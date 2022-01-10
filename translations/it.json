@@ -1,0 +1,291 @@
+{
+    "types": {
+        "mobile": "cellulare",
+        "work": "lavoro",
+        "other": "altro",
+        "home": "casa"
+    },
+    "url": "Sito web",
+    "url_plural": "Siti web {{count}}",
+    "select": {
+        "default": "Seleziona tipo"
+    },
+    "section": {
+        "title": {
+            "url": "Sito web",
+            "url_plural": "Siti web {{count}}",
+            "phone_number": "Contatto telefonico",
+            "phone_number_plural": "Contatti telefonici {{count}}",
+            "mail": "Indirizzo e-mail",
+            "mail_plural": "Inidirizzi e-mail {{count}}",
+            "address": "Indirizzo",
+            "address_plural": "Indirizzi {{count}}"
+        },
+        "field": {
+            "url": "Sito Web",
+            "street": "Via",
+            "state": "Stato",
+            "postalCode": "Codice postale",
+            "number": "Numero",
+            "country": "Paese",
+            "city": "Città"
+        }
+    },
+    "number": "numero",
+    "number_plural": "Numeri {{count}}",
+    "notes": "Note",
+    "name": {
+        "suffix": "Suffisso",
+        "prefix": "Prefisso",
+        "nickName": "Soprannome",
+        "middle_name": "Secondo nome",
+        "last_name": "Cognome",
+        "first_name": "Nome"
+    },
+    "message": {
+        "new_contact": "Questo contatto sarà creato nella cartella 'Contatti'",
+        "snackbar": {
+            "settings_saved": "Modifiche salvate correttamente"
+        }
+    },
+    "mail": "E-mail",
+    "mail_plural": "E-mail {{count}}",
+    "label": {
+        "edit": "Modifica",
+        "create": "Crea",
+        "save": "Salva",
+        "cancel": "Cancella",
+        "advance_filters": "1 Filtro avanzato",
+        "advance_filters_plural": "{{count}} Filtri avanzati",
+        "contact_setting": "Impostazioni di contatto",
+        "resend": "Invia di nuovo",
+        "revoke": "Revoca",
+        "edit_access": "Modifica accesso",
+        "edit_folder_properties": "Modifica proprietà di {{name}}",
+        "revoke_access_tooltip": "Revoca accesso e invia una notifica standard",
+        "revoke_access_without_notification": "Revoca accesso e non inviare notifica",
+        "revoke_send_standard_msg": "Revoca accesso e invia una notifica personalizzata",
+        "revoke_share": "Revoca condivisone di {{title}}",
+        "search_hint": "Cerca suggerimenti!",
+        "share": "Condividi",
+        "shares_folder_edit": "Condivisione di questa rubrica",
+        "single_advance_fillter": "Filtri Avanzati",
+        "empty": "Vuoto",
+        "error_try_again": "Qualcosa è andato storto, riprova",
+        "move": "Sposta",
+        "restore": "Ripristina",
+        "results_for": "Risultati per:",
+        "advanced_filters": "1 Filtro avanzato",
+        "advanced_filters_plural": "{{count}} Filtri avanzati",
+        "contacts": "Contatti",
+        "delete": "Cancella",
+        "edit_access_name": "Modifica l'accesso di {{name}}",
+        "email": "E-mail",
+        "new_address_book": "Nuova rubrica",
+        "notes": "Note",
+        "of": "di",
+        "revoke_with_standard_msg": "Revoca accesso e invia una notifica standard",
+        "revoke_without_notification": "Revoca accesso e non inviare notifica",
+        "revoke_with_custom_msg": "Revoca accesso e invia una notifica personalizzata",
+        "root": "Root"
+    },
+    "job": {
+        "title": "Ruolo",
+        "department": "Dipartimento",
+        "company": "Azienda"
+    },
+    "address": "Indirizzo",
+    "address_plural": "Indirizzi ({{count}})",
+    "folder": {
+        "action": {
+            "empty": {
+                "trash": "Svuota cestino",
+                "folder": "Rubrica vuota"
+            },
+            "edit": "Modifica rubrica",
+            "delete_permanently": "Elimina rubrica definitivamente",
+            "delete": "Elimina rubrica",
+            "move": "Sposta rubrica",
+            "new": "Nuova rubrica"
+        },
+        "modal": {
+            "edit": {
+                "footer": "Modifica",
+                "title": "Modifica",
+                "body": {
+                    "contacts": "Contatti",
+                    "item": {
+                        "empty": "Nessun percorso disponibile",
+                        "root": "root"
+                    },
+                    "type": "Tipo"
+                }
+            },
+            "empty": {
+                "footer": "Svuota",
+                "title": "Svuota",
+                "body": {
+                    "message1": "Vuoi svuotare questa rubrica?",
+                    "message2": "Se rimuovi il contenuto questo verrà spostato nel cestino."
+                }
+            },
+            "move": {
+                "title": "Sposta",
+                "footer": "Sposta",
+                "input": {
+                    "filter": "Filtra rubrica"
+                },
+                "new": "Nuova rubrica",
+                "body": {
+                    "message1": "Seleziona una rubrica per spostarla in:",
+                    "message3": "Seleziona una cartella in cui spostare quella selezionata:"
+                }
+            },
+            "new": {
+                "footer": "Crea",
+                "create_footer": "Crea e Sposta",
+                "body": {
+                    "message1": "Nuovo nome rubrica",
+                    "message2": "Seleziona una rubrica che conterrà quella appena creata:"
+                },
+                "input": {
+                    "name": "Inserisci nome rubrica",
+                    "name_exist": "Il nome esiste già in questo percorso"
+                },
+                "title": "Crea nuova rubrica",
+                "title2": "Creazione di nuova cartella"
+            },
+            "delete": {
+                "title": "Elimina",
+                "body": {
+                    "message2": "Vuoi eliminare questa rubrica? Se eliminata, il contenuto verrà rimosso definitivamente e la rubrica non sarà più recuperabile.",
+                    "message1": "Vuoi eliminare questa rubrica? Se eliminata, il contenuto verrà spostato nel cestino e la rubrica non sarà più visibile."
+                },
+                "footer": "Elimina"
+            },
+            "item": {
+                "empty": "Nessun elemento disponibile"
+            },
+            "footer": {
+                "go_back": "Indietro"
+            },
+            "restore": {
+                "create_footer": "Crea e Ripristina",
+                "footer": "Ripristina",
+                "title": "Ripristina"
+            }
+        },
+        "item": {
+            "root": "Root"
+        },
+        "snackbar": {
+            "trash_empty": "Cestino svuotato con successo",
+            "address_book_moved_to_trash": "Rubrica spostata nel cestino",
+            "folder_empty": "Rubrica svuotata correttamente",
+            "folder_new": "Nuova rubrica creata"
+        },
+        "share_folder": "Condividi rubrica",
+        "type": "Cartella Contatti"
+    },
+    "action": {
+        "send_msg": "Invia e-mail",
+        "delete": "Cancella",
+        "delete_permanently": "Elimina definitivamente",
+        "move": "Sposta",
+        "restore": "Ripristina",
+        "edit_share": "Modifica Accesso",
+        "goto_folder": "Vai alla cartella",
+        "reset_filters": "Ripristina Filtri",
+        "search": "Cerca",
+        "share_folder": "Condividi cartella"
+    },
+    "settings": {
+        "contacts": {
+            "checkbox": {
+                "add_contact_to_emailed_contacts": "Aggiungi nuovi contatti a \"Persone contattate via e-mail\"",
+                "autocomplete_on_comma": "Seleziona auto completamento quando viene inserita una virgola",
+                "incl_addrs_in_glbl_addrs_list": "Includi indirizzi nella Lista Globale degli indirizzi GAL",
+                "include_add_in_shared_contact": "Includi indirizzi nei contatti condivisi"
+            }
+        }
+    },
+    "share": {
+        "find_shares_label": "Seleziona le rubriche da visualizzare nella lista dei contatti",
+        "none": "Nessuno",
+        "add": "Aggiungi",
+        "admin": "Amministratore",
+        "administer": "Gestisci",
+        "allowed_actions": "Azioni consentite",
+        "contact_folder": "Rubrica",
+        "contacts": "Contatti",
+        "create": "Crea",
+        "delete": "Elimina",
+        "filter_user": "Trova utenti",
+        "find_shares": "Trova Condivisioni",
+        "insert": "Inserisci",
+        "manager": "Manager",
+        "owner": "Proprietario",
+        "read": "Letto",
+        "remove_from_this_list": "Rimuovi da questa lista",
+        "role": "Ruolo",
+        "share_added_succesfully": "Condivisione aggiunta con successo",
+        "share_info": "Informazione rubrica condivisa",
+        "share_removed_succesfully": "Condivisione rimossa con successo",
+        "find_contact_shares": "Trova Condivisioni Contatto",
+        "options": {
+            "share_calendar_with": {
+                "external_guests": "Invitati Esterni (solo visualizzazione)",
+                "internal_users_groups": "Utenti Interni o Gruppi",
+                "public": "Pubblico (solo visualizzazione, password non richiesta)"
+            }
+        },
+        "recipients_address": "Indirizzi e-mail dei destinatari",
+        "send_notification": "Invia notifica per questa condivisione",
+        "shared_item": "Elemento Condiviso",
+        "standard_message": "Aggiungi nota a messaggio predefinito",
+        "workflow": "Flusso di lavoro",
+        "write": "Scrivi",
+        "share_note": "Il messaggio predefinito mostra il tuo nome, il nome dell'elemento condiviso, i permessi dati ai destinatari e le informazioni di accesso.",
+        "shared_folders": "Rubriche Condivise",
+        "type": "Tipo",
+        "shared_items": "Rubrica condivisa di {{value}}"
+    },
+    "messages": {
+        "snackbar": {
+            "contact_moved_to_trash": "Contatto spostato nel cestino",
+            "contact_restored": "Contatto ripristinato nella rubrica di destinazione",
+            "address_book_moved": "Rubrica spostata nella cartella di destinazione",
+            "contact_deleted_permanently": "Contatto eliminato definitivamente",
+            "contact_moved": "Contatto spostato nella rubrica di destinazione"
+        },
+        "modal": {
+            "delete": {
+                "sure_delete_contact": "Vuoi eliminare questo contatto definitivamente?",
+                "sure_delete_contact_plural": "Vuoi eliminare questi contatti definitivamente?",
+                "if_delete_lost_forever": "Eliminando definitivamente questo contatto non sarà possibile ripristinarlo, continuare?"
+            }
+        }
+    },
+    "snackbar": {
+        "folder_shared_error": "Qualcosa è andato storto. Riprova",
+        "error": "Qualcosa è andato storto. Riprova",
+        "folder_edited": "Rubrica modificata correttamente",
+        "folder_shared": "Rubrica condivisa",
+        "share_resend": "Invito condivisione inviato",
+        "share_revoke": "Condivisione accesso revocata",
+        "share_updated": "Diritti di accesso aggiornati"
+    },
+    "modal": {
+        "address_book_name": "Nome rubrica",
+        "destination": "Cartella di destinazione"
+    },
+    "title": {
+        "advanced_filters": "Filtri Avanzati"
+    },
+    "tooltip": {
+        "edit": "Modifica accesso",
+        "resend": "Invia notifica per questa condivisione",
+        "revoke": "Revoca accesso"
+    },
+    "of": "di"
+}

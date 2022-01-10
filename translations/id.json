@@ -1,0 +1,260 @@
+{
+    "share": {
+        "owner": "Pemilik",
+        "read": "Dibaca",
+        "type": "Jenis",
+        "add": "Tambahkan",
+        "admin": "Admin",
+        "contacts": "Kontak",
+        "create": "Buat",
+        "delete": "Hapus",
+        "none": "Tidak ada",
+        "administer": "Kelola",
+        "allowed_actions": "Tindakan yang diperbolehkan",
+        "contact_folder": "Buku Alamat",
+        "filter_user": "Temukan pengguna",
+        "insert": "Sisipkan",
+        "find_shares_label": "Pilih buku alamat mana yang ingin Anda lihat di pohon kontak",
+        "manager": "Pengelola",
+        "options": {
+            "share_calendar_with": {
+                "external_guests": "Tamu eksternal (hanya lihat)",
+                "internal_users_groups": "Pengguna atau Grup Internal",
+                "public": "Publik (hanya lihat, tidak diperlukan kata sandi)"
+            }
+        },
+        "recipients_address": "Alamat email penerima",
+        "remove_from_this_list": "Hapus dari daftar ini",
+        "role": "Peran",
+        "find_contact_shares": "Temukan Berbagi Kontak",
+        "find_shares": "Temukan Berbagi",
+        "share_note": "Pesan standar ini menampilkan nama Anda, nama item bersama, izin yang diberikan kepada penerima, dan informasi masuk.",
+        "send_notification": "Kirim pemberitahuan tentang berbagi ini",
+        "share_added_succesfully": "Berbagi berhasil ditambahkan",
+        "share_info": "Info buku alamat bersama",
+        "standard_message": "Tambahkan catatan ke pesan standar",
+        "viewer": "Pemirsa",
+        "workflow": "Alur kerja",
+        "shared_item": "Item Bersama",
+        "shared_items": "buku alamat {{value}} bersama",
+        "share_removed_succesfully": "Item bersama berhasil dihapus",
+        "shared_folders": "Buku Alamat Bersama",
+        "write": "Tulis"
+    },
+    "action": {
+        "delete": "Hapus",
+        "move": "Pindahkan",
+        "restore": "Pulihkan",
+        "search": "Cari",
+        "delete_permanently": "Hapus Secara Permanen",
+        "edit_share": "Edit Akses",
+        "goto_folder": "Buka folder",
+        "reset_filters": "Atur Ulang Filter",
+        "send_msg": "Kirim email",
+        "share_folder": "Bagikan folder"
+    },
+    "folder": {
+        "modal": {
+            "delete": {
+                "footer": "Hapus",
+                "title": "Hapus",
+                "body": {
+                    "message2": "Apakah Anda ingin menghapus buku alamat yang dipilih secara permanen? Jika dihapus, konten terkait akan dihapus secara permanen dan buku alamat tidak dapat dipulihkan lagi.",
+                    "message1": "Apakah Anda ingin menghapus buku alamat yang dipilih? Jika dihapus, konten terkait akan dipindahkan ke tempat sampah dan buku alamat tidak terlihat lagi."
+                }
+            },
+            "edit": {
+                "body": {
+                    "contacts": "Kontak",
+                    "type": "Jenis",
+                    "item": {
+                        "empty": "Tidak tersedia jalur",
+                        "root": "root"
+                    }
+                },
+                "footer": "Edit"
+            },
+            "move": {
+                "footer": "Pindahkan",
+                "title": "Pindahkan",
+                "input": {
+                    "filter": "Filter buku alamat"
+                },
+                "new": "Buku alamat baru",
+                "body": {
+                    "message3": "Pilih satu folder sebagai tempat memindahkan file yang diinginkan:",
+                    "message1": "Pilih satu buku alamat sebagai tempat memindahkan alamat yang diinginkan:"
+                }
+            },
+            "new": {
+                "footer": "Buat",
+                "body": {
+                    "message1": "Nama buku alamat baru",
+                    "message2": "Pilih satu buku alamat untuk menyimpan alamat baru:"
+                },
+                "input": {
+                    "name": "Sisipkan nama buku alamat",
+                    "name_exist": "Nama sudah ada di jalur ini"
+                },
+                "title": "Buat buku alamat baru",
+                "create_footer": "Buat dan Pindahkan",
+                "title2": "Pembuatan folder baru"
+            },
+            "restore": {
+                "footer": "Pulihkan",
+                "title": "Pulihkan",
+                "create_footer": "Buat dan Pulihkan"
+            },
+            "empty": {
+                "body": {
+                    "message1": "Apakah Anda ingin mengosongkan buku alamat yang dipilih?",
+                    "message2": "Jika dikosongkan, semua konten terkait akan dipindahkan ke tempat sampah."
+                },
+                "footer": "Kosongkan",
+                "title": "Kosongkan"
+            },
+            "footer": {
+                "go_back": "Kembali"
+            },
+            "item": {
+                "empty": "Tidak tersedia item"
+            }
+        },
+        "action": {
+            "delete": "Hapus buku alamat",
+            "delete_permanently": "Hapus buku alamat secara permanen",
+            "edit": "Edit buku alamat",
+            "empty": {
+                "folder": "Kosongkan buku alamat",
+                "trash": "Kosongkan tempat sampah"
+            },
+            "move": "Pindahkan buku alamat",
+            "new": "Buku alamat baru"
+        },
+        "item": {
+            "root": "Root"
+        },
+        "share_folder": "Bagikan buku alamat",
+        "snackbar": {
+            "address_book_moved_to_trash": "Buku alamat dipindahkan ke tempat sampah",
+            "folder_empty": "Buku alamat berhasil dikosongkan",
+            "folder_new": "Buku alamat baru dibuat",
+            "trash_empty": "Folder tempat sampah berhasil dikosongkan"
+        },
+        "type": "Folder Kontak"
+    },
+    "job": {
+        "company": "Perusahaan",
+        "department": "Departemen",
+        "title": "Uraian pekerjaan"
+    },
+    "label": {
+        "cancel": "Batal",
+        "edit": "Edit",
+        "save": "Simpan",
+        "share": "Bagikan",
+        "advance_filters": "{{count}} Filter tingkat lanjut",
+        "contact_setting": "Pengaturan Kontak",
+        "create": "Kontak Baru",
+        "edit_access": "Edit akses {{name}}",
+        "edit_folder_properties": "Edit properti {{name}}",
+        "resend": "Kirim ulang",
+        "revoke": "Batalkan",
+        "revoke_access_tooltip": "Batalkan akses dengan mengirim pemberitahuan standar",
+        "search_hint": "Cari petunjuk!",
+        "revoke_access_without_notification": "Batalkan akses tanpa mengirim pemberitahuan",
+        "revoke_send_standard_msg": "Batalkan akses dengan mengirim pemberitahuan kustom",
+        "revoke_share": "Batalkan berbagi {{title}}",
+        "single_advance_fillter": "Filter Tingkat Lanjut",
+        "shares_folder_edit": "Berbagi buku alamat ini"
+    },
+    "name": {
+        "nickName": "Nama panggilan",
+        "first_name": "Nama depan",
+        "last_name": "Nama belakang",
+        "middle_name": "Nama Tengah",
+        "prefix": "Awalan",
+        "suffix": "Akhiran"
+    },
+    "notes": "Catatan",
+    "section": {
+        "field": {
+            "country": "Negara",
+            "state": "Status",
+            "city": "Kota",
+            "number": "Angka",
+            "postalCode": "Kode pos",
+            "street": "Jalan",
+            "url": "Situs Web"
+        },
+        "title": {
+            "mail": "Alamat email",
+            "phone_number": "Kontak telepon",
+            "address": "Alamat ({{count}})",
+            "url": "Situs Web ({{count}})"
+        }
+    },
+    "message": {
+        "snackbar": {
+            "settings_saved": "Hasil edit disimpan dengan benar"
+        },
+        "search_hints": "Cari petunjuk yang perlu didiskusikan"
+    },
+    "mail": "Email",
+    "messages": {
+        "modal": {
+            "delete": {
+                "if_delete_lost_forever": "Jika kontak ini dihapus secara permanen, Anda tidak dapat memulihkannya lagi, lanjutkan?",
+                "sure_delete_contact": "Anda yakin ingin menghapus kontak yang dipilih secara permanen?"
+            }
+        },
+        "snackbar": {
+            "address_book_moved": "Buku alamat dipindahkan ke folder tujuan",
+            "contact_deleted_permanently": "Kontak dihapus secara permanen",
+            "contact_moved": "Kontak dipindahkan ke buku alamat tujuan",
+            "contact_moved_to_trash": "Kontak dipindahkan ke tempat sampah",
+            "contact_restored": "Kontak dipulihkan di buku alamat tujuan"
+        }
+    },
+    "modal": {
+        "address_book_name": "Nama buku alamat",
+        "destination": "Folder tujuan"
+    },
+    "settings": {
+        "contacts": {
+            "checkbox": {
+                "add_contact_to_emailed_contacts": "Tambahkan kontak baru ke \"Kontak Email\"",
+                "incl_addrs_in_glbl_addrs_list": "Sertakan alamat dalam Daftar Alamat Global",
+                "include_add_in_shared_contact": "Sertakan alamat ke dalam kontak bersama",
+                "srch_glbl_addrs_list": "Cari Daftar Alamat Global terlebih dahulu saat menggunakan pemilih kontak",
+                "autocomplete_on_comma": "Pilih kecocokan autocomplete saat mengetik koma"
+            }
+        }
+    },
+    "select": {
+        "default": "Pilih jenis"
+    },
+    "title": {
+        "advanced_filters": "Filter Tingkat Lanjut"
+    },
+    "tooltip": {
+        "edit": "Edit akses",
+        "revoke": "Batalkan akses",
+        "resend": "Kirim pemberitahuan email tentang berbagi ini"
+    },
+    "types": {
+        "home": "beranda",
+        "mobile": "seluler",
+        "other": "lainnya",
+        "work": "pekerjaan"
+    },
+    "snackbar": {
+        "error": "Terjadi kesalahan, coba lagi",
+        "folder_edited": "Buku alamat berhasil diedit",
+        "folder_shared": "Buku alamat dibagikan",
+        "folder_shared_error": "Terjadi kesalahan, coba lagi",
+        "share_resend": "Undangan berbagi dikirim ulang",
+        "share_revoke": "Akses berbagi dibatalkan",
+        "share_updated": "Hak akses diperbarui"
+    }
+}

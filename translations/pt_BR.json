@@ -1,0 +1,264 @@
+{
+    "action": {
+        "delete": "Excluir",
+        "move": "Mover",
+        "restore": "Restaurar",
+        "search": "Buscar",
+        "delete_permanently": "Excluir Permanentemente",
+        "edit_share": "Editar Acesso",
+        "goto_folder": "Ir para a pasta",
+        "reset_filters": "Redefinir Filtros",
+        "send_msg": "Enviar e-mail",
+        "share_folder": "Compartilhar pasta"
+    },
+    "folder": {
+        "modal": {
+            "delete": {
+                "footer": "Excluir",
+                "title": "Excluir",
+                "body": {
+                    "message1": "Deseja excluir a agenda de endereços selecionada? Ao excluí-la, seu conteúdo será movido para a lixeira e ela não estará mais visível.",
+                    "message2": "Deseja excluir permanentemente a agenda de endereços selecionada? Ao excluí-la, seu conteúdo será removido permanentemente e ela não poderá mais ser recuperada."
+                }
+            },
+            "edit": {
+                "body": {
+                    "contacts": "Contatos",
+                    "type": "Tipo",
+                    "item": {
+                        "empty": "Sem caminho disponível",
+                        "root": "raiz"
+                    }
+                },
+                "footer": "Editar"
+            },
+            "move": {
+                "footer": "Mover",
+                "title": "Mover",
+                "body": {
+                    "message1": "Selecione uma agenda de endereços para movê-la para:",
+                    "message3": "Selecione uma pasta para mover a selecionada:"
+                },
+                "input": {
+                    "filter": "Filtrar agenda de endereços"
+                },
+                "new": "Nova agenda de endereços"
+            },
+            "new": {
+                "footer": "Criar",
+                "body": {
+                    "message1": "Novo nome para a agenda de endereços",
+                    "message2": "Selecione uma agenda de endereços que irá conter a recém criada:"
+                },
+                "create_footer": "Criar e Mover",
+                "input": {
+                    "name": "Insira o nome para a agenda de endereços",
+                    "name_exist": "O nome já existe neste caminho"
+                },
+                "title": "Criar nova agenda de endereços",
+                "title2": "Criação de nova pasta"
+            },
+            "restore": {
+                "footer": "Restaurar",
+                "title": "Restaurar",
+                "create_footer": "Criar e Restaurar"
+            },
+            "empty": {
+                "body": {
+                    "message1": "Deseja esvaziar a agenda de endereços selecionada?",
+                    "message2": "Ao esvaziá-la, todo seu conteúdo será movido para a lixeira."
+                },
+                "footer": "Vazia",
+                "title": "Vazia"
+            },
+            "footer": {
+                "go_back": "Voltar"
+            },
+            "item": {
+                "empty": "Sem itens disponíveis"
+            }
+        },
+        "action": {
+            "delete": "Excluir agenda de endereços",
+            "delete_permanently": "Excluir agenda de endereços permanentemente",
+            "edit": "Editar agenda de endereços",
+            "empty": {
+                "folder": "Esvaziar agenda de endereços",
+                "trash": "Esvaziar lixeira"
+            },
+            "move": "Mover agenda de endereços",
+            "new": "Nova agenda de endereços"
+        },
+        "item": {
+            "root": "Raiz"
+        },
+        "share_folder": "Compartilhar agenda de endereços",
+        "snackbar": {
+            "address_book_moved_to_trash": "Agenda de endereços movida para lixeira",
+            "folder_empty": "Agenda de endereços esvaziada com sucesso",
+            "folder_new": "Nova agenda de endereços criada",
+            "trash_empty": "Lixeira esvaziada com sucesso"
+        },
+        "type": "Pasta de contatos"
+    },
+    "job": {
+        "company": "Empresa",
+        "department": "Departamento",
+        "title": "Função"
+    },
+    "label": {
+        "cancel": "Cancelar",
+        "edit": "Editar",
+        "save": "Salvar",
+        "share": "Compartilhar",
+        "advance_filters": "1 Filtro avançado",
+        "advance_filters_plural": "{{count}} Filtros avançados",
+        "contact_setting": "Configurações de contato",
+        "create": "Novo Contato",
+        "edit_access": "Editar acesso de {{name}}",
+        "edit_folder_properties": "Editar propriedades de {{name}}",
+        "resend": "Reenviar",
+        "revoke": "Revogar",
+        "revoke_access_tooltip": "Revogar acesso enviando uma notificação padrão",
+        "revoke_access_without_notification": "Revogar acesso sem enviar notificação",
+        "revoke_send_standard_msg": "Revogar acesso enviando uma notificação personalizada",
+        "revoke_share": "Revogar compartilhamento de {{title}}",
+        "search_hint": "Dicas de pesquisa!",
+        "shares_folder_edit": "Compartilhando esta agenda de endereços",
+        "single_advance_fillter": "Filtros Avançados"
+    },
+    "share": {
+        "add": "Adicionar",
+        "admin": "Admin",
+        "contacts": "Contatos",
+        "owner": "Proprietário",
+        "read": "Leitura",
+        "type": "Tipo",
+        "create": "Criar",
+        "delete": "Excluir",
+        "none": "None",
+        "administer": "Administrador",
+        "allowed_actions": "Ações permitidas",
+        "contact_folder": "Agenda de Endereços",
+        "filter_user": "Encontrar usuários",
+        "find_contact_shares": "Encontrar Compartilhamentos de Contato",
+        "find_shares": "Encontrar Compartilhamentos",
+        "find_shares_label": "Selecione em qual agenda de endereços deseja ver a árvore de contatos",
+        "insert": "Inserir",
+        "manager": "Gerente",
+        "options": {
+            "share_calendar_with": {
+                "internal_users_groups": "Usuários ou Grupos Internos",
+                "public": "Público (apenas ver, senha não necessária)",
+                "external_guests": "Convidados externos (apenas ver)"
+            }
+        },
+        "recipients_address": "Endereços de e-mail dos destinatários",
+        "remove_from_this_list": "Remover desta lista",
+        "role": "Função",
+        "send_notification": "Enviar notificação sobre este compartilhamento",
+        "share_added_succesfully": "Compartilhamento adicionado com sucesso",
+        "share_info": "Informação da agenda de endereços compartilhada",
+        "share_note": "A mensagem padrão exibe seu nome, o nome do item compartilhado, as permissões concedidas aos destinatários e as informações de acesso.",
+        "share_removed_succesfully": "Compartilhamento removido com sucesso",
+        "shared_folders": "Agendas de Endereços Compartilhadas",
+        "shared_item": "Item Compartilhado",
+        "shared_items": "Agendas de endereço compartilhadas de {{value}}",
+        "standard_message": "Adicionar nota à mensagem padrão",
+        "viewer": "Visualizador",
+        "workflow": "Fluxo de Trabalho",
+        "write": "Escrever"
+    },
+    "name": {
+        "nickName": "Apelido",
+        "first_name": "Nome",
+        "last_name": "Último nome",
+        "middle_name": "Nome do meio",
+        "prefix": "Título",
+        "suffix": "Sufixo"
+    },
+    "notes": "Notas",
+    "section": {
+        "field": {
+            "country": "País",
+            "state": "Estado",
+            "city": "Cidade",
+            "number": "Número",
+            "postalCode": "CEP",
+            "street": "Rua",
+            "url": "Website"
+        },
+        "title": {
+            "address": "Endereço",
+            "address_plural": "Endereços ({{count}})",
+            "mail": "Endereço de e-mail",
+            "phone_number": "Contato telefônico",
+            "url": "Website",
+            "url_plural": "Websites ({{count}})"
+        }
+    },
+    "message": {
+        "snackbar": {
+            "settings_saved": "Edições salvas corretamente"
+        },
+        "search_hints": "Dicas de pesquisa que precisamos conversar"
+    },
+    "mail": "E-mail",
+    "messages": {
+        "modal": {
+            "delete": {
+                "if_delete_lost_forever": "Ao excluir permanentemente este contato, você não poderá mais recuperá-lo. Continue?",
+                "sure_delete_contact": "Tem certeza que deseja excluir este contato permanentemente?",
+                "sure_delete_contact_plural": "Tem certeza que deseja excluir estes contatos permanentemente?"
+            }
+        },
+        "snackbar": {
+            "address_book_moved": "Agenda de endereços movida para a pasta de destino",
+            "contact_deleted_permanently": "Contato excluído permanentemente",
+            "contact_moved": "Contato movido para a agenda de endereços de destino",
+            "contact_moved_to_trash": "Contato movido para a lixeira",
+            "contact_restored": "Contato recuperado na agenda de endereços de destino"
+        }
+    },
+    "modal": {
+        "address_book_name": "Nome da agenda de endereços",
+        "destination": "Pasta de destino"
+    },
+    "select": {
+        "default": "Selecionar tipo"
+    },
+    "settings": {
+        "contacts": {
+            "checkbox": {
+                "add_contact_to_emailed_contacts": "Adicionar novos contatos para \"Contatados por e-mail\"",
+                "autocomplete_on_comma": "Selecione o preenchimento automático para for inserida uma vírgula",
+                "include_add_in_shared_contact": "Incluir endereços nos contatos compartilhados",
+                "srch_glbl_addrs_list": "Buscar primeiro na Lista Global de Endereços quando for usado o seletor de contato",
+                "incl_addrs_in_glbl_addrs_list": "Incluir endereços na Lista Global de Endereços"
+            }
+        }
+    },
+    "snackbar": {
+        "error": "Algo deu errado. Tente novamente",
+        "folder_edited": "Agenda de endereços editada com sucesso",
+        "folder_shared": "Agenda de endereços compartilhada",
+        "folder_shared_error": "Algo deu errado. Tente novamente",
+        "share_resend": "Convite de compartilhamento reenviado",
+        "share_revoke": "Compartilhamento de acesso revogado",
+        "share_updated": "Direitos de acesso atualizados"
+    },
+    "tooltip": {
+        "revoke": "Revogar acesso",
+        "edit": "Editar acesso",
+        "resend": "Enviar notificação por e-mail sobre este compartilhamento"
+    },
+    "title": {
+        "advanced_filters": "Filtros Avançados"
+    },
+    "types": {
+        "mobile": "celular",
+        "other": "outro",
+        "home": "casa",
+        "work": "trabalho"
+    }
+}
