@@ -1,0 +1,328 @@
+{
+    "action": {
+        "delete": "Sil",
+        "edit_share": "Erişimi Düzenle",
+        "goto_folder": "Klasöre git",
+        "reset_filters": "Filtreleri sıfırla",
+        "restore": "Geri yükle",
+        "delete_permanently": "Kalıcı olarak sil",
+        "move": "Taşı",
+        "search": "Ara",
+        "share_folder": "Klasörü paylaş",
+        "send_msg": "E-posta gönder"
+    },
+    "folder": {
+        "modal": {
+            "delete": {
+                "title": "Sil",
+                "footer": "Sil",
+                "body": {
+                    "message1": "Seçili adres defterini kalıcı olarak silmek istiyor musunuz? Silerseniz, ilgili içerik kalıcı olarak silinecek ve adres defteri artık geri alınamayacak.",
+                    "message2": "Seçili adres defterini kalıcı olarak silmek istiyor musunuz? Silerseniz, ilgili içerik kalıcı olarak silinecek ve adres defteri artık geri alınamayacak."
+                }
+            },
+            "footer": {
+                "go_back": "Geriye git"
+            },
+            "restore": {
+                "title": "Geri yükle",
+                "footer": "Geri yükle",
+                "create_footer": "Oluştur ve Geri Yükle"
+            },
+            "new": {
+                "footer": "Oluştur",
+                "body": {
+                    "message1": "Yeni adres defteri adı",
+                    "message2": "Yeni oluşturulan öğenin bulunacağı adres defterini seçin:"
+                },
+                "create_footer": "Oluştur ve Taşı",
+                "input": {
+                    "name": "Adres defteri adı ekle",
+                    "name_exist": "Bu ad zaten kullanılıyor"
+                },
+                "title": "Yeni adres defteri oluştur",
+                "title2": "Yeni klasör oluştur"
+            },
+            "move": {
+                "title": "Taşı",
+                "body": {
+                    "message1": "İçine taşınmasını istediğiniz bir adres defteri seçin:",
+                    "message3": "İçine taşınmasını istediğiniz bir klasör seçin:"
+                },
+                "footer": "Taşı",
+                "input": {
+                    "filter": "Adres defterini filtrele"
+                },
+                "new": "Yeni adres defteri"
+            },
+            "edit": {
+                "body": {
+                    "contacts": "Kişiler",
+                    "item": {
+                        "empty": "Yol bulunamadı",
+                        "root": "kök"
+                    },
+                    "type": "Tür"
+                },
+                "footer": "Düzenle"
+            },
+            "empty": {
+                "body": {
+                    "message1": "Seçili adres defterini boşaltmak istiyor musunuz?",
+                    "message2": "Boşaltırsanız, ilgili tüm içerik çöp kutusuna taşınacak."
+                },
+                "footer": "Boşalt",
+                "title": "Boşalt"
+            },
+            "item": {
+                "empty": "Hiç öğe bulunamadı"
+            }
+        },
+        "action": {
+            "empty": {
+                "trash": "Çöp kutusunu boşalt",
+                "folder": "Adres defterini boşalt"
+            },
+            "delete": "Adres defterini sil",
+            "delete_permanently": "Adres defterini kalıcı olarak sil",
+            "edit": "Adres defterini düzenle",
+            "move": "Taşı",
+            "new": "Yeni adres defteri",
+            "moved": "Adres defteri başarıyla taşındı"
+        },
+        "item": {
+            "root": "Kök"
+        },
+        "share_folder": "Adres defterini paylaş",
+        "snackbar": {
+            "address_book_moved_to_trash": "Adres defteri çöp kutusuna taşındı",
+            "folder_empty": "Adres defteri başarıyla boşaltıldı",
+            "folder_new": "Yeni adres defteri oluşturuldu",
+            "trash_empty": "Çöp kutusu klasörü başarıyla boşaltıldı",
+            "address_book_permanently_deleted": "Adres defteri kalıcı olarak silindi"
+        },
+        "type": "Kişiler Klasörü"
+    },
+    "share": {
+        "create": "Oluştur",
+        "options": {
+            "share_calendar_with": {
+                "external_guests": "Dışarıdan misafir (sadece görüntüler)",
+                "public": "Genel (sadece görüntüler, parola gerekmez)",
+                "internal_users_groups": "İçeriden Kullanıcılar veya Gruplar"
+            }
+        },
+        "add": "Ekle",
+        "admin": "Admin",
+        "administer": "Yönet",
+        "allowed_actions": "İzin verilen eylemler",
+        "contact_folder": "Adres Defteri",
+        "contacts": "Kişiler",
+        "delete": "Sil",
+        "filter_user": "Kişileri bul",
+        "find_contact_shares": "Kişi Paylaşımlarını Bul",
+        "find_shares": "Paylaşımları Bul",
+        "insert": "Ekle",
+        "manager": "Yöneten",
+        "none": "Hiçbiri",
+        "owner": "Sahibi",
+        "read": "Okunmuş",
+        "recipients_address": "Alıcıların e-posta adresleri",
+        "remove_from_this_list": "Bu listeden kaldır",
+        "role": "Rol",
+        "send_notification": "Bu paylaşım hakkında bildirim gönder",
+        "shared_folders": "Paylaşılan Adres Defterleri",
+        "shared_item": "Paylaşılan öğe",
+        "standard_message": "Standart mesaja bir not ekle",
+        "type": "Tür",
+        "viewer": "Görüntüleyici",
+        "workflow": "İş Akışı",
+        "write": "Yaz",
+        "share_note": "Standart mesajda adınız, paylaşılan öğenin adı, alıcıya verilen izinler ve giriş bilgisi gösterilir.",
+        "find_shares_label": "Kişiler dizininde görmek istediğiniz adres defterini seçin",
+        "share_added_succesfully": "Paylaşım başarıyla eklendi",
+        "share_info": "Paylaşılan adres defteri bilgisi",
+        "share_removed_succesfully": "Paylaşım başarıyla kaldırıldı",
+        "shared_items": "{{value}}'in paylaşılan adres defterleri"
+    },
+    "message": {
+        "snackbar": {
+            "settings_saved": "Değişiklikler başarıyla kaydedildi"
+        }
+    },
+    "label": {
+        "cancel": "İptal",
+        "edit": "Düzenle",
+        "edit_access": "Erişimi düzenle",
+        "resend": "Yeniden gönder",
+        "revoke": "İptal et",
+        "save": "Kaydet",
+        "share": "Paylaş",
+        "advance_filters": "1 Gelişmiş filtre",
+        "advance_filters_plural": "{{count}} Gelişmiş filtre",
+        "contact_setting": "Kişi Ayarları",
+        "create": "Oluştur",
+        "edit_folder_properties": "{{name}}'in özelliklerini düzenle",
+        "revoke_access_tooltip": "Standart bildirim göndererek erişim yetkisini kaldır",
+        "revoke_access_without_notification": "Bildirim göndermeden erişim yetkisini kaldır",
+        "revoke_send_standard_msg": "Özel bildirim göndererek erişim yetkisini kaldır",
+        "revoke_share": "{{title}} paylaşımını iptal et",
+        "search_hint": "Arama ipuçları!",
+        "shares_folder_edit": "Bu adres defteri paylaşımı",
+        "single_advance_fillter": "Gelişmiş Filtreler",
+        "activate_selection_mode": "Seçim modunu aktive et",
+        "advanced_filters": "1 Gelişimiş filtre",
+        "advanced_filters_plural": "{{count}} Gelişimiş filtre",
+        "contacts": "Kişiler",
+        "empty": "Boşalt",
+        "delete": "Sil",
+        "edit_access_name": "{{name}}'in erişimini düzenle",
+        "email": "E-posta",
+        "error_try_again": "Bir sorun oluştu, lütfen tekrar deneyin",
+        "move": "Taşı",
+        "new_address_book": "Yeni Adres Defteri",
+        "notes": "Notlar",
+        "of": "—",
+        "restore": "Geri al",
+        "results_for": "Sonuçlar:",
+        "revoke_with_standard_msg": "Standart bildirim göndererek erişimi iptal edin",
+        "revoke_without_notification": "Bildirim göndermeden erişimi iptal edin",
+        "revoke_with_custom_msg": "Özel bildirim göndererek erişimi iptal edin",
+        "root": "Kök",
+        "single_advanced_filter": "Gelişmiş Filtreleme",
+        "type": "Tür",
+        "website": "Web Sitesi",
+        "website_plural": "Web Siteleri",
+        "undo": "Geri Al",
+        "Undo": "Geri Al",
+        "address_book_restored": "Adres defteri geri alındı",
+        "discard_changes": "DEĞİŞİKLİKLERİ UYGULAMA",
+        "new_contact_created": "Yeni kişi oluşturuldu",
+        "advanced_filter": "{{count}} Gelişmiş Filtre",
+        "advanced_filter_plural": "{{count}} Gelişmiş Filtreler",
+        "search_activate_selection_mode": "Arama sonuçlarında seçme modu henüz kullanılamıyor"
+    },
+    "job": {
+        "company": "Firma",
+        "department": "Departman",
+        "title": "Görevi"
+    },
+    "mail": "E-Posta",
+    "messages": {
+        "modal": {
+            "delete": {
+                "if_delete_lost_forever": "Bu kişiyi kalıcı olarak silerseniz geri alamazsınız, devam edilsin mi?",
+                "sure_delete_contact": "Bu kişiyi kalıcı olarak silmek istediğinizden emin misiniz?",
+                "sure_delete_contact_plural": "Bu kişileri kalıcı olarak silmek istediğinizden emin misiniz?"
+            }
+        },
+        "snackbar": {
+            "address_book_moved": "Adres defteri hedef klasöre taşındı",
+            "contact_deleted_permanently": "Kişi kalıcı olarak silindi",
+            "contact_moved": "Kişi taşındı",
+            "contact_moved_to_trash": "Kişi çöp kutusuna taşındı",
+            "contact_restored": "Kişi geri yüklendi"
+        }
+    },
+    "modal": {
+        "address_book_name": "Adres defteri adı",
+        "destination": "Hedef klasör"
+    },
+    "name": {
+        "first_name": "Ad",
+        "last_name": "Soyad",
+        "middle_name": "Orta ad",
+        "nickName": "Görünen Ad",
+        "prefix": "Önek",
+        "suffix": "Sonek"
+    },
+    "notes": "Notlar",
+    "section": {
+        "field": {
+            "city": "Şehir",
+            "country": "Ülke",
+            "number": "Sayı",
+            "postalCode": "Posta kodu",
+            "state": "Bölge",
+            "street": "Sokak",
+            "url": "Web Sitesi"
+        },
+        "title": {
+            "address": "Adres",
+            "address_plural": "Adres",
+            "mail": "E-posta adresi",
+            "phone_number": "Telefon",
+            "url": "Web Sitesi",
+            "url_plural": "Web Sitesi ({{count}})"
+        }
+    },
+    "select": {
+        "default": "Tür seçin"
+    },
+    "settings": {
+        "contacts": {
+            "checkbox": {
+                "add_contact_to_emailed_contacts": "Yeni kişileri \"E-posta Gönderilen Kişiler\" listesine ekle",
+                "autocomplete_on_comma": "Virgül yazıldığında otomatik tamamlamada eşleşeni seç",
+                "incl_addrs_in_glbl_addrs_list": "Global Adres Listesindeki adresleri ekle",
+                "include_add_in_shared_contact": "Paylaşılan kişilerdeki adresleri ekle",
+                "srch_glbl_addrs_list": "Kişi seçerken öncelikle Global Adres Defterinde arama yap"
+            }
+        }
+    },
+    "snackbar": {
+        "error": "Bir hata oluştu, lütfen tekrar deneyin",
+        "folder_edited": "Adres defteri başarıyla düzenlendi",
+        "folder_shared": "Adres defteri paylaşıldı",
+        "folder_shared_error": "Bir hata oluştu, lütfen tekrar deneyin",
+        "share_resend": "Paylaşım davetini yeniden gönder",
+        "share_revoke": "Paylaşım erişimi iptal edildi",
+        "share_updated": "Erişim hakları güncellendi"
+    },
+    "title": {
+        "advanced_filters": "Gelişmiş Filtreler"
+    },
+    "tooltip": {
+        "edit": "Erişimi düzenle",
+        "resend": "Bu paylaşım hakkında e-posta bildirimi gönder",
+        "revoke": "Erişimi iptal et"
+    },
+    "types": {
+        "home": "Giriş",
+        "mobile": "Mobil",
+        "other": "diğer",
+        "work": "İş"
+    },
+    "of": "—",
+    "contact_restored": "Kişi geri yüklendi",
+    "displayer": {
+        "description3": "Yeni bir kişiler grubu oluşturmak için \"YENİ\" tuşuna tıklayın.",
+        "description4": "\"YENİ\" tuşuna tıklayıp yeni bir tane oluşturun.",
+        "description5": "Diğer kullanıcılar ile tüm bağlantı yöntemlerini keşfedin.",
+        "description2": "Yeni bir tane oluşturmak için \"YENİ\" tuşuna tıklayın.",
+        "description6": "\"Düzenle\" modunu kullanarak bir kişiye kişisel not ekleyebilirsiniz.",
+        "description7": "\"YENİ\" tuşuna tıklayıp bir kişiler grubu oluşturun.",
+        "description8": "Paylaşılan e-postalar göndermek için kişi veya kişiler grubu seçin.",
+        "list_title1": "Henüz hiç kişi yok görünüyor",
+        "list_title2": "Çöp kutusu boş",
+        "search_description1": "Veya aramanızı detaylandırmak için “Gelişmiş Filtreler”i seçin.",
+        "search_description2": "Başka bir arama yapmayı deneyin.",
+        "search_description3": "Yazım hatalarını ve filtre seçeneklerini kontrol edin veya farklı kelimeler ile deneyin.",
+        "search_list_title1": "Sonuç bulunamadı. Yeniden aramayı deneyin!",
+        "search_list_title2": "Aramanız ile uyumlu öğe bulunamadı.",
+        "search_title1": "Farklı arama başlat",
+        "search_title2": "Üzgünüz, aramanız için sonuç bulunamadı",
+        "search_title3": "Aramanız için sonuç bulunamadı.",
+        "title1": "\"YENİ\" tuşuna tıklayıp yeni bir kişi oluşturun.",
+        "title10": "Çöp kutusundan kişileri seçin ve geri alın",
+        "title3": "İş arkadaşlarınız ile bağlantılı kalın.",
+        "title4": "Kişisel notlar ekleyerek kişilerinizi özelleştirin",
+        "title5": "Kişi seç",
+        "title6": "Kişiyi özelleştir",
+        "title8": "Paylaşmak iyidir",
+        "title9": "Kişiyi silmek için çöp kutusu simgesine tıklayın.",
+        "search_title4": "Detayları görüntülemek veya işlem yapmak için bir veya daha fazla sonuç seçin.",
+        "title2": "Tüm çalışmalarınızı kişileriniz ile paylaşın.",
+        "title7": "İş arkadaşlarınız ile bağlantılı kalın"
+    }
+}

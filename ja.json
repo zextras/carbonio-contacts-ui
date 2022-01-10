@@ -1,0 +1,261 @@
+{
+    "share": {
+        "contacts": "連絡先",
+        "add": "追加する",
+        "admin": "管理者",
+        "create": "作成する",
+        "delete": "削除する",
+        "none": "なし",
+        "owner": "オーナ",
+        "read": "既読",
+        "type": "タイプ",
+        "administer": "管理者",
+        "allowed_actions": "許可された操作",
+        "contact_folder": "アドレス帳",
+        "filter_user": "ユーザーを探す",
+        "find_contact_shares": "連絡先の共有を検索する",
+        "find_shares": "共有を検索する",
+        "find_shares_label": "連絡先のツリーに表示するアドレス帳を選択します",
+        "insert": "挿入する",
+        "manager": "管理者",
+        "options": {
+            "share_calendar_with": {
+                "external_guests": "外部ゲスト（表示のみ）",
+                "internal_users_groups": "内部ユーザーまたはグループ",
+                "public": "公開（表示のみ、パスワード不要）"
+            }
+        },
+        "recipients_address": "受信者のメールアドレス",
+        "remove_from_this_list": "このリストから削除する",
+        "role": "役割",
+        "send_notification": "この共有に関する通知を送信する",
+        "share_added_succesfully": "共有が追加されました",
+        "share_info": "共有されたアドレス帳の情報",
+        "share_removed_succesfully": "共有が削除されました",
+        "shared_folders": "共有されたアドレス帳",
+        "shared_item": "共有アイテム",
+        "shared_items": "{{value}}の共有アドレス帳",
+        "standard_message": "標準メッセージにメモを追加する",
+        "viewer": "ビューア",
+        "workflow": "ワークフロー",
+        "write": "書く",
+        "share_note": "標準メッセージには、名前、共有アイテムの名前、受信者に付与されたアクセス許可、および必要に応じてサインイン情報が表示されます。"
+    },
+    "action": {
+        "delete": "削除する",
+        "move": "移動",
+        "restore": "復元する",
+        "search": "検索する",
+        "delete_permanently": "完全に削除する",
+        "edit_share": "アクセスを編集する",
+        "goto_folder": "フォルダに移動する",
+        "reset_filters": "フィルターをリセットする",
+        "send_msg": "メールを送信する",
+        "share_folder": "フォルダを共有する"
+    },
+    "folder": {
+        "modal": {
+            "delete": {
+                "footer": "削除する",
+                "title": "削除する",
+                "body": {
+                    "message1": "選択した名簿を削除しますか？ 削除すると、関連するコンテンツがゴミ箱に移動し、名簿が表示されなくなります。",
+                    "message2": "選択した名簿を完全に削除しますか？ 削除すると、関連するコンテンツが完全に削除され、名簿を復元できなくなります。"
+                }
+            },
+            "edit": {
+                "body": {
+                    "contacts": "連絡先",
+                    "type": "タイプ",
+                    "item": {
+                        "empty": "利用可能なパスがありません",
+                        "root": "ルート"
+                    }
+                },
+                "footer": "編集する"
+            },
+            "move": {
+                "footer": "移動",
+                "title": "移動",
+                "body": {
+                    "message1": "名簿を選択して、検討対象の名簿を次の場所に移動します:",
+                    "message3": "検討対象のフォルダを次の場所に移動するフォルダを選択します:"
+                },
+                "input": {
+                    "filter": "アドレス帳をフィルタリングする"
+                },
+                "new": "新しいアドレス帳"
+            },
+            "new": {
+                "footer": "作成する",
+                "body": {
+                    "message1": "新しいアドレス帳の名前",
+                    "message2": "新しく作成されたアドレス帳を含むアドレス帳を選択します:"
+                },
+                "create_footer": "作成して移動する",
+                "input": {
+                    "name": "アドレス帳の名前を挿入する",
+                    "name_exist": "名前がこのパスにすでに存在します"
+                },
+                "title": "新しいアドレス帳を作成する",
+                "title2": "新しいフォルダの作成"
+            },
+            "restore": {
+                "footer": "復元する",
+                "title": "復元する",
+                "create_footer": "作成と復元"
+            },
+            "footer": {
+                "go_back": "戻る"
+            },
+            "empty": {
+                "body": {
+                    "message1": "選択したアドレス帳を空にしますか？",
+                    "message2": "空にすると、関連するコンテンツがすべてゴミ箱に移動されます。"
+                },
+                "footer": "空にする",
+                "title": "空にする"
+            },
+            "item": {
+                "empty": "利用可能なアイテムはありません"
+            }
+        },
+        "action": {
+            "delete": "アドレス帳を削除する",
+            "delete_permanently": "アドレス帳を完全に削除する",
+            "edit": "アドレス帳を編集する",
+            "empty": {
+                "folder": "アドレス帳を空にする",
+                "trash": "ゴミ箱を空にする"
+            },
+            "move": "アドレス帳を移動する",
+            "new": "新しいアドレス帳"
+        },
+        "item": {
+            "root": "ルート"
+        },
+        "share_folder": "アドレス帳を共有する",
+        "snackbar": {
+            "address_book_moved_to_trash": "アドレス帳をゴミ箱に移動しました",
+            "folder_empty": "アドレス帳が空になりました",
+            "folder_new": "新しいアドレス帳が作成されました",
+            "trash_empty": "ゴミ箱フォルダが空になりました"
+        },
+        "type": "連絡先フォルダ"
+    },
+    "job": {
+        "company": "会社",
+        "department": "部門",
+        "title": "役職"
+    },
+    "label": {
+        "cancel": "キャンセル",
+        "edit": "編集する",
+        "save": "保存する",
+        "share": "シェアする",
+        "advance_filters": "{{count}}高度なフィルター",
+        "contact_setting": "連絡先の設定",
+        "create": "新しい連絡先",
+        "edit_access": "{{name}}のアクセスを編集する",
+        "edit_folder_properties": "{{name}}のプロパティを編集する",
+        "resend": "再送信する",
+        "revoke": "取り消す",
+        "revoke_access_tooltip": "標準通知の送信へのアクセスを取り消す",
+        "revoke_access_without_notification": "通知を送信せずにアクセスを取り消す",
+        "revoke_send_standard_msg": "カスタム通知の送信へのアクセスを取り消す",
+        "revoke_share": "{{title}}の共有を取り消す",
+        "search_hint": "検索のヒント！",
+        "shares_folder_edit": "このアドレス帳の共有",
+        "single_advance_fillter": "高度なフィルター"
+    },
+    "name": {
+        "nickName": "ニックネーム",
+        "first_name": "名前",
+        "last_name": "苗字",
+        "middle_name": "ミドルネーム",
+        "prefix": "敬称",
+        "suffix": "称号"
+    },
+    "notes": "注釈",
+    "section": {
+        "field": {
+            "country": "国",
+            "state": "ステータス",
+            "city": "市町村",
+            "number": "番号",
+            "postalCode": "郵便番号",
+            "street": "通り名",
+            "url": "ウェブサイト"
+        },
+        "title": {
+            "address": "アドレス ({{count}})",
+            "mail": "メールアドレス",
+            "phone_number": "電話連絡先",
+            "url": "ウェブサイト {{count}}"
+        }
+    },
+    "message": {
+        "snackbar": {
+            "settings_saved": "編集が保存されました"
+        },
+        "search_hints": "話し合う必要のある検索のヒント"
+    },
+    "mail": "メール",
+    "messages": {
+        "modal": {
+            "delete": {
+                "sure_delete_contact": "本当に選択した連絡先を完全に削除しますか？",
+                "if_delete_lost_forever": "この連絡先を完全に削除すると、復元できなくなります。続行しますか？"
+            }
+        },
+        "snackbar": {
+            "address_book_moved": "アドレス帳を宛先フォルダに移動しました",
+            "contact_deleted_permanently": "連絡先が完全に削除されました",
+            "contact_moved": "連絡先が宛先のアドレス帳に移動しました",
+            "contact_moved_to_trash": "連絡先がゴミ箱に移動しました",
+            "contact_restored": "宛先アドレス帳に復元された連絡先"
+        }
+    },
+    "modal": {
+        "address_book_name": "アドレス帳の名前",
+        "destination": "宛先フォルダ"
+    },
+    "select": {
+        "default": "種類を選択してください"
+    },
+    "settings": {
+        "contacts": {
+            "checkbox": {
+                "add_contact_to_emailed_contacts": "「メールで送信された連絡先」に新しい連絡先を追加する",
+                "autocomplete_on_comma": "コンマが入力された際にオートコンプリートのマッチを選択します",
+                "incl_addrs_in_glbl_addrs_list": "グローバルアドレスリストにアドレスを含める",
+                "include_add_in_shared_contact": "共有の連絡先にアドレスを含める",
+                "srch_glbl_addrs_list": "連絡先ピッカーを利用する際、最初にグローバルアドレスリストを検索します"
+            }
+        }
+    },
+    "snackbar": {
+        "error": "エラーが発生しました。再度お試しください",
+        "folder_edited": "アドレス帳が編集されました",
+        "folder_shared": "アドレス帳が共有されました",
+        "folder_shared_error": "エラーが発生しました。再度お試しください",
+        "share_resend": "送信された招待を共有する",
+        "share_updated": "アクセス権が更新されました",
+        "share_revoke": "共有アクセスが取り消されました"
+    },
+    "title": {
+        "advanced_filters": "高度なフィルター"
+    },
+    "tooltip": {
+        "edit": "アクセスを編集する",
+        "resend": "この共有に関するメール通知を再送信します",
+        "revoke": "アクセス権を取り消す"
+    },
+    "types": {
+        "home": "自宅",
+        "mobile": "携帯電話",
+        "other": "その他",
+        "work": "職場"
+    },
+    "of": "の"
+}

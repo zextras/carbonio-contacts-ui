@@ -1,0 +1,260 @@
+{
+    "share": {
+        "none": "无",
+        "add": "添加",
+        "admin": "管理员",
+        "contacts": "联系人",
+        "create": "创建",
+        "delete": "删除",
+        "owner": "所有者",
+        "read": "读取",
+        "type": "类型",
+        "viewer": "查看者",
+        "write": "编写",
+        "administer": "管理",
+        "allowed_actions": "允许操作",
+        "contact_folder": "地址簿",
+        "filter_user": "查找用户",
+        "find_contact_shares": "查找联系人共享",
+        "find_shares": "查找共享",
+        "find_shares_label": "选择要在联系人树中查看的地址簿",
+        "insert": "插入",
+        "manager": "管理者",
+        "options": {
+            "share_calendar_with": {
+                "external_guests": "外部访客（仅查看）",
+                "internal_users_groups": "内部用户或群组",
+                "public": "公开（仅查看，无需密码）"
+            }
+        },
+        "recipients_address": "接收者邮件地址",
+        "remove_from_this_list": "从此列表中移除",
+        "role": "角色",
+        "send_notification": "发送有关此共享的消息通知",
+        "share_added_succesfully": "共享添加成功",
+        "share_info": "共享地址簿信息",
+        "share_removed_succesfully": "共享移除成功",
+        "shared_folders": "共享地址簿",
+        "shared_item": "共享项目",
+        "shared_items": "{{value}} 的共享地址簿",
+        "standard_message": "向标准消息添加备注",
+        "workflow": "工作流",
+        "share_note": "标准消息中会展示您的名称、共享项目名称、授予接收者的权限以及登录信息。"
+    },
+    "action": {
+        "delete": "删除",
+        "move": "移动",
+        "restore": "恢复",
+        "search": "搜索",
+        "edit_share": "编辑访问权限",
+        "goto_folder": "前往文件夹",
+        "share_folder": "共享文件夹",
+        "delete_permanently": "永久删除",
+        "reset_filters": "重置过滤条件",
+        "send_msg": "发送邮件"
+    },
+    "folder": {
+        "modal": {
+            "delete": {
+                "footer": "删除",
+                "title": "删除",
+                "body": {
+                    "message1": "是否删除所选地址簿？如果删除，则其相关内容将被移动至垃圾箱中，且地址簿将不再可见。",
+                    "message2": "是否永久性删除所选地址簿？如果删除，则其相关内容将永久性移除，且地址簿将不可恢复。"
+                }
+            },
+            "edit": {
+                "body": {
+                    "contacts": "联系人",
+                    "type": "类型",
+                    "item": {
+                        "empty": "无可用路径",
+                        "root": "root"
+                    }
+                },
+                "footer": "编辑"
+            },
+            "move": {
+                "footer": "移动",
+                "title": "移动",
+                "body": {
+                    "message1": "选择一个地址簿以将其移动至：",
+                    "message3": "选择文件夹以将其移动至："
+                },
+                "input": {
+                    "filter": "筛选地址簿"
+                },
+                "new": "新地址簿"
+            },
+            "new": {
+                "footer": "创建",
+                "body": {
+                    "message2": "选择将会包含最近创建的一个地址簿：",
+                    "message1": "新地址簿名称"
+                },
+                "input": {
+                    "name": "插入地址簿名称",
+                    "name_exist": "名称已存在于此路径中"
+                },
+                "title": "新建地址簿",
+                "title2": "新文件夹创建",
+                "create_footer": "创建和移动"
+            },
+            "restore": {
+                "footer": "恢复",
+                "title": "恢复",
+                "create_footer": "创建和恢复"
+            },
+            "empty": {
+                "body": {
+                    "message2": "如果清空，所有相关内容都将被移动至垃圾箱。",
+                    "message1": "是否清空所选地址簿？"
+                },
+                "footer": "空",
+                "title": "空"
+            },
+            "footer": {
+                "go_back": "返回"
+            },
+            "item": {
+                "empty": "无可用项目"
+            }
+        },
+        "action": {
+            "delete": "删除地址簿",
+            "delete_permanently": "永久性删除地址簿",
+            "edit": "编辑地址簿",
+            "empty": {
+                "folder": "清空地址簿",
+                "trash": "清空垃圾箱"
+            },
+            "move": "移动地址簿",
+            "new": "新地址簿"
+        },
+        "item": {
+            "root": "Root"
+        },
+        "share_folder": "共享地址簿",
+        "type": "联系人文件夹",
+        "snackbar": {
+            "address_book_moved_to_trash": "地址簿已移动至垃圾箱",
+            "folder_new": "新地址簿已创建",
+            "trash_empty": "垃圾文件夹清空成功",
+            "folder_empty": "地址簿已清空成功"
+        }
+    },
+    "job": {
+        "company": "公司",
+        "department": "部门",
+        "title": "工作角色"
+    },
+    "label": {
+        "cancel": "取消",
+        "edit": "编辑",
+        "save": "保存",
+        "share": "分享",
+        "advance_filters": "{{count}}高级过滤条件",
+        "revoke_share": "撤销 {{title}} 的共享",
+        "contact_setting": "联系人设置",
+        "create": "新联系人",
+        "edit_access": "编辑 {{name}} 的访问权限",
+        "edit_folder_properties": "编辑 {{name}} 的属性",
+        "resend": "重新发送",
+        "revoke": "撤销",
+        "revoke_access_tooltip": "撤销访问权限并发送标准通知",
+        "revoke_access_without_notification": "撤销访问权限并不发送通知",
+        "revoke_send_standard_msg": "撤销访问权限并发送自定义通知",
+        "search_hint": "搜索提示！",
+        "shares_folder_edit": "共享此地址簿",
+        "single_advance_fillter": "高级过滤条件"
+    },
+    "name": {
+        "nickName": "昵称",
+        "first_name": "名字",
+        "last_name": "姓氏",
+        "middle_name": "中间名",
+        "prefix": "前缀",
+        "suffix": "后缀"
+    },
+    "notes": "备注",
+    "section": {
+        "field": {
+            "country": "国家",
+            "state": "状态",
+            "city": "城市",
+            "number": "号码",
+            "postalCode": "邮政编码",
+            "street": "街道",
+            "url": "网站"
+        },
+        "title": {
+            "address": "地址（{{count}}）",
+            "url": "网站（{{count}}）",
+            "mail": "邮件地址",
+            "phone_number": "电话联系"
+        }
+    },
+    "modal": {
+        "destination": "目标文件夹",
+        "address_book_name": "地址簿名称"
+    },
+    "mail": "邮件",
+    "message": {
+        "search_hints": "搜索我们需要讨论的提示",
+        "snackbar": {
+            "settings_saved": "编辑保存正确"
+        }
+    },
+    "messages": {
+        "modal": {
+            "delete": {
+                "if_delete_lost_forever": "永久性删除此联系人将导致您无法再次将其恢复，是否继续？",
+                "sure_delete_contact": "确定要永久性删除所选联系人吗？"
+            }
+        },
+        "snackbar": {
+            "address_book_moved": "地址簿已移动至目标文件夹",
+            "contact_deleted_permanently": "联系人已永久性删除",
+            "contact_moved": "联系人已移动至目标地址簿",
+            "contact_moved_to_trash": "联系人已移动至垃圾箱",
+            "contact_restored": "联系人已在目标地址簿中恢复"
+        }
+    },
+    "tooltip": {
+        "resend": "发送有关此共享的邮件通知",
+        "edit": "编辑访问权限",
+        "revoke": "撤销访问权限"
+    },
+    "types": {
+        "work": "工作",
+        "home": "主页",
+        "mobile": "移动端",
+        "other": "其他"
+    },
+    "select": {
+        "default": "选择类型"
+    },
+    "settings": {
+        "contacts": {
+            "checkbox": {
+                "add_contact_to_emailed_contacts": "向“已发邮件联系人”中新增联系人",
+                "autocomplete_on_comma": "在键入逗号时选择自动补全匹配",
+                "incl_addrs_in_glbl_addrs_list": "在全局地址列表中包含地址",
+                "include_add_in_shared_contact": "在共享联系人中包含地址",
+                "srch_glbl_addrs_list": "使用联系人选择器时搜索全局地址列表"
+            }
+        }
+    },
+    "snackbar": {
+        "error": "出现错误，请重试",
+        "folder_edited": "地址簿编辑成功",
+        "folder_shared": "地址簿已共享",
+        "folder_shared_error": "出现错误，请重试",
+        "share_resend": "共享邀请重发",
+        "share_revoke": "共享访问权限已撤销",
+        "share_updated": "访问权限更新"
+    },
+    "title": {
+        "advanced_filters": "高级过滤条件"
+    }
+}

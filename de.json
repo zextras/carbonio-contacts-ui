@@ -1,0 +1,265 @@
+{
+    "action": {
+        "delete": "Löschen",
+        "edit_share": "Zugriff bearbeiten",
+        "goto_folder": "Zum Ordner gehen",
+        "move": "Verschieben",
+        "reset_filters": "Filter zurücksetzen",
+        "restore": "Wiederherstellen",
+        "search": "Suchen",
+        "send_msg": "E-Mail senden",
+        "share_folder": "Ordner teilen",
+        "delete_permanently": "Endgültig löschen"
+    },
+    "folder": {
+        "action": {
+            "delete": "Adressbuch löschen",
+            "delete_permanently": "Adressbuch endgültig löschen",
+            "edit": "Adressbuch bearbeiten",
+            "empty": {
+                "folder": "Adressbuch leeren",
+                "trash": "Papierkorb leeren"
+            },
+            "move": "Adressbuch verschieben",
+            "new": "Neues Adressbuch"
+        },
+        "item": {
+            "root": "Root"
+        },
+        "modal": {
+            "delete": {
+                "body": {
+                    "message1": "Möchten Sie das ausgewählte Adressbuch löschen? Wenn Sie es löschen, wird der zugehörige Inhalt in den Papierkorb verschoben und das Adressbuch wird nicht mehr sichtbar sein.",
+                    "message2": "Möchten Sie das ausgewählte Adressbuch endgültig löschen? Wenn Sie es löschen, wird der zugehörige Inhalt unwiderruflich gelöscht und das Adressbuch kann nicht mehr wiederhergestellt werden."
+                },
+                "footer": "Löschen",
+                "title": "Löschen"
+            },
+            "edit": {
+                "body": {
+                    "contacts": "Kontakte",
+                    "item": {
+                        "empty": "Kein Pfad verfügbar",
+                        "root": "root"
+                    },
+                    "type": "Typ"
+                },
+                "footer": "Bearbeiten"
+            },
+            "empty": {
+                "body": {
+                    "message1": "Möchten Sie das ausgewählte Adressbuch leeren?",
+                    "message2": "Wenn Sie es leeren, wird der zugehörige Inhalt in den Papierkorb verschoben."
+                },
+                "footer": "Leer",
+                "title": "Leer"
+            },
+            "footer": {
+                "go_back": "Zurück"
+            },
+            "item": {
+                "empty": "Keine Elemente verfügbar"
+            },
+            "move": {
+                "body": {
+                    "message1": "Ein Adressbuch als Ziel zum Verschieben aussuchen:",
+                    "message3": "Einen Ordner als Ziel zum Verschieben aussuchen:"
+                },
+                "footer": "Verschieben",
+                "input": {
+                    "filter": "Adressbuch filtern"
+                },
+                "new": "Neues Adressbuch",
+                "title": "Verschieben"
+            },
+            "new": {
+                "body": {
+                    "message1": "Name des neuen Adressbuches",
+                    "message2": "Wählen Sie ein Adressbuch aus, welches das neu erstellte Element enthalten wird:"
+                },
+                "create_footer": "Erstellen und verschieben",
+                "footer": "Erstellen",
+                "input": {
+                    "name": "Adressbuchname eingeben",
+                    "name_exist": "Der Name existiert bereits in diesem Pfad"
+                },
+                "title": "Neues Adressbuch erstellen",
+                "title2": "Erstellung eines neuen Ordners"
+            },
+            "restore": {
+                "create_footer": "Erstellen und wiederherstellen",
+                "footer": "Wiederherstellen",
+                "title": "Wiederherstellen"
+            }
+        },
+        "snackbar": {
+            "folder_empty": "Adressbuch erfolgreich geleert",
+            "folder_new": "Neues Adressbuch erstellt",
+            "trash_empty": "Papierkorb erfolgreich geleert",
+            "address_book_moved_to_trash": "Adressbuch in den Papierkorb verschoben"
+        },
+        "type": "Kontakteordner",
+        "share_folder": "Adressbuch teilen"
+    },
+    "job": {
+        "company": "Firma",
+        "department": "Abteilung",
+        "title": "Job Rolle"
+    },
+    "label": {
+        "edit_access": "{{name}}'s Zugriff bearbeiten",
+        "resend": "Erneut senden",
+        "revoke": "Widerrufen",
+        "contact_setting": "Kontakt Einstellungen",
+        "revoke_share": "{{title}}'s Teilen widerrufen",
+        "search_hint": "Suchhinweise!",
+        "shares_folder_edit": "Teilen dieses Adressbuches",
+        "cancel": "Abbrechen",
+        "edit": "Bearbeiten",
+        "advance_filters": "1 Fortgeschrittener filter",
+        "advance_filters_plural": "{{count}} Fortgeschrittene filter",
+        "create": "Neuer Kontakt",
+        "edit_folder_properties": "{{name}}'s Eigenschaften bearbeiten",
+        "save": "Speichern",
+        "share": "Teilen",
+        "revoke_access_tooltip": "Zugriff widerrufen mit einer Standardbenachrichtigung",
+        "revoke_access_without_notification": "Zugriff widerrufen ohne eine Benachrichtigung zu senden",
+        "revoke_send_standard_msg": "Zugriff widerrufen mit einer benutzerdefinierten Benachrichtigung",
+        "single_advance_fillter": "Fortgeschrittene Filter"
+    },
+    "message": {
+        "snackbar": {
+            "settings_saved": "Änderungen korrekt gespeichert"
+        },
+        "search_hints": "Suchhinweise, über die wir sprechen müssen"
+    },
+    "messages": {
+        "modal": {
+            "delete": {
+                "sure_delete_contact": "Sind Sie sicher, dass Sie diesen Kontakt endgültig löschen möchten ?",
+                "sure_delete_contact_plural": "Sind Sie sicher, dass Sie diese Kontakte endgültig löschen möchten ?",
+                "if_delete_lost_forever": "Wenn Sie diesen Kontakt endgültig löschen, werden Sie ihn nicht mehr wiederherstellen können, fortfahren?"
+            }
+        },
+        "snackbar": {
+            "address_book_moved": "Adressbuch in den Zielordner verschoben",
+            "contact_deleted_permanently": "Kontakt endgültig gelöscht",
+            "contact_moved": "Kontakt in das Zieladressbuch verschoben",
+            "contact_moved_to_trash": "Kontakt in den Papierkorb verschoben",
+            "contact_restored": "Kontakt in Zieladressbuch wiederhergestellt"
+        }
+    },
+    "modal": {
+        "address_book_name": "Name des Adressbuches",
+        "destination": "Zielordner"
+    },
+    "name": {
+        "last_name": "Nachname",
+        "middle_name": "Zweiter Vorname",
+        "prefix": "Anrede",
+        "suffix": "Namenssuffix",
+        "nickName": "Nickname",
+        "first_name": "Vorname"
+    },
+    "section": {
+        "field": {
+            "url": "Website",
+            "city": "Stadt",
+            "country": "Land",
+            "number": "Nummer",
+            "postalCode": "Postleitzahl",
+            "state": "Status",
+            "street": "Straße"
+        },
+        "title": {
+            "mail": "E-Mail Adresse",
+            "phone_number": "Telefon Kontakt",
+            "url": "Webseite",
+            "url_plural": "Webseiten ({{count}})",
+            "address": "Adresse",
+            "address_plural": ""
+        }
+    },
+    "select": {
+        "default": "Typ auswählen"
+    },
+    "settings": {
+        "contacts": {
+            "checkbox": {
+                "add_contact_to_emailed_contacts": "Neue Kontakte zu \"Angeschriebene Kontakte\" hinzufügen",
+                "autocomplete_on_comma": "Wählen Sie ein Ergebnis der Autovervollständigung aus, wenn ein Komma eingegeben wird",
+                "incl_addrs_in_glbl_addrs_list": "Adressen in der Globalen Adressliste inkludieren",
+                "include_add_in_shared_contact": "Adressen in geteilte Kontakte inkludieren",
+                "srch_glbl_addrs_list": "Zuerst die Globale Adressliste durchsuchen, wenn der Kontaktsammler verwendet wird"
+            }
+        }
+    },
+    "share": {
+        "contact_folder": "Adressbuch",
+        "filter_user": "Benutzer finden",
+        "find_contact_shares": "Geteilte Elemente des Kontaktes finden",
+        "find_shares": "Geteilte Elemente finden",
+        "insert": "Eingeben",
+        "options": {
+            "share_calendar_with": {
+                "external_guests": "Externe Gäste (nur Leserecht)",
+                "internal_users_groups": "Interne Benutzer oder Gruppen",
+                "public": "Öffentlich (nur Leserecht, kein Passwort erforderlich)"
+            }
+        },
+        "recipients_address": "E-Mail Adressen der Empfänger",
+        "remove_from_this_list": "Aus der Liste entfernen",
+        "role": "Rolle",
+        "send_notification": "Benachrichtigung über dieses geteilte Element senden",
+        "share_note": "Die Standardnachricht zeigt Ihren Namen, den Namen des geteilten Elements, die verteilten Rechte für die Empfänger und Anmeldeinformationen.",
+        "shared_folders": "Geteilte Adressbücher",
+        "shared_item": "Geteiltes Element",
+        "standard_message": "Notiz zur Standardnachricht hinzufügen",
+        "workflow": "Workflow",
+        "write": "Schreiben",
+        "add": "Hinzufügen",
+        "admin": "Admin",
+        "administer": "Verwalten",
+        "owner": "Besitzer",
+        "read": "Gelesen",
+        "type": "Typ",
+        "viewer": "Zuschauer",
+        "allowed_actions": "Erlaubte Aktionen",
+        "contacts": "Kontakte",
+        "create": "Erstellen",
+        "delete": "Löschen",
+        "manager": "Manager",
+        "none": "Keine",
+        "find_shares_label": "Wählen Sie aus, welches Adressbuch Sie im Kontaktbaum sehen möchten",
+        "share_added_succesfully": "Teilen erfolgreich hinzugefügt",
+        "share_info": "Informationen des Adressbuches geteilt",
+        "share_removed_succesfully": "Teilen erfolgreich entfernt",
+        "shared_items": "{{value}}s geteilte Adressbücher"
+    },
+    "snackbar": {
+        "error": "Etwas ist schiefgegangen,bitte versuchen Sie es erneut",
+        "folder_edited": "Adressbücher erfolgreich bearbeitet",
+        "folder_shared": "Adressbuch geteilt",
+        "folder_shared_error": "Etwas ist schiefgegangen,bitte versuchen Sie es erneut",
+        "share_updated": "Zugriffsrechte aktualisiert",
+        "share_resend": "Einladung zum Teilen erneut gesendet",
+        "share_revoke": "Gemeinsamen Zugriff widerrufen"
+    },
+    "title": {
+        "advanced_filters": "Fortgeschrittene Filter"
+    },
+    "tooltip": {
+        "edit": "Zugriff bearbeiten",
+        "revoke": "Zugriff widerrufen",
+        "resend": "E-Mail Benachrichtigung über dieses geteilte Element senden"
+    },
+    "types": {
+        "home": "Home",
+        "other": "andere",
+        "work": "Arbeit",
+        "mobile": "Mobil"
+    },
+    "mail": "E-mail",
+    "notes": "Notizen",
+    "of": "von"
+}
