@@ -10,7 +10,7 @@ import {
 	useRemoveCurrentBoard,
 	report,
 	getBridgedFunctions
-} from '@zextras/zapp-shell';
+} from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 import { map, filter, reduce, set, omit, find } from 'lodash';
 import {

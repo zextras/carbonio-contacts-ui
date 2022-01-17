@@ -5,7 +5,7 @@
  */
 import React, { useCallback } from 'react';
 import { Container, CustomModal, Text } from '@zextras/carbonio-design-system';
-import { useReplaceHistoryCallback, report, FOLDERS } from '@zextras/zapp-shell';
+import { useReplaceHistoryCallback, report, FOLDERS } from '@zextras/carbonio-shell-ui';
 import ModalFooter from '../contact-actions/commons/modal-footer';
 import { ModalHeader } from './commons/modal-header';
 import { folderAction } from '../../store/actions/folder-action';

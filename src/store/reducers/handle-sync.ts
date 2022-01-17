@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { FOLDERS } from '@zextras/zapp-shell';
+import { FOLDERS } from '@zextras/carbonio-shell-ui';
 import { filter, find, map } from 'lodash';
 import { normalizeFolders } from '../normalizations/normalize-folders';
 import {

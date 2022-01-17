@@ -5,7 +5,7 @@
  */
 import React, { FC, useEffect, useState, useCallback, Suspense } from 'react';
 import { Container } from '@zextras/carbonio-design-system';
-import { soapFetch, Spinner } from '@zextras/zapp-shell';
+import { soapFetch, Spinner } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 import { Switch, Route, useRouteMatch } from 'react-router-dom';
 import { Contact } from '../../types/contact';

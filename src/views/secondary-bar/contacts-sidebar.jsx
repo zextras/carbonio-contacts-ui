@@ -18,7 +18,7 @@ import {
 	Row,
 	SnackbarManagerContext
 } from '@zextras/carbonio-design-system';
-import { useReplaceHistoryCallback } from '@zextras/zapp-shell';
+import { useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
 import { setCustomComponent } from '../folder/accordion-custom-components';
 import { FolderActionsType } from '../../types/folder';
 import { NewModal } from './new-modal';

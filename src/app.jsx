@@ -9,7 +9,7 @@ import {
 	registerComponents,
 	Spinner,
 	getBridgedFunctions
-} from '@zextras/zapp-shell';
+} from '@zextras/carbonio-shell-ui';
 import SidebarItems from './views/secondary-bar/contacts-sidebar';
 import ContactInput from './shared/contact-input';
 import { SyncDataHandler } from './views/secondary-bar/sync-data-handler';

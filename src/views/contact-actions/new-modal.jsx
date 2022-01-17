@@ -5,7 +5,7 @@
  */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Container, Input, Row, Text } from '@zextras/carbonio-design-system';
-import { FOLDERS } from '@zextras/zapp-shell';
+import { FOLDERS } from '@zextras/carbonio-shell-ui';
 import { filter, map } from 'lodash';
 import { nanoid } from '@reduxjs/toolkit';
 import ModalFooter from './commons/modal-footer';

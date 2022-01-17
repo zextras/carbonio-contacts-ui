@@ -6,7 +6,7 @@
 import React from 'react';
 import { isEmpty } from 'lodash';
 import { Text } from '@zextras/carbonio-design-system';
-import { getAction, FOLDERS } from '@zextras/zapp-shell';
+import { getAction, FOLDERS } from '@zextras/carbonio-shell-ui';
 import { FolderActionsType } from '../types/folder';
 import { contactAction } from '../store/actions/contact-action';
 import MoveModal from '../views/contact-actions/move-modal';

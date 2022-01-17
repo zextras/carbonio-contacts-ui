@@ -8,7 +8,7 @@ import { Input, Container, Text } from '@zextras/carbonio-design-system';
 import { filter, startsWith, reduce, isEmpty } from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { useReplaceHistoryCallback, FOLDERS } from '@zextras/zapp-shell';
+import { useReplaceHistoryCallback, FOLDERS } from '@zextras/carbonio-shell-ui';
 import ModalFooter from './commons/modal-footer';
 import { ModalHeader } from '../secondary-bar/commons/modal-header';
 import FolderItem from '../secondary-bar/commons/folder-item';

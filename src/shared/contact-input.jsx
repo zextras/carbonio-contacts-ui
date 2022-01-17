@@ -6,7 +6,7 @@
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { reduce, filter, some, startsWith, map, findIndex, trim } from 'lodash';
 import { ChipInput, Container, Avatar, Text, Row } from '@zextras/carbonio-design-system';
-import { soapFetch } from '@zextras/zapp-shell';
+import { soapFetch } from '@zextras/carbonio-shell-ui';
 import { useSelector } from 'react-redux';
 import { createSelector } from '@reduxjs/toolkit';
 import styled from 'styled-components';

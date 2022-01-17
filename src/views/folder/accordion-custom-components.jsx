@@ -5,7 +5,7 @@
  */
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
-import { AppLink, ZIMBRA_STANDARD_COLORS, FOLDERS } from '@zextras/zapp-shell';
+import { AppLink, ZIMBRA_STANDARD_COLORS, FOLDERS } from '@zextras/carbonio-shell-ui';
 import {
 	AccordionItem,
 	Container,

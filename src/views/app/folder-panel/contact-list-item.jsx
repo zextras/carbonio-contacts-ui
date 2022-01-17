@@ -5,7 +5,7 @@
  */
 import React, { useCallback, useMemo } from 'react';
 import { Container, Drag, Divider } from '@zextras/carbonio-design-system';
-import { useReplaceHistoryCallback } from '@zextras/zapp-shell';
+import { useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
 import ListItemActionWrapper from '../../folder/list-item-action-wrapper';
 import { ItemAvatar } from './item-avatar';
 import { ItemContent } from './item-content';

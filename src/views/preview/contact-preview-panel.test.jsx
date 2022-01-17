@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { testUtils, useReplaceHistoryCallback } from '@zextras/zapp-shell';
+import { testUtils, useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
 import React from 'react';
 // import { screen } from '@testing-library/react';
 import reducers from '../../store/reducers/reducers';
