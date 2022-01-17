@@ -14,7 +14,7 @@ import {
 	Row,
 	Dropdown,
 	Responsive
-} from '@zextras/zapp-ui';
+} from '@zextras/carbonio-design-system';
 
 const ContactPreviewHeader = ({ displayName, onClose, onEdit, onDelete, onMove }) => (
 	<Container height={49}>

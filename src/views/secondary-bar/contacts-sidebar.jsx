@@ -17,7 +17,7 @@ import {
 	Padding,
 	Row,
 	SnackbarManagerContext
-} from '@zextras/zapp-ui';
+} from '@zextras/carbonio-design-system';
 import { useReplaceHistoryCallback } from '@zextras/zapp-shell';
 import { setCustomComponent } from '../folder/accordion-custom-components';
 import { FolderActionsType } from '../../types/folder';

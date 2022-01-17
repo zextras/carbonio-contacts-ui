@@ -6,7 +6,7 @@
 import React, { Suspense, lazy, useState, useEffect } from 'react';
 import { Redirect, Switch, Route, useRouteMatch } from 'react-router-dom';
 import { setAppContext, Spinner } from '@zextras/zapp-shell';
-import { Container } from '@zextras/zapp-ui';
+import { Container } from '@zextras/carbonio-design-system';
 
 const LazyFolderView = lazy(() =>
 	import(/* webpackChunkName: "folder-view" */ './app/folder-panel')

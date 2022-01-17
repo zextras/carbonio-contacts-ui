@@ -6,7 +6,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Container } from '@zextras/zapp-ui';
+import { Container } from '@zextras/carbonio-design-system';
 import { useAppContext } from '@zextras/zapp-shell';
 import { ActionsContextProvider } from '../../ui-actions/actions-context';
 import { ContactsList } from './folder-panel/contacts-list';

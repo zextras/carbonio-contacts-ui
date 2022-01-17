@@ -5,7 +5,7 @@
  */
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Container, Icon, Padding, Row, Text } from '@zextras/zapp-ui';
+import { Container, Icon, Padding, Row, Text } from '@zextras/carbonio-design-system';
 import { ModalHeader } from './commons/modal-header';
 import { findLabel, ShareCalendarRoleOptions } from './commons/utils';
 

@@ -5,7 +5,7 @@
  */
 import React, { useMemo } from 'react';
 import { AppLink, ZIMBRA_STANDARD_COLORS } from '@zextras/zapp-shell';
-import { Icon, Padding, Row, Tooltip } from '@zextras/zapp-ui';
+import { Icon, Padding, Row, Tooltip } from '@zextras/carbonio-design-system';
 
 const folderIconName = {
 	7: 'PersonOutline',

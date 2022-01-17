@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React, { FC, ReactElement, useState, useCallback, useMemo, useEffect } from 'react';
-import { CustomModal, Container, ChipInput } from '@zextras/zapp-ui';
+import { CustomModal, Container, ChipInput } from '@zextras/carbonio-design-system';
 import { TFunction } from 'i18next';
 import { filter, includes, map } from 'lodash';
 import ModalFooter from '../secondary-bar/commons/modal-footer';

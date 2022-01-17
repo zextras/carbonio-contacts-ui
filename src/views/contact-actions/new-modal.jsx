@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Container, Input, Row, Text } from '@zextras/zapp-ui';
+import { Container, Input, Row, Text } from '@zextras/carbonio-design-system';
 import { FOLDERS } from '@zextras/zapp-shell';
 import { filter, map } from 'lodash';
 import { nanoid } from '@reduxjs/toolkit';

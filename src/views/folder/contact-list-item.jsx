@@ -7,7 +7,7 @@ import React, { useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Link, useRouteMatch } from 'react-router-dom';
-import { Avatar, Container, Text, Row, Padding } from '@zextras/zapp-ui';
+import { Avatar, Container, Text, Row, Padding } from '@zextras/carbonio-design-system';
 import { trim, includes } from 'lodash';
 import { useReplaceHistoryCallback } from '@zextras/zapp-shell';
 import { useDisplayName } from '../../commons/use-display-name';

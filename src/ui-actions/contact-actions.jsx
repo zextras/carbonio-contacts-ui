@@ -5,7 +5,7 @@
  */
 import React from 'react';
 import { isEmpty } from 'lodash';
-import { Text } from '@zextras/zapp-ui';
+import { Text } from '@zextras/carbonio-design-system';
 import { getAction, FOLDERS } from '@zextras/zapp-shell';
 import { FolderActionsType } from '../types/folder';
 import { contactAction } from '../store/actions/contact-action';

@@ -13,7 +13,16 @@ import {
 } from '@zextras/zapp-shell';
 import { useTranslation } from 'react-i18next';
 import { map, filter, reduce, set, omit, find } from 'lodash';
-import { Button, Container, Input, Row, IconButton, Padding, Text, Select } from '@zextras/zapp-ui';
+import {
+	Button,
+	Container,
+	Input,
+	Row,
+	IconButton,
+	Padding,
+	Text,
+	Select
+} from '@zextras/carbonio-design-system';
 import { useDispatch, useSelector } from 'react-redux';
 import FormSection from './form-section';
 import { CompactView } from '../../commons/contact-compact-view';

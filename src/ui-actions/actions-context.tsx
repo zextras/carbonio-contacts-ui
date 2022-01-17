@@ -9,7 +9,7 @@ import { useDispatch } from 'react-redux';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { useReplaceHistoryCallback } from '@zextras/zapp-shell';
-import { SnackbarManagerContext, ModalManagerContext } from '@zextras/zapp-ui';
+import { SnackbarManagerContext, ModalManagerContext } from '@zextras/carbonio-design-system';
 import { Contact } from '../types/contact';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore

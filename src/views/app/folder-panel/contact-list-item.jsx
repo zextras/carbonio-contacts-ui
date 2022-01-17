@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React, { useCallback, useMemo } from 'react';
-import { Container, Drag, Divider } from '@zextras/zapp-ui';
+import { Container, Drag, Divider } from '@zextras/carbonio-design-system';
 import { useReplaceHistoryCallback } from '@zextras/zapp-shell';
 import ListItemActionWrapper from '../../folder/list-item-action-wrapper';
 import { ItemAvatar } from './item-avatar';
