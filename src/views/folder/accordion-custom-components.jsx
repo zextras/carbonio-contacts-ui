@@ -133,10 +133,27 @@ export const dropdownActions = (
 				  );
 	}
 };
-const folderIconName = {
-	7: 'PersonOutline',
-	13: 'EmailOutline',
-	3: 'Trash2Outline'
+
+const getFolderIconName = (folder) => {
+	if ([FOLDERS.CONTACTS, FOLDERS.AUTO_CONTACTS, FOLDERS.TRASH].includes(folder.id)) {
+		switch (folder.id) {
+			case FOLDERS.CONTACTS:
+				return folder.color === 0 ? 'PersonOutline' : 'Person';
+			case FOLDERS.AUTO_CONTACTS:
+				return folder.color === 0 ? 'EmailOutline' : 'Email';
+			case FOLDERS.TRASH:
+				return folder.color === 0 ? 'Trash2Outline' : 'Trash2';
+			default:
+				return 'FolderOutline';
+		}
+	}
+	if (folder.id === 'shares' || folder.isShared) {
+		return 'SharedAddressBook';
+	}
+	if (folder.color === 0) {
+		return 'FolderOutline';
+	}
+	return 'Folder';
 };
 
 export const CustomAccordion = (
@@ -153,12 +170,7 @@ export const CustomAccordion = (
 		? ZIMBRA_STANDARD_COLORS[folder.color].hex
 		: ZIMBRA_STANDARD_COLORS[0].hex;
 
-	// eslint-disable-next-line no-nested-ternary
-	const folderIconLabel = Object.keys(folderIconName).includes(folder.id)
-		? folderIconName[Number(folder.id)]
-		: folder.id === 'shares' || folder.isShared
-		? 'Share'
-		: 'Folder';
+	const folderIconLabel = getFolderIconName(folder);
 	const onDragEnterAction = (data) => {
 		if (data.type === 'contact') {
 			if (
@@ -294,7 +306,7 @@ export const CustomAccordion = (
 							<Row mainAlignment="flex-start" padding={{ left: 'large' }} takeAvailableSpace>
 								<Icon size="large" icon={folderIconLabel} customColor={folderIconColor} />
 								<Padding right="large" />
-								<AccordionItem {...props} />
+								<AccordionItem {...props} height={40} />
 							</Row>
 						</Dropdown>
 					</AppLink>
