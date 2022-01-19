@@ -5,10 +5,10 @@
  */
 import React, { useCallback, useContext, useMemo, useState } from 'react';
 import { map, replace, split } from 'lodash';
-import { Button, Chip, Container, Padding, Text, Tooltip } from '@zextras/zapp-ui';
+import { Button, Chip, Container, Padding, Text, Tooltip } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { useUserAccounts } from '@zextras/zapp-shell';
+import { useUserAccounts } from '@zextras/carbonio-shell-ui';
 
 import styled from 'styled-components';
 import { findLabel, ShareFolderRoleOptions } from '../../commons/utils';

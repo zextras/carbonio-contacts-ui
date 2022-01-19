@@ -6,8 +6,8 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Container } from '@zextras/zapp-ui';
-import { useAppContext } from '@zextras/zapp-shell';
+import { Container } from '@zextras/carbonio-design-system';
+import { useAppContext } from '@zextras/carbonio-shell-ui';
 import { ActionsContextProvider } from '../../ui-actions/actions-context';
 import { ContactsList } from './folder-panel/contacts-list';
 import { selectAllContactsInFolder, selectFolderStatus } from '../../store/selectors/contacts';

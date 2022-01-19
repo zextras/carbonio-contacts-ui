@@ -3,7 +3,15 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { Avatar, Button, Drag, IconButton, Responsive, Row, Text } from '@zextras/zapp-ui';
+import {
+	Avatar,
+	Button,
+	Drag,
+	IconButton,
+	Responsive,
+	Row,
+	Text
+} from '@zextras/carbonio-design-system';
 import { trim } from 'lodash';
 import React, { useMemo } from 'react';
 import styled from 'styled-components';

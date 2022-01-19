@@ -5,7 +5,7 @@
  */
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
-import { AppLink, ZIMBRA_STANDARD_COLORS, FOLDERS } from '@zextras/zapp-shell';
+import { AppLink, ZIMBRA_STANDARD_COLORS, FOLDERS } from '@zextras/carbonio-shell-ui';
 import {
 	AccordionItem,
 	Container,
@@ -15,7 +15,7 @@ import {
 	Icon,
 	Padding,
 	Row
-} from '@zextras/zapp-ui';
+} from '@zextras/carbonio-design-system';
 import { map, filter } from 'lodash';
 import { actionsRetriever } from '../secondary-bar/commons/folders-actions';
 import { FolderActionsType } from '../../types/folder';

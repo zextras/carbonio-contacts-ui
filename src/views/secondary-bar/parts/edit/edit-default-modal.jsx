@@ -4,7 +4,15 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React, { useState, useMemo, useCallback } from 'react';
-import { Container, Select, Input, Text, Padding, Row, Divider } from '@zextras/zapp-ui';
+import {
+	Container,
+	Select,
+	Input,
+	Text,
+	Padding,
+	Row,
+	Divider
+} from '@zextras/carbonio-design-system';
 import { isEmpty, reduce, filter, first } from 'lodash';
 import ModalFooter from '../../commons/modal-footer';
 import { ModalHeader } from '../../commons/modal-header';

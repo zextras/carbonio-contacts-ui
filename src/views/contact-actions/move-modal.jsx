@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React, { useState, useMemo, useCallback } from 'react';
-import { Input, Container, Text } from '@zextras/zapp-ui';
+import { Input, Container, Text } from '@zextras/carbonio-design-system';
 import { filter, startsWith, reduce, isEmpty } from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { useReplaceHistoryCallback, FOLDERS } from '@zextras/zapp-shell';
+import { useReplaceHistoryCallback, FOLDERS } from '@zextras/carbonio-shell-ui';
 import ModalFooter from './commons/modal-footer';
 import { ModalHeader } from '../secondary-bar/commons/modal-header';
 import FolderItem from '../secondary-bar/commons/folder-item';

@@ -14,7 +14,7 @@ import {
 	Collapse,
 	Dropdown,
 	Padding
-} from '@zextras/zapp-ui';
+} from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 import { reduce } from 'lodash';
 import { CompactView } from '../../commons/contact-compact-view';

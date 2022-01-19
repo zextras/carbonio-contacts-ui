@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { Text, Row, Tooltip } from '@zextras/zapp-ui';
+import { Text, Row, Tooltip } from '@zextras/carbonio-design-system';
 import React, { useMemo } from 'react';
 import { trim } from 'lodash';
 import { useDisplayName } from '../../../commons/use-display-name';

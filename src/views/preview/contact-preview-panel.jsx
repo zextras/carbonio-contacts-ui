@@ -4,8 +4,12 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React, { useCallback, useContext } from 'react';
-import { useReplaceHistoryCallback, getAction, FOLDERS } from '@zextras/zapp-shell';
-import { Divider, SnackbarManagerContext, ModalManagerContext } from '@zextras/zapp-ui';
+import { useReplaceHistoryCallback, getAction, FOLDERS } from '@zextras/carbonio-shell-ui';
+import {
+	Divider,
+	SnackbarManagerContext,
+	ModalManagerContext
+} from '@zextras/carbonio-design-system';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { includes, head, split } from 'lodash';

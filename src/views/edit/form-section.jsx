@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React, { createContext, useContext } from 'react';
-import { Container, Text } from '@zextras/zapp-ui';
+import { Container, Text } from '@zextras/carbonio-design-system';
 
 const levelContext = createContext(0);
 

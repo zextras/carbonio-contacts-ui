@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React from 'react';
-import { FOLDERS } from '@zextras/zapp-shell';
+import { FOLDERS } from '@zextras/carbonio-shell-ui';
 import { FolderActionsType } from '../../../types/folder';
 import { getFolder } from '../../../store/actions/get-folder';
 import { SharesInfoModal } from '../shares-info-modal';

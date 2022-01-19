@@ -4,7 +4,14 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React, { useMemo, useContext } from 'react';
-import { Container, Dropdown, IconButton, Padding, Icon, Divider } from '@zextras/zapp-ui';
+import {
+	Container,
+	Dropdown,
+	IconButton,
+	Padding,
+	Icon,
+	Divider
+} from '@zextras/carbonio-design-system';
 import { map } from 'lodash';
 import styled from 'styled-components';
 import { ActionsContext } from '../../ui-actions/actions-context';
