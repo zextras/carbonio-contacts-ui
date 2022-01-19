@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React, { useMemo } from 'react';
-import { AppLink, ZIMBRA_STANDARD_COLORS } from '@zextras/zapp-shell';
-import { Icon, Padding, Row, Tooltip } from '@zextras/zapp-ui';
+import { AppLink, ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-shell-ui';
+import { Icon, Padding, Row, Tooltip } from '@zextras/carbonio-design-system';
 
 const folderIconName = {
 	7: 'PersonOutline',

@@ -5,7 +5,7 @@
  */
 import React from 'react';
 import { useRouteMatch, Switch, Route } from 'react-router-dom';
-import { Container } from '@zextras/zapp-ui';
+import { Container } from '@zextras/carbonio-design-system';
 import ContactPreviewPanel from '../preview/contact-preview-panel';
 import SelectionInteractive from './selection-interactive';
 import ContactEditPanel from '../edit/contact-edit-panel';

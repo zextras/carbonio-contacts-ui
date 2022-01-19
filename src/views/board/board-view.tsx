@@ -7,7 +7,7 @@ import React, { FC, lazy, Suspense } from 'react';
 import { Switch, Route, useRouteMatch } from 'react-router-dom';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import { Spinner } from '@zextras/zapp-shell';
+import { Spinner } from '@zextras/carbonio-shell-ui';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 const LazyEditView = lazy(() => import(/* webpackChunkName: "edit-view" */ '../edit/edit-view'));

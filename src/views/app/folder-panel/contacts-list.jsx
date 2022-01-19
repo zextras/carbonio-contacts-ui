@@ -5,7 +5,7 @@
  */
 import React, { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Container, List, Padding, Text } from '@zextras/zapp-ui';
+import { Container, List, Padding, Text } from '@zextras/carbonio-design-system';
 import styled from 'styled-components';
 import { reduce, find, map } from 'lodash';
 import { useParams } from 'react-router-dom';

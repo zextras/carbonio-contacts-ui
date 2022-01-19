@@ -6,7 +6,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import React, { useCallback, useMemo } from 'react';
 import { trim, split, head } from 'lodash';
-import { Container, Divider, Padding, Row, Text, Tooltip } from '@zextras/zapp-ui';
+import { Container, Divider, Padding, Row, Text, Tooltip } from '@zextras/carbonio-design-system';
 import { useHistory, useLocation } from 'react-router-dom';
 import { selectFolderStatus } from '../../store/selectors/contacts';
 import { searchContacts } from '../../store/actions/search-contacts';

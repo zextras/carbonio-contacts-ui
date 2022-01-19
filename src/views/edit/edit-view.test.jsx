@@ -5,7 +5,7 @@
  */
 import React from 'react';
 // import { screen } from '@testing-library/react';
-import { testUtils } from '@zextras/zapp-shell';
+import { testUtils } from '@zextras/carbonio-shell-ui';
 import reducers from '../../store/reducers/reducers';
 import ContactEditPanel from './contact-edit-panel';
 // import { populateContactSlice } from '../../mocks/populate-contacts-slice';

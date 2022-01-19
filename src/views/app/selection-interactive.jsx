@@ -5,7 +5,7 @@
  */
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Container, Padding, Text } from '@zextras/zapp-ui';
+import { Container, Padding, Text } from '@zextras/carbonio-design-system';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { selectAllContactsInFolder } from '../../store/selectors/contacts';
