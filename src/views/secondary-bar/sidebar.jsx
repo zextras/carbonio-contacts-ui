@@ -98,7 +98,7 @@ const SharesItem = ({ item }) => (
 
 const ShareLabel = (item) => (
 	<Row mainAlignment="flex-start" padding={{ horizontal: 'large' }} takeAvailableSpace>
-		<Icon size="large" icon="Share" /> <Padding right="large" />
+		<Icon size="large" icon="ShareOutline" /> <Padding right="large" />
 		<AccordionItem {...item} height={40} />
 	</Row>
 );

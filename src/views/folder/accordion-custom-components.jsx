@@ -138,22 +138,20 @@ const getFolderIconName = (folder) => {
 	if ([FOLDERS.CONTACTS, FOLDERS.AUTO_CONTACTS, FOLDERS.TRASH].includes(folder.id)) {
 		switch (folder.id) {
 			case FOLDERS.CONTACTS:
-				return folder.color === 0 ? 'PersonOutline' : 'Person';
+				return 'PersonOutline';
 			case FOLDERS.AUTO_CONTACTS:
-				return folder.color === 0 ? 'EmailOutline' : 'Email';
+				return 'EmailOutline';
 			case FOLDERS.TRASH:
-				return folder.color === 0 ? 'Trash2Outline' : 'Trash2';
+				return 'Trash2Outline';
 			default:
 				return 'FolderOutline';
 		}
 	}
 	if (folder.id === 'shares' || folder.isShared) {
-		return 'SharedAddressBook';
+		return 'SharedAddressBookOutline';
 	}
-	if (folder.color === 0) {
-		return 'FolderOutline';
-	}
-	return 'Folder';
+
+	return 'FolderOutline';
 };
 
 export const CustomAccordion = (
