@@ -6,7 +6,17 @@
 import { Avatar, Container, Tooltip } from '@zextras/carbonio-design-system';
 import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
 
+const AvatarElement = styled(Avatar)`
+	width: 42px !important;
+	height: 42px !important;
+	min-width: 42px !important;
+	min-height: 42px !important;
+	p {
+		font-size: 14px;
+	}
+`;
 export const ItemAvatar = ({ item, selected, selecting, toggle, isSearch = false }) => {
 	const [t] = useTranslation();
 	const conversationSelect = useCallback(
@@ -34,7 +44,7 @@ export const ItemAvatar = ({ item, selected, selecting, toggle, isSearch = false
 			mainAlignment="flex-start"
 		>
 			<Tooltip label={activateSelectionMode} disabled={selecting} maxWidth="100%">
-				<Avatar
+				<AvatarElement
 					selecting={selecting}
 					selected={selected}
 					label={`${item.firstName} ${item.lastName}`}

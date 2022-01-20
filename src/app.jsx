@@ -10,7 +10,7 @@ import {
 	Spinner,
 	getBridgedFunctions
 } from '@zextras/carbonio-shell-ui';
-import SidebarItems from './views/secondary-bar/contacts-sidebar';
+import SidebarItems from './views/secondary-bar/sidebar';
 import ContactInput from './shared/contact-input';
 import { SyncDataHandler } from './views/secondary-bar/sync-data-handler';
 

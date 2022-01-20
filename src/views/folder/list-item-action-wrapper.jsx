@@ -41,12 +41,7 @@ const ListItemActionWrapper = ({ children, current, onClick, contact }) => {
 	const hoverActions = useMemo(() => getHoverActions(contact), [contact, getHoverActions]);
 	const dropdownActions = useMemo(() => getContextActions(contact), [contact, getContextActions]);
 	return (
-		<Dropdown
-			contextMenu
-			items={dropdownActions}
-			display="block"
-			style={{ width: '100%', height: '64px' }}
-		>
+		<Dropdown contextMenu items={dropdownActions} display="block" style={{ width: '100%' }}>
 			<HoverRow
 				orientation="horizontal"
 				mainAlignment="flex-start"

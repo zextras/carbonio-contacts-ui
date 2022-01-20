@@ -96,7 +96,6 @@ const SearchListItem = ({ item, selected, selecting, toggle, active }) => {
 					)}
 				</Row>
 			</ListItemActionWrapper>
-			<Divider style={{ minHeight: '1px' }} />
 		</Container>
 	);
 };

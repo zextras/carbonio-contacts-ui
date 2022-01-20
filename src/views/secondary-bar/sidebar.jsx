@@ -40,7 +40,7 @@ export const nest = (items, id, newFolder, setNewFolder, level) =>
 			const open = newFolder ? newFolder.id === item.id || newFolder.absParent === item.id : false;
 			return {
 				...item,
-				divider: true,
+				divider: false,
 				items: nest(items, item.id, newFolder, setNewFolder, level + 1),
 				to: `/folder/${item.id}`,
 				open
@@ -53,7 +53,7 @@ const SharesItem = ({ item }) => (
 		width="fill"
 		mainAlignment="center"
 		orientation="horizontal"
-		style={{ padding: '14px 16px' }}
+		style={{ padding: '8px 16px' }}
 	>
 		<Button
 			type="outlined"
@@ -99,7 +99,7 @@ const SharesItem = ({ item }) => (
 const ShareLabel = (item) => (
 	<Row mainAlignment="flex-start" padding={{ horizontal: 'large' }} takeAvailableSpace>
 		<Icon size="large" icon="ShareOutline" /> <Padding right="large" />
-		<AccordionItem {...item} />
+		<AccordionItem {...item} height={40} />
 	</Row>
 );
 
