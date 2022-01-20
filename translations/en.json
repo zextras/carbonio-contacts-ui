@@ -134,7 +134,7 @@
         "edit_access_name": "Edit {{name}}'s access",
         "edit_email": "Edit E-mail",
         "edit_folder_properties": "Edit {{name}}'s properties",
-        "edit_invalid_email": "E-mail is invalid,click to edit it",
+        "edit_invalid_email": "E-mail is invalid, click to edit it",
         "email": "E-mail",
         "empty": "Empty",
         "error_try_again": "Something went wrong, please try again",

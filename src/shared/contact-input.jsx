@@ -252,7 +252,7 @@ export default function ContactInput({
 							id: 'action1',
 							label: isValidEmail(valueToAdd)
 								? t('label.edit_email', 'Edit E-mail')
-								: t('label.edit_invalid_email', 'E-mail is invalid,click to edit it'),
+								: t('label.edit_invalid_email', 'E-mail is invalid, click to edit it'),
 							icon: 'EditOutline',
 							type: 'button',
 							onClick: () => editChip(valueToAdd, id)
