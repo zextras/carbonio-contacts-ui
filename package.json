@@ -3,6 +3,10 @@
 	"version": "0.1.5-rc.4",
 	"description": "Contacts module for Zextras Carbonio",
 	"main": "src/app.jsx",
+	"engines": {
+		"node": "v16",
+		"npm": "v8"
+	},
 	"scripts": {
 		"build": "node sdk build",
 		"start": "node sdk watch",
