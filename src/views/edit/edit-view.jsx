@@ -336,9 +336,7 @@ export default function EditView({ panel }) {
 	);
 
 	useEffect(() => {
-		if (panel) {
-			// setTitle(data?.title ?? t('label.no_subject', 'No subject'));
-		} else {
+		if (!panel) {
 			updateBoard(undefined, title);
 		}
 	}, [panel, title, updateBoard]);
