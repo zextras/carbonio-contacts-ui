@@ -316,13 +316,9 @@ export default function EditView({ panel }) {
 			contact?.nickName ||
 			contact?.lastName ||
 			contact?.nameSuffix
-				? `${contact?.namePrefix ? `${contact?.namePrefix} ` : ''}${
-						contact?.firstName ? `${contact?.firstName} ` : ''
-				  }${contact?.middleName ? `${contact?.middleName} ` : ''}${
-						contact?.nickName ? `${contact?.nickName} ` : ''
-				  }${contact?.lastName ? `${contact?.lastName} ` : ''}${
-						contact?.nameSuffix ? `${contact?.nameSuffix} ` : ''
-				  }`
+				? `${contact?.namePrefix ?? ''} ${contact?.firstName ?? ''} ${contact?.middleName ?? ''} ${
+						contact?.nickName ?? ''
+				  } ${contact?.lastName ?? ''} ${contact?.nameSuffix ?? ''}`
 				: t('label.new_contact', 'New contact'),
 		[
 			contact?.firstName,
