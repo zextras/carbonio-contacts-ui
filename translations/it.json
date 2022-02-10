@@ -19,7 +19,7 @@
             "mail": "Indirizzo e-mail",
             "mail_plural": "Inidirizzi e-mail {{count}}",
             "address": "Indirizzo",
-            "address_plural": "Indirizzi {{count}}"
+            "address_plural": "Indirizzi"
         },
         "field": {
             "url": "Sito Web",
@@ -81,13 +81,25 @@
         "delete": "Cancella",
         "edit_access_name": "Modifica l'accesso di {{name}}",
         "email": "E-mail",
-        "new_address_book": "Nuova rubrica",
+        "new_address_book": "Nuova Rubrica",
         "notes": "Note",
         "of": "di",
         "revoke_with_standard_msg": "Revoca accesso e invia una notifica standard",
         "revoke_without_notification": "Revoca accesso e non inviare notifica",
         "revoke_with_custom_msg": "Revoca accesso e invia una notifica personalizzata",
-        "root": "Root"
+        "root": "Root",
+        "activate_selection_mode": "Attiva modalità selezione",
+        "single_advanced_filter": "Filtro avanzato",
+        "type": "Tipo",
+        "new_contact_created": "Nuovo contatto creato",
+        "address_book_restored": "Rubrica ripristinata",
+        "advanced_filter": "{{count}} Filtro Avanzato",
+        "advanced_filter_plural": "{{count}} Filtri Avanzati",
+        "Undo": "Annulla",
+        "discard_changes": "ELIMINA MODIFICHE",
+        "undo": "Annulla",
+        "website": "Sito Web",
+        "website_plural": ""
     },
     "job": {
         "title": "Ruolo",
@@ -105,8 +117,9 @@
             "edit": "Modifica rubrica",
             "delete_permanently": "Elimina rubrica definitivamente",
             "delete": "Elimina rubrica",
-            "move": "Sposta rubrica",
-            "new": "Nuova rubrica"
+            "move": "Sposta",
+            "new": "Nuova rubrica",
+            "moved": "Rubrica spostata correttamente"
         },
         "modal": {
             "edit": {
@@ -159,7 +172,7 @@
                 "title": "Elimina",
                 "body": {
                     "message2": "Vuoi eliminare questa rubrica? Se eliminata, il contenuto verrà rimosso definitivamente e la rubrica non sarà più recuperabile.",
-                    "message1": "Vuoi eliminare questa rubrica? Se eliminata, il contenuto verrà spostato nel cestino e la rubrica non sarà più visibile."
+                    "message1": "Vuoi eliminare questa rubrica? Se eliminata, il contenuto verrà eliminato permanentemente e la rubrica non sarà più ripristinabile."
                 },
                 "footer": "Elimina"
             },
@@ -182,7 +195,8 @@
             "trash_empty": "Cestino svuotato con successo",
             "address_book_moved_to_trash": "Rubrica spostata nel cestino",
             "folder_empty": "Rubrica svuotata correttamente",
-            "folder_new": "Nuova rubrica creata"
+            "folder_new": "Nuova rubrica creata",
+            "address_book_permanently_deleted": "Rubrica eliminata permanentemente"
         },
         "share_folder": "Condividi rubrica",
         "type": "Cartella Contatti"
@@ -253,10 +267,10 @@
     "messages": {
         "snackbar": {
             "contact_moved_to_trash": "Contatto spostato nel cestino",
-            "contact_restored": "Contatto ripristinato nella rubrica di destinazione",
+            "contact_restored": "Contatto ripristinato",
             "address_book_moved": "Rubrica spostata nella cartella di destinazione",
             "contact_deleted_permanently": "Contatto eliminato definitivamente",
-            "contact_moved": "Contatto spostato nella rubrica di destinazione"
+            "contact_moved": "Contatto spostato"
         },
         "modal": {
             "delete": {
@@ -284,8 +298,39 @@
     },
     "tooltip": {
         "edit": "Modifica accesso",
-        "resend": "Invia notifica per questa condivisione",
+        "resend": "Invia e-mail di notifica per questa condivisione",
         "revoke": "Revoca accesso"
     },
-    "of": "di"
+    "of": "di",
+    "displayer": {
+        "description3": "Clicca il pulsante \"NUOVO\" per creare un nuovo gruppo di contatti.",
+        "description4": "Creane uno nuovo cliccando il pulsante \"NUOVO\".",
+        "description5": "Scopri tutti i modi per connetterti con gli altri utenti.",
+        "description7": "Crea un nuovo gruppo di contatti cliccando il pulsante \"NUOVO\".",
+        "description8": "Seleziona un contatto o un gruppo di contatti per inviare e-mail condivise.",
+        "list_title1": "Sembra che non ci sia ancora alcun contatto",
+        "list_title2": "Il cestino è vuoto",
+        "search_description2": "Prova a iniziare una nuova ricerca.",
+        "search_description3": "Controlla l'ortografia e i filtri oppure prova con un'altra parola chiave.",
+        "search_list_title1": "Nessun risultato trovato. Continua a cercare!",
+        "search_list_title2": "Nessun elemento corrisponde alla tua ricerca.",
+        "search_title1": "Inizia una nuova ricerca",
+        "title1": "Crea un nuovo contatto cliccando il pulsante \"NUOVO\".",
+        "title10": "Seleziona i contatti e ripristinali dal cestino",
+        "title2": "Condividi tutti i tuoi lavori con i tuoi contatti.",
+        "title5": "Seleziona una contatto",
+        "title3": "Resta in contatto con i tuoi colleghi.",
+        "title4": "Personalizza i tuoi contatti aggiungendo note personali",
+        "title6": "Personalizza un contatto",
+        "title7": "Resta in contatto con i tuoi colleghi",
+        "title9": "Seleziona l'icona del cestino per eliminare un contatto.",
+        "title8": "Invia e-mail condivisa",
+        "description2": "Clicca il bottone \"NUOVO\" per crearne uno nuovo.",
+        "description6": "Utilizza la modalità \"Modifica\" per aggiungere note personali ai tuoi contatti.",
+        "search_description1": "O seleziona \"Filtri Avanzati\" per rifinire la tua ricerca.",
+        "search_title2": "Nessun risultato per la tua ricerca",
+        "search_title3": "Nessun risultato per la tua ricerca.",
+        "search_title4": "Seleziona uno o più risultati per completare delle azioni o visualizzare i dettagli."
+    },
+    "contact_restored": "Contatto ripristinato"
 }
