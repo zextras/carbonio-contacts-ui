@@ -115,7 +115,7 @@
         "advance_filters_plural": "{{count}} Filtros avançados",
         "contact_setting": "Configurações de contato",
         "create": "Novo Contato",
-        "edit_access": "Editar acesso de {{name}}",
+        "edit_access": "Editar acesso",
         "edit_folder_properties": "Editar propriedades de {{name}}",
         "resend": "Reenviar",
         "revoke": "Revogar",
@@ -125,7 +125,28 @@
         "revoke_share": "Revogar compartilhamento de {{title}}",
         "search_hint": "Dicas de pesquisa!",
         "shares_folder_edit": "Compartilhando esta agenda de endereços",
-        "single_advance_fillter": "Filtros Avançados"
+        "single_advance_fillter": "Filtros Avançados",
+        "notes": "Notas",
+        "of": "de",
+        "restore": "Restaurar",
+        "results_for": "Resultados para:",
+        "revoke_with_standard_msg": "Revogar acesso enviando uma notificação padrão",
+        "revoke_with_custom_msg": "Revogar acesso enviando uma notificação personalizada",
+        "single_advanced_filter": "Filtro avançado",
+        "type": "Tipo",
+        "website": "Website",
+        "website_plural": "Website",
+        "Undo": "Desfazer",
+        "contacts": "Contatos",
+        "delete": "Apagar",
+        "edit_access_name": "Editar acesso de {{name}}",
+        "email": "E-mail",
+        "empty": "Vazia",
+        "error_try_again": "Algo deu errado. Tente novamente",
+        "move": "Mover",
+        "revoke_without_notification": "Revogar acesso sem enviar notificação",
+        "root": "Raiz",
+        "undo": "Desfazer"
     },
     "share": {
         "add": "Adicionar",
@@ -260,5 +281,8 @@
         "other": "outro",
         "home": "casa",
         "work": "trabalho"
+    },
+    "displayer": {
+        "title5": "Selecionar um contato"
     }
 }

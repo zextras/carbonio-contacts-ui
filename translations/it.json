@@ -99,7 +99,8 @@
         "discard_changes": "ELIMINA MODIFICHE",
         "undo": "Annulla",
         "website": "Sito Web",
-        "website_plural": ""
+        "website_plural": "",
+        "search_activate_selection_mode": "La Modalità Selezione non è ancora disponibile nei risultati di ricerca"
     },
     "job": {
         "title": "Ruolo",
@@ -262,7 +263,8 @@
         "share_note": "Il messaggio predefinito mostra il tuo nome, il nome dell'elemento condiviso, i permessi dati ai destinatari e le informazioni di accesso.",
         "shared_folders": "Rubriche Condivise",
         "type": "Tipo",
-        "shared_items": "Rubrica condivisa di {{value}}"
+        "shared_items": "Rubrica condivisa di {{value}}",
+        "viewer": "Vista"
     },
     "messages": {
         "snackbar": {

@@ -157,7 +157,7 @@
         "revoke_share": "撤销 {{title}} 的共享",
         "contact_setting": "联系人设置",
         "create": "新联系人",
-        "edit_access": "编辑 {{name}} 的访问权限",
+        "edit_access": "编辑 的访问权限",
         "edit_folder_properties": "编辑 {{name}} 的属性",
         "resend": "重新发送",
         "revoke": "撤销",
@@ -166,7 +166,10 @@
         "revoke_send_standard_msg": "撤销访问权限并发送自定义通知",
         "search_hint": "搜索提示！",
         "shares_folder_edit": "共享此地址簿",
-        "single_advance_fillter": "高级过滤条件"
+        "single_advance_fillter": "高级过滤条件",
+        "error_try_again": "出现了一些错误，请重试",
+        "type": "类型",
+        "undo": "撤消"
     },
     "name": {
         "nickName": "昵称",
