@@ -167,7 +167,28 @@
         "revoke_share": "{{title}} की शेयरिंग बंद करें",
         "search_hint": "सर्च करने के लिए हिंट!",
         "shares_folder_edit": "इस एड्रेस बुक की शेयरिंग",
-        "single_advance_fillter": "एड्वान्स्ड फ़िल्टर"
+        "single_advance_fillter": "एड्वान्स्ड फ़िल्टर",
+        "contacts": "संपर्क",
+        "email": "ई-मेल",
+        "empty": "रिक्त",
+        "error_try_again": "कुछ गड़बड़ हुई, दोबारा कोशिश करें",
+        "move": "ले जाएँ",
+        "notes": "नोट्स",
+        "single_advanced_filter": "एड्वान्स्ड फ़िल्टर",
+        "type": "टाइप",
+        "website": "वेबसाइट",
+        "website_plural": "",
+        "Undo": "अनडू करें",
+        "delete": "डिलीट करें",
+        "edit_access_name": "{{name}} के ऐक्सेस में संशोधन",
+        "of": "में से",
+        "restore": "वापस लाएँ",
+        "results_for": "इसके नतीजे:",
+        "revoke_with_custom_msg": "एक कस्टम नोटिफिकेशन भेजकर एक्सेस बंद करें",
+        "revoke_with_standard_msg": "एक स्टैंडर्ड नोटिफिकेशन भेजकर एक्सेस बंद करें",
+        "revoke_without_notification": "बिना किसी सूचना के एक्सेस खत्म करें",
+        "root": "मूल",
+        "undo": "अनडू करें"
     },
     "name": {
         "nickName": "उर्फनाम",
@@ -260,5 +281,8 @@
         "mobile": "मोबाइल",
         "other": "अन्य",
         "work": "काम"
+    },
+    "displayer": {
+        "title5": "सम्पर्क का चयन करें"
     }
 }
