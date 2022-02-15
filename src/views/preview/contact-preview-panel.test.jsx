@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { testUtils, useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
+import { testUtils, replaceHistory } from '@zextras/carbonio-shell-ui';
 import React from 'react';
 // import { screen } from '@testing-library/react';
 import reducers from '../../store/reducers/reducers';
@@ -11,7 +11,7 @@ import ContactPreviewPanel from './contact-preview-panel';
 
 describe.skip('Preview Panel', () => {
 	test('Render preview', async () => {
-		useReplaceHistoryCallback.mockImplementation(() => jest.fn());
+		replaceHistory.mockImplementation(() => jest.fn());
 		const ctxt = {};
 		const folderId = 7;
 		const itemsCount = 1;

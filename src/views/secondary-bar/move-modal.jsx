@@ -6,7 +6,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Input, Text, Container, CustomModal, Padding } from '@zextras/carbonio-design-system';
 import { filter, startsWith, reduce, isEmpty } from 'lodash';
-import { useReplaceHistoryCallback, FOLDERS } from '@zextras/carbonio-shell-ui';
+import { replaceHistory, FOLDERS } from '@zextras/carbonio-shell-ui';
 import FolderItem from './commons/folder-item';
 import { folderAction } from '../../store/actions/folder-action';
 import ModalFooter from '../contact-actions/commons/modal-footer';
@@ -23,7 +23,6 @@ export const MoveModal = ({
 }) => {
 	const [input, setInput] = useState('');
 	const [folderDestination, setFolderDestination] = useState(currentFolder || {});
-	const replaceHistory = useReplaceHistoryCallback();
 
 	const onClose = useCallback(() => {
 		setModal('');
@@ -143,16 +142,7 @@ export const MoveModal = ({
 		}
 		setModal('');
 		setFolderDestination('');
-	}, [
-		folderDestination.id,
-		currentFolder,
-		setModal,
-		dispatch,
-		onClose,
-		createSnackbar,
-		t,
-		replaceHistory
-	]);
+	}, [folderDestination.id, currentFolder, setModal, dispatch, onClose, createSnackbar, t]);
 
 	return currentFolder ? (
 		<CustomModal open={openModal} onClose={onClose} maxHeight="90vh">

@@ -5,7 +5,7 @@
  */
 import React, { useCallback, useMemo } from 'react';
 import { Container, Drag } from '@zextras/carbonio-design-system';
-import { useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
+import { replaceHistory } from '@zextras/carbonio-shell-ui';
 import ListItemActionWrapper from '../../folder/list-item-action-wrapper';
 import { ItemAvatar } from './item-avatar';
 import { ItemContent } from './item-content';
@@ -24,7 +24,6 @@ export default function ContactListItem({
 	selectedItems,
 	dragImageRef
 }) {
-	const replaceHistory = useReplaceHistoryCallback();
 	const ids = useMemo(() => Object.keys(selectedItems ?? []), [selectedItems]);
 
 	const _onClick = useCallback(
@@ -33,7 +32,7 @@ export default function ContactListItem({
 				replaceHistory(`/folder/${folderId}/contacts/${item.id}`);
 			}
 		},
-		[folderId, item.id, replaceHistory]
+		[folderId, item.id]
 	);
 	const dragCheck = useCallback(
 		(e, id) => {

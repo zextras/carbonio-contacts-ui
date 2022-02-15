@@ -8,11 +8,9 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import { useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
+import { replaceHistory } from '@zextras/carbonio-shell-ui';
 import { SnackbarManagerContext, ModalManagerContext } from '@zextras/carbonio-design-system';
 import { Contact } from '../types/contact';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { contextActions, hoverActions, primaryActions, secondaryActions } from './contact-actions';
@@ -57,7 +55,6 @@ export const ActionsContextProvider: FC<ACPProps> = ({
 	const [t] = useTranslation();
 
 	const dispatch = useDispatch();
-	const replaceHistory = useReplaceHistoryCallback();
 	const createSnackbar = useContext(SnackbarManagerContext);
 	const createModal = useContext(ModalManagerContext);
 
@@ -107,7 +104,7 @@ export const ActionsContextProvider: FC<ACPProps> = ({
 				deselectAll
 			})
 		],
-		[createModal, createSnackbar, dispatch, folderId, replaceHistory, t, selectedIds, deselectAll]
+		[createModal, createSnackbar, dispatch, folderId, t, selectedIds, deselectAll]
 	);
 
 	const getContextActions = useCallback<GetActionsFunction>(

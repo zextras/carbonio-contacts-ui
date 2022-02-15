@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React, { useCallback } from 'react';
-import { useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
+import { replaceHistory } from '@zextras/carbonio-shell-ui';
 import {
 	Container,
 	Divider,
@@ -20,12 +20,8 @@ import EditView from './edit-view';
 
 function ContactEditHeader({ editPanelId, folderId }) {
 	const [t] = useTranslation();
-	const replaceHistory = useReplaceHistoryCallback();
 
-	const onClose = useCallback(
-		() => replaceHistory(`/folder/${folderId}`),
-		[folderId, replaceHistory]
-	);
+	const onClose = useCallback(() => replaceHistory(`/folder/${folderId}`), [folderId]);
 
 	return (
 		<Container height={49}>

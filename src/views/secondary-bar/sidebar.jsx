@@ -18,7 +18,7 @@ import {
 	Row,
 	SnackbarManagerContext
 } from '@zextras/carbonio-design-system';
-import { useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
+import { replaceHistory } from '@zextras/carbonio-shell-ui';
 import { setCustomComponent } from '../folder/accordion-custom-components';
 import { FolderActionsType } from '../../types/folder';
 import { NewModal } from './new-modal';
@@ -115,7 +115,6 @@ export default function Sidebar({ expanded }) {
 	const [sideBarItems, setSidebarItems] = useState([]);
 	const createModal = useContext(ModalManagerContext);
 	const createSnackbar = useContext(SnackbarManagerContext);
-	const replaceHistory = useReplaceHistoryCallback();
 	useEffect(() => {
 		const nestedFolders = nest(folders, '1', newFolder, setNewFolder, 1);
 		const trashFolder = remove(nestedFolders, (c) => c.id === '3');
@@ -148,7 +147,7 @@ export default function Sidebar({ expanded }) {
 		);
 
 		setModalAccordions(temp);
-	}, [folders, newFolder, t, dispatch, createModal, createSnackbar, expanded, replaceHistory]);
+	}, [folders, newFolder, t, dispatch, createModal, createSnackbar, expanded]);
 
 	const modalFolders = useMemo(() => sortBy(folders, (item) => Number(item.id)), [folders]);
 	const activeFolder = useMemo(

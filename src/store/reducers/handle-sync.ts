@@ -16,7 +16,6 @@ import {
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function handleFolderSyncReducer(state: any, { payload }: { payload: any }): void {
 	const { created, modified, deleted } = payload;
-	console.log('handling', created, modified, deleted);
 	if (state.folders) {
 		if (created?.folder) {
 			addFoldersToStore(state, normalizeFolders(state, created.folder));
@@ -33,7 +32,6 @@ export function handleFolderSyncReducer(state: any, { payload }: { payload: any 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function handleContactSyncReducer(state: any, { payload }: { payload: any }): void {
 	const { created, modified, deleted } = payload;
-	console.log('handling', created, modified, deleted);
 	if (state.contacts) {
 		state.status.pendingActions = false;
 		if (deleted?.length > 0) {

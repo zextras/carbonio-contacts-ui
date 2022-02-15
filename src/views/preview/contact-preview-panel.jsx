@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React, { useCallback, useContext } from 'react';
-import { useReplaceHistoryCallback, getAction, FOLDERS } from '@zextras/carbonio-shell-ui';
+import { replaceHistory, getAction, FOLDERS } from '@zextras/carbonio-shell-ui';
 import {
 	Divider,
 	SnackbarManagerContext,
@@ -29,21 +29,20 @@ export default function ContactPreviewPanel() {
 	const dispatch = useDispatch();
 	const { folderId, contactId } = useParams();
 	const contactInternalId = contactId;
-	const replaceHistory = useReplaceHistoryCallback();
 	const contact = useSelector((state) => selectContact(state, folderId, contactInternalId));
 	const createSnackbar = useContext(SnackbarManagerContext);
 	const createModal = useContext(ModalManagerContext);
 
 	const onEdit = useCallback(
 		() => replaceHistory(`/folder/${folderId}/edit/${contactInternalId}`),
-		[contactInternalId, folderId, replaceHistory]
+		[contactInternalId, folderId]
 	);
 
 	const onClose = useCallback(() => {
 		includes(urlLocation?.pathname, 'search')
 			? history.push(head(split(pathname, '/folder')))
 			: replaceHistory(`/folder/${folderId}`);
-	}, [folderId, history, pathname, replaceHistory, urlLocation?.pathname]);
+	}, [folderId, history, pathname, urlLocation?.pathname]);
 
 	const onDelete = useCallback(() => {
 		const restoreContact = () => {
@@ -112,7 +111,7 @@ export default function ContactPreviewPanel() {
 				});
 			}
 		});
-	}, [contact, dispatch, t, createSnackbar, folderId, replaceHistory, onClose]);
+	}, [contact, dispatch, t, createSnackbar, folderId, onClose]);
 
 	const onPrint = useCallback(() => null, []);
 	const onArchieve = useCallback(() => null, []);
