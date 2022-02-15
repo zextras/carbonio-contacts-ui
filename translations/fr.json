@@ -1,0 +1,195 @@
+{
+    "action": {
+        "delete_permanently": "Supprimer définitivement",
+        "goto_folder": "Aller au dossier",
+        "search": "Recherche",
+        "share_folder": "Partager le dossier",
+        "reset_filters": "Réinitialiser les filtres",
+        "send_msg": "Envoyer courriel"
+    },
+    "displayer": {
+        "list_title2": "La corbeille est vide",
+        "search_description1": "Ou sélectionner \"Filtres avancés\" pour affiner votre recherche.",
+        "search_description2": "Essayer de lancer une autre recherche.",
+        "search_title1": "Lancer une autre recherche",
+        "search_list_title1": "Il semble qu'il n'y ait pas de résultats. Continuez à chercher !",
+        "search_list_title2": "Aucun de vos éléments ne correspond à votre recherche.",
+        "search_title2": "Nous sommes désolés mais il n'y a pas de résultats pour votre recherche",
+        "search_title3": "Il n'y a pas de résultats pour votre recherche.",
+        "search_title4": "Sélectionner un ou plusieurs résultats pour effectuer des actions ou afficher des détails.",
+        "title5": "sélectionner un contact",
+        "description2": "Cliquez sur le bouton \"NOUVEAU\" pour commencer à en créer un nouveau.",
+        "description3": "Cliquez sur le bouton \"NOUVEAU\" pour commencer à créer un nouveau groupe de contacts.",
+        "description4": "Créez-en un nouveau en cliquant sur le bouton \"NOUVEAU\".",
+        "description5": "Découvrez toutes les façons dont vous pouvez vous connecter avec d'autres utilisateurs.",
+        "description6": "Utilisez le mode \"Modifier\" pour ajouter une note personnelle à un contact.",
+        "description7": "Créez un groupe de contacts en cliquant sur le bouton \"NOUVEAU\".",
+        "description8": "Sélectionnez un contact ou un groupe de contacts pour envoyer des e-mails partagés.",
+        "list_title1": "Il semble qu'il n'y ait pas encore de contacts",
+        "search_description3": "Vérifiez l'orthographe et les options des filtres ou essayez avec un autre mot-clé.",
+        "title1": "Créez un nouveau contact en cliquant sur le bouton \"NOUVEAU\".",
+        "title10": "Sélectionner et restaurer les contacts de la corbeille",
+        "title2": "Partagez tous vos travaux avec vos contacts.",
+        "title3": "Restez en contact avec vos collègues.",
+        "title4": "Personnalisez vos contacts en ajoutant des notes personnelles",
+        "title6": "Personnalisez un contact",
+        "title7": "Restez en contact avec vos collègues",
+        "title8": "Partager, c'est se préoccuper des autres",
+        "title9": "Cliquez sur l'icône de la corbeille pour supprimer un contact."
+    },
+    "folder": {
+        "action": {
+            "move": "Déplacer",
+            "delete": "Supprimer le carnet d'adresses",
+            "delete_permanently": "Supprimer définitivement le carnet d'adresses",
+            "edit": "Modifier le carnet d'adresses",
+            "empty": {
+                "folder": "Vider le carnet d'adresses",
+                "trash": "Vider la corbeille"
+            },
+            "moved": "Carnet d'adresses déplacé avec succès"
+        },
+        "modal": {
+            "footer": {
+                "go_back": "Retour"
+            },
+            "new": {
+                "input": {
+                    "name_exist": "Le nom existe déjà dans ce chemin"
+                },
+                "body": {
+                    "message1": "Nouveau nom du carnet d'adresses",
+                    "message2": "Sélectionnez un carnet d'adresses qui contiendra le contact nouvellement créé :"
+                },
+                "create_footer": "Créer et déplacer"
+            },
+            "restore": {
+                "create_footer": "Créer et restaurer"
+            },
+            "delete": {
+                "body": {
+                    "message1": "Voulez-vous supprimer le carnet d'adresses sélectionné ? Si vous le supprimez, le contenu associé sera définitivement supprimé et le carnet d'adresses ne sera plus récupérable.",
+                    "message2": "Voulez-vous supprimer définitivement le carnet d'adresses sélectionné ? Si vous le supprimez, le contenu associé sera définitivement supprimé et le carnet d'adresses ne sera plus récupérable."
+                }
+            },
+            "edit": {
+                "body": {
+                    "item": {
+                        "empty": "Aucun chemin disponible"
+                    }
+                }
+            },
+            "empty": {
+                "body": {
+                    "message1": "Voulez-vous vider le carnet d'adresses sélectionné ?",
+                    "message2": "Si vous le videz, tout le contenu associé sera déplacé vers la corbeille."
+                }
+            },
+            "item": {
+                "empty": "Aucun élément disponible"
+            },
+            "move": {
+                "body": {
+                    "message1": "Sélectionnez le carnet d'adresses vers lequel déplacer le contact sélectionné :",
+                    "message3": "Sélectionnez un dossier vers lequel déplacer celui sélectionné :"
+                },
+                "input": {
+                    "filter": "Filtrer le carnet d'adresses"
+                }
+            }
+        }
+    },
+    "label": {
+        "edit": "Éditer",
+        "empty": "Vide",
+        "Undo": "Annuler",
+        "activate_selection_mode": "Activer le mode de sélection",
+        "cancel": "Annuler",
+        "contacts": "Contacts",
+        "create": "Créer",
+        "delete": "Effacer",
+        "discard_changes": "REJETER LES MODIFICATIONS",
+        "edit_access_name": "Modifier les accès de {{name}}",
+        "error_try_again": "Quelque chose s'est mal passé, veuillez recommencer",
+        "move": "Déplacer",
+        "notes": "Notes",
+        "of": "de",
+        "resend": "Renvoyer",
+        "restore": "Restaurer",
+        "results_for": "Résultats pour :",
+        "revoke": "Révoquer",
+        "revoke_with_custom_msg": "Révoquer l'accès en envoyant une notification personnalisée",
+        "revoke_with_standard_msg": "Révoquer les accès en envoyant une notification",
+        "revoke_without_notification": "Révoquer l'accès sans envoyer de notification",
+        "root": "Racine",
+        "save": "Sauvegarder",
+        "share": "Partager",
+        "single_advanced_filter": "Filtre avancé",
+        "type": "Type de rendez-vous",
+        "undo": "Annuler"
+    },
+    "name": {
+        "nickName": "Surnom",
+        "first_name": "Prénom",
+        "last_name": "Nom de famille"
+    },
+    "section": {
+        "field": {
+            "city": "Ville",
+            "country": "Pays",
+            "number": "Numéro",
+            "state": "État",
+            "street": "Voie"
+        },
+        "title": {
+            "address": "Adresse",
+            "address_plural": ""
+        }
+    },
+    "share": {
+        "standard_message": "Ajouter une note au message standard",
+        "viewer": "Visualisateur",
+        "write": "Ecrire",
+        "add": "Ajouter",
+        "admin": "Admin",
+        "administer": "Administrer",
+        "allowed_actions": "Actions autorisées",
+        "insert": "Insérer",
+        "manager": "Manager",
+        "none": "Aucun",
+        "options": {
+            "share_calendar_with": {
+                "external_guests": "Invité(e)s externes (vue seulement)",
+                "internal_users_groups": "Utilisateurs ou Groupes internes",
+                "public": "Public (affichage uniquement, pas de mot de passe requis)"
+            }
+        },
+        "owner": "Propriétaire",
+        "read": "Lire",
+        "recipients_address": "Adresses email des destinataires",
+        "remove_from_this_list": "Supprimer de cette liste",
+        "role": "Rôle",
+        "send_notification": "Envoyer une notification concernant ce partage"
+    },
+    "snackbar": {
+        "share_resend": "Invitation à partager renvoyée",
+        "share_revoke": "Accès au partage révoqué"
+    },
+    "title": {
+        "advanced_filters": "Filtres avancés"
+    },
+    "tooltip": {
+        "revoke": "Révoquer l'accès"
+    },
+    "job": {
+        "company": "Entreprise",
+        "department": "Département"
+    },
+    "message": {
+        "new_contact": "",
+        "snackbar": {
+            "settings_saved": "Modifications enregistrées correctement"
+        }
+    },
+    "contact_restored": "Contact restauré"
+}

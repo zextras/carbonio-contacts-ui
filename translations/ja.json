@@ -166,7 +166,27 @@
         "revoke_share": "{{title}}の共有を取り消す",
         "search_hint": "検索のヒント！",
         "shares_folder_edit": "このアドレス帳の共有",
-        "single_advance_fillter": "高度なフィルター"
+        "single_advance_fillter": "高度なフィルター",
+        "contacts": "連絡先",
+        "delete": "削除する",
+        "revoke_with_standard_msg": "標準通知を送信してアクセス権を取り消す",
+        "revoke_without_notification": "通知を送信せずにアクセス権を取り消す",
+        "revoke_with_custom_msg": "カスタム通知を送信してアクセス権を取り消す",
+        "root": "ルート",
+        "single_advanced_filter": "高度なフィルタ",
+        "type": "タイプ",
+        "website": "ウェブサイト",
+        "Undo": "元に戻す",
+        "email": "メール",
+        "edit_access_name": "{{name}}のアクセスを編集する",
+        "empty": "空にする",
+        "error_try_again": "エラーが発生しました。再度お試しください",
+        "move": "移動",
+        "notes": "注釈",
+        "of": "の",
+        "restore": "戻す",
+        "results_for": "検索結果:",
+        "undo": "元に戻す"
     },
     "name": {
         "nickName": "ニックネーム",
@@ -257,5 +277,8 @@
         "other": "その他",
         "work": "職場"
     },
-    "of": "の"
+    "of": "の",
+    "displayer": {
+        "title5": "連絡先を選択する"
+    }
 }

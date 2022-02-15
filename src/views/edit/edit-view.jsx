@@ -9,7 +9,8 @@ import {
 	replaceHistory,
 	useRemoveCurrentBoard,
 	report,
-	getBridgedFunctions
+	getBridgedFunctions,
+	useUpdateCurrentBoard
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 import { map, filter, reduce, set, omit, find } from 'lodash';
@@ -287,6 +288,8 @@ export default function EditView({ panel }) {
 	const closeBoard = useRemoveCurrentBoard();
 	const [compareToContact, setCompareToContact] = useState(existingContact);
 	const keys = Object.keys(existingContact ?? {});
+	const updateBoard = useUpdateCurrentBoard();
+
 	useEffect(() => {
 		if (!compareToContact && keys?.length > 0) setCompareToContact(existingContact);
 		let canSet = true;
@@ -303,6 +306,35 @@ export default function EditView({ panel }) {
 			canSet = false;
 		};
 	}, [compareToContact, editId, existingContact, keys?.length, panel]);
+
+	const title = useMemo(
+		() =>
+			contact?.namePrefix ||
+			contact?.firstName ||
+			contact?.middleName ||
+			contact?.nickName ||
+			contact?.lastName ||
+			contact?.nameSuffix
+				? `${contact?.namePrefix ?? ''} ${contact?.firstName ?? ''} ${contact?.middleName ?? ''} ${
+						contact?.nickName ?? ''
+				  } ${contact?.lastName ?? ''} ${contact?.nameSuffix ?? ''}`
+				: t('label.new_contact', 'New contact'),
+		[
+			contact?.firstName,
+			contact?.lastName,
+			contact?.middleName,
+			contact?.namePrefix,
+			contact?.nameSuffix,
+			contact?.nickName,
+			t
+		]
+	);
+
+	useEffect(() => {
+		if (!panel) {
+			updateBoard(undefined, title);
+		}
+	}, [panel, title, updateBoard]);
 
 	const onSubmit = useCallback(() => {
 		const updatedContact = cleanMultivalueFields(contact);
