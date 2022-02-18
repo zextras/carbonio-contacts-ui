@@ -60,7 +60,7 @@
                 "title": "Hapus",
                 "body": {
                     "message2": "Apakah Anda ingin menghapus buku alamat yang dipilih secara permanen? Jika dihapus, konten terkait akan dihapus secara permanen dan buku alamat tidak dapat dipulihkan lagi.",
-                    "message1": "Apakah Anda ingin menghapus buku alamat yang dipilih? Jika dihapus, konten terkait akan dipindahkan ke tempat sampah dan buku alamat tidak terlihat lagi."
+                    "message1": "Apakah Anda ingin menghapus buku alamat yang dipilih? Jika dihapus, konten terkait akan dihapus secara permanen dan buku alamat tidak akan bisa dipulihkan lagi."
                 }
             },
             "edit": {
@@ -90,7 +90,7 @@
                 "footer": "Buat",
                 "body": {
                     "message1": "Nama buku alamat baru",
-                    "message2": "Pilih satu buku alamat untuk menyimpan alamat baru:"
+                    "message2": "Pilih satu buku alamat yang berisi kontak yang baru dibuat:"
                 },
                 "input": {
                     "name": "Sisipkan nama buku alamat",
@@ -128,8 +128,9 @@
                 "folder": "Kosongkan buku alamat",
                 "trash": "Kosongkan tempat sampah"
             },
-            "move": "Pindahkan buku alamat",
-            "new": "Buku alamat baru"
+            "move": "Pindahkan",
+            "new": "Buku alamat baru",
+            "moved": "Buku alamat berhasil dipindahkan"
         },
         "item": {
             "root": "Root"
@@ -139,14 +140,15 @@
             "address_book_moved_to_trash": "Buku alamat dipindahkan ke tempat sampah",
             "folder_empty": "Buku alamat berhasil dikosongkan",
             "folder_new": "Buku alamat baru dibuat",
-            "trash_empty": "Folder tempat sampah berhasil dikosongkan"
+            "trash_empty": "Folder tempat sampah berhasil dikosongkan",
+            "address_book_permanently_deleted": "Buku alamat dihapus permanen"
         },
         "type": "Folder Kontak"
     },
     "job": {
         "company": "Perusahaan",
         "department": "Departemen",
-        "title": "Uraian pekerjaan"
+        "title": "Peran Pekerjaan"
     },
     "label": {
         "cancel": "Batal",
@@ -155,8 +157,8 @@
         "share": "Bagikan",
         "advance_filters": "{{count}} Filter tingkat lanjut",
         "contact_setting": "Pengaturan Kontak",
-        "create": "Kontak Baru",
-        "edit_access": "Edit akses {{name}}",
+        "create": "Buat",
+        "edit_access": "Edit akses",
         "edit_folder_properties": "Edit properti {{name}}",
         "resend": "Kirim ulang",
         "revoke": "Batalkan",
@@ -166,7 +168,31 @@
         "revoke_send_standard_msg": "Batalkan akses dengan mengirim pemberitahuan kustom",
         "revoke_share": "Batalkan berbagi {{title}}",
         "single_advance_fillter": "Filter Tingkat Lanjut",
-        "shares_folder_edit": "Berbagi buku alamat ini"
+        "shares_folder_edit": "Berbagi buku alamat ini",
+        "contacts": "Kontak",
+        "delete": "Hapus",
+        "edit_access_name": "Edit akses {{name}}",
+        "email": "Email",
+        "empty": "Kosong",
+        "error_try_again": "Terjadi kesalahan, coba lagi",
+        "move": "Pindahkan",
+        "notes": "Catatan",
+        "of": "dari",
+        "restore": "Pulihkan",
+        "results_for": "Hasil untuk:",
+        "revoke_with_standard_msg": "Batalkan akses dengan mengirim pemberitahuan standar",
+        "revoke_without_notification": "Batalkan akses tanpa mengirim pemberitahuan",
+        "revoke_with_custom_msg": "Batalkan akses dengan mengirim pemberitahuan kustom",
+        "root": "Root",
+        "type": "Jenis",
+        "single_advanced_filter": "Filter Lanjutan",
+        "website": "Situs Web",
+        "Undo": "Batalkan",
+        "undo": "Batalkan",
+        "activate_selection_mode": "Aktifkan mode pemilihan",
+        "discard_changes": "HAPUS PERUBAHAN",
+        "address_book_restored": "buku alamat dipulihkan",
+        "advanced_filter": "{{count}} Filter Lanjutan"
     },
     "name": {
         "nickName": "Nama panggilan",
@@ -256,5 +282,36 @@
         "share_resend": "Undangan berbagi dikirim ulang",
         "share_revoke": "Akses berbagi dibatalkan",
         "share_updated": "Hak akses diperbarui"
-    }
+    },
+    "displayer": {
+        "title5": "Pilih kontak",
+        "title3": "Tetaplah berkomunikasi dengan rekan kerja Anda.",
+        "description2": "Klik tombol \"BARU\" untuk membuat yang baru.",
+        "description3": "Klik tombol \"BARU\" untuk membuat grup kontak baru.",
+        "description4": "Buat yang baru dengan mengklik tombol \"BARU\".",
+        "description5": "Temukan semua cara agar bisa terhubung dengan pengguna lain.",
+        "description6": "Gunakan mode \"Edit\" untuk menambahkan catatan pribadi pada kontak.",
+        "description7": "Buat grup kontak dengan mengklik tombol \"BARU\".",
+        "description8": "Pilih kontak atau grup kontak untuk mengirim email bersama.",
+        "list_title1": "Tampaknya belum ada kontak",
+        "list_title2": "Sampah kosong",
+        "search_description2": "Coba mulai pencarian lain.",
+        "search_description3": "Perika ejaan dan opsi filter atau coba dengan kata kunci lain.",
+        "search_list_title1": "Tampaknya tidak ada hasil. Cari terus!",
+        "search_list_title2": "Tak ada item yang cocok dengan pencarian Anda.",
+        "search_title1": "Mulai pencarian lain",
+        "search_title2": "Maaf, tidak ada hasil untuk pencarian Anda",
+        "search_title3": "Tidak ada hasil untuk pencarian Anda.",
+        "search_title4": "Pilih satu atau beberapa hasil untuk melakukan tindakan atau menampilkan detail.",
+        "title1": "Buat kontak baru dengan mengklik tombol \"BARU\".",
+        "title10": "Pilih dan pulihkan kontak dari sampah",
+        "title2": "Bagikan semua pekerjaan Anda kepada kontak.",
+        "title4": "Sesuaikan kontak Anda dengan menambahkan catatan pribadi",
+        "title6": "Sesuaikan kontak",
+        "title7": "Tetaplah berkomunikasi dengan rekan kerja Anda",
+        "title9": "Klik ikon sampah untuk menghapus kontak.",
+        "search_description1": "Atau pilih \"Filter Lanjutan\" untuk mempersempit pencarian.",
+        "title8": "Kirim email bersama"
+    },
+    "contact_restored": "Kontak dipulihkan"
 }

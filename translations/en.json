@@ -106,7 +106,7 @@
         "snackbar": {
             "address_book_moved_to_trash": "Address book moved to trash",
             "address_book_permanently_deleted": "Address book permanently deleted",
-            "folder_empty": "Address book emptied successfullly",
+            "folder_empty": "Address book emptied successfully",
             "folder_new": "New address book created",
             "trash_empty": "Trash folder emptied successfully"
         },
