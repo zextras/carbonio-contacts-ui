@@ -6,7 +6,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 // import faker from 'faker';
 import reducers from '../reducers/reducers';
-import { getContacts } from '../actions/get-contacts';
 import { searchContacts } from '../actions/search-contacts';
 import { createContact } from '../actions/create-contact';
 import { modifyContact } from '../actions/modify-contact';
@@ -110,33 +109,6 @@ describe.skip('Contact Slice', () => {
 			await store.dispatch(createContact(contact));
 			expect(store.getState().contacts.contacts[7]).toBeDefined();
 			expect(store.getState().contacts.contacts[7]).toHaveLength(1);
-		});
-	});
-
-	describe('Fetch Contact', () => {
-		test('Fetch Contact from Soap - unknown folder', async () => {
-			const store = configureStore({
-				reducer: reducers
-			});
-			const ids = ['2982', '2983'];
-			const contacts = await store.dispatch(getContacts(ids));
-			expect(contacts.payload).toBeDefined();
-			expect(contacts.payload).toHaveLength(2);
-			expect(store.getState().contacts.contacts[7]).toBeDefined();
-			expect(store.getState().contacts.contacts[7]).toHaveLength(2);
-		});
-
-		test('Fetch Contact from Soap - known folder', async () => {
-			const store = configureStore({
-				reducer: reducers
-			});
-			const ids = ['2821'];
-			await store.dispatch(searchContacts('7'));
-			const previousState = store.getState().contacts.contacts[7][0];
-			await store.dispatch(getContacts(ids));
-			expect(store.getState().contacts.contacts[7]).toBeDefined();
-			expect(store.getState().contacts.contacts[7]).toHaveLength(1);
-			expect(previousState).not.toMatchObject(store.getState().contacts.contacts[7][0]);
 		});
 	});
 

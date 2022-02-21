@@ -31,7 +31,7 @@ import reducer, { op } from './form-reducer';
 import { modifyContact } from '../../store/actions/modify-contact';
 import { createContact } from '../../store/actions/create-contact';
 import { selectContact } from '../../store/selectors/contacts';
-import { differenceObject } from '../../settings/components/utils';
+import { differenceObject } from '../settings/components/utils';
 
 const filterEmptyValues = (values) =>
 	reduce(

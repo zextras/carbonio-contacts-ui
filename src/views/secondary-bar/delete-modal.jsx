@@ -5,10 +5,12 @@
  */
 import React, { useCallback } from 'react';
 import { Container, CustomModal, Text } from '@zextras/carbonio-design-system';
-import { useReplaceHistoryCallback, report, FOLDERS } from '@zextras/carbonio-shell-ui';
+import { report, FOLDERS } from '@zextras/carbonio-shell-ui';
+import { useSelector } from 'react-redux';
 import ModalFooter from '../contact-actions/commons/modal-footer';
 import { ModalHeader } from './commons/modal-header';
 import { folderAction } from '../../store/actions/folder-action';
+import { selectFolder } from '../../store/selectors/folders';
 
 export const DeleteModal = ({
 	currentFolder,
@@ -18,7 +20,7 @@ export const DeleteModal = ({
 	t,
 	createSnackbar
 }) => {
-	const replaceHistory = useReplaceHistoryCallback();
+	const trashFolder = useSelector((state) => selectFolder(state, FOLDERS.TRASH));
 
 	const onConfirm = useCallback(() => {
 		const restoreFolder = () => {
@@ -47,7 +49,7 @@ export const DeleteModal = ({
 				}
 			);
 		};
-		if (currentFolder.absParent !== FOLDERS.TRASH) {
+		if (!currentFolder.path.includes(`/${trashFolder.label}/`)) {
 			dispatch(folderAction({ folder: currentFolder, op: 'trash' }))
 				.then((res) => {
 					if (!res.error) {
@@ -106,7 +108,7 @@ export const DeleteModal = ({
 		}
 
 		setModal('');
-	}, [createSnackbar, currentFolder, dispatch, setModal, t]);
+	}, [createSnackbar, currentFolder, dispatch, setModal, t, trashFolder.label]);
 
 	const onClose = useCallback(() => setModal(''), [setModal]);
 
@@ -129,7 +131,7 @@ export const DeleteModal = ({
 					height="fit"
 				>
 					<Text overflow="break-word">
-						{currentFolder.absParent === FOLDERS.TRASH
+						{currentFolder.path.includes(`/${trashFolder.label}/`)
 							? t(
 									'folder.modal.delete.body.message2',
 									'Do you want to delete permanently the selected address book? If you delete it, the related content will be permanently removed and the address book will no longer be recoverable.'

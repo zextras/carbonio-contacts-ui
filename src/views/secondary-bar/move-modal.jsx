@@ -5,7 +5,7 @@
  */
 import React, { useCallback, useMemo, useState } from 'react';
 import { Input, Text, Container, CustomModal, Padding } from '@zextras/carbonio-design-system';
-import { filter, startsWith, reduce, isEmpty } from 'lodash';
+import { filter, startsWith, reduce, isEmpty, split } from 'lodash';
 import { useReplaceHistoryCallback, FOLDERS } from '@zextras/carbonio-shell-ui';
 import FolderItem from './commons/folder-item';
 import { folderAction } from '../../store/actions/folder-action';
@@ -41,19 +41,19 @@ export const MoveModal = ({
 					v.id === currentFolder.id ||
 					v.id === currentFolder.parent ||
 					v.parent === FOLDERS.TRASH ||
-					(v.absParent === currentFolder.absParent && v.level > currentFolder.level) ||
-					(v.level + currentFolder.depth > 3 && v.level !== 0)
+					(split(v.path, '/')?.[0] === split(currentFolder.path, '/')?.[0] &&
+						v.level > currentFolder.level) ||
+					(v.level + currentFolder.level > 3 && v.level !== 0)
 				) {
 					return false;
 				}
 				return startsWith(v?.label?.toLowerCase(), input?.toLowerCase());
 			}),
 		[
-			currentFolder.absParent,
-			currentFolder.depth,
-			currentFolder.id,
 			currentFolder.level,
+			currentFolder.id,
 			currentFolder.parent,
+			currentFolder.path,
 			folders,
 			input
 		]

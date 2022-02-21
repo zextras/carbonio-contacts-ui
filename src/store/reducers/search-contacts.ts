@@ -5,8 +5,8 @@
  */
 import { map } from 'lodash';
 import { ContactsSlice } from '../../types/store';
-import { normalizeContactsFromSoap } from '../normalizations/normalize-contact-from-soap';
-import { addCnAndItemsCount, addContactsToStore, removeContactsFromStore } from '../utils/helpers';
+import { normalizeContactsFromSoap } from '../../utils/normalizations/normalize-contact-from-soap';
+import { addContactsToStore, removeContactsFromStore } from '../../utils/helpers';
 
 export function searchContactsPending(state: ContactsSlice): void {
 	state.status.pendingActions = true;
@@ -19,11 +19,6 @@ export function searchContactsRejected(state: ContactsSlice): void {
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function searchContactsFullFilled(state: any, { meta, payload }: any): void {
 	const contacts = normalizeContactsFromSoap(payload);
-	if (state.folders) {
-		if (contacts) {
-			addCnAndItemsCount(state, contacts);
-		}
-	}
 	if (state.contacts) {
 		if (payload) {
 			removeContactsFromStore(

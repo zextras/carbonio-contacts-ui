@@ -9,7 +9,7 @@ import {
 	normalizeContactAddressesToSoapOp,
 	normalizeContactUrlsToSoapOp,
 	normalizeContactToSoap // todo: make new test normalizations
-} from '../store/normalizations/normalize-contact-to-soap';
+} from '../utils/normalizations/normalize-contact-to-soap';
 import { ContactAddressType, ContactPhoneType, ContactUrlType } from './contact';
 
 describe('SOAP Utils', () => {

@@ -6,7 +6,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
 import { Contact } from '../../types/contact';
-import { normalizeContactToSoap } from '../normalizations/normalize-contact-to-soap';
+import { normalizeContactToSoap } from '../../utils/normalizations/normalize-contact-to-soap';
 
 export const createContact = createAsyncThunk(
 	'contacts/createContact',

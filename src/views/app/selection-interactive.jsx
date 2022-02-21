@@ -82,7 +82,7 @@ export default function SelectionInteractive() {
 				title: t(`displayer.title8`, 'Sharing is caring'),
 				description: t(
 					`displayer.description8`,
-					'Select a contact or a group of contacts to send shared emails.'
+					'Select a contact or a group of contacts to send integrations emails.'
 				)
 			}
 		],

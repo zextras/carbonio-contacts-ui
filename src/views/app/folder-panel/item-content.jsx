@@ -6,7 +6,7 @@
 import { Text, Row, Tooltip } from '@zextras/carbonio-design-system';
 import React, { useMemo } from 'react';
 import { trim } from 'lodash';
-import { useDisplayName } from '../../../commons/use-display-name';
+import { useDisplayName } from '../../../hooks/use-display-name';
 
 export const ItemContent = ({ item }) => {
 	const displayName = useDisplayName(item);

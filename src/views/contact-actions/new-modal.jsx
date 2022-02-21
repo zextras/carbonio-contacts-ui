@@ -6,7 +6,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Container, Input, Row, Text } from '@zextras/carbonio-design-system';
 import { FOLDERS } from '@zextras/carbonio-shell-ui';
-import { filter, map } from 'lodash';
+import { filter, map, size, split } from 'lodash';
 import { nanoid } from '@reduxjs/toolkit';
 import ModalFooter from './commons/modal-footer';
 import { ModalHeader } from '../secondary-bar/commons/modal-header';
@@ -135,9 +135,9 @@ export const NewModal = ({
 							onClick: () => setFolderDestination(folder),
 							open:
 								folder.open ??
-								(currentFolder.absParent === FOLDERS.USER_ROOT
+								(size(split(currentFolder.path, '/')) === 1
 									? currentFolder.id === item.id
-									: currentFolder.absParent === item.id),
+									: currentFolder.path.includes(item.label)),
 							items: []
 						};
 					}
@@ -147,13 +147,13 @@ export const NewModal = ({
 						onClick: () => setFolderDestination(folder),
 						open:
 							folder.open ??
-							(currentFolder.absParent === FOLDERS.USER_ROOT
+							(size(split(currentFolder.path, '/')) === 1
 								? currentFolder.id === item.id
-								: currentFolder.absParent === item.id)
+								: currentFolder.path.includes(item.label))
 					};
 				}
 			),
-		[currentFolder.absParent, currentFolder.id, folderDestination?.id]
+		[currentFolder.id, currentFolder.path, folderDestination?.id]
 	);
 
 	const rootEl = useMemo(

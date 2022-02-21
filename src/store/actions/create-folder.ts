@@ -5,10 +5,11 @@
  */
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
+import { ContactsFolder } from '../../types/contact';
 
 export const createFolder = createAsyncThunk(
 	'folder/createFolder',
-	async ({ parentFolder, name }: any) => {
+	async ({ parentFolder, name }: { parentFolder: ContactsFolder; name: string; id: string }) => {
 		const { folder } = (await soapFetch('CreateFolder', {
 			_jsns: 'urn:zimbraMail',
 			folder: {
@@ -16,7 +17,7 @@ export const createFolder = createAsyncThunk(
 				l: parentFolder.id || '7',
 				name
 			}
-		})) as { folder: any };
+		})) as { folder: ContactsFolder };
 		return folder;
 	}
 );

@@ -3,11 +3,12 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { forEach, findIndex } from 'lodash';
+import { forEach, findIndex, cloneDeep } from 'lodash';
 import { FoldersSlice } from '../../types/store';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function getFolderFulFilled(state: FoldersSlice, { meta, payload }: any): void {
+	console.log(cloneDeep(state.folders));
 	forEach(payload?.folder?.[0]?.link, (f) => {
 		const contactIndex = findIndex(state.folders, { id: f.id });
 		if (contactIndex >= 0) {

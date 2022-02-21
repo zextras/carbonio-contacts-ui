@@ -3,9 +3,9 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { cloneDeep, filter, find, map, max, reduce, some, split } from 'lodash';
-import { Contact, ContactsFolder } from '../../types/contact';
-import { ContactsSlice, FoldersSlice } from '../../types/store';
+import { cloneDeep, filter, find, forEach, map, max, merge, reduce, reject, some } from 'lodash';
+import { Contact, ContactsFolder } from '../types/contact';
+import { ContactsSlice, FoldersSlice } from '../types/store';
 
 export function extractFolders(accordions: ContactsFolder[]): ContactsFolder[] {
 	return reduce(
@@ -18,13 +18,6 @@ export function extractFolders(accordions: ContactsFolder[]): ContactsFolder[] {
 		},
 		[] as ContactsFolder[]
 	);
-}
-
-export function findDepth(subFolder: ContactsFolder, depth = 1): number {
-	if (subFolder && subFolder.items && subFolder.items.length) {
-		return <number>max(map(subFolder.items, (item) => findDepth(item, depth + 1)));
-	}
-	return depth;
 }
 
 export function calcFolderItems(
@@ -42,20 +35,16 @@ export function calcFolderItems(
 	);
 }
 
-export function calcFolderAbsParentLevelAndPath(
+export function calcFolderLevel(
 	folders: ContactsFolder[],
 	subFolder: ContactsFolder | undefined,
-	path = subFolder && subFolder.label,
 	level = 1
 ): any {
 	if (!subFolder) return undefined;
 	const nextFolder = find(folders, (item) => item.id === subFolder.parent);
-	const nextPath = `${nextFolder ? nextFolder.label : ''}/${path}`;
 	return (
-		calcFolderAbsParentLevelAndPath(folders, nextFolder, nextPath, level + 1) || {
-			absParent: level > 1 ? subFolder.id : subFolder.parent,
-			level,
-			path
+		calcFolderLevel(folders, nextFolder, level + 1) || {
+			level
 		}
 	);
 }
@@ -64,37 +53,13 @@ export function updateFolderInStore(state: FoldersSlice, folders: ContactsFolder
 	if (folders && folders.length) {
 		state.folders = map(state.folders, (folder) => {
 			const toRet = find(folders, (c) => c.id === folder.id) || folder;
-			const items = calcFolderItems(state.folders, toRet, toRet.id);
-			const moreParams = calcFolderAbsParentLevelAndPath(state.folders, toRet);
+			const moreParams = calcFolderLevel(state.folders, toRet);
 
 			return {
 				...toRet,
-				items,
-				depth: findDepth({ ...toRet, items }),
-				absParent: moreParams.absParent,
 				level: moreParams.level,
-				path: moreParams.path,
 				to: `/folder/${toRet.id}`
 			};
-		});
-	}
-}
-
-export function addCnAndItemsCount(state: FoldersSlice, contacts: Contact[]): void {
-	if (contacts) {
-		map(contacts, (contact) => {
-			const folderToUpdate = find(state.folders, (folder) => folder.id === contact.parent);
-			if (folderToUpdate && contact.id) {
-				if (folderToUpdate.cn[0] && folderToUpdate.cn[0].ids) {
-					if (!find(split(folderToUpdate.cn[0].ids, ','), (id) => id === contact.id)) {
-						folderToUpdate.cn[0].ids += `,${contact.id}`;
-						folderToUpdate.itemsCount += 1;
-					}
-				} else {
-					folderToUpdate.cn[0] = { ids: contact.id };
-					folderToUpdate.itemsCount += 1;
-				}
-			}
 		});
 	}
 }
@@ -112,6 +77,20 @@ export function removeFoldersFromStore(
 		[] as ContactsFolder[]
 	);
 }
+
+export const applyFoldersChangesToStore = (
+	state: FoldersSlice,
+	folders: ContactsFolder[]
+): void => {
+	forEach(folders, (f) => {
+		const isFolderInStore = find(state.folders, ['id', f.id]);
+		if (isFolderInStore) {
+			merge(isFolderInStore, f);
+		} else {
+			state.folders = [...state.folders, f];
+		}
+	});
+};
 
 export function addFoldersToStore(state: FoldersSlice, folders: ContactsFolder[]): void {
 	if (folders && folders.length) {
@@ -169,18 +148,8 @@ export function findContactsInStore(state: ContactsSlice, ids: Array<string>): A
 	);
 }
 
-export function addContactID(state: ContactsSlice, id: string): void {
-	reduce(
-		state.contacts,
-		(acc, v) => {
-			const contact = find(v, (item) => !item.id);
-			if (contact && !contact.id) {
-				contact.id = id;
-			}
-			return acc;
-		},
-		{}
-	);
+export function removeContactsWithoutID(state: ContactsSlice): void {
+	map(state.contacts, (v) => reject(v, (item) => !item.id));
 }
 
 export function removeContactsFromStore(

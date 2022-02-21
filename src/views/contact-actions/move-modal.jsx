@@ -5,7 +5,7 @@
  */
 import React, { useState, useMemo, useCallback } from 'react';
 import { Input, Container, Text } from '@zextras/carbonio-design-system';
-import { filter, startsWith, reduce, isEmpty } from 'lodash';
+import { filter, startsWith, reduce, isEmpty, split } from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useReplaceHistoryCallback, FOLDERS } from '@zextras/carbonio-shell-ui';
@@ -99,19 +99,19 @@ export default function MoveModal({
 					v.id === currentFolder.parent ||
 					v.id === FOLDERS.TRASH ||
 					v.parent === FOLDERS.TRASH ||
-					(v.absParent === currentFolder.absParent && v.level > currentFolder.level) ||
-					(v.level + currentFolder.depth > 3 && v.level !== 0)
+					(split(v.path, '/')?.[0] === split(currentFolder.path, '/')?.[0] &&
+						v.level > currentFolder.level) ||
+					(v.level + currentFolder.level > 3 && v.level !== 0)
 				) {
 					return false;
 				}
 				return startsWith(v?.label?.toLowerCase(), input?.toLowerCase());
 			}),
 		[
-			currentFolder.absParent,
-			currentFolder.depth,
 			currentFolder.id,
 			currentFolder.level,
 			currentFolder.parent,
+			currentFolder.path,
 			folders,
 			input
 		]

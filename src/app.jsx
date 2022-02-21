@@ -11,19 +11,19 @@ import {
 	getBridgedFunctions
 } from '@zextras/carbonio-shell-ui';
 import SidebarItems from './views/secondary-bar/sidebar';
-import ContactInput from './shared/contact-input';
+import ContactInput from './integrations/contact-input';
 import { SyncDataHandler } from './views/secondary-bar/sync-data-handler';
 
 const LazyAppView = lazy(() => import(/* webpackChunkName: "contacts-view" */ './views/app-view'));
 
 const LazySettingsView = lazy(() =>
-	import(/* webpackChunkName: "settings-view" */ './settings/settings-view')
+	import(/* webpackChunkName: "settings-view" */ './views/settings/settings-view')
 );
 const LazySearchView = lazy(() =>
 	import(/* webpackChunkName: "edit-view" */ './views/search/search-view')
 );
 const LazyBoardView = lazy(() =>
-	import(/* webpackChunkName: "board-view" */ './views/board/board-view')
+	import(/* webpackChunkName: "edit-view" */ './views/edit/edit-view')
 );
 
 const AppView = (props) => (
@@ -86,9 +86,6 @@ export default function App() {
 			component: ContactInput
 		});
 	}, []);
-	// useEffect(() => {
-	// 	store.setReducer(reducers);
-	// }, []);
 
 	return <SyncDataHandler />;
 }
