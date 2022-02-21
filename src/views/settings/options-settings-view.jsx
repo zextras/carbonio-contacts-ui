@@ -63,7 +63,7 @@ export default function OptionsSettingsView({ t, settingsObj, updateSettings }) 
 				<Checkbox
 					label={t(
 						'settings.contacts.checkbox.include_add_in_shared_contact',
-						'Include addresses in integrations contacts'
+						'Include addresses in shared contacts'
 					)}
 					value={settingsObj.zimbraPrefSharedAddrBookAutoCompleteEnabled === 'TRUE'}
 					onClick={() =>

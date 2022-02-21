@@ -104,7 +104,7 @@ const ShareFolderModal = ({
 						type: 'info',
 						label: editMode
 							? t('snackbar.share_updated', 'Access rights updated')
-							: t('snackbar.folder_shared', 'Address book integrations'),
+							: t('snackbar.folder_shared', 'Address book shared'),
 						autoHideTimeout: 3000
 					});
 					sendNotification &&
@@ -266,7 +266,7 @@ const ShareFolderModal = ({
 					<Text overflow="break-word" size="small" color="gray1">
 						{t(
 							'share.share_note',
-							'The standard message displays your name, the name of the integrations item, pemissions granted to the recipients, and sign in information.'
+							'The standard message displays your name, the name of the shared item, permissions granted to the recipients, and sign in information.'
 						)}
 					</Text>
 				</Row>

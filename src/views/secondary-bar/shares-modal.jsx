@@ -129,7 +129,7 @@ export const SharesModal = ({ folders, onClose, createSnackbar }) => {
 				id: v[0].ownerId,
 				label: t('share.shared_items', {
 					value: v[0].ownerName,
-					defaultValue: "{{value}}'s integrations address books"
+					defaultValue: "{{value}}'s shared address books"
 				}),
 				open: true,
 				icon: 'PersonOutline',

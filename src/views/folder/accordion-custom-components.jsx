@@ -181,7 +181,7 @@ export const CustomAccordion = (
 		if (data.type === 'contact') {
 			if (
 				data.data.parentFolderId === folder.id || // same folder not allowed
-				(folder.isShared && folder.perm.indexOf('w') === -1) // only if integrations folder have write permission
+				(folder.isShared && folder.perm.indexOf('w') === -1) // only if shared folder have write permission
 			) {
 				return { succss: false };
 			}
@@ -190,7 +190,7 @@ export const CustomAccordion = (
 			if (
 				folder.id === data.data.id || // same folder not allowed
 				folder.level + data.data.level > 3 || // rules for maximum 3 folder level
-				folder.isShared //  integrations folder not allowed
+				folder.isShared //  shared folder not allowed
 			)
 				return { succss: false };
 		}
@@ -276,7 +276,7 @@ export const CustomAccordion = (
 		const trashFolder = useSelector((state) => selectFolder(state, FOLDERS.TRASH));
 
 		const dragFolderDisable = useMemo(
-			() => [3, 7, 13].includes(Number(folder.id)) || folder.isShared, // Default folders and integrations folders not allowed to drag
+			() => [3, 7, 13].includes(Number(folder.id)) || folder.isShared, // Default folders and shared folders not allowed to drag
 			[]
 		);
 		const onClick = useCallback(
