@@ -3,9 +3,9 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useEffect, useState, useMemo, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { filter, find, isEqual, map, remove, sortBy, uniqWith } from 'lodash';
+import { filter, isEqual, map, remove, sortBy, uniqWith } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import {
 	Accordion,
@@ -19,7 +19,6 @@ import {
 	SnackbarManagerContext
 } from '@zextras/carbonio-design-system';
 import { useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
-import { useParams } from 'react-router-dom';
 import { setCustomComponent } from '../folder/accordion-custom-components';
 import { FolderActionsType } from '../../types/folder';
 import { NewModal } from './new-modal';
@@ -33,7 +32,6 @@ import { getShareInfo } from '../../store/actions/get-share-info';
 import ShareFolderModal from './share-folder-modal';
 import ModalWrapper from './commons/modal-wrapper';
 import { CollapsedSideBarItems } from '../folder/collapsed-sidebar-items';
-import { selectAllContacts, selectAllContactsInFolder } from '../../store/selectors/contacts';
 
 export const nest = (items, id, level) =>
 	map(
@@ -106,7 +104,6 @@ export default function Sidebar({ expanded }) {
 	const folders = useSelector(selectFolders);
 	const [modal, setModal] = useState('');
 	const [currentFolder, setCurrentFolder] = useState();
-	const contacts = useSelector(selectAllContacts);
 	const [modalAccordions, setModalAccordions] = useState();
 	const [t] = useTranslation();
 	const [accordionItems, setAccordionItems] = useState([]);
@@ -148,13 +145,6 @@ export default function Sidebar({ expanded }) {
 
 		setModalAccordions(temp);
 	}, [folders, t, dispatch, createModal, createSnackbar, expanded, replaceHistory]);
-
-	useEffect(() => {
-		console.clear();
-		console.log(folders);
-		console.log(contacts);
-		console.log('current', currentFolder);
-	}, [contacts, currentFolder, folders]);
 
 	return (
 		<>
