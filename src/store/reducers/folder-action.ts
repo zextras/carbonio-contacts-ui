@@ -6,7 +6,7 @@
 import { FOLDERS } from '@zextras/carbonio-shell-ui';
 import { cloneDeep, filter, find, reject, split } from 'lodash';
 import { FoldersSlice } from '../../types/store';
-import { removeFoldersFromStore, updateFolderInStore } from '../../utils/helpers';
+import { applyFoldersChangesToStore, removeFoldersFromStore } from '../../utils/helpers';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function folderActionPending(state: any, { meta }: any): void {
@@ -23,28 +23,24 @@ export function folderActionPending(state: any, { meta }: any): void {
 		};
 		switch (op) {
 			case 'move':
-				state.folders = filter(state.folders, (f) => f.id !== newFolder.id).concat(newFolder);
-				updateFolderInStore(state, [newFolder]);
+				applyFoldersChangesToStore(state, [newFolder]);
 				break;
 			case 'delete':
 				removeFoldersFromStore(state, [folder.id]);
 				break;
 			case 'rename':
-				state.folders = filter(state.folders, (f) => f.id !== newFolder.id).concat(newFolder);
-				updateFolderInStore(state, [newFolder]);
+				applyFoldersChangesToStore(state, [newFolder]);
 				break;
 
 			case '!grant': {
 				const newAcl = filter(folder.sharedWith.grant, (rights) => rights.zid !== zid);
 				const updatedFolder = { ...newFolder, sharedWith: newAcl };
-				state.folders = filter(state.folders, (f) => f.id !== newFolder.id).concat(updatedFolder);
-				updateFolderInStore(state, [updatedFolder]);
+				applyFoldersChangesToStore(state, [updatedFolder]);
 				state.status = 'updating';
 				break;
 			}
 			case 'update': {
-				state.folders = filter(state.folders, (f) => f.id !== newFolder.id).concat(newFolder);
-				updateFolderInStore(state, [newFolder]);
+				applyFoldersChangesToStore(state, [newFolder]);
 				break;
 			}
 			case 'empty':

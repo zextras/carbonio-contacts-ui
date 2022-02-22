@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { cloneDeep, filter, find, forEach, map, max, merge, reduce, reject, some } from 'lodash';
+import { cloneDeep, filter, find, forEach, map, merge, reduce, reject, some } from 'lodash';
 import { Contact, ContactsFolder } from '../types/contact';
 import { ContactsSlice, FoldersSlice } from '../types/store';
 
@@ -18,50 +18,6 @@ export function extractFolders(accordions: ContactsFolder[]): ContactsFolder[] {
 		},
 		[] as ContactsFolder[]
 	);
-}
-
-export function calcFolderItems(
-	folders: ContactsFolder[],
-	subFolders: ContactsFolder,
-	id: string | undefined
-): ContactsFolder[] {
-	return map(
-		filter(folders, (item) => item.parent === id),
-		(item) => ({
-			...item,
-			items: calcFolderItems(folders, subFolders, item.id),
-			to: `/folder/${item.id}`
-		})
-	);
-}
-
-export function calcFolderLevel(
-	folders: ContactsFolder[],
-	subFolder: ContactsFolder | undefined,
-	level = 1
-): any {
-	if (!subFolder) return undefined;
-	const nextFolder = find(folders, (item) => item.id === subFolder.parent);
-	return (
-		calcFolderLevel(folders, nextFolder, level + 1) || {
-			level
-		}
-	);
-}
-
-export function updateFolderInStore(state: FoldersSlice, folders: ContactsFolder[]): void {
-	if (folders && folders.length) {
-		state.folders = map(state.folders, (folder) => {
-			const toRet = find(folders, (c) => c.id === folder.id) || folder;
-			const moreParams = calcFolderLevel(state.folders, toRet);
-
-			return {
-				...toRet,
-				level: moreParams.level,
-				to: `/folder/${toRet.id}`
-			};
-		});
-	}
 }
 
 export function removeFoldersFromStore(
@@ -99,14 +55,6 @@ export function addFoldersToStore(state: FoldersSlice, folders: ContactsFolder[]
 			state.folders = reduce(folders, (acc, v) => [...acc, v], state.folders);
 		}
 	}
-}
-
-export function removeIndexFolderFromStore(state: ContactsSlice, index: string): void {
-	state.contacts = reduce(
-		state.contacts,
-		(acc, v, k) => (k === index ? acc : { ...acc, [k]: v }),
-		{}
-	);
 }
 
 export function updateContactsInStore(state: ContactsSlice, contactsArray: Contact[]): void {

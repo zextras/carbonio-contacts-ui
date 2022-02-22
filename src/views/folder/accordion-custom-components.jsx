@@ -14,9 +14,10 @@ import {
 	Drop,
 	Icon,
 	Padding,
-	Row
+	Row,
+	Tooltip
 } from '@zextras/carbonio-design-system';
-import { map, filter, find } from 'lodash';
+import { map, filter } from 'lodash';
 import { useSelector } from 'react-redux';
 import { actionsRetriever } from '../secondary-bar/commons/folders-actions';
 import { FolderActionsType } from '../../types/folder';
@@ -327,7 +328,9 @@ export const CustomAccordion = (
 							<Row mainAlignment="flex-start" padding={{ left: 'large' }} takeAvailableSpace>
 								<Icon size="large" icon={folderIconLabel} customColor={folderIconColor} />
 								<Padding right="large" />
-								<AccordionItem {...props} height={40} />
+								<Tooltip label={folder.label} placement="right" maxWidth="100%">
+									<AccordionItem {...props} height={40} />
+								</Tooltip>
 							</Row>
 						</Dropdown>
 					</AppLink>
