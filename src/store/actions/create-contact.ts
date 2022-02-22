@@ -11,12 +11,13 @@ import { normalizeContactToSoap } from '../../utils/normalizations/normalize-con
 export const createContact = createAsyncThunk(
 	'contacts/createContact',
 	async (contact: Contact) => {
+		const cnt = { ...contact, fileAsStr: contact.firstName };
 		const { cn } = (await soapFetch('CreateContact', {
 			_jsns: 'urn:zimbraMail',
 			cn: {
 				m: [],
-				l: contact.parent,
-				a: normalizeContactToSoap(contact)
+				l: cnt.parent,
+				a: normalizeContactToSoap(cnt)
 			}
 		})) as { cn: any };
 		return cn;

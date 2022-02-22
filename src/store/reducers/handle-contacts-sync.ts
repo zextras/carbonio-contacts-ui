@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { find, forEach, map, orderBy, reduce, reject, uniqBy } from 'lodash';
+import { cloneDeep, find, forEach, map, orderBy, reduce, reject, uniqBy } from 'lodash';
 import { Contact } from '../../types/contact';
 import { ContactsSlice } from '../../types/store';
 import { removeContactsFromStore } from '../../utils/helpers';
@@ -16,10 +16,13 @@ export function handleCreatedContactsSyncReducer(
 		if (cn.id && cn.parent) {
 			state.contacts[cn.parent] = orderBy(
 				[
-					...map(reject(state.contacts[cn.parent], ['id', cn.id]), (cnt) => ({
-						...cnt,
-						fileAsStr: cnt.fileAsStr.toLowerCase()
-					})),
+					...map(
+						reject(state.contacts[cn.parent], (item) => item.id === cn.id || !item.id),
+						(cnt) => ({
+							...cnt,
+							fileAsStr: cnt.fileAsStr.toLowerCase()
+						})
+					),
 					cn
 				],
 				'fileAsStr'
