@@ -127,29 +127,28 @@ export const NewModal = ({
 									divider: true,
 									level
 							  };
-
+					const splittedFolder = split(item.path, '/');
+					const folderLabel = splittedFolder[1];
+					const open =
+						folder.open ??
+						(size(split(currentFolder.path, '/')) === 2
+							? currentFolder.id === item.id
+							: currentFolder.path.includes(folderLabel));
 					if (folder.level > 1) {
 						return {
 							...folder,
 							divider: true,
 							onClick: () => setFolderDestination(folder),
-							open:
-								folder.open ??
-								(size(split(currentFolder.path, '/')) === 1
-									? currentFolder.id === item.id
-									: currentFolder.path.includes(item.label)),
+							open,
 							items: []
 						};
 					}
+
 					return {
 						...folder,
 						divider: true,
 						onClick: () => setFolderDestination(folder),
-						open:
-							folder.open ??
-							(size(split(currentFolder.path, '/')) === 1
-								? currentFolder.id === item.id
-								: currentFolder.path.includes(item.label))
+						open
 					};
 				}
 			),

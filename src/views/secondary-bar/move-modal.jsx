@@ -5,7 +5,7 @@
  */
 import React, { useCallback, useMemo, useState } from 'react';
 import { Input, Text, Container, CustomModal, Padding } from '@zextras/carbonio-design-system';
-import { filter, startsWith, reduce, isEmpty, split } from 'lodash';
+import { filter, startsWith, reduce, isEmpty, split, size } from 'lodash';
 import { useReplaceHistoryCallback, FOLDERS } from '@zextras/carbonio-shell-ui';
 import FolderItem from './commons/folder-item';
 import { folderAction } from '../../store/actions/folder-action';
@@ -41,26 +41,17 @@ export const MoveModal = ({
 					v.id === currentFolder.id ||
 					v.id === currentFolder.parent ||
 					v.parent === FOLDERS.TRASH ||
-					(split(v.path, '/')?.[0] === split(currentFolder.path, '/')?.[0] &&
-						v.level > currentFolder.level) ||
-					(v.level + currentFolder.level > 3 && v.level !== 0)
+					v.path.includes(currentFolder.label)
 				) {
 					return false;
 				}
 				return startsWith(v?.label?.toLowerCase(), input?.toLowerCase());
 			}),
-		[
-			currentFolder.level,
-			currentFolder.id,
-			currentFolder.parent,
-			currentFolder.path,
-			folders,
-			input
-		]
+		[folders, currentFolder.id, currentFolder.parent, currentFolder.label, input]
 	);
 
 	const nestFilteredFolders = useCallback(
-		(items, id, results) =>
+		(items, id, results, level = 0) =>
 			reduce(
 				filter(items, (item) => item.parent === id),
 				(acc, item) => {
@@ -70,8 +61,9 @@ export const MoveModal = ({
 							...acc,
 							{
 								...item,
-								items: nestFilteredFolders(items, item.id, results),
+								items: nestFilteredFolders(items, item.id, results, level + 1),
 								onClick: () => setFolderDestination(item),
+								level: level + 1,
 								open: !!input.length,
 								divider: true,
 								background: folderDestination.id === item.id ? 'highlight' : undefined
@@ -79,7 +71,7 @@ export const MoveModal = ({
 						];
 					}
 					if (match && !match.length) {
-						return [...acc, ...nestFilteredFolders(items, item.id, results)];
+						return [...acc, ...nestFilteredFolders(items, item.id, results, level)];
 					}
 					return acc;
 				},
