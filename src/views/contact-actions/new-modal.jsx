@@ -133,7 +133,7 @@ export const NewModal = ({
 						folder.open ??
 						(size(split(currentFolder.path, '/')) === 2
 							? currentFolder.id === item.id
-							: currentFolder.path.includes(folderLabel));
+							: currentFolder?.path?.includes?.(folderLabel));
 					if (folder.level > 1) {
 						return {
 							...folder,

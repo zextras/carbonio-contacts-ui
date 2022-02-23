@@ -131,7 +131,7 @@ export const dropdownActions = (
 									action.id === FolderActionsType.MOVE) ||
 								(modalFolder.parent === FOLDERS.TRASH &&
 									(action.id === FolderActionsType.NEW || action.id === FolderActionsType.EDIT)) ||
-								(modalFolder.path.includes(`/${trashFolder.label}/`) &&
+								(modalFolder?.path?.includes?.(`/${trashFolder?.label}/`) &&
 									modalFolder.id !== FOLDERS.TRASH &&
 									action.id === FolderActionsType.EMPTY)
 							) {

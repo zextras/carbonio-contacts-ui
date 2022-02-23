@@ -41,7 +41,7 @@ export const MoveModal = ({
 					v.id === currentFolder.id ||
 					v.id === currentFolder.parent ||
 					v.parent === FOLDERS.TRASH ||
-					v.path.includes(currentFolder.label)
+					v?.path?.includes?.(currentFolder?.label)
 				) {
 					return false;
 				}

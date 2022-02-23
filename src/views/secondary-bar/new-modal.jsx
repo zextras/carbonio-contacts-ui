@@ -56,7 +56,7 @@ export const NewModal = ({
 								folder.open ??
 								(size(split(currentFolder.path, '/')) === 1
 									? currentFolder.id === item.id
-									: currentFolder.path.includes(item.label)),
+									: currentFolder?.path?.includes?.(item?.label)),
 							items: []
 						};
 					}
@@ -67,7 +67,7 @@ export const NewModal = ({
 							folder.open ??
 							(size(split(currentFolder.path, '/')) === 1
 								? currentFolder.id === item.id
-								: currentFolder.path.includes(item.label))
+								: currentFolder?.path?.includes?.(item?.label))
 					};
 				}
 			),

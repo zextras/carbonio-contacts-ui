@@ -49,7 +49,7 @@ export const DeleteModal = ({
 				}
 			);
 		};
-		if (!currentFolder.path.includes(`/${trashFolder.label}/`)) {
+		if (!currentFolder?.path?.includes?.(`/${trashFolder?.label}/`)) {
 			dispatch(folderAction({ folder: currentFolder, op: 'trash' }))
 				.then((res) => {
 					if (!res.error) {
@@ -131,7 +131,7 @@ export const DeleteModal = ({
 					height="fit"
 				>
 					<Text overflow="break-word">
-						{currentFolder.path.includes(`/${trashFolder.label}/`)
+						{currentFolder?.path?.includes?.(`/${trashFolder?.label}/`)
 							? t(
 									'folder.modal.delete.body.message2',
 									'Do you want to delete permanently the selected address book? If you delete it, the related content will be permanently removed and the address book will no longer be recoverable.'
