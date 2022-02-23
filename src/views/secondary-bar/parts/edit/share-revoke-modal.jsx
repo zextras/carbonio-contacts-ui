@@ -145,7 +145,7 @@ const ShareRevokeModal = ({ folder, onClose, grant, createSnackbar, goBack }) =>
 					<Text overflow="break-word" size="small" color="gray1">
 						{t(
 							'share.share_note',
-							'The standard message displays your name, the name of the shared item, pemissions granted to the recipients, and sign in information.'
+							'The standard message displays your name, the name of the shared item, permissions granted to the recipients, and sign in information.'
 						)}
 					</Text>
 				</Row>

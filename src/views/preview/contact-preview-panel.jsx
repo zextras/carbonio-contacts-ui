@@ -16,7 +16,7 @@ import { includes, head, split } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import ContactPreviewHeader from './contact-preview-header';
 import ContactPreviewContent from './contact-preview-content';
-import { useDisplayName } from '../../commons/use-display-name';
+import { useDisplayName } from '../../hooks/use-display-name';
 import { contactAction } from '../../store/actions/contact-action';
 import MoveModal from '../contact-actions/move-modal';
 import { selectContact } from '../../store/selectors/contacts';

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { ContactsSlice, ModifyContactAction } from '../../types/store';
-import { updateContactsInStore } from '../utils/helpers';
+import { updateContactsInStore } from '../../utils/helpers';
 
 export function modifyContactPending(state: ContactsSlice, { meta }: ModifyContactAction): void {
 	const { updatedContact } = meta.arg;

@@ -7,9 +7,13 @@ import { createSlice } from '@reduxjs/toolkit';
 import { createContact } from '../actions/create-contact';
 import { contactAction } from '../actions/contact-action';
 import { folderAction } from '../actions/folder-action';
-import { getContacts } from '../actions/get-contacts';
 import { searchContacts } from '../actions/search-contacts';
 import { modifyContact } from '../actions/modify-contact';
+import {
+	handleDeletedContactsSyncReducer,
+	handleCreatedContactsSyncReducer,
+	handleModifiedContactsSyncReducer
+} from '../reducers/handle-contacts-sync';
 import {
 	contactActionFulFilled,
 	contactActionPending,
@@ -21,12 +25,6 @@ import {
 	createContactRejected
 } from '../reducers/create-contact';
 import { folderActionPending, folderActionRejected } from '../reducers/folder-action';
-import {
-	getContactsFullFilled,
-	getContactsPending,
-	getContactsRejected
-} from '../reducers/get-contacts';
-import { handleContactSyncReducer } from '../reducers/handle-sync';
 import {
 	modifyContactFulFilled,
 	modifyContactPending,
@@ -47,12 +45,11 @@ export const contactsSlice = createSlice({
 		contacts: {}
 	},
 	reducers: {
-		handleContactsSync: handleContactSyncReducer
+		handleModifiedContactsSync: handleModifiedContactsSyncReducer,
+		handleCreatedContactsSync: handleCreatedContactsSyncReducer,
+		handleDeletedContactsSync: handleDeletedContactsSyncReducer
 	},
 	extraReducers: (builder) => {
-		builder.addCase(getContacts.pending, getContactsPending);
-		builder.addCase(getContacts.fulfilled, getContactsFullFilled);
-		builder.addCase(getContacts.rejected, getContactsRejected);
 		builder.addCase(searchContacts.pending, searchContactsPending);
 		builder.addCase(searchContacts.fulfilled, searchContactsFullFilled);
 		builder.addCase(searchContacts.rejected, searchContactsRejected);
@@ -70,5 +67,6 @@ export const contactsSlice = createSlice({
 	}
 });
 
-export const { handleContactsSync } = contactsSlice.actions;
+export const { handleCreatedContactsSync, handleModifiedContactsSync, handleDeletedContactsSync } =
+	contactsSlice.actions;
 export const contactSliceReducer = contactsSlice.reducer;

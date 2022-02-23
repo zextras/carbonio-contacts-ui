@@ -17,7 +17,8 @@ export const actionsRetriever = (
 	t,
 	dispatch,
 	createModal,
-	createSnackbar
+	createSnackbar,
+	trashFolder
 ) => [
 	{
 		id: FolderActionsType.NEW,
@@ -72,7 +73,7 @@ export const actionsRetriever = (
 		id: FolderActionsType.DELETE,
 		icon: 'Trash2Outline',
 		label:
-			folder.absParent === FOLDERS.TRASH
+			folder?.path?.includes?.(`/${trashFolder.label}/`) && folder.id !== FOLDERS.TRASH
 				? t('folder.action.delete_permanently', 'Delete address book permanently')
 				: t('folder.action.delete', 'Delete address book'),
 		click: () => {

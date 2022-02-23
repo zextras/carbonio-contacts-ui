@@ -17,8 +17,8 @@ import { isEmpty, reduce, filter, first } from 'lodash';
 import ModalFooter from '../../commons/modal-footer';
 import { ModalHeader } from '../../commons/modal-header';
 import { folderAction } from '../../../../store/actions/folder-action';
-import { extractFolders } from '../../../../store/utils/helpers';
-import ColorSelect from '../../../commons/ColorSelect';
+import { extractFolders } from '../../../../utils/helpers';
+import ColorSelect from '../../../../commons/ColorSelect';
 import { ShareFolderProperties } from './share-folder-properties';
 
 const EditDefaultModal = ({
@@ -49,7 +49,7 @@ const EditDefaultModal = ({
 
 	const items = useMemo(() => {
 		let accItem = [];
-		if (currentFolder.parent === '1' && currentFolder.depth > 2) {
+		if (currentFolder.parent === '1' && currentFolder.level > 2) {
 			accItem = [
 				{
 					label: t('folder.modal.edit.body.item.empty', 'No path available'),
@@ -77,7 +77,7 @@ const EditDefaultModal = ({
 					v.id === currentFolder.id ||
 					v.id === currentFolder.parent ||
 					v.parent === '3' ||
-					(v.level + currentFolder.depth > 3 && v.level !== 0)
+					(v.level + currentFolder.level > 3 && v.level !== 0)
 				) {
 					return acc;
 				}
@@ -91,7 +91,7 @@ const EditDefaultModal = ({
 			},
 			accItem
 		);
-	}, [currentFolder.depth, currentFolder.id, currentFolder.parent, folders, t]);
+	}, [currentFolder.level, currentFolder.id, currentFolder.parent, folders, t]);
 
 	useMemo(() => {
 		setParent(currentFolder.parent);

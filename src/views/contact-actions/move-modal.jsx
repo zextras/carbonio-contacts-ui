@@ -5,7 +5,7 @@
  */
 import React, { useState, useMemo, useCallback } from 'react';
 import { Input, Container, Text } from '@zextras/carbonio-design-system';
-import { filter, startsWith, reduce, isEmpty } from 'lodash';
+import { filter, startsWith, reduce, isEmpty, split, find, size } from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useReplaceHistoryCallback, FOLDERS } from '@zextras/carbonio-shell-ui';
@@ -28,7 +28,7 @@ export default function MoveModal({
 	const folders = useSelector(selectFolders);
 	const totalContacts = useMemo(() => reduce(folders, (ac, v) => ac + v.itemsCount, 0), [folders]);
 	const currentFolder = useMemo(
-		() => filter(folders, (f) => f.id === `${folderId}`),
+		() => find(folders, (f) => f.id === `${folderId}`),
 		[folders, folderId]
 	);
 	const [showNewFolderModal, setShowNewFolderModal] = useState(false);
@@ -89,35 +89,12 @@ export default function MoveModal({
 	]);
 
 	const filterFromInput = useMemo(
-		() =>
-			filter(folders, (v) => {
-				if (isEmpty(v)) {
-					return false;
-				}
-				if (
-					v.id === currentFolder.id ||
-					v.id === currentFolder.parent ||
-					v.id === FOLDERS.TRASH ||
-					v.parent === FOLDERS.TRASH ||
-					(v.absParent === currentFolder.absParent && v.level > currentFolder.level) ||
-					(v.level + currentFolder.depth > 3 && v.level !== 0)
-				) {
-					return false;
-				}
-				return startsWith(v?.label?.toLowerCase(), input?.toLowerCase());
-			}),
-		[
-			currentFolder.absParent,
-			currentFolder.depth,
-			currentFolder.id,
-			currentFolder.level,
-			currentFolder.parent,
-			folders,
-			input
-		]
+		() => filter(folders, (v) => startsWith(v?.label?.toLowerCase(), input?.toLowerCase())),
+		[folders, input]
 	);
+
 	const nestFilteredFolders = useCallback(
-		(items, id, results) =>
+		(items, id, results, level = 0) =>
 			reduce(
 				filter(items, (item) => item.parent === id),
 				(acc, item) => {
@@ -127,7 +104,8 @@ export default function MoveModal({
 							...acc,
 							{
 								...item,
-								items: nestFilteredFolders(items, item.id, results),
+								level: level + 1,
+								items: nestFilteredFolders(items, item.id, results, level + 1),
 								onClick: () => setFolderDestination(item),
 								open: !!input.length,
 								divider: true,
@@ -136,7 +114,7 @@ export default function MoveModal({
 						];
 					}
 					if (match && !match.length) {
-						return [...acc, ...nestFilteredFolders(items, item.id, results)];
+						return [...acc, ...nestFilteredFolders(items, item.id, results, level)];
 					}
 					return acc;
 				},

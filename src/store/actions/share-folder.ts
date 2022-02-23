@@ -6,7 +6,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { map } from 'lodash';
 
-export const shareFolder = createAsyncThunk('mail/shareFolder', async (data: any, { getState }) => {
+export const shareFolder = createAsyncThunk('mail/shareFolder', async (data: any) => {
 	const requests: any = {};
 	requests.ShareCalendarRequest = `<BatchRequest xmlns="urn:zimbra" onerror="stop">
         ${map(
