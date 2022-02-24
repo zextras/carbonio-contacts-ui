@@ -9,7 +9,7 @@ import styled from 'styled-components';
 import { Link, useRouteMatch } from 'react-router-dom';
 import { Avatar, Container, Text, Row, Padding } from '@zextras/carbonio-design-system';
 import { trim, includes } from 'lodash';
-import { useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
+import { replaceHistory } from '@zextras/carbonio-shell-ui';
 import { useDisplayName } from '../../hooks/use-display-name';
 import ListItemActionWrapper from './list-item-action-wrapper';
 import useQueryParam from '../../hooks/getQueryParam';
@@ -68,7 +68,6 @@ export default function ContactListItem({
 		() => includes(selectedIds, contact.id),
 		[selectedIds, contact.id]
 	);
-	const replaceHistory = useReplaceHistoryCallback();
 	const previewId = useQueryParam('preview');
 	const active = useMemo(() => contact.id === previewId, [contact.id, previewId]);
 	const _onClick = useCallback(
@@ -78,7 +77,7 @@ export default function ContactListItem({
 			// }
 			replaceHistory(`${url}/contacts/${contact.id}`);
 		},
-		[replaceHistory, url, contact.id]
+		[url, contact.id]
 	);
 	return (
 		<MainWrapper style={style}>

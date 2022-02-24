@@ -6,7 +6,7 @@
 import React, { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
-	useReplaceHistoryCallback,
+	replaceHistory,
 	useRemoveCurrentBoard,
 	report,
 	getBridgedFunctions,
@@ -285,7 +285,6 @@ export default function EditView({ panel }) {
 	const existingContact = useSelector((state) => selectContact(state, folderId, editId));
 	const [contact, dispatch] = useReducer(reducer);
 	const [t] = useTranslation();
-	const replaceHistory = useReplaceHistoryCallback();
 	const closeBoard = useRemoveCurrentBoard();
 	const [compareToContact, setCompareToContact] = useState(existingContact);
 	const keys = Object.keys(existingContact ?? {});
@@ -371,7 +370,7 @@ export default function EditView({ panel }) {
 				})
 				.catch(report);
 		}
-	}, [contact, closeBoard, folderId, panel, replaceHistory, storeDispatch, t, existingContact]);
+	}, [contact, closeBoard, folderId, panel, storeDispatch, t, existingContact]);
 
 	const defaultTypes = useMemo(
 		() => [

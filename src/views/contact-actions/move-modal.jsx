@@ -8,7 +8,7 @@ import { Input, Container, Text } from '@zextras/carbonio-design-system';
 import { filter, startsWith, reduce, isEmpty, split, find, size } from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { useReplaceHistoryCallback, FOLDERS } from '@zextras/carbonio-shell-ui';
+import { replaceHistory, FOLDERS } from '@zextras/carbonio-shell-ui';
 import ModalFooter from './commons/modal-footer';
 import { ModalHeader } from '../secondary-bar/commons/modal-header';
 import FolderItem from '../secondary-bar/commons/folder-item';
@@ -36,7 +36,6 @@ export default function MoveModal({
 	const [folderDestination, setFolderDestination] = useState(currentFolder || {});
 	const [isSameFolder, setIsSameFolder] = useState(false);
 	const [t] = useTranslation();
-	const replaceHistory = useReplaceHistoryCallback();
 	const moveContact = useCallback(() => {
 		if (folderDestination?.id !== folderId && folderDestination.id !== originID) {
 			dispatch(
@@ -76,17 +75,7 @@ export default function MoveModal({
 		} else {
 			setIsSameFolder(true);
 		}
-	}, [
-		folderDestination.id,
-		folderId,
-		originID,
-		dispatch,
-		contactId,
-		onClose,
-		createSnackbar,
-		t,
-		replaceHistory
-	]);
+	}, [folderDestination.id, folderId, originID, dispatch, contactId, onClose, createSnackbar, t]);
 
 	const filterFromInput = useMemo(
 		() => filter(folders, (v) => startsWith(v?.label?.toLowerCase(), input?.toLowerCase())),

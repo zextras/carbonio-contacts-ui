@@ -5,14 +5,21 @@
  */
 import React, { lazy, useEffect, Suspense } from 'react';
 import {
-	registerAppData,
-	registerComponents,
 	Spinner,
-	getBridgedFunctions
+	addRoute,
+	addSettingsView,
+	addSearchView,
+	addBoardView,
+	registerActions,
+	ACTION_TYPES,
+	getBridgedFunctions,
+	registerComponents
 } from '@zextras/carbonio-shell-ui';
+import { useTranslation } from 'react-i18next';
 import SidebarItems from './views/secondary-bar/sidebar';
 import ContactInput from './integrations/contact-input';
 import { SyncDataHandler } from './views/secondary-bar/sync-data-handler';
+import { CONTACTS_ROUTE, CONTACTS_APP_ID } from './constants';
 
 const LazyAppView = lazy(() => import(/* webpackChunkName: "contacts-view" */ './views/app-view'));
 
@@ -51,41 +58,81 @@ const SearchView = (props) => (
 );
 
 export default function App() {
-	console.log(
-		'%c CONTACTS APP LOADED',
-		'color: white; background: #8bc34a;padding: 4px 8px 2px 4px; font-family: sans-serif; border-radius: 12px; width: 100%'
-	);
+	const [t] = useTranslation();
 	useEffect(() => {
-		registerAppData({
-			icon: 'ContactsModOutline',
-			views: {
-				app: AppView,
-				settings: SettingsView,
-				board: BoardView,
-				sidebar: SidebarItems,
-				search: SearchView
-			},
-			context: {},
-			newButton: {
-				primary: {
-					id: 'create-contact',
-					label: 'New Contact',
-					icon: 'PersonOutline',
-					click: () => {
-						getBridgedFunctions().addBoard('/new');
-					}
-				},
-				secondaryItems: []
-			}
+		// registerAppData({
+		// 	icon: 'ContactsModOutline',
+		// 	views: {
+		// 		app: AppView,
+		// 		settings: SettingsView,
+		// 		board: BoardView,
+		// 		sidebar: SidebarItems,
+		// 		search: SearchView
+		// 	},
+		// 	context: {},
+		// 	newButton: {
+		// 		primary: {
+		// 			id: 'create-contact',
+		// 			label: 'New Contact',
+		// 			icon: 'PersonOutline',
+		// 			click: () => {
+		// 				getBridgedFunctions().addBoard('/new');
+		// 			}
+		// 		},
+		// 		secondaryItems: []
+		// 	}
+		// });
+		addRoute({
+			route: CONTACTS_ROUTE,
+			position: 3,
+			visible: true,
+			label: t('label.app_name', 'Contacts'),
+			primaryBar: 'ContactsModOutline',
+			secondaryBar: SidebarItems,
+			appView: AppView
 		});
-	}, []);
+		addSettingsView({
+			route: CONTACTS_ROUTE,
+			label: t('label.app_name', 'Contacts'),
+			component: SettingsView
+		});
+		addSearchView({
+			route: CONTACTS_ROUTE,
+			component: SearchView
+		});
+		addBoardView({
+			route: CONTACTS_ROUTE,
+			component: BoardView
+		});
+	}, [t]);
 
 	useEffect(() => {
 		registerComponents({
 			id: 'contact-input',
 			component: ContactInput
 		});
-	}, []);
+		registerActions({
+			action: () => ({
+				id: 'new-contact',
+				label: t('label.new_contact', 'New Contact'),
+				icon: 'ContactsModOutline',
+				click: (ev) => {
+					ev?.preventDefault?.();
+					getBridgedFunctions().addBoard(`${CONTACTS_ROUTE}/new`, {
+						title: t('label.new_contact', 'New Contact')
+					});
+				},
+				disabled: false,
+				group: CONTACTS_APP_ID,
+				primary: true
+			}),
+			id: 'new-contact',
+			type: ACTION_TYPES.NEW
+		});
+	}, [t]);
+	// useEffect(() => {
+	// 	store.setReducer(reducers);
+	// }, []);
 
 	return <SyncDataHandler />;
 }
