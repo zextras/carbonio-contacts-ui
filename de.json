@@ -20,8 +20,9 @@
                 "folder": "Adressbuch leeren",
                 "trash": "Papierkorb leeren"
             },
-            "move": "Adressbuch verschieben",
-            "new": "Neues Adressbuch"
+            "move": "Verschieben",
+            "new": "Neues Adressbuch",
+            "moved": "Adressbuch erfolgreich verschoben"
         },
         "item": {
             "root": "Root"
@@ -29,7 +30,7 @@
         "modal": {
             "delete": {
                 "body": {
-                    "message1": "Möchten Sie das ausgewählte Adressbuch löschen? Wenn Sie es löschen, wird der zugehörige Inhalt in den Papierkorb verschoben und das Adressbuch wird nicht mehr sichtbar sein.",
+                    "message1": "Möchten Sie das ausgewählte Adressbuch endgültig löschen? Wenn Sie es löschen, wird der zugehörige Inhalt unwiderruflich gelöscht und das Adressbuch kann nicht mehr wiederhergestellt werden.",
                     "message2": "Möchten Sie das ausgewählte Adressbuch endgültig löschen? Wenn Sie es löschen, wird der zugehörige Inhalt unwiderruflich gelöscht und das Adressbuch kann nicht mehr wiederhergestellt werden."
                 },
                 "footer": "Löschen",
@@ -81,7 +82,7 @@
                 "footer": "Erstellen",
                 "input": {
                     "name": "Adressbuchname eingeben",
-                    "name_exist": "Der Name existiert bereits in diesem Pfad"
+                    "name_exist": "Name existiert bereits in diesem Pfad"
                 },
                 "title": "Neues Adressbuch erstellen",
                 "title2": "Erstellung eines neuen Ordners"
@@ -96,7 +97,8 @@
             "folder_empty": "Adressbuch erfolgreich geleert",
             "folder_new": "Neues Adressbuch erstellt",
             "trash_empty": "Papierkorb erfolgreich geleert",
-            "address_book_moved_to_trash": "Adressbuch in den Papierkorb verschoben"
+            "address_book_moved_to_trash": "Adressbuch in den Papierkorb verschoben",
+            "address_book_permanently_deleted": "Adressbuch endgültig gelöscht"
         },
         "type": "Kontakteordner",
         "share_folder": "Adressbuch teilen"
@@ -104,7 +106,7 @@
     "job": {
         "company": "Firma",
         "department": "Abteilung",
-        "title": "Job Rolle"
+        "title": "Funktion"
     },
     "label": {
         "edit_access": "Zugriff bearbeiten",
@@ -118,7 +120,7 @@
         "edit": "Bearbeiten",
         "advance_filters": "1 Fortgeschrittener filter",
         "advance_filters_plural": "{{count}} Fortgeschrittene filter",
-        "create": "Neuer Kontakt",
+        "create": "Erstellen",
         "edit_folder_properties": "{{name}}'s Eigenschaften bearbeiten",
         "save": "Speichern",
         "share": "Teilen",
@@ -129,7 +131,32 @@
         "empty": "Leer",
         "type": "Typ",
         "error_try_again": "Etwas ist schiefgegangen, bitte versuchen Sie es erneut",
-        "undo": "Rückgängig machen"
+        "undo": "Rückgängig machen",
+        "contacts": "Kontakte",
+        "delete": "Löschen",
+        "edit_access_name": "{{name}}'s Zugang bearbeiten",
+        "of": "von",
+        "revoke_with_standard_msg": "Zugriff widerrufen mit einer Standardbenachrichtigung",
+        "revoke_without_notification": "Zugriff widerrufen ohne eine Benachrichtigung zu senden",
+        "root": "Root",
+        "single_advanced_filter": "Erweiterte Filter",
+        "website": "Webseite",
+        "website_plural": "Webseiten",
+        "advanced_filter": "{{count}} Erweiterter Filter",
+        "advanced_filter_plural": "{{count}} Erweiterte Filter",
+        "email": "E-mail",
+        "move": "Verschieben",
+        "new_contact_created": "Neuer Kontakt erstellt",
+        "revoke_with_custom_msg": "Zugriff widerrufen mit einer benutzerdefinierten Benachrichtigung",
+        "search_activate_selection_mode": "Der Auswahlmodus ist bei den Suchergebnissen noch nicht verfügbar",
+        "discard_changes": "ÄNDERUNGEN VERWERFEN",
+        "Undo": "Rückgängig machen",
+        "activate_selection_mode": "Auswahlmodus aktivieren",
+        "address_book_restored": "Adressbuch wiederhergestellt",
+        "new_address_book": "Neues Adressbuch",
+        "notes": "Notizen",
+        "restore": "Wiederherstellen",
+        "results_for": "Ergebnisse für:"
     },
     "message": {
         "snackbar": {
@@ -148,13 +175,13 @@
         "snackbar": {
             "address_book_moved": "Adressbuch in den Zielordner verschoben",
             "contact_deleted_permanently": "Kontakt endgültig gelöscht",
-            "contact_moved": "Kontakt in das Zieladressbuch verschoben",
+            "contact_moved": "Contact moved to the destination address book",
             "contact_moved_to_trash": "Kontakt in den Papierkorb verschoben",
-            "contact_restored": "Kontakt in Zieladressbuch wiederhergestellt"
+            "contact_restored": "Kontakt wiederhergestellt"
         }
     },
     "modal": {
-        "address_book_name": "Name des Adressbuches",
+        "address_book_name": "Name des Adressbuchs",
         "destination": "Zielordner"
     },
     "name": {
@@ -181,7 +208,7 @@
             "url": "Webseite",
             "url_plural": "Webseiten ({{count}})",
             "address": "Adresse",
-            "address_plural": ""
+            "address_plural": "Adresse"
         }
     },
     "select": {
@@ -265,5 +292,36 @@
     },
     "mail": "E-mail",
     "notes": "Notizen",
-    "of": "von"
+    "of": "von",
+    "displayer": {
+        "description2": "Klicken Sie auf die Schaltfläche \"NEU\", um mit der Erstellung eines neuen Dokuments zu beginnen.",
+        "description6": "Verwenden Sie den Modus \"Bearbeiten\", um einem Kontakt eine persönliche Notiz hinzuzufügen.",
+        "list_title1": "Es sieht so aus, als gäbe es noch keine Kontakte",
+        "search_description3": "Überprüfen Sie die Rechtschreibung und die Filteroptionen oder versuchen Sie es mit einem anderen Stichwort.",
+        "search_title4": "Wählen Sie ein oder mehrere Ergebnisse aus, um Aktionen durchzuführen oder Details anzuzeigen.",
+        "title4": "Passen Sie Ihre Kontakte an, indem Sie persönliche Notizen hinzufügen",
+        "description3": "Klicken Sie auf die Schaltfläche \"NEU\", um eine neue Gruppe von Kontakten zu erstellen.",
+        "description4": "Erstellen Sie einen neuen, indem Sie auf die Schaltfläche \"NEU\" klicken.",
+        "description5": "Entdecken Sie alle Möglichkeiten, wie Sie mit anderen Nutzern in Kontakt treten können.",
+        "description7": "Erstellen Sie eine Gruppe von Kontakten, indem Sie auf die Schaltfläche \"NEU\" klicken.",
+        "description8": "Wählen Sie einen Kontakt oder eine Gruppe von Kontakten aus, um gemeinsame E-Mails zu versenden.",
+        "list_title2": "Der Papierkorb ist leer",
+        "search_description1": "Oder wählen Sie \"Erweiterte Filter\", um Ihre Suche zu verfeinern.",
+        "search_description2": "Versuchen Sie, eine weitere Suche zu starten.",
+        "search_list_title1": "Es sieht so aus, als gäbe es keine Ergebnisse. Suchen Sie weiter!",
+        "search_list_title2": "Keiner Ihrer Artikel entspricht Ihrer Suche.",
+        "search_title1": "Weitere Suche starten",
+        "search_title2": "Es tut uns leid, aber es gibt keine Ergebnisse für Ihre Suche",
+        "search_title3": "Es gibt keine Ergebnisse für Ihre Suche.",
+        "title1": "Erstellen Sie einen neuen Kontakt, indem Sie auf die Schaltfläche \"NEU\" klicken.",
+        "title10": "Auswählen und Wiederherstellen von Kontakten aus dem Papierkorb",
+        "title2": "Teilen Sie alle Ihre Werke mit Ihren Kontakten.",
+        "title3": "Bleiben Sie in Kontakt mit Ihren Kollegen.",
+        "title5": "Kontakt auswählen",
+        "title6": "Kontakt anpassen",
+        "title7": "Bleiben Sie in Kontakt mit Ihren Kollegen",
+        "title9": "Klicken Sie auf das Papierkorbsymbol, um einen Kontakt zu löschen.",
+        "title8": "Gemeinsame E-Mail senden"
+    },
+    "contact_restored": "Kontakt wiederhergestellt"
 }

@@ -10,7 +10,7 @@
                 "footer": "Openen met",
                 "title": "Verwijderen",
                 "body": {
-                    "message1": "Wilt u het geselecteerde adresboek verwijderen? Als u het verwijdert, wordt de gerelateerde inhoud naar de prullenbak verplaatst en is het adresboek niet langer zichtbaar.",
+                    "message1": "Wilt u het geselecteerde adresboek verwijderen? Als u het verwijdert, wordt de gerelateerde inhoud permanent naar de prullenbak verplaatst en is het adresboek niet langer recupereerbaar.",
                     "message2": "Wilt u het geselecteerde adresboek definitief verwijderen? Als u het verwijdert, wordt de gerelateerde inhoud permanent verwijderd en kan het adresboek niet meer worden hersteld."
                 }
             },
@@ -46,7 +46,7 @@
                 "create_footer": "Creëren en verplaatsen",
                 "input": {
                     "name": "Naam adresboek invoegen",
-                    "name_exist": "De naam bestaat al in dit pad"
+                    "name_exist": "Naam bestaat al in dit pad"
                 },
                 "title": "Nieuw adresboek aanmaken",
                 "title2": "Creatie nieuwe map"
@@ -74,8 +74,9 @@
                 "folder": "Adresboek leegmaken",
                 "trash": "Prullenbak leegmaken"
             },
-            "move": "Adresboek verplaatsen",
-            "new": "Nieuw adresboek"
+            "move": "Verplaatsen",
+            "new": "Nieuw adresboek",
+            "moved": "Adresboek met succes verplaatst"
         },
         "item": {
             "root": "Wortel"
@@ -85,7 +86,8 @@
             "address_book_moved_to_trash": "Adresboek verplaatst naar prullenbak",
             "folder_empty": "Adresboek met succes geleegd",
             "folder_new": "Nieuw adresboek aangemaakt",
-            "trash_empty": "Prullenbak met succes leeggemaakt"
+            "trash_empty": "Prullenbak met succes leeggemaakt",
+            "address_book_permanently_deleted": "Adresboek permanent verwijderd"
         },
         "type": "Contactenmap"
     },
@@ -149,7 +151,7 @@
         "edit_share": "Toegang bewerken",
         "goto_folder": "Ga naar map",
         "reset_filters": "Filters resetten",
-        "send_msg": "Mail sturen",
+        "send_msg": "E-mail sturen",
         "share_folder": "Map delen"
     },
     "job": {
@@ -163,16 +165,16 @@
         "save": "Opslaan",
         "share": "Delen",
         "contact_setting": "Contactinstellingen",
-        "create": "Nieuw contact",
+        "create": "Creëren",
         "advance_filters": "1 Geavanceerde filter",
         "advance_filters_plural": "{{count}} Geavanceerde filters",
-        "edit_access": "Toegang van {{name}} bewerken",
+        "edit_access": "Toegang bewerken",
         "edit_folder_properties": "Eigenschappen van {{name}} bewerken",
         "resend": "Opnieuw verzenden",
         "revoke": "Intrekken",
         "revoke_access_tooltip": "Toegang intrekken met een standaardkennisgeving",
         "revoke_access_without_notification": "Toegang intrekken zonder een melding te sturen",
-        "revoke_share": "Aandeel van {{title}} intrekken",
+        "revoke_share": "Delen van {{title}} intrekken",
         "search_hint": "Hints zoeken!",
         "shares_folder_edit": "Delen van dit adresboek",
         "single_advance_fillter": "Geavanceerde filters",
@@ -189,15 +191,23 @@
         "revoke_without_notification": "Toegang intrekken zonder een melding te sturen",
         "revoke_with_custom_msg": "Toegang intrekken door een aangepaste melding te verzenden",
         "root": "Wortel",
-        "single_advanced_filter": "Geavanceerd efilter",
+        "single_advanced_filter": "Geavanceerd Filter",
         "type": "Type",
         "website": "Website",
-        "website_plural": "",
+        "website_plural": "Websites",
         "undo": "Ongedaan maken",
         "Undo": "Ongedaan maken",
         "of": "van",
         "restore": "Herstellen",
-        "results_for": "Resultaten voor:"
+        "results_for": "Resultaten voor:",
+        "activate_selection_mode": "Keuzemodus activeren",
+        "new_address_book": "Nieuw adresboek",
+        "new_contact_created": "Nieuw contact aangemaakt",
+        "discard_changes": "WIJZIGINGEN VERWIJDEREN",
+        "address_book_restored": "Adresboek hersteld",
+        "advanced_filter": "{{count}} Geavanceerde filter",
+        "advanced_filter_plural": "{{count}} Geavanceerde filters",
+        "search_activate_selection_mode": "Selectiemodus is nog niet beschikbaar bij zoekresultaten"
     },
     "section": {
         "field": {
@@ -211,7 +221,7 @@
         },
         "title": {
             "address": "Adres",
-            "address_plural": "Adressen ({{count}})",
+            "address_plural": "Adressen",
             "mail": "E-mailadres",
             "phone_number": "Telefoon contact",
             "url": "Website",
@@ -236,15 +246,15 @@
             "delete": {
                 "if_delete_lost_forever": "Door dit contact definitief te verwijderen, kunt u het niet meer herstellen, verdergaan?",
                 "sure_delete_contact": "Weet u zeker dat u dit contact permanent wilt verwijderen?",
-                "sure_delete_contact_plural": "Weet u zeker dat u de geselecteerde contacten permanent wilt verwijderen?"
+                "sure_delete_contact_plural": "Weet u zeker dat u deze contacten permanent wilt verwijderen?"
             }
         },
         "snackbar": {
             "address_book_moved": "Adresboek verplaatst naar doelmap",
             "contact_deleted_permanently": "Contact permanent verwijderd",
-            "contact_moved": "Contact verplaatst naar bestemmingsadresboek",
+            "contact_moved": "Contact verplaatst",
             "contact_moved_to_trash": "Contact verplaatst naar prullenbak",
-            "contact_restored": "Contact hersteld in bestemmingsadresboek"
+            "contact_restored": "Contact hersteld"
         }
     },
     "modal": {
@@ -279,11 +289,39 @@
     },
     "tooltip": {
         "edit": "Toegang bewerken",
-        "resend": "Bericht over dit aandeel verzenden",
+        "resend": "E-mailbericht over dit aandeel verzenden",
         "revoke": "Toegang intrekken"
     },
     "of": "van",
     "displayer": {
-        "title5": "Een contact selecteren"
-    }
+        "title5": "Een contact selecteren",
+        "search_title4": "Selecteer een of meer resultaten om acties uit te voeren of details weer te geven.",
+        "title9": "Klik op het prullenbakicoon om een contact te verwijderen.",
+        "description3": "Klik op de knop \"NIEUW\" om een nieuwe groep contacten aan te maken.",
+        "description2": "Klik op de knop \"NIEUW\" om een nieuwe aan te maken.",
+        "description4": "Maak een nieuwe aan door op de knop \"NIEUW\" te klikken.",
+        "description5": "Ontdek alle manieren waarop u met andere gebruikers in contact kunt komen.",
+        "description6": "Gebruik de \"Bewerken\" modus om een persoonlijke notitie aan een contactpersoon toe te voegen.",
+        "description7": "Maak een groep van contactpersonen door op de knop \"NIEUW\" te klikken.",
+        "description8": "Selecteer een contactpersoon of een groep van contactpersonen om gedeelde e-mails te versturen.",
+        "list_title1": "Het lijkt erop dat er nog geen contacten zijn",
+        "list_title2": "De prullenbak is leeg",
+        "search_description1": "Of selecteer \"Geavanceerde filters\" om uw zoekopdracht te verfijnen.",
+        "search_description2": "Probeer een andere zoekopdracht te starten.",
+        "search_description3": "Controleer de spelling en de opties van de filters of probeer het met een ander trefwoord.",
+        "search_list_title2": "Geen van uw items komt overeen met uw zoekopdracht.",
+        "search_title1": "Start een andere zoekopdracht",
+        "search_title2": "Het spijt ons maar er zijn geen resultaten voor uw zoekopdracht",
+        "search_title3": "Er zijn geen resultaten voor uw zoekopdracht.",
+        "title1": "Maak een nieuw contact aan door op de knop \"NIEUW\" te klikken.",
+        "title10": "Contacten uit de prullenbak selecteren en herstellen",
+        "title2": "Deel al uw werken met uw contacten.",
+        "title3": "Houd contact met uw collega's.",
+        "title4": "Pas uw contacten aan door persoonlijke notities toe te voegen",
+        "title6": "Een contactpersoon personaliseren",
+        "title8": "Gedeelde e-mail verzenden",
+        "search_list_title1": "Het lijkt erop dat er geen resultaten zijn. Blijf zoeken!",
+        "title7": "Houd contact met uw collega's"
+    },
+    "contact_restored": "Contact hersteld"
 }

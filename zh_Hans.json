@@ -128,8 +128,9 @@
                 "folder": "清空地址簿",
                 "trash": "清空垃圾箱"
             },
-            "move": "移动地址簿",
-            "new": "新地址簿"
+            "move": "移动",
+            "new": "新地址簿",
+            "moved": "地址簿移动成功"
         },
         "item": {
             "root": "Root"
@@ -140,7 +141,8 @@
             "address_book_moved_to_trash": "地址簿已移动至垃圾箱",
             "folder_new": "新地址簿已创建",
             "trash_empty": "垃圾文件夹清空成功",
-            "folder_empty": "地址簿已清空成功"
+            "folder_empty": "地址簿已清空成功",
+            "address_book_permanently_deleted": "地址簿已永久删除"
         }
     },
     "job": {
@@ -156,7 +158,7 @@
         "advance_filters": "{{count}}高级过滤条件",
         "revoke_share": "撤销 {{title}} 的共享",
         "contact_setting": "联系人设置",
-        "create": "新联系人",
+        "create": "创建",
         "edit_access": "编辑 的访问权限",
         "edit_folder_properties": "编辑 {{name}} 的属性",
         "resend": "重新发送",
@@ -169,7 +171,31 @@
         "single_advance_fillter": "高级过滤条件",
         "error_try_again": "出现了一些错误，请重试",
         "type": "类型",
-        "undo": "撤消"
+        "undo": "撤消",
+        "delete": "删除",
+        "single_advanced_filter": "高级过滤条件",
+        "website": "网站",
+        "Undo": "撤消",
+        "activate_selection_mode": "激活选择模式",
+        "address_book_restored": "地址簿已恢复",
+        "contacts": "联系人",
+        "edit_access_name": "编辑 {{name}} 的访问权限",
+        "email": "邮件",
+        "move": "移动",
+        "new_address_book": "新地址簿",
+        "new_contact_created": "新联系人已创建",
+        "notes": "备注",
+        "of": "of",
+        "restore": "恢复",
+        "results_for": "结果：",
+        "revoke_with_custom_msg": "撤销访问权限并发送自定义通知",
+        "revoke_with_standard_msg": "撤销访问权限并发送标准通知",
+        "revoke_without_notification": "撤销访问权限并不发送通知",
+        "root": "Root",
+        "empty": "空",
+        "discard_changes": "丢弃变更",
+        "advanced_filter": "{{count}}高级过滤条件",
+        "search_activate_selection_mode": "搜索结果上无可用选择模式"
     },
     "name": {
         "nickName": "昵称",
@@ -191,7 +217,7 @@
             "url": "网站"
         },
         "title": {
-            "address": "地址（{{count}}）",
+            "address": "地址",
             "url": "网站（{{count}}）",
             "mail": "邮件地址",
             "phone_number": "电话联系"
@@ -212,15 +238,15 @@
         "modal": {
             "delete": {
                 "if_delete_lost_forever": "永久性删除此联系人将导致您无法再次将其恢复，是否继续？",
-                "sure_delete_contact": "确定要永久性删除所选联系人吗？"
+                "sure_delete_contact": "确定要永久性删除这些联系人吗？"
             }
         },
         "snackbar": {
             "address_book_moved": "地址簿已移动至目标文件夹",
             "contact_deleted_permanently": "联系人已永久性删除",
-            "contact_moved": "联系人已移动至目标地址簿",
+            "contact_moved": "联系人已移动",
             "contact_moved_to_trash": "联系人已移动至垃圾箱",
-            "contact_restored": "联系人已在目标地址簿中恢复"
+            "contact_restored": "联系人已恢复"
         }
     },
     "tooltip": {
@@ -259,5 +285,36 @@
     },
     "title": {
         "advanced_filters": "高级过滤条件"
-    }
+    },
+    "displayer": {
+        "list_title1": "似乎这里尚无联系人",
+        "search_description1": "或选择“高级过滤”以精细化搜索。",
+        "search_description2": "尝试开始另一次搜索。",
+        "search_description3": "检查拼写和过滤选项，或尝试使用其他关键字。",
+        "search_list_title1": "似乎没有结果。继续搜索吧！",
+        "search_list_title2": "没有符合您搜索的项目。",
+        "search_title1": "开始另一次搜索",
+        "search_title2": "抱歉，搜索未返回结果",
+        "search_title3": "搜索没有结果。",
+        "search_title4": "选择一个或多个结果以进行操作或展示详情。",
+        "title1": "点击“新建”按钮即可进行联系人新建。",
+        "title10": "选择并从垃圾箱中恢复联系人",
+        "title2": "与联系人分享您的一切工作。",
+        "title3": "与同事保持联系。",
+        "title4": "通过添加个人笔记自定义联系人",
+        "title5": "选择联系人",
+        "title6": "自定义联系人",
+        "title7": "与同事保持联系",
+        "title9": "点击垃圾箱图标以删除联系人。",
+        "description2": "点击“新建”按钮以开始新建。",
+        "description3": "点击“新建”按钮以新建联系人群组。",
+        "description4": "点击“新建”按钮即可进行新建。",
+        "description5": "探索所有与其他用户建立连接的方式。",
+        "description6": "使用“编辑”模式以将个人备注添加至联系人处。",
+        "description7": "点击“新建”按钮即可进行联系人群组的新建工作。",
+        "description8": "选择联系人或联系人群组以发送共享邮件。",
+        "list_title2": "垃圾箱为空",
+        "title8": "发送共享邮件"
+    },
+    "contact_restored": "联系人已恢复"
 }
