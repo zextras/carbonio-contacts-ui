@@ -10,7 +10,7 @@ export type ContactsSlice = {
 	status: {
 		[k: string]: boolean;
 	};
-	contacts: { [k: string]: Contact[] };
+	contacts: { [k: string]: Array<Contact> };
 };
 
 export type SyncSlice = {

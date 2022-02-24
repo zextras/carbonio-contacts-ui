@@ -35,8 +35,8 @@
         "Undo": "Deshacer",
         "undo": "Deshacer",
         "contacts": "Contactos",
-        "empty": "Vacía",
-        "error_try_again": "Algo fue mal, por favor, prueba de nuevo",
+        "empty": "Vacío",
+        "error_try_again": "Algo ha salido mal. Por favor intente de nuevo",
         "move": "Mover",
         "revoke_without_notification": "Revocar acceso sin enviar una notificación",
         "root": "Raíz",
@@ -156,7 +156,7 @@
                 "create_footer": "Crear y restaurar"
             },
             "footer": {
-                "go_back": "Regresar"
+                "go_back": "Volver"
             },
             "empty": {
                 "footer": "Vacía",

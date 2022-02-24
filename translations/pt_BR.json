@@ -17,7 +17,7 @@
                 "footer": "Excluir",
                 "title": "Excluir",
                 "body": {
-                    "message1": "Deseja excluir a agenda de endereços selecionada? Ao excluí-la, seu conteúdo será movido para a lixeira e ela não estará mais visível.",
+                    "message1": "Deseja excluir a agenda de endereços selecionada? Ao excluí-la, seu conteúdo será removido permanentemente e ela não será mais recuperável.",
                     "message2": "Deseja excluir permanentemente a agenda de endereços selecionada? Ao excluí-la, seu conteúdo será removido permanentemente e ela não poderá mais ser recuperada."
                 }
             },
@@ -86,8 +86,9 @@
                 "folder": "Esvaziar agenda de endereços",
                 "trash": "Esvaziar lixeira"
             },
-            "move": "Mover agenda de endereços",
-            "new": "Nova agenda de endereços"
+            "move": "Mover",
+            "new": "Nova agenda de endereços",
+            "moved": "Agenda de endereços movida com sucesso"
         },
         "item": {
             "root": "Raiz"
@@ -97,7 +98,8 @@
             "address_book_moved_to_trash": "Agenda de endereços movida para lixeira",
             "folder_empty": "Agenda de endereços esvaziada com sucesso",
             "folder_new": "Nova agenda de endereços criada",
-            "trash_empty": "Lixeira esvaziada com sucesso"
+            "trash_empty": "Lixeira esvaziada com sucesso",
+            "address_book_permanently_deleted": "Agenda de endereços excluída permanentemente"
         },
         "type": "Pasta de contatos"
     },
@@ -114,7 +116,7 @@
         "advance_filters": "1 Filtro avançado",
         "advance_filters_plural": "{{count}} Filtros avançados",
         "contact_setting": "Configurações de contato",
-        "create": "Novo Contato",
+        "create": "Criar",
         "edit_access": "Editar acesso",
         "edit_folder_properties": "Editar propriedades de {{name}}",
         "resend": "Reenviar",
@@ -146,7 +148,15 @@
         "move": "Mover",
         "revoke_without_notification": "Revogar acesso sem enviar notificação",
         "root": "Raiz",
-        "undo": "Desfazer"
+        "undo": "Desfazer",
+        "activate_selection_mode": "Ativar modo de seleção",
+        "address_book_restored": "Agenda de endereços restaurada",
+        "advanced_filter": "{{count}} Filtro Avançado",
+        "advanced_filter_plural": "{{count}} Filtros Avançados",
+        "discard_changes": "DESCARTAR MODIFICAÇÕES",
+        "new_address_book": "Nova agenda de endereços",
+        "new_contact_created": "Novo contato criado",
+        "search_activate_selection_mode": "Modo de seleção ainda não está disponível nos resultados da busca"
     },
     "share": {
         "add": "Adicionar",
@@ -193,8 +203,8 @@
     "name": {
         "nickName": "Apelido",
         "first_name": "Nome",
-        "last_name": "Último nome",
-        "middle_name": "Nome do meio",
+        "last_name": "Último Nome",
+        "middle_name": "Nome do Meio",
         "prefix": "Título",
         "suffix": "Sufixo"
     },
@@ -211,7 +221,7 @@
         },
         "title": {
             "address": "Endereço",
-            "address_plural": "Endereços ({{count}})",
+            "address_plural": "Endereços",
             "mail": "Endereço de e-mail",
             "phone_number": "Contato telefônico",
             "url": "Website",
@@ -228,17 +238,17 @@
     "messages": {
         "modal": {
             "delete": {
-                "if_delete_lost_forever": "Ao excluir permanentemente este contato, você não poderá mais recuperá-lo. Continue?",
-                "sure_delete_contact": "Tem certeza que deseja excluir este contato permanentemente?",
-                "sure_delete_contact_plural": "Tem certeza que deseja excluir estes contatos permanentemente?"
+                "if_delete_lost_forever": "Ao excluir permanentemente este contato, você não poderá mais recuperá-lo. Continuar?",
+                "sure_delete_contact": "Tem certeza que deseja excluir permanentemente este contato?",
+                "sure_delete_contact_plural": "Tem certeza que deseja excluir permanentemente estes contatos?"
             }
         },
         "snackbar": {
             "address_book_moved": "Agenda de endereços movida para a pasta de destino",
             "contact_deleted_permanently": "Contato excluído permanentemente",
-            "contact_moved": "Contato movido para a agenda de endereços de destino",
+            "contact_moved": "Contato movido",
             "contact_moved_to_trash": "Contato movido para a lixeira",
-            "contact_restored": "Contato recuperado na agenda de endereços de destino"
+            "contact_restored": "Contato recuperado"
         }
     },
     "modal": {
@@ -283,6 +293,34 @@
         "work": "trabalho"
     },
     "displayer": {
-        "title5": "Selecionar um contato"
-    }
+        "title5": "Selecionar um contato",
+        "description2": "Clique no botão \"NOVO\" para começar a criar um novo.",
+        "description6": "Use o modo \"Editar\" para adicionar uma nota pessoal a um contato.",
+        "description7": "Crie um grupo de contatos clicando no botão \"NOVO\".",
+        "description8": "Selecione um contato ou um grupo de contatos para enviar e-mails compartilhados.",
+        "list_title1": "Parece que ainda não existem contatos",
+        "list_title2": "A lixeira está vazia",
+        "search_description2": "Tente iniciar uma nova busca.",
+        "search_description3": "Verifique a ortografia e as opções de filtros ou experimente uma nova palavra-chave.",
+        "search_list_title2": "Nenhum dos seus itens corresponde à sua busca.",
+        "search_title1": "Iniciar nova busca",
+        "search_title2": "Lamentamos, mas não existem resultados para sua busca",
+        "search_title3": "Não existem resultados para sua busca.",
+        "title1": "Crie um novo contato clicando no botão \"NOVO\".",
+        "description4": "Crie um novo clicando no botão \"NOVO\".",
+        "title10": "Selecione e recupere contatos da lixeira",
+        "title2": "Compartilhe todos os seus trabalhos com seus contatos.",
+        "title3": "Mantenha contato com seus colegas.",
+        "title4": "Personalize seus contatos adicionando notas pessoais",
+        "title6": "Personalizar um contato",
+        "title8": "Enviar e-mail compartilhado",
+        "title9": "Clique no ícone da lixeira para excluir um contato.",
+        "description3": "Clique no botão \"NOVO\" para criar um novo grupo de contatos.",
+        "description5": "Descubra todas as formas que você pode se conectar com outros usuários.",
+        "search_description1": "Ou selecione \"Filtros Avançados\" para refinar sua busca.",
+        "search_list_title1": "Parece que não existem resultados. Continue buscando!",
+        "search_title4": "Selecione um ou mais resultados para realizar ações ou exibir os detalhes.",
+        "title7": "Mantenha contato com seus colegas"
+    },
+    "contact_restored": "Contato recuperado"
 }

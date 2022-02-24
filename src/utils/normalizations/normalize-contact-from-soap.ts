@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { lowerFirst, parseInt, pickBy, reduce, words, isEmpty } from 'lodash';
+import { lowerFirst, parseInt, pickBy, reduce, words, isEmpty, omitBy, isNil } from 'lodash';
 import {
 	Contact,
 	ContactAddress,
@@ -127,6 +127,7 @@ export function normalizeContactsFromSoap(contact: SoapContact[]): Contact[] | u
 					r.push({
 						parent: c.l,
 						id: c.id,
+						fileAsStr: c.fileAsStr,
 						address: normalizeContactAddresses(c),
 						company: c._attrs?.company ?? '',
 						department: c._attrs?.department ?? '',
@@ -148,5 +149,47 @@ export function normalizeContactsFromSoap(contact: SoapContact[]): Contact[] | u
 					return r;
 				},
 				[] as Contact[]
+		  );
+}
+
+export function normalizeSyncContactsFromSoap(
+	contact: SoapContact[]
+): Array<Partial<Contact>> | undefined {
+	return isEmpty(contact)
+		? undefined
+		: reduce(
+				contact,
+				(r, c) => {
+					if (c._attrs?.type === 'group') return r;
+					r.push(
+						omitBy<Partial<Contact>>(
+							{
+								parent: c.l,
+								id: c.id,
+								fileAsStr: c.fileAsStr,
+								address: c._attrs ? normalizeContactAddresses(c) : undefined,
+								company: c._attrs?.company,
+								department: c._attrs?.department,
+								email: c._attrs ? normalizeContactMails(c) : undefined,
+								firstName: c._attrs?.firstName,
+								middleName: c._attrs?.middleName,
+								lastName: c._attrs?.lastName,
+								nickName: c._attrs?.nickname,
+								image: c._attrs?.image
+									? `/service/home/~/?auth=co&id=${c.id}&part=${c._attrs.image.part}&max_width=32&max_height=32`
+									: undefined,
+								jobTitle: c._attrs?.jobTitle,
+								notes: c._attrs?.notes,
+								phone: c._attrs ? normalizeContactPhones(c) : undefined,
+								nameSuffix: c._attrs?.nameSuffix,
+								namePrefix: c._attrs?.namePrefix,
+								URL: c._attrs ? normalizeContactUrls(c) : undefined
+							},
+							isNil
+						)
+					);
+					return r;
+				},
+				[] as Array<Partial<Contact>>
 		  );
 }

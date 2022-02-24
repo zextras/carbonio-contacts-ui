@@ -8,7 +8,6 @@ import { contactAction } from '../actions/contact-action';
 import { createContact } from '../actions/create-contact';
 import { createFolder } from '../actions/create-folder';
 import { folderAction } from '../actions/folder-action';
-import { getContacts } from '../actions/get-contacts';
 import { getFolder } from '../actions/get-folder';
 import { searchContacts } from '../actions/search-contacts';
 import {
@@ -27,8 +26,7 @@ import {
 	folderActionPending,
 	folderActionRejected
 } from '../reducers/folder-action';
-import { getContactsFullFilled } from '../reducers/get-contacts';
-import { handleFolderSyncReducer, handleRefreshReducer } from '../reducers/handle-sync';
+import { handleFolderSyncReducer, handleRefreshReducer } from '../reducers/handle-folder-sync';
 import { searchContactsFullFilled } from '../reducers/search-contacts';
 import { getFolderFulFilled } from '../reducers/get-folder';
 
@@ -54,7 +52,6 @@ export const foldersSlice = createSlice({
 		builder.addCase(contactAction.pending, contactActionPending);
 		builder.addCase(contactAction.fulfilled, contactActionFulFilled);
 		builder.addCase(contactAction.rejected, contactActionRejected);
-		builder.addCase(getContacts.fulfilled, getContactsFullFilled);
 		builder.addCase(searchContacts.fulfilled, searchContactsFullFilled);
 	}
 });

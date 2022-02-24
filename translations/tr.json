@@ -200,7 +200,10 @@
         "new_contact_created": "Yeni kişi oluşturuldu",
         "advanced_filter": "{{count}} Gelişmiş Filtre",
         "advanced_filter_plural": "{{count}} Gelişmiş Filtreler",
-        "search_activate_selection_mode": "Arama sonuçlarında seçme modu henüz kullanılamıyor"
+        "search_activate_selection_mode": "Arama sonuçlarında seçme modu henüz kullanılamıyor",
+        "edit_email": "E-Postayı Düzenle",
+        "edit_invalid_email": "E-posta geçersiz, düzenlemek için tıklayın",
+        "new_contact": "Yeni Kişi"
     },
     "job": {
         "company": "Firma",
@@ -288,9 +291,9 @@
         "revoke": "Erişimi iptal et"
     },
     "types": {
-        "home": "Giriş",
+        "home": "Ev",
         "mobile": "Mobil",
-        "other": "diğer",
+        "other": "Diğer",
         "work": "İş"
     },
     "of": "—",

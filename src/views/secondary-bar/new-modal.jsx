@@ -5,7 +5,7 @@
  */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Container, CustomModal, Input, Text } from '@zextras/carbonio-design-system';
-import { filter, map } from 'lodash';
+import { filter, map, size, split } from 'lodash';
 import { nanoid } from '@reduxjs/toolkit';
 import FolderItem from './commons/folder-item';
 import ModalFooter from '../contact-actions/commons/modal-footer';
@@ -18,7 +18,6 @@ export const NewModal = ({
 	openModal,
 	setModal,
 	dispatch,
-	setNew,
 	t,
 	createSnackbar
 }) => {
@@ -55,9 +54,9 @@ export const NewModal = ({
 							onClick: () => setFolderDestination(folder),
 							open:
 								folder.open ??
-								(currentFolder.absParent === '1'
+								(size(split(currentFolder.path, '/')) === 1
 									? currentFolder.id === item.id
-									: currentFolder.absParent === item.id),
+									: currentFolder?.path?.includes?.(item?.label)),
 							items: []
 						};
 					}
@@ -66,13 +65,13 @@ export const NewModal = ({
 						onClick: () => setFolderDestination(folder),
 						open:
 							folder.open ??
-							(currentFolder.absParent === '1'
+							(size(split(currentFolder.path, '/')) === 1
 								? currentFolder.id === item.id
-								: currentFolder.absParent === item.id)
+								: currentFolder?.path?.includes?.(item?.label))
 					};
 				}
 			),
-		[currentFolder.absParent, currentFolder.id, folderDestination.id]
+		[currentFolder.id, currentFolder.path, folderDestination.id]
 	);
 
 	useEffect(() => {
@@ -132,14 +131,13 @@ export const NewModal = ({
 					hideButton: true
 				});
 			}
-			setNew({ id: res.meta.arg.parentFolder.id, absParent: res.meta.arg.parentFolder.absParent });
 		});
 		setInputValue('');
 		setLabel(t('folder.modal.new.input.name', 'Insert address book name'));
 		setFolderDestination('');
 		setModal('');
 		setHasError(false);
-	}, [createSnackbar, dispatch, folderDestination, inputValue, setModal, setNew, t]);
+	}, [createSnackbar, dispatch, folderDestination, inputValue, setModal, t]);
 
 	const onClose = useCallback(() => {
 		setInputValue('');

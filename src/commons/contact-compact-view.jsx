@@ -15,7 +15,7 @@ import {
 import { trim } from 'lodash';
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
-import { useDisplayName } from './use-display-name';
+import { useDisplayName } from '../hooks/use-display-name';
 
 const AvatarMobile = styled(Avatar)`
 	position: relative;

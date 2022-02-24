@@ -4,16 +4,8 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React from 'react';
-import {
-	Container,
-	Row,
-	FormSubSection,
-	Select,
-	Input,
-	Checkbox
-} from '@zextras/carbonio-design-system';
+import { Container, FormSubSection, Checkbox } from '@zextras/carbonio-design-system';
 import Heading from './components/settings-heading';
-import { findLabel } from './components/utils';
 
 export default function OptionsSettingsView({ t, settingsObj, updateSettings }) {
 	return (

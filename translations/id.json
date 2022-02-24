@@ -192,12 +192,15 @@
         "activate_selection_mode": "Aktifkan mode pemilihan",
         "discard_changes": "HAPUS PERUBAHAN",
         "address_book_restored": "buku alamat dipulihkan",
-        "advanced_filter": "{{count}} Filter Lanjutan"
+        "advanced_filter": "{{count}} Filter Lanjutan",
+        "new_address_book": "Buku alamat baru",
+        "search_activate_selection_mode": "Mode pemilihan belum tersedia di hasil pencarian",
+        "new_contact_created": "Kontak baru dibuat"
     },
     "name": {
         "nickName": "Nama panggilan",
-        "first_name": "Nama depan",
-        "last_name": "Nama belakang",
+        "first_name": "Nama Depan",
+        "last_name": "Nama Belakang",
         "middle_name": "Nama Tengah",
         "prefix": "Awalan",
         "suffix": "Akhiran"
@@ -209,14 +212,14 @@
             "state": "Status",
             "city": "Kota",
             "number": "Angka",
-            "postalCode": "Kode pos",
+            "postalCode": "Kode Pos",
             "street": "Jalan",
             "url": "Situs Web"
         },
         "title": {
             "mail": "Alamat email",
             "phone_number": "Kontak telepon",
-            "address": "Alamat ({{count}})",
+            "address": "Alamat",
             "url": "Situs Web ({{count}})"
         }
     },
@@ -231,15 +234,15 @@
         "modal": {
             "delete": {
                 "if_delete_lost_forever": "Jika kontak ini dihapus secara permanen, Anda tidak dapat memulihkannya lagi, lanjutkan?",
-                "sure_delete_contact": "Anda yakin ingin menghapus kontak yang dipilih secara permanen?"
+                "sure_delete_contact": "Anda yakin ingin menghapus kontak secara permanen?"
             }
         },
         "snackbar": {
             "address_book_moved": "Buku alamat dipindahkan ke folder tujuan",
             "contact_deleted_permanently": "Kontak dihapus secara permanen",
-            "contact_moved": "Kontak dipindahkan ke buku alamat tujuan",
+            "contact_moved": "Kontak dipindahkan",
             "contact_moved_to_trash": "Kontak dipindahkan ke tempat sampah",
-            "contact_restored": "Kontak dipulihkan di buku alamat tujuan"
+            "contact_restored": "Kontak dipulihkan"
         }
     },
     "modal": {
@@ -266,7 +269,7 @@
     "tooltip": {
         "edit": "Edit akses",
         "revoke": "Batalkan akses",
-        "resend": "Kirim pemberitahuan email tentang berbagi ini"
+        "resend": "Kirim notifikasi email tentang berbagi ini"
     },
     "types": {
         "home": "beranda",

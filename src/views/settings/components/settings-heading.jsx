@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React from 'react';
-import { Padding, Row, Text, Divider } from '@zextras/carbonio-design-system';
+import { Padding, Row, Text } from '@zextras/carbonio-design-system';
 
 export default function Heading({ title }) {
 	return (
@@ -19,7 +19,6 @@ export default function Heading({ title }) {
 					{title}
 				</Text>
 			</Row>
-			{/* <Divider /> */}
 			<Padding veritcal="small" />
 		</>
 	);

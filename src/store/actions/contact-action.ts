@@ -13,7 +13,7 @@ export const contactAction = createAsyncThunk(
 		destinationID,
 		op
 	}: {
-		contactsIDs: any;
+		contactsIDs: Array<string>;
 		destinationID: string;
 		op: string;
 	}) => {

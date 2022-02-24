@@ -9,7 +9,7 @@ import { soapFetch, Spinner } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 import { Switch, Route, useRouteMatch } from 'react-router-dom';
 import { Contact } from '../../types/contact';
-import { normalizeContactsFromSoap } from '../../store/normalizations/normalize-contact-from-soap';
+import { normalizeContactsFromSoap } from '../../utils/normalizations/normalize-contact-from-soap';
 import AdvancedFilterModal from './advance-filter-modal';
 import SearchList from './search-list';
 import SearchPanel from './search-panel';
