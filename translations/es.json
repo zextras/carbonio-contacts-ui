@@ -4,21 +4,50 @@
         "cancel": "Cancelar",
         "edit": "Editar",
         "share": "Compartir",
-        "edit_access": "Editar acceso de {{name}}",
+        "edit_access": "Editar acceso",
         "resend": "Reenviar",
         "revoke": "Revocar",
         "advance_filters": "1 filtro avanzado",
         "advance_filters_plural": "{{count}} filtros avanzados",
         "edit_folder_properties": "Editar propiedades del {{name}}",
         "contact_setting": "Ajustes del contacto",
-        "create": "Nuevo contacto",
+        "create": "Crear",
         "revoke_access_tooltip": "Revocar acceso enviando una notificación estándar",
         "revoke_access_without_notification": "Revocar acceso sin enviar una notificación",
         "revoke_send_standard_msg": "Revocar acceso enviando una notificación personalizada",
         "revoke_share": "Revocar el uso compartido de {{title}}",
         "single_advance_fillter": "Filtros avanzados",
         "search_hint": "¡Sugerencias de búsqueda!",
-        "shares_folder_edit": "Compartir esta libreta de direcciones"
+        "shares_folder_edit": "Compartir esta libreta de direcciones",
+        "delete": "Eliminar",
+        "edit_access_name": "Editar acceso de {{name}}",
+        "email": "Correo electrónico",
+        "notes": "Notas",
+        "of": "de",
+        "restore": "Restaurar",
+        "results_for": "Resultados para:",
+        "revoke_with_standard_msg": "Revocar acceso enviando una notificación estándar",
+        "revoke_with_custom_msg": "Revocar acceso enviando una notificación personalizada",
+        "single_advanced_filter": "Filtro avanzado",
+        "type": "Tipo",
+        "website": "Página web",
+        "website_plural": "",
+        "Undo": "Deshacer",
+        "undo": "Deshacer",
+        "contacts": "Contactos",
+        "empty": "Vacía",
+        "error_try_again": "Algo fue mal, por favor, prueba de nuevo",
+        "move": "Mover",
+        "revoke_without_notification": "Revocar acceso sin enviar una notificación",
+        "root": "Raíz",
+        "activate_selection_mode": "Activar modo de selección",
+        "advanced_filter": "{{count}} Filtro avanzado",
+        "advanced_filter_plural": "{{count}} Filtros avanzados",
+        "discard_changes": "DESCARTAR CAMBIOS",
+        "address_book_restored": "Libreta de direcciones restaurada",
+        "new_address_book": "Nueva libreta de direcciones",
+        "new_contact_created": "Nuevo contacto creado",
+        "search_activate_selection_mode": "El modo selección aún no está disponible en los resultados de búsqueda"
     },
     "share": {
         "none": "None",
@@ -80,7 +109,7 @@
                 "footer": "Eliminar",
                 "title": "Eliminar",
                 "body": {
-                    "message1": "¿Quieres borrar la libreta de direcciones seleccionada? Si la borras, el contenido relacionado se moverá al la papelera y la libreta de direcciones no será visible más.",
+                    "message1": "¿Quieres borrar la libreta de direcciones seleccionada? Si la borras, el contenido relacionado será eliminado y la libreta de direcciones no se podrá recuperar.",
                     "message2": "¿Quieres borrar la libreta de direcciones seleccionada permanentemente? Si la borras, el contenido relacionado será eliminado y la libreta de direcciones no se podrá recuperar."
                 }
             },
@@ -149,8 +178,9 @@
             "delete": "Borrar libreta de direcciones",
             "delete_permanently": "Borrar libreta de direcciones permanentemente",
             "edit": "Editar libreta de direcciones",
-            "move": "Mover libreta de direcciones",
-            "new": "Nueva libreta de direcciones"
+            "move": "Mover",
+            "new": "Nueva libreta de direcciones",
+            "moved": "Libreta de direcciones movida con éxito"
         },
         "item": {
             "root": "Raíz"
@@ -160,7 +190,8 @@
             "address_book_moved_to_trash": "Libreta de direcciones movida a la papelera",
             "folder_new": "Nueva libreta de direcciones creada",
             "trash_empty": "Carpeta de papelera vaciada con éxito",
-            "folder_empty": "Libreta de direcciones vaciada con éxito"
+            "folder_empty": "Libreta de direcciones vaciada con éxito",
+            "address_book_permanently_deleted": "Libreta de direcciones borrada permanentemente"
         },
         "type": "Carpeta de contactos"
     },
@@ -190,7 +221,7 @@
         },
         "title": {
             "address": "Dirección",
-            "address_plural": "Direcciones ({{count}})",
+            "address_plural": "Direcciones",
             "mail": "Dirección de correo electrónico",
             "phone_number": "Contacto telefónico",
             "url": "Página web",
@@ -208,9 +239,9 @@
         "snackbar": {
             "address_book_moved": "Libreta de direcciones movida a la carpeta de destino",
             "contact_deleted_permanently": "Contacto borrado permanentemente",
-            "contact_moved": "Contacto movido a la libreta de direcciones de destino",
+            "contact_moved": "Contacto movido",
             "contact_moved_to_trash": "Contacto movido a la papelera",
-            "contact_restored": "Contacto restaurado en la libreta de direcciones de destino"
+            "contact_restored": "Contacto restaurado"
         },
         "modal": {
             "delete": {
@@ -261,5 +292,36 @@
         "other": "otro",
         "work": "trabajo"
     },
-    "of": "de"
+    "of": "de",
+    "displayer": {
+        "title5": "Elegir un contacto",
+        "description2": "Haz clic en el botón \"NUEVO\" para empezar a crear uno nuevo.",
+        "description5": "Descubre todas las maneras en las que puedes conectar con otros usuarios.",
+        "search_description1": "O elige \"Filtros avanzados\" para refinar tu búsqueda.",
+        "search_list_title1": "Parece que no hay resultados. ¡Sigue buscando!",
+        "search_title4": "Elige uno o más resultados para realizar acciones o para mostrar los detalles.",
+        "description3": "Haz clic en el botón \"NUEVO\" para crear un nuevo grupo de contactos.",
+        "description4": "Crear uno nuevo haciendo clic en el botón \"NUEVO\".",
+        "description6": "Utiliza el modo \"Editar\" para añadir cualquier nota personal a un contacto.",
+        "description7": "Crea un grupo de contactos haciendo clic en el botón \"NUEVO\".",
+        "description8": "Elige un contacto o un grupo de contactos para enviar emails compartidos.",
+        "list_title1": "Parece que aún no hay contactos",
+        "list_title2": "La papelera está vacía",
+        "search_description2": "Prueba a iniciar otra búsqueda.",
+        "search_description3": "Comprueba la ortografía y las opciones de los filtros o prueba con otra palabra clave.",
+        "search_list_title2": "Ninguno de tus elementos coincide con tu búsqueda.",
+        "search_title1": "Iniciar otra búsqueda",
+        "search_title2": "Lo sentimos pero no hay resultados para tu búsqueda",
+        "search_title3": "No hay resultados para tu búsqueda.",
+        "title1": "Crea un nuevo contacto haciendo clic en el botón \"NUEVO\".",
+        "title10": "Selecciona y restaura los contactos de la papelera",
+        "title2": "Comparte todos tus trabajos con tus contactos.",
+        "title3": "Mantente en contacto con tus compañeros.",
+        "title4": "Personaliza tus contactos añadiendo notas personales",
+        "title6": "Personalizar un contacto",
+        "title7": "Mantente en contacto con tus compañeros",
+        "title9": "Haz clic en el icono de la papelera para borrar un contacto.",
+        "title8": "Enviar e-mail compartido"
+    },
+    "contact_restored": "Contacto restaurado"
 }

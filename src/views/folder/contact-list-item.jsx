@@ -10,7 +10,7 @@ import { Link, useRouteMatch } from 'react-router-dom';
 import { Avatar, Container, Text, Row, Padding } from '@zextras/carbonio-design-system';
 import { trim, includes } from 'lodash';
 import { replaceHistory } from '@zextras/carbonio-shell-ui';
-import { useDisplayName } from '../../commons/use-display-name';
+import { useDisplayName } from '../../hooks/use-display-name';
 import ListItemActionWrapper from './list-item-action-wrapper';
 import useQueryParam from '../../hooks/getQueryParam';
 

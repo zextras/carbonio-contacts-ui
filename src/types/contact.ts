@@ -58,7 +58,6 @@ export type AccordionFolder = {
 	label: string;
 	level?: number;
 	items: AccordionFolder[];
-	absParent: string;
 	view: string;
 	itemsCount: number;
 	parent: string;
@@ -75,16 +74,13 @@ export type ContactsFolder = {
 	parent: string;
 	level?: number;
 	label: string;
-	absParent: string | undefined;
 	deletable: boolean;
 	view: string;
 	to?: string;
-	cn: Array<{ ids: string }>;
-	depth?: number;
-	all: any;
 	color: number;
 	isShared: boolean;
 	sharedWith: any;
+	owner?: string;
 	perm: any;
 };
 
@@ -107,4 +103,5 @@ export type Contact = {
 	nameSuffix: string;
 	namePrefix: string;
 	URL: ContactUrlMap;
+	fileAsStr: string;
 };

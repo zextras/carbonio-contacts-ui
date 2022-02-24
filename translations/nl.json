@@ -176,7 +176,28 @@
         "search_hint": "Hints zoeken!",
         "shares_folder_edit": "Delen van dit adresboek",
         "single_advance_fillter": "Geavanceerde filters",
-        "revoke_send_standard_msg": "Toegang intrekken door een aangepaste melding te verzenden"
+        "revoke_send_standard_msg": "Toegang intrekken door een aangepaste melding te verzenden",
+        "contacts": "Contacten",
+        "delete": "Verwijderen",
+        "edit_access_name": "Toegang van {{name}} bewerken",
+        "email": "E-mail",
+        "move": "Verplaatsen",
+        "notes": "Opmerkingen",
+        "empty": "Leeg",
+        "error_try_again": "Er is iets misgegaan, probeer het opnieuw",
+        "revoke_with_standard_msg": "Toegang intrekken met een standaardkennisgeving",
+        "revoke_without_notification": "Toegang intrekken zonder een melding te sturen",
+        "revoke_with_custom_msg": "Toegang intrekken door een aangepaste melding te verzenden",
+        "root": "Wortel",
+        "single_advanced_filter": "Geavanceerd efilter",
+        "type": "Type",
+        "website": "Website",
+        "website_plural": "",
+        "undo": "Ongedaan maken",
+        "Undo": "Ongedaan maken",
+        "of": "van",
+        "restore": "Herstellen",
+        "results_for": "Resultaten voor:"
     },
     "section": {
         "field": {
@@ -261,5 +282,8 @@
         "resend": "Bericht over dit aandeel verzenden",
         "revoke": "Toegang intrekken"
     },
-    "of": "van"
+    "of": "van",
+    "displayer": {
+        "title5": "Een contact selecteren"
+    }
 }

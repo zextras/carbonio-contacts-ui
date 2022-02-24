@@ -40,26 +40,17 @@ export const MoveModal = ({
 					v.id === currentFolder.id ||
 					v.id === currentFolder.parent ||
 					v.parent === FOLDERS.TRASH ||
-					(v.absParent === currentFolder.absParent && v.level > currentFolder.level) ||
-					(v.level + currentFolder.depth > 3 && v.level !== 0)
+					v?.path?.includes?.(currentFolder?.label)
 				) {
 					return false;
 				}
 				return startsWith(v?.label?.toLowerCase(), input?.toLowerCase());
 			}),
-		[
-			currentFolder.absParent,
-			currentFolder.depth,
-			currentFolder.id,
-			currentFolder.level,
-			currentFolder.parent,
-			folders,
-			input
-		]
+		[folders, currentFolder.id, currentFolder.parent, currentFolder.label, input]
 	);
 
 	const nestFilteredFolders = useCallback(
-		(items, id, results) =>
+		(items, id, results, level = 0) =>
 			reduce(
 				filter(items, (item) => item.parent === id),
 				(acc, item) => {
@@ -69,8 +60,9 @@ export const MoveModal = ({
 							...acc,
 							{
 								...item,
-								items: nestFilteredFolders(items, item.id, results),
+								items: nestFilteredFolders(items, item.id, results, level + 1),
 								onClick: () => setFolderDestination(item),
+								level: level + 1,
 								open: !!input.length,
 								divider: true,
 								background: folderDestination.id === item.id ? 'highlight' : undefined
@@ -78,7 +70,7 @@ export const MoveModal = ({
 						];
 					}
 					if (match && !match.length) {
-						return [...acc, ...nestFilteredFolders(items, item.id, results)];
+						return [...acc, ...nestFilteredFolders(items, item.id, results, level)];
 					}
 					return acc;
 				},

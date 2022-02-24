@@ -107,7 +107,7 @@
         "title": "Job Rolle"
     },
     "label": {
-        "edit_access": "{{name}}'s Zugriff bearbeiten",
+        "edit_access": "Zugriff bearbeiten",
         "resend": "Erneut senden",
         "revoke": "Widerrufen",
         "contact_setting": "Kontakt Einstellungen",
@@ -125,7 +125,11 @@
         "revoke_access_tooltip": "Zugriff widerrufen mit einer Standardbenachrichtigung",
         "revoke_access_without_notification": "Zugriff widerrufen ohne eine Benachrichtigung zu senden",
         "revoke_send_standard_msg": "Zugriff widerrufen mit einer benutzerdefinierten Benachrichtigung",
-        "single_advance_fillter": "Fortgeschrittene Filter"
+        "single_advance_fillter": "Fortgeschrittene Filter",
+        "empty": "Leer",
+        "type": "Typ",
+        "error_try_again": "Etwas ist schiefgegangen, bitte versuchen Sie es erneut",
+        "undo": "Rückgängig machen"
     },
     "message": {
         "snackbar": {
@@ -158,7 +162,7 @@
         "middle_name": "Zweiter Vorname",
         "prefix": "Anrede",
         "suffix": "Namenssuffix",
-        "nickName": "Nickname",
+        "nickName": "Spitzname",
         "first_name": "Vorname"
     },
     "section": {

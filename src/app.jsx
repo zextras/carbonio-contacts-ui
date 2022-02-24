@@ -17,20 +17,20 @@ import {
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 import SidebarItems from './views/secondary-bar/sidebar';
-import ContactInput from './shared/contact-input';
+import ContactInput from './integrations/contact-input';
 import { SyncDataHandler } from './views/secondary-bar/sync-data-handler';
 import { CONTACTS_ROUTE, CONTACTS_APP_ID } from './constants';
 
 const LazyAppView = lazy(() => import(/* webpackChunkName: "contacts-view" */ './views/app-view'));
 
 const LazySettingsView = lazy(() =>
-	import(/* webpackChunkName: "settings-view" */ './settings/settings-view')
+	import(/* webpackChunkName: "settings-view" */ './views/settings/settings-view')
 );
 const LazySearchView = lazy(() =>
 	import(/* webpackChunkName: "edit-view" */ './views/search/search-view')
 );
 const LazyBoardView = lazy(() =>
-	import(/* webpackChunkName: "board-view" */ './views/board/board-view')
+	import(/* webpackChunkName: "edit-view" */ './views/edit/edit-view')
 );
 
 const AppView = (props) => (

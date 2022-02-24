@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import styled from 'styled-components';
 import { AppLink, ZIMBRA_STANDARD_COLORS, FOLDERS } from '@zextras/carbonio-shell-ui';
 import {
@@ -14,13 +14,18 @@ import {
 	Drop,
 	Icon,
 	Padding,
-	Row
+	Row,
+	Tooltip
 } from '@zextras/carbonio-design-system';
 import { map, filter } from 'lodash';
+import { useSelector } from 'react-redux';
 import { actionsRetriever } from '../secondary-bar/commons/folders-actions';
 import { FolderActionsType } from '../../types/folder';
 import { folderAction } from '../../store/actions/folder-action';
 import { contactAction } from '../../store/actions/contact-action';
+import { searchContacts } from '../../store/actions/search-contacts';
+import { selectFolderStatus } from '../../store/selectors/contacts';
+import { selectFolder } from '../../store/selectors/folders';
 
 const DropOverlayContainer = styled(Container)`
 	position: absolute;
@@ -49,7 +54,8 @@ export const dropdownActions = (
 	t,
 	dispatch,
 	createModal,
-	createSnackbar
+	createSnackbar,
+	trashFolder
 ) => {
 	const modalFolder = folder;
 	const actions = actionsRetriever(
@@ -59,7 +65,8 @@ export const dropdownActions = (
 		t,
 		dispatch,
 		createModal,
-		createSnackbar
+		createSnackbar,
+		trashFolder
 	);
 
 	switch (modalFolder.id) {
@@ -119,12 +126,14 @@ export const dropdownActions = (
 						(action) => {
 							if (
 								(modalFolder.level > 2 && action.id === FolderActionsType.NEW) ||
-								(modalFolder.depth > 2 &&
+								(modalFolder.level > 2 &&
 									modalFolder.parent === FOLDERS.USER_ROOT &&
 									action.id === FolderActionsType.MOVE) ||
 								(modalFolder.parent === FOLDERS.TRASH &&
 									(action.id === FolderActionsType.NEW || action.id === FolderActionsType.EDIT)) ||
-								(modalFolder.absParent === FOLDERS.TRASH && action.id === FolderActionsType.EMPTY)
+								(modalFolder?.path?.includes?.(`/${trashFolder?.label}/`) &&
+									modalFolder.id !== FOLDERS.TRASH &&
+									action.id === FolderActionsType.EMPTY)
 							) {
 								return { ...action, disabled: true };
 							}
@@ -181,7 +190,7 @@ export const CustomAccordion = (
 		if (data.type === 'folder') {
 			if (
 				folder.id === data.data.id || // same folder not allowed
-				folder.level + data.data.depth > 3 || // rules for maximum 3 folder depth
+				folder.level + data.data.level > 3 || // rules for maximum 3 folder level
 				folder.isShared //  shared folder not allowed
 			)
 				return { succss: false };
@@ -264,10 +273,24 @@ export const CustomAccordion = (
 		}
 	};
 	const Component = (props) => {
+		const folderStatus = useSelector((state) => selectFolderStatus(state, folder.id));
+		const trashFolder = useSelector((state) => selectFolder(state, FOLDERS.TRASH));
+
 		const dragFolderDisable = useMemo(
 			() => [3, 7, 13].includes(Number(folder.id)) || folder.isShared, // Default folders and shared folders not allowed to drag
 			[]
 		);
+		const onClick = useCallback(
+			(e) => {
+				e.stopPropagation();
+				if (folderStatus) {
+					dispatch(searchContacts(folder.id));
+				}
+				setCurrentFolder(folder);
+			},
+			[folderStatus]
+		);
+
 		return (
 			<Drop
 				acceptType={['contact', 'folder']}
@@ -283,7 +306,7 @@ export const CustomAccordion = (
 					style={{ display: 'block' }}
 				>
 					<AppLink
-						onClick={(e) => e.stopPropagation()}
+						onClick={onClick}
 						to={`/folder/${folder.id}`}
 						style={{ width: '100%', height: '100%', textDecoration: 'none' }}
 					>
@@ -296,7 +319,8 @@ export const CustomAccordion = (
 								t,
 								dispatch,
 								createModal,
-								createSnackbar
+								createSnackbar,
+								trashFolder
 							)}
 							display="block"
 							width="100%"
@@ -304,7 +328,9 @@ export const CustomAccordion = (
 							<Row mainAlignment="flex-start" padding={{ left: 'large' }} takeAvailableSpace>
 								<Icon size="large" icon={folderIconLabel} customColor={folderIconColor} />
 								<Padding right="large" />
-								<AccordionItem {...props} height={40} />
+								<Tooltip label={folder.label} placement="right" maxWidth="100%">
+									<AccordionItem {...props} height={40} />
+								</Tooltip>
 							</Row>
 						</Dropdown>
 					</AppLink>

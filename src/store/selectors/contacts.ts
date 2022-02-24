@@ -3,14 +3,18 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+import { find } from 'lodash';
 import { Contact } from '../../types/contact';
 import { State } from '../../types/store';
 
+export function selectAllContacts({
+	contacts
+}: State): { [p: string]: Array<Contact> } | undefined {
+	return contacts?.contacts;
+}
+
 export function selectAllContactsInFolder({ contacts }: State, id: string): Contact[] | undefined {
-	if (contacts && contacts.contacts[id]) {
-		return contacts.contacts[id];
-	}
-	return undefined;
+	return contacts?.contacts?.[id];
 }
 
 export function selectContact(
@@ -18,22 +22,13 @@ export function selectContact(
 	folderId: number,
 	id: string
 ): Contact | undefined {
-	if (contacts && contacts.contacts[folderId]) {
-		return contacts.contacts[folderId].find((item) => item.id === id);
-	}
-	return undefined;
+	return find(contacts?.contacts?.[folderId], ['id', id]);
 }
 
 export function selectContactsStatus({ contacts }: State, id: string): boolean | undefined {
-	if (contacts && contacts.status[id]) {
-		return contacts.status[id];
-	}
-	return undefined;
+	return contacts?.status?.[id];
 }
 
 export function selectFolderStatus({ contacts }: State, id: string): boolean | undefined {
-	if (contacts && contacts.status[id]) {
-		return contacts.status[id];
-	}
-	return undefined;
+	return contacts?.status?.[id];
 }

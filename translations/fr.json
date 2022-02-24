@@ -5,7 +5,7 @@
         "search": "Recherche",
         "share_folder": "Partager le dossier",
         "reset_filters": "Réinitialiser les filtres",
-        "send_msg": "Envoyer courriel"
+        "send_msg": "Envoyer un email"
     },
     "displayer": {
         "list_title2": "La corbeille est vide",
@@ -34,7 +34,7 @@
         "title4": "Personnalisez vos contacts en ajoutant des notes personnelles",
         "title6": "Personnalisez un contact",
         "title7": "Restez en contact avec vos collègues",
-        "title8": "Partager, c'est se préoccuper des autres",
+        "title8": "Le partage, c'est l'entraide",
         "title9": "Cliquez sur l'icône de la corbeille pour supprimer un contact."
     },
     "folder": {
@@ -55,13 +55,16 @@
             },
             "new": {
                 "input": {
-                    "name_exist": "Le nom existe déjà dans ce chemin"
+                    "name_exist": "Le nom existe déjà dans ce chemin",
+                    "name": "Saisir le nom du carnet d'adresses"
                 },
                 "body": {
                     "message1": "Nouveau nom du carnet d'adresses",
                     "message2": "Sélectionnez un carnet d'adresses qui contiendra le contact nouvellement créé :"
                 },
-                "create_footer": "Créer et déplacer"
+                "create_footer": "Créer et déplacer",
+                "title": "Créer un nouveau carnet d'adresses",
+                "title2": "Créer un nouveau dossier"
             },
             "restore": {
                 "create_footer": "Créer et restaurer"
@@ -97,7 +100,16 @@
                     "filter": "Filtrer le carnet d'adresses"
                 }
             }
-        }
+        },
+        "share_folder": "Partager le carnet d'adresses",
+        "snackbar": {
+            "address_book_moved_to_trash": "Le carnet d'adresses a été déplacé dans la corbeille",
+            "address_book_permanently_deleted": "Le carnet d'adresses a été définitivement supprimé",
+            "folder_empty": "Le carnet d'adresses a été vidé avec succès",
+            "folder_new": "Nouveau carnet d'adresses créé",
+            "trash_empty": "Corbeille vidée avec succès"
+        },
+        "type": "Dossier de contact"
     },
     "label": {
         "edit": "Éditer",
@@ -108,7 +120,7 @@
         "contacts": "Contacts",
         "create": "Créer",
         "delete": "Effacer",
-        "discard_changes": "REJETER LES MODIFICATIONS",
+        "discard_changes": "ANNULER LES MODIFICATIONS",
         "edit_access_name": "Modifier les accès de {{name}}",
         "error_try_again": "Quelque chose s'est mal passé, veuillez recommencer",
         "move": "Déplacer",
@@ -125,13 +137,30 @@
         "save": "Sauvegarder",
         "share": "Partager",
         "single_advanced_filter": "Filtre avancé",
-        "type": "Type de rendez-vous",
-        "undo": "Annuler"
+        "type": "Type",
+        "undo": "Annuler",
+        "address_book_restored": "Carnet d'adresses restauré",
+        "advanced_filter": "{{count}} filtre avancé",
+        "advanced_filter_plural": "{{count}} filtres avancés",
+        "contact_setting": "Paramètres de contact",
+        "revoke_share": "Révoquer le partage de {{title}}",
+        "search_activate_selection_mode": "Le mode sélection n'est pas encore disponible dans les résultats de la recherche",
+        "edit_access": "Modifier les accès",
+        "edit_folder_properties": "Modifier les propriétés de {{name}}",
+        "email": "Email",
+        "new_address_book": "Nouveau carnet d'adresses",
+        "new_contact_created": "Nouveau contact créé",
+        "shares_folder_edit": "Partager ce carnet d'adresses",
+        "website": "Site web",
+        "website_plural": "Sites web"
     },
     "name": {
         "nickName": "Surnom",
         "first_name": "Prénom",
-        "last_name": "Nom de famille"
+        "last_name": "Nom de famille",
+        "middle_name": "Deuxième prénom",
+        "prefix": "Préfixe",
+        "suffix": "Suffixe"
     },
     "section": {
         "field": {
@@ -139,11 +168,14 @@
             "country": "Pays",
             "number": "Numéro",
             "state": "État",
-            "street": "Voie"
+            "street": "Voie",
+            "postalCode": "Code postal"
         },
         "title": {
             "address": "Adresse",
-            "address_plural": ""
+            "address_plural": "",
+            "mail": "Adresse email",
+            "phone_number": "Téléphone"
         }
     },
     "share": {
@@ -169,21 +201,39 @@
         "recipients_address": "Adresses email des destinataires",
         "remove_from_this_list": "Supprimer de cette liste",
         "role": "Rôle",
-        "send_notification": "Envoyer une notification concernant ce partage"
+        "send_notification": "Envoyer une notification concernant ce partage",
+        "share_note": "Le message standard affiche votre nom, le nom de l'élément partagé, les autorisations accordées aux destinataires, et les informations de connexion.",
+        "contact_folder": "Carnet d'adresses",
+        "filter_user": "Trouver des utilisateurs",
+        "find_contact_shares": "Trouver des partages de contact",
+        "find_shares": "Trouver des partages",
+        "find_shares_label": "Sélectionner le carnet d'adresses que vous souhaitez voir dans l'arbre des contacts",
+        "share_added_succesfully": "Le partage a été ajouté avec succès",
+        "share_info": "Partager les informations du carnet d'adresses",
+        "share_removed_succesfully": "Le partage a été supprimé avec succès",
+        "shared_folders": "Partager les carnets d'adresses",
+        "shared_item": "Élément partagé",
+        "shared_items": "Les carnets d'adresses de {{value}}",
+        "workflow": "Flux de travail"
     },
     "snackbar": {
         "share_resend": "Invitation à partager renvoyée",
-        "share_revoke": "Accès au partage révoqué"
+        "share_revoke": "Accès au partage révoqué",
+        "folder_edited": "Le carnet d'adresses a été modifié avec succès",
+        "folder_shared": "Le carnet d'adresses a été partagé",
+        "share_updated": "Les droits d'accès ont été mis à jour"
     },
     "title": {
         "advanced_filters": "Filtres avancés"
     },
     "tooltip": {
-        "revoke": "Révoquer l'accès"
+        "revoke": "Révoquer l'accès",
+        "resend": "Envoyer un email de notification concernant ce partage"
     },
     "job": {
         "company": "Entreprise",
-        "department": "Département"
+        "department": "Département",
+        "title": "Poste"
     },
     "message": {
         "new_contact": "",
@@ -191,5 +241,45 @@
             "settings_saved": "Modifications enregistrées correctement"
         }
     },
-    "contact_restored": "Contact restauré"
+    "contact_restored": "Contact restauré",
+    "messages": {
+        "snackbar": {
+            "address_book_moved": "Le carnet d'adresses a été déplacé dans le dossier",
+            "contact_deleted_permanently": "Le contact a été supprimé définitivement",
+            "contact_moved": "Le contact a été déplacé",
+            "contact_moved_to_trash": "Le contact a été déplacé dans la corbeille",
+            "contact_restored": "Le contact a été réstauré"
+        },
+        "modal": {
+            "delete": {
+                "if_delete_lost_forever": "En supprimant définitivement ce contact, vous ne serez plus en mesure de le restaurer. Souhaitez-vous continuer ?",
+                "sure_delete_contact": "Êtes-vous sûr de vouloir supprimer définitivement ce contact ?",
+                "sure_delete_contact_plural": "Êtes-vous sûr de vouloir supprimer définitivement ces contacts ?"
+            }
+        }
+    },
+    "modal": {
+        "address_book_name": "Nom du carnet d'adresses",
+        "destination": "Dossier de destination"
+    },
+    "select": {
+        "default": "Sélectionner un type"
+    },
+    "settings": {
+        "contacts": {
+            "checkbox": {
+                "add_contact_to_emailed_contacts": "Ajouter de nouveaux contact dans \"Personnes contactées par email\"",
+                "autocomplete_on_comma": "Sélectionner l'autocomplétion de la correspondance dès que la virgule est tapée",
+                "incl_addrs_in_glbl_addrs_list": "Inclure les adresses dans la Liste d'Adresse Globale",
+                "include_add_in_shared_contact": "Inclure les adresses dans les contacts partagés",
+                "srch_glbl_addrs_list": "Recherche préliminaire dans la Liste des Adresses Globale lors de l'appel au sélectionneur de contact"
+            }
+        }
+    },
+    "types": {
+        "home": "Accueil",
+        "mobile": "mobile",
+        "other": "autre",
+        "work": "travail"
+    }
 }

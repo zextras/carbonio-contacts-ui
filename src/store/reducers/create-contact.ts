@@ -4,13 +4,11 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { AddContactAction, AddContactRequest, ContactsSlice } from '../../types/store';
-import { normalizeContactsFromSoap } from '../normalizations/normalize-contact-from-soap';
 import {
-	addCnAndItemsCount,
-	addContactID,
+	removeContactsWithoutID,
 	addContactsToStore,
 	removeContactsFromStore
-} from '../utils/helpers';
+} from '../../utils/helpers';
 
 export function createContactPending(state: ContactsSlice, { meta }: AddContactRequest): void {
 	if (meta && meta.arg) {
@@ -23,15 +21,9 @@ export function createContactPending(state: ContactsSlice, { meta }: AddContactR
 export function createContactFulFilled(state: any, { payload }: AddContactAction): void {
 	if (state.contacts) {
 		if (payload) {
-			addContactID(state, payload[0].id);
+			removeContactsWithoutID(state);
 		}
 		state.status.pendingActions = false;
-	}
-	if (state.folders) {
-		const normalizedCn = normalizeContactsFromSoap(payload);
-		if (normalizedCn) {
-			addCnAndItemsCount(state, normalizedCn);
-		}
 	}
 }
 

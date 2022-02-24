@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React, { useState, useMemo, useCallback, useContext } from 'react';
-import { useUserSettings, replaceHistory, editSettings } from '@zextras/carbonio-shell-ui';
+import { useUserSettings, editSettings } from '@zextras/carbonio-shell-ui';
 import {
 	Container,
 	Padding,

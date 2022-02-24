@@ -45,13 +45,13 @@ export type ISoapFolderObj = {
 	/** Size */ s: number;
 	/** Count of unread messages */ u?: number;
 	uuid: string;
-	absParent?: string;
 	view: IFolderView;
 	cn: Array<mapContactIds>;
 	webOfflineSyncDays: number;
 	color?: number;
 	owner?: string;
 	acl?: Record<string, Array<Acl>> | any;
+	perm: any;
 };
 
 export type ISoapSyncFolderObj = {
