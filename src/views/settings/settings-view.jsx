@@ -4,17 +4,8 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React, { useState, useMemo, useCallback, useContext } from 'react';
-import { useUserSettings, editSettings } from '@zextras/carbonio-shell-ui';
-import {
-	Container,
-	Padding,
-	Text,
-	Button,
-	Row,
-	Divider,
-	FormSection,
-	SnackbarManagerContext
-} from '@zextras/carbonio-design-system';
+import { useUserSettings, editSettings, SettingsHeader } from '@zextras/carbonio-shell-ui';
+import { Container, FormSection, SnackbarManagerContext } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 import { differenceObject } from './components/utils';
 import OptionsSettingsView from './options-settings-view';
@@ -69,48 +60,10 @@ export default function ContactSettingsView() {
 			}
 		});
 	}, [updatedSettings, createSnackbar, t]);
-
+	const title = useMemo(() => t('label.contact_setting', 'Contact Settings'), [t]);
 	return (
-		<Container
-			orientation="vertical"
-			mainAlignment="space-around"
-			background="gray5"
-			style={{ overflowY: 'auto' }}
-		>
-			<Row orientation="horizontal" width="100%">
-				<Row
-					padding={{ all: 'small' }}
-					mainAlignment="flex-start"
-					width="50%"
-					crossAlignment="flex-start"
-				>
-					<Text size="large" weight="regular">
-						{t('label.contact_setting', 'Contact Settings')}
-					</Text>
-				</Row>
-				<Row
-					padding={{ all: 'small' }}
-					width="50%"
-					mainAlignment="flex-end"
-					crossAlignment="flex-end"
-				>
-					<Padding right="small">
-						<Button
-							label={t('label.discard_changes', 'DISCARD CHANGES')}
-							onClick={onClose}
-							color="secondary"
-							disabled={disabled}
-						/>
-					</Padding>
-					<Button
-						label={t('label.save', 'Save')}
-						color="primary"
-						onClick={saveChanges}
-						disabled={disabled}
-					/>
-				</Row>
-			</Row>
-			<Divider />
+		<>
+			<SettingsHeader onCancel={onClose} onSave={saveChanges} title={title} isDirty={!disabled} />
 			<Container
 				orientation="vertical"
 				mainAlignment="baseline"
@@ -122,6 +75,6 @@ export default function ContactSettingsView() {
 					<OptionsSettingsView t={t} settingsObj={settingsObj} updateSettings={updateSettings} />
 				</FormSection>
 			</Container>
-		</Container>
+		</>
 	);
 }
