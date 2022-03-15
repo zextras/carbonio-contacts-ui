@@ -89,7 +89,8 @@ export default function ContactInput({
 	onChange,
 	defaultValue,
 	placeholder,
-	background = 'gray5'
+	background = 'gray5',
+	...props
 }) {
 	const [defaults, setDefaults] = useState([]);
 	const [options, setOptions] = useState([]);
@@ -283,6 +284,7 @@ export default function ContactInput({
 				background={background}
 				onAdd={onAdd}
 				requireUniqueChips
+				{...props}
 			/>
 		</Container>
 	);
