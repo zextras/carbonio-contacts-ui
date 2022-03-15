@@ -1,1 +1,291 @@
-{}
+{
+    "folder": {
+        "modal": {
+            "footer": {
+                "go_back": "Powrót"
+            },
+            "delete": {
+                "body": {
+                    "message1": "Czy na pewno chcesz usunąć tą książkę adresową? Jeśli ją usuniesz, powiązana z nią zawartość zostanie trwale usunięta, a książki adresowej nie będzie dało się już odzyskać.",
+                    "message2": "Czy na pewno chcesz trwale usunąć tą książkę adresową? Jeśli ją usuniesz, powiązana z nią zawartość zostanie trwale usunięta, a książki adresowej nie będzie dało się już odzyskać."
+                }
+            },
+            "edit": {
+                "body": {
+                    "item": {
+                        "empty": "Brak dostępnej ścieżki"
+                    }
+                }
+            },
+            "empty": {
+                "body": {
+                    "message1": "Czy na pewno chcesz opróżnić książkę adresową?",
+                    "message2": "Jeśli ja opróżnisz, cała powiązana z nią zawartość zostanie przeniesiona do kosza."
+                }
+            },
+            "move": {
+                "body": {
+                    "message1": "Wybierz książkę adresową, do której chcesz przenieść ten element:",
+                    "message3": "Wybierz folder, do którego chcesz przenieść ten element:"
+                },
+                "input": {
+                    "filter": "Filtruj książkę adresową"
+                }
+            },
+            "item": {
+                "empty": "Brak dostępnych elementów"
+            },
+            "new": {
+                "input": {
+                    "name_exist": "Wybrana nazwa istnieje już w tej ścieżce",
+                    "name": "Wpisz nazwę książki adresowej"
+                },
+                "body": {
+                    "message1": "Nazwa nowej książki adresowej",
+                    "message2": "Wybierz książkę adresową, która będzie zawierać nowo utworzony element:"
+                },
+                "create_footer": "Stwórz i Przenieś",
+                "title": "Stwórz nową książkę adresową",
+                "title2": "Tworzenie nowego folderu"
+            },
+            "restore": {
+                "create_footer": "Stwórz i Przywróć"
+            }
+        },
+        "action": {
+            "delete_permanently": "Trwale usuń książkę adresową",
+            "delete": "Usuń książkę adresową",
+            "edit": "Edytuj książkę adresową",
+            "empty": {
+                "trash": "Opróżnij kosz",
+                "folder": "Opróżnij książkę adresową"
+            },
+            "move": "Przenieś",
+            "moved": "Książka adresowa została przeniesiona pomyślnie"
+        },
+        "share_folder": "Udostępnij książkę adresową",
+        "snackbar": {
+            "address_book_moved_to_trash": "Książka adresowa została przeniesiona do kosza",
+            "address_book_permanently_deleted": "Książka adresowa została trwale usunięta",
+            "folder_empty": "Książka adresowa została opróżniona pomyślnie",
+            "folder_new": "Nowa książka adresowa została stworzona",
+            "trash_empty": "Kosz został opróżniony pomyślnie"
+        },
+        "type": "Folder Kontakty"
+    },
+    "label": {
+        "discard_changes": "ODRZUĆ ZMIANY",
+        "edit": "Edytuj",
+        "cancel": "Anuluj",
+        "activate_selection_mode": "Aktywuj tryb wybierania",
+        "create": "Stwórz",
+        "delete": "Usuń",
+        "move": "Przenieś",
+        "of": "od",
+        "resend": "Wyślij ponownie",
+        "restore": "Przywróć",
+        "results_for": "Wyniki dla:",
+        "revoke": "Odbierz",
+        "revoke_share": "Cofnij udostępnienie {{title}}",
+        "save": "Zapisz",
+        "share": "Udostępnij",
+        "search_activate_selection_mode": "Tryb wybierania nie jest jeszcze dostępny w wynikach wyszukiwań",
+        "empty": "Pusty",
+        "error_try_again": "Coś poszło nie tak, spróbuj ponownie",
+        "undo": "Cofnij",
+        "type": "Typ",
+        "Undo": "Cofnij",
+        "address_book_restored": "Książka adresowa została przywrócona",
+        "contact_setting": "Ustawienia Kontaktów",
+        "contacts": "Kontakty",
+        "edit_access": "Edytuj dostęp",
+        "edit_access_name": "Edytuj dostęp do {{name}}",
+        "new_address_book": "Nowa książka adresowa",
+        "new_contact_created": "Nowy kontakt został stworzony",
+        "notes": "Notki",
+        "revoke_with_custom_msg": "Odbierz dostęp i wyślij niestandardową notke",
+        "revoke_without_notification": "Odbierz dostęp i nie wysyłaj notki",
+        "root": "Źródło",
+        "shares_folder_edit": "Udostępnianie tej książki adresowej",
+        "edit_email": "Edytuj e-mail",
+        "edit_folder_properties": "Edytuj ustawienia {{name}}",
+        "email": "E-mail",
+        "new_contact": "Nowy kontakt",
+        "single_advanced_filter": "Zaawansowany Filtr",
+        "website_0": "Strona internetowa",
+        "website_1": "Strony internetowe",
+        "website_2": "Stron internetowych",
+        "advanced_filter_0": "{{count}} Zaawansowany Filtr",
+        "advanced_filter_1": "{{count}} Zaawansowane Filtry",
+        "advanced_filter_2": "{{count}} Zaawansowanych Filtrów",
+        "edit_invalid_email": "E-mail jest nieprawidłowy, kliknij aby go edytować",
+        "revoke_with_standard_msg": "Odbierz dostęp i wyślij domyślną notkę"
+    },
+    "displayer": {
+        "search_description1": "Lub wybierz \"Zaawansowane filtry\", aby udoskonalić wyniki wyszukiwania.",
+        "search_title2": "Niestety nie udało znaleźć się żadnych wyników wyszukiwania",
+        "search_description2": "Spróbuj rozpocząć kolejne wyszukiwanie.",
+        "search_list_title1": "Wygląda na to, że nie ma żadnych wyników wyszukiwania. Nie poddawaj się!",
+        "search_list_title2": "Żaden z elementów nie pasuje do kryteriów wyszukiwania.",
+        "search_title1": "Rozpocznij kolejne wyszukiwanie",
+        "search_title3": "Nie znaleziono wyników wyszukiwania.",
+        "search_title4": "Wybierz jeden lub więcej wyników, aby przeprowadzić czynności lub wyświetlić szczegóły.",
+        "description3": "Kliknij przycisk \"NOWY\", aby stworzyć nową grupę kontaktów.",
+        "description4": "Stwórz nowy, klikając przycisk \"NOWY\".",
+        "description6": "Użyj trybu \"Edytuj\", aby dodać prywatną notkę do kontaktu.",
+        "list_title1": "Wygląda na to, że nie masz jeszcze żadnych kontaktów",
+        "list_title2": "Kosz jest pusty",
+        "description7": "Stwórz grupę kontaktów klikając przycisk \"NOWY\".",
+        "description8": "Wybierz kontakt lub grupę kontaktów która będzie otrzymywać udostępniane e-maile.",
+        "title1": "Stwórz nowy kontakt klikając przycisk \"NOWY\".",
+        "title10": "Wybierz i przywróć kontakty z kosza",
+        "title2": "Udostępnij wszystkie swoje prace ze swoimi kontaktami.",
+        "title3": "Pozostań w kontakcie ze swoimi współpracownikami.",
+        "title4": "Dostosuj swoje kontakty dodając prywatne notki",
+        "title5": "Wybierz kontakt",
+        "title6": "Dostosuj kontakt",
+        "title7": "Pozostań w kontakcie ze swoimi współpracownikami",
+        "title8": "Wyślij udostępnionego e-maila",
+        "title9": "Kliknij ikonkę kosza, aby usunąć kontakt.",
+        "description2": "Kliknij przycisk \"NOWY\" aby stworzyć nowy kontakt.",
+        "description5": "Odkryj wszystkie sposoby, jakimi możesz komunikować się z innymi użytkownikami.",
+        "search_description3": "Sprawdź poprawność pisowni oraz ustawienia filtrów lub spróbuj wpisać inne słowo kluczowe."
+    },
+    "action": {
+        "search": "Wyszukaj",
+        "share_folder": "Udostępnij folder",
+        "delete_permanently": "Trwale usuń",
+        "goto_folder": "Idź do folderu",
+        "reset_filters": "Zresetuj Filtry",
+        "send_msg": "Wyślij e-maila"
+    },
+    "message": {
+        "snackbar": {
+            "settings_saved": "Zmiany zostały zapisane pomyślnie"
+        }
+    },
+    "share": {
+        "options": {
+            "share_calendar_with": {
+                "external_guests": "Goście spoza mojej domeny (mogą tylko wyświetlać)",
+                "internal_users_groups": "Użytkownicy lub Grupy z mojej domeny",
+                "public": "Publiczny (można tylko wyświetlać, hasło niewymagane)"
+            }
+        },
+        "recipients_address": "Adresy e-mail odbiorców",
+        "share_note": "Domyślna wiadomość zawiera twoje imię, nazwę udostępnianiego elementu, uprawnienia przyznane odbiorcom oraz informacje dot. logowania.",
+        "shared_folders": "Udostępnione Książki Adresowe",
+        "shared_item": "Udostępniony Element",
+        "shared_items": "Udostępnione książki adresowe {{value}}",
+        "standard_message": "Dodaj notkę do domyślnej wiadomości",
+        "viewer": "Wyświetlający",
+        "workflow": "Organizacja Pracy",
+        "write": "Pisanie",
+        "share_removed_succesfully": "Udostępnienie zostało usunięte pomyślnie",
+        "add": "Dodaj",
+        "admin": "Administrator",
+        "administer": "Zarządzaj",
+        "allowed_actions": "Dozwolone czynności",
+        "contact_folder": "Książka Adresowa",
+        "filter_user": "Znajdź użytkowników",
+        "find_contact_shares": "Znajdź Udostępnienia Kontaktów",
+        "find_shares": "Znajdź Udostępnienia",
+        "find_shares_label": "Wybierz którą książkę adresową chcesz widzieć w drzewku kontaktów",
+        "insert": "Wstaw",
+        "manager": "Manager",
+        "none": "Nikt z powyższych",
+        "owner": "Posiadacz",
+        "read": "Czytanie",
+        "remove_from_this_list": "Usuń z tej listy",
+        "role": "Rola",
+        "send_notification": "Wyślij powiadomienie o tym udostępnieniu",
+        "share_added_succesfully": "Udostępnienie zostało dodane pomyślnie",
+        "share_info": "Informacje o udostępnionej książce adresowej"
+    },
+    "snackbar": {
+        "share_resend": "Zaproszenie do udostępnienia zostało wysłane ponownie",
+        "share_revoke": "Dostęp do udostępniania został odebrany",
+        "folder_edited": "Książka adresowa została zedytowana pomyślnie",
+        "folder_shared": "Książka adresowa została udostępniona pomyślnie",
+        "share_updated": "Uprawnienia dostępu zostały zaktualizowane"
+    },
+    "tooltip": {
+        "revoke": "Odbierz dostęp",
+        "resend": "Wyślij powiadomienie mailowe dot. tego udostępnienia"
+    },
+    "contact_restored": "Kontakt został przywrócony",
+    "job": {
+        "company": "Firma",
+        "department": "Dział",
+        "title": "Stanowisko"
+    },
+    "messages": {
+        "snackbar": {
+            "contact_moved": "Kontakt został przeniesiony",
+            "contact_restored": "Kontakt został przywrócony",
+            "contact_deleted_permanently": "Kontakt został trwale usunięty",
+            "contact_moved_to_trash": "Kontakt został przeniesiony do kosza",
+            "address_book_moved": "Książka adresowa została przeniesiona do folderu docelowego"
+        },
+        "modal": {
+            "delete": {
+                "sure_delete_contact_0": "Czy na pewno chcesz usunąć ten kontakt?",
+                "sure_delete_contact_1": "Czy na pewno chcesz usunąć te kontakty?",
+                "sure_delete_contact_2": "Czy na pewno chcesz usunąć te kontakty?",
+                "if_delete_lost_forever": "Trwale usuwając ten kontakt, nie będziesz w stanie go już odzyskać. Kontynuować?"
+            }
+        }
+    },
+    "title": {
+        "advanced_filters": "Zaawansowane Filtry"
+    },
+    "types": {
+        "home": "start",
+        "mobile": "komórka",
+        "other": "inne",
+        "work": "praca"
+    },
+    "modal": {
+        "address_book_name": "Nazwa książki adresowej",
+        "destination": "Folder docelowy"
+    },
+    "name": {
+        "first_name": "Imię",
+        "last_name": "Nazwisko",
+        "middle_name": "Drugie Imię",
+        "nickName": "Pseudonim",
+        "suffix": "Przyrostek (suffiks)",
+        "prefix": "Przedrostek (prefiks)"
+    },
+    "section": {
+        "field": {
+            "city": "Miasto",
+            "country": "Kraj",
+            "number": "Numer",
+            "street": "Ulica",
+            "state": "Region",
+            "postalCode": "KodPocztowy"
+        },
+        "title": {
+            "address_0": "Adres",
+            "address_1": "Adresy",
+            "address_2": "Adresów",
+            "mail": "Adres e-mail",
+            "phone_number": "Numer telefonu"
+        }
+    },
+    "select": {
+        "default": "Wybierz typ"
+    },
+    "settings": {
+        "contacts": {
+            "checkbox": {
+                "autocomplete_on_comma": "Wybierz automatycznie dopełnioną frazę, kiedy wpisany zostanie przecinek",
+                "incl_addrs_in_glbl_addrs_list": "Zawrzyj adresy w Globalnej Liście Adresów",
+                "include_add_in_shared_contact": "Zawrzyj adresy w udostępnionych kontaktach",
+                "add_contact_to_emailed_contacts": "Dodaj nowe kontakty do \"Kontakty do których wysłano już e-maila\"",
+                "srch_glbl_addrs_list": "Najpierw przeszukuj Globalną Listę Adresów podczas wybierania kontaktów"
+            }
+        }
+    }
+}

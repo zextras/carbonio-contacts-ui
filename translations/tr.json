@@ -267,7 +267,7 @@
             "checkbox": {
                 "add_contact_to_emailed_contacts": "Yeni kişileri \"E-posta Gönderilen Kişiler\" listesine ekle",
                 "autocomplete_on_comma": "Virgül yazıldığında otomatik tamamlamada eşleşeni seç",
-                "incl_addrs_in_glbl_addrs_list": "Global Adres Listesindeki adresleri ekle",
+                "incl_addrs_in_glbl_addrs_list": "Adresleri Global Adres Listesine ekle",
                 "include_add_in_shared_contact": "Paylaşılan kişilerdeki adresleri ekle",
                 "srch_glbl_addrs_list": "Kişi seçerken öncelikle Global Adres Defterinde arama yap"
             }

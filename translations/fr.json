@@ -34,7 +34,7 @@
         "title4": "Personnalisez vos contacts en ajoutant des notes personnelles",
         "title6": "Personnalisez un contact",
         "title7": "Restez en contact avec vos collègues",
-        "title8": "Le partage, c'est l'entraide",
+        "title8": "Envoyer l'email partagé",
         "title9": "Cliquez sur l'icône de la corbeille pour supprimer un contact."
     },
     "folder": {
@@ -152,7 +152,10 @@
         "new_contact_created": "Nouveau contact créé",
         "shares_folder_edit": "Partager ce carnet d'adresses",
         "website": "Site web",
-        "website_plural": "Sites web"
+        "website_plural": "Sites web",
+        "edit_email": "Éditer l'email",
+        "edit_invalid_email": "l'email est invalide, cliquez pour l'éditer",
+        "new_contact": "Nouveau contact"
     },
     "name": {
         "nickName": "Surnom",
@@ -173,7 +176,7 @@
         },
         "title": {
             "address": "Adresse",
-            "address_plural": "",
+            "address_plural": "Adresses",
             "mail": "Adresse email",
             "phone_number": "Téléphone"
         }
