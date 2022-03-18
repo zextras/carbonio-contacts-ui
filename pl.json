@@ -81,7 +81,7 @@
         "create": "Stwórz",
         "delete": "Usuń",
         "move": "Przenieś",
-        "of": "od",
+        "of": "z",
         "resend": "Wyślij ponownie",
         "restore": "Przywróć",
         "results_for": "Wyniki dla:",
@@ -280,11 +280,11 @@
     "settings": {
         "contacts": {
             "checkbox": {
-                "autocomplete_on_comma": "Wybierz automatycznie dopełnioną frazę, kiedy wpisany zostanie przecinek",
+                "autocomplete_on_comma": "Wybierz automatycznie uzupełnioną frazę, kiedy wpisany zostanie przecinek",
                 "incl_addrs_in_glbl_addrs_list": "Zawrzyj adresy w Globalnej Liście Adresów",
                 "include_add_in_shared_contact": "Zawrzyj adresy w udostępnionych kontaktach",
                 "add_contact_to_emailed_contacts": "Dodaj nowe kontakty do \"Kontakty do których wysłano już e-maila\"",
-                "srch_glbl_addrs_list": "Najpierw przeszukuj Globalną Listę Adresów podczas wybierania kontaktów"
+                "srch_glbl_addrs_list": "Wstępnie przeszukaj Globalną Listę Adresów podczas wybierania kontaktów"
             }
         }
     }
