@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.7-rc.0](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.5-rc.7...v0.1.7-rc.0) (2022-03-18)
+
+
+### Features
+
+* chipinput props passed to contact input ([be3351d](https://github.com/zextras/carbonio-contacts-ui/commit/be3351d74929b839c3a0b30f6e5fd2cb92606700))
+* settings enhancements ([c101c49](https://github.com/zextras/carbonio-contacts-ui/commit/c101c49634a0f6755abc10692e0f130fd9859742))
+
 ### [0.1.5-rc.7](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.5-rc.6...v0.1.5-rc.7) (2022-02-24)
 
 
