@@ -209,7 +209,7 @@ const EditDefaultModal = ({
 				<ColorSelect
 					onChange={(color) => setFolderColor(Number(color))}
 					t={t}
-					label="Select Color"
+					label={t('label.select_color', 'Select Color')}
 					defaultColor={folderColor}
 				/>
 				<Padding top="small" />
@@ -282,7 +282,7 @@ const EditDefaultModal = ({
 					label={t('label.edit', 'Edit')}
 					t={t}
 					secondaryAction={() => setActiveModal('share')}
-					secondaryLabel="Add Share"
+					secondaryLabel={t('label.add_share', 'Add Share')}
 					disabled={disabled}
 					secondaryBtnType="outlined"
 					secondaryColor="primary"
