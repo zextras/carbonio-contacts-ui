@@ -198,7 +198,7 @@ export const NewModal = ({
 					<Container mainAlignment="baseline" crossAlignment="flex-start">
 						<Row width="100%">
 							<Input
-								label="Folder name"
+								label={t('label.folder_name', 'Folder name')}
 								backgroundColor="gray5"
 								hasError={hasError}
 								defaultValue={inputValue}
