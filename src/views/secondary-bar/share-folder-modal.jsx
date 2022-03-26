@@ -171,7 +171,7 @@ const ShareFolderModal = ({
 					<Select
 						items={shareFolderWithOptions}
 						background="gray5"
-						label="Share with"
+						label={t('label.share_with', 'Share with')}
 						onChange={onShareWithChange}
 						defaultSelection={{
 							value: 'usr',
@@ -218,7 +218,7 @@ const ShareFolderModal = ({
 				<Select
 					items={shareFolderRoleOptions}
 					background="gray5"
-					label="Role"
+					label={t('share.role', 'Role')}
 					onChange={onShareRoleChange}
 					defaultSelection={{
 						value: editMode ? activeGrant?.perm : 'r',
