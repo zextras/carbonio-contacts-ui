@@ -138,7 +138,7 @@ const ShareRevokeModal = ({ folder, onClose, grant, createSnackbar, goBack }) =>
 			>
 				<Row padding={{ right: 'small' }}>
 					<Text weight="bold" size="small" color="gray0">
-						{t('label.note', 'Note:')}
+						Note:
 					</Text>
 				</Row>
 				<Row padding={{ bottom: 'small' }}>

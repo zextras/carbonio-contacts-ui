@@ -9,7 +9,7 @@ import Heading from './components/settings-heading';
 
 export default function OptionsSettingsView({ t, settingsObj, updateSettings }) {
 	return (
-		<FormSubSection label={t('label.options', 'Options')}>
+		<FormSubSection label="Options">
 			<Container crossAlignment="baseline" padding={{ all: 'small' }}>
 				<Heading title="Settings" />
 				<Checkbox
