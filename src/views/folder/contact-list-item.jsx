@@ -97,7 +97,7 @@ export default function ContactListItem({
 									<Avatar
 										data-testid={`checkedAvatar`}
 										icon="Checkmark"
-										label="NameLastname"
+										label={`${contact.firstName} ${contact.lastName}`}
 										background="primary"
 										onClick={(ev) => {
 											if (ev) ev.preventDefault();
