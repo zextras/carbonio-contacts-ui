@@ -118,6 +118,7 @@
         "title": "Job Role"
     },
     "label": {
+        "Undo": "Undo",
         "activate_selection_mode": "Activate selection mode",
         "address_book_restored": "Address book restored",
         "advanced_filter": "{{count}} Advanced Filter",

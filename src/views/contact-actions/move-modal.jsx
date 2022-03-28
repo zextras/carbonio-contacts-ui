@@ -187,9 +187,7 @@ export default function MoveModal({
 							mainAlignment="center"
 							crossAlignment="flex-start"
 						>
-							{isSameFolder && (
-								<Text color="error">{t('label.cannot_move', 'Cannot move to same folder')}</Text>
-							)}
+							{isSameFolder && <Text color="error">Cannot move to same folder</Text>}
 						</Container>
 						<ModalFooter
 							onConfirm={moveContact}
