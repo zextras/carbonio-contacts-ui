@@ -50,7 +50,7 @@ export const applyFoldersChangesToStore = (
 
 export function addFoldersToStore(state: FoldersSlice, folders: ContactsFolder[]): void {
 	if (folders && folders.length) {
-		const isFolderAvailable = state.folders.find((item) => item.id === folders[0].id);
+		const isFolderAvailable = state.folders?.find((item) => item.id === folders[0].id);
 		if (isFolderAvailable === undefined) {
 			state.folders = reduce(folders, (acc, v) => [...acc, v], state.folders);
 		}
