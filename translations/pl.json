@@ -119,7 +119,8 @@
         "advanced_filter_1": "{{count}} Zaawansowane Filtry",
         "advanced_filter_2": "{{count}} Zaawansowanych Filtrów",
         "edit_invalid_email": "E-mail jest nieprawidłowy, kliknij aby go edytować",
-        "revoke_with_standard_msg": "Odbierz dostęp i wyślij domyślną notkę"
+        "revoke_with_standard_msg": "Odbierz dostęp i wyślij domyślną notkę",
+        "app_name": "Kontakty"
     },
     "displayer": {
         "search_description1": "Lub wybierz \"Zaawansowane filtry\", aby udoskonalić wyniki wyszukiwania.",
@@ -167,8 +168,8 @@
     "share": {
         "options": {
             "share_calendar_with": {
-                "external_guests": "Goście spoza mojej domeny (mogą tylko wyświetlać)",
-                "internal_users_groups": "Użytkownicy lub Grupy z mojej domeny",
+                "external_guests": "Goście spoza mojej organizacji (mogą tylko wyświetlać)",
+                "internal_users_groups": "Użytkownicy lub Grupy z mojej organizacji",
                 "public": "Publiczny (można tylko wyświetlać, hasło niewymagane)"
             }
         },
