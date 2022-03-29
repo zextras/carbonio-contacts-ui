@@ -203,7 +203,8 @@
         "search_activate_selection_mode": "Arama sonuçlarında seçme modu henüz kullanılamıyor",
         "edit_email": "E-Postayı Düzenle",
         "edit_invalid_email": "E-posta geçersiz, düzenlemek için tıklayın",
-        "new_contact": "Yeni Kişi"
+        "new_contact": "Yeni Kişi",
+        "app_name": "Kişiler"
     },
     "job": {
         "company": "Firma",

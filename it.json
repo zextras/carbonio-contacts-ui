@@ -103,7 +103,8 @@
         "search_activate_selection_mode": "La Modalità Selezione non è ancora disponibile nei risultati di ricerca",
         "edit_email": "Modifica E-mail",
         "edit_invalid_email": "E-mail non valida, selezionala per modificare",
-        "new_contact": "Nuovo contatto"
+        "new_contact": "Nuovo contatto",
+        "app_name": "Contatti"
     },
     "job": {
         "title": "Ruolo",

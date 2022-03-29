@@ -123,6 +123,7 @@
         "address_book_restored": "Address book restored",
         "advanced_filter": "{{count}} Advanced Filter",
         "advanced_filter_plural": "{{count}} Advanced Filters",
+        "app_name": "Contacts",
         "cancel": "Cancel",
         "contact_setting": "Contact Settings",
         "contacts": "Contacts",
