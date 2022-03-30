@@ -207,7 +207,8 @@
         "address_book_restored": "Adresboek hersteld",
         "advanced_filter": "{{count}} Geavanceerde filter",
         "advanced_filter_plural": "{{count}} Geavanceerde filters",
-        "search_activate_selection_mode": "Selectiemodus is nog niet beschikbaar bij zoekresultaten"
+        "search_activate_selection_mode": "Selectiemodus is nog niet beschikbaar bij zoekresultaten",
+        "new_contact": "Nieuw contact"
     },
     "section": {
         "field": {
