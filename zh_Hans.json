@@ -195,7 +195,8 @@
         "empty": "空",
         "discard_changes": "丢弃变更",
         "advanced_filter": "{{count}}高级过滤条件",
-        "search_activate_selection_mode": "搜索结果上无可用选择模式"
+        "search_activate_selection_mode": "搜索结果上无可用选择模式",
+        "new_contact": "新联系人"
     },
     "name": {
         "nickName": "昵称",
