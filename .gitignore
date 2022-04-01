@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: CC0-1.0
 /node_modules/
 /pkg/
+/sdk/
 /build/
 /dist/
 /.idea/workspace.xml
