@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React from 'react';
-import { isEmpty } from 'lodash';
+import { compact } from 'lodash';
 import { Text } from '@zextras/carbonio-design-system';
 import { getAction, FOLDERS } from '@zextras/carbonio-shell-ui';
 import { FolderActionsType } from '../types/folder';
@@ -228,18 +228,19 @@ export const contextActions = ({
 			];
 
 		default:
-			return (contact) => [
-				moveToTrash({
-					ids: [contact.id],
-					t,
-					dispatch,
-					parent: contact.parent,
-					createSnackbar,
-					replaceHistory
-				}),
-				mailToContact(contact, t),
-				moveContact(contact, folderId, t, dispatch, contact.parent, createModal, createSnackbar)
-			];
+			return (contact) =>
+				compact([
+					moveToTrash({
+						ids: [contact.id],
+						t,
+						dispatch,
+						parent: contact.parent,
+						createSnackbar,
+						replaceHistory
+					}),
+					mailToContact(contact, t),
+					moveContact(contact, folderId, t, dispatch, contact.parent, createModal, createSnackbar)
+				]);
 	}
 };
 
@@ -266,18 +267,19 @@ export const hoverActions = ({
 			];
 
 		default:
-			return (contact) => [
-				moveToTrash({
-					ids: [contact.id],
-					t,
-					dispatch,
-					parent: contact.parent,
-					createSnackbar,
-					replaceHistory
-				}),
-				mailToContact(contact, t),
-				moveContact(contact, folderId, t, dispatch, contact.parent, createModal, createSnackbar)
-			];
+			return (contact) =>
+				compact([
+					moveToTrash({
+						ids: [contact.id],
+						t,
+						dispatch,
+						parent: contact.parent,
+						createSnackbar,
+						replaceHistory
+					}),
+					mailToContact(contact, t),
+					moveContact(contact, folderId, t, dispatch, contact.parent, createModal, createSnackbar)
+				]);
 	}
 };
 
