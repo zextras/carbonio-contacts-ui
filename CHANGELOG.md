@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.9](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.7-rc.0...v0.1.9) (2022-04-01)
+
+
+### Bug Fixes
+
+* removed hardcoded labels ([e46924c](https://github.com/zextras/carbonio-contacts-ui/commit/e46924ce78f93aedda7edaacc16f85ee8242c3ae))
+* removed hardcoded labels ([363907d](https://github.com/zextras/carbonio-contacts-ui/commit/363907d9cec5fe8deacfa425e7c0a5c47e30ad52))
+* removed hardcoded labels ([f6d0784](https://github.com/zextras/carbonio-contacts-ui/commit/f6d07848add145505f0ff09fc685a2f741ea6297))
+
 ### [0.1.7-rc.0](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.5-rc.7...v0.1.7-rc.0) (2022-03-18)
 
 
