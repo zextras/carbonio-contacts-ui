@@ -13,6 +13,10 @@ import styled from 'styled-components';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 
+const emailRegex =
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars, max-len, no-control-regex
+	/[^\s@]+@[^\s@]+\.[^\s@]+/;
+
 const getChipLabel = (contact) => {
 	if (contact.firstName ?? contact.middleName ?? contact.lastName) {
 		return trim(`${contact.firstName ?? ''} ${contact.middleName ?? ''} ${contact.lastName ?? ''}`);
@@ -164,7 +168,12 @@ export default function ContactInput({
 							includeGal: 1,
 							name: e.textContent
 						})
-							.then(({ match }) => filter(match, (m) => typeof m.email === 'string'))
+							.then(({ match }) =>
+								map(match, (m) => ({
+									...m,
+									email: emailRegex.exec(m.email)[0]
+								}))
+							)
 							.then((remoteResults) => {
 								const normRemoteResults = reduce(
 									remoteResults,
@@ -221,7 +230,7 @@ export default function ContactInput({
 		[allContacts]
 	);
 
-	const isValidEmail = useCallback((email) => typeof email === 'string', []);
+	const isValidEmail = useCallback((email) => emailRegex.test(email), []);
 
 	const editChip = useCallback((text, id) => {
 		setIdToRemove(id);
