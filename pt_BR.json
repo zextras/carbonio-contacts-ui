@@ -156,7 +156,14 @@
         "discard_changes": "DESCARTAR MODIFICAÇÕES",
         "new_address_book": "Nova agenda de endereços",
         "new_contact_created": "Novo contato criado",
-        "search_activate_selection_mode": "Modo de seleção ainda não está disponível nos resultados da busca"
+        "search_activate_selection_mode": "Modo de seleção ainda não está disponível nos resultados da busca",
+        "add_share": "Adicionar Compartilhamento",
+        "folder_name": "Nome da pasta",
+        "note": "Nota:",
+        "options": "Opções",
+        "share_with": "Compartilhar com",
+        "app_name": "Contatos",
+        "new_contact": "Novo contato"
     },
     "share": {
         "add": "Adicionar",

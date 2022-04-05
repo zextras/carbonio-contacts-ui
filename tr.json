@@ -204,7 +204,14 @@
         "edit_email": "E-Postayı Düzenle",
         "edit_invalid_email": "E-posta geçersiz, düzenlemek için tıklayın",
         "new_contact": "Yeni Kişi",
-        "app_name": "Kişiler"
+        "app_name": "Kişiler",
+        "add_share": "Paylaşım ekle",
+        "cannot_move": "Aynı klasöre taşınamaz",
+        "folder_name": "Klasör adı",
+        "note": "Not:",
+        "options": "Seçenekler",
+        "select_color": "Renk seçin",
+        "share_with": "Paylaş"
     },
     "job": {
         "company": "Firma",

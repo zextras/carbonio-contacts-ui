@@ -198,7 +198,14 @@
         "search_activate_selection_mode": "सर्च रिज़ल्ट में अभी तक सिलेक्शन मोड उपलब्ध नहीं है",
         "discard_changes": "बदलाव रद्द करें",
         "activate_selection_mode": "सिलेक्शन मोड एक्टिवेट करें",
-        "address_book_restored": "एड्रेस बुक वापस लाई गई"
+        "address_book_restored": "एड्रेस बुक वापस लाई गई",
+        "add_share": "Share जोड़ें",
+        "note": "नोट:",
+        "share_with": "इनके साथ शेयर",
+        "folder_name": "फोल्डर नाम",
+        "options": "विकल्प",
+        "app_name": "संपर्क",
+        "new_contact": "नया सम्पर्क"
     },
     "name": {
         "nickName": "उर्फनाम",

@@ -195,7 +195,14 @@
         "advanced_filter": "{{count}} Filter Lanjutan",
         "new_address_book": "Buku alamat baru",
         "search_activate_selection_mode": "Mode pemilihan belum tersedia di hasil pencarian",
-        "new_contact_created": "Kontak baru dibuat"
+        "new_contact_created": "Kontak baru dibuat",
+        "add_share": "Tambahkan Berbagi",
+        "folder_name": "Nama folder",
+        "note": "Catatan:",
+        "options": "Opsi",
+        "share_with": "Bagikan dengan",
+        "app_name": "Kontak",
+        "new_contact": "Kontak baru"
     },
     "name": {
         "nickName": "Nama panggilan",

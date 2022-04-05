@@ -148,7 +148,15 @@
         "address_book_restored": "กู้คืนสมุดที่อยู่แล้ว",
         "advanced_filter": "{{count}} ตัวกรองขั้นสูง",
         "discard_changes": "ยกเลิกการเปลี่ยนแปลง",
-        "new_contact_created": "สร้างผู้ติดต่อใหม่แล้ว"
+        "new_contact_created": "สร้างผู้ติดต่อใหม่แล้ว",
+        "add_share": "เพิ่มการแชร์",
+        "folder_name": "ชื่อโฟลเดอร์",
+        "note": "บันทึก:",
+        "options": "ตัวเลือก",
+        "share_with": "แชร์กับ",
+        "select_color": "เลือกสี",
+        "app_name": "การติดต่อ",
+        "new_contact": "รายชื่อผู้ติดต่อใหม่"
     },
     "share": {
         "read": "อ่าน",
