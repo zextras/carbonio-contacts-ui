@@ -47,7 +47,14 @@
         "address_book_restored": "Libreta de direcciones restaurada",
         "new_address_book": "Nueva libreta de direcciones",
         "new_contact_created": "Nuevo contacto creado",
-        "search_activate_selection_mode": "El modo selección aún no está disponible en los resultados de búsqueda"
+        "search_activate_selection_mode": "El modo selección aún no está disponible en los resultados de búsqueda",
+        "folder_name": "Nombre de la carpeta",
+        "app_name": "Contactos",
+        "add_share": "Añadir Compartición",
+        "note": "Nota:",
+        "options": "Opciones",
+        "share_with": "Compartir con",
+        "new_contact": "Nuevo contacto"
     },
     "share": {
         "none": "None",

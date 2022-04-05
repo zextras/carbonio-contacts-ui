@@ -104,7 +104,14 @@
         "edit_email": "Modifica E-mail",
         "edit_invalid_email": "E-mail non valida, selezionala per modificare",
         "new_contact": "Nuovo contatto",
-        "app_name": "Contatti"
+        "app_name": "Contatti",
+        "add_share": "Aggiungi Condivisione",
+        "folder_name": "Nome cartella",
+        "cannot_move": "Non possibile spostarlo nella stessa cartella",
+        "note": "Note:",
+        "options": "Opzioni",
+        "select_color": "Seleziona Colore",
+        "share_with": "Condividi con"
     },
     "job": {
         "title": "Ruolo",
