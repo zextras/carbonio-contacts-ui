@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.11](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.10...v0.1.11) (2022-04-14)
+
+
+### Bug Fixes
+
+* fix contact input regex validation ([cd88d6f](https://github.com/zextras/carbonio-contacts-ui/commit/cd88d6f75d02fcec5787b5f4b8934b59660cf09e))
+
 ### [0.1.10](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.9...v0.1.10) (2022-04-14)
 
 
