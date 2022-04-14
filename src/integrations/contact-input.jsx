@@ -171,7 +171,7 @@ export default function ContactInput({
 							.then(({ match }) =>
 								map(match, (m) => ({
 									...m,
-									email: emailRegex.exec(m.email)[0]
+									email: emailRegex.exec(m.email)[0]?.slice(1, -1)
 								}))
 							)
 							.then((remoteResults) => {
