@@ -195,7 +195,18 @@
         "advanced_filter": "{{count}}高度なフィルター",
         "new_address_book": "新しいアドレス帳",
         "new_contact_created": "新しい連絡先が作成されました",
-        "search_activate_selection_mode": "選択モードは検索結果ではまだ利用できません"
+        "search_activate_selection_mode": "選択モードは検索結果ではまだ利用できません",
+        "add_share": "共有を追加する",
+        "folder_name": "フォルダー名",
+        "options": "オプション",
+        "share_with": "シェア先",
+        "new_contact": "新しい連絡先",
+        "note": "メモ:",
+        "app_name": "連絡先",
+        "cannot_move": "同じフォルダに移動できません",
+        "edit_invalid_email": "メールが無効です。クリックして編集してください",
+        "select_color": "色を選択してください",
+        "edit_email": "メールを編集する"
     },
     "name": {
         "nickName": "ニックネーム",

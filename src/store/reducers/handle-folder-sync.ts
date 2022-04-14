@@ -22,9 +22,8 @@ export function handleFolderSyncReducer(state: FoldersSlice, { payload }: { payl
 		if (modified?.folder) {
 			applyFoldersChangesToStore(state, normalizeFolders(modified?.folder));
 		}
-		if (deleted?.id) {
-			const ids = deleted.id.split(',');
-			removeFoldersFromStore(state, ids);
+		if (deleted?.length > 0) {
+			removeFoldersFromStore(state, deleted);
 		}
 	}
 }

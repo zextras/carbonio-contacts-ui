@@ -156,7 +156,18 @@
         "new_address_book": "Neues Adressbuch",
         "notes": "Notizen",
         "restore": "Wiederherstellen",
-        "results_for": "Ergebnisse für:"
+        "results_for": "Ergebnisse für:",
+        "add_share": "Teilen hinzufügen",
+        "cannot_move": "Kann nicht in denselben Ordner verschoben werden",
+        "folder_name": "Ordnernname",
+        "note": "Notizen:",
+        "options": "Optionen",
+        "select_color": "Farbe auswählen",
+        "share_with": "Teilen mit",
+        "app_name": "Kontakte",
+        "edit_email": "E-Mail bearbeiten",
+        "edit_invalid_email": "E-Mail ist ungültig, klicken Sie zum Bearbeiten",
+        "new_contact": "Neuer Kontakt"
     },
     "message": {
         "snackbar": {

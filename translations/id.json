@@ -195,7 +195,18 @@
         "advanced_filter": "{{count}} Filter Lanjutan",
         "new_address_book": "Buku alamat baru",
         "search_activate_selection_mode": "Mode pemilihan belum tersedia di hasil pencarian",
-        "new_contact_created": "Kontak baru dibuat"
+        "new_contact_created": "Kontak baru dibuat",
+        "add_share": "Tambahkan Berbagi",
+        "folder_name": "Nama folder",
+        "note": "Catatan:",
+        "options": "Opsi",
+        "share_with": "Bagikan dengan",
+        "app_name": "Kontak",
+        "new_contact": "Kontak baru",
+        "cannot_move": "Tidak bisa memindahkan folder yang sama",
+        "select_color": "Pilih Warna",
+        "edit_invalid_email": "Email tidak valid, klik untuk mengedit",
+        "edit_email": "Edit Email"
     },
     "name": {
         "nickName": "Nama panggilan",

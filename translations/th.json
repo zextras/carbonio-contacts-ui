@@ -148,7 +148,18 @@
         "address_book_restored": "กู้คืนสมุดที่อยู่แล้ว",
         "advanced_filter": "{{count}} ตัวกรองขั้นสูง",
         "discard_changes": "ยกเลิกการเปลี่ยนแปลง",
-        "new_contact_created": "สร้างผู้ติดต่อใหม่แล้ว"
+        "new_contact_created": "สร้างผู้ติดต่อใหม่แล้ว",
+        "add_share": "เพิ่มการแชร์",
+        "folder_name": "ชื่อโฟลเดอร์",
+        "note": "บันทึก:",
+        "options": "ตัวเลือก",
+        "share_with": "แชร์กับ",
+        "select_color": "เลือกสี",
+        "app_name": "การติดต่อ",
+        "new_contact": "รายชื่อผู้ติดต่อใหม่",
+        "cannot_move": "ไม่สามารถย้ายไปยังโฟลเดอร์เดียวกันได้",
+        "edit_invalid_email": "อีเมลไม่ถูกต้อง คลิกเพื่อแก้ไข",
+        "edit_email": "แก้ไขอีเมล"
     },
     "share": {
         "read": "อ่าน",
@@ -161,7 +172,7 @@
         "none": "ไม่มี",
         "owner": "เจ้าของ",
         "administer": "ดูแล",
-        "allowed_actions": "การกระทำที่ได้รับอนุญาต",
+        "allowed_actions": "การดำเนินการที่ได้รับอนุญาต",
         "contact_folder": "สมุดที่อยู่",
         "filter_user": "ค้นหาผู้ใช้",
         "find_contact_shares": "ค้นหารายชื่อผู้ติดต่อที่แชร๋",

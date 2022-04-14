@@ -155,7 +155,15 @@
         "website_plural": "Sites web",
         "edit_email": "Éditer l'email",
         "edit_invalid_email": "l'email est invalide, cliquez pour l'éditer",
-        "new_contact": "Nouveau contact"
+        "new_contact": "Nouveau contact",
+        "cannot_move": "Impossible de déplacer le même dossier",
+        "select_color": "Sélectionner une couleur",
+        "add_share": "Ajouter un Partage",
+        "folder_name": "Nom du dossier",
+        "note": "Note :",
+        "options": "Options",
+        "share_with": "Partager avec",
+        "app_name": "Contacts"
     },
     "name": {
         "nickName": "Surnom",

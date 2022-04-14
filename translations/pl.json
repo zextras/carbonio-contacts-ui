@@ -108,7 +108,7 @@
         "root": "Źródło",
         "shares_folder_edit": "Udostępnianie tej książki adresowej",
         "edit_email": "Edytuj e-mail",
-        "edit_folder_properties": "Edytuj ustawienia {{name}}",
+        "edit_folder_properties": "Edytuj właściwości {{name}}",
         "email": "E-mail",
         "new_contact": "Nowy kontakt",
         "single_advanced_filter": "Zaawansowany Filtr",
@@ -120,7 +120,8 @@
         "advanced_filter_2": "{{count}} Zaawansowanych Filtrów",
         "edit_invalid_email": "E-mail jest nieprawidłowy, kliknij aby go edytować",
         "revoke_with_standard_msg": "Odbierz dostęp i wyślij domyślną notkę",
-        "app_name": "Kontakty"
+        "app_name": "Kontakty",
+        "share_with": "Udostępnij"
     },
     "displayer": {
         "search_description1": "Lub wybierz \"Zaawansowane filtry\", aby udoskonalić wyniki wyszukiwania.",

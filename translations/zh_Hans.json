@@ -196,7 +196,17 @@
         "discard_changes": "丢弃变更",
         "advanced_filter": "{{count}}高级过滤条件",
         "search_activate_selection_mode": "搜索结果上无可用选择模式",
-        "new_contact": "新联系人"
+        "new_contact": "新联系人",
+        "add_share": "添加共享",
+        "folder_name": "文件夹名称",
+        "note": "备注:",
+        "options": "选项",
+        "select_color": "选择颜色",
+        "share_with": "分享给",
+        "app_name": "联系人",
+        "cannot_move": "无法移动至相同文件夹",
+        "edit_email": "编辑邮件",
+        "edit_invalid_email": "邮件无效，点击编辑"
     },
     "name": {
         "nickName": "昵称",
