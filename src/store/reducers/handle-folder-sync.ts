@@ -15,12 +15,14 @@ import {
 
 export function handleFolderSyncReducer(state: FoldersSlice, { payload }: { payload: any }): void {
 	const { created, modified, deleted } = payload;
+	const modsFolders = filter(modified.folder, ['view', 'contact']);
+	const createdFolders = filter(created.folder, ['view', 'contact']);
 	if (state.folders) {
-		if (created?.folder) {
-			applyFoldersChangesToStore(state, normalizeFolders(created.folder));
+		if (createdFolders?.length) {
+			applyFoldersChangesToStore(state, normalizeFolders(createdFolders));
 		}
-		if (modified?.folder) {
-			applyFoldersChangesToStore(state, normalizeFolders(modified?.folder));
+		if (modsFolders?.length) {
+			applyFoldersChangesToStore(state, normalizeFolders(modsFolders));
 		}
 		if (deleted?.length > 0) {
 			removeFoldersFromStore(state, deleted);
