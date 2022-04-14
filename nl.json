@@ -208,7 +208,17 @@
         "advanced_filter": "{{count}} Geavanceerde filter",
         "advanced_filter_plural": "{{count}} Geavanceerde filters",
         "search_activate_selection_mode": "Selectiemodus is nog niet beschikbaar bij zoekresultaten",
-        "new_contact": "Nieuw contact"
+        "new_contact": "Nieuw contact",
+        "add_share": "Delen toevoegen",
+        "cannot_move": "Kan niet verplaatsen naar dezelfde map",
+        "folder_name": "Naam map",
+        "note": "Opmerking:",
+        "options": "Opties",
+        "select_color": "Kleur selecteren",
+        "share_with": "Delen met",
+        "app_name": "Contacten",
+        "edit_invalid_email": "E-mail is ongeldig, klik om het te bewerken",
+        "edit_email": "E-mail bewerken"
     },
     "section": {
         "field": {
