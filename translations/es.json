@@ -54,7 +54,11 @@
         "note": "Nota:",
         "options": "Opciones",
         "share_with": "Compartir con",
-        "new_contact": "Nuevo contacto"
+        "new_contact": "Nuevo contacto",
+        "cannot_move": "No se puede mover a la misma carpeta",
+        "select_color": "Seleccionar color",
+        "edit_invalid_email": "E-mail no válido, haz clic para editarlo",
+        "edit_email": "Editar e-mail"
     },
     "share": {
         "none": "None",

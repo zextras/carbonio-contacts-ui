@@ -107,7 +107,7 @@
         "app_name": "Contatti",
         "add_share": "Aggiungi Condivisione",
         "folder_name": "Nome cartella",
-        "cannot_move": "Non possibile spostarlo nella stessa cartella",
+        "cannot_move": "Non è possibile spostarlo nella stessa cartella",
         "note": "Note:",
         "options": "Opzioni",
         "select_color": "Seleziona Colore",
@@ -276,7 +276,7 @@
         "shared_folders": "Rubriche Condivise",
         "type": "Tipo",
         "shared_items": "Rubrica condivisa di {{value}}",
-        "viewer": "Vista"
+        "viewer": "Visualizzazione"
     },
     "messages": {
         "snackbar": {

@@ -205,7 +205,11 @@
         "folder_name": "फोल्डर नाम",
         "options": "विकल्प",
         "app_name": "संपर्क",
-        "new_contact": "नया सम्पर्क"
+        "new_contact": "नया सम्पर्क",
+        "cannot_move": "उसी फोल्डर में फिर से नहीं भेज सकता",
+        "select_color": "रंग चुनें",
+        "edit_invalid_email": "ई-मेल अमान्य है, इसे एडिट करने के लिए क्लिक करें",
+        "edit_email": "ई-मेल एडिट करें"
     },
     "name": {
         "nickName": "उर्फनाम",
