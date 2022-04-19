@@ -163,7 +163,11 @@
         "options": "Opções",
         "share_with": "Compartilhar com",
         "app_name": "Contatos",
-        "new_contact": "Novo contato"
+        "new_contact": "Novo contato",
+        "cannot_move": "Não é possível mover para a mesma pasta",
+        "select_color": "Selecionar Cor",
+        "edit_invalid_email": "E-mail inválido. Clique para editá-lo",
+        "edit_email": "Editar E-mail"
     },
     "share": {
         "add": "Adicionar",
@@ -202,7 +206,7 @@
         "shared_folders": "Agendas de Endereços Compartilhadas",
         "shared_item": "Item Compartilhado",
         "shared_items": "Agendas de endereço compartilhadas de {{value}}",
-        "standard_message": "Adicionar nota à mensagem padrão",
+        "standard_message": "Adicionar uma nota à mensagem padrão",
         "viewer": "Visualizador",
         "workflow": "Fluxo de Trabalho",
         "write": "Escrever"
