@@ -203,7 +203,10 @@
         "options": "选项",
         "select_color": "选择颜色",
         "share_with": "分享给",
-        "app_name": "联系人"
+        "app_name": "联系人",
+        "cannot_move": "无法移动至相同文件夹",
+        "edit_email": "编辑邮件",
+        "edit_invalid_email": "邮件无效，点击编辑"
     },
     "name": {
         "nickName": "昵称",

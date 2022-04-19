@@ -202,7 +202,11 @@
         "options": "Opsi",
         "share_with": "Bagikan dengan",
         "app_name": "Kontak",
-        "new_contact": "Kontak baru"
+        "new_contact": "Kontak baru",
+        "cannot_move": "Tidak bisa memindahkan folder yang sama",
+        "select_color": "Pilih Warna",
+        "edit_invalid_email": "Email tidak valid, klik untuk mengedit",
+        "edit_email": "Edit Email"
     },
     "name": {
         "nickName": "Nama panggilan",
