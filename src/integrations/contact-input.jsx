@@ -284,6 +284,8 @@ export default function ContactInput({
 				background={background}
 				onAdd={onAdd}
 				requireUniqueChips
+				createChipOnPaste
+				pasteSeparators={[',', ' ', ';', '\n']}
 				{...props}
 			/>
 		</Container>
