@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.12](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.11...v0.1.12) (2022-04-26)
+
+
+### Bug Fixes
+
+* prevents showing calendars in contact app ([ea08e91](https://github.com/zextras/carbonio-contacts-ui/commit/ea08e91e37040ca7d5da3bebfcbf7047989b341c))
+
 ### [0.1.11](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.10...v0.1.11) (2022-04-14)
 
 
