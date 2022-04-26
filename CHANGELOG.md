@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.11](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.10...v0.1.11) (2022-04-14)
+
+
+### Bug Fixes
+
+* fix contact input regex validation ([cd88d6f](https://github.com/zextras/carbonio-contacts-ui/commit/cd88d6f75d02fcec5787b5f4b8934b59660cf09e))
+
+### [0.1.10](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.9...v0.1.10) (2022-04-14)
+
+
+### Bug Fixes
+
+* changed regex of email validation on contact input ([145bfd4](https://github.com/zextras/carbonio-contacts-ui/commit/145bfd446390a83ab835db6702ecd126ab064022))
+* fix crash when mail-to action is undefined and sync deletion handlers ([b0cfafb](https://github.com/zextras/carbonio-contacts-ui/commit/b0cfafb13f9618b5856afe10e7ff87ad39324163))
+* fixed email validation ([00536d8](https://github.com/zextras/carbonio-contacts-ui/commit/00536d8fd2f264e2c49e3cfcc8180b4d9beebccf))
+
 ### [0.1.9](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.7-rc.0...v0.1.9) (2022-04-01)
 
 
