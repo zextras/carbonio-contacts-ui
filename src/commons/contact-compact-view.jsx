@@ -52,7 +52,7 @@ export const CompactView = ({ contact, toggleOpen, open }) => {
 	return (
 		<>
 			<Responsive mode="desktop" target={window.top}>
-				<Drag style={{ width : '100%' }}>
+				<Drag style={{ width: '100%' }}>
 					<Row width="fill" height="fit" mainAlignment="flex-start">
 						<Avatar
 							label={`${contact.firstName} ${contact.lastName}`}
