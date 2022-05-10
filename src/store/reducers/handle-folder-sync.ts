@@ -15,8 +15,8 @@ import {
 
 export function handleFolderSyncReducer(state: FoldersSlice, { payload }: { payload: any }): void {
 	const { created, modified, deleted } = payload;
-	const modsFolders = filter(modified.folder, ['view', 'contact']);
-	const createdFolders = filter(created.folder, ['view', 'contact']);
+	const modsFolders = filter(modified?.folder, ['view', 'contact']);
+	const createdFolders = filter(created?.folder, ['view', 'contact']);
 	if (state.folders) {
 		if (createdFolders?.length) {
 			applyFoldersChangesToStore(state, normalizeFolders(createdFolders));
