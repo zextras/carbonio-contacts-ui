@@ -256,8 +256,8 @@
         "last_name": "Nazwisko",
         "middle_name": "Drugie Imię",
         "nickName": "Pseudonim",
-        "suffix": "Przyrostek (suffiks)",
-        "prefix": "Przedrostek (prefiks)"
+        "suffix": "Sufiks",
+        "prefix": "Prefiks"
     },
     "section": {
         "field": {
