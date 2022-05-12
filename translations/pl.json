@@ -142,11 +142,11 @@
         "title1": "Stwórz nowy kontakt klikając przycisk \"NOWY\".",
         "title10": "Wybierz i przywróć kontakty z kosza",
         "title2": "Udostępnij wszystkie swoje prace ze swoimi kontaktami.",
-        "title3": "Pozostań w kontakcie ze swoimi współpracownikami.",
+        "title3": "Pozostań w kontakcie ze swoimi kolegami.",
         "title4": "Dostosuj swoje kontakty dodając prywatne notki",
         "title5": "Wybierz kontakt",
         "title6": "Dostosuj kontakt",
-        "title7": "Pozostań w kontakcie ze swoimi współpracownikami",
+        "title7": "Pozostań w kontakcie ze swoimi kolegami",
         "title8": "Wyślij udostępnionego e-maila",
         "title9": "Kliknij ikonkę kosza, aby usunąć kontakt.",
         "description2": "Kliknij przycisk \"NOWY\" aby stworzyć nowy kontakt.",
@@ -169,13 +169,13 @@
     "share": {
         "options": {
             "share_calendar_with": {
-                "external_guests": "Goście spoza mojej organizacji (mogą tylko wyświetlać)",
-                "internal_users_groups": "Użytkownicy lub Grupy z mojej organizacji",
+                "external_guests": "Goście spoza mojej domeny (mogą tylko wyświetlać)",
+                "internal_users_groups": "Użytkownicy lub Grupy z mojej domeny",
                 "public": "Publiczny (można tylko wyświetlać, hasło niewymagane)"
             }
         },
         "recipients_address": "Adresy e-mail odbiorców",
-        "share_note": "Domyślna wiadomość zawiera twoje imię, nazwę udostępnianiego elementu, uprawnienia przyznane odbiorcom oraz informacje dot. logowania.",
+        "share_note": "Domyślna wiadomość zawiera twoje imię, nazwę udostępnianiego elementu, uprawnienia przyznane odbiorcom oraz informacje logowania.",
         "shared_folders": "Udostępnione Książki Adresowe",
         "shared_item": "Udostępniony Element",
         "shared_items": "Udostępnione książki adresowe {{value}}",
@@ -256,8 +256,8 @@
         "last_name": "Nazwisko",
         "middle_name": "Drugie Imię",
         "nickName": "Pseudonim",
-        "suffix": "Przyrostek (suffiks)",
-        "prefix": "Przedrostek (prefiks)"
+        "suffix": "Sufiks",
+        "prefix": "Prefiks"
     },
     "section": {
         "field": {
