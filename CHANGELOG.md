@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.13](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.12...v0.1.13) (2022-05-12)
+
+
+### Features
+
+* passing create chips on paste prop ([29ab880](https://github.com/zextras/carbonio-contacts-ui/commit/29ab880959e3ec07f9dd85758f804dbb3cf431cb))
+
+
+### Bug Fixes
+
+* fixed console errors while syncing folders ([588d715](https://github.com/zextras/carbonio-contacts-ui/commit/588d715756cd22cd4651ab3a68478bc510979207))
+* set drag component width ([d732655](https://github.com/zextras/carbonio-contacts-ui/commit/d7326551908de022f8e88c3897785cb9b6e4e304))
+* set drag component width ([7643087](https://github.com/zextras/carbonio-contacts-ui/commit/76430878b8430f3b9e50f3438b819752931f3884))
+
 ### [0.1.12](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.11...v0.1.12) (2022-04-26)
 
 
