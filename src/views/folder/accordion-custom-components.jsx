@@ -14,7 +14,8 @@ import {
 	Drop,
 	Icon,
 	Row,
-	Tooltip, Padding,
+	Tooltip,
+	Padding
 } from '@zextras/carbonio-design-system';
 import { map, filter } from 'lodash';
 import { useSelector } from 'react-redux';

@@ -284,7 +284,7 @@
     },
     "tooltip": {
         "address_book_sharing_status": "Shared with {{count}} people",
-        "address_book_sharing_status_one": "Shared with {{count}} person",
+        "address_book_sharing_status_plural": "",
         "resend": "Send e-mail notification about this share",
         "revoke": "Revoke access"
     },
