@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.16](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.15...v0.1.16) (2022-05-24)
+
+
+### Features
+
+* added addressbook sharing status icon ([e57cd94](https://github.com/zextras/carbonio-contacts-ui/commit/e57cd942fc78d4e9e5687ee5e0272b931609f7d0))
+* added addressbook sharing status icon ([af7d43a](https://github.com/zextras/carbonio-contacts-ui/commit/af7d43adbcd2fd35bb1f38cc86d8e91db7518053))
+
 ### [0.1.15](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.14...v0.1.15) (2022-05-24)
 
 
