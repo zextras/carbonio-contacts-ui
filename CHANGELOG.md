@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.15](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.14...v0.1.15) (2022-05-24)
+
+
+### Bug Fixes
+
+* items height and paddings on secondary bar ([7524edf](https://github.com/zextras/carbonio-contacts-ui/commit/7524edfbfee1533ba33aae3382a027049cb4ec14))
+* padding on secondary bar accordion ([fef5b85](https://github.com/zextras/carbonio-contacts-ui/commit/fef5b85f37c5ad4f0d731c95bab9433a4d091352))
+
 ### [0.1.14](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.13...v0.1.14) (2022-05-12)
 
 ### [0.1.13](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.12...v0.1.13) (2022-05-12)
