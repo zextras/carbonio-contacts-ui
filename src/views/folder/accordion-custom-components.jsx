@@ -13,7 +13,6 @@ import {
 	Drag,
 	Drop,
 	Icon,
-	Padding,
 	Row,
 	Tooltip
 } from '@zextras/carbonio-design-system';
@@ -325,11 +324,10 @@ export const CustomAccordion = (
 							display="block"
 							width="100%"
 						>
-							<Row mainAlignment="flex-start" padding={{ left: 'large' }} takeAvailableSpace>
+							<Row mainAlignment="flex-start" padding={{ left: 'small' }} takeAvailableSpace>
 								<Icon size="large" icon={folderIconLabel} customColor={folderIconColor} />
-								<Padding right="large" />
 								<Tooltip label={folder.label} placement="right" maxWidth="100%">
-									<AccordionItem {...props} height={40} />
+									<AccordionItem {...props} />
 								</Tooltip>
 							</Row>
 						</Dropdown>
