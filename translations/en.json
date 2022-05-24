@@ -283,6 +283,8 @@
         "advanced_filters": "Advanced Filters"
     },
     "tooltip": {
+        "address_book_sharing_status": "Shared with {{count}} people",
+        "address_book_sharing_status_one": "Shared with {{count}} person",
         "resend": "Send e-mail notification about this share",
         "revoke": "Revoke access"
     },

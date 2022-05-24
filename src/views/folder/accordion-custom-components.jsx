@@ -14,7 +14,7 @@ import {
 	Drop,
 	Icon,
 	Row,
-	Tooltip
+	Tooltip, Padding,
 } from '@zextras/carbonio-design-system';
 import { map, filter } from 'lodash';
 import { useSelector } from 'react-redux';
@@ -271,6 +271,7 @@ export const CustomAccordion = (
 			});
 		}
 	};
+
 	const Component = (props) => {
 		const folderStatus = useSelector((state) => selectFolderStatus(state, folder.id));
 		const trashFolder = useSelector((state) => selectFolder(state, FOLDERS.TRASH));
@@ -289,6 +290,28 @@ export const CustomAccordion = (
 			},
 			[folderStatus]
 		);
+
+		const sharedStatusIcon = useMemo(() => {
+			if (!folder.sharedWith?.grant || !folder.sharedWith?.grant?.length) {
+				return '';
+			}
+
+			const tooltipText = t('tooltip.address_book_sharing_status', {
+				count: folder.sharedWith.grant.length,
+				defaultValue_one: 'Shared with 1 person',
+				defaultValue: 'Shared with {{count}} people'
+			});
+
+			return (
+				<Padding right="small">
+					<Tooltip placement="right" label={tooltipText}>
+						<div>
+							<Icon icon="ArrowCircleRight" customColor="#ffb74d" size="large" />
+						</div>
+					</Tooltip>
+				</Padding>
+			);
+		}, []);
 
 		return (
 			<Drop
@@ -327,7 +350,7 @@ export const CustomAccordion = (
 							<Row mainAlignment="flex-start" padding={{ left: 'small' }} takeAvailableSpace>
 								<Icon size="large" icon={folderIconLabel} customColor={folderIconColor} />
 								<Tooltip label={folder.label} placement="right" maxWidth="100%">
-									<AccordionItem {...props} />
+									<AccordionItem {...props}>{sharedStatusIcon}</AccordionItem>
 								</Tooltip>
 							</Row>
 						</Dropdown>
