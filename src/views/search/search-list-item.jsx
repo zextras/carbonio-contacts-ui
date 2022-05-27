@@ -46,11 +46,7 @@ const SearchListItem = ({ item, selected, selecting, toggle, active }) => {
 		[item]
 	);
 	return (
-		<Container
-			background={active ? 'highlight' : 'gray6'}
-			mainAlignment="flex-start"
-			data-testid={`ConversationListItem-${item.id}`}
-		>
+		<Container mainAlignment="flex-start" data-testid={`ConversationListItem-${item.id}`}>
 			<ListItemActionWrapper item={item} current={active} onClick={_onClick} contact={item}>
 				<div style={{ alignSelf: 'center' }} data-testid={`AvatarContainer`}>
 					<ItemAvatar

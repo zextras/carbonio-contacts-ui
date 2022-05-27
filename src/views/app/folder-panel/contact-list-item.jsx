@@ -55,11 +55,7 @@ export default function ContactListItem({
 			onDragStart={(e) => dragCheck(e, item.id)}
 		>
 			<Container orientation="vertical">
-				<Container
-					orientation="horizontal"
-					mainAlignment="flex-start"
-					background={active ? 'highlight' : 'gray6'}
-				>
+				<Container orientation="horizontal" mainAlignment="flex-start">
 					<ListItemActionWrapper contact={item} onClick={_onClick} current={active}>
 						<ItemAvatar
 							item={item}

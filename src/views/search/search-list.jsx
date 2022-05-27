@@ -88,6 +88,7 @@ const SearchList = ({
 			{searchResults?.contacts.length > 0 && !loading && (
 				<Container>
 					<List
+						background="gray6"
 						items={searchResults?.contacts ?? []}
 						ItemComponent={SearchListItem}
 						onListBottom={canLoadMore ? loadMore : undefined}
