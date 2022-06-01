@@ -9,7 +9,7 @@
         "goto_folder": "Ir para a pasta",
         "reset_filters": "Redefinir Filtros",
         "send_msg": "Enviar e-mail",
-        "share_folder": "Compartilhar pasta"
+        "share_folder": "Partilhar pasta"
     },
     "folder": {
         "modal": {
@@ -112,7 +112,7 @@
         "cancel": "Cancelar",
         "edit": "Editar",
         "save": "Salvar",
-        "share": "Compartilhar",
+        "share": "Partilhar",
         "advance_filters": "1 Filtro avançado",
         "advance_filters_plural": "{{count}} Filtros avançados",
         "contact_setting": "Configurações de contato",
