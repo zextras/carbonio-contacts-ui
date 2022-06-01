@@ -19,7 +19,7 @@ export function folderActionPending(state: any, { meta }: any): void {
 			...folder,
 			parent: l,
 			label: name || folder.label,
-			color: color || folder.color
+			color: color ?? folder.color
 		};
 		switch (op) {
 			case 'move':
