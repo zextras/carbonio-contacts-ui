@@ -190,9 +190,9 @@
         "manager": "Gerente",
         "options": {
             "share_calendar_with": {
-                "internal_users_groups": "Usuários ou Grupos Internos",
+                "internal_users_groups": "Usuários ou grupos internos",
                 "public": "Público (apenas ver, senha não necessária)",
-                "external_guests": "Convidados externos (apenas ver)"
+                "external_guests": "Convidados externos (apenas podem visualizar)"
             }
         },
         "recipients_address": "Endereços de e-mail dos destinatários",

@@ -1,1 +1,290 @@
-{}
+{
+    "label": {
+        "select_color": "Chọn màu",
+        "folder_name": "Tên thư mục",
+        "share_with": "Chia sẻ với",
+        "add_share": "Thêm chia sẻ",
+        "cannot_move": "Không thể di chuyển vào thư mục tương tự",
+        "note": "Chú thích:",
+        "options": "Tuỳ chọn",
+        "move": "Di chuyển",
+        "save": "Lưu",
+        "share": "Chia sẻ",
+        "undo": "Hoàn tác",
+        "search_activate_selection_mode": "Chế độ lựa chọn chưa khả dụng trên kết quả tìm kiếm",
+        "type": "Kiểu",
+        "error_try_again": "Có lỗi, vui lòng thử lại",
+        "app_name": "Liên hệ",
+        "single_advanced_filter": "Bộ lọc nâng cao",
+        "new_address_book": "Danh bạ mới",
+        "shares_folder_edit": "Chia sẻ danh bạ này",
+        "activate_selection_mode": "Kích hoạt chế độ lựa chọn",
+        "cancel": "Huỷ",
+        "contacts": "Liên hệ",
+        "advanced_filter": "Bộ lọc nâng cao {{count}}",
+        "contact_setting": "Cài đặt liên hệ",
+        "create": "Tạo",
+        "discard_changes": "BỎ QUA CÁC THAY ĐỔI",
+        "empty": "Rỗng",
+        "edit_access_name": "Chỉnh sửa truy cập {{name}}'",
+        "edit_email": "Chỉnh sửa thư",
+        "edit_folder_properties": "Chỉnh sửa tuỳ chỉnh {{name}}",
+        "edit_invalid_email": "Thư sai, bấm để chỉnh sửa nó",
+        "email": "Thư điện tử",
+        "delete": "Xoá",
+        "edit": "Chỉnh sửa",
+        "edit_access": "Chỉnh sửa truy cập",
+        "of": "của",
+        "resend": "Gửi lại",
+        "restore": "Khôi phục",
+        "results_for": "Kết quả cho:",
+        "new_contact_created": "Đã tạo liên hệ mới",
+        "notes": "Chú thích",
+        "revoke_with_custom_msg": "Thu hồi quyền truy cập gửi một thông báo tùy chỉnh",
+        "revoke": "Thu hồi",
+        "revoke_share": "Thu hồi chia sẻ của {{title}}",
+        "new_contact": "Liên hệ mới",
+        "revoke_with_standard_msg": "Thu hồi quyền truy cập gửi thông báo chuẩn",
+        "revoke_without_notification": "Thu hồi quyền truy cập và không gửi thông báo",
+        "root": "Root",
+        "website": "Websites",
+        "address_book_restored": "Danh bạ đã được khôi phục"
+    },
+    "share": {
+        "share_note": "Thông báo chuẩn hiển thị tên của bạn, tên của mục được chia sẻ, quyền được cấp cho người nhận và thông tin đăng nhập.",
+        "shared_item": "Mục đã chia sẻ",
+        "shared_items": "chia sẻ danh bạ {{value}}",
+        "shared_folders": "Chia sẻ danh bạ",
+        "share_removed_succesfully": "Đã xoá chia sẻ thành công",
+        "add": "Thêm vào",
+        "options": {
+            "share_calendar_with": {
+                "external_guests": "Khách bên ngoài (chỉ được xem)",
+                "internal_users_groups": "Người dùng và nhóm nội bộ",
+                "public": "Người bên ngoài (chỉ được xem, không yêu cầu mật khẩu)"
+            }
+        },
+        "admin": "Admin",
+        "administer": "Quản trị viên",
+        "allowed_actions": "Các tác vụ được phép",
+        "filter_user": "Tìm người dùng",
+        "find_contact_shares": "Tìm chia sẻ liên hệ",
+        "find_shares": "Tìm chia sẻ",
+        "insert": "Chèn",
+        "manager": "Manager",
+        "none": "Không",
+        "contact_folder": "Danh bạ",
+        "read": "Đọc",
+        "remove_from_this_list": "Xóa từ danh sách này",
+        "owner": "Chủ sở hữu",
+        "role": "vai trò",
+        "send_notification": "Gửi thông báo chia sẻ này",
+        "share_added_succesfully": "Chia sẻ được thêm thành công",
+        "share_info": "Chia sẻ thông tin của danh bạ",
+        "viewer": "Người xem",
+        "workflow": "Luồng công việc(Workflow)",
+        "write": "Ghi",
+        "standard_message": "Thêm ghi chú vào tin nhắn chuẩn",
+        "recipients_address": "Địa chỉ thư của người nhận",
+        "find_shares_label": "Chọn danh bạ bạn muốn xem trong cây của liên hệ"
+    },
+    "messages": {
+        "snackbar": {
+            "contact_deleted_permanently": "Xoá vĩnh viễn liên hệ",
+            "contact_moved": "Đã di chuyển liên hệ",
+            "contact_moved_to_trash": "Di chuyển liên hệ vào thùng rác",
+            "contact_restored": "Khôi phục liên hệ",
+            "address_book_moved": "Danh bạ đã được di chuyển về thư mục đích"
+        },
+        "modal": {
+            "delete": {
+                "if_delete_lost_forever": "Chọn cách xóa vĩnh viễn liên hệ này, bạn sẽ không thể khôi phục được nữa, bạn có tiếp tục không?",
+                "sure_delete_contact": "Bạn có chắc chắn xóa vĩnh viễn những liên hệ này không?"
+            }
+        }
+    },
+    "modal": {
+        "destination": "Thư mục đích",
+        "address_book_name": "Tên danh bạ"
+    },
+    "action": {
+        "search": "Tìm",
+        "share_folder": "Chia sẻ thư mục",
+        "delete_permanently": "Xoá vĩnh viễn",
+        "goto_folder": "Chuyển đến thư mục",
+        "reset_filters": "Cài đặt lại bộ lọc",
+        "send_msg": "Gửi thư"
+    },
+    "contact_restored": "Khôi phục liên hệ",
+    "displayer": {
+        "description2": "Bấm vào nút \"MỚI\" để bắt đầu tạo một cái mới.",
+        "description3": "Bấm vào nút \"MỚI\" để bắt đầu tạo một nhóm liên hệ mới.",
+        "description4": "Tạo một cái mới bằng cách bấm vào nút \"MỚI\".",
+        "description5": "Khám phá tất cả các cách bạn có thể kết nối với những người dùng khác.",
+        "description6": "Sử dụng chế độ “Chỉnh sửa” để thêm bất kỳ ghi chú cá nhân nào vào một số liên lạc.",
+        "search_description1": "Hoặc chọn \"Bộ lọc nâng cao\" để tinh chỉnh tìm kiếm của bạn.",
+        "description7": "Tạo một nhóm liên hệ bằng cách bấm vào nút \"MỚI\".",
+        "description8": "Chọn một liên hệ hoặc một nhóm để gửi thư chia sẻ.",
+        "list_title1": "Có vẻ không có liên hệ nào",
+        "list_title2": "Thùng rác đang rỗng",
+        "search_list_title1": "Có vẻ như không có kết quả. Tiếp tục tìm kiếm!",
+        "search_list_title2": "Không có mục nào phù hợp với tìm kiếm của bạn.",
+        "search_title1": "Bắt đầu tìm kiếm khác",
+        "search_title2": "Rất tiếc, không có kết quả nào cho tìm kiếm của bạn",
+        "search_title3": "Không có kết quả cho tìm kiếm của bạn.",
+        "search_description3": "Kiểm tra chính tả và các tùy chọn bộ lọc hoặc thử với một từ khóa khác.",
+        "search_description2": "Thử với tìm kiếm khác.",
+        "search_title4": "Chọn một hoặc nhiều kết quả để thực hiện các tác vụ hoặc hiển thị chi tiết.",
+        "title1": "Tạo một liên hệ bằng cách bấm vào nút \"MỚI\".",
+        "title10": "Chọn và khôi phục liên hệ từ thùng rác",
+        "title2": "Chia sẻ tất cả công việc của bạn với liên hệ của bạn.",
+        "title3": "Giữ liên lạc với đồng nghiệp của bạn.",
+        "title4": "Tuỳ chỉnh liên hệ của bạn bằng cách thêm vào những ghi chú cá nhân",
+        "title5": "Chọn liên hệ",
+        "title6": "Tuỳ chỉnh một liên hệ",
+        "title7": "Giữ liên lạc với đồng nghiệp của bạn",
+        "title8": "Gửi thư chia sẻ",
+        "title9": "Bấm vào biểu tượng thùng rác để xoá một liên hệ."
+    },
+    "folder": {
+        "action": {
+            "empty": {
+                "trash": "Xoá sạch thùng rác",
+                "folder": "Dọn sạch danh bạ"
+            },
+            "move": "Di chuyển",
+            "delete": "Xoá danh bạ",
+            "delete_permanently": "Xoá vĩnh viễn danh bạ",
+            "edit": "Chỉnh sửa danh bạ",
+            "moved": "Danh bạ đã được di chuyển thành công"
+        },
+        "modal": {
+            "footer": {
+                "go_back": "Quay lại"
+            },
+            "edit": {
+                "body": {
+                    "item": {
+                        "empty": "Đường dẫn không tồn tại"
+                    }
+                }
+            },
+            "empty": {
+                "body": {
+                    "message2": "Nếu bạn dọn sạch nó, tất cả các thông tin liên quan sẽ bị di chuyển vào thùng rác.",
+                    "message1": "Bạn có muốn dọn sạch danh bạ đã chọn không?"
+                }
+            },
+            "item": {
+                "empty": "Không có đối tượng nào sẵn sàng"
+            },
+            "move": {
+                "body": {
+                    "message3": "Chọn một thư mục mà bạn cân nhắc:",
+                    "message1": "Lựa chọn danh bạ mà bạn cân nhắc di chuyển đến:"
+                },
+                "input": {
+                    "filter": "Bộ lọc danh bạ"
+                }
+            },
+            "new": {
+                "create_footer": "Tạo và di chuyển",
+                "input": {
+                    "name_exist": "Tên đã tồn tại trong đường dẫn này",
+                    "name": "Chèn vào tên danh bạ"
+                },
+                "body": {
+                    "message1": "Tên danh bạ mới",
+                    "message2": "Chọn một danh bạ sẽ chứa nội dung mới được tạo:"
+                },
+                "title2": "Tạo một thư mục mới",
+                "title": "Tạo một sổ danh bạ mới"
+            },
+            "restore": {
+                "create_footer": "Tạo và khôi phục"
+            },
+            "delete": {
+                "body": {
+                    "message1": "Bạn có muốn xóa danh bạ đã chọn không? Nếu bạn xóa nó, nội dung liên quan sẽ bị xóa vĩnh viễn và danh bạ sẽ không thể khôi phục được nữa.",
+                    "message2": "Bạn có muốn xóa sổ vĩnh viễn danh bạ đã chọn không? Nếu bạn xóa nó, nội dung liên quan sẽ bị xóa vĩnh viễn và danh bạ sẽ không thể khôi phục được nữa."
+                }
+            }
+        },
+        "share_folder": "Chia sẻ danh bạ",
+        "snackbar": {
+            "address_book_permanently_deleted": "Danh bạ đã được xoá vĩnh viễn",
+            "trash_empty": "Dọn thùng rác thành công",
+            "folder_empty": "Dọn sạch danh bạ thành công",
+            "folder_new": "Đã tạo danh bạ mới",
+            "address_book_moved_to_trash": "Danh bạ đã được di chuyển vào thùng rác"
+        },
+        "type": "Thư mục liên hệ"
+    },
+    "job": {
+        "company": "Công ty",
+        "department": "Phòng",
+        "title": "Vị trí"
+    },
+    "message": {
+        "snackbar": {
+            "settings_saved": "Chỉnh sửa được lưu chính xác"
+        }
+    },
+    "name": {
+        "suffix": "Đuôi tên",
+        "last_name": "Họ (Last Name)",
+        "first_name": "Tên riêng (First Name)",
+        "middle_name": "Đệm (Middle Name)",
+        "nickName": "Bí danh",
+        "prefix": "Danh xưng"
+    },
+    "section": {
+        "field": {
+            "city": "Thành phố",
+            "country": "Quốc gia",
+            "number": "Số",
+            "postalCode": "Mã bưu chính",
+            "state": "Trạng thái",
+            "street": "Đường/phố"
+        },
+        "title": {
+            "address": "Địa chỉ",
+            "mail": "Địa chỉ email",
+            "phone_number": "Số điện thoại liên lạc"
+        }
+    },
+    "select": {
+        "default": "Chọn kiểu"
+    },
+    "settings": {
+        "contacts": {
+            "checkbox": {
+                "add_contact_to_emailed_contacts": "Thêm một liên hệ vào \"Danh sách gửi thư\"",
+                "autocomplete_on_comma": "Chọn đối sánh tự động hoàn thành khi nhập dấu phẩy",
+                "incl_addrs_in_glbl_addrs_list": "Bao gồm địa chỉ trong Global Address List",
+                "include_add_in_shared_contact": "Bao gồm địa chỉ trong chia sẻ liên hệ",
+                "srch_glbl_addrs_list": "Ban đầu hãy tìm kiếm Danh sách địa chỉ chung khi sử dụng bộ chọn liên hệ"
+            }
+        }
+    },
+    "snackbar": {
+        "folder_shared": "Chia sẻ danh bạ",
+        "share_updated": "\"Quyền truy cập được cập nhập\"",
+        "share_revoke": "Thu hồi truy cập chia sẻ",
+        "folder_edited": "Đã chỉnh sửa danh bạ thành công",
+        "share_resend": "Gửi lại lời mời chia sẻ"
+    },
+    "title": {
+        "advanced_filters": "Bộ lọc nâng cao"
+    },
+    "types": {
+        "home": "Home",
+        "other": "khác",
+        "work": "làm việc",
+        "mobile": "di động"
+    },
+    "tooltip": {
+        "revoke": "Thu hồi truy cập",
+        "resend": "Gửi e-mail thông báo về chia sẻ này"
+    }
+}
