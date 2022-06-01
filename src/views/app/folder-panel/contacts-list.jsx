@@ -87,6 +87,7 @@ export const ContactsList = ({ folderId, selected, contacts, toggle }) => {
 			) : (
 				<List
 					selected={selected}
+					background="gray6"
 					active={itemId}
 					items={contacts}
 					itemProps={{
