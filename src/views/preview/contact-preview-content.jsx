@@ -268,7 +268,6 @@ function ContactPreviewContent({ contact, onEdit, onDelete, onPrint, onArchieve,
 						{contact.parent !== '3' && <IconButton icon="MailModOutline" onClick={onMail} />}
 						{contact.parent !== '3' && <IconButton icon="TagsMoreOutline" onClick={onArchieve} />}
 						<IconButton icon="Trash2Outline" onClick={onDelete} />
-						{contact.parent !== '3' && <IconButton icon="PrinterOutline" onClick={onPrint} />}
 						<IconButton
 							icon={contact.parent === '3' ? 'RestoreOutline' : 'MoveOutline'}
 							onClick={onMove}
