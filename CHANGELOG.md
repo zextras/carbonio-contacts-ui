@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.18](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.17...v0.1.18) (2022-06-09)
+
+
+### Bug Fixes
+
+* cannot change the addressbook color to black ([a2b0c94](https://github.com/zextras/carbonio-contacts-ui/commit/a2b0c94b2511c3f60b2118a15fc7a3849b49ad6f))
+* fixed background to allow navigation on lists ([67a0c56](https://github.com/zextras/carbonio-contacts-ui/commit/67a0c56ed1b1db9e039b613ea79d5bfcb1db09b6))
+
 ### [0.1.17](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.16...v0.1.17) (2022-05-25)
 
 ### [0.1.16](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.15...v0.1.16) (2022-05-24)
