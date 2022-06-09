@@ -1,1 +1,16 @@
-{}
+{
+    "action": {
+        "search": "Hae",
+        "share_folder": "Jaa kansio"
+    },
+    "displayer": {
+        "search_list_title1": "Näyttäisi siltä, ettei tullut tuloksia. Jatka etsimistä!",
+        "search_list_title2": "Yksikään kohteistasi ei vastannut hakuasi.",
+        "search_title1": "Aloita toinen haku",
+        "search_title2": "Olemme pahoillamme, mutta hakusi ei tuottanut tuloksia",
+        "search_title3": "Hakusi ei tuottanut tuloksia.",
+        "search_title4": "Valitse tuloksista yksi tai useampi suorittaaksesi toimenpiteitä tai katsoaksesi yksityiskohtia.",
+        "search_description1": "Tai valitse \"Edityneet suotimet\" tarkentaaksesi hakuasi.",
+        "search_description2": "Yritä aloittaa toinen haku."
+    }
+}
