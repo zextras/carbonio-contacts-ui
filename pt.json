@@ -124,7 +124,7 @@
         "revoke_access_tooltip": "Revogar acesso enviando uma notificação padrão",
         "revoke_access_without_notification": "Revogar acesso sem enviar notificação",
         "revoke_send_standard_msg": "Revogar acesso enviando uma notificação personalizada",
-        "revoke_share": "Revogar compartilhamento de {{title}}",
+        "revoke_share": "Revogar partilha de {{title}}",
         "search_hint": "Dicas de pesquisa!",
         "shares_folder_edit": "Compartilhando esta agenda de endereços",
         "single_advance_fillter": "Filtros Avançados",
@@ -161,7 +161,7 @@
         "folder_name": "Nome da pasta",
         "note": "Nota:",
         "options": "Opções",
-        "share_with": "Compartilhar com",
+        "share_with": "Partilhar com",
         "app_name": "Contatos",
         "new_contact": "Novo contato",
         "cannot_move": "Não é possível mover para a mesma pasta",
@@ -190,7 +190,7 @@
         "manager": "Gerente",
         "options": {
             "share_calendar_with": {
-                "internal_users_groups": "Usuários ou Grupos Internos",
+                "internal_users_groups": "Usuários ou grupos internos",
                 "public": "Público (apenas ver, senha não necessária)",
                 "external_guests": "Convidados externos (apenas ver)"
             }
@@ -201,7 +201,7 @@
         "send_notification": "Enviar notificação sobre este compartilhamento",
         "share_added_succesfully": "Compartilhamento adicionado com sucesso",
         "share_info": "Informação da agenda de endereços compartilhada",
-        "share_note": "A mensagem padrão exibe seu nome, o nome do item compartilhado, as permissões concedidas aos destinatários e as informações de acesso.",
+        "share_note": "A mensagem padrão exibe seu nome, o nome do item partilhado, as permissões concedidas aos destinatários e as informações de acesso.",
         "share_removed_succesfully": "Compartilhamento removido com sucesso",
         "shared_folders": "Agendas de Endereços Compartilhadas",
         "shared_item": "Item Compartilhado",
@@ -285,8 +285,8 @@
         "folder_edited": "Agenda de endereços editada com sucesso",
         "folder_shared": "Agenda de endereços compartilhada",
         "folder_shared_error": "Algo deu errado. Tente novamente",
-        "share_resend": "Convite de compartilhamento reenviado",
-        "share_revoke": "Compartilhamento de acesso revogado",
+        "share_resend": "Convite da partilha reenviado",
+        "share_revoke": "Acesso à partilha revogado",
         "share_updated": "Direitos de acesso atualizados"
     },
     "tooltip": {

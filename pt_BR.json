@@ -165,7 +165,7 @@
         "app_name": "Contatos",
         "new_contact": "Novo contato",
         "cannot_move": "Não é possível mover para a mesma pasta",
-        "select_color": "Selecionar Cor",
+        "select_color": "Selecionar cor",
         "edit_invalid_email": "E-mail inválido. Clique para editá-lo",
         "edit_email": "Editar E-mail"
     },
@@ -285,8 +285,8 @@
         "folder_edited": "Agenda de endereços editada com sucesso",
         "folder_shared": "Agenda de endereços compartilhada",
         "folder_shared_error": "Algo deu errado. Tente novamente",
-        "share_resend": "Convite de compartilhamento reenviado",
-        "share_revoke": "Compartilhamento de acesso revogado",
+        "share_resend": "Convite do compartilhamento reenviado",
+        "share_revoke": "Acesso ao compartilhamento revogado",
         "share_updated": "Direitos de acesso atualizados"
     },
     "tooltip": {
@@ -313,7 +313,7 @@
         "list_title2": "A lixeira está vazia",
         "search_description2": "Tente iniciar uma nova busca.",
         "search_description3": "Verifique a ortografia e as opções de filtros ou experimente uma nova palavra-chave.",
-        "search_list_title2": "Nenhum dos seus itens corresponde à sua busca.",
+        "search_list_title2": "Nenhum dos itens corresponde à sua busca.",
         "search_title1": "Iniciar nova busca",
         "search_title2": "Lamentamos, mas não existem resultados para sua busca",
         "search_title3": "Não existem resultados para sua busca.",

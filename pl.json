@@ -121,7 +121,13 @@
         "edit_invalid_email": "E-mail jest nieprawidłowy, kliknij aby go edytować",
         "revoke_with_standard_msg": "Odbierz dostęp i wyślij domyślną notkę",
         "app_name": "Kontakty",
-        "share_with": "Udostępnij"
+        "share_with": "Udostępnij",
+        "add_share": "Dodaj Udostępnienie",
+        "cannot_move": "Nie można przenieść do tego samego folderu",
+        "select_color": "Wybierz kolor",
+        "folder_name": "Nazwa folderu",
+        "note": "Notka:",
+        "options": "Opcje"
     },
     "displayer": {
         "search_description1": "Lub wybierz \"Zaawansowane filtry\", aby udoskonalić wyniki wyszukiwania.",
