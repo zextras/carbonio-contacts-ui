@@ -5,7 +5,7 @@
  */
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
-import { identity, pickBy } from 'lodash';
+import { isNil, omitBy } from 'lodash';
 import { ContactsFolder } from '../../types/contact';
 
 export const folderAction = createAsyncThunk(
@@ -28,7 +28,7 @@ export const folderAction = createAsyncThunk(
 		zid: string;
 	}) => {
 		const result = await soapFetch('FolderAction', {
-			action: pickBy(
+			action: omitBy(
 				{
 					id: folder.id,
 					op,
@@ -38,7 +38,7 @@ export const folderAction = createAsyncThunk(
 					color,
 					zid
 				},
-				identity
+				isNil
 			),
 			_jsns: 'urn:zimbraMail'
 		});
