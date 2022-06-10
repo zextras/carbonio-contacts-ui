@@ -265,7 +265,13 @@ function ContactPreviewContent({ contact, onEdit, onDelete, onPrint, onArchieve,
 						mainAlignment="flex-end"
 						padding={{ horizontal: 'extrasmall' }}
 					>
-						{contact.parent !== '3' && <IconButton icon="MailModOutline" onClick={onMail} />}
+						{contact.parent !== '3' && (
+							<IconButton
+								icon="MailModOutline"
+								onClick={onMail}
+								disabled={Object.keys(contact?.email).length < 1}
+							/>
+						)}
 						{contact.parent !== '3' && <IconButton icon="TagsMoreOutline" onClick={onArchieve} />}
 						<IconButton icon="Trash2Outline" onClick={onDelete} />
 						<IconButton

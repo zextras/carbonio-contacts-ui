@@ -18,7 +18,8 @@ export function mailToContact(contact, t) {
 	return available
 		? {
 				...mailTo,
-				label: t('action.send_msg', 'Send e-mail')
+				label: t('action.send_msg', 'Send e-mail'),
+				disabled: !(Object.keys(contact?.email).length > 0)
 		  }
 		: undefined;
 }
