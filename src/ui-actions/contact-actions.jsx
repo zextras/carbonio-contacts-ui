@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React from 'react';
-import { compact } from 'lodash';
+import { compact, isEmpty } from 'lodash';
 import { Text } from '@zextras/carbonio-design-system';
 import { getAction, FOLDERS } from '@zextras/carbonio-shell-ui';
 import { FolderActionsType } from '../types/folder';
@@ -19,7 +19,7 @@ export function mailToContact(contact, t) {
 		? {
 				...mailTo,
 				label: t('action.send_msg', 'Send e-mail'),
-				disabled: Object.keys(contact?.email).length === 0
+				disabled: isEmpty(contact?.email)
 		  }
 		: undefined;
 }

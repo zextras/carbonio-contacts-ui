@@ -16,7 +16,7 @@ import {
 	Padding
 } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
-import { reduce } from 'lodash';
+import { isEmpty, reduce } from 'lodash';
 import { CompactView } from '../../commons/contact-compact-view';
 
 function typeToIcon(type) {
@@ -269,7 +269,7 @@ function ContactPreviewContent({ contact, onEdit, onDelete, onPrint, onArchieve,
 							<IconButton
 								icon="MailModOutline"
 								onClick={onMail}
-								disabled={Object.keys(contact?.email).length === 0}
+								disabled={isEmpty(contact?.email)}
 							/>
 						)}
 						{contact.parent !== '3' && <IconButton icon="TagsMoreOutline" onClick={onArchieve} />}
