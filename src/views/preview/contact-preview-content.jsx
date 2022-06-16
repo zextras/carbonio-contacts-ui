@@ -269,7 +269,7 @@ function ContactPreviewContent({ contact, onEdit, onDelete, onPrint, onArchieve,
 							<IconButton
 								icon="MailModOutline"
 								onClick={onMail}
-								disabled={Object.keys(contact?.email).length < 1}
+								disabled={Object.keys(contact?.email).length === 0}
 							/>
 						)}
 						{contact.parent !== '3' && <IconButton icon="TagsMoreOutline" onClick={onArchieve} />}
