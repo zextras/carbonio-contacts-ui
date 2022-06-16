@@ -17,6 +17,7 @@ import {
 } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 import { isEmpty, reduce } from 'lodash';
+import { FOLDERS } from '@zextras/carbonio-shell-ui';
 import { CompactView } from '../../commons/contact-compact-view';
 
 function typeToIcon(type) {
@@ -265,21 +266,23 @@ function ContactPreviewContent({ contact, onEdit, onDelete, onPrint, onArchieve,
 						mainAlignment="flex-end"
 						padding={{ horizontal: 'extrasmall' }}
 					>
-						{contact.parent !== '3' && (
+						{contact.parent !== FOLDERS.TRASH && (
 							<IconButton
 								icon="MailModOutline"
 								onClick={onMail}
 								disabled={isEmpty(contact?.email)}
 							/>
 						)}
-						{contact.parent !== '3' && <IconButton icon="TagsMoreOutline" onClick={onArchieve} />}
+						{contact.parent !== FOLDERS.TRASH && (
+							<IconButton icon="TagsMoreOutline" onClick={onArchieve} />
+						)}
 						<IconButton icon="Trash2Outline" onClick={onDelete} />
 						<IconButton
-							icon={contact.parent === '3' ? 'RestoreOutline' : 'MoveOutline'}
+							icon={contact.parent === FOLDERS.TRASH ? 'RestoreOutline' : 'MoveOutline'}
 							onClick={onMove}
 						/>
 						<Padding right="small" />
-						{contact.parent !== '3' && (
+						{contact.parent !== FOLDERS.TRASH && (
 							<Button icon="EditOutline" label={t('label.edit')} onClick={onEdit} />
 						)}
 					</Row>
