@@ -3,23 +3,26 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+import { ButtonOldProps, ContainerProps } from '@zextras/carbonio-design-system';
+import { SyntheticEvent } from 'react';
+
 export type ModalFooterProps = {
-	mainAlignment?: string | undefined;
-	crossAlignment?: string | undefined;
+	mainAlignment?: typeof ContainerProps['mainAlignment'];
+	crossAlignment?: typeof ContainerProps['crossAlignment'];
 	padding?: Record<string, string> | undefined;
-	onConfirm: (a: string) => void;
+	onConfirm: (e?: SyntheticEvent<Element, Event> | KeyboardEvent) => void;
 	secondaryAction?: () => void | undefined;
 	label: string;
 	secondaryLabel?: string | undefined;
 	disabled?: boolean | undefined;
 	secondaryDisabled?: boolean | undefined;
-	background?: string | undefined;
-	secondarybackground?: string | undefined;
+	background?: typeof ContainerProps['background'];
+	secondarybackground?: typeof ContainerProps['background'];
 	color?: string | undefined;
 	secondaryColor?: string | undefined;
-	size?: string | undefined;
-	primaryBtnType?: string | undefined;
-	secondaryBtnType?: string | undefined;
+	size?: typeof ButtonOldProps['size'];
+	primaryBtnType?: typeof ButtonOldProps['type'];
+	secondaryBtnType?: typeof ButtonOldProps['type'];
 	divider?: boolean;
 	verticalPadding?: string;
 	secondaryVerticalPadding?: string;

@@ -6,13 +6,9 @@
 import React, { createContext, FC, useCallback, useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 import { replaceHistory } from '@zextras/carbonio-shell-ui';
 import { SnackbarManagerContext, ModalManagerContext } from '@zextras/carbonio-design-system';
 import { Contact } from '../types/contact';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 import { contextActions, hoverActions, primaryActions, secondaryActions } from './contact-actions';
 
 type ACPProps = {
@@ -24,7 +20,7 @@ type ACPProps = {
 type ActionObj = {
 	id: string;
 	label: string;
-	click: (event: MouseEvent) => void;
+	click: (e: React.SyntheticEvent<HTMLElement> | KeyboardEvent) => void;
 	icon: string;
 };
 
@@ -39,9 +35,9 @@ export const ActionsContext = createContext<{
 	getSecondaryActions: GetActionsFunction;
 }>({
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	getContextActions: (i: Contact) => [],
+	getContextActions: () => [],
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	getHoverActions: (i: Contact) => [],
+	getHoverActions: () => [],
 	getPrimaryActions: () => [],
 	getSecondaryActions: () => []
 });
@@ -125,8 +121,6 @@ export const ActionsContextProvider: FC<ACPProps> = ({
 	);
 
 	return (
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
 		<ActionsContext.Provider
 			value={{ getContextActions, getHoverActions, getPrimaryActions, getSecondaryActions }}
 		>

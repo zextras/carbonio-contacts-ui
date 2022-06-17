@@ -11,7 +11,7 @@ export default function OptionsSettingsView({ t, settingsObj, updateSettings }) 
 	return (
 		<FormSubSection label={t('label.options', 'Options')}>
 			<Container crossAlignment="baseline" padding={{ all: 'small' }}>
-				<Heading title="Settings" />
+				<Heading title={t('label.options', 'Options')} />
 				<Checkbox
 					label={t(
 						'settings.contacts.checkbox.add_contact_to_emailed_contacts',

@@ -3,11 +3,12 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useEffect } from 'react';
+import React, { ReactElement, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Container } from '@zextras/carbonio-design-system';
 import { useAppContext } from '@zextras/carbonio-shell-ui';
+import { State } from '../../types/store';
 import { ActionsContextProvider } from '../../ui-actions/actions-context';
 import { ContactsList } from './folder-panel/contacts-list';
 import { selectAllContactsInFolder, selectFolderStatus } from '../../store/selectors/contacts';
@@ -15,17 +16,21 @@ import { searchContacts } from '../../store/actions/search-contacts';
 import { useSelection } from '../../hooks/useSelection';
 import { selectFolder } from '../../store/selectors/folders';
 import { Breadcrumbs } from './breadcrumbs';
-import SelectPanelAction from '../folder/select-panel-actions';
+import { SelectPanelActions } from '../folder/select-panel-actions';
 
-export default function FolderPanel() {
-	const { folderId } = useParams();
+type RouteParams = {
+	folderId: string;
+};
+
+export default function FolderPanel(): ReactElement {
+	const { folderId } = useParams<RouteParams>();
 	const dispatch = useDispatch();
-	const folder = useSelector((state) => selectFolder(state, folderId));
-	const folderStatus = useSelector((state) => selectFolderStatus(state, folderId));
+	const folder = useSelector((state: State) => selectFolder(state, folderId));
+	const folderStatus = useSelector((state: State) => selectFolderStatus(state, folderId));
 	const { setCount } = useAppContext();
 	const { selected, isSelecting, toggle, deselectAll } = useSelection(folderId, setCount);
 
-	const contacts = useSelector((state) => selectAllContactsInFolder(state, folderId));
+	const contacts = useSelector((state: State) => selectAllContactsInFolder(state, folderId));
 
 	useEffect(() => {
 		if (!folderStatus) {
@@ -49,7 +54,7 @@ export default function FolderPanel() {
 			>
 				<Container mainAlignment="flex-start" borderRadius="none" height="calc(100% - 64px)">
 					{isSelecting ? (
-						<SelectPanelAction
+						<SelectPanelActions
 							folderId={folderId}
 							dispatch={dispatch}
 							deselectAll={deselectAll}

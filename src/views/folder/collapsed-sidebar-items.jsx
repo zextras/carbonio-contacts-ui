@@ -5,7 +5,8 @@
  */
 import React, { useMemo } from 'react';
 import { AppLink, ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-shell-ui';
-import { Icon, Padding, Row, Tooltip } from '@zextras/carbonio-design-system';
+import { IconButton, Padding, Row, Tooltip } from '@zextras/carbonio-design-system';
+import { noop } from 'lodash';
 
 const folderIconName = {
 	7: 'PersonOutline',
@@ -34,8 +35,13 @@ export const CollapsedSideBarItems = ({ folder }) => {
 			<AppLink to={`/folder/${folder.id}`} style={{ width: '100%', textDecoration: 'none' }}>
 				<Row mainAlignment="flex-start" height={'fit'}>
 					<Tooltip placement="right" label={folder.label}>
-						<Padding all="medium">
-							<Icon size="large" icon={folderIconLabel} customColor={folderIconColor} />
+						<Padding all="extrasmall">
+							<IconButton
+								customSize={{ iconSize: 'large', paddingSize: 'small' }}
+								icon={folderIconLabel}
+								customIconColor={folderIconColor}
+								onClick={noop}
+							/>
 						</Padding>
 					</Tooltip>
 				</Row>

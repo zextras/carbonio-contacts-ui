@@ -15,7 +15,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { map, filter, reduce, set, omit, find } from 'lodash';
 import {
-	Button,
+	ButtonOld as Button,
 	Container,
 	Input,
 	Row,
@@ -251,6 +251,10 @@ const CustomMultivalueField = ({
 									<Padding right="small">
 										<IconButton
 											icon="Plus"
+											customSize={{
+												iconSize: 'medium',
+												paddingSize: 'medium'
+											}}
 											iconColor="gray6"
 											backgroundColor="primary"
 											onClick={() => addValue()}
@@ -259,6 +263,10 @@ const CustomMultivalueField = ({
 									<IconButton
 										icon="Minus"
 										iconColor="gray6"
+										customSize={{
+											iconSize: 'medium',
+											paddingSize: 'medium'
+										}}
 										backgroundColor="secondary"
 										onClick={() => removeValue(id)}
 									/>
