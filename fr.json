@@ -239,7 +239,9 @@
     },
     "tooltip": {
         "revoke": "Révoquer l'accès",
-        "resend": "Envoyer un email de notification concernant ce partage"
+        "resend": "Envoyer un email de notification concernant ce partage",
+        "address_book_sharing_status": "Partager avec {{count}} personne",
+        "address_book_sharing_status_plural": "Partager avec {{count}} personnes"
     },
     "job": {
         "company": "Entreprise",

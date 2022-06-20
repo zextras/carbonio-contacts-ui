@@ -71,7 +71,7 @@
         "find_contact_shares": "Tìm chia sẻ liên hệ",
         "find_shares": "Tìm chia sẻ",
         "insert": "Chèn",
-        "manager": "Manager",
+        "manager": "Quản lý",
         "none": "Không",
         "contact_folder": "Danh bạ",
         "read": "Đọc",
@@ -232,8 +232,8 @@
     },
     "name": {
         "suffix": "Đuôi tên",
-        "last_name": "Họ (Last Name)",
-        "first_name": "Tên riêng (First Name)",
+        "last_name": "Họ",
+        "first_name": "Tên riêng",
         "middle_name": "Đệm (Middle Name)",
         "nickName": "Bí danh",
         "prefix": "Danh xưng"
@@ -259,7 +259,7 @@
     "settings": {
         "contacts": {
             "checkbox": {
-                "add_contact_to_emailed_contacts": "Thêm một liên hệ vào \"Danh sách gửi thư\"",
+                "add_contact_to_emailed_contacts": "Thêm một liên hệ vào \"Liên hệ đã gửi thư\"",
                 "autocomplete_on_comma": "Chọn đối sánh tự động hoàn thành khi nhập dấu phẩy",
                 "incl_addrs_in_glbl_addrs_list": "Bao gồm địa chỉ trong danh sách địa chỉ toàn cầu",
                 "include_add_in_shared_contact": "Bao gồm địa chỉ trong chia sẻ liên hệ",
