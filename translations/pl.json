@@ -181,7 +181,7 @@
             }
         },
         "recipients_address": "Adresy e-mail odbiorców",
-        "share_note": "Domyślna wiadomość zawiera twoje imię, nazwę udostępnianiego elementu, uprawnienia przyznane odbiorcom oraz informacje logowania.",
+        "share_note": "Domyślna wiadomość zawiera Twoje imię, nazwę udostępnianiego elementu, uprawnienia przyznane odbiorcom oraz informacje logowania.",
         "shared_folders": "Udostępnione Książki Adresowe",
         "shared_item": "Udostępniony Element",
         "shared_items": "Udostępnione książki adresowe {{value}}",
@@ -219,7 +219,10 @@
     },
     "tooltip": {
         "revoke": "Odbierz dostęp",
-        "resend": "Wyślij powiadomienie mailowe dot. tego udostępnienia"
+        "resend": "Wyślij powiadomienie mailowe dot. tego udostępnienia",
+        "address_book_sharing_status_0": "Udostępniono {{count}} osobie",
+        "address_book_sharing_status_1": "Udostępniono {{count}} osobom",
+        "address_book_sharing_status_2": "Udostępniono {{count}} osobom"
     },
     "contact_restored": "Kontakt został przywrócony",
     "job": {

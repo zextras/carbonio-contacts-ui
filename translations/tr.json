@@ -296,7 +296,9 @@
     "tooltip": {
         "edit": "Erişimi düzenle",
         "resend": "Bu paylaşım hakkında e-posta bildirimi gönder",
-        "revoke": "Erişimi iptal et"
+        "revoke": "Erişimi iptal et",
+        "address_book_sharing_status": "{{count}} kişi ile paylaşıldı",
+        "address_book_sharing_status_plural": "{{count}} kişi ile paylaşıldı"
     },
     "types": {
         "home": "Ev",
