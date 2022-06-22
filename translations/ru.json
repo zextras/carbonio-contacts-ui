@@ -334,7 +334,10 @@
     "tooltip": {
         "resend": "Отправить уведомление об этой публикации",
         "edit": "Изменить доступ",
-        "revoke": "Отозвать доступ"
+        "revoke": "Отозвать доступ",
+        "address_book_sharing_status_0": "Поделиться с {{count}}",
+        "address_book_sharing_status_1": "Поделиться с {{count}}",
+        "address_book_sharing_status_2": "Поделиться с {{count}}"
     },
     "contact_restored": "Контакт восстановлен",
     "displayer": {

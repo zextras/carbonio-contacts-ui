@@ -295,7 +295,9 @@
     "tooltip": {
         "resend": "Enviar notificación por correo de esta compartición",
         "revoke": "Revocar acceso",
-        "edit": "Editar acceso"
+        "edit": "Editar acceso",
+        "address_book_sharing_status": "Compartido con {{count}} personas",
+        "address_book_sharing_status_plural": ""
     },
     "types": {
         "home": "inicio",
