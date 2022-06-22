@@ -26,6 +26,7 @@ type ActionObj = {
 	label: string;
 	click: (event: MouseEvent) => void;
 	icon: string;
+	disabled: boolean;
 };
 
 type ActionList = Array<ActionObj>;
