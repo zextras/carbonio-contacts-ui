@@ -5,7 +5,15 @@
  */
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { reduce, filter, some, startsWith, map, findIndex, trim } from 'lodash';
-import { ChipInput, Container, Avatar, Text, Row, Chip, Tooltip } from '@zextras/carbonio-design-system';
+import {
+	ChipInput,
+	Container,
+	Avatar,
+	Text,
+	Row,
+	Chip,
+	Tooltip
+} from '@zextras/carbonio-design-system';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
 import { useSelector } from 'react-redux';
 import { createSelector } from '@reduxjs/toolkit';
@@ -275,7 +283,7 @@ export default function ContactInput({
 			{...chipProps}
 			avatarLabel={chipProps.label}
 			label={
-				<Tooltip label={chipProps.email} maxWidth="unset">
+				<Tooltip label={chipProps.address} maxWidth="unset">
 					<Row wrap="nowrap">
 						<Text size="extrasmall">{chipProps.label}</Text>
 					</Row>
@@ -283,6 +291,8 @@ export default function ContactInput({
 			}
 		/>
 	);
+
+	console.log('*** defaults', defaults);
 
 	return (
 		<Container width="100%">
