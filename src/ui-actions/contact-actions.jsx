@@ -10,6 +10,8 @@ import { getAction, FOLDERS } from '@zextras/carbonio-shell-ui';
 import { FolderActionsType } from '../types/folder';
 import { contactAction } from '../store/actions/contact-action';
 import MoveModal from '../views/contact-actions/move-modal';
+import { applyTag, applyMultiTag, createAndApplyTag } from './tag-actions';
+
 // eslint-disable-next-line import/extensions
 import ModalFooter from '../views/contact-actions/commons/modal-footer.tsx';
 
@@ -213,7 +215,8 @@ export const contextActions = ({
 	replaceHistory,
 	createSnackbar,
 	createModal,
-	selectedIds
+	selectedIds,
+	tags
 }) => {
 	switch (folderId) {
 		case FOLDERS.TRASH:
@@ -225,7 +228,8 @@ export const contextActions = ({
 					dispatch,
 					createSnackbar,
 					createModal
-				})
+				}),
+				applyTag({ contact, tags, t, context: { createAndApplyTag, createModal } })
 			];
 
 		default:
@@ -240,7 +244,8 @@ export const contextActions = ({
 						replaceHistory
 					}),
 					mailToContact(contact, t),
-					moveContact(contact, folderId, t, dispatch, contact.parent, createModal, createSnackbar)
+					moveContact(contact, folderId, t, dispatch, contact.parent, createModal, createSnackbar),
+					applyTag({ contact, tags, t, context: { createAndApplyTag, createModal } })
 				]);
 	}
 };
@@ -310,7 +315,10 @@ export const secondaryActions = ({
 	createSnackbar,
 	createModal,
 	selectedIds,
-	deselectAll
+	deselectAll,
+	tags,
+	selectedContacts,
+	ids
 }) => {
 	switch (folderId) {
 		case FOLDERS.TRASH:
@@ -322,6 +330,14 @@ export const secondaryActions = ({
 					createSnackbar,
 					createModal,
 					deselectAll
+				}),
+				applyMultiTag({
+					t,
+					tags,
+					ids,
+					contacts: selectedContacts,
+					deselectAll,
+					folderId
 				})
 			];
 
@@ -335,6 +351,14 @@ export const secondaryActions = ({
 					createSnackbar,
 					deselectAll,
 					replaceHistory
+				}),
+				applyMultiTag({
+					t,
+					tags,
+					ids,
+					contacts: selectedContacts,
+					deselectAll,
+					folderId
 				})
 			];
 	}

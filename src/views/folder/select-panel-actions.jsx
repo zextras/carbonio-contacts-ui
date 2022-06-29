@@ -31,7 +31,7 @@ export default function SelectPanelActions({ deselectAll }) {
 		() => getSecondaryActions(deselectAll),
 		[deselectAll, getSecondaryActions]
 	);
-
+	console.log('ooo:', { secondaryActions });
 	return (
 		<>
 			<Container
@@ -78,7 +78,9 @@ export default function SelectPanelActions({ deselectAll }) {
 							click: (ev) => {
 								if (ev) ev.preventDefault();
 								action.click();
-							}
+							},
+							customComponent: action.customComponent,
+							items: action.items
 						}))}
 					>
 						<IconButton
