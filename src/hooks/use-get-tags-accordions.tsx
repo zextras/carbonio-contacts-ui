@@ -4,9 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React, { FC, useCallback, useContext, useMemo } from 'react';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import { useTags, ZIMBRA_STANDARD_COLORS, runSearch } from '@zextras/carbonio-shell-ui';
+import { useTags, ZIMBRA_STANDARD_COLORS, runSearch, QueryChip } from '@zextras/carbonio-shell-ui';
 import {
 	AccordionItem,
 	Dropdown,
@@ -34,8 +32,6 @@ const CustomComp: FC<ItemProps> = (props) => {
 			runSearch(
 				[
 					{
-						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-						// @ts-ignore
 						avatarBackground: ZIMBRA_STANDARD_COLORS[props?.item?.color || 0].hex,
 						avatarIcon: 'Tag',
 						background: 'gray2',
@@ -44,7 +40,7 @@ const CustomComp: FC<ItemProps> = (props) => {
 						isQueryFilter: true,
 						label: `tag:${props?.item?.name}`,
 						value: `tag:"${props?.item?.name}"`
-					}
+					} as QueryChip
 				],
 				'contacts'
 			),

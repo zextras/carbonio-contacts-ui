@@ -255,8 +255,6 @@ function ContactPreviewContent({ contact, onEdit, onDelete, onPrint, onArchieve,
 			runSearch(
 				[
 					{
-						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-						// @ts-ignore
 						avatarBackground: ZIMBRA_STANDARD_COLORS[tagToSearch?.color ?? 0].hex,
 						avatarIcon: 'Tag',
 						background: 'gray2',

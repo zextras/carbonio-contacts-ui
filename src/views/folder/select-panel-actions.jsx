@@ -31,7 +31,7 @@ export default function SelectPanelActions({ deselectAll }) {
 		() => getSecondaryActions(deselectAll),
 		[deselectAll, getSecondaryActions]
 	);
-	console.log('ooo:', { secondaryActions });
+
 	return (
 		<>
 			<Container

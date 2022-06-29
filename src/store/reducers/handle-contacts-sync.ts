@@ -43,7 +43,6 @@ export function handleModifiedContactsSyncReducer(
 					const oldContact = find(v, ['id', cn.id]);
 					if (oldContact) {
 						const updated = { ...oldContact, ...cn };
-						console.log('vv:', { updated });
 						return oldContact.parent !== updated.parent
 							? {
 									...acc,
@@ -57,7 +56,7 @@ export function handleModifiedContactsSyncReducer(
 									)
 							  };
 					}
-					console.log('vv:else');
+
 					return { ...acc, [key]: uniqBy([...(acc[key] ?? []), ...v], 'id') };
 				},
 				{} as { [k: string]: Array<Contact> }
