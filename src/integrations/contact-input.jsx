@@ -283,7 +283,7 @@ export default function ContactInput({
 			{...chipProps}
 			avatarLabel={chipProps.label}
 			label={
-				<Tooltip label={chipProps.address} maxWidth="unset">
+				<Tooltip label={chipProps.email ?? chipProps.address} maxWidth="unset">
 					<Row wrap="nowrap">
 						<Text size="extrasmall">{chipProps.label}</Text>
 					</Row>
