@@ -34,6 +34,7 @@ import { useDispatch } from 'react-redux';
 import { ModalHeader } from './commons/modal-header';
 import ModalFooter from '../contact-actions/commons/modal-footer';
 import { createMountpoint } from '../../store/actions/create-mountpoint';
+import { translateFoldersNames } from '../../utils/helpers';
 
 const ContainerEl = styled(Container)`
 	overflow-y: auto;
@@ -84,6 +85,8 @@ export const SharesModal = ({ folders, onClose, createSnackbar }) => {
 	const dispatch = useDispatch();
 	const [t] = useTranslation();
 
+	const translatedFolders = translateFoldersNames(t, folders);
+
 	const onConfirm = useCallback(() => {
 		dispatch(createMountpoint(links)).then((res) => {
 			if (res.type.includes('fulfilled')) {
@@ -109,7 +112,7 @@ export const SharesModal = ({ folders, onClose, createSnackbar }) => {
 		onClose();
 	}, [links, dispatch, onClose, createSnackbar, t]);
 
-	const shared = map(folders, (c) => ({
+	const shared = map(translatedFolders, (c) => ({
 		id: `${c.ownerName} - ${c.folderId} - ${c.granteeType} - ${c.granteeName}`,
 		label: last(split(c.folderPath, '/')),
 		open: true,
