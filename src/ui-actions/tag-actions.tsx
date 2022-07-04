@@ -377,7 +377,7 @@ export const applyMultiTag = ({
 	);
 
 	return {
-		id: TagsActionsType.Apply,
+		id: TagsActionsType.APPLY,
 		items: tagItem,
 		customComponent: (
 			<Row takeAvailableSpace mainAlignment="flex-start">
@@ -445,7 +445,7 @@ export const applyTag = ({
 	tagItem.push(newTag);
 
 	return {
-		id: TagsActionsType.Apply,
+		id: TagsActionsType.APPLY,
 		items: tagItem,
 		label: t('label.tag', 'Tag'),
 		icon: 'TagsMoreOutline',

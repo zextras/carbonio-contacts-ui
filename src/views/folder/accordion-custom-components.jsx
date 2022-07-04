@@ -306,7 +306,7 @@ export const CustomAccordion = (
 				),
 			[trashFolder]
 		);
-		console.log('xmx:', { dropActions });
+
 		const sharedStatusIcon = useMemo(() => {
 			if (!folder.sharedWith?.grant || !folder.sharedWith?.grant?.length) {
 				return '';
