@@ -9,6 +9,8 @@ import { TFunction } from 'react-i18next';
 import { Contact, ContactsFolder } from '../types/contact';
 import { ContactsSlice, FoldersSlice } from '../types/store';
 
+const folderIdRegex = /^(.+:)*(\d+)$/;
+
 export function extractFolders(accordions: ContactsFolder[]): ContactsFolder[] {
 	return reduce(
 		accordions,
@@ -153,8 +155,9 @@ export const getFolderTranslatedName = (
 	folderId: string,
 	folderName: string
 ): string => {
+	const id = folderIdRegex.exec(folderId ?? '')?.[2];
 	let translationKey;
-	switch (folderId) {
+	switch (id) {
 		case FOLDERS.USER_ROOT:
 			translationKey = 'root';
 			break;
