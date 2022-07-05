@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { useNotify, useRefresh, store } from '@zextras/carbonio-shell-ui';
+import { useNotify, useRefresh } from '@zextras/carbonio-shell-ui';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { forEach, isEmpty, sortBy } from 'lodash';
@@ -13,7 +13,6 @@ import {
 	handleCreatedContactsSync
 } from '../../store/slices/contacts-slice';
 import { handleFoldersSync, handleRefresh } from '../../store/slices/folders-slice';
-import reducers from '../../store/reducers/reducers';
 import { normalizeSyncContactsFromSoap } from '../../utils/normalizations/normalize-contact-from-soap';
 
 export const SyncDataHandler = () => {
@@ -25,7 +24,6 @@ export const SyncDataHandler = () => {
 
 	useEffect(() => {
 		if (!isEmpty(refresh) && !initialized) {
-			store.setReducer(reducers);
 			dispatch(handleRefresh(refresh));
 			setInitialized(true);
 		}
