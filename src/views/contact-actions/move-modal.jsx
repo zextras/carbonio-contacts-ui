@@ -15,6 +15,7 @@ import FolderItem from '../secondary-bar/commons/folder-item';
 import { contactAction } from '../../store/actions/contact-action';
 import { NewModal } from './new-modal';
 import { selectFolders } from '../../store/selectors/folders';
+import { getFolderTranslatedName } from '../../utils/helpers';
 
 export default function MoveModal({
 	onClose,
@@ -78,8 +79,17 @@ export default function MoveModal({
 	}, [folderDestination.id, folderId, originID, dispatch, contactId, onClose, createSnackbar, t]);
 
 	const filterFromInput = useMemo(
-		() => filter(folders, (v) => startsWith(v?.label?.toLowerCase(), input?.toLowerCase())),
-		[folders, input]
+		() =>
+			filter(folders, (v) => {
+				if (isEmpty(v)) {
+					return false;
+				}
+
+				const folderName = getFolderTranslatedName(t, v?.id, v?.name)?.toLowerCase();
+
+				return startsWith(folderName, input.toLowerCase());
+			}),
+		[folders, input, t]
 	);
 
 	const nestFilteredFolders = useCallback(
@@ -93,6 +103,7 @@ export default function MoveModal({
 							...acc,
 							{
 								...item,
+								label: getFolderTranslatedName(t, item.id, item.name),
 								level: level + 1,
 								items: nestFilteredFolders(items, item.id, results, level + 1),
 								onClick: () => setFolderDestination(item),
@@ -109,7 +120,7 @@ export default function MoveModal({
 				},
 				[]
 			),
-		[folderDestination.id, input.length]
+		[folderDestination.id, input.length, t]
 	);
 
 	const nestedData = useMemo(
