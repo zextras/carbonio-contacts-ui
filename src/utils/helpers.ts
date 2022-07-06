@@ -143,7 +143,7 @@ export function addContactsToStore(
 	);
 }
 
-export const translatedSystemFolders = (t: TFunction): Array<string> => [
+export const getSystemFoldersTranslatedName = (t: TFunction): Array<string> => [
 	t('folders.root', 'Root'),
 	t('folders.contacts', 'Contacts'),
 	t('folders.auto_contacts', 'Emailed Contacts'),

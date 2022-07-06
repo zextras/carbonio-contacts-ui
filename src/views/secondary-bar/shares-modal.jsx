@@ -85,7 +85,7 @@ export const SharesModal = ({ folders, onClose, createSnackbar }) => {
 	const dispatch = useDispatch();
 	const [t] = useTranslation();
 
-	const translatedFolders = translateFoldersNames(t, folders);
+	const translatedFolders = useMemo(() => translateFoldersNames(t, folders), [t, folders]);
 
 	const onConfirm = useCallback(() => {
 		dispatch(createMountpoint(links)).then((res) => {
