@@ -26,6 +26,7 @@ import { contactAction } from '../../store/actions/contact-action';
 import { searchContacts } from '../../store/actions/search-contacts';
 import { selectFolderStatus } from '../../store/selectors/contacts';
 import { selectFolder } from '../../store/selectors/folders';
+import { getFolderTranslatedName } from '../../utils/helpers';
 
 const DropOverlayContainer = styled(Container)`
 	position: absolute;
@@ -177,14 +178,13 @@ export const CustomAccordion = (
 		? ZIMBRA_STANDARD_COLORS[folder.color].hex
 		: ZIMBRA_STANDARD_COLORS[0].hex;
 
-	const folderIconLabel = getFolderIconName(folder);
 	const onDragEnterAction = (data) => {
 		if (data.type === 'contact') {
 			if (
 				data.data.parentFolderId === folder.id || // same folder not allowed
 				(folder.isShared && folder.perm.indexOf('w') === -1) // only if shared folder have write permission
 			) {
-				return { succss: false };
+				return { success: false };
 			}
 		}
 		if (data.type === 'folder') {
@@ -193,14 +193,14 @@ export const CustomAccordion = (
 				folder.level + data.data.level > 3 || // rules for maximum 3 folder level
 				folder.isShared //  shared folder not allowed
 			)
-				return { succss: false };
+				return { success: false };
 		}
 		return undefined;
 	};
 
 	const onDropAction = (data) => {
 		const dragEnterResponse = onDragEnterAction(data);
-		if (dragEnterResponse && dragEnterResponse?.succss === false) return;
+		if (dragEnterResponse && dragEnterResponse?.success === false) return;
 		let contactId = [data.data.id];
 		if (
 			data.type !== 'folder' &&
@@ -306,6 +306,16 @@ export const CustomAccordion = (
 				),
 			[trashFolder]
 		);
+		const folderIconLabel = getFolderIconName(folder);
+		const folderTranslatedLabel = getFolderTranslatedName(t, folder.id, folder.label);
+
+		const translatedProps = {
+			...props,
+			item: {
+				...props.item,
+				label: folderTranslatedLabel
+			}
+		};
 
 		const sharedStatusIcon = useMemo(() => {
 			if (!folder.sharedWith?.grant || !folder.sharedWith?.grant?.length) {
@@ -351,8 +361,8 @@ export const CustomAccordion = (
 						<Dropdown contextMenu items={dropActions} display="block" width="100%">
 							<Row mainAlignment="flex-start" padding={{ left: 'small' }} takeAvailableSpace>
 								<Icon size="large" icon={folderIconLabel} customColor={folderIconColor} />
-								<Tooltip label={folder.label} placement="right" maxWidth="100%">
-									<AccordionItem {...props}>{sharedStatusIcon}</AccordionItem>
+								<Tooltip label={folderTranslatedLabel} placement="right" maxWidth="100%">
+									<AccordionItem {...translatedProps}>{sharedStatusIcon}</AccordionItem>
 								</Tooltip>
 							</Row>
 						</Dropdown>

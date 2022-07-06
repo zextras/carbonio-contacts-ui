@@ -112,6 +112,12 @@
         },
         "type": "Contact Folder"
     },
+    "folders": {
+        "auto_contacts": "Emailed Contacts",
+        "contacts": "Contacts",
+        "root": "Root",
+        "trash": "Trash"
+    },
     "job": {
         "company": "Company",
         "department": "Department",

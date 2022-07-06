@@ -13,6 +13,7 @@ import { ModalHeader } from '../secondary-bar/commons/modal-header';
 import { createFolder } from '../../store/actions/create-folder';
 import { contactAction } from '../../store/actions/contact-action';
 import FolderItem from '../secondary-bar/commons/folder-item';
+import { getFolderTranslatedName } from '../../utils/helpers';
 
 export const NewModal = ({
 	folders,
@@ -38,7 +39,10 @@ export const NewModal = ({
 			return;
 		}
 
-		const value = !!filter(folders, (item) => item.label === inputValue).length;
+		const value = !!filter(
+			folders,
+			(item) => getFolderTranslatedName(t, item.id, item.label) === inputValue
+		).length;
 		if (value) {
 			setLabel(t('folder.modal.new.input.name_exist', 'Name already exists in this path'));
 		}
