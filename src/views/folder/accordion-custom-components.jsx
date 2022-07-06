@@ -292,6 +292,20 @@ export const CustomAccordion = (
 			[folderStatus]
 		);
 
+		const dropActions = useMemo(
+			() =>
+				dropdownActions(
+					folder,
+					setAction,
+					setCurrentFolder,
+					t,
+					dispatch,
+					createModal,
+					createSnackbar,
+					trashFolder
+				),
+			[trashFolder]
+		);
 		const folderIconLabel = getFolderIconName(folder);
 		const folderTranslatedLabel = getFolderTranslatedName(t, folder.id, folder.label);
 
@@ -344,21 +358,7 @@ export const CustomAccordion = (
 						to={`/folder/${folder.id}`}
 						style={{ width: '100%', height: '100%', textDecoration: 'none' }}
 					>
-						<Dropdown
-							contextMenu
-							items={dropdownActions(
-								folder,
-								setAction,
-								setCurrentFolder,
-								t,
-								dispatch,
-								createModal,
-								createSnackbar,
-								trashFolder
-							)}
-							display="block"
-							width="100%"
-						>
+						<Dropdown contextMenu items={dropActions} display="block" width="100%">
 							<Row mainAlignment="flex-start" padding={{ left: 'small' }} takeAvailableSpace>
 								<Icon size="large" icon={folderIconLabel} customColor={folderIconColor} />
 								<Tooltip label={folderTranslatedLabel} placement="right" maxWidth="100%">

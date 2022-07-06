@@ -13,12 +13,15 @@ import {
 	Text,
 	Collapse,
 	Dropdown,
-	Padding
+	Padding,
+	Icon,
+	Tooltip
 } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
-import { isEmpty, reduce } from 'lodash';
-import { FOLDERS } from '@zextras/carbonio-shell-ui';
+import { every, includes, isEmpty, reduce } from 'lodash';
+import { FOLDERS, runSearch, useTags, ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-shell-ui';
 import { CompactView } from '../../commons/contact-compact-view';
+import { useTagExist } from '../../ui-actions/tag-actions';
 
 function typeToIcon(type) {
 	switch (type) {
@@ -245,6 +248,97 @@ function ContactPreviewContent({ contact, onEdit, onDelete, onPrint, onArchieve,
 	const mailData = useMemo(() => Object.values(contact.email), [contact]);
 	// const urlData = useMemo(() => Object.values(contact.URL), [contact]);
 	const phoneData = useMemo(() => Object.values(contact.phone), [contact]);
+
+	const tagsFromStore = useTags();
+	const triggerSearch = useCallback(
+		(tagToSearch) =>
+			runSearch(
+				[
+					{
+						avatarBackground: ZIMBRA_STANDARD_COLORS[tagToSearch?.color ?? 0].hex,
+						avatarIcon: 'Tag',
+						background: 'gray2',
+						hasAvatar: true,
+						isGeneric: false,
+						isQueryFilter: true,
+						label: `tag:${tagToSearch?.name}`,
+						value: `tag:"${tagToSearch?.name}"`
+					}
+				],
+				'contacts'
+			),
+		[]
+	);
+	const tags = useMemo(
+		() =>
+			reduce(
+				tagsFromStore,
+				(acc, v) => {
+					if (includes(contact.tags, v.id))
+						acc.push({
+							...v,
+							color: ZIMBRA_STANDARD_COLORS[v.color ?? 0].hex,
+							label: v.name,
+							click: () => triggerSearch(v),
+							customComponent: (
+								<Row takeAvailableSpace mainAlignment="flex-start">
+									<Row takeAvailableSpace mainAlignment="space-between">
+										<Row mainAlignment="flex-end">
+											<Padding right="small">
+												<Icon icon="Tag" color={ZIMBRA_STANDARD_COLORS[v.color ?? 0].hex} />
+											</Padding>
+										</Row>
+										<Row takeAvailableSpace mainAlignment="flex-start">
+											<Text>{v.name}</Text>
+										</Row>
+									</Row>
+								</Row>
+							)
+						});
+					return acc;
+				},
+				[]
+			),
+		[contact.tags, tagsFromStore, triggerSearch]
+	);
+
+	const tagIcon = useMemo(() => (tags.length > 1 ? 'TagsMoreOutline' : 'Tag'), [tags]);
+	const tagIconColor = useMemo(() => (tags.length === 1 ? tags[0].color : undefined), [tags]);
+
+	const isTagInStore = useTagExist(tags);
+
+	const onTagClick = useCallback(() => {
+		triggerSearch(tagsFromStore?.[contact?.tags[0]]);
+	}, [contact.tags, triggerSearch, tagsFromStore]);
+
+	const showMultiTagIcon = useMemo(
+		() => contact.tags?.length > 1 && isTagInStore,
+		[contact.tags?.length, isTagInStore]
+	);
+	const showTagIcon = useMemo(
+		() =>
+			contact.tags &&
+			contact.tags?.length !== 0 &&
+			!showMultiTagIcon &&
+			isTagInStore &&
+			every(contact.tags, (tn) => tn !== ''),
+		[isTagInStore, contact.tags, showMultiTagIcon]
+	);
+
+	const [showDropdown, setShowDropdown] = useState(false);
+	const onIconClick = useCallback((ev) => {
+		ev.stopPropagation();
+		setShowDropdown((o) => !o);
+	}, []);
+
+	const onDropdownClose = useCallback(() => {
+		setShowDropdown(false);
+	}, []);
+
+	const singleTagLabel = useMemo(
+		() => tagsFromStore[contact?.tags?.[0]]?.name,
+		[contact?.tags, tagsFromStore]
+	);
 	return (
 		<Row
 			data-testid="PreviewPanel"
@@ -273,8 +367,32 @@ function ContactPreviewContent({ contact, onEdit, onDelete, onPrint, onArchieve,
 								disabled={isEmpty(contact?.email)}
 							/>
 						)}
-						{contact.parent !== FOLDERS.TRASH && (
-							<IconButton icon="TagsMoreOutline" onClick={onArchieve} />
+
+						{showTagIcon && (
+							<Padding left="small">
+								<Tooltip label={singleTagLabel} disabled={showMultiTagIcon}>
+									<IconButton
+										data-testid="TagIcon"
+										size="large"
+										onClick={onTagClick}
+										icon={tagIcon}
+										color={tagIconColor}
+									/>
+								</Tooltip>
+							</Padding>
+						)}
+						{showMultiTagIcon && (
+							<Dropdown items={tags} forceOpen={showDropdown} onClose={onDropdownClose}>
+								<Padding left="small">
+									<IconButton
+										size="large"
+										data-testid="TagIcon"
+										icon={tagIcon}
+										onClick={onIconClick}
+										color={tagIconColor}
+									/>
+								</Padding>
+							</Dropdown>
 						)}
 						<IconButton icon="Trash2Outline" onClick={onDelete} />
 						<IconButton

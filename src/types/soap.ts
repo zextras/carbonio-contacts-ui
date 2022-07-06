@@ -88,6 +88,8 @@ export type SoapContact = {
 	id: string;
 	l: string;
 	rev: number;
+	t: string;
+	tn: string;
 	_attrs: {
 		type?: string;
 		firstName?: string;
