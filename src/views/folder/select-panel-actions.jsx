@@ -78,7 +78,9 @@ export default function SelectPanelActions({ deselectAll }) {
 							click: (ev) => {
 								if (ev) ev.preventDefault();
 								action.click();
-							}
+							},
+							customComponent: action.customComponent,
+							items: action.items
 						}))}
 					>
 						<IconButton

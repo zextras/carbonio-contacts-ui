@@ -5,26 +5,34 @@
  */
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
+import { isNil, omitBy } from 'lodash';
 
 export const contactAction = createAsyncThunk(
 	'contacts/contactAction',
 	async ({
 		contactsIDs,
 		destinationID,
-		op
+		op,
+		tagName
 	}: {
 		contactsIDs: Array<string>;
-		destinationID: string;
+		destinationID?: string;
 		op: string;
+		tagName: string;
 	}) => {
 		const ids = contactsIDs.join(',');
+
 		const res = await soapFetch('ContactAction', {
 			_jsns: 'urn:zimbraMail',
-			action: {
-				id: ids,
-				op,
-				l: destinationID
-			}
+			action: omitBy(
+				{
+					id: ids,
+					op,
+					l: destinationID,
+					tn: tagName
+				},
+				isNil
+			)
 		});
 		return res;
 	}
