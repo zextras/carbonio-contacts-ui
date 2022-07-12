@@ -7,10 +7,9 @@ import React, { useCallback, useEffect, useMemo, useReducer, useState } from 're
 import { useParams } from 'react-router-dom';
 import {
 	replaceHistory,
-	useRemoveCurrentBoard,
 	report,
-	getBridgedFunctions,
-	useUpdateCurrentBoard
+	useBoardHooks,
+	getBridgedFunctions
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 import { map, filter, reduce, set, omit, find } from 'lodash';
@@ -285,10 +284,10 @@ export default function EditView({ panel }) {
 	const existingContact = useSelector((state) => selectContact(state, folderId, editId));
 	const [contact, dispatch] = useReducer(reducer);
 	const [t] = useTranslation();
-	const closeBoard = useRemoveCurrentBoard();
+	const { closeBoard } = useBoardHooks();
 	const [compareToContact, setCompareToContact] = useState(existingContact);
 	const keys = Object.keys(existingContact ?? {});
-	const updateBoard = useUpdateCurrentBoard();
+	const { updateBoard } = useBoardHooks();
 
 	useEffect(() => {
 		if (!compareToContact && keys?.length > 0) setCompareToContact(existingContact);
@@ -332,7 +331,8 @@ export default function EditView({ panel }) {
 
 	useEffect(() => {
 		if (!panel) {
-			updateBoard(undefined, title);
+			console.log('updating title');
+			updateBoard({ title });
 		}
 	}, [panel, title, updateBoard]);
 

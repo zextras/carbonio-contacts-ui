@@ -12,7 +12,7 @@ import {
 	addBoardView,
 	registerActions,
 	ACTION_TYPES,
-	getBridgedFunctions,
+	addBoard,
 	registerComponents
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
@@ -112,9 +112,7 @@ export default function App() {
 				icon: 'ContactsModOutline',
 				click: (ev) => {
 					ev?.preventDefault?.();
-					getBridgedFunctions().addBoard(`${CONTACTS_ROUTE}/new`, {
-						title: t('label.new_contact', 'New Contact')
-					});
+					addBoard({ url: `${CONTACTS_ROUTE}/new`, title: t('label.new_contact', 'New Contact') });
 				},
 				disabled: false,
 				group: CONTACTS_APP_ID,
