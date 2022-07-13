@@ -292,7 +292,9 @@
     "tooltip": {
         "revoke": "Revogar acesso",
         "edit": "Editar acesso",
-        "resend": "Enviar notificação por e-mail sobre este compartilhamento"
+        "resend": "Enviar notificação por e-mail sobre esta partilha",
+        "address_book_sharing_status": "Partilhado com {{count}} persona",
+        "address_book_sharing_status_plural": "Partilhado com {{count}} personas"
     },
     "title": {
         "advanced_filters": "Filtros Avançados"
@@ -300,7 +302,7 @@
     "types": {
         "mobile": "celular",
         "other": "outro",
-        "home": "casa",
+        "home": "início",
         "work": "trabalho"
     },
     "displayer": {
