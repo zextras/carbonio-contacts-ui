@@ -74,7 +74,9 @@ const SelectPanelActions: FC<SelectPanelActionsProps> = ({ deselectAll }): React
 							click: (ev: React.SyntheticEvent<HTMLElement> | KeyboardEvent): void => {
 								if (ev) ev.preventDefault();
 								action.click(ev);
-							}
+							},
+							customComponent: action.customComponent,
+							items: action.items
 						}))}
 					>
 						<IconButton

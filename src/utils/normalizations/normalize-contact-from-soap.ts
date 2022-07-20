@@ -3,7 +3,17 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { lowerFirst, parseInt, pickBy, reduce, words, isEmpty, omitBy, isNil } from 'lodash';
+import {
+	lowerFirst,
+	parseInt,
+	pickBy,
+	reduce,
+	words,
+	isEmpty,
+	omitBy,
+	isNil,
+	filter
+} from 'lodash';
 import {
 	Contact,
 	ContactAddress,
@@ -128,6 +138,7 @@ export function normalizeContactsFromSoap(contact: SoapContact[]): Contact[] | u
 						parent: c.l,
 						id: c.id,
 						fileAsStr: c.fileAsStr,
+						tags: !isNil(c.t) ? filter(c.t.split(','), (t) => t !== '') : [],
 						address: normalizeContactAddresses(c),
 						company: c._attrs?.company ?? '',
 						department: c._attrs?.department ?? '',
@@ -166,6 +177,7 @@ export function normalizeSyncContactsFromSoap(
 							{
 								parent: c.l,
 								id: c.id,
+								tags: !isNil(c.t) ? filter(c.t.split(','), (t) => t !== '') : [],
 								fileAsStr: c.fileAsStr,
 								address: c._attrs ? normalizeContactAddresses(c) : undefined,
 								company: c._attrs?.company,

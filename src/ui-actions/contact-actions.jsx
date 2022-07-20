@@ -4,12 +4,14 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React from 'react';
-import { compact } from 'lodash';
+import { compact, isEmpty } from 'lodash';
 import { Text } from '@zextras/carbonio-design-system';
 import { getAction, FOLDERS } from '@zextras/carbonio-shell-ui';
 import { FolderActionsType } from '../types/folder';
 import { contactAction } from '../store/actions/contact-action';
 import MoveModal from '../views/contact-actions/move-modal';
+import { applyTag, applyMultiTag, createAndApplyTag } from './tag-actions';
+
 // eslint-disable-next-line import/extensions
 import ModalFooter from '../views/contact-actions/commons/modal-footer.tsx';
 
@@ -18,7 +20,8 @@ export function mailToContact(contact, t) {
 	return available
 		? {
 				...mailTo,
-				label: t('action.send_msg', 'Send e-mail')
+				label: t('action.send_msg', 'Send e-mail'),
+				disabled: isEmpty(contact?.email)
 		  }
 		: undefined;
 }
@@ -94,15 +97,7 @@ export function deletePermanently({ ids, t, dispatch, createSnackbar, createModa
 		}
 	};
 }
-export function moveToTrash({
-	ids,
-	t,
-	dispatch,
-	parent,
-	createSnackbar,
-	deselectAll,
-	replaceHistory
-}) {
+export function moveToTrash({ ids, t, dispatch, parent, createSnackbar, deselectAll }) {
 	const restoreContact = () => {
 		dispatch(
 			contactAction({
@@ -212,7 +207,7 @@ export const contextActions = ({
 	replaceHistory,
 	createSnackbar,
 	createModal,
-	selectedIds
+	tags
 }) => {
 	switch (folderId) {
 		case FOLDERS.TRASH:
@@ -224,7 +219,8 @@ export const contextActions = ({
 					dispatch,
 					createSnackbar,
 					createModal
-				})
+				}),
+				applyTag({ contact, tags, t, context: { createAndApplyTag, createModal } })
 			];
 
 		default:
@@ -239,7 +235,8 @@ export const contextActions = ({
 						replaceHistory
 					}),
 					mailToContact(contact, t),
-					moveContact(contact, folderId, t, dispatch, contact.parent, createModal, createSnackbar)
+					moveContact(contact, folderId, t, dispatch, contact.parent, createModal, createSnackbar),
+					applyTag({ contact, tags, t, context: { createAndApplyTag, createModal } })
 				]);
 	}
 };
@@ -250,8 +247,7 @@ export const hoverActions = ({
 	dispatch,
 	replaceHistory,
 	createSnackbar,
-	createModal,
-	selectedIds
+	createModal
 }) => {
 	switch (folderId) {
 		case FOLDERS.TRASH:
@@ -283,16 +279,7 @@ export const hoverActions = ({
 	}
 };
 
-export const primaryActions = ({
-	folderId,
-	t,
-	dispatch,
-	replaceHistory,
-	createSnackbar,
-	createModal,
-	selectedIds,
-	deselectAll
-}) => {
+export const primaryActions = ({ folderId }) => {
 	switch (folderId) {
 		case FOLDERS.TRASH:
 			return () => [];
@@ -309,7 +296,10 @@ export const secondaryActions = ({
 	createSnackbar,
 	createModal,
 	selectedIds,
-	deselectAll
+	deselectAll,
+	tags,
+	selectedContacts,
+	ids
 }) => {
 	switch (folderId) {
 		case FOLDERS.TRASH:
@@ -321,6 +311,14 @@ export const secondaryActions = ({
 					createSnackbar,
 					createModal,
 					deselectAll
+				}),
+				applyMultiTag({
+					t,
+					tags,
+					ids,
+					contacts: selectedContacts,
+					deselectAll,
+					folderId
 				})
 			];
 
@@ -334,6 +332,14 @@ export const secondaryActions = ({
 					createSnackbar,
 					deselectAll,
 					replaceHistory
+				}),
+				applyMultiTag({
+					t,
+					tags,
+					ids,
+					contacts: selectedContacts,
+					deselectAll,
+					folderId
 				})
 			];
 	}

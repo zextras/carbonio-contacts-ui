@@ -3,12 +3,16 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { createContext, FC, useCallback, useContext, useMemo } from 'react';
+import React, { ComponentType, createContext, FC, useCallback, useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { replaceHistory } from '@zextras/carbonio-shell-ui';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { replaceHistory, useTags } from '@zextras/carbonio-shell-ui';
 import { SnackbarManagerContext, ModalManagerContext } from '@zextras/carbonio-design-system';
 import { Contact } from '../types/contact';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import { contextActions, hoverActions, primaryActions, secondaryActions } from './contact-actions';
 
 type ACPProps = {
@@ -21,6 +25,8 @@ type ActionObj = {
 	id: string;
 	label: string;
 	click: (e: React.SyntheticEvent<HTMLElement> | KeyboardEvent) => void;
+	customComponent: ComponentType;
+	items: Array<ActionObj>;
 	icon: string;
 };
 
@@ -42,18 +48,19 @@ export const ActionsContext = createContext<{
 	getSecondaryActions: () => []
 });
 
-export const ActionsContextProvider: FC<ACPProps> = ({
+export const ActionsContextProvider: FC<ACPProps & { selectedContacts: Contact[] }> = ({
 	children,
 	folderId,
 	selectedIds,
-	deselectAll
+	deselectAll,
+	selectedContacts
 }) => {
 	const [t] = useTranslation();
-
+	const ids = useMemo(() => Object.keys(selectedIds ?? []), [selectedIds]);
 	const dispatch = useDispatch();
 	const createSnackbar = useContext(SnackbarManagerContext);
 	const createModal = useContext(ModalManagerContext);
-
+	const tags = useTags();
 	const [
 		contextActionsCallback,
 		hoverActionsCallback,
@@ -68,7 +75,8 @@ export const ActionsContextProvider: FC<ACPProps> = ({
 				replaceHistory,
 				createSnackbar,
 				createModal,
-				selectedIds
+				selectedIds,
+				tags
 			}),
 			hoverActions({
 				folderId,
@@ -97,10 +105,24 @@ export const ActionsContextProvider: FC<ACPProps> = ({
 				createSnackbar,
 				createModal,
 				selectedIds,
-				deselectAll
+				deselectAll,
+				tags,
+				ids,
+				selectedContacts
 			})
 		],
-		[createModal, createSnackbar, dispatch, folderId, t, selectedIds, deselectAll]
+		[
+			folderId,
+			t,
+			dispatch,
+			createSnackbar,
+			createModal,
+			selectedIds,
+			tags,
+			deselectAll,
+			selectedContacts,
+			ids
+		]
 	);
 
 	const getContextActions = useCallback<GetActionsFunction>(
@@ -121,6 +143,8 @@ export const ActionsContextProvider: FC<ACPProps> = ({
 	);
 
 	return (
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore
 		<ActionsContext.Provider
 			value={{ getContextActions, getHoverActions, getPrimaryActions, getSecondaryActions }}
 		>

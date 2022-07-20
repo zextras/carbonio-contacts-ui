@@ -4,9 +4,21 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { Container, Row, Text, Divider } from '@zextras/carbonio-design-system';
-import React from 'react';
+import React, { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { getFolderTranslatedNameByName } from '../../utils/helpers';
 
 export function Breadcrumbs({ folderPath, itemsCount }) {
+	const [t] = useTranslation();
+	const label = useMemo(
+		() =>
+			folderPath
+				?.split('/')
+				?.map((token) => getFolderTranslatedNameByName(t, token))
+				.join(' / '),
+		[t, folderPath]
+	);
+
 	return (
 		<>
 			<Container
@@ -28,7 +40,7 @@ export function Breadcrumbs({ folderPath, itemsCount }) {
 						padding={{ all: 'small', right: 'medium' }}
 					>
 						<Text size="medium" data-testid="BreadcrumbPath">
-							{folderPath?.split('/')?.join(' / ')}
+							{label}
 						</Text>
 					</Row>
 					<Row mainAlignment="flex-end" padding={{ all: 'small', right: 'medium' }}>

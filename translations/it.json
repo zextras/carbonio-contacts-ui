@@ -313,7 +313,9 @@
     "tooltip": {
         "edit": "Modifica accesso",
         "resend": "Invia e-mail di notifica per questa condivisione",
-        "revoke": "Revoca accesso"
+        "revoke": "Revoca accesso",
+        "address_book_sharing_status": "Condiviso con {{count}} persone",
+        "address_book_sharing_status_plural": ""
     },
     "of": "di",
     "displayer": {

@@ -11,6 +11,7 @@ import FolderItem from './commons/folder-item';
 import ModalFooter from '../contact-actions/commons/modal-footer';
 import { ModalHeader } from './commons/modal-header';
 import { createFolder } from '../../store/actions/create-folder';
+import { getFolderTranslatedName } from '../../utils/helpers';
 
 export const NewModal = ({
 	folders,
@@ -36,6 +37,7 @@ export const NewModal = ({
 						folderDestination.id === item.id
 							? {
 									...item,
+									label: getFolderTranslatedName(t, item.id, item.label),
 									items: nest(items, item.id, level + 1),
 									background: 'highlight', // todo: fix with right color
 									level,
@@ -43,6 +45,7 @@ export const NewModal = ({
 							  }
 							: {
 									...item,
+									label: getFolderTranslatedName(t, item.id, item.label),
 									items: nest(items, item.id, level + 1),
 									level,
 									divider: true
@@ -71,7 +74,7 @@ export const NewModal = ({
 					};
 				}
 			),
-		[currentFolder.id, currentFolder.path, folderDestination.id]
+		[currentFolder.id, currentFolder.path, folderDestination.id, t]
 	);
 
 	useEffect(() => {

@@ -7,8 +7,8 @@ import { ButtonOldProps, ContainerProps } from '@zextras/carbonio-design-system'
 import { SyntheticEvent } from 'react';
 
 export type ModalFooterProps = {
-	mainAlignment?: typeof ContainerProps['mainAlignment'];
-	crossAlignment?: typeof ContainerProps['crossAlignment'];
+	mainAlignment?: ContainerProps['mainAlignment'];
+	crossAlignment?: ContainerProps['crossAlignment'];
 	padding?: Record<string, string> | undefined;
 	onConfirm: (e?: SyntheticEvent<Element, Event> | KeyboardEvent) => void;
 	secondaryAction?: () => void | undefined;
@@ -16,13 +16,13 @@ export type ModalFooterProps = {
 	secondaryLabel?: string | undefined;
 	disabled?: boolean | undefined;
 	secondaryDisabled?: boolean | undefined;
-	background?: typeof ContainerProps['background'];
-	secondarybackground?: typeof ContainerProps['background'];
+	background?: ContainerProps['background'];
+	secondarybackground?: ContainerProps['background'];
 	color?: string | undefined;
 	secondaryColor?: string | undefined;
-	size?: typeof ButtonOldProps['size'];
-	primaryBtnType?: typeof ButtonOldProps['type'];
-	secondaryBtnType?: typeof ButtonOldProps['type'];
+	size?: ButtonOldProps['size'];
+	primaryBtnType?: ButtonOldProps['type'];
+	secondaryBtnType?: ButtonOldProps['type'];
 	divider?: boolean;
 	verticalPadding?: string;
 	secondaryVerticalPadding?: string;

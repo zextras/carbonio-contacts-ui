@@ -31,6 +31,7 @@ import { getShareInfo } from '../../store/actions/get-share-info';
 import ShareFolderModal from './share-folder-modal';
 import ModalWrapper from './commons/modal-wrapper';
 import { CollapsedSideBarItems } from '../folder/collapsed-sidebar-items';
+import useGetTagsAccordion from '../../hooks/use-get-tags-accordions';
 
 export const nest = (items, id, level) =>
 	map(
@@ -109,6 +110,7 @@ export default function Sidebar({ expanded }) {
 	const [sideBarItems, setSidebarItems] = useState([]);
 	const createModal = useContext(ModalManagerContext);
 	const createSnackbar = useContext(SnackbarManagerContext);
+	const tagsAccordionItems = useGetTagsAccordion();
 	useEffect(() => {
 		const nestedFolders = nest(folders, '1', 1);
 		const trashFolder = remove(nestedFolders, (c) => c.id === '3');
@@ -146,7 +148,10 @@ export default function Sidebar({ expanded }) {
 	return (
 		<>
 			{expanded ? (
-				<Accordion items={accordionItems} activeId={currentFolder?.id} />
+				<>
+					<Accordion items={accordionItems} activeId={currentFolder?.id} />
+					<Accordion items={[tagsAccordionItems]} />
+				</>
 			) : (
 				sideBarItems.map((folder, index) => <CollapsedSideBarItems key={index} folder={folder} />)
 			)}

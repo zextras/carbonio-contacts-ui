@@ -3,11 +3,12 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { ReactElement, useEffect } from 'react';
+import React, { useEffect, useMemo, ReactElement } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Container } from '@zextras/carbonio-design-system';
 import { useAppContext } from '@zextras/carbonio-shell-ui';
+import { filter } from 'lodash';
 import { State } from '../../types/store';
 import { ActionsContextProvider } from '../../ui-actions/actions-context';
 import { ContactsList } from './folder-panel/contacts-list';
@@ -31,6 +32,8 @@ export default function FolderPanel(): ReactElement {
 	const { selected, isSelecting, toggle, deselectAll } = useSelection(folderId, setCount);
 
 	const contacts = useSelector((state: State) => selectAllContactsInFolder(state, folderId));
+	const ids = useMemo(() => Object.keys(selected ?? []), [selected]);
+	const selectedContacts = filter(contacts, (contact) => ids.indexOf(contact.id) !== -1);
 
 	useEffect(() => {
 		if (!folderStatus) {
@@ -39,7 +42,12 @@ export default function FolderPanel(): ReactElement {
 	}, [dispatch, folderId, folderStatus]);
 
 	return (
-		<ActionsContextProvider folderId={folderId} deselectAll={deselectAll} selectedIds={selected}>
+		<ActionsContextProvider
+			folderId={folderId}
+			deselectAll={deselectAll}
+			selectedContacts={selectedContacts}
+			selectedIds={selected}
+		>
 			<Container
 				orientation="row"
 				crossAlignment="flex-start"

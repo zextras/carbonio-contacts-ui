@@ -11,6 +11,7 @@ import FolderItem from './commons/folder-item';
 import { folderAction } from '../../store/actions/folder-action';
 import ModalFooter from '../contact-actions/commons/modal-footer';
 import { ModalHeader } from './commons/modal-header';
+import { getFolderTranslatedName } from '../../utils/helpers';
 
 export const MoveModal = ({
 	folders,
@@ -44,9 +45,11 @@ export const MoveModal = ({
 				) {
 					return false;
 				}
-				return startsWith(v?.label?.toLowerCase(), input?.toLowerCase());
+
+				const folderName = getFolderTranslatedName(t, v?.id, v?.label)?.toLowerCase();
+				return startsWith(folderName, input?.toLowerCase());
 			}),
-		[folders, currentFolder.id, currentFolder.parent, currentFolder.label, input]
+		[folders, currentFolder.id, currentFolder.parent, currentFolder?.label, t, input]
 	);
 
 	const nestFilteredFolders = useCallback(
@@ -60,6 +63,7 @@ export const MoveModal = ({
 							...acc,
 							{
 								...item,
+								label: getFolderTranslatedName(t, item.id, item.label),
 								items: nestFilteredFolders(items, item.id, results, level + 1),
 								onClick: () => setFolderDestination(item),
 								level: level + 1,
@@ -76,14 +80,14 @@ export const MoveModal = ({
 				},
 				[]
 			),
-		[folderDestination.id, input.length]
+		[t, folderDestination.id, input.length]
 	);
 
 	const nestedData = useMemo(
 		() => [
 			{
 				id: FOLDERS.USER_ROOT,
-				label: 'Root',
+				label: getFolderTranslatedName(t, FOLDERS.USER_ROOT, 'Root'),
 				level: '0',
 				open: true,
 				divider: true,
@@ -92,7 +96,7 @@ export const MoveModal = ({
 				onClick: () => setFolderDestination({ id: FOLDERS.USER_ROOT })
 			}
 		],
-		[filterFromInput, folderDestination.id, folders, nestFilteredFolders]
+		[t, filterFromInput, folderDestination.id, folders, nestFilteredFolders]
 	);
 
 	const onConfirm = useCallback(() => {
