@@ -10,7 +10,7 @@
         "advance_filters": "1 filtro avanzado",
         "advance_filters_plural": "{{count}} filtros avanzados",
         "edit_folder_properties": "Editar propiedades de {{name}}",
-        "contact_setting": "Ajustes del contacto",
+        "contact_setting": "Ajustes de Contacto",
         "create": "Crear",
         "revoke_access_tooltip": "Revocar acceso enviando una notificación estándar",
         "revoke_access_without_notification": "Revocar acceso sin enviar una notificación",
@@ -35,7 +35,7 @@
         "Undo": "Deshacer",
         "undo": "Deshacer",
         "contacts": "Contactos",
-        "empty": "Vacío",
+        "empty": "Vaciar",
         "error_try_again": "Algo ha salido mal. Por favor intenta de nuevo",
         "move": "Mover",
         "revoke_without_notification": "Revocar acceso sin enviar una notificación",
@@ -50,7 +50,7 @@
         "search_activate_selection_mode": "El modo de selección aún no está disponible en los resultados de búsqueda",
         "folder_name": "Nombre de la carpeta",
         "app_name": "Contactos",
-        "add_share": "Añadir Compartición",
+        "add_share": "Añadir compartición",
         "note": "Nota:",
         "options": "Opciones",
         "share_with": "Compartir con",
@@ -106,7 +106,7 @@
         "delete": "Eliminar",
         "move": "Mover",
         "restore": "Restaurar",
-        "search": "Búsqueda",
+        "search": "Buscar",
         "delete_permanently": "Eliminar permanentemente",
         "edit_share": "Editar acceso",
         "goto_folder": "Ir a la carpeta",
@@ -120,8 +120,8 @@
                 "footer": "Eliminar",
                 "title": "Eliminar",
                 "body": {
-                    "message1": "¿Quieres borrar la libreta de direcciones seleccionada? Si la borras, el contenido relacionado será eliminado y la libreta de direcciones no se podrá recuperar.",
-                    "message2": "¿Quieres borrar la libreta de direcciones seleccionada permanentemente? Si la borras, el contenido relacionado será eliminado y la libreta de direcciones no se podrá recuperar."
+                    "message1": "¿Quieres eliminar la libreta de direcciones seleccionada? Al hacerlo, el contenido relacionado será borrado y la libreta de direcciones no se podrá recuperar.",
+                    "message2": "¿Quieres eliminar la libreta de direcciones seleccionada permanentemente? Al hacerlo, el contenido relacionado será borrado y la libreta de direcciones no se podrá recuperar."
                 }
             },
             "edit": {
@@ -139,8 +139,8 @@
                 "footer": "Mover",
                 "title": "Mover",
                 "body": {
-                    "message3": "Elige una carpeta para mover la seleccionada a:",
-                    "message1": "Elige una libreta de direcciones para mover la seleccionada a:"
+                    "message3": "Elige una carpeta hacia donde mover la seleccionada:",
+                    "message1": "Elige una libreta de direcciones hacia donde mover la seleccionada:"
                 },
                 "input": {
                     "filter": "Filtrar libreta de direcciones"
@@ -149,17 +149,17 @@
             },
             "new": {
                 "footer": "Crear",
-                "create_footer": "Crear y mover",
+                "create_footer": "Crear",
                 "body": {
-                    "message1": "Nuevo nombre para la libreta de direcciones",
+                    "message1": "Nombre de la nueva libreta de direcciones",
                     "message2": "Elige una libreta de direcciones que contendrá la recién creada:"
                 },
                 "input": {
-                    "name": "Introduce un nombre para la libreta de direcciones",
+                    "name": "Introduce el nombre de la libreta de direcciones",
                     "name_exist": "El nombre ya existe en esta ruta"
                 },
-                "title2": "Creación de una carpeta nueva",
-                "title": "Crear una nueva libreta de direcciones"
+                "title2": "Crear nueva carpeta",
+                "title": "Crear nueva libreta de direcciones"
             },
             "restore": {
                 "footer": "Restaurar",
@@ -178,7 +178,7 @@
                 }
             },
             "item": {
-                "empty": "Sin elementos disponibles"
+                "empty": "No hay elementos disponibles"
             }
         },
         "action": {
@@ -186,12 +186,12 @@
                 "trash": "Vaciar papelera",
                 "folder": "Vaciar libreta de direcciones"
             },
-            "delete": "Borrar libreta de direcciones",
-            "delete_permanently": "Borrar libreta de direcciones permanentemente",
+            "delete": "Eliminar libreta de direcciones",
+            "delete_permanently": "Eliminar libreta de direcciones permanentemente",
             "edit": "Editar libreta de direcciones",
             "move": "Mover",
             "new": "Nueva libreta de direcciones",
-            "moved": "Libreta de direcciones movida con éxito"
+            "moved": "La libreta de direcciones ha sido movida correctamente"
         },
         "item": {
             "root": "Raíz"
@@ -200,16 +200,16 @@
         "snackbar": {
             "address_book_moved_to_trash": "Libreta de direcciones movida a la papelera",
             "folder_new": "Nueva libreta de direcciones creada",
-            "trash_empty": "Carpeta de papelera vaciada con éxito",
-            "folder_empty": "Libreta de direcciones vaciada con éxito",
-            "address_book_permanently_deleted": "Libreta de direcciones borrada permanentemente"
+            "trash_empty": "Papelera vaciada con éxito",
+            "folder_empty": "La libreta de direcciones ha sido vaciada con éxito",
+            "address_book_permanently_deleted": "Libreta de direcciones eliminada permanentemente"
         },
         "type": "Carpeta de contactos"
     },
     "job": {
         "company": "Organización",
         "department": "Departamento",
-        "title": "Puesto de trabajo"
+        "title": "Cargo"
     },
     "name": {
         "nickName": "Apodo",
@@ -307,9 +307,9 @@
     },
     "of": "de",
     "displayer": {
-        "title5": "Elegir un contacto",
+        "title5": "Seleccionar un contacto",
         "description2": "Haz clic en el botón \"NUEVO\" para empezar a crear uno nuevo.",
-        "description5": "Descubre todas las maneras en las que puedes conectar con otros usuarios.",
+        "description5": "Descubre todas las maneras en las que puedes conectarte con otros usuarios.",
         "search_description1": "O elige \"Filtros avanzados\" para refinar la búsqueda.",
         "search_list_title1": "No hay resultados. ¡Sigue buscando!",
         "search_title4": "Elige uno o más resultados para realizar acciones o para mostrar los detalles.",
@@ -320,14 +320,14 @@
         "description8": "Elige un contacto o un grupo de contactos para enviar emails compartidos.",
         "list_title1": "Parece que aún no hay contactos",
         "list_title2": "La papelera está vacía",
-        "search_description2": "Prueba a iniciar otra búsqueda.",
+        "search_description2": "Intenta iniciar otra búsqueda.",
         "search_description3": "Comprueba la ortografía y las opciones de los filtros o intenta con otra palabra.",
-        "search_list_title2": "No hay elementos coinciden con tu búsqueda.",
+        "search_list_title2": "No hay elementos que coincidan con tu búsqueda.",
         "search_title1": "Iniciar otra búsqueda",
         "search_title2": "Lo sentimos pero no hay resultados para tu búsqueda",
         "search_title3": "No hay resultados para la búsqueda.",
         "title1": "Crea un nuevo contacto haciendo clic en el botón \"NUEVO\".",
-        "title10": "Selecciona y restaura los contactos de la papelera",
+        "title10": "Selecciona y restaura contactos de la papelera",
         "title2": "Comparte todos tus trabajos con tus contactos.",
         "title3": "Mantente en contacto con tus compañeros.",
         "title4": "Personaliza tus contactos añadiendo notas personales",
