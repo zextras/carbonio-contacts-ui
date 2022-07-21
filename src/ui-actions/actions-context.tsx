@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import { replaceHistory } from '@zextras/carbonio-shell-ui';
+import { replaceHistory, useTags } from '@zextras/carbonio-shell-ui';
 import { SnackbarManagerContext, ModalManagerContext } from '@zextras/carbonio-design-system';
 import { Contact } from '../types/contact';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -19,6 +19,7 @@ type ACPProps = {
 	folderId: string;
 	selectedIds: Array<string>;
 	deselectAll: () => void;
+	selectedContacts: Array<Contact>;
 };
 
 type ActionObj = {
@@ -26,6 +27,7 @@ type ActionObj = {
 	label: string;
 	click: (event: MouseEvent) => void;
 	icon: string;
+	disabled: boolean;
 };
 
 type ActionList = Array<ActionObj>;
@@ -50,14 +52,15 @@ export const ActionsContextProvider: FC<ACPProps> = ({
 	children,
 	folderId,
 	selectedIds,
-	deselectAll
+	deselectAll,
+	selectedContacts
 }) => {
 	const [t] = useTranslation();
-
+	const ids = useMemo(() => Object.keys(selectedIds ?? []), [selectedIds]);
 	const dispatch = useDispatch();
 	const createSnackbar = useContext(SnackbarManagerContext);
 	const createModal = useContext(ModalManagerContext);
-
+	const tags = useTags();
 	const [
 		contextActionsCallback,
 		hoverActionsCallback,
@@ -72,7 +75,8 @@ export const ActionsContextProvider: FC<ACPProps> = ({
 				replaceHistory,
 				createSnackbar,
 				createModal,
-				selectedIds
+				selectedIds,
+				tags
 			}),
 			hoverActions({
 				folderId,
@@ -101,10 +105,24 @@ export const ActionsContextProvider: FC<ACPProps> = ({
 				createSnackbar,
 				createModal,
 				selectedIds,
-				deselectAll
+				deselectAll,
+				tags,
+				ids,
+				selectedContacts
 			})
 		],
-		[createModal, createSnackbar, dispatch, folderId, t, selectedIds, deselectAll]
+		[
+			folderId,
+			t,
+			dispatch,
+			createSnackbar,
+			createModal,
+			selectedIds,
+			tags,
+			deselectAll,
+			selectedContacts,
+			ids
+		]
 	);
 
 	const getContextActions = useCallback<GetActionsFunction>(

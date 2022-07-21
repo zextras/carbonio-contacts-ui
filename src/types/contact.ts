@@ -86,7 +86,8 @@ export type ContactsFolder = {
 
 export type Contact = {
 	_id?: string;
-	/* Zimbra ID */ id?: string;
+	/* Zimbra ID */ id: string;
+	tags?: string[];
 	firstName: string;
 	middleName: string;
 	lastName: string;

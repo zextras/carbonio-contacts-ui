@@ -66,6 +66,7 @@ const ListItemActionWrapper = ({ children, current, onClick, contact }) => {
 									action.click(ev);
 								}}
 								size="small"
+								disabled={action.disabled}
 							/>
 						</Tooltip>
 					))}

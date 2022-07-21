@@ -292,7 +292,9 @@
     "tooltip": {
         "revoke": "Revogar acesso",
         "edit": "Editar acesso",
-        "resend": "Enviar notificação por e-mail sobre este compartilhamento"
+        "resend": "Enviar notificação por e-mail sobre este compartilhamento",
+        "address_book_sharing_status": "Compartilhado com {{count}} persona",
+        "address_book_sharing_status_plural": "Compartilhado com {{count}} personas"
     },
     "title": {
         "advanced_filters": "Filtros Avançados"
@@ -312,7 +314,7 @@
         "list_title1": "Parece que ainda não existem contatos",
         "list_title2": "A lixeira está vazia",
         "search_description2": "Tente iniciar uma nova busca.",
-        "search_description3": "Verifique a ortografia e as opções de filtros ou experimente uma nova palavra-chave.",
+        "search_description3": "Verifique a ortografia e as opções dos filtros ou tente com outra palavra-chave.",
         "search_list_title2": "Nenhum dos itens corresponde à sua busca.",
         "search_title1": "Iniciar nova busca",
         "search_title2": "Lamentamos, mas não existem resultados para sua busca",

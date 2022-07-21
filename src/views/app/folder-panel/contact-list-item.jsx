@@ -3,9 +3,10 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { Container, Drag } from '@zextras/carbonio-design-system';
-import { replaceHistory } from '@zextras/carbonio-shell-ui';
+import { replaceHistory, useTags, ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-shell-ui';
+import { includes, reduce } from 'lodash';
 import ListItemActionWrapper from '../../folder/list-item-action-wrapper';
 import { ItemAvatar } from './item-avatar';
 import { ItemContent } from './item-content';
@@ -25,6 +26,21 @@ export default function ContactListItem({
 	dragImageRef
 }) {
 	const ids = useMemo(() => Object.keys(selectedItems ?? []), [selectedItems]);
+	const tagsFromStore = useTags();
+
+	const tags = useMemo(
+		() =>
+			reduce(
+				tagsFromStore,
+				(acc, v) => {
+					if (includes(item.tags, v.id))
+						acc.push({ ...v, color: ZIMBRA_STANDARD_COLORS[parseInt(v.color ?? '0', 10)].hex });
+					return acc;
+				},
+				[]
+			),
+		[item.tags, tagsFromStore]
+	);
 
 	const _onClick = useCallback(
 		(e) => {
@@ -64,7 +80,7 @@ export default function ContactListItem({
 							toggle={toggle}
 							folderId={folderId}
 						/>
-						<ItemContent item={item} />
+						<ItemContent item={item} tags={tags} />
 					</ListItemActionWrapper>
 				</Container>
 			</Container>
