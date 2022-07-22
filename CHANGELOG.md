@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.20](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.19...v0.1.20) (2022-07-21)
+
+
+### Features
+
+* press enter to select the first result of chipinput ([fe4eec5](https://github.com/zextras/carbonio-contacts-ui/commit/fe4eec585e7cfc0b0d272b7f9e39134ef9ef6758))
+* tags implemented ([f4897d8](https://github.com/zextras/carbonio-contacts-ui/commit/f4897d8623d310e25e2a5eb2bfb96fa635fadaa6))
+
+
+### Bug Fixes
+
+* added support for shared addressbooks ([4a0fba7](https://github.com/zextras/carbonio-contacts-ui/commit/4a0fba795605c80f5e9e428dd016e71c28dce0ed))
+* disable email button in case of contacts without emails ([#41](https://github.com/zextras/carbonio-contacts-ui/issues/41)) ([37af302](https://github.com/zextras/carbonio-contacts-ui/commit/37af3023a97f4b7c7738da71647121d20acc7ff5))
+* use the folder's translated names in the secondary bar and modals ([ee68337](https://github.com/zextras/carbonio-contacts-ui/commit/ee68337624e43c05d81018fe49b551e8e0b847d5))
+
 ### [0.1.19](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.18...v0.1.19) (2022-06-20)
 
 ### [0.1.18](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.17...v0.1.18) (2022-06-09)
