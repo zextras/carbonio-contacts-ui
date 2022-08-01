@@ -301,7 +301,9 @@
     "tooltip": {
         "edit": "Toegang bewerken",
         "resend": "E-mailbericht over dit aandeel verzenden",
-        "revoke": "Toegang intrekken"
+        "revoke": "Toegang intrekken",
+        "address_book_sharing_status": "Gedeeld met {{count}} persoon",
+        "address_book_sharing_status_plural": "Gedeeld met {{count}} personen"
     },
     "of": "van",
     "displayer": {
