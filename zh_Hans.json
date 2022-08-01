@@ -263,7 +263,8 @@
     "tooltip": {
         "resend": "发送有关此共享的邮件通知",
         "edit": "编辑访问权限",
-        "revoke": "撤销访问权限"
+        "revoke": "撤销访问权限",
+        "address_book_sharing_status": " "
     },
     "types": {
         "work": "工作",
