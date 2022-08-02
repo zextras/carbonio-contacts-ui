@@ -293,7 +293,9 @@
     "tooltip": {
         "edit": "Zugriff bearbeiten",
         "revoke": "Zugriff widerrufen",
-        "resend": "E-Mail Benachrichtigung über dieses geteilte Element senden"
+        "resend": "E-Mail Benachrichtigung über dieses geteilte Element senden",
+        "address_book_sharing_status": "Mit {{count}} Person geteilt",
+        "address_book_sharing_status_plural": "Mit {{count}} Personen geteilt"
     },
     "types": {
         "home": "Home",
