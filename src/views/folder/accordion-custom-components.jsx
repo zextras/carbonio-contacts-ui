@@ -340,35 +340,37 @@ export const CustomAccordion = (
 		}, []);
 
 		return (
-			<Drop
-				acceptType={['contact', 'folder']}
-				onDrop={(data) => onDropAction(data)}
-				onDragEnter={(data) => onDragEnterAction(data)}
-				overlayAcceptComponent={<DropOverlayContainer folder={folder} />}
-				overlayDenyComponent={<DropDenyOverlayContainer folder={folder} />}
-			>
-				<Drag
-					type="folder"
-					data={folder}
-					dragDisabled={dragFolderDisable}
-					style={{ display: 'block' }}
+			<Row width="fill" minWidth={0}>
+				<Drop
+					acceptType={['contact', 'folder']}
+					onDrop={(data) => onDropAction(data)}
+					onDragEnter={(data) => onDragEnterAction(data)}
+					overlayAcceptComponent={<DropOverlayContainer folder={folder} />}
+					overlayDenyComponent={<DropDenyOverlayContainer folder={folder} />}
 				>
-					<AppLink
-						onClick={onClick}
-						to={`/folder/${folder.id}`}
-						style={{ width: '100%', height: '100%', textDecoration: 'none' }}
+					<Drag
+						type="folder"
+						data={folder}
+						dragDisabled={dragFolderDisable}
+						style={{ display: 'block' }}
 					>
-						<Dropdown contextMenu items={dropActions} display="block" width="100%">
-							<Row mainAlignment="flex-start" padding={{ left: 'small' }} takeAvailableSpace>
-								<Icon size="large" icon={folderIconLabel} customColor={folderIconColor} />
-								<Tooltip label={folderTranslatedLabel} placement="right" maxWidth="100%">
-									<AccordionItem {...translatedProps}>{sharedStatusIcon}</AccordionItem>
-								</Tooltip>
-							</Row>
-						</Dropdown>
-					</AppLink>
-				</Drag>
-			</Drop>
+						<AppLink
+							onClick={onClick}
+							to={`/folder/${folder.id}`}
+							style={{ width: '100%', height: '100%', textDecoration: 'none' }}
+						>
+							<Dropdown contextMenu items={dropActions} display="block" width="100%">
+								<Row mainAlignment="flex-start" padding={{ left: 'small' }} takeAvailableSpace>
+									<Icon size="large" icon={folderIconLabel} customColor={folderIconColor} />
+									<Tooltip label={folderTranslatedLabel} placement="right" maxWidth="100%">
+										<AccordionItem {...translatedProps}>{sharedStatusIcon}</AccordionItem>
+									</Tooltip>
+								</Row>
+							</Dropdown>
+						</AppLink>
+					</Drag>
+				</Drop>
+			</Row>
 		);
 	};
 	return Component;
