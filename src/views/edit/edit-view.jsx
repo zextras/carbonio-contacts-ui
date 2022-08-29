@@ -307,6 +307,21 @@ export default function EditView({ panel }) {
 		};
 	}, [compareToContact, editId, existingContact, keys?.length, panel]);
 
+	const fieldsToUpdate = useMemo(() => {
+		if (!contact) {
+			return {};
+		}
+		const updatedContact = cleanMultivalueFields(contact);
+
+		return differenceObject(compareToContact, updatedContact);
+	}, [compareToContact, contact]);
+
+	const isDisabled = useMemo(() => {
+		if (editId && editId !== 'new' && existingContact) {
+			return Object.keys(fieldsToUpdate).length < 1 || !(contact?.firstName || contact?.lastName);
+		}
+		return !(contact?.firstName || contact?.lastName);
+	}, [contact?.firstName, contact?.lastName, editId, existingContact, fieldsToUpdate]);
 	const title = useMemo(
 		() =>
 			contact?.namePrefix ||
@@ -391,15 +406,6 @@ export default function EditView({ panel }) {
 		[t]
 	);
 
-	const fieldsToUpdate = useMemo(() => {
-		if (!contact) {
-			return {};
-		}
-		const updatedContact = cleanMultivalueFields(contact);
-
-		return differenceObject(compareToContact, updatedContact);
-	}, [compareToContact, contact]);
-
 	return contact ? (
 		<Container
 			mainAlignment="flex-start"
@@ -422,11 +428,7 @@ export default function EditView({ panel }) {
 							</Text>
 						)}
 					</Container>
-					<Button
-						label={t('label.save', 'Save')}
-						onClick={onSubmit}
-						disabled={editId ? Object.keys(fieldsToUpdate).length < 1 : false}
-					/>
+					<Button label={t('label.save', 'Save')} onClick={onSubmit} disabled={isDisabled} />
 				</Row>
 				<Padding value="medium small">
 					<CompactView contact={contact} />
