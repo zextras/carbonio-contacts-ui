@@ -22,7 +22,8 @@ import {
 	IconButton,
 	Padding,
 	Text,
-	Select
+	Select,
+	Tooltip
 } from '@zextras/carbonio-design-system';
 import { useDispatch, useSelector } from 'react-redux';
 import FormSection from './form-section';
@@ -428,7 +429,13 @@ export default function EditView({ panel }) {
 							</Text>
 						)}
 					</Container>
-					<Button label={t('label.save', 'Save')} onClick={onSubmit} disabled={isDisabled} />
+					<Tooltip
+						label={t('message.require_field', 'Fill one required * field')}
+						placement="top"
+						disabled={!isDisabled}
+					>
+						<Button label={t('label.save', 'Save')} onClick={onSubmit} disabled={isDisabled} />
+					</Tooltip>
 				</Row>
 				<Padding value="medium small">
 					<CompactView contact={contact} />
