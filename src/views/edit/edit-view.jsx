@@ -442,7 +442,7 @@ export default function EditView({ panel }) {
 					/>
 					<CustomStringField
 						name="firstName"
-						label={t('name.first_name', 'First Name')}
+						label={`${t('name.first_name', 'First Name')}*`}
 						value={contact.firstName}
 						dispatch={dispatch}
 					/>
@@ -462,7 +462,7 @@ export default function EditView({ panel }) {
 					/>
 					<CustomStringField
 						name="lastName"
-						label={t('name.last_name', 'Last Name')}
+						label={`${t('name.last_name', 'Last Name')}*`}
 						value={contact.lastName}
 						dispatch={dispatch}
 					/>
