@@ -3,12 +3,9 @@
         "none": "无",
         "add": "添加",
         "admin": "管理员",
-        "contacts": "联系人",
         "create": "创建",
-        "delete": "删除",
         "owner": "所有者",
         "read": "读取",
-        "type": "类型",
         "viewer": "查看者",
         "write": "编写",
         "administer": "管理",
@@ -42,11 +39,8 @@
         "share_note": "标准消息中会展示您的名称、共享项目名称、授予接收者的权限以及登录信息。"
     },
     "action": {
-        "delete": "删除",
         "move": "移动",
-        "restore": "恢复",
         "search": "搜索",
-        "edit_share": "编辑访问权限",
         "goto_folder": "前往文件夹",
         "share_folder": "共享文件夹",
         "delete_permanently": "永久删除",
@@ -56,7 +50,6 @@
     "folder": {
         "modal": {
             "delete": {
-                "footer": "删除",
                 "title": "删除",
                 "body": {
                     "message1": "是否删除所选地址簿？如果删除，则其相关内容将被移动至垃圾箱中，且地址簿将不再可见。",
@@ -65,17 +58,14 @@
             },
             "edit": {
                 "body": {
-                    "contacts": "联系人",
                     "type": "类型",
                     "item": {
-                        "empty": "无可用路径",
-                        "root": "root"
+                        "empty": "无可用路径"
                     }
                 },
                 "footer": "编辑"
             },
             "move": {
-                "footer": "移动",
                 "title": "移动",
                 "body": {
                     "message1": "选择一个地址簿以将其移动至：",
@@ -83,8 +73,7 @@
                 },
                 "input": {
                     "filter": "筛选地址簿"
-                },
-                "new": "新地址簿"
+                }
             },
             "new": {
                 "footer": "创建",
@@ -101,7 +90,6 @@
                 "create_footer": "创建和移动"
             },
             "restore": {
-                "footer": "恢复",
                 "title": "恢复",
                 "create_footer": "创建和恢复"
             },
@@ -110,7 +98,6 @@
                     "message2": "如果清空，所有相关内容都将被移动至垃圾箱。",
                     "message1": "是否清空所选地址簿？"
                 },
-                "footer": "空",
                 "title": "空"
             },
             "footer": {
@@ -129,11 +116,7 @@
                 "trash": "清空垃圾箱"
             },
             "move": "移动",
-            "new": "新地址簿",
             "moved": "地址簿移动成功"
-        },
-        "item": {
-            "root": "Root"
         },
         "share_folder": "共享地址簿",
         "type": "联系人文件夹",
@@ -155,7 +138,6 @@
         "edit": "编辑",
         "save": "保存",
         "share": "分享",
-        "advance_filters": "{{count}}高级过滤条件",
         "revoke_share": "撤销 {{title}} 的共享",
         "contact_setting": "联系人设置",
         "create": "创建",
@@ -163,19 +145,15 @@
         "edit_folder_properties": "编辑 {{name}} 的属性",
         "resend": "重新发送",
         "revoke": "撤销",
-        "revoke_access_tooltip": "撤销访问权限并发送标准通知",
         "revoke_access_without_notification": "撤销访问权限并不发送通知",
-        "revoke_send_standard_msg": "撤销访问权限并发送自定义通知",
         "search_hint": "搜索提示！",
         "shares_folder_edit": "共享此地址簿",
-        "single_advance_fillter": "高级过滤条件",
         "error_try_again": "出现了一些错误，请重试",
         "type": "类型",
         "undo": "撤消",
         "delete": "删除",
         "single_advanced_filter": "高级过滤条件",
         "website": "网站",
-        "Undo": "撤消",
         "activate_selection_mode": "激活选择模式",
         "address_book_restored": "地址簿已恢复",
         "contacts": "联系人",
@@ -216,7 +194,6 @@
         "prefix": "前缀",
         "suffix": "后缀"
     },
-    "notes": "备注",
     "section": {
         "field": {
             "country": "国家",
@@ -224,12 +201,10 @@
             "city": "城市",
             "number": "号码",
             "postalCode": "邮政编码",
-            "street": "街道",
-            "url": "网站"
+            "street": "街道"
         },
         "title": {
             "address": "地址",
-            "url": "网站（{{count}}）",
             "mail": "邮件地址",
             "phone_number": "电话联系"
         }
@@ -238,7 +213,6 @@
         "destination": "目标文件夹",
         "address_book_name": "地址簿名称"
     },
-    "mail": "邮件",
     "message": {
         "search_hints": "搜索我们需要讨论的提示",
         "snackbar": {
@@ -262,7 +236,6 @@
     },
     "tooltip": {
         "resend": "发送有关此共享的邮件通知",
-        "edit": "编辑访问权限",
         "revoke": "撤销访问权限",
         "address_book_sharing_status": " "
     },
@@ -287,10 +260,8 @@
         }
     },
     "snackbar": {
-        "error": "出现错误，请重试",
         "folder_edited": "地址簿编辑成功",
         "folder_shared": "地址簿已共享",
-        "folder_shared_error": "出现错误，请重试",
         "share_resend": "共享邀请重发",
         "share_revoke": "共享访问权限已撤销",
         "share_updated": "访问权限更新"
