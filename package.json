@@ -1,6 +1,6 @@
 {
 	"name": "carbonio-contacts-ui",
-	"version": "0.1.21",
+	"version": "0.1.22",
 	"description": "Contacts module for Zextras Carbonio",
 	"main": "src/app.jsx",
 	"engines": {
