@@ -2,12 +2,9 @@
     "share": {
         "owner": "Pemilik",
         "read": "Dibaca",
-        "type": "Jenis",
         "add": "Tambahkan",
         "admin": "Admin",
-        "contacts": "Kontak",
         "create": "Buat",
-        "delete": "Hapus",
         "none": "Tidak ada",
         "administer": "Kelola",
         "allowed_actions": "Tindakan yang diperbolehkan",
@@ -42,12 +39,9 @@
         "write": "Tulis"
     },
     "action": {
-        "delete": "Hapus",
         "move": "Pindahkan",
-        "restore": "Pulihkan",
         "search": "Cari",
         "delete_permanently": "Hapus Secara Permanen",
-        "edit_share": "Edit Akses",
         "goto_folder": "Buka folder",
         "reset_filters": "Atur Ulang Filter",
         "send_msg": "Kirim email",
@@ -56,7 +50,6 @@
     "folder": {
         "modal": {
             "delete": {
-                "footer": "Hapus",
                 "title": "Hapus",
                 "body": {
                     "message2": "Apakah Anda ingin menghapus buku alamat yang dipilih secara permanen? Jika dihapus, konten terkait akan dihapus secara permanen dan buku alamat tidak dapat dipulihkan lagi.",
@@ -65,29 +58,24 @@
             },
             "edit": {
                 "body": {
-                    "contacts": "Kontak",
                     "type": "Jenis",
                     "item": {
-                        "empty": "Tidak tersedia jalur",
-                        "root": "root"
+                        "empty": "Tidak tersedia jalur"
                     }
                 },
                 "footer": "Edit"
             },
             "move": {
-                "footer": "Pindahkan",
                 "title": "Pindahkan",
                 "input": {
                     "filter": "Filter buku alamat"
                 },
-                "new": "Buku alamat baru",
                 "body": {
                     "message3": "Pilih satu folder sebagai tempat memindahkan file yang diinginkan:",
                     "message1": "Pilih satu buku alamat sebagai tempat memindahkan alamat yang diinginkan:"
                 }
             },
             "new": {
-                "footer": "Buat",
                 "body": {
                     "message1": "Nama buku alamat baru",
                     "message2": "Pilih satu buku alamat yang berisi kontak yang baru dibuat:"
@@ -101,7 +89,6 @@
                 "title2": "Pembuatan folder baru"
             },
             "restore": {
-                "footer": "Pulihkan",
                 "title": "Pulihkan",
                 "create_footer": "Buat dan Pulihkan"
             },
@@ -110,7 +97,6 @@
                     "message1": "Apakah Anda ingin mengosongkan buku alamat yang dipilih?",
                     "message2": "Jika dikosongkan, semua konten terkait akan dipindahkan ke tempat sampah."
                 },
-                "footer": "Kosongkan",
                 "title": "Kosongkan"
             },
             "footer": {
@@ -129,11 +115,7 @@
                 "trash": "Kosongkan tempat sampah"
             },
             "move": "Pindahkan",
-            "new": "Buku alamat baru",
             "moved": "Buku alamat berhasil dipindahkan"
-        },
-        "item": {
-            "root": "Root"
         },
         "share_folder": "Bagikan buku alamat",
         "snackbar": {
@@ -155,19 +137,15 @@
         "edit": "Edit",
         "save": "Simpan",
         "share": "Bagikan",
-        "advance_filters": "{{count}} Filter tingkat lanjut",
         "contact_setting": "Pengaturan Kontak",
         "create": "Buat",
         "edit_access": "Edit akses",
         "edit_folder_properties": "Edit properti {{name}}",
         "resend": "Kirim ulang",
         "revoke": "Batalkan",
-        "revoke_access_tooltip": "Batalkan akses dengan mengirim pemberitahuan standar",
         "search_hint": "Cari petunjuk!",
-        "revoke_access_without_notification": "Batalkan akses tanpa mengirim pemberitahuan",
         "revoke_send_standard_msg": "Batalkan akses dengan mengirim pemberitahuan kustom",
         "revoke_share": "Batalkan berbagi {{title}}",
-        "single_advance_fillter": "Filter Tingkat Lanjut",
         "shares_folder_edit": "Berbagi buku alamat ini",
         "contacts": "Kontak",
         "delete": "Hapus",
@@ -187,7 +165,6 @@
         "type": "Jenis",
         "single_advanced_filter": "Filter Lanjutan",
         "website": "Situs Web",
-        "Undo": "Batalkan",
         "undo": "Batalkan",
         "activate_selection_mode": "Aktifkan mode pemilihan",
         "discard_changes": "HAPUS PERUBAHAN",
@@ -216,7 +193,6 @@
         "prefix": "Awalan",
         "suffix": "Akhiran"
     },
-    "notes": "Catatan",
     "section": {
         "field": {
             "country": "Negara",
@@ -224,21 +200,18 @@
             "city": "Kota",
             "number": "Angka",
             "postalCode": "Kode Pos",
-            "street": "Jalan",
-            "url": "Situs Web"
+            "street": "Jalan"
         },
         "title": {
             "mail": "Alamat email",
             "phone_number": "Kontak telepon",
-            "address": "Alamat",
-            "url": "Situs Web ({{count}})"
+            "address": "Alamat"
         }
     },
     "message": {
         "snackbar": {
             "settings_saved": "Hasil edit disimpan dengan benar"
-        },
-        "search_hints": "Cari petunjuk yang perlu didiskusikan"
+        }
     },
     "mail": "Email",
     "messages": {
@@ -278,7 +251,6 @@
         "advanced_filters": "Filter Tingkat Lanjut"
     },
     "tooltip": {
-        "edit": "Edit akses",
         "revoke": "Batalkan akses",
         "resend": "Kirim notifikasi email tentang berbagi ini"
     },
@@ -289,10 +261,8 @@
         "work": "pekerjaan"
     },
     "snackbar": {
-        "error": "Terjadi kesalahan, coba lagi",
         "folder_edited": "Buku alamat berhasil diedit",
         "folder_shared": "Buku alamat dibagikan",
-        "folder_shared_error": "Terjadi kesalahan, coba lagi",
         "share_resend": "Undangan berbagi dikirim ulang",
         "share_revoke": "Akses berbagi dibatalkan",
         "share_updated": "Hak akses diperbarui"

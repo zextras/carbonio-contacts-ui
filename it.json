@@ -5,15 +5,11 @@
         "other": "altro",
         "home": "casa"
     },
-    "url": "Sito web",
-    "url_plural": "Siti web {{count}}",
     "select": {
         "default": "Seleziona tipo"
     },
     "section": {
         "title": {
-            "url": "Sito web",
-            "url_plural": "Siti web {{count}}",
             "phone_number": "Contatto telefonico",
             "phone_number_plural": "Contatti telefonici {{count}}",
             "mail": "Indirizzo e-mail",
@@ -22,7 +18,6 @@
             "address_plural": "Indirizzi"
         },
         "field": {
-            "url": "Sito Web",
             "street": "Via",
             "state": "Stato",
             "postalCode": "Codice postale",
@@ -31,8 +26,6 @@
             "city": "Città"
         }
     },
-    "number": "numero",
-    "number_plural": "Numeri {{count}}",
     "notes": "Note",
     "name": {
         "suffix": "Suffisso",
@@ -48,35 +41,25 @@
             "settings_saved": "Modifiche salvate correttamente"
         }
     },
-    "mail": "E-mail",
-    "mail_plural": "E-mail {{count}}",
     "label": {
         "edit": "Modifica",
         "create": "Crea",
         "save": "Salva",
-        "cancel": "Cancella",
-        "advance_filters": "1 Filtro avanzato",
-        "advance_filters_plural": "{{count}} Filtri avanzati",
+        "cancel": "Elimina",
         "contact_setting": "Impostazioni di contatto",
         "resend": "Invia di nuovo",
         "revoke": "Revoca",
         "edit_access": "Modifica accesso",
         "edit_folder_properties": "Modifica proprietà di {{name}}",
-        "revoke_access_tooltip": "Revoca accesso e invia una notifica standard",
         "revoke_access_without_notification": "Revoca accesso e non inviare notifica",
-        "revoke_send_standard_msg": "Revoca accesso e invia una notifica personalizzata",
         "revoke_share": "Revoca condivisone di {{title}}",
-        "search_hint": "Cerca suggerimenti!",
         "share": "Condividi",
         "shares_folder_edit": "Condivisione di questa rubrica",
-        "single_advance_fillter": "Filtri Avanzati",
         "empty": "Vuoto",
         "error_try_again": "Qualcosa è andato storto, riprova",
         "move": "Sposta",
         "restore": "Ripristina",
         "results_for": "Risultati per:",
-        "advanced_filters": "1 Filtro avanzato",
-        "advanced_filters_plural": "{{count}} Filtri avanzati",
         "contacts": "Contatti",
         "delete": "Cancella",
         "edit_access_name": "Modifica l'accesso di {{name}}",
@@ -95,7 +78,6 @@
         "address_book_restored": "Rubrica ripristinata",
         "advanced_filter": "{{count}} Filtro Avanzato",
         "advanced_filter_plural": "{{count}} Filtri Avanzati",
-        "Undo": "Annulla",
         "discard_changes": "ELIMINA MODIFICHE",
         "undo": "Annulla",
         "website": "Sito Web",
@@ -118,8 +100,6 @@
         "department": "Dipartimento",
         "company": "Azienda"
     },
-    "address": "Indirizzo",
-    "address_plural": "Indirizzi ({{count}})",
     "folder": {
         "action": {
             "empty": {
@@ -130,24 +110,19 @@
             "delete_permanently": "Elimina rubrica definitivamente",
             "delete": "Elimina rubrica",
             "move": "Sposta",
-            "new": "Nuova rubrica",
             "moved": "Rubrica spostata correttamente"
         },
         "modal": {
             "edit": {
-                "footer": "Modifica",
                 "title": "Modifica",
                 "body": {
-                    "contacts": "Contatti",
                     "item": {
-                        "empty": "Nessun percorso disponibile",
-                        "root": "root"
+                        "empty": "Nessun percorso disponibile"
                     },
                     "type": "Tipo"
                 }
             },
             "empty": {
-                "footer": "Svuota",
                 "title": "Svuota",
                 "body": {
                     "message1": "Vuoi svuotare questa rubrica?",
@@ -155,19 +130,16 @@
                 }
             },
             "move": {
-                "title": "Sposta",
                 "footer": "Sposta",
                 "input": {
                     "filter": "Filtra rubrica"
                 },
-                "new": "Nuova rubrica",
                 "body": {
                     "message1": "Seleziona una rubrica per spostarla in:",
                     "message3": "Seleziona una cartella in cui spostare quella selezionata:"
                 }
             },
             "new": {
-                "footer": "Crea",
                 "create_footer": "Crea e Sposta",
                 "body": {
                     "message1": "Nuovo nome rubrica",
@@ -181,12 +153,10 @@
                 "title2": "Creazione di nuova cartella"
             },
             "delete": {
-                "title": "Elimina",
                 "body": {
                     "message2": "Vuoi eliminare questa rubrica? Se eliminata, il contenuto verrà rimosso definitivamente e la rubrica non sarà più recuperabile.",
                     "message1": "Vuoi eliminare questa rubrica? Se eliminata, il contenuto verrà eliminato permanentemente e la rubrica non sarà più ripristinabile."
-                },
-                "footer": "Elimina"
+                }
             },
             "item": {
                 "empty": "Nessun elemento disponibile"
@@ -196,12 +166,8 @@
             },
             "restore": {
                 "create_footer": "Crea e Ripristina",
-                "footer": "Ripristina",
                 "title": "Ripristina"
             }
-        },
-        "item": {
-            "root": "Root"
         },
         "snackbar": {
             "trash_empty": "Cestino svuotato con successo",
@@ -215,11 +181,8 @@
     },
     "action": {
         "send_msg": "Invia e-mail",
-        "delete": "Cancella",
         "delete_permanently": "Elimina definitivamente",
-        "move": "Sposta",
         "restore": "Ripristina",
-        "edit_share": "Modifica Accesso",
         "goto_folder": "Vai alla cartella",
         "reset_filters": "Ripristina Filtri",
         "search": "Cerca",
@@ -244,9 +207,7 @@
         "administer": "Gestisci",
         "allowed_actions": "Azioni consentite",
         "contact_folder": "Rubrica",
-        "contacts": "Contatti",
         "create": "Crea",
-        "delete": "Elimina",
         "filter_user": "Trova utenti",
         "find_shares": "Trova Condivisioni",
         "insert": "Inserisci",
@@ -274,7 +235,6 @@
         "write": "Scrivi",
         "share_note": "Il messaggio predefinito mostra il tuo nome, il nome dell'elemento condiviso, i permessi dati ai destinatari e le informazioni di accesso.",
         "shared_folders": "Rubriche Condivise",
-        "type": "Tipo",
         "shared_items": "Rubrica condivisa di {{value}}",
         "viewer": "Visualizzazione"
     },
@@ -295,7 +255,6 @@
         }
     },
     "snackbar": {
-        "folder_shared_error": "Qualcosa è andato storto. Riprova",
         "error": "Qualcosa è andato storto. Riprova",
         "folder_edited": "Rubrica modificata correttamente",
         "folder_shared": "Rubrica condivisa",
@@ -311,13 +270,11 @@
         "advanced_filters": "Filtri Avanzati"
     },
     "tooltip": {
-        "edit": "Modifica accesso",
         "resend": "Invia e-mail di notifica per questa condivisione",
         "revoke": "Revoca accesso",
         "address_book_sharing_status": "Condiviso con {{count}} persone",
         "address_book_sharing_status_plural": ""
     },
-    "of": "di",
     "displayer": {
         "description3": "Clicca il pulsante \"NUOVO\" per creare un nuovo gruppo di contatti.",
         "description4": "Creane uno nuovo cliccando il pulsante \"NUOVO\".",
