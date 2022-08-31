@@ -1,14 +1,11 @@
 {
     "share": {
-        "contacts": "連絡先",
         "add": "追加する",
         "admin": "管理者",
-        "create": "作成する",
         "delete": "削除する",
         "none": "なし",
         "owner": "オーナ",
         "read": "既読",
-        "type": "タイプ",
         "administer": "管理者",
         "allowed_actions": "許可された操作",
         "contact_folder": "アドレス帳",
@@ -42,12 +39,9 @@
         "share_note": "標準メッセージには、名前、共有アイテムの名前、受信者に付与されたアクセス許可、サインイン情報が表示されます。"
     },
     "action": {
-        "delete": "削除する",
         "move": "移動",
-        "restore": "復元する",
         "search": "検索する",
         "delete_permanently": "完全に削除する",
-        "edit_share": "アクセスを編集する",
         "goto_folder": "フォルダに移動する",
         "reset_filters": "フィルターをリセットする",
         "send_msg": "メールを送信する",
@@ -56,7 +50,6 @@
     "folder": {
         "modal": {
             "delete": {
-                "footer": "削除する",
                 "title": "削除する",
                 "body": {
                     "message1": "選択した名簿を削除しますか？ 削除すると、関連するコンテンツが完全に削除され、名簿を復元できなくなります。",
@@ -65,17 +58,14 @@
             },
             "edit": {
                 "body": {
-                    "contacts": "連絡先",
                     "type": "タイプ",
                     "item": {
-                        "empty": "利用可能なパスがありません",
-                        "root": "ルート"
+                        "empty": "利用可能なパスがありません"
                     }
                 },
                 "footer": "編集する"
             },
             "move": {
-                "footer": "移動",
                 "title": "移動",
                 "body": {
                     "message1": "名簿を選択して、検討対象の名簿を次の場所に移動します:",
@@ -83,8 +73,7 @@
                 },
                 "input": {
                     "filter": "アドレス帳をフィルタリングする"
-                },
-                "new": "新しいアドレス帳"
+                }
             },
             "new": {
                 "footer": "作成する",
@@ -101,7 +90,6 @@
                 "title2": "新しいフォルダの作成"
             },
             "restore": {
-                "footer": "復元する",
                 "title": "復元する",
                 "create_footer": "作成と復元"
             },
@@ -113,7 +101,6 @@
                     "message1": "選択したアドレス帳を空にしますか？",
                     "message2": "空にすると、関連するコンテンツがすべてゴミ箱に移動されます。"
                 },
-                "footer": "空にする",
                 "title": "空にする"
             },
             "item": {
@@ -129,11 +116,7 @@
                 "trash": "ゴミ箱を空にする"
             },
             "move": "移動する",
-            "new": "新しいアドレス帳",
             "moved": "アドレス帳が移動しました"
-        },
-        "item": {
-            "root": "ルート"
         },
         "share_folder": "アドレス帳を共有する",
         "snackbar": {
@@ -155,20 +138,15 @@
         "edit": "編集する",
         "save": "保存する",
         "share": "シェアする",
-        "advance_filters": "{{count}}高度なフィルター",
         "contact_setting": "連絡先の設定",
         "create": "作成する",
         "edit_access": "アクセス権を編集する",
         "edit_folder_properties": "{{name}}のプロパティを編集する",
         "resend": "再送信する",
         "revoke": "取り消す",
-        "revoke_access_tooltip": "標準通知の送信へのアクセスを取り消す",
         "revoke_access_without_notification": "通知を送信せずにアクセスを取り消す",
-        "revoke_send_standard_msg": "カスタム通知の送信へのアクセスを取り消す",
         "revoke_share": "{{title}}の共有を取り消す",
-        "search_hint": "検索のヒント！",
         "shares_folder_edit": "このアドレス帳の共有",
-        "single_advance_fillter": "高度なフィルター",
         "contacts": "連絡先",
         "delete": "削除する",
         "revoke_with_standard_msg": "標準通知を送信してアクセス権を取り消す",
@@ -178,7 +156,6 @@
         "single_advanced_filter": "高度なフィルタ",
         "type": "種類",
         "website": "ウェブサイト",
-        "Undo": "元に戻す",
         "email": "メール",
         "edit_access_name": "{{name}}のアクセスを編集する",
         "empty": "空にする",
@@ -216,7 +193,6 @@
         "prefix": "敬称",
         "suffix": "称号"
     },
-    "notes": "注釈",
     "section": {
         "field": {
             "country": "国",
@@ -224,21 +200,18 @@
             "city": "市町村",
             "number": "番号",
             "postalCode": "郵便番号",
-            "street": "通り名",
-            "url": "ウェブサイト"
+            "street": "通り名"
         },
         "title": {
             "address": "アドレス",
             "mail": "メールアドレス",
-            "phone_number": "電話連絡先",
-            "url": "ウェブサイト {{count}}"
+            "phone_number": "電話連絡先"
         }
     },
     "message": {
         "snackbar": {
             "settings_saved": "編集が保存されました"
-        },
-        "search_hints": "話し合う必要のある検索のヒント"
+        }
     },
     "mail": "メール",
     "messages": {
@@ -275,10 +248,8 @@
         }
     },
     "snackbar": {
-        "error": "エラーが発生しました。再度お試しください",
         "folder_edited": "アドレス帳が編集されました",
         "folder_shared": "アドレス帳が共有されました",
-        "folder_shared_error": "エラーが発生しました。再度お試しください",
         "share_resend": "送信された招待を共有する",
         "share_updated": "アクセス権が更新されました",
         "share_revoke": "共有アクセスが取り消されました"
@@ -287,7 +258,6 @@
         "advanced_filters": "高度なフィルター"
     },
     "tooltip": {
-        "edit": "アクセスを編集する",
         "resend": "この共有に関するメール通知を再送信します",
         "revoke": "アクセス権を取り消す"
     },
@@ -297,7 +267,6 @@
         "other": "その他",
         "work": "職場"
     },
-    "of": "の",
     "displayer": {
         "title5": "連絡先を選択する",
         "search_list_title1": "検索結果がないようです。 探し続けてください！",

@@ -22,13 +22,14 @@
 		"sdk-setup": "npm ci --prefix sdk"
 	},
 	"keywords": [],
-	"author": "Zextras DL Team <https://www.zextras.com/carbonio/>",
+	"author": "Zextras Crab Onions Team <https://www.zextras.com/carbonio/>",
 	"maintainers": [
-		"Matteo Dal Zovo <matteo.dalzovo@zextras.com>",
 		"Gabriele Marino <gabriele.marino@zextras.com>",
 		"Abhishek Kumar <abhishek.kumar@zextras.com>",
 		"Giuliano Caregnato <giuliano.caregnato@zextras.com>",
-		"Dhaval Dodiya <dhaval.dodiya@zextras.com>"
+		"Dhaval Dodiya <dhaval.dodiya@zextras.com>",
+		"Francesco Gottardi <francesco.gottardi@zextras.com>",
+		"Luca Stauble <luca.stauble@zextras.com>"
 	],
 	"license": "AGPL-3.0-only",
 	"devDependencies": {
@@ -58,8 +59,8 @@
 	"dependencies": {
 		"@reduxjs/toolkit": "1.6.2",
 		"@types/react-redux": "7.1.20",
-		"@zextras/carbonio-design-system": "^0.3.7",
-		"@zextras/carbonio-shell-ui": "^0.4.30",
+		"@zextras/carbonio-design-system": "^0.3.10",
+		"@zextras/carbonio-shell-ui": "^0.4.34",
 		"core-js": "3.19.1",
 		"i18next": "^21.5.3",
 		"lodash": "4.17.21",

@@ -1,11 +1,8 @@
 {
     "action": {
-        "delete": "Excluir",
         "move": "Mover",
-        "restore": "Restaurar",
         "search": "Buscar",
         "delete_permanently": "Excluir Permanentemente",
-        "edit_share": "Editar Acesso",
         "goto_folder": "Ir para a pasta",
         "reset_filters": "Redefinir Filtros",
         "send_msg": "Enviar e-mail",
@@ -14,7 +11,6 @@
     "folder": {
         "modal": {
             "delete": {
-                "footer": "Excluir",
                 "title": "Excluir",
                 "body": {
                     "message1": "Deseja excluir a agenda de endereços selecionada? Ao excluí-la, seu conteúdo será removido permanentemente e ela não será mais recuperável.",
@@ -23,17 +19,14 @@
             },
             "edit": {
                 "body": {
-                    "contacts": "Contatos",
                     "type": "Tipo",
                     "item": {
-                        "empty": "Sem caminho disponível",
-                        "root": "raiz"
+                        "empty": "Sem caminho disponível"
                     }
                 },
                 "footer": "Editar"
             },
             "move": {
-                "footer": "Mover",
                 "title": "Mover",
                 "body": {
                     "message1": "Selecione uma agenda de endereços para movê-la para:",
@@ -41,8 +34,7 @@
                 },
                 "input": {
                     "filter": "Filtrar agenda de endereços"
-                },
-                "new": "Nova agenda de endereços"
+                }
             },
             "new": {
                 "footer": "Criar",
@@ -59,7 +51,6 @@
                 "title2": "Criação de nova pasta"
             },
             "restore": {
-                "footer": "Restaurar",
                 "title": "Restaurar",
                 "create_footer": "Criar e Restaurar"
             },
@@ -68,7 +59,6 @@
                     "message1": "Deseja esvaziar a agenda de endereços selecionada?",
                     "message2": "Ao esvaziá-la, todo seu conteúdo será movido para a lixeira."
                 },
-                "footer": "Vazia",
                 "title": "Vazia"
             },
             "footer": {
@@ -87,11 +77,7 @@
                 "trash": "Esvaziar lixeira"
             },
             "move": "Mover",
-            "new": "Nova agenda de endereços",
             "moved": "Agenda de endereços movida com sucesso"
-        },
-        "item": {
-            "root": "Raiz"
         },
         "share_folder": "Compartilhar agenda de endereços",
         "snackbar": {
@@ -113,21 +99,15 @@
         "edit": "Editar",
         "save": "Salvar",
         "share": "Partilhar",
-        "advance_filters": "1 Filtro avançado",
-        "advance_filters_plural": "{{count}} Filtros avançados",
         "contact_setting": "Configurações de contato",
         "create": "Criar",
         "edit_access": "Editar acesso",
         "edit_folder_properties": "Editar propriedades de {{name}}",
         "resend": "Reenviar",
         "revoke": "Revogar",
-        "revoke_access_tooltip": "Revogar acesso enviando uma notificação padrão",
         "revoke_access_without_notification": "Revogar acesso sem enviar notificação",
-        "revoke_send_standard_msg": "Revogar acesso enviando uma notificação personalizada",
         "revoke_share": "Revogar partilha de {{title}}",
-        "search_hint": "Dicas de pesquisa!",
         "shares_folder_edit": "Compartilhando esta agenda de endereços",
-        "single_advance_fillter": "Filtros Avançados",
         "notes": "Notas",
         "of": "de",
         "restore": "Restaurar",
@@ -138,7 +118,6 @@
         "type": "Tipo",
         "website": "Website",
         "website_plural": "Website",
-        "Undo": "Desfazer",
         "contacts": "Contatos",
         "delete": "Apagar",
         "edit_access_name": "Editar acesso de {{name}}",
@@ -172,12 +151,9 @@
     "share": {
         "add": "Adicionar",
         "admin": "Admin",
-        "contacts": "Contatos",
         "owner": "Proprietário",
         "read": "Leitura",
-        "type": "Tipo",
         "create": "Criar",
-        "delete": "Excluir",
         "none": "None",
         "administer": "Administrador",
         "allowed_actions": "Ações permitidas",
@@ -219,7 +195,6 @@
         "prefix": "Título",
         "suffix": "Sufixo"
     },
-    "notes": "Notas",
     "section": {
         "field": {
             "country": "País",
@@ -227,23 +202,19 @@
             "city": "Cidade",
             "number": "Número",
             "postalCode": "CEP",
-            "street": "Rua",
-            "url": "Website"
+            "street": "Rua"
         },
         "title": {
             "address": "Endereço",
             "address_plural": "Endereços",
             "mail": "Endereço de e-mail",
-            "phone_number": "Contato telefônico",
-            "url": "Website",
-            "url_plural": "Websites ({{count}})"
+            "phone_number": "Contato telefônico"
         }
     },
     "message": {
         "snackbar": {
             "settings_saved": "Edições salvas corretamente"
-        },
-        "search_hints": "Dicas de pesquisa que precisamos conversar"
+        }
     },
     "mail": "E-mail",
     "messages": {
@@ -281,17 +252,14 @@
         }
     },
     "snackbar": {
-        "error": "Algo deu errado. Tente novamente",
         "folder_edited": "Agenda de endereços editada com sucesso",
         "folder_shared": "Agenda de endereços compartilhada",
-        "folder_shared_error": "Algo deu errado. Tente novamente",
         "share_resend": "Convite da partilha reenviado",
         "share_revoke": "Acesso à partilha revogado",
         "share_updated": "Direitos de acesso atualizados"
     },
     "tooltip": {
         "revoke": "Revogar acesso",
-        "edit": "Editar acesso",
         "resend": "Enviar notificação por e-mail sobre esta partilha",
         "address_book_sharing_status": "Partilhado com {{count}} persona",
         "address_book_sharing_status_plural": "Partilhado com {{count}} personas"
