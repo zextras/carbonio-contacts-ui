@@ -1,6 +1,5 @@
 {
     "action": {
-        "edit_share": "Erişimi Düzenle",
         "goto_folder": "Klasöre git",
         "reset_filters": "Filtreleri sıfırla",
         "delete_permanently": "Kalıcı olarak sil",
@@ -11,7 +10,6 @@
     "folder": {
         "modal": {
             "delete": {
-                "footer": "Sil",
                 "body": {
                     "message1": "Seçili adres defterini kalıcı olarak silmek istiyor musunuz? Silerseniz, ilgili içerik kalıcı olarak silinecek ve adres defteri artık geri alınamayacak.",
                     "message2": "Seçili adres defterini kalıcı olarak silmek istiyor musunuz? Silerseniz, ilgili içerik kalıcı olarak silinecek ve adres defteri artık geri alınamayacak."
@@ -21,7 +19,6 @@
                 "go_back": "Geriye git"
             },
             "restore": {
-                "footer": "Geri yükle",
                 "create_footer": "Oluştur ve Geri Yükle"
             },
             "new": {
@@ -48,19 +45,16 @@
             },
             "edit": {
                 "body": {
-                    "contacts": "Kişiler",
                     "item": {
                         "empty": "Yol bulunamadı"
-                    },
-                    "type": "Tür"
+                    }
                 }
             },
             "empty": {
                 "body": {
                     "message1": "Seçili adres defterini boşaltmak istiyor musunuz?",
                     "message2": "Boşaltırsanız, ilgili tüm içerik çöp kutusuna taşınacak."
-                },
-                "title": "Boşalt"
+                }
             },
             "item": {
                 "empty": "Hiç öğe bulunamadı"
@@ -100,7 +94,6 @@
         "administer": "Yönet",
         "allowed_actions": "İzin verilen eylemler",
         "contact_folder": "Adres Defteri",
-        "delete": "Sil",
         "filter_user": "Kişileri bul",
         "find_contact_shares": "Kişi Paylaşımlarını Bul",
         "find_shares": "Paylaşımları Bul",
@@ -142,7 +135,6 @@
         "contact_setting": "Kişi Ayarları",
         "create": "Oluştur",
         "edit_folder_properties": "{{name}} özelliklerini düzenle",
-        "revoke_access_without_notification": "Bildirim göndermeden erişim yetkisini kaldır",
         "revoke_share": "{{title}} paylaşımını iptal et",
         "shares_folder_edit": "Bu adres defteri paylaşımı",
         "activate_selection_mode": "Seçim modunu aktive et",

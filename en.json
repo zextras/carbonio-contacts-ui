@@ -112,6 +112,12 @@
         },
         "type": "Contact Folder"
     },
+    "folders": {
+        "auto_contacts": "Emailed Contacts",
+        "contacts": "Contacts",
+        "root": "Root",
+        "trash": "Trash"
+    },
     "job": {
         "company": "Company",
         "department": "Department",
@@ -129,7 +135,10 @@
         "contact_setting": "Contact Settings",
         "contacts": "Contacts",
         "create": "Create",
+        "create_tag": "Create Tag",
         "delete": "Delete",
+        "delete_tag": "Delete Tag",
+        "delete_tag_name": "Delete \"{{name}}\" tag",
         "discard_changes": "DISCARD CHANGES",
         "edit": "Edit",
         "edit_access": "Edit access",
@@ -137,6 +146,8 @@
         "edit_email": "Edit E-mail",
         "edit_folder_properties": "Edit {{name}}'s properties",
         "edit_invalid_email": "E-mail is invalid, click to edit it",
+        "edit_tag": "Edit Tag",
+        "edit_tag_name": "Edit \"{{name}}\" tag",
         "email": "E-mail",
         "empty": "Empty",
         "error_try_again": "Something went wrong, please try again",
@@ -145,6 +156,8 @@
         "new_address_book": "New address Book",
         "new_contact": "New contact",
         "new_contact_created": "New contact created",
+        "new_tag": "New Tag",
+        "no_special_char_allowed": "Name should not contain any special character",
         "note": "Note:",
         "notes": "Notes",
         "of": "of",
@@ -165,13 +178,20 @@
         "share_with": "Share with",
         "shares_folder_edit": "Sharing of this address book",
         "single_advanced_filter": "Advanced Filter",
+        "tag": "Tag",
+        "tag_max_length": "Max 128 characters are allowed",
+        "tag_name": "Tag name",
+        "tags": "Tags",
         "type": "Type",
         "undo": "Undo",
         "website": "Website",
         "website_plural": "Websites"
     },
     "message": {
+        "delete_tag_message1": "Are you sure to delete \"{{name}}\" Tag?",
+        "delete_tag_message2": "Once deleted, it will be removed from every item marked with it.",
         "new_contact": "This contact will be created in the 'Contacts' folder",
+        "require_field": "Fill one required * field",
         "snackbar": {
             "settings_saved": "Edits saved correctly"
         }
@@ -189,7 +209,11 @@
             "contact_deleted_permanently": "Contact permanently deleted",
             "contact_moved": "Contact moved",
             "contact_moved_to_trash": "Contact moved to trash",
-            "contact_restored": "Contact restored"
+            "contact_restored": "Contact restored",
+            "tag_created": "Tag {{name}} successfully created",
+            "tag_deleted": "{{name}} Tag deleted successfully",
+            "tag_not_updated": "Something went wrong, tag not updated. Please try again.",
+            "tag_updated": "Tag successfully updated"
         }
     },
     "modal": {
@@ -277,7 +301,9 @@
         "folder_shared": "Address book shared",
         "share_resend": "Share invite resent",
         "share_revoke": "Share access revoked",
-        "share_updated": "Access rights updated"
+        "share_updated": "Access rights updated",
+        "tag_applied": "\"{{tag}}\" tag applied",
+        "tag_removed": "\"{{tag}}\" tag removed"
     },
     "title": {
         "advanced_filters": "Advanced Filters"

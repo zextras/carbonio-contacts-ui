@@ -1,6 +1,5 @@
 {
     "action": {
-        "edit_share": "Zugriff bearbeiten",
         "goto_folder": "Zum Ordner gehen",
         "reset_filters": "Filter zurücksetzen",
         "search": "Suchen",
@@ -25,23 +24,20 @@
                 "body": {
                     "message1": "Möchten Sie das ausgewählte Adressbuch endgültig löschen? Wenn Sie es löschen, wird der zugehörige Inhalt unwiderruflich gelöscht und das Adressbuch kann nicht mehr wiederhergestellt werden.",
                     "message2": "Möchten Sie das ausgewählte Adressbuch endgültig löschen? Wenn Sie es löschen, wird der zugehörige Inhalt unwiderruflich gelöscht und das Adressbuch kann nicht mehr wiederhergestellt werden."
-                },
-                "title": "Löschen"
+                }
             },
             "edit": {
                 "body": {
                     "item": {
                         "empty": "Kein Pfad verfügbar"
-                    },
-                    "type": "Typ"
+                    }
                 }
             },
             "empty": {
                 "body": {
                     "message1": "Möchten Sie das ausgewählte Adressbuch leeren?",
                     "message2": "Wenn Sie es leeren, wird der zugehörige Inhalt in den Papierkorb verschoben."
-                },
-                "title": "Leer"
+                }
             },
             "footer": {
                 "go_back": "Zurück"
@@ -56,8 +52,7 @@
                 },
                 "input": {
                     "filter": "Adressbuch filtern"
-                },
-                "title": "Verschieben"
+                }
             },
             "new": {
                 "body": {
@@ -73,8 +68,7 @@
                 "title2": "Erstellung eines neuen Ordners"
             },
             "restore": {
-                "create_footer": "Erstellen und wiederherstellen",
-                "title": "Wiederherstellen"
+                "create_footer": "Erstellen und wiederherstellen"
             }
         },
         "snackbar": {
@@ -105,7 +99,6 @@
         "edit_folder_properties": "{{name}}'s Eigenschaften bearbeiten",
         "save": "Speichern",
         "share": "Teilen",
-        "revoke_access_without_notification": "Zugriff widerrufen ohne eine Benachrichtigung zu senden",
         "single_advance_fillter": "Fortgeschrittene Filter",
         "empty": "Leer",
         "type": "Typ",
@@ -240,7 +233,6 @@
         "read": "Gelesen",
         "viewer": "Zuschauer",
         "allowed_actions": "Erlaubte Aktionen",
-        "create": "Erstellen",
         "manager": "Manager",
         "none": "Keine",
         "find_shares_label": "Wählen Sie aus, welches Adressbuch Sie im Kontaktbaum sehen möchten",
@@ -271,7 +263,6 @@
         "work": "Arbeit",
         "mobile": "Mobil"
     },
-    "notes": "Notizen",
     "displayer": {
         "description2": "Klicken Sie auf die Schaltfläche \"NEU\", um mit der Erstellung eines neuen Dokuments zu beginnen.",
         "description6": "Verwenden Sie den Modus \"Bearbeiten\", um einem Kontakt eine persönliche Notiz hinzuzufügen.",

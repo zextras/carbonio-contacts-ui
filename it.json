@@ -26,7 +26,6 @@
             "city": "Città"
         }
     },
-    "notes": "Note",
     "name": {
         "suffix": "Suffisso",
         "prefix": "Prefisso",
@@ -51,7 +50,6 @@
         "revoke": "Revoca",
         "edit_access": "Modifica accesso",
         "edit_folder_properties": "Modifica proprietà di {{name}}",
-        "revoke_access_without_notification": "Revoca accesso e non inviare notifica",
         "revoke_share": "Revoca condivisone di {{title}}",
         "share": "Condividi",
         "shares_folder_edit": "Condivisione di questa rubrica",
@@ -114,12 +112,10 @@
         },
         "modal": {
             "edit": {
-                "title": "Modifica",
                 "body": {
                     "item": {
                         "empty": "Nessun percorso disponibile"
-                    },
-                    "type": "Tipo"
+                    }
                 }
             },
             "empty": {
@@ -130,7 +126,6 @@
                 }
             },
             "move": {
-                "footer": "Sposta",
                 "input": {
                     "filter": "Filtra rubrica"
                 },
@@ -165,8 +160,7 @@
                 "go_back": "Indietro"
             },
             "restore": {
-                "create_footer": "Crea e Ripristina",
-                "title": "Ripristina"
+                "create_footer": "Crea e Ripristina"
             }
         },
         "snackbar": {
@@ -182,7 +176,6 @@
     "action": {
         "send_msg": "Invia e-mail",
         "delete_permanently": "Elimina definitivamente",
-        "restore": "Ripristina",
         "goto_folder": "Vai alla cartella",
         "reset_filters": "Ripristina Filtri",
         "search": "Cerca",
@@ -207,7 +200,6 @@
         "administer": "Gestisci",
         "allowed_actions": "Azioni consentite",
         "contact_folder": "Rubrica",
-        "create": "Crea",
         "filter_user": "Trova utenti",
         "find_shares": "Trova Condivisioni",
         "insert": "Inserisci",
@@ -255,7 +247,6 @@
         }
     },
     "snackbar": {
-        "error": "Qualcosa è andato storto. Riprova",
         "folder_edited": "Rubrica modificata correttamente",
         "folder_shared": "Rubrica condivisa",
         "share_resend": "Invito condivisione inviato",

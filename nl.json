@@ -2,11 +2,9 @@
     "folder": {
         "modal": {
             "restore": {
-                "title": "Herstellen",
                 "create_footer": "Aanmaken en herstellen"
             },
             "delete": {
-                "title": "Verwijderen",
                 "body": {
                     "message1": "Wilt u het geselecteerde adresboek verwijderen? Als u het verwijdert, wordt de gerelateerde inhoud permanent naar de prullenbak verplaatst en is het adresboek niet langer recupereerbaar.",
                     "message2": "Wilt u het geselecteerde adresboek definitief verwijderen? Als u het verwijdert, wordt de gerelateerde inhoud permanent verwijderd en kan het adresboek niet meer worden hersteld."
@@ -14,12 +12,10 @@
             },
             "edit": {
                 "body": {
-                    "type": "Type",
                     "item": {
                         "empty": "Geen pad beschikbaar"
                     }
-                },
-                "footer": "Bewerken"
+                }
             },
             "move": {
                 "title": "Verplaatsen",
@@ -32,7 +28,6 @@
                 }
             },
             "new": {
-                "footer": "Creëren",
                 "body": {
                     "message1": "Nieuwe adresboeknaam",
                     "message2": "Selecteer een adresboek dat het nieuw aangemaakte adresboek zal bevatten:"
@@ -49,8 +44,7 @@
                 "body": {
                     "message1": "Wilt u het geselecteerde adresboek leegmaken?",
                     "message2": "Als u het leegmaakt, zal alle gerelateerde inhoud naar de prullenbak worden verplaatst."
-                },
-                "title": "Leeg"
+                }
             },
             "footer": {
                 "go_back": "Teruggaan"
@@ -91,7 +85,6 @@
     "share": {
         "add": "Toevoegen",
         "admin": "Admin",
-        "create": "Creëren",
         "manager": "Beheren",
         "none": "Geen",
         "owner": "Eigenaar",
@@ -129,7 +122,6 @@
     },
     "action": {
         "delete_permanently": "Permanent Verwijderen",
-        "restore": "Herstellen",
         "search": "Zoeken",
         "goto_folder": "Ga naar map",
         "reset_filters": "Filters resetten",
@@ -152,10 +144,8 @@
         "edit_folder_properties": "Eigenschappen van {{name}} bewerken",
         "resend": "Opnieuw verzenden",
         "revoke": "Intrekken",
-        "revoke_access_without_notification": "Toegang intrekken zonder een melding te sturen",
         "revoke_share": "Delen van {{title}} intrekken",
         "shares_folder_edit": "Delen van dit adresboek",
-        "revoke_send_standard_msg": "Toegang intrekken door een aangepaste melding te verzenden",
         "contacts": "Contacten",
         "delete": "Verwijderen",
         "edit_access_name": "Toegang van {{name}} bewerken",
@@ -223,7 +213,6 @@
             "settings_saved": "Bewerkingen correct opgeslagen"
         }
     },
-    "mail": "E-mail",
     "messages": {
         "modal": {
             "delete": {

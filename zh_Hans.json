@@ -3,7 +3,6 @@
         "none": "无",
         "add": "添加",
         "admin": "管理员",
-        "create": "创建",
         "owner": "所有者",
         "read": "读取",
         "viewer": "查看者",
@@ -39,7 +38,6 @@
         "share_note": "标准消息中会展示您的名称、共享项目名称、授予接收者的权限以及登录信息。"
     },
     "action": {
-        "move": "移动",
         "search": "搜索",
         "goto_folder": "前往文件夹",
         "share_folder": "共享文件夹",
@@ -50,7 +48,6 @@
     "folder": {
         "modal": {
             "delete": {
-                "title": "删除",
                 "body": {
                     "message1": "是否删除所选地址簿？如果删除，则其相关内容将被移动至垃圾箱中，且地址簿将不再可见。",
                     "message2": "是否永久性删除所选地址簿？如果删除，则其相关内容将永久性移除，且地址簿将不可恢复。"
@@ -58,12 +55,10 @@
             },
             "edit": {
                 "body": {
-                    "type": "类型",
                     "item": {
                         "empty": "无可用路径"
                     }
-                },
-                "footer": "编辑"
+                }
             },
             "move": {
                 "title": "移动",
@@ -76,7 +71,6 @@
                 }
             },
             "new": {
-                "footer": "创建",
                 "body": {
                     "message2": "选择将会包含最近创建的一个地址簿：",
                     "message1": "新地址簿名称"
@@ -90,15 +84,13 @@
                 "create_footer": "创建和移动"
             },
             "restore": {
-                "title": "恢复",
                 "create_footer": "创建和恢复"
             },
             "empty": {
                 "body": {
                     "message2": "如果清空，所有相关内容都将被移动至垃圾箱。",
                     "message1": "是否清空所选地址簿？"
-                },
-                "title": "空"
+                }
             },
             "footer": {
                 "go_back": "返回"
@@ -145,7 +137,6 @@
         "edit_folder_properties": "编辑 {{name}} 的属性",
         "resend": "重新发送",
         "revoke": "撤销",
-        "revoke_access_without_notification": "撤销访问权限并不发送通知",
         "search_hint": "搜索提示！",
         "shares_folder_edit": "共享此地址簿",
         "error_try_again": "出现了一些错误，请重试",
@@ -214,7 +205,6 @@
         "address_book_name": "地址簿名称"
     },
     "message": {
-        "search_hints": "搜索我们需要讨论的提示",
         "snackbar": {
             "settings_saved": "编辑保存正确"
         }
