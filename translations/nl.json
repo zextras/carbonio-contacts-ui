@@ -2,12 +2,10 @@
     "folder": {
         "modal": {
             "restore": {
-                "footer": "Herstellen",
                 "title": "Herstellen",
                 "create_footer": "Aanmaken en herstellen"
             },
             "delete": {
-                "footer": "Openen met",
                 "title": "Verwijderen",
                 "body": {
                     "message1": "Wilt u het geselecteerde adresboek verwijderen? Als u het verwijdert, wordt de gerelateerde inhoud permanent naar de prullenbak verplaatst en is het adresboek niet langer recupereerbaar.",
@@ -16,17 +14,14 @@
             },
             "edit": {
                 "body": {
-                    "contacts": "Contacten",
                     "type": "Type",
                     "item": {
-                        "empty": "Geen pad beschikbaar",
-                        "root": "wortel"
+                        "empty": "Geen pad beschikbaar"
                     }
                 },
                 "footer": "Bewerken"
             },
             "move": {
-                "footer": "Verplaatsen",
                 "title": "Verplaatsen",
                 "body": {
                     "message1": "Selecteer een adresboek om het overwogene naar te verplaatsen:",
@@ -34,8 +29,7 @@
                 },
                 "input": {
                     "filter": "Adresboek filteren"
-                },
-                "new": "Nieuw adresboek"
+                }
             },
             "new": {
                 "footer": "Creëren",
@@ -56,7 +50,6 @@
                     "message1": "Wilt u het geselecteerde adresboek leegmaken?",
                     "message2": "Als u het leegmaakt, zal alle gerelateerde inhoud naar de prullenbak worden verplaatst."
                 },
-                "footer": "Leeg",
                 "title": "Leeg"
             },
             "footer": {
@@ -75,11 +68,7 @@
                 "trash": "Prullenbak leegmaken"
             },
             "move": "Verplaatsen",
-            "new": "Nieuw adresboek",
             "moved": "Adresboek met succes verplaatst"
-        },
-        "item": {
-            "root": "Wortel"
         },
         "share_folder": "Adresboek delen",
         "snackbar": {
@@ -99,18 +88,14 @@
         "prefix": "Prefix",
         "suffix": "Suffix"
     },
-    "notes": "Opmerkingen",
     "share": {
         "add": "Toevoegen",
         "admin": "Admin",
-        "contacts": "Contacten",
         "create": "Creëren",
-        "delete": "Openen met",
         "manager": "Beheren",
         "none": "Geen",
         "owner": "Eigenaar",
         "read": "Gelezen",
-        "type": "Type",
         "administer": "Beheren",
         "allowed_actions": "Toegestane acties",
         "contact_folder": "Adresboek",
@@ -143,12 +128,9 @@
         "share_note": "Het standaardbericht toont uw naam, de naam van het gedeelde item, de machtigingen die aan de ontvangers zijn verleend en, indien nodig."
     },
     "action": {
-        "delete": "Verwijderen",
         "delete_permanently": "Permanent Verwijderen",
-        "move": "Verplaatsen",
         "restore": "Herstellen",
         "search": "Zoeken",
-        "edit_share": "Toegang bewerken",
         "goto_folder": "Ga naar map",
         "reset_filters": "Filters resetten",
         "send_msg": "E-mail sturen",
@@ -166,18 +148,13 @@
         "share": "Delen",
         "contact_setting": "Contactinstellingen",
         "create": "Creëren",
-        "advance_filters": "1 Geavanceerde filter",
-        "advance_filters_plural": "{{count}} Geavanceerde filters",
         "edit_access": "Toegang bewerken",
         "edit_folder_properties": "Eigenschappen van {{name}} bewerken",
         "resend": "Opnieuw verzenden",
         "revoke": "Intrekken",
-        "revoke_access_tooltip": "Toegang intrekken met een standaardkennisgeving",
         "revoke_access_without_notification": "Toegang intrekken zonder een melding te sturen",
         "revoke_share": "Delen van {{title}} intrekken",
-        "search_hint": "Hints zoeken!",
         "shares_folder_edit": "Delen van dit adresboek",
-        "single_advance_fillter": "Geavanceerde filters",
         "revoke_send_standard_msg": "Toegang intrekken door een aangepaste melding te verzenden",
         "contacts": "Contacten",
         "delete": "Verwijderen",
@@ -196,7 +173,6 @@
         "website": "Website",
         "website_plural": "Websites",
         "undo": "Ongedaan maken",
-        "Undo": "Ongedaan maken",
         "of": "van",
         "restore": "Herstellen",
         "results_for": "Resultaten voor:",
@@ -227,16 +203,13 @@
             "city": "Stad",
             "number": "Nummer",
             "postalCode": "Postcode",
-            "street": "Straat",
-            "url": "Website"
+            "street": "Straat"
         },
         "title": {
             "address": "Adres",
             "address_plural": "Adressen",
             "mail": "E-mailadres",
-            "phone_number": "Telefoon contact",
-            "url": "Website",
-            "url_plural": "Websites ({{count}})"
+            "phone_number": "Telefoon contact"
         }
     },
     "types": {
@@ -248,8 +221,7 @@
     "message": {
         "snackbar": {
             "settings_saved": "Bewerkingen correct opgeslagen"
-        },
-        "search_hints": "Hints zoeken waar we het over moeten hebben"
+        }
     },
     "mail": "E-mail",
     "messages": {
@@ -287,25 +259,21 @@
         }
     },
     "snackbar": {
-        "error": "Er is iets misgegaan, probeer het opnieuw",
         "folder_edited": "Adresboek met succes bewerkt",
         "folder_shared": "Adresboek gedeeld",
         "share_resend": "Delen uitnodigen opnieuw versturen",
         "share_updated": "Toegangsrechten bijgewerkt",
-        "share_revoke": "Delen toegang ingetrokken",
-        "folder_shared_error": "Er is iets misgegaan, probeer het opnieuw"
+        "share_revoke": "Delen toegang ingetrokken"
     },
     "title": {
         "advanced_filters": "Geavanceerde filters"
     },
     "tooltip": {
-        "edit": "Toegang bewerken",
         "resend": "E-mailbericht over dit aandeel verzenden",
         "revoke": "Toegang intrekken",
         "address_book_sharing_status": "Gedeeld met {{count}} persoon",
         "address_book_sharing_status_plural": "Gedeeld met {{count}} personen"
     },
-    "of": "van",
     "displayer": {
         "title5": "Een contact selecteren",
         "search_title4": "Selecteer een of meer resultaten om acties uit te voeren of details weer te geven.",

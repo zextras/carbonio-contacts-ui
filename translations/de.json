@@ -1,11 +1,8 @@
 {
     "action": {
-        "delete": "Löschen",
         "edit_share": "Zugriff bearbeiten",
         "goto_folder": "Zum Ordner gehen",
-        "move": "Verschieben",
         "reset_filters": "Filter zurücksetzen",
-        "restore": "Wiederherstellen",
         "search": "Suchen",
         "send_msg": "E-Mail senden",
         "share_folder": "Ordner teilen",
@@ -21,11 +18,7 @@
                 "trash": "Papierkorb leeren"
             },
             "move": "Verschieben",
-            "new": "Neues Adressbuch",
             "moved": "Adressbuch erfolgreich verschoben"
-        },
-        "item": {
-            "root": "Root"
         },
         "modal": {
             "delete": {
@@ -33,26 +26,21 @@
                     "message1": "Möchten Sie das ausgewählte Adressbuch endgültig löschen? Wenn Sie es löschen, wird der zugehörige Inhalt unwiderruflich gelöscht und das Adressbuch kann nicht mehr wiederhergestellt werden.",
                     "message2": "Möchten Sie das ausgewählte Adressbuch endgültig löschen? Wenn Sie es löschen, wird der zugehörige Inhalt unwiderruflich gelöscht und das Adressbuch kann nicht mehr wiederhergestellt werden."
                 },
-                "footer": "Löschen",
                 "title": "Löschen"
             },
             "edit": {
                 "body": {
-                    "contacts": "Kontakte",
                     "item": {
-                        "empty": "Kein Pfad verfügbar",
-                        "root": "root"
+                        "empty": "Kein Pfad verfügbar"
                     },
                     "type": "Typ"
-                },
-                "footer": "Bearbeiten"
+                }
             },
             "empty": {
                 "body": {
                     "message1": "Möchten Sie das ausgewählte Adressbuch leeren?",
                     "message2": "Wenn Sie es leeren, wird der zugehörige Inhalt in den Papierkorb verschoben."
                 },
-                "footer": "Leer",
                 "title": "Leer"
             },
             "footer": {
@@ -66,11 +54,9 @@
                     "message1": "Ein Adressbuch als Ziel zum Verschieben aussuchen:",
                     "message3": "Einen Ordner als Ziel zum Verschieben aussuchen:"
                 },
-                "footer": "Verschieben",
                 "input": {
                     "filter": "Adressbuch filtern"
                 },
-                "new": "Neues Adressbuch",
                 "title": "Verschieben"
             },
             "new": {
@@ -79,7 +65,6 @@
                     "message2": "Wählen Sie ein Adressbuch aus, welches das neu erstellte Element enthalten wird:"
                 },
                 "create_footer": "Erstellen und verschieben",
-                "footer": "Erstellen",
                 "input": {
                     "name": "Adressbuchname eingeben",
                     "name_exist": "Name existiert bereits in diesem Pfad"
@@ -89,7 +74,6 @@
             },
             "restore": {
                 "create_footer": "Erstellen und wiederherstellen",
-                "footer": "Wiederherstellen",
                 "title": "Wiederherstellen"
             }
         },
@@ -114,19 +98,14 @@
         "revoke": "Widerrufen",
         "contact_setting": "Kontakt Einstellungen",
         "revoke_share": "{{title}}'s Teilen widerrufen",
-        "search_hint": "Suchhinweise!",
         "shares_folder_edit": "Teilen dieses Adressbuches",
         "cancel": "Abbrechen",
         "edit": "Bearbeiten",
-        "advance_filters": "1 Fortgeschrittener filter",
-        "advance_filters_plural": "{{count}} Fortgeschrittene filter",
         "create": "Erstellen",
         "edit_folder_properties": "{{name}}'s Eigenschaften bearbeiten",
         "save": "Speichern",
         "share": "Teilen",
-        "revoke_access_tooltip": "Zugriff widerrufen mit einer Standardbenachrichtigung",
         "revoke_access_without_notification": "Zugriff widerrufen ohne eine Benachrichtigung zu senden",
-        "revoke_send_standard_msg": "Zugriff widerrufen mit einer benutzerdefinierten Benachrichtigung",
         "single_advance_fillter": "Fortgeschrittene Filter",
         "empty": "Leer",
         "type": "Typ",
@@ -150,7 +129,6 @@
         "revoke_with_custom_msg": "Zugriff widerrufen mit einer benutzerdefinierten Benachrichtigung",
         "search_activate_selection_mode": "Der Auswahlmodus ist bei den Suchergebnissen noch nicht verfügbar",
         "discard_changes": "ÄNDERUNGEN VERWERFEN",
-        "Undo": "Rückgängig machen",
         "activate_selection_mode": "Auswahlmodus aktivieren",
         "address_book_restored": "Adressbuch wiederhergestellt",
         "new_address_book": "Neues Adressbuch",
@@ -172,8 +150,7 @@
     "message": {
         "snackbar": {
             "settings_saved": "Änderungen korrekt gespeichert"
-        },
-        "search_hints": "Suchhinweise, über die wir sprechen müssen"
+        }
     },
     "messages": {
         "modal": {
@@ -205,7 +182,6 @@
     },
     "section": {
         "field": {
-            "url": "Website",
             "city": "Stadt",
             "country": "Land",
             "number": "Nummer",
@@ -216,8 +192,6 @@
         "title": {
             "mail": "E-Mail Adresse",
             "phone_number": "Telefon Kontakt",
-            "url": "Webseite",
-            "url_plural": "Webseiten ({{count}})",
             "address": "Adresse",
             "address_plural": "Adresse"
         }
@@ -264,12 +238,9 @@
         "administer": "Verwalten",
         "owner": "Besitzer",
         "read": "Gelesen",
-        "type": "Typ",
         "viewer": "Zuschauer",
         "allowed_actions": "Erlaubte Aktionen",
-        "contacts": "Kontakte",
         "create": "Erstellen",
-        "delete": "Löschen",
         "manager": "Manager",
         "none": "Keine",
         "find_shares_label": "Wählen Sie aus, welches Adressbuch Sie im Kontaktbaum sehen möchten",
@@ -279,10 +250,8 @@
         "shared_items": "{{value}}s geteilte Adressbücher"
     },
     "snackbar": {
-        "error": "Etwas ist schiefgegangen,bitte versuchen Sie es erneut",
         "folder_edited": "Adressbücher erfolgreich bearbeitet",
         "folder_shared": "Adressbuch geteilt",
-        "folder_shared_error": "Etwas ist schiefgegangen,bitte versuchen Sie es erneut",
         "share_updated": "Zugriffsrechte aktualisiert",
         "share_resend": "Einladung zum Teilen erneut gesendet",
         "share_revoke": "Gemeinsamen Zugriff widerrufen"
@@ -291,7 +260,6 @@
         "advanced_filters": "Fortgeschrittene Filter"
     },
     "tooltip": {
-        "edit": "Zugriff bearbeiten",
         "revoke": "Zugriff widerrufen",
         "resend": "E-Mail Benachrichtigung über dieses geteilte Element senden",
         "address_book_sharing_status": "Mit {{count}} Person geteilt",
@@ -303,9 +271,7 @@
         "work": "Arbeit",
         "mobile": "Mobil"
     },
-    "mail": "E-mail",
     "notes": "Notizen",
-    "of": "von",
     "displayer": {
         "description2": "Klicken Sie auf die Schaltfläche \"NEU\", um mit der Erstellung eines neuen Dokuments zu beginnen.",
         "description6": "Verwenden Sie den Modus \"Bearbeiten\", um einem Kontakt eine persönliche Notiz hinzuzufügen.",

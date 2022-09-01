@@ -7,16 +7,11 @@
         "edit_access": "Editar acceso",
         "resend": "Enviar de nuevo",
         "revoke": "Revocar",
-        "advance_filters": "1 filtro avanzado",
-        "advance_filters_plural": "{{count}} filtros avanzados",
         "edit_folder_properties": "Editar propiedades de {{name}}",
         "contact_setting": "Ajustes de Contacto",
         "create": "Crear",
-        "revoke_access_tooltip": "Revocar acceso enviando una notificación estándar",
         "revoke_access_without_notification": "Revocar acceso sin enviar una notificación",
-        "revoke_send_standard_msg": "Revocar acceso enviando una notificación personalizada",
         "revoke_share": "Revocar compartición de {{title}}",
-        "single_advance_fillter": "Filtros avanzados",
         "search_hint": "¡Sugerencias de búsqueda!",
         "shares_folder_edit": "Compartir esta libreta de direcciones",
         "delete": "Eliminar",
@@ -32,7 +27,6 @@
         "type": "Tipo",
         "website": "Página web",
         "website_plural": "Páginas web",
-        "Undo": "Deshacer",
         "undo": "Deshacer",
         "contacts": "Contactos",
         "empty": "Vacía",
@@ -64,12 +58,9 @@
         "none": "None",
         "add": "Agregar",
         "admin": "Admin",
-        "contacts": "Contactos",
         "create": "Crear",
-        "delete": "Eliminar",
         "owner": "Propietario",
         "read": "Leido",
-        "type": "Tipo",
         "options": {
             "share_calendar_with": {
                 "external_guests": "Invitados externos (solo pueden ver)",
@@ -103,12 +94,9 @@
         "write": "Escribir"
     },
     "action": {
-        "delete": "Eliminar",
         "move": "Mover",
-        "restore": "Restaurar",
         "search": "Buscar",
         "delete_permanently": "Eliminar permanentemente",
-        "edit_share": "Editar acceso",
         "goto_folder": "Ir a la carpeta",
         "reset_filters": "Reiniciar filtros",
         "share_folder": "Compartir carpeta",
@@ -117,7 +105,6 @@
     "folder": {
         "modal": {
             "delete": {
-                "footer": "Eliminar",
                 "title": "Eliminar",
                 "body": {
                     "message1": "¿Quieres eliminar la libreta de direcciones seleccionada? Al hacerlo, el contenido relacionado será borrado y la libreta de direcciones no se podrá recuperar.",
@@ -126,17 +113,14 @@
             },
             "edit": {
                 "body": {
-                    "contacts": "Contactos",
                     "type": "Tipo",
                     "item": {
-                        "empty": "Sin ruta disponible",
-                        "root": "raíz"
+                        "empty": "Sin ruta disponible"
                     }
                 },
                 "footer": "Editar"
             },
             "move": {
-                "footer": "Mover",
                 "title": "Mover",
                 "body": {
                     "message3": "Elige una carpeta hacia donde mover la seleccionada:",
@@ -144,8 +128,7 @@
                 },
                 "input": {
                     "filter": "Filtrar libreta de direcciones"
-                },
-                "new": "Nueva libreta de direcciones"
+                }
             },
             "new": {
                 "footer": "Crear",
@@ -162,7 +145,6 @@
                 "title": "Crear nueva libreta de direcciones"
             },
             "restore": {
-                "footer": "Restaurar",
                 "title": "Restaurar",
                 "create_footer": "Crear y restaurar"
             },
@@ -170,7 +152,6 @@
                 "go_back": "Volver"
             },
             "empty": {
-                "footer": "Vacía",
                 "title": "Vacía",
                 "body": {
                     "message1": "¿Quieres vaciar la libreta de direcciones seleccionada?",
@@ -190,11 +171,7 @@
             "delete_permanently": "Eliminar libreta de direcciones permanentemente",
             "edit": "Editar libreta de direcciones",
             "move": "Mover",
-            "new": "Nueva libreta de direcciones",
             "moved": "La libreta de direcciones ha sido movida correctamente"
-        },
-        "item": {
-            "root": "Raíz"
         },
         "share_folder": "Compartir libreta de direcciones",
         "snackbar": {
@@ -219,7 +196,6 @@
         "prefix": "Prefijo",
         "suffix": "Sufijo"
     },
-    "notes": "Notas",
     "section": {
         "field": {
             "country": "País",
@@ -227,23 +203,19 @@
             "city": "Ciudad",
             "number": "Número",
             "postalCode": "Código postal",
-            "street": "Calle",
-            "url": "Página web"
+            "street": "Calle"
         },
         "title": {
             "address": "Dirección",
             "address_plural": "Direcciones",
             "mail": "Dirección de correo electrónico",
-            "phone_number": "Contacto telefónico",
-            "url": "Página web",
-            "url_plural": "Páginas web {{count}}"
+            "phone_number": "Contacto telefónico"
         }
     },
     "message": {
         "snackbar": {
             "settings_saved": "Ediciones guardadas correctamente"
-        },
-        "search_hints": "Sugerencias de búsqueda sobre las que tenemos que discutir"
+        }
     },
     "mail": "Correo electrónico",
     "messages": {
@@ -281,10 +253,8 @@
         }
     },
     "snackbar": {
-        "error": "Algo fue mal, por favor, reinténtalo",
         "folder_edited": "Libreta de direcciones editada con éxito",
         "folder_shared": "Libreta de direcciones compartida",
-        "folder_shared_error": "Algo fue mal, por favor, reinténtalo",
         "share_resend": "Invitación para la compartición reenviada",
         "share_revoke": "Acceso a la compartición revocado",
         "share_updated": "Derechos de acceso actualizados"
@@ -295,7 +265,6 @@
     "tooltip": {
         "resend": "Enviar notificación por correo de esta compartición",
         "revoke": "Revocar acceso",
-        "edit": "Editar acceso",
         "address_book_sharing_status": "Compartido con {{count}} persona",
         "address_book_sharing_status_plural": "Compartido con {{count}} personas"
     },
@@ -305,7 +274,6 @@
         "other": "otro",
         "work": "trabajo"
     },
-    "of": "de",
     "displayer": {
         "title5": "Seleccionar un contacto",
         "description2": "Haz clic en el botón \"NUEVO\" para empezar a crear uno nuevo.",
