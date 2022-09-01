@@ -10,9 +10,7 @@
         "edit_folder_properties": "Editar propiedades de {{name}}",
         "contact_setting": "Ajustes de Contacto",
         "create": "Crear",
-        "revoke_access_without_notification": "Revocar acceso sin enviar una notificación",
         "revoke_share": "Revocar compartición de {{title}}",
-        "search_hint": "¡Sugerencias de búsqueda!",
         "shares_folder_edit": "Compartir esta libreta de direcciones",
         "delete": "Eliminar",
         "edit_access_name": "Editar acceso de {{name}}",
@@ -58,7 +56,6 @@
         "none": "None",
         "add": "Agregar",
         "admin": "Admin",
-        "create": "Crear",
         "owner": "Propietario",
         "read": "Leido",
         "options": {
@@ -94,7 +91,6 @@
         "write": "Escribir"
     },
     "action": {
-        "move": "Mover",
         "search": "Buscar",
         "delete_permanently": "Eliminar permanentemente",
         "goto_folder": "Ir a la carpeta",
@@ -105,7 +101,6 @@
     "folder": {
         "modal": {
             "delete": {
-                "title": "Eliminar",
                 "body": {
                     "message1": "¿Quieres eliminar la libreta de direcciones seleccionada? Al hacerlo, el contenido relacionado será borrado y la libreta de direcciones no se podrá recuperar.",
                     "message2": "¿Quieres eliminar la libreta de direcciones seleccionada permanentemente? Al hacerlo, el contenido relacionado será borrado y la libreta de direcciones no se podrá recuperar."
@@ -113,12 +108,10 @@
             },
             "edit": {
                 "body": {
-                    "type": "Tipo",
                     "item": {
                         "empty": "Sin ruta disponible"
                     }
-                },
-                "footer": "Editar"
+                }
             },
             "move": {
                 "title": "Mover",
@@ -131,7 +124,6 @@
                 }
             },
             "new": {
-                "footer": "Crear",
                 "create_footer": "Crear",
                 "body": {
                     "message1": "Nombre de la nueva libreta de direcciones",
@@ -145,14 +137,12 @@
                 "title": "Crear nueva libreta de direcciones"
             },
             "restore": {
-                "title": "Restaurar",
                 "create_footer": "Crear y restaurar"
             },
             "footer": {
                 "go_back": "Volver"
             },
             "empty": {
-                "title": "Vacía",
                 "body": {
                     "message1": "¿Quieres vaciar la libreta de direcciones seleccionada?",
                     "message2": "Si la vacías, el contenido relacionado se moverá a la papelera."
@@ -217,7 +207,6 @@
             "settings_saved": "Ediciones guardadas correctamente"
         }
     },
-    "mail": "Correo electrónico",
     "messages": {
         "snackbar": {
             "address_book_moved": "Libreta de direcciones movida a la carpeta de destino",

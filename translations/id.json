@@ -4,7 +4,6 @@
         "read": "Dibaca",
         "add": "Tambahkan",
         "admin": "Admin",
-        "create": "Buat",
         "none": "Tidak ada",
         "administer": "Kelola",
         "allowed_actions": "Tindakan yang diperbolehkan",
@@ -39,7 +38,6 @@
         "write": "Tulis"
     },
     "action": {
-        "move": "Pindahkan",
         "search": "Cari",
         "delete_permanently": "Hapus Secara Permanen",
         "goto_folder": "Buka folder",
@@ -50,7 +48,6 @@
     "folder": {
         "modal": {
             "delete": {
-                "title": "Hapus",
                 "body": {
                     "message2": "Apakah Anda ingin menghapus buku alamat yang dipilih secara permanen? Jika dihapus, konten terkait akan dihapus secara permanen dan buku alamat tidak dapat dipulihkan lagi.",
                     "message1": "Apakah Anda ingin menghapus buku alamat yang dipilih? Jika dihapus, konten terkait akan dihapus secara permanen dan buku alamat tidak akan bisa dipulihkan lagi."
@@ -58,12 +55,10 @@
             },
             "edit": {
                 "body": {
-                    "type": "Jenis",
                     "item": {
                         "empty": "Tidak tersedia jalur"
                     }
-                },
-                "footer": "Edit"
+                }
             },
             "move": {
                 "title": "Pindahkan",
@@ -89,15 +84,13 @@
                 "title2": "Pembuatan folder baru"
             },
             "restore": {
-                "title": "Pulihkan",
                 "create_footer": "Buat dan Pulihkan"
             },
             "empty": {
                 "body": {
                     "message1": "Apakah Anda ingin mengosongkan buku alamat yang dipilih?",
                     "message2": "Jika dikosongkan, semua konten terkait akan dipindahkan ke tempat sampah."
-                },
-                "title": "Kosongkan"
+                }
             },
             "footer": {
                 "go_back": "Kembali"
@@ -143,7 +136,6 @@
         "edit_folder_properties": "Edit properti {{name}}",
         "resend": "Kirim ulang",
         "revoke": "Batalkan",
-        "search_hint": "Cari petunjuk!",
         "revoke_send_standard_msg": "Batalkan akses dengan mengirim pemberitahuan kustom",
         "revoke_share": "Batalkan berbagi {{title}}",
         "shares_folder_edit": "Berbagi buku alamat ini",
@@ -213,7 +205,6 @@
             "settings_saved": "Hasil edit disimpan dengan benar"
         }
     },
-    "mail": "Email",
     "messages": {
         "modal": {
             "delete": {
