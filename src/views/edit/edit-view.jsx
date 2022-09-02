@@ -285,10 +285,9 @@ export default function EditView({ panel }) {
 	const existingContact = useSelector((state) => selectContact(state, folderId, editId));
 	const [contact, dispatch] = useReducer(reducer);
 	const [t] = useTranslation();
-	const { closeBoard } = useBoardHooks();
+	const boardUtilities = useBoardHooks();
 	const [compareToContact, setCompareToContact] = useState(existingContact);
 	const keys = Object.keys(existingContact ?? {});
-	const { updateBoard } = useBoardHooks();
 
 	useEffect(() => {
 		if (!compareToContact && keys?.length > 0) setCompareToContact(existingContact);
@@ -347,10 +346,9 @@ export default function EditView({ panel }) {
 
 	useEffect(() => {
 		if (!panel) {
-			console.log('updating title');
-			updateBoard({ title });
+			boardUtilities?.updateBoard({ title });
 		}
-	}, [panel, title, updateBoard]);
+	}, [panel, title, boardUtilities]);
 
 	const onSubmit = useCallback(() => {
 		const updatedContact = cleanMultivalueFields(contact);
@@ -360,7 +358,7 @@ export default function EditView({ panel }) {
 					if (panel && !res.error) {
 						replaceHistory(`/folder/${folderId}/contacts/${res.payload[0].id}`);
 					} else if (res.type.includes('fulfilled')) {
-						closeBoard();
+						boardUtilities?.closeBoard();
 						getBridgedFunctions().createSnackbar({
 							key: `edit`,
 							replace: true,
@@ -386,7 +384,7 @@ export default function EditView({ panel }) {
 				})
 				.catch(report);
 		}
-	}, [contact, closeBoard, folderId, panel, storeDispatch, t, existingContact]);
+	}, [contact, boardUtilities, folderId, panel, storeDispatch, t, existingContact]);
 
 	const defaultTypes = useMemo(
 		() => [
