@@ -20,7 +20,6 @@ type ComponentProps = {
 const TagRow: FC<ComponentProps> = ({ compProps }): ReactElement => {
 	const [t] = useTranslation();
 	const { tagOptions, tag, setTag } = compProps;
-	const chipBackground = useMemo(() => 'gray5', []);
 
 	const chipOnAdd = useCallback(
 		(label, preText, hasAvatar, isGeneric, isQueryFilter, avatarIcon, avatarBackground) => ({
@@ -37,7 +36,7 @@ const TagRow: FC<ComponentProps> = ({ compProps }): ReactElement => {
 	);
 
 	const tagChipOnAdd = useCallback(
-		(label: string): any => {
+		(label: string | unknown): any => {
 			const chipBg = filter(tagOptions, { label })[0];
 			return chipOnAdd(
 				label,
@@ -63,7 +62,7 @@ const TagRow: FC<ComponentProps> = ({ compProps }): ReactElement => {
 		<Container padding={{ bottom: 'small', top: 'medium' }} orientation="horizontal">
 			<ChipInput
 				placeholder={tagPlaceholder}
-				background={chipBackground}
+				background="gray5"
 				defaultValue={[]}
 				options={tagOptions}
 				value={tag}

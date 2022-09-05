@@ -42,7 +42,7 @@ export const actionsRetriever = (
 		id: FolderActionsType.SHARE,
 		icon: 'ShareOutline',
 		label: t('folder.share_folder', 'Share address book'),
-		click: (e) => {
+		click: () => {
 			setAction(FolderActionsType.SHARE);
 			setCurrentFolder(folder);
 		}

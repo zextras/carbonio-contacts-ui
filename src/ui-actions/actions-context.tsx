@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { createContext, FC, useCallback, useContext, useMemo } from 'react';
+import React, { ComponentType, createContext, FC, useCallback, useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -19,15 +19,15 @@ type ACPProps = {
 	folderId: string;
 	selectedIds: Array<string>;
 	deselectAll: () => void;
-	selectedContacts: Array<Contact>;
 };
 
 type ActionObj = {
 	id: string;
 	label: string;
-	click: (event: MouseEvent) => void;
+	click: (e: React.SyntheticEvent<HTMLElement> | KeyboardEvent) => void;
+	customComponent: ComponentType;
+	items: Array<ActionObj>;
 	icon: string;
-	disabled: boolean;
 };
 
 type ActionList = Array<ActionObj>;
@@ -41,14 +41,14 @@ export const ActionsContext = createContext<{
 	getSecondaryActions: GetActionsFunction;
 }>({
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	getContextActions: (i: Contact) => [],
+	getContextActions: () => [],
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	getHoverActions: (i: Contact) => [],
+	getHoverActions: () => [],
 	getPrimaryActions: () => [],
 	getSecondaryActions: () => []
 });
 
-export const ActionsContextProvider: FC<ACPProps> = ({
+export const ActionsContextProvider: FC<ACPProps & { selectedContacts: Contact[] }> = ({
 	children,
 	folderId,
 	selectedIds,

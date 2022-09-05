@@ -5,7 +5,7 @@
  */
 import React, { useState, useMemo, useCallback } from 'react';
 import { Input, Container, Text } from '@zextras/carbonio-design-system';
-import { filter, startsWith, reduce, isEmpty, split, find, size } from 'lodash';
+import { filter, startsWith, reduce, isEmpty, find } from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { replaceHistory, FOLDERS } from '@zextras/carbonio-shell-ui';

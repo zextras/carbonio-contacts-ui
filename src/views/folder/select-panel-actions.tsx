@@ -3,24 +3,20 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useMemo, useContext } from 'react';
-import {
-	Container,
-	Dropdown,
-	IconButton,
-	Padding,
-	Icon,
-	Divider
-} from '@zextras/carbonio-design-system';
-import { map } from 'lodash';
-import styled from 'styled-components';
+import { Dispatch } from '@reduxjs/toolkit';
+import React, { useMemo, useContext, ReactElement, FC, SyntheticEvent } from 'react';
+import { Container, Dropdown, IconButton, Padding, Divider } from '@zextras/carbonio-design-system';
+import { map, noop } from 'lodash';
 import { ActionsContext } from '../../ui-actions/actions-context';
 
-const ActionIcon = styled(Icon)`
-	cursor: pointer;
-`;
+interface SelectPanelActionsProps {
+	dispatch?: Dispatch<any>;
+	deselectAll?: (e: SyntheticEvent) => void;
+	folderId?: string;
+	selectedIDs?: { [key: string]: boolean };
+}
 
-export default function SelectPanelActions({ deselectAll }) {
+const SelectPanelActions: FC<SelectPanelActionsProps> = ({ deselectAll }): ReactElement => {
 	const { getPrimaryActions, getSecondaryActions } = useContext(ActionsContext);
 
 	const primaryActions = useMemo(
@@ -41,11 +37,11 @@ export default function SelectPanelActions({ deselectAll }) {
 				padding={{ all: 'extrasmall' }}
 			>
 				<Container background="gray5" orientation="horizontal" mainAlignment="flex-start">
-					<ActionIcon
+					<IconButton
 						icon="ArrowBack"
-						color="primary"
+						iconColor="primary"
 						size="large"
-						onClick={deselectAll}
+						onClick={deselectAll ?? noop}
 						data-testid="action-button-deselect-all"
 					/>
 					{/* Uncomment this line to show the `Select all` Button */}
@@ -54,13 +50,13 @@ export default function SelectPanelActions({ deselectAll }) {
 				<Container background="gray5" orientation="horizontal" mainAlignment="flex-end">
 					{map(primaryActions, (action) => (
 						<Padding left="extralarge" key={action.label}>
-							<ActionIcon
+							<IconButton
 								data-testid={`primary-action-button-${action.label}`}
 								icon={action.icon}
 								color="primary"
-								onClick={(ev) => {
+								onClick={(ev: React.SyntheticEvent<HTMLElement> | KeyboardEvent): void => {
 									if (ev) ev.preventDefault();
-									action.click();
+									action.click(ev);
 								}}
 								size="large"
 							/>
@@ -75,9 +71,9 @@ export default function SelectPanelActions({ deselectAll }) {
 							id: action.label,
 							icon: action.icon,
 							label: action.label,
-							click: (ev) => {
+							click: (ev: React.SyntheticEvent<HTMLElement> | KeyboardEvent): void => {
 								if (ev) ev.preventDefault();
-								action.click();
+								action.click(ev);
 							},
 							customComponent: action.customComponent,
 							items: action.items
@@ -88,6 +84,7 @@ export default function SelectPanelActions({ deselectAll }) {
 							iconColor="primary"
 							icon="MoreVertical"
 							data-testid="secondary-actions-open-button"
+							onClick={noop}
 						/>
 					</Dropdown>
 				</Padding>
@@ -95,4 +92,6 @@ export default function SelectPanelActions({ deselectAll }) {
 			<Divider />
 		</>
 	);
-}
+};
+
+export { SelectPanelActions, SelectPanelActionsProps };

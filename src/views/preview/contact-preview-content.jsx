@@ -9,7 +9,7 @@ import {
 	IconButton,
 	Row,
 	Responsive,
-	Button,
+	ButtonOld as Button,
 	Text,
 	Collapse,
 	Dropdown,
@@ -231,7 +231,7 @@ function ContactMultiValueField({ type, values, width, defaultType, showIcon }) 
 	);
 }
 
-function ContactPreviewContent({ contact, onEdit, onDelete, onPrint, onArchieve, onMail, onMove }) {
+function ContactPreviewContent({ contact, onEdit, onDelete, onMail, onMove }) {
 	const [open, setOpen] = useState(true);
 	const toggleOpen = useCallback(() => {
 		setOpen(!open);

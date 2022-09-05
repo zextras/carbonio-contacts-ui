@@ -64,7 +64,7 @@ const CreateUpdateTagModal: FC<ComponentProps> = ({
 				})
 			) // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-ignore
-				.then((res: any) => {
+				.then(() => {
 					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 					// @ts-ignore
 					createSnackbar({
@@ -79,7 +79,7 @@ const CreateUpdateTagModal: FC<ComponentProps> = ({
 						autoHideTimeout: 3000
 					});
 				})
-				.catch((error: any) => {
+				.catch(() => {
 					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 					// @ts-ignore
 					createSnackbar({

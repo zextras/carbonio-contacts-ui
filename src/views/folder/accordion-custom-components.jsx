@@ -324,8 +324,8 @@ export const CustomAccordion = (
 
 			const tooltipText = t('tooltip.address_book_sharing_status', {
 				count: folder.sharedWith.grant.length,
-				defaultValue_one: 'Shared with 1 person',
-				defaultValue: 'Shared with {{count}} people'
+				defaultValue: 'Shared with 1 person',
+				defaultValue_plural: 'Shared with {{count}} people'
 			});
 
 			return (

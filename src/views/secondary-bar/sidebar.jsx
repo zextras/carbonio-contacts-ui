@@ -10,11 +10,10 @@ import { useTranslation } from 'react-i18next';
 import {
 	Accordion,
 	AccordionItem,
-	Button,
+	ButtonOld as Button,
 	Container,
 	Icon,
 	ModalManagerContext,
-	Padding,
 	Row,
 	SnackbarManagerContext
 } from '@zextras/carbonio-design-system';
@@ -150,7 +149,7 @@ export default function Sidebar({ expanded }) {
 		<>
 			{expanded ? (
 				<>
-					<Accordion items={accordionItems} />
+					<Accordion items={accordionItems} activeId={currentFolder?.id} />
 					<Accordion items={[tagsAccordionItems]} />
 				</>
 			) : (
