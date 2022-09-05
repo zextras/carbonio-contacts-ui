@@ -22,7 +22,8 @@ import {
 	IconButton,
 	Padding,
 	Text,
-	Select
+	Select,
+	Tooltip
 } from '@zextras/carbonio-design-system';
 import { useDispatch, useSelector } from 'react-redux';
 import FormSection from './form-section';
@@ -315,6 +316,21 @@ export default function EditView({ panel }) {
 		};
 	}, [compareToContact, editId, existingContact, keys?.length, panel]);
 
+	const fieldsToUpdate = useMemo(() => {
+		if (!contact) {
+			return {};
+		}
+		const updatedContact = cleanMultivalueFields(contact);
+
+		return differenceObject(compareToContact, updatedContact);
+	}, [compareToContact, contact]);
+
+	const isDisabled = useMemo(() => {
+		if (editId && editId !== 'new' && existingContact) {
+			return Object.keys(fieldsToUpdate).length < 1 || !(contact?.firstName || contact?.lastName);
+		}
+		return !(contact?.firstName || contact?.lastName);
+	}, [contact?.firstName, contact?.lastName, editId, existingContact, fieldsToUpdate]);
 	const title = useMemo(
 		() =>
 			contact?.namePrefix ||
@@ -399,15 +415,6 @@ export default function EditView({ panel }) {
 		[t]
 	);
 
-	const fieldsToUpdate = useMemo(() => {
-		if (!contact) {
-			return {};
-		}
-		const updatedContact = cleanMultivalueFields(contact);
-
-		return differenceObject(compareToContact, updatedContact);
-	}, [compareToContact, contact]);
-
 	return contact ? (
 		<Container
 			mainAlignment="flex-start"
@@ -430,11 +437,13 @@ export default function EditView({ panel }) {
 							</Text>
 						)}
 					</Container>
-					<Button
-						label={t('label.save', 'Save')}
-						onClick={onSubmit}
-						disabled={editId ? Object.keys(fieldsToUpdate).length < 1 : false}
-					/>
+					<Tooltip
+						label={t('message.require_field', 'Fill one required * field')}
+						placement="top"
+						disabled={!isDisabled}
+					>
+						<Button label={t('label.save', 'Save')} onClick={onSubmit} disabled={isDisabled} />
+					</Tooltip>
 				</Row>
 				<Padding value="medium small">
 					<CompactView contact={contact} />
@@ -448,7 +457,7 @@ export default function EditView({ panel }) {
 					/>
 					<CustomStringField
 						name="firstName"
-						label={t('name.first_name', 'First Name')}
+						label={`${t('name.first_name', 'First Name')}*`}
 						value={contact.firstName}
 						dispatch={dispatch}
 					/>
@@ -468,7 +477,7 @@ export default function EditView({ panel }) {
 					/>
 					<CustomStringField
 						name="lastName"
-						label={t('name.last_name', 'Last Name')}
+						label={`${t('name.last_name', 'Last Name')}*`}
 						value={contact.lastName}
 						dispatch={dispatch}
 					/>
