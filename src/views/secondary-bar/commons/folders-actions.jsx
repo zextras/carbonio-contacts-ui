@@ -9,6 +9,7 @@ import { FolderActionsType } from '../../../types/folder';
 import { getFolder } from '../../../store/actions/get-folder';
 import { SharesInfoModal } from '../shares-info-modal';
 import { folderAction } from '../../../store/actions/folder-action';
+import { StoreProvider } from '../../../store/redux';
 
 export const actionsRetriever = (
 	folder,
@@ -128,12 +129,14 @@ export const actionsRetriever = (
 					const closeModal = createModal(
 						{
 							children: (
-								<SharesInfoModal
-									onClose={() => {
-										closeModal();
-									}}
-									folder={res.payload}
-								/>
+								<StoreProvider>
+									<SharesInfoModal
+										onClose={() => {
+											closeModal();
+										}}
+										folder={res.payload}
+									/>
+								</StoreProvider>
 							)
 						},
 						true

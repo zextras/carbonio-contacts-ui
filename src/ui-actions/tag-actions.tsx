@@ -33,6 +33,7 @@ import {
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
+import { StoreProvider } from '../store/redux';
 import { TagsActionsType } from '../types/tags';
 import CreateUpdateTagModal from '../views/secondary-bar/parts/tags/create-update-tag-modal';
 import DeleteTagModal from '../views/secondary-bar/parts/tags/delete-tag-modal';
@@ -82,7 +83,13 @@ export const createAndApplyTag = ({
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
 		const closeModal = context.createModal(
-			{ children: <CreateUpdateTagModal onClose={(): void => closeModal()} contact={contact} /> },
+			{
+				children: (
+					<StoreProvider>
+						<CreateUpdateTagModal onClose={(): void => closeModal()} contact={contact} />
+					</StoreProvider>
+				)
+			},
 			true
 		);
 	}
@@ -98,7 +105,13 @@ export const createTag = ({ t, createModal }: ArgumentType): ReturnType => ({
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
 		const closeModal = createModal(
-			{ children: <CreateUpdateTagModal onClose={(): void => closeModal()} /> },
+			{
+				children: (
+					<StoreProvider>
+						<CreateUpdateTagModal onClose={(): void => closeModal()} />
+					</StoreProvider>
+				)
+			},
 			true
 		);
 	}
@@ -116,7 +129,11 @@ export const editTag = ({ t, createModal, tag }: ArgumentType): ReturnType => ({
 		// @ts-ignore
 		const closeModal = createModal(
 			{
-				children: <CreateUpdateTagModal onClose={(): void => closeModal()} tag={tag} editMode />
+				children: (
+					<StoreProvider>
+						<CreateUpdateTagModal onClose={(): void => closeModal()} tag={tag} editMode />
+					</StoreProvider>
+				)
 			},
 			true
 		);
@@ -135,7 +152,11 @@ export const deleteTag = ({ t, createModal, tag }: ArgumentType): ReturnType => 
 		// @ts-ignore
 		const closeModal = createModal(
 			{
-				children: <DeleteTagModal onClose={(): void => closeModal()} tag={tag} />
+				children: (
+					<StoreProvider>
+						<DeleteTagModal onClose={(): void => closeModal()} tag={tag} />
+					</StoreProvider>
+				)
 			},
 			true
 		);

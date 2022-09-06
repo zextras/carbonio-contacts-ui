@@ -3,6 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+import { nanoid } from '@reduxjs/toolkit';
 import React, { FC, useCallback, useContext, useMemo } from 'react';
 import { useTags, ZIMBRA_STANDARD_COLORS, runSearch, QueryChip } from '@zextras/carbonio-shell-ui';
 import {
@@ -32,6 +33,7 @@ const CustomComp: FC<ItemProps> = (props) => {
 			runSearch(
 				[
 					{
+						id: nanoid(),
 						avatarBackground: ZIMBRA_STANDARD_COLORS[props?.item?.color || 0].hex,
 						avatarIcon: 'Tag',
 						background: 'gray2',

@@ -14,6 +14,7 @@ import { applyTag, applyMultiTag, createAndApplyTag } from './tag-actions';
 
 // eslint-disable-next-line import/extensions
 import ModalFooter from '../views/contact-actions/commons/modal-footer.tsx';
+import { StoreProvider } from '../store/redux';
 
 export function mailToContact(contact, t) {
 	const [mailTo, available] = getAction('contact-list', 'mail-to', [contact]);
@@ -84,14 +85,14 @@ export function deletePermanently({ ids, t, dispatch, createSnackbar, createModa
 				onClose: () => closeModal(),
 				showCloseIcon: true,
 				children: (
-					<>
+					<StoreProvider>
 						<Text overflow="break-word">
 							{t(
 								'messages.modal.delete.if_delete_lost_forever',
 								'By permanently deleting this contact you will not be able to recover it anymore, continue?'
 							)}
 						</Text>
-					</>
+					</StoreProvider>
 				)
 			});
 		}
@@ -182,7 +183,7 @@ export function moveContact(contact, folderId, t, dispatch, parent, createModal,
 			const closeModal = createModal(
 				{
 					children: (
-						<>
+						<StoreProvider>
 							<MoveModal
 								contact={contact}
 								onClose={() => closeModal()}
@@ -191,7 +192,7 @@ export function moveContact(contact, folderId, t, dispatch, parent, createModal,
 								folderId={folderId}
 								createSnackbar={createSnackbar}
 							/>
-						</>
+						</StoreProvider>
 					)
 				},
 				true
