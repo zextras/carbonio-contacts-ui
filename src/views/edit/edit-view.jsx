@@ -7,10 +7,9 @@ import React, { useCallback, useEffect, useMemo, useReducer, useState } from 're
 import { useParams } from 'react-router-dom';
 import {
 	replaceHistory,
-	useRemoveCurrentBoard,
 	report,
-	getBridgedFunctions,
-	useUpdateCurrentBoard
+	useBoardHooks,
+	getBridgedFunctions
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 import { map, filter, reduce, set, omit, find } from 'lodash';
@@ -294,10 +293,9 @@ export default function EditView({ panel }) {
 	const existingContact = useSelector((state) => selectContact(state, folderId, editId));
 	const [contact, dispatch] = useReducer(reducer);
 	const [t] = useTranslation();
-	const closeBoard = useRemoveCurrentBoard();
+	const boardUtilities = useBoardHooks();
 	const [compareToContact, setCompareToContact] = useState(existingContact);
 	const keys = Object.keys(existingContact ?? {});
-	const updateBoard = useUpdateCurrentBoard();
 
 	useEffect(() => {
 		if (!compareToContact && keys?.length > 0) setCompareToContact(existingContact);
@@ -356,9 +354,9 @@ export default function EditView({ panel }) {
 
 	useEffect(() => {
 		if (!panel) {
-			updateBoard(undefined, title);
+			boardUtilities?.updateBoard({ title });
 		}
-	}, [panel, title, updateBoard]);
+	}, [panel, title, boardUtilities]);
 
 	const onSubmit = useCallback(() => {
 		const updatedContact = cleanMultivalueFields(contact);
@@ -368,7 +366,7 @@ export default function EditView({ panel }) {
 					if (panel && !res.error) {
 						replaceHistory(`/folder/${folderId}/contacts/${res.payload[0].id}`);
 					} else if (res.type.includes('fulfilled')) {
-						closeBoard();
+						boardUtilities?.closeBoard();
 						getBridgedFunctions().createSnackbar({
 							key: `edit`,
 							replace: true,
@@ -394,7 +392,7 @@ export default function EditView({ panel }) {
 				})
 				.catch(report);
 		}
-	}, [contact, closeBoard, folderId, panel, storeDispatch, t, existingContact]);
+	}, [contact, boardUtilities, folderId, panel, storeDispatch, t, existingContact]);
 
 	const defaultTypes = useMemo(
 		() => [

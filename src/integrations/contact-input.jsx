@@ -20,6 +20,7 @@ import { createSelector } from '@reduxjs/toolkit';
 import styled from 'styled-components';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
+import { StoreProvider } from '../store/redux';
 
 const emailRegex =
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars, max-len, no-control-regex
@@ -93,13 +94,7 @@ const Loader = () => (
 	</Container>
 );
 
-export default function ContactInput({
-	onChange,
-	defaultValue,
-	placeholder,
-	background = 'gray5',
-	...props
-}) {
+function ContactInput({ onChange, defaultValue, placeholder, background = 'gray5', ...props }) {
 	const [defaults, setDefaults] = useState([]);
 	const [options, setOptions] = useState([]);
 	const [idToRemove, setIdToRemove] = useState('');
@@ -356,3 +351,11 @@ export default function ContactInput({
 		</Container>
 	);
 }
+
+const ContactInputComp = (props) => (
+	<StoreProvider>
+		<ContactInput {...props} />
+	</StoreProvider>
+);
+
+export default ContactInputComp;

@@ -32,6 +32,7 @@ import ShareFolderModal from './share-folder-modal';
 import ModalWrapper from './commons/modal-wrapper';
 import { CollapsedSideBarItems } from '../folder/collapsed-sidebar-items';
 import useGetTagsAccordion from '../../hooks/use-get-tags-accordions';
+import { StoreProvider } from '../../store/redux';
 
 export const nest = (items, id, level) =>
 	map(
@@ -74,13 +75,13 @@ const SharesItem = ({ item }) => (
 						const closeModal = item.context.createModal(
 							{
 								children: (
-									<>
+									<StoreProvider>
 										<SharesModal
 											folders={requiredFolders}
 											onClose={() => closeModal()}
 											createSnackbar={item?.context?.createSnackbar}
 										/>
-									</>
+									</StoreProvider>
 								)
 							},
 							true
