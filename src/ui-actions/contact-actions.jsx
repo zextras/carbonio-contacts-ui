@@ -97,15 +97,7 @@ export function deletePermanently({ ids, t, dispatch, createSnackbar, createModa
 		}
 	};
 }
-export function moveToTrash({
-	ids,
-	t,
-	dispatch,
-	parent,
-	createSnackbar,
-	deselectAll,
-	replaceHistory
-}) {
+export function moveToTrash({ ids, t, dispatch, parent, createSnackbar, deselectAll }) {
 	const restoreContact = () => {
 		dispatch(
 			contactAction({
@@ -215,7 +207,6 @@ export const contextActions = ({
 	replaceHistory,
 	createSnackbar,
 	createModal,
-	selectedIds,
 	tags
 }) => {
 	switch (folderId) {
@@ -256,8 +247,7 @@ export const hoverActions = ({
 	dispatch,
 	replaceHistory,
 	createSnackbar,
-	createModal,
-	selectedIds
+	createModal
 }) => {
 	switch (folderId) {
 		case FOLDERS.TRASH:
@@ -289,16 +279,7 @@ export const hoverActions = ({
 	}
 };
 
-export const primaryActions = ({
-	folderId,
-	t,
-	dispatch,
-	replaceHistory,
-	createSnackbar,
-	createModal,
-	selectedIds,
-	deselectAll
-}) => {
+export const primaryActions = ({ folderId }) => {
 	switch (folderId) {
 		case FOLDERS.TRASH:
 			return () => [];

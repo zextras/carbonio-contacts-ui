@@ -5,7 +5,15 @@
  */
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { reduce, filter, some, startsWith, map, findIndex, trim, find } from 'lodash';
-import { ChipInput, Container, Avatar, Text, Row } from '@zextras/carbonio-design-system';
+import {
+	ChipInput,
+	Container,
+	Avatar,
+	Text,
+	Row,
+	Chip,
+	Tooltip
+} from '@zextras/carbonio-design-system';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
 import { useSelector } from 'react-redux';
 import { createSelector } from '@reduxjs/toolkit';
@@ -92,6 +100,7 @@ function ContactInput({ onChange, defaultValue, placeholder, background = 'gray5
 	const [idToRemove, setIdToRemove] = useState('');
 	const [t] = useTranslation();
 	const inputRef = useRef();
+
 	useEffect(() => {
 		setDefaults(
 			map(filter(defaultValue, (c) => c.id !== idToRemove) ?? [], (obj) => ({
@@ -304,6 +313,20 @@ function ContactInput({ onChange, defaultValue, placeholder, background = 'gray5
 		[editChip, isValidEmail, t]
 	);
 
+	const customChip = (chipProps) => (
+		<Chip
+			{...chipProps}
+			avatarLabel={chipProps.label}
+			label={
+				<Tooltip label={chipProps.email ?? chipProps.address} maxWidth="unset">
+					<Row wrap="nowrap">
+						<Text size="extrasmall">{chipProps.label}</Text>
+					</Row>
+				</Tooltip>
+			}
+		/>
+	);
+
 	return (
 		<Container width="100%">
 			<ChipInput
@@ -320,6 +343,7 @@ function ContactInput({ onChange, defaultValue, placeholder, background = 'gray5
 				onAdd={onAdd}
 				requireUniqueChips
 				createChipOnPaste
+				ChipComponent={customChip}
 				pasteSeparators={[',', ' ', ';', '\n']}
 				separators={['NumpadEnter', 'Comma']}
 				{...props}

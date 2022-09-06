@@ -68,11 +68,12 @@ const CustomComp: FC<ItemProps> = (props) => {
 export const TagLabel: FC<ItemType> = (props) => {
 	const createModal = useContext(ModalManagerContext) as () => () => void;
 	const [t] = useTranslation();
+	const alteredProps = { ...props, color: `$props.color` };
 	return (
 		<Dropdown contextMenu display="block" width="fit" items={[createTag({ t, createModal })]}>
 			<Row mainAlignment="flex-start" padding={{ horizontal: 'small' }} takeAvailableSpace>
 				<Icon size="large" icon="TagsMoreOutline" />
-				<AccordionItem {...props} />
+				<AccordionItem {...alteredProps} />
 			</Row>
 		</Dropdown>
 	);
@@ -98,6 +99,7 @@ const useGetTagsAccordion = (): TagsAccordionItems => {
 				(acc: Array<ItemType>, v) => {
 					const item = {
 						id: v.id,
+						item: v,
 						active: false,
 						color: v.color || 0,
 						divider: false,

@@ -13,11 +13,11 @@ import {
 	Icon
 } from '@zextras/carbonio-design-system';
 import { TFunction } from 'i18next';
-import { concat, filter, includes, map } from 'lodash';
+import { concat, filter, map } from 'lodash';
 import { getTags, ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-shell-ui';
 import ModalFooter from '../secondary-bar/commons/modal-footer';
 import { ModalHeader } from '../secondary-bar/commons/modal-header';
-import KeywordRow from './parts/keyword-row';
+import KeywordRow, { KeywordState } from './parts/keyword-row';
 import TagRow from './parts/tag-row';
 import { useDisabled, useSecondaryDisabled } from './parts/use-disable-hooks';
 
@@ -34,17 +34,7 @@ type AdvancedFilterModalProps = {
 	query: Query;
 	updateQuery: (arg: any) => void;
 };
-export type KeywordState = Array<{
-	label: string;
-	hasAvatar?: boolean;
-	value?: string;
-	isQueryFilter?: boolean;
-	isGeneric?: boolean;
-	avatarIcon?: string;
-	avatarBackground?: string;
-	hasError?: boolean;
-	error?: boolean;
-}>;
+
 const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 	open,
 	onClose,
@@ -53,7 +43,6 @@ const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 	updateQuery
 }): ReactElement => {
 	const [otherKeywords, setOtherKeywords] = useState<KeywordState>([]);
-	const filterQueryArray = useMemo(() => [], []);
 	const [tag, setTag] = useState<KeywordState>([]);
 	const tagOptions = useMemo(
 		() =>
