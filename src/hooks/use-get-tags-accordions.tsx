@@ -89,7 +89,6 @@ const useGetTagsAccordion = (): TagsAccordionItems => {
 		() => ({
 			id: 'Tags',
 			label: t('label.tags', 'Tags'),
-			divider: true,
 			active: false,
 			open: false,
 			onClick: (e: Event): void => {
