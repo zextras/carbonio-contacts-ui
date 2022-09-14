@@ -131,12 +131,12 @@ export default function Sidebar({ expanded }) {
 		const sharedItems = remove(temp, 'owner');
 		setSidebarItems(temp);
 		setAccordionItems(
-			temp.concat({
+			temp.concat(divider(1), {
 				id: 'shares',
 				label: t('share.shared_folders', 'Shared Address Books'),
-				divider: true,
+				divider: false,
 				CustomComponent: ShareLabel,
-				items: sharedItems.concat(divider(1), {
+				items: sharedItems.concat({
 					label: t('share.find_shares', 'Find Shares'),
 					context: { dispatch, t, createModal, createSnackbar },
 					CustomComponent: SharesItem
@@ -152,7 +152,7 @@ export default function Sidebar({ expanded }) {
 			{expanded ? (
 				<>
 					<Accordion items={accordionItems} activeId={currentFolder?.id} />
-					<Accordion items={[tagsAccordionItems].concat(divider(2))} />
+					<Accordion items={[divider(2), tagsAccordionItems, divider(3)]} />
 				</>
 			) : (
 				sideBarItems.map((folder, index) => <CollapsedSideBarItems key={index} folder={folder} />)
