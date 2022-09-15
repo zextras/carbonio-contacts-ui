@@ -20,6 +20,7 @@ import { useDisplayName } from '../../hooks/use-display-name';
 import { contactAction } from '../../store/actions/contact-action';
 import MoveModal from '../contact-actions/move-modal';
 import { selectContact } from '../../store/selectors/contacts';
+import { StoreProvider } from '../../store/redux';
 
 export default function ContactPreviewPanel() {
 	const [t] = useTranslation();
@@ -129,7 +130,7 @@ export default function ContactPreviewPanel() {
 			const closeModal = createModal(
 				{
 					children: (
-						<>
+						<StoreProvider>
 							<MoveModal
 								contact={contact}
 								// open={showModal}
@@ -140,7 +141,7 @@ export default function ContactPreviewPanel() {
 								//	setShowModal={setShowModal}
 								createSnackbar={createSnackbar}
 							/>
-						</>
+						</StoreProvider>
 					)
 				},
 				true

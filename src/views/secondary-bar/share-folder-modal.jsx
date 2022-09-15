@@ -74,8 +74,6 @@ const ShareFolderModal = ({
 
 	const onConfirm = useCallback(() => {
 		dispatch(
-			//	eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			//	@ts-ignore
 			shareFolder({
 				sendNotification,
 				standardMessage,
@@ -109,8 +107,6 @@ const ShareFolderModal = ({
 					});
 					sendNotification &&
 						dispatch(
-							// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-							// @ts-ignore
 							sendShareNotification({
 								sendNotification,
 								standardMessage,

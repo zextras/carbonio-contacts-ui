@@ -3,6 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+import { nanoid } from '@reduxjs/toolkit';
 import React, { FC, useCallback, useContext, useMemo } from 'react';
 import { useTags, ZIMBRA_STANDARD_COLORS, runSearch, QueryChip } from '@zextras/carbonio-shell-ui';
 import {
@@ -32,6 +33,7 @@ const CustomComp: FC<ItemProps> = (props) => {
 			runSearch(
 				[
 					{
+						id: nanoid(),
 						avatarBackground: ZIMBRA_STANDARD_COLORS[props?.item?.color || 0].hex,
 						avatarIcon: 'Tag',
 						background: 'gray2',
@@ -68,11 +70,12 @@ const CustomComp: FC<ItemProps> = (props) => {
 export const TagLabel: FC<ItemType> = (props) => {
 	const createModal = useContext(ModalManagerContext) as () => () => void;
 	const [t] = useTranslation();
+	const alteredProps = { ...props, color: `$props.color` };
 	return (
 		<Dropdown contextMenu display="block" width="fit" items={[createTag({ t, createModal })]}>
 			<Row mainAlignment="flex-start" padding={{ horizontal: 'small' }} takeAvailableSpace>
 				<Icon size="large" icon="TagsMoreOutline" />
-				<AccordionItem {...props} />
+				<AccordionItem {...alteredProps} />
 			</Row>
 		</Dropdown>
 	);
@@ -98,6 +101,7 @@ const useGetTagsAccordion = (): TagsAccordionItems => {
 				(acc: Array<ItemType>, v) => {
 					const item = {
 						id: v.id,
+						item: v,
 						active: false,
 						color: v.color || 0,
 						divider: false,

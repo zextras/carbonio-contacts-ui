@@ -6,7 +6,6 @@
 import React, { useContext, useMemo } from 'react';
 import { Container, Tooltip, Dropdown, IconButton, Row } from '@zextras/carbonio-design-system';
 import styled from 'styled-components';
-import { map, filter } from 'lodash';
 import { ActionsContext } from '../../ui-actions/actions-context';
 
 const HoverBarContainer = styled(Container)`

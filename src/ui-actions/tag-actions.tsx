@@ -33,6 +33,7 @@ import {
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
+import { StoreProvider } from '../store/redux';
 import { TagsActionsType } from '../types/tags';
 import CreateUpdateTagModal from '../views/secondary-bar/parts/tags/create-update-tag-modal';
 import DeleteTagModal from '../views/secondary-bar/parts/tags/delete-tag-modal';
@@ -44,7 +45,7 @@ export type ReturnType = {
 	id: string;
 	icon: string;
 	label: string;
-	click?: (arg: React.SyntheticEvent<EventTarget>) => void;
+	click?: (arg: React.SyntheticEvent<HTMLElement> | KeyboardEvent) => void;
 	items?: Array<{
 		customComponent: ComponentType;
 		id: string;
@@ -75,14 +76,20 @@ export const createAndApplyTag = ({
 	id: TagsActionsType.NEW,
 	icon: 'TagOutline',
 	label: t('label.create_tag', 'Create Tag'),
-	click: (e: React.SyntheticEvent<EventTarget>): void => {
+	click: (e): void => {
 		if (e) {
 			e.stopPropagation();
 		}
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
 		const closeModal = context.createModal(
-			{ children: <CreateUpdateTagModal onClose={(): void => closeModal()} contact={contact} /> },
+			{
+				children: (
+					<StoreProvider>
+						<CreateUpdateTagModal onClose={(): void => closeModal()} contact={contact} />
+					</StoreProvider>
+				)
+			},
 			true
 		);
 	}
@@ -91,14 +98,20 @@ export const createTag = ({ t, createModal }: ArgumentType): ReturnType => ({
 	id: TagsActionsType.NEW,
 	icon: 'TagOutline',
 	label: t('label.create_tag', 'Create Tag'),
-	click: (e: React.SyntheticEvent<EventTarget>): void => {
+	click: (e): void => {
 		if (e) {
 			e.stopPropagation();
 		}
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
 		const closeModal = createModal(
-			{ children: <CreateUpdateTagModal onClose={(): void => closeModal()} /> },
+			{
+				children: (
+					<StoreProvider>
+						<CreateUpdateTagModal onClose={(): void => closeModal()} />
+					</StoreProvider>
+				)
+			},
 			true
 		);
 	}
@@ -108,7 +121,7 @@ export const editTag = ({ t, createModal, tag }: ArgumentType): ReturnType => ({
 	id: TagsActionsType.EDIT,
 	icon: 'Edit2Outline',
 	label: t('label.edit_tag', 'Edit Tag'),
-	click: (e: React.SyntheticEvent<EventTarget>): void => {
+	click: (e): void => {
 		if (e) {
 			e.stopPropagation();
 		}
@@ -116,7 +129,11 @@ export const editTag = ({ t, createModal, tag }: ArgumentType): ReturnType => ({
 		// @ts-ignore
 		const closeModal = createModal(
 			{
-				children: <CreateUpdateTagModal onClose={(): void => closeModal()} tag={tag} editMode />
+				children: (
+					<StoreProvider>
+						<CreateUpdateTagModal onClose={(): void => closeModal()} tag={tag} editMode />
+					</StoreProvider>
+				)
 			},
 			true
 		);
@@ -127,7 +144,7 @@ export const deleteTag = ({ t, createModal, tag }: ArgumentType): ReturnType => 
 	id: TagsActionsType.DELETE,
 	icon: 'Untag',
 	label: t('label.delete_tag', 'Delete Tag'),
-	click: (e: React.SyntheticEvent<EventTarget>): void => {
+	click: (e): void => {
 		if (e) {
 			e.stopPropagation();
 		}
@@ -135,7 +152,11 @@ export const deleteTag = ({ t, createModal, tag }: ArgumentType): ReturnType => 
 		// @ts-ignore
 		const closeModal = createModal(
 			{
-				children: <DeleteTagModal onClose={(): void => closeModal()} tag={tag} />
+				children: (
+					<StoreProvider>
+						<DeleteTagModal onClose={(): void => closeModal()} tag={tag} />
+					</StoreProvider>
+				)
 			},
 			true
 		);
@@ -434,8 +455,8 @@ export const applyTag = ({
 			<Button
 				label={t('label.new_tag', 'New Tag')}
 				type="outlined"
-				size="fill"
-				isSmall
+				width="fill"
+				size="small"
 				onClick={(): void => context.createAndApplyTag({ t, context, contact }).click()}
 			/>
 		)

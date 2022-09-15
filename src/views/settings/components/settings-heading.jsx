@@ -15,7 +15,7 @@ export default function Heading({ title }) {
 				crossAlignment="baseline"
 				width="100%"
 			>
-				<Text size="large" weight="bold">
+				<Text size="medium" weight="bold">
 					{title}
 				</Text>
 			</Row>

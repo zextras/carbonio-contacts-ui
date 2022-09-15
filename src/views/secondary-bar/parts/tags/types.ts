@@ -8,6 +8,7 @@ import { ComponentType } from 'react';
 
 export type ItemType = {
 	CustomComponent: ComponentType<any>;
+	item: any;
 	active: boolean;
 	color: number;
 	divider: boolean;

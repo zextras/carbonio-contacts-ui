@@ -5,13 +5,22 @@
  */
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { reduce, filter, some, startsWith, map, findIndex, trim, find } from 'lodash';
-import { ChipInput, Container, Avatar, Text, Row } from '@zextras/carbonio-design-system';
+import {
+	ChipInput,
+	Container,
+	Avatar,
+	Text,
+	Row,
+	Chip,
+	Tooltip
+} from '@zextras/carbonio-design-system';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
 import { useSelector } from 'react-redux';
 import { createSelector } from '@reduxjs/toolkit';
 import styled from 'styled-components';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
+import { StoreProvider } from '../store/redux';
 
 const emailRegex =
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars, max-len, no-control-regex
@@ -85,18 +94,13 @@ const Loader = () => (
 	</Container>
 );
 
-export default function ContactInput({
-	onChange,
-	defaultValue,
-	placeholder,
-	background = 'gray5',
-	...props
-}) {
+function ContactInput({ onChange, defaultValue, placeholder, background = 'gray5', ...props }) {
 	const [defaults, setDefaults] = useState([]);
 	const [options, setOptions] = useState([]);
 	const [idToRemove, setIdToRemove] = useState('');
 	const [t] = useTranslation();
 	const inputRef = useRef();
+
 	useEffect(() => {
 		setDefaults(
 			map(filter(defaultValue, (c) => c.id !== idToRemove) ?? [], (obj) => ({
@@ -309,6 +313,20 @@ export default function ContactInput({
 		[editChip, isValidEmail, t]
 	);
 
+	const customChip = (chipProps) => (
+		<Chip
+			{...chipProps}
+			avatarLabel={chipProps.label}
+			label={
+				<Tooltip label={chipProps.email ?? chipProps.address} maxWidth="unset">
+					<Row wrap="nowrap">
+						<Text size="extrasmall">{chipProps.label}</Text>
+					</Row>
+				</Tooltip>
+			}
+		/>
+	);
+
 	return (
 		<Container width="100%">
 			<ChipInput
@@ -325,6 +343,7 @@ export default function ContactInput({
 				onAdd={onAdd}
 				requireUniqueChips
 				createChipOnPaste
+				ChipComponent={customChip}
 				pasteSeparators={[',', ' ', ';', '\n']}
 				separators={['NumpadEnter', 'Comma']}
 				{...props}
@@ -332,3 +351,11 @@ export default function ContactInput({
 		</Container>
 	);
 }
+
+const ContactInputComp = (props) => (
+	<StoreProvider>
+		<ContactInput {...props} />
+	</StoreProvider>
+);
+
+export default ContactInputComp;

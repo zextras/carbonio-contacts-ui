@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { Container, Text } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
@@ -12,7 +12,10 @@ type SearchResultsHeaderProps = {
 	resultsCount: number | undefined;
 };
 
-const SearchResultsHeader = ({ searchString, resultsCount }: SearchResultsHeaderProps): any => {
+const SearchResultsHeader = ({
+	searchString,
+	resultsCount
+}: SearchResultsHeaderProps): ReactElement => {
 	const [t] = useTranslation();
 	return (
 		<Container
@@ -42,9 +45,7 @@ const SearchResultsHeader = ({ searchString, resultsCount }: SearchResultsHeader
 				<Text size="large" weight="bold">
 					{searchString.map((i) => i.label).join(' ')}
 				</Text>
-				<Text width="fill" mainAlignment="right" size="large">
-					{resultsCount}
-				</Text>
+				<Text size="large">{resultsCount}</Text>
 			</Container>
 		</Container>
 	);
