@@ -191,7 +191,7 @@
         "delete_tag_message1": "Are you sure to delete \"{{name}}\" Tag?",
         "delete_tag_message2": "Once deleted, it will be removed from every item marked with it.",
         "new_contact": "This contact will be created in the 'Contacts' folder",
-        "require_field": "Fill one required * field",
+        "require_field": "Fill at least one of the required * field",
         "snackbar": {
             "settings_saved": "Edits saved correctly"
         }
