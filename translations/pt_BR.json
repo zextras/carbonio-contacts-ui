@@ -1,6 +1,5 @@
 {
     "action": {
-        "move": "Mover",
         "search": "Buscar",
         "delete_permanently": "Excluir Permanentemente",
         "goto_folder": "Ir para a pasta",
@@ -11,7 +10,6 @@
     "folder": {
         "modal": {
             "delete": {
-                "title": "Excluir",
                 "body": {
                     "message1": "Deseja excluir a agenda de endereços selecionada? Ao excluí-la, seu conteúdo será removido permanentemente e ela não será mais recuperável.",
                     "message2": "Deseja excluir permanentemente a agenda de endereços selecionada? Ao excluí-la, seu conteúdo será removido permanentemente e ela não poderá mais ser recuperada."
@@ -19,15 +17,12 @@
             },
             "edit": {
                 "body": {
-                    "type": "Tipo",
                     "item": {
                         "empty": "Sem caminho disponível"
                     }
-                },
-                "footer": "Editar"
+                }
             },
             "move": {
-                "title": "Mover",
                 "body": {
                     "message1": "Selecione uma agenda de endereços para movê-la para:",
                     "message3": "Selecione uma pasta para mover a selecionada:"
@@ -37,7 +32,6 @@
                 }
             },
             "new": {
-                "footer": "Criar",
                 "body": {
                     "message1": "Novo nome para a agenda de endereços",
                     "message2": "Selecione uma agenda de endereços que irá conter a recém criada:"
@@ -51,15 +45,13 @@
                 "title2": "Criação de nova pasta"
             },
             "restore": {
-                "title": "Restaurar",
                 "create_footer": "Criar e Restaurar"
             },
             "empty": {
                 "body": {
                     "message1": "Deseja esvaziar a agenda de endereços selecionada?",
                     "message2": "Ao esvaziá-la, todo seu conteúdo será movido para a lixeira."
-                },
-                "title": "Vazia"
+                }
             },
             "footer": {
                 "go_back": "Voltar"
@@ -105,7 +97,6 @@
         "edit_folder_properties": "Editar propriedades de {{name}}",
         "resend": "Reenviar",
         "revoke": "Revogar",
-        "revoke_access_without_notification": "Revogar acesso sem enviar notificação",
         "revoke_share": "Revogar compartilhamento de {{title}}",
         "shares_folder_edit": "Compartilhando esta agenda de endereços",
         "notes": "Notas",
@@ -146,14 +137,24 @@
         "cannot_move": "Não é possível mover para a mesma pasta",
         "select_color": "Selecionar cor",
         "edit_invalid_email": "E-mail inválido. Clique para editá-lo",
-        "edit_email": "Editar E-mail"
+        "edit_email": "Editar E-mail",
+        "tags": "Marcadores",
+        "tag_name": "Nome da Etiqueta",
+        "tag_max_length": "Máximo de 128 caracteres permitidos",
+        "tag": "Marcador",
+        "no_special_char_allowed": "O nome não deve conter caracteres especiais",
+        "new_tag": "Novo marcador",
+        "edit_tag_name": "Editar etiqueta \"{{name}}\"",
+        "edit_tag": "Editar Etiqueta",
+        "delete_tag_name": "Excluir etiqueta \"{{name}}\"",
+        "delete_tag": "Excluir Etiqueta",
+        "create_tag": "Criar Etiqueta"
     },
     "share": {
         "add": "Adicionar",
         "admin": "Admin",
         "owner": "Proprietário",
         "read": "Leitura",
-        "create": "Criar",
         "none": "None",
         "administer": "Administrador",
         "allowed_actions": "Ações permitidas",
@@ -214,9 +215,10 @@
     "message": {
         "snackbar": {
             "settings_saved": "Edições salvas corretamente"
-        }
+        },
+        "delete_tag_message2": "Uma vez excluída, ela será removida de todos os itens marcados com a mesma.",
+        "delete_tag_message1": "Tem certeza que deseja excluir a Etiqueta \"{{name}}\"?"
     },
-    "mail": "E-mail",
     "messages": {
         "modal": {
             "delete": {
@@ -230,7 +232,11 @@
             "contact_deleted_permanently": "Contato excluído permanentemente",
             "contact_moved": "Contato movido",
             "contact_moved_to_trash": "Contato movido para a lixeira",
-            "contact_restored": "Contato recuperado"
+            "contact_restored": "Contato recuperado",
+            "tag_updated": "Etiqueta atualizada com sucesso",
+            "tag_not_updated": "Algo deu errado, a etiqueta não foi atualizada. Tente novamente.",
+            "tag_deleted": "Etiqueta {{name}} excluída com sucesso",
+            "tag_created": "Etiqueta {{name}} criada com sucesso"
         }
     },
     "modal": {
@@ -256,7 +262,9 @@
         "folder_shared": "Agenda de endereços compartilhada",
         "share_resend": "Convite do compartilhamento reenviado",
         "share_revoke": "Acesso ao compartilhamento revogado",
-        "share_updated": "Direitos de acesso atualizados"
+        "share_updated": "Direitos de acesso atualizados",
+        "tag_removed": "Etiqueta \"{{tag}}\" removida",
+        "tag_applied": "Etiqueta \"{{tag}}\" aplicada"
     },
     "tooltip": {
         "revoke": "Revogar acesso",
@@ -303,5 +311,11 @@
         "search_title4": "Selecione um ou mais resultados para realizar ações ou exibir os detalhes.",
         "title7": "Mantenha contato com seus colegas"
     },
-    "contact_restored": "Contato recuperado"
+    "contact_restored": "Contato recuperado",
+    "folders": {
+        "trash": "Lixeira",
+        "root": "Raiz",
+        "contacts": "Contatos",
+        "auto_contacts": "Contatos que receberam e-mail"
+    }
 }

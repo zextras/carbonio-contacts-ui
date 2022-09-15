@@ -2,11 +2,9 @@
     "folder": {
         "modal": {
             "restore": {
-                "title": "Herstellen",
                 "create_footer": "Aanmaken en herstellen"
             },
             "delete": {
-                "title": "Verwijderen",
                 "body": {
                     "message1": "Wilt u het geselecteerde adresboek verwijderen? Als u het verwijdert, wordt de gerelateerde inhoud permanent naar de prullenbak verplaatst en is het adresboek niet langer recupereerbaar.",
                     "message2": "Wilt u het geselecteerde adresboek definitief verwijderen? Als u het verwijdert, wordt de gerelateerde inhoud permanent verwijderd en kan het adresboek niet meer worden hersteld."
@@ -14,15 +12,12 @@
             },
             "edit": {
                 "body": {
-                    "type": "Type",
                     "item": {
                         "empty": "Geen pad beschikbaar"
                     }
-                },
-                "footer": "Bewerken"
+                }
             },
             "move": {
-                "title": "Verplaatsen",
                 "body": {
                     "message1": "Selecteer een adresboek om het overwogene naar te verplaatsen:",
                     "message3": "Selecteer een map om de overwogene naar te verplaatsen:"
@@ -32,7 +27,6 @@
                 }
             },
             "new": {
-                "footer": "Creëren",
                 "body": {
                     "message1": "Nieuwe adresboeknaam",
                     "message2": "Selecteer een adresboek dat het nieuw aangemaakte adresboek zal bevatten:"
@@ -49,8 +43,7 @@
                 "body": {
                     "message1": "Wilt u het geselecteerde adresboek leegmaken?",
                     "message2": "Als u het leegmaakt, zal alle gerelateerde inhoud naar de prullenbak worden verplaatst."
-                },
-                "title": "Leeg"
+                }
             },
             "footer": {
                 "go_back": "Teruggaan"
@@ -91,7 +84,6 @@
     "share": {
         "add": "Toevoegen",
         "admin": "Admin",
-        "create": "Creëren",
         "manager": "Beheren",
         "none": "Geen",
         "owner": "Eigenaar",
@@ -129,7 +121,6 @@
     },
     "action": {
         "delete_permanently": "Permanent Verwijderen",
-        "restore": "Herstellen",
         "search": "Zoeken",
         "goto_folder": "Ga naar map",
         "reset_filters": "Filters resetten",
@@ -152,10 +143,8 @@
         "edit_folder_properties": "Eigenschappen van {{name}} bewerken",
         "resend": "Opnieuw verzenden",
         "revoke": "Intrekken",
-        "revoke_access_without_notification": "Toegang intrekken zonder een melding te sturen",
         "revoke_share": "Delen van {{title}} intrekken",
         "shares_folder_edit": "Delen van dit adresboek",
-        "revoke_send_standard_msg": "Toegang intrekken door een aangepaste melding te verzenden",
         "contacts": "Contacten",
         "delete": "Verwijderen",
         "edit_access_name": "Toegang van {{name}} bewerken",
@@ -194,7 +183,18 @@
         "share_with": "Delen met",
         "app_name": "Contacten",
         "edit_invalid_email": "E-mail is ongeldig, klik om het te bewerken",
-        "edit_email": "E-mail bewerken"
+        "edit_email": "E-mail bewerken",
+        "tags": "Labels",
+        "tag_name": "Labelnaam",
+        "tag_max_length": "Max 128 tekens zijn toegestaan",
+        "tag": "Label",
+        "no_special_char_allowed": "De naam mag geen speciaal teken bevatten",
+        "new_tag": "Nieuw label",
+        "edit_tag_name": "\"{{name}}\" tag bewerken",
+        "edit_tag": "Tag bewerken",
+        "delete_tag_name": "\"{{name}}\" tag verwijderen",
+        "delete_tag": "Tag verwijderen",
+        "create_tag": "Tag creëren"
     },
     "section": {
         "field": {
@@ -221,9 +221,10 @@
     "message": {
         "snackbar": {
             "settings_saved": "Bewerkingen correct opgeslagen"
-        }
+        },
+        "delete_tag_message2": "Eenmaal verwijderd, zal het verwijderd worden van elk item dat ermee gemarkeerd is.",
+        "delete_tag_message1": "Weet u zeker dat u de\"{{name}}\" Tag wilt verwijderen?"
     },
-    "mail": "E-mail",
     "messages": {
         "modal": {
             "delete": {
@@ -237,7 +238,11 @@
             "contact_deleted_permanently": "Contact permanent verwijderd",
             "contact_moved": "Contact verplaatst",
             "contact_moved_to_trash": "Contact verplaatst naar prullenbak",
-            "contact_restored": "Contact hersteld"
+            "contact_restored": "Contact hersteld",
+            "tag_updated": "Tag met succes bijgewerkt",
+            "tag_not_updated": "Er is iets fout gegaan, de tag is niet bijgewerkt. Probeer het opnieuw.",
+            "tag_deleted": "{{name}} Tag met succes verwijderd",
+            "tag_created": "Tag {{name}} met succes gecreëerd"
         }
     },
     "modal": {
@@ -263,7 +268,9 @@
         "folder_shared": "Adresboek gedeeld",
         "share_resend": "Delen uitnodigen opnieuw versturen",
         "share_updated": "Toegangsrechten bijgewerkt",
-        "share_revoke": "Delen toegang ingetrokken"
+        "share_revoke": "Delen toegang ingetrokken",
+        "tag_removed": "\"{{tag}}\" tag verwijderd",
+        "tag_applied": "\"{{tag}}\" tag toegepast"
     },
     "title": {
         "advanced_filters": "Geavanceerde filters"
@@ -304,5 +311,11 @@
         "search_list_title1": "Het lijkt erop dat er geen resultaten zijn. Blijf zoeken!",
         "title7": "Houd contact met uw collega's"
     },
-    "contact_restored": "Contact hersteld"
+    "contact_restored": "Contact hersteld",
+    "folders": {
+        "trash": "Papierkorb",
+        "root": "Hoofdniveau",
+        "contacts": "Contacten",
+        "auto_contacts": "Gemailde contacten"
+    }
 }
