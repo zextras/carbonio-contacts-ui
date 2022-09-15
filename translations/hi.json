@@ -36,7 +36,6 @@
                 }
             },
             "move": {
-                "title": "ले जाएँ",
                 "body": {
                     "message1": "चुने गए को भेजने के लिए कोई एड्रेस बुक चुनें:",
                     "message3": "चुने गए को भेजने के लिए कोई फोल्डर चुनें:"
@@ -176,7 +175,18 @@
         "cannot_move": "उसी फोल्डर में फिर से नहीं भेज सकता",
         "select_color": "रंग चुनें",
         "edit_invalid_email": "ई-मेल अमान्य है, इसे एडिट करने के लिए क्लिक करें",
-        "edit_email": "ई-मेल एडिट करें"
+        "edit_email": "ई-मेल एडिट करें",
+        "tags": "टैग्स",
+        "tag_name": "नाम टैग करें",
+        "tag_max_length": "अधिकतम 128 कैरक्टर",
+        "tag": "टैग",
+        "no_special_char_allowed": "नाम में कोई स्पेशल कैरक्टर नहीं होना चाहिए",
+        "new_tag": "नया टैग",
+        "edit_tag_name": "\"{{name}}\" टैग बदलें",
+        "edit_tag": "टैग बदलें",
+        "delete_tag_name": "\"{{name}}\" टैग डिलीट करें",
+        "delete_tag": "टैग डिलीट करें",
+        "create_tag": "टैग बनाएँ"
     },
     "name": {
         "nickName": "उर्फनाम",
@@ -205,7 +215,9 @@
     "message": {
         "snackbar": {
             "settings_saved": "बदलाव ठीक से सेव हो गए"
-        }
+        },
+        "delete_tag_message2": "डिलीट हो जाने के बाद, इससे मार्क हर आइटम से इसे हटा दिया जाएगा।",
+        "delete_tag_message1": "क्या आप वाकई में \"{{name}}\" टैग डिलीट करना चाहते हैं?"
     },
     "messages": {
         "modal": {
@@ -220,7 +232,11 @@
             "contact_deleted_permanently": "कांटैक्ट परमानेंट डिलीट कर दिया गया",
             "contact_moved": "कांटैक्ट भेजा गया",
             "contact_moved_to_trash": "कांटैक्ट रद्दी में भेजा गया",
-            "contact_restored": "कांटैक्ट वापस लाया गया"
+            "contact_restored": "कांटैक्ट वापस लाया गया",
+            "tag_updated": "टैग अपडेट हो गया",
+            "tag_not_updated": "कुछ गड़बड़ हुई, टैग अपडेट नहीं है। दोबारा कोशिश करें।",
+            "tag_deleted": "{{name}} टैग डिलीट हो गया",
+            "tag_created": "टैग {{name}} बन गया"
         }
     },
     "modal": {
@@ -246,7 +262,9 @@
         "folder_shared": "एड्रेस बुक शेयर की गई",
         "share_resend": "शेयर इन्वाइट भेजा गया",
         "share_revoke": "शेयर एक्सेस वापस ली गई",
-        "share_updated": "एक्सेस अधिकार अपडेट हुए"
+        "share_updated": "एक्सेस अधिकार अपडेट हुए",
+        "tag_removed": "\"{{tag}}\" टैग हटाया गया",
+        "tag_applied": "\"{{tag}}\" टैग अप्लाई हो गया"
     },
     "title": {
         "advanced_filters": "एड्वान्स्ड फ़िल्टर"
@@ -293,5 +311,11 @@
         "title6": "कोई कांटैक्ट कस्टमाइज़ करें",
         "title8": "शेयर की गई ई-मेल भेजें"
     },
-    "contact_restored": "Contact वापस लाया गया"
+    "contact_restored": "Contact वापस लाया गया",
+    "folders": {
+        "trash": "रद्दी",
+        "root": "मूल",
+        "contacts": "संपर्क",
+        "auto_contacts": "ईमेल किए गए संपर्क"
+    }
 }

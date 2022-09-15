@@ -122,7 +122,10 @@
     "message": {
         "snackbar": {
             "settings_saved": "Değişiklikler başarıyla kaydedildi"
-        }
+        },
+        "require_field": "* ile işaretli en az bir alanı doldurun",
+        "delete_tag_message2": "Silinince önceden işaretlenmiş tüm öğelerden etiket kaldırılacak.",
+        "delete_tag_message1": "\"{{name}}\" etiketini silmek istediğinizden emin misiniz?"
     },
     "label": {
         "cancel": "İptal",
@@ -175,7 +178,18 @@
         "note": "Not:",
         "options": "Seçenekler",
         "select_color": "Renk seçin",
-        "share_with": "Paylaş"
+        "share_with": "Paylaş",
+        "tags": "Etiketler",
+        "tag_name": "Etiket adı",
+        "tag_max_length": "En çok 128 karakter kullanılabilir",
+        "tag": "Etiket",
+        "no_special_char_allowed": "Ad özel karakterler içermemelidir",
+        "new_tag": "Yeni Etiket",
+        "edit_tag_name": "\"{{name}}\" etiketi düzenle",
+        "edit_tag": "Etiketi düzenle",
+        "delete_tag_name": "\"{{name}}\" etiketi sil",
+        "delete_tag": "Etiketi Sil",
+        "create_tag": "Etiket Oluştur"
     },
     "job": {
         "company": "Firma",
@@ -195,7 +209,11 @@
             "contact_deleted_permanently": "Kişi kalıcı olarak silindi",
             "contact_moved": "Kişi taşındı",
             "contact_moved_to_trash": "Kişi çöp kutusuna taşındı",
-            "contact_restored": "Kişi geri yüklendi"
+            "contact_restored": "Kişi geri yüklendi",
+            "tag_updated": "Etiket başarıyla güncellendi",
+            "tag_not_updated": "Bir hata oluştu, etiket güncellenemedi. Lütfen tekrar deneyin.",
+            "tag_deleted": "{{name}} Etiketi başarıyla silindi",
+            "tag_created": "{{name}} etiketi başarıyla oluşturuldu"
         }
     },
     "modal": {
@@ -245,7 +263,9 @@
         "folder_shared": "Adres defteri paylaşıldı",
         "share_resend": "Paylaşım davetini yeniden gönder",
         "share_revoke": "Paylaşım erişimi iptal edildi",
-        "share_updated": "Erişim hakları güncellendi"
+        "share_updated": "Erişim hakları güncellendi",
+        "tag_removed": "\"{{tag}}\" etiketi kaldırıldı",
+        "tag_applied": "\"{{tag}}\" etiketi uygulandı"
     },
     "title": {
         "advanced_filters": "Gelişmiş Filtreler"
@@ -292,5 +312,11 @@
         "search_title4": "Detayları görüntülemek veya işlem yapmak için bir veya daha fazla sonuç seçin.",
         "title2": "Tüm çalışmalarınızı kişileriniz ile paylaşın.",
         "title7": "İş arkadaşlarınız ile bağlantılı kalın"
+    },
+    "folders": {
+        "trash": "Çöp Kutusu",
+        "root": "Kök",
+        "contacts": "Kişiler",
+        "auto_contacts": "E-posta Gönderilmiş Kişiler"
     }
 }
