@@ -4,7 +4,6 @@
         "read": "Dibaca",
         "add": "Tambahkan",
         "admin": "Admin",
-        "create": "Buat",
         "none": "Tidak ada",
         "administer": "Kelola",
         "allowed_actions": "Tindakan yang diperbolehkan",
@@ -39,7 +38,6 @@
         "write": "Tulis"
     },
     "action": {
-        "move": "Pindahkan",
         "search": "Cari",
         "delete_permanently": "Hapus Secara Permanen",
         "goto_folder": "Buka folder",
@@ -50,7 +48,6 @@
     "folder": {
         "modal": {
             "delete": {
-                "title": "Hapus",
                 "body": {
                     "message2": "Apakah Anda ingin menghapus buku alamat yang dipilih secara permanen? Jika dihapus, konten terkait akan dihapus secara permanen dan buku alamat tidak dapat dipulihkan lagi.",
                     "message1": "Apakah Anda ingin menghapus buku alamat yang dipilih? Jika dihapus, konten terkait akan dihapus secara permanen dan buku alamat tidak akan bisa dipulihkan lagi."
@@ -58,15 +55,12 @@
             },
             "edit": {
                 "body": {
-                    "type": "Jenis",
                     "item": {
                         "empty": "Tidak tersedia jalur"
                     }
-                },
-                "footer": "Edit"
+                }
             },
             "move": {
-                "title": "Pindahkan",
                 "input": {
                     "filter": "Filter buku alamat"
                 },
@@ -89,15 +83,13 @@
                 "title2": "Pembuatan folder baru"
             },
             "restore": {
-                "title": "Pulihkan",
                 "create_footer": "Buat dan Pulihkan"
             },
             "empty": {
                 "body": {
                     "message1": "Apakah Anda ingin mengosongkan buku alamat yang dipilih?",
                     "message2": "Jika dikosongkan, semua konten terkait akan dipindahkan ke tempat sampah."
-                },
-                "title": "Kosongkan"
+                }
             },
             "footer": {
                 "go_back": "Kembali"
@@ -143,8 +135,6 @@
         "edit_folder_properties": "Edit properti {{name}}",
         "resend": "Kirim ulang",
         "revoke": "Batalkan",
-        "search_hint": "Cari petunjuk!",
-        "revoke_send_standard_msg": "Batalkan akses dengan mengirim pemberitahuan kustom",
         "revoke_share": "Batalkan berbagi {{title}}",
         "shares_folder_edit": "Berbagi buku alamat ini",
         "contacts": "Kontak",
@@ -183,7 +173,18 @@
         "cannot_move": "Tidak bisa memindahkan folder yang sama",
         "select_color": "Pilih Warna",
         "edit_invalid_email": "Email tidak valid, klik untuk mengedit",
-        "edit_email": "Edit Email"
+        "edit_email": "Edit Email",
+        "tags": "Tag",
+        "tag_name": "Nama tag",
+        "tag_max_length": "Maks 128 karakter yang diizinkan",
+        "tag": "Tag",
+        "no_special_char_allowed": "Nama tidak boleh berisi karakter spesial",
+        "new_tag": "Tag Baru",
+        "edit_tag_name": "Edit tag \"{{name}}\"",
+        "edit_tag": "Edit Tag",
+        "delete_tag_name": "Hapus tag \"{{name}}\"",
+        "delete_tag": "Hapus Tag",
+        "create_tag": "Buat Tag"
     },
     "name": {
         "nickName": "Nama panggilan",
@@ -211,9 +212,10 @@
     "message": {
         "snackbar": {
             "settings_saved": "Hasil edit disimpan dengan benar"
-        }
+        },
+        "delete_tag_message2": "Setelah dihapus, ini akan dihapus dari tiap item yang ditandai dengannya.",
+        "delete_tag_message1": "Yakin ingin menghapus Tag \"{{name}}\"?"
     },
-    "mail": "Email",
     "messages": {
         "modal": {
             "delete": {
@@ -226,7 +228,11 @@
             "contact_deleted_permanently": "Kontak dihapus secara permanen",
             "contact_moved": "Kontak dipindahkan",
             "contact_moved_to_trash": "Kontak dipindahkan ke tempat sampah",
-            "contact_restored": "Kontak dipulihkan"
+            "contact_restored": "Kontak dipulihkan",
+            "tag_updated": "Tag berhasil diperbarui",
+            "tag_not_updated": "Terjadi kesalahan, tag tidak diperbarui. Coba lagi.",
+            "tag_deleted": "Tag {{name}} berhasil dihapus",
+            "tag_created": "Tag {{name}} berhasil dibuat"
         }
     },
     "modal": {
@@ -252,7 +258,8 @@
     },
     "tooltip": {
         "revoke": "Batalkan akses",
-        "resend": "Kirim notifikasi email tentang berbagi ini"
+        "resend": "Kirim notifikasi email tentang berbagi ini",
+        "address_book_sharing_status": "Dibagikan kepada {{count}} orang"
     },
     "types": {
         "home": "beranda",
@@ -265,7 +272,9 @@
         "folder_shared": "Buku alamat dibagikan",
         "share_resend": "Undangan berbagi dikirim ulang",
         "share_revoke": "Akses berbagi dibatalkan",
-        "share_updated": "Hak akses diperbarui"
+        "share_updated": "Hak akses diperbarui",
+        "tag_removed": "Tag \"{{tag}}: dihapus",
+        "tag_applied": "Tag \"{{tag}}\" diterapkan"
     },
     "displayer": {
         "title5": "Pilih kontak",
@@ -297,5 +306,11 @@
         "search_description1": "Atau pilih \"Filter Lanjutan\" untuk mempersempit pencarian.",
         "title8": "Kirim email bersama"
     },
-    "contact_restored": "Kontak dipulihkan"
+    "contact_restored": "Kontak dipulihkan",
+    "folders": {
+        "trash": "Sampah",
+        "root": "Akar",
+        "contacts": "Kontak",
+        "auto_contacts": "Kontak Email"
+    }
 }

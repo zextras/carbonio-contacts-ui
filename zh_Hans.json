@@ -3,7 +3,6 @@
         "none": "无",
         "add": "添加",
         "admin": "管理员",
-        "create": "创建",
         "owner": "所有者",
         "read": "读取",
         "viewer": "查看者",
@@ -39,7 +38,6 @@
         "share_note": "标准消息中会展示您的名称、共享项目名称、授予接收者的权限以及登录信息。"
     },
     "action": {
-        "move": "移动",
         "search": "搜索",
         "goto_folder": "前往文件夹",
         "share_folder": "共享文件夹",
@@ -50,7 +48,6 @@
     "folder": {
         "modal": {
             "delete": {
-                "title": "删除",
                 "body": {
                     "message1": "是否删除所选地址簿？如果删除，则其相关内容将被移动至垃圾箱中，且地址簿将不再可见。",
                     "message2": "是否永久性删除所选地址簿？如果删除，则其相关内容将永久性移除，且地址簿将不可恢复。"
@@ -58,15 +55,12 @@
             },
             "edit": {
                 "body": {
-                    "type": "类型",
                     "item": {
                         "empty": "无可用路径"
                     }
-                },
-                "footer": "编辑"
+                }
             },
             "move": {
-                "title": "移动",
                 "body": {
                     "message1": "选择一个地址簿以将其移动至：",
                     "message3": "选择文件夹以将其移动至："
@@ -76,7 +70,6 @@
                 }
             },
             "new": {
-                "footer": "创建",
                 "body": {
                     "message2": "选择将会包含最近创建的一个地址簿：",
                     "message1": "新地址簿名称"
@@ -90,15 +83,13 @@
                 "create_footer": "创建和移动"
             },
             "restore": {
-                "title": "恢复",
                 "create_footer": "创建和恢复"
             },
             "empty": {
                 "body": {
                     "message2": "如果清空，所有相关内容都将被移动至垃圾箱。",
                     "message1": "是否清空所选地址簿？"
-                },
-                "title": "空"
+                }
             },
             "footer": {
                 "go_back": "返回"
@@ -145,8 +136,6 @@
         "edit_folder_properties": "编辑 {{name}} 的属性",
         "resend": "重新发送",
         "revoke": "撤销",
-        "revoke_access_without_notification": "撤销访问权限并不发送通知",
-        "search_hint": "搜索提示！",
         "shares_folder_edit": "共享此地址簿",
         "error_try_again": "出现了一些错误，请重试",
         "type": "类型",
@@ -184,7 +173,18 @@
         "app_name": "联系人",
         "cannot_move": "无法移动至相同文件夹",
         "edit_email": "编辑邮件",
-        "edit_invalid_email": "邮件无效，点击编辑"
+        "edit_invalid_email": "邮件无效，点击编辑",
+        "tags": "标记",
+        "tag_name": "标记名称",
+        "tag_max_length": "最多允许 128 个字符",
+        "tag": "标记",
+        "no_special_char_allowed": "名称中不应包含任何特殊字符",
+        "new_tag": "新建标记",
+        "edit_tag_name": "编辑“{{name}}”标签",
+        "edit_tag": "编辑标签",
+        "delete_tag_name": "删除“{{name}}”标签",
+        "delete_tag": "删除标签",
+        "create_tag": "创建标签"
     },
     "name": {
         "nickName": "昵称",
@@ -214,10 +214,11 @@
         "address_book_name": "地址簿名称"
     },
     "message": {
-        "search_hints": "搜索我们需要讨论的提示",
         "snackbar": {
             "settings_saved": "编辑保存正确"
-        }
+        },
+        "delete_tag_message2": "删除后，其将从所有已进行相关标记的项目上移除。",
+        "delete_tag_message1": "确定要删除“{{name}}”标签吗？"
     },
     "messages": {
         "modal": {
@@ -231,7 +232,11 @@
             "contact_deleted_permanently": "联系人已永久性删除",
             "contact_moved": "联系人已移动",
             "contact_moved_to_trash": "联系人已移动至垃圾箱",
-            "contact_restored": "联系人已恢复"
+            "contact_restored": "联系人已恢复",
+            "tag_updated": "标签已成功更新",
+            "tag_not_updated": "发生一些错误，标签未更新。请重试。",
+            "tag_deleted": "{{name}} 标签已删除成功",
+            "tag_created": "标签 {{name}} 已成功创建"
         }
     },
     "tooltip": {
@@ -264,7 +269,9 @@
         "folder_shared": "地址簿已共享",
         "share_resend": "共享邀请重发",
         "share_revoke": "共享访问权限已撤销",
-        "share_updated": "访问权限更新"
+        "share_updated": "访问权限更新",
+        "tag_removed": "“{{tag}}”标签已移除",
+        "tag_applied": "“{{tag}}”标签已应用"
     },
     "title": {
         "advanced_filters": "高级过滤条件"
@@ -299,5 +306,11 @@
         "list_title2": "垃圾箱为空",
         "title8": "发送共享邮件"
     },
-    "contact_restored": "联系人已恢复"
+    "contact_restored": "联系人已恢复",
+    "folders": {
+        "trash": "回收站",
+        "root": "根目录",
+        "contacts": "地址簿",
+        "auto_contacts": "电子邮件联系人"
+    }
 }

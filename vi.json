@@ -48,7 +48,18 @@
         "revoke_without_notification": "Thu hồi quyền truy cập và không gửi thông báo",
         "root": "Thư mục gốc",
         "website": "Websites",
-        "address_book_restored": "Danh bạ đã được khôi phục"
+        "address_book_restored": "Danh bạ đã được khôi phục",
+        "tags": "Thẻ",
+        "tag_name": "Tên thẻ",
+        "tag_max_length": "Cho phép tối đa là 128 ký tự",
+        "tag": "Thẻ",
+        "no_special_char_allowed": "Tên không được chứa bất kỳ ký tự đặc biệt nào",
+        "new_tag": "Thẻ mới",
+        "edit_tag_name": "Chỉnh sửa thẻ \"{{name}}",
+        "edit_tag": "Chỉnh sửa thẻ",
+        "delete_tag_name": "Xoá thẻ \"{{name}}\"",
+        "delete_tag": "Xoá thẻ",
+        "create_tag": "Tạo thẻ"
     },
     "share": {
         "share_note": "Thông báo chuẩn hiển thị tên của bạn, tên của mục được chia sẻ, quyền được cấp cho người nhận và thông tin đăng nhập.",
@@ -94,7 +105,11 @@
             "contact_moved": "Đã di chuyển liên hệ",
             "contact_moved_to_trash": "Di chuyển liên hệ vào thùng rác",
             "contact_restored": "Khôi phục liên hệ",
-            "address_book_moved": "Danh bạ đã được di chuyển về thư mục đích"
+            "address_book_moved": "Danh bạ đã được di chuyển về thư mục đích",
+            "tag_updated": "Cập nhập thẻ thành công",
+            "tag_not_updated": "Có gì đó sai không cập nhập được Tag. Vui lòng thử lại.",
+            "tag_deleted": "Xoá thẻ {{name}} thành công",
+            "tag_created": "Tạo thẻ {{name}} thành công"
         },
         "modal": {
             "delete": {
@@ -228,7 +243,9 @@
     "message": {
         "snackbar": {
             "settings_saved": "Chỉnh sửa được lưu chính xác"
-        }
+        },
+        "delete_tag_message2": "Sau khi xóa, nó sẽ bị xóa khỏi mọi mục được đánh dấu bởi nó.",
+        "delete_tag_message1": "Bạn có chắc xoá thẻ \"{{name}}\"?"
     },
     "name": {
         "suffix": "Đuôi tên",
@@ -272,7 +289,9 @@
         "share_updated": "\"Quyền truy cập được cập nhập\"",
         "share_revoke": "Thu hồi truy cập chia sẻ",
         "folder_edited": "Đã chỉnh sửa danh bạ thành công",
-        "share_resend": "Gửi lại lời mời chia sẻ"
+        "share_resend": "Gửi lại lời mời chia sẻ",
+        "tag_removed": "Đã xoá thẻ \"{{tag}}\"",
+        "tag_applied": "đã áp dụng thẻ \"{{tag}}\""
     },
     "title": {
         "advanced_filters": "Bộ lọc nâng cao"
@@ -285,6 +304,13 @@
     },
     "tooltip": {
         "revoke": "Thu hồi truy cập",
-        "resend": "Gửi thư điện tử thông báo về chia sẻ này"
+        "resend": "Gửi thư điện tử thông báo về chia sẻ này",
+        "address_book_sharing_status": "Chia sẻ {{count}} với"
+    },
+    "folders": {
+        "trash": "Trash",
+        "root": "Gốc",
+        "contacts": "Danh bạ",
+        "auto_contacts": "Những liên hệ đã gửi email"
     }
 }
