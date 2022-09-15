@@ -50,7 +50,18 @@
         "cannot_move": "No se puede mover a la misma carpeta",
         "select_color": "Elige un color",
         "edit_invalid_email": "E-mail no válido, haz clic para editarlo",
-        "edit_email": "Editar e-mail"
+        "edit_email": "Editar e-mail",
+        "tags": "Etiquetas",
+        "tag_name": "Nombre de la etiqueta",
+        "tag_max_length": "Máximo 128 caracteres permitidos",
+        "tag": "Etiqueta",
+        "no_special_char_allowed": "El nombre no debe contener ningún carácter especial",
+        "new_tag": "Nueva etiqueta",
+        "edit_tag_name": "Editar etiqueta \"{{name}}\"",
+        "edit_tag": "Editar etiqueta",
+        "delete_tag_name": "Eliminar etiqueta \"{{name}}\"",
+        "delete_tag": "Eliminar etiqueta",
+        "create_tag": "Crear Etiqueta"
     },
     "share": {
         "none": "None",
@@ -114,7 +125,6 @@
                 }
             },
             "move": {
-                "title": "Mover",
                 "body": {
                     "message3": "Elige una carpeta hacia donde mover la seleccionada:",
                     "message1": "Elige una libreta de direcciones hacia donde mover la seleccionada:"
@@ -205,7 +215,9 @@
     "message": {
         "snackbar": {
             "settings_saved": "Ediciones guardadas correctamente"
-        }
+        },
+        "delete_tag_message2": "Una vez borrada, se quitará de cada elemento marcado con ella.",
+        "delete_tag_message1": "¿Seguro que quieres borrar la etiqueta \"{{name}}\"?"
     },
     "messages": {
         "snackbar": {
@@ -213,7 +225,11 @@
             "contact_deleted_permanently": "Contacto borrado permanentemente",
             "contact_moved": "Contacto movido",
             "contact_moved_to_trash": "Contacto movido a la papelera",
-            "contact_restored": "Contacto restaurado"
+            "contact_restored": "Contacto restaurado",
+            "tag_updated": "Etiqueta actualizada con éxito",
+            "tag_not_updated": "Algo salió mal, etiqueta no actualizada. Por favor, prueba de nuevo.",
+            "tag_deleted": "{{name}} etiqueta borrada con éxito",
+            "tag_created": "Etiqueta {{name}} creada con éxito"
         },
         "modal": {
             "delete": {
@@ -246,7 +262,9 @@
         "folder_shared": "Libreta de direcciones compartida",
         "share_resend": "Invitación para la compartición reenviada",
         "share_revoke": "Acceso a la compartición revocado",
-        "share_updated": "Derechos de acceso actualizados"
+        "share_updated": "Derechos de acceso actualizados",
+        "tag_removed": "Etiqueta \"{{tag}}\" eliminada",
+        "tag_applied": "Etiqueta \"{{tag}}\" aplicada"
     },
     "title": {
         "advanced_filters": "Filtros avanzados"
@@ -293,5 +311,11 @@
         "title9": "Haz clic en el icono de la papelera para borrar un contacto.",
         "title8": "Enviar e-mail compartido"
     },
-    "contact_restored": "Contacto restaurado"
+    "contact_restored": "Contacto restaurado",
+    "folders": {
+        "trash": "Papelera",
+        "root": "Raíz",
+        "contacts": "Contactos",
+        "auto_contacts": "Contactos respondidos"
+    }
 }

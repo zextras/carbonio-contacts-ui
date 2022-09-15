@@ -18,7 +18,6 @@
                 }
             },
             "move": {
-                "title": "Verplaatsen",
                 "body": {
                     "message1": "Selecteer een adresboek om het overwogene naar te verplaatsen:",
                     "message3": "Selecteer een map om de overwogene naar te verplaatsen:"
@@ -184,7 +183,18 @@
         "share_with": "Delen met",
         "app_name": "Contacten",
         "edit_invalid_email": "E-mail is ongeldig, klik om het te bewerken",
-        "edit_email": "E-mail bewerken"
+        "edit_email": "E-mail bewerken",
+        "tags": "Labels",
+        "tag_name": "Labelnaam",
+        "tag_max_length": "Max 128 tekens zijn toegestaan",
+        "tag": "Label",
+        "no_special_char_allowed": "De naam mag geen speciaal teken bevatten",
+        "new_tag": "Nieuw label",
+        "edit_tag_name": "\"{{name}}\" tag bewerken",
+        "edit_tag": "Tag bewerken",
+        "delete_tag_name": "\"{{name}}\" tag verwijderen",
+        "delete_tag": "Tag verwijderen",
+        "create_tag": "Tag creëren"
     },
     "section": {
         "field": {
@@ -211,7 +221,9 @@
     "message": {
         "snackbar": {
             "settings_saved": "Bewerkingen correct opgeslagen"
-        }
+        },
+        "delete_tag_message2": "Eenmaal verwijderd, zal het verwijderd worden van elk item dat ermee gemarkeerd is.",
+        "delete_tag_message1": "Weet u zeker dat u de\"{{name}}\" Tag wilt verwijderen?"
     },
     "messages": {
         "modal": {
@@ -226,7 +238,11 @@
             "contact_deleted_permanently": "Contact permanent verwijderd",
             "contact_moved": "Contact verplaatst",
             "contact_moved_to_trash": "Contact verplaatst naar prullenbak",
-            "contact_restored": "Contact hersteld"
+            "contact_restored": "Contact hersteld",
+            "tag_updated": "Tag met succes bijgewerkt",
+            "tag_not_updated": "Er is iets fout gegaan, de tag is niet bijgewerkt. Probeer het opnieuw.",
+            "tag_deleted": "{{name}} Tag met succes verwijderd",
+            "tag_created": "Tag {{name}} met succes gecreëerd"
         }
     },
     "modal": {
@@ -252,7 +268,9 @@
         "folder_shared": "Adresboek gedeeld",
         "share_resend": "Delen uitnodigen opnieuw versturen",
         "share_updated": "Toegangsrechten bijgewerkt",
-        "share_revoke": "Delen toegang ingetrokken"
+        "share_revoke": "Delen toegang ingetrokken",
+        "tag_removed": "\"{{tag}}\" tag verwijderd",
+        "tag_applied": "\"{{tag}}\" tag toegepast"
     },
     "title": {
         "advanced_filters": "Geavanceerde filters"
@@ -293,5 +311,11 @@
         "search_list_title1": "Het lijkt erop dat er geen resultaten zijn. Blijf zoeken!",
         "title7": "Houd contact met uw collega's"
     },
-    "contact_restored": "Contact hersteld"
+    "contact_restored": "Contact hersteld",
+    "folders": {
+        "trash": "Papierkorb",
+        "root": "Hoofdniveau",
+        "contacts": "Contacten",
+        "auto_contacts": "Gemailde contacten"
+    }
 }

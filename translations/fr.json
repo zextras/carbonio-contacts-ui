@@ -162,7 +162,18 @@
         "note": "Note :",
         "options": "Options",
         "share_with": "Partager avec",
-        "app_name": "Contacts"
+        "app_name": "Contacts",
+        "tag": "Etiquette",
+        "tags": "Étiquettes",
+        "tag_name": "Nom de l'étiquette",
+        "tag_max_length": "128 caractères maximum autorisés",
+        "no_special_char_allowed": "Le nom ne doit pas contenir de caractère spécial",
+        "new_tag": "Nouvelle étiquette",
+        "edit_tag_name": "Modifier l'étiquette \"{{name}}\"",
+        "edit_tag": "Modifier l'étiquette",
+        "delete_tag_name": "Supprimer l'étiquette \"{{name}}\"",
+        "delete_tag": "Supprimer l'étiquette",
+        "create_tag": "Créer une étiquette"
     },
     "name": {
         "nickName": "Surnom",
@@ -231,7 +242,9 @@
         "share_revoke": "Accès au partage révoqué",
         "folder_edited": "Le carnet d'adresses a été modifié avec succès",
         "folder_shared": "Le carnet d'adresses a été partagé",
-        "share_updated": "Les droits d'accès ont été mis à jour"
+        "share_updated": "Les droits d'accès ont été mis à jour",
+        "tag_removed": "L'étiquette \"{{tag}}\" a été supprimée",
+        "tag_applied": "Étiquette \"{{tag}}\" appliquée"
     },
     "title": {
         "advanced_filters": "Filtres avancés"
@@ -250,7 +263,10 @@
     "message": {
         "snackbar": {
             "settings_saved": "Modifications enregistrées correctement"
-        }
+        },
+        "require_field": "Compléter au moins un des champs * requis",
+        "delete_tag_message2": "Une fois supprimée, elle sera supprimée de l'ensemble des éléments associés.",
+        "delete_tag_message1": "Êtes-vous sûr de vouloir supprimer l'étiquette \"{{name}}\" ?"
     },
     "contact_restored": "Contact restauré",
     "messages": {
@@ -259,7 +275,11 @@
             "contact_deleted_permanently": "Le contact a été supprimé définitivement",
             "contact_moved": "Le contact a été déplacé",
             "contact_moved_to_trash": "Le contact a été déplacé dans la corbeille",
-            "contact_restored": "Le contact a été réstauré"
+            "contact_restored": "Le contact a été réstauré",
+            "tag_updated": "Étiquette mise à jour avec succès",
+            "tag_not_updated": "Une erreur est survenue, l'étiquette n'a pas été mise à jour. Merci de réessayer.",
+            "tag_deleted": "L'étiquette {{name}} a été supprimée avec succès",
+            "tag_created": "L'étiquette {{name}} a été créée avec succès"
         },
         "modal": {
             "delete": {
@@ -292,5 +312,11 @@
         "mobile": "mobile",
         "other": "autre",
         "work": "travail"
+    },
+    "folders": {
+        "trash": "Corbeille",
+        "root": "Racine",
+        "contacts": "Contacts",
+        "auto_contacts": "Personnes déjà contactées"
     }
 }
