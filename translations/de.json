@@ -1,6 +1,5 @@
 {
     "action": {
-        "edit_share": "Zugriff bearbeiten",
         "goto_folder": "Zum Ordner gehen",
         "reset_filters": "Filter zurücksetzen",
         "search": "Suchen",
@@ -25,23 +24,20 @@
                 "body": {
                     "message1": "Möchten Sie das ausgewählte Adressbuch endgültig löschen? Wenn Sie es löschen, wird der zugehörige Inhalt unwiderruflich gelöscht und das Adressbuch kann nicht mehr wiederhergestellt werden.",
                     "message2": "Möchten Sie das ausgewählte Adressbuch endgültig löschen? Wenn Sie es löschen, wird der zugehörige Inhalt unwiderruflich gelöscht und das Adressbuch kann nicht mehr wiederhergestellt werden."
-                },
-                "title": "Löschen"
+                }
             },
             "edit": {
                 "body": {
                     "item": {
                         "empty": "Kein Pfad verfügbar"
-                    },
-                    "type": "Typ"
+                    }
                 }
             },
             "empty": {
                 "body": {
                     "message1": "Möchten Sie das ausgewählte Adressbuch leeren?",
                     "message2": "Wenn Sie es leeren, wird der zugehörige Inhalt in den Papierkorb verschoben."
-                },
-                "title": "Leer"
+                }
             },
             "footer": {
                 "go_back": "Zurück"
@@ -56,8 +52,7 @@
                 },
                 "input": {
                     "filter": "Adressbuch filtern"
-                },
-                "title": "Verschieben"
+                }
             },
             "new": {
                 "body": {
@@ -73,8 +68,7 @@
                 "title2": "Erstellung eines neuen Ordners"
             },
             "restore": {
-                "create_footer": "Erstellen und wiederherstellen",
-                "title": "Wiederherstellen"
+                "create_footer": "Erstellen und wiederherstellen"
             }
         },
         "snackbar": {
@@ -105,8 +99,6 @@
         "edit_folder_properties": "{{name}}'s Eigenschaften bearbeiten",
         "save": "Speichern",
         "share": "Teilen",
-        "revoke_access_without_notification": "Zugriff widerrufen ohne eine Benachrichtigung zu senden",
-        "single_advance_fillter": "Fortgeschrittene Filter",
         "empty": "Leer",
         "type": "Typ",
         "error_try_again": "Etwas ist schiefgegangen, bitte versuchen Sie es erneut",
@@ -145,12 +137,25 @@
         "app_name": "Kontakte",
         "edit_email": "E-Mail bearbeiten",
         "edit_invalid_email": "E-Mail ist ungültig, klicken Sie zum Bearbeiten",
-        "new_contact": "Neuer Kontakt"
+        "new_contact": "Neuer Kontakt",
+        "tags": "Tags",
+        "tag_name": "Tagname",
+        "tag_max_length": "Maximal 128 Zeichen sind erlaubt",
+        "tag": "Tag",
+        "no_special_char_allowed": "Der Name darf keine Sonderzeichen enthalten",
+        "new_tag": "Neuer Tag",
+        "edit_tag_name": "Tag \"{{name}}\" bearbeiten",
+        "edit_tag": "Edit Tag",
+        "delete_tag_name": "Tag \"{{name}}\" löschen",
+        "delete_tag": "Delete tag",
+        "create_tag": "Tag erstellen"
     },
     "message": {
         "snackbar": {
             "settings_saved": "Änderungen korrekt gespeichert"
-        }
+        },
+        "delete_tag_message2": "Nach dem Löschen wird es aus allen damit gekennzeichneten Artikeln entfernt.",
+        "delete_tag_message1": "Sind Sie sicher, dass Sie den \"{{name}}\" Tag?"
     },
     "messages": {
         "modal": {
@@ -165,7 +170,11 @@
             "contact_deleted_permanently": "Kontakt endgültig gelöscht",
             "contact_moved": "Contact moved to the destination address book",
             "contact_moved_to_trash": "Kontakt in den Papierkorb verschoben",
-            "contact_restored": "Kontakt wiederhergestellt"
+            "contact_restored": "Kontakt wiederhergestellt",
+            "tag_updated": "Tag erfolgreich aktualisiert",
+            "tag_not_updated": "Etwas ist schief gelaufen, der Tag wurde nicht aktualisiert. Bitte versuchen Sie es erneut.",
+            "tag_deleted": "{{name}} Tag erfolgreich gelöscht",
+            "tag_created": "Tag {{name}} erfolgreich erstellt"
         }
     },
     "modal": {
@@ -240,7 +249,6 @@
         "read": "Gelesen",
         "viewer": "Zuschauer",
         "allowed_actions": "Erlaubte Aktionen",
-        "create": "Erstellen",
         "manager": "Manager",
         "none": "Keine",
         "find_shares_label": "Wählen Sie aus, welches Adressbuch Sie im Kontaktbaum sehen möchten",
@@ -254,7 +262,9 @@
         "folder_shared": "Adressbuch geteilt",
         "share_updated": "Zugriffsrechte aktualisiert",
         "share_resend": "Einladung zum Teilen erneut gesendet",
-        "share_revoke": "Gemeinsamen Zugriff widerrufen"
+        "share_revoke": "Gemeinsamen Zugriff widerrufen",
+        "tag_removed": "\"{{tag}}\" Tag entfernt",
+        "tag_applied": "\"{{tag}}\" Tag angewendet"
     },
     "title": {
         "advanced_filters": "Fortgeschrittene Filter"
@@ -271,7 +281,6 @@
         "work": "Arbeit",
         "mobile": "Mobil"
     },
-    "notes": "Notizen",
     "displayer": {
         "description2": "Klicken Sie auf die Schaltfläche \"NEU\", um mit der Erstellung eines neuen Dokuments zu beginnen.",
         "description6": "Verwenden Sie den Modus \"Bearbeiten\", um einem Kontakt eine persönliche Notiz hinzuzufügen.",
@@ -302,5 +311,11 @@
         "title9": "Klicken Sie auf das Papierkorbsymbol, um einen Kontakt zu löschen.",
         "title8": "Gemeinsame E-Mail senden"
     },
-    "contact_restored": "Kontakt wiederhergestellt"
+    "contact_restored": "Kontakt wiederhergestellt",
+    "folders": {
+        "trash": "Prullenbak",
+        "root": "Stammordner",
+        "contacts": "Kontakte",
+        "auto_contacts": "Mailempfänger"
+    }
 }

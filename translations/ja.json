@@ -2,7 +2,6 @@
     "share": {
         "add": "追加する",
         "admin": "管理者",
-        "delete": "削除する",
         "none": "なし",
         "owner": "オーナ",
         "read": "既読",
@@ -39,7 +38,6 @@
         "share_note": "標準メッセージには、名前、共有アイテムの名前、受信者に付与されたアクセス許可、サインイン情報が表示されます。"
     },
     "action": {
-        "move": "移動",
         "search": "検索する",
         "delete_permanently": "完全に削除する",
         "goto_folder": "フォルダに移動する",
@@ -50,7 +48,6 @@
     "folder": {
         "modal": {
             "delete": {
-                "title": "削除する",
                 "body": {
                     "message1": "選択した名簿を削除しますか？ 削除すると、関連するコンテンツが完全に削除され、名簿を復元できなくなります。",
                     "message2": "選択した名簿を完全に削除しますか？ 削除すると、関連するコンテンツが完全に削除され、名簿を復元できなくなります。"
@@ -58,15 +55,12 @@
             },
             "edit": {
                 "body": {
-                    "type": "タイプ",
                     "item": {
                         "empty": "利用可能なパスがありません"
                     }
-                },
-                "footer": "編集する"
+                }
             },
             "move": {
-                "title": "移動",
                 "body": {
                     "message1": "名簿を選択して、検討対象の名簿を次の場所に移動します:",
                     "message3": "検討対象のフォルダを次の場所に移動するフォルダを選択します:"
@@ -76,7 +70,6 @@
                 }
             },
             "new": {
-                "footer": "作成する",
                 "body": {
                     "message1": "新しいアドレス帳の名前",
                     "message2": "新しく作成されたアドレス帳を含むアドレス帳を選択します:"
@@ -90,7 +83,6 @@
                 "title2": "新しいフォルダの作成"
             },
             "restore": {
-                "title": "復元する",
                 "create_footer": "作成と復元"
             },
             "footer": {
@@ -100,8 +92,7 @@
                 "body": {
                     "message1": "選択したアドレス帳を空にしますか？",
                     "message2": "空にすると、関連するコンテンツがすべてゴミ箱に移動されます。"
-                },
-                "title": "空にする"
+                }
             },
             "item": {
                 "empty": "利用可能なアイテムはありません"
@@ -144,7 +135,6 @@
         "edit_folder_properties": "{{name}}のプロパティを編集する",
         "resend": "再送信する",
         "revoke": "取り消す",
-        "revoke_access_without_notification": "通知を送信せずにアクセスを取り消す",
         "revoke_share": "{{title}}の共有を取り消す",
         "shares_folder_edit": "このアドレス帳の共有",
         "contacts": "連絡先",
@@ -183,7 +173,18 @@
         "cannot_move": "同じフォルダに移動できません",
         "edit_invalid_email": "メールが無効です。クリックして編集してください",
         "select_color": "色を選択してください",
-        "edit_email": "メールを編集する"
+        "edit_email": "メールを編集する",
+        "tags": "タグ",
+        "tag_name": "タグ名",
+        "tag_max_length": "最大128文字まで使用できます",
+        "tag": "タグ",
+        "no_special_char_allowed": "名前に特殊文字を含めることはできません",
+        "new_tag": "新しいタグ",
+        "edit_tag_name": "\"{{name}}\" タグを編集する",
+        "edit_tag": "タグを編集する",
+        "delete_tag_name": "\"{{name}}\" タグを削除する",
+        "delete_tag": "タグを削除する",
+        "create_tag": "タグを作成する"
     },
     "name": {
         "nickName": "ニックネーム",
@@ -211,9 +212,10 @@
     "message": {
         "snackbar": {
             "settings_saved": "編集が保存されました"
-        }
+        },
+        "delete_tag_message2": "削除されると、それでマークされたすべてのアイテムから削除されます。",
+        "delete_tag_message1": "本当に\"{{name}}\" タグを削除しますか？"
     },
-    "mail": "メール",
     "messages": {
         "modal": {
             "delete": {
@@ -226,7 +228,11 @@
             "contact_deleted_permanently": "連絡先が完全に削除されました",
             "contact_moved": "連絡先が移動しました",
             "contact_moved_to_trash": "連絡先がゴミ箱に移動しました",
-            "contact_restored": "連絡先が復元されました"
+            "contact_restored": "連絡先が復元されました",
+            "tag_updated": "タグが更新されました",
+            "tag_not_updated": "問題が発生しました。タグが更新されていません。 再度お試しください。",
+            "tag_deleted": "{{name}}タグが削除されました",
+            "tag_created": "タグ{{name}}が作成されました"
         }
     },
     "modal": {
@@ -252,14 +258,17 @@
         "folder_shared": "アドレス帳が共有されました",
         "share_resend": "送信された招待を共有する",
         "share_updated": "アクセス権が更新されました",
-        "share_revoke": "共有アクセスが取り消されました"
+        "share_revoke": "共有アクセスが取り消されました",
+        "tag_removed": "\"{{tag}}\" タグが削除されました",
+        "tag_applied": "\"{{tag}}\" タグが適用されました"
     },
     "title": {
         "advanced_filters": "高度なフィルター"
     },
     "tooltip": {
         "resend": "この共有に関するメール通知を再送信します",
-        "revoke": "アクセス権を取り消す"
+        "revoke": "アクセス権を取り消す",
+        "address_book_sharing_status": "{{count}}人と共有されました"
     },
     "types": {
         "home": "自宅",
@@ -297,5 +306,11 @@
         "title9": "ゴミ箱アイコンをクリックして、連絡先を削除します。",
         "title8": "共有メールを送信する"
     },
-    "contact_restored": "連絡先が復元されました"
+    "contact_restored": "連絡先が復元されました",
+    "folders": {
+        "trash": "ゴミ箱",
+        "root": "ルート",
+        "contacts": "連絡先",
+        "auto_contacts": "メールを送信した連絡先"
+    }
 }

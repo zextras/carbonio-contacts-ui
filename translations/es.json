@@ -10,9 +10,7 @@
         "edit_folder_properties": "Editar propiedades de {{name}}",
         "contact_setting": "Ajustes de Contacto",
         "create": "Crear",
-        "revoke_access_without_notification": "Revocar acceso sin enviar una notificación",
         "revoke_share": "Revocar compartición de {{title}}",
-        "search_hint": "¡Sugerencias de búsqueda!",
         "shares_folder_edit": "Compartir esta libreta de direcciones",
         "delete": "Eliminar",
         "edit_access_name": "Editar acceso de {{name}}",
@@ -52,13 +50,23 @@
         "cannot_move": "No se puede mover a la misma carpeta",
         "select_color": "Elige un color",
         "edit_invalid_email": "E-mail no válido, haz clic para editarlo",
-        "edit_email": "Editar e-mail"
+        "edit_email": "Editar e-mail",
+        "tags": "Etiquetas",
+        "tag_name": "Nombre de la etiqueta",
+        "tag_max_length": "Máximo 128 caracteres permitidos",
+        "tag": "Etiqueta",
+        "no_special_char_allowed": "El nombre no debe contener ningún carácter especial",
+        "new_tag": "Nueva etiqueta",
+        "edit_tag_name": "Editar etiqueta \"{{name}}\"",
+        "edit_tag": "Editar etiqueta",
+        "delete_tag_name": "Eliminar etiqueta \"{{name}}\"",
+        "delete_tag": "Eliminar etiqueta",
+        "create_tag": "Crear Etiqueta"
     },
     "share": {
         "none": "None",
         "add": "Agregar",
         "admin": "Admin",
-        "create": "Crear",
         "owner": "Propietario",
         "read": "Leido",
         "options": {
@@ -94,7 +102,6 @@
         "write": "Escribir"
     },
     "action": {
-        "move": "Mover",
         "search": "Buscar",
         "delete_permanently": "Eliminar permanentemente",
         "goto_folder": "Ir a la carpeta",
@@ -105,7 +112,6 @@
     "folder": {
         "modal": {
             "delete": {
-                "title": "Eliminar",
                 "body": {
                     "message1": "¿Quieres eliminar la libreta de direcciones seleccionada? Al hacerlo, el contenido relacionado será borrado y la libreta de direcciones no se podrá recuperar.",
                     "message2": "¿Quieres eliminar la libreta de direcciones seleccionada permanentemente? Al hacerlo, el contenido relacionado será borrado y la libreta de direcciones no se podrá recuperar."
@@ -113,15 +119,12 @@
             },
             "edit": {
                 "body": {
-                    "type": "Tipo",
                     "item": {
                         "empty": "Sin ruta disponible"
                     }
-                },
-                "footer": "Editar"
+                }
             },
             "move": {
-                "title": "Mover",
                 "body": {
                     "message3": "Elige una carpeta hacia donde mover la seleccionada:",
                     "message1": "Elige una libreta de direcciones hacia donde mover la seleccionada:"
@@ -131,7 +134,6 @@
                 }
             },
             "new": {
-                "footer": "Crear",
                 "create_footer": "Crear",
                 "body": {
                     "message1": "Nombre de la nueva libreta de direcciones",
@@ -145,14 +147,12 @@
                 "title": "Crear nueva libreta de direcciones"
             },
             "restore": {
-                "title": "Restaurar",
                 "create_footer": "Crear y restaurar"
             },
             "footer": {
                 "go_back": "Volver"
             },
             "empty": {
-                "title": "Vacía",
                 "body": {
                     "message1": "¿Quieres vaciar la libreta de direcciones seleccionada?",
                     "message2": "Si la vacías, el contenido relacionado se moverá a la papelera."
@@ -215,16 +215,21 @@
     "message": {
         "snackbar": {
             "settings_saved": "Ediciones guardadas correctamente"
-        }
+        },
+        "delete_tag_message2": "Una vez borrada, se quitará de cada elemento marcado con ella.",
+        "delete_tag_message1": "¿Seguro que quieres borrar la etiqueta \"{{name}}\"?"
     },
-    "mail": "Correo electrónico",
     "messages": {
         "snackbar": {
             "address_book_moved": "Libreta de direcciones movida a la carpeta de destino",
             "contact_deleted_permanently": "Contacto borrado permanentemente",
             "contact_moved": "Contacto movido",
             "contact_moved_to_trash": "Contacto movido a la papelera",
-            "contact_restored": "Contacto restaurado"
+            "contact_restored": "Contacto restaurado",
+            "tag_updated": "Etiqueta actualizada con éxito",
+            "tag_not_updated": "Algo salió mal, etiqueta no actualizada. Por favor, prueba de nuevo.",
+            "tag_deleted": "{{name}} etiqueta borrada con éxito",
+            "tag_created": "Etiqueta {{name}} creada con éxito"
         },
         "modal": {
             "delete": {
@@ -257,7 +262,9 @@
         "folder_shared": "Libreta de direcciones compartida",
         "share_resend": "Invitación para la compartición reenviada",
         "share_revoke": "Acceso a la compartición revocado",
-        "share_updated": "Derechos de acceso actualizados"
+        "share_updated": "Derechos de acceso actualizados",
+        "tag_removed": "Etiqueta \"{{tag}}\" eliminada",
+        "tag_applied": "Etiqueta \"{{tag}}\" aplicada"
     },
     "title": {
         "advanced_filters": "Filtros avanzados"
@@ -304,5 +311,11 @@
         "title9": "Haz clic en el icono de la papelera para borrar un contacto.",
         "title8": "Enviar e-mail compartido"
     },
-    "contact_restored": "Contacto restaurado"
+    "contact_restored": "Contacto restaurado",
+    "folders": {
+        "trash": "Papelera",
+        "root": "Raíz",
+        "contacts": "Contactos",
+        "auto_contacts": "Contactos respondidos"
+    }
 }

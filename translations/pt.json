@@ -1,6 +1,5 @@
 {
     "action": {
-        "move": "Mover",
         "search": "Buscar",
         "delete_permanently": "Excluir Permanentemente",
         "goto_folder": "Ir para a pasta",
@@ -11,7 +10,6 @@
     "folder": {
         "modal": {
             "delete": {
-                "title": "Excluir",
                 "body": {
                     "message1": "Deseja excluir a agenda de endereços selecionada? Ao excluí-la, seu conteúdo será removido permanentemente e ela não será mais recuperável.",
                     "message2": "Deseja excluir permanentemente a agenda de endereços selecionada? Ao excluí-la, seu conteúdo será removido permanentemente e ela não poderá mais ser recuperada."
@@ -19,12 +17,10 @@
             },
             "edit": {
                 "body": {
-                    "type": "Tipo",
                     "item": {
                         "empty": "Sem caminho disponível"
                     }
-                },
-                "footer": "Editar"
+                }
             },
             "move": {
                 "title": "Mover",
@@ -37,7 +33,6 @@
                 }
             },
             "new": {
-                "footer": "Criar",
                 "body": {
                     "message1": "Novo nome para a agenda de endereços",
                     "message2": "Selecione uma agenda de endereços que irá conter a recém criada:"
@@ -51,15 +46,13 @@
                 "title2": "Criação de nova pasta"
             },
             "restore": {
-                "title": "Restaurar",
                 "create_footer": "Criar e Restaurar"
             },
             "empty": {
                 "body": {
                     "message1": "Deseja esvaziar a agenda de endereços selecionada?",
                     "message2": "Ao esvaziá-la, todo seu conteúdo será movido para a lixeira."
-                },
-                "title": "Vazia"
+                }
             },
             "footer": {
                 "go_back": "Voltar"
@@ -105,7 +98,6 @@
         "edit_folder_properties": "Editar propriedades de {{name}}",
         "resend": "Reenviar",
         "revoke": "Revogar",
-        "revoke_access_without_notification": "Revogar acesso sem enviar notificação",
         "revoke_share": "Revogar partilha de {{title}}",
         "shares_folder_edit": "Compartilhando esta agenda de endereços",
         "notes": "Notas",
@@ -153,7 +145,6 @@
         "admin": "Admin",
         "owner": "Proprietário",
         "read": "Leitura",
-        "create": "Criar",
         "none": "None",
         "administer": "Administrador",
         "allowed_actions": "Ações permitidas",
@@ -216,7 +207,6 @@
             "settings_saved": "Edições salvas corretamente"
         }
     },
-    "mail": "E-mail",
     "messages": {
         "modal": {
             "delete": {

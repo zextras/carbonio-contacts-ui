@@ -26,7 +26,6 @@
             "city": "Città"
         }
     },
-    "notes": "Note",
     "name": {
         "suffix": "Suffisso",
         "prefix": "Prefisso",
@@ -39,7 +38,10 @@
         "new_contact": "Questo contatto sarà creato nella cartella 'Contatti'",
         "snackbar": {
             "settings_saved": "Modifiche salvate correttamente"
-        }
+        },
+        "require_field": "Completa almeno uno dei campi richiesti *",
+        "delete_tag_message2": "Una volta eliminata, verrà eliminata anche da tutti gli elementi su cui è utilizzata.",
+        "delete_tag_message1": "Vuoi eliminare l'etichetta \"{{name}}\"?"
     },
     "label": {
         "edit": "Modifica",
@@ -51,7 +53,6 @@
         "revoke": "Revoca",
         "edit_access": "Modifica accesso",
         "edit_folder_properties": "Modifica proprietà di {{name}}",
-        "revoke_access_without_notification": "Revoca accesso e non inviare notifica",
         "revoke_share": "Revoca condivisone di {{title}}",
         "share": "Condividi",
         "shares_folder_edit": "Condivisione di questa rubrica",
@@ -61,7 +62,7 @@
         "restore": "Ripristina",
         "results_for": "Risultati per:",
         "contacts": "Contatti",
-        "delete": "Cancella",
+        "delete": "Elimina",
         "edit_access_name": "Modifica l'accesso di {{name}}",
         "email": "E-mail",
         "new_address_book": "Nuova Rubrica",
@@ -93,7 +94,18 @@
         "note": "Note:",
         "options": "Opzioni",
         "select_color": "Seleziona Colore",
-        "share_with": "Condividi con"
+        "share_with": "Condividi con",
+        "tags": "Tag",
+        "tag_name": "Nome etichetta",
+        "tag_max_length": "Il numero massimo di caratteri consentiti è 128",
+        "tag": "Tag",
+        "no_special_char_allowed": "Il nome non deve contenere alcun carattere speciale",
+        "new_tag": "Nuovo tag",
+        "edit_tag_name": "Modifica etichetta \"{{name}}\"",
+        "edit_tag": "Modifica Etichetta",
+        "delete_tag_name": "Elimina etichetta \"{{name}}\"",
+        "delete_tag": "Elimina Etichetta",
+        "create_tag": "Crea Etichetta"
     },
     "job": {
         "title": "Ruolo",
@@ -114,23 +126,19 @@
         },
         "modal": {
             "edit": {
-                "title": "Modifica",
                 "body": {
                     "item": {
                         "empty": "Nessun percorso disponibile"
-                    },
-                    "type": "Tipo"
+                    }
                 }
             },
             "empty": {
-                "title": "Svuota",
                 "body": {
                     "message1": "Vuoi svuotare questa rubrica?",
                     "message2": "Se rimuovi il contenuto questo verrà spostato nel cestino."
                 }
             },
             "move": {
-                "footer": "Sposta",
                 "input": {
                     "filter": "Filtra rubrica"
                 },
@@ -165,8 +173,7 @@
                 "go_back": "Indietro"
             },
             "restore": {
-                "create_footer": "Crea e Ripristina",
-                "title": "Ripristina"
+                "create_footer": "Crea e Ripristina"
             }
         },
         "snackbar": {
@@ -182,7 +189,6 @@
     "action": {
         "send_msg": "Invia e-mail",
         "delete_permanently": "Elimina definitivamente",
-        "restore": "Ripristina",
         "goto_folder": "Vai alla cartella",
         "reset_filters": "Ripristina Filtri",
         "search": "Cerca",
@@ -207,7 +213,6 @@
         "administer": "Gestisci",
         "allowed_actions": "Azioni consentite",
         "contact_folder": "Rubrica",
-        "create": "Crea",
         "filter_user": "Trova utenti",
         "find_shares": "Trova Condivisioni",
         "insert": "Inserisci",
@@ -244,7 +249,11 @@
             "contact_restored": "Contatto ripristinato",
             "address_book_moved": "Rubrica spostata nella cartella di destinazione",
             "contact_deleted_permanently": "Contatto eliminato definitivamente",
-            "contact_moved": "Contatto spostato"
+            "contact_moved": "Contatto spostato",
+            "tag_updated": "Etichetta aggiornata con successo",
+            "tag_not_updated": "Qualcosa è andato storto, etichetta non aggiornata. Riprova.",
+            "tag_deleted": "Etichetta {{name}} eliminata con successo",
+            "tag_created": "Etichetta {{name}} creata con successo"
         },
         "modal": {
             "delete": {
@@ -255,12 +264,13 @@
         }
     },
     "snackbar": {
-        "error": "Qualcosa è andato storto. Riprova",
         "folder_edited": "Rubrica modificata correttamente",
         "folder_shared": "Rubrica condivisa",
         "share_resend": "Invito condivisione inviato",
         "share_revoke": "Condivisione accesso revocata",
-        "share_updated": "Diritti di accesso aggiornati"
+        "share_updated": "Diritti di accesso aggiornati",
+        "tag_removed": "Etichetta \"{{tag}}\" rimossa",
+        "tag_applied": "Etichetta \"{{tag}}\" applicata"
     },
     "modal": {
         "address_book_name": "Nome rubrica",
@@ -305,5 +315,11 @@
         "search_title3": "Nessun risultato per la tua ricerca.",
         "search_title4": "Seleziona uno o più risultati per completare delle azioni o visualizzare i dettagli."
     },
-    "contact_restored": "Contatto ripristinato"
+    "contact_restored": "Contatto ripristinato",
+    "folders": {
+        "trash": "Cestino",
+        "root": "Primaria",
+        "contacts": "Contatti",
+        "auto_contacts": "Contatti usati per email"
+    }
 }
