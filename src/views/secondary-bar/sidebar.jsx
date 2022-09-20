@@ -112,6 +112,7 @@ export default function Sidebar({ expanded }) {
 	const createModal = useContext(ModalManagerContext);
 	const createSnackbar = useContext(SnackbarManagerContext);
 	const tagsAccordionItems = useGetTagsAccordion();
+	const divider = (idx) => ({ divider: true, id: `divider-${idx}` });
 	useEffect(() => {
 		const nestedFolders = nest(folders, '1', 1);
 		const trashFolder = remove(nestedFolders, (c) => c.id === '3');
@@ -130,10 +131,10 @@ export default function Sidebar({ expanded }) {
 		const sharedItems = remove(temp, 'owner');
 		setSidebarItems(temp);
 		setAccordionItems(
-			temp.concat({
+			temp.concat(divider(1), {
 				id: 'shares',
 				label: t('share.shared_folders', 'Shared Address Books'),
-				divider: true,
+				divider: false,
 				CustomComponent: ShareLabel,
 				items: sharedItems.concat({
 					label: t('share.find_shares', 'Find Shares'),
@@ -151,7 +152,7 @@ export default function Sidebar({ expanded }) {
 			{expanded ? (
 				<>
 					<Accordion items={accordionItems} activeId={currentFolder?.id} />
-					<Accordion items={[tagsAccordionItems]} />
+					<Accordion items={[divider(2), tagsAccordionItems, divider(3)]} />
 				</>
 			) : (
 				sideBarItems.map((folder, index) => <CollapsedSideBarItems key={index} folder={folder} />)

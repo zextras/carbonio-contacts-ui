@@ -23,7 +23,7 @@ export type TagsAccordionItems = {
 	items: ItemType[];
 	id: string;
 	label: string;
-	divider: true;
+	divider?: true;
 	active: false;
 	open: boolean;
 	onClick: (e: Event) => void;
