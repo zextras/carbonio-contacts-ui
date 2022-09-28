@@ -5,7 +5,7 @@
  */
 import {
 	Avatar,
-	Button,
+	ButtonOld as Button,
 	Drag,
 	IconButton,
 	Responsive,
@@ -68,10 +68,10 @@ export const CompactView = ({ contact, toggleOpen, open }) => {
 							padding={{ horizontal: 'large', vertical: 'small' }}
 							height="fill"
 						>
-							<Text size="large" weight="bold">
+							<Text size="medium" weight="bold">
 								{displayName}
 							</Text>
-							<Text weight="bold" color="secondary">
+							<Text size="small" weight="bold" color="secondary">
 								{trim(
 									`${contact.jobTitle && `${contact.jobTitle}, `} ${
 										contact.department && `${contact.department}, `
@@ -79,7 +79,9 @@ export const CompactView = ({ contact, toggleOpen, open }) => {
 									', '
 								)}
 							</Text>
-							<Text color="secondary">{displayMailAndPhone}</Text>
+							<Text size="small" color="secondary">
+								{displayMailAndPhone}
+							</Text>
 						</Row>
 
 						{toggleOpen && (

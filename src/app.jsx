@@ -12,7 +12,7 @@ import {
 	addBoardView,
 	registerActions,
 	ACTION_TYPES,
-	getBridgedFunctions,
+	addBoard,
 	registerComponents
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
@@ -20,6 +20,7 @@ import SidebarItems from './views/secondary-bar/sidebar';
 import ContactInput from './integrations/contact-input';
 import { SyncDataHandler } from './views/secondary-bar/sync-data-handler';
 import { CONTACTS_ROUTE, CONTACTS_APP_ID } from './constants';
+import { StoreProvider } from './store/redux';
 
 const LazyAppView = lazy(() => import(/* webpackChunkName: "contacts-view" */ './views/app-view'));
 
@@ -35,60 +36,53 @@ const LazyBoardView = lazy(() =>
 
 const AppView = (props) => (
 	<Suspense fallback={<Spinner />}>
-		<LazyAppView {...props} />
+		<StoreProvider>
+			<LazyAppView {...props} />
+		</StoreProvider>
 	</Suspense>
 );
 
 const BoardView = (props) => (
 	<Suspense fallback={<Spinner />}>
-		<LazyBoardView {...props} />
+		<StoreProvider>
+			<LazyBoardView {...props} />
+		</StoreProvider>
 	</Suspense>
 );
 
 const SettingsView = (props) => (
 	<Suspense fallback={<Spinner />}>
-		<LazySettingsView {...props} />
+		<StoreProvider>
+			<LazySettingsView {...props} />
+		</StoreProvider>
 	</Suspense>
 );
 
 const SearchView = (props) => (
 	<Suspense fallback={<Spinner />}>
-		<LazySearchView {...props} />
+		<StoreProvider>
+			<LazySearchView {...props} />
+		</StoreProvider>
 	</Suspense>
 );
 
+const SidebarView = (props) => (
+	<Suspense fallback={<Spinner />}>
+		<StoreProvider>
+			<SidebarItems {...props} />
+		</StoreProvider>
+	</Suspense>
+);
 export default function App() {
 	const [t] = useTranslation();
 	useEffect(() => {
-		// registerAppData({
-		// 	icon: 'ContactsModOutline',
-		// 	views: {
-		// 		app: AppView,
-		// 		settings: SettingsView,
-		// 		board: BoardView,
-		// 		sidebar: SidebarItems,
-		// 		search: SearchView
-		// 	},
-		// 	context: {},
-		// 	newButton: {
-		// 		primary: {
-		// 			id: 'create-contact',
-		// 			label: 'New Contact',
-		// 			icon: 'PersonOutline',
-		// 			click: () => {
-		// 				getBridgedFunctions().addBoard('/new');
-		// 			}
-		// 		},
-		// 		secondaryItems: []
-		// 	}
-		// });
 		addRoute({
 			route: CONTACTS_ROUTE,
 			position: 3,
 			visible: true,
 			label: t('label.app_name', 'Contacts'),
 			primaryBar: 'ContactsModOutline',
-			secondaryBar: SidebarItems,
+			secondaryBar: SidebarView,
 			appView: AppView
 		});
 		addSettingsView({
@@ -118,9 +112,7 @@ export default function App() {
 				icon: 'ContactsModOutline',
 				click: (ev) => {
 					ev?.preventDefault?.();
-					getBridgedFunctions().addBoard(`${CONTACTS_ROUTE}/new`, {
-						title: t('label.new_contact', 'New Contact')
-					});
+					addBoard({ url: `${CONTACTS_ROUTE}/new`, title: t('label.new_contact', 'New Contact') });
 				},
 				disabled: false,
 				group: CONTACTS_APP_ID,
@@ -130,9 +122,10 @@ export default function App() {
 			type: ACTION_TYPES.NEW
 		});
 	}, [t]);
-	// useEffect(() => {
-	// 	store.setReducer(reducers);
-	// }, []);
 
-	return <SyncDataHandler />;
+	return (
+		<StoreProvider>
+			<SyncDataHandler />
+		</StoreProvider>
+	);
 }

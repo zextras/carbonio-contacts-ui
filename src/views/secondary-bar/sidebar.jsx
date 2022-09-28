@@ -10,11 +10,10 @@ import { useTranslation } from 'react-i18next';
 import {
 	Accordion,
 	AccordionItem,
-	Button,
+	ButtonOld as Button,
 	Container,
 	Icon,
 	ModalManagerContext,
-	Padding,
 	Row,
 	SnackbarManagerContext
 } from '@zextras/carbonio-design-system';
@@ -33,6 +32,7 @@ import ShareFolderModal from './share-folder-modal';
 import ModalWrapper from './commons/modal-wrapper';
 import { CollapsedSideBarItems } from '../folder/collapsed-sidebar-items';
 import useGetTagsAccordion from '../../hooks/use-get-tags-accordions';
+import { StoreProvider } from '../../store/redux';
 
 export const nest = (items, id, level) =>
 	map(
@@ -75,13 +75,13 @@ const SharesItem = ({ item }) => (
 						const closeModal = item.context.createModal(
 							{
 								children: (
-									<>
+									<StoreProvider>
 										<SharesModal
 											folders={requiredFolders}
 											onClose={() => closeModal()}
 											createSnackbar={item?.context?.createSnackbar}
 										/>
-									</>
+									</StoreProvider>
 								)
 							},
 							true
@@ -112,6 +112,7 @@ export default function Sidebar({ expanded }) {
 	const createModal = useContext(ModalManagerContext);
 	const createSnackbar = useContext(SnackbarManagerContext);
 	const tagsAccordionItems = useGetTagsAccordion();
+	const divider = (idx) => ({ divider: true, id: `divider-${idx}` });
 	useEffect(() => {
 		const nestedFolders = nest(folders, '1', 1);
 		const trashFolder = remove(nestedFolders, (c) => c.id === '3');
@@ -130,10 +131,10 @@ export default function Sidebar({ expanded }) {
 		const sharedItems = remove(temp, 'owner');
 		setSidebarItems(temp);
 		setAccordionItems(
-			temp.concat({
+			temp.concat(divider(1), {
 				id: 'shares',
 				label: t('share.shared_folders', 'Shared Address Books'),
-				divider: true,
+				divider: false,
 				CustomComponent: ShareLabel,
 				items: sharedItems.concat({
 					label: t('share.find_shares', 'Find Shares'),
@@ -150,8 +151,8 @@ export default function Sidebar({ expanded }) {
 		<>
 			{expanded ? (
 				<>
-					<Accordion items={accordionItems} />
-					<Accordion items={[tagsAccordionItems]} />
+					<Accordion items={accordionItems} activeId={currentFolder?.id} />
+					<Accordion items={[divider(2), tagsAccordionItems, divider(3)]} />
 				</>
 			) : (
 				sideBarItems.map((folder, index) => <CollapsedSideBarItems key={index} folder={folder} />)
