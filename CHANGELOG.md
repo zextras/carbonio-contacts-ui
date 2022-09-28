@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.24](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.23...v0.1.24) (2022-09-28)
+
+
+### Features
+
+* code and UI alignment to the design system's new version ([#42](https://github.com/zextras/carbonio-contacts-ui/issues/42)) ([36cccce](https://github.com/zextras/carbonio-contacts-ui/commit/36cccce02d084c186371d445e6d48ed860bd7842))
+
+
+### Bug Fixes
+
+* german share translation ([9b01925](https://github.com/zextras/carbonio-contacts-ui/commit/9b019252653ca187aa4228f716fe8cdc79b3d697))
+* restore missing tags and shared calendars on secondary bar ([b14ad3d](https://github.com/zextras/carbonio-contacts-ui/commit/b14ad3d5e62445bb2488fad6ac119d26f7876845))
+* restore shared calendars and tags elements on secondary bar ([8b6e801](https://github.com/zextras/carbonio-contacts-ui/commit/8b6e8013bdcdfe204908381b8516a1bea0ad6bc6))
+
 ### [0.1.23](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.22...v0.1.23) (2022-09-15)
 
 ### [0.1.22](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.21...v0.1.22) (2022-08-31)
