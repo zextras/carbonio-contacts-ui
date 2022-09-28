@@ -102,13 +102,15 @@ export default function MoveModal({
 						return [
 							...acc,
 							{
+								divider: true
+							},
+							{
 								...item,
-								label: getFolderTranslatedName(t, item.id, item.name),
+								label: getFolderTranslatedName(t, item.id, item.label),
 								level: level + 1,
 								items: nestFilteredFolders(items, item.id, results, level + 1),
 								onClick: () => setFolderDestination(item),
 								open: !!input.length,
-								divider: true,
 								background: folderDestination.id === item.id ? 'highlight' : undefined
 							}
 						];
