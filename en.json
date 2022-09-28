@@ -309,8 +309,8 @@
         "advanced_filters": "Advanced Filters"
     },
     "tooltip": {
-        "address_book_sharing_status": "Shared with {{count}} people",
-        "address_book_sharing_status_plural": "",
+        "address_book_sharing_status": "Shared with {{count}} person",
+        "address_book_sharing_status_plural": "Shared with {{count}} people",
         "resend": "Send e-mail notification about this share",
         "revoke": "Revoke access"
     },

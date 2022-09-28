@@ -23,7 +23,6 @@
                 }
             },
             "move": {
-                "title": "Mover",
                 "body": {
                     "message1": "Selecione uma agenda de endereços para movê-la para:",
                     "message3": "Selecione uma pasta para mover a selecionada:"
