@@ -40,15 +40,13 @@ export const NewModal = ({
 									label: getFolderTranslatedName(t, item.id, item.label),
 									items: nest(items, item.id, level + 1),
 									background: 'highlight', // todo: fix with right color
-									level,
-									divider: true
+									level
 							  }
 							: {
 									...item,
 									label: getFolderTranslatedName(t, item.id, item.label),
 									items: nest(items, item.id, level + 1),
-									level,
-									divider: true
+									level
 							  };
 
 					if (folder.level > 1) {
@@ -102,7 +100,6 @@ export const NewModal = ({
 			label: t('label.root', 'Root'),
 			level: 0,
 			open: true,
-			divider: true,
 			parent: '0',
 			background: folderDestination.id === '1' ? 'highlight' : undefined // todo: fix with right color
 		}),

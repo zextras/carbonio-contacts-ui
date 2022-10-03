@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.25](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.24...v0.1.25) (2022-09-29)
+
+
+### Bug Fixes
+
+* restore list of available addressbooks on modals ([6b18300](https://github.com/zextras/carbonio-contacts-ui/commit/6b18300372315616cf8d4fc0aced78891f303835))
+
 ### [0.1.24](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.23...v0.1.24) (2022-09-28)
 
 

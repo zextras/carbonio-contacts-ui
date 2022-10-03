@@ -62,13 +62,15 @@ export const MoveModal = ({
 						return [
 							...acc,
 							{
+								divider: true
+							},
+							{
 								...item,
 								label: getFolderTranslatedName(t, item.id, item.label),
 								items: nestFilteredFolders(items, item.id, results, level + 1),
 								onClick: () => setFolderDestination(item),
 								level: level + 1,
 								open: !!input.length,
-								divider: true,
 								background: folderDestination.id === item.id ? 'highlight' : undefined
 							}
 						];
@@ -90,7 +92,6 @@ export const MoveModal = ({
 				label: getFolderTranslatedName(t, FOLDERS.USER_ROOT, 'Root'),
 				level: '0',
 				open: true,
-				divider: true,
 				items: nestFilteredFolders(folders, FOLDERS.USER_ROOT, filterFromInput),
 				background: folderDestination.id === FOLDERS.USER_ROOT ? 'highlight' : undefined,
 				onClick: () => setFolderDestination({ id: FOLDERS.USER_ROOT })
