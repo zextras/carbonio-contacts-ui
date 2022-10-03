@@ -214,7 +214,8 @@
             "settings_saved": "編集が保存されました"
         },
         "delete_tag_message2": "削除されると、それでマークされたすべてのアイテムから削除されます。",
-        "delete_tag_message1": "本当に\"{{name}}\" タグを削除しますか？"
+        "delete_tag_message1": "本当に\"{{name}}\" タグを削除しますか？",
+        "require_field": "必須項目*に1つ以上入力してください"
     },
     "messages": {
         "modal": {
