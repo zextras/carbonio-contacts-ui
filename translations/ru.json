@@ -283,9 +283,9 @@
     "tooltip": {
         "resend": "Отправить уведомление об этой публикации",
         "revoke": "Отозвать доступ",
-        "address_book_sharing_status_0": "Поделиться с {{count}}",
-        "address_book_sharing_status_1": "Поделиться с {{count}}",
-        "address_book_sharing_status_2": "Поделиться с {{count}}"
+        "address_book_sharing_status_0": "Поделился с {{count}}",
+        "address_book_sharing_status_1": "Поделился с {{count}}",
+        "address_book_sharing_status_2": "Поделился с {{count}}"
     },
     "contact_restored": "Контакт восстановлен",
     "displayer": {

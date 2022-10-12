@@ -217,7 +217,8 @@
             "settings_saved": "Edições salvas corretamente"
         },
         "delete_tag_message2": "Uma vez excluída, ela será removida de todos os itens marcados com a mesma.",
-        "delete_tag_message1": "Tem certeza que deseja excluir a Etiqueta \"{{name}}\"?"
+        "delete_tag_message1": "Tem certeza que deseja excluir a Etiqueta \"{{name}}\"?",
+        "require_field": "Preencha pelo menos um dos campos * obrigatórios"
     },
     "messages": {
         "modal": {
@@ -269,8 +270,8 @@
     "tooltip": {
         "revoke": "Revogar acesso",
         "resend": "Enviar notificação por e-mail sobre este compartilhamento",
-        "address_book_sharing_status": "Compartilhado com {{count}} persona",
-        "address_book_sharing_status_plural": "Compartilhado com {{count}} personas"
+        "address_book_sharing_status": "Compartilhado com {{count}} pessoa",
+        "address_book_sharing_status_plural": "Compartilhado com {{count}} pessoas"
     },
     "title": {
         "advanced_filters": "Filtros Avançados"

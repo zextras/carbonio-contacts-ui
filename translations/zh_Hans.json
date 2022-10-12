@@ -158,7 +158,7 @@
         "revoke_with_custom_msg": "撤销访问权限并发送自定义通知",
         "revoke_with_standard_msg": "撤销访问权限并发送标准通知",
         "revoke_without_notification": "撤销访问权限并不发送通知",
-        "root": "Root",
+        "root": "根目录",
         "empty": "空",
         "discard_changes": "丢弃变更",
         "advanced_filter": "{{count}}高级过滤条件",
@@ -218,7 +218,8 @@
             "settings_saved": "编辑保存正确"
         },
         "delete_tag_message2": "删除后，其将从所有已进行相关标记的项目上移除。",
-        "delete_tag_message1": "确定要删除“{{name}}”标签吗？"
+        "delete_tag_message1": "确定要删除“{{name}}”标签吗？",
+        "require_field": "填写至少一个必填 * 字段"
     },
     "messages": {
         "modal": {
@@ -242,7 +243,7 @@
     "tooltip": {
         "resend": "发送有关此共享的邮件通知",
         "revoke": "撤销访问权限",
-        "address_book_sharing_status": " "
+        "address_book_sharing_status": "已与 {{count}} 人共享"
     },
     "types": {
         "work": "工作",

@@ -282,8 +282,8 @@
     "tooltip": {
         "resend": "Invia e-mail di notifica per questa condivisione",
         "revoke": "Revoca accesso",
-        "address_book_sharing_status": "Condiviso con {{count}} persone",
-        "address_book_sharing_status_plural": ""
+        "address_book_sharing_status": "Condiviso con {{count}} persona",
+        "address_book_sharing_status_plural": "Condiviso con {{count}} persone"
     },
     "displayer": {
         "description3": "Clicca il pulsante \"NUOVO\" per creare un nuovo gruppo di contatti.",
