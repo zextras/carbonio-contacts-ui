@@ -217,7 +217,8 @@
             "settings_saved": "Ediciones guardadas correctamente"
         },
         "delete_tag_message2": "Una vez borrada, se quitará de cada elemento marcado con ella.",
-        "delete_tag_message1": "¿Seguro que quieres borrar la etiqueta \"{{name}}\"?"
+        "delete_tag_message1": "¿Seguro que quieres borrar la etiqueta \"{{name}}\"?",
+        "require_field": "Rellena al menos uno de los campos * requeridos"
     },
     "messages": {
         "snackbar": {
