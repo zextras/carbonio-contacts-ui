@@ -95,7 +95,7 @@
         "undo": "Cofnij",
         "type": "Typ",
         "address_book_restored": "Książka adresowa została przywrócona",
-        "contact_setting": "Ustawienia Kontaktów",
+        "contact_setting": "Ustawienia kontaktów",
         "contacts": "Kontakty",
         "edit_access": "Edytuj dostęp",
         "edit_access_name": "Edytuj dostęp do {{name}}",
@@ -151,19 +151,19 @@
         "description3": "Kliknij przycisk \"NOWY\", aby stworzyć nową grupę kontaktów.",
         "description4": "Stwórz nowy, klikając przycisk \"NOWY\".",
         "description6": "Użyj trybu \"Edytuj\", aby dodać prywatną notatkę do kontaktu.",
-        "list_title1": "Wygląda na to, że nie masz jeszcze żadnych kontaktów",
+        "list_title1": "Wygląda na to, że nie masz tu jeszcze żadnych kontaktów",
         "list_title2": "Kosz jest pusty",
         "description7": "Stwórz grupę kontaktów klikając przycisk \"NOWY\".",
-        "description8": "Wybierz kontakt lub grupę kontaktów która będzie otrzymywać udostępniane e-maile.",
+        "description8": "Wybierz kontakt lub grupę kontaktów która będzie otrzymywać wspólne e-maile.",
         "title1": "Stwórz nowy kontakt klikając przycisk \"NOWY\".",
         "title10": "Wybierz i przywróć kontakty z kosza",
-        "title2": "Udostępnij wszystkie swoje prace ze swoimi kontaktami.",
+        "title2": "Podziel się swoją pracą ze swoimi kontaktami.",
         "title3": "Pozostań w kontakcie ze swoimi kolegami.",
         "title4": "Dostosuj swoje kontakty dodając prywatne notatki",
         "title5": "Wybierz kontakt",
         "title6": "Dostosuj kontakt",
         "title7": "Pozostań w kontakcie ze swoimi kolegami",
-        "title8": "Wyślij udostępnionego e-maila",
+        "title8": "Wyślij wspólnego e-maila",
         "title9": "Kliknij ikonkę kosza, aby usunąć kontakt.",
         "description2": "Kliknij przycisk \"NOWY\" aby stworzyć nowy kontakt.",
         "description5": "Odkryj wszystkie sposoby, jakimi możesz komunikować się z innymi użytkownikami.",
@@ -195,7 +195,7 @@
         },
         "recipients_address": "Adresy e-mail odbiorców",
         "share_note": "Domyślna wiadomość zawiera Twoje imię, nazwę udostępnianiego elementu, uprawnienia przyznane odbiorcom oraz informacje logowania.",
-        "shared_folders": "Udostępnione Książki Adresowe",
+        "shared_folders": "Udostępnione książki adresowe",
         "shared_item": "Udostępniony Element",
         "shared_items": "Udostępnione książki adresowe {{value}}",
         "standard_message": "Dodaj notatkę do domyślnej wiadomości",
@@ -209,8 +209,8 @@
         "allowed_actions": "Dozwolone czynności",
         "contact_folder": "Książka Adresowa",
         "filter_user": "Znajdź użytkowników",
-        "find_contact_shares": "Znajdź Udostępnienia Kontaktów",
-        "find_shares": "Znajdź Udostępnienia",
+        "find_contact_shares": "Znajdź udostępnienia kontaktów",
+        "find_shares": "Dodaj",
         "find_shares_label": "Wybierz którą książkę adresową chcesz widzieć w drzewku kontaktów",
         "insert": "Wstaw",
         "manager": "Manager",
@@ -270,7 +270,7 @@
         "advanced_filters": "Zaawansowane Filtry"
     },
     "types": {
-        "home": "start",
+        "home": "dom",
         "mobile": "komórka",
         "other": "inne",
         "work": "praca"
@@ -293,8 +293,8 @@
             "country": "Kraj",
             "number": "Numer",
             "street": "Ulica",
-            "state": "Region",
-            "postalCode": "KodPocztowy"
+            "state": "Województwo",
+            "postalCode": "Kod pocztowy"
         },
         "title": {
             "address_0": "Adres",
@@ -313,7 +313,7 @@
                 "autocomplete_on_comma": "Wybierz automatycznie uzupełnioną frazę, kiedy wpisany zostanie przecinek",
                 "incl_addrs_in_glbl_addrs_list": "Uwzględnij adresy w Globalnej Liście Adresów",
                 "include_add_in_shared_contact": "Uwzględnij adresy w udostępnionych kontaktach",
-                "add_contact_to_emailed_contacts": "Dodaj nowe kontakty do \"Kontakty do których wysłano e-maila\"",
+                "add_contact_to_emailed_contacts": "Dodawaj nowe kontakty do \"Kontakty do których wysłano e-maila\"",
                 "srch_glbl_addrs_list": "Wstępnie przeszukaj Globalną Listę Adresów podczas wybierania kontaktów"
             }
         }

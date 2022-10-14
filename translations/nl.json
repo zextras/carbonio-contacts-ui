@@ -156,7 +156,7 @@
         "revoke_with_standard_msg": "Toegang intrekken met een standaardkennisgeving",
         "revoke_without_notification": "Toegang intrekken zonder een melding te sturen",
         "revoke_with_custom_msg": "Toegang intrekken door een aangepaste melding te verzenden",
-        "root": "Wortel",
+        "root": "Hoofdniveau",
         "single_advanced_filter": "Geavanceerd Filter",
         "type": "Type",
         "website": "Website",
@@ -223,7 +223,8 @@
             "settings_saved": "Bewerkingen correct opgeslagen"
         },
         "delete_tag_message2": "Eenmaal verwijderd, zal het verwijderd worden van elk item dat ermee gemarkeerd is.",
-        "delete_tag_message1": "Weet u zeker dat u de\"{{name}}\" Tag wilt verwijderen?"
+        "delete_tag_message1": "Weet u zeker dat u de\"{{name}}\" Tag wilt verwijderen?",
+        "require_field": "Vul ten minste één van de verplichte * velden in"
     },
     "messages": {
         "modal": {
