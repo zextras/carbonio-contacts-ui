@@ -71,7 +71,7 @@ export default function ContactSettingsView() {
 				background="gray5"
 				style={{ overflowY: 'auto' }}
 			>
-				<FormSection width="50%" minWidth="calc(min(100%, 512px))">
+				<FormSection width="50%" minWidth="calc(min(100%, 32rem))">
 					<OptionsSettingsView t={t} settingsObj={settingsObj} updateSettings={updateSettings} />
 				</FormSection>
 			</Container>

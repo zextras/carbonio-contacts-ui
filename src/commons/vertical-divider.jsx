@@ -7,7 +7,7 @@ import React from 'react';
 import { Container } from '@zextras/carbonio-design-system';
 
 export const VerticalDivider = () => (
-	<Container width={8} background="gray5">
+	<Container width="0.5rem" background="gray5">
 		{/* <Notch /> */}
 	</Container>
 );

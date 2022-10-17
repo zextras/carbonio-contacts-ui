@@ -219,7 +219,7 @@ const EditDefaultModal = ({
 						crossAlignment="flex-start"
 						padding={{ top: 'small', bottom: 'small' }}
 						width="48%"
-						style={{ minHeight: '48px', maxWidth: 'calc(100% - 48px)' }}
+						style={{ minHeight: '3rem', maxWidth: 'calc(100% - 3rem)' }}
 					>
 						<Text color="secondary">{t('label.type', 'Type')}</Text>
 						<Row
@@ -244,7 +244,7 @@ const EditDefaultModal = ({
 						crossAlignment="flex-start"
 						padding={{ top: 'small', bottom: 'small' }}
 						width="48%"
-						style={{ minHeight: '48px', maxWidth: 'calc(100% - 48px)' }}
+						style={{ minHeight: '3rem', maxWidth: 'calc(100% - 3rem)' }}
 					>
 						<Text color="secondary">{t('label.contacts', 'Contacts')}</Text>
 						<Row

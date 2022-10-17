@@ -18,8 +18,8 @@ import SearchListItem from './search-list-item';
 import ShimmerList from './shimmer-list';
 
 const BorderContainer = styled(Container)`
-	border-bottom: 1px solid ${({ theme }) => theme?.palette?.gray2?.regular};
-	border-right: 1px solid ${({ theme }) => theme?.palette?.gray2?.regular};
+	border-bottom: 0.0625rem solid ${({ theme }) => theme?.palette?.gray2?.regular};
+	border-right: 0.0625rem solid ${({ theme }) => theme?.palette?.gray2?.regular};
 `;
 
 const SearchList = ({
@@ -68,7 +68,7 @@ const SearchList = ({
 	return (
 		<Container
 			background="gray6"
-			maxWidth="650px"
+			maxWidth="40.625rem"
 			width="25%"
 			orientation="vertical"
 			mainAlignment="flex-start"

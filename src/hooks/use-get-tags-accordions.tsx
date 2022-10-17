@@ -60,7 +60,7 @@ const CustomComp: FC<ItemProps> = (props) => {
 
 				<Padding right="large" />
 				<Tooltip label={props?.item?.name} placement="right" maxWidth="100%">
-					<AccordionItem {...props} height={40} />
+					<AccordionItem {...props} height="2.5rem" />
 				</Tooltip>
 			</Row>
 		</Dropdown>

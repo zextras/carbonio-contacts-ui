@@ -106,8 +106,8 @@ function ContactField({ field, label, width, limit, items }) {
 					padding={{ all: 'small' }}
 					width={width || '48%'}
 					style={{
-						minHeight: '48px',
-						maxWidth: limit ? 'calc(100% - 48px)' : '100%'
+						minHeight: '3rem',
+						maxWidth: limit ? 'calc(100% - 3rem)' : '100%'
 					}}
 				>
 					<Text color="secondary">{label}</Text>

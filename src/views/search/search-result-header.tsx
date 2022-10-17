@@ -22,7 +22,7 @@ const SearchResultsHeader = ({
 			orientation="horizontal"
 			background="gray4"
 			mainAlignment="flex-start"
-			minWidth="256px"
+			minWidth="16rem"
 			height="fit"
 			padding={{ all: 'large' }}
 		>
