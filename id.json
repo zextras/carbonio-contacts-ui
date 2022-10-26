@@ -214,7 +214,8 @@
             "settings_saved": "Hasil edit disimpan dengan benar"
         },
         "delete_tag_message2": "Setelah dihapus, ini akan dihapus dari tiap item yang ditandai dengannya.",
-        "delete_tag_message1": "Yakin ingin menghapus Tag \"{{name}}\"?"
+        "delete_tag_message1": "Yakin ingin menghapus Tag \"{{name}}\"?",
+        "require_field": "Isi minimal sati kolom wajib *"
     },
     "messages": {
         "modal": {
