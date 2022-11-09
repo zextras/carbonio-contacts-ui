@@ -46,7 +46,7 @@
         "new_contact": "Liên hệ mới",
         "revoke_with_standard_msg": "Thu hồi quyền truy cập gửi thông báo chuẩn",
         "revoke_without_notification": "Thu hồi quyền truy cập và không gửi thông báo",
-        "root": "Thư mục gốc",
+        "root": "Root",
         "website": "Websites",
         "address_book_restored": "Danh bạ đã được khôi phục",
         "tags": "Thẻ",
@@ -245,7 +245,8 @@
             "settings_saved": "Chỉnh sửa được lưu chính xác"
         },
         "delete_tag_message2": "Sau khi xóa, nó sẽ bị xóa khỏi mọi mục được đánh dấu bởi nó.",
-        "delete_tag_message1": "Bạn có chắc xoá thẻ \"{{name}}\"?"
+        "delete_tag_message1": "Bạn có chắc xoá thẻ \"{{name}}\"?",
+        "require_field": "Điền ít nhất một trong các trường bắt buộc *"
     },
     "name": {
         "suffix": "Đuôi tên",
@@ -305,10 +306,10 @@
     "tooltip": {
         "revoke": "Thu hồi truy cập",
         "resend": "Gửi thư điện tử thông báo về chia sẻ này",
-        "address_book_sharing_status": "Chia sẻ {{count}} với"
+        "address_book_sharing_status": "Chia sẻ {{count}} với người"
     },
     "folders": {
-        "trash": "Trash",
+        "trash": "Thùng rác",
         "root": "Gốc",
         "contacts": "Danh bạ",
         "auto_contacts": "Những liên hệ đã gửi email"
