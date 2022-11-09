@@ -9,7 +9,7 @@ import { trim } from 'lodash';
 export const useDisplayName = (contact) =>
 	useMemo(() => {
 		if (contact) {
-			if (contact.firstName || contact.lastName) {
+			if (contact.firstName || contact.middleName || contact.lastName) {
 				return trim(
 					`${contact.namePrefix || ''} ${contact.firstName || ''} ${contact.middleName || ''} ${
 						contact.lastName || ''
