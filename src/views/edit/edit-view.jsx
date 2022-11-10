@@ -9,9 +9,9 @@ import {
 	replaceHistory,
 	report,
 	useBoardHooks,
-	getBridgedFunctions
+	getBridgedFunctions,
+	t
 } from '@zextras/carbonio-shell-ui';
-import { useTranslation } from 'react-i18next';
 import { map, filter, reduce, set, omit, find } from 'lodash';
 import {
 	ButtonOld as Button,
@@ -292,7 +292,6 @@ export default function EditView({ panel }) {
 	const storeDispatch = useDispatch();
 	const existingContact = useSelector((state) => selectContact(state, folderId, editId));
 	const [contact, dispatch] = useReducer(reducer);
-	const [t] = useTranslation();
 	const boardUtilities = useBoardHooks();
 	const [compareToContact, setCompareToContact] = useState(existingContact);
 	const keys = Object.keys(existingContact ?? {});
@@ -347,8 +346,7 @@ export default function EditView({ panel }) {
 			contact?.middleName,
 			contact?.namePrefix,
 			contact?.nameSuffix,
-			contact?.nickName,
-			t
+			contact?.nickName
 		]
 	);
 
@@ -392,7 +390,7 @@ export default function EditView({ panel }) {
 				})
 				.catch(report);
 		}
-	}, [contact, boardUtilities, folderId, panel, storeDispatch, t, existingContact]);
+	}, [contact, boardUtilities, folderId, panel, storeDispatch, existingContact]);
 
 	const defaultTypes = useMemo(
 		() => [
@@ -400,7 +398,7 @@ export default function EditView({ panel }) {
 			{ label: t('types.home', 'home'), value: 'home' },
 			{ label: t('types.other', 'other'), value: 'other' }
 		],
-		[t]
+		[]
 	);
 
 	const mobileTypes = useMemo(
@@ -410,7 +408,7 @@ export default function EditView({ panel }) {
 			{ label: t('types.home', 'home'), value: 'home' },
 			{ label: t('types.other', 'other'), value: 'other' }
 		],
-		[t]
+		[]
 	);
 
 	return contact ? (
