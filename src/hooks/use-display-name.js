@@ -5,6 +5,7 @@
  */
 import { useMemo } from 'react';
 import { trim } from 'lodash';
+import { t } from '@zextras/carbonio-shell-ui';
 
 export const useDisplayName = (contact) =>
 	useMemo(() => {
@@ -16,7 +17,8 @@ export const useDisplayName = (contact) =>
 					} ${contact.nameSuffix || ''}`
 				);
 			}
-			if (contact.email && contact.email.length > 0) return `<No Name> ${contact.email[0].mail}`;
+			if (contact.email && contact.email.length > 0)
+				return `<${t('label.no_name', 'No Name')}> ${contact.email[0].mail}`;
 		}
-		return '<No Data>';
+		return `<${t('label.no_data', 'No Data')}>`;
 	}, [contact]);
