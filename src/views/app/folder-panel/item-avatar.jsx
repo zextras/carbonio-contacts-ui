@@ -47,7 +47,7 @@ export const ItemAvatar = ({ item, selected, selecting, toggle, isSearch = false
 				<AvatarElement
 					selecting={selecting}
 					selected={selected}
-					label={`${item.firstName} ${item.lastName}`}
+					label={`${item.firstName} ${item.middleName} ${item.lastName}`}
 					onClick={conversationSelect(item.id)}
 					size="large"
 				/>
