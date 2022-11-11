@@ -74,7 +74,7 @@ export default function FolderPanel(): ReactElement {
 					maxHeight: '100%'
 				}}
 			>
-				<Container mainAlignment="flex-start" borderRadius="none" height="calc(100% - 64px)">
+				<Container mainAlignment="flex-start" borderRadius="none" height="calc(100% - 4rem)">
 					{isSelecting ? (
 						<SelectPanelActions
 							folderId={folderId}

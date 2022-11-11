@@ -17,13 +17,13 @@ import {
 } from '@zextras/carbonio-design-system';
 
 const ContactPreviewHeader = ({ displayName, onClose, onEdit, onDelete, onMove }) => (
-	<Container height={49}>
+	<Container height="3.0625rem">
 		<Responsive mode="desktop" target={window.top}>
 			<Container
 				data-testid="contact-preview-header-desktop"
 				orientation="horizontal"
 				mainAlignment="flex-start"
-				height={48}
+				height="3rem"
 				padding={{ left: 'large', right: 'large' }}
 			>
 				<Padding right="medium">
@@ -42,7 +42,7 @@ const ContactPreviewHeader = ({ displayName, onClose, onEdit, onDelete, onMove }
 				orientation="horizontal"
 				data-testid="contact-preview-header-mobile"
 				mainAlignment="flex-start"
-				height={48}
+				height="3rem"
 				padding={{ left: 'large' }}
 			>
 				<Padding right="medium">

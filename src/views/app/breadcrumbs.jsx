@@ -25,7 +25,7 @@ export function Breadcrumbs({ folderPath, itemsCount }) {
 				background="gray5"
 				mainAlignment="flex-start"
 				crossAlignment="flex-start"
-				height="48px"
+				height="3rem"
 			>
 				<Row
 					height="100%"

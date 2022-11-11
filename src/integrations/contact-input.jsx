@@ -40,8 +40,8 @@ const Hint = ({ contact }) => {
 			orientation="horizontal"
 			mainAlignment="flex-start"
 			crossAlignment="center"
-			minWidth="256px"
-			minHeight={32}
+			minWidth="16rem"
+			minHeight="2rem"
 		>
 			<Avatar label={contact.label ?? getChipLabel(contact)} />
 			<Container orientation="vertical" crossAlignment="flex-start" padding={{ left: 'small' }}>
@@ -63,13 +63,13 @@ const Hint = ({ contact }) => {
 };
 
 const SkeletonTile = styled.div`
-	width: ${({ width }) => width ?? '16px'};
-	max-width: ${({ width }) => width ?? '16px'};
-	min-width: ${({ width }) => width ?? '16px'};
-	height: ${({ height }) => height ?? '16px'};
-	max-height: ${({ height }) => height ?? '16px'};
-	min-height: ${({ height }) => height ?? '16px'};
-	border-radius: ${({ radius }) => radius ?? '2px'};
+	width: ${({ width }) => width ?? '1rem'};
+	max-width: ${({ width }) => width ?? '1rem'};
+	min-width: ${({ width }) => width ?? '1rem'};
+	height: ${({ height }) => height ?? '1rem'};
+	max-height: ${({ height }) => height ?? '1rem'};
+	min-height: ${({ height }) => height ?? '1rem'};
+	border-radius: ${({ radius }) => radius ?? '0.125rem'};
 	background: ${({ theme }) => theme.palette.gray2.regular};
 `;
 
@@ -78,18 +78,18 @@ const Loader = () => (
 		orientation="horizontal"
 		mainAlignment="flex-start"
 		crossAlignment="center"
-		minWidth="256px"
-		minHeight={32}
+		minWidth="16rem"
+		minHeight="2rem"
 	>
-		<SkeletonTile radius="50%" width="32px" height="32px" />
+		<SkeletonTile radius="50%" width="2rem" height="2rem" />
 		<Container orientation="vertical" crossAlignment="flex-start" padding={{ left: 'small' }}>
 			<SkeletonTile
-				radius="4px"
-				width={`${Math.random() * 150 + 64}px`}
-				height="14px"
-				style={{ marginBottom: '4px' }}
+				radius="0.25rem"
+				width={`${Math.random() * 9.375 + 4}rem`}
+				height="0.875rem"
+				style={{ marginBottom: '0.25rem' }}
 			/>
-			<SkeletonTile radius="4px" width={`${Math.random() * 150 + 64}px`} height="12px" />
+			<SkeletonTile radius="0.25rem" width={`${Math.random() * 9.375 + 4}rem`} height="0.75rem" />
 		</Container>
 	</Container>
 );

@@ -222,14 +222,14 @@ const CustomMultivalueField = ({
 						</Padding>
 					))}
 					<Container
-						style={{ flexGrow: 1, minWidth: typeField ? '200px' : '104px' }}
-						width={typeField ? 'calc(32% + 8px)' : '104px'}
+						style={{ flexGrow: 1, minWidth: typeField ? '12.5rem' : '6.5rem' }}
+						width={typeField ? 'calc(32% + 0.5rem)' : '6.5rem'}
 						orientation="horizontal"
 						mainAlignment="space-between"
 						crossAlignment="flex-start"
 						padding={{ top: 'small', right: 'small' }}
 					>
-						<Padding right="small" style={{ width: 'calc(100% - 88px)' }}>
+						<Padding right="small" style={{ width: 'calc(100% - 5.5rem)' }}>
 							{typeField && typeLabel && types && types.length > 0 && (
 								<Select
 									items={types}
@@ -243,8 +243,8 @@ const CustomMultivalueField = ({
 							orientation="horizontal"
 							mainAlignment="flex-end"
 							height="fit"
-							width="88px"
-							style={{ minWidth: '88px' }}
+							width="5.5rem"
+							style={{ minWidth: '5.5rem' }}
 						>
 							{index >= Object.entries(value).length - 1 ? (
 								<>

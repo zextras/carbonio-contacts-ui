@@ -107,7 +107,7 @@ const Actions = ({ folder, grant, createSnackbar, setActiveModal, onMouseLeave, 
 			<Tooltip
 				label={t('tooltip.resend', 'Send e-mail notification about this share')}
 				placement="top"
-				maxWidth="300px"
+				maxWidth="18.75rem"
 			>
 				<Button type="outlined" label={t('label.resend', 'Resend')} onClick={onResend} isSmall />
 			</Tooltip>

@@ -19,7 +19,7 @@ import { useDisplayName } from '../hooks/use-display-name';
 
 const AvatarMobile = styled(Avatar)`
 	position: relative;
-	top: 15px;
+	top: 0.9375rem;
 `;
 
 const AvatarHeader = styled(Row)`
