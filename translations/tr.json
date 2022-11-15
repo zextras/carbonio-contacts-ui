@@ -125,7 +125,8 @@
         },
         "require_field": "* ile işaretli en az bir alanı doldurun",
         "delete_tag_message2": "Silinince önceden işaretlenmiş tüm öğelerden etiket kaldırılacak.",
-        "delete_tag_message1": "\"{{name}}\" etiketini silmek istediğinizden emin misiniz?"
+        "delete_tag_message1": "\"{{name}}\" etiketini silmek istediğinizden emin misiniz?",
+        "new_contact": "Bu kişi 'Kişiler' klasöründe oluşturulacak"
     },
     "label": {
         "cancel": "İptal",
