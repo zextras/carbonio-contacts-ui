@@ -183,7 +183,8 @@
         },
         "require_field": "Uzupełnij co najmniej jedno z wymaganych pól",
         "delete_tag_message2": "Po usunięciu Tag zostanie zdjęty z każdego elementu oznaczonego nim.",
-        "delete_tag_message1": "Czy na pewno chcesz usunąć Tag \"{{name}}\"?"
+        "delete_tag_message1": "Czy na pewno chcesz usunąć Tag \"{{name}}\"?",
+        "new_contact": "Kontakt zostanie stworzony w folderze \"Kontakty\""
     },
     "share": {
         "options": {
