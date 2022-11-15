@@ -61,8 +61,8 @@
 	"dependencies": {
 		"@reduxjs/toolkit": "1.6.2",
 		"@types/react-redux": "7.1.20",
-		"@zextras/carbonio-design-system": "^0.5.0",
-		"@zextras/carbonio-shell-ui": "0.4.40",
+		"@zextras/carbonio-design-system": "^0.5.1",
+		"@zextras/carbonio-shell-ui": "0.4.42",
 		"core-js": "3.19.1",
 		"i18next": "^21.5.3",
 		"lodash": "4.17.21",

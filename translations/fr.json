@@ -266,7 +266,8 @@
         },
         "require_field": "Compléter au moins un des champs * requis",
         "delete_tag_message2": "Une fois supprimée, elle sera supprimée de l'ensemble des éléments associés.",
-        "delete_tag_message1": "Êtes-vous sûr de vouloir supprimer l'étiquette \"{{name}}\" ?"
+        "delete_tag_message1": "Êtes-vous sûr de vouloir supprimer l'étiquette \"{{name}}\" ?",
+        "new_contact": "Ce contact sera créé dans le dossier 'Contacts'"
     },
     "contact_restored": "Contact restauré",
     "messages": {

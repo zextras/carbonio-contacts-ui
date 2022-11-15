@@ -154,7 +154,7 @@ export const NewModal = ({
 				mainAlignment="center"
 				crossAlignment="flex-start"
 				height="fit"
-				maxHeight="calc(100vh - 144px)"
+				maxHeight="calc(100vh - 9rem)"
 			>
 				<ModalHeader
 					title={t('folder.modal.new.title', 'Create new address book')}
@@ -165,7 +165,7 @@ export const NewModal = ({
 					mainAlignment="center"
 					crossAlignment="flex-start"
 					height="fit"
-					maxHeight="calc(100vh - 210px)"
+					maxHeight="calc(100vh - 13.125rem)"
 				>
 					<Container padding={{ all: 'small' }} mainAlignment="center" crossAlignment="flex-start">
 						<Text overflow="break-word" weight="bold">

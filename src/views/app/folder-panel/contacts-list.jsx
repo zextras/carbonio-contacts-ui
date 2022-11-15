@@ -13,8 +13,8 @@ import ContactListItem from './contact-list-item';
 
 const DragImageContainer = styled.div`
 	position: absolute;
-	top: -5000px;
-	left: -5000px;
+	top: -312.5rem;
+	left: -312.5rem;
 	transform: translate(-100%, -100%);
 	width: 35vw;
 `;
@@ -78,7 +78,7 @@ export const ContactsList = ({ folderId, selected, contacts, toggle }) => {
 							color="gray1"
 							overflow="break-word"
 							size="small"
-							style={{ whiteSpace: 'pre-line', textAlign: 'center', paddingTop: '32px' }}
+							style={{ whiteSpace: 'pre-line', textAlign: 'center', paddingTop: '2rem' }}
 						>
 							{displayerTitle}
 						</Text>

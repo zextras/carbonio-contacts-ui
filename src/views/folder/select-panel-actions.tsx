@@ -32,7 +32,7 @@ const SelectPanelActions: FC<SelectPanelActionsProps> = ({ deselectAll }): React
 		<>
 			<Container
 				background="gray5"
-				height="48px"
+				height="3rem"
 				orientation="horizontal"
 				padding={{ all: 'extrasmall' }}
 			>

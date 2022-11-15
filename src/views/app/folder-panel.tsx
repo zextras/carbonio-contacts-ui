@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Container } from '@zextras/carbonio-design-system';
 import { useAppContext } from '@zextras/carbonio-shell-ui';
-import { filter } from 'lodash';
+import { filter, orderBy } from 'lodash';
 import { State } from '../../types/store';
 import { ActionsContextProvider } from '../../ui-actions/actions-context';
 import { ContactsList } from './folder-panel/contacts-list';
@@ -32,6 +32,20 @@ export default function FolderPanel(): ReactElement {
 	const { selected, isSelecting, toggle, deselectAll } = useSelection(folderId, setCount);
 
 	const contacts = useSelector((state: State) => selectAllContactsInFolder(state, folderId));
+	const sortedContacts = useMemo(
+		() =>
+			orderBy(
+				contacts,
+				[
+					(item): string =>
+						item?.firstName?.toLowerCase() ||
+						item?.lastName?.toLowerCase() ||
+						item?.middleName?.toLowerCase()
+				],
+				'asc'
+			),
+		[contacts]
+	);
 	const ids = useMemo(() => Object.keys(selected ?? []), [selected]);
 	const selectedContacts = filter(contacts, (contact) => ids.indexOf(contact.id) !== -1);
 
@@ -60,7 +74,7 @@ export default function FolderPanel(): ReactElement {
 					maxHeight: '100%'
 				}}
 			>
-				<Container mainAlignment="flex-start" borderRadius="none" height="calc(100% - 64px)">
+				<Container mainAlignment="flex-start" borderRadius="none" height="calc(100% - 4rem)">
 					{isSelecting ? (
 						<SelectPanelActions
 							folderId={folderId}
@@ -73,7 +87,7 @@ export default function FolderPanel(): ReactElement {
 					)}
 					<ContactsList
 						folderId={folderId}
-						contacts={contacts}
+						contacts={sortedContacts}
 						selected={selected}
 						setCount={setCount}
 						toggle={toggle}

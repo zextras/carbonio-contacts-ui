@@ -24,11 +24,11 @@ function ContactEditHeader({ editPanelId, folderId }) {
 	const onClose = useCallback(() => replaceHistory(`/folder/${folderId}`), [folderId]);
 
 	return (
-		<Container height={49}>
+		<Container height="3.0625rem">
 			<Container
 				orientation="horizontal"
 				mainAlignment="flex-start"
-				height={48}
+				height="3rem"
 				padding={{ left: 'large', right: 'large' }}
 			>
 				<Padding right="medium">
