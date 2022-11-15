@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.29](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.28...v0.1.29) (2022-11-15)
+
+
+### Features
+
+* contacts list sorting ([#74](https://github.com/zextras/carbonio-contacts-ui/issues/74)) ([47fcde3](https://github.com/zextras/carbonio-contacts-ui/commit/47fcde3509e2d0b25453a972613845395430bc40))
+* convert px to rem ([ce7fcfd](https://github.com/zextras/carbonio-contacts-ui/commit/ce7fcfd067c6508f8cc9544b6c4a3dbe8ef2b919))
+
+
+### Bug Fixes
+
+* hardcoded translations removed ([#78](https://github.com/zextras/carbonio-contacts-ui/issues/78)) ([8c54c33](https://github.com/zextras/carbonio-contacts-ui/commit/8c54c339dac8dd37f12c8ced309eca0f6ba84cca))
+
 ### [0.1.28](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.27...v0.1.28) (2022-11-09)
 
 ### [0.1.27](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.26...v0.1.27) (2022-10-26)
