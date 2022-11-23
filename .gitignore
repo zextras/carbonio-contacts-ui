@@ -6,7 +6,7 @@
 /sdk/
 /build/
 /dist/
-/.idea/workspace.xml
+/.idea
 /e2e/output/
 /junit.xml
 /coverage/cobertura-coverage.xml
