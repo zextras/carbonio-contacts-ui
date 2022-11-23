@@ -30,21 +30,21 @@ import { getFolderTranslatedName } from '../../utils/helpers';
 
 const DropOverlayContainer = styled(Container)`
 	position: absolute;
-	width: calc(248px - ${(props) => (props.folder.level - 1) * 16}px);
+	width: calc(15.5rem - ${(props) => props.folder.level - 1}rem);
 	height: 100%;
 	background: ${(props) => props.theme.palette.primary.regular};
-	border-radius: 4px;
-	border: 4px solid #d5e3f6;
+	border-radius: 0.25rem;
+	border: 0.25rem solid #d5e3f6;
 	opacity: 0.4;
 `;
 
 const DropDenyOverlayContainer = styled(Container)`
 	position: absolute;
-	width: calc(248px - ${(props) => (props.folder.level - 1) * 16}px);
+	width: calc(15.5rem - ${(props) => props.folder.level - 1}rem);
 	height: 100%;
 	background: ${(props) => props.theme.palette.gray1.regular};
-	border-radius: 4px;
-	border: 4px solid #d5e3f6;
+	border-radius: 0.25rem;
+	border: 0.25rem solid #d5e3f6;
 	opacity: 0.4;
 `;
 

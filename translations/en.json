@@ -157,6 +157,8 @@
         "new_contact": "New contact",
         "new_contact_created": "New contact created",
         "new_tag": "New Tag",
+        "no_data": "No Data",
+        "no_name": "No Name",
         "no_special_char_allowed": "Name should not contain any special character",
         "note": "Note:",
         "notes": "Notes",
