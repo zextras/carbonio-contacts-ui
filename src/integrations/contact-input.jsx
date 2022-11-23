@@ -345,7 +345,7 @@ function ContactInput({ onChange, defaultValue, placeholder, background = 'gray5
 				createChipOnPaste
 				ChipComponent={customChip}
 				pasteSeparators={[',', ' ', ';', '\n']}
-				separators={['NumpadEnter', 'Comma']}
+				separators={['NumpadEnter', ',']}
 				{...props}
 			/>
 		</Container>
