@@ -190,7 +190,9 @@
         "edit_tag": "Etiketi düzenle",
         "delete_tag_name": "\"{{name}}\" etiketi sil",
         "delete_tag": "Etiketi Sil",
-        "create_tag": "Etiket Oluştur"
+        "create_tag": "Etiket Oluştur",
+        "no_name": "İsim yok",
+        "no_data": "Veri yok"
     },
     "job": {
         "company": "Firma",

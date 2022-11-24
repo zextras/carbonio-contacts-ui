@@ -105,7 +105,9 @@
         "edit_tag": "Modifica Etichetta",
         "delete_tag_name": "Elimina etichetta \"{{name}}\"",
         "delete_tag": "Elimina Etichetta",
-        "create_tag": "Crea Etichetta"
+        "create_tag": "Crea Etichetta",
+        "no_name": "Nessun Nome",
+        "no_data": "Nessun Dato"
     },
     "job": {
         "title": "Ruolo",
@@ -188,7 +190,7 @@
     },
     "action": {
         "send_msg": "Invia e-mail",
-        "delete_permanently": "Elimina definitivamente",
+        "delete_permanently": "Elimina Definitivamente",
         "goto_folder": "Vai alla cartella",
         "reset_filters": "Ripristina Filtri",
         "search": "Cerca",

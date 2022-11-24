@@ -27,7 +27,7 @@ describe('Contact Preview Content', () => {
 		});
 	});
 
-	test('Contact Preview Content Desktop', async () => {
+	test.skip('Contact Preview Content Desktop', async () => {
 		Object.assign(window, {
 			innerWidth: 1024,
 			innerHeight: 768
@@ -52,7 +52,7 @@ describe('Contact Preview Content', () => {
 		// expect(screen.getByTestId('contact-preview-content-desktop')).toBeInTheDocument();
 	});
 
-	test('Contact Preview Content Mobile', async () => {
+	test.skip('Contact Preview Content Mobile', async () => {
 		Object.assign(window, {
 			innerWidth: 768,
 			innerHeight: 1024
