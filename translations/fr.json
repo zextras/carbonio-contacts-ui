@@ -173,7 +173,9 @@
         "edit_tag": "Modifier l'étiquette",
         "delete_tag_name": "Supprimer l'étiquette \"{{name}}\"",
         "delete_tag": "Supprimer l'étiquette",
-        "create_tag": "Créer une étiquette"
+        "create_tag": "Créer une étiquette",
+        "no_name": "Pas de nom",
+        "no_data": "Pas de données"
     },
     "name": {
         "nickName": "Surnom",

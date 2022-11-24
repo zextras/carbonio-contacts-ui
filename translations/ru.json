@@ -171,7 +171,9 @@
         "delete_tag_name": "Удалить тег \"{{name}}\"",
         "delete_tag": "Удалить Тег",
         "create_tag": "Создать Тег",
-        "tag": "Тег"
+        "tag": "Тег",
+        "no_name": "Без имени",
+        "no_data": "Нет данных"
     },
     "job": {
         "title": "Должность",
@@ -284,9 +286,9 @@
     "tooltip": {
         "resend": "Отправить уведомление об этой публикации",
         "revoke": "Отозвать доступ",
-        "address_book_sharing_status_0": "Поделился с {{count}}",
-        "address_book_sharing_status_1": "Поделился с {{count}}",
-        "address_book_sharing_status_2": "Поделился с {{count}}"
+        "address_book_sharing_status_0": "Поделился с {{count}} пользователем",
+        "address_book_sharing_status_1": "Поделился с {{count}} пользователями",
+        "address_book_sharing_status_2": "Поделился с {{count}} пользователями"
     },
     "contact_restored": "Контакт восстановлен",
     "displayer": {
