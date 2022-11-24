@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.31](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.30...v0.1.31) (2022-11-24)
+
+
+### Bug Fixes
+
+* workaround for chip separators with the azerty keyboard layout ([76e10a2](https://github.com/zextras/carbonio-contacts-ui/commit/76e10a268ed6f4b95c1e436547695bdbdbf86fed))
+
 ### [0.1.30](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.29...v0.1.30) (2022-11-15)
 
 ### [0.1.29](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.28...v0.1.29) (2022-11-15)
