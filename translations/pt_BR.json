@@ -148,7 +148,9 @@
         "edit_tag": "Editar Etiqueta",
         "delete_tag_name": "Excluir etiqueta \"{{name}}\"",
         "delete_tag": "Excluir Etiqueta",
-        "create_tag": "Criar Etiqueta"
+        "create_tag": "Criar Etiqueta",
+        "no_name": "Sem Nome",
+        "no_data": "Sem Dados"
     },
     "share": {
         "add": "Adicionar",
@@ -218,7 +220,8 @@
         },
         "delete_tag_message2": "Uma vez excluída, ela será removida de todos os itens marcados com a mesma.",
         "delete_tag_message1": "Tem certeza que deseja excluir a Etiqueta \"{{name}}\"?",
-        "require_field": "Preencha pelo menos um dos campos * obrigatórios"
+        "require_field": "Preencha pelo menos um dos campos * obrigatórios",
+        "new_contact": "Este contato será criado na pasta \"Contatos\""
     },
     "messages": {
         "modal": {

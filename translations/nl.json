@@ -194,7 +194,9 @@
         "edit_tag": "Tag bewerken",
         "delete_tag_name": "\"{{name}}\" tag verwijderen",
         "delete_tag": "Tag verwijderen",
-        "create_tag": "Tag creëren"
+        "create_tag": "Tag creëren",
+        "no_name": "Geen Naam",
+        "no_data": "Geen Gegevens"
     },
     "section": {
         "field": {
@@ -224,7 +226,8 @@
         },
         "delete_tag_message2": "Eenmaal verwijderd, zal het verwijderd worden van elk item dat ermee gemarkeerd is.",
         "delete_tag_message1": "Weet u zeker dat u de\"{{name}}\" Tag wilt verwijderen?",
-        "require_field": "Vul ten minste één van de verplichte * velden in"
+        "require_field": "Vul ten minste één van de verplichte * velden in",
+        "new_contact": "Dit contact wordt aangemaakt in de map \"Contacten\""
     },
     "messages": {
         "modal": {

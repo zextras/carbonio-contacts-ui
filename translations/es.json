@@ -61,7 +61,9 @@
         "edit_tag": "Editar etiqueta",
         "delete_tag_name": "Eliminar etiqueta \"{{name}}\"",
         "delete_tag": "Eliminar etiqueta",
-        "create_tag": "Crear Etiqueta"
+        "create_tag": "Crear Etiqueta",
+        "no_name": "Sin Nombre",
+        "no_data": "Sin datos"
     },
     "share": {
         "none": "None",
@@ -218,7 +220,8 @@
         },
         "delete_tag_message2": "Una vez borrada, se quitará de cada elemento marcado con ella.",
         "delete_tag_message1": "¿Seguro que quieres borrar la etiqueta \"{{name}}\"?",
-        "require_field": "Rellena al menos uno de los campos * requeridos"
+        "require_field": "Rellena al menos uno de los campos * requeridos",
+        "new_contact": "Este contacto será creado en la carpeta de \"Contactos\""
     },
     "messages": {
         "snackbar": {
