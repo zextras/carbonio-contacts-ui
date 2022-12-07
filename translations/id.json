@@ -184,7 +184,9 @@
         "edit_tag": "Edit Tag",
         "delete_tag_name": "Hapus tag \"{{name}}\"",
         "delete_tag": "Hapus Tag",
-        "create_tag": "Buat Tag"
+        "create_tag": "Buat Tag",
+        "no_name": "Tanpa Nama",
+        "no_data": "Tak Ada Data"
     },
     "name": {
         "nickName": "Nama panggilan",
@@ -215,7 +217,8 @@
         },
         "delete_tag_message2": "Setelah dihapus, ini akan dihapus dari tiap item yang ditandai dengannya.",
         "delete_tag_message1": "Yakin ingin menghapus Tag \"{{name}}\"?",
-        "require_field": "Isi minimal sati kolom wajib *"
+        "require_field": "Isi minimal sati kolom wajib *",
+        "new_contact": "Kontak ini akan dibuat di folder 'Kontak'"
     },
     "messages": {
         "modal": {

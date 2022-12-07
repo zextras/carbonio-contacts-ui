@@ -184,7 +184,9 @@
         "edit_tag": "编辑标签",
         "delete_tag_name": "删除“{{name}}”标签",
         "delete_tag": "删除标签",
-        "create_tag": "创建标签"
+        "create_tag": "创建标签",
+        "no_name": "无名称",
+        "no_data": "无数据"
     },
     "name": {
         "nickName": "昵称",
@@ -219,7 +221,8 @@
         },
         "delete_tag_message2": "删除后，其将从所有已进行相关标记的项目上移除。",
         "delete_tag_message1": "确定要删除“{{name}}”标签吗？",
-        "require_field": "填写至少一个必填 * 字段"
+        "require_field": "填写至少一个必填 * 字段",
+        "new_contact": "此联系人将在“联系人”文件夹中创建"
     },
     "messages": {
         "modal": {
