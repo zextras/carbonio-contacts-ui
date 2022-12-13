@@ -184,7 +184,9 @@
         "edit_tag": "タグを編集する",
         "delete_tag_name": "\"{{name}}\" タグを削除する",
         "delete_tag": "タグを削除する",
-        "create_tag": "タグを作成する"
+        "create_tag": "タグを作成する",
+        "no_data": "データがありません",
+        "no_name": "名前がありません"
     },
     "name": {
         "nickName": "ニックネーム",
@@ -215,7 +217,8 @@
         },
         "delete_tag_message2": "削除されると、それでマークされたすべてのアイテムから削除されます。",
         "delete_tag_message1": "本当に\"{{name}}\" タグを削除しますか？",
-        "require_field": "必須項目*に1つ以上入力してください"
+        "require_field": "必須項目*に1つ以上入力してください",
+        "new_contact": "この連絡先は「連絡先」フォルダに作成されます"
     },
     "messages": {
         "modal": {

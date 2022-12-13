@@ -148,7 +148,9 @@
         "edit_tag": "Edit Tag",
         "delete_tag_name": "Tag \"{{name}}\" löschen",
         "delete_tag": "Delete tag",
-        "create_tag": "Tag erstellen"
+        "create_tag": "Tag erstellen",
+        "no_name": "Kein Name",
+        "no_data": "Keine Daten"
     },
     "message": {
         "snackbar": {
@@ -156,7 +158,8 @@
         },
         "delete_tag_message2": "Nach dem Löschen wird es aus allen damit gekennzeichneten Artikeln entfernt.",
         "delete_tag_message1": "Sind Sie sicher, dass Sie den \"{{name}}\" Tag?",
-        "require_field": "Füllen Sie mindestens eines der Pflichtfelder * aus"
+        "require_field": "Füllen Sie mindestens eines der Pflichtfelder * aus",
+        "new_contact": "Dieser Kontakt wird im 'Kontakte' Ordner erstellt"
     },
     "messages": {
         "modal": {
