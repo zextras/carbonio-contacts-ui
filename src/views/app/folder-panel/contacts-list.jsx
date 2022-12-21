@@ -72,7 +72,7 @@ export const ContactsList = ({ folderId, selected, contacts, toggle }) => {
 	return (
 		<>
 			{contacts?.length === 0 ? (
-				<Container>
+				<Container data-testid="ContactsListToScrollContainer">
 					<Padding top="medium">
 						<Text
 							color="gray1"
@@ -86,6 +86,7 @@ export const ContactsList = ({ folderId, selected, contacts, toggle }) => {
 				</Container>
 			) : (
 				<List
+					data-testid="ContactsListToScrollContainer"
 					selected={selected}
 					background="gray6"
 					active={itemId}

@@ -70,6 +70,7 @@ export default function FolderPanel(): ReactElement {
 				height="fill"
 				background="gray6"
 				borderRadius="none"
+				data-testid="ContactsListContainer"
 				style={{
 					maxHeight: '100%'
 				}}
