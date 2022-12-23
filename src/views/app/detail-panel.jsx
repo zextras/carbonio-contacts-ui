@@ -13,7 +13,11 @@ import ContactEditPanel from '../edit/contact-edit-panel';
 const DetailPanel = ({ width }) => {
 	const { path } = useRouteMatch();
 	return (
-		<Container width={width ?? '60%'} mainAlignment="flex-start">
+		<Container
+			width={width ?? '60%'}
+			mainAlignment="flex-start"
+			data-testid="ContactDetailsContainer"
+		>
 			<Switch>
 				<Route exact path={`${path}/folder/:folderId`}>
 					<SelectionInteractive />

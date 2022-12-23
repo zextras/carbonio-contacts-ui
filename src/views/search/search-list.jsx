@@ -72,6 +72,7 @@ const SearchList = ({
 			width="25%"
 			orientation="vertical"
 			mainAlignment="flex-start"
+			data-testid="ContactsSearchResultListContainer"
 		>
 			<BorderContainer padding="small" height="fit" borderRadius="none">
 				<Button
@@ -99,6 +100,7 @@ const SearchList = ({
 						ItemComponent={SearchListItem}
 						onListBottom={canLoadMore ? loadMore : undefined}
 						active={itemId}
+						data-testid="SearchResultContactsContainer"
 					/>
 				</Container>
 			)}
