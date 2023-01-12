@@ -128,9 +128,9 @@ export default function Sidebar({ expanded }) {
 			createSnackbar,
 			replaceHistory
 		);
-		const allSharedItems = remove(temp, 'owner');
+		const sharedItems = remove(temp, 'owner');
 		// Remove those share folders which broken due to revoke the rights from folder owner
-		const sharedItems = remove(allSharedItems, (item) => !item.broken);
+		remove(sharedItems, (item) => item.broken);
 		setSidebarItems(temp);
 		setAccordionItems(
 			temp.concat(divider(1), {
