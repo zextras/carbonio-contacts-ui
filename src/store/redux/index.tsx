@@ -7,7 +7,7 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import React, { FC } from 'react';
 import { Provider } from 'react-redux';
 import { CONTACTS_APP_ID } from '../../constants';
-import reducers from '../reducers/reducers';
+import { storeReducers } from '../reducers/reducers';
 
 export default combineReducers({});
 
@@ -20,7 +20,7 @@ export const store = configureStore({
 	// 	  (getDefaultMiddleware) => getDefaultMiddleware().concat(logger)
 	// 	: // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	// 	  (getDefaultMiddleware) => getDefaultMiddleware(),
-	reducer: reducers
+	reducer: storeReducers
 });
 
 export const StoreProvider: FC = ({ children }) => <Provider store={store}>{children}</Provider>;
