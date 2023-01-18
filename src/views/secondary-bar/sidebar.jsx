@@ -129,6 +129,8 @@ export default function Sidebar({ expanded }) {
 			replaceHistory
 		);
 		const sharedItems = remove(temp, 'owner');
+		// Remove those share folders which broken due to revoke the rights from folder owner
+		remove(sharedItems, (item) => item.broken);
 		setSidebarItems(temp);
 		setAccordionItems(
 			temp.concat(divider(1), {
@@ -143,7 +145,6 @@ export default function Sidebar({ expanded }) {
 				})
 			})
 		);
-
 		setModalAccordions(temp);
 	}, [folders, t, dispatch, createModal, createSnackbar, expanded]);
 

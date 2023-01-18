@@ -38,7 +38,8 @@ export const normalizeFolders = (soapFolderObj: ISoapFolderObj[]): Array<Contact
 				color: v.color,
 				isShared: v.owner ? !!v.owner : undefined,
 				perm: v.perm,
-				sharedWith: v.acl
+				sharedWith: v.acl,
+				broken: v.broken ? v.broken : false
 			},
 			isNil
 		)
