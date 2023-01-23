@@ -139,7 +139,7 @@
         "contact_setting": "Kişi Ayarları",
         "create": "Oluştur",
         "edit_folder_properties": "{{name}} özelliklerini düzenle",
-        "revoke_share": "{{title}} paylaşımını iptal et",
+        "revoke_share": "{{title}} paylaşımını kaldır",
         "shares_folder_edit": "Bu adres defteri paylaşımı",
         "activate_selection_mode": "Seçim modunu aktive et",
         "contacts": "Kişiler",

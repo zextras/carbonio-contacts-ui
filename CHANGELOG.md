@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.33...v1.0.0) (2023-01-18)
+
 ### [0.1.33](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.32...v0.1.33) (2023-01-05)
 
 ### [0.1.32](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.31...v0.1.32) (2022-12-07)
