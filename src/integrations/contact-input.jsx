@@ -3,15 +3,15 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
-import { reduce, filter, some, startsWith, map, findIndex, trim, find } from 'lodash';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { filter, find, findIndex, map, reduce, some, startsWith, trim } from 'lodash';
 import {
+	Avatar,
+	Chip,
 	ChipInput,
 	Container,
-	Avatar,
-	Text,
 	Row,
-	Chip,
+	Text,
 	Tooltip
 } from '@zextras/carbonio-design-system';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
@@ -203,7 +203,7 @@ function ContactInput({ onChange, defaultValue, placeholder, background = 'gray5
 						resolve(
 							filter(allContacts, (c) =>
 								some([c.firstName, c.lastName, c.company, c.email], (field) =>
-									startsWith(field?.toString().toLowerCase(), e.textContent?.toLowerCase())
+									startsWith(field?.toString().toLowerCase().trim(), e.textContent?.toLowerCase())
 								)
 							)
 						);
@@ -251,7 +251,7 @@ function ContactInput({ onChange, defaultValue, placeholder, background = 'gray5
 									map(
 										filter(normRemoteResults, (c) =>
 											some([c.firstName, c.lastName, c.company, c.email, c.fullName], (field) =>
-												startsWith(field?.toLowerCase(), e.textContent.toLowerCase())
+												startsWith(field?.toLowerCase().trim(), e.textContent.toLowerCase())
 											)
 										),
 										(contact) => ({
