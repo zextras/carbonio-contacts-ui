@@ -14,8 +14,8 @@ import { FolderActionRequest } from '../../../types/soap';
 /**
  * Test the address book Empty modal
  */
-describe('Empty model', () => {
-	test('folder action', async () => {
+describe('Empty modal', () => {
+	test('empty folder action with empty modal', async () => {
 		const store = generateStore();
 		const folderActionInterceptor = new Promise<FolderActionRequest>((resolve, reject) => {
 			// Register a handler for the REST call
