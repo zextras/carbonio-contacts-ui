@@ -43,6 +43,7 @@ const ModalFooter: FC<ModalFooterProps> = ({
 						label={secondaryLabel}
 						disabled={secondaryDisabled}
 						size={size}
+						data-testid="BtnFooterSecondary"
 					/>
 				</Padding>
 			)}
@@ -56,6 +57,7 @@ const ModalFooter: FC<ModalFooterProps> = ({
 					type={primaryBtnType}
 					disabled={disabled}
 					backgroundColor={background}
+					data-testid="BtnFooterPrimary"
 				/>
 			</Padding>
 		</Container>

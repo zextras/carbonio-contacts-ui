@@ -21,11 +21,11 @@ export const folderAction = createAsyncThunk(
 	}: {
 		folder: ContactsFolder;
 		op: string;
-		name: string;
-		l: string;
-		recursive: boolean;
-		color: number;
-		zid: string;
+		name?: string;
+		l?: string;
+		recursive?: boolean;
+		color?: number;
+		zid?: string;
 	}) => {
 		const result = await soapFetch('FolderAction', {
 			action: omitBy(
