@@ -5,7 +5,7 @@
  */
 import React, { useEffect, useState, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { filter, isEqual, map, remove, sortBy, uniqWith } from 'lodash';
+import { filter, isEqual, map, remove, sortBy, uniqWith, maxBy, findIndex } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import {
 	Accordion,
@@ -17,7 +17,7 @@ import {
 	Row,
 	SnackbarManagerContext
 } from '@zextras/carbonio-design-system';
-import { replaceHistory } from '@zextras/carbonio-shell-ui';
+import { replaceHistory, FOLDERS } from '@zextras/carbonio-shell-ui';
 import { setCustomComponent } from '../folder/accordion-custom-components';
 import { FolderActionsType } from '../../types/folder';
 import { NewModal } from './new-modal';
@@ -116,7 +116,12 @@ export default function Sidebar({ expanded }) {
 	useEffect(() => {
 		const nestedFolders = nest(folders, '1', 1);
 		const trashFolder = remove(nestedFolders, (c) => c.id === '3');
-		const accordions = sortBy(nestedFolders, (item) => Number(item.id)).concat(trashFolder);
+		const maxSystemFolderId = maxBy(nestedFolders, (item) =>
+			Number(item.id) < FOLDERS.LAST_SYSTEM_FOLDER_POSITION ? Number(item.id) : 0
+		).id;
+		const accordions = sortBy(nestedFolders, (item) => Number(item.id));
+		const maxSystemFolderIdIndex = findIndex(accordions, (item) => item.id === maxSystemFolderId);
+		accordions.splice(maxSystemFolderIdIndex + 1, 0, trashFolder[0]);
 		const temp = setCustomComponent(
 			accordions,
 			setModal,
