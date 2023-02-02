@@ -11,8 +11,6 @@ import { useDispatch } from 'react-redux';
 import { replaceHistory, useTags } from '@zextras/carbonio-shell-ui';
 import { SnackbarManagerContext, ModalManagerContext } from '@zextras/carbonio-design-system';
 import { Contact } from '../types/contact';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 import { contextActions, hoverActions, primaryActions, secondaryActions } from './contact-actions';
 
 type ACPProps = {
