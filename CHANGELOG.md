@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/zextras/carbonio-contacts-ui/compare/v1.0.0...v1.1.0) (2023-02-02)
+
+
+### Features
+
+* move trash folder position after system folders ([#97](https://github.com/zextras/carbonio-contacts-ui/issues/97)) ([8bf71f0](https://github.com/zextras/carbonio-contacts-ui/commit/8bf71f0fa503230cf9cf56b01f55cce99323b04b))
+
+
+### Bug Fixes
+
+* can not empty contacts address book ([#95](https://github.com/zextras/carbonio-contacts-ui/issues/95)) ([951ea23](https://github.com/zextras/carbonio-contacts-ui/commit/951ea237e176acbe2860334b1fb39aabc868d0cd))
+* removed leading whitespace from autocomplete results ([#96](https://github.com/zextras/carbonio-contacts-ui/issues/96)) ([a9fed1e](https://github.com/zextras/carbonio-contacts-ui/commit/a9fed1efb374e6b6086c701fc7351100fffcc5cb))
+* revoking the share is taking the shared folder to wrong state ([#92](https://github.com/zextras/carbonio-contacts-ui/issues/92)) ([bbf75f7](https://github.com/zextras/carbonio-contacts-ui/commit/bbf75f7d76782fcdf9bd19651e17fd0b740ce082))
+
 ## [1.0.0](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.33...v1.0.0) (2023-01-18)
 
 ### [0.1.33](https://github.com/zextras/carbonio-contacts-ui/compare/v0.1.32...v0.1.33) (2023-01-05)
