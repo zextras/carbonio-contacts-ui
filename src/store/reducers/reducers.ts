@@ -7,7 +7,7 @@ import { combineReducers } from '@reduxjs/toolkit';
 import { folderSliceReducer } from '../slices/folders-slice';
 import { contactSliceReducer } from '../slices/contacts-slice';
 
-export default combineReducers({
+export const storeReducers = combineReducers({
 	folders: folderSliceReducer,
 	contacts: contactSliceReducer
 });
