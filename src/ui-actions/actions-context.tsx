@@ -6,13 +6,9 @@
 import React, { ComponentType, createContext, FC, useCallback, useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 import { replaceHistory, useTags } from '@zextras/carbonio-shell-ui';
 import { SnackbarManagerContext, ModalManagerContext } from '@zextras/carbonio-design-system';
 import { Contact } from '../types/contact';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 import { contextActions, hoverActions, primaryActions, secondaryActions } from './contact-actions';
 
 type ACPProps = {
