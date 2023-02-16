@@ -23,12 +23,16 @@ type RouteParams = {
 	folderId: string;
 };
 
+type UseAppContextType = {
+	setCount: (count: number) => void;
+};
+
 export default function FolderPanel(): ReactElement {
 	const { folderId } = useParams<RouteParams>();
 	const dispatch = useDispatch();
 	const folder = useSelector((state: State) => selectFolder(state, folderId));
 	const folderStatus = useSelector((state: State) => selectFolderStatus(state, folderId));
-	const { setCount } = useAppContext();
+	const { setCount } = useAppContext<UseAppContextType>();
 	const { selected, isSelecting, toggle, deselectAll } = useSelection(folderId, setCount);
 
 	const contacts = useSelector((state: State) => selectAllContactsInFolder(state, folderId));
