@@ -7,7 +7,7 @@
 import { act } from '@testing-library/react';
 import { rest } from 'msw';
 import { generateStore } from '../../../tests/generators/store';
-import { getSetupServerApi } from '../../../carbonio-ui-commons/test/jest-setup';
+import { getSetupServer } from '../../../carbonio-ui-commons/test/jest-setup';
 import { folderAction } from '../../../store/actions/folder-action';
 import { ContactsFolder } from '../../../types/contact';
 import { FolderActionRequest } from '../../../types/soap';
@@ -19,7 +19,7 @@ describe('Empty modal', () => {
 		const store = generateStore();
 		const folderActionInterceptor = new Promise<FolderActionRequest>((resolve, reject) => {
 			// Register a handler for the REST call
-			getSetupServerApi().use(
+			getSetupServer().use(
 				rest.post('/service/soap/FolderActionRequest', async (req, res, ctx) => {
 					if (!req) {
 						reject(new Error('Empty request'));
