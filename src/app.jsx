@@ -30,6 +30,7 @@ const LazySettingsView = lazy(() =>
 const LazySearchView = lazy(() =>
 	import(/* webpackChunkName: "edit-view" */ './views/search/search-view')
 );
+
 const LazyBoardView = lazy(() =>
 	import(/* webpackChunkName: "edit-view" */ './views/edit/edit-view')
 );
