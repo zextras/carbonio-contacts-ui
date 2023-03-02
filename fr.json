@@ -252,7 +252,7 @@
         "advanced_filters": "Filtres avancés"
     },
     "tooltip": {
-        "revoke": "Révoquer l'accès",
+        "revoke": "Révoquer les accès",
         "resend": "Envoyer un email de notification concernant ce partage",
         "address_book_sharing_status": "Partager avec {{count}} personne",
         "address_book_sharing_status_plural": "Partager avec {{count}} personnes"
