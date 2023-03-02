@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-only
   <h1>Carbonio Contacts UI</h1>
 </div>
 
-Contacts module for Zextras Carbonio
+Contacts module
 
 <p align="center">
   <a href="https://github.com/zextras/carbonio-contacts-ui/graphs/contributors" alt="Contributors">
