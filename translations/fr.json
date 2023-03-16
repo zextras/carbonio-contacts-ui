@@ -2,7 +2,7 @@
     "action": {
         "delete_permanently": "Supprimer définitivement",
         "goto_folder": "Aller au dossier",
-        "search": "Recherche",
+        "search": "Rechercher",
         "share_folder": "Partager le dossier",
         "reset_filters": "Réinitialiser les filtres",
         "send_msg": "Envoyer un email"
