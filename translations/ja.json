@@ -38,7 +38,7 @@
         "share_note": "標準メッセージには、名前、共有アイテムの名前、受信者に付与されたアクセス許可、サインイン情報が表示されます。"
     },
     "action": {
-        "search": "検索する",
+        "search": "検索",
         "delete_permanently": "完全に削除する",
         "goto_folder": "フォルダに移動する",
         "reset_filters": "フィルターをリセットする",
