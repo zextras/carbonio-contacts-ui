@@ -3,20 +3,23 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { FC, useEffect, useState, useCallback, Suspense } from 'react';
+import React, { FC, useEffect, useState, useCallback, Suspense, useMemo } from 'react';
 import { Container } from '@zextras/carbonio-design-system';
 import { soapFetch, Spinner } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 import { Switch, Route, useRouteMatch } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { map, reduce } from 'lodash';
 import { Contact } from '../../types/contact';
 import { normalizeContactsFromSoap } from '../../utils/normalizations/normalize-contact-from-soap';
 import AdvancedFilterModal from './advance-filter-modal';
 import SearchList from './search-list';
 import SearchPanel from './search-panel';
+import { selectFolders } from '../../store/selectors/folders';
 
 type SearchProps = {
 	useQuery: () => [Array<any>, (arg: any) => void];
-	ResultsHeader: FC<{ query: Array<any>; label: string }>;
+	ResultsHeader: FC<{ label: string }>;
 };
 
 type SearchResults = {
@@ -24,7 +27,8 @@ type SearchResults = {
 	more: boolean;
 	offset: number;
 	sortBy: string;
-	query: Array<{ label: string; value?: string }>;
+	query: string;
+	// Array<{ label: string; value?: string }>;
 };
 const SearchView: FC<SearchProps> = ({ useQuery, ResultsHeader }) => {
 	const [query, updateQuery] = useQuery();
@@ -34,20 +38,49 @@ const SearchView: FC<SearchProps> = ({ useQuery, ResultsHeader }) => {
 		more: false,
 		offset: 0,
 		sortBy: 'nameAsc',
-		query: []
+		query: ''
 	});
 
 	const [loading, setLoading] = useState(false);
 	const [t] = useTranslation();
 	const [filterCount, setFilterCount] = useState(0);
 	const [showAdvanceFilters, setShowAdvanceFilters] = useState(false);
+	const [isSharedFolderIncluded, setIsSharedFolderIncluded] = useState(true);
+	const folders = useSelector(selectFolders);
+	const searchInFolders = useMemo(
+		() =>
+			reduce(
+				folders,
+				(acc: string[], v, k) => {
+					if (v.isShared || v.perm) {
+						acc.push(v.id);
+					}
+					return acc;
+				},
+				[]
+			),
+		[folders]
+	);
 
-	const search = useCallback(
-		(queryStr: Array<{ label: string; value?: string }>, reset: boolean) => {
+	const foldersToSearchInQuery = useMemo(
+		() => `( ${map(searchInFolders, (folder) => `inid:"${folder}"`).join(' OR ')} OR is:local) `,
+		[searchInFolders]
+	);
+
+	const queryToString = useMemo(
+		() =>
+			isSharedFolderIncluded && searchInFolders?.length > 0
+				? `(${query.map((c) => (c.value ? c.value : c.label)).join(' ')}) ${foldersToSearchInQuery}`
+				: `${query.map((c) => (c.value ? c.value : c.label)).join(' ')}`,
+		[isSharedFolderIncluded, searchInFolders.length, query, foldersToSearchInQuery]
+	);
+
+	const searchQuery = useCallback(
+		(queryStr: string, reset: boolean) => {
 			setLoading(true);
 			soapFetch<any, any>('Search', {
 				limit: 100,
-				query: `${queryStr.map((c) => (c.value ? c.value : c.label)).join(' ')}`,
+				query: queryStr,
 				offset: reset ? 0 : searchResults.offset,
 				sortBy: searchResults.sortBy,
 				types: 'contact',
@@ -74,12 +107,12 @@ const SearchView: FC<SearchProps> = ({ useQuery, ResultsHeader }) => {
 	);
 
 	useEffect(() => {
-		if (query && query.length > 0 && query !== searchResults.query) {
+		if (query && query.length > 0 && queryToString !== searchResults.query) {
 			setLoading(true);
 			setFilterCount(query.length);
-			search(query, true);
+			searchQuery(queryToString, true);
 		}
-	}, [query, search, searchResults.query]);
+	}, [query, queryToString, searchQuery, searchResults.query]);
 
 	const { path } = useRouteMatch();
 
@@ -87,7 +120,7 @@ const SearchView: FC<SearchProps> = ({ useQuery, ResultsHeader }) => {
 		<>
 			<Container>
 				<ResultsHeader
-					query={searchResults?.query}
+					// query={searchResults?.query}
 					label={t('label.results_for', 'Results for:')}
 				/>
 				<Container
@@ -100,7 +133,7 @@ const SearchView: FC<SearchProps> = ({ useQuery, ResultsHeader }) => {
 						<Route path={`${path}/:folder?/:folderId?/:type?/:itemId?`}>
 							<SearchList
 								searchResults={searchResults}
-								search={search}
+								search={searchQuery}
 								query={query}
 								loading={loading}
 								filterCount={filterCount}
@@ -117,6 +150,8 @@ const SearchView: FC<SearchProps> = ({ useQuery, ResultsHeader }) => {
 					query={query}
 					updateQuery={updateQuery}
 					open={showAdvanceFilters}
+					isSharedFolderIncluded={isSharedFolderIncluded}
+					setIsSharedFolderIncluded={setIsSharedFolderIncluded}
 					onClose={(): void => setShowAdvanceFilters(false)}
 					t={t}
 				/>
@@ -125,6 +160,8 @@ const SearchView: FC<SearchProps> = ({ useQuery, ResultsHeader }) => {
 					query={query}
 					updateQuery={updateQuery}
 					open={showAdvanceFilters}
+					isSharedFolderIncluded={isSharedFolderIncluded}
+					setIsSharedFolderIncluded={setIsSharedFolderIncluded}
 					onClose={(): void => setShowAdvanceFilters(false)}
 					t={t}
 				/>

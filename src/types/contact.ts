@@ -68,7 +68,7 @@ export type AccordionFolder = {
 export type ContactsFolder = {
 	items: ContactsFolder[] | [];
 	/** Internal UUID */ _id?: string;
-	/** Zimbra ID */ id?: string;
+	/** Zimbra ID */ id: string;
 	itemsCount: number;
 	path: string;
 	parent: string;
