@@ -418,7 +418,7 @@ export default function EditView({ panel }) {
 		} else {
 			storeDispatch(
 				modifyContact({
-					updatedContact,
+					updatedContact: { ...updatedContact, parent: existingContact.parent },
 					existingContact
 				})
 			)
