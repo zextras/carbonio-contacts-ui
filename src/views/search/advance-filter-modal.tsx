@@ -20,6 +20,7 @@ import { ModalHeader } from '../secondary-bar/commons/modal-header';
 import KeywordRow, { KeywordState } from './parts/keyword-row';
 import TagRow from './parts/tag-row';
 import { useDisabled, useSecondaryDisabled } from './parts/use-disable-hooks';
+import ToggleFilters from './parts/toggle-filters';
 
 export type Query = Array<{
 	label: string;
@@ -33,6 +34,8 @@ type AdvancedFilterModalProps = {
 	t: TFunction;
 	query: Query;
 	updateQuery: (arg: any) => void;
+	isSharedFolderIncluded: boolean;
+	setIsSharedFolderIncluded: (arg: boolean) => void;
 };
 
 const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
@@ -40,7 +43,9 @@ const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 	onClose,
 	t,
 	query,
-	updateQuery
+	updateQuery,
+	setIsSharedFolderIncluded,
+	isSharedFolderIncluded
 }): ReactElement => {
 	const [otherKeywords, setOtherKeywords] = useState<KeywordState>([]);
 	const [tag, setTag] = useState<KeywordState>([]);
@@ -66,6 +71,8 @@ const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 			})),
 		[]
 	);
+	const [isSharedFolderIncludedTobe, setIsSharedFolderIncludedTobe] =
+		useState(isSharedFolderIncluded);
 
 	useEffect(() => {
 		const updatedQuery = map(
@@ -96,7 +103,12 @@ const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 		[otherKeywords, tag]
 	);
 
-	const disabled = useDisabled({ query, queryToBe });
+	const disabled = useDisabled({
+		query,
+		queryToBe,
+		isSharedFolderIncluded,
+		isSharedFolderIncludedTobe
+	});
 	const secondaryDisabled = useSecondaryDisabled({
 		tag,
 		totalKeywords
@@ -109,8 +121,9 @@ const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 	const onConfirm = useCallback(() => {
 		const tmp = [...otherKeywords];
 		updateQuery(tmp);
+		setIsSharedFolderIncluded(isSharedFolderIncludedTobe);
 		onClose();
-	}, [updateQuery, onClose, otherKeywords]);
+	}, [otherKeywords, updateQuery, setIsSharedFolderIncluded, isSharedFolderIncludedTobe, onClose]);
 
 	const keywordRowProps = useMemo(
 		() => ({
@@ -129,11 +142,20 @@ const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 		[tagOptions, tag, setTag]
 	);
 
+	const toggleFiltersProps = useMemo(
+		() => ({
+			query,
+			setIsSharedFolderIncludedTobe,
+			isSharedFolderIncludedTobe
+		}),
+		[query, isSharedFolderIncludedTobe]
+	);
 	return (
 		<CustomModal open={open} onClose={onClose} maxHeight="90vh" size="medium">
 			<Container padding={{ bottom: 'medium' }}>
 				<ModalHeader onClose={onClose} title={t('title.advanced_filters', 'Advanced Filters')} />
 				<Container padding={{ horizontal: 'medium', vertical: 'small' }}>
+					<ToggleFilters compProps={toggleFiltersProps} />
 					<KeywordRow compProps={keywordRowProps} />
 					<TagRow compProps={tagRowProps} />
 				</Container>

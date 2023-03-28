@@ -81,7 +81,7 @@ const SearchList = ({
 					size="fill"
 					label={
 						filterCount === 0
-							? t('label.single_advanced_filter', 'Advanced Filter')
+							? t('title.advanced_filters', 'Advanced Filters')
 							: t('label.advanced_filter', {
 									count: filterCount,
 									defaultValue: '{{count}} Advanced Filter',

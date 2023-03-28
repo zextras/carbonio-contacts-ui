@@ -158,6 +158,7 @@
         "empty": "Empty",
         "error_try_again": "Something went wrong, please try again",
         "folder_name": "Folder name",
+        "include_shared_folders": "Include shared address books",
         "move": "Move",
         "new_address_book": "New address Book",
         "new_contact": "New contact",
@@ -185,7 +186,6 @@
         "share": "Share",
         "share_with": "Share with",
         "shares_folder_edit": "Sharing of this address book",
-        "single_advanced_filter": "Advanced Filter",
         "tag": "Tag",
         "tag_max_length": "Max 128 characters are allowed",
         "tag_name": "Tag name",
@@ -235,6 +235,9 @@
         "nickName": "Nickname",
         "prefix": "Prefix",
         "suffix": "Suffix"
+    },
+    "search": {
+        "shared_folders_note": "Include shared address books in searches."
     },
     "section": {
         "field": {
