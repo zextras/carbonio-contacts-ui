@@ -3,19 +3,19 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { FC, useEffect, useState, useCallback, Suspense, useMemo } from 'react';
 import { Container } from '@zextras/carbonio-design-system';
-import { soapFetch, Spinner } from '@zextras/carbonio-shell-ui';
-import { useTranslation } from 'react-i18next';
-import { Switch, Route, useRouteMatch } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { Spinner, soapFetch } from '@zextras/carbonio-shell-ui';
 import { map, reduce } from 'lodash';
+import React, { FC, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Route, Switch, useRouteMatch } from 'react-router-dom';
+import { useAppSelector } from '../../hooks/redux';
+import { selectFolders } from '../../store/selectors/folders';
 import { Contact } from '../../types/contact';
 import { normalizeContactsFromSoap } from '../../utils/normalizations/normalize-contact-from-soap';
 import AdvancedFilterModal from './advance-filter-modal';
 import SearchList from './search-list';
 import SearchPanel from './search-panel';
-import { selectFolders } from '../../store/selectors/folders';
 
 type SearchProps = {
 	useQuery: () => [Array<any>, (arg: any) => void];
@@ -45,7 +45,7 @@ const SearchView: FC<SearchProps> = ({ useQuery, ResultsHeader }) => {
 	const [filterCount, setFilterCount] = useState(0);
 	const [showAdvanceFilters, setShowAdvanceFilters] = useState(false);
 	const [isSharedFolderIncluded, setIsSharedFolderIncluded] = useState(true);
-	const folders = useSelector(selectFolders);
+	const folders = useAppSelector(selectFolders);
 	const searchInFolders = useMemo(
 		() =>
 			reduce(

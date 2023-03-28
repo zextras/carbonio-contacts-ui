@@ -3,8 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { filter, find, findIndex, map, reduce, some, startsWith, trim } from 'lodash';
+import { createSelector } from '@reduxjs/toolkit';
 import {
 	Avatar,
 	Chip,
@@ -15,11 +14,12 @@ import {
 	Tooltip
 } from '@zextras/carbonio-design-system';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
-import { useSelector } from 'react-redux';
-import { createSelector } from '@reduxjs/toolkit';
-import styled from 'styled-components';
+import { filter, find, findIndex, map, reduce, some, startsWith, trim } from 'lodash';
 import moment from 'moment';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
+import { useAppSelector } from '../hooks/redux';
 import { StoreProvider } from '../store/redux';
 
 const emailRegex =
@@ -110,7 +110,7 @@ function ContactInput({ onChange, defaultValue, placeholder, background = 'gray5
 		);
 	}, [defaultValue, idToRemove]);
 
-	const allContacts = useSelector(
+	const allContacts = useAppSelector(
 		createSelector(
 			(state) => state.contacts.contacts,
 			(contacts) =>
