@@ -337,10 +337,10 @@ export default function EditView({ panel }) {
 	}, [compareToContact, contact]);
 
 	const folders = useSelector(selectFolders);
-	const selectedFolderName = useMemo(
-		() => find(folders, ['id', selectFolderId]).label,
-		[selectFolderId, folders]
-	);
+	const selectedFolderName = useMemo(() => {
+		const selectedFolder = find(folders, ['id', selectFolderId]);
+		return selectedFolder && selectedFolder.label ? selectedFolder.label : '';
+	}, [folders, selectFolderId]);
 	const folderWithWritePerm = useMemo(
 		() =>
 			filter(
@@ -418,26 +418,12 @@ export default function EditView({ panel }) {
 		} else {
 			storeDispatch(
 				modifyContact({
-					updatedContact: { ...updatedContact, parent: existingContact.parent },
+					updatedContact,
 					existingContact
 				})
 			)
 				.then((res) => {
-					if (res.type.includes('fulfilled') && existingContact.parent !== updatedContact.parent) {
-						storeDispatch(
-							contactAction({
-								contactsIDs: [res.payload[0].id],
-								destinationID: updatedContact.parent,
-								op: 'move'
-							})
-						).then((response) => {
-							if (response.type.includes('fulfilled')) {
-								if (panel) {
-									replaceHistory(`/folder/${folderId}`);
-								}
-							}
-						});
-					} else if (panel) {
+					if (panel) {
 						replaceHistory(`/folder/${folderId}/contacts/${res.payload[0].id}`);
 					}
 				})
@@ -568,25 +554,30 @@ export default function EditView({ panel }) {
 						dispatch={dispatch}
 					/>
 				</ContactEditorRow>
-				<ContactEditorRow>
-					<Padding horizontal="small" top="small" style={{ width: '100%' }}>
-						<Row padding={{ bottom: 'small' }} crossAlignment="flex-start" orientation="vertical">
-							<Text size="large" weight={'medium'} overflow="break-word">
-								{t('label.destination_address_book', 'Destination address book')}
-							</Text>
-						</Row>
-						<FoldersSelector
-							defaultFolderId={selectFolderId}
-							onChange={(selectedItem) => {
-								dispatch({ type: op.setInput, payload: { name: 'parent', value: selectedItem } });
-								setSelectFolderId(selectedItem);
-							}}
-							label={t('share.contact_folder', 'Address Book')}
-							folderItems={allFolders}
-							disabled={false}
-						></FoldersSelector>
-					</Padding>
-				</ContactEditorRow>
+				{!editId && (
+					<ContactEditorRow>
+						<Padding horizontal="small" top="small" style={{ width: '100%' }}>
+							<Row padding={{ bottom: 'small' }} crossAlignment="flex-start" orientation="vertical">
+								<Text size="large" weight={'medium'} overflow="break-word">
+									{t('label.destination_address_book', 'Destination address book')}
+								</Text>
+							</Row>
+							<FoldersSelector
+								defaultFolderId={selectFolderId}
+								onChange={(selectedItem) => {
+									dispatch({
+										type: op.setInput,
+										payload: { name: 'parent', value: selectedItem }
+									});
+									setSelectFolderId(selectedItem);
+								}}
+								label={t('share.contact_folder', 'Address Book')}
+								folderItems={allFolders}
+								disabled={false}
+							></FoldersSelector>
+						</Padding>
+					</ContactEditorRow>
+				)}
 				<CustomMultivalueField
 					name="email"
 					label={t('section.title.mail', 'E-mail address')}
