@@ -28,7 +28,6 @@ type SearchResults = {
 	offset: number;
 	sortBy: string;
 	query: string;
-	// Array<{ label: string; value?: string }>;
 };
 const SearchView: FC<SearchProps> = ({ useQuery, ResultsHeader }) => {
 	const [query, updateQuery] = useQuery();
@@ -119,10 +118,7 @@ const SearchView: FC<SearchProps> = ({ useQuery, ResultsHeader }) => {
 	return (
 		<>
 			<Container>
-				<ResultsHeader
-					// query={searchResults?.query}
-					label={t('label.results_for', 'Results for:')}
-				/>
+				<ResultsHeader label={t('label.results_for', 'Results for:')} />
 				<Container
 					orientation="horizontal"
 					background="gray4"
