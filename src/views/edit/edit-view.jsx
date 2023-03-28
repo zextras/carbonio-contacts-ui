@@ -10,7 +10,9 @@ import {
 	report,
 	useBoardHooks,
 	getBridgedFunctions,
-	t
+	t,
+	ZIMBRA_STANDARD_COLORS,
+	FOLDERS
 } from '@zextras/carbonio-shell-ui';
 import { map, filter, reduce, set, omit, find } from 'lodash';
 import {
@@ -25,13 +27,23 @@ import {
 	Tooltip
 } from '@zextras/carbonio-design-system';
 import { useDispatch, useSelector } from 'react-redux';
+import styled from 'styled-components';
 import FormSection from './form-section';
 import { CompactView } from '../../commons/contact-compact-view';
 import reducer, { op } from './form-reducer';
 import { modifyContact } from '../../store/actions/modify-contact';
 import { createContact } from '../../store/actions/create-contact';
 import { selectContact } from '../../store/selectors/contacts';
+import { selectFolders } from '../../store/selectors/folders';
 import { differenceObject } from '../settings/components/utils';
+import { FoldersSelector } from '../../carbonio-ui-commons/components/select/folders-selector';
+import { contactAction } from '../../store/actions/contact-action';
+
+const ItalicText = styled(Text)`
+	font-style: italic;
+	color: ${({ theme }) => theme.palette.gray1.regular};
+	padding-right: 0.5rem;
+`;
 
 const filterEmptyValues = (values) =>
 	reduce(
@@ -294,6 +306,7 @@ export default function EditView({ panel }) {
 	const [contact, dispatch] = useReducer(reducer);
 	const boardUtilities = useBoardHooks();
 	const [compareToContact, setCompareToContact] = useState(existingContact);
+	const [selectFolderId, setSelectFolderId] = useState(FOLDERS.CONTACTS);
 	const keys = Object.keys(existingContact ?? {});
 
 	useEffect(() => {
@@ -301,6 +314,7 @@ export default function EditView({ panel }) {
 		let canSet = true;
 		if (editId && editId !== 'new' && existingContact) {
 			canSet && dispatch({ type: op.setExistingContact, payload: { existingContact } });
+			setSelectFolderId(existingContact.parent);
 		}
 		if (editId && editId === 'new') {
 			canSet && dispatch({ type: op.setEmptyContact, payload: {} });
@@ -321,6 +335,31 @@ export default function EditView({ panel }) {
 
 		return differenceObject(compareToContact, updatedContact);
 	}, [compareToContact, contact]);
+
+	const folders = useSelector(selectFolders);
+	const selectedFolderName = useMemo(() => {
+		const selectedFolder = find(folders, ['id', selectFolderId]);
+		return selectedFolder && selectedFolder.label ? selectedFolder.label : '';
+	}, [folders, selectFolderId]);
+	const folderWithWritePerm = useMemo(
+		() =>
+			filter(
+				folders,
+				(folder) =>
+					(folder.id !== FOLDERS.TRASH && !folder.isShared) ||
+					(folder.perm && folder.perm.indexOf('w') !== -1)
+			),
+		[folders]
+	);
+	const allFolders = useMemo(
+		() =>
+			map(folderWithWritePerm, (item) => ({
+				label: item.label,
+				value: item.id,
+				color: ZIMBRA_STANDARD_COLORS[item.color || 0].hex
+			})),
+		[folderWithWritePerm]
+	);
 
 	const isDisabled = useMemo(() => {
 		if (editId && editId !== 'new' && existingContact) {
@@ -390,7 +429,7 @@ export default function EditView({ panel }) {
 				})
 				.catch(report);
 		}
-	}, [contact, boardUtilities, folderId, panel, storeDispatch, existingContact]);
+	}, [boardUtilities, contact, existingContact, folderId, panel, storeDispatch]);
 
 	const defaultTypes = useMemo(
 		() => [
@@ -428,9 +467,12 @@ export default function EditView({ panel }) {
 				<Row orientation="horizontal" mainAlignment="space-between" width="fill">
 					<Container height="fit" width="fit">
 						{!editId && (
-							<Text>
-								{t('message.new_contact', "This contact will be created in the 'Contacts' folder")}
-							</Text>
+							<ItalicText>
+								{t('label.contact_created_in_folder', {
+									name: selectedFolderName,
+									defaultValue: 'This contact will be created in the "{{name}}" folder'
+								})}
+							</ItalicText>
 						)}
 					</Container>
 					<Tooltip
@@ -504,6 +546,38 @@ export default function EditView({ panel }) {
 						dispatch={dispatch}
 					/>
 				</ContactEditorRow>
+				<ContactEditorRow>
+					<CustomStringField
+						name="notes"
+						label={t('label.notes', 'Notes')}
+						value={contact.notes}
+						dispatch={dispatch}
+					/>
+				</ContactEditorRow>
+				{!editId && (
+					<ContactEditorRow>
+						<Padding horizontal="small" top="small" style={{ width: '100%' }}>
+							<Row padding={{ bottom: 'small' }} crossAlignment="flex-start" orientation="vertical">
+								<Text size="large" weight={'medium'} overflow="break-word">
+									{t('label.destination_address_book', 'Destination address book')}
+								</Text>
+							</Row>
+							<FoldersSelector
+								defaultFolderId={selectFolderId}
+								onChange={(selectedItem) => {
+									dispatch({
+										type: op.setInput,
+										payload: { name: 'parent', value: selectedItem }
+									});
+									setSelectFolderId(selectedItem);
+								}}
+								label={t('share.contact_folder', 'Address Book')}
+								folderItems={allFolders}
+								disabled={false}
+							></FoldersSelector>
+						</Padding>
+					</ContactEditorRow>
+				)}
 				<CustomMultivalueField
 					name="email"
 					label={t('section.title.mail', 'E-mail address')}
@@ -552,14 +626,6 @@ export default function EditView({ panel }) {
 					value={contact.address}
 					dispatch={dispatch}
 				/>
-				<ContactEditorRow>
-					<CustomStringField
-						name="notes"
-						label={t('label.notes', 'Notes')}
-						value={contact.notes}
-						dispatch={dispatch}
-					/>
-				</ContactEditorRow>
 			</Container>
 		</Container>
 	) : null;
