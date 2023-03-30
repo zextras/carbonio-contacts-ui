@@ -8,7 +8,12 @@ import React, { useCallback, useMemo } from 'react';
 import { trim, split, head, reduce, includes } from 'lodash';
 import { Container, Padding, Row, Text, Tooltip } from '@zextras/carbonio-design-system';
 import { useHistory, useLocation } from 'react-router-dom';
-import { useTags, ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-shell-ui';
+import {
+	pushHistory,
+	replaceHistory,
+	useTags,
+	ZIMBRA_STANDARD_COLORS
+} from '@zextras/carbonio-shell-ui';
 import { selectFolderStatus } from '../../store/selectors/contacts';
 import { searchContacts } from '../../store/actions/search-contacts';
 import ListItemActionWrapper from '../folder/list-item-action-wrapper';
@@ -22,8 +27,6 @@ const getChipLabel = (item) => {
 	return item.fullName ?? item?.email?.email?.mail ?? '';
 };
 const SearchListItem = ({ item, selected, selecting, toggle, active }) => {
-	const history = useHistory();
-	const { pathname } = useLocation();
 	const dispatch = useDispatch();
 	const folderId = item.parent;
 	const folderStatus = useSelector((state) => selectFolderStatus(state, folderId));
@@ -32,9 +35,8 @@ const SearchListItem = ({ item, selected, selecting, toggle, active }) => {
 		if (!folderStatus) {
 			dispatch(searchContacts(folderId));
 		}
-		const path = head(split(pathname, '/folder'));
-		history.push(`${path}/folder/${item.parent}/contacts/${item.id}`);
-	}, [dispatch, folderId, folderStatus, history, item.id, item.parent, pathname]);
+		pushHistory(`/folder/${item.parent}/contacts/${item.id}`);
+	}, [dispatch, folderId, folderStatus, item]);
 
 	const label = useMemo(() => getChipLabel(item), [item]);
 	const secondaryRow = useMemo(
