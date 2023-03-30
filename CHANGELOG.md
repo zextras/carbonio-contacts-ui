@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/zextras/carbonio-contacts-ui/compare/v1.1.5...v1.2.0) (2023-03-30)
+
+
+### Features
+
+* added option to select contact's address book destination ([c212aa7](https://github.com/zextras/carbonio-contacts-ui/commit/c212aa7614a61c3b57f6beaf7473aba0407c6a41))
+* shared address books included in search ([048742b](https://github.com/zextras/carbonio-contacts-ui/commit/048742b7d2b906f5769fa72f13912bd333c0bf86))
+
 ### [1.1.5](https://github.com/zextras/carbonio-contacts-ui/compare/v1.1.4...v1.1.5) (2023-03-16)
 
 ### [1.1.4](https://github.com/zextras/carbonio-contacts-ui/compare/v1.1.3...v1.1.4) (2023-03-10)
