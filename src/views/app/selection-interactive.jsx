@@ -3,18 +3,18 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+import { Container, Padding, Text } from '@zextras/carbonio-design-system';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Container, Padding, Text } from '@zextras/carbonio-design-system';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { useAppSelector } from '../../store/redux';
 import { selectAllContactsInFolder } from '../../store/selectors/contacts';
 
 const generateRandomNumber = () => Math.floor(Math.random() * 4);
 export default function SelectionInteractive() {
 	const [t] = useTranslation();
 	const { folderId } = useParams();
-	const contacts = useSelector((state) => selectAllContactsInFolder(state, folderId));
+	const contacts = useAppSelector((state) => selectAllContactsInFolder(state, folderId));
 	const trashMessages = useMemo(
 		() => [
 			{

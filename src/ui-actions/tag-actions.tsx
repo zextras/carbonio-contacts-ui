@@ -40,6 +40,7 @@ import DeleteTagModal from '../views/secondary-bar/parts/tags/delete-tag-modal';
 import { contactAction } from '../store/actions/contact-action';
 import { ItemType } from '../views/secondary-bar/parts/tags/types';
 import { Contact } from '../types/contact';
+import { useAppDispatch } from '../hooks/redux';
 
 export type ReturnType = {
 	id: string;
@@ -172,7 +173,7 @@ export const TagsDropdownItem = ({
 }): ReactElement => {
 	const [t] = useTranslation();
 	const createSnackbar = useContext(SnackbarManagerContext);
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 	const [checked, setChecked] = useState(includes(contact.tags, tag.id));
 	const [isHovering, setIsHovering] = useState(false);
 	const toggleCheck = useCallback(
@@ -264,7 +265,7 @@ export const MultiSelectTagsDropdownItem = ({
 }): ReactElement => {
 	const [t] = useTranslation();
 	const createSnackbar = useContext(SnackbarManagerContext);
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 	const [isHovering, setIsHovering] = useState(false);
 
 	const tagsToShow = reduce(
