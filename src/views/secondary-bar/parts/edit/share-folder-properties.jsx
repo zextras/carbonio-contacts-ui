@@ -3,8 +3,6 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback, useContext, useMemo, useState } from 'react';
-import { map, replace, split } from 'lodash';
 import {
 	ButtonOld as Button,
 	Chip,
@@ -13,15 +11,16 @@ import {
 	Text,
 	Tooltip
 } from '@zextras/carbonio-design-system';
-import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
 import { useUserAccounts } from '@zextras/carbonio-shell-ui';
-
+import { map, replace, split } from 'lodash';
+import React, { useCallback, useContext, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import { findLabel, ShareFolderRoleOptions } from '../../commons/utils';
-import { Context } from './edit-context';
 import { sendShareNotification } from '../../../../store/actions/send-share-notification';
+import { useAppDispatch } from '../../../../store/redux';
+import { ShareFolderRoleOptions, findLabel } from '../../commons/utils';
 import { capitalise } from '../../utils';
+import { Context } from './edit-context';
 
 const HoverChip = styled(Chip)`
 	background-color: ${({ theme, hovered }) =>
@@ -50,7 +49,7 @@ const Actions = ({ folder, grant, createSnackbar, setActiveModal, onMouseLeave, 
 	const [t] = useTranslation();
 	const accounts = useUserAccounts();
 	const { setActiveGrant } = useContext(Context);
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 	const onRevoke = useCallback(() => {
 		setActiveGrant(grant);
 		setActiveModal('revoke');

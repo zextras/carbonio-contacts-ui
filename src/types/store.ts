@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { ContactsFolder, Contact } from './contact';
+import { Contact, ContactsFolder } from './contact';
 import { SoapContact } from './soap';
 
 export type ContactsSlice = {
@@ -25,7 +25,6 @@ export type FoldersSlice = {
 };
 
 export type State = {
-	sync: SyncSlice;
 	folders: FoldersSlice;
 	contacts: ContactsSlice;
 };

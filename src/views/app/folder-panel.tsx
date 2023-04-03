@@ -3,21 +3,21 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useEffect, useMemo, ReactElement } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import { Container } from '@zextras/carbonio-design-system';
 import { useAppContext } from '@zextras/carbonio-shell-ui';
 import { filter, orderBy } from 'lodash';
+import React, { ReactElement, useEffect, useMemo } from 'react';
+import { useParams } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { useSelection } from '../../hooks/useSelection';
+import { searchContacts } from '../../store/actions/search-contacts';
+import { selectAllContactsInFolder, selectFolderStatus } from '../../store/selectors/contacts';
+import { selectFolder } from '../../store/selectors/folders';
 import { State } from '../../types/store';
 import { ActionsContextProvider } from '../../ui-actions/actions-context';
-import { ContactsList } from './folder-panel/contacts-list';
-import { selectAllContactsInFolder, selectFolderStatus } from '../../store/selectors/contacts';
-import { searchContacts } from '../../store/actions/search-contacts';
-import { useSelection } from '../../hooks/useSelection';
-import { selectFolder } from '../../store/selectors/folders';
-import { Breadcrumbs } from './breadcrumbs';
 import { SelectPanelActions } from '../folder/select-panel-actions';
+import { Breadcrumbs } from './breadcrumbs';
+import { ContactsList } from './folder-panel/contacts-list';
 
 type RouteParams = {
 	folderId: string;
@@ -29,13 +29,13 @@ type UseAppContextType = {
 
 export default function FolderPanel(): ReactElement {
 	const { folderId } = useParams<RouteParams>();
-	const dispatch = useDispatch();
-	const folder = useSelector((state: State) => selectFolder(state, folderId));
-	const folderStatus = useSelector((state: State) => selectFolderStatus(state, folderId));
+	const dispatch = useAppDispatch();
+	const folder = useAppSelector((state) => selectFolder(state, folderId));
+	const folderStatus = useAppSelector((state) => selectFolderStatus(state, folderId));
 	const { setCount } = useAppContext<UseAppContextType>();
 	const { selected, isSelecting, toggle, deselectAll } = useSelection(folderId, setCount);
 
-	const contacts = useSelector((state: State) => selectAllContactsInFolder(state, folderId));
+	const contacts = useAppSelector((state) => selectAllContactsInFolder(state, folderId));
 	const sortedContacts = useMemo(
 		() =>
 			orderBy(
