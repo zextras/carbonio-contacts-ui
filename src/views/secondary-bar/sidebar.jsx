@@ -19,7 +19,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import useGetTagsAccordion from '../../hooks/use-get-tags-accordions';
 import { getShareInfo } from '../../store/actions/get-share-info';
-import { StoreProvider, useAppDispatch, useAppSelector } from '../../store/redux';
+import { StoreProvider } from '../../store/redux';
 import { selectFolders } from '../../store/selectors/folders';
 import { FolderActionsType } from '../../types/folder';
 import { setCustomComponent } from '../folder/accordion-custom-components';
@@ -32,6 +32,7 @@ import { MoveModal } from './move-modal';
 import { NewModal } from './new-modal';
 import ShareFolderModal from './share-folder-modal';
 import { SharesModal } from './shares-modal';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 
 export const nest = (items, id, level) =>
 	map(

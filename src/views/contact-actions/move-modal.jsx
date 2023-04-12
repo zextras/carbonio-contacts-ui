@@ -10,13 +10,13 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { contactAction } from '../../store/actions/contact-action';
-import { useAppSelector } from '../../store/redux';
 import { selectFolders } from '../../store/selectors/folders';
 import { getFolderTranslatedName } from '../../utils/helpers';
 import FolderItem from '../secondary-bar/commons/folder-item';
 import { ModalHeader } from '../secondary-bar/commons/modal-header';
 import ModalFooter from './commons/modal-footer';
 import { NewModal } from './new-modal';
+import { useAppSelector } from '../../hooks/redux';
 
 export default function MoveModal({
 	onClose,

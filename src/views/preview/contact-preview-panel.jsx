@@ -16,11 +16,12 @@ import { useDispatch } from 'react-redux';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { useDisplayName } from '../../hooks/use-display-name';
 import { contactAction } from '../../store/actions/contact-action';
-import { StoreProvider, useAppSelector } from '../../store/redux';
+import { StoreProvider } from '../../store/redux';
 import { selectContact } from '../../store/selectors/contacts';
 import MoveModal from '../contact-actions/move-modal';
 import ContactPreviewContent from './contact-preview-content';
 import ContactPreviewHeader from './contact-preview-header';
+import { useAppSelector } from '../../hooks/redux';
 
 export default function ContactPreviewPanel() {
 	const [t] = useTranslation();
