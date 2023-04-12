@@ -93,6 +93,7 @@ export default function App() {
 		});
 		addSearchView({
 			route: CONTACTS_ROUTE,
+			label: t('label.app_name', 'Contacts'),
 			component: SearchView
 		});
 		addBoardView({
