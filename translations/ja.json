@@ -92,7 +92,8 @@
                 "body": {
                     "message1": "選択したアドレス帳を空にしますか？",
                     "message2": "空にすると、関連するコンテンツがすべてゴミ箱に移動されます。"
-                }
+                },
+                "message1": "選択したアドレス帳を空にしますか？"
             },
             "item": {
                 "empty": "利用可能なアイテムはありません"
@@ -143,7 +144,6 @@
         "revoke_without_notification": "通知を送信せずにアクセス権を取り消す",
         "revoke_with_custom_msg": "カスタム通知を送信してアクセス権を取り消す",
         "root": "ルート",
-        "single_advanced_filter": "高度なフィルタ",
         "type": "種類",
         "website": "ウェブサイト",
         "email": "メール",

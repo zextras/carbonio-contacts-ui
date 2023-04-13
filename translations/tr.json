@@ -54,7 +54,11 @@
                 "body": {
                     "message1": "Seçili adres defterini boşaltmak istiyor musunuz?",
                     "message2": "Boşaltırsanız, ilgili tüm içerik çöp kutusuna taşınacak."
-                }
+                },
+                "message1": "Seçili adres defterini boşaltmak istiyor musunuz?",
+                "message2": "İlgili tüm kişiler kalıcı olarak silinecek ve bunları kurtarmak mümkün olmayacaktır.",
+                "message3": "Çöp Kutusunu boşaltmak istiyor musunuz?",
+                "message4": "İçeriği kalıcı olarak silinecek ve kurtarılması mümkün olmayacaktır."
             },
             "item": {
                 "empty": "Hiç öğe bulunamadı"
@@ -158,7 +162,6 @@
         "revoke_without_notification": "Bildirim göndermeden erişimi iptal edin",
         "revoke_with_custom_msg": "Özel bildirim göndererek erişimi iptal edin",
         "root": "Kök",
-        "single_advanced_filter": "Gelişmiş Filtreleme",
         "type": "Tür",
         "website": "Web Sitesi",
         "website_plural": "Web Siteleri",
@@ -192,7 +195,10 @@
         "delete_tag": "Etiketi Sil",
         "create_tag": "Etiket Oluştur",
         "no_name": "İsim yok",
-        "no_data": "Veri yok"
+        "no_data": "Veri yok",
+        "contact_created_in_folder": "Bu kişi \"{{ name }}\" klasöründe oluşturulacak",
+        "destination_address_book": "Hedef Adres Defteri",
+        "include_shared_folders": "Paylaşılan adres defterlerini dahil et"
     },
     "job": {
         "company": "Firma",
@@ -321,5 +327,8 @@
         "root": "Kök",
         "contacts": "Kişiler",
         "auto_contacts": "E-posta Gönderilmiş Kişiler"
+    },
+    "search": {
+        "shared_folders_note": "Paylaşılan adres defterlerini aramalara dahil edin."
     }
 }
