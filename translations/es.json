@@ -59,7 +59,7 @@
         "edit_tag_name": "Editar etiqueta \"{{name}}\"",
         "edit_tag": "Editar etiqueta",
         "delete_tag_name": "Eliminar etiqueta",
-        "delete_tag": "Eliminar etiqueta",
+        "delete_tag": "Eliminar Etiqueta",
         "create_tag": "Nueva Etiqueta",
         "no_name": "Sin Nombre",
         "no_data": "Sin datos"
@@ -67,17 +67,17 @@
     "share": {
         "none": "Ninguno",
         "add": "Añadir",
-        "admin": "Admin",
+        "admin": "Administrar",
         "owner": "Propietario",
         "read": "Leído",
         "options": {
             "share_calendar_with": {
                 "external_guests": "Invitados externos (solo ver)",
                 "internal_users_groups": "Usuarios o grupos internos",
-                "public": "Público (solo ver, no necesita contraseña)"
+                "public": "Público (solo ver, no se necesita contraseña)"
             }
         },
-        "administer": "Administrador",
+        "administer": "Control total",
         "allowed_actions": "Acciones permitidas",
         "contact_folder": "Libreta de direcciones",
         "filter_user": "Encontrar usuarios",
@@ -86,15 +86,15 @@
         "find_shares": "Encontrar usos compartidos",
         "find_shares_label": "Elige las libretas de direcciones compartidas que quieres ver",
         "insert": "Insertar",
-        "manager": "Controlador",
+        "manager": "Administrar",
         "remove_from_this_list": "Remover de la lista",
         "role": "Permisos",
         "send_notification": "Enviar notificación sobre este uso compartido",
-        "share_note": "El mensaje estándar muestra tu nombre, el nombre del recurso compartido, los permisos otorgados a los usuarios y la información de acceso.",
+        "share_note": "El mensaje estándar muestra tu nombre, el nombre del recurso compartido, los permisos otorgados a los usuarios y la información de acceso, si fuera necesaria.",
         "standard_message": "Añadir una nota al mensaje estándar",
         "share_added_succesfully": "Se ha añadido el uso compartido",
         "share_info": "Información sobre el uso compartido de la libreta",
-        "share_removed_succesfully": "Los permisos han sido anulados",
+        "share_removed_succesfully": "Los permisos han sido removidos",
         "shared_folders": "Libretas de direcciones compartidas",
         "shared_item": "Elemento compartido",
         "shared_items": "Libretas compartidas de {{value}}",
@@ -104,7 +104,7 @@
     },
     "action": {
         "search": "Buscar",
-        "delete_permanently": "Eliminar permanentemente",
+        "delete_permanently": "Eliminar definitivamente",
         "goto_folder": "Ir a la carpeta",
         "reset_filters": "Restablecer campos",
         "share_folder": "Compartir carpeta",
@@ -115,7 +115,7 @@
             "delete": {
                 "body": {
                     "message1": "¿Quieres eliminar la libreta seleccionada? Al hacerlo, su contenido será borrado y los contactos ya no se podrán recuperar.",
-                    "message2": "¿Quieres eliminar la libreta seleccionada de forma permanente? Al hacerlo, su contenido será borrado y los contactos ya no se podrán recuperar."
+                    "message2": "¿Quieres eliminar definitivamente la libreta seleccionada? Al hacerlo, su contenido será borrado y los contactos ya no se podrán recuperar."
                 }
             },
             "edit": {
@@ -169,7 +169,7 @@
                 "folder": "Vaciar libreta de direcciones"
             },
             "delete": "Eliminar libreta de direcciones",
-            "delete_permanently": "Eliminar permanentemente",
+            "delete_permanently": "Eliminar definitivamente",
             "edit": "Editar libreta de direcciones",
             "move": "Mover",
             "moved": "La libreta ha sido movida"
@@ -180,7 +180,7 @@
             "folder_new": "Nueva libreta de direcciones creada",
             "trash_empty": "La Papelera ha sido vaciada",
             "folder_empty": "Se ha vaciado la libreta de direcciones",
-            "address_book_permanently_deleted": "Libreta eliminada permanentemente"
+            "address_book_permanently_deleted": "Libreta eliminada definitivamente"
         },
         "type": "Carpeta de Contactos"
     },
@@ -225,7 +225,7 @@
     "messages": {
         "snackbar": {
             "address_book_moved": "Libreta de direcciones movida a la carpeta de destino",
-            "contact_deleted_permanently": "Contacto eliminado permanentemente",
+            "contact_deleted_permanently": "Contacto eliminado definitivamente",
             "contact_moved": "Contacto movido",
             "contact_moved_to_trash": "Contacto movido a la Papelera",
             "contact_restored": "Contacto restaurado",
@@ -236,9 +236,9 @@
         },
         "modal": {
             "delete": {
-                "sure_delete_contact": "¿Seguro que quieres eliminar este contacto de forma permanente?",
-                "sure_delete_contact_plural": "¿Seguro que quieres eliminar estos contactos de forma permanente?",
-                "if_delete_lost_forever": "Si eliminas este contacto de forma permanente ya no podrás recuperarlo, ¿continuar?"
+                "sure_delete_contact": "¿Seguro que quieres eliminar definitivamente este contacto?",
+                "sure_delete_contact_plural": "¿Seguro que quieres eliminar definitivamente estos contactos?",
+                "if_delete_lost_forever": "Si eliminas definitivamente este contacto ya no podrás recuperarlo, ¿continuar?"
             }
         }
     },
@@ -255,7 +255,7 @@
                 "add_contact_to_emailed_contacts": "Añadir nuevos contactos a \"Contactos respondidos\"",
                 "autocomplete_on_comma": "Autocompletar dirección de e-mail escribiendo una coma",
                 "incl_addrs_in_glbl_addrs_list": "Incluir direcciones de la Lista Global de Direcciones",
-                "include_add_in_shared_contact": "Mostrar direcciones de contactos compartidos",
+                "include_add_in_shared_contact": "Incluir direcciones de los contactos compartidos",
                 "srch_glbl_addrs_list": "Buscar primero en la GAL al mostrar las sugerencias de contactos"
             }
         }
@@ -263,17 +263,17 @@
     "snackbar": {
         "folder_edited": "Se ha editado la libreta de direcciones",
         "folder_shared": "Libreta de direcciones compartida",
-        "share_resend": "Se ha reenviado la invitación de uso compartido",
+        "share_resend": "Se ha reenviado la invitación para el uso compartido",
         "share_revoke": "Permiso de uso compartido revocado",
-        "share_updated": "Permisos de acceso actualizados",
-        "tag_removed": "Etiqueta \"{{tag}}\" removida",
+        "share_updated": "Derechos de acceso actualizados",
+        "tag_removed": "Etiqueta \"{{tag}}\" eliminada",
         "tag_applied": "Etiqueta \"{{tag}}\" aplicada"
     },
     "title": {
         "advanced_filters": "Filtros avanzados"
     },
     "tooltip": {
-        "resend": "Enviar una notificación por correo sobre este uso compartido",
+        "resend": "Enviar notificación por correo sobre este uso compartido",
         "revoke": "Revocar acceso",
         "address_book_sharing_status": "Compartido con {{count}} persona",
         "address_book_sharing_status_plural": "Compartido con {{count}} personas"

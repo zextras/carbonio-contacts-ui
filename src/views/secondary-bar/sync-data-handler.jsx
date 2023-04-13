@@ -4,22 +4,22 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { useNotify, useRefresh } from '@zextras/carbonio-shell-ui';
-import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { forEach, isEmpty, sortBy } from 'lodash';
+import { useEffect, useState } from 'react';
 import {
+	handleCreatedContactsSync,
 	handleDeletedContactsSync,
-	handleModifiedContactsSync,
-	handleCreatedContactsSync
+	handleModifiedContactsSync
 } from '../../store/slices/contacts-slice';
 import { handleFoldersSync, handleRefresh } from '../../store/slices/folders-slice';
 import { normalizeSyncContactsFromSoap } from '../../utils/normalizations/normalize-contact-from-soap';
+import { useAppDispatch } from '../../hooks/redux';
 
 export const SyncDataHandler = () => {
 	const notifyList = useNotify();
 	const [seq, setSeq] = useState(-1);
 	const refresh = useRefresh();
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 	const [initialized, setInitialized] = useState(false);
 
 	useEffect(() => {

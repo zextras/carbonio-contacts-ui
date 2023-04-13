@@ -5,7 +5,7 @@
  */
 import { Folder, FOLDERS } from '@zextras/carbonio-shell-ui';
 import { cloneDeep, filter, find, forEach, map, merge, reduce, reject, some } from 'lodash';
-import { TFunction } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import { Contact, ContactsFolder } from '../types/contact';
 import { ContactsSlice, FoldersSlice } from '../types/store';
 

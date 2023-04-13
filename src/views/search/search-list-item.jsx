@@ -3,22 +3,17 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { useDispatch, useSelector } from 'react-redux';
-import React, { useCallback, useMemo } from 'react';
-import { trim, split, head, reduce, includes } from 'lodash';
 import { Container, Padding, Row, Text, Tooltip } from '@zextras/carbonio-design-system';
-import { useHistory, useLocation } from 'react-router-dom';
-import {
-	pushHistory,
-	replaceHistory,
-	useTags,
-	ZIMBRA_STANDARD_COLORS
-} from '@zextras/carbonio-shell-ui';
-import { selectFolderStatus } from '../../store/selectors/contacts';
+import { ZIMBRA_STANDARD_COLORS, pushHistory, useTags } from '@zextras/carbonio-shell-ui';
+import { includes, reduce, trim } from 'lodash';
+import React, { useCallback, useMemo } from 'react';
+import { useDispatch } from 'react-redux';
+import { useAppSelector } from '../../hooks/redux';
 import { searchContacts } from '../../store/actions/search-contacts';
-import ListItemActionWrapper from '../folder/list-item-action-wrapper';
+import { selectFolderStatus } from '../../store/selectors/contacts';
 import { ItemAvatar } from '../app/folder-panel/item-avatar';
 import { RowInfo } from '../app/folder-panel/item-content';
+import ListItemActionWrapper from '../folder/list-item-action-wrapper';
 
 const getChipLabel = (item) => {
 	if (item.firstName ?? item.middleName ?? item.lastName) {
@@ -29,7 +24,7 @@ const getChipLabel = (item) => {
 const SearchListItem = ({ item, selected, selecting, toggle, active }) => {
 	const dispatch = useDispatch();
 	const folderId = item.parent;
-	const folderStatus = useSelector((state) => selectFolderStatus(state, folderId));
+	const folderStatus = useAppSelector((state) => selectFolderStatus(state, folderId));
 
 	const _onClick = useCallback(() => {
 		if (!folderStatus) {
