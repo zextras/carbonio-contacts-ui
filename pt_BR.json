@@ -1,9 +1,9 @@
 {
     "action": {
         "search": "Buscar",
-        "delete_permanently": "Excluir Permanentemente",
+        "delete_permanently": "Excluir permanentemente",
         "goto_folder": "Ir para a pasta",
-        "reset_filters": "Redefinir Filtros",
+        "reset_filters": "Redefinir filtros",
         "send_msg": "Enviar e-mail",
         "share_folder": "Compartilhar pasta"
     },
@@ -11,8 +11,8 @@
         "modal": {
             "delete": {
                 "body": {
-                    "message1": "Deseja excluir a agenda de endereços selecionada? Ao excluí-la, seu conteúdo será removido permanentemente e ela não será mais recuperável.",
-                    "message2": "Deseja excluir permanentemente a agenda de endereços selecionada? Ao excluí-la, seu conteúdo será removido permanentemente e ela não poderá mais ser recuperada."
+                    "message1": "Deseja excluir a agenda de contatos selecionada? Ao excluí-la, seu conteúdo será removido permanentemente e não será mais recuperável.",
+                    "message2": "Deseja excluir permanentemente a agenda de contatos selecionada? Ao excluí-la, seu conteúdo será removido permanentemente e não será mais recuperável."
                 }
             },
             "edit": {
@@ -24,32 +24,32 @@
             },
             "move": {
                 "body": {
-                    "message1": "Selecione uma agenda de endereços para movê-la para:",
+                    "message1": "Escolha a agenda para a qual deseja mover a selecionada:",
                     "message3": "Selecione uma pasta para mover a selecionada:"
                 },
                 "input": {
-                    "filter": "Filtrar agenda de endereços"
+                    "filter": "Filtrar agenda de contatos"
                 }
             },
             "new": {
                 "body": {
-                    "message1": "Novo nome para a agenda de endereços",
-                    "message2": "Selecione uma agenda de endereços que irá conter a recém criada:"
+                    "message1": "Nome da nova agenda de contatos",
+                    "message2": "Selecione a agenda de contatos que irá conter a recém criada:"
                 },
-                "create_footer": "Criar e Mover",
+                "create_footer": "Criar e mover",
                 "input": {
-                    "name": "Insira o nome para a agenda de endereços",
+                    "name": "Insira o nome para a agenda de contatos",
                     "name_exist": "O nome já existe neste caminho"
                 },
-                "title": "Criar nova agenda de endereços",
+                "title": "Criar nova agenda de contatos",
                 "title2": "Criação de nova pasta"
             },
             "restore": {
-                "create_footer": "Criar e Restaurar"
+                "create_footer": "Criar e restaurar"
             },
             "empty": {
                 "body": {
-                    "message1": "Deseja esvaziar a agenda de endereços selecionada?",
+                    "message1": "Deseja esvaziar a agenda de contatos selecionada?",
                     "message2": "Ao esvaziá-la, todo seu conteúdo será movido para a lixeira."
                 }
             },
@@ -61,28 +61,28 @@
             }
         },
         "action": {
-            "delete": "Excluir agenda de endereços",
-            "delete_permanently": "Excluir agenda de endereços permanentemente",
-            "edit": "Editar agenda de endereços",
+            "delete": "Excluir agenda de contatos",
+            "delete_permanently": "Excluir agenda permanentemente",
+            "edit": "Editar agenda de contatos",
             "empty": {
-                "folder": "Esvaziar agenda de endereços",
+                "folder": "Esvaziar agenda de contatos",
                 "trash": "Esvaziar lixeira"
             },
             "move": "Mover",
-            "moved": "Agenda de endereços movida com sucesso"
+            "moved": "Agenda de contatos movida com sucesso"
         },
-        "share_folder": "Compartilhar agenda de endereços",
+        "share_folder": "Compartilhar agenda",
         "snackbar": {
-            "address_book_moved_to_trash": "Agenda de endereços movida para lixeira",
-            "folder_empty": "Agenda de endereços esvaziada com sucesso",
-            "folder_new": "Nova agenda de endereços criada",
+            "address_book_moved_to_trash": "Agenda movida para a lixeira",
+            "folder_empty": "Agenda esvaziada com sucesso",
+            "folder_new": "Nova agenda de contatos criada",
             "trash_empty": "Lixeira esvaziada com sucesso",
-            "address_book_permanently_deleted": "Agenda de endereços excluída permanentemente"
+            "address_book_permanently_deleted": "Agenda excluída permanentemente"
         },
         "type": "Pasta de contatos"
     },
     "job": {
-        "company": "Empresa",
+        "company": "Organização",
         "department": "Departamento",
         "title": "Função"
     },
@@ -93,41 +93,40 @@
         "share": "Compartilhar",
         "contact_setting": "Configurações de contato",
         "create": "Criar",
-        "edit_access": "Editar acesso",
+        "edit_access": "Editar permissões",
         "edit_folder_properties": "Editar propriedades de {{name}}",
         "resend": "Reenviar",
         "revoke": "Revogar",
         "revoke_share": "Revogar compartilhamento de {{title}}",
-        "shares_folder_edit": "Compartilhando esta agenda de endereços",
+        "shares_folder_edit": "Compartilhamento da agenda de contatos",
         "notes": "Notas",
         "of": "de",
         "restore": "Restaurar",
         "results_for": "Resultados para:",
-        "revoke_with_standard_msg": "Revogar acesso enviando uma notificação padrão",
+        "revoke_with_standard_msg": "Revogar acesso enviando a notificação padrão",
         "revoke_with_custom_msg": "Revogar acesso enviando uma notificação personalizada",
-        "single_advanced_filter": "Filtro avançado",
         "type": "Tipo",
         "website": "Website",
-        "website_plural": "Website",
+        "website_plural": "Websites",
         "contacts": "Contatos",
-        "delete": "Apagar",
+        "delete": "Excluir",
         "edit_access_name": "Editar acesso de {{name}}",
         "email": "E-mail",
-        "empty": "Vazia",
+        "empty": "Esvaziar",
         "error_try_again": "Algo deu errado. Tente novamente",
         "move": "Mover",
         "revoke_without_notification": "Revogar acesso sem enviar notificação",
         "root": "Raiz",
         "undo": "Desfazer",
         "activate_selection_mode": "Ativar modo de seleção",
-        "address_book_restored": "Agenda de endereços restaurada",
-        "advanced_filter": "{{count}} Filtro Avançado",
-        "advanced_filter_plural": "{{count}} Filtros Avançados",
+        "address_book_restored": "Agenda de contatos restaurada",
+        "advanced_filter": "{{count}} Filtro avançado",
+        "advanced_filter_plural": "{{count}} Filtros avançados",
         "discard_changes": "DESCARTAR MODIFICAÇÕES",
-        "new_address_book": "Nova agenda de endereços",
+        "new_address_book": "Nova agenda de contatos",
         "new_contact_created": "Novo contato criado",
-        "search_activate_selection_mode": "Modo de seleção ainda não está disponível nos resultados da busca",
-        "add_share": "Adicionar Compartilhamento",
+        "search_activate_selection_mode": "Modo de seleção ainda não está disponível para resultados da busca",
+        "add_share": "Adicionar compartilhamento",
         "folder_name": "Nome da pasta",
         "note": "Nota:",
         "options": "Opções",
@@ -137,66 +136,66 @@
         "cannot_move": "Não é possível mover para a mesma pasta",
         "select_color": "Selecionar cor",
         "edit_invalid_email": "E-mail inválido. Clique para editá-lo",
-        "edit_email": "Editar E-mail",
+        "edit_email": "Editar e-mail",
         "tags": "Marcadores",
-        "tag_name": "Nome da Etiqueta",
+        "tag_name": "Nome do marcador",
         "tag_max_length": "Máximo de 128 caracteres permitidos",
         "tag": "Marcador",
-        "no_special_char_allowed": "O nome não deve conter caracteres especiais",
+        "no_special_char_allowed": "O nome não pode conter caracteres especiais",
         "new_tag": "Novo marcador",
-        "edit_tag_name": "Editar etiqueta \"{{name}}\"",
-        "edit_tag": "Editar Etiqueta",
-        "delete_tag_name": "Excluir etiqueta \"{{name}}\"",
-        "delete_tag": "Excluir Etiqueta",
-        "create_tag": "Criar Etiqueta",
-        "no_name": "Sem Nome",
-        "no_data": "Sem Dados"
+        "edit_tag_name": "Editar o marcador \"{{name}}\"",
+        "edit_tag": "Editar marcador",
+        "delete_tag_name": "Excluir marcador",
+        "delete_tag": "Excluir marcador",
+        "create_tag": "Criar marcador",
+        "no_name": "Sem nome",
+        "no_data": "Sem dados"
     },
     "share": {
         "add": "Adicionar",
-        "admin": "Admin",
+        "admin": "Administrar",
         "owner": "Proprietário",
-        "read": "Leitura",
-        "none": "None",
-        "administer": "Administrador",
+        "read": "Lida",
+        "none": "Nenhum",
+        "administer": "Administrar",
         "allowed_actions": "Ações permitidas",
-        "contact_folder": "Agenda de Endereços",
+        "contact_folder": "Agenda de contatos",
         "filter_user": "Encontrar usuários",
-        "find_contact_shares": "Encontrar Compartilhamentos de Contato",
-        "find_shares": "Encontrar Compartilhamentos",
-        "find_shares_label": "Selecione em qual agenda de endereços deseja ver a árvore de contatos",
+        "find_contact_shares": "Encontrar contatos compartilhados",
+        "find_shares": "Encontrar compartilhamentos",
+        "find_shares_label": "Selecione as agendas compartilhadas que serão exibidas",
         "insert": "Inserir",
-        "manager": "Gerente",
+        "manager": "Gerenciar",
         "options": {
             "share_calendar_with": {
                 "internal_users_groups": "Usuários ou grupos internos",
-                "public": "Público (apenas ver, senha não necessária)",
-                "external_guests": "Convidados externos (apenas podem visualizar)"
+                "public": "Público (apenas ver, senha não requerida)",
+                "external_guests": "Convidados externos (apenas visualizar)"
             }
         },
         "recipients_address": "Endereços de e-mail dos destinatários",
         "remove_from_this_list": "Remover desta lista",
-        "role": "Função",
+        "role": "Papel",
         "send_notification": "Enviar notificação sobre este compartilhamento",
         "share_added_succesfully": "Compartilhamento adicionado com sucesso",
-        "share_info": "Informação da agenda de endereços compartilhada",
+        "share_info": "Informações da agenda compartilhada",
         "share_note": "A mensagem padrão exibe seu nome, o nome do item compartilhado, as permissões concedidas aos destinatários e as informações de acesso.",
         "share_removed_succesfully": "Compartilhamento removido com sucesso",
-        "shared_folders": "Agendas de Endereços Compartilhadas",
-        "shared_item": "Item Compartilhado",
-        "shared_items": "Agendas de endereço compartilhadas de {{value}}",
-        "standard_message": "Adicionar uma nota à mensagem padrão",
-        "viewer": "Visualizador",
-        "workflow": "Fluxo de Trabalho",
+        "shared_folders": "Agendas compartilhadas",
+        "shared_item": "Item compartilhado",
+        "shared_items": "Agendas compartilhadas de {{value}}",
+        "standard_message": "Adicionar nota à mensagem padrão",
+        "viewer": "Visualizar",
+        "workflow": "Fluxo de trabalho",
         "write": "Escrever"
     },
     "name": {
         "nickName": "Apelido",
         "first_name": "Nome",
-        "last_name": "Último Nome",
-        "middle_name": "Nome do Meio",
-        "prefix": "Título",
-        "suffix": "Sufixo"
+        "last_name": "Sobrenome",
+        "middle_name": "Nome do meio",
+        "prefix": "Pronome de tratamento",
+        "suffix": "Complem. do nome"
     },
     "section": {
         "field": {
@@ -211,16 +210,16 @@
             "address": "Endereço",
             "address_plural": "Endereços",
             "mail": "Endereço de e-mail",
-            "phone_number": "Contato telefônico"
+            "phone_number": "Telefone"
         }
     },
     "message": {
         "snackbar": {
             "settings_saved": "Edições salvas corretamente"
         },
-        "delete_tag_message2": "Uma vez excluída, ela será removida de todos os itens marcados com a mesma.",
-        "delete_tag_message1": "Tem certeza que deseja excluir a Etiqueta \"{{name}}\"?",
-        "require_field": "Preencha pelo menos um dos campos * obrigatórios",
+        "delete_tag_message2": "Uma vez excluído, ele será removido de todos os itens marcados com o mesmo.",
+        "delete_tag_message1": "Tem certeza que deseja excluir o marcador \"{{name}}\"?",
+        "require_field": "Preencha pelo menos um dos campos obrigatórios (*)",
         "new_contact": "Este contato será criado na pasta \"Contatos\""
     },
     "messages": {
@@ -232,19 +231,19 @@
             }
         },
         "snackbar": {
-            "address_book_moved": "Agenda de endereços movida para a pasta de destino",
+            "address_book_moved": "Agenda de contatos movida para a pasta de destino",
             "contact_deleted_permanently": "Contato excluído permanentemente",
             "contact_moved": "Contato movido",
             "contact_moved_to_trash": "Contato movido para a lixeira",
-            "contact_restored": "Contato recuperado",
-            "tag_updated": "Etiqueta atualizada com sucesso",
-            "tag_not_updated": "Algo deu errado, a etiqueta não foi atualizada. Tente novamente.",
-            "tag_deleted": "Etiqueta {{name}} excluída com sucesso",
-            "tag_created": "Etiqueta {{name}} criada com sucesso"
+            "contact_restored": "Contato restaurado",
+            "tag_updated": "Marcador atualizado com sucesso",
+            "tag_not_updated": "Algo deu errado, o marcador não foi atualizado. Tente novamente.",
+            "tag_deleted": "Marcador \"{{name}}\" excluído com sucesso",
+            "tag_created": "Marcador \"{{name}}\" criado com sucesso"
         }
     },
     "modal": {
-        "address_book_name": "Nome da agenda de endereços",
+        "address_book_name": "Nome da agenda de contatos",
         "destination": "Pasta de destino"
     },
     "select": {
@@ -253,22 +252,22 @@
     "settings": {
         "contacts": {
             "checkbox": {
-                "add_contact_to_emailed_contacts": "Adicionar novos contatos para \"Contatados por e-mail\"",
-                "autocomplete_on_comma": "Selecione o preenchimento automático para for inserida uma vírgula",
-                "include_add_in_shared_contact": "Incluir endereços nos contatos compartilhados",
-                "srch_glbl_addrs_list": "Buscar primeiro na Lista Global de Endereços quando for usado o seletor de contato",
-                "incl_addrs_in_glbl_addrs_list": "Incluir endereços na Lista Global de Endereços"
+                "add_contact_to_emailed_contacts": "Adicionar novos contatos aos \"Contatos que receberam e-mail\"",
+                "autocomplete_on_comma": "Preencher endereço de e-mail automáticamente ao digitar vírgula",
+                "include_add_in_shared_contact": "Mostrar endereços de contatos compartilhados",
+                "srch_glbl_addrs_list": "Procurar primeiro na GAL ao exibir sugestões de contato",
+                "incl_addrs_in_glbl_addrs_list": "Mostrar endereços da Global Address List"
             }
         }
     },
     "snackbar": {
-        "folder_edited": "Agenda de endereços editada com sucesso",
-        "folder_shared": "Agenda de endereços compartilhada",
+        "folder_edited": "Agenda de contatos editada com sucesso",
+        "folder_shared": "Agenda de contatos compartilhada",
         "share_resend": "Convite do compartilhamento reenviado",
-        "share_revoke": "Acesso ao compartilhamento revogado",
-        "share_updated": "Direitos de acesso atualizados",
-        "tag_removed": "Etiqueta \"{{tag}}\" removida",
-        "tag_applied": "Etiqueta \"{{tag}}\" aplicada"
+        "share_revoke": "Acesso compartilhado revogado",
+        "share_updated": "Direitos de acesso atualizadas",
+        "tag_removed": "Marcador \"{{tag}}\" removido",
+        "tag_applied": "Marcador \"{{tag}}\" aplicado"
     },
     "tooltip": {
         "revoke": "Revogar acesso",
@@ -277,7 +276,7 @@
         "address_book_sharing_status_plural": "Compartilhado com {{count}} pessoas"
     },
     "title": {
-        "advanced_filters": "Filtros Avançados"
+        "advanced_filters": "Filtros avançados"
     },
     "types": {
         "mobile": "celular",
@@ -287,35 +286,35 @@
     },
     "displayer": {
         "title5": "Selecionar um contato",
-        "description2": "Clique no botão \"NOVO\" para começar a criar um novo.",
-        "description6": "Use o modo \"Editar\" para adicionar uma nota pessoal a um contato.",
+        "description2": "Clique no botão \"NOVO\" para criar um contato.",
+        "description6": "Use a opção \"Editar\" para adicionar uma nota personalizada.",
         "description7": "Crie um grupo de contatos clicando no botão \"NOVO\".",
-        "description8": "Selecione um contato ou um grupo de contatos para enviar e-mails compartilhados.",
-        "list_title1": "Parece que ainda não existem contatos",
+        "description8": "Selecione um contato ou grupo de contatos para enviar um e-mail.",
+        "list_title1": "Parece que ainda não tem contatos",
         "list_title2": "A lixeira está vazia",
         "search_description2": "Tente iniciar uma nova busca.",
         "search_description3": "Verifique a ortografia e as opções dos filtros ou tente com outra palavra-chave.",
         "search_list_title2": "Nenhum dos itens corresponde à sua busca.",
-        "search_title1": "Iniciar nova busca",
-        "search_title2": "Lamentamos, mas não existem resultados para sua busca",
-        "search_title3": "Não existem resultados para sua busca.",
-        "title1": "Crie um novo contato clicando no botão \"NOVO\".",
-        "description4": "Crie um novo clicando no botão \"NOVO\".",
+        "search_title1": "Inicie uma nova busca",
+        "search_title2": "Não há resultados para sua busca",
+        "search_title3": "Não há resultados para sua busca.",
+        "title1": "Crie um contato clicando no botão \"NOVO\".",
+        "description4": "Crie um clicando no botão \"NOVO\".",
         "title10": "Selecione e recupere contatos da lixeira",
-        "title2": "Compartilhe todos os seus trabalhos com seus contatos.",
+        "title2": "Compartilhe seus trabalhos com seus contatos.",
         "title3": "Mantenha contato com seus colegas.",
-        "title4": "Personalize seus contatos adicionando notas pessoais",
+        "title4": "Personalize seus contatos adicionando notas descritivas",
         "title6": "Personalizar um contato",
-        "title8": "Enviar e-mail compartilhado",
+        "title8": "Enviar e-mail",
         "title9": "Clique no ícone da lixeira para excluir um contato.",
-        "description3": "Clique no botão \"NOVO\" para criar um novo grupo de contatos.",
+        "description3": "Clique no botão \"NOVO\" para criar um grupo de contatos.",
         "description5": "Descubra todas as formas que você pode se conectar com outros usuários.",
-        "search_description1": "Ou selecione \"Filtros Avançados\" para refinar sua busca.",
-        "search_list_title1": "Parece que não existem resultados. Continue buscando!",
+        "search_description1": "Ou selecione \"Filtros avançados\" para refinar sua busca.",
+        "search_list_title1": "Parece que não há resultados. Continue buscando!",
         "search_title4": "Selecione um ou mais resultados para realizar ações ou exibir os detalhes.",
         "title7": "Mantenha contato com seus colegas"
     },
-    "contact_restored": "Contato recuperado",
+    "contact_restored": "Contato restaurado",
     "folders": {
         "trash": "Lixeira",
         "root": "Raiz",

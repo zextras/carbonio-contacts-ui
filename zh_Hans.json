@@ -89,7 +89,8 @@
                 "body": {
                     "message2": "如果清空，所有相关内容都将被移动至垃圾箱。",
                     "message1": "是否清空所选地址簿？"
-                }
+                },
+                "message1": "是否清空所选地址簿？"
             },
             "footer": {
                 "go_back": "返回"
@@ -141,7 +142,6 @@
         "type": "类型",
         "undo": "撤消",
         "delete": "删除",
-        "single_advanced_filter": "高级过滤条件",
         "website": "网站",
         "activate_selection_mode": "激活选择模式",
         "address_book_restored": "地址簿已恢复",

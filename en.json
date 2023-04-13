@@ -68,7 +68,11 @@
                 "body": {
                     "message1": "Do you want to empty the selected address book?",
                     "message2": "If you empty it, all the related content will be moved to trash."
-                }
+                },
+                "message1": "Do you want to empty the selected address book?",
+                "message2": "All the related contacts will be permanently deleted and it won't be possible to recover them.",
+                "message3": "Do you want to empty the trash?",
+                "message4": "Its content will be permanently deleted and it won't be possible to recover it."
             },
             "footer": {
                 "go_back": "Go back"
@@ -132,6 +136,7 @@
         "app_name": "Contacts",
         "cancel": "Cancel",
         "cannot_move": "Cannot move to same folder",
+        "contact_created_in_folder": "This contact will be created in the \"{{name}}\" folder",
         "contact_setting": "Contact Settings",
         "contacts": "Contacts",
         "create": "Create",
@@ -139,6 +144,7 @@
         "delete": "Delete",
         "delete_tag": "Delete Tag",
         "delete_tag_name": "Delete \"{{name}}\" tag",
+        "destination_address_book": "Destination address book",
         "discard_changes": "DISCARD CHANGES",
         "edit": "Edit",
         "edit_access": "Edit access",
@@ -152,6 +158,7 @@
         "empty": "Empty",
         "error_try_again": "Something went wrong, please try again",
         "folder_name": "Folder name",
+        "include_shared_folders": "Include shared address books",
         "move": "Move",
         "new_address_book": "New address Book",
         "new_contact": "New contact",
@@ -179,7 +186,6 @@
         "share": "Share",
         "share_with": "Share with",
         "shares_folder_edit": "Sharing of this address book",
-        "single_advanced_filter": "Advanced Filter",
         "tag": "Tag",
         "tag_max_length": "Max 128 characters are allowed",
         "tag_name": "Tag name",
@@ -229,6 +235,9 @@
         "nickName": "Nickname",
         "prefix": "Prefix",
         "suffix": "Suffix"
+    },
+    "search": {
+        "shared_folders_note": "Include shared address books in searches."
     },
     "section": {
         "field": {
