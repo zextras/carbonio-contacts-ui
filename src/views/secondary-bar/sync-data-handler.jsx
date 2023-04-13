@@ -6,7 +6,6 @@
 import { useNotify, useRefresh } from '@zextras/carbonio-shell-ui';
 import { forEach, isEmpty, sortBy } from 'lodash';
 import { useEffect, useState } from 'react';
-import { useAppDispatch } from '../../store/redux';
 import {
 	handleCreatedContactsSync,
 	handleDeletedContactsSync,
@@ -14,6 +13,7 @@ import {
 } from '../../store/slices/contacts-slice';
 import { handleFoldersSync, handleRefresh } from '../../store/slices/folders-slice';
 import { normalizeSyncContactsFromSoap } from '../../utils/normalizations/normalize-contact-from-soap';
+import { useAppDispatch } from '../../hooks/redux';
 
 export const SyncDataHandler = () => {
 	const notifyList = useNotify();

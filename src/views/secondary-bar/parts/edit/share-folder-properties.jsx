@@ -17,10 +17,10 @@ import React, { useCallback, useContext, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { sendShareNotification } from '../../../../store/actions/send-share-notification';
-import { useAppDispatch } from '../../../../store/redux';
 import { ShareFolderRoleOptions, findLabel } from '../../commons/utils';
 import { capitalise } from '../../utils';
 import { Context } from './edit-context';
+import { useAppDispatch } from '../../../../hooks/redux';
 
 const HoverChip = styled(Chip)`
 	background-color: ${({ theme, hovered }) =>

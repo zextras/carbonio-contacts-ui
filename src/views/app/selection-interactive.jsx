@@ -7,8 +7,8 @@ import { Container, Padding, Text } from '@zextras/carbonio-design-system';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { useAppSelector } from '../../store/redux';
 import { selectAllContactsInFolder } from '../../store/selectors/contacts';
+import { useAppSelector } from '../../hooks/redux';
 
 const generateRandomNumber = () => Math.floor(Math.random() * 4);
 export default function SelectionInteractive() {

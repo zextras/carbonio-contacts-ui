@@ -31,10 +31,10 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { createMountpoint } from '../../store/actions/create-mountpoint';
-import { useAppDispatch } from '../../store/redux';
 import { translateFoldersNames } from '../../utils/helpers';
 import ModalFooter from '../contact-actions/commons/modal-footer';
 import { ModalHeader } from './commons/modal-header';
+import { useAppDispatch } from '../../hooks/redux';
 
 const ContainerEl = styled(Container)`
 	overflow-y: auto;
