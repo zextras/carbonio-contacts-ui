@@ -89,7 +89,8 @@
                 "body": {
                     "message1": "Apakah Anda ingin mengosongkan buku alamat yang dipilih?",
                     "message2": "Jika dikosongkan, semua konten terkait akan dipindahkan ke tempat sampah."
-                }
+                },
+                "message1": "Apakah Anda ingin mengosongkan buku alamat yang dipilih?"
             },
             "footer": {
                 "go_back": "Kembali"
@@ -153,7 +154,6 @@
         "revoke_with_custom_msg": "Batalkan akses dengan mengirim pemberitahuan kustom",
         "root": "Root",
         "type": "Jenis",
-        "single_advanced_filter": "Filter Lanjutan",
         "website": "Situs Web",
         "undo": "Batalkan",
         "activate_selection_mode": "Aktifkan mode pemilihan",
@@ -186,7 +186,8 @@
         "delete_tag": "Hapus Tag",
         "create_tag": "Buat Tag",
         "no_name": "Tanpa Nama",
-        "no_data": "Tak Ada Data"
+        "no_data": "Tak Ada Data",
+        "contact_created_in_folder": "Kontak ini akan dibuat di folder '{{name}}'"
     },
     "name": {
         "nickName": "Nama panggilan",

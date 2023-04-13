@@ -37,7 +37,11 @@
                 "body": {
                     "message1": "Möchten Sie das ausgewählte Adressbuch leeren?",
                     "message2": "Wenn Sie es leeren, wird der zugehörige Inhalt in den Papierkorb verschoben."
-                }
+                },
+                "message2": "Alle zugehörigen Kontakte werden dauerhaft gelöscht und können nicht wiederhergestellt werden.",
+                "message3": "Möchten Sie den Papierkorb leeren?",
+                "message4": "Der Inhalt wird dauerhaft gelöscht und kann nicht wiederhergestellt werden.",
+                "message1": "Möchten Sie das ausgewählte Adressbuch leeren?"
             },
             "footer": {
                 "go_back": "Zurück"
@@ -91,7 +95,7 @@
         "resend": "Erneut senden",
         "revoke": "Widerrufen",
         "contact_setting": "Kontakt Einstellungen",
-        "revoke_share": "{{title}}'s Teilen widerrufen",
+        "revoke_share": "{{title}}’s Teilen widerrufen",
         "shares_folder_edit": "Teilen dieses Adressbuches",
         "cancel": "Abbrechen",
         "edit": "Bearbeiten",
@@ -109,8 +113,7 @@
         "of": "von",
         "revoke_with_standard_msg": "Zugriff widerrufen mit einer Standardbenachrichtigung",
         "revoke_without_notification": "Zugriff widerrufen ohne eine Benachrichtigung zu senden",
-        "root": "Root",
-        "single_advanced_filter": "Erweiterte Filter",
+        "root": "Stammordner",
         "website": "Webseite",
         "website_plural": "Webseiten",
         "advanced_filter": "{{count}} Erweiterter Filter",
@@ -145,12 +148,15 @@
         "no_special_char_allowed": "Der Name darf keine Sonderzeichen enthalten",
         "new_tag": "Neuer Tag",
         "edit_tag_name": "Tag \"{{name}}\" bearbeiten",
-        "edit_tag": "Edit Tag",
+        "edit_tag": "Tag bearbeiten",
         "delete_tag_name": "Tag \"{{name}}\" löschen",
         "delete_tag": "Delete tag",
         "create_tag": "Tag erstellen",
         "no_name": "Kein Name",
-        "no_data": "Keine Daten"
+        "no_data": "Keine Daten",
+        "contact_created_in_folder": "Dieser Kontakt wird im Ordner \"{{name}}\" erstellt",
+        "destination_address_book": "Zieladressbuch",
+        "include_shared_folders": "Gemeinsame Adressbücher einschließen"
     },
     "message": {
         "snackbar": {
@@ -206,7 +212,7 @@
             "mail": "E-Mail Adresse",
             "phone_number": "Telefon Kontakt",
             "address": "Adresse",
-            "address_plural": "Adresse"
+            "address_plural": "Adressen"
         }
     },
     "select": {
@@ -244,7 +250,7 @@
         "shared_folders": "Geteilte Adressbücher",
         "shared_item": "Geteiltes Element",
         "standard_message": "Notiz zur Standardnachricht hinzufügen",
-        "workflow": "Workflow",
+        "workflow": "Arbeitsablauf",
         "write": "Schreiben",
         "add": "Hinzufügen",
         "admin": "Admin",
@@ -321,5 +327,8 @@
         "root": "Stammordner",
         "contacts": "Kontakte",
         "auto_contacts": "Mailempfänger"
+    },
+    "search": {
+        "shared_folders_note": "Fügen Sie freigegebene Adressbücher in Suchanfragen ein."
     }
 }

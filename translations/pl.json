@@ -19,9 +19,13 @@
             },
             "empty": {
                 "body": {
-                    "message1": "Czy na pewno chcesz opróżnić książkę adresową?",
+                    "message1": "Czy na pewno chcesz opróżnić wybraną książkę adresową?",
                     "message2": "Jeśli ja opróżnisz, cała powiązana z nią zawartość zostanie przeniesiona do kosza."
-                }
+                },
+                "message1": "Czy na pewno chcesz opróżnić wybraną książkę adresową?",
+                "message2": "Wszystkie powiązane kontakty zostaną trwale usunięte i nie będzie się dało ich odzyskać.",
+                "message3": "Czy chcesz opróźnić kosz?",
+                "message4": "Jego zawartość zostanie trwale usunięta i nie będzie się dało jej odzyskać."
             },
             "move": {
                 "body": {
@@ -71,7 +75,7 @@
             "folder_new": "Nowa książka adresowa została stworzona",
             "trash_empty": "Kosz został opróżniony pomyślnie"
         },
-        "type": "Folder Kontakty"
+        "type": "Folder kontakty"
     },
     "label": {
         "discard_changes": "ODRZUĆ ZMIANY",
@@ -110,7 +114,6 @@
         "edit_folder_properties": "Edytuj właściwości {{name}}",
         "email": "E-mail",
         "new_contact": "Nowy kontakt",
-        "single_advanced_filter": "Zaawansowany filtr",
         "website_0": "Strona internetowa",
         "website_1": "Strony internetowe",
         "website_2": "Stron internetowych",
@@ -139,7 +142,10 @@
         "create_tag": "Stwórz Tag",
         "tag": "Tag",
         "no_name": "Brak imienia",
-        "no_data": "Brak danych"
+        "no_data": "Brak danych",
+        "contact_created_in_folder": "Kontakt zostanie utworzony w folderze \"{{name}}\"",
+        "destination_address_book": "Docelowa książka adresowa",
+        "include_shared_folders": "Uwzględnij udostępnione książki adresowe"
     },
     "displayer": {
         "search_description1": "Lub wybierz \"Zaawansowane filtry\", aby udoskonalić wyniki wyszukiwania.",
@@ -210,7 +216,7 @@
         "admin": "Administrator",
         "administer": "Zarządzaj",
         "allowed_actions": "Dozwolone czynności",
-        "contact_folder": "Książka Adresowa",
+        "contact_folder": "Książka adresowa",
         "filter_user": "Znajdź użytkowników",
         "find_contact_shares": "Znajdź udostępnienia kontaktów",
         "find_shares": "Dodaj",
@@ -326,5 +332,8 @@
         "root": "Źródło",
         "contacts": "Kontakty",
         "auto_contacts": "Kontakty do których wysłano e-maila"
+    },
+    "search": {
+        "shared_folders_note": "Uzwględnij udostępnione książki adresowe w wynikach wyszukiwań."
     }
 }

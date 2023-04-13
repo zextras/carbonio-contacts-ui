@@ -73,7 +73,6 @@
         "revoke_with_custom_msg": "Revoca accesso e invia una notifica personalizzata",
         "root": "Root",
         "activate_selection_mode": "Attiva modalità selezione",
-        "single_advanced_filter": "Filtro avanzato",
         "type": "Tipo",
         "new_contact_created": "Nuovo contatto creato",
         "address_book_restored": "Rubrica ripristinata",
@@ -107,7 +106,10 @@
         "delete_tag": "Elimina Etichetta",
         "create_tag": "Crea Etichetta",
         "no_name": "Nessun Nome",
-        "no_data": "Nessun Dato"
+        "no_data": "Nessun Dato",
+        "contact_created_in_folder": "Questo contatto verrà creato nella cartella \"{{name}}\"",
+        "destination_address_book": "Rubrica di destinazione",
+        "include_shared_folders": "Includi rubriche condivise"
     },
     "job": {
         "title": "Ruolo",
@@ -138,7 +140,11 @@
                 "body": {
                     "message1": "Vuoi svuotare questa rubrica?",
                     "message2": "Se rimuovi il contenuto questo verrà spostato nel cestino."
-                }
+                },
+                "message1": "Vuoi svuotare questa rubrica?",
+                "message2": "Tutti i contatti correlati verranno eliminati definitivamente e non sarà possibile recuperarli.",
+                "message3": "Vuoi svuotare il cestino?",
+                "message4": "Il suo contenuto verrà eliminato definitivamente e non sarà possibile recuperarlo."
             },
             "move": {
                 "input": {
@@ -323,5 +329,8 @@
         "root": "Primaria",
         "contacts": "Contatti",
         "auto_contacts": "Contatti usati per email"
+    },
+    "search": {
+        "shared_folders_note": "Includi nella ricerche anche le rubriche condivise."
     }
 }
