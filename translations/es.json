@@ -19,9 +19,8 @@
         "of": "de",
         "restore": "Restaurar",
         "results_for": "Resultados para:",
-        "revoke_with_standard_msg": "Revocar acceso enviando una notificación estándar",
+        "revoke_with_standard_msg": "Revocar acceso enviando la notificación estándar",
         "revoke_with_custom_msg": "Revocar acceso enviando una notificación personalizada",
-        "single_advanced_filter": "Filtro avanzado",
         "type": "Tipo",
         "website": "Página web",
         "website_plural": "Páginas web",
@@ -50,7 +49,7 @@
         "cannot_move": "Ya está en esta carpeta",
         "select_color": "Seleccionar color",
         "edit_invalid_email": "La dirección de e-mail no es válida. Haz clic para editarla",
-        "edit_email": "Editar e-mail",
+        "edit_email": "Editar correo",
         "tags": "Etiquetas",
         "tag_name": "Nombre de la etiqueta",
         "tag_max_length": "Máximo 128 caracteres permitidos",
@@ -60,7 +59,7 @@
         "edit_tag_name": "Editar etiqueta \"{{name}}\"",
         "edit_tag": "Editar etiqueta",
         "delete_tag_name": "Eliminar etiqueta",
-        "delete_tag": "Eliminar Etiqueta",
+        "delete_tag": "Eliminar etiqueta",
         "create_tag": "Nueva Etiqueta",
         "no_name": "Sin Nombre",
         "no_data": "Sin datos"
@@ -68,44 +67,44 @@
     "share": {
         "none": "Ninguno",
         "add": "Añadir",
-        "admin": "Administrar",
+        "admin": "Admin",
         "owner": "Propietario",
         "read": "Leído",
         "options": {
             "share_calendar_with": {
                 "external_guests": "Invitados externos (solo ver)",
                 "internal_users_groups": "Usuarios o grupos internos",
-                "public": "Público (solo ver, no se necesita contraseña)"
+                "public": "Público (solo ver, no necesita contraseña)"
             }
         },
-        "administer": "Control total",
+        "administer": "Administrador",
         "allowed_actions": "Acciones permitidas",
         "contact_folder": "Libreta de direcciones",
         "filter_user": "Encontrar usuarios",
-        "recipients_address": "Direcciones de e-mail de los destinatarios",
+        "recipients_address": "E-mails de los destinatarios",
         "find_contact_shares": "Encontrar contactos compartidos",
         "find_shares": "Encontrar usos compartidos",
         "find_shares_label": "Elige las libretas de direcciones compartidas que quieres ver",
         "insert": "Insertar",
-        "manager": "Administrar",
+        "manager": "Controlador",
         "remove_from_this_list": "Remover de la lista",
         "role": "Permisos",
         "send_notification": "Enviar notificación sobre este uso compartido",
-        "share_note": "El mensaje estándar muestra tu nombre, el nombre del recurso compartido, los permisos otorgados a los usuarios y la información de acceso, si fuera necesaria.",
+        "share_note": "El mensaje estándar muestra tu nombre, el nombre del recurso compartido, los permisos otorgados a los usuarios y la información de acceso.",
         "standard_message": "Añadir una nota al mensaje estándar",
         "share_added_succesfully": "Se ha añadido el uso compartido",
         "share_info": "Información sobre el uso compartido de la libreta",
-        "share_removed_succesfully": "Los permisos han sido removidos",
+        "share_removed_succesfully": "Los permisos han sido anulados",
         "shared_folders": "Libretas de direcciones compartidas",
         "shared_item": "Elemento compartido",
         "shared_items": "Libretas compartidas de {{value}}",
-        "viewer": "Visualizar",
+        "viewer": "Visualizador",
         "workflow": "Flujo de trabajo",
         "write": "Escribir"
     },
     "action": {
         "search": "Buscar",
-        "delete_permanently": "Eliminar definitivamente",
+        "delete_permanently": "Eliminar permanentemente",
         "goto_folder": "Ir a la carpeta",
         "reset_filters": "Restablecer campos",
         "share_folder": "Compartir carpeta",
@@ -116,7 +115,7 @@
             "delete": {
                 "body": {
                     "message1": "¿Quieres eliminar la libreta seleccionada? Al hacerlo, su contenido será borrado y los contactos ya no se podrán recuperar.",
-                    "message2": "¿Quieres eliminar definitivamente la libreta seleccionada? Al hacerlo, su contenido será borrado y los contactos ya no se podrán recuperar."
+                    "message2": "¿Quieres eliminar la libreta seleccionada de forma permanente? Al hacerlo, su contenido será borrado y los contactos ya no se podrán recuperar."
                 }
             },
             "edit": {
@@ -170,18 +169,18 @@
                 "folder": "Vaciar libreta de direcciones"
             },
             "delete": "Eliminar libreta de direcciones",
-            "delete_permanently": "Eliminar definitivamente",
+            "delete_permanently": "Eliminar permanentemente",
             "edit": "Editar libreta de direcciones",
             "move": "Mover",
             "moved": "La libreta ha sido movida"
         },
-        "share_folder": "Compartir libreta",
+        "share_folder": "Compartir libreta de direcciones",
         "snackbar": {
             "address_book_moved_to_trash": "Libreta de direcciones movida a la Papelera",
             "folder_new": "Nueva libreta de direcciones creada",
             "trash_empty": "La Papelera ha sido vaciada",
             "folder_empty": "Se ha vaciado la libreta de direcciones",
-            "address_book_permanently_deleted": "Libreta eliminada definitivamente"
+            "address_book_permanently_deleted": "Libreta eliminada permanentemente"
         },
         "type": "Carpeta de Contactos"
     },
@@ -201,7 +200,7 @@
     "section": {
         "field": {
             "country": "País",
-            "state": "Estado",
+            "state": "Provincia",
             "city": "Ciudad",
             "number": "Número",
             "postalCode": "Código postal",
@@ -226,7 +225,7 @@
     "messages": {
         "snackbar": {
             "address_book_moved": "Libreta de direcciones movida a la carpeta de destino",
-            "contact_deleted_permanently": "Contacto eliminado definitivamente",
+            "contact_deleted_permanently": "Contacto eliminado permanentemente",
             "contact_moved": "Contacto movido",
             "contact_moved_to_trash": "Contacto movido a la Papelera",
             "contact_restored": "Contacto restaurado",
@@ -237,9 +236,9 @@
         },
         "modal": {
             "delete": {
-                "sure_delete_contact": "¿Seguro que quieres eliminar definitivamente este contacto?",
-                "sure_delete_contact_plural": "¿Seguro que quieres eliminar definitivamente estos contactos?",
-                "if_delete_lost_forever": "Si eliminas definitivamente este contacto ya no podrás recuperarlo, ¿continuar?"
+                "sure_delete_contact": "¿Seguro que quieres eliminar este contacto de forma permanente?",
+                "sure_delete_contact_plural": "¿Seguro que quieres eliminar estos contactos de forma permanente?",
+                "if_delete_lost_forever": "Si eliminas este contacto de forma permanente ya no podrás recuperarlo, ¿continuar?"
             }
         }
     },
@@ -256,7 +255,7 @@
                 "add_contact_to_emailed_contacts": "Añadir nuevos contactos a \"Contactos respondidos\"",
                 "autocomplete_on_comma": "Autocompletar dirección de e-mail escribiendo una coma",
                 "incl_addrs_in_glbl_addrs_list": "Incluir direcciones de la Lista Global de Direcciones",
-                "include_add_in_shared_contact": "Incluir direcciones de los contactos compartidos",
+                "include_add_in_shared_contact": "Mostrar direcciones de contactos compartidos",
                 "srch_glbl_addrs_list": "Buscar primero en la GAL al mostrar las sugerencias de contactos"
             }
         }
@@ -264,17 +263,17 @@
     "snackbar": {
         "folder_edited": "Se ha editado la libreta de direcciones",
         "folder_shared": "Libreta de direcciones compartida",
-        "share_resend": "Se ha reenviado la invitación para el uso compartido",
+        "share_resend": "Se ha reenviado la invitación de uso compartido",
         "share_revoke": "Permiso de uso compartido revocado",
-        "share_updated": "Derechos de acceso actualizados",
-        "tag_removed": "Etiqueta \"{{tag}}\" eliminada",
+        "share_updated": "Permisos de acceso actualizados",
+        "tag_removed": "Etiqueta \"{{tag}}\" removida",
         "tag_applied": "Etiqueta \"{{tag}}\" aplicada"
     },
     "title": {
         "advanced_filters": "Filtros avanzados"
     },
     "tooltip": {
-        "resend": "Enviar notificación por correo sobre este uso compartido",
+        "resend": "Enviar una notificación por correo sobre este uso compartido",
         "revoke": "Revocar acceso",
         "address_book_sharing_status": "Compartido con {{count}} persona",
         "address_book_sharing_status_plural": "Compartido con {{count}} personas"
@@ -287,12 +286,12 @@
     },
     "displayer": {
         "title5": "Selecciona un contacto",
-        "description2": "Haz clic en el botón \"NUEVO\" para crear un nuevo contacto.",
+        "description2": "Haz clic en el botón \"NUEVO\" para crear un contacto.",
         "description5": "Descubre todas las formas en que puedes conectarte con otros usuarios.",
         "search_description1": "O utiliza los \"Filtros avanzados\" para refinar la búsqueda.",
         "search_list_title1": "No hay resultados. ¡Sigue buscando!",
         "search_title4": "Selecciona uno o más resultados para realizar acciones o mostrar detalles.",
-        "description3": "Haz clic en el botón \"NUEVO\" para crear un nuevo grupo de contactos.",
+        "description3": "Haz clic en el botón \"NUEVO\" para crear un grupo de contactos.",
         "description4": "Crea uno haciendo clic en el botón \"NUEVO\".",
         "description6": "Utiliza la opción \"Editar\" para añadir una nota personalizada.",
         "description7": "Crea un grupo de contactos haciendo clic en el botón \"NUEVO\".",
@@ -300,7 +299,7 @@
         "list_title1": "Parece que aún no hay contactos",
         "list_title2": "La Papelera está vacía",
         "search_description2": "Intenta iniciar otra búsqueda.",
-        "search_description3": "Comprueba la ortografía y las opciones de los filtros o intenta con otra palabra.",
+        "search_description3": "Verifica la ortografía y las opciones de los filtros o intenta con otra palabra.",
         "search_list_title2": "No se encontraron elementos que coincidan con la búsqueda.",
         "search_title1": "Efectúa otra búsqueda",
         "search_title2": "No hay resultados para la búsqueda efectuada",

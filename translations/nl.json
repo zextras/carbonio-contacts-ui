@@ -43,7 +43,8 @@
                 "body": {
                     "message1": "Wilt u het geselecteerde adresboek leegmaken?",
                     "message2": "Als u het leegmaakt, zal alle gerelateerde inhoud naar de prullenbak worden verplaatst."
-                }
+                },
+                "message1": "Wilt u het geselecteerde adresboek leegmaken?"
             },
             "footer": {
                 "go_back": "Teruggaan"
@@ -157,7 +158,6 @@
         "revoke_without_notification": "Toegang intrekken zonder een melding te sturen",
         "revoke_with_custom_msg": "Toegang intrekken door een aangepaste melding te verzenden",
         "root": "Hoofdniveau",
-        "single_advanced_filter": "Geavanceerd Filter",
         "type": "Type",
         "website": "Website",
         "website_plural": "Websites",
@@ -196,7 +196,8 @@
         "delete_tag": "Tag verwijderen",
         "create_tag": "Tag creëren",
         "no_name": "Geen Naam",
-        "no_data": "Geen Gegevens"
+        "no_data": "Geen Gegevens",
+        "contact_created_in_folder": "Dit contact wordt aangemaakt in de map \"{{name}}\""
     },
     "section": {
         "field": {
