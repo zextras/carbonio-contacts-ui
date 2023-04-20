@@ -21,7 +21,7 @@ type ACPProps = {
 type ActionObj = {
 	id: string;
 	label: string;
-	click: (e: React.SyntheticEvent<HTMLElement> | KeyboardEvent) => void;
+	onClick: (e: React.SyntheticEvent<HTMLElement> | KeyboardEvent) => void;
 	customComponent: ComponentType;
 	items: Array<ActionObj>;
 	icon: string;

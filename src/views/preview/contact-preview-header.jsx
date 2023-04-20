@@ -59,19 +59,19 @@ const ContactPreviewHeader = ({ displayName, onClose, onEdit, onDelete, onMove }
 							id: 'edit',
 							icon: 'EditOutline',
 							label: 'Edit',
-							click: onEdit
+							onClick: onEdit
 						},
 						{
 							id: 'delete',
 							icon: 'TrashOutline',
 							label: 'Delete',
-							click: onDelete
+							onClick: onDelete
 						},
 						{
 							id: 'move',
 							icon: 'MoveOutline',
 							label: 'Move',
-							click: onMove
+							onClick: onMove
 						}
 					]}
 				>

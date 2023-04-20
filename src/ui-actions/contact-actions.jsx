@@ -31,7 +31,7 @@ export function deletePermanently({ ids, t, dispatch, createSnackbar, createModa
 		id: 'deletePermanently',
 		icon: 'DeletePermanentlyOutline',
 		label: t('action.delete_permanently', 'Delete Permanently'),
-		click: (ev) => {
+		onClick: (ev) => {
 			if (ev) ev.preventDefault();
 			const closeModal = createModal({
 				title: t('messages.modal.delete.sure_delete_contact', {
@@ -134,7 +134,7 @@ export function moveToTrash({ ids, t, dispatch, parent, createSnackbar, deselect
 		id: parent === FOLDERS.TRASH ? 'deletePermanently' : 'delete',
 		icon: parent === FOLDERS.TRASH ? 'DeletePermanentlyOutline' : 'Trash2Outline',
 		label: t('label.delete', 'Delete'),
-		click: (ev) => {
+		onClick: (ev) => {
 			if (ev) ev.preventDefault();
 
 			dispatch(
@@ -178,7 +178,7 @@ export function moveContact(contact, folderId, t, dispatch, parent, createModal,
 		icon: contact.parent === FOLDERS.TRASH ? 'RestoreOutline' : 'MoveOutline',
 		label:
 			contact.parent === FOLDERS.TRASH ? t('label.restore', 'Restore') : t('label.move', 'Move'),
-		click: (ev) => {
+		onClick: (ev) => {
 			if (ev) ev.preventDefault();
 			const closeModal = createModal(
 				{

@@ -46,7 +46,7 @@ export type ReturnType = {
 	id: string;
 	icon: string;
 	label: string;
-	click?: (arg: React.SyntheticEvent<HTMLElement> | KeyboardEvent) => void;
+	onClick?: (arg: React.SyntheticEvent<HTMLElement> | KeyboardEvent) => void;
 	items?: Array<{
 		customComponent: ComponentType;
 		id: string;
@@ -77,7 +77,7 @@ export const createAndApplyTag = ({
 	id: TagsActionsType.NEW,
 	icon: 'TagOutline',
 	label: t('label.create_tag', 'Create Tag'),
-	click: (e): void => {
+	onClick: (e): void => {
 		if (e) {
 			e.stopPropagation();
 		}
@@ -99,7 +99,7 @@ export const createTag = ({ t, createModal }: ArgumentType): ReturnType => ({
 	id: TagsActionsType.NEW,
 	icon: 'TagOutline',
 	label: t('label.create_tag', 'Create Tag'),
-	click: (e): void => {
+	onClick: (e): void => {
 		if (e) {
 			e.stopPropagation();
 		}
@@ -122,7 +122,7 @@ export const editTag = ({ t, createModal, tag }: ArgumentType): ReturnType => ({
 	id: TagsActionsType.EDIT,
 	icon: 'Edit2Outline',
 	label: t('label.edit_tag', 'Edit Tag'),
-	click: (e): void => {
+	onClick: (e): void => {
 		if (e) {
 			e.stopPropagation();
 		}
@@ -145,7 +145,7 @@ export const deleteTag = ({ t, createModal, tag }: ArgumentType): ReturnType => 
 	id: TagsActionsType.DELETE,
 	icon: 'Untag',
 	label: t('label.delete_tag', 'Delete Tag'),
-	click: (e): void => {
+	onClick: (e): void => {
 		if (e) {
 			e.stopPropagation();
 		}
@@ -458,7 +458,7 @@ export const applyTag = ({
 				type="outlined"
 				width="fill"
 				size="small"
-				onClick={(): void => context.createAndApplyTag({ t, context, contact }).click()}
+				onClick={(): void => context.createAndApplyTag({ t, context, contact }).onClick()}
 			/>
 		)
 	};

@@ -62,7 +62,7 @@ const ListItemActionWrapper = ({ children, current, onClick, contact }) => {
 								icon={action.icon}
 								onClick={(ev) => {
 									ev.stopPropagation();
-									action.click(ev);
+									action.onClick(ev);
 								}}
 								size="small"
 								disabled={action.disabled}

@@ -200,7 +200,7 @@ function ContactMultiValueField({ type, values, width, defaultType, showIcon }) 
 						id: id.toString(),
 						label: itemLabel,
 						icon: showIcon ? typeToIcon(item.type || defaultType || 'other') : null,
-						click: () => setSelected(id)
+						onClick: () => setSelected(id)
 					});
 					return acc;
 				},
@@ -279,7 +279,7 @@ function ContactPreviewContent({ contact, onEdit, onDelete, onMail, onMove }) {
 							...v,
 							color: ZIMBRA_STANDARD_COLORS[v.color ?? 0].hex,
 							label: v.name,
-							click: () => triggerSearch(v),
+							onClick: () => triggerSearch(v),
 							customComponent: (
 								<Row takeAvailableSpace mainAlignment="flex-start">
 									<Row takeAvailableSpace mainAlignment="space-between">
