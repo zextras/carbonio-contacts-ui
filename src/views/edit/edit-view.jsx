@@ -339,7 +339,9 @@ export default function EditView({ panel }) {
 	const folders = useAppSelector(selectFolders);
 	const selectedFolderName = useMemo(() => {
 		const selectedFolder = find(folders, ['id', selectFolderId]);
-		return selectedFolder && selectedFolder.label ? selectedFolder.label : '';
+		return selectFolderId === FOLDERS.CONTACTS
+			? t('folders.contacts', 'Contacts')
+			: selectedFolder.label;
 	}, [folders, selectFolderId]);
 	const folderWithWritePerm = useMemo(
 		() =>
@@ -354,7 +356,7 @@ export default function EditView({ panel }) {
 	const allFolders = useMemo(
 		() =>
 			map(folderWithWritePerm, (item) => ({
-				label: item.label,
+				label: item.id === FOLDERS.CONTACTS ? t('folders.contacts', 'Contacts') : item.label,
 				value: item.id,
 				color: ZIMBRA_STANDARD_COLORS[item.color || 0].hex
 			})),

@@ -92,8 +92,8 @@
         "title": {
             "phone_number": "Номер телефона",
             "mail": "Электронная почта",
-            "address_0": "Адрес",
-            "address_1": "Адреса",
+            "address": "Адрес",
+            "address_plural": "Адреса",
             "address_2": "Адресов"
         }
     },
@@ -139,18 +139,16 @@
         "revoke_with_custom_msg": "Отменить доступ, отправив персонализированное уведомление",
         "root": "Корень",
         "type": "Тип",
-        "website_0": "Сайт",
-        "website_1": "Сайта",
-        "website_2": "Сайтов",
+        "website": "Сайт",
+        "website_plural": "Сайта",
         "new_address_book": "Новая адресная книга",
         "revoke_with_standard_msg": "Отменить доступ, отправив стандартное уведомление",
         "discard_changes": "ОТМЕНИТЬ ИЗМЕНЕНИЯ",
         "new_contact_created": "Создан новый контакт",
         "undo": "Отменить",
         "address_book_restored": "Адресная книга восстановлена",
-        "advanced_filter_0": "{{count}} Расширенный фильтр",
-        "advanced_filter_1": "{{count}} Расширенных фильтра",
-        "advanced_filter_2": "{{count}} Расширенных фильтров",
+        "advanced_filter": "{{count}} Расширенный фильтр",
+        "advanced_filter_plural": "{{count}} Расширенных фильтра",
         "search_activate_selection_mode": "Режим выбора пока недоступен в результатах поиска",
         "of": "из",
         "edit_email": "Изменить адрес электронной почты",
@@ -201,9 +199,8 @@
         "modal": {
             "delete": {
                 "if_delete_lost_forever": "Удалив этот контакт без возможности восстановления, вы больше не сможете его восстановить. Продолжить?",
-                "sure_delete_contact_0": "Вы действительно хотите удалить этот контакт навсегда?",
-                "sure_delete_contact_1": "Вы действительно хотите удалить выбранных контакта навсегда?",
-                "sure_delete_contact_2": "Вы действительно хотите удалить выбранных контактов навсегда?"
+                "sure_delete_contact": "Вы действительно хотите удалить этот контакт навсегда?",
+                "sure_delete_contact_plural": "Вы действительно хотите удалить выбранных контакта навсегда?"
             }
         }
     },
@@ -292,9 +289,8 @@
     "tooltip": {
         "resend": "Отправить уведомление об этой публикации",
         "revoke": "Отозвать доступ",
-        "address_book_sharing_status_0": "Поделился с {{count}} пользователем",
-        "address_book_sharing_status_1": "Поделился с {{count}} пользователями",
-        "address_book_sharing_status_2": "Поделился с {{count}} пользователями"
+        "address_book_sharing_status": "Поделился с {{count}} пользователем",
+        "address_book_sharing_status_plural": "Поделился с {{count}} пользователями"
     },
     "contact_restored": "Контакт восстановлен",
     "displayer": {

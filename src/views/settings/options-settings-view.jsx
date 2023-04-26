@@ -44,7 +44,7 @@ export default function OptionsSettingsView({ t, settingsObj, updateSettings }) 
 				/>
 			</Container>
 			<Container crossAlignment="baseline" padding={{ all: 'small' }}>
-				<Heading title="Autocomplete" />
+				<Heading title={t('label.autocomplete', 'Autocomplete')} />
 				<Checkbox
 					label={t(
 						'settings.contacts.checkbox.incl_addrs_in_glbl_addrs_list',
