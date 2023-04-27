@@ -58,7 +58,7 @@
         "new_tag": "Nueva etiqueta",
         "edit_tag_name": "Editar etiqueta \"{{name}}\"",
         "edit_tag": "Editar etiqueta",
-        "delete_tag_name": "Eliminar etiqueta",
+        "delete_tag_name": "Eliminar etiqueta \"{{name}}\"",
         "delete_tag": "Eliminar etiqueta",
         "create_tag": "Nueva Etiqueta",
         "no_name": "Sin Nombre",
