@@ -86,7 +86,11 @@
                 "body": {
                     "message1": "Voulez-vous vider le carnet d'adresses sélectionné ?",
                     "message2": "Si vous le videz, tout le contenu associé sera déplacé vers la corbeille."
-                }
+                },
+                "message1": "Souhaitez-vous vider le carnet d'adresse sélectionné ?",
+                "message2": "Tous les contacts concernés seront supprimé de manière permanente et il ne sera plus possible de les restaurer.",
+                "message3": "Souhaitez-vous vider la corbeille ?",
+                "message4": "Son contenu sera supprimé de manière permanente et il ne sera pas possible de les restaurer."
             },
             "item": {
                 "empty": "Aucun élément disponible"
@@ -138,8 +142,9 @@
         "type": "Type",
         "undo": "Annuler",
         "address_book_restored": "Carnet d'adresses restauré",
-        "advanced_filter": "{{count}} filtre avancé",
-        "advanced_filter_plural": "{{count}} filtres avancés",
+        "advanced_filter_0": "{{count}} filtre avancé",
+        "advanced_filter_1": "{{count}} filtres avancés",
+        "advanced_filter_2": "{{count}} filtres avancés",
         "contact_setting": "Paramètres de contact",
         "revoke_share": "Révoquer le partage de {{title}}",
         "search_activate_selection_mode": "Le mode sélection n'est pas encore disponible dans les résultats de la recherche",
@@ -149,8 +154,9 @@
         "new_address_book": "Nouveau carnet d'adresses",
         "new_contact_created": "Nouveau contact créé",
         "shares_folder_edit": "Partager ce carnet d'adresses",
-        "website": "Site web",
-        "website_plural": "Sites web",
+        "website_0": "Site web",
+        "website_1": "Sites web",
+        "website_2": "Sites web",
         "edit_email": "Éditer l'email",
         "edit_invalid_email": "l'email est invalide, cliquez pour l'éditer",
         "new_contact": "Nouveau contact",
@@ -174,7 +180,10 @@
         "delete_tag": "Supprimer l'étiquette",
         "create_tag": "Créer une étiquette",
         "no_name": "Pas de nom",
-        "no_data": "Pas de données"
+        "no_data": "Pas de données",
+        "contact_created_in_folder": "Ce contact sera créé dans le dossier \"{{name}}\"",
+        "destination_address_book": "Carnet d'adresse de destination",
+        "include_shared_folders": "Inclure les carnets d'adresses partagés"
     },
     "name": {
         "nickName": "Surnom",
@@ -194,8 +203,9 @@
             "postalCode": "Code postal"
         },
         "title": {
-            "address": "Adresse",
-            "address_plural": "Adresses",
+            "address_0": "Adresse",
+            "address_1": "Adresses",
+            "address_2": "Adresses",
             "mail": "Adresse email",
             "phone_number": "Téléphone"
         }
@@ -253,8 +263,9 @@
     "tooltip": {
         "revoke": "Révoquer les accès",
         "resend": "Envoyer un email de notification concernant ce partage",
-        "address_book_sharing_status": "Partager avec {{count}} personne",
-        "address_book_sharing_status_plural": "Partager avec {{count}} personnes"
+        "address_book_sharing_status_0": "Partager avec {{count}} personne",
+        "address_book_sharing_status_1": "Partager avec {{count}} personnes",
+        "address_book_sharing_status_2": "Partager avec {{count}} personnes"
     },
     "job": {
         "company": "Entreprise",
@@ -286,8 +297,9 @@
         "modal": {
             "delete": {
                 "if_delete_lost_forever": "En supprimant définitivement ce contact, vous ne serez plus en mesure de le restaurer. Souhaitez-vous continuer ?",
-                "sure_delete_contact": "Êtes-vous sûr de vouloir supprimer définitivement ce contact ?",
-                "sure_delete_contact_plural": "Êtes-vous sûr de vouloir supprimer définitivement ces contacts ?"
+                "sure_delete_contact_0": "Êtes-vous sûr de vouloir supprimer définitivement ce contact ?",
+                "sure_delete_contact_1": "Êtes-vous sûr de vouloir supprimer définitivement ces contacts ?",
+                "sure_delete_contact_2": "Êtes-vous sûr de vouloir supprimer définitivement ces contacts ?"
             }
         }
     },
@@ -320,5 +332,8 @@
         "root": "Racine",
         "contacts": "Contacts",
         "auto_contacts": "Personnes déjà contactées"
+    },
+    "search": {
+        "shared_folders_note": "Inclure les carnets d'adresses partagés dans les recherches"
     }
 }
