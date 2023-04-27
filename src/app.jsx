@@ -112,7 +112,7 @@ export default function App() {
 				id: 'new-contact',
 				label: t('label.new_contact', 'New Contact'),
 				icon: 'ContactsModOutline',
-				click: (ev) => {
+				onClick: (ev) => {
 					ev?.preventDefault?.();
 					addBoard({ url: `${CONTACTS_ROUTE}/new`, title: t('label.new_contact', 'New Contact') });
 				},
