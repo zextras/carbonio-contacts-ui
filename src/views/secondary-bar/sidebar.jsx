@@ -3,10 +3,6 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useEffect, useState, useContext } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { filter, isEqual, map, remove, sortBy, uniqWith, maxBy, findIndex } from 'lodash';
-import { useTranslation } from 'react-i18next';
 import {
 	Accordion,
 	AccordionItem,
@@ -17,22 +13,26 @@ import {
 	Row,
 	SnackbarManagerContext
 } from '@zextras/carbonio-design-system';
-import { replaceHistory, FOLDERS } from '@zextras/carbonio-shell-ui';
-import { setCustomComponent } from '../folder/accordion-custom-components';
+import { FOLDERS, replaceHistory } from '@zextras/carbonio-shell-ui';
+import { filter, findIndex, isEqual, map, maxBy, remove, sortBy, uniqWith } from 'lodash';
+import React, { useContext, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import useGetTagsAccordion from '../../hooks/use-get-tags-accordions';
+import { getShareInfo } from '../../store/actions/get-share-info';
+import { StoreProvider } from '../../store/redux';
+import { selectFolders } from '../../store/selectors/folders';
 import { FolderActionsType } from '../../types/folder';
-import { NewModal } from './new-modal';
+import { setCustomComponent } from '../folder/accordion-custom-components';
+import { CollapsedSideBarItems } from '../folder/collapsed-sidebar-items';
+import ModalWrapper from './commons/modal-wrapper';
 import { DeleteModal } from './delete-modal';
 import { EditModal } from './edit-modal';
-import { MoveModal } from './move-modal';
 import { EmptyModal } from './empty-modal';
-import { selectFolders } from '../../store/selectors/folders';
-import { SharesModal } from './shares-modal';
-import { getShareInfo } from '../../store/actions/get-share-info';
+import { MoveModal } from './move-modal';
+import { NewModal } from './new-modal';
 import ShareFolderModal from './share-folder-modal';
-import ModalWrapper from './commons/modal-wrapper';
-import { CollapsedSideBarItems } from '../folder/collapsed-sidebar-items';
-import useGetTagsAccordion from '../../hooks/use-get-tags-accordions';
-import { StoreProvider } from '../../store/redux';
+import { SharesModal } from './shares-modal';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 
 export const nest = (items, id, level) =>
 	map(
@@ -101,8 +101,8 @@ const ShareLabel = (item) => (
 );
 
 export default function Sidebar({ expanded }) {
-	const dispatch = useDispatch();
-	const folders = useSelector(selectFolders);
+	const dispatch = useAppDispatch();
+	const folders = useAppSelector(selectFolders);
 	const [modal, setModal] = useState('');
 	const [currentFolder, setCurrentFolder] = useState();
 	const [modalAccordions, setModalAccordions] = useState();

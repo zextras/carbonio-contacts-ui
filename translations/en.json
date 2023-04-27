@@ -134,6 +134,7 @@
         "advanced_filter": "{{count}} Advanced Filter",
         "advanced_filter_plural": "{{count}} Advanced Filters",
         "app_name": "Contacts",
+        "autocomplete": "Autocomplete",
         "cancel": "Cancel",
         "cannot_move": "Cannot move to same folder",
         "contact_created_in_folder": "This contact will be created in the \"{{name}}\" folder",

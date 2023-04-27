@@ -56,7 +56,7 @@ const SelectPanelActions: FC<SelectPanelActionsProps> = ({ deselectAll }): React
 								color="primary"
 								onClick={(ev: React.SyntheticEvent<HTMLElement> | KeyboardEvent): void => {
 									if (ev) ev.preventDefault();
-									action.click(ev);
+									action.onClick(ev);
 								}}
 								size="large"
 							/>
@@ -71,9 +71,9 @@ const SelectPanelActions: FC<SelectPanelActionsProps> = ({ deselectAll }): React
 							id: action.label,
 							icon: action.icon,
 							label: action.label,
-							click: (ev: React.SyntheticEvent<HTMLElement> | KeyboardEvent): void => {
+							onClick: (ev: React.SyntheticEvent<HTMLElement> | KeyboardEvent): void => {
 								if (ev) ev.preventDefault();
-								action.click(ev);
+								action.onClick(ev);
 							},
 							customComponent: action.customComponent,
 							items: action.items

@@ -3,19 +3,20 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useState, useMemo, useCallback } from 'react';
-import { Input, Container, Text } from '@zextras/carbonio-design-system';
-import { filter, startsWith, reduce, isEmpty, find } from 'lodash';
-import { useDispatch, useSelector } from 'react-redux';
+import { Container, Input, Text } from '@zextras/carbonio-design-system';
+import { FOLDERS, replaceHistory } from '@zextras/carbonio-shell-ui';
+import { filter, find, isEmpty, reduce, startsWith } from 'lodash';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { replaceHistory, FOLDERS } from '@zextras/carbonio-shell-ui';
-import ModalFooter from './commons/modal-footer';
-import { ModalHeader } from '../secondary-bar/commons/modal-header';
-import FolderItem from '../secondary-bar/commons/folder-item';
+import { useDispatch } from 'react-redux';
 import { contactAction } from '../../store/actions/contact-action';
-import { NewModal } from './new-modal';
 import { selectFolders } from '../../store/selectors/folders';
 import { getFolderTranslatedName } from '../../utils/helpers';
+import FolderItem from '../secondary-bar/commons/folder-item';
+import { ModalHeader } from '../secondary-bar/commons/modal-header';
+import ModalFooter from './commons/modal-footer';
+import { NewModal } from './new-modal';
+import { useAppSelector } from '../../hooks/redux';
 
 export default function MoveModal({
 	onClose,
@@ -26,7 +27,7 @@ export default function MoveModal({
 	createSnackbar
 }) {
 	const dispatch = useDispatch();
-	const folders = useSelector(selectFolders);
+	const folders = useAppSelector(selectFolders);
 	const totalContacts = useMemo(() => reduce(folders, (ac, v) => ac + v.itemsCount, 0), [folders]);
 	const currentFolder = useMemo(
 		() => find(folders, (f) => f.id === `${folderId}`),

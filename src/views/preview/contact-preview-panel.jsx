@@ -3,24 +3,25 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback, useContext } from 'react';
-import { replaceHistory, getAction, FOLDERS } from '@zextras/carbonio-shell-ui';
 import {
 	Divider,
-	SnackbarManagerContext,
-	ModalManagerContext
+	ModalManagerContext,
+	SnackbarManagerContext
 } from '@zextras/carbonio-design-system';
-import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useParams, useLocation } from 'react-router-dom';
-import { includes, head, split } from 'lodash';
+import { FOLDERS, getAction, replaceHistory } from '@zextras/carbonio-shell-ui';
+import { head, includes, split } from 'lodash';
+import React, { useCallback, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
-import ContactPreviewHeader from './contact-preview-header';
-import ContactPreviewContent from './contact-preview-content';
+import { useDispatch } from 'react-redux';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { useDisplayName } from '../../hooks/use-display-name';
 import { contactAction } from '../../store/actions/contact-action';
-import MoveModal from '../contact-actions/move-modal';
-import { selectContact } from '../../store/selectors/contacts';
 import { StoreProvider } from '../../store/redux';
+import { selectContact } from '../../store/selectors/contacts';
+import MoveModal from '../contact-actions/move-modal';
+import ContactPreviewContent from './contact-preview-content';
+import ContactPreviewHeader from './contact-preview-header';
+import { useAppSelector } from '../../hooks/redux';
 
 export default function ContactPreviewPanel() {
 	const [t] = useTranslation();
@@ -30,7 +31,7 @@ export default function ContactPreviewPanel() {
 	const dispatch = useDispatch();
 	const { folderId, contactId } = useParams();
 	const contactInternalId = contactId;
-	const contact = useSelector((state) => selectContact(state, folderId, contactInternalId));
+	const contact = useAppSelector((state) => selectContact(state, folderId, contactInternalId));
 	const createSnackbar = useContext(SnackbarManagerContext);
 	const createModal = useContext(ModalManagerContext);
 
@@ -119,7 +120,7 @@ export default function ContactPreviewPanel() {
 	const onMail = useCallback(() => {
 		const [mailTo, available] = getAction('contact-list', 'mail-to', [contact]);
 		if (available) {
-			mailTo.click(contact);
+			mailTo.onClick(contact);
 		}
 	}, [contact]);
 

@@ -3,30 +3,30 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback, useMemo } from 'react';
-import styled from 'styled-components';
-import { AppLink, ZIMBRA_STANDARD_COLORS, FOLDERS } from '@zextras/carbonio-shell-ui';
 import {
 	AccordionItem,
 	Container,
-	Dropdown,
 	Drag,
 	Drop,
+	Dropdown,
 	Icon,
+	Padding,
 	Row,
-	Tooltip,
-	Padding
+	Tooltip
 } from '@zextras/carbonio-design-system';
-import { map, filter } from 'lodash';
-import { useSelector } from 'react-redux';
-import { actionsRetriever } from '../secondary-bar/commons/folders-actions';
-import { FolderActionsType } from '../../types/folder';
-import { folderAction } from '../../store/actions/folder-action';
+import { AppLink, FOLDERS, ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-shell-ui';
+import { filter, map } from 'lodash';
+import React, { useCallback, useMemo } from 'react';
+import styled from 'styled-components';
+import { useAppSelector } from '../../hooks/redux';
 import { contactAction } from '../../store/actions/contact-action';
+import { folderAction } from '../../store/actions/folder-action';
 import { searchContacts } from '../../store/actions/search-contacts';
 import { selectFolderStatus } from '../../store/selectors/contacts';
 import { selectFolder } from '../../store/selectors/folders';
+import { FolderActionsType } from '../../types/folder';
 import { getFolderTranslatedName } from '../../utils/helpers';
+import { actionsRetriever } from '../secondary-bar/commons/folders-actions';
 
 const DropOverlayContainer = styled(Container)`
 	position: absolute;
@@ -274,8 +274,8 @@ export const CustomAccordion = (
 	};
 
 	const Component = (props) => {
-		const folderStatus = useSelector((state) => selectFolderStatus(state, folder.id));
-		const trashFolder = useSelector((state) => selectFolder(state, FOLDERS.TRASH));
+		const folderStatus = useAppSelector((state) => selectFolderStatus(state, folder.id));
+		const trashFolder = useAppSelector((state) => selectFolder(state, FOLDERS.TRASH));
 
 		const dragFolderDisable = useMemo(
 			() => [3, 7, 13].includes(Number(folder.id)) || folder.isShared, // Default folders and shared folders not allowed to drag

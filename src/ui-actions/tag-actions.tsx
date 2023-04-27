@@ -40,12 +40,13 @@ import DeleteTagModal from '../views/secondary-bar/parts/tags/delete-tag-modal';
 import { contactAction } from '../store/actions/contact-action';
 import { ItemType } from '../views/secondary-bar/parts/tags/types';
 import { Contact } from '../types/contact';
+import { useAppDispatch } from '../hooks/redux';
 
 export type ReturnType = {
 	id: string;
 	icon: string;
 	label: string;
-	click?: (arg: React.SyntheticEvent<HTMLElement> | KeyboardEvent) => void;
+	onClick?: (arg: React.SyntheticEvent<HTMLElement> | KeyboardEvent) => void;
 	items?: Array<{
 		customComponent: ComponentType;
 		id: string;
@@ -76,7 +77,7 @@ export const createAndApplyTag = ({
 	id: TagsActionsType.NEW,
 	icon: 'TagOutline',
 	label: t('label.create_tag', 'Create Tag'),
-	click: (e): void => {
+	onClick: (e): void => {
 		if (e) {
 			e.stopPropagation();
 		}
@@ -98,7 +99,7 @@ export const createTag = ({ t, createModal }: ArgumentType): ReturnType => ({
 	id: TagsActionsType.NEW,
 	icon: 'TagOutline',
 	label: t('label.create_tag', 'Create Tag'),
-	click: (e): void => {
+	onClick: (e): void => {
 		if (e) {
 			e.stopPropagation();
 		}
@@ -121,7 +122,7 @@ export const editTag = ({ t, createModal, tag }: ArgumentType): ReturnType => ({
 	id: TagsActionsType.EDIT,
 	icon: 'Edit2Outline',
 	label: t('label.edit_tag', 'Edit Tag'),
-	click: (e): void => {
+	onClick: (e): void => {
 		if (e) {
 			e.stopPropagation();
 		}
@@ -144,7 +145,7 @@ export const deleteTag = ({ t, createModal, tag }: ArgumentType): ReturnType => 
 	id: TagsActionsType.DELETE,
 	icon: 'Untag',
 	label: t('label.delete_tag', 'Delete Tag'),
-	click: (e): void => {
+	onClick: (e): void => {
 		if (e) {
 			e.stopPropagation();
 		}
@@ -172,7 +173,7 @@ export const TagsDropdownItem = ({
 }): ReactElement => {
 	const [t] = useTranslation();
 	const createSnackbar = useContext(SnackbarManagerContext);
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 	const [checked, setChecked] = useState(includes(contact.tags, tag.id));
 	const [isHovering, setIsHovering] = useState(false);
 	const toggleCheck = useCallback(
@@ -264,7 +265,7 @@ export const MultiSelectTagsDropdownItem = ({
 }): ReactElement => {
 	const [t] = useTranslation();
 	const createSnackbar = useContext(SnackbarManagerContext);
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 	const [isHovering, setIsHovering] = useState(false);
 
 	const tagsToShow = reduce(
@@ -428,7 +429,7 @@ export const applyTag = ({
 	id: string;
 	items: ItemType[];
 	customComponent: ReactElement;
-	label?: 'string';
+	label?: string;
 	icon?: string;
 } => {
 	const tagItem = reduce(
@@ -457,7 +458,7 @@ export const applyTag = ({
 				type="outlined"
 				width="fill"
 				size="small"
-				onClick={(): void => context.createAndApplyTag({ t, context, contact }).click()}
+				onClick={(): void => context.createAndApplyTag({ t, context, contact }).onClick()}
 			/>
 		)
 	};

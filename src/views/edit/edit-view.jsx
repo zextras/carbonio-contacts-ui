@@ -3,41 +3,41 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import {
-	replaceHistory,
-	report,
-	useBoardHooks,
-	getBridgedFunctions,
-	t,
-	ZIMBRA_STANDARD_COLORS,
-	FOLDERS
-} from '@zextras/carbonio-shell-ui';
-import { map, filter, reduce, set, omit, find } from 'lodash';
 import {
 	ButtonOld as Button,
 	Container,
-	Input,
-	Row,
 	IconButton,
+	Input,
 	Padding,
-	Text,
+	Row,
 	Select,
+	Text,
 	Tooltip
 } from '@zextras/carbonio-design-system';
-import { useDispatch, useSelector } from 'react-redux';
+import {
+	FOLDERS,
+	ZIMBRA_STANDARD_COLORS,
+	getBridgedFunctions,
+	replaceHistory,
+	report,
+	t,
+	useBoardHooks
+} from '@zextras/carbonio-shell-ui';
+import { filter, find, map, omit, reduce, set } from 'lodash';
+import React, { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import FormSection from './form-section';
+import { FoldersSelector } from '../../carbonio-ui-commons/components/select/folders-selector';
 import { CompactView } from '../../commons/contact-compact-view';
-import reducer, { op } from './form-reducer';
-import { modifyContact } from '../../store/actions/modify-contact';
+import { useAppSelector } from '../../hooks/redux';
 import { createContact } from '../../store/actions/create-contact';
+import { modifyContact } from '../../store/actions/modify-contact';
 import { selectContact } from '../../store/selectors/contacts';
 import { selectFolders } from '../../store/selectors/folders';
 import { differenceObject } from '../settings/components/utils';
-import { FoldersSelector } from '../../carbonio-ui-commons/components/select/folders-selector';
-import { contactAction } from '../../store/actions/contact-action';
+import reducer, { op } from './form-reducer';
+import FormSection from './form-section';
 
 const ItalicText = styled(Text)`
 	font-style: italic;
@@ -302,7 +302,7 @@ const CustomMultivalueField = ({
 export default function EditView({ panel }) {
 	const { folderId, editId } = useParams();
 	const storeDispatch = useDispatch();
-	const existingContact = useSelector((state) => selectContact(state, folderId, editId));
+	const existingContact = useAppSelector((state) => selectContact(state, folderId, editId));
 	const [contact, dispatch] = useReducer(reducer);
 	const boardUtilities = useBoardHooks();
 	const [compareToContact, setCompareToContact] = useState(existingContact);
@@ -336,10 +336,12 @@ export default function EditView({ panel }) {
 		return differenceObject(compareToContact, updatedContact);
 	}, [compareToContact, contact]);
 
-	const folders = useSelector(selectFolders);
+	const folders = useAppSelector(selectFolders);
 	const selectedFolderName = useMemo(() => {
 		const selectedFolder = find(folders, ['id', selectFolderId]);
-		return selectedFolder && selectedFolder.label ? selectedFolder.label : '';
+		return selectFolderId === FOLDERS.CONTACTS
+			? t('folders.contacts', 'Contacts')
+			: selectedFolder.label;
 	}, [folders, selectFolderId]);
 	const folderWithWritePerm = useMemo(
 		() =>
@@ -354,7 +356,7 @@ export default function EditView({ panel }) {
 	const allFolders = useMemo(
 		() =>
 			map(folderWithWritePerm, (item) => ({
-				label: item.label,
+				label: item.id === FOLDERS.CONTACTS ? t('folders.contacts', 'Contacts') : item.label,
 				value: item.id,
 				color: ZIMBRA_STANDARD_COLORS[item.color || 0].hex
 			})),

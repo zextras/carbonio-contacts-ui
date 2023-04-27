@@ -10,6 +10,7 @@ import { replaceHistory, useTags } from '@zextras/carbonio-shell-ui';
 import { SnackbarManagerContext, ModalManagerContext } from '@zextras/carbonio-design-system';
 import { Contact } from '../types/contact';
 import { contextActions, hoverActions, primaryActions, secondaryActions } from './contact-actions';
+import { useAppDispatch } from '../hooks/redux';
 
 type ACPProps = {
 	folderId: string;
@@ -20,7 +21,7 @@ type ACPProps = {
 type ActionObj = {
 	id: string;
 	label: string;
-	click: (e: React.SyntheticEvent<HTMLElement> | KeyboardEvent) => void;
+	onClick: (e: React.SyntheticEvent<HTMLElement> | KeyboardEvent) => void;
 	customComponent: ComponentType;
 	items: Array<ActionObj>;
 	icon: string;
@@ -53,7 +54,7 @@ export const ActionsContextProvider: FC<ACPProps & { selectedContacts: Contact[]
 }) => {
 	const [t] = useTranslation();
 	const ids = useMemo(() => Object.keys(selectedIds ?? []), [selectedIds]);
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 	const createSnackbar = useContext(SnackbarManagerContext);
 	const createModal = useContext(ModalManagerContext);
 	const tags = useTags();

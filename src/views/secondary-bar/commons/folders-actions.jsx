@@ -25,7 +25,7 @@ export const actionsRetriever = (
 		id: FolderActionsType.NEW,
 		icon: 'AddressBookOutline',
 		label: t('label.new_address_book', 'New address book'),
-		click: () => {
+		onClick: () => {
 			setAction(FolderActionsType.NEW);
 			setCurrentFolder(folder);
 		}
@@ -34,7 +34,7 @@ export const actionsRetriever = (
 		id: FolderActionsType.MOVE,
 		icon: 'MoveOutline',
 		label: t('folder.action.move', 'Move'),
-		click: () => {
+		onClick: () => {
 			setAction(FolderActionsType.MOVE);
 			setCurrentFolder(folder);
 		}
@@ -43,7 +43,7 @@ export const actionsRetriever = (
 		id: FolderActionsType.SHARE,
 		icon: 'ShareOutline',
 		label: t('folder.share_folder', 'Share address book'),
-		click: () => {
+		onClick: () => {
 			setAction(FolderActionsType.SHARE);
 			setCurrentFolder(folder);
 		}
@@ -56,7 +56,7 @@ export const actionsRetriever = (
 				? t('folder.action.empty.trash', 'Empty trash')
 				: t('folder.action.empty.folder', 'Empty address book'),
 		disabled: folder.id === FOLDERS.TRASH ? false : !folder.itemsCount,
-		click: () => {
+		onClick: () => {
 			setAction(FolderActionsType.EMPTY);
 			setCurrentFolder(folder);
 		}
@@ -65,7 +65,7 @@ export const actionsRetriever = (
 		id: FolderActionsType.EDIT,
 		icon: 'Edit2Outline',
 		label: t('folder.action.edit', 'Edit address book'),
-		click: () => {
+		onClick: () => {
 			setAction(FolderActionsType.EDIT);
 			setCurrentFolder(folder);
 		}
@@ -77,7 +77,7 @@ export const actionsRetriever = (
 			folder?.path?.includes?.(`/${trashFolder?.label}/`) && folder?.id !== FOLDERS.TRASH
 				? t('folder.action.delete_permanently', 'Delete address book permanently')
 				: t('folder.action.delete', 'Delete address book'),
-		click: () => {
+		onClick: () => {
 			setAction(FolderActionsType.DELETE);
 			setCurrentFolder(folder);
 		}
@@ -86,7 +86,7 @@ export const actionsRetriever = (
 		id: FolderActionsType.REMOVE_FROM_LIST,
 		icon: 'CloseOutline',
 		label: t('share.remove_from_this_list', 'Remove from this list'),
-		click: (e) => {
+		onClick: (e) => {
 			if (e) {
 				e.stopPropagation();
 
@@ -119,7 +119,7 @@ export const actionsRetriever = (
 		id: FolderActionsType.SHARE_INFO,
 		icon: 'InfoOutline',
 		label: t('share.share_info', "Shared address book's info"),
-		click: (e) => {
+		onClick: (e) => {
 			if (e) {
 				e.stopPropagation();
 			}

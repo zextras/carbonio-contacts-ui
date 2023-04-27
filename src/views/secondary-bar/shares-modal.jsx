@@ -3,38 +3,38 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback, useMemo, useState } from 'react';
 import {
-	Container,
 	Accordion,
 	AccordionItem,
 	Checkbox,
-	Padding,
-	Text,
-	Input,
+	Container,
 	Icon,
-	Row
+	Input,
+	Padding,
+	Row,
+	Text
 } from '@zextras/carbonio-design-system';
 import {
-	groupBy,
-	map,
-	split,
-	last,
-	values,
-	uniqWith,
-	isEqual,
 	filter,
+	groupBy,
+	isEqual,
+	last,
+	map,
 	pickBy,
+	split,
 	startsWith,
-	toLower
+	toLower,
+	uniqWith,
+	values
 } from 'lodash';
-import styled from 'styled-components';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
-import { ModalHeader } from './commons/modal-header';
-import ModalFooter from '../contact-actions/commons/modal-footer';
+import styled from 'styled-components';
 import { createMountpoint } from '../../store/actions/create-mountpoint';
 import { translateFoldersNames } from '../../utils/helpers';
+import ModalFooter from '../contact-actions/commons/modal-footer';
+import { ModalHeader } from './commons/modal-header';
+import { useAppDispatch } from '../../hooks/redux';
 
 const ContainerEl = styled(Container)`
 	overflow-y: auto;
@@ -82,7 +82,7 @@ const CustomItem = ({ item }) => {
 export const SharesModal = ({ folders, onClose, createSnackbar }) => {
 	const [links, setLinks] = useState([]);
 	const [data, setData] = useState();
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 	const [t] = useTranslation();
 
 	const translatedFolders = useMemo(() => translateFoldersNames(t, folders), [t, folders]);
