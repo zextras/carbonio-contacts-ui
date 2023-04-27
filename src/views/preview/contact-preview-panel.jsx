@@ -120,7 +120,7 @@ export default function ContactPreviewPanel() {
 	const onMail = useCallback(() => {
 		const [mailTo, available] = getAction('contact-list', 'mail-to', [contact]);
 		if (available) {
-			mailTo.click(contact);
+			mailTo.onClick(contact);
 		}
 	}, [contact]);
 
