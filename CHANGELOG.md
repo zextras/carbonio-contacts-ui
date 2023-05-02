@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.2](https://github.com/zextras/carbonio-contacts-ui/compare/v1.2.1...v1.2.2) (2023-04-27)
+
+
+### Bug Fixes
+
+* broken translations ([#121](https://github.com/zextras/carbonio-contacts-ui/issues/121)) ([5cafe51](https://github.com/zextras/carbonio-contacts-ui/commit/5cafe51b8d8d87d66255cd5c028cda5074e89c8a))
+* fix imports of redux hooks ([fdb3a2a](https://github.com/zextras/carbonio-contacts-ui/commit/fdb3a2a60d1efbeab31580f4dcba12d0e49cd684))
+* fix onclick ([#122](https://github.com/zextras/carbonio-contacts-ui/issues/122)) ([8c8ad25](https://github.com/zextras/carbonio-contacts-ui/commit/8c8ad25be39520b54fcee4cdafd1283b93f8430e))
+* translate label for search module selector ([8ab7bc6](https://github.com/zextras/carbonio-contacts-ui/commit/8ab7bc6fdca7810c2a72e98bd3d0ea08d97d20fe))
+
 ### [1.2.1](https://github.com/zextras/carbonio-contacts-ui/compare/v1.2.0...v1.2.1) (2023-04-13)
 
 ## [1.2.0](https://github.com/zextras/carbonio-contacts-ui/compare/v1.1.5...v1.2.0) (2023-03-30)
