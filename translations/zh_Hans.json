@@ -90,7 +90,10 @@
                     "message2": "如果清空，所有相关内容都将被移动至垃圾箱。",
                     "message1": "是否清空所选地址簿？"
                 },
-                "message1": "是否清空所选地址簿？"
+                "message1": "是否清空所选地址簿？",
+                "message2": "所有相关联系人都将被永久删除且无法恢复。",
+                "message3": "是否清空垃圾箱？",
+                "message4": "其中的内容将被永久删除且无法恢复。"
             },
             "footer": {
                 "go_back": "返回"
@@ -186,7 +189,11 @@
         "delete_tag": "删除标签",
         "create_tag": "创建标签",
         "no_name": "无名称",
-        "no_data": "无数据"
+        "no_data": "无数据",
+        "destination_address_book": "目标地址簿",
+        "include_shared_folders": "包含共享地址簿",
+        "contact_created_in_folder": "此联系人将在“{{name}}”文件夹中创建",
+        "autocomplete": "自动补全"
     },
     "name": {
         "nickName": "昵称",
@@ -316,5 +323,8 @@
         "root": "根目录",
         "contacts": "地址簿",
         "auto_contacts": "电子邮件联系人"
+    },
+    "search": {
+        "shared_folders_note": "在搜索中包含共享地址簿。"
     }
 }
