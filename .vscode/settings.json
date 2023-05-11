@@ -1,0 +1,6 @@
+{
+	"sonarlint.connectedMode.project": {
+		"connectionId": "https-sonar-zextras-tools",
+		"projectKey": "carbonio-contacts-ui"
+	}
+}

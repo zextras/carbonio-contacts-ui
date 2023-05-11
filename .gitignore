@@ -10,3 +10,5 @@
 /e2e/output/
 /junit.xml
 /coverage/cobertura-coverage.xml
+/.vscode
+.vscode
