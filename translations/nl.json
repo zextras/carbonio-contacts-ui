@@ -44,7 +44,10 @@
                     "message1": "Wilt u het geselecteerde adresboek leegmaken?",
                     "message2": "Als u het leegmaakt, zal alle gerelateerde inhoud naar de prullenbak worden verplaatst."
                 },
-                "message1": "Wilt u het geselecteerde adresboek leegmaken?"
+                "message1": "Wilt u het geselecteerde adresboek leegmaken?",
+                "message2": "Alle gerelateerde contacten worden permanent verwijderd en het is niet mogelijk om ze te herstellen.",
+                "message3": "Wil je de prullenbak legen?",
+                "message4": "De inhoud wordt permanent verwijderd en het is niet mogelijk om deze te herstellen."
             },
             "footer": {
                 "go_back": "Teruggaan"
@@ -197,7 +200,10 @@
         "create_tag": "Tag creëren",
         "no_name": "Geen Naam",
         "no_data": "Geen Gegevens",
-        "contact_created_in_folder": "Dit contact wordt aangemaakt in de map \"{{name}}\""
+        "contact_created_in_folder": "Dit contact wordt aangemaakt in de map \"{{name}}\"",
+        "include_shared_folders": "Gedeelde adresboeken opnemen",
+        "autocomplete": "Autom. invullen",
+        "destination_address_book": "Bestemmingsadresboek"
     },
     "section": {
         "field": {
@@ -322,5 +328,8 @@
         "root": "Hoofdniveau",
         "contacts": "Contacten",
         "auto_contacts": "Gemailde contacten"
+    },
+    "search": {
+        "shared_folders_note": "Neem gedeelde adresboeken op in zoekopdrachten."
     }
 }

@@ -143,7 +143,8 @@
         "no_data": "Brak danych",
         "contact_created_in_folder": "Kontakt zostanie utworzony w folderze \"{{name}}\"",
         "destination_address_book": "Docelowa książka adresowa",
-        "include_shared_folders": "Uwzględnij udostępnione książki adresowe"
+        "include_shared_folders": "Uwzględnij udostępnione książki adresowe",
+        "autocomplete": "Automatyczne uzupełnianie"
     },
     "displayer": {
         "search_description1": "Lub wybierz \"Zaawansowane filtry\", aby udoskonalić wyniki wyszukiwania.",
@@ -185,7 +186,7 @@
     },
     "message": {
         "snackbar": {
-            "settings_saved": "Zmiany zostały zapisane pomyślnie"
+            "settings_saved": "Zmiany zostały zapisane"
         },
         "require_field": "Uzupełnij co najmniej jedno z wymaganych pól",
         "delete_tag_message2": "Po usunięciu Tag zostanie zdjęty z każdego elementu oznaczonego nim.",

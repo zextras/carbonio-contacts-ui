@@ -109,7 +109,8 @@
         "no_data": "Nessun Dato",
         "contact_created_in_folder": "Questo contatto verrà creato nella cartella \"{{name}}\"",
         "destination_address_book": "Rubrica di destinazione",
-        "include_shared_folders": "Includi rubriche condivise"
+        "include_shared_folders": "Includi rubriche condivise",
+        "autocomplete": "Auto completamento"
     },
     "job": {
         "title": "Ruolo",
