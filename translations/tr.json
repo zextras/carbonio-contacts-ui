@@ -198,7 +198,8 @@
         "no_data": "Veri yok",
         "contact_created_in_folder": "Bu kişi \"{{ name }}\" klasöründe oluşturulacak",
         "destination_address_book": "Hedef Adres Defteri",
-        "include_shared_folders": "Paylaşılan adres defterlerini dahil et"
+        "include_shared_folders": "Paylaşılan adres defterlerini dahil et",
+        "autocomplete": "Otomatik tamamla"
     },
     "job": {
         "company": "Firma",

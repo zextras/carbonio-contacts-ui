@@ -107,6 +107,7 @@ export default function App() {
 			id: 'contact-input',
 			component: ContactInput
 		});
+
 		registerActions({
 			action: () => ({
 				id: 'new-contact',
