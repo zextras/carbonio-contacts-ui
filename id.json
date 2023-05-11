@@ -90,7 +90,10 @@
                     "message1": "Apakah Anda ingin mengosongkan buku alamat yang dipilih?",
                     "message2": "Jika dikosongkan, semua konten terkait akan dipindahkan ke tempat sampah."
                 },
-                "message1": "Apakah Anda ingin mengosongkan buku alamat yang dipilih?"
+                "message1": "Apakah Anda ingin mengosongkan buku alamat yang dipilih?",
+                "message2": "Semua kontak terkait akan dihapus permanen dan tidak akan bisa dipulihkan.",
+                "message3": "Apakah Anda ingin mengosongkan sampah?",
+                "message4": "Kontennya akan dihapus permanen dan tidak akan bisa dipulihkan."
             },
             "footer": {
                 "go_back": "Kembali"
@@ -167,7 +170,7 @@
         "folder_name": "Nama folder",
         "note": "Catatan:",
         "options": "Opsi",
-        "share_with": "Bagikan dengan",
+        "share_with": "Bagikan kepada",
         "app_name": "Kontak",
         "new_contact": "Kontak baru",
         "cannot_move": "Tidak bisa memindahkan folder yang sama",
@@ -187,7 +190,10 @@
         "create_tag": "Buat Tag",
         "no_name": "Tanpa Nama",
         "no_data": "Tak Ada Data",
-        "contact_created_in_folder": "Kontak ini akan dibuat di folder '{{name}}'"
+        "contact_created_in_folder": "Kontak ini akan dibuat di folder '{{name}}'",
+        "destination_address_book": "Buku alamat tujuan",
+        "include_shared_folders": "Sertakan buku alamat bersama",
+        "autocomplete": "Lengkapi otomatis"
     },
     "name": {
         "nickName": "Nama panggilan",
@@ -317,5 +323,8 @@
         "root": "Akar",
         "contacts": "Kontak",
         "auto_contacts": "Kontak Email"
+    },
+    "search": {
+        "shared_folders_note": "Sertakan buku alamat bersama di pencarian."
     }
 }

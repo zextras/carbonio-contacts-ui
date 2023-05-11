@@ -51,7 +51,11 @@
                 "body": {
                     "message1": "Deseja esvaziar a agenda de contatos selecionada?",
                     "message2": "Ao esvaziá-la, todo seu conteúdo será movido para a lixeira."
-                }
+                },
+                "message1": "Deseja esvaziar a agenda de contatos selecionada?",
+                "message3": "Deseja esvaziar a lixeira?",
+                "message2": "Todos os contatos relacionados serão excluídos permanentemente e não será possível recuperá-los.",
+                "message4": "Seu conteúdo será excluído permanentemente e não será possível recuperá-lo."
             },
             "footer": {
                 "go_back": "Voltar"
@@ -106,8 +110,9 @@
         "revoke_with_standard_msg": "Revogar acesso enviando a notificação padrão",
         "revoke_with_custom_msg": "Revogar acesso enviando uma notificação personalizada",
         "type": "Tipo",
-        "website": "Website",
-        "website_plural": "Websites",
+        "website_0": "Website",
+        "website_1": "Websites",
+        "website_2": "",
         "contacts": "Contatos",
         "delete": "Excluir",
         "edit_access_name": "Editar acesso de {{name}}",
@@ -120,8 +125,9 @@
         "undo": "Desfazer",
         "activate_selection_mode": "Ativar modo de seleção",
         "address_book_restored": "Agenda de contatos restaurada",
-        "advanced_filter": "{{count}} Filtro avançado",
-        "advanced_filter_plural": "{{count}} Filtros avançados",
+        "advanced_filter_0": "{{count}} Filtro avançado",
+        "advanced_filter_1": "{{count}} Filtros avançados",
+        "advanced_filter_2": "",
         "discard_changes": "DESCARTAR MODIFICAÇÕES",
         "new_address_book": "Nova agenda de contatos",
         "new_contact_created": "Novo contato criado",
@@ -145,11 +151,15 @@
         "new_tag": "Novo marcador",
         "edit_tag_name": "Editar o marcador \"{{name}}\"",
         "edit_tag": "Editar marcador",
-        "delete_tag_name": "Excluir marcador",
+        "delete_tag_name": "Excluir marcador \"{{name}}\"",
         "delete_tag": "Excluir marcador",
         "create_tag": "Criar marcador",
         "no_name": "Sem nome",
-        "no_data": "Sem dados"
+        "no_data": "Sem dados",
+        "contact_created_in_folder": "Esse contato será criado na pasta \"{{name}}\"",
+        "destination_address_book": "Agenda de contatos de destino",
+        "include_shared_folders": "Incluir agenda de contatos compartilhada",
+        "autocomplete": "Autocompletar"
     },
     "share": {
         "add": "Adicionar",
@@ -226,8 +236,9 @@
         "modal": {
             "delete": {
                 "if_delete_lost_forever": "Ao excluir permanentemente este contato, você não poderá mais recuperá-lo. Continuar?",
-                "sure_delete_contact": "Tem certeza que deseja excluir permanentemente este contato?",
-                "sure_delete_contact_plural": "Tem certeza que deseja excluir permanentemente estes contatos?"
+                "sure_delete_contact_0": "Tem certeza que deseja excluir permanentemente este contato?",
+                "sure_delete_contact_1": "Tem certeza que deseja excluir permanentemente estes contatos?",
+                "sure_delete_contact_2": ""
             }
         },
         "snackbar": {
@@ -272,8 +283,9 @@
     "tooltip": {
         "revoke": "Revogar acesso",
         "resend": "Enviar notificação por e-mail sobre este compartilhamento",
-        "address_book_sharing_status": "Compartilhado com {{count}} pessoa",
-        "address_book_sharing_status_plural": "Compartilhado com {{count}} pessoas"
+        "address_book_sharing_status_0": "Compartilhado com {{count}} pessoa",
+        "address_book_sharing_status_1": "Compartilhado com {{count}} pessoas",
+        "address_book_sharing_status_2": ""
     },
     "title": {
         "advanced_filters": "Filtros avançados"
@@ -320,5 +332,8 @@
         "root": "Raiz",
         "contacts": "Contatos",
         "auto_contacts": "Contatos que receberam e-mail"
+    },
+    "search": {
+        "shared_folders_note": "Incluir agenda de contatos compartilhada nas buscas"
     }
 }
