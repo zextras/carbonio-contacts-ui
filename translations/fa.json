@@ -5,5 +5,12 @@
     },
     "displayer": {
         "search_description1": "یا «فیلترهای پیشرفته» را برای اصلاح جستجوی خود انتخاب کنید."
+    },
+    "folder": {
+        "modal": {
+            "footer": {
+                "go_back": "بازگشت"
+            }
+        }
     }
 }
