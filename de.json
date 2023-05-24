@@ -136,7 +136,7 @@
         "note": "Notizen:",
         "options": "Optionen",
         "select_color": "Farbe auswählen",
-        "share_with": "Teilen mit",
+        "share_with": "teilen mit",
         "app_name": "Kontakte",
         "edit_email": "E-Mail bearbeiten",
         "edit_invalid_email": "E-Mail ist ungültig, klicken Sie zum Bearbeiten",
@@ -156,7 +156,8 @@
         "no_data": "Keine Daten",
         "contact_created_in_folder": "Dieser Kontakt wird im Ordner \"{{name}}\" erstellt",
         "destination_address_book": "Zieladressbuch",
-        "include_shared_folders": "Gemeinsame Adressbücher einschließen"
+        "include_shared_folders": "Gemeinsame Adressbücher einschließen",
+        "autocomplete": "Automatisch vervollständigen"
     },
     "message": {
         "snackbar": {
