@@ -40,7 +40,7 @@ const ShareFolderModal = ({
 	const [ContactInput, integrationAvailable] = useIntegratedComponent('contact-input');
 	const shareFolderWithOptions = useMemo(() => ShareFolderWithOptions(t), [t]);
 	const shareFolderRoleOptions = useMemo(() => ShareFolderRoleOptions(t), [t]);
-	const [sendNotification, setSendNotification] = useState(false);
+	const [sendNotification, setSendNotification] = useState(true);
 	const [standardMessage, setStandardMessage] = useState('');
 	const [contacts, setContacts] = useState([]);
 	const [shareWithUserType, setshareWithUserType] = useState('usr');
