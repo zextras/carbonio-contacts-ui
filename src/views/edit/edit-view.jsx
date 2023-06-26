@@ -74,7 +74,7 @@ const ContactEditorRow = ({ children, wrap }) => (
 		{children}
 	</Row>
 );
-const CustomStringField = ({ name, label, value, dispatch }) => (
+const CustomStringField = ({ name, label, value, dispatch, autoFocus = false }) => (
 	<Container padding={{ all: 'small' }}>
 		<Input
 			backgroundColor="gray5"
@@ -82,6 +82,8 @@ const CustomStringField = ({ name, label, value, dispatch }) => (
 			label={label}
 			defaultValue={value}
 			onChange={(ev) => dispatch({ type: op.setInput, payload: ev.target })}
+			// eslint-disable-next-line jsx-a11y/no-autofocus
+			autoFocus={autoFocus}
 		/>
 	</Container>
 );
@@ -500,6 +502,8 @@ export default function EditView({ panel }) {
 						label={`${t('name.first_name', 'First Name')}*`}
 						value={contact.firstName}
 						dispatch={dispatch}
+						// eslint-disable-next-line jsx-a11y/no-autofocus
+						autoFocus
 					/>
 					<CustomStringField
 						name="middleName"
