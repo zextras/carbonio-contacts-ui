@@ -166,7 +166,7 @@
         "folder_name": "Nom du dossier",
         "note": "Note :",
         "options": "Options",
-        "share_with": "Partager avec",
+        "share_with": "Partagé avec",
         "app_name": "Contacts",
         "tag": "Etiquette",
         "tags": "Étiquettes",
@@ -183,7 +183,8 @@
         "no_data": "Pas de données",
         "contact_created_in_folder": "Ce contact sera créé dans le dossier \"{{name}}\"",
         "destination_address_book": "Carnet d'adresse de destination",
-        "include_shared_folders": "Inclure les carnets d'adresses partagés"
+        "include_shared_folders": "Inclure les carnets d'adresses partagés",
+        "autocomplete": "Auto-complétion"
     },
     "name": {
         "nickName": "Surnom",
