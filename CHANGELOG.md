@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.4](https://github.com/zextras/carbonio-contacts-ui/compare/v1.2.3...v1.2.4) (2023-07-06)
+
+
+### Bug Fixes
+
+* focus on composer name input during new contact creation ([#131](https://github.com/zextras/carbonio-contacts-ui/issues/131)) ([33dca35](https://github.com/zextras/carbonio-contacts-ui/commit/33dca3570f176b05ee2ed2d45dd03582db8d939c))
+* sharing folder set 'send notification about this shared' is checked by default ([9cbc294](https://github.com/zextras/carbonio-contacts-ui/commit/9cbc29418545a197638b9deecdf66a143c2ae82c))
+
 ### [1.2.3](https://github.com/zextras/carbonio-contacts-ui/compare/v1.2.2...v1.2.3) (2023-05-24)
 
 ### [1.2.2](https://github.com/zextras/carbonio-contacts-ui/compare/v1.2.1...v1.2.2) (2023-04-27)
