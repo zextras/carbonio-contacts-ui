@@ -93,7 +93,10 @@
                     "message1": "選択したアドレス帳を空にしますか？",
                     "message2": "空にすると、関連するコンテンツがすべてゴミ箱に移動されます。"
                 },
-                "message1": "選択したアドレス帳を空にしますか？"
+                "message1": "選択したアドレス帳を空にしますか？",
+                "message3": "ごみ箱を空にしますか？",
+                "message2": "関連する連絡先はすべて完全に削除され、元に戻すことはできません。",
+                "message4": "そのコンテンツは完全に削除され、復元することはできません。"
             },
             "item": {
                 "empty": "利用可能なアイテムはありません"
@@ -166,7 +169,7 @@
         "add_share": "共有を追加する",
         "folder_name": "フォルダー名",
         "options": "オプション",
-        "share_with": "シェア先",
+        "share_with": "共有する人",
         "new_contact": "新しい連絡先",
         "note": "メモ:",
         "app_name": "連絡先",
@@ -186,7 +189,11 @@
         "delete_tag": "タグを削除する",
         "create_tag": "タグを作成する",
         "no_data": "データがありません",
-        "no_name": "名前がありません"
+        "no_name": "名前がありません",
+        "contact_created_in_folder": "この連絡先は「{{name}}」フォルダに作成されます",
+        "destination_address_book": "宛先アドレス帳",
+        "include_shared_folders": "共有アドレス帳を含める",
+        "autocomplete": "オートコンプリート"
     },
     "name": {
         "nickName": "ニックネーム",
@@ -316,5 +323,8 @@
         "root": "ルート",
         "contacts": "連絡先",
         "auto_contacts": "メールを送信した連絡先"
+    },
+    "search": {
+        "shared_folders_note": "共有アドレス帳を検索に含めます。"
     }
 }
