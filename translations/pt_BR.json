@@ -334,6 +334,6 @@
         "auto_contacts": "Contatos que receberam e-mail"
     },
     "search": {
-        "shared_folders_note": "Incluir agenda de contatos compartilhada nas buscas"
+        "shared_folders_note": "Incluir agenda de contatos compartilhada nas buscas."
     }
 }
