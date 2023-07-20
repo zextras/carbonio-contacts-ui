@@ -2,10 +2,10 @@
     "action": {
         "goto_folder": "Zum Ordner gehen",
         "reset_filters": "Filter zurücksetzen",
-        "search": "Suchen",
+        "search": "Suche",
         "send_msg": "E-Mail senden",
         "share_folder": "Ordner teilen",
-        "delete_permanently": "Endgültig löschen"
+        "delete_permanently": "Permanent löschen"
     },
     "folder": {
         "action": {
@@ -63,7 +63,7 @@
                     "message1": "Name des neuen Adressbuches",
                     "message2": "Wählen Sie ein Adressbuch aus, welches das neu erstellte Element enthalten wird:"
                 },
-                "create_footer": "Erstellen und verschieben",
+                "create_footer": "Erstellen und Verschieben",
                 "input": {
                     "name": "Adressbuchname eingeben",
                     "name_exist": "Name existiert bereits in diesem Pfad"
@@ -72,7 +72,7 @@
                 "title2": "Erstellung eines neuen Ordners"
             },
             "restore": {
-                "create_footer": "Erstellen und wiederherstellen"
+                "create_footer": "Erstellen und Wiederherstellen"
             }
         },
         "snackbar": {
@@ -80,13 +80,13 @@
             "folder_new": "Neues Adressbuch erstellt",
             "trash_empty": "Papierkorb erfolgreich geleert",
             "address_book_moved_to_trash": "Adressbuch in den Papierkorb verschoben",
-            "address_book_permanently_deleted": "Adressbuch endgültig gelöscht"
+            "address_book_permanently_deleted": "Adressbuch permanent gelöscht"
         },
         "type": "Kontakteordner",
         "share_folder": "Adressbuch teilen"
     },
     "job": {
-        "company": "Firma",
+        "company": "Unternehmen",
         "department": "Abteilung",
         "title": "Funktion"
     },
@@ -94,22 +94,22 @@
         "edit_access": "Zugriff bearbeiten",
         "resend": "Erneut senden",
         "revoke": "Widerrufen",
-        "contact_setting": "Kontakt Einstellungen",
-        "revoke_share": "{{title}}’s Teilen widerrufen",
+        "contact_setting": "Kontakt-Einstellungen",
+        "revoke_share": "{{title}}s Teilen widerrufen",
         "shares_folder_edit": "Teilen dieses Adressbuches",
         "cancel": "Abbrechen",
         "edit": "Bearbeiten",
         "create": "Erstellen",
-        "edit_folder_properties": "{{name}}'s Eigenschaften bearbeiten",
+        "edit_folder_properties": "{{name}}s Eigenschaften bearbeiten",
         "save": "Speichern",
         "share": "Teilen",
         "empty": "Leer",
         "type": "Typ",
-        "error_try_again": "Etwas ist schiefgegangen, bitte versuchen Sie es erneut",
+        "error_try_again": "Es ist ein Fehler aufgetreten, bitte versuchen Sie es erneut",
         "undo": "Rückgängig machen",
         "contacts": "Kontakte",
         "delete": "Löschen",
-        "edit_access_name": "{{name}}'s Zugang bearbeiten",
+        "edit_access_name": "{{name}}s Zugriff bearbeiten",
         "of": "von",
         "revoke_with_standard_msg": "Zugriff widerrufen mit einer Standardbenachrichtigung",
         "revoke_without_notification": "Zugriff widerrufen ohne eine Benachrichtigung zu senden",
@@ -118,7 +118,7 @@
         "website_plural": "Webseiten",
         "advanced_filter": "{{count}} Erweiterter Filter",
         "advanced_filter_plural": "{{count}} Erweiterte Filter",
-        "email": "E-mail",
+        "email": "E-Mail",
         "move": "Verschieben",
         "new_contact_created": "Neuer Kontakt erstellt",
         "revoke_with_custom_msg": "Zugriff widerrufen mit einer benutzerdefinierten Benachrichtigung",
@@ -136,7 +136,7 @@
         "note": "Notizen:",
         "options": "Optionen",
         "select_color": "Farbe auswählen",
-        "share_with": "teilen mit",
+        "share_with": "Teilen mit",
         "app_name": "Kontakte",
         "edit_email": "E-Mail bearbeiten",
         "edit_invalid_email": "E-Mail ist ungültig, klicken Sie zum Bearbeiten",
@@ -150,13 +150,13 @@
         "edit_tag_name": "Tag \"{{name}}\" bearbeiten",
         "edit_tag": "Tag bearbeiten",
         "delete_tag_name": "Tag \"{{name}}\" löschen",
-        "delete_tag": "Delete tag",
+        "delete_tag": "Tag löschen",
         "create_tag": "Tag erstellen",
         "no_name": "Kein Name",
         "no_data": "Keine Daten",
         "contact_created_in_folder": "Dieser Kontakt wird im Ordner \"{{name}}\" erstellt",
         "destination_address_book": "Zieladressbuch",
-        "include_shared_folders": "Gemeinsame Adressbücher einschließen",
+        "include_shared_folders": "Geteilte Adressbücher einschließen",
         "autocomplete": "Automatisch vervollständigen"
     },
     "message": {
@@ -164,9 +164,9 @@
             "settings_saved": "Änderungen korrekt gespeichert"
         },
         "delete_tag_message2": "Nach dem Löschen wird es aus allen damit gekennzeichneten Artikeln entfernt.",
-        "delete_tag_message1": "Sind Sie sicher, dass Sie den \"{{name}}\" Tag?",
+        "delete_tag_message1": "Sind Sie sicher, dass Sie den \"{{name}}\" Tag löschen möchten?",
         "require_field": "Füllen Sie mindestens eines der Pflichtfelder * aus",
-        "new_contact": "Dieser Kontakt wird im 'Kontakte' Ordner erstellt"
+        "new_contact": "Dieser Kontakt wird im \"Kontakte\" Ordner erstellt"
     },
     "messages": {
         "modal": {
@@ -178,12 +178,12 @@
         },
         "snackbar": {
             "address_book_moved": "Adressbuch in den Zielordner verschoben",
-            "contact_deleted_permanently": "Kontakt endgültig gelöscht",
-            "contact_moved": "Contact moved to the destination address book",
+            "contact_deleted_permanently": "Kontakt permanent gelöscht",
+            "contact_moved": "Kontakt verschoben",
             "contact_moved_to_trash": "Kontakt in den Papierkorb verschoben",
             "contact_restored": "Kontakt wiederhergestellt",
             "tag_updated": "Tag erfolgreich aktualisiert",
-            "tag_not_updated": "Etwas ist schief gelaufen, der Tag wurde nicht aktualisiert. Bitte versuchen Sie es erneut.",
+            "tag_not_updated": "Ein Fehler ist aufgetreten, der Tag wurde nicht aktualisiert. Bitte versuchen Sie es erneut.",
             "tag_deleted": "{{name}} Tag erfolgreich gelöscht",
             "tag_created": "Tag {{name}} erfolgreich erstellt"
         }
@@ -206,12 +206,12 @@
             "country": "Land",
             "number": "Nummer",
             "postalCode": "Postleitzahl",
-            "state": "Status",
+            "state": "Bundesland",
             "street": "Straße"
         },
         "title": {
-            "mail": "E-Mail Adresse",
-            "phone_number": "Telefon Kontakt",
+            "mail": "E-Mail-Adresse",
+            "phone_number": "Telefonkontakt",
             "address": "Adresse",
             "address_plural": "Adressen"
         }
@@ -243,7 +243,7 @@
                 "public": "Öffentlich (nur Leserecht, kein Passwort erforderlich)"
             }
         },
-        "recipients_address": "E-Mail Adressen der Empfänger",
+        "recipients_address": "E-Mail-Adressen der Empfänger",
         "remove_from_this_list": "Aus der Liste entfernen",
         "role": "Rolle",
         "send_notification": "Benachrichtigung über dieses geteilte Element senden",
@@ -282,27 +282,27 @@
     },
     "tooltip": {
         "revoke": "Zugriff widerrufen",
-        "resend": "E-Mail Benachrichtigung über dieses geteilte Element senden",
+        "resend": "E-Mail-Benachrichtigung über dieses geteilte Element senden",
         "address_book_sharing_status": "Mit {{count}} Person geteilt",
         "address_book_sharing_status_plural": "Mit {{count}} Personen geteilt"
     },
     "types": {
-        "home": "Home",
+        "home": "Zuhause",
         "other": "andere",
         "work": "Arbeit",
         "mobile": "Mobil"
     },
     "displayer": {
-        "description2": "Klicken Sie auf die Schaltfläche \"NEU\", um mit der Erstellung eines neuen Dokuments zu beginnen.",
+        "description2": "Klicken Sie auf \"NEU\", um mit der Erstellung eines neuen Dokuments zu beginnen.",
         "description6": "Verwenden Sie den Modus \"Bearbeiten\", um einem Kontakt eine persönliche Notiz hinzuzufügen.",
         "list_title1": "Es sieht so aus, als gäbe es noch keine Kontakte",
         "search_description3": "Überprüfen Sie die Rechtschreibung und die Filteroptionen oder versuchen Sie es mit einem anderen Stichwort.",
         "search_title4": "Wählen Sie ein oder mehrere Ergebnisse aus, um Aktionen durchzuführen oder Details anzuzeigen.",
         "title4": "Passen Sie Ihre Kontakte an, indem Sie persönliche Notizen hinzufügen",
-        "description3": "Klicken Sie auf die Schaltfläche \"NEU\", um eine neue Gruppe von Kontakten zu erstellen.",
-        "description4": "Erstellen Sie einen neuen, indem Sie auf die Schaltfläche \"NEU\" klicken.",
+        "description3": "Klicken Sie auf \"NEU\", um eine neue Gruppe von Kontakten zu erstellen.",
+        "description4": "Erstellen Sie einen neuen, indem Sie auf \"NEU\" klicken.",
         "description5": "Entdecken Sie alle Möglichkeiten, wie Sie mit anderen Nutzern in Kontakt treten können.",
-        "description7": "Erstellen Sie eine Gruppe von Kontakten, indem Sie auf die Schaltfläche \"NEU\" klicken.",
+        "description7": "Erstellen Sie eine Gruppe von Kontakten, indem Sie auf \"NEU\" klicken.",
         "description8": "Wählen Sie einen Kontakt oder eine Gruppe von Kontakten aus, um gemeinsame E-Mails zu versenden.",
         "list_title2": "Der Papierkorb ist leer",
         "search_description1": "Oder wählen Sie \"Erweiterte Filter\", um Ihre Suche zu verfeinern.",
@@ -312,7 +312,7 @@
         "search_title1": "Weitere Suche starten",
         "search_title2": "Es tut uns leid, aber es gibt keine Ergebnisse für Ihre Suche",
         "search_title3": "Es gibt keine Ergebnisse für Ihre Suche.",
-        "title1": "Erstellen Sie einen neuen Kontakt, indem Sie auf die Schaltfläche \"NEU\" klicken.",
+        "title1": "Erstellen Sie einen neuen Kontakt, indem Sie auf \"NEU\" klicken.",
         "title10": "Auswählen und Wiederherstellen von Kontakten aus dem Papierkorb",
         "title2": "Teilen Sie alle Ihre Werke mit Ihren Kontakten.",
         "title3": "Bleiben Sie in Kontakt mit Ihren Kollegen.",
@@ -324,10 +324,10 @@
     },
     "contact_restored": "Kontakt wiederhergestellt",
     "folders": {
-        "trash": "Prullenbak",
-        "root": "Stammordner",
+        "trash": "Papierkorb",
+        "root": "Root",
         "contacts": "Kontakte",
-        "auto_contacts": "Mailempfänger"
+        "auto_contacts": "E-Mail-Kontakte"
     },
     "search": {
         "shared_folders_note": "Fügen Sie freigegebene Adressbücher in Suchanfragen ein."
