@@ -3,22 +3,32 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback, useEffect, useRef, useState, ReactElement, FC } from 'react';
+import React, { useCallback, useEffect, useRef, useState, ReactElement, FC, useMemo } from 'react';
 
 import { createSelector } from '@reduxjs/toolkit';
 import {
 	Avatar,
-	Chip,
 	ChipInput,
 	Container,
 	Row,
 	Text,
-	Tooltip,
 	ChipProps,
 	ChipItem
 } from '@zextras/carbonio-design-system';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
-import { filter, find, findIndex, map, reduce, some, startsWith, trim, forEach } from 'lodash';
+import {
+	filter,
+	find,
+	findIndex,
+	map,
+	reduce,
+	some,
+	startsWith,
+	trim,
+	forEach,
+	reject,
+	uniqBy
+} from 'lodash';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import styled, { DefaultTheme } from 'styled-components';
@@ -36,11 +46,17 @@ function isGroup(contact: Contact | Group): contact is Group {
 	return (contact as Group).isGroup === true;
 }
 
-const getChipLabel = (contact: Contact | Group): string => {
-	if (!isGroup(contact)) {
+// const getChipLabel = (contact: Contact | Group): string => {
+// 	if (!isGroup(contact)) {
+// 		return trim(`${contact.firstName ?? ''} ${contact.middleName ?? ''} ${contact.lastName ?? ''}`);
+// 	}
+// 	return contact?.display ?? '';
+// };
+const getChipLabel = (contact: any): string => {
+	if (contact.firstName ?? contact.middleName ?? contact.lastName) {
 		return trim(`${contact.firstName ?? ''} ${contact.middleName ?? ''} ${contact.lastName ?? ''}`);
 	}
-	return contact?.display ?? '';
+	return contact.fullName ?? contact.email ?? contact.name ?? contact.address ?? '';
 };
 
 const Hint = ({ contact }: { contact: Contact | Group }): ReactElement => {
@@ -123,7 +139,8 @@ const ContactInput: FC<ContactInput> = ({
 	background = 'gray5',
 	...props
 }) => {
-	const [defaults, setDefaults] = useState<Array<Contact>>([]);
+	const [defaults, setDefaults] = useState<Array<ChipItem<string | Contact>>>([]);
+
 	const [options, setOptions] = useState<any>([]);
 	const [idToRemove, setIdToRemove] = useState('');
 	const [t] = useTranslation();
@@ -272,7 +289,6 @@ const ContactInput: FC<ContactInput> = ({
 												fullName: result.full,
 												display: result.display,
 												isGroup: result.isGroup,
-												// check if needed
 												id: result.id,
 												l: result.l,
 												exp: result.exp
@@ -321,11 +337,48 @@ const ContactInput: FC<ContactInput> = ({
 		[allContacts, defaults, editChip, isValidEmail, onChange, options, t]
 	);
 
+	useEffect(() => {
+		const groups = filter(defaults, ['isGroup', true]);
+		const newContacts: any = [];
+		if (groups.length > 0) {
+			forEach(groups, (def: any) => {
+				soapFetch('GetContacts', {
+					_jsns: 'urn:zimbraMail',
+					cn: {
+						id: def.groupId
+					},
+					derefGroupMember: true
+				}).then((result: any) => {
+					const id = moment().valueOf().toString();
+					const members = result && result?.cn && result?.cn[0].m;
+					forEach(members, (member) => {
+						const email = member.cn?.[0]._attrs.email ?? member.value;
+						newContacts.push({
+							email,
+							id,
+							label: email,
+							error: !isValidEmail(email)
+						});
+					});
+
+					setDefaults(() => {
+						const newValue = reject(defaults, ['isGroup', true]);
+						onChange && onChange([...newValue, ...newContacts]);
+						return [...newValue, ...newContacts];
+					});
+				});
+			});
+		}
+	}, [defaults, isValidEmail, onChange]);
+
+	const contactInputValue = useMemo(() => uniqBy(defaults, 'email'), [defaults]);
+
 	const onAdd = useCallback(
 		(valueToAdd) => {
 			if (typeof valueToAdd === 'string') {
 				const id = moment().valueOf().toString();
-				const chip: ChipProps = {
+				const chip: any = {
+					email: valueToAdd,
 					id,
 					label: valueToAdd,
 					error: !isValidEmail(valueToAdd),
@@ -346,40 +399,6 @@ const ContactInput: FC<ContactInput> = ({
 				}
 				return chip;
 			}
-			if (valueToAdd.isGroup) {
-				const groupChips: Array<any> = [];
-				soapFetch('GetContacts', {
-					_jsns: 'urn:zimbraMail',
-					cn: {
-						id: valueToAdd.groupId
-					},
-					derefGroupMember: true
-				}).then((result: any) => {
-					const id = moment().valueOf().toString();
-					const members = result && result?.cn && result?.cn[0].m;
-					forEach(members, (member, i) => {
-						groupChips.push({
-							email: member.cn[0]._attrs.email,
-							id,
-							label: member.cn[0]._attrs.email,
-							error: !isValidEmail(member.cn[0]._attrs.email),
-							actions: [
-								{
-									id: 'action1',
-									label: isValidEmail(member.cn[0]._attrs.email)
-										? t('label.edit_email', 'Edit E-mail')
-										: t('label.edit_invalid_email', 'E-mail is invalid, click to edit it'),
-									icon: 'EditOutline',
-									type: 'button',
-									onClick: () => editChip(member.cn[0]._attrs.email, id)
-								}
-							]
-						});
-					});
-					setDefaults((prevValue) => [...prevValue, ...groupChips]);
-				});
-				return {};
-			}
 			return valueToAdd;
 		},
 		[editChip, isValidEmail, t]
@@ -396,7 +415,7 @@ const ContactInput: FC<ContactInput> = ({
 				onInputType={onInputType}
 				onChange={onChange}
 				options={options}
-				value={defaults}
+				value={contactInputValue}
 				background={background}
 				onAdd={onAdd}
 				requireUniqueChips
