@@ -45,13 +45,6 @@ const emailRegex =
 function isGroup(contact: Contact | Group): contact is Group {
 	return (contact as Group).isGroup === true;
 }
-
-// const getChipLabel = (contact: Contact | Group): string => {
-// 	if (!isGroup(contact)) {
-// 		return trim(`${contact.firstName ?? ''} ${contact.middleName ?? ''} ${contact.lastName ?? ''}`);
-// 	}
-// 	return contact?.display ?? '';
-// };
 const getChipLabel = (contact: any): string => {
 	if (contact.firstName ?? contact.middleName ?? contact.lastName) {
 		return trim(`${contact.firstName ?? ''} ${contact.middleName ?? ''} ${contact.lastName ?? ''}`);
