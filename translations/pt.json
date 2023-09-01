@@ -101,7 +101,7 @@
         "edit_folder_properties": "Editar propriedades de {{name}}",
         "resend": "Reenviar",
         "revoke": "Revogar",
-        "revoke_share": "Revogar partilha de {{title}}",
+        "revoke_share": "Revogar a partilha de {{title}}",
         "shares_folder_edit": "Partilha do Livro de Contactos",
         "notes": "Notas",
         "of": "de",
@@ -157,7 +157,7 @@
         "no_name": "Sem nome",
         "no_data": "Sem dados",
         "contact_created_in_folder": "Este contato será criado na pasta \"{{name}}\"",
-        "include_shared_folders": "Incluir os contatos partilhados",
+        "include_shared_folders": "Incluir a lista de contatos partilhados",
         "destination_address_book": "Livro de Contactos de destino",
         "autocomplete": "Autocompletar"
     },
@@ -178,7 +178,7 @@
         "manager": "Gerenciar",
         "options": {
             "share_calendar_with": {
-                "internal_users_groups": "Usuários ou grupos internos",
+                "internal_users_groups": "Utilizadores ou grupos internos",
                 "public": "Público (apenas ver, senha não requerida)",
                 "external_guests": "Convidados externos (apenas visualizar)"
             }
