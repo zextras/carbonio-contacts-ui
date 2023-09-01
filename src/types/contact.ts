@@ -106,3 +106,13 @@ export type Contact = {
 	URL: ContactUrlMap;
 	fileAsStr: string;
 };
+
+export type Group = {
+	display: string;
+	exp: boolean;
+	id: string;
+	isGroup: boolean;
+	l: string;
+	ranking: string;
+	type: string;
+};
