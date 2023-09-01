@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/zextras/carbonio-contacts-ui/compare/v1.2.5...v1.3.0) (2023-09-01)
+
+
+### Features
+
+* allow groups selection inside the contact-input ([0a57e2f](https://github.com/zextras/carbonio-contacts-ui/commit/0a57e2fe5ee087b7488c7892da3a499aedf87e1a))
+* allow groups selection inside the contact-input ([43a0c77](https://github.com/zextras/carbonio-contacts-ui/commit/43a0c77e96a64b0a3d8be2dc16bbd76bacc30df9))
+* allow groups selection inside the contact-input ([7b74737](https://github.com/zextras/carbonio-contacts-ui/commit/7b747372e701699f6e7e34192cbd43dbf2b5031f))
+
 ### [1.2.5](https://github.com/zextras/carbonio-contacts-ui/compare/v1.2.4...v1.2.5) (2023-07-20)
 
 ### [1.2.4](https://github.com/zextras/carbonio-contacts-ui/compare/v1.2.3...v1.2.4) (2023-07-06)
