@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React, { lazy, useEffect, Suspense } from 'react';
+
 import {
 	Spinner,
 	addRoute,
@@ -16,11 +17,12 @@ import {
 	registerComponents
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
-import SidebarItems from './views/secondary-bar/sidebar';
-import ContactInput from './integrations/contact-input';
-import { SyncDataHandler } from './views/secondary-bar/sync-data-handler';
+
 import { CONTACTS_ROUTE, CONTACTS_APP_ID } from './constants';
+import ContactInput from './integrations/contact-input';
 import { StoreProvider } from './store/redux';
+import SidebarItems from './views/secondary-bar/sidebar';
+import { SyncDataHandler } from './views/secondary-bar/sync-data-handler';
 
 const LazyAppView = lazy(() => import(/* webpackChunkName: "contacts-view" */ './views/app-view'));
 
