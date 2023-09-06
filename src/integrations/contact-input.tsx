@@ -43,7 +43,7 @@ const emailRegex =
 	/[^\s@]+@[^\s@]+\.[^\s@]+/;
 
 function isGroup(contact: Contact | Group): contact is Group {
-	return (contact as Group).isGroup === true;
+	return (contact as Group).isGroup === true && (contact as Group).display !== undefined && (contact as Group).display !== null;
 }
 const getChipLabel = (contact: any): string => {
 	if (contact.firstName ?? contact.middleName ?? contact.lastName) {
@@ -261,7 +261,7 @@ const ContactInput: FC<ContactInput> = ({
 							.then((autoCompleteResult: any) =>
 								map(autoCompleteResult.match, (m) => ({
 									...m,
-									email: m.isGroup ? m.display : emailRegex.exec(m.email)?.[0]?.slice(1, -1)
+									email: isGroup(m) ? m.display : emailRegex.exec(m.email)?.[0]?.slice(1, -1)
 								}))
 							)
 							.then((remoteResults: any) => {
@@ -331,7 +331,7 @@ const ContactInput: FC<ContactInput> = ({
 	);
 
 	useEffect(() => {
-		const groups = filter(defaults, ['isGroup', true]);
+		const groups = filter(defaults, isGroup);
 		const newContacts: any = [];
 		if (groups.length > 0) {
 			forEach(groups, (def: any) => {
@@ -355,7 +355,7 @@ const ContactInput: FC<ContactInput> = ({
 					});
 
 					setDefaults(() => {
-						const newValue = reject(defaults, ['isGroup', true]);
+						const newValue = reject(defaults, isGroup);
 						onChange && onChange([...newValue, ...newContacts]);
 						return [...newValue, ...newContacts];
 					});
