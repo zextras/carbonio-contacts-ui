@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.1](https://github.com/zextras/carbonio-contacts-ui/compare/v1.3.0...v1.3.1) (2023-09-07)
+
+
+### Bug Fixes
+
+* **contact input:** differentiate groups from DLs ([0da5577](https://github.com/zextras/carbonio-contacts-ui/commit/0da55770fecdf5a5b0c3e7f21ec91f44543902a5))
+* groups and distribution lists management are now separated ([cb569d0](https://github.com/zextras/carbonio-contacts-ui/commit/cb569d0daa1e82f37f8f9ffb8ae97e9224fe0afb))
+
 ## [1.3.0](https://github.com/zextras/carbonio-contacts-ui/compare/v1.2.5...v1.3.0) (2023-09-01)
 
 
