@@ -187,7 +187,10 @@ const ContactInput: FC<ContactInput> = ({
 	const editChip = useCallback((text, id) => {
 		setIdToRemove(id);
 		if (inputRef?.current) {
-			inputRef.current.innerText = text;
+			inputRef.current.value = text;
+			inputRef.current.style.width = inputRef.current.value
+				? `${inputRef.current.scrollWidth}px`
+				: '';
 		}
 	}, []);
 	const onInputType = useCallback(
