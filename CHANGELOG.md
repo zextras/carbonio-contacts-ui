@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.2](https://github.com/zextras/carbonio-contacts-ui/compare/v1.3.1...v1.3.2) (2023-09-28)
+
+
+### Bug Fixes
+
+* can't edit a chip in contact-input ([ad34233](https://github.com/zextras/carbonio-contacts-ui/commit/ad34233a0777c01d3f9c230b5b327f70989d00ec))
+
 ### [1.3.1](https://github.com/zextras/carbonio-contacts-ui/compare/v1.3.0...v1.3.1) (2023-09-07)
 
 
