@@ -412,7 +412,6 @@ const ContactInput: FC<ContactInput> = ({
 				disableOptions
 				placeholder={placeholder}
 				confirmChipOnBlur
-				confirmChipOnSpace={false}
 				inputRef={inputRef}
 				onInputType={onInputType}
 				onChange={onChange}
@@ -423,7 +422,10 @@ const ContactInput: FC<ContactInput> = ({
 				requireUniqueChips
 				createChipOnPaste
 				pasteSeparators={[',', ' ', ';', '\n']}
-				separators={['NumpadEnter', ',']}
+				separators={[
+					{ code: 'NumpadEnter', ctrlKey: false },
+					{ key: ',', ctrlKey: false }
+				]}
 				{...props}
 			/>
 		</Container>
