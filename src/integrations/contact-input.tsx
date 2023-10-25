@@ -137,21 +137,48 @@ const ContactInput: FC<ContactInput> = ({
 	background = 'gray5',
 	...props
 }) => {
-	const [defaults, setDefaults] = useState<Array<ChipItem<string | Contact>>>([]);
+	const [defaults, setDefaults] = useState<
+		Array<ChipItem<string | Contact | ((prevState: ChipItem<string | Contact>[]) => ChipItem[])>>
+	>([]);
 
 	const [options, setOptions] = useState<any>([]);
 	const [idToRemove, setIdToRemove] = useState('');
 	const [t] = useTranslation();
 	const inputRef = useRef<HTMLInputElement | null>(null);
+	const emptyDraggedChip = useMemo(() => ({ id: '', dragStartRef: null }), []);
+	const draggedChip = useRef<{
+		id: string;
+		dragStartRef: HTMLInputElement | null;
+	}>(emptyDraggedChip);
+	const isSameElement = useRef(false);
 
+	const buildDragStartHandler = useCallback(
+		(chip) => (ev: React.DragEvent) => {
+			ev.dataTransfer.setData('contact', JSON.stringify(chip));
+			ev.dataTransfer.dropEffect = 'move';
+			draggedChip.current = { id: chip.id, dragStartRef: inputRef.current };
+		},
+		[]
+	);
 	useEffect(() => {
 		setDefaults(
 			map(filter(defaultValue, (c) => c.id !== idToRemove) ?? [], (obj) => ({
 				...obj,
-				label: getChipLabel(obj)
+				label: getChipLabel(obj),
+				draggable: true,
+				onDragStart: buildDragStartHandler(obj)
 			}))
 		);
-	}, [defaultValue, idToRemove]);
+	}, [buildDragStartHandler, defaultValue, idToRemove]);
+
+	const buildDraggableChip = useCallback(
+		(chip): ChipItem => ({
+			...chip,
+			draggable: true,
+			onDragStart: buildDragStartHandler(chip)
+		}),
+		[buildDragStartHandler]
+	);
 
 	const allContacts: Array<Contact> = useAppSelector(
 		createSelector(
@@ -200,7 +227,13 @@ const ContactInput: FC<ContactInput> = ({
 					inputRef.current.innerText = inputRef.current.innerText.replaceAll('\n', '');
 				}
 				if (options?.length > 0 && !find(options, { id: 'loading' })) {
-					onChange && onChange([...defaults, { ...(options[0]?.value as Contact) }]);
+					onChange &&
+						onChange([
+							...defaults,
+							{
+								...(options[0]?.value as Contact)
+							}
+						] as ChipItem<string | Contact>[]);
 					if (inputRef?.current) {
 						inputRef.current.innerText = '';
 					}
@@ -359,7 +392,9 @@ const ContactInput: FC<ContactInput> = ({
 							email,
 							id,
 							label: email,
-							error: !isValidEmail(email)
+							error: !isValidEmail(email),
+							draggable: true,
+							onDragStart: buildDragStartHandler({ id, email, label: email })
 						});
 					});
 
@@ -371,7 +406,7 @@ const ContactInput: FC<ContactInput> = ({
 				});
 			});
 		}
-	}, [defaults, isValidEmail, onChange]);
+	}, [buildDragStartHandler, defaults, isValidEmail, onChange]);
 
 	const contactInputValue = useMemo(() => uniqBy(defaults, 'email'), [defaults]);
 
@@ -406,8 +441,54 @@ const ContactInput: FC<ContactInput> = ({
 		[editChip, isValidEmail, t]
 	);
 
+	const onDragEnter = useCallback((ev) => {
+		ev.preventDefault();
+		ev.dataTransfer.dropEffect = 'move';
+	}, []);
+
+	const onDragEnd = useCallback(
+		(ev) => {
+			ev.preventDefault();
+			// if the drop is cancelled (e.g. by dropping outside of the dropzone or by pressing ESC), no dragleave action is fired
+			if (ev?.dataTransfer?.dropEffect === 'none' || isSameElement.current) {
+				draggedChip.current = emptyDraggedChip;
+				isSameElement.current = false;
+				return;
+			}
+			setDefaults((prevState) =>
+				filter(prevState, (contact) => contact.id !== draggedChip.current.id)
+			);
+			const newDefaults = filter(defaults, (c) => c.id !== draggedChip.current.id);
+			onChange && onChange([...newDefaults] as ChipItem<string | Contact>[]);
+			draggedChip.current = emptyDraggedChip;
+			isSameElement.current = false;
+		},
+		[defaults, emptyDraggedChip, onChange]
+	);
+
+	const onDrop = useCallback(
+		(ev) => {
+			ev.preventDefault();
+			if (draggedChip.current.dragStartRef === inputRef.current) {
+				isSameElement.current = true;
+				return;
+			}
+			const chipJson = ev.dataTransfer.getData('contact');
+			if (chipJson) {
+				const chip = JSON.parse(chipJson);
+				const newChip = buildDraggableChip(chip) as ChipItem<string | Contact>;
+				setDefaults((prevState) =>
+					find(prevState, { id: newChip.id }) ? prevState : { ...prevState, newChip }
+				);
+				// !find(defaults, { id: newChip.id }) &&
+				onChange && onChange([...defaults, { ...newChip }] as ChipItem<string | Contact>[]);
+			}
+		},
+		[buildDraggableChip, defaults, onChange]
+	);
+
 	return (
-		<Container width="100%">
+		<Container width="100%" onDrop={onDrop} height="100%">
 			<ChipInput
 				disableOptions
 				placeholder={placeholder}
@@ -424,6 +505,9 @@ const ContactInput: FC<ContactInput> = ({
 				createChipOnPaste
 				pasteSeparators={[',', ' ', ';', '\n']}
 				separators={['NumpadEnter', ',']}
+				onDragEnter={onDragEnter}
+				onDragOver={onDragEnter}
+				onDragEnd={onDragEnd}
 				{...props}
 			/>
 		</Container>
