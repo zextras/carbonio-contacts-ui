@@ -480,7 +480,6 @@ const ContactInput: FC<ContactInput> = ({
 				setDefaults((prevState) =>
 					find(prevState, { id: newChip.id }) ? prevState : { ...prevState, newChip }
 				);
-				// !find(defaults, { id: newChip.id }) &&
 				onChange && onChange([...defaults, { ...newChip }] as ChipItem<string | Contact>[]);
 			}
 		},
