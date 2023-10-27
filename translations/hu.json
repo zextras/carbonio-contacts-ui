@@ -1,0 +1,22 @@
+{
+    "displayer": {
+        "search_description2": "Újabb keresés indítása.",
+        "search_list_title2": "Nincs találat a keresésre.",
+        "search_title1": "Másik keresés indítása",
+        "search_title2": "Sajnáljuk, de nincs találat a keresésre",
+        "search_title4": "Válasszon ki egy vagy több eredményt a műveletek végrehajtásához vagy a részletek megjelenítéséhez.",
+        "search_description1": "Vagy válassza ki a \"Haladó szűrőbeállítások\"-at a keresés testreszabásához.",
+        "search_list_title1": "Eddig nincs találat. Folytassa a keresést!",
+        "search_title3": "Nincs találat a keresésére."
+    },
+    "action": {
+        "share_folder": "Mappa megosztás",
+        "search": "Keresés"
+    },
+    "folders": {
+        "trash": "Törölt üzenetek"
+    },
+    "label": {
+        "activate_selection_mode": "Kiválasztási mód aktiválása"
+    }
+}
