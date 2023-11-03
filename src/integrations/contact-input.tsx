@@ -27,7 +27,8 @@ import {
 	trim,
 	forEach,
 	reject,
-	uniqBy
+	uniqBy,
+	noop
 } from 'lodash';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
@@ -129,12 +130,14 @@ type ContactInput = {
 	defaultValue: Array<Contact>;
 	placeholder: string;
 	background?: keyof DefaultTheme['palette'];
+	dragAndDropEnabled?: boolean;
 };
 const ContactInput: FC<ContactInput> = ({
 	onChange,
 	defaultValue,
 	placeholder,
 	background = 'gray5',
+	dragAndDropEnabled = false,
 	...props
 }) => {
 	const [defaults, setDefaults] = useState<
@@ -145,9 +148,10 @@ const ContactInput: FC<ContactInput> = ({
 	const [idToRemove, setIdToRemove] = useState('');
 	const [t] = useTranslation();
 	const inputRef = useRef<HTMLInputElement | null>(null);
-	const emptyDraggedChip = useMemo(() => ({ id: '', dragStartRef: null }), []);
+	const emptyDraggedChip = useMemo(() => ({ id: '', email: '', dragStartRef: null }), []);
 	const draggedChip = useRef<{
-		id: string;
+		id?: string;
+		email?: string;
 		dragStartRef: HTMLInputElement | null;
 	}>(emptyDraggedChip);
 	const isSameElement = useRef(false);
@@ -156,7 +160,11 @@ const ContactInput: FC<ContactInput> = ({
 		(chip) => (ev: React.DragEvent) => {
 			ev.dataTransfer.setData('contact', JSON.stringify(chip));
 			ev.dataTransfer.dropEffect = 'move';
-			draggedChip.current = { id: chip.id, dragStartRef: inputRef.current };
+			draggedChip.current = {
+				id: chip.id,
+				email: chip.email ?? chip.address,
+				dragStartRef: inputRef.current
+			};
 		},
 		[]
 	);
@@ -165,11 +173,11 @@ const ContactInput: FC<ContactInput> = ({
 			map(filter(defaultValue, (c) => c.id !== idToRemove) ?? [], (obj) => ({
 				...obj,
 				label: getChipLabel(obj),
-				draggable: true,
-				onDragStart: buildDragStartHandler(obj)
+				draggable: dragAndDropEnabled,
+				onDragStart: dragAndDropEnabled ? buildDragStartHandler(obj) : noop
 			}))
 		);
-	}, [buildDragStartHandler, defaultValue, idToRemove]);
+	}, [buildDragStartHandler, defaultValue, dragAndDropEnabled, idToRemove]);
 
 	const buildDraggableChip = useCallback(
 		(chip): ChipItem => ({
@@ -446,24 +454,32 @@ const ContactInput: FC<ContactInput> = ({
 		ev.dataTransfer.dropEffect = 'move';
 	}, []);
 
+	const resetDraggedChip = useCallback(() => {
+		draggedChip.current = emptyDraggedChip;
+	}, [emptyDraggedChip]);
+
 	const onDragEnd = useCallback(
 		(ev) => {
 			ev.preventDefault();
 			// if the drop is cancelled (e.g. by dropping outside of the dropzone or by pressing ESC), no dragleave action is fired
 			if (ev?.dataTransfer?.dropEffect === 'none' || isSameElement.current) {
-				draggedChip.current = emptyDraggedChip;
+				resetDraggedChip();
 				isSameElement.current = false;
 				return;
 			}
 			setDefaults((prevState) =>
 				filter(prevState, (contact) => contact.id !== draggedChip.current.id)
 			);
-			const newDefaults = filter(defaults, (c) => c.id !== draggedChip.current.id);
-			onChange && onChange([...newDefaults] as ChipItem<string | Contact>[]);
-			draggedChip.current = emptyDraggedChip;
+			const newDefaults = filter(defaults, (c: any) => {
+				if (c.email) return c.email !== draggedChip.current.email;
+
+				return c.id !== draggedChip.current.id;
+			});
+			onChange && onChange(newDefaults as ChipItem<string | Contact>[]);
+			resetDraggedChip();
 			isSameElement.current = false;
 		},
-		[defaults, emptyDraggedChip, onChange]
+		[defaults, onChange, resetDraggedChip]
 	);
 
 	const onDrop = useCallback(
@@ -471,6 +487,7 @@ const ContactInput: FC<ContactInput> = ({
 			ev.preventDefault();
 			if (draggedChip.current.dragStartRef === inputRef.current) {
 				isSameElement.current = true;
+				resetDraggedChip();
 				return;
 			}
 			const chipJson = ev.dataTransfer.getData('contact');
@@ -481,9 +498,11 @@ const ContactInput: FC<ContactInput> = ({
 					find(prevState, { id: newChip.id }) ? prevState : { ...prevState, newChip }
 				);
 				onChange && onChange([...defaults, { ...newChip }] as ChipItem<string | Contact>[]);
+				resetDraggedChip();
+				isSameElement.current = false;
 			}
 		},
-		[buildDraggableChip, defaults, onChange]
+		[buildDraggableChip, defaults, onChange, resetDraggedChip]
 	);
 
 	return (
@@ -504,9 +523,9 @@ const ContactInput: FC<ContactInput> = ({
 				createChipOnPaste
 				pasteSeparators={[',', ' ', ';', '\n']}
 				separators={['NumpadEnter', ',']}
-				onDragEnter={onDragEnter}
-				onDragOver={onDragEnter}
-				onDragEnd={onDragEnd}
+				onDragEnter={dragAndDropEnabled ? onDragEnter : noop}
+				onDragOver={dragAndDropEnabled ? onDragEnter : noop}
+				onDragEnd={dragAndDropEnabled ? onDragEnd : noop}
 				{...props}
 			/>
 		</Container>
