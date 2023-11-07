@@ -33,6 +33,7 @@ import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import styled, { DefaultTheme } from 'styled-components';
 
+import { AddDistributionListChip } from './addDistributionListChip';
 import { useAppSelector } from '../hooks/redux';
 import { StoreProvider } from '../store/redux';
 import { Contact, Group } from '../types/contact';
@@ -42,12 +43,11 @@ const emailRegex =
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars, max-len, no-control-regex
 	/[^\s@]+@[^\s@]+\.[^\s@]+/;
 
-function isGroup(contact: Contact | Group): contact is Group {
-	return (
-		(contact as Group).isGroup &&
-		(contact as Group).display !== undefined &&
-		(contact as Group).display !== null
-	);
+function isContactGroup(contact: {
+	isGroup?: boolean;
+	display?: string | undefined | null;
+}): boolean {
+	return (contact?.isGroup && contact?.display !== undefined && contact?.display !== null) ?? false;
 }
 
 const getChipLabel = (contact: any): string => {
@@ -57,7 +57,7 @@ const getChipLabel = (contact: any): string => {
 	return contact.fullName ?? contact.email ?? contact.name ?? contact.address ?? '';
 };
 
-const Hint = ({ contact }: { contact: Contact | Group }): ReactElement => {
+const Hint = ({ contact }: { contact: Group }): ReactElement => {
 	const label = getChipLabel(contact);
 	return (
 		<Container
@@ -69,7 +69,7 @@ const Hint = ({ contact }: { contact: Contact | Group }): ReactElement => {
 		>
 			<Avatar label={label} />
 			<Container orientation="vertical" crossAlignment="flex-start" padding={{ left: 'small' }}>
-				{!isGroup(contact) ? (
+				{!isContactGroup(contact) ? (
 					<>
 						<Row takeAvailableSpace mainAlignment="flex-start">
 							<Text size="large">{label}</Text>
@@ -269,8 +269,7 @@ const ContactInput: FC<ContactInput> = ({
 							.then((autoCompleteResult: any) =>
 								map(autoCompleteResult.match, (m) => ({
 									...m,
-									isGroup: isGroup(m),
-									email: isGroup(m) ? m.display : emailRegex.exec(m.email)?.[0]?.slice(1, -1)
+									email: isContactGroup(m) ? m.display : emailRegex.exec(m.email)?.[0]?.slice(1, -1)
 								}))
 							)
 							.then((remoteResults: any) => {
@@ -293,7 +292,8 @@ const ContactInput: FC<ContactInput> = ({
 												isGroup: result.isGroup,
 												id: result.id,
 												l: result.l,
-												exp: result.exp
+												exp: result.exp,
+												galType: result.type
 											}
 										];
 									},
@@ -318,9 +318,11 @@ const ContactInput: FC<ContactInput> = ({
 												lastName: contact?.lastName,
 												company: contact?.company,
 												fullName: contact?.fullName,
+												display: contact?.display,
 												isGroup: contact?.isGroup,
 												groupId: contact?.id,
-												label: contact?.label ?? getChipLabel(contact)
+												label: contact?.label ?? getChipLabel(contact),
+												galType: contact?.galType
 											},
 											customComponent: <Hint contact={contact} />
 										})
@@ -340,7 +342,7 @@ const ContactInput: FC<ContactInput> = ({
 	);
 
 	useEffect(() => {
-		const groups = filter(defaults, ['isGroup', true]);
+		const groups = filter(defaults, (def) => isContactGroup(def));
 		const newContacts: any = [];
 		if (groups.length > 0) {
 			forEach(groups, (def: any) => {
@@ -424,6 +426,7 @@ const ContactInput: FC<ContactInput> = ({
 				createChipOnPaste
 				pasteSeparators={[',', ' ', ';', '\n']}
 				separators={['NumpadEnter', ',']}
+				ChipComponent={(_props): ReactElement => AddDistributionListChip(_props, setDefaults)}
 				{...props}
 			/>
 		</Container>

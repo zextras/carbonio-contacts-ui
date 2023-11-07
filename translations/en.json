@@ -1,4 +1,5 @@
 {
+    "": "",
     "action": {
         "delete_permanently": "Delete Permanently",
         "goto_folder": "Go to folder",
@@ -183,6 +184,8 @@
         "root": "Root",
         "save": "Save",
         "search_activate_selection_mode": "Selection mode isn’t available yet on search results",
+        "select_all_addresses": "Select address",
+        "select_all_addresses_plural": "Select all {{count}} addresses",
         "select_color": "Select Color",
         "share": "Share",
         "share_with": "Share with",

@@ -108,11 +108,13 @@ export type Contact = {
 };
 
 export type Group = {
-	display: string;
+	display: undefined | string;
+	email: string;
 	exp: boolean;
 	id: string;
 	isGroup: boolean;
 	l: string;
 	ranking: string;
 	type: string;
+	galType?: string;
 };
