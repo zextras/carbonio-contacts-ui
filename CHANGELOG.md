@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.0](https://github.com/zextras/carbonio-contacts-ui/compare/v1.3.4...v1.4.0) (2023-11-07)
+
+
+### Features
+
+* add drag and drop to chips ([43794a1](https://github.com/zextras/carbonio-contacts-ui/commit/43794a11f18439f7eeb2f836e6c380519dd5ff73))
+* enable drag and drop of contacts ([a3be10b](https://github.com/zextras/carbonio-contacts-ui/commit/a3be10b08d1065b82a6a78e5e9259435bb2a062f))
+
 ### [1.3.4](https://github.com/zextras/carbonio-contacts-ui/compare/v1.3.3...v1.3.4) (2023-10-26)
 
 ### [1.3.3](https://github.com/zextras/carbonio-contacts-ui/compare/v1.3.2...v1.3.3) (2023-10-12)
