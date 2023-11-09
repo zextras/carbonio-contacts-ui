@@ -408,6 +408,11 @@ const ContactInput: FC<ContactInput> = ({
 		[editChip, isValidEmail, t]
 	);
 
+	const ChipComponent = useCallback(
+		(_props): ReactElement => AddDistributionListChip({ ..._props, onChange, contactInputValue }),
+		[contactInputValue, onChange]
+	);
+
 	return (
 		<Container width="100%">
 			<ChipInput
@@ -426,7 +431,7 @@ const ContactInput: FC<ContactInput> = ({
 				createChipOnPaste
 				pasteSeparators={[',', ' ', ';', '\n']}
 				separators={['NumpadEnter', ',']}
-				ChipComponent={(_props): ReactElement => AddDistributionListChip(_props, setDefaults)}
+				ChipComponent={ChipComponent}
 				{...props}
 			/>
 		</Container>
