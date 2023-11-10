@@ -109,7 +109,7 @@ export type Contact = {
 
 export type Group = {
 	display: undefined | string;
-	email: string;
+	email: string | undefined;
 	exp: boolean;
 	id: string;
 	isGroup: boolean;

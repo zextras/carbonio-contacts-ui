@@ -46,15 +46,24 @@ const emailRegex =
 function isContactGroup(contact: {
 	isGroup?: boolean;
 	display?: string | undefined | null;
+	email?: string | undefined;
 }): boolean {
-	return (contact?.isGroup && contact?.display !== undefined && contact?.display !== null) ?? false;
+	return (
+		(contact?.isGroup &&
+			contact?.display !== undefined &&
+			contact?.display !== null &&
+			!contact?.email) ??
+		false
+	);
 }
 
 const getChipLabel = (contact: any): string => {
 	if (contact.firstName ?? contact.middleName ?? contact.lastName) {
 		return trim(`${contact.firstName ?? ''} ${contact.middleName ?? ''} ${contact.lastName ?? ''}`);
 	}
-	return contact.fullName ?? contact.email ?? contact.name ?? contact.address ?? '';
+	return (
+		contact.fullName ?? contact.email ?? contact.name ?? contact.address ?? contact.display ?? ''
+	);
 };
 
 const Hint = ({ contact }: { contact: Group }): ReactElement => {
@@ -269,7 +278,7 @@ const ContactInput: FC<ContactInput> = ({
 							.then((autoCompleteResult: any) =>
 								map(autoCompleteResult.match, (m) => ({
 									...m,
-									email: isContactGroup(m) ? m.display : emailRegex.exec(m.email)?.[0]?.slice(1, -1)
+									email: isContactGroup(m) ? undefined : emailRegex.exec(m.email)?.[0]?.slice(1, -1)
 								}))
 							)
 							.then((remoteResults: any) => {
@@ -292,8 +301,7 @@ const ContactInput: FC<ContactInput> = ({
 												isGroup: result.isGroup,
 												id: result.id,
 												l: result.l,
-												exp: result.exp,
-												galType: result.type
+												exp: result.exp
 											}
 										];
 									},
@@ -321,8 +329,7 @@ const ContactInput: FC<ContactInput> = ({
 												display: contact?.display,
 												isGroup: contact?.isGroup,
 												groupId: contact?.id,
-												label: contact?.label ?? getChipLabel(contact),
-												galType: contact?.galType
+												label: contact?.label ?? getChipLabel(contact)
 											},
 											customComponent: <Hint contact={contact} />
 										})
@@ -366,7 +373,7 @@ const ContactInput: FC<ContactInput> = ({
 					});
 
 					setDefaults(() => {
-						const newValue = reject(defaults, ['isGroup', true]);
+						const newValue = reject(defaults, (chip) => isContactGroup(chip));
 						onChange && onChange([...newValue, ...newContacts]);
 						return [...newValue, ...newContacts];
 					});

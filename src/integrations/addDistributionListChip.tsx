@@ -26,16 +26,8 @@ const DISTRIBUTION_ITEM = {
 	MORE_ITEM: 'dl-get-more'
 };
 
-const isDistributionList = ({
-	exp,
-	isGroup,
-	galType
-}: {
-	isGroup?: boolean;
-	galType?: string;
-	exp?: boolean;
-}): boolean => {
-	return (isGroup && (galType === 'gal' || exp)) ?? false;
+const isDistributionList = ({ isGroup, email }: { isGroup?: boolean; email?: string }): boolean => {
+	return (isGroup && !!email) ?? false;
 };
 
 const debounceUserInput = (
@@ -90,8 +82,6 @@ const useDistributionListFunctions = ({
 	email,
 	id,
 	isGroup,
-	galType,
-	exp,
 	open,
 	setOpen,
 	onChange,
@@ -213,13 +203,13 @@ const useDistributionListFunctions = ({
 	const onChevronClick = useCallback(() => {
 		setOpen((prevValue: boolean) => !prevValue);
 
-		if (!open && isDistributionList({ isGroup, galType, exp }) && !dlm.length && !loading) {
+		if (!open && isDistributionList({ isGroup, email }) && !dlm.length && !loading) {
 			setLoading(true);
 			getDistributionListMembers({ email }).then((result) => {
 				updateStates(result);
 			});
 		}
-	}, [dlm.length, email, exp, galType, isGroup, loading, open, setOpen, updateStates]);
+	}, [dlm.length, email, isGroup, loading, open, setOpen, updateStates]);
 
 	const items = useMemo(() => {
 		if (more) {
@@ -237,15 +227,13 @@ export const AddDistributionListChip = (
 	// refs: waiting for 'chipinput-improve-generic-type' to be merged
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore
-	const { id, label, email, onClose, galType, exp, isGroup, onChange, contactInputValue } = props;
+	const { id, label, email, onClose, isGroup, onChange, contactInputValue } = props;
 
 	const [open, setOpen] = useState(false);
 
 	const { items, onChevronClick } = useDistributionListFunctions({
 		id,
 		email,
-		galType,
-		exp,
 		open,
 		setOpen,
 		isGroup,
@@ -268,7 +256,7 @@ export const AddDistributionListChip = (
 		[contactInputValue, id, onChange, onClose]
 	);
 
-	if (!isDistributionList({ exp, isGroup, galType })) {
+	if (!isDistributionList({ email, isGroup })) {
 		return <Chip {...props} />;
 	}
 	return (
