@@ -40,7 +40,7 @@ const debounceUserInput = (
 
 const getDistributionListMembers = async ({
 	email,
-	limit = 10,
+	limit = 100,
 	offset = 0
 }: {
 	email: string;
@@ -221,14 +221,14 @@ const useDistributionListFunctions = ({
 	return { items, onChevronClick };
 };
 
-export const AddDistributionListChip = (
+export const ContactInputCustomChipComponent = (
 	props: React.PropsWithChildren<ChipItem<any>>
 ): ReactElement => {
 	// refs: waiting for 'chipinput-improve-generic-type' to be merged
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore
 	const { id, label, email, onClose, isGroup, onChange, contactInputValue } = props;
-
+	const [t] = useTranslation();
 	const [open, setOpen] = useState(false);
 
 	const { items, onChevronClick } = useDistributionListFunctions({
@@ -257,7 +257,7 @@ export const AddDistributionListChip = (
 	);
 
 	if (!isDistributionList({ email, isGroup })) {
-		return <Chip {...props} />;
+		return <Chip {...props} data-testid={'default-chip'} />;
 	}
 	return (
 		<>
@@ -285,7 +285,7 @@ export const AddDistributionListChip = (
 						actions={[
 							{
 								id: 'action1',
-								label: 'Expand addresses list',
+								label: t('expand_distribution_list', 'Expand address list'),
 								type: 'button',
 								icon: open ? 'ChevronUpOutline' : 'ChevronDownOutline',
 								onClick: debounceUserInput(onChevronClick)

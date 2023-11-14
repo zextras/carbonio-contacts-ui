@@ -39,6 +39,7 @@
         "title8": "Send shared e-mail",
         "title9": "Click the trash icon to delete a contact."
     },
+    "expand_distribution_list": "Expand address list",
     "folder": {
         "action": {
             "delete": "Delete address book",

@@ -6,6 +6,7 @@
 import '@testing-library/jest-dom';
 import failOnConsole from 'jest-fail-on-console';
 import { rest } from 'msw';
+
 import {
 	defaultAfterAllTests,
 	defaultAfterEachTest,
@@ -13,12 +14,21 @@ import {
 	defaultBeforeEachTest,
 	getFailOnConsoleDefaultConfig
 } from './src/carbonio-ui-commons/test/jest-setup';
+import { registerRestHandler } from './src/carbonio-ui-commons/test/mocks/network/msw/handlers';
+import { handleGetDistributionListMembersRequest } from './src/tests/msw/handle-get-distribution-list-members-request';
 
 failOnConsole({
 	...getFailOnConsoleDefaultConfig()
 });
 
 beforeAll(() => {
+	const handlers = [
+		rest.post(
+			'/service/soap/GetDistributionListMembersRequest',
+			handleGetDistributionListMembersRequest
+		)
+	];
+	registerRestHandler(...handlers);
 	defaultBeforeAllTests();
 });
 

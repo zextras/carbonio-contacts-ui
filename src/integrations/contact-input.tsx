@@ -27,13 +27,14 @@ import {
 	trim,
 	forEach,
 	reject,
-	uniqBy
+	uniqBy,
+	omit
 } from 'lodash';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import styled, { DefaultTheme } from 'styled-components';
 
-import { AddDistributionListChip } from './addDistributionListChip';
+import { ContactInputCustomChipComponent } from './contact-input-custom-chip-component';
 import { useAppSelector } from '../hooks/redux';
 import { StoreProvider } from '../store/redux';
 import { Contact, Group } from '../types/contact';
@@ -144,8 +145,9 @@ const ContactInput: FC<ContactInput> = ({
 	defaultValue,
 	placeholder,
 	background = 'gray5',
-	...props
+	...rest
 }) => {
+	const props = omit(rest, 'ChipComponent');
 	const [defaults, setDefaults] = useState<Array<ChipItem<string | Contact>>>([]);
 
 	const [options, setOptions] = useState<any>([]);
@@ -416,7 +418,8 @@ const ContactInput: FC<ContactInput> = ({
 	);
 
 	const ChipComponent = useCallback(
-		(_props): ReactElement => AddDistributionListChip({ ..._props, onChange, contactInputValue }),
+		(_props): ReactElement =>
+			ContactInputCustomChipComponent({ ..._props, onChange, contactInputValue }),
 		[contactInputValue, onChange]
 	);
 
