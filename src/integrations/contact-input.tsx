@@ -140,9 +140,7 @@ const ContactInput: FC<ContactInput> = ({
 	dragAndDropEnabled = false,
 	...props
 }) => {
-	const [defaults, setDefaults] = useState<
-		Array<ChipItem<string | Contact | ((prevState: ChipItem<string | Contact>[]) => ChipItem[])>>
-	>([]);
+	const [defaults, setDefaults] = useState<Array<ChipItem<string | Contact>>>([]);
 
 	const [options, setOptions] = useState<any>([]);
 	const [idToRemove, setIdToRemove] = useState('');
@@ -475,7 +473,7 @@ const ContactInput: FC<ContactInput> = ({
 
 				return c.id !== draggedChip.current.id;
 			});
-			onChange && onChange(newDefaults as ChipItem<string | Contact>[]);
+			onChange && onChange(newDefaults);
 			resetDraggedChip();
 			isSameElement.current = false;
 		},
