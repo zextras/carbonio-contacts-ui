@@ -373,12 +373,10 @@ const ContactInput: FC<ContactInput> = ({
 							error: !isValidEmail(email)
 						});
 					});
-
-					setDefaults(() => {
-						const newValue = reject(defaults, (chip) => isContactGroup(chip));
-						onChange && onChange([...newValue, ...newContacts]);
-						return [...newValue, ...newContacts];
-					});
+					const newValue = reject(defaults, (chip) => isContactGroup(chip));
+					const updatedValue = [...newValue, ...newContacts];
+					onChange && onChange(updatedValue);
+					setDefaults(updatedValue);
 				});
 			});
 		}

@@ -18,8 +18,15 @@ import {
 import { soapFetch } from '@zextras/carbonio-shell-ui';
 import { debounce, DebouncedFuncLeading, filter, map, uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
 
 import { Contact } from '../types/contact';
+
+const StyledChip = styled(Chip)`
+	&:hover {
+		background: ${({ theme }): string => theme.palette.gray3.regular};
+	}
+`;
 
 const DISTRIBUTION_ITEM = {
 	SELECT_ALL: 'dl-select-all',
@@ -222,7 +229,7 @@ const useDistributionListFunctions = ({
 };
 
 export const ContactInputCustomChipComponent = (
-	props: React.PropsWithChildren<ChipItem<any>>
+	props: React.PropsWithChildren<ChipItem<unknown>>
 ): ReactElement => {
 	// refs: waiting for 'chipinput-improve-generic-type' to be merged
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -260,46 +267,45 @@ export const ContactInputCustomChipComponent = (
 		return <Chip {...props} data-testid={'default-chip'} />;
 	}
 	return (
-		<>
-			<Dropdown
-				items={items}
-				placement="bottom"
-				forceOpen={open}
-				width={'18.75rem'}
-				onOpen={(): void => setOpen(true)}
-				onClose={(): void => setOpen(false)}
-			>
-				<div>
-					<Chip
-						id={id}
-						label={label}
-						background={'gray3'}
-						color="text"
-						data-testid={'distribution-list-chip'}
-						hasAvatar
-						shape="regular"
-						closable
-						onClick={(e): void => {
-							e.stopPropagation();
-						}}
-						actions={[
-							{
-								id: 'action1',
-								label: t('expand_distribution_list', 'Expand address list'),
-								type: 'button',
-								icon: open ? 'ChevronUpOutline' : 'ChevronDownOutline',
-								onClick: debounceUserInput(onChevronClick)
-							},
-							{
-								id: 'action2',
-								type: 'button',
-								icon: 'CloseOutline',
-								onClick: removeChip
-							}
-						]}
-					/>
-				</div>
-			</Dropdown>
-		</>
+		<Dropdown
+			items={items}
+			placement="bottom"
+			forceOpen={open}
+			disableAutoFocus
+			width={'18.75rem'}
+			onOpen={(): void => setOpen(true)}
+			onClose={(): void => setOpen(false)}
+		>
+			<div>
+				<StyledChip
+					id={id}
+					label={label}
+					background={'gray3'}
+					color="text"
+					data-testid={'distribution-list-chip'}
+					hasAvatar
+					shape="regular"
+					closable
+					onClick={(e): void => {
+						e.stopPropagation();
+					}}
+					actions={[
+						{
+							id: 'action1',
+							label: t('expand_distribution_list', 'Expand address list'),
+							type: 'button',
+							icon: open ? 'ChevronUpOutline' : 'ChevronDownOutline',
+							onClick: debounceUserInput(onChevronClick)
+						},
+						{
+							id: 'action2',
+							type: 'button',
+							icon: 'CloseOutline',
+							onClick: removeChip
+						}
+					]}
+				/>
+			</div>
+		</Dropdown>
 	);
 };
