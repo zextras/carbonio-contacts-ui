@@ -237,16 +237,13 @@ describe('Contact input custom chip component', () => {
 	});
 	test('clicking select all when all data are retrieved, it wont make any other call to the server', async () => {
 		const dlm = [{ _content: user1Mail }, { _content: user2Mail }, { _content: user3Mail }];
-		const firstResponse = getDistributionListCustomResponse({ dlm, total: 3, more: false });
-		const server = getSetupServer();
+		const response = getDistributionListCustomResponse({ dlm, total: 3, more: false });
 		const dispatchRequest = jest.fn();
 
-		server.use(
-			rest.post(getDistributionListMembersRequest, async (req, res, ctx) =>
-				res(ctx.json(firstResponse))
-			)
+		getSetupServer().use(
+			rest.post(getDistributionListMembersRequest, async (req, res, ctx) => res(ctx.json(response)))
 		);
-		server.events.on('request:start', dispatchRequest);
+		getSetupServer().events.on('request:start', dispatchRequest);
 		const { user } = setupTest(
 			<ContactInputCustomChipComponent
 				id={dl1Id}
