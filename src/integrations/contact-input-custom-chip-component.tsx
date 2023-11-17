@@ -23,6 +23,7 @@ import styled from 'styled-components';
 import { Contact } from '../types/contact';
 
 const StyledChip = styled(Chip)`
+	cursor: default;
 	&:hover {
 		background: ${({ theme }): string => theme.palette.gray3.regular};
 	}
