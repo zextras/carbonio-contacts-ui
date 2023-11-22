@@ -3,6 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+import React, { useCallback, useMemo, useState } from 'react';
 import {
 	Accordion,
 	AccordionItem,
@@ -27,14 +28,14 @@ import {
 	uniqWith,
 	values
 } from 'lodash';
-import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
+
+import { ModalHeader } from './commons/modal-header';
+import { useAppDispatch } from '../../hooks/redux';
 import { createMountpoint } from '../../store/actions/create-mountpoint';
 import { translateFoldersNames } from '../../utils/helpers';
 import ModalFooter from '../contact-actions/commons/modal-footer';
-import { ModalHeader } from './commons/modal-header';
-import { useAppDispatch } from '../../hooks/redux';
 
 const ContainerEl = styled(Container)`
 	overflow-y: auto;
