@@ -1,7 +1,7 @@
 {
     "action": {
         "search": "Procurar",
-        "delete_permanently": "Excluir permanentemente",
+        "delete_permanently": "Apagar permanentemente",
         "goto_folder": "Ir para a pasta",
         "reset_filters": "Redefinir filtros",
         "send_msg": "Enviar e-mail",
@@ -11,8 +11,8 @@
         "modal": {
             "delete": {
                 "body": {
-                    "message1": "Deseja excluir o Livro de Contatos selecionado? Ao excluí-lo, seu conteúdo será removido permanentemente e não será mais recuperável.",
-                    "message2": "Deseja excluir permanentemente o Livro de Contatos selecionado? Ao excluí-lo, seu conteúdo será removido permanentemente e não será mais recuperável."
+                    "message1": "Deseja apagar o Livro de Contatos selecionado? O seu conteúdo será removido permanentemente e não será mais recuperável.",
+                    "message2": "Deseja apagar permanentemente o Livro de Contatos selecionado? O seu conteúdo será removido permanentemente e não será mais recuperável."
                 }
             },
             "edit": {
@@ -65,8 +65,8 @@
             }
         },
         "action": {
-            "delete": "Excluir Livro de Contatos",
-            "delete_permanently": "Excluir agenda permanentemente",
+            "delete": "Apagar Livro de Contatos",
+            "delete_permanently": "Apagar agenda permanentemente",
             "edit": "Editar o Livro de Contatos",
             "empty": {
                 "folder": "Esvaziar o Livro de Contatos",
@@ -114,11 +114,11 @@
         "website_1": "Sítios Web",
         "website_2": "Sítios Web",
         "contacts": "Contatos",
-        "delete": "Excluir",
+        "delete": "Apagar",
         "edit_access_name": "Editar acesso de {{name}}",
         "email": "E-mail",
         "empty": "Esvaziar",
-        "error_try_again": "Algo deu errado. Tente novamente",
+        "error_try_again": "Ocorreu um erro. Por favor tente novamente",
         "move": "Mover",
         "revoke_without_notification": "Revogar acesso sem enviar notificação",
         "root": "Raiz",
@@ -143,17 +143,17 @@
         "select_color": "Selecionar cor",
         "edit_invalid_email": "E-mail inválido. Clique para editá-lo",
         "edit_email": "Editar e-mail",
-        "tags": "Marcadores",
-        "tag_name": "Nome do marcador",
+        "tags": "Etiquetas",
+        "tag_name": "Nome da Etiqueta",
         "tag_max_length": "Máximo de 128 caracteres permitidos",
-        "tag": "Marcador",
+        "tag": "Etiqueta",
         "no_special_char_allowed": "O nome não pode conter caracteres especiais",
-        "new_tag": "Novo marcador",
-        "edit_tag_name": "Editar o marcador \"{{name}}\"",
-        "edit_tag": "Editar marcador",
-        "delete_tag_name": "Excluir o Marcador \"{{name}}\"",
-        "delete_tag": "Excluir marcador",
-        "create_tag": "Criar marcador",
+        "new_tag": "Nova Etiqueta",
+        "edit_tag_name": "Editar a etiqueta \"{{name}}\"",
+        "edit_tag": "Editar Etiqueta",
+        "delete_tag_name": "Remover a Etiqueta \"{{name}}\"",
+        "delete_tag": "Apagar etiqueta",
+        "create_tag": "Criar Etiqueta",
         "no_name": "Sem nome",
         "no_data": "Sem dados",
         "contact_created_in_folder": "Este contato será criado na pasta \"{{name}}\"",
@@ -172,7 +172,7 @@
         "contact_folder": "Livro de Contatos",
         "filter_user": "Encontrar usuários",
         "find_contact_shares": "Procurar contatos partilhados",
-        "find_shares": "Encontrar compartilhamentos",
+        "find_shares": "Localizar Partilhas",
         "find_shares_label": "Selecione as agendas compartilhadas que serão exibidas",
         "insert": "Inserir",
         "manager": "Gerenciar",
@@ -228,15 +228,15 @@
         "snackbar": {
             "settings_saved": "Edições guardadas corretamente"
         },
-        "delete_tag_message2": "Uma vez excluído, ele será removido de todos os itens marcados com o mesmo.",
-        "delete_tag_message1": "Tem certeza que deseja excluir o marcador \"{{name}}\"?",
+        "delete_tag_message2": "Uma vez excluída, esta Etiqueta será removida de todos os itens sinalizados.",
+        "delete_tag_message1": "Tem a certeza que deseja remover a etiqueta \"{{name}}\"?",
         "require_field": "Preencha pelo menos um dos campos obrigatórios (*)",
         "new_contact": "Este contato será criado na pasta \"Contatos\""
     },
     "messages": {
         "modal": {
             "delete": {
-                "if_delete_lost_forever": "Ao excluir permanentemente este contato, não poderá mais ser recuperado. Deseja continuar?",
+                "if_delete_lost_forever": "Ao apagar permanentemente este contato, o mesmo não poderá ser recuperado. Deseja continuar?",
                 "sure_delete_contact_0": "Tem certeza que deseja remover este contato? (esta ação é irreversível)",
                 "sure_delete_contact_1": "Tem certeza que deseja remover estes contatos? (esta ação é irreversível)",
                 "sure_delete_contact_2": "Tem certeza que deseja remover estes contatos? (esta ação é irreversível)"
@@ -248,10 +248,10 @@
             "contact_moved": "Contato movido",
             "contact_moved_to_trash": "Contato movido para a lixeira",
             "contact_restored": "Contato restaurado",
-            "tag_updated": "Marcador atualizado com sucesso",
-            "tag_not_updated": "Algo deu errado, o marcador não foi atualizado. Tente novamente.",
-            "tag_deleted": "Marcador \"{{name}}\" excluído com sucesso",
-            "tag_created": "Marcador \"{{name}}\" criado com sucesso"
+            "tag_updated": "A Etiqueta foi atualizada com sucesso",
+            "tag_not_updated": "Ocorreu um erro. A Etiqueta não foi atualizada. Por favor, tente novamente.",
+            "tag_deleted": "Etiqueta \"{{name}}\" removida com sucesso",
+            "tag_created": "Etiqueta \"{{name}}\" criada com sucesso"
         }
     },
     "modal": {
@@ -278,8 +278,8 @@
         "share_resend": "Convite do compartilhamento reenviado",
         "share_revoke": "Acesso compartilhado revogado",
         "share_updated": "Direitos de acesso atualizadas",
-        "tag_removed": "Marcador \"{{tag}}\" removido",
-        "tag_applied": "Marcador \"{{tag}}\" aplicado"
+        "tag_removed": "A Etiqueta \"{{tag}}\" foi removida",
+        "tag_applied": "A Etiqueta \"{{tag}}\" foi aplicada"
     },
     "tooltip": {
         "revoke": "Revogar acesso",
@@ -319,7 +319,7 @@
         "title4": "Adicione notas descritivas para personalizar os seus contatos",
         "title6": "Personalizar um contato",
         "title8": "Enviar e-mail",
-        "title9": "Clique no ícone da lixeira para excluir um contato.",
+        "title9": "Clique no ícone da lixeira para apagar um contato.",
         "description3": "Clique no botão \"NOVO\" para criar um grupo de contatos.",
         "description5": "Descubra todas as formas que você pode se conectar com outros usuários.",
         "search_description1": "Ou selecione \"Filtros Avançados\" para refinar a sua pesquisa.",

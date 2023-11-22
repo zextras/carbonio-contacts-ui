@@ -36,11 +36,9 @@ describe('Contact input custom chip component', () => {
 			<ContactInputCustomChipComponent
 				id={'group-1'}
 				label={'group 1'}
-				onClose={jest.fn()}
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
+				email={''}
 				isGroup
-				onChange={jest.fn()}
+				_onChange={jest.fn()}
 				contactInputValue={[]}
 			/>
 		);
@@ -53,12 +51,9 @@ describe('Contact input custom chip component', () => {
 			<ContactInputCustomChipComponent
 				id={'user-1'}
 				label={'user 1'}
-				onClose={jest.fn()}
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
 				email={user1Mail}
 				isGroup={false}
-				onChange={jest.fn()}
+				_onChange={jest.fn()}
 				contactInputValue={[]}
 			/>
 		);
@@ -71,39 +66,15 @@ describe('Contact input custom chip component', () => {
 			<ContactInputCustomChipComponent
 				id={dl1Id}
 				label={dl1Label}
-				onClose={jest.fn()}
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
 				email={dl1Mail}
 				isGroup
-				onChange={jest.fn()}
+				_onChange={jest.fn()}
 				contactInputValue={[]}
 			/>
 		);
 
 		const distributionListChip = screen.getByTestId('distribution-list-chip');
 		expect(distributionListChip).toBeInTheDocument();
-	});
-	test('distribution custom chip has two actions', () => {
-		setupTest(
-			<ContactInputCustomChipComponent
-				id={dl1Id}
-				label={dl1Label}
-				onClose={jest.fn()}
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
-				email={dl1Mail}
-				isGroup
-				onChange={jest.fn()}
-				contactInputValue={[]}
-			/>
-		);
-
-		const chevronAction = screen.getByTestId(chevronTestId);
-		const closeAction = screen.getByTestId('icon: CloseOutline');
-
-		expect(chevronAction).toBeInTheDocument();
-		expect(closeAction).toBeInTheDocument();
 	});
 	test('the dropdown will contain the select all button and the users list when the chevron action is clicked', async () => {
 		const dlm = [{ _content: user1Mail }, { _content: user2Mail }, { _content: user3Mail }];
@@ -119,12 +90,9 @@ describe('Contact input custom chip component', () => {
 			<ContactInputCustomChipComponent
 				id={dl1Id}
 				label={dl1Label}
-				onClose={jest.fn()}
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
 				email={dl1Mail}
 				isGroup
-				onChange={jest.fn()}
+				_onChange={jest.fn()}
 				contactInputValue={[]}
 			/>
 		);
@@ -159,12 +127,9 @@ describe('Contact input custom chip component', () => {
 			<ContactInputCustomChipComponent
 				id={dl1Id}
 				label={dl1Label}
-				onClose={jest.fn()}
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
 				email={dl1Mail}
 				isGroup
-				onChange={jest.fn()}
+				_onChange={jest.fn()}
 				contactInputValue={[]}
 			/>
 		);
@@ -197,12 +162,9 @@ describe('Contact input custom chip component', () => {
 			<ContactInputCustomChipComponent
 				id={dl1Id}
 				label={dl1Label}
-				onClose={jest.fn()}
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
 				email={dl1Mail}
 				isGroup
-				onChange={jest.fn()}
+				_onChange={jest.fn()}
 				contactInputValue={[]}
 			/>
 		);
@@ -248,12 +210,9 @@ describe('Contact input custom chip component', () => {
 			<ContactInputCustomChipComponent
 				id={dl1Id}
 				label={dl1Label}
-				onClose={jest.fn()}
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
 				email={dl1Mail}
 				isGroup
-				onChange={jest.fn()}
+				_onChange={jest.fn()}
 				contactInputValue={[]}
 			/>
 		);
@@ -297,12 +256,9 @@ describe('Contact input custom chip component', () => {
 			<ContactInputCustomChipComponent
 				id={dl1Id}
 				label={dl1Label}
-				onClose={jest.fn()}
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
 				email={dl1Mail}
 				isGroup
-				onChange={jest.fn()}
+				_onChange={jest.fn()}
 				contactInputValue={[]}
 			/>
 		);

@@ -7,20 +7,13 @@
 /* eslint-disable arrow-body-style */
 import React, { ReactElement, useCallback, useMemo, useState } from 'react';
 
-import {
-	Chip,
-	Dropdown,
-	Button,
-	Container,
-	DropdownItem,
-	ChipItem
-} from '@zextras/carbonio-design-system';
+import { Chip, Dropdown, Button, Container, DropdownItem } from '@zextras/carbonio-design-system';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
-import { debounce, DebouncedFuncLeading, filter, map, uniqBy } from 'lodash';
+import { debounce, DebouncedFuncLeading, filter, map, noop, uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { Contact } from '../types/contact';
+import { ContactInputOnChange, ContactInputValue, CustomChipProps } from '../types/integrations';
 
 const StyledChip = styled(Chip)`
 	cursor: default;
@@ -92,7 +85,7 @@ const useDistributionListFunctions = ({
 	isGroup,
 	open,
 	setOpen,
-	onChange,
+	_onChange,
 	contactInputValue
 }: {
 	email: string;
@@ -102,8 +95,8 @@ const useDistributionListFunctions = ({
 	exp?: boolean;
 	open: boolean;
 	setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-	onChange: ((items: ChipItem<string | Contact>[]) => void) | undefined;
-	contactInputValue: Array<ChipItem<string | Contact>>;
+	_onChange: ContactInputOnChange;
+	contactInputValue: ContactInputValue;
 }): { items: Array<DropdownItem>; onChevronClick: () => void } => {
 	const [loading, setLoading] = useState(false);
 	const [dlm, setDlm] = useState<Array<{ _content: string }>>([]);
@@ -148,7 +141,8 @@ const useDistributionListFunctions = ({
 				id: item._content,
 				email: item._content
 			}));
-			onChange && onChange([...filter(contactInputValue, (value) => value.id !== id), ...newValue]);
+			_onChange &&
+				_onChange([...filter(contactInputValue, (value) => value.id !== id), ...newValue]);
 		};
 		if (more) {
 			getAllDistributionListMembers(email, dlm, offset).then((result) => {
@@ -157,7 +151,7 @@ const useDistributionListFunctions = ({
 		} else {
 			updateDefaults(dlm);
 		}
-	}, [contactInputValue, dlm, email, id, more, offset, onChange]);
+	}, [contactInputValue, dlm, email, id, more, offset, _onChange]);
 
 	const onShowMoreClick = useCallback(() => {
 		getDistributionListMembers({ email, offset }).then((result) => {
@@ -178,12 +172,12 @@ const useDistributionListFunctions = ({
 						shape="regular"
 						width="fill"
 						label={selectAllItemLabel}
-						onClick={debounceUserInput(onSelectAllClick)}
+						onClick={total > 0 ? debounceUserInput(onSelectAllClick) : noop}
 					/>
 				</Container>
 			)
 		}),
-		[onSelectAllClick, selectAllItemLabel]
+		[onSelectAllClick, selectAllItemLabel, total]
 	);
 
 	const moreButton = useMemo(
@@ -229,13 +223,8 @@ const useDistributionListFunctions = ({
 	return { items, onChevronClick };
 };
 
-export const ContactInputCustomChipComponent = (
-	props: React.PropsWithChildren<ChipItem<unknown>>
-): ReactElement => {
-	// refs: waiting for 'chipinput-improve-generic-type' to be merged
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
-	const { id, label, email, onClose, isGroup, onChange, contactInputValue } = props;
+const CustomComponent = (props: CustomChipProps): JSX.Element => {
+	const { id, label, email, isGroup, _onChange, contactInputValue } = props;
 	const [t] = useTranslation();
 	const [open, setOpen] = useState(false);
 
@@ -245,28 +234,10 @@ export const ContactInputCustomChipComponent = (
 		open,
 		setOpen,
 		isGroup,
-		// refs: waiting for 'chipinput-improve-generic-type' to be merged
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
-		onChange,
+		_onChange,
 		contactInputValue
 	});
 
-	const removeChip = useCallback(
-		(e: React.MouseEvent<HTMLButtonElement, MouseEvent> | KeyboardEvent) => {
-			const newValue = filter(contactInputValue, (value) => value.id !== id);
-			onClose && onClose(e);
-			// refs: waiting for 'chipinput-improve-generic-type' to be merged
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
-			onChange && onChange(newValue);
-		},
-		[contactInputValue, id, onChange, onClose]
-	);
-
-	if (!isDistributionList({ email, isGroup })) {
-		return <Chip {...props} data-testid={'default-chip'} />;
-	}
 	return (
 		<Dropdown
 			items={items}
@@ -279,6 +250,7 @@ export const ContactInputCustomChipComponent = (
 		>
 			<div>
 				<StyledChip
+					{...props}
 					id={id}
 					label={label}
 					background={'gray3'}
@@ -297,16 +269,19 @@ export const ContactInputCustomChipComponent = (
 							type: 'button',
 							icon: open ? 'ChevronUpOutline' : 'ChevronDownOutline',
 							onClick: debounceUserInput(onChevronClick)
-						},
-						{
-							id: 'action2',
-							type: 'button',
-							icon: 'CloseOutline',
-							onClick: removeChip
 						}
 					]}
 				/>
 			</div>
 		</Dropdown>
 	);
+};
+
+export const ContactInputCustomChipComponent = (props: CustomChipProps): ReactElement => {
+	const { email, isGroup } = props;
+
+	if (!isDistributionList({ email, isGroup })) {
+		return <Chip {...props} data-testid={'default-chip'} />;
+	}
+	return <CustomComponent {...props} />;
 };
