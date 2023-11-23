@@ -152,7 +152,6 @@ const ContactInput: FC<ContactInput> = ({
 }) => {
 	const props = omit(rest, 'ChipComponent');
 	const [defaults, setDefaults] = useState<ContactInputValue>([]);
-
 	const [options, setOptions] = useState<any>([]);
 	const [idToRemove, setIdToRemove] = useState('');
 	const [t] = useTranslation();
@@ -493,7 +492,7 @@ const ContactInput: FC<ContactInput> = ({
 
 				return c.id !== draggedChip.current.id;
 			});
-			onChange && onChange(newDefaults as ChipItem<string | Contact>[]);
+			onChange && onChange(newDefaults);
 			resetDraggedChip();
 			isSameElement.current = false;
 		},
@@ -529,7 +528,6 @@ const ContactInput: FC<ContactInput> = ({
 				disableOptions
 				placeholder={placeholder}
 				confirmChipOnBlur
-				confirmChipOnSpace={false}
 				inputRef={inputRef}
 				onInputType={onInputType}
 				onChange={onChange}
@@ -540,7 +538,10 @@ const ContactInput: FC<ContactInput> = ({
 				requireUniqueChips
 				createChipOnPaste
 				pasteSeparators={[',', ' ', ';', '\n']}
-				separators={['NumpadEnter', ',']}
+				separators={[
+					{ code: 'NumpadEnter', ctrlKey: false },
+					{ key: ',', ctrlKey: false }
+				]}
 				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-ignore
 				ChipComponent={ChipComponent}
