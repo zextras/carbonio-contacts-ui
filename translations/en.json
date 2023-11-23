@@ -38,6 +38,7 @@
         "title8": "Send shared e-mail",
         "title9": "Click the trash icon to delete a contact."
     },
+    "expand_distribution_list": "Expand address list",
     "folder": {
         "action": {
             "delete": "Delete address book",
@@ -183,10 +184,13 @@
         "root": "Root",
         "save": "Save",
         "search_activate_selection_mode": "Selection mode isn’t available yet on search results",
+        "select_all_addresses": "Select address",
+        "select_all_addresses_plural": "Select all {{count}} addresses",
         "select_color": "Select Color",
         "share": "Share",
         "share_with": "Share with",
         "shares_folder_edit": "Sharing of this address book",
+        "show_more": "show more",
         "tag": "Tag",
         "tag_max_length": "Max 128 characters are allowed",
         "tag_name": "Tag name",

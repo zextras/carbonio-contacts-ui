@@ -195,6 +195,7 @@ const ShareFolderModal = ({
 							defaultValue={contacts}
 						/>
 					) : (
+						// FIXME: this ChipInput is using props that don't exist
 						<ChipInput
 							backgroundColor="gray5"
 							placeholder={t('share.recipients_address', 'Recipients’ e-mail addresses')}
