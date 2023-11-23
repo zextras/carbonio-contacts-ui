@@ -540,7 +540,10 @@ const ContactInput: FC<ContactInput> = ({
 				requireUniqueChips
 				createChipOnPaste
 				pasteSeparators={[',', ' ', ';', '\n']}
-				separators={['NumpadEnter', ',']}
+				separators={[
+					{ key: 'NumpadEnter', ctrlKey: false },
+					{ key: ',', ctrlKey: false }
+				]}
 				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-ignore
 				ChipComponent={ChipComponent}
