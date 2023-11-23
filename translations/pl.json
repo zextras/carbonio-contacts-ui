@@ -114,10 +114,12 @@
         "edit_folder_properties": "Edytuj właściwości {{name}}",
         "email": "E-mail",
         "new_contact": "Nowy kontakt",
-        "website": "Strona internetowa",
-        "website_plural": "Strony internetowe",
-        "advanced_filter": "{{count}} Zaawansowany filtr",
-        "advanced_filter_plural": "{{count}} Zaawansowane filtry",
+        "website_0": "Strona internetowa",
+        "website_1": "Strony internetowe",
+        "website_2": "Stron internetowych",
+        "advanced_filter_0": "{{count}} Zaawansowany filtr",
+        "advanced_filter_1": "{{count}} Zaawansowane filtry",
+        "advanced_filter_2": "{{count}} Zaawansowanych filtrów",
         "edit_invalid_email": "E-mail jest nieprawidłowy, kliknij aby go edytować",
         "revoke_with_standard_msg": "Odbierz dostęp i wyślij domyślną notkę",
         "app_name": "Kontakty",
@@ -243,8 +245,9 @@
     "tooltip": {
         "revoke": "Odbierz dostęp",
         "resend": "Wyślij powiadomienie mailowe dot. tego udostępnienia",
-        "address_book_sharing_status": "Udostępniono {{count}} osobie",
-        "address_book_sharing_status_plural": "Udostępniono {{count}} osobom"
+        "address_book_sharing_status_0": "Udostępniono {{count}} osobie",
+        "address_book_sharing_status_1": "Udostępniono {{count}} osobom",
+        "address_book_sharing_status_2": "Udostępniono {{count}} osobom"
     },
     "contact_restored": "Kontakt został przywrócony",
     "job": {
@@ -266,8 +269,9 @@
         },
         "modal": {
             "delete": {
-                "sure_delete_contact": "Czy na pewno chcesz usunąć ten kontakt?",
-                "sure_delete_contact_plural": "Czy na pewno chcesz usunąć te kontakty?",
+                "sure_delete_contact_0": "Czy na pewno chcesz usunąć ten kontakt?",
+                "sure_delete_contact_1": "Czy na pewno chcesz usunąć te kontakty?",
+                "sure_delete_contact_2": "Czy na pewno chcesz usunąć te kontakty?",
                 "if_delete_lost_forever": "Trwale usuwając ten kontakt, nie będziesz w stanie go już odzyskać. Kontynuować?"
             }
         }
@@ -288,7 +292,7 @@
     "name": {
         "first_name": "Imię",
         "last_name": "Nazwisko",
-        "middle_name": "Drugie Imię",
+        "middle_name": "Drugie imię",
         "nickName": "Pseudonim",
         "suffix": "Sufiks",
         "prefix": "Prefiks"
@@ -303,8 +307,9 @@
             "postalCode": "Kod pocztowy"
         },
         "title": {
-            "address": "Adres",
-            "address_plural": "Adresy",
+            "address_0": "Adres",
+            "address_1": "Adresy",
+            "address_2": "Adresów",
             "mail": "Adres e-mail",
             "phone_number": "Numer telefonu"
         }
