@@ -1,6 +1,6 @@
 {
 	"name": "carbonio-contacts-ui",
-	"version": "1.4.1",
+	"version": "1.5.0",
 	"description": "Contacts module",
 	"main": "src/app.jsx",
 	"engines": {
