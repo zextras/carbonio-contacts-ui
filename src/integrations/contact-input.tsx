@@ -28,26 +28,33 @@ import {
 	forEach,
 	reject,
 	uniqBy,
+	omit,
 	noop
 } from 'lodash';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import styled, { DefaultTheme } from 'styled-components';
 
+import { ContactInputCustomChipComponent } from './contact-input-custom-chip-component';
 import { useAppSelector } from '../hooks/redux';
 import { StoreProvider } from '../store/redux';
 import { Contact, Group } from '../types/contact';
+import { ContactInputOnChange, ContactInputValue, CustomChipProps } from '../types/integrations';
 import { ContactsSlice, State } from '../types/store';
 
-const emailRegex =
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars, max-len, no-control-regex
-	/[^\s@]+@[^\s@]+\.[^\s@]+/;
+const emailRegex = /[^\s@]+@[^\s@]+\.[^\s@]+/;
 
-function isGroup(contact: Contact | Group): contact is Group {
+function isContactGroup(contact: {
+	isGroup?: boolean;
+	display?: string | undefined | null;
+	email?: string | undefined;
+}): boolean {
 	return (
-		(contact as Group).isGroup &&
-		(contact as Group).display !== undefined &&
-		(contact as Group).display !== null
+		(contact?.isGroup &&
+			contact?.display !== undefined &&
+			contact?.display !== null &&
+			!contact?.email) ??
+		false
 	);
 }
 
@@ -55,10 +62,12 @@ const getChipLabel = (contact: any): string => {
 	if (contact.firstName ?? contact.middleName ?? contact.lastName) {
 		return trim(`${contact.firstName ?? ''} ${contact.middleName ?? ''} ${contact.lastName ?? ''}`);
 	}
-	return contact.fullName ?? contact.email ?? contact.name ?? contact.address ?? '';
+	return (
+		contact.fullName ?? contact.email ?? contact.name ?? contact.address ?? contact.display ?? ''
+	);
 };
 
-const Hint = ({ contact }: { contact: Contact | Group }): ReactElement => {
+const Hint = ({ contact }: { contact: Group }): ReactElement => {
 	const label = getChipLabel(contact);
 	return (
 		<Container
@@ -70,7 +79,7 @@ const Hint = ({ contact }: { contact: Contact | Group }): ReactElement => {
 		>
 			<Avatar label={label} />
 			<Container orientation="vertical" crossAlignment="flex-start" padding={{ left: 'small' }}>
-				{!isGroup(contact) ? (
+				{!isContactGroup(contact) ? (
 					<>
 						<Row takeAvailableSpace mainAlignment="flex-start">
 							<Text size="large">{label}</Text>
@@ -125,8 +134,8 @@ const Loader = (): ReactElement => (
 	</Container>
 );
 
-export type ContactInputProps = {
-	onChange?: (items: ChipItem<string | Contact>[]) => void;
+type ContactInputProps = {
+	onChange?: ContactInputOnChange;
 	defaultValue: Array<Contact>;
 	placeholder: string;
 	background?: keyof DefaultTheme['palette'];
@@ -139,12 +148,10 @@ export const ContactInput: FC<ContactInputProps> = ({
 	placeholder,
 	background = 'gray5',
 	dragAndDropEnabled = false,
-	...props
-}): ReactElement => {
-	const [defaults, setDefaults] = useState<
-		Array<ChipItem<string | Contact | ((prevState: ChipItem<string | Contact>[]) => ChipItem[])>>
-	>([]);
-
+	...rest
+}) => {
+	const props = omit(rest, 'ChipComponent');
+	const [defaults, setDefaults] = useState<ContactInputValue>([]);
 	const [options, setOptions] = useState<any>([]);
 	const [idToRemove, setIdToRemove] = useState('');
 	const [t] = useTranslation();
@@ -311,8 +318,7 @@ export const ContactInput: FC<ContactInputProps> = ({
 							.then((autoCompleteResult: any) =>
 								map(autoCompleteResult.match, (m) => ({
 									...m,
-									isGroup: isGroup(m),
-									email: isGroup(m) ? m.display : emailRegex.exec(m.email)?.[0]?.slice(1, -1)
+									email: isContactGroup(m) ? undefined : emailRegex.exec(m.email)?.[0]?.slice(1, -1)
 								}))
 							)
 							.then((remoteResults: any) => {
@@ -360,6 +366,7 @@ export const ContactInput: FC<ContactInputProps> = ({
 												lastName: contact?.lastName,
 												company: contact?.company,
 												fullName: contact?.fullName,
+												display: contact?.display,
 												isGroup: contact?.isGroup,
 												groupId: contact?.id,
 												label: contact?.label ?? getChipLabel(contact)
@@ -382,7 +389,7 @@ export const ContactInput: FC<ContactInputProps> = ({
 	);
 
 	useEffect(() => {
-		const groups = filter(defaults, ['isGroup', true]);
+		const groups = filter(defaults, (def) => isContactGroup(def));
 		const newContacts: any = [];
 		if (groups.length > 0) {
 			forEach(groups, (def: any) => {
@@ -406,12 +413,10 @@ export const ContactInput: FC<ContactInputProps> = ({
 							onDragStart: buildDragStartHandler({ id, email, label: email })
 						});
 					});
-
-					setDefaults(() => {
-						const newValue = reject(defaults, ['isGroup', true]);
-						onChange && onChange([...newValue, ...newContacts]);
-						return [...newValue, ...newContacts];
-					});
+					const newValue = reject(defaults, (chip) => isContactGroup(chip));
+					const updatedValue = [...newValue, ...newContacts];
+					onChange && onChange(updatedValue);
+					setDefaults(updatedValue);
 				});
 			});
 		}
@@ -450,6 +455,17 @@ export const ContactInput: FC<ContactInputProps> = ({
 		[editChip, isValidEmail, t]
 	);
 
+	const ChipComponent = useCallback(
+		(_props: CustomChipProps): React.JSX.Element => (
+			<ContactInputCustomChipComponent
+				{..._props}
+				_onChange={onChange}
+				contactInputValue={contactInputValue}
+			/>
+		),
+		[contactInputValue, onChange]
+	);
+
 	const onDragEnter = useCallback((ev) => {
 		ev.preventDefault();
 		ev.dataTransfer.dropEffect = 'move';
@@ -476,7 +492,7 @@ export const ContactInput: FC<ContactInputProps> = ({
 
 				return c.id !== draggedChip.current.id;
 			});
-			onChange && onChange(newDefaults as ChipItem<string | Contact>[]);
+			onChange && onChange(newDefaults);
 			resetDraggedChip();
 			isSameElement.current = false;
 		},
@@ -524,7 +540,13 @@ export const ContactInput: FC<ContactInputProps> = ({
 					requireUniqueChips
 					createChipOnPaste
 					pasteSeparators={[',', ' ', ';', '\n']}
-					separators={['NumpadEnter', ',']}
+					separators={[
+						{ code: 'NumpadEnter', ctrlKey: false },
+						{ key: ',', ctrlKey: false }
+					]}
+					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+					// @ts-ignore
+					ChipComponent={ChipComponent}
 					onDragEnter={dragAndDropEnabled ? onDragEnter : noop}
 					onDragOver={dragAndDropEnabled ? onDragEnter : noop}
 					onDragEnd={dragAndDropEnabled ? onDragEnd : noop}

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-export const customizeConfig = (config, pkg, options, mode) => {
+const customizeConfig = (config, pkg, options, mode) => {
 	config.resolve.alias['app-entrypoint'] = `${__dirname}/src/app.tsx`;
 	return config;
 };

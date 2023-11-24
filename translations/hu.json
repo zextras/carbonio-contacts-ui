@@ -1,22 +1,83 @@
 {
-    "displayer": {
-        "search_description2": "Újabb keresés indítása.",
-        "search_list_title2": "Nincs találat a keresésre.",
-        "search_title1": "Másik keresés indítása",
-        "search_title2": "Sajnáljuk, de nincs találat a keresésre",
-        "search_title4": "Válasszon ki egy vagy több eredményt a műveletek végrehajtásához vagy a részletek megjelenítéséhez.",
-        "search_description1": "Vagy válassza ki a \"Haladó szűrőbeállítások\"-at a keresés testreszabásához.",
-        "search_list_title1": "Eddig nincs találat. Folytassa a keresést!",
-        "search_title3": "Nincs találat a keresésére."
-    },
-    "action": {
-        "share_folder": "Mappa megosztás",
-        "search": "Keresés"
-    },
-    "folders": {
-        "trash": "Törölt üzenetek"
+    "folder": {
+        "modal": {
+            "footer": {
+                "go_back": "Vissza"
+            }
+        }
     },
     "label": {
-        "activate_selection_mode": "Kiválasztási mód aktiválása"
+        "delete": "Töröl",
+        "delete_tag": "Címke törlése",
+        "delete_tag_name": "„{{name}}” címke törlése",
+        "discard_changes": "Módosítások elvetése",
+        "edit_access": "Hozzáférés szerkesztése",
+        "edit_tag_name": "„{{name}}” címke szerkesztése",
+        "folder_name": "Mappa neve",
+        "of": "a",
+        "restore": "Helyreállítás",
+        "revoke": "Visszavon",
+        "select_color": "Szín kiválasztása",
+        "share": "Megosztás",
+        "tag_max_length": "Legfeljebb 128 karakter megengedett",
+        "tag_name": "Címke neve",
+        "tags": "Címkék",
+        "type": "Típus",
+        "create": "Létrehoz",
+        "create_tag": "Címke létrehozása",
+        "move": "Áthelyezés",
+        "search_activate_selection_mode": "A kiválasztási mód még nem érhető el a keresési találatok között",
+        "cancel": "Mégse",
+        "empty": "Üres",
+        "share_with": "Megosztás a következőkkel",
+        "edit": "Szerkesztés",
+        "edit_tag": "Címke szerkesztése",
+        "no_special_char_allowed": "A név nem tartalmazhat különleges karaktert",
+        "resend": "Újraküldés",
+        "save": "Mentés",
+        "tag": "Címke",
+        "undo": "Visszavonás",
+        "error_try_again": "Valami hiba történt, kérjük, próbálja újra",
+        "results_for": "Eredmények a következőre:",
+        "root": "Gyökér",
+        "new_tag": "Új címke"
+    },
+    "messages": {
+        "snackbar": {
+            "tag_created": "{{name}} címke sikeresen létrehozva",
+            "tag_deleted": "{{name}} címke sikeresen törölve",
+            "tag_updated": "Sikeresen frissítve",
+            "tag_not_updated": "Hiba történt, a címke nem lett frissítve. Próbálja újra."
+        }
+    },
+    "share": {
+        "options": {
+            "share_calendar_with": {
+                "public": "Nyilvános (csak megtekintés, jelszó nem szükséges)",
+                "internal_users_groups": "Belső felhasználók vagy csoportok",
+                "external_guests": "Külső vendégek (csak megtekintés)"
+            }
+        },
+        "recipients_address": "Címzettek e-mail címei",
+        "share_note": "A szabványos üzenet megjeleníti a nevedet, a megosztott elem nevét, a címzetteknek adott engedélyeket és a bejelentkezési információkat."
+    },
+    "snackbar": {
+        "share_resend": "Meghívó megosztása újraküldve",
+        "share_revoke": "Megosztási hozzáférés visszavonva",
+        "tag_applied": "„{{tag}}” címke alkalmazva",
+        "tag_removed": "„{{tag}}” címke eltávolítva"
+    },
+    "tooltip": {
+        "revoke": "Hozzáférés visszavonása"
+    },
+    "message": {
+        "delete_tag_message1": "Biztosan törli a (z) „{{name}}” címkét?",
+        "snackbar": {
+            "settings_saved": "A szerkesztések mentése sikeres"
+        },
+        "delete_tag_message2": "A törlés után minden vele megjelölt elemből eltávolításra kerül."
+    },
+    "displayer": {
+        "search_title2": "Sajnáljuk, de nincs találat a keresésre"
     }
 }

@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React, { FC, ReactElement, useState, useCallback, useMemo, useEffect } from 'react';
+
 import {
 	CustomModal,
 	Container,
@@ -12,28 +13,24 @@ import {
 	Padding,
 	Icon
 } from '@zextras/carbonio-design-system';
+import { getTags, SearchViewProps, ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-shell-ui';
 import { TFunction } from 'i18next';
 import { concat, filter, map } from 'lodash';
-import { getTags, ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-shell-ui';
-import ModalFooter from '../secondary-bar/commons/modal-footer';
-import { ModalHeader } from '../secondary-bar/commons/modal-header';
+
 import KeywordRow, { KeywordState } from './parts/keyword-row';
 import TagRow from './parts/tag-row';
-import { useDisabled, useSecondaryDisabled } from './parts/use-disable-hooks';
 import ToggleFilters from './parts/toggle-filters';
+import { useDisabled, useSecondaryDisabled } from './parts/use-disable-hooks';
+import type { Query } from './search-types';
+import ModalFooter from '../secondary-bar/commons/modal-footer';
+import { ModalHeader } from '../secondary-bar/commons/modal-header';
 
-export type Query = Array<{
-	label: string;
-	value?: string;
-	isGeneric?: boolean;
-	isQueryFilter?: boolean;
-}>;
 type AdvancedFilterModalProps = {
 	open: boolean;
 	onClose: () => void;
 	t: TFunction;
 	query: Query;
-	updateQuery: (arg: any) => void;
+	updateQuery: ReturnType<SearchViewProps['useQuery']>[1];
 	isSharedFolderIncluded: boolean;
 	setIsSharedFolderIncluded: (arg: boolean) => void;
 };
@@ -76,12 +73,12 @@ const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 
 	useEffect(() => {
 		const updatedQuery = map(
-			filter(query, (v) => !/^tag:/.test(v.label) && !v.isQueryFilter),
+			filter(query, (v) => !/^tag:/.test(v.label ?? '') && !v.isQueryFilter),
 			(q) => ({ ...q, hasAvatar: false })
 		);
 
 		const tagFromQuery = map(
-			filter(query, (v) => /^tag:/.test(v.label)),
+			filter(query, (v) => /^tag:/.test(v.label ?? '')),
 			(q) => ({ ...q, hasAvatar: true, icon: 'TagOutline' })
 		);
 		setTag(tagFromQuery);

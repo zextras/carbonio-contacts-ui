@@ -4,11 +4,13 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React, { FC, ReactElement, useCallback } from 'react';
+
 import { Container, ChipInput, ChipProps } from '@zextras/carbonio-design-system';
+
 import { Query } from '../search-types';
 
 export type KeywordState = Array<{
-	label: string;
+	label?: string;
 	hasAvatar?: boolean;
 	value?: string;
 	isQueryFilter?: boolean;
@@ -16,7 +18,7 @@ export type KeywordState = Array<{
 	avatarIcon?: ChipProps['avatarIcon'];
 	avatarBackground?: ChipProps['avatarBackground'];
 	hasError?: boolean;
-	error?: boolean;
+	error?: boolean | string;
 }>;
 
 type ComponentProps = {
