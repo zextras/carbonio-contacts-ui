@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { lazy, useEffect, Suspense } from 'react';
+import React, { lazy, useEffect, Suspense, FC } from 'react';
 
 import {
 	Spinner,
@@ -14,38 +14,41 @@ import {
 	registerActions,
 	ACTION_TYPES,
 	addBoard,
-	registerComponents
+	registerComponents,
+	SearchViewProps
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
 import { CONTACTS_ROUTE, CONTACTS_APP_ID } from './constants';
-import ContactInput from './integrations/contact-input';
+import { ContactInput } from './integrations/contact-input';
 import { StoreProvider } from './store/redux';
+import { EditViewProps } from './types/views/edit-view';
+import { SidebarProps } from './types/views/sidebar';
 import SidebarItems from './views/secondary-bar/sidebar';
 import { SyncDataHandler } from './views/secondary-bar/sync-data-handler';
 
 const LazyAppView = lazy(() => import(/* webpackChunkName: "contacts-view" */ './views/app-view'));
 
-const LazySettingsView = lazy(() =>
-	import(/* webpackChunkName: "settings-view" */ './views/settings/settings-view')
+const LazySettingsView = lazy(
+	() => import(/* webpackChunkName: "settings-view" */ './views/settings/settings-view')
 );
-const LazySearchView = lazy(() =>
-	import(/* webpackChunkName: "edit-view" */ './views/search/search-view')
-);
-
-const LazyBoardView = lazy(() =>
-	import(/* webpackChunkName: "edit-view" */ './views/edit/edit-view')
+const LazySearchView = lazy(
+	() => import(/* webpackChunkName: "edit-view" */ './views/search/search-view')
 );
 
-const AppView = (props) => (
+const LazyBoardView = lazy(
+	() => import(/* webpackChunkName: "edit-view" */ './views/edit/edit-view')
+);
+
+const AppView = (): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
 		<StoreProvider>
-			<LazyAppView {...props} />
+			<LazyAppView />
 		</StoreProvider>
 	</Suspense>
 );
 
-const BoardView = (props) => (
+const BoardView = (props: EditViewProps): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
 		<StoreProvider>
 			<LazyBoardView {...props} />
@@ -53,15 +56,15 @@ const BoardView = (props) => (
 	</Suspense>
 );
 
-const SettingsView = (props) => (
+const SettingsView = (): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
 		<StoreProvider>
-			<LazySettingsView {...props} />
+			<LazySettingsView />
 		</StoreProvider>
 	</Suspense>
 );
 
-const SearchView = (props) => (
+const SearchView = (props: SearchViewProps): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
 		<StoreProvider>
 			<LazySearchView {...props} />
@@ -69,14 +72,15 @@ const SearchView = (props) => (
 	</Suspense>
 );
 
-const SidebarView = (props) => (
+const SidebarView = (props: SidebarProps): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
 		<StoreProvider>
 			<SidebarItems {...props} />
 		</StoreProvider>
 	</Suspense>
 );
-export default function App() {
+
+const App: FC = () => {
 	const [t] = useTranslation();
 	useEffect(() => {
 		addRoute({
@@ -115,7 +119,7 @@ export default function App() {
 				id: 'new-contact',
 				label: t('label.new_contact', 'New Contact'),
 				icon: 'ContactsModOutline',
-				onClick: (ev) => {
+				onClick: (ev): void => {
 					ev?.preventDefault?.();
 					addBoard({ url: `${CONTACTS_ROUTE}/new`, title: t('label.new_contact', 'New Contact') });
 				},
@@ -133,4 +137,6 @@ export default function App() {
 			<SyncDataHandler />
 		</StoreProvider>
 	);
-}
+};
+
+export default App;

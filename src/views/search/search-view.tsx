@@ -3,24 +3,21 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { Container } from '@zextras/carbonio-design-system';
-import { Spinner, soapFetch } from '@zextras/carbonio-shell-ui';
-import { map, reduce } from 'lodash';
 import React, { FC, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
+
+import { Container } from '@zextras/carbonio-design-system';
+import { type SearchViewProps, soapFetch, Spinner } from '@zextras/carbonio-shell-ui';
+import { map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
+
+import AdvancedFilterModal from './advance-filter-modal';
+import SearchList from './search-list';
+import SearchPanel from './search-panel';
 import { useAppSelector } from '../../hooks/redux';
 import { selectFolders } from '../../store/selectors/folders';
 import { Contact } from '../../types/contact';
 import { normalizeContactsFromSoap } from '../../utils/normalizations/normalize-contact-from-soap';
-import AdvancedFilterModal from './advance-filter-modal';
-import SearchList from './search-list';
-import SearchPanel from './search-panel';
-
-type SearchProps = {
-	useQuery: () => [Array<any>, (arg: any) => void];
-	ResultsHeader: FC<{ label: string }>;
-};
 
 type SearchResults = {
 	contacts: Array<Contact>;
@@ -29,7 +26,8 @@ type SearchResults = {
 	sortBy: string;
 	query: string;
 };
-const SearchView: FC<SearchProps> = ({ useQuery, ResultsHeader }) => {
+
+const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 	const [query, updateQuery] = useQuery();
 
 	const [searchResults, setSearchResults] = useState<SearchResults>({
@@ -141,16 +139,6 @@ const SearchView: FC<SearchProps> = ({ useQuery, ResultsHeader }) => {
 						<SearchPanel searchResults={searchResults} query={query} width="75%" />
 					</Suspense>
 				</Container>
-
-				<AdvancedFilterModal
-					query={query}
-					updateQuery={updateQuery}
-					open={showAdvanceFilters}
-					isSharedFolderIncluded={isSharedFolderIncluded}
-					setIsSharedFolderIncluded={setIsSharedFolderIncluded}
-					onClose={(): void => setShowAdvanceFilters(false)}
-					t={t}
-				/>
 
 				<AdvancedFilterModal
 					query={query}

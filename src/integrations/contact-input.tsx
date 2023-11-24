@@ -125,21 +125,22 @@ const Loader = (): ReactElement => (
 	</Container>
 );
 
-type ContactInput = {
+export type ContactInputProps = {
 	onChange?: (items: ChipItem<string | Contact>[]) => void;
 	defaultValue: Array<Contact>;
 	placeholder: string;
 	background?: keyof DefaultTheme['palette'];
 	dragAndDropEnabled?: boolean;
 };
-const ContactInput: FC<ContactInput> = ({
+
+export const ContactInput: FC<ContactInputProps> = ({
 	onChange,
 	defaultValue,
 	placeholder,
 	background = 'gray5',
 	dragAndDropEnabled = false,
 	...props
-}) => {
+}): ReactElement => {
 	const [defaults, setDefaults] = useState<
 		Array<ChipItem<string | Contact | ((prevState: ChipItem<string | Contact>[]) => ChipItem[])>>
 	>([]);
@@ -506,36 +507,30 @@ const ContactInput: FC<ContactInput> = ({
 	);
 
 	return (
-		<Container width="100%" onDrop={onDrop} height="100%">
-			<ChipInput
-				disableOptions
-				placeholder={placeholder}
-				confirmChipOnBlur
-				confirmChipOnSpace={false}
-				inputRef={inputRef}
-				onInputType={onInputType}
-				onChange={onChange}
-				options={options}
-				value={contactInputValue}
-				background={background}
-				onAdd={onAdd}
-				requireUniqueChips
-				createChipOnPaste
-				pasteSeparators={[',', ' ', ';', '\n']}
-				separators={['NumpadEnter', ',']}
-				onDragEnter={dragAndDropEnabled ? onDragEnter : noop}
-				onDragOver={dragAndDropEnabled ? onDragEnter : noop}
-				onDragEnd={dragAndDropEnabled ? onDragEnd : noop}
-				{...props}
-			/>
-		</Container>
+		<StoreProvider>
+			<Container width="100%" onDrop={onDrop} height="100%">
+				<ChipInput
+					disableOptions
+					placeholder={placeholder}
+					confirmChipOnBlur
+					confirmChipOnSpace={false}
+					inputRef={inputRef}
+					onInputType={onInputType}
+					onChange={onChange}
+					options={options}
+					value={contactInputValue}
+					background={background}
+					onAdd={onAdd}
+					requireUniqueChips
+					createChipOnPaste
+					pasteSeparators={[',', ' ', ';', '\n']}
+					separators={['NumpadEnter', ',']}
+					onDragEnter={dragAndDropEnabled ? onDragEnter : noop}
+					onDragOver={dragAndDropEnabled ? onDragEnter : noop}
+					onDragEnd={dragAndDropEnabled ? onDragEnd : noop}
+					{...props}
+				/>
+			</Container>
+		</StoreProvider>
 	);
 };
-
-const ContactInputComp = (props: ContactInput): ReactElement => (
-	<StoreProvider>
-		<ContactInput {...props} />
-	</StoreProvider>
-);
-
-export default ContactInputComp;
