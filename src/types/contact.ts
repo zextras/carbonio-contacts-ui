@@ -118,3 +118,21 @@ export type Group = {
 	type: string;
 	galType?: string;
 };
+
+export type Match = {
+	last: string;
+	fileas: string;
+	ranking: string;
+	type: string;
+	isGroup?: boolean;
+	email: string;
+	full: string;
+};
+
+export type FullAutocompleteResponse = {
+	match?: Match[];
+	_attributes: {
+		canBeCached: string | null;
+		xmlns: string | null;
+	};
+};
