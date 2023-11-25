@@ -36,6 +36,7 @@ import { useTranslation } from 'react-i18next';
 import styled, { DefaultTheme } from 'styled-components';
 
 import { ContactInputCustomChipComponent } from './contact-input-custom-chip-component';
+import { parseFullAutocompleteXML } from '../helpers/autocomplete';
 import { useAppSelector } from '../hooks/redux';
 import { StoreProvider } from '../store/redux';
 import { Contact, Group } from '../types/contact';
@@ -315,17 +316,18 @@ const ContactInput: FC<ContactInput> = ({
 						soapFetch('FullAutocomplete', {
 							AutoCompleteRequest: {
 								name: e.textContent,
-								...(extraAccountId && extraAccountId.map((item) => ({ extraAccountId: item })))
+								...(extraAccountId && { extraAccountId: extraAccountId[0] })
 							},
 							_jsns: 'urn:zimbraMail',
 							includeGal: 1
 						})
-							.then((autoCompleteResult: any) =>
-								map(autoCompleteResult.match, (m) => ({
+							.then((autoCompleteResult: any) => {
+								const results = parseFullAutocompleteXML(autoCompleteResult);
+								return map(results.match, (m) => ({
 									...m,
 									email: isContactGroup(m) ? undefined : emailRegex.exec(m.email)?.[0]?.slice(1, -1)
-								}))
-							)
+								}));
+							})
 							.then((remoteResults: any) => {
 								const normRemoteResults = reduce(
 									remoteResults,
