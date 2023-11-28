@@ -141,7 +141,7 @@ type ContactInput = {
 	placeholder: string;
 	background?: keyof DefaultTheme['palette'];
 	dragAndDropEnabled?: boolean;
-	extraAccountId: Array<string>;
+	extraAccountsIds: Array<string>;
 };
 
 const ContactInput: FC<ContactInput> = ({
@@ -150,7 +150,7 @@ const ContactInput: FC<ContactInput> = ({
 	placeholder,
 	background = 'gray5',
 	dragAndDropEnabled = false,
-	extraAccountId,
+	extraAccountsIds,
 	...rest
 }) => {
 	const props = omit(rest, 'ChipComponent');
@@ -314,12 +314,14 @@ const ContactInput: FC<ContactInput> = ({
 							setOptions(localResults);
 						}
 						soapFetch('FullAutocomplete', {
+							...(extraAccountsIds?.length > 0 && {
+								extraAccountId: extraAccountsIds.map((id) => ({ _content: id }))
+							}),
 							AutoCompleteRequest: {
 								name: e.textContent,
-								...(extraAccountId && { extraAccountId: extraAccountId[0] })
-							},
-							_jsns: 'urn:zimbraMail',
-							includeGal: 1
+								includeGal: 1,
+								_jsns: 'urn:zimbraMail'
+							}
 						})
 							.then((autoCompleteResult: any) => {
 								const results = parseFullAutocompleteXML(autoCompleteResult);
@@ -392,7 +394,7 @@ const ContactInput: FC<ContactInput> = ({
 					});
 			} else setOptions([]);
 		},
-		[allContacts, defaults, editChip, extraAccountId, isValidEmail, onChange, options, t]
+		[allContacts, defaults, editChip, extraAccountsIds, isValidEmail, onChange, options, t]
 	);
 
 	useEffect(() => {
