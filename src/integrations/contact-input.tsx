@@ -319,9 +319,9 @@ const ContactInput: FC<ContactInput> = ({
 							}),
 							AutoCompleteRequest: {
 								name: e.textContent,
-								includeGal: 1,
-								_jsns: 'urn:zimbraMail'
-							}
+								includeGal: 1
+							},
+							_jsns: 'urn:zimbraMail'
 						})
 							.then((autoCompleteResult: any) => {
 								const results = parseFullAutocompleteXML(autoCompleteResult);
