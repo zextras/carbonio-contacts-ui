@@ -3,6 +3,8 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+import React, { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
+
 import {
 	ButtonOld as Button,
 	Container,
@@ -24,11 +26,13 @@ import {
 	useBoardHooks
 } from '@zextras/carbonio-shell-ui';
 import { filter, find, map, omit, reduce, set } from 'lodash';
-import React, { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { FoldersSelector } from '../../carbonio-ui-commons/components/select/folders-selector';
+
+import reducer, { op } from './form-reducer';
+import FormSection from './form-section';
+import { FoldersSelector } from '../../../carbonio-ui-commons/components/select/folders-selector';
 import { CompactView } from '../../commons/contact-compact-view';
 import { useAppSelector } from '../../hooks/redux';
 import { createContact } from '../../store/actions/create-contact';
@@ -36,8 +40,6 @@ import { modifyContact } from '../../store/actions/modify-contact';
 import { selectContact } from '../../store/selectors/contacts';
 import { selectFolders } from '../../store/selectors/folders';
 import { differenceObject } from '../settings/components/utils';
-import reducer, { op } from './form-reducer';
-import FormSection from './form-section';
 
 const ItalicText = styled(Text)`
 	font-style: italic;

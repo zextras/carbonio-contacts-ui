@@ -5,12 +5,12 @@
  */
 import React from 'react';
 
-import { screen, waitFor } from '@testing-library/react';
+import { waitFor } from '@testing-library/react';
 import { rest } from 'msw';
 
 import { ContactInputCustomChipComponent } from './contact-input-custom-chip-component';
-import { getSetupServer } from '../carbonio-ui-commons/test/jest-setup';
-import { setupTest } from '../carbonio-ui-commons/test/test-setup';
+import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
+import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { getDistributionListCustomResponse } from '../tests/msw/handle-get-distribution-list-members-request';
 
 const getDistributionListMembersRequest = '/service/soap/GetDistributionListMembersRequest';
@@ -281,5 +281,49 @@ describe('Contact input custom chip component', () => {
 			user.click(selectAllLabel);
 		});
 		expect(dispatchRequest).toHaveBeenCalledTimes(2);
+	});
+
+	describe('Editing DL', () => {
+		it("doesn't show the edit icon if the contact isn't a DL", () => {
+			setupTest(
+				<ContactInputCustomChipComponent
+					id={'user-1'}
+					label={'user 1'}
+					email={user1Mail}
+					isGroup={false}
+					_onChange={jest.fn()}
+					contactInputValue={[]}
+				/>
+			);
+
+			const editButton = screen.queryByRoleWithIcon('button', { icon: 'edit-2-outline' });
+			expect(editButton).not.toBeInTheDocument();
+		});
+
+		it('shows the edit icon if the contact is a DL', () => {
+			setupTest(
+				<ContactInputCustomChipComponent
+					id={'user-1'}
+					label={'user 1'}
+					email={user1Mail}
+					isGroup
+					_onChange={jest.fn()}
+					contactInputValue={[]}
+				/>
+			);
+
+			const editButton = screen.queryByRoleWithIcon('button', { icon: 'edit-2-outline' });
+			expect(editButton).toBeInTheDocument();
+		});
+
+		it.todo(
+			"doesn't show the edit icon if the contacts is a DL and if the current user is not the DL owner"
+		);
+
+		it.todo('shows the edit icon if the contact is a DL but the current user is the DL owner');
+
+		it.todo(
+			'if the user click on the edit icon the DL description is displayed inside a modal modal'
+		);
 	});
 });

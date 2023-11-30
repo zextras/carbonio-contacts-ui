@@ -6,7 +6,8 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
 import { configureStore, EnhancedStore } from '@reduxjs/toolkit';
-import { CONTACTS_APP_ID } from '../../constants';
+
+import { CONTACTS_APP_ID } from '../../../constants';
 import { storeReducers } from '../../store/reducers/reducers';
 
 type StateType = {
@@ -23,12 +24,10 @@ type StateType = {
 	};
 };
 
-export const generateStore = (): EnhancedStore<StateType> => {
-	const store = configureStore({
+export const generateStore = (): EnhancedStore<StateType> =>
+	configureStore({
 		devTools: {
 			name: CONTACTS_APP_ID
 		},
 		reducer: storeReducers
 	});
-	return store;
-};

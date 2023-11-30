@@ -223,7 +223,7 @@ const useDistributionListFunctions = ({
 	return { items, onChevronClick };
 };
 
-const CustomComponent = (props: CustomChipProps): JSX.Element => {
+const CustomComponent = (props: CustomChipProps): React.JSX.Element => {
 	const { id, label, email, isGroup, _onChange, contactInputValue } = props;
 	const [t] = useTranslation();
 	const [open, setOpen] = useState(false);
@@ -237,6 +237,25 @@ const CustomComponent = (props: CustomChipProps): JSX.Element => {
 		_onChange,
 		contactInputValue
 	});
+
+	const chipActions = useMemo(() => {
+		return [
+			{
+				id: 'dl-edit-action',
+				label: t('edit_distribution_list', 'Edit address list'),
+				type: 'button',
+				icon: 'Edit2Outline',
+				onClick: debounceUserInput(onChevronClick)
+			},
+			{
+				id: 'action2',
+				label: t('expand_distribution_list', 'Expand address list'),
+				type: 'button',
+				icon: open ? 'ChevronUpOutline' : 'ChevronDownOutline',
+				onClick: debounceUserInput(onChevronClick)
+			}
+		];
+	}, [onChevronClick, open, t]);
 
 	return (
 		<Dropdown
@@ -262,15 +281,7 @@ const CustomComponent = (props: CustomChipProps): JSX.Element => {
 					onClick={(e): void => {
 						e.stopPropagation();
 					}}
-					actions={[
-						{
-							id: 'action1',
-							label: t('expand_distribution_list', 'Expand address list'),
-							type: 'button',
-							icon: open ? 'ChevronUpOutline' : 'ChevronDownOutline',
-							onClick: debounceUserInput(onChevronClick)
-						}
-					]}
+					actions={chipActions}
 				/>
 			</div>
 		</Dropdown>

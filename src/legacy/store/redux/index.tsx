@@ -3,10 +3,12 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import React, { FC } from 'react';
+
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
-import { CONTACTS_APP_ID } from '../../constants';
+
+import { CONTACTS_APP_ID } from '../../../constants';
 import { storeReducers } from '../reducers/reducers';
 
 export default combineReducers({});

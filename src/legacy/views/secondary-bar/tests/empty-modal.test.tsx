@@ -6,9 +6,10 @@
 
 import { act } from '@testing-library/react';
 import { rest } from 'msw';
-import { generateStore } from '../../../tests/generators/store';
-import { getSetupServer } from '../../../carbonio-ui-commons/test/jest-setup';
+
+import { getSetupServer } from '../../../../carbonio-ui-commons/test/jest-setup';
 import { folderAction } from '../../../store/actions/folder-action';
+import { generateStore } from '../../../tests/generators/store';
 import { ContactsFolder } from '../../../types/contact';
 import { FolderActionRequest } from '../../../types/soap';
 /**

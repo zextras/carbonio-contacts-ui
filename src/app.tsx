@@ -20,24 +20,26 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import { CONTACTS_ROUTE, CONTACTS_APP_ID } from './constants';
-import { ContactInput } from './integrations/contact-input';
-import { StoreProvider } from './store/redux';
-import { EditViewProps } from './types/views/edit-view';
-import { SidebarProps } from './types/views/sidebar';
-import SidebarItems from './views/secondary-bar/sidebar';
-import { SyncDataHandler } from './views/secondary-bar/sync-data-handler';
+import { ContactInput } from './legacy/integrations/contact-input';
+import { StoreProvider } from './legacy/store/redux';
+import { EditViewProps } from './legacy/types/views/edit-view';
+import { SidebarProps } from './legacy/types/views/sidebar';
+import SidebarItems from './legacy/views/secondary-bar/sidebar';
+import { SyncDataHandler } from './legacy/views/secondary-bar/sync-data-handler';
 
-const LazyAppView = lazy(() => import(/* webpackChunkName: "contacts-view" */ './views/app-view'));
+const LazyAppView = lazy(
+	() => import(/* webpackChunkName: "contacts-view" */ './legacy/views/app-view')
+);
 
 const LazySettingsView = lazy(
-	() => import(/* webpackChunkName: "settings-view" */ './views/settings/settings-view')
+	() => import(/* webpackChunkName: "settings-view" */ './legacy/views/settings/settings-view')
 );
 const LazySearchView = lazy(
-	() => import(/* webpackChunkName: "edit-view" */ './views/search/search-view')
+	() => import(/* webpackChunkName: "search-view" */ './legacy/views/search/search-view')
 );
 
 const LazyBoardView = lazy(
-	() => import(/* webpackChunkName: "edit-view" */ './views/edit/edit-view')
+	() => import(/* webpackChunkName: "edit-view" */ './legacy/views/edit/edit-view')
 );
 
 const AppView = (): React.JSX.Element => (
