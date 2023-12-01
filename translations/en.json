@@ -7,6 +7,19 @@
         "send_msg": "Send e-mail",
         "share_folder": "Share folder"
     },
+    "board": {
+        "input": {
+            "title": {
+                "label": "Group title*"
+            }
+        },
+        "label": {
+            "description": "Description"
+        },
+        "newContactGroup": {
+            "title": "New Group"
+        }
+    },
     "contact_restored": "Contact restored",
     "displayer": {
         "description2": "Click the “NEW” button to start creating a new one.",
@@ -162,6 +175,7 @@
         "folder_name": "Folder name",
         "include_shared_folders": "Include shared address books",
         "move": "Move",
+        "newContactGroup": "New Contact Group",
         "new_address_book": "New address Book",
         "new_contact": "New contact",
         "new_contact_created": "New contact created",

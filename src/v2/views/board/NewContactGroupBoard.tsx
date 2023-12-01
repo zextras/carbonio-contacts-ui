@@ -7,11 +7,11 @@ import React, { useCallback, useState } from 'react';
 
 import {
 	Container,
-	Padding,
 	Button,
 	Text,
 	Input,
-	InputProps
+	InputProps,
+	Avatar
 } from '@zextras/carbonio-design-system';
 import { useBoardHooks } from '@zextras/carbonio-shell-ui';
 import { noop, size } from 'lodash';
@@ -23,7 +23,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 	const [t] = useTranslation();
 	const { updateBoard } = useBoardHooks();
 
-	const [titleValue, setTitleValue] = useState('');
+	const [titleValue, setTitleValue] = useState('New Group');
 
 	const onTitleChange = useCallback<NonNullable<InputProps['onChange']>>(
 		(ev) => {
@@ -43,16 +43,34 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 			background={'gray5'}
 			padding={{ horizontal: 'large', bottom: '2.625rem' }}
 		>
-			<Padding vertical={'small'}>
-				<Button disabled={false} size={'medium'} label={'discard'} onClick={noop} />
+			<Container
+				gap={'0.5rem'}
+				orientation={'horizontal'}
+				mainAlignment={'flex-end'}
+				height={'fit'}
+				padding={{ vertical: '0.5rem' }}
+			>
+				<Button disabled={false} size={'medium'} label={'discard'} onClick={noop} type="outlined" />
 				<Button
-					disabled={false}
+					disabled={titleValue.length === 0}
 					size={'medium'}
 					label={'save'}
 					icon={'SaveOutline'}
 					onClick={noop}
 				/>
-			</Padding>
+			</Container>
+			<Container
+				height={'fit'}
+				orientation={'horizontal'}
+				mainAlignment={'flex-start'}
+				gap={'1rem'}
+			>
+				<Avatar size="large" label="A Label" icon="PeopleOutline" />
+				<Container height={'fit'} crossAlignment={'flex-start'}>
+					<Text weight={'bold'}>New Group</Text>
+					<Text color={'gray1'}>Addresses: 0</Text>
+				</Container>
+			</Container>
 			<Container
 				background={'gray6'}
 				mainAlignment={'flex-start'}
@@ -81,7 +99,6 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 						iconAction={noop}
 					/>
 				</Container>
-				<Text weight={'bold'}>{t('board.label.description', 'Description')}</Text>
 			</Container>
 		</Container>
 	);
