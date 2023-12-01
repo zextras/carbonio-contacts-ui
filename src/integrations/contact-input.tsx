@@ -13,7 +13,8 @@ import {
 	Row,
 	Text,
 	ChipProps,
-	ChipItem
+	ChipItem,
+	ChipInputProps
 } from '@zextras/carbonio-design-system';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
 import {
@@ -140,7 +141,7 @@ type ContactInput = {
 	placeholder: string;
 	background?: keyof DefaultTheme['palette'];
 	dragAndDropEnabled?: boolean;
-};
+} & Omit<ChipInputProps, 'defaultValue'>;
 
 const ContactInput: FC<ContactInput> = ({
 	onChange,
