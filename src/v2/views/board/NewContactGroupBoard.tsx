@@ -23,7 +23,8 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 	const [t] = useTranslation();
 	const { updateBoard } = useBoardHooks();
 
-	const [titleValue, setTitleValue] = useState('New Group');
+	const initialTitle = 'New Group';
+	const [titleValue, setTitleValue] = useState(initialTitle);
 
 	const onTitleChange = useCallback<NonNullable<InputProps['onChange']>>(
 		(ev) => {
@@ -36,6 +37,10 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 		},
 		[updateBoard]
 	);
+
+	const discardChanges = useCallback(() => {
+		setTitleValue(initialTitle);
+	}, []);
 
 	return (
 		<Container
@@ -50,9 +55,15 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 				height={'fit'}
 				padding={{ vertical: '0.5rem' }}
 			>
-				<Button disabled={false} size={'medium'} label={'discard'} onClick={noop} type="outlined" />
 				<Button
-					disabled={titleValue.length === 0}
+					disabled={false}
+					size={'medium'}
+					label={'discard'}
+					onClick={discardChanges}
+					type="outlined"
+				/>
+				<Button
+					disabled={titleValue.trim().length === 0 || titleValue.length > 256}
 					size={'medium'}
 					label={'save'}
 					icon={'SaveOutline'}
@@ -97,6 +108,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 						placeholder={'Insert an address to add a new element'}
 						icon={'Plus'}
 						iconAction={noop}
+						iconDisabled
 					/>
 				</Container>
 			</Container>

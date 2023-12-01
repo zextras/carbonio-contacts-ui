@@ -6,12 +6,14 @@
 
 import React from 'react';
 
+import { faker } from '@faker-js/faker';
+
 import NewContactGroupBoard from './NewContactGroupBoard';
 import { screen, setup } from '../../../utils/testUtils';
 import { ICON_REGEXP } from '../../constants/tests';
 
 describe('New contact group board', () => {
-	test('should show fields for group title and addresses list', () => {
+	it('should show fields for group title and addresses list', () => {
 		setup(<NewContactGroupBoard />);
 		expect(screen.getByRole('textbox', { name: 'Group title*' })).toBeVisible();
 		expect(screen.getByText('Addresses list')).toBeVisible();
@@ -22,7 +24,7 @@ describe('New contact group board', () => {
 		).toBeVisible();
 	});
 
-	test('should render discard and save buttons', () => {
+	it('should render discard and save buttons', () => {
 		setup(<NewContactGroupBoard />);
 		expect(screen.getByRole('button', { name: /DISCARD/i })).toBeVisible();
 		expect(
@@ -30,27 +32,63 @@ describe('New contact group board', () => {
 		).toBeVisible();
 	});
 
-	test('should render the avatar icon, title and the number of addresses', () => {
+	it('should render the avatar icon, title and the number of addresses', () => {
 		setup(<NewContactGroupBoard />);
 		expect(screen.getByTestId(ICON_REGEXP.avatar)).toBeVisible();
 		expect(screen.getByText('New Group')).toBeVisible();
 		expect(screen.getByText('Addresses: 0')).toBeVisible();
 	});
 
-	test('by default title input has New Group string', () => {
+	it('should render New Group string by default in the title input', () => {
 		setup(<NewContactGroupBoard />);
 		expect(screen.getByRole('textbox', { name: 'Group title*' })).toHaveValue('New Group');
 	});
 
-	test('save button is disabled when title input is empty string', async () => {
-		const { user } = setup(<NewContactGroupBoard />);
-		await user.clear(screen.getByRole('textbox', { name: 'Group title*' }));
-		expect(
-			screen.getByRoleWithIcon('button', { name: /SAVE/i, icon: ICON_REGEXP.save })
-		).toBeDisabled();
+	describe('Save button disabled', () => {
+		it('should disable the save button when title input is empty string', async () => {
+			const { user } = setup(<NewContactGroupBoard />);
+			await user.clear(screen.getByRole('textbox', { name: 'Group title*' }));
+			expect(
+				screen.getByRoleWithIcon('button', { name: /SAVE/i, icon: ICON_REGEXP.save })
+			).toBeDisabled();
+		});
+
+		it('should disable save button when title input contains only space characters', async () => {
+			const { user } = setup(<NewContactGroupBoard />);
+			const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
+			await user.clear(titleInput);
+			await user.type(titleInput, '   ');
+			expect(
+				screen.getByRoleWithIcon('button', { name: /SAVE/i, icon: ICON_REGEXP.save })
+			).toBeDisabled();
+		});
+
+		it('should disable save button when title input length is greater than 256', async () => {
+			const newTitle = faker.string.alphanumeric(257);
+			const { user } = setup(<NewContactGroupBoard />);
+			const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
+			await user.clear(titleInput);
+			await user.type(titleInput, newTitle);
+			expect(
+				screen.getByRoleWithIcon('button', { name: /SAVE/i, icon: ICON_REGEXP.save })
+			).toBeDisabled();
+		});
 	});
 
-	test.todo('should render the dropdown with the proposed options once the user start typing');
+	it('should reset to the initial title when click on the discard button', async () => {
+		const { user } = setup(<NewContactGroupBoard />);
+		const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
+		const newTitle = faker.string.alphanumeric(257);
+		await user.clear(titleInput);
+		await user.type(titleInput, newTitle);
+		expect(titleInput).toHaveValue(newTitle);
+		await user.click(screen.getByRole('button', { name: /discard/i }));
+		expect(titleInput).toHaveValue('New Group');
+	});
+
+	it.todo('should show the error message when the title input length is greater than 256');
+
+	it.todo('should render the dropdown with the proposed options once the user start typing');
 });
 
 /**
