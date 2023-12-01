@@ -5,12 +5,13 @@
  */
 import React from 'react';
 
-import { waitFor } from '@testing-library/react';
+import { act, waitFor } from '@testing-library/react';
 import { rest } from 'msw';
 
 import { ContactInputCustomChipComponent } from './contact-input-custom-chip-component';
 import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
-import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
+import { screen, setupTest, within } from '../../carbonio-ui-commons/test/test-setup';
+import { TESTID_SELECTORS, TIMERS } from '../../constants/tests';
 import { getDistributionListCustomResponse } from '../tests/msw/handle-get-distribution-list-members-request';
 
 const getDistributionListMembersRequest = '/service/soap/GetDistributionListMembersRequest';
@@ -25,8 +26,6 @@ const user3Mail = 'user3@mail.com';
 const user4Mail = 'user4@mail.com';
 const user5Mail = 'user5@mail.com';
 const user6Mail = 'user6@mail.com';
-
-const chevronTestId = 'icon: ChevronDownOutline';
 
 const selectAll = 'Select address';
 
@@ -97,7 +96,7 @@ describe('Contact input custom chip component', () => {
 			/>
 		);
 
-		const chevronAction = screen.getByTestId(chevronTestId);
+		const chevronAction = screen.getByTestId(TESTID_SELECTORS.ICONS.EXPAND_DL);
 
 		await waitFor(() => {
 			user.click(chevronAction);
@@ -134,7 +133,7 @@ describe('Contact input custom chip component', () => {
 			/>
 		);
 
-		const chevronAction = screen.getByTestId(chevronTestId);
+		const chevronAction = screen.getByTestId(TESTID_SELECTORS.ICONS.EXPAND_DL);
 
 		await waitFor(() => {
 			user.click(chevronAction);
@@ -169,7 +168,7 @@ describe('Contact input custom chip component', () => {
 			/>
 		);
 
-		const chevronAction = screen.getByTestId(chevronTestId);
+		const chevronAction = screen.getByTestId(TESTID_SELECTORS.ICONS.EXPAND_DL);
 
 		await waitFor(() => {
 			user.click(chevronAction);
@@ -217,7 +216,7 @@ describe('Contact input custom chip component', () => {
 			/>
 		);
 
-		const chevronAction = screen.getByTestId(chevronTestId);
+		const chevronAction = screen.getByTestId(TESTID_SELECTORS.ICONS.EXPAND_DL);
 
 		await waitFor(() => {
 			user.click(chevronAction);
@@ -263,7 +262,7 @@ describe('Contact input custom chip component', () => {
 			/>
 		);
 
-		const chevronAction = screen.getByTestId(chevronTestId);
+		const chevronAction = screen.getByTestId(TESTID_SELECTORS.ICONS.EXPAND_DL);
 
 		await waitFor(() => {
 			user.click(chevronAction);
@@ -296,24 +295,28 @@ describe('Contact input custom chip component', () => {
 				/>
 			);
 
-			const editButton = screen.queryByRoleWithIcon('button', { icon: 'edit-2-outline' });
+			const editButton = screen.queryByRoleWithIcon('button', {
+				icon: TESTID_SELECTORS.ICONS.EDIT_DL
+			});
 			expect(editButton).not.toBeInTheDocument();
 		});
 
 		it('shows the edit icon if the contact is a DL', () => {
 			setupTest(
 				<ContactInputCustomChipComponent
-					id={'user-1'}
-					label={'user 1'}
-					email={user1Mail}
+					id={dl1Id}
+					label={dl1Label}
+					email={dl1Mail}
 					isGroup
 					_onChange={jest.fn()}
 					contactInputValue={[]}
 				/>
 			);
 
-			const editButton = screen.queryByRoleWithIcon('button', { icon: 'edit-2-outline' });
-			expect(editButton).toBeInTheDocument();
+			const editButton = screen.getByRoleWithIcon('button', {
+				icon: TESTID_SELECTORS.ICONS.EDIT_DL
+			});
+			expect(editButton).toBeVisible();
 		});
 
 		it.todo(
@@ -322,8 +325,29 @@ describe('Contact input custom chip component', () => {
 
 		it.todo('shows the edit icon if the contact is a DL but the current user is the DL owner');
 
-		it.todo(
-			'if the user click on the edit icon the DL description is displayed inside a modal modal'
-		);
+		it('if the user clicks on the edit icon the DL title is displayed inside a modal', async () => {
+			const { user } = setupTest(
+				<ContactInputCustomChipComponent
+					id={dl1Id}
+					label={dl1Label}
+					email={dl1Mail}
+					isGroup
+					_onChange={jest.fn()}
+					contactInputValue={[]}
+				/>
+			);
+
+			const editButton = screen.getByRoleWithIcon('button', {
+				icon: TESTID_SELECTORS.ICONS.EDIT_DL
+			});
+			await user.click(editButton);
+			await screen.findByText(`Edit "${dl1Label}"`);
+			act(() => {
+				jest.advanceTimersByTime(TIMERS.MODAL.DELAY_OPEN);
+			});
+			expect(
+				within(screen.getByTestId(TESTID_SELECTORS.MODAL)).getByText(`Edit "${dl1Label}"`)
+			).toBeVisible();
+		});
 	});
 });

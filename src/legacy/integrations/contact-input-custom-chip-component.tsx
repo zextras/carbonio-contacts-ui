@@ -7,13 +7,21 @@
 /* eslint-disable arrow-body-style */
 import React, { ReactElement, useCallback, useMemo, useState } from 'react';
 
-import { Chip, Dropdown, Button, Container, DropdownItem } from '@zextras/carbonio-design-system';
+import {
+	Chip,
+	Dropdown,
+	Button,
+	Container,
+	DropdownItem,
+	ChipAction
+} from '@zextras/carbonio-design-system';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
 import { debounce, DebouncedFuncLeading, filter, map, noop, uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { ContactInputOnChange, ContactInputValue, CustomChipProps } from '../types/integrations';
+import { useActionEditDL } from '../../actions/edit-dl';
 
 const StyledChip = styled(Chip)`
 	cursor: default;
@@ -238,14 +246,16 @@ const CustomComponent = (props: CustomChipProps): React.JSX.Element => {
 		contactInputValue
 	});
 
-	const chipActions = useMemo(() => {
+	const actionEditDL = useActionEditDL();
+
+	const chipActions = useMemo<ChipAction[]>(() => {
 		return [
 			{
-				id: 'dl-edit-action',
-				label: t('edit_distribution_list', 'Edit address list'),
+				id: `chip-action-${actionEditDL.id}`,
+				label: actionEditDL.label,
 				type: 'button',
-				icon: 'Edit2Outline',
-				onClick: debounceUserInput(onChevronClick)
+				icon: actionEditDL.icon,
+				onClick: () => actionEditDL.execute({ name: label, email })
 			},
 			{
 				id: 'action2',
@@ -255,7 +265,11 @@ const CustomComponent = (props: CustomChipProps): React.JSX.Element => {
 				onClick: debounceUserInput(onChevronClick)
 			}
 		];
-	}, [onChevronClick, open, t]);
+	}, [actionEditDL, email, label, onChevronClick, open, t]);
+
+	const onChipClick = useCallback<React.MouseEventHandler>((e) => {
+		e.stopPropagation();
+	}, []);
 
 	return (
 		<Dropdown
@@ -278,9 +292,7 @@ const CustomComponent = (props: CustomChipProps): React.JSX.Element => {
 					hasAvatar
 					shape="regular"
 					closable
-					onClick={(e): void => {
-						e.stopPropagation();
-					}}
+					onClick={onChipClick}
 					actions={chipActions}
 				/>
 			</div>
