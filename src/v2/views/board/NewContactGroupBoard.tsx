@@ -14,7 +14,7 @@ import {
 	Avatar
 } from '@zextras/carbonio-design-system';
 import { useBoardHooks } from '@zextras/carbonio-shell-ui';
-import { noop, size } from 'lodash';
+import { noop, size, some } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import ContactInput from '../../../integrations/contact-input';
@@ -53,6 +53,15 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 		return undefined;
 	}, [titleValue]);
 
+	const [contactInputValue, setContactInputValue] = useState<any>([]);
+	const contactInputOnChange = (newContactInputValue: any): void => {
+		setContactInputValue(newContactInputValue);
+	};
+
+	const contactInputIconDisabled = useMemo(
+		() => !some(contactInputValue, (chip) => chip.error === false),
+		[contactInputValue]
+	);
 	return (
 		<Container
 			crossAlignment={'flex-end'}
@@ -74,7 +83,9 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 					type="outlined"
 				/>
 				<Button
-					disabled={titleValue.trim().length === 0 || titleValue.length > CONTACT_GROUP_TITLE_MAX_LENGTH}
+					disabled={
+						titleValue.trim().length === 0 || titleValue.length > CONTACT_GROUP_TITLE_MAX_LENGTH
+					}
 					size={'medium'}
 					label={'save'}
 					icon={'SaveOutline'}
@@ -119,11 +130,12 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 					crossAlignment={'flex-start'}
 				>
 					<ContactInput
-						defaultValue={[]}
+						defaultValue={contactInputValue}
+						onChange={contactInputOnChange}
 						placeholder={'Insert an address to add a new element'}
 						icon={'Plus'}
 						iconAction={noop}
-						iconDisabled
+						iconDisabled={contactInputIconDisabled}
 					/>
 				</Container>
 			</Container>

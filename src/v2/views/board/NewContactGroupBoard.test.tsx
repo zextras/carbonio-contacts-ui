@@ -7,12 +7,13 @@
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
+import 'jest-styled-components';
+import { act } from '@testing-library/react';
 
 import NewContactGroupBoard from './NewContactGroupBoard';
 import { screen, setup } from '../../../utils/testUtils';
-import { ICON_REGEXP, PALETTE } from '../../constants/tests';
-import 'jest-styled-components';
 import { CONTACT_GROUP_TITLE_MAX_LENGTH } from '../../constants';
+import { ICON_REGEXP, PALETTE } from '../../constants/tests';
 
 describe('New contact group board', () => {
 	it('should show fields for group title and addresses list', () => {
@@ -88,35 +89,86 @@ describe('New contact group board', () => {
 		expect(titleInput).toHaveValue('New Group');
 	});
 
-	it('should show the error message in red when the title input length is 0', async () => {
-		const errorMessage = 'Error: title length must be greater than 0';
-		const { user } = setup(<NewContactGroupBoard />);
-		const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
-		await user.clear(titleInput);
-		expect(screen.getByText(errorMessage)).toBeVisible();
-		expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
+	describe('Error message', () => {
+		it('should show the error message in red when the title input length is 0', async () => {
+			const errorMessage = 'Error: title length must be greater than 0';
+			const { user } = setup(<NewContactGroupBoard />);
+			const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
+			await user.clear(titleInput);
+			expect(screen.getByText(errorMessage)).toBeVisible();
+			expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
+		});
+
+		it('should show the error message when the title input contains only space characters', async () => {
+			const { user } = setup(<NewContactGroupBoard />);
+			const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
+			await user.clear(titleInput);
+			await user.type(titleInput, '   ');
+			expect(screen.getByText('Error: title length must be greater than 0')).toBeVisible();
+		});
+
+		it('should show the error message in red when the title input length is greater than 256', async () => {
+			const errorMessage = 'Error: title length can have maximum 256 characters';
+			const newTitle = faker.string.alphanumeric(CONTACT_GROUP_TITLE_MAX_LENGTH + 1);
+			const { user } = setup(<NewContactGroupBoard />);
+			const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
+			await user.clear(titleInput);
+			await user.type(titleInput, newTitle);
+			expect(screen.getByText(errorMessage)).toBeVisible();
+			expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
+		});
 	});
 
-	it('should show the error message when the title input contains only space characters', async () => {
-		const { user } = setup(<NewContactGroupBoard />);
-		const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
-		await user.clear(titleInput);
-		await user.type(titleInput, '   ');
-		expect(screen.getByText('Error: title length must be greater than 0')).toBeVisible();
-	});
+	describe('Addresses list', () => {
+		it('should enable the plus button when at least a valid chip is in the contact input', async () => {
+			const newEmail = faker.internet.email();
+			const { user } = setup(<NewContactGroupBoard />);
+			const inputElement = screen.getByRole('textbox', {
+				name: /Insert an address to add a new element/i
+			});
+			await user.type(inputElement, newEmail);
+			await act(async () => {
+				await user.type(inputElement, ',');
+			});
+			expect(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus })).toBeEnabled();
+		});
 
-	it('should show the error message in red when the title input length is greater than 256', async () => {
-		const errorMessage = 'Error: title length can have maximum 256 characters';
-		const newTitle = faker.string.alphanumeric(CONTACT_GROUP_TITLE_MAX_LENGTH + 1);
-		const { user } = setup(<NewContactGroupBoard />);
-		const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
-		await user.clear(titleInput);
-		await user.type(titleInput, newTitle);
-		expect(screen.getByText(errorMessage)).toBeVisible();
-		expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
-	});
+		it('should enable the plus button when both valid and invalid chips are in the contact input', async () => {
+			const newEmail = faker.internet.email();
+			const invalidMail = faker.string.alpha(10);
+			const { user } = setup(<NewContactGroupBoard />);
+			const inputElement = screen.getByRole('textbox', {
+				name: /Insert an address to add a new element/i
+			});
+			await user.type(inputElement, newEmail);
+			await act(async () => {
+				await user.type(inputElement, ',');
+			});
+			await user.type(inputElement, invalidMail);
+			await act(async () => {
+				await user.type(inputElement, ',');
+			});
+			expect(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus })).toBeEnabled();
+		});
 
-	it.todo('should render the dropdown with the proposed options once the user start typing');
+		it('should disable the plus button when there are no chips in the contact input', async () => {
+			setup(<NewContactGroupBoard />);
+			expect(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus })).toBeDisabled();
+		});
+
+		it('should disable the plus button when there are only invalid chips in the contact input', async () => {
+			const invalidMail = faker.string.alpha(10);
+			const { user } = setup(<NewContactGroupBoard />);
+			const inputElement = screen.getByRole('textbox', {
+				name: /Insert an address to add a new element/i
+			});
+			await user.type(inputElement, invalidMail);
+			await act(async () => {
+				await user.type(inputElement, ',');
+			});
+			expect(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus })).toBeDisabled();
+		});
+	});
 });
 
 /**
