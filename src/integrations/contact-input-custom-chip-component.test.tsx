@@ -18,9 +18,11 @@ import { getDistributionListCustomResponse } from '../tests/msw/handle-get-distr
 
 const getDistributionListMembersRequest = '/service/soap/GetDistributionListMembersRequest';
 
-const dl1Id = 'dl-1';
-const dl1Label = 'dl 1';
-const dl1Mail = 'dl1@mail.com';
+const distributionList = {
+	id: 'dl-1',
+	email: 'dl1@mail.com',
+	label: 'dl 1'
+};
 
 const user1 = {
 	id: 'user1ID',
@@ -119,9 +121,9 @@ describe('Contact input custom chip component', () => {
 	test('if it is a distribution list it will render the distribution list custom chip', () => {
 		setupTest(
 			<ContactInputCustomChipComponent
-				id={dl1Id}
-				label={dl1Label}
-				email={dl1Mail}
+				id={distributionList.id}
+				label={distributionList.label}
+				email={distributionList.email}
 				isGroup
 				_onChange={jest.fn()}
 				contactInputValue={[]}
@@ -143,9 +145,9 @@ describe('Contact input custom chip component', () => {
 
 		const { user } = setupTest(
 			<ContactInputCustomChipComponent
-				id={dl1Id}
-				label={dl1Label}
-				email={dl1Mail}
+				id={distributionList.id}
+				label={distributionList.label}
+				email={distributionList.email}
 				isGroup
 				_onChange={jest.fn()}
 				contactInputValue={[]}
@@ -180,9 +182,9 @@ describe('Contact input custom chip component', () => {
 
 		const { user } = setupTest(
 			<ContactInputCustomChipComponent
-				id={dl1Id}
-				label={dl1Label}
-				email={dl1Mail}
+				id={distributionList.id}
+				label={distributionList.label}
+				email={distributionList.email}
 				isGroup
 				_onChange={jest.fn()}
 				contactInputValue={[]}
@@ -215,9 +217,9 @@ describe('Contact input custom chip component', () => {
 
 		const { user } = setupTest(
 			<ContactInputCustomChipComponent
-				id={dl1Id}
-				label={dl1Label}
-				email={dl1Mail}
+				id={distributionList.id}
+				label={distributionList.label}
+				email={distributionList.email}
 				isGroup
 				_onChange={jest.fn()}
 				contactInputValue={[]}
@@ -263,9 +265,9 @@ describe('Contact input custom chip component', () => {
 		getSetupServer().events.on('request:start', dispatchRequest);
 		const { user } = setupTest(
 			<ContactInputCustomChipComponent
-				id={dl1Id}
-				label={dl1Label}
-				email={dl1Mail}
+				id={distributionList.id}
+				label={distributionList.label}
+				email={distributionList.email}
 				isGroup
 				_onChange={jest.fn()}
 				contactInputValue={[]}
@@ -309,9 +311,9 @@ describe('Contact input custom chip component', () => {
 
 		const { user } = setupTest(
 			<ContactInputCustomChipComponent
-				id={dl1Id}
-				label={dl1Label}
-				email={dl1Mail}
+				id={distributionList.id}
+				label={distributionList.label}
+				email={distributionList.email}
 				isGroup
 				_onChange={jest.fn()}
 				contactInputValue={[]}
