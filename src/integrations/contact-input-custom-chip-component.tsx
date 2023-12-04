@@ -15,6 +15,11 @@ import styled from 'styled-components';
 
 import { ContactInputOnChange, ContactInputValue, CustomChipProps } from '../types/integrations';
 
+export const CHIP_DISPLAY_NAME_VALUES = {
+	LABEL: 'label',
+	EMAIL: 'email'
+};
+
 const StyledChip = styled(Chip)`
 	cursor: default;
 	&:hover {
@@ -278,10 +283,20 @@ const CustomComponent = (props: CustomChipProps): JSX.Element => {
 };
 
 export const ContactInputCustomChipComponent = (props: CustomChipProps): ReactElement => {
-	const { email, isGroup } = props;
+	const { email, isGroup, label, chipDisplayName = CHIP_DISPLAY_NAME_VALUES.LABEL } = props;
+
+	const _label = useMemo(() => {
+		if (label && chipDisplayName === CHIP_DISPLAY_NAME_VALUES.LABEL) {
+			return label;
+		}
+		if (email && chipDisplayName === CHIP_DISPLAY_NAME_VALUES.EMAIL) {
+			return email;
+		}
+		return label ?? email ?? '';
+	}, [chipDisplayName, email, label]);
 
 	if (!isDistributionList({ email, isGroup })) {
-		return <Chip {...props} data-testid={'default-chip'} />;
+		return <Chip {...props} label={_label} data-testid={'default-chip'} />;
 	}
-	return <CustomComponent {...props} />;
+	return <CustomComponent {...props} label={_label} />;
 };

@@ -19,6 +19,7 @@ export type CustomChipProps = React.PropsWithChildren<{
 	label: string;
 	email: string;
 	isGroup: boolean;
+	chipDisplayName?: string;
 	_onChange: ContactInputOnChange;
 	contactInputValue: ContactInputValue;
 }>;

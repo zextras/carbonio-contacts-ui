@@ -35,7 +35,10 @@ import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import styled, { DefaultTheme } from 'styled-components';
 
-import { ContactInputCustomChipComponent } from './contact-input-custom-chip-component';
+import {
+	CHIP_DISPLAY_NAME_VALUES,
+	ContactInputCustomChipComponent
+} from './contact-input-custom-chip-component';
 import { useAppSelector } from '../hooks/redux';
 import { StoreProvider } from '../store/redux';
 import { Contact, Group } from '../types/contact';
@@ -139,6 +142,7 @@ type ContactInput = {
 	defaultValue: Array<Contact>;
 	placeholder: string;
 	background?: keyof DefaultTheme['palette'];
+	chipDisplayName?: string;
 	dragAndDropEnabled?: boolean;
 };
 
@@ -148,6 +152,7 @@ const ContactInput: FC<ContactInput> = ({
 	placeholder,
 	background = 'gray5',
 	dragAndDropEnabled = false,
+	chipDisplayName = CHIP_DISPLAY_NAME_VALUES.LABEL,
 	...rest
 }) => {
 	const props = omit(rest, 'ChipComponent');
@@ -293,7 +298,7 @@ const ContactInput: FC<ContactInput> = ({
 						customComponent: <Loader />
 					}
 				]);
-				new Promise((resolve, reject) => {
+				new Promise((resolve, _reject) => {
 					try {
 						resolve(
 							filter(allContacts, (c) =>
@@ -303,7 +308,7 @@ const ContactInput: FC<ContactInput> = ({
 							)
 						);
 					} catch (err: any) {
-						reject(new Error(err));
+						_reject(new Error(err));
 					}
 				})
 					.then((localResults: any) => {
@@ -459,11 +464,12 @@ const ContactInput: FC<ContactInput> = ({
 		(_props: CustomChipProps): React.JSX.Element => (
 			<ContactInputCustomChipComponent
 				{..._props}
+				chipDisplayName={chipDisplayName}
 				_onChange={onChange}
 				contactInputValue={contactInputValue}
 			/>
 		),
-		[contactInputValue, onChange]
+		[chipDisplayName, contactInputValue, onChange]
 	);
 
 	const onDragEnter = useCallback((ev) => {
