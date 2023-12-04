@@ -13,7 +13,8 @@ import {
 	Row,
 	Text,
 	ChipProps,
-	ChipItem
+	ChipItem,
+	ChipInputProps
 } from '@zextras/carbonio-design-system';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
 import {
@@ -134,11 +135,12 @@ const Loader = (): ReactElement => (
 	</Container>
 );
 
-type ContactInputProps = {
+type ContactInputProps = Pick<
+	ChipInputProps,
+	'placeholder' | 'background' | 'icon' | 'iconAction'
+> & {
 	onChange?: ContactInputOnChange;
 	defaultValue: Array<Contact>;
-	placeholder: string;
-	background?: keyof DefaultTheme['palette'];
 	dragAndDropEnabled?: boolean;
 };
 
@@ -526,6 +528,7 @@ export const ContactInput: FC<ContactInputProps> = ({
 		<StoreProvider>
 			<Container width="100%" onDrop={onDrop} height="100%">
 				<ChipInput
+					data-testid={'contact-input'}
 					disableOptions
 					placeholder={placeholder}
 					confirmChipOnBlur
