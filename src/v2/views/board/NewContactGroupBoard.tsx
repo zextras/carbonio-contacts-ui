@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import {
 	Container,
@@ -18,6 +18,7 @@ import { noop, size } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import ContactInput from '../../../integrations/contact-input';
+import { CONTACT_GROUP_TITLE_MAX_LENGTH } from '../../constants';
 
 const NewContactGroupBoard = (): React.JSX.Element => {
 	const [t] = useTranslation();
@@ -42,6 +43,16 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 		setTitleValue(initialTitle);
 	}, []);
 
+	const titleDescription = useMemo(() => {
+		if (titleValue.trim().length === 0) {
+			return 'Error: title length must be greater than 0';
+		}
+		if (titleValue.length > CONTACT_GROUP_TITLE_MAX_LENGTH) {
+			return 'Error: title length can have maximum 256 characters';
+		}
+		return undefined;
+	}, [titleValue]);
+
 	return (
 		<Container
 			crossAlignment={'flex-end'}
@@ -63,7 +74,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 					type="outlined"
 				/>
 				<Button
-					disabled={titleValue.trim().length === 0 || titleValue.length > 256}
+					disabled={titleValue.trim().length === 0 || titleValue.length > CONTACT_GROUP_TITLE_MAX_LENGTH}
 					size={'medium'}
 					label={'save'}
 					icon={'SaveOutline'}
@@ -95,6 +106,10 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 					borderColor={'gray3'}
 					value={titleValue}
 					onChange={onTitleChange}
+					description={titleDescription}
+					hasError={
+						titleValue.trim().length === 0 || titleValue.length > CONTACT_GROUP_TITLE_MAX_LENGTH
+					}
 				/>
 				<Text>{'Addresses list'}</Text>
 				<Container

@@ -10,7 +10,9 @@ import { faker } from '@faker-js/faker';
 
 import NewContactGroupBoard from './NewContactGroupBoard';
 import { screen, setup } from '../../../utils/testUtils';
-import { ICON_REGEXP } from '../../constants/tests';
+import { ICON_REGEXP, PALETTE } from '../../constants/tests';
+import 'jest-styled-components';
+import { CONTACT_GROUP_TITLE_MAX_LENGTH } from '../../constants';
 
 describe('New contact group board', () => {
 	it('should show fields for group title and addresses list', () => {
@@ -64,7 +66,7 @@ describe('New contact group board', () => {
 		});
 
 		it('should disable save button when title input length is greater than 256', async () => {
-			const newTitle = faker.string.alphanumeric(257);
+			const newTitle = faker.string.alphanumeric(CONTACT_GROUP_TITLE_MAX_LENGTH + 1);
 			const { user } = setup(<NewContactGroupBoard />);
 			const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
 			await user.clear(titleInput);
@@ -78,7 +80,7 @@ describe('New contact group board', () => {
 	it('should reset to the initial title when click on the discard button', async () => {
 		const { user } = setup(<NewContactGroupBoard />);
 		const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
-		const newTitle = faker.string.alphanumeric(257);
+		const newTitle = faker.string.alphanumeric(CONTACT_GROUP_TITLE_MAX_LENGTH + 1);
 		await user.clear(titleInput);
 		await user.type(titleInput, newTitle);
 		expect(titleInput).toHaveValue(newTitle);
@@ -86,7 +88,33 @@ describe('New contact group board', () => {
 		expect(titleInput).toHaveValue('New Group');
 	});
 
-	it.todo('should show the error message when the title input length is greater than 256');
+	it('should show the error message in red when the title input length is 0', async () => {
+		const errorMessage = 'Error: title length must be greater than 0';
+		const { user } = setup(<NewContactGroupBoard />);
+		const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
+		await user.clear(titleInput);
+		expect(screen.getByText(errorMessage)).toBeVisible();
+		expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
+	});
+
+	it('should show the error message when the title input contains only space characters', async () => {
+		const { user } = setup(<NewContactGroupBoard />);
+		const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
+		await user.clear(titleInput);
+		await user.type(titleInput, '   ');
+		expect(screen.getByText('Error: title length must be greater than 0')).toBeVisible();
+	});
+
+	it('should show the error message in red when the title input length is greater than 256', async () => {
+		const errorMessage = 'Error: title length can have maximum 256 characters';
+		const newTitle = faker.string.alphanumeric(CONTACT_GROUP_TITLE_MAX_LENGTH + 1);
+		const { user } = setup(<NewContactGroupBoard />);
+		const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
+		await user.clear(titleInput);
+		await user.type(titleInput, newTitle);
+		expect(screen.getByText(errorMessage)).toBeVisible();
+		expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
+	});
 
 	it.todo('should render the dropdown with the proposed options once the user start typing');
 });
