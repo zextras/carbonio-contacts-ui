@@ -110,3 +110,7 @@ export const PALETTE = {
 		disabled: '#cccccc'
 	}
 };
+
+export const SELECTORS = {
+	dropdownList: 'dropdown-popper-list'
+};

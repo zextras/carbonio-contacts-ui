@@ -9,11 +9,13 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import 'jest-styled-components';
 import { act } from '@testing-library/react';
+import { rest } from 'msw';
 
 import NewContactGroupBoard from './NewContactGroupBoard';
+import { getSetupServer } from '../../../carbonio-ui-commons/test/jest-setup';
 import { screen, setup } from '../../../utils/testUtils';
 import { CONTACT_GROUP_TITLE_MAX_LENGTH } from '../../constants';
-import { ICON_REGEXP, PALETTE } from '../../constants/tests';
+import { ICON_REGEXP, PALETTE, SELECTORS } from '../../constants/tests';
 
 describe('New contact group board', () => {
 	it('should show fields for group title and addresses list', () => {
@@ -120,53 +122,93 @@ describe('New contact group board', () => {
 	});
 
 	describe('Addresses list', () => {
-		it('should enable the plus button when at least a valid chip is in the contact input', async () => {
-			const newEmail = faker.internet.email();
-			const { user } = setup(<NewContactGroupBoard />);
-			const inputElement = screen.getByRole('textbox', {
-				name: /Insert an address to add a new element/i
+		describe('Plus button', () => {
+			it('should enable the plus button when at least a valid chip is in the contact input', async () => {
+				const newEmail = faker.internet.email();
+				const { user } = setup(<NewContactGroupBoard />);
+				const inputElement = screen.getByRole('textbox', {
+					name: /Insert an address to add a new element/i
+				});
+				await user.type(inputElement, newEmail);
+				await act(async () => {
+					await user.type(inputElement, ',');
+				});
+				expect(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus })).toBeEnabled();
 			});
-			await user.type(inputElement, newEmail);
-			await act(async () => {
-				await user.type(inputElement, ',');
-			});
-			expect(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus })).toBeEnabled();
-		});
 
-		it('should enable the plus button when both valid and invalid chips are in the contact input', async () => {
-			const newEmail = faker.internet.email();
-			const invalidMail = faker.string.alpha(10);
-			const { user } = setup(<NewContactGroupBoard />);
-			const inputElement = screen.getByRole('textbox', {
-				name: /Insert an address to add a new element/i
+			it('should enable the plus button when both valid and invalid chips are in the contact input', async () => {
+				const newEmail = faker.internet.email();
+				const invalidMail = faker.string.alpha(10);
+				const { user } = setup(<NewContactGroupBoard />);
+				const inputElement = screen.getByRole('textbox', {
+					name: /Insert an address to add a new element/i
+				});
+				await user.type(inputElement, newEmail);
+				await act(async () => {
+					await user.type(inputElement, ',');
+				});
+				await user.type(inputElement, invalidMail);
+				await act(async () => {
+					await user.type(inputElement, ',');
+				});
+				expect(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus })).toBeEnabled();
 			});
-			await user.type(inputElement, newEmail);
-			await act(async () => {
-				await user.type(inputElement, ',');
-			});
-			await user.type(inputElement, invalidMail);
-			await act(async () => {
-				await user.type(inputElement, ',');
-			});
-			expect(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus })).toBeEnabled();
-		});
 
-		it('should disable the plus button when there are no chips in the contact input', async () => {
-			setup(<NewContactGroupBoard />);
-			expect(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus })).toBeDisabled();
-		});
+			it('should disable the plus button when there are no chips in the contact input', async () => {
+				setup(<NewContactGroupBoard />);
+				expect(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus })).toBeDisabled();
+			});
 
-		it('should disable the plus button when there are only invalid chips in the contact input', async () => {
-			const invalidMail = faker.string.alpha(10);
-			const { user } = setup(<NewContactGroupBoard />);
-			const inputElement = screen.getByRole('textbox', {
-				name: /Insert an address to add a new element/i
+			it('should disable the plus button when there are only invalid chips in the contact input', async () => {
+				const invalidMail = faker.string.alpha(10);
+				const { user } = setup(<NewContactGroupBoard />);
+				const inputElement = screen.getByRole('textbox', {
+					name: /Insert an address to add a new element/i
+				});
+				await user.type(inputElement, invalidMail);
+				await act(async () => {
+					await user.type(inputElement, ',');
+				});
+				expect(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus })).toBeDisabled();
 			});
-			await user.type(inputElement, invalidMail);
-			await act(async () => {
-				await user.type(inputElement, ',');
+
+			it('should enable the plus button when the user add a chip from the dropdown', async () => {
+				const email = faker.internet.email();
+				getSetupServer().use(
+					rest.post('/service/soap/AutoCompleteRequest', async (req, res, ctx) =>
+						res(
+							ctx.json({
+								Body: {
+									AutoCompleteResponse: {
+										match: [
+											{
+												email: `<${email}>`,
+												first: faker.person.firstName()
+											}
+										]
+									}
+								}
+							})
+						)
+					)
+				);
+
+				const { user } = setup(<NewContactGroupBoard />);
+				const inputElement = screen.getByRole('textbox', {
+					name: /Insert an address to add a new element/i
+				});
+				await user.type(inputElement, email.substring(0, 3));
+				act(() => {
+					// run timers of dropdown
+					jest.runOnlyPendingTimers();
+				});
+				await screen.findByTestId(SELECTORS.dropdownList);
+
+				const dropdownOption = await screen.findByText(email);
+				expect(dropdownOption).toBeVisible();
+				await user.click(dropdownOption);
+				expect(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus })).toBeEnabled();
 			});
-			expect(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus })).toBeDisabled();
 		});
 	});
 });

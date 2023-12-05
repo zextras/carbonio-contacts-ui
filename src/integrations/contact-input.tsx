@@ -372,7 +372,8 @@ const ContactInput: FC<ContactInput> = ({
 												groupId: contact?.id,
 												label: contact?.label ?? getChipLabel(contact)
 											},
-											customComponent: <Hint contact={contact} />
+											customComponent: <Hint contact={contact} />,
+											id: `${contact.id} ${contact.email}`
 										})
 									)
 								);
@@ -451,7 +452,21 @@ const ContactInput: FC<ContactInput> = ({
 				}
 				return chip;
 			}
-			return valueToAdd;
+			return {
+				...valueToAdd,
+				error: !isValidEmail(valueToAdd.email),
+				actions: [
+					{
+						id: 'action1',
+						label: isValidEmail(valueToAdd.email)
+							? t('label.edit_email', 'Edit E-mail')
+							: t('label.edit_invalid_email', 'E-mail is invalid, click to edit it'),
+						icon: 'EditOutline',
+						type: 'button',
+						onClick: () => editChip(valueToAdd, valueToAdd.id)
+					}
+				]
+			};
 		},
 		[editChip, isValidEmail, t]
 	);
