@@ -36,6 +36,7 @@ import { useTranslation } from 'react-i18next';
 import styled, { DefaultTheme } from 'styled-components';
 
 import { ContactInputCustomChipComponent } from './contact-input-custom-chip-component';
+import { parseFullAutocompleteXML } from '../helpers/autocomplete';
 import { useAppSelector } from '../hooks/redux';
 import { StoreProvider } from '../store/redux';
 import { Contact, Group } from '../types/contact';
@@ -140,6 +141,7 @@ type ContactInput = {
 	placeholder: string;
 	background?: keyof DefaultTheme['palette'];
 	dragAndDropEnabled?: boolean;
+	extraAccountsIds: Array<string>;
 };
 
 const ContactInput: FC<ContactInput> = ({
@@ -148,6 +150,7 @@ const ContactInput: FC<ContactInput> = ({
 	placeholder,
 	background = 'gray5',
 	dragAndDropEnabled = false,
+	extraAccountsIds,
 	...rest
 }) => {
 	const props = omit(rest, 'ChipComponent');
@@ -310,17 +313,23 @@ const ContactInput: FC<ContactInput> = ({
 						if (localResults.length > 0) {
 							setOptions(localResults);
 						}
-						soapFetch('AutoComplete', {
-							_jsns: 'urn:zimbraMail',
-							includeGal: 1,
-							name: e.textContent
+						soapFetch('FullAutocomplete', {
+							...(extraAccountsIds?.length > 0 && {
+								extraAccountId: extraAccountsIds.map((id) => ({ _content: id }))
+							}),
+							AutoCompleteRequest: {
+								name: e.textContent,
+								includeGal: 1
+							},
+							_jsns: 'urn:zimbraMail'
 						})
-							.then((autoCompleteResult: any) =>
-								map(autoCompleteResult.match, (m) => ({
+							.then((autoCompleteResult: any) => {
+								const results = parseFullAutocompleteXML(autoCompleteResult);
+								return map(results.match, (m) => ({
 									...m,
 									email: isContactGroup(m) ? undefined : emailRegex.exec(m.email)?.[0]?.slice(1, -1)
-								}))
-							)
+								}));
+							})
 							.then((remoteResults: any) => {
 								const normRemoteResults = reduce(
 									remoteResults,
@@ -385,7 +394,7 @@ const ContactInput: FC<ContactInput> = ({
 					});
 			} else setOptions([]);
 		},
-		[allContacts, defaults, editChip, isValidEmail, onChange, options, t]
+		[allContacts, defaults, editChip, extraAccountsIds, isValidEmail, onChange, options, t]
 	);
 
 	useEffect(() => {
