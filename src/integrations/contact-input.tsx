@@ -300,7 +300,7 @@ const ContactInput: FC<ContactInput> = ({
 						customComponent: <Loader />
 					}
 				]);
-				new Promise((resolve, _reject) => {
+				new Promise((resolve, promiseReject) => {
 					try {
 						resolve(
 							filter(allContacts, (c) =>
@@ -310,7 +310,7 @@ const ContactInput: FC<ContactInput> = ({
 							)
 						);
 					} catch (err: any) {
-						_reject(new Error(err));
+						promiseReject(new Error(err));
 					}
 				})
 					.then((localResults: any) => {
