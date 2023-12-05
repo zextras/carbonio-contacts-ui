@@ -53,15 +53,49 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 		return undefined;
 	}, [titleValue]);
 
-	const [contactInputValue, setContactInputValue] = useState<any>([]);
+	const [contactInputValue, setContactInputValue] = useState<
+		Array<{ email: string; error: boolean }>
+	>([]);
+
+	const [memberListEmails, setMemberListEmails] = useState<string[]>([]);
+
 	const contactInputOnChange = (newContactInputValue: any): void => {
 		setContactInputValue(newContactInputValue);
 	};
 
 	const contactInputIconDisabled = useMemo(
-		() => !some(contactInputValue, (chip) => chip.error === false),
+		() => !some(contactInputValue, (chip) => !chip.error),
 		[contactInputValue]
 	);
+
+	const listItems = useMemo(
+		(): Array<React.JSX.Element> =>
+			memberListEmails.map((item: string) => (
+				<Container key={item} orientation={'horizontal'}>
+					<Avatar label={item} />
+					<div>{item} </div>
+					<Button onClick={(): void => undefined} icon={'Trash2Outline'} label={'REMOVE'} />
+				</Container>
+			)),
+		[memberListEmails]
+	);
+
+	const contactInputIconAction = useCallback(() => {
+		const valid: typeof contactInputValue = [];
+		const invalid: typeof contactInputValue = [];
+
+		contactInputValue.forEach((value) => {
+			if (value.error) {
+				invalid.push(value);
+			} else if (!value.error) {
+				valid.push(value);
+			}
+		});
+
+		setContactInputValue(invalid);
+		setMemberListEmails(valid.map((value) => value.email));
+	}, [contactInputValue]);
+
 	return (
 		<Container
 			crossAlignment={'flex-end'}
@@ -130,14 +164,18 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 					crossAlignment={'flex-start'}
 				>
 					<ContactInput
+						data-testid={'contact-group-contact-input'}
+						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+						// @ts-ignore
 						defaultValue={contactInputValue}
 						onChange={contactInputOnChange}
 						placeholder={'Insert an address to add a new element'}
 						icon={'Plus'}
-						iconAction={noop}
+						iconAction={contactInputIconAction}
 						iconDisabled={contactInputIconDisabled}
 					/>
 				</Container>
+				<Container data-testid={'member-list'}>{listItems}</Container>
 			</Container>
 		</Container>
 	);

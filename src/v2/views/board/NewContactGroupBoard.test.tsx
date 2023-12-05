@@ -8,7 +8,8 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import 'jest-styled-components';
-import { act } from '@testing-library/react';
+import { act, within } from '@testing-library/react';
+import { first, last } from 'lodash';
 import { rest } from 'msw';
 
 import NewContactGroupBoard from './NewContactGroupBoard';
@@ -208,6 +209,93 @@ describe('New contact group board', () => {
 				expect(dropdownOption).toBeVisible();
 				await user.click(dropdownOption);
 				expect(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus })).toBeEnabled();
+			});
+
+			// TODO fix when contact input will be fixed cause actually invalid mail in contact are not shown
+			it.todo('should enable the plus button when the user add a chip from the dropdown');
+
+			it('should remove valid chip from input when the user clicks on plus button', async () => {
+				const email = faker.internet.email();
+				const { user } = setup(<NewContactGroupBoard />);
+				const inputElement = screen.getByRole('textbox', {
+					name: /Insert an address to add a new element/i
+				});
+				await user.type(inputElement, email);
+				await act(async () => {
+					await user.type(inputElement, ',');
+				});
+				expect(screen.getByTestId('default-chip')).toBeVisible();
+				await act(async () => {
+					await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
+				});
+				expect(screen.queryByTestId('default-chip')).not.toBeInTheDocument();
+			});
+
+			it('should remove valid chip and maintain invalid ones in the contact input', async () => {
+				const newEmail = faker.internet.email();
+				const invalidMail1 = faker.string.alpha(10);
+				const invalidMail2 = faker.string.alpha(10);
+				const { user } = setup(<NewContactGroupBoard />);
+				const inputElement = screen.getByRole('textbox', {
+					name: /Insert an address to add a new element/i
+				});
+				await user.type(inputElement, newEmail);
+				await act(async () => {
+					await user.type(inputElement, ',');
+				});
+				await user.type(inputElement, invalidMail1);
+				await act(async () => {
+					await user.type(inputElement, ',');
+				});
+				await user.type(inputElement, invalidMail2);
+				await act(async () => {
+					await user.type(inputElement, ',');
+				});
+
+				const chipInput = screen.getByTestId('contact-group-contact-input');
+				expect(within(chipInput).getByText(invalidMail1)).toBeVisible();
+				expect(within(chipInput).getByText(invalidMail2)).toBeVisible();
+				expect(within(chipInput).getByText(newEmail)).toBeVisible();
+				await act(async () => {
+					await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
+				});
+				expect(within(chipInput).queryByText(newEmail)).not.toBeInTheDocument();
+				expect(within(chipInput).getByText(invalidMail1)).toBeVisible();
+				expect(within(chipInput).getByText(invalidMail2)).toBeVisible();
+			});
+		});
+		describe('Contact group members list', () => {
+			it('should render the valid email on the list', async () => {
+				const email = faker.internet.email();
+				const { user } = setup(<NewContactGroupBoard />);
+				const inputElement = screen.getByRole('textbox', {
+					name: /Insert an address to add a new element/i
+				});
+				await user.type(inputElement, email);
+				await act(async () => {
+					await user.type(inputElement, ',');
+				});
+				await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
+				const memberList = await screen.findByTestId('member-list');
+				expect(within(memberList).getByText(email)).toBeVisible();
+			});
+
+			it('should render the avatar and the remove button on the list', async () => {
+				const email = faker.internet.email();
+				const { user } = setup(<NewContactGroupBoard />);
+				const inputElement = screen.getByRole('textbox', {
+					name: /Insert an address to add a new element/i
+				});
+				await user.type(inputElement, email);
+				await act(async () => {
+					await user.type(inputElement, ',');
+				});
+				await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
+				const memberList = await screen.findByTestId('member-list');
+				const avatar = within(memberList).getByTestId('avatar');
+				expect(avatar).toBeVisible();
+				expect(avatar).toHaveTextContent(`${first(email)}${last(email)}`.toUpperCase());
+				expect(screen.getByRoleWithIcon('button', { name: /remove/i, icon: ICON_REGEXP.trash }));
 			});
 		});
 	});

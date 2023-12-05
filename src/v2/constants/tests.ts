@@ -7,7 +7,8 @@
 export const ICON_REGEXP = {
 	save: /icon: SaveOutline/i,
 	avatar: /icon: PeopleOutline/i,
-	plus: /icon: Plus/i
+	plus: /icon: Plus/i,
+	trash: /icon: Trash2Outline/i
 } as const;
 
 export const PALETTE = {
