@@ -53,4 +53,11 @@ describe('Member item', () => {
 			})
 		).toBeVisible();
 	});
+
+	it('should call onRemove callback when user clicks on remove button', async () => {
+		const removeFn = jest.fn();
+		const { user } = setupTest(<MemberListItemComponent {...buildProps({ onRemove: removeFn })} />);
+		await user.click(screen.getByRole('button', { name: 'remove' }));
+		expect(removeFn).toHaveBeenCalled();
+	});
 });

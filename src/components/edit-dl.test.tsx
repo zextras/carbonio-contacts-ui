@@ -6,6 +6,7 @@
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
+import { waitFor } from '@testing-library/react';
 import { times } from 'lodash';
 
 import { EditDLComponent, EditDLComponentProps } from './edit-dl';
@@ -16,11 +17,13 @@ import { generateStore } from '../legacy/tests/generators/store';
 const buildProps = ({
 	email = '',
 	members = [],
-	totalMembers = 0
+	totalMembers = 0,
+	onRemoveMember = jest.fn()
 }: Partial<EditDLComponentProps> = {}): EditDLComponentProps => ({
 	email,
 	members,
-	totalMembers
+	totalMembers,
+	onRemoveMember
 });
 
 describe('Edit DL Component', () => {
@@ -72,6 +75,24 @@ describe('Edit DL Component', () => {
 		expect(screen.getByText(`Member list ${totalMembers}`)).toBeVisible();
 	});
 
+	describe('Add members', () => {
+		it('add action should be disabled if add input is empty', () => {
+			const store = generateStore();
+			setupTest(<EditDLComponent {...buildProps()} />, { store });
+			const contactInput = screen.getByTestId(TESTID_SELECTORS.CONTACT_INPUT);
+			const contactInputIcon = within(contactInput).getByRoleWithIcon('button', {
+				icon: TESTID_SELECTORS.ICONS.ADD_MEMBERS
+			});
+			expect(contactInputIcon).toBeDisabled();
+		});
+
+		it.todo('add action should be disabled if all values are invalid');
+		it.todo('chip should show email if contact is added from options');
+		it.todo('chip should show email if contact is added manually by typing');
+		it.todo('should add all valid emails inside the list when user clicks on add action');
+		it.todo('should leave invalid values inside input when user clicks on add action');
+	});
+
 	describe('Members list', () => {
 		it('should show the list of members', () => {
 			const store = generateStore();
@@ -86,7 +107,78 @@ describe('Edit DL Component', () => {
 			});
 		});
 
-		it.todo('should remove a member if the remove action button for that member is clicked');
+		// TODO: move where the api call to get members is made
+		it('should load all members on first load', async () => {
+			const store = generateStore();
+			const members: Array<string> = [];
+			const totalMembers = 200;
+			times(totalMembers, () => {
+				members.push(faker.internet.email());
+			});
+			setupTest(<EditDLComponent {...buildProps({ members })} />, { store });
+			expect(screen.getByText(members[0])).toBeVisible();
+			expect(screen.getByText(members[totalMembers - 1])).toBeVisible();
+		});
+
+		it('should call onRemoveMember with member email if the remove action button for that member is clicked', async () => {
+			const store = generateStore();
+			const members: Array<string> = [];
+			times(10, () => {
+				members.push(faker.internet.email());
+			});
+			const onRemoveFn = jest.fn();
+			const { user } = setupTest(
+				<EditDLComponent {...buildProps({ members, onRemoveMember: onRemoveFn })} />,
+				{ store }
+			);
+			const listItem = screen
+				.getAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM)
+				.find((item) => within(item).queryByText(members[4]) !== null);
+			expect(listItem).toBeDefined();
+			await user.click(within(listItem as HTMLElement).getByRole('button', { name: 'remove' }));
+			expect(onRemoveFn).toHaveBeenCalledWith(members[4]);
+		});
+
+		it('should show only members with a match with the search input content', async () => {
+			const store = generateStore();
+			const members: Array<string> = [
+				'john.smith@example.org',
+				'mario.rossi@test.com',
+				'abraham.lincoln@president.usa',
+				'bianchi@radiomaria.com',
+				'do-not-reply@unknown.net'
+			];
+			const { user } = setupTest(<EditDLComponent {...buildProps({ members })} />, { store });
+			await user.type(screen.getByRole('textbox', { name: 'Search an address' }), 'mari');
+			await waitFor(() =>
+				expect(screen.getAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM)).toHaveLength(2)
+			);
+			expect(screen.getByText(members[1])).toBeVisible();
+			expect(screen.getByText(members[3])).toBeVisible();
+		});
+
+		it('should show all members if the search input is cleared', async () => {
+			const store = generateStore();
+			const members: Array<string> = [
+				'john.smith@example.org',
+				'mario.rossi@test.com',
+				'abraham.lincoln@president.usa',
+				'bianchi@radiomaria.com',
+				'do-not-reply@unknown.net'
+			];
+			const { user } = setupTest(<EditDLComponent {...buildProps({ members })} />, { store });
+			const searchInput = screen.getByRole('textbox', { name: 'Search an address' });
+			await user.type(searchInput, 'mari');
+			await waitFor(() =>
+				expect(screen.getAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM)).toHaveLength(2)
+			);
+			await user.clear(searchInput);
+			await waitFor(() =>
+				expect(screen.getAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM)).toHaveLength(
+					members.length
+				)
+			);
+		});
 	});
 	describe('Modal footer', () => {
 		describe('Cancel action button', () => {

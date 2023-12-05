@@ -14,7 +14,8 @@ export const TESTID_SELECTORS = {
 	AVATAR: 'avatar',
 	MODAL: 'modal',
 	CONTACT_INPUT: 'contact-input',
-	DL_MEMBERS_SEARCH_INPUT: 'dl-members-search-input'
+	DL_MEMBERS_SEARCH_INPUT: 'dl-members-search-input',
+	MEMBERS_LIST_ITEM: 'member-list-item'
 } as const;
 
 export const TIMERS = { MODAL: { DELAY_OPEN: 1 } as const } as const;

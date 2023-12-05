@@ -137,7 +137,7 @@ const Loader = (): ReactElement => (
 
 type ContactInputProps = Pick<
 	ChipInputProps,
-	'placeholder' | 'background' | 'icon' | 'iconAction'
+	'placeholder' | 'background' | 'icon' | 'iconAction' | 'iconDisabled'
 > & {
 	onChange?: ContactInputOnChange;
 	defaultValue: Array<Contact>;
