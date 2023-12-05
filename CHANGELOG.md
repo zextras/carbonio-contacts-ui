@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/zextras/carbonio-contacts-ui/compare/v1.5.0...v1.6.0) (2023-12-05)
+
+
+### Features
+
+* added fullAutocomplete API to contact input ([d62d21c](https://github.com/zextras/carbonio-contacts-ui/commit/d62d21cebef78886a66e75f5b5c6082878f389f7))
+* added fullAutocomplete parser function ([eb4bde5](https://github.com/zextras/carbonio-contacts-ui/commit/eb4bde5a1b48b8f5a1c4bf0ed6251582775050c0))
+
+
+### Bug Fixes
+
+* fix autocomplete call ([4be766c](https://github.com/zextras/carbonio-contacts-ui/commit/4be766c82e40bb1d4e7a980a24160203f133c382))
+* fix fullautocomplete request ([7f7720a](https://github.com/zextras/carbonio-contacts-ui/commit/7f7720a1cc0acb29a994b8805ab74c5fc609bc24))
+* parse fullAutocomplete response ([2f8cd3e](https://github.com/zextras/carbonio-contacts-ui/commit/2f8cd3ec3fbe353dedbb3cb11c2f17168a455fae))
+
 ## [1.5.0](https://github.com/zextras/carbonio-contacts-ui/compare/v1.4.1...v1.5.0) (2023-11-23)
 
 
