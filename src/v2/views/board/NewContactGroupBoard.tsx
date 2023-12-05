@@ -27,6 +27,12 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 	const initialTitle = 'New Group';
 	const [titleValue, setTitleValue] = useState(initialTitle);
 
+	const [contactInputValue, setContactInputValue] = useState<
+		Array<{ email: string; error: boolean }>
+	>([]);
+
+	const [memberListEmails, setMemberListEmails] = useState<string[]>([]);
+
 	const onTitleChange = useCallback<NonNullable<InputProps['onChange']>>(
 		(ev) => {
 			setTitleValue(ev.target.value);
@@ -41,6 +47,8 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 
 	const discardChanges = useCallback(() => {
 		setTitleValue(initialTitle);
+		setContactInputValue([]);
+		setMemberListEmails([]);
 	}, []);
 
 	const titleDescription = useMemo(() => {
@@ -53,12 +61,6 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 		return undefined;
 	}, [titleValue]);
 
-	const [contactInputValue, setContactInputValue] = useState<
-		Array<{ email: string; error: boolean }>
-	>([]);
-
-	const [memberListEmails, setMemberListEmails] = useState<string[]>([]);
-
 	const contactInputOnChange = (newContactInputValue: any): void => {
 		setContactInputValue(newContactInputValue);
 	};
@@ -68,16 +70,23 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 		[contactInputValue]
 	);
 
+	const removeItem = useCallback(
+		(email: string) => {
+			setMemberListEmails(memberListEmails.filter((value) => value !== email));
+		},
+		[memberListEmails]
+	);
+
 	const listItems = useMemo(
 		(): Array<React.JSX.Element> =>
 			memberListEmails.map((item: string) => (
 				<Container key={item} orientation={'horizontal'}>
 					<Avatar label={item} />
 					<div>{item} </div>
-					<Button onClick={(): void => undefined} icon={'Trash2Outline'} label={'REMOVE'} />
+					<Button onClick={(): void => removeItem(item)} icon={'Trash2Outline'} label={'REMOVE'} />
 				</Container>
 			)),
-		[memberListEmails]
+		[memberListEmails, removeItem]
 	);
 
 	const contactInputIconAction = useCallback(() => {

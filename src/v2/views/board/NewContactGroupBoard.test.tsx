@@ -81,15 +81,51 @@ describe('New contact group board', () => {
 		});
 	});
 
-	it('should reset to the initial title when click on the discard button', async () => {
-		const { user } = setup(<NewContactGroupBoard />);
-		const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
-		const newTitle = faker.string.alphanumeric(CONTACT_GROUP_TITLE_MAX_LENGTH + 1);
-		await user.clear(titleInput);
-		await user.type(titleInput, newTitle);
-		expect(titleInput).toHaveValue(newTitle);
-		await user.click(screen.getByRole('button', { name: /discard/i }));
-		expect(titleInput).toHaveValue('New Group');
+	describe('Discard button', () => {
+		it('should reset to the initial title when click on the discard button', async () => {
+			const { user } = setup(<NewContactGroupBoard />);
+			const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
+			const newTitle = faker.string.alphanumeric(CONTACT_GROUP_TITLE_MAX_LENGTH + 1);
+			await user.clear(titleInput);
+			await user.type(titleInput, newTitle);
+			expect(titleInput).toHaveValue(newTitle);
+			await user.click(screen.getByRole('button', { name: /discard/i }));
+			expect(titleInput).toHaveValue('New Group');
+		});
+
+		it('should delete chips when click on the discard button', async () => {
+			const newEmail = faker.internet.email();
+			const { user } = setup(<NewContactGroupBoard />);
+			const chipInput = screen.getByRole('textbox', {
+				name: /Insert an address to add a new element/i
+			});
+			await user.type(chipInput, newEmail);
+			await act(async () => {
+				await user.type(chipInput, ',');
+			});
+			await act(async () => {
+				await user.click(screen.getByRole('button', { name: /discard/i }));
+			});
+			expect(screen.queryByTestId('default-chip')).not.toBeInTheDocument();
+		});
+
+		it('should delete member list when click on the discard button', async () => {
+			const newEmail = faker.internet.email();
+			const { user } = setup(<NewContactGroupBoard />);
+			const chipInput = screen.getByRole('textbox', {
+				name: /Insert an address to add a new element/i
+			});
+			await user.type(chipInput, newEmail);
+			await act(async () => {
+				await user.type(chipInput, ',');
+			});
+			await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
+			await user.click(screen.getByRole('button', { name: /discard/i }));
+			const memberList = await screen.findByTestId('member-list');
+			expect(within(memberList).queryByText(newEmail)).not.toBeInTheDocument();
+		});
+
+		it.todo('should reset board title');
 	});
 
 	describe('Error message', () => {
@@ -320,6 +356,24 @@ describe('New contact group board', () => {
 				expect(avatar).toBeVisible();
 				expect(avatar).toHaveTextContent(`${first(email)}${last(email)}`.toUpperCase());
 				expect(screen.getByRoleWithIcon('button', { name: /remove/i, icon: ICON_REGEXP.trash }));
+			});
+
+			it('should remove the email from the list when click on the remove button', async () => {
+				const email = faker.internet.email();
+				const { user } = setup(<NewContactGroupBoard />);
+				const inputElement = screen.getByRole('textbox', {
+					name: /Insert an address to add a new element/i
+				});
+				await user.type(inputElement, email);
+				await act(async () => {
+					await user.type(inputElement, ',');
+				});
+				await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
+				await user.click(
+					screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.trash, name: /remove/i })
+				);
+				const memberList = await screen.findByTestId('member-list');
+				expect(within(memberList).queryByText(email)).not.toBeInTheDocument();
 			});
 		});
 	});
