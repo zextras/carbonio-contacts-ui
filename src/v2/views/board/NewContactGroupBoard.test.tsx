@@ -280,6 +280,30 @@ describe('New contact group board', () => {
 				expect(within(memberList).getByText(email)).toBeVisible();
 			});
 
+			it('should add the valid email on the list and maintain also the previous list item', async () => {
+				const email = faker.internet.email();
+				const email2 = faker.internet.email();
+				const { user } = setup(<NewContactGroupBoard />);
+				const inputElement = screen.getByRole('textbox', {
+					name: /Insert an address to add a new element/i
+				});
+				await user.type(inputElement, email);
+				await act(async () => {
+					await user.type(inputElement, ',');
+				});
+				await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
+				const memberList = await screen.findByTestId('member-list');
+				expect(within(memberList).getByText(email)).toBeVisible();
+
+				await user.type(inputElement, email2);
+				await act(async () => {
+					await user.type(inputElement, ',');
+				});
+				await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
+				expect(within(memberList).getByText(email2)).toBeVisible();
+				expect(within(memberList).getByText(email)).toBeVisible();
+			});
+
 			it('should render the avatar and the remove button on the list', async () => {
 				const email = faker.internet.email();
 				const { user } = setup(<NewContactGroupBoard />);

@@ -93,7 +93,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 		});
 
 		setContactInputValue(invalid);
-		setMemberListEmails(valid.map((value) => value.email));
+		setMemberListEmails((prevState) => [...prevState, ...valid.map((value) => value.email)]);
 	}, [contactInputValue]);
 
 	return (
