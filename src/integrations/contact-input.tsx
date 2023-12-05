@@ -35,14 +35,16 @@ import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import styled, { DefaultTheme } from 'styled-components';
 
-import {
-	CHIP_DISPLAY_NAME_VALUES,
-	ContactInputCustomChipComponent
-} from './contact-input-custom-chip-component';
+import { ContactInputCustomChipComponent } from './contact-input-custom-chip-component';
 import { useAppSelector } from '../hooks/redux';
 import { StoreProvider } from '../store/redux';
 import { Contact, Group } from '../types/contact';
-import { ContactInputOnChange, ContactInputValue, CustomChipProps } from '../types/integrations';
+import {
+	CHIP_DISPLAY_NAME_VALUES,
+	ContactInputOnChange,
+	ContactInputValue,
+	CustomChipProps
+} from '../types/integrations';
 import { ContactsSlice, State } from '../types/store';
 
 const emailRegex = /[^\s@]+@[^\s@]+\.[^\s@]+/;
@@ -142,7 +144,7 @@ type ContactInput = {
 	defaultValue: Array<Contact>;
 	placeholder: string;
 	background?: keyof DefaultTheme['palette'];
-	chipDisplayName?: string;
+	chipDisplayName?: (typeof CHIP_DISPLAY_NAME_VALUES)[keyof typeof CHIP_DISPLAY_NAME_VALUES];
 	dragAndDropEnabled?: boolean;
 };
 

@@ -13,12 +13,12 @@ import { debounce, DebouncedFuncLeading, filter, map, noop, uniqBy } from 'lodas
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { ContactInputOnChange, ContactInputValue, CustomChipProps } from '../types/integrations';
-
-export const CHIP_DISPLAY_NAME_VALUES = {
-	LABEL: 'label',
-	EMAIL: 'email'
-};
+import {
+	CHIP_DISPLAY_NAME_VALUES,
+	ContactInputOnChange,
+	ContactInputValue,
+	CustomChipProps
+} from '../types/integrations';
 
 const StyledChip = styled(Chip)`
 	cursor: default;
@@ -228,8 +228,15 @@ const useDistributionListFunctions = ({
 	return { items, onChevronClick };
 };
 
-const CustomComponent = (props: CustomChipProps): JSX.Element => {
-	const { id, label, email, isGroup, _onChange, contactInputValue } = props;
+const CustomComponent = ({
+	id,
+	label,
+	email,
+	isGroup,
+	_onChange,
+	contactInputValue,
+	...rest
+}: CustomChipProps): JSX.Element => {
 	const [t] = useTranslation();
 	const [open, setOpen] = useState(false);
 
@@ -255,7 +262,7 @@ const CustomComponent = (props: CustomChipProps): JSX.Element => {
 		>
 			<div>
 				<StyledChip
-					{...props}
+					{...rest}
 					id={id}
 					label={label}
 					background={'gray3'}
@@ -282,9 +289,13 @@ const CustomComponent = (props: CustomChipProps): JSX.Element => {
 	);
 };
 
-export const ContactInputCustomChipComponent = (props: CustomChipProps): ReactElement => {
-	const { email, isGroup, label, chipDisplayName = CHIP_DISPLAY_NAME_VALUES.LABEL } = props;
-
+export const ContactInputCustomChipComponent = ({
+	email,
+	isGroup,
+	label,
+	chipDisplayName = CHIP_DISPLAY_NAME_VALUES.LABEL,
+	...rest
+}: CustomChipProps): ReactElement => {
 	const _label = useMemo(() => {
 		if (label && chipDisplayName === CHIP_DISPLAY_NAME_VALUES.LABEL) {
 			return label;
@@ -296,7 +307,7 @@ export const ContactInputCustomChipComponent = (props: CustomChipProps): ReactEl
 	}, [chipDisplayName, email, label]);
 
 	if (!isDistributionList({ email, isGroup })) {
-		return <Chip {...props} label={_label} data-testid={'default-chip'} />;
+		return <Chip {...rest} label={_label} data-testid={'default-chip'} />;
 	}
-	return <CustomComponent {...props} label={_label} />;
+	return <CustomComponent {...rest} label={_label} email={email} isGroup={isGroup} />;
 };

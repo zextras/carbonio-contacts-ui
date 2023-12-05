@@ -8,13 +8,11 @@ import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { rest } from 'msw';
 
-import {
-	CHIP_DISPLAY_NAME_VALUES,
-	ContactInputCustomChipComponent
-} from './contact-input-custom-chip-component';
+import { ContactInputCustomChipComponent } from './contact-input-custom-chip-component';
 import { getSetupServer } from '../carbonio-ui-commons/test/jest-setup';
 import { setupTest } from '../carbonio-ui-commons/test/test-setup';
 import { getDistributionListCustomResponse } from '../tests/msw/handle-get-distribution-list-members-request';
+import { CHIP_DISPLAY_NAME_VALUES } from '../types/integrations';
 
 const getDistributionListMembersRequest = '/service/soap/GetDistributionListMembersRequest';
 
@@ -54,7 +52,7 @@ describe('Contact input custom chip component', () => {
 		);
 		const defaultChipLabel = screen.getByText(user1.label);
 
-		expect(defaultChipLabel).toBeInTheDocument();
+		expect(defaultChipLabel).toBeVisible();
 	});
 	test('if chipDisplayName has label value it will show chips label', () => {
 		setupTest(
@@ -70,7 +68,7 @@ describe('Contact input custom chip component', () => {
 		);
 		const defaultChipLabel = screen.getByText(user1.label);
 
-		expect(defaultChipLabel).toBeInTheDocument();
+		expect(defaultChipLabel).toBeVisible();
 	});
 	test('if chipDisplayName has email value it will show chips email', () => {
 		setupTest(
@@ -86,7 +84,7 @@ describe('Contact input custom chip component', () => {
 		);
 		const defaultChipEmail = screen.getByText(user1.email);
 
-		expect(defaultChipEmail).toBeInTheDocument();
+		expect(defaultChipEmail).toBeVisible();
 	});
 	test('if it is a group it will render a normal chip', () => {
 		setupTest(
@@ -101,7 +99,7 @@ describe('Contact input custom chip component', () => {
 		);
 
 		const defaultChip = screen.getByTestId('default-chip');
-		expect(defaultChip).toBeInTheDocument();
+		expect(defaultChip).toBeVisible();
 	});
 	test('if it is a contact it will render a normal chip', () => {
 		setupTest(
@@ -116,7 +114,7 @@ describe('Contact input custom chip component', () => {
 		);
 
 		const defaultChip = screen.getByTestId('default-chip');
-		expect(defaultChip).toBeInTheDocument();
+		expect(defaultChip).toBeVisible();
 	});
 	test('if it is a distribution list it will render the distribution list custom chip', () => {
 		setupTest(
@@ -131,7 +129,7 @@ describe('Contact input custom chip component', () => {
 		);
 
 		const distributionListChip = screen.getByTestId('distribution-list-chip');
-		expect(distributionListChip).toBeInTheDocument();
+		expect(distributionListChip).toBeVisible();
 	});
 	test('the dropdown will contain the select all button and the users list when the chevron action is clicked', async () => {
 		const dlm = [{ _content: user1.email }, { _content: user2Mail }, { _content: user3Mail }];
@@ -165,10 +163,10 @@ describe('Contact input custom chip component', () => {
 		const user2Element = screen.getByText(user2Mail);
 		const user3Element = screen.getByText(user3Mail);
 
-		expect(selectAllLabel).toBeInTheDocument();
-		expect(user1Element).toBeInTheDocument();
-		expect(user2Element).toBeInTheDocument();
-		expect(user3Element).toBeInTheDocument();
+		expect(selectAllLabel).toBeVisible();
+		expect(user1Element).toBeVisible();
+		expect(user2Element).toBeVisible();
+		expect(user3Element).toBeVisible();
 	});
 	test('the dropdown will contain also the show more button when more results can be retrieved', async () => {
 		const dlm = [{ _content: user1.email }, { _content: user2Mail }, { _content: user3Mail }];
@@ -200,7 +198,7 @@ describe('Contact input custom chip component', () => {
 
 		const showMore = screen.getByText(/show more/i);
 
-		expect(showMore).toBeInTheDocument();
+		expect(showMore).toBeVisible();
 	});
 	test('clicking show more button will increase the dropdown items, if all items are retrieved show more will disappear', async () => {
 		const dlm = [{ _content: user1.email }, { _content: user2Mail }, { _content: user3Mail }];
@@ -248,11 +246,11 @@ describe('Contact input custom chip component', () => {
 		const user5 = screen.getByText(user5Mail);
 		const user6 = screen.getByText(user6Mail);
 
-		expect(user4).toBeInTheDocument();
-		expect(user5).toBeInTheDocument();
-		expect(user6).toBeInTheDocument();
+		expect(user4).toBeVisible();
+		expect(user5).toBeVisible();
+		expect(user6).toBeVisible();
 
-		expect(showMore).not.toBeInTheDocument();
+		expect(showMore).not.toBeVisible();
 	});
 	test('clicking select all when all data are retrieved, it wont make any other call to the server', async () => {
 		const dlm = [{ _content: user1.email }, { _content: user2Mail }, { _content: user3Mail }];

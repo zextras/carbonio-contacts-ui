@@ -9,6 +9,11 @@ import { ChipItem } from '@zextras/carbonio-design-system';
 
 import { Contact } from './contact';
 
+export const CHIP_DISPLAY_NAME_VALUES = {
+	LABEL: 'label',
+	EMAIL: 'email'
+} as const;
+
 export type ContactInputValue = Array<
 	ChipItem<string | Contact | ((prevState: ChipItem<string | Contact>[]) => ChipItem[])>
 >;
@@ -19,7 +24,7 @@ export type CustomChipProps = React.PropsWithChildren<{
 	label: string;
 	email: string;
 	isGroup: boolean;
-	chipDisplayName?: string;
+	chipDisplayName?: (typeof CHIP_DISPLAY_NAME_VALUES)[keyof typeof CHIP_DISPLAY_NAME_VALUES];
 	_onChange: ContactInputOnChange;
 	contactInputValue: ContactInputValue;
 }>;
