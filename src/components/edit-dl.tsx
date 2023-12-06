@@ -17,7 +17,10 @@ export type EditDLComponentProps = {
 	totalMembers: number;
 	members: Array<string>;
 	onRemoveMember: (email: string) => void;
+	onAddMembers: (emails: Array<string>) => void;
 };
+
+type ContactInputValue = Array<{ email: string; error: boolean }>;
 
 const SearchMembersIcon: FC = () => <Icon icon={'Search'} size={'large'}></Icon>;
 
@@ -25,12 +28,11 @@ export const EditDLComponent: FC<EditDLComponentProps> = ({
 	email,
 	members,
 	totalMembers,
-	onRemoveMember
+	onRemoveMember,
+	onAddMembers
 }) => {
 	const [t] = useTranslation();
-	const [contactInputValue, setContactInputValue] = useState<
-		Array<{ email: string; error: boolean }>
-	>([]);
+	const [contactInputValue, setContactInputValue] = useState<ContactInputValue>([]);
 	const [searchValue, setSearchValue] = useState('');
 
 	const memberItems = useMemo(
@@ -54,9 +56,28 @@ export const EditDLComponent: FC<EditDLComponentProps> = ({
 		[members, onRemoveMember, searchValue]
 	);
 
+	const isAddMembersAllowed = useMemo(
+		() => contactInputValue.some((chipValue) => !chipValue.error),
+		[contactInputValue]
+	);
+
+	const onContactInputChange = useCallback((value: ContactInputValue) => {
+		setContactInputValue(value);
+	}, []);
+
 	const onSearchChange = useCallback<React.ChangeEventHandler<HTMLInputElement>>((event) => {
 		setSearchValue(event.currentTarget.value);
 	}, []);
+
+	const onAddRawMembers = useCallback(() => {
+		const validEmails = contactInputValue.reduce<string[]>((result, contactInputItem) => {
+			!contactInputItem.error && result.push(contactInputItem.email);
+			return result;
+		}, []);
+		if (validEmails.length > 0) {
+			onAddMembers(validEmails);
+		}
+	}, [contactInputValue, onAddMembers]);
 
 	return (
 		<Container gap={'0.5rem'}>
@@ -82,8 +103,12 @@ export const EditDLComponent: FC<EditDLComponentProps> = ({
 				// @ts-ignore
 				defaultValue={contactInputValue}
 				icon={'Plus'}
-				iconAction={(): void => undefined}
-				iconDisabled={contactInputValue.length === 0}
+				iconAction={onAddRawMembers}
+				// FIXME: remove ts-ignore when contact-input types are fixed
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+				// @ts-ignore
+				onChange={onContactInputChange}
+				iconDisabled={!isAddMembersAllowed}
 			/>
 			<Input
 				data-testid={'dl-members-search-input'}

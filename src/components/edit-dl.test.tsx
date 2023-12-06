@@ -6,7 +6,7 @@
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
-import { waitFor } from '@testing-library/react';
+import { act, waitFor } from '@testing-library/react';
 import { times } from 'lodash';
 
 import { EditDLComponent, EditDLComponentProps } from './edit-dl';
@@ -18,12 +18,14 @@ const buildProps = ({
 	email = '',
 	members = [],
 	totalMembers = 0,
-	onRemoveMember = jest.fn()
+	onRemoveMember = jest.fn(),
+	onAddMembers = jest.fn()
 }: Partial<EditDLComponentProps> = {}): EditDLComponentProps => ({
 	email,
 	members,
 	totalMembers,
-	onRemoveMember
+	onRemoveMember,
+	onAddMembers
 });
 
 describe('Edit DL Component', () => {
@@ -76,7 +78,7 @@ describe('Edit DL Component', () => {
 	});
 
 	describe('Add members', () => {
-		it('add action should be disabled if add input is empty', () => {
+		it('add action should be disabled if the input is empty', () => {
 			const store = generateStore();
 			setupTest(<EditDLComponent {...buildProps()} />, { store });
 			const contactInput = screen.getByTestId(TESTID_SELECTORS.CONTACT_INPUT);
@@ -86,11 +88,97 @@ describe('Edit DL Component', () => {
 			expect(contactInputIcon).toBeDisabled();
 		});
 
-		it.todo('add action should be disabled if all values are invalid');
+		it('add action should be disabled if all values are invalid', async () => {
+			const store = generateStore();
+			const { user } = setupTest(<EditDLComponent {...buildProps()} />, { store });
+			const contactInputTextBox = screen.getByRole('textbox', {
+				name: /Insert an address to add a new element/i
+			});
+			const invalidValues = ['bad', 'worst'];
+			await act(async () => {
+				await user.type(contactInputTextBox, invalidValues.join(','));
+			});
+
+			expect(
+				screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.ICONS.ADD_MEMBERS })
+			).toBeDisabled();
+		});
+
+		it('add action should be enabled if the input contains at least a valid value', async () => {
+			const store = generateStore();
+			const { user } = setupTest(<EditDLComponent {...buildProps()} />, { store });
+			const contactInputTextBox = screen.getByRole('textbox', {
+				name: /Insert an address to add a new element/i
+			});
+			const values = ['bad', 'correct.email@domain.com', 'worst'];
+			await act(async () => {
+				await user.type(contactInputTextBox, values.join(','));
+			});
+
+			expect(
+				screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.ICONS.ADD_MEMBERS })
+			).toBeEnabled();
+		});
+
 		it.todo('chip should show email if contact is added from options');
-		it.todo('chip should show email if contact is added manually by typing');
-		it.todo('should add all valid emails inside the list when user clicks on add action');
-		it.todo('should leave invalid values inside input when user clicks on add action');
+
+		it('chip should show email if contact is added manually by typing', async () => {
+			const store = generateStore();
+			const { user } = setupTest(<EditDLComponent {...buildProps()} />, { store });
+			const contactInput = screen.getByTestId(TESTID_SELECTORS.CONTACT_INPUT);
+			const contactInputTextBox = within(contactInput).getByRole('textbox', {
+				name: /Insert an address to add a new element/i
+			});
+			const email = faker.internet.email();
+			await act(async () => {
+				await user.type(contactInputTextBox, `${email},`);
+			});
+
+			expect(within(contactInput).getByText(email)).toBeVisible();
+			expect(contactInputTextBox).not.toHaveDisplayValue(email);
+		});
+
+		it('should call the onAddMember callback when the user clicks the add action', async () => {
+			const store = generateStore();
+			const onAddMembers = jest.fn();
+			const { user } = setupTest(<EditDLComponent {...buildProps({ onAddMembers })} />, { store });
+			const contactInput = screen.getByTestId(TESTID_SELECTORS.CONTACT_INPUT);
+			const contactInputTextBox = within(contactInput).getByRole('textbox', {
+				name: /Insert an address to add a new element/i
+			});
+			const addMembersButton = within(contactInput).getByRoleWithIcon('button', {
+				icon: TESTID_SELECTORS.ICONS.ADD_MEMBERS
+			});
+			await act(async () => {
+				await user.type(contactInputTextBox, `${faker.internet.email()},`);
+			});
+
+			await user.click(addMembersButton);
+			expect(onAddMembers).toHaveBeenCalled();
+		});
+
+		it('should call the onAddMember callback with only the valid emails', async () => {
+			const store = generateStore();
+			const onAddMembers = jest.fn();
+			const { user } = setupTest(<EditDLComponent {...buildProps({ onAddMembers })} />, { store });
+			const contactInput = screen.getByTestId(TESTID_SELECTORS.CONTACT_INPUT);
+			const contactInputTextBox = within(contactInput).getByRole('textbox', {
+				name: /Insert an address to add a new element/i
+			});
+			const addMembersButton = within(contactInput).getByRoleWithIcon('button', {
+				icon: TESTID_SELECTORS.ICONS.ADD_MEMBERS
+			});
+			const values = ['bad', 'correct.email@domain.com', 'worst', 'supercorrect.email@domain.net'];
+			await act(async () => {
+				await user.type(contactInputTextBox, values.join(','));
+			});
+
+			await user.click(addMembersButton);
+			expect(onAddMembers).toHaveBeenCalledWith([
+				'correct.email@domain.com',
+				'supercorrect.email@domain.net'
+			]);
+		});
 	});
 
 	describe('Members list', () => {
@@ -105,19 +193,6 @@ describe('Edit DL Component', () => {
 			members.forEach((member) => {
 				expect(screen.getByText(member)).toBeVisible();
 			});
-		});
-
-		// TODO: move where the api call to get members is made
-		it('should load all members on first load', async () => {
-			const store = generateStore();
-			const members: Array<string> = [];
-			const totalMembers = 200;
-			times(totalMembers, () => {
-				members.push(faker.internet.email());
-			});
-			setupTest(<EditDLComponent {...buildProps({ members })} />, { store });
-			expect(screen.getByText(members[0])).toBeVisible();
-			expect(screen.getByText(members[totalMembers - 1])).toBeVisible();
 		});
 
 		it('should call onRemoveMember with member email if the remove action button for that member is clicked', async () => {
@@ -178,19 +253,6 @@ describe('Edit DL Component', () => {
 					members.length
 				)
 			);
-		});
-	});
-	describe('Modal footer', () => {
-		describe('Cancel action button', () => {
-			it.todo('should be visible and enabled');
-			it.todo('should close the modal when clicked');
-		});
-		describe('Save action button', () => {
-			it.todo('should be visible');
-			it.todo('should be disabled if there are no changes');
-			it.todo('should show a tooltip if disabled');
-			it.todo('should be enabled if there is the user does some change');
-			it.todo('should cause a success snackbar to appear when clicked');
 		});
 	});
 });
