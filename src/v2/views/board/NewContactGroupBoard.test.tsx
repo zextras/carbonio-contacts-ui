@@ -19,16 +19,17 @@ import { CONTACT_GROUP_TITLE_MAX_LENGTH } from '../../constants';
 import { ICON_REGEXP, PALETTE, SELECTORS } from '../../constants/tests';
 
 describe('New contact group board', () => {
+	function getContactInput(): HTMLElement {
+		return screen.getByRole('textbox', {
+			name: `Type an address, click ‘+’ to add to the group`
+		});
+	}
 	describe('Default visualization', () => {
 		it('should show fields for group title and addresses list', () => {
 			setup(<NewContactGroupBoard />);
 			expect(screen.getByRole('textbox', { name: 'Group title*' })).toBeVisible();
 			expect(screen.getByText('Addresses list')).toBeVisible();
-			expect(
-				screen.getByRole('textbox', {
-					name: /Insert an address to add a new element/i
-				})
-			).toBeVisible();
+			expect(getContactInput()).toBeVisible();
 		});
 
 		it('should render discard and save buttons', () => {
@@ -98,12 +99,10 @@ describe('New contact group board', () => {
 		it('should delete chips when click on the discard button', async () => {
 			const newEmail = faker.internet.email();
 			const { user } = setup(<NewContactGroupBoard />);
-			const chipInput = screen.getByRole('textbox', {
-				name: /Insert an address to add a new element/i
-			});
-			await user.type(chipInput, newEmail);
+			const contactInput = getContactInput();
+			await user.type(contactInput, newEmail);
 			await act(async () => {
-				await user.type(chipInput, ',');
+				await user.type(contactInput, ',');
 			});
 			await act(async () => {
 				await user.click(screen.getByRole('button', { name: /discard/i }));
@@ -114,12 +113,10 @@ describe('New contact group board', () => {
 		it('should delete member list when click on the discard button', async () => {
 			const newEmail = faker.internet.email();
 			const { user } = setup(<NewContactGroupBoard />);
-			const chipInput = screen.getByRole('textbox', {
-				name: /Insert an address to add a new element/i
-			});
-			await user.type(chipInput, newEmail);
+			const contactInput = getContactInput();
+			await user.type(contactInput, newEmail);
 			await act(async () => {
-				await user.type(chipInput, ',');
+				await user.type(contactInput, ',');
 			});
 			await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
 			await user.click(screen.getByRole('button', { name: /discard/i }));
@@ -177,12 +174,10 @@ describe('New contact group board', () => {
 		it('should update the number of the addresses when the user adds members on the list', async () => {
 			const email = faker.internet.email();
 			const { user } = setup(<NewContactGroupBoard />);
-			const inputElement = screen.getByRole('textbox', {
-				name: /Insert an address to add a new element/i
-			});
-			await user.type(inputElement, email);
+			const contactInput = getContactInput();
+			await user.type(contactInput, email);
 			await act(async () => {
-				await user.type(inputElement, ',');
+				await user.type(contactInput, ',');
 			});
 			await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
 			await screen.findByTestId('member-list');
@@ -192,12 +187,10 @@ describe('New contact group board', () => {
 			it('should enable the plus button when at least a valid chip is in the contact input', async () => {
 				const newEmail = faker.internet.email();
 				const { user } = setup(<NewContactGroupBoard />);
-				const inputElement = screen.getByRole('textbox', {
-					name: /Insert an address to add a new element/i
-				});
-				await user.type(inputElement, newEmail);
+				const contactInput = getContactInput();
+				await user.type(contactInput, newEmail);
 				await act(async () => {
-					await user.type(inputElement, ',');
+					await user.type(contactInput, ',');
 				});
 				expect(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus })).toBeEnabled();
 			});
@@ -206,16 +199,14 @@ describe('New contact group board', () => {
 				const newEmail = faker.internet.email();
 				const invalidMail = faker.string.alpha(10);
 				const { user } = setup(<NewContactGroupBoard />);
-				const inputElement = screen.getByRole('textbox', {
-					name: /Insert an address to add a new element/i
-				});
-				await user.type(inputElement, newEmail);
+				const contactInput = getContactInput();
+				await user.type(contactInput, newEmail);
 				await act(async () => {
-					await user.type(inputElement, ',');
+					await user.type(contactInput, ',');
 				});
-				await user.type(inputElement, invalidMail);
+				await user.type(contactInput, invalidMail);
 				await act(async () => {
-					await user.type(inputElement, ',');
+					await user.type(contactInput, ',');
 				});
 				expect(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus })).toBeEnabled();
 			});
@@ -228,12 +219,10 @@ describe('New contact group board', () => {
 			it('should disable the plus button when there are only invalid chips in the contact input', async () => {
 				const invalidMail = faker.string.alpha(10);
 				const { user } = setup(<NewContactGroupBoard />);
-				const inputElement = screen.getByRole('textbox', {
-					name: /Insert an address to add a new element/i
-				});
-				await user.type(inputElement, invalidMail);
+				const contactInput = getContactInput();
+				await user.type(contactInput, invalidMail);
 				await act(async () => {
-					await user.type(inputElement, ',');
+					await user.type(contactInput, ',');
 				});
 				expect(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus })).toBeDisabled();
 			});
@@ -260,10 +249,8 @@ describe('New contact group board', () => {
 				);
 
 				const { user } = setup(<NewContactGroupBoard />);
-				const inputElement = screen.getByRole('textbox', {
-					name: /Insert an address to add a new element/i
-				});
-				await user.type(inputElement, email.substring(0, 3));
+				const contactInput = getContactInput();
+				await user.type(contactInput, email.substring(0, 3));
 				act(() => {
 					// run timers of dropdown
 					jest.runOnlyPendingTimers();
@@ -284,12 +271,10 @@ describe('New contact group board', () => {
 			it('should remove valid chip from input when the user clicks on plus button', async () => {
 				const email = faker.internet.email();
 				const { user } = setup(<NewContactGroupBoard />);
-				const inputElement = screen.getByRole('textbox', {
-					name: /Insert an address to add a new element/i
-				});
-				await user.type(inputElement, email);
+				const contactInput = getContactInput();
+				await user.type(contactInput, email);
 				await act(async () => {
-					await user.type(inputElement, ',');
+					await user.type(contactInput, ',');
 				});
 				expect(screen.getByTestId('default-chip')).toBeVisible();
 				await act(async () => {
@@ -303,20 +288,18 @@ describe('New contact group board', () => {
 				const invalidMail1 = faker.string.alpha(10);
 				const invalidMail2 = faker.string.alpha(10);
 				const { user } = setup(<NewContactGroupBoard />);
-				const inputElement = screen.getByRole('textbox', {
-					name: /Insert an address to add a new element/i
-				});
-				await user.type(inputElement, newEmail);
+				const contactInput = getContactInput();
+				await user.type(contactInput, newEmail);
 				await act(async () => {
-					await user.type(inputElement, ',');
+					await user.type(contactInput, ',');
 				});
-				await user.type(inputElement, invalidMail1);
+				await user.type(contactInput, invalidMail1);
 				await act(async () => {
-					await user.type(inputElement, ',');
+					await user.type(contactInput, ',');
 				});
-				await user.type(inputElement, invalidMail2);
+				await user.type(contactInput, invalidMail2);
 				await act(async () => {
-					await user.type(inputElement, ',');
+					await user.type(contactInput, ',');
 				});
 
 				const chipInput = screen.getByTestId('contact-group-contact-input');
@@ -335,12 +318,10 @@ describe('New contact group board', () => {
 			it('should render the valid email on the list', async () => {
 				const email = faker.internet.email();
 				const { user } = setup(<NewContactGroupBoard />);
-				const inputElement = screen.getByRole('textbox', {
-					name: /Insert an address to add a new element/i
-				});
-				await user.type(inputElement, email);
+				const contactInput = getContactInput();
+				await user.type(contactInput, email);
 				await act(async () => {
-					await user.type(inputElement, ',');
+					await user.type(contactInput, ',');
 				});
 				await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
 				const memberList = await screen.findByTestId('member-list');
@@ -351,20 +332,18 @@ describe('New contact group board', () => {
 				const email = faker.internet.email();
 				const email2 = faker.internet.email();
 				const { user } = setup(<NewContactGroupBoard />);
-				const inputElement = screen.getByRole('textbox', {
-					name: /Insert an address to add a new element/i
-				});
-				await user.type(inputElement, email);
+				const contactInput = getContactInput();
+				await user.type(contactInput, email);
 				await act(async () => {
-					await user.type(inputElement, ',');
+					await user.type(contactInput, ',');
 				});
 				await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
 				const memberList = await screen.findByTestId('member-list');
 				expect(within(memberList).getByText(email)).toBeVisible();
 
-				await user.type(inputElement, email2);
+				await user.type(contactInput, email2);
 				await act(async () => {
-					await user.type(inputElement, ',');
+					await user.type(contactInput, ',');
 				});
 				await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
 				expect(within(memberList).getByText(email2)).toBeVisible();
@@ -374,12 +353,10 @@ describe('New contact group board', () => {
 			it('should render the avatar and the remove button on the list', async () => {
 				const email = faker.internet.email();
 				const { user } = setup(<NewContactGroupBoard />);
-				const inputElement = screen.getByRole('textbox', {
-					name: /Insert an address to add a new element/i
-				});
-				await user.type(inputElement, email);
+				const contactInput = getContactInput();
+				await user.type(contactInput, email);
 				await act(async () => {
-					await user.type(inputElement, ',');
+					await user.type(contactInput, ',');
 				});
 				await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
 				const memberList = await screen.findByTestId('member-list');
@@ -392,12 +369,10 @@ describe('New contact group board', () => {
 			it('should remove the email from the list when click on the remove button', async () => {
 				const email = faker.internet.email();
 				const { user } = setup(<NewContactGroupBoard />);
-				const inputElement = screen.getByRole('textbox', {
-					name: /Insert an address to add a new element/i
-				});
-				await user.type(inputElement, email);
+				const contactInput = getContactInput();
+				await user.type(contactInput, email);
 				await act(async () => {
-					await user.type(inputElement, ',');
+					await user.type(contactInput, ',');
 				});
 				await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
 				await user.click(

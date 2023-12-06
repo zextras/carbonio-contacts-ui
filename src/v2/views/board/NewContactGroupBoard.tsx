@@ -12,7 +12,8 @@ import {
 	Input,
 	InputProps,
 	Avatar,
-	ListV2
+	ListV2,
+	Row
 } from '@zextras/carbonio-design-system';
 import { useBoardHooks } from '@zextras/carbonio-shell-ui';
 import { noop, size, some } from 'lodash';
@@ -139,7 +140,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 				mainAlignment={'flex-start'}
 				gap={'1rem'}
 			>
-				<Avatar size="large" label="A Label" icon="PeopleOutline" />
+				<Avatar size="large" label={titleValue} icon="PeopleOutline" />
 				<Container height={'fit'} crossAlignment={'flex-start'}>
 					<Text weight={'bold'}>{titleValue}</Text>
 					<Text color={'gray1'}>Addresses: {memberListEmails.length}</Text>
@@ -163,7 +164,9 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 						titleValue.trim().length === 0 || titleValue.length > CONTACT_GROUP_TITLE_MAX_LENGTH
 					}
 				/>
-				<Text>{'Addresses list'}</Text>
+				<Row>
+					<Text>{'Addresses list'}</Text>
+				</Row>
 				<Container
 					orientation={'horizontal'}
 					height={'fit'}
@@ -176,7 +179,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 						// @ts-ignore
 						defaultValue={contactInputValue}
 						onChange={contactInputOnChange}
-						placeholder={'Insert an address to add a new element'}
+						placeholder={'Type an address, click ‘+’ to add to the group'}
 						icon={'Plus'}
 						iconAction={contactInputIconAction}
 						iconDisabled={contactInputIconDisabled}

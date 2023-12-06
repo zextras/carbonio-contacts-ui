@@ -214,6 +214,14 @@
         "website": "Website",
         "website_plural": "Websites"
     },
+    "members_list_item_component": {
+        "button": {
+            "remove": "remove"
+        },
+        "label": {
+            "manager": "Manager"
+        }
+    },
     "message": {
         "delete_tag_message1": "Are you sure to delete \"{{name}}\" Tag?",
         "delete_tag_message2": "Once deleted, it will be removed from every item marked with it.",
