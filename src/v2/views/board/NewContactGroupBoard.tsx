@@ -11,12 +11,14 @@ import {
 	Text,
 	Input,
 	InputProps,
-	Avatar
+	Avatar,
+	ListV2
 } from '@zextras/carbonio-design-system';
 import { useBoardHooks } from '@zextras/carbonio-shell-ui';
 import { noop, size, some } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
+import { MemberListItemComponent } from '../../../components/member-list-item';
 import ContactInput from '../../../integrations/contact-input';
 import { CONTACT_GROUP_TITLE_MAX_LENGTH } from '../../constants';
 
@@ -80,11 +82,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 	const listItems = useMemo(
 		(): Array<React.JSX.Element> =>
 			memberListEmails.map((item: string) => (
-				<Container key={item} orientation={'horizontal'}>
-					<Avatar label={item} />
-					<div>{item} </div>
-					<Button onClick={(): void => removeItem(item)} icon={'Trash2Outline'} label={'REMOVE'} />
-				</Container>
+				<MemberListItemComponent key={item} email={item} onRemove={(): void => removeItem(item)} />
 			)),
 		[memberListEmails, removeItem]
 	);
@@ -143,8 +141,8 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 			>
 				<Avatar size="large" label="A Label" icon="PeopleOutline" />
 				<Container height={'fit'} crossAlignment={'flex-start'}>
-					<Text weight={'bold'}>New Group</Text>
-					<Text color={'gray1'}>Addresses: 0</Text>
+					<Text weight={'bold'}>{titleValue}</Text>
+					<Text color={'gray1'}>Addresses: {memberListEmails.length}</Text>
 				</Container>
 			</Container>
 			<Container
@@ -182,9 +180,11 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 						icon={'Plus'}
 						iconAction={contactInputIconAction}
 						iconDisabled={contactInputIconDisabled}
+						description={''}
+						hasError={false}
 					/>
 				</Container>
-				<Container data-testid={'member-list'}>{listItems}</Container>
+				<ListV2 data-testid={'member-list'}>{listItems}</ListV2>
 			</Container>
 		</Container>
 	);

@@ -141,7 +141,7 @@ type ContactInput = {
 	placeholder: string;
 	background?: keyof DefaultTheme['palette'];
 	dragAndDropEnabled?: boolean;
-} & Pick<ChipInputProps, 'icon' | 'iconAction' | 'iconDisabled'>;
+} & Pick<ChipInputProps, 'icon' | 'iconAction' | 'iconDisabled' | 'description' | 'hasError'>;
 
 const ContactInput: FC<ContactInput> = ({
 	onChange,
