@@ -227,6 +227,8 @@ describe('New contact group board', () => {
 				expect(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus })).toBeDisabled();
 			});
 
+			it.todo('should disable the plus button when the user insert a duplicated chip only');
+
 			it('should enable the plus button when the user add a chip from the dropdown', async () => {
 				const email = faker.internet.email();
 				getSetupServer().use(
@@ -380,6 +382,137 @@ describe('New contact group board', () => {
 				);
 				const memberList = await screen.findByTestId('member-list');
 				expect(within(memberList).queryByText(email)).not.toBeInTheDocument();
+			});
+		});
+
+		describe('Error message contact input', () => {
+			it('should render "Invalid address" error message when there is only an invalid email as a chip and remove the error when a valid chip is added', async () => {
+				const errorMessage = 'Invalid address';
+				const validMail = faker.internet.email();
+				const invalidMail = faker.string.alpha(10);
+				const { user } = setup(<NewContactGroupBoard />);
+				const contactInput = getContactInput();
+				await user.type(contactInput, invalidMail);
+				await act(async () => {
+					await user.type(contactInput, ',');
+				});
+				expect(screen.getByText(errorMessage)).toBeVisible();
+				await user.type(contactInput, validMail);
+				await act(async () => {
+					await user.type(contactInput, ',');
+				});
+				expect(screen.queryByText(errorMessage)).not.toBeInTheDocument();
+			});
+
+			it('should render "Invalid addresses" error message when there are only invalid emails (at least 2) as chips and remove the error when a valid chip is added', async () => {
+				const errorMessage = 'Invalid addresses';
+				const validMail = faker.internet.email();
+				const invalidMail1 = faker.string.alpha(10);
+				const invalidMail2 = faker.string.alpha(10);
+				const { user } = setup(<NewContactGroupBoard />);
+				const contactInput = getContactInput();
+				await user.type(contactInput, invalidMail1);
+				await act(async () => {
+					await user.type(contactInput, ',');
+				});
+				await user.type(contactInput, invalidMail2);
+				await act(async () => {
+					await user.type(contactInput, ',');
+				});
+				expect(screen.getByText(errorMessage)).toBeVisible();
+				await user.type(contactInput, validMail);
+				await act(async () => {
+					await user.type(contactInput, ',');
+				});
+				expect(screen.queryByText(errorMessage)).not.toBeInTheDocument();
+			});
+
+			it('should render "Address already present" error message when there is only a duplicated email as a chip and remove the error when a valid chip is added', async () => {
+				const errorMessage = 'Address already present';
+				const validMail = faker.internet.email();
+				const { user } = setup(<NewContactGroupBoard />);
+				const contactInput = getContactInput();
+				await user.type(contactInput, validMail);
+				await act(async () => {
+					await user.type(contactInput, ',');
+				});
+				await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
+
+				await user.type(contactInput, validMail);
+				await act(async () => {
+					await user.type(contactInput, ',');
+				});
+				expect(screen.getByText(errorMessage)).toBeVisible();
+				await user.type(contactInput, faker.internet.email());
+				await act(async () => {
+					await user.type(contactInput, ',');
+				});
+
+				expect(screen.queryByText(errorMessage)).not.toBeInTheDocument();
+			});
+
+			it('should render "Addresses already present" error message when there are only duplicated emails (at least 2) as chips and remove the error when a valid chip is added', async () => {
+				const errorMessage = 'Addresses already present';
+				const validMail1 = faker.internet.email();
+				const validMail2 = faker.internet.email();
+				const { user } = setup(<NewContactGroupBoard />);
+				const contactInput = getContactInput();
+
+				await user.type(contactInput, validMail1);
+				await act(async () => {
+					await user.type(contactInput, ',');
+				});
+				await user.type(contactInput, validMail2);
+				await act(async () => {
+					await user.type(contactInput, ',');
+				});
+				await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
+				await user.type(contactInput, validMail1);
+				await act(async () => {
+					await user.type(contactInput, ',');
+				});
+				await user.type(contactInput, validMail2);
+				await act(async () => {
+					await user.type(contactInput, ',');
+				});
+
+				expect(screen.getByText(errorMessage)).toBeVisible();
+				await user.type(contactInput, faker.internet.email());
+				await act(async () => {
+					await user.type(contactInput, ',');
+				});
+
+				expect(screen.queryByText(errorMessage)).not.toBeInTheDocument();
+			});
+
+			it('should render "Invalid and already present addresses" error message when there are at least 1 error chip per type and remove the error when a valid chip is added', async () => {
+				const errorMessage = 'Invalid and already present addresses';
+				const validMail = faker.internet.email();
+				const { user } = setup(<NewContactGroupBoard />);
+				const contactInput = getContactInput();
+
+				await user.type(contactInput, validMail);
+				await act(async () => {
+					await user.type(contactInput, ',');
+				});
+				await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
+
+				await user.type(contactInput, faker.string.alpha(10));
+				await act(async () => {
+					await user.type(contactInput, ',');
+				});
+
+				await user.type(contactInput, validMail);
+				await act(async () => {
+					await user.type(contactInput, ',');
+				});
+
+				expect(screen.getByText(errorMessage)).toBeVisible();
+				await user.type(contactInput, faker.internet.email());
+				await act(async () => {
+					await user.type(contactInput, ',');
+				});
+				expect(screen.queryByText(errorMessage)).not.toBeInTheDocument();
 			});
 		});
 	});

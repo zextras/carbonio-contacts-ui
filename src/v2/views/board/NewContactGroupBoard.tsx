@@ -31,7 +31,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 	const [titleValue, setTitleValue] = useState(initialTitle);
 
 	const [contactInputValue, setContactInputValue] = useState<
-		Array<{ email: string; error: boolean }>
+		Array<{ email: string; error: boolean; duplicated: boolean }>
 	>([]);
 
 	const [memberListEmails, setMemberListEmails] = useState<string[]>([]);
@@ -64,12 +64,61 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 		return undefined;
 	}, [titleValue]);
 
-	const contactInputOnChange = (newContactInputValue: any): void => {
-		setContactInputValue(newContactInputValue);
+	const contactInputDescription = useMemo(() => {
+		let valid = 0;
+		let duplicated = 0;
+		let invalid = 0;
+
+		contactInputValue.forEach((value) => {
+			if (value.duplicated) {
+				duplicated += 1;
+			} else if (value.error) {
+				invalid += 1;
+			} else {
+				valid += 1;
+			}
+			if (value.error && value.duplicated) {
+				throw new Error(
+					'Invalid case reached: should not have duplicated and invalid chips at the same time'
+				);
+			}
+		});
+
+		if (valid > 0) {
+			return undefined;
+		}
+		if (invalid > 0 && duplicated > 0) {
+			return 'Invalid and already present addresses';
+		}
+		if (invalid === 1 && duplicated === 0) {
+			return 'Invalid address';
+		}
+		if (invalid > 1 && duplicated === 0) {
+			return 'Invalid addresses';
+		}
+		if (duplicated === 1 && invalid === 0) {
+			return 'Address already present';
+		}
+		if (duplicated > 1 && invalid === 0) {
+			return 'Addresses already present';
+		}
+		// TODO add test
+		return undefined;
+	}, [contactInputValue]);
+
+	const contactInputOnChange = (
+		newContactInputValue: Array<{ email: string; error: boolean; duplicated?: boolean }>
+	): void => {
+		const mapped = newContactInputValue.map((value) => ({
+			...value,
+			duplicated: memberListEmails.includes(value.email)
+		}));
+
+		setContactInputValue(mapped);
 	};
 
 	const contactInputIconDisabled = useMemo(
-		() => !some(contactInputValue, (chip) => !chip.error),
+		() => !some(contactInputValue, (chip) => !chip.error && !chip.duplicated),
 		[contactInputValue]
 	);
 
@@ -178,12 +227,14 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 						// @ts-ignore
 						defaultValue={contactInputValue}
+						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+						// @ts-ignore
 						onChange={contactInputOnChange}
 						placeholder={'Type an address, click ‘+’ to add to the group'}
 						icon={'Plus'}
 						iconAction={contactInputIconAction}
 						iconDisabled={contactInputIconDisabled}
-						description={''}
+						description={contactInputDescription}
 						hasError={false}
 					/>
 				</Container>
