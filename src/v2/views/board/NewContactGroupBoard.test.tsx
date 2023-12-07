@@ -141,7 +141,7 @@ describe('New contact group board', () => {
 
 		describe('Error message', () => {
 			it('should show the error message in red when the title input length is 0', async () => {
-				const errorMessage = 'Error: title length must be greater than 0';
+				const errorMessage = 'Group name is required, enter a name to proceed';
 				const { user } = setup(<NewContactGroupBoard />);
 				const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
 				await user.clear(titleInput);
@@ -154,11 +154,11 @@ describe('New contact group board', () => {
 				const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
 				await user.clear(titleInput);
 				await user.type(titleInput, '   ');
-				expect(screen.getByText('Error: title length must be greater than 0')).toBeVisible();
+				expect(screen.getByText('Group name is required, enter a name to proceed')).toBeVisible();
 			});
 
 			it('should show the error message in red when the title input length is greater than 256', async () => {
-				const errorMessage = 'Error: title length can have maximum 256 characters';
+				const errorMessage = 'Maximum length allowed is 256 characters';
 				const newTitle = faker.string.alphanumeric(CONTACT_GROUP_TITLE_MAX_LENGTH + 1);
 				const { user } = setup(<NewContactGroupBoard />);
 				const titleInput = screen.getByRole('textbox', { name: 'Group title*' });

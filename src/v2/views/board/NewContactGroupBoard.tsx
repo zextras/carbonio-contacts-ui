@@ -56,10 +56,10 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 
 	const titleDescription = useMemo(() => {
 		if (titleValue.trim().length === 0) {
-			return 'Error: title length must be greater than 0';
+			return 'Group name is required, enter a name to proceed';
 		}
 		if (titleValue.length > CONTACT_GROUP_TITLE_MAX_LENGTH) {
-			return 'Error: title length can have maximum 256 characters';
+			return 'Maximum length allowed is 256 characters';
 		}
 		return undefined;
 	}, [titleValue]);
