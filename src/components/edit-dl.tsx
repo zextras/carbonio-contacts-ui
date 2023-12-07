@@ -16,8 +16,8 @@ export type EditDLComponentProps = {
 	email: string;
 	totalMembers: number;
 	members: Array<string>;
-	onRemoveMember: (email: string) => void;
-	onAddMembers: (emails: Array<string>) => void;
+	onRemoveMember: (member: string) => void;
+	onAddMembers: (members: Array<string>) => void;
 };
 
 type ContactInputValue = Array<{ email: string; error: boolean }>;
@@ -70,12 +70,18 @@ export const EditDLComponent: FC<EditDLComponentProps> = ({
 	}, []);
 
 	const onAddRawMembers = useCallback(() => {
-		const validEmails = contactInputValue.reduce<string[]>((result, contactInputItem) => {
-			!contactInputItem.error && result.push(contactInputItem.email);
-			return result;
-		}, []);
+		const [validEmails, invalidContacts] = contactInputValue.reduce<[string[], ContactInputValue]>(
+			(result, contactInputItem) => {
+				!contactInputItem.error
+					? result[0].push(contactInputItem.email)
+					: result[1].push(contactInputItem);
+				return result;
+			},
+			[[], []]
+		);
 		if (validEmails.length > 0) {
 			onAddMembers(validEmails);
+			setContactInputValue(invalidContacts);
 		}
 	}, [contactInputValue, onAddMembers]);
 

@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { lazy, useEffect, Suspense, FC } from 'react';
+import React, { lazy, useEffect, Suspense, FC, ComponentType } from 'react';
 
 import {
 	Spinner,
@@ -113,7 +113,8 @@ const App: FC = () => {
 	useEffect(() => {
 		registerComponents({
 			id: 'contact-input',
-			component: ContactInput
+			// FIXME: remove cast when SHELL-185 will be released
+			component: ContactInput as ComponentType
 		});
 
 		registerActions({

@@ -179,6 +179,33 @@ describe('Edit DL Component', () => {
 				'supercorrect.email@domain.net'
 			]);
 		});
+
+		it('should leave only invalid values inside input when user clicks on add action', async () => {
+			const store = generateStore();
+			const onAddMembers = jest.fn();
+			const { user } = setupTest(<EditDLComponent {...buildProps({ onAddMembers })} />, { store });
+			const contactInput = screen.getByTestId(TESTID_SELECTORS.CONTACT_INPUT);
+			const contactInputTextBox = within(contactInput).getByRole('textbox', {
+				name: /Insert an address to add a new element/i
+			});
+			const addMembersButton = within(contactInput).getByRoleWithIcon('button', {
+				icon: TESTID_SELECTORS.ICONS.ADD_MEMBERS
+			});
+			const values = ['bad', 'correct.email@domain.com', 'worst', 'supercorrect.email@domain.net'];
+			await act(async () => {
+				await user.type(contactInputTextBox, values.join(','));
+			});
+
+			await user.click(addMembersButton);
+			await waitFor(() => expect(onAddMembers).toHaveBeenCalled());
+			await waitFor(() => expect(screen.queryByText(values[1])).not.toBeInTheDocument());
+			expect(screen.getByText(values[0])).toBeVisible();
+			expect(screen.getByText(values[2])).toBeVisible();
+			expect(screen.queryByText(values[1])).not.toBeInTheDocument();
+			expect(screen.queryByText(values[3])).not.toBeInTheDocument();
+		});
+
+		it.todo('should show a description of the error when all values are invalid');
 	});
 
 	describe('Members list', () => {

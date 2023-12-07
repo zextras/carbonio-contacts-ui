@@ -5,20 +5,29 @@
  */
 import { NameSpace } from '@zextras/carbonio-shell-ui';
 
+// TODO move into Shell
 export const NAMESPACES = {
 	account: 'urn:zimbraAccount',
 	mail: 'urn:zimbraMail',
 	generic: 'urn:zimbra'
 } satisfies Record<string, NameSpace>;
 
-interface GenericSoapRequest<NS extends NameSpace> {
+interface GenericSoapPayload<NS extends NameSpace> {
 	_jsns: NS;
 }
 
 export interface GetDistributionListMembersRequest
-	extends GenericSoapRequest<typeof NAMESPACES.account> {
+	extends GenericSoapPayload<typeof NAMESPACES.account> {
 	dl: {
 		by: 'name';
 		_content: string;
 	};
+	limit?: number;
+}
+
+export interface GetDistributionListMembersResponse
+	extends GenericSoapPayload<typeof NAMESPACES.account> {
+	dlm: Array<{ _content: string }>;
+	more: boolean;
+	total: number;
 }
