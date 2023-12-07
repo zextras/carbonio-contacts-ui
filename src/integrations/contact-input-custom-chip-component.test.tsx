@@ -11,8 +11,8 @@ import { rest } from 'msw';
 import { ContactInputCustomChipComponent } from './contact-input-custom-chip-component';
 import { getSetupServer } from '../carbonio-ui-commons/test/jest-setup';
 import { setupTest } from '../carbonio-ui-commons/test/test-setup';
+import { CHIP_DISPLAY_NAME_VALUES } from '../constants/contact-input';
 import { getDistributionListCustomResponse } from '../tests/msw/handle-get-distribution-list-members-request';
-import { CHIP_DISPLAY_NAME_VALUES } from '../types/integrations';
 
 const getDistributionListMembersRequest = '/service/soap/GetDistributionListMembersRequest';
 
@@ -250,7 +250,7 @@ describe('Contact input custom chip component', () => {
 		expect(user5).toBeVisible();
 		expect(user6).toBeVisible();
 
-		expect(showMore).not.toBeVisible();
+		expect(showMore).not.toBeInTheDocument();
 	});
 	test('clicking select all when all data are retrieved, it wont make any other call to the server', async () => {
 		const dlm = [{ _content: user1.email }, { _content: user2Mail }, { _content: user3Mail }];

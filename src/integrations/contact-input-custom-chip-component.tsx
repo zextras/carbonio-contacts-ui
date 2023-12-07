@@ -13,12 +13,8 @@ import { debounce, DebouncedFuncLeading, filter, map, noop, uniqBy } from 'lodas
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import {
-	CHIP_DISPLAY_NAME_VALUES,
-	ContactInputOnChange,
-	ContactInputValue,
-	CustomChipProps
-} from '../types/integrations';
+import { CHIP_DISPLAY_NAME_VALUES } from '../constants/contact-input';
+import { ContactInputOnChange, ContactInputValue, CustomChipProps } from '../types/integrations';
 
 const StyledChip = styled(Chip)`
 	cursor: default;

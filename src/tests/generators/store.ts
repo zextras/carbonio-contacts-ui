@@ -6,7 +6,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
 import { configureStore, EnhancedStore } from '@reduxjs/toolkit';
-import { CONTACTS_APP_ID } from '../../constants';
+import { CONTACTS_APP_ID } from '../../constants/app';
 import { storeReducers } from '../../store/reducers/reducers';
 
 type StateType = {

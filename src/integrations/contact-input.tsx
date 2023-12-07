@@ -36,12 +36,13 @@ import { useTranslation } from 'react-i18next';
 import styled, { DefaultTheme } from 'styled-components';
 
 import { ContactInputCustomChipComponent } from './contact-input-custom-chip-component';
+import { CHIP_DISPLAY_NAME_VALUES } from '../constants/contact-input';
 import { parseFullAutocompleteXML } from '../helpers/autocomplete';
 import { useAppSelector } from '../hooks/redux';
 import { StoreProvider } from '../store/redux';
 import { Contact, Group } from '../types/contact';
 import {
-	CHIP_DISPLAY_NAME_VALUES,
+	ContactInputChipDisplayName,
 	ContactInputOnChange,
 	ContactInputValue,
 	CustomChipProps
@@ -145,7 +146,7 @@ type ContactInput = {
 	defaultValue: Array<Contact>;
 	placeholder: string;
 	background?: keyof DefaultTheme['palette'];
-	chipDisplayName?: (typeof CHIP_DISPLAY_NAME_VALUES)[keyof typeof CHIP_DISPLAY_NAME_VALUES];
+	chipDisplayName?: ContactInputChipDisplayName;
 	dragAndDropEnabled?: boolean;
 	extraAccountsIds: Array<string>;
 };
