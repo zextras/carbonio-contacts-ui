@@ -23,6 +23,7 @@ export function parseFullAutocompleteXML(xmlString: string): FullAutocompleteRes
 	const matchElements = xmlDoc.documentElement.getElementsByTagName('match');
 	forEach(matchElements, (matchElement) => {
 		const match = {
+			first: matchElement.getAttribute('first') ?? '',
 			last: matchElement.getAttribute('last') ?? '',
 			fileas: matchElement.getAttribute('fileas') ?? '',
 			ranking: matchElement.getAttribute('ranking') ?? '',
