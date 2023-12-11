@@ -121,7 +121,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 		setContactInputValue(mapped);
 	};
 
-	const contactInputIconDisabled = useMemo(
+	const noValidChip = useMemo(
 		() => !some(contactInputValue, (chip) => !chip.error && !chip.duplicated),
 		[contactInputValue]
 	);
@@ -237,9 +237,9 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 						placeholder={'Type an address, click ‘+’ to add to the group'}
 						icon={'Plus'}
 						iconAction={contactInputIconAction}
-						iconDisabled={contactInputIconDisabled}
+						iconDisabled={noValidChip}
 						description={contactInputDescription}
-						hasError={false}
+						hasError={noValidChip}
 					/>
 				</Container>
 				<ListV2 data-testid={'member-list'}>{listItems}</ListV2>

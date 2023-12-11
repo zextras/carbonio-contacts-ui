@@ -353,6 +353,10 @@ describe('New contact group board', () => {
 				expect(screen.queryByTestId('default-chip')).not.toBeInTheDocument();
 			});
 
+			it.todo(
+				'should update contactInput chips and icon when item is removed from the bottom list'
+			);
+
 			it('should move valid chip addresses in bottom list and maintain invalid ones in the contact input', async () => {
 				const newEmail = faker.internet.email();
 				const invalidMail1 = faker.string.alpha(10);
@@ -431,6 +435,7 @@ describe('New contact group board', () => {
 					await user.type(contactInput, ',');
 				});
 				expect(screen.getByText(errorMessage)).toBeVisible();
+				expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
 				await user.type(contactInput, validMail);
 				await act(async () => {
 					await user.type(contactInput, ',');
@@ -454,6 +459,7 @@ describe('New contact group board', () => {
 					await user.type(contactInput, ',');
 				});
 				expect(screen.getByText(errorMessage)).toBeVisible();
+				expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
 				await user.type(contactInput, validMail);
 				await act(async () => {
 					await user.type(contactInput, ',');
@@ -477,6 +483,7 @@ describe('New contact group board', () => {
 					await user.type(contactInput, ',');
 				});
 				expect(screen.getByText(errorMessage)).toBeVisible();
+				expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
 				await user.type(contactInput, faker.internet.email());
 				await act(async () => {
 					await user.type(contactInput, ',');
@@ -511,6 +518,7 @@ describe('New contact group board', () => {
 				});
 
 				expect(screen.getByText(errorMessage)).toBeVisible();
+				expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
 				await user.type(contactInput, faker.internet.email());
 				await act(async () => {
 					await user.type(contactInput, ',');
@@ -542,6 +550,7 @@ describe('New contact group board', () => {
 				});
 
 				expect(screen.getByText(errorMessage)).toBeVisible();
+				expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
 				await user.type(contactInput, faker.internet.email());
 				await act(async () => {
 					await user.type(contactInput, ',');
