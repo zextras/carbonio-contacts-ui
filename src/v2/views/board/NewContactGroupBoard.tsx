@@ -142,9 +142,9 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 		const invalid: typeof contactInputValue = [];
 
 		contactInputValue.forEach((value) => {
-			if (value.error) {
+			if (value.error || value.duplicated) {
 				invalid.push(value);
-			} else if (!value.error) {
+			} else {
 				valid.push(value);
 			}
 		});

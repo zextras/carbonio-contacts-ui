@@ -269,54 +269,8 @@ describe('New contact group board', () => {
 			it.todo(
 				'should disable the plus button when the user add a contact with invalid mail from the dropdown'
 			);
-
-			it('should remove valid chip from input when the user clicks on plus button', async () => {
-				const email = faker.internet.email();
-				const { user } = setup(<NewContactGroupBoard />);
-				const contactInput = getContactInput();
-				await user.type(contactInput, email);
-				await act(async () => {
-					await user.type(contactInput, ',');
-				});
-				expect(screen.getByTestId('default-chip')).toBeVisible();
-				await act(async () => {
-					await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
-				});
-				expect(screen.queryByTestId('default-chip')).not.toBeInTheDocument();
-			});
-
-			it('should remove valid chip and maintain invalid ones in the contact input', async () => {
-				const newEmail = faker.internet.email();
-				const invalidMail1 = faker.string.alpha(10);
-				const invalidMail2 = faker.string.alpha(10);
-				const { user } = setup(<NewContactGroupBoard />);
-				const contactInput = getContactInput();
-				await user.type(contactInput, newEmail);
-				await act(async () => {
-					await user.type(contactInput, ',');
-				});
-				await user.type(contactInput, invalidMail1);
-				await act(async () => {
-					await user.type(contactInput, ',');
-				});
-				await user.type(contactInput, invalidMail2);
-				await act(async () => {
-					await user.type(contactInput, ',');
-				});
-
-				const chipInput = screen.getByTestId('contact-group-contact-input');
-				expect(within(chipInput).getByText(invalidMail1)).toBeVisible();
-				expect(within(chipInput).getByText(invalidMail2)).toBeVisible();
-				expect(within(chipInput).getByText(newEmail)).toBeVisible();
-				await act(async () => {
-					await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
-				});
-				expect(within(chipInput).queryByText(newEmail)).not.toBeInTheDocument();
-				expect(within(chipInput).getByText(invalidMail1)).toBeVisible();
-				expect(within(chipInput).getByText(invalidMail2)).toBeVisible();
-			});
 		});
-		describe('Contact group members list', () => {
+		describe('Contact group add and remove members', () => {
 			it('should render the valid email on the list', async () => {
 				const email = faker.internet.email();
 				const { user } = setup(<NewContactGroupBoard />);
@@ -382,6 +336,86 @@ describe('New contact group board', () => {
 				);
 				const memberList = await screen.findByTestId('member-list');
 				expect(within(memberList).queryByText(email)).not.toBeInTheDocument();
+			});
+
+			it('should remove valid chip from input when the user clicks on plus button', async () => {
+				const email = faker.internet.email();
+				const { user } = setup(<NewContactGroupBoard />);
+				const contactInput = getContactInput();
+				await user.type(contactInput, email);
+				await act(async () => {
+					await user.type(contactInput, ',');
+				});
+				expect(screen.getByTestId('default-chip')).toBeVisible();
+				await act(async () => {
+					await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
+				});
+				expect(screen.queryByTestId('default-chip')).not.toBeInTheDocument();
+			});
+
+			it('should move valid chip addresses in bottom list and maintain invalid ones in the contact input', async () => {
+				const newEmail = faker.internet.email();
+				const invalidMail1 = faker.string.alpha(10);
+				const invalidMail2 = faker.string.alpha(10);
+				const { user } = setup(<NewContactGroupBoard />);
+				const contactInput = getContactInput();
+				await user.type(contactInput, newEmail);
+				await act(async () => {
+					await user.type(contactInput, ',');
+				});
+				await user.type(contactInput, invalidMail1);
+				await act(async () => {
+					await user.type(contactInput, ',');
+				});
+				await user.type(contactInput, invalidMail2);
+				await act(async () => {
+					await user.type(contactInput, ',');
+				});
+
+				const chipInput = screen.getByTestId('contact-group-contact-input');
+				expect(within(chipInput).getByText(invalidMail1)).toBeVisible();
+				expect(within(chipInput).getByText(invalidMail2)).toBeVisible();
+				expect(within(chipInput).getByText(newEmail)).toBeVisible();
+				await act(async () => {
+					await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
+				});
+				expect(within(chipInput).queryByText(newEmail)).not.toBeInTheDocument();
+				expect(within(chipInput).getByText(invalidMail1)).toBeVisible();
+				expect(within(chipInput).getByText(invalidMail2)).toBeVisible();
+
+				expect(within(screen.getByTestId('member-list')).getByText(newEmail)).toBeVisible();
+			});
+
+			it('should move valid chip addresses in bottom list and maintain duplicated ones in the contact input', async () => {
+				const email1 = faker.internet.email();
+				const email2 = faker.internet.email();
+				const { user } = setup(<NewContactGroupBoard />);
+				const contactInput = getContactInput();
+				await user.type(contactInput, email1);
+				await act(async () => {
+					await user.type(contactInput, ',');
+				});
+				await act(async () => {
+					await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
+				});
+				const chipInput = screen.getByTestId('contact-group-contact-input');
+				expect(within(chipInput).queryByText(email1)).not.toBeInTheDocument();
+				await user.type(contactInput, email2);
+				await act(async () => {
+					await user.type(contactInput, ',');
+				});
+				await user.type(contactInput, email1);
+				await act(async () => {
+					await user.type(contactInput, ',');
+				});
+				await act(async () => {
+					await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
+				});
+				expect(within(chipInput).queryByText(email2)).not.toBeInTheDocument();
+				expect(within(chipInput).getByText(email1)).toBeVisible();
+
+				expect(within(screen.getByTestId('member-list')).getByText(email1)).toBeVisible();
+				expect(within(screen.getByTestId('member-list')).getByText(email2)).toBeVisible();
 			});
 		});
 
