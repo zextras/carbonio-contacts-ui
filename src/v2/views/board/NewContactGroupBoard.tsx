@@ -16,7 +16,7 @@ import {
 	Row
 } from '@zextras/carbonio-design-system';
 import { useBoardHooks } from '@zextras/carbonio-shell-ui';
-import { noop, size, some } from 'lodash';
+import { noop, size, some, uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { MemberListItemComponent } from '../../../components/member-list-item';
@@ -109,7 +109,11 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 	const contactInputOnChange = (
 		newContactInputValue: Array<{ email: string; error: boolean; duplicated?: boolean }>
 	): void => {
-		const mapped = newContactInputValue.map((value) => ({
+		// TODO item are filtered to be uniq, because the ContactInput filters out, dropdown duplicated, only visually
+		//  but provide that item inside onChange parameter
+		const uniqNewContactInputValue = uniqBy(newContactInputValue, 'email');
+
+		const mapped = uniqNewContactInputValue.map((value) => ({
 			...value,
 			duplicated: memberListEmails.includes(value.email)
 		}));
