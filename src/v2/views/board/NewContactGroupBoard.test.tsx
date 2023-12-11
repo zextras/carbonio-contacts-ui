@@ -353,9 +353,30 @@ describe('New contact group board', () => {
 				expect(screen.queryByTestId('default-chip')).not.toBeInTheDocument();
 			});
 
-			it.todo(
-				'should update contactInput chips and icon when item is removed from the bottom list'
-			);
+			it('should update contactInput chips and icon when item is removed from the bottom list', async () => {
+				const errorMessage = 'Address already present';
+				const validMail = faker.internet.email();
+				const { user } = setup(<NewContactGroupBoard />);
+				const contactInput = getContactInput();
+				await user.type(contactInput, validMail);
+				await act(async () => {
+					await user.type(contactInput, ',');
+				});
+				await act(async () => {
+					await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
+				});
+				await user.type(contactInput, validMail);
+				await act(async () => {
+					await user.type(contactInput, ',');
+				});
+				expect(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus })).toBeDisabled();
+				expect(screen.getByText(errorMessage)).toBeVisible();
+				await user.click(
+					screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.trash, name: /remove/i })
+				);
+				expect(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus })).toBeEnabled();
+				expect(screen.queryByText(errorMessage)).not.toBeInTheDocument();
+			});
 
 			it('should move valid chip addresses in bottom list and maintain invalid ones in the contact input', async () => {
 				const newEmail = faker.internet.email();

@@ -128,7 +128,14 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 
 	const removeItem = useCallback(
 		(email: string) => {
-			setMemberListEmails(memberListEmails.filter((value) => value !== email));
+			const newMemberListEmails = memberListEmails.filter((value) => value !== email);
+			setMemberListEmails(newMemberListEmails);
+			setContactInputValue((prevState) =>
+				prevState.map((value) => ({
+					...value,
+					duplicated: newMemberListEmails.includes(value.email)
+				}))
+			);
 		},
 		[memberListEmails]
 	);
