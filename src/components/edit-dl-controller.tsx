@@ -19,9 +19,13 @@ import {
 export type EditDLControllerComponentProps = {
 	email: string;
 	// displayName: string;
+	onClose: () => void;
 };
 
-export const EditDLControllerComponent: FC<EditDLControllerComponentProps> = ({ email }) => {
+export const EditDLControllerComponent: FC<EditDLControllerComponentProps> = ({
+	email,
+	onClose
+}) => {
 	const [members, setMembers] = useState<string[]>([]);
 	const [totalMembers, setTotalMembers] = useState<number>(0);
 	const [t] = useTranslation();
@@ -65,8 +69,10 @@ export const EditDLControllerComponent: FC<EditDLControllerComponentProps> = ({ 
 				onAddMembers={onAddMembers}
 			/>
 			<ModalFooter
+				confirmLabel={t('label.save', 'save')}
+				onConfirm={(): void => undefined}
 				secondaryActionLabel={t('label.cancel', 'cancel')}
-				onSecondaryAction={() => undefined}
+				onSecondaryAction={onClose}
 			/>
 		</>
 	);

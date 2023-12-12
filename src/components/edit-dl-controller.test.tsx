@@ -11,7 +11,7 @@ import { SoapResponse } from '@zextras/carbonio-shell-ui';
 import { times } from 'lodash';
 import { rest } from 'msw';
 
-import { EditDLControllerComponent } from './edit-dl-controller';
+import { EditDLControllerComponent, EditDLControllerComponentProps } from './edit-dl-controller';
 import {
 	GetDistributionListMembersRequest,
 	GetDistributionListMembersResponse,
@@ -59,12 +59,20 @@ const registerAPIHandler = (members: Array<string>): void => {
 	);
 };
 
+const buildProps = ({
+	email = '',
+	onClose = jest.fn()
+}: Partial<EditDLControllerComponentProps> = {}): EditDLControllerComponentProps => ({
+	email,
+	onClose
+});
+
 describe('EditDLControllerComponent', () => {
 	it('should render an EditDLComponent that displays the DL email', async () => {
 		const dlEmail = 'dl-mail@domain.net';
 		const store = generateStore();
 		registerAPIHandler([]);
-		setupTest(<EditDLControllerComponent email={dlEmail} />, { store });
+		setupTest(<EditDLControllerComponent {...buildProps({ email: dlEmail })} />, { store });
 		expect(await screen.findByText(dlEmail)).toBeVisible();
 	});
 
@@ -74,7 +82,7 @@ describe('EditDLControllerComponent', () => {
 		const members = times(10, () => faker.internet.email());
 		registerAPIHandler(members);
 
-		setupTest(<EditDLControllerComponent email={dlEmail} />, { store });
+		setupTest(<EditDLControllerComponent {...buildProps({ email: dlEmail })} />, { store });
 		await screen.findByText(dlEmail);
 		await screen.findByText(`Member list ${members.length}`);
 		expect(screen.getAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM)).toHaveLength(members.length);
@@ -85,7 +93,9 @@ describe('EditDLControllerComponent', () => {
 		const dlEmail = 'dl-mail@domain.net';
 		registerAPIHandler([]);
 
-		const { user } = setupTest(<EditDLControllerComponent email={dlEmail} />, { store });
+		const { user } = setupTest(<EditDLControllerComponent {...buildProps({ email: dlEmail })} />, {
+			store
+		});
 		const emails = ['john.doe@test.com', 'invalid-email.com', 'mary.white@example.org'];
 		await act(async () => {
 			await user.type(
@@ -108,7 +118,9 @@ describe('EditDLControllerComponent', () => {
 		const members = times(10, () => faker.internet.email());
 		registerAPIHandler(members);
 
-		const { user } = setupTest(<EditDLControllerComponent email={dlEmail} />, { store });
+		const { user } = setupTest(<EditDLControllerComponent {...buildProps({ email: dlEmail })} />, {
+			store
+		});
 		const emails = ['john.doe@test.com', 'mary.white@example.org'];
 		await screen.findByText(dlEmail);
 		await screen.findAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM);
@@ -134,7 +146,9 @@ describe('EditDLControllerComponent', () => {
 		const members = times(10, () => faker.internet.email());
 		registerAPIHandler(members);
 
-		const { user } = setupTest(<EditDLControllerComponent email={dlEmail} />, { store });
+		const { user } = setupTest(<EditDLControllerComponent {...buildProps({ email: dlEmail })} />, {
+			store
+		});
 		await screen.findByText(dlEmail);
 		const membersListItems = await screen.findAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM);
 		const memberToRemoveElement = membersListItems.find(
@@ -150,16 +164,54 @@ describe('EditDLControllerComponent', () => {
 				const dlEmail = 'dl-mail@domain.net';
 				const store = generateStore();
 				registerAPIHandler([faker.internet.email()]);
-				setupTest(<EditDLControllerComponent email={dlEmail} />, { store });
+				setupTest(<EditDLControllerComponent {...buildProps({ email: dlEmail })} />, { store });
 				await screen.findByText(dlEmail);
 				await screen.findAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM);
 				expect(screen.getByRole('button', { name: 'cancel' })).toBeEnabled();
 			});
 
-			it.todo('should close the modal when clicked');
+			it('should call the onClose callback when clicked', async () => {
+				const store = generateStore();
+				registerAPIHandler([faker.internet.email()]);
+				const dlEmail = 'dl-mail@domain.net';
+				const onClose = jest.fn();
+				const { user } = setupTest(
+					<EditDLControllerComponent {...buildProps({ email: dlEmail, onClose })} />,
+					{ store }
+				);
+				await screen.findByText(dlEmail);
+				const button = screen.getByRole('button', { name: 'cancel' });
+				await user.click(button);
+				expect(onClose).toHaveBeenCalled();
+			});
+
+			// TODO move in the edit-dl action tests
+			// it('should close the modal when clicked', async () => {
+			// 	const dlEmail = 'dl-mail@domain.net';
+			// 	const store = generateStore();
+			// 	registerAPIHandler([faker.internet.email()]);
+			// 	const { user } = setupTest(<EditDLControllerComponent email={dlEmail} />, { store });
+			// 	const dlEmailLabel = await screen.findByText(dlEmail);
+			// 	// await screen.findAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM);
+			// 	const button = screen.getByRole('button', { name: 'cancel' });
+			// 	await user.click(button);
+			// 	await waitFor(() => {
+			// 		expect(dlEmailLabel).not.toBeInTheDocument();
+			// 	});
+			// });
 		});
+
 		describe('Save action button', () => {
-			it.todo('should be visible');
+			it('should be visible', async () => {
+				const dlEmail = 'dl-mail@domain.net';
+				const store = generateStore();
+				registerAPIHandler([faker.internet.email()]);
+				setupTest(<EditDLControllerComponent {...buildProps({ email: dlEmail })} />, { store });
+				await screen.findByText(dlEmail);
+				await screen.findAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM);
+				expect(screen.getByRole('button', { name: 'save' })).toBeVisible();
+			});
+
 			it.todo('should be disabled if there are no changes');
 			it.todo('should show a tooltip if disabled');
 			it.todo('should be enabled if there is the user does some change');
