@@ -5,7 +5,9 @@
  */
 import React, { FC, useCallback, useEffect, useState } from 'react';
 
+import { ModalFooter } from '@zextras/carbonio-design-system';
 import { ErrorSoapBodyResponse, soapFetch } from '@zextras/carbonio-shell-ui';
+import { useTranslation } from 'react-i18next';
 
 import { EditDLComponent } from './edit-dl';
 import {
@@ -22,6 +24,7 @@ export type EditDLControllerComponentProps = {
 export const EditDLControllerComponent: FC<EditDLControllerComponentProps> = ({ email }) => {
 	const [members, setMembers] = useState<string[]>([]);
 	const [totalMembers, setTotalMembers] = useState<number>(0);
+	const [t] = useTranslation();
 
 	useEffect(() => {
 		soapFetch<
@@ -53,12 +56,18 @@ export const EditDLControllerComponent: FC<EditDLControllerComponentProps> = ({ 
 	}, []);
 
 	return (
-		<EditDLComponent
-			email={email}
-			members={members}
-			totalMembers={totalMembers}
-			onRemoveMember={onRemoveMember}
-			onAddMembers={onAddMembers}
-		/>
+		<>
+			<EditDLComponent
+				email={email}
+				members={members}
+				totalMembers={totalMembers}
+				onRemoveMember={onRemoveMember}
+				onAddMembers={onAddMembers}
+			/>
+			<ModalFooter
+				secondaryActionLabel={t('label.cancel', 'cancel')}
+				onSecondaryAction={() => undefined}
+			/>
+		</>
 	);
 };

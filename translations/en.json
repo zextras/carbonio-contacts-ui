@@ -1,6 +1,7 @@
 {
     "action": {
         "delete_permanently": "Delete Permanently",
+        "edit_distribution_list": "Edit address list",
         "goto_folder": "Go to folder",
         "reset_filters": "Reset Filters",
         "search": "Search",
@@ -231,7 +232,10 @@
     },
     "modal": {
         "address_book_name": "Address book name",
-        "destination": "Destination folder"
+        "destination": "Destination folder",
+        "edit_distribution_list": {
+            "title": "Edit \"{{name}}\""
+        }
     },
     "name": {
         "first_name": "First Name",

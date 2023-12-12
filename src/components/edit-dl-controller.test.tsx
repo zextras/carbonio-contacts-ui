@@ -22,73 +22,57 @@ import { setupTest, screen, within } from '../carbonio-ui-commons/test/test-setu
 import { TESTID_SELECTORS } from '../constants/tests';
 import { generateStore } from '../legacy/tests/generators/store';
 
-describe('EditDLControllerComponent', () => {
-	const buildSoapResponse = <T,>(responseData: Record<string, T>): SoapResponse<T> => ({
-		Header: {
-			context: {}
-		},
-		Body: responseData
-	});
+const buildSoapResponse = <T,>(responseData: Record<string, T>): SoapResponse<T> => ({
+	Header: {
+		context: {}
+	},
+	Body: responseData
+});
 
+const registerAPIHandler = (members: Array<string>): void => {
+	getSetupServer().use(
+		rest.post<
+			{ Body: { GetDistributionListMembersRequest: GetDistributionListMembersRequest } },
+			never,
+			SoapResponse<GetDistributionListMembersResponse>
+		>('/service/soap/GetDistributionListMembersRequest', async (req, res, ctx) => {
+			const reqBody = await req.json<{
+				Body: { GetDistributionListMembersRequest: GetDistributionListMembersRequest };
+			}>();
+			const { limit } = reqBody.Body.GetDistributionListMembersRequest;
+			if (limit !== undefined && limit > 0) {
+				throw new Error('expected limit to be undefined or 0 to load all members');
+			}
+			return res(
+				ctx.json(
+					buildSoapResponse({
+						GetDistributionListMembersResponse: {
+							dlm: members.map((member) => ({ _content: member })),
+							more: false,
+							total: members.length,
+							_jsns: NAMESPACES.account
+						}
+					})
+				)
+			);
+		})
+	);
+};
+
+describe('EditDLControllerComponent', () => {
 	it('should render an EditDLComponent that displays the DL email', async () => {
 		const dlEmail = 'dl-mail@domain.net';
 		const store = generateStore();
-
+		registerAPIHandler([]);
 		setupTest(<EditDLControllerComponent email={dlEmail} />, { store });
-		expect(screen.getByText(dlEmail)).toBeVisible();
+		expect(await screen.findByText(dlEmail)).toBeVisible();
 	});
 
 	it('should load all members on first load', async () => {
 		const store = generateStore();
 		const dlEmail = 'dl-mail@domain.net';
 		const members = times(10, () => faker.internet.email());
-		getSetupServer().use(
-			rest.post<
-				{ Body: { GetDistributionListMembersRequest: GetDistributionListMembersRequest } },
-				never,
-				SoapResponse<GetDistributionListMembersResponse>
-			>('/service/soap/GetDistributionListMembersRequest', async (req, res, ctx) =>
-				res(
-					ctx.json(
-						buildSoapResponse({
-							GetDistributionListMembersResponse: {
-								dlm: [],
-								more: false,
-								total: 0,
-								_jsns: NAMESPACES.account
-							}
-						})
-					)
-				)
-			)
-		);
-		getSetupServer().use(
-			rest.post<
-				{ Body: { GetDistributionListMembersRequest: GetDistributionListMembersRequest } },
-				never,
-				SoapResponse<GetDistributionListMembersResponse>
-			>('/service/soap/GetDistributionListMembersRequest', async (req, res, ctx) => {
-				const reqBody = await req.json<{
-					Body: { GetDistributionListMembersRequest: GetDistributionListMembersRequest };
-				}>();
-				const { limit } = reqBody.Body.GetDistributionListMembersRequest;
-				if (limit !== undefined && limit > 0) {
-					throw new Error('expected limit to be undefined or 0 to load all members');
-				}
-				return res(
-					ctx.json(
-						buildSoapResponse({
-							GetDistributionListMembersResponse: {
-								dlm: members.map((member) => ({ _content: member })),
-								more: false,
-								total: members.length,
-								_jsns: NAMESPACES.account
-							}
-						})
-					)
-				);
-			})
-		);
+		registerAPIHandler(members);
 
 		setupTest(<EditDLControllerComponent email={dlEmail} />, { store });
 		await screen.findByText(dlEmail);
@@ -99,26 +83,7 @@ describe('EditDLControllerComponent', () => {
 	it('should add all valid emails inside the list when user clicks on add action', async () => {
 		const store = generateStore();
 		const dlEmail = 'dl-mail@domain.net';
-		getSetupServer().use(
-			rest.post<
-				{ Body: { GetDistributionListMembersRequest: GetDistributionListMembersRequest } },
-				never,
-				SoapResponse<GetDistributionListMembersResponse>
-			>('/service/soap/GetDistributionListMembersRequest', async (req, res, ctx) =>
-				res(
-					ctx.json(
-						buildSoapResponse({
-							GetDistributionListMembersResponse: {
-								dlm: [],
-								more: false,
-								total: 0,
-								_jsns: NAMESPACES.account
-							}
-						})
-					)
-				)
-			)
-		);
+		registerAPIHandler([]);
 
 		const { user } = setupTest(<EditDLControllerComponent email={dlEmail} />, { store });
 		const emails = ['john.doe@test.com', 'invalid-email.com', 'mary.white@example.org'];
@@ -141,26 +106,7 @@ describe('EditDLControllerComponent', () => {
 		const store = generateStore();
 		const dlEmail = 'dl-mail@domain.net';
 		const members = times(10, () => faker.internet.email());
-		getSetupServer().use(
-			rest.post<
-				{ Body: { GetDistributionListMembersRequest: GetDistributionListMembersRequest } },
-				never,
-				SoapResponse<GetDistributionListMembersResponse>
-			>('/service/soap/GetDistributionListMembersRequest', async (req, res, ctx) =>
-				res(
-					ctx.json(
-						buildSoapResponse({
-							GetDistributionListMembersResponse: {
-								dlm: members.map((email) => ({ _content: email })),
-								more: false,
-								total: members.length,
-								_jsns: NAMESPACES.account
-							}
-						})
-					)
-				)
-			)
-		);
+		registerAPIHandler(members);
 
 		const { user } = setupTest(<EditDLControllerComponent email={dlEmail} />, { store });
 		const emails = ['john.doe@test.com', 'mary.white@example.org'];
@@ -186,26 +132,7 @@ describe('EditDLControllerComponent', () => {
 		const store = generateStore();
 		const dlEmail = 'dl-mail@domain.net';
 		const members = times(10, () => faker.internet.email());
-		getSetupServer().use(
-			rest.post<
-				{ Body: { GetDistributionListMembersRequest: GetDistributionListMembersRequest } },
-				never,
-				SoapResponse<GetDistributionListMembersResponse>
-			>('/service/soap/GetDistributionListMembersRequest', async (req, res, ctx) =>
-				res(
-					ctx.json(
-						buildSoapResponse({
-							GetDistributionListMembersResponse: {
-								dlm: members.map((email) => ({ _content: email })),
-								more: false,
-								total: members.length,
-								_jsns: NAMESPACES.account
-							}
-						})
-					)
-				)
-			)
-		);
+		registerAPIHandler(members);
 
 		const { user } = setupTest(<EditDLControllerComponent email={dlEmail} />, { store });
 		await screen.findByText(dlEmail);
@@ -219,7 +146,16 @@ describe('EditDLControllerComponent', () => {
 
 	describe('Modal footer', () => {
 		describe('Cancel action button', () => {
-			it.todo('should be visible and enabled');
+			it('should be enabled', async () => {
+				const dlEmail = 'dl-mail@domain.net';
+				const store = generateStore();
+				registerAPIHandler([faker.internet.email()]);
+				setupTest(<EditDLControllerComponent email={dlEmail} />, { store });
+				await screen.findByText(dlEmail);
+				await screen.findAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM);
+				expect(screen.getByRole('button', { name: 'cancel' })).toBeEnabled();
+			});
+
 			it.todo('should close the modal when clicked');
 		});
 		describe('Save action button', () => {
