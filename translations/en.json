@@ -335,5 +335,10 @@
         "mobile": "mobile",
         "other": "other",
         "work": "work"
+    },
+    "secondaryBar": {
+        "contextualMenu": {
+            "new_contact_group_creation_action": "New Contact Group"
+        }
     }
 }
