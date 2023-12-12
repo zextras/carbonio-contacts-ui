@@ -3,18 +3,9 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { NameSpace } from '@zextras/carbonio-shell-ui';
-
-// TODO move into Shell
-export const NAMESPACES = {
-	account: 'urn:zimbraAccount',
-	mail: 'urn:zimbraMail',
-	generic: 'urn:zimbra'
-} satisfies Record<string, NameSpace>;
-
-interface GenericSoapPayload<NS extends NameSpace> {
-	_jsns: NS;
-}
+import { ErrorSoapBodyResponse, NameSpace, soapFetch } from '@zextras/carbonio-shell-ui';
+import { NAMESPACES } from '../constants/api';
+import { GenericSoapPayload } from './types';
 
 export interface GetDistributionListMembersRequest
 	extends GenericSoapPayload<typeof NAMESPACES.account> {
@@ -31,3 +22,22 @@ export interface GetDistributionListMembersResponse
 	more: boolean;
 	total: number;
 }
+
+export const getDistributionListMembers = (
+	email: string
+): Promise<GetDistributionListMembersResponse> =>
+	soapFetch<
+		GetDistributionListMembersRequest,
+		GetDistributionListMembersResponse | ErrorSoapBodyResponse
+	>('GetDistributionListMembers', {
+		_jsns: NAMESPACES.account,
+		dl: {
+			by: 'name',
+			_content: email
+		}
+	}).then((response) => {
+		if ('Fault' in response) {
+			throw new Error(response.Fault.Reason.Text, { cause: response.Fault });
+		}
+		return response;
+	});
