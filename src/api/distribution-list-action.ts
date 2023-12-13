@@ -33,13 +33,8 @@ export interface BatchDistributionListActionRequest
 
 export interface BatchDistributionListActionResponse
 	extends GenericSoapPayload<typeof NAMESPACES.generic> {
-	DistributionListActionResponse: Array<DistributionListActionResponse>;
+	DistributionListActionResponse?: Array<DistributionListActionResponse>;
 	Fault?: Array<SoapFault>;
-}
-
-export interface BatchDistributionListActionResponse
-	extends GenericSoapPayload<typeof NAMESPACES.generic> {
-	DistributionListActionResponse: Array<DistributionListActionResponse>;
 }
 
 export const distributionListAction = (
@@ -90,7 +85,9 @@ export const distributionListAction = (
 	).then((response) => {
 		if ('Fault' in response) {
 			// TODO create a specific BatchSoapError
-			throw new Error('Batch error', { cause: response.Fault });
+			throw new Error(response.Fault?.map((fault) => fault.Reason.Text).join(',\n'), {
+				cause: response.Fault
+			});
 		}
 	});
 };

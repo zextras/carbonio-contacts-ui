@@ -9,32 +9,39 @@ import { useModal } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 import { DefaultTheme } from 'styled-components';
 
+import { EditDLControllerComponent } from '../components/edit-dl-controller';
 import { ACTION_IDS } from '../constants';
 
-type UIAction<ExecArg> = {
+export type UIAction<ExecArg> = {
 	id: string;
 	label: string;
 	icon: keyof DefaultTheme['icons'];
 	execute: (arg: ExecArg) => void;
 };
 
-type EditDLAction = UIAction<{ name: string; email: string }>;
+export type EditDLAction = UIAction<{ displayName: string; email: string }>;
 
 export const useActionEditDL = (): EditDLAction => {
 	const [t] = useTranslation();
 	const createModal = useModal();
 
 	const callback = useCallback<EditDLAction['execute']>(
-		(dl) => {
+		({ email, displayName }) => {
 			const closeModal = createModal({
-				title: t('modal.edit_distribution_list.title', 'Edit "{{name}}"', { name: dl.name }),
-				confirmLabel: t('label.save', 'Save'),
-				dismissLabel: t('label.cancel', 'Cancel'),
+				title: t('modal.edit_distribution_list.title', 'Edit "{{displayName}}"', { displayName }),
 				size: 'medium',
 				onClose: () => {
 					closeModal();
 				},
-				children: <>Test</>
+				children: (
+					<EditDLControllerComponent
+						email={email}
+						displayName={displayName}
+						onClose={(): void => closeModal()}
+						onSave={(): void => closeModal()}
+					/>
+				),
+				hideFooter: true
 			});
 		},
 		[createModal, t]

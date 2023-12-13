@@ -5,22 +5,32 @@
  */
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { ModalFooter } from '@zextras/carbonio-design-system';
-import { xor } from 'lodash';
+import { ModalFooter, useSnackbar } from '@zextras/carbonio-design-system';
+import { difference, xor } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { EditDLComponent } from './edit-dl';
+import { distributionListAction } from '../api/distribution-list-action';
 import { getDistributionListMembers } from '../api/get-distribution-list-members';
 
 export type EditDLControllerComponentProps = {
 	email: string;
-	// displayName: string;
+	displayName: string;
 	onClose: () => void;
 	onSave: () => void;
 };
 
+export const getMembersPartition = (
+	originalMembers: Array<string>,
+	updatedMembers: Array<string>
+): { membersToAdd: Array<string>; membersToRemove: Array<string> } => ({
+	membersToAdd: difference(updatedMembers, originalMembers),
+	membersToRemove: difference(originalMembers, updatedMembers)
+});
+
 export const EditDLControllerComponent: FC<EditDLControllerComponentProps> = ({
 	email,
+	displayName,
 	onClose,
 	onSave
 }) => {
@@ -28,6 +38,7 @@ export const EditDLControllerComponent: FC<EditDLControllerComponentProps> = ({
 	const originalMembersRef = useRef<string[]>([]);
 	const [totalMembers, setTotalMembers] = useState<number>(0);
 	const [t] = useTranslation();
+	const createSnackbar = useSnackbar();
 
 	useEffect(() => {
 		getDistributionListMembers(email)
@@ -56,8 +67,34 @@ export const EditDLControllerComponent: FC<EditDLControllerComponentProps> = ({
 	}, []);
 
 	const onConfirm = useCallback(() => {
-		onSave();
-	}, [onSave]);
+		const { membersToAdd, membersToRemove } = getMembersPartition(
+			originalMembersRef.current,
+			members
+		);
+		distributionListAction(email, membersToAdd, membersToRemove)
+			.then(() => {
+				createSnackbar({
+					key: `dl-save-success-${email}`,
+					type: 'success',
+					label: t(
+						'snackbar.edit_distribution_list.save.success',
+						'"{{displayName}}" distribution list edits saved successfully',
+						{ displayName }
+					),
+					hideButton: true
+				});
+				onSave();
+			})
+			.catch((error) => {
+				createSnackbar({
+					key: `dl-save-error-${email}`,
+					type: 'error',
+					label: t('label.error_try_again', 'Something went wrong, please try again'),
+					hideButton: true
+				});
+				console.error(error);
+			});
+	}, [createSnackbar, displayName, email, members, onSave, t]);
 
 	const isDirty = useMemo(() => xor(members, originalMembersRef.current).length > 0, [members]);
 
