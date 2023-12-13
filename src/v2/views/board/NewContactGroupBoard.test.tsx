@@ -227,7 +227,23 @@ describe('New contact group board', () => {
 				expect(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus })).toBeDisabled();
 			});
 
-			it.todo('should disable the plus button when the user insert a duplicated chip only');
+			it('should disable the plus button when the user insert a duplicated chip only', async () => {
+				const validMail = faker.internet.email();
+				const { user } = setup(<NewContactGroupBoard />);
+				const contactInput = getContactInput();
+				await user.type(contactInput, validMail);
+				await act(async () => {
+					await user.type(contactInput, ',');
+				});
+				await act(async () => {
+					await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
+				});
+				await user.type(contactInput, validMail);
+				await act(async () => {
+					await user.type(contactInput, ',');
+				});
+				expect(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus })).toBeDisabled();
+			});
 
 			it('should enable the plus button when the user add a chip from the dropdown', async () => {
 				const email = faker.internet.email();
@@ -511,6 +527,34 @@ describe('New contact group board', () => {
 				});
 
 				expect(screen.queryByText(errorMessage)).not.toBeInTheDocument();
+			});
+
+			it('should render AlertCircle error icon inside chip when the chip is a duplicated email and remove the icon error when duplicated item is removed from the bottom list', async () => {
+				const validMail = faker.internet.email();
+				const { user } = setup(<NewContactGroupBoard />);
+				const contactInput = getContactInput();
+				await user.type(contactInput, validMail);
+				await act(async () => {
+					await user.type(contactInput, ',');
+				});
+				await act(async () => {
+					await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
+				});
+				await user.type(contactInput, validMail);
+				await act(async () => {
+					await user.type(contactInput, ',');
+				});
+
+				expect(
+					within(screen.getByTestId('default-chip')).getByTestId(ICON_REGEXP.duplicated)
+				).toBeVisible();
+				await act(async () => {
+					await user.click(
+						screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.trash, name: /remove/i })
+					);
+				});
+				const chip = screen.getByTestId('default-chip');
+				expect(within(chip).queryByTestId(ICON_REGEXP.duplicated)).not.toBeInTheDocument();
 			});
 
 			it('should render "Addresses already present" error message when there are only duplicated emails (at least 2) as chips and remove the error when a valid chip is added', async () => {

@@ -16,7 +16,7 @@ import {
 	Row
 } from '@zextras/carbonio-design-system';
 import { useBoardHooks } from '@zextras/carbonio-shell-ui';
-import { noop, size, some, uniqBy } from 'lodash';
+import { noop, remove, size, some, uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { MemberListItemComponent } from '../../../components/member-list-item';
@@ -31,7 +31,12 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 	const [titleValue, setTitleValue] = useState(initialTitle);
 
 	const [contactInputValue, setContactInputValue] = useState<
-		Array<{ email: string; error: boolean; duplicated: boolean }>
+		Array<{
+			email: string;
+			error: boolean;
+			duplicated: boolean;
+			actions: Array<{ color: string; icon: string; id: string; type: string }>;
+		}>
 	>([]);
 
 	const [memberListEmails, setMemberListEmails] = useState<string[]>([]);
@@ -77,13 +82,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 			} else {
 				valid += 1;
 			}
-			if (value.error && value.duplicated) {
-				throw new Error(
-					'Invalid case reached: should not have duplicated and invalid chips at the same time'
-				);
-			}
 		});
-
 		if (valid > 0) {
 			return undefined;
 		}
@@ -102,23 +101,46 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 		if (duplicated > 1 && invalid === 0) {
 			return 'Addresses already present';
 		}
-		// TODO add test
 		return undefined;
 	}, [contactInputValue]);
 
 	const contactInputOnChange = (
-		newContactInputValue: Array<{ email: string; error: boolean; duplicated?: boolean }>
+		newContactInputValue: Array<{
+			actions: Array<{ color: string; icon: string; id: string; type: string }>;
+			email: string;
+			error: boolean;
+			duplicated?: boolean;
+		}>
 	): void => {
 		// TODO item are filtered to be uniq, because the ContactInput filters out, dropdown duplicated, only visually
 		//  but provide that item inside onChange parameter
 		const uniqNewContactInputValue = uniqBy(newContactInputValue, 'email');
 
-		const mapped = uniqNewContactInputValue.map((value) => ({
-			...value,
-			duplicated: memberListEmails.includes(value.email)
-		}));
+		const uniqNewContactInputValueWithActions = uniqNewContactInputValue.map((value) => {
+			const duplicated = memberListEmails.includes(value.email);
 
-		setContactInputValue(mapped);
+			const actions = [
+				...value.actions,
+				...(duplicated && !value.duplicated
+					? [
+							{
+								id: 'duplicated',
+								color: 'error',
+								type: 'icon',
+								icon: 'AlertCircle'
+							}
+					  ]
+					: [])
+			];
+
+			return {
+				...value,
+				duplicated,
+				actions
+			};
+		});
+
+		setContactInputValue(uniqNewContactInputValueWithActions);
 	};
 
 	const noValidChip = useMemo(
@@ -131,10 +153,20 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 			const newMemberListEmails = memberListEmails.filter((value) => value !== email);
 			setMemberListEmails(newMemberListEmails);
 			setContactInputValue((prevState) =>
-				prevState.map((value) => ({
-					...value,
-					duplicated: newMemberListEmails.includes(value.email)
-				}))
+				prevState.map((value) => {
+					const duplicated = newMemberListEmails.includes(value.email);
+
+					const actions = [...value.actions];
+					if (!duplicated && value.duplicated) {
+						remove(actions, (action) => action.id === 'duplicated');
+					}
+
+					return {
+						...value,
+						duplicated,
+						actions
+					};
+				})
 			);
 		},
 		[memberListEmails]

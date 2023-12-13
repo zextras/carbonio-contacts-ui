@@ -7,6 +7,7 @@
         "send_msg": "Send e-mail",
         "share_folder": "Share folder"
     },
+    "attendee_unavailable": "Attendee not available at the selected time of the event",
     "board": {
         "input": {
             "title": {
