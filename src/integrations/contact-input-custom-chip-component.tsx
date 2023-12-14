@@ -13,6 +13,7 @@ import { debounce, DebouncedFuncLeading, filter, map, noop, uniqBy } from 'lodas
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
+import { CHIP_DISPLAY_NAME_VALUES } from '../constants/contact-input';
 import { ContactInputOnChange, ContactInputValue, CustomChipProps } from '../types/integrations';
 
 const StyledChip = styled(Chip)`
@@ -223,8 +224,15 @@ const useDistributionListFunctions = ({
 	return { items, onChevronClick };
 };
 
-const CustomComponent = (props: CustomChipProps): JSX.Element => {
-	const { id, label, email, isGroup, _onChange, contactInputValue } = props;
+const CustomComponent = ({
+	id,
+	label,
+	email,
+	isGroup,
+	_onChange,
+	contactInputValue,
+	...rest
+}: CustomChipProps): JSX.Element => {
 	const [t] = useTranslation();
 	const [open, setOpen] = useState(false);
 
@@ -250,7 +258,7 @@ const CustomComponent = (props: CustomChipProps): JSX.Element => {
 		>
 			<div>
 				<StyledChip
-					{...props}
+					{...rest}
 					id={id}
 					label={label}
 					background={'gray3'}
@@ -277,11 +285,25 @@ const CustomComponent = (props: CustomChipProps): JSX.Element => {
 	);
 };
 
-export const ContactInputCustomChipComponent = (props: CustomChipProps): ReactElement => {
-	const { email, isGroup } = props;
+export const ContactInputCustomChipComponent = ({
+	email,
+	isGroup,
+	label,
+	chipDisplayName = CHIP_DISPLAY_NAME_VALUES.LABEL,
+	...rest
+}: CustomChipProps): ReactElement => {
+	const _label = useMemo(() => {
+		if (label && chipDisplayName === CHIP_DISPLAY_NAME_VALUES.LABEL) {
+			return label;
+		}
+		if (email && chipDisplayName === CHIP_DISPLAY_NAME_VALUES.EMAIL) {
+			return email;
+		}
+		return label ?? email ?? '';
+	}, [chipDisplayName, email, label]);
 
 	if (!isDistributionList({ email, isGroup })) {
-		return <Chip {...props} data-testid={'default-chip'} />;
+		return <Chip {...rest} label={_label} data-testid={'default-chip'} />;
 	}
-	return <CustomComponent {...props} />;
+	return <CustomComponent {...rest} label={_label} email={email} isGroup={isGroup} />;
 };

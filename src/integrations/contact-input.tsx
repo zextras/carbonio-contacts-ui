@@ -37,10 +37,17 @@ import { useTranslation } from 'react-i18next';
 import styled, { DefaultTheme } from 'styled-components';
 
 import { ContactInputCustomChipComponent } from './contact-input-custom-chip-component';
+import { CHIP_DISPLAY_NAME_VALUES } from '../constants/contact-input';
+import { parseFullAutocompleteXML } from '../helpers/autocomplete';
 import { useAppSelector } from '../hooks/redux';
 import { StoreProvider } from '../store/redux';
 import { Contact, Group } from '../types/contact';
-import { ContactInputOnChange, ContactInputValue, CustomChipProps } from '../types/integrations';
+import {
+	ContactInputChipDisplayName,
+	ContactInputOnChange,
+	ContactInputValue,
+	CustomChipProps
+} from '../types/integrations';
 import { ContactsSlice, State } from '../types/store';
 
 const emailRegex = /[^\s@]+@[^\s@]+\.[^\s@]+/;
@@ -140,7 +147,9 @@ type ContactInput = {
 	defaultValue: Array<Contact>;
 	placeholder: string;
 	background?: keyof DefaultTheme['palette'];
+	chipDisplayName?: ContactInputChipDisplayName;
 	dragAndDropEnabled?: boolean;
+	extraAccountsIds: Array<string>;
 } & Pick<ChipInputProps, 'icon' | 'iconAction' | 'iconDisabled' | 'description' | 'hasError'>;
 
 const ContactInput: FC<ContactInput> = ({
@@ -149,6 +158,8 @@ const ContactInput: FC<ContactInput> = ({
 	placeholder,
 	background = 'gray5',
 	dragAndDropEnabled = false,
+	chipDisplayName = CHIP_DISPLAY_NAME_VALUES.LABEL,
+	extraAccountsIds,
 	...rest
 }) => {
 	const props = omit(rest, 'ChipComponent');
@@ -294,7 +305,7 @@ const ContactInput: FC<ContactInput> = ({
 						customComponent: <Loader />
 					}
 				]);
-				new Promise((resolve, reject) => {
+				new Promise((resolve, promiseReject) => {
 					try {
 						resolve(
 							filter(allContacts, (c) =>
@@ -304,24 +315,30 @@ const ContactInput: FC<ContactInput> = ({
 							)
 						);
 					} catch (err: any) {
-						reject(new Error(err));
+						promiseReject(new Error(err));
 					}
 				})
 					.then((localResults: any) => {
 						if (localResults.length > 0) {
 							setOptions(localResults);
 						}
-						soapFetch('AutoComplete', {
-							_jsns: 'urn:zimbraMail',
-							includeGal: 1,
-							name: e.textContent
+						soapFetch('FullAutocomplete', {
+							...(extraAccountsIds?.length > 0 && {
+								extraAccountId: extraAccountsIds.map((id) => ({ _content: id }))
+							}),
+							AutoCompleteRequest: {
+								name: e.textContent,
+								includeGal: 1
+							},
+							_jsns: 'urn:zimbraMail'
 						})
-							.then((autoCompleteResult: any) =>
-								map(autoCompleteResult.match, (m) => ({
+							.then((autoCompleteResult: any) => {
+								const results = parseFullAutocompleteXML(autoCompleteResult);
+								return map(results.match, (m) => ({
 									...m,
 									email: isContactGroup(m) ? undefined : emailRegex.exec(m.email)?.[0]?.slice(1, -1)
-								}))
-							)
+								}));
+							})
 							.then((remoteResults: any) => {
 								const normRemoteResults = reduce(
 									remoteResults,
@@ -387,7 +404,7 @@ const ContactInput: FC<ContactInput> = ({
 					});
 			} else setOptions([]);
 		},
-		[allContacts, defaults, editChip, isValidEmail, onChange, options, t]
+		[allContacts, defaults, editChip, extraAccountsIds, isValidEmail, onChange, options, t]
 	);
 
 	useEffect(() => {
@@ -475,11 +492,12 @@ const ContactInput: FC<ContactInput> = ({
 		(_props: CustomChipProps): React.JSX.Element => (
 			<ContactInputCustomChipComponent
 				{..._props}
+				chipDisplayName={chipDisplayName}
 				_onChange={onChange}
 				contactInputValue={contactInputValue}
 			/>
 		),
-		[contactInputValue, onChange]
+		[chipDisplayName, contactInputValue, onChange]
 	);
 
 	const onDragEnter = useCallback((ev) => {

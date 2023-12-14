@@ -18,7 +18,7 @@ import {
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
-import { CONTACTS_ROUTE, CONTACTS_APP_ID, NEW_CONTACT_GROUP_BOARD_ID } from './constants';
+import { CONTACTS_APP_ID, CONTACTS_ROUTE, NEW_CONTACT_GROUP_BOARD_ID } from './constants/app';
 import ContactInput from './integrations/contact-input';
 import { StoreProvider } from './store/redux';
 import SidebarItems from './views/secondary-bar/sidebar';
