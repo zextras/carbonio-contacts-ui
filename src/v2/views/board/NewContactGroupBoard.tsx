@@ -20,6 +20,7 @@ import { noop, remove, size, some, uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { MemberListItemComponent } from '../../../components/member-list-item';
+import { CHIP_DISPLAY_NAME_VALUES } from '../../../constants/contact-input';
 import ContactInput from '../../../integrations/contact-input';
 import { CONTACT_GROUP_TITLE_MAX_LENGTH } from '../../constants';
 
@@ -280,6 +281,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 						iconDisabled={noValidChip}
 						description={contactInputDescription}
 						hasError={contactInputValue.length > 0 && noValidChip}
+						chipDisplayName={CHIP_DISPLAY_NAME_VALUES.EMAIL}
 					/>
 				</Container>
 				<ListV2 data-testid={'member-list'}>{listItems}</ListV2>
