@@ -278,7 +278,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 						iconAction={contactInputIconAction}
 						iconDisabled={noValidChip}
 						description={contactInputDescription}
-						hasError={noValidChip}
+						hasError={contactInputValue.length > 0 && noValidChip}
 					/>
 				</Container>
 				<ListV2 data-testid={'member-list'}>{listItems}</ListV2>

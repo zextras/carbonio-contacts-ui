@@ -30,6 +30,10 @@ describe('New contact group board', () => {
 			expect(screen.getByRole('textbox', { name: 'Group title*' })).toBeVisible();
 			expect(screen.getByText('Addresses list')).toBeVisible();
 			expect(getContactInput()).toBeVisible();
+			expect(screen.getByText(`Type an address, click ‘+’ to add to the group`)).toHaveStyleRule(
+				'color',
+				PALETTE.secondary.regular
+			);
 		});
 
 		it('should render discard and save buttons', () => {
