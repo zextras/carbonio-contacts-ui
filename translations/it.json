@@ -121,7 +121,7 @@
         "action": {
             "empty": {
                 "trash": "Svuota cestino",
-                "folder": "Rubrica vuota"
+                "folder": "Pulisci cartella"
             },
             "edit": "Modifica rubrica",
             "delete_permanently": "Elimina rubrica definitivamente",
