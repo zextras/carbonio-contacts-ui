@@ -9,6 +9,7 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import 'jest-styled-components';
 import { act, within } from '@testing-library/react';
+import * as shell from '@zextras/carbonio-shell-ui';
 import { first, last } from 'lodash';
 import { rest } from 'msw';
 
@@ -18,6 +19,18 @@ import { screen, setup } from '../../../utils/testUtils';
 import { CONTACT_GROUP_TITLE_MAX_LENGTH } from '../../constants';
 import { ICON_REGEXP, PALETTE, SELECTORS } from '../../constants/tests';
 
+function spyUseBoardHooks(updateBoardFn?: jest.Mock): void {
+	jest.spyOn(shell, 'useBoardHooks').mockReturnValue({
+		updateBoard: updateBoardFn ?? jest.fn(),
+		setCurrentBoard: jest.fn(),
+		getBoardContext: jest.fn(),
+		getBoard: jest.fn(),
+		closeBoard: jest.fn()
+	});
+}
+beforeAll(() => {
+	spyUseBoardHooks();
+});
 describe('New contact group board', () => {
 	function getContactInput(): HTMLElement {
 		return screen.getByRole('textbox', {
@@ -128,7 +141,17 @@ describe('New contact group board', () => {
 			expect(within(memberList).queryByText(newEmail)).not.toBeInTheDocument();
 		});
 
-		it.todo('should reset board title');
+		it('should reset board title', async () => {
+			const updateBoard = jest.fn();
+			spyUseBoardHooks(updateBoard);
+			const { user } = setup(<NewContactGroupBoard />);
+
+			const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
+			await user.clear(titleInput);
+			await user.click(screen.getByRole('button', { name: /discard/i }));
+			expect(updateBoard).toBeCalledTimes(2);
+			expect(updateBoard).toHaveBeenLastCalledWith({ title: 'New Group' });
+		});
 	});
 
 	describe('Title', () => {
@@ -141,7 +164,17 @@ describe('New contact group board', () => {
 			expect(screen.getByText(newTitle)).toBeVisible();
 		});
 
-		it.todo('should update board title');
+		it('should update board title', async () => {
+			const updateBoard = jest.fn();
+			spyUseBoardHooks(updateBoard);
+			const newTitle = faker.string.alpha(10);
+			const { user } = setup(<NewContactGroupBoard />);
+
+			const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
+			await user.clear(titleInput);
+			await user.type(titleInput, newTitle);
+			expect(updateBoard).toHaveBeenLastCalledWith({ title: newTitle });
+		});
 
 		describe('Error message', () => {
 			it('should show the error message in red when the title input length is 0', async () => {

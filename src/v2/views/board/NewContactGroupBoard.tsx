@@ -57,7 +57,8 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 		setTitleValue(initialTitle);
 		setContactInputValue([]);
 		setMemberListEmails([]);
-	}, []);
+		updateBoard({ title: initialTitle });
+	}, [updateBoard]);
 
 	const titleDescription = useMemo(() => {
 		if (titleValue.trim().length === 0) {
