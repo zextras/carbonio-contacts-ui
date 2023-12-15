@@ -13,8 +13,8 @@ import {
 	InputProps,
 	Avatar,
 	ListV2,
-	Row,
-	SnackbarManagerContext
+	SnackbarManagerContext,
+	Row
 } from '@zextras/carbonio-design-system';
 import { useBoardHooks } from '@zextras/carbonio-shell-ui';
 import { remove, size, some, uniqBy } from 'lodash';
@@ -256,6 +256,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 				orientation={'horizontal'}
 				mainAlignment={'flex-start'}
 				gap={'1rem'}
+				padding={'1rem 0'}
 			>
 				<Avatar size="large" label={titleValue} icon="PeopleOutline" />
 				<Container height={'fit'} crossAlignment={'flex-start'}>
@@ -267,7 +268,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 				background={'gray6'}
 				mainAlignment={'flex-start'}
 				crossAlignment={'flex-start'}
-				padding={{ horizontal: 'small', top: 'small' }}
+				padding={{ horizontal: 'large', top: 'large' }}
 				gap={'0.5rem'}
 			>
 				<Input
@@ -281,15 +282,10 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 						titleValue.trim().length === 0 || titleValue.length > CONTACT_GROUP_TITLE_MAX_LENGTH
 					}
 				/>
-				<Row>
-					<Text>{'Addresses list'}</Text>
+				<Row padding={{ top: '0.5rem' }}>
+					<Text color={'secondary'}>{'Addresses list'}</Text>
 				</Row>
-				<Container
-					orientation={'horizontal'}
-					height={'fit'}
-					gap={'0.5rem'}
-					crossAlignment={'flex-start'}
-				>
+				<Container orientation={'horizontal'} height={'fit'} crossAlignment={'flex-start'}>
 					<ContactInput
 						data-testid={'contact-group-contact-input'}
 						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
