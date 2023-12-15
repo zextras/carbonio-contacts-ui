@@ -4,8 +4,10 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React from 'react';
+
 // import { screen } from '@testing-library/react';
 import { testUtils } from '@zextras/carbonio-shell-ui';
+
 import ContactPreviewHeader from './contact-preview-header';
 
 describe.skip('Contact Preview Header', () => {
@@ -31,7 +33,7 @@ describe.skip('Contact Preview Header', () => {
 			innerWidth: 1024,
 			innerHeight: 768
 		});
-		// const displayName = `${faker.name.firstName()} ${faker.name.lastName()}`;
+		// const displayName = `${faker.person.firstName()} ${faker.person.lastName()}`;
 		const ctxt = {};
 		testUtils.render(
 			<ContactPreviewHeader
@@ -53,7 +55,7 @@ describe.skip('Contact Preview Header', () => {
 			innerWidth: 768,
 			innerHeight: 1024
 		});
-		// const displayName = `${faker.name.firstName()} ${faker.name.lastName()}`;
+		// const displayName = `${faker.person.firstName()} ${faker.person.lastName()}`;
 		const ctxt = {};
 		testUtils.render(
 			<ContactPreviewHeader

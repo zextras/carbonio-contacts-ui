@@ -41,6 +41,7 @@ describe('useActionEditDL', () => {
 		});
 
 		expect(await screen.findByText(dlEmail)).toBeVisible();
+		expect(screen.getByText(`Edit "${dlDisplayName}"`)).toBeVisible();
 		expect(screen.getAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM)).toHaveLength(members.length);
 	});
 });

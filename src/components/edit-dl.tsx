@@ -10,6 +10,7 @@ import { reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { MemberListItemComponent } from './member-list-item';
+import { CHIP_DISPLAY_NAME_VALUES } from '../constants/contact-input';
 import { ContactInput } from '../legacy/integrations/contact-input';
 
 export type EditDLComponentProps = {
@@ -56,10 +57,81 @@ export const EditDLComponent: FC<EditDLComponentProps> = ({
 		[members, onRemoveMember, searchValue]
 	);
 
-	const isAddMembersAllowed = useMemo(
-		() => contactInputValue.some((chipValue) => !chipValue.error),
-		[contactInputValue]
+	const isMemberDuplicated = useCallback(
+		(member: string): boolean => members.includes(member),
+		[members]
 	);
+
+	const { validEmails, invalidEmailContacts, duplicatedContacts } = useMemo(
+		() =>
+			contactInputValue.reduce<{
+				validEmails: Array<string>;
+				invalidEmailContacts: ContactInputValue;
+				duplicatedContacts: ContactInputValue;
+			}>(
+				(result, contactInputItem) => {
+					if (contactInputItem.error) {
+						result.invalidEmailContacts.push(contactInputItem);
+					} else if (isMemberDuplicated(contactInputItem.email)) {
+						result.duplicatedContacts.push(contactInputItem);
+					} else {
+						result.validEmails.push(contactInputItem.email);
+					}
+
+					return result;
+				},
+				{
+					validEmails: [],
+					invalidEmailContacts: [],
+					duplicatedContacts: []
+				}
+			),
+		[contactInputValue, isMemberDuplicated]
+	);
+
+	const contactInputErrorDescription = useMemo(() => {
+		const valid = validEmails.length;
+		const duplicated = duplicatedContacts.length;
+		const invalid = invalidEmailContacts.length;
+
+		if (valid > 0) {
+			return undefined;
+		}
+
+		if (invalid > 0 && duplicated > 0) {
+			return t(
+				'edit_dl_component.error.invalid_and_duplicated_addresses',
+				'Invalid and already present addresses'
+			);
+		}
+
+		if (invalid >= 1 && duplicated === 0) {
+			return t('edit_dl_component.error.invalid_address', {
+				count: invalid,
+				defaultValue: 'Invalid address',
+				defaultValue_plural: 'Invalid addresses'
+			});
+		}
+
+		if (invalid === 0 && duplicated >= 1) {
+			return t('edit_dl_component.error.duplicated_address', {
+				count: duplicated,
+				defaultValue: 'Address already present',
+				defaultValue_plural: 'Addresses already present'
+			});
+		}
+
+		return undefined;
+	}, [duplicatedContacts.length, invalidEmailContacts.length, t, validEmails.length]);
+
+	const isOnlyInvalidContacts = useMemo(
+		(): boolean =>
+			validEmails.length === 0 &&
+			(invalidEmailContacts.length > 0 || duplicatedContacts.length > 0),
+		[duplicatedContacts.length, invalidEmailContacts.length, validEmails.length]
+	);
+
+	const isAddMembersAllowed = useMemo(() => validEmails.length > 0, [validEmails]);
 
 	const onContactInputChange = useCallback((value: ContactInputValue) => {
 		setContactInputValue(value);
@@ -70,20 +142,11 @@ export const EditDLComponent: FC<EditDLComponentProps> = ({
 	}, []);
 
 	const onAddRawMembers = useCallback(() => {
-		const [validEmails, invalidContacts] = contactInputValue.reduce<[string[], ContactInputValue]>(
-			(result, contactInputItem) => {
-				!contactInputItem.error
-					? result[0].push(contactInputItem.email)
-					: result[1].push(contactInputItem);
-				return result;
-			},
-			[[], []]
-		);
 		if (validEmails.length > 0) {
 			onAddMembers(validEmails);
-			setContactInputValue(invalidContacts);
+			setContactInputValue([...invalidEmailContacts, ...duplicatedContacts]);
 		}
-	}, [contactInputValue, onAddMembers]);
+	}, [duplicatedContacts, invalidEmailContacts, onAddMembers, validEmails]);
 
 	return (
 		<Container gap={'0.5rem'}>
@@ -115,6 +178,9 @@ export const EditDLComponent: FC<EditDLComponentProps> = ({
 				// @ts-ignore
 				onChange={onContactInputChange}
 				iconDisabled={!isAddMembersAllowed}
+				chipDisplayName={CHIP_DISPLAY_NAME_VALUES.EMAIL}
+				description={contactInputErrorDescription}
+				hasError={isOnlyInvalidContacts}
 			/>
 			<Input
 				data-testid={'dl-members-search-input'}

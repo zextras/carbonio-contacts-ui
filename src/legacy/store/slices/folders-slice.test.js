@@ -6,9 +6,10 @@
 import { configureStore, nanoid } from '@reduxjs/toolkit';
 // import faker from 'faker';
 import { filter, head } from 'lodash';
+
 import { createFolder } from '../actions/create-folder';
-import reducers from '../reducers/reducers';
 import { folderAction } from '../actions/folder-action';
+import reducers from '../reducers/reducers';
 
 describe.skip('Folders Slice', () => {
 	test('Create new folder', async () => {
@@ -39,7 +40,6 @@ describe.skip('Folders Slice', () => {
 
 		const folder = {
 			parent: '7',
-			// name: faker.name.firstName(),
 			view: 'contact',
 			absParent: '1'
 		};

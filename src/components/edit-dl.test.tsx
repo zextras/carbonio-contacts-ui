@@ -8,11 +8,15 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import { act, waitFor } from '@testing-library/react';
 import { times } from 'lodash';
+import { rest } from 'msw';
 
 import { EditDLComponent, EditDLComponentProps } from './edit-dl';
+import { getSetupServer } from '../carbonio-ui-commons/test/jest-setup';
 import { setupTest, screen, within } from '../carbonio-ui-commons/test/test-setup';
-import { TESTID_SELECTORS } from '../constants/tests';
+import { NAMESPACES } from '../constants/api';
+import { PALETTE, TESTID_SELECTORS } from '../constants/tests';
 import { generateStore } from '../legacy/tests/generators/store';
+import 'jest-styled-components';
 
 const buildProps = ({
 	email = '',
@@ -27,6 +31,34 @@ const buildProps = ({
 	onRemoveMember,
 	onAddMembers
 });
+
+const getContactInput = (): {
+	container: HTMLElement;
+	textbox: HTMLElement;
+	addMembersIcon: HTMLElement;
+} => {
+	const contactInput = screen.getByTestId(TESTID_SELECTORS.CONTACT_INPUT);
+	const contactInputTextBox = within(contactInput).getByRole('textbox', {
+		name: /Insert an address to add a new element/i
+	});
+	const contactInputIcon = within(contactInput).getByRoleWithIcon('button', {
+		icon: TESTID_SELECTORS.ICONS.ADD_MEMBERS
+	});
+
+	return {
+		container: contactInput,
+		textbox: contactInputTextBox,
+		addMembersIcon: contactInputIcon
+	};
+};
+
+const createAutocompleteResponse = (
+	firstName: string,
+	lastName: string,
+	email: string
+): string => `<FullAutocompleteResponse canBeCached="0" xmlns="${NAMESPACES.mail}">
+		<match last="${lastName}" fileas="8:${firstName} ${lastName}" ranking="66" type="gal" isGroup="0" email="&quot;${firstName} ${lastName}&quot; &lt;${email}>" first="${firstName}" full="${firstName} ${lastName}"/>' +
+		</FullAutocompleteResponse>`;
 
 describe('Edit DL Component', () => {
 	it('should show email address', () => {
@@ -48,15 +80,10 @@ describe('Edit DL Component', () => {
 
 	it('should show the input to add new elements', () => {
 		const store = generateStore();
-		const placeholder = 'Insert an address to add a new element';
 		setupTest(<EditDLComponent {...buildProps()} />, { store });
-		const contactInput = screen.getByTestId(TESTID_SELECTORS.CONTACT_INPUT);
-		const contactInputTextBox = within(contactInput).getByRole('textbox', { name: placeholder });
-		expect(contactInputTextBox).toBeVisible();
-		const contactInputIcon = within(contactInput).getByRoleWithIcon('button', {
-			icon: TESTID_SELECTORS.ICONS.ADD_MEMBERS
-		});
-		expect(contactInputIcon).toBeVisible();
+		const contactInput = getContactInput();
+		expect(contactInput.textbox).toBeVisible();
+		expect(contactInput.addMembersIcon).toBeVisible();
 	});
 
 	it('should show the input to search an address', () => {
@@ -81,22 +108,15 @@ describe('Edit DL Component', () => {
 		it('add action should be disabled if the input is empty', () => {
 			const store = generateStore();
 			setupTest(<EditDLComponent {...buildProps()} />, { store });
-			const contactInput = screen.getByTestId(TESTID_SELECTORS.CONTACT_INPUT);
-			const contactInputIcon = within(contactInput).getByRoleWithIcon('button', {
-				icon: TESTID_SELECTORS.ICONS.ADD_MEMBERS
-			});
-			expect(contactInputIcon).toBeDisabled();
+			expect(getContactInput().addMembersIcon).toBeDisabled();
 		});
 
 		it('add action should be disabled if all values are invalid', async () => {
 			const store = generateStore();
 			const { user } = setupTest(<EditDLComponent {...buildProps()} />, { store });
-			const contactInputTextBox = screen.getByRole('textbox', {
-				name: /Insert an address to add a new element/i
-			});
 			const invalidValues = ['bad', 'worst'];
 			await act(async () => {
-				await user.type(contactInputTextBox, invalidValues.join(','));
+				await user.type(getContactInput().textbox, invalidValues.join(','));
 			});
 
 			expect(
@@ -104,15 +124,38 @@ describe('Edit DL Component', () => {
 			).toBeDisabled();
 		});
 
+		it('add action should be disabled if all values are duplicated', async () => {
+			const store = generateStore();
+			const members = ['1@domain.com', '2@domain.com'];
+			const { user } = setupTest(<EditDLComponent {...buildProps({ members })} />, { store });
+			const contactInput = getContactInput();
+			const values = ['1@domain.com', '2@domain.com'];
+			await act(async () => {
+				await user.type(contactInput.textbox, values.join(','));
+			});
+
+			expect(contactInput.addMembersIcon).toBeDisabled();
+		});
+
+		it('add action should be disabled if all values are duplicated or invalid', async () => {
+			const store = generateStore();
+			const members = ['1@domain.com', '2@domain.com'];
+			const { user } = setupTest(<EditDLComponent {...buildProps({ members })} />, { store });
+			const contactInput = getContactInput();
+			const values = ['1@domain.com', '2@domain.com', '3453453', 'aaaaaaabbbbbb'];
+			await act(async () => {
+				await user.type(contactInput.textbox, values.join(','));
+			});
+
+			expect(contactInput.addMembersIcon).toBeDisabled();
+		});
+
 		it('add action should be enabled if the input contains at least a valid value', async () => {
 			const store = generateStore();
 			const { user } = setupTest(<EditDLComponent {...buildProps()} />, { store });
-			const contactInputTextBox = screen.getByRole('textbox', {
-				name: /Insert an address to add a new element/i
-			});
 			const values = ['bad', 'correct.email@domain.com', 'worst'];
 			await act(async () => {
-				await user.type(contactInputTextBox, values.join(','));
+				await user.type(getContactInput().textbox, values.join(','));
 			});
 
 			expect(
@@ -120,40 +163,66 @@ describe('Edit DL Component', () => {
 			).toBeEnabled();
 		});
 
-		it.todo('chip should show email if contact is added from options');
+		it('chip should show email if contact is added from options', async () => {
+			const firstName = faker.person.firstName();
+			const lastName = faker.person.lastName();
+			const email = faker.internet.email({ firstName, lastName });
+
+			getSetupServer().use(
+				rest.post('/service/soap/FullAutocompleteRequest', async (req, res, ctx) =>
+					res(
+						ctx.json({
+							Body: {
+								FullAutocompleteResponse: createAutocompleteResponse(firstName, lastName, email)
+							}
+						})
+					)
+				)
+			);
+
+			const store = generateStore();
+			const { user } = setupTest(<EditDLComponent {...buildProps()} />, { store });
+
+			const contactInput = getContactInput();
+
+			await user.type(contactInput.textbox, email.substring(0, 3));
+			act(() => {
+				// run timers of dropdown
+				jest.runOnlyPendingTimers();
+			});
+			await screen.findByTestId(TESTID_SELECTORS.DROPDOWN_LIST);
+			const dropdownOption = await screen.findByText(email);
+			expect(dropdownOption).toBeVisible();
+			await act(async () => {
+				await user.click(dropdownOption);
+			});
+
+			expect(await within(contactInput.container).findByText(email)).toBeVisible();
+		});
 
 		it('chip should show email if contact is added manually by typing', async () => {
 			const store = generateStore();
 			const { user } = setupTest(<EditDLComponent {...buildProps()} />, { store });
-			const contactInput = screen.getByTestId(TESTID_SELECTORS.CONTACT_INPUT);
-			const contactInputTextBox = within(contactInput).getByRole('textbox', {
-				name: /Insert an address to add a new element/i
-			});
+			const contactInput = getContactInput();
 			const email = faker.internet.email();
 			await act(async () => {
-				await user.type(contactInputTextBox, `${email},`);
+				await user.type(contactInput.textbox, `${email},`);
 			});
 
-			expect(within(contactInput).getByText(email)).toBeVisible();
-			expect(contactInputTextBox).not.toHaveDisplayValue(email);
+			expect(within(contactInput.container).getByText(email)).toBeVisible();
+			expect(contactInput.textbox).not.toHaveDisplayValue(email);
 		});
 
 		it('should call the onAddMember callback when the user clicks the add action', async () => {
 			const store = generateStore();
 			const onAddMembers = jest.fn();
 			const { user } = setupTest(<EditDLComponent {...buildProps({ onAddMembers })} />, { store });
-			const contactInput = screen.getByTestId(TESTID_SELECTORS.CONTACT_INPUT);
-			const contactInputTextBox = within(contactInput).getByRole('textbox', {
-				name: /Insert an address to add a new element/i
-			});
-			const addMembersButton = within(contactInput).getByRoleWithIcon('button', {
-				icon: TESTID_SELECTORS.ICONS.ADD_MEMBERS
-			});
+			const contactInput = getContactInput();
 			await act(async () => {
-				await user.type(contactInputTextBox, `${faker.internet.email()},`);
+				await user.type(contactInput.textbox, `${faker.internet.email()},`);
 			});
 
-			await user.click(addMembersButton);
+			await user.click(contactInput.addMembersIcon);
 			expect(onAddMembers).toHaveBeenCalled();
 		});
 
@@ -161,19 +230,13 @@ describe('Edit DL Component', () => {
 			const store = generateStore();
 			const onAddMembers = jest.fn();
 			const { user } = setupTest(<EditDLComponent {...buildProps({ onAddMembers })} />, { store });
-			const contactInput = screen.getByTestId(TESTID_SELECTORS.CONTACT_INPUT);
-			const contactInputTextBox = within(contactInput).getByRole('textbox', {
-				name: /Insert an address to add a new element/i
-			});
-			const addMembersButton = within(contactInput).getByRoleWithIcon('button', {
-				icon: TESTID_SELECTORS.ICONS.ADD_MEMBERS
-			});
+			const contactInput = getContactInput();
 			const values = ['bad', 'correct.email@domain.com', 'worst', 'supercorrect.email@domain.net'];
 			await act(async () => {
-				await user.type(contactInputTextBox, values.join(','));
+				await user.type(contactInput.textbox, values.join(','));
 			});
 
-			await user.click(addMembersButton);
+			await user.click(contactInput.addMembersIcon);
 			expect(onAddMembers).toHaveBeenCalledWith([
 				'correct.email@domain.com',
 				'supercorrect.email@domain.net'
@@ -184,19 +247,13 @@ describe('Edit DL Component', () => {
 			const store = generateStore();
 			const onAddMembers = jest.fn();
 			const { user } = setupTest(<EditDLComponent {...buildProps({ onAddMembers })} />, { store });
-			const contactInput = screen.getByTestId(TESTID_SELECTORS.CONTACT_INPUT);
-			const contactInputTextBox = within(contactInput).getByRole('textbox', {
-				name: /Insert an address to add a new element/i
-			});
-			const addMembersButton = within(contactInput).getByRoleWithIcon('button', {
-				icon: TESTID_SELECTORS.ICONS.ADD_MEMBERS
-			});
+			const contactInput = getContactInput();
 			const values = ['bad', 'correct.email@domain.com', 'worst', 'supercorrect.email@domain.net'];
 			await act(async () => {
-				await user.type(contactInputTextBox, values.join(','));
+				await user.type(contactInput.textbox, values.join(','));
 			});
 
-			await user.click(addMembersButton);
+			await user.click(contactInput.addMembersIcon);
 			await waitFor(() => expect(onAddMembers).toHaveBeenCalled());
 			await waitFor(() => expect(screen.queryByText(values[1])).not.toBeInTheDocument());
 			expect(screen.getByText(values[0])).toBeVisible();
@@ -205,7 +262,159 @@ describe('Edit DL Component', () => {
 			expect(screen.queryByText(values[3])).not.toBeInTheDocument();
 		});
 
-		it.todo('should show a description of the error when all values are invalid');
+		it('should leave duplicated values inside the input when the user clicks on add', async () => {
+			const store = generateStore();
+			const members = ['duplicated.email@domain.com'];
+			const { user } = setupTest(<EditDLComponent {...buildProps({ members })} />, { store });
+			const contactInput = getContactInput();
+			const values = ['duplicated.email@domain.com', 'correct.email@domain.net'];
+			await act(async () => {
+				await user.type(contactInput.textbox, values.join(','));
+			});
+
+			await act(async () => {
+				await user.click(contactInput.addMembersIcon);
+			});
+			await waitFor(() =>
+				expect(within(contactInput.container).queryByText(values[1])).not.toBeInTheDocument()
+			);
+			expect(within(contactInput.container).getByText(values[0])).toBeVisible();
+		});
+
+		describe('Error message contact input', () => {
+			it('should render "Invalid address" error message when there is only an invalid email as a chip and remove the error when a valid chip is added', async () => {
+				const errorMessage = 'Invalid address';
+				const validMail = faker.internet.email();
+				const invalidMail = faker.string.alpha(10);
+				const { user } = setupTest(<EditDLComponent {...buildProps()} />, {
+					store: generateStore()
+				});
+				const contactInput = getContactInput();
+				await act(async () => {
+					await user.type(contactInput.textbox, `${invalidMail},`);
+				});
+				expect(screen.getByText(errorMessage)).toBeVisible();
+				expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
+				await act(async () => {
+					await user.type(contactInput.textbox, `${validMail},`);
+				});
+				expect(screen.queryByText(errorMessage)).not.toBeInTheDocument();
+			});
+
+			// it('should render "Invalid addresses" error message when there are only invalid emails (at least 2) as chips and remove the error when a valid chip is added', async () => {
+			// 	const errorMessage = 'Invalid addresses';
+			// 	const validMail = faker.internet.email();
+			// 	const invalidMail1 = faker.string.alpha(10);
+			// 	const invalidMail2 = faker.string.alpha(10);
+			// 	const { user } = setupTest(<EditDLComponent {...buildProps()} />, {
+			// 		store: generateStore()
+			// 	});
+			// 	const contactInput = getContactInput();
+			// 	await act(async () => {
+			// 		await user.type(contactInput.textbox, `${invalidMail1},${invalidMail2},`);
+			// 	});
+			// 	// screen.logTestingPlaygroundURL();
+			// 	expect(screen.getByText(errorMessage)).toBeVisible();
+			// 	expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
+			// 	await act(async () => {
+			// 		await user.type(contactInput.textbox, `${validMail},`);
+			// 	});
+			// 	expect(screen.queryByText(errorMessage)).not.toBeInTheDocument();
+			// });
+
+			it('should render "Address already present" error message when there is only a duplicated email as a chip and remove the error when a valid chip is added', async () => {
+				const errorMessage = 'Address already present';
+				const validMail = faker.internet.email();
+				const members = [validMail];
+				const { user } = setupTest(<EditDLComponent {...buildProps({ members })} />, {
+					store: generateStore()
+				});
+				const contactInput = getContactInput();
+				await act(async () => {
+					await user.type(contactInput.textbox, `${validMail},`);
+				});
+
+				expect(screen.getByText(errorMessage)).toBeVisible();
+				expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
+				await act(async () => {
+					await user.type(contactInput.textbox, `${faker.internet.email()},`);
+				});
+
+				expect(screen.queryByText(errorMessage)).not.toBeInTheDocument();
+			});
+
+			// it('should render "Addresses already present" error message when there is only duplicated email (>= 2) as chips and remove the error when a valid chip is added', async () => {
+			// 	const errorMessage = 'Addresses already present';
+			// 	const validMail = faker.internet.email();
+			// 	const members = [validMail];
+			// 	const { user } = setupTest(<EditDLComponent {...buildProps({ members })} />, {
+			// 		store: generateStore()
+			// 	});
+			// 	const contactInput = getContactInput();
+			// 	await act(async () => {
+			// 		await user.type(contactInput.textbox, `${validMail},${validMail},`);
+			// 	});
+			//
+			// 	expect(screen.getByText(errorMessage)).toBeVisible();
+			// 	expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
+			// 	await act(async () => {
+			// 		await user.type(contactInput.textbox, `${faker.internet.email()},`);
+			// 	});
+			//
+			// 	expect(screen.queryByText(errorMessage)).not.toBeInTheDocument();
+			// });
+
+			it('should render "Invalid and already present addresses" error message when there are at least 1 error chip per type and remove the error when a valid chip is added', async () => {
+				const errorMessage = 'Invalid and already present addresses';
+				const validMail = faker.internet.email();
+				const invalidMail = faker.string.alpha(10);
+				const members = [validMail];
+				const { user } = setupTest(<EditDLComponent {...buildProps({ members })} />, {
+					store: generateStore()
+				});
+				const contactInput = getContactInput();
+				await act(async () => {
+					await user.type(contactInput.textbox, `${validMail},${invalidMail},`);
+				});
+
+				expect(screen.getByText(errorMessage)).toBeVisible();
+				expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
+				await act(async () => {
+					await user.type(contactInput.textbox, `${faker.internet.email()},`);
+				});
+				expect(screen.queryByText(errorMessage)).not.toBeInTheDocument();
+			});
+
+			//
+			// 		it('should render AlertCircle error icon inside chip when the chip is a duplicated email and remove the icon error when duplicated item is removed from the bottom list', async () => {
+			// 			const validMail = faker.internet.email();
+			// 			const { user } = setup(<NewContactGroupBoard />);
+			// 			const contactInput = getContactInput();
+			// 			await user.type(contactInput, validMail);
+			// 			await act(async () => {
+			// 				await user.type(contactInput, ',');
+			// 			});
+			// 			await act(async () => {
+			// 				await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
+			// 			});
+			// 			await user.type(contactInput, validMail);
+			// 			await act(async () => {
+			// 				await user.type(contactInput, ',');
+			// 			});
+			//
+			// 			expect(
+			// 				within(screen.getByTestId('default-chip')).getByTestId(ICON_REGEXP.duplicated)
+			// 			).toBeVisible();
+			// 			await act(async () => {
+			// 				await user.click(
+			// 					screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.trash, name: /remove/i })
+			// 				);
+			// 			});
+			// 			const chip = screen.getByTestId('default-chip');
+			// 			expect(within(chip).queryByTestId(ICON_REGEXP.duplicated)).not.toBeInTheDocument();
+			// 		});
+			//
+		});
 	});
 
 	describe('Members list', () => {

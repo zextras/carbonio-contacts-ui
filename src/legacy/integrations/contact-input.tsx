@@ -37,11 +37,17 @@ import { useTranslation } from 'react-i18next';
 import styled, { DefaultTheme } from 'styled-components';
 
 import { ContactInputCustomChipComponent } from './contact-input-custom-chip-component';
+import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
 import { parseFullAutocompleteXML } from '../helpers/autocomplete';
 import { useAppSelector } from '../hooks/redux';
 import { StoreProvider } from '../store/redux';
 import { Contact, Group } from '../types/contact';
-import { ContactInputOnChange, ContactInputValue, CustomChipProps } from '../types/integrations';
+import {
+	ContactInputChipDisplayName,
+	ContactInputOnChange,
+	ContactInputValue,
+	CustomChipProps
+} from '../types/integrations';
 import { ContactsSlice, State } from '../types/store';
 
 const emailRegex = /[^\s@]+@[^\s@]+\.[^\s@]+/;
@@ -144,6 +150,7 @@ type ContactInputProps = Pick<
 	defaultValue: Array<Contact>;
 	dragAndDropEnabled?: boolean;
 	extraAccountsIds: Array<string>;
+	chipDisplayName?: ContactInputChipDisplayName;
 };
 
 export const ContactInput: FC<ContactInputProps> = ({
@@ -152,6 +159,7 @@ export const ContactInput: FC<ContactInputProps> = ({
 	placeholder,
 	background = 'gray5',
 	dragAndDropEnabled = false,
+	chipDisplayName = CHIP_DISPLAY_NAME_VALUES.LABEL,
 	extraAccountsIds,
 	...rest
 }) => {
@@ -298,7 +306,7 @@ export const ContactInput: FC<ContactInputProps> = ({
 						customComponent: <Loader />
 					}
 				]);
-				new Promise((resolve, reject) => {
+				new Promise((resolve, promiseReject) => {
 					try {
 						resolve(
 							filter(allContacts, (c) =>
@@ -308,7 +316,7 @@ export const ContactInput: FC<ContactInputProps> = ({
 							)
 						);
 					} catch (err: any) {
-						reject(new Error(err));
+						promiseReject(new Error(err));
 					}
 				})
 					.then((localResults: any) => {
@@ -382,7 +390,8 @@ export const ContactInput: FC<ContactInputProps> = ({
 												groupId: contact?.id,
 												label: contact?.label ?? getChipLabel(contact)
 											},
-											customComponent: <Hint contact={contact} />
+											customComponent: <Hint contact={contact} />,
+											id: `${contact.id} ${contact.email}`
 										})
 									)
 								);
@@ -470,11 +479,12 @@ export const ContactInput: FC<ContactInputProps> = ({
 		(_props: CustomChipProps): React.JSX.Element => (
 			<ContactInputCustomChipComponent
 				{..._props}
+				chipDisplayName={chipDisplayName}
 				_onChange={onChange}
 				contactInputValue={contactInputValue}
 			/>
 		),
-		[contactInputValue, onChange]
+		[chipDisplayName, contactInputValue, onChange]
 	);
 
 	const onDragEnter = useCallback((ev) => {

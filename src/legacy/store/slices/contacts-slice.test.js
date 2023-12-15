@@ -4,12 +4,13 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { configureStore } from '@reduxjs/toolkit';
+
 // import faker from 'faker';
-import reducers from '../reducers/reducers';
-import { searchContacts } from '../actions/search-contacts';
+import { contactAction } from '../actions/contact-action';
 import { createContact } from '../actions/create-contact';
 import { modifyContact } from '../actions/modify-contact';
-import { contactAction } from '../actions/contact-action';
+import { searchContacts } from '../actions/search-contacts';
+import reducers from '../reducers/reducers';
 
 describe.skip('Contact Slice', () => {
 	describe('Add new Contact', () => {
@@ -125,8 +126,8 @@ describe.skip('Contact Slice', () => {
 			const updatedContact = {
 				...prevContact
 				// company: faker.company.companyName(),
-				// firstName: faker.name.firstName(),
-				// lastName: faker.name.lastName()
+				// firstName: faker.person.firstName(),
+				// lastName: faker.person.lastName()
 			};
 			await store.dispatch(modifyContact({ updatedContact, editContact: prevContact }));
 			expect(store.getState().contacts.contacts[7]).toBeDefined();
@@ -146,8 +147,8 @@ describe.skip('Contact Slice', () => {
 			const updatedContact = {
 				...prevContact,
 				// company: faker.company.companyName(),
-				// firstName: faker.name.firstName(),
-				// lastName: faker.name.lastName(),
+				// firstName: faker.person.firstName(),
+				// lastName: faker.person.lastName(),
 				address: {
 					workAddress: {
 						// city: faker.address.city(),
