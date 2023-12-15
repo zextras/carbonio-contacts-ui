@@ -35,7 +35,9 @@ export function parseFullAutocompleteXML(xmlString: string): FullAutocompleteRes
 			id: matchElement.getAttribute('id') ?? '',
 			l: matchElement.getAttribute('l') ?? '',
 			exp: matchElement.getAttribute('exp') ?? '',
-			display: matchElement.getAttribute('display') ?? ''
+			display: matchElement.getAttribute('display') ?? '',
+			middle: matchElement.getAttribute('middle') ?? '',
+			nick: matchElement.getAttribute('nick') ?? ''
 		};
 		fullAutocompleteResponse.match?.push(match);
 	});
