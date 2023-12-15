@@ -282,21 +282,14 @@ describe('New contact group board', () => {
 				expect(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus })).toBeDisabled();
 			});
 
-			it.skip('should enable the plus button when the user add a chip from the dropdown', async () => {
+			it('should enable the plus button when the user add a chip from the dropdown', async () => {
 				const email = faker.internet.email();
 				getSetupServer().use(
-					rest.post('/service/soap/AutoCompleteRequest', async (req, res, ctx) =>
+					rest.post('/service/soap/FullAutocompleteRequest', async (req, res, ctx) =>
 						res(
 							ctx.json({
 								Body: {
-									AutoCompleteResponse: {
-										match: [
-											{
-												email: `<${email}>`,
-												first: faker.person.firstName()
-											}
-										]
-									}
+									FullAutocompleteResponse: `<FullAutocompleteResponse xmlns="urn:zimbraMail"><match email="&lt;${email}>" first="${faker.person.firstName()}" /></FullAutocompleteResponse>`
 								}
 							})
 						)
