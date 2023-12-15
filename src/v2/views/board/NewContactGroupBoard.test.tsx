@@ -18,6 +18,7 @@ import { getSetupServer } from '../../../carbonio-ui-commons/test/jest-setup';
 import { screen, setup } from '../../../utils/testUtils';
 import { CONTACT_GROUP_TITLE_MAX_LENGTH } from '../../constants';
 import { ICON_REGEXP, PALETTE, SELECTORS } from '../../constants/tests';
+import { client } from '../../network/client';
 
 function spyUseBoardHooks(updateBoardFn?: jest.Mock, closeBoardFn?: jest.Mock): void {
 	jest.spyOn(shell, 'useBoardHooks').mockReturnValue({
@@ -275,6 +276,79 @@ describe('New contact group board', () => {
 			expect(within(memberList).getByText(newEmail1)).toBeVisible();
 			const chipInput = screen.getByTestId('contact-group-contact-input');
 			expect(within(chipInput).getByText(newEmail2)).toBeVisible();
+		});
+
+		it('should not use unconfirmed mails(valid chip in contactInput) in createContact request', async () => {
+			getSetupServer().use(
+				rest.post('/service/soap/CreateContactRequest', async (req, res, ctx) =>
+					res(
+						ctx.json({
+							Body: {
+								CreateContactResponse: {}
+							}
+						})
+					)
+				)
+			);
+
+			const createContactGroupSpy = jest.spyOn(client, 'createContactGroup');
+			const newEmail1 = faker.internet.email();
+			const newEmail2 = faker.internet.email();
+			const { user } = setup(<NewContactGroupBoard />);
+			const contactInput = getContactInput();
+
+			await user.type(contactInput, newEmail1);
+			await act(async () => {
+				await user.type(contactInput, ',');
+			});
+			await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
+
+			await user.type(contactInput, newEmail2);
+			await act(async () => {
+				await user.type(contactInput, ',');
+			});
+
+			const saveButton = screen.getByRoleWithIcon('button', {
+				name: /SAVE/i,
+				icon: ICON_REGEXP.save
+			});
+			await act(async () => {
+				await user.click(saveButton);
+			});
+			await screen.findByText('Contact group successfully created');
+
+			expect(createContactGroupSpy).toBeCalledWith('New Group', [newEmail1]);
+		});
+
+		it('should use inserted title in createContact request', async () => {
+			getSetupServer().use(
+				rest.post('/service/soap/CreateContactRequest', async (req, res, ctx) =>
+					res(
+						ctx.json({
+							Body: {
+								CreateContactResponse: {}
+							}
+						})
+					)
+				)
+			);
+			const newTitle = faker.string.alpha(10);
+			const createContactGroupSpy = jest.spyOn(client, 'createContactGroup');
+			const { user } = setup(<NewContactGroupBoard />);
+			const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
+			await user.clear(titleInput);
+			await user.type(titleInput, newTitle);
+
+			const saveButton = screen.getByRoleWithIcon('button', {
+				name: /SAVE/i,
+				icon: ICON_REGEXP.save
+			});
+			await act(async () => {
+				await user.click(saveButton);
+			});
+			await screen.findByText('Contact group successfully created');
+
+			expect(createContactGroupSpy).toBeCalledWith(newTitle, []);
 		});
 	});
 
