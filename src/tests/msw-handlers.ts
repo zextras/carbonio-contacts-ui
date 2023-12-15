@@ -3,7 +3,12 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { SoapFault, SoapResponse, SuccessSoapResponse } from '@zextras/carbonio-shell-ui';
+import {
+	ErrorSoapResponse,
+	SoapFault,
+	SoapResponse,
+	SuccessSoapResponse
+} from '@zextras/carbonio-shell-ui';
 import { map } from 'lodash';
 import { ResponseResolver, rest, RestContext, RestRequest } from 'msw';
 
@@ -26,7 +31,10 @@ const buildSoapResponse = <T>(responseData: Record<string, T>): SuccessSoapRespo
 	Body: responseData
 });
 
-export const registerGetDistributionListMembersHandler = (members: Array<string>): void => {
+export const registerGetDistributionListMembersHandler = (
+	members: Array<string>,
+	error?: string
+): void => {
 	getSetupServer().use(
 		rest.post<
 			{ Body: { GetDistributionListMembersRequest: GetDistributionListMembersRequest } },
@@ -40,9 +48,26 @@ export const registerGetDistributionListMembersHandler = (members: Array<string>
 			if (limit !== undefined && limit > 0) {
 				throw new Error('expected limit to be undefined or 0 to load all members');
 			}
+			if (error) {
+				return res(
+					ctx.json<ErrorSoapResponse>({
+						Header: {
+							context: {}
+						},
+						Body: {
+							Fault: {
+								Reason: { Text: error },
+								Detail: {
+									Error: { Code: '', Detail: error }
+								}
+							}
+						}
+					})
+				);
+			}
 			return res(
 				ctx.json(
-					buildSoapResponse({
+					buildSoapResponse<GetDistributionListMembersResponse>({
 						GetDistributionListMembersResponse: {
 							dlm: members.map((member) => ({ _content: member })),
 							more: false,

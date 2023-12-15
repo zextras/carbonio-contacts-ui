@@ -12,11 +12,12 @@ import { rest } from 'msw';
 
 import { EditDLComponent, EditDLComponentProps } from './edit-dl';
 import { getSetupServer } from '../carbonio-ui-commons/test/jest-setup';
-import { setupTest, screen, within } from '../carbonio-ui-commons/test/test-setup';
+import { screen, setupTest, within } from '../carbonio-ui-commons/test/test-setup';
 import { NAMESPACES } from '../constants/api';
 import { PALETTE, TESTID_SELECTORS } from '../constants/tests';
 import { generateStore } from '../legacy/tests/generators/store';
 import 'jest-styled-components';
+import { getDLContactInput } from '../tests/utils';
 
 const buildProps = ({
 	email = '',
@@ -31,26 +32,6 @@ const buildProps = ({
 	onRemoveMember,
 	onAddMembers
 });
-
-const getContactInput = (): {
-	container: HTMLElement;
-	textbox: HTMLElement;
-	addMembersIcon: HTMLElement;
-} => {
-	const contactInput = screen.getByTestId(TESTID_SELECTORS.CONTACT_INPUT);
-	const contactInputTextBox = within(contactInput).getByRole('textbox', {
-		name: /Insert an address to add a new element/i
-	});
-	const contactInputIcon = within(contactInput).getByRoleWithIcon('button', {
-		icon: TESTID_SELECTORS.ICONS.ADD_MEMBERS
-	});
-
-	return {
-		container: contactInput,
-		textbox: contactInputTextBox,
-		addMembersIcon: contactInputIcon
-	};
-};
 
 const createAutocompleteResponse = (
 	firstName: string,
@@ -81,7 +62,7 @@ describe('Edit DL Component', () => {
 	it('should show the input to add new elements', () => {
 		const store = generateStore();
 		setupTest(<EditDLComponent {...buildProps()} />, { store });
-		const contactInput = getContactInput();
+		const contactInput = getDLContactInput();
 		expect(contactInput.textbox).toBeVisible();
 		expect(contactInput.addMembersIcon).toBeVisible();
 	});
@@ -108,7 +89,7 @@ describe('Edit DL Component', () => {
 		it('add action should be disabled if the input is empty', () => {
 			const store = generateStore();
 			setupTest(<EditDLComponent {...buildProps()} />, { store });
-			expect(getContactInput().addMembersIcon).toBeDisabled();
+			expect(getDLContactInput().addMembersIcon).toBeDisabled();
 		});
 
 		it('add action should be disabled if all values are invalid', async () => {
@@ -116,7 +97,7 @@ describe('Edit DL Component', () => {
 			const { user } = setupTest(<EditDLComponent {...buildProps()} />, { store });
 			const invalidValues = ['bad', 'worst'];
 			await act(async () => {
-				await user.type(getContactInput().textbox, invalidValues.join(','));
+				await user.type(getDLContactInput().textbox, invalidValues.join(','));
 			});
 
 			expect(
@@ -128,7 +109,7 @@ describe('Edit DL Component', () => {
 			const store = generateStore();
 			const members = ['1@domain.com', '2@domain.com'];
 			const { user } = setupTest(<EditDLComponent {...buildProps({ members })} />, { store });
-			const contactInput = getContactInput();
+			const contactInput = getDLContactInput();
 			const values = ['1@domain.com', '2@domain.com'];
 			await act(async () => {
 				await user.type(contactInput.textbox, values.join(','));
@@ -141,7 +122,7 @@ describe('Edit DL Component', () => {
 			const store = generateStore();
 			const members = ['1@domain.com', '2@domain.com'];
 			const { user } = setupTest(<EditDLComponent {...buildProps({ members })} />, { store });
-			const contactInput = getContactInput();
+			const contactInput = getDLContactInput();
 			const values = ['1@domain.com', '2@domain.com', '3453453', 'aaaaaaabbbbbb'];
 			await act(async () => {
 				await user.type(contactInput.textbox, values.join(','));
@@ -155,7 +136,7 @@ describe('Edit DL Component', () => {
 			const { user } = setupTest(<EditDLComponent {...buildProps()} />, { store });
 			const values = ['bad', 'correct.email@domain.com', 'worst'];
 			await act(async () => {
-				await user.type(getContactInput().textbox, values.join(','));
+				await user.type(getDLContactInput().textbox, values.join(','));
 			});
 
 			expect(
@@ -183,7 +164,7 @@ describe('Edit DL Component', () => {
 			const store = generateStore();
 			const { user } = setupTest(<EditDLComponent {...buildProps()} />, { store });
 
-			const contactInput = getContactInput();
+			const contactInput = getDLContactInput();
 
 			await user.type(contactInput.textbox, email.substring(0, 3));
 			act(() => {
@@ -203,7 +184,7 @@ describe('Edit DL Component', () => {
 		it('chip should show email if contact is added manually by typing', async () => {
 			const store = generateStore();
 			const { user } = setupTest(<EditDLComponent {...buildProps()} />, { store });
-			const contactInput = getContactInput();
+			const contactInput = getDLContactInput();
 			const email = faker.internet.email();
 			await act(async () => {
 				await user.type(contactInput.textbox, `${email},`);
@@ -217,7 +198,7 @@ describe('Edit DL Component', () => {
 			const store = generateStore();
 			const onAddMembers = jest.fn();
 			const { user } = setupTest(<EditDLComponent {...buildProps({ onAddMembers })} />, { store });
-			const contactInput = getContactInput();
+			const contactInput = getDLContactInput();
 			await act(async () => {
 				await user.type(contactInput.textbox, `${faker.internet.email()},`);
 			});
@@ -230,7 +211,7 @@ describe('Edit DL Component', () => {
 			const store = generateStore();
 			const onAddMembers = jest.fn();
 			const { user } = setupTest(<EditDLComponent {...buildProps({ onAddMembers })} />, { store });
-			const contactInput = getContactInput();
+			const contactInput = getDLContactInput();
 			const values = ['bad', 'correct.email@domain.com', 'worst', 'supercorrect.email@domain.net'];
 			await act(async () => {
 				await user.type(contactInput.textbox, values.join(','));
@@ -247,7 +228,7 @@ describe('Edit DL Component', () => {
 			const store = generateStore();
 			const onAddMembers = jest.fn();
 			const { user } = setupTest(<EditDLComponent {...buildProps({ onAddMembers })} />, { store });
-			const contactInput = getContactInput();
+			const contactInput = getDLContactInput();
 			const values = ['bad', 'correct.email@domain.com', 'worst', 'supercorrect.email@domain.net'];
 			await act(async () => {
 				await user.type(contactInput.textbox, values.join(','));
@@ -266,7 +247,7 @@ describe('Edit DL Component', () => {
 			const store = generateStore();
 			const members = ['duplicated.email@domain.com'];
 			const { user } = setupTest(<EditDLComponent {...buildProps({ members })} />, { store });
-			const contactInput = getContactInput();
+			const contactInput = getDLContactInput();
 			const values = ['duplicated.email@domain.com', 'correct.email@domain.net'];
 			await act(async () => {
 				await user.type(contactInput.textbox, values.join(','));
@@ -289,7 +270,7 @@ describe('Edit DL Component', () => {
 				const { user } = setupTest(<EditDLComponent {...buildProps()} />, {
 					store: generateStore()
 				});
-				const contactInput = getContactInput();
+				const contactInput = getDLContactInput();
 				await act(async () => {
 					await user.type(contactInput.textbox, `${invalidMail},`);
 				});
@@ -301,26 +282,25 @@ describe('Edit DL Component', () => {
 				expect(screen.queryByText(errorMessage)).not.toBeInTheDocument();
 			});
 
-			// it('should render "Invalid addresses" error message when there are only invalid emails (at least 2) as chips and remove the error when a valid chip is added', async () => {
-			// 	const errorMessage = 'Invalid addresses';
-			// 	const validMail = faker.internet.email();
-			// 	const invalidMail1 = faker.string.alpha(10);
-			// 	const invalidMail2 = faker.string.alpha(10);
-			// 	const { user } = setupTest(<EditDLComponent {...buildProps()} />, {
-			// 		store: generateStore()
-			// 	});
-			// 	const contactInput = getContactInput();
-			// 	await act(async () => {
-			// 		await user.type(contactInput.textbox, `${invalidMail1},${invalidMail2},`);
-			// 	});
-			// 	// screen.logTestingPlaygroundURL();
-			// 	expect(screen.getByText(errorMessage)).toBeVisible();
-			// 	expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
-			// 	await act(async () => {
-			// 		await user.type(contactInput.textbox, `${validMail},`);
-			// 	});
-			// 	expect(screen.queryByText(errorMessage)).not.toBeInTheDocument();
-			// });
+			it('should render "Invalid addresses" error message when there are only invalid emails (at least 2) as chips and remove the error when a valid chip is added', async () => {
+				const errorMessage = 'Invalid addresses';
+				const validMail = faker.internet.email();
+				const invalidMail1 = faker.string.alpha(10);
+				const invalidMail2 = faker.string.alpha(10);
+				const { user } = setupTest(<EditDLComponent {...buildProps()} />, {
+					store: generateStore()
+				});
+				const contactInput = getDLContactInput();
+				await act(async () => {
+					await user.type(contactInput.textbox, `${invalidMail1},${invalidMail2},`);
+				});
+				expect(screen.getByText(errorMessage)).toBeVisible();
+				expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
+				await act(async () => {
+					await user.type(contactInput.textbox, `${validMail},`);
+				});
+				expect(screen.queryByText(errorMessage)).not.toBeInTheDocument();
+			});
 
 			it('should render "Address already present" error message when there is only a duplicated email as a chip and remove the error when a valid chip is added', async () => {
 				const errorMessage = 'Address already present';
@@ -329,7 +309,7 @@ describe('Edit DL Component', () => {
 				const { user } = setupTest(<EditDLComponent {...buildProps({ members })} />, {
 					store: generateStore()
 				});
-				const contactInput = getContactInput();
+				const contactInput = getDLContactInput();
 				await act(async () => {
 					await user.type(contactInput.textbox, `${validMail},`);
 				});
@@ -343,26 +323,27 @@ describe('Edit DL Component', () => {
 				expect(screen.queryByText(errorMessage)).not.toBeInTheDocument();
 			});
 
-			// it('should render "Addresses already present" error message when there is only duplicated email (>= 2) as chips and remove the error when a valid chip is added', async () => {
-			// 	const errorMessage = 'Addresses already present';
-			// 	const validMail = faker.internet.email();
-			// 	const members = [validMail];
-			// 	const { user } = setupTest(<EditDLComponent {...buildProps({ members })} />, {
-			// 		store: generateStore()
-			// 	});
-			// 	const contactInput = getContactInput();
-			// 	await act(async () => {
-			// 		await user.type(contactInput.textbox, `${validMail},${validMail},`);
-			// 	});
-			//
-			// 	expect(screen.getByText(errorMessage)).toBeVisible();
-			// 	expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
-			// 	await act(async () => {
-			// 		await user.type(contactInput.textbox, `${faker.internet.email()},`);
-			// 	});
-			//
-			// 	expect(screen.queryByText(errorMessage)).not.toBeInTheDocument();
-			// });
+			it('should render "Addresses already present" error message when there is only duplicated email (>= 2) as chips and remove the error when a valid chip is added', async () => {
+				const errorMessage = 'Addresses already present';
+				const validMail = faker.internet.email();
+				const validMail2 = faker.internet.email();
+				const members = [validMail, validMail2];
+				const { user } = setupTest(<EditDLComponent {...buildProps({ members })} />, {
+					store: generateStore()
+				});
+				const contactInput = getDLContactInput();
+				await act(async () => {
+					await user.type(contactInput.textbox, `${validMail},${validMail2},`);
+				});
+
+				expect(screen.getByText(errorMessage)).toBeVisible();
+				expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
+				await act(async () => {
+					await user.type(contactInput.textbox, `${faker.internet.email()},`);
+				});
+
+				expect(screen.queryByText(errorMessage)).not.toBeInTheDocument();
+			});
 
 			it('should render "Invalid and already present addresses" error message when there are at least 1 error chip per type and remove the error when a valid chip is added', async () => {
 				const errorMessage = 'Invalid and already present addresses';
@@ -372,7 +353,7 @@ describe('Edit DL Component', () => {
 				const { user } = setupTest(<EditDLComponent {...buildProps({ members })} />, {
 					store: generateStore()
 				});
-				const contactInput = getContactInput();
+				const contactInput = getDLContactInput();
 				await act(async () => {
 					await user.type(contactInput.textbox, `${validMail},${invalidMail},`);
 				});

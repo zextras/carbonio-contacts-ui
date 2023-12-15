@@ -55,6 +55,16 @@ describe('EditDLControllerComponent', () => {
 		expect(screen.getAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM)).toHaveLength(members.length);
 	});
 
+	it.todo(
+		'should <do something> when the members cannot be loaded' /* async () => {
+		const store = generateStore();
+		const dlEmail = 'dl-mail@domain.net';
+		registerGetDistributionListMembersHandler([], 'error during load of members');
+		setupTest(<EditDLControllerComponent {...buildProps({ email: dlEmail })} />, { store });
+		await screen.findByText(dlEmail);
+	} */
+	);
+
 	it('should add all valid emails inside the list when user clicks on add action', async () => {
 		const store = generateStore();
 		const dlEmail = 'dl-mail@domain.net';
@@ -302,7 +312,7 @@ describe('EditDLControllerComponent', () => {
 				expect(handler).toHaveBeenCalled();
 			});
 
-			it('should cause a success snackbar to appear when then API return a success result', async () => {
+			it('should show a success snackbar when then API return a success result', async () => {
 				const store = generateStore();
 				const members = [faker.internet.email()];
 				registerGetDistributionListMembersHandler(members);
