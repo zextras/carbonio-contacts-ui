@@ -8,7 +8,7 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import 'jest-styled-components';
-import { act, within } from '@testing-library/react';
+import { act, waitFor, within } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { first, last } from 'lodash';
 import { rest } from 'msw';
@@ -19,13 +19,13 @@ import { screen, setup } from '../../../utils/testUtils';
 import { CONTACT_GROUP_TITLE_MAX_LENGTH } from '../../constants';
 import { ICON_REGEXP, PALETTE, SELECTORS } from '../../constants/tests';
 
-function spyUseBoardHooks(updateBoardFn?: jest.Mock): void {
+function spyUseBoardHooks(updateBoardFn?: jest.Mock, closeBoardFn?: jest.Mock): void {
 	jest.spyOn(shell, 'useBoardHooks').mockReturnValue({
 		updateBoard: updateBoardFn ?? jest.fn(),
 		setCurrentBoard: jest.fn(),
 		getBoardContext: jest.fn(),
 		getBoard: jest.fn(),
-		closeBoard: jest.fn()
+		closeBoard: closeBoardFn ?? jest.fn()
 	});
 }
 beforeAll(() => {
@@ -70,34 +70,211 @@ describe('New contact group board', () => {
 		});
 	});
 
-	describe('Save button disabled', () => {
-		it('should disable the save button when title input is empty string', async () => {
-			const { user } = setup(<NewContactGroupBoard />);
-			await user.clear(screen.getByRole('textbox', { name: 'Group title*' }));
-			expect(
-				screen.getByRoleWithIcon('button', { name: /SAVE/i, icon: ICON_REGEXP.save })
-			).toBeDisabled();
+	describe('Save button behaviours', () => {
+		describe('Save button disabled', () => {
+			it('should disable the save button when title input is empty string', async () => {
+				const { user } = setup(<NewContactGroupBoard />);
+				await user.clear(screen.getByRole('textbox', { name: 'Group title*' }));
+				expect(
+					screen.getByRoleWithIcon('button', { name: /SAVE/i, icon: ICON_REGEXP.save })
+				).toBeDisabled();
+			});
+
+			it('should disable save button when title input contains only space characters', async () => {
+				const { user } = setup(<NewContactGroupBoard />);
+				const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
+				await user.clear(titleInput);
+				await user.type(titleInput, '   ');
+				expect(
+					screen.getByRoleWithIcon('button', { name: /SAVE/i, icon: ICON_REGEXP.save })
+				).toBeDisabled();
+			});
+
+			it('should disable save button when title input length is greater than 256', async () => {
+				const newTitle = faker.string.alphanumeric(CONTACT_GROUP_TITLE_MAX_LENGTH + 1);
+				const { user } = setup(<NewContactGroupBoard />);
+				const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
+				await user.clear(titleInput);
+				await user.type(titleInput, newTitle);
+				expect(
+					screen.getByRoleWithIcon('button', { name: /SAVE/i, icon: ICON_REGEXP.save })
+				).toBeDisabled();
+			});
 		});
 
-		it('should disable save button when title input contains only space characters', async () => {
-			const { user } = setup(<NewContactGroupBoard />);
-			const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
-			await user.clear(titleInput);
-			await user.type(titleInput, '   ');
-			expect(
-				screen.getByRoleWithIcon('button', { name: /SAVE/i, icon: ICON_REGEXP.save })
-			).toBeDisabled();
-		});
+		it('should close the board when save button is clicked and the request is done successfully', async () => {
+			const closeBoard = jest.fn();
+			spyUseBoardHooks(undefined, closeBoard);
+			getSetupServer().use(
+				rest.post('/service/soap/CreateContactRequest', async (req, res, ctx) =>
+					res(
+						ctx.json({
+							Body: {
+								CreateContactResponse: {}
+							}
+						})
+					)
+				)
+			);
 
-		it('should disable save button when title input length is greater than 256', async () => {
-			const newTitle = faker.string.alphanumeric(CONTACT_GROUP_TITLE_MAX_LENGTH + 1);
+			const newTitle = faker.string.alpha(10);
 			const { user } = setup(<NewContactGroupBoard />);
 			const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
 			await user.clear(titleInput);
 			await user.type(titleInput, newTitle);
-			expect(
-				screen.getByRoleWithIcon('button', { name: /SAVE/i, icon: ICON_REGEXP.save })
-			).toBeDisabled();
+			const saveButton = screen.getByRoleWithIcon('button', {
+				name: /SAVE/i,
+				icon: ICON_REGEXP.save
+			});
+			await user.click(saveButton);
+			await waitFor(() => expect(closeBoard).toHaveBeenCalledTimes(1));
+		});
+
+		it('should show success snackbar when save button is clicked and the request is done successfully', async () => {
+			getSetupServer().use(
+				rest.post('/service/soap/CreateContactRequest', async (req, res, ctx) =>
+					res(
+						ctx.json({
+							Body: {
+								CreateContactResponse: {}
+							}
+						})
+					)
+				)
+			);
+
+			const newTitle = faker.string.alpha(10);
+			const { user } = setup(<NewContactGroupBoard />);
+			const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
+			await user.clear(titleInput);
+			await user.type(titleInput, newTitle);
+			const saveButton = screen.getByRoleWithIcon('button', {
+				name: /SAVE/i,
+				icon: ICON_REGEXP.save
+			});
+			await user.click(saveButton);
+			expect(await screen.findByText('Contact group successfully created')).toBeVisible();
+		});
+
+		it('should show error snackbar when create contact fails', async () => {
+			getSetupServer().use(
+				rest.post('/service/soap/CreateContactRequest', async (req, res, ctx) =>
+					res(
+						ctx.status(500),
+						ctx.json({
+							Body: {
+								Fault: {
+									Reason: { Text: 'invalid request: contact must have fields' },
+									Detail: {
+										Error: {
+											Code: 'service.INVALID_REQUEST'
+										}
+									}
+								}
+							}
+						})
+					)
+				)
+			);
+
+			const newTitle = faker.string.alpha(10);
+			const { user } = setup(<NewContactGroupBoard />);
+			const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
+			await user.clear(titleInput);
+			await user.type(titleInput, newTitle);
+			const saveButton = screen.getByRoleWithIcon('button', {
+				name: /SAVE/i,
+				icon: ICON_REGEXP.save
+			});
+			await user.click(saveButton);
+			expect(await screen.findByText('Something went wrong, please try again')).toBeVisible();
+		});
+
+		it('should not close the board when create contact fails', async () => {
+			const closeBoard = jest.fn();
+			spyUseBoardHooks(undefined, closeBoard);
+			getSetupServer().use(
+				rest.post('/service/soap/CreateContactRequest', async (req, res, ctx) =>
+					res(
+						ctx.status(500),
+						ctx.json({
+							Body: {
+								Fault: {
+									Reason: { Text: 'invalid request: contact must have fields' },
+									Detail: {
+										Error: {
+											Code: 'service.INVALID_REQUEST'
+										}
+									}
+								}
+							}
+						})
+					)
+				)
+			);
+
+			const newTitle = faker.string.alpha(10);
+			const { user } = setup(<NewContactGroupBoard />);
+			const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
+			await user.clear(titleInput);
+			await user.type(titleInput, newTitle);
+			const saveButton = screen.getByRoleWithIcon('button', {
+				name: /SAVE/i,
+				icon: ICON_REGEXP.save
+			});
+			await user.click(saveButton);
+			await screen.findByText('Something went wrong, please try again');
+			expect(closeBoard).not.toHaveBeenCalled();
+		});
+
+		it('should not reset the fields when create contact fails', async () => {
+			getSetupServer().use(
+				rest.post('/service/soap/CreateContactRequest', async (req, res, ctx) =>
+					res(
+						ctx.status(500),
+						ctx.json({
+							Body: {
+								Fault: {
+									Reason: { Text: 'invalid request: contact must have fields' },
+									Detail: {
+										Error: {
+											Code: 'service.INVALID_REQUEST'
+										}
+									}
+								}
+							}
+						})
+					)
+				)
+			);
+			const newEmail1 = faker.internet.email();
+			const newEmail2 = faker.internet.email();
+			const newTitle = faker.string.alpha(10);
+			const { user } = setup(<NewContactGroupBoard />);
+			const contactInput = getContactInput();
+			const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
+			await user.clear(titleInput);
+			await user.type(titleInput, newTitle);
+			await user.type(contactInput, newEmail1);
+			await act(async () => {
+				await user.type(contactInput, ',');
+			});
+			await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
+			await user.type(contactInput, newEmail2);
+			await act(async () => {
+				await user.type(contactInput, ',');
+			});
+			const saveButton = screen.getByRoleWithIcon('button', {
+				name: /SAVE/i,
+				icon: ICON_REGEXP.save
+			});
+			await user.click(saveButton);
+			await screen.findByText('Something went wrong, please try again');
+			expect(screen.getByText(newTitle)).toBeVisible();
+			const memberList = await screen.findByTestId('member-list');
+			expect(within(memberList).getByText(newEmail1)).toBeVisible();
+			const chipInput = screen.getByTestId('contact-group-contact-input');
+			expect(within(chipInput).getByText(newEmail2)).toBeVisible();
 		});
 	});
 
@@ -655,25 +832,3 @@ describe('New contact group board', () => {
 		});
 	});
 });
-
-/**
- * The discard action will reset the group to its default state.
- * Every contact group will be created in the main address book
- * Only inline contacts will be allowed
- * Every contact group must have a name in order to be created.
- * There won’t be a  minimum limit on members of a contact group
- * There won’t be a maximum limit on members of a contact group
- * Every chips will show the email inserted by the user
- * Distribution lists are valid members of a contact group and are inserted as inline value as every other member
- * The add action will be enabled only when at least one valid chip is inserted inside the Contact Input
- * [TENTATIVE] [IRIS-4906] Duplicate emails should be handled with a specific chip (as per figma) and cannot be accepted as valid values
- * When clicking on the add button only valid emails will be added in the list below, the discarded one will still be available in the contact input
- * the add button is disabled when one or more errors are present and no valid entries are provided.  Errors can be of two types and the tooltip will explain all the possible cases
- * [TENTATIVE] [IRIS-4906] When a chip is invalid because it is a duplicate and the entry of the same chip is deleted from the list below it should update and be considered valid
- * Once save is clicked and the request is done successfully the board will be closed
- * Board will close only if the response of the creation is successful
- * If an error occurs during saving request, board is kept open and an error snackbar will appear (generic error for now)
- * when user clicks on save but some valid chips are in the contact input, these chips will not be part of the creation request (first iteration)
- * The placeholder of the contact input will show a message to inform the user “add” action is required to make chip values considered when saving
- * [IRIS-4908] when user clicks on save but some valid chips are in the contact input, a message will tell the user these chips will not be part of the creation request (second iteration - still need refinement)
- */

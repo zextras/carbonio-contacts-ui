@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useContext, useMemo, useState } from 'react';
 
 import {
 	Container,
@@ -13,20 +13,23 @@ import {
 	InputProps,
 	Avatar,
 	ListV2,
-	Row
+	Row,
+	SnackbarManagerContext
 } from '@zextras/carbonio-design-system';
 import { useBoardHooks } from '@zextras/carbonio-shell-ui';
-import { noop, remove, size, some, uniqBy } from 'lodash';
+import { remove, size, some, uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { MemberListItemComponent } from '../../../components/member-list-item';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../../constants/contact-input';
 import ContactInput from '../../../integrations/contact-input';
 import { CONTACT_GROUP_TITLE_MAX_LENGTH } from '../../constants';
+import { client } from '../../network/client';
 
 const NewContactGroupBoard = (): React.JSX.Element => {
 	const [t] = useTranslation();
-	const { updateBoard } = useBoardHooks();
+	const { updateBoard, closeBoard } = useBoardHooks();
+	const createSnackbar = useContext(SnackbarManagerContext);
 
 	const initialTitle = 'New Group';
 	const [titleValue, setTitleValue] = useState(initialTitle);
@@ -60,6 +63,26 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 		setMemberListEmails([]);
 		updateBoard({ title: initialTitle });
 	}, [updateBoard]);
+
+	const onSave = useCallback(() => {
+		client
+			.createContactGroup(titleValue, memberListEmails)
+			.then(() => {
+				createSnackbar({
+					key: new Date().toLocaleString(),
+					type: 'success',
+					label: 'Contact group successfully created'
+				});
+				closeBoard();
+			})
+			.catch(() => {
+				createSnackbar({
+					key: new Date().toLocaleString(),
+					type: 'error',
+					label: t('label.error_try_again', 'Something went wrong, please try again')
+				});
+			});
+	}, [closeBoard, createSnackbar, memberListEmails, t, titleValue]);
 
 	const titleDescription = useMemo(() => {
 		if (titleValue.trim().length === 0) {
@@ -225,7 +248,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 					size={'medium'}
 					label={'save'}
 					icon={'SaveOutline'}
-					onClick={noop}
+					onClick={onSave}
 				/>
 			</Container>
 			<Container
