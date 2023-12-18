@@ -18,6 +18,7 @@ export const client = {
 						cn: {
 							a: [
 								{ n: 'fullName', _content: title },
+								{ n: 'nickname', _content: title },
 								{ n: 'type', _content: 'group' },
 								{ n: 'fileAs', _content: `8:${title}` }
 							],
