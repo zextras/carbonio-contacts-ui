@@ -31,7 +31,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 	const { updateBoard, closeBoard } = useBoardHooks();
 	const createSnackbar = useContext(SnackbarManagerContext);
 
-	const initialTitle = 'New Group';
+	const initialTitle = t('board.newContactGroup.title', 'New Group');
 	const [titleValue, setTitleValue] = useState(initialTitle);
 
 	const [contactInputValue, setContactInputValue] = useState<
@@ -62,7 +62,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 		setContactInputValue([]);
 		setMemberListEmails([]);
 		updateBoard({ title: initialTitle });
-	}, [updateBoard]);
+	}, [initialTitle, updateBoard]);
 
 	const onSave = useCallback(() => {
 		client
@@ -71,7 +71,10 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 				createSnackbar({
 					key: new Date().toLocaleString(),
 					type: 'success',
-					label: 'Contact group successfully created'
+					label: t(
+						'board.newContactGroup.snackbar.contact_group_created',
+						'Contact group successfully created'
+					)
 				});
 				closeBoard();
 			})
@@ -86,13 +89,19 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 
 	const titleDescription = useMemo(() => {
 		if (titleValue.trim().length === 0) {
-			return 'Group name is required, enter a name to proceed';
+			return t(
+				'board.newContactGroup.input.title_input.error.required',
+				'Group name is required, enter a name to proceed'
+			);
 		}
 		if (titleValue.length > CONTACT_GROUP_TITLE_MAX_LENGTH) {
-			return 'Maximum length allowed is 256 characters';
+			return t(
+				'board.newContactGroup.input.title_input.error.max_length',
+				'Maximum length allowed is 256 characters'
+			);
 		}
 		return undefined;
-	}, [titleValue]);
+	}, [t, titleValue]);
 
 	const contactInputDescription = useMemo(() => {
 		let valid = 0;
@@ -112,22 +121,47 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 			return undefined;
 		}
 		if (invalid > 0 && duplicated > 0) {
-			return 'Invalid and already present addresses';
+			return t(
+				'board.newContactGroup.input.contact_input.error.invalid_already_present_addresses',
+				'Invalid and already present addresses'
+			);
 		}
 		if (invalid === 1 && duplicated === 0) {
-			return 'Invalid address';
+			return t(
+				'board.newContactGroup.input.contact_input.error.invalid_address',
+				'Invalid address',
+				{ count: invalid }
+			);
 		}
 		if (invalid > 1 && duplicated === 0) {
-			return 'Invalid addresses';
+			return t(
+				'board.newContactGroup.input.contact_input.error.invalid_address',
+				'Invalid addresses',
+				{
+					count: invalid
+				}
+			);
 		}
 		if (duplicated === 1 && invalid === 0) {
-			return 'Address already present';
+			return t(
+				'board.newContactGroup.input.contact_input.error.address_already_present',
+				'Address already present',
+				{
+					count: duplicated
+				}
+			);
 		}
 		if (duplicated > 1 && invalid === 0) {
-			return 'Addresses already present';
+			return t(
+				'board.newContactGroup.input.contact_input.error.address_already_present',
+				'Addresses already present',
+				{
+					count: duplicated
+				}
+			);
 		}
 		return undefined;
-	}, [contactInputValue]);
+	}, [contactInputValue, t]);
 
 	const contactInputOnChange = (
 		newContactInputValue: Array<{
@@ -226,6 +260,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 			crossAlignment={'flex-end'}
 			background={'gray5'}
 			padding={{ horizontal: 'large', bottom: '2.625rem' }}
+			height={'fit'}
 		>
 			<Container
 				gap={'0.5rem'}
@@ -237,7 +272,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 				<Button
 					disabled={false}
 					size={'medium'}
-					label={'discard'}
+					label={t('label.discard', 'discard')}
 					onClick={discardChanges}
 					type="outlined"
 				/>
@@ -246,7 +281,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 						titleValue.trim().length === 0 || titleValue.length > CONTACT_GROUP_TITLE_MAX_LENGTH
 					}
 					size={'medium'}
-					label={'save'}
+					label={t('label.save', 'save')}
 					icon={'SaveOutline'}
 					onClick={onSave}
 				/>
@@ -261,7 +296,9 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 				<Avatar size="large" label={titleValue} icon="PeopleOutline" />
 				<Container height={'fit'} crossAlignment={'flex-start'}>
 					<Text weight={'bold'}>{titleValue}</Text>
-					<Text color={'gray1'}>Addresses: {memberListEmails.length}</Text>
+					<Text color={'gray1'}>
+						{t('board.newContactGroup.addresses.label', 'Addresses')}: {memberListEmails.length}
+					</Text>
 				</Container>
 			</Container>
 			<Container
@@ -272,7 +309,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 				gap={'0.5rem'}
 			>
 				<Input
-					label={t('board.input.title.label', 'Group title*')}
+					label={t('board.newContactGroup.input.title_input.title.label', 'Group title*')}
 					backgroundColor={'gray5'}
 					borderColor={'gray3'}
 					value={titleValue}
@@ -283,7 +320,9 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 					}
 				/>
 				<Row padding={{ top: '0.5rem' }}>
-					<Text color={'secondary'}>{'Addresses list'}</Text>
+					<Text color={'secondary'}>
+						{t('board.newContactGroup.input.contact_input.title', 'Addresses list')}
+					</Text>
 				</Row>
 				<Container orientation={'horizontal'} height={'fit'} crossAlignment={'flex-start'}>
 					<ContactInput
@@ -294,7 +333,10 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 						// @ts-ignore
 						onChange={contactInputOnChange}
-						placeholder={'Type an address, click ‘+’ to add to the group'}
+						placeholder={t(
+							'board.newContactGroup.input.contact_input.placeholder',
+							'Type an address, click ‘+’ to add to the group'
+						)}
 						icon={'Plus'}
 						iconAction={contactInputIconAction}
 						iconDisabled={noValidChip}
@@ -303,7 +345,9 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 						chipDisplayName={CHIP_DISPLAY_NAME_VALUES.EMAIL}
 					/>
 				</Container>
-				<ListV2 data-testid={'member-list'}>{listItems}</ListV2>
+				<ListV2 maxHeight={'5rem'} data-testid={'member-list'}>
+					{listItems}
+				</ListV2>
 			</Container>
 		</Container>
 	);

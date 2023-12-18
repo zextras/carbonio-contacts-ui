@@ -9,15 +9,38 @@
     },
     "attendee_unavailable": "Attendee not available at the selected time of the event",
     "board": {
-        "input": {
-            "title": {
-                "label": "Group title*"
-            }
-        },
         "label": {
             "description": "Description"
         },
         "newContactGroup": {
+            "addresses": {
+                "label": "Addresses"
+            },
+            "input": {
+                "contact_input": {
+                    "error": {
+                        "address_already_present": "Address already present",
+                        "address_already_present_plural": "Addresses already present",
+                        "invalid_address": "Invalid address",
+                        "invalid_address_plural": "Invalid addresses",
+                        "invalid_already_present_addresses": "Invalid and already present addresses"
+                    },
+                    "placeholder": "Type an address, click ‘+’ to add to the group",
+                    "title": "Addresses list"
+                },
+                "title_input": {
+                    "error": {
+                        "max_length": "Maximum length allowed is 256 characters",
+                        "required": "Group name is required, enter a name to proceed"
+                    },
+                    "title": {
+                        "label": "Group title*"
+                    }
+                }
+            },
+            "snackbar": {
+                "contact_group_created": "Contact group successfully created"
+            },
             "title": "New Group"
         }
     },
@@ -161,6 +184,7 @@
         "delete_tag": "Delete Tag",
         "delete_tag_name": "Delete \"{{name}}\" tag",
         "destination_address_book": "Destination address book",
+        "discard": "discard",
         "discard_changes": "DISCARD CHANGES",
         "edit": "Edit",
         "edit_access": "Edit access",
@@ -267,6 +291,11 @@
     "search": {
         "shared_folders_note": "Include shared address books in searches."
     },
+    "secondaryBar": {
+        "contextualMenu": {
+            "new_contact_group_creation_action": "New Contact Group"
+        }
+    },
     "section": {
         "field": {
             "city": "City",
@@ -358,10 +387,5 @@
         "mobile": "mobile",
         "other": "other",
         "work": "work"
-    },
-    "secondaryBar": {
-        "contextualMenu": {
-            "new_contact_group_creation_action": "New Contact Group"
-        }
     }
 }
