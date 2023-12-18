@@ -58,8 +58,9 @@ export const EditDLControllerComponent: FC<EditDLControllerComponentProps> = ({
 					hideButton: true
 				});
 				console.error(error);
+				onClose();
 			});
-	}, [createSnackbar, email, t]);
+	}, [createSnackbar, email, onClose, t]);
 
 	const onAddMembers = useCallback((newMembers: string[]) => {
 		setMembers((prevState) => [...newMembers, ...prevState]);

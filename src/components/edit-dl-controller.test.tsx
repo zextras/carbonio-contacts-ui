@@ -55,13 +55,17 @@ describe('EditDLControllerComponent', () => {
 		expect(screen.getAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM)).toHaveLength(members.length);
 	});
 
-	it('should show an error snackbar when the members cannot be loaded', async () => {
+	it('should show an error snackbar and call the close callback when the members cannot be loaded', async () => {
 		const store = generateStore();
 		const dlEmail = 'dl-mail@domain.net';
+		const onClose = jest.fn();
 		registerGetDistributionListMembersHandler([], JEST_MOCKED_ERROR);
-		setupTest(<EditDLControllerComponent {...buildProps({ email: dlEmail })} />, { store });
+		setupTest(<EditDLControllerComponent {...buildProps({ email: dlEmail, onClose })} />, {
+			store
+		});
 		await screen.findByText(dlEmail);
 		expect(await screen.findByText('Something went wrong, please try again')).toBeVisible();
+		expect(onClose).toHaveBeenCalled();
 	});
 
 	it('should add all valid emails inside the list when user clicks on add action', async () => {
