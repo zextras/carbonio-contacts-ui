@@ -19,12 +19,17 @@ import {
 import { useBoardHooks } from '@zextras/carbonio-shell-ui';
 import { remove, size, some, uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
 
 import { MemberListItemComponent } from '../../../components/member-list-item';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../../constants/contact-input';
 import ContactInput from '../../../integrations/contact-input';
 import { CONTACT_GROUP_TITLE_MAX_LENGTH } from '../../constants';
 import { client } from '../../network/client';
+
+const List = styled(ListV2)`
+	min-height: 0;
+`;
 
 const NewContactGroupBoard = (): React.JSX.Element => {
 	const [t] = useTranslation();
@@ -260,7 +265,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 			crossAlignment={'flex-end'}
 			background={'gray5'}
 			padding={{ horizontal: 'large', bottom: '2.625rem' }}
-			height={'fit'}
+			height={'fill'}
 		>
 			<Container
 				gap={'0.5rem'}
@@ -307,6 +312,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 				crossAlignment={'flex-start'}
 				padding={{ horizontal: 'large', top: 'large' }}
 				gap={'0.5rem'}
+				height={'calc(100% - 8rem)'}
 			>
 				<Input
 					label={t('board.newContactGroup.input.title_input.title.label', 'Group title*')}
@@ -345,9 +351,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 						chipDisplayName={CHIP_DISPLAY_NAME_VALUES.EMAIL}
 					/>
 				</Container>
-				<ListV2 maxHeight={'5rem'} data-testid={'member-list'}>
-					{listItems}
-				</ListV2>
+				<List data-testid={'member-list'}>{listItems}</List>
 			</Container>
 		</Container>
 	);
