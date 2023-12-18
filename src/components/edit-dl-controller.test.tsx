@@ -55,15 +55,14 @@ describe('EditDLControllerComponent', () => {
 		expect(screen.getAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM)).toHaveLength(members.length);
 	});
 
-	it.todo(
-		'should <do something> when the members cannot be loaded' /* async () => {
+	it('should show an error snackbar when the members cannot be loaded', async () => {
 		const store = generateStore();
 		const dlEmail = 'dl-mail@domain.net';
-		registerGetDistributionListMembersHandler([], 'error during load of members');
+		registerGetDistributionListMembersHandler([], JEST_MOCKED_ERROR);
 		setupTest(<EditDLControllerComponent {...buildProps({ email: dlEmail })} />, { store });
 		await screen.findByText(dlEmail);
-	} */
-	);
+		expect(await screen.findByText('Something went wrong, please try again')).toBeVisible();
+	});
 
 	it('should add all valid emails inside the list when user clicks on add action', async () => {
 		const store = generateStore();
@@ -200,21 +199,6 @@ describe('EditDLControllerComponent', () => {
 				await user.click(button);
 				expect(onClose).toHaveBeenCalled();
 			});
-
-			// TODO move in the edit-dl action tests
-			// it('should close the modal when clicked', async () => {
-			// 	const dlEmail = 'dl-mail@domain.net';
-			// 	const store = generateStore();
-			// 	registerAPIHandler([faker.internet.email()]);
-			// 	const { user } = setupTest(<EditDLControllerComponent email={dlEmail} />, { store });
-			// 	const dlEmailLabel = await screen.findByText(dlEmail);
-			// 	// await screen.findAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM);
-			// 	const button = screen.getByRole('button', { name: 'cancel' });
-			// 	await user.click(button);
-			// 	await waitFor(() => {
-			// 		expect(dlEmailLabel).not.toBeInTheDocument();
-			// 	});
-			// });
 		});
 
 		describe('Save action button', () => {

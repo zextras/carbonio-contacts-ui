@@ -51,10 +51,15 @@ export const EditDLControllerComponent: FC<EditDLControllerComponentProps> = ({
 				setTotalMembers(response.total);
 			})
 			.catch((error: Error) => {
-				// TODO: handle error
+				createSnackbar({
+					key: `dl-members-load-error-${email}`,
+					type: 'error',
+					label: t('label.error_try_again', 'Something went wrong, please try again'),
+					hideButton: true
+				});
 				console.error(error);
 			});
-	}, [email]);
+	}, [createSnackbar, email, t]);
 
 	const onAddMembers = useCallback((newMembers: string[]) => {
 		setMembers((prevState) => [...newMembers, ...prevState]);
