@@ -30,7 +30,14 @@ export function parseFullAutocompleteXML(xmlString: string): FullAutocompleteRes
 			type: matchElement.getAttribute('type') ?? '',
 			isGroup: matchElement.getAttribute('isGroup') === '1',
 			email: matchElement.getAttribute('email') ?? '',
-			full: matchElement.getAttribute('full') ?? ''
+			full: matchElement.getAttribute('full') ?? '',
+			company: matchElement.getAttribute('company') ?? '',
+			id: matchElement.getAttribute('id') ?? '',
+			l: matchElement.getAttribute('l') ?? '',
+			exp: matchElement.getAttribute('exp') ?? '',
+			display: matchElement.getAttribute('display') ?? '',
+			middle: matchElement.getAttribute('middle') ?? '',
+			nick: matchElement.getAttribute('nick') ?? ''
 		};
 		fullAutocompleteResponse.match?.push(match);
 	});
