@@ -5,6 +5,7 @@
  */
 import React from 'react';
 
+import { faker } from '@faker-js/faker';
 import { act, waitFor } from '@testing-library/react';
 import { rest } from 'msw';
 
@@ -13,6 +14,7 @@ import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
 import { screen, setupTest, within } from '../../carbonio-ui-commons/test/test-setup';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
 import { TESTID_SELECTORS, TIMERS } from '../../constants/tests';
+import { registerGetDistributionListHandler } from '../../tests/msw-handlers';
 import { generateStore } from '../tests/generators/store';
 import { getDistributionListCustomResponse } from '../tests/msw/handle-get-distribution-list-members-request';
 
@@ -375,9 +377,30 @@ describe('Contact input custom chip component', () => {
 			expect(editButton).toBeVisible();
 		});
 
-		it.todo(
-			'should not show the edit icon if the contact is a DL but the current user is not the DL owner'
-		);
+		it('should not show the edit icon if the contact is a DL but the current user is not the DL owner', async () => {
+			const dl = {
+				email: faker.internet.email(),
+				owners: [{ id: faker.string.uuid(), name: faker.person.fullName() }]
+			};
+
+			const handler = registerGetDistributionListHandler(dl);
+
+			setupTest(
+				<ContactInputCustomChipComponent
+					id={distributionList.id}
+					label={distributionList.label}
+					email={distributionList.email}
+					isGroup
+					_onChange={jest.fn()}
+					contactInputValue={[]}
+				/>
+			);
+
+			await waitFor(() => expect(handler).toHaveBeenCalled());
+			expect(
+				screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.ICONS.EDIT_DL })
+			).not.toBeInTheDocument();
+		});
 
 		it.todo(
 			'should show the edit icon if the contact is a DL and the current user is the DL owner'

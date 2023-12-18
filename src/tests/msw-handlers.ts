@@ -18,6 +18,10 @@ import {
 	DistributionListActionResponse
 } from '../api/distribution-list-action';
 import {
+	GetDistributionListRequest,
+	GetDistributionListResponse
+} from '../api/get-distribution-list';
+import {
 	GetDistributionListMembersRequest,
 	GetDistributionListMembersResponse
 } from '../api/get-distribution-list-members';
@@ -140,5 +144,66 @@ export const registerDistributionListActionHandler = (
 		);
 	});
 	getSetupServer().use(rest.post('/service/soap/BatchRequest', handler));
+	return handler;
+};
+
+type GetDistributionListHandler = ResponseResolver<
+	RestRequest<{ Body: { GetDistributionListRequest: GetDistributionListRequest } }>,
+	RestContext,
+	SoapResponse<GetDistributionListResponse>
+>;
+
+export const registerGetDistributionListHandler = (
+	dl: { email: string; displayName?: string; owners?: Array<{ id?: string; name?: string }> },
+	error?: string
+): jest.Mock<ReturnType<GetDistributionListHandler>, Parameters<GetDistributionListHandler>> => {
+	const handler = jest.fn<
+		ReturnType<GetDistributionListHandler>,
+		Parameters<GetDistributionListHandler>
+	>((req, res, ctx) => {
+		if (error) {
+			return res(
+				ctx.json<ErrorSoapResponse>({
+					Header: {
+						context: {}
+					},
+					Body: {
+						Fault: {
+							Reason: { Text: error },
+							Detail: {
+								Error: { Code: '', Detail: error }
+							}
+						}
+					}
+				})
+			);
+		}
+		return res(
+			ctx.json(
+				buildSoapResponse<GetDistributionListResponse>({
+					GetDistributionListResponse: {
+						dl: [
+							{
+								name: dl.email,
+								_attrs: {
+									displayName: dl.displayName
+								},
+								owners: map(dl.owners, (owner) => ({ owner: [owner] }))
+							}
+						],
+						_jsns: NAMESPACES.account
+					}
+				})
+			)
+		);
+	});
+	getSetupServer().use(
+		rest.post<
+			{ Body: { GetDistributionListRequest: GetDistributionListRequest } },
+			never,
+			SoapResponse<GetDistributionListResponse>
+		>('/service/soap/GetDistributionListRequest', handler)
+	);
+
 	return handler;
 };

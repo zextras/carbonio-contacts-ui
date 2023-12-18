@@ -49,6 +49,25 @@ describe('useActionEditDL', () => {
 		expect(screen.getAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM)).toHaveLength(members.length);
 	});
 
+	it('should show the email in the title if the dl has no display name', async () => {
+		const store = generateStore();
+		const { result } = setupHook(useActionEditDL, { store });
+		const action = result.current;
+		const dlEmail = 'dl-mail@domain.org';
+		const members = times(10, () => faker.internet.email());
+		registerGetDistributionListMembersHandler(members);
+		act(() => {
+			action.execute({ email: dlEmail });
+		});
+
+		act(() => {
+			jest.advanceTimersByTime(TIMERS.MODAL.DELAY_OPEN);
+		});
+
+		expect(await screen.findByText(dlEmail)).toBeVisible();
+		expect(screen.getByText(`Edit "${dlEmail}"`)).toBeVisible();
+	});
+
 	it('should close the edit view on save', async () => {
 		const store = generateStore();
 		const { result, user } = setupHook(useActionEditDL, { store });
