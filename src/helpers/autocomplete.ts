@@ -23,21 +23,21 @@ export function parseFullAutocompleteXML(xmlString: string): FullAutocompleteRes
 	const matchElements = xmlDoc.documentElement.getElementsByTagName('match');
 	forEach(matchElements, (matchElement) => {
 		const match = {
-			first: matchElement.getAttribute('first') ?? '',
-			last: matchElement.getAttribute('last') ?? '',
-			fileas: matchElement.getAttribute('fileas') ?? '',
-			ranking: matchElement.getAttribute('ranking') ?? '',
-			type: matchElement.getAttribute('type') ?? '',
+			first: matchElement.getAttribute('first') ?? undefined,
+			last: matchElement.getAttribute('last') ?? undefined,
+			fileas: matchElement.getAttribute('fileas') ?? undefined,
+			ranking: matchElement.getAttribute('ranking') ?? undefined,
+			type: matchElement.getAttribute('type') ?? undefined,
 			isGroup: matchElement.getAttribute('isGroup') === '1',
-			email: matchElement.getAttribute('email') ?? '',
-			full: matchElement.getAttribute('full') ?? '',
-			company: matchElement.getAttribute('company') ?? '',
-			id: matchElement.getAttribute('id') ?? '',
-			l: matchElement.getAttribute('l') ?? '',
-			exp: matchElement.getAttribute('exp') ?? '',
-			display: matchElement.getAttribute('display') ?? '',
-			middle: matchElement.getAttribute('middle') ?? '',
-			nick: matchElement.getAttribute('nick') ?? ''
+			email: matchElement.getAttribute('email') ?? undefined,
+			full: matchElement.getAttribute('full') ?? undefined,
+			company: matchElement.getAttribute('company') ?? undefined,
+			id: matchElement.getAttribute('id') ?? undefined,
+			l: matchElement.getAttribute('l') ?? undefined,
+			exp: matchElement.getAttribute('exp') ?? undefined,
+			display: matchElement.getAttribute('display') ?? undefined,
+			middle: matchElement.getAttribute('middle') ?? undefined,
+			nick: matchElement.getAttribute('nick') ?? undefined
 		};
 		fullAutocompleteResponse.match?.push(match);
 	});
