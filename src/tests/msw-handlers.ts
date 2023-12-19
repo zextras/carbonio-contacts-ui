@@ -9,7 +9,7 @@ import {
 	SoapResponse,
 	SuccessSoapResponse
 } from '@zextras/carbonio-shell-ui';
-import { map } from 'lodash';
+import { map, some } from 'lodash';
 import { ResponseResolver, rest, RestContext, RestRequest } from 'msw';
 
 import {
@@ -26,6 +26,7 @@ import {
 	GetDistributionListMembersResponse
 } from '../api/get-distribution-list-members';
 import { getSetupServer } from '../carbonio-ui-commons/test/jest-setup';
+import { mockedAccount } from '../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
 import { NAMESPACES } from '../constants/api';
 
 const buildSoapResponse = <T>(responseData: Record<string, T>): SuccessSoapResponse<T> => ({
@@ -178,6 +179,7 @@ export const registerGetDistributionListHandler = (
 				})
 			);
 		}
+
 		return res(
 			ctx.json(
 				buildSoapResponse<GetDistributionListResponse>({
@@ -188,7 +190,8 @@ export const registerGetDistributionListHandler = (
 								_attrs: {
 									displayName: dl.displayName
 								},
-								owners: map(dl.owners, (owner) => ({ owner: [owner] }))
+								owners: map(dl.owners, (owner) => ({ owner: [owner] })),
+								isOwner: some(dl.owners, (owner) => owner.id === mockedAccount.id)
 							}
 						],
 						_jsns: NAMESPACES.account

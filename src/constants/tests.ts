@@ -10,7 +10,7 @@ export const TESTID_SELECTORS = {
 	ICONS: {
 		EDIT_DL: 'icon: Edit2Outline',
 		EXPAND_DL: 'icon: ChevronDownOutline',
-		SEARCH_MEMBERS: 'icon: Search',
+		FILTER_MEMBERS: 'icon: FunnelOutline',
 		ADD_MEMBERS: 'icon: Plus',
 		REMOVE_MEMBER: 'icon: Trash2Outline'
 	} as const,
@@ -18,7 +18,7 @@ export const TESTID_SELECTORS = {
 	MODAL: 'modal',
 	CONTACT_INPUT: 'contact-input',
 	DROPDOWN_LIST: 'dropdown-popper-list',
-	DL_MEMBERS_SEARCH_INPUT: 'dl-members-search-input',
+	DL_MEMBERS_FILTER_INPUT: 'dl-members-filter-input',
 	MEMBERS_LIST_ITEM: 'member-list-item',
 	SNACKBAR: 'snackbar'
 } as const;

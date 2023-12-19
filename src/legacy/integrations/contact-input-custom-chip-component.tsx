@@ -16,13 +16,14 @@ import {
 	ChipAction
 } from '@zextras/carbonio-design-system';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
-import { debounce, DebouncedFuncLeading, filter, first, map, noop, reduce, uniqBy } from 'lodash';
+import { debounce, DebouncedFuncLeading, filter, first, map, noop, uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { useActionEditDL } from '../../actions/edit-dl';
-import { getDistributionList, GetDistributionListResponse } from '../../api/get-distribution-list';
+import { getDistributionList } from '../../api/get-distribution-list';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
+import { DistributionList } from '../../model/distribution-list';
 import { ContactInputOnChange, ContactInputValue, CustomChipProps } from '../types/integrations';
 
 const StyledChip = styled(Chip)`
@@ -256,60 +257,46 @@ const CustomComponent = ({
 	});
 
 	const actionEditDL = useActionEditDL();
-	const [chipActions, setChipActions] = useState<ChipAction[]>([]);
+	const [distributionList, setDistributionList] = useState<DistributionList>();
 
-	const actionsAlwaysAvailable = useMemo(
-		(): ChipAction[] => [
-			{
-				id: 'action2',
-				label: t('expand_distribution_list', 'Expand address list'),
+	const chipActions = useMemo((): ChipAction[] => {
+		const actions: ChipAction[] = [];
+		if (distributionList && actionEditDL.canExecute(distributionList)) {
+			actions.push({
+				id: `chip-action-${actionEditDL.id}`,
+				label: actionEditDL.label,
 				type: 'button',
-				icon: open ? 'ChevronUpOutline' : 'ChevronDownOutline',
-				onClick: debounceUserInput(onChevronClick)
-			}
-		],
-		[onChevronClick, open, t]
-	);
+				icon: actionEditDL.icon,
+				onClick: () => actionEditDL.execute(distributionList)
+			});
+		}
+		actions.push({
+			id: 'action2',
+			label: t('expand_distribution_list', 'Expand address list'),
+			type: 'button',
+			icon: open ? 'ChevronUpOutline' : 'ChevronDownOutline',
+			onClick: debounceUserInput(onChevronClick)
+		});
+		return actions;
+	}, [actionEditDL, distributionList, onChevronClick, open, t]);
 
 	useEffect(() => {
 		getDistributionList(email)
-			.then((dlDetails) => {
-				const actions: ChipAction[] = [];
-				const dlOwners = reduce<
-					NonNullable<GetDistributionListResponse['dl'][number]['owners']>[number],
-					Array<{ id: string }>
-				>(
-					first(dlDetails.dl)?.owners,
-					(result, item) => {
-						const owner = first(item.owner);
-						if (owner?.id) {
-							result.push({ id: owner.id });
-						}
-						return result;
-					},
-					[]
-				);
-				if (
-					actionEditDL.canExecute({
-						owners: dlOwners
-					})
-				) {
-					actions.push({
-						id: `chip-action-${actionEditDL.id}`,
-						label: actionEditDL.label,
-						type: 'button',
-						icon: actionEditDL.icon,
-						onClick: () => actionEditDL.execute({ displayName: label, email })
+			.then((response) => {
+				const dlData = first(response.dl);
+				if (dlData) {
+					setDistributionList({
+						email: dlData.name,
+						displayName: dlData._attrs?.displayName,
+						isOwner: dlData.isOwner ?? false
 					});
 				}
-				actions.push(...actionsAlwaysAvailable);
-				setChipActions(actions);
 			})
 			.catch((error) => {
-				setChipActions(actionsAlwaysAvailable);
+				setDistributionList(undefined);
 				console.error(error);
 			});
-	}, [actionEditDL, actionsAlwaysAvailable, email, label, onChevronClick, open, t]);
+	}, [email]);
 
 	const onChipClick = useCallback<React.MouseEventHandler>((e) => {
 		e.stopPropagation();
@@ -358,7 +345,7 @@ export const ContactInputCustomChipComponent = ({
 		if (email && chipDisplayName === CHIP_DISPLAY_NAME_VALUES.EMAIL) {
 			return email;
 		}
-		return label ?? email ?? '';
+		return label || email || '';
 	}, [chipDisplayName, email, label]);
 
 	if (!isDistributionList({ email, isGroup })) {

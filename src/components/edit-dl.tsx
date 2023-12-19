@@ -23,7 +23,9 @@ export type EditDLComponentProps = {
 
 type ContactInputValue = Array<{ email: string; error: boolean }>;
 
-const SearchMembersIcon: FC = () => <Icon icon={'Search'} size={'large'}></Icon>;
+const FilterMembersIcon = (): React.JSX.Element => (
+	<Icon icon={'FunnelOutline'} size={'large'}></Icon>
+);
 
 export const EditDLComponent: FC<EditDLComponentProps> = ({
 	email,
@@ -149,14 +151,18 @@ export const EditDLComponent: FC<EditDLComponentProps> = ({
 	}, [duplicatedContacts, invalidEmailContacts, onAddMembers, validEmails]);
 
 	return (
-		<Container gap={'0.5rem'}>
-			<Container padding={{ bottom: 'small' }}>
+		<Container mainAlignment={'flex-start'} crossAlignment={'flex-start'} gap={'0.5rem'}>
+			<Container
+				mainAlignment={'flex-start'}
+				crossAlignment={'flex-start'}
+				padding={{ bottom: 'small' }}
+			>
 				<Text size={'small'} color={'secondary'}>
 					{t('edit_dl_component.label.dl_email', 'Distribution list')}
 				</Text>
 				<Text size={'small'}>{email}</Text>
 			</Container>
-			<Text size={'small'}>
+			<Text size={'small'} overflow={'break-word'}>
 				{t(
 					'edit_dl_component.label.hint',
 					'You can filter this list by looking for specific member’s name or add new ones by editing the Distribution List.'
@@ -183,9 +189,9 @@ export const EditDLComponent: FC<EditDLComponentProps> = ({
 				hasError={isOnlyInvalidContacts}
 			/>
 			<Input
-				data-testid={'dl-members-search-input'}
-				label={t('edit_dl_component.placeholder.search_member', 'Search an address')}
-				CustomIcon={SearchMembersIcon}
+				data-testid={'dl-members-filter-input'}
+				label={t('edit_dl_component.placeholder.filter_member', 'Filter an address')}
+				CustomIcon={FilterMembersIcon}
 				value={searchValue}
 				onChange={onSearchChange}
 			/>
@@ -194,7 +200,9 @@ export const EditDLComponent: FC<EditDLComponentProps> = ({
 					total: totalMembers
 				})}
 			</Text>
-			<ListV2>{memberItems}</ListV2>
+			<Container height={'15rem'}>
+				<ListV2 maxWidth={'fill'}>{memberItems}</ListV2>
+			</Container>
 		</Container>
 	);
 };

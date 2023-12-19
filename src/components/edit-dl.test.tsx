@@ -67,14 +67,14 @@ describe('Edit DL Component', () => {
 		expect(contactInput.addMembersIcon).toBeVisible();
 	});
 
-	it('should show the input to search an address', () => {
+	it('should show the input to filter an address', () => {
 		const store = generateStore();
-		const placeholder = 'Search an address';
+		const placeholder = 'Filter an address';
 		setupTest(<EditDLComponent {...buildProps()} />, { store });
-		const searchInput = screen.getByTestId(TESTID_SELECTORS.DL_MEMBERS_SEARCH_INPUT);
+		const searchInput = screen.getByTestId(TESTID_SELECTORS.DL_MEMBERS_FILTER_INPUT);
 		const searchInputTextBox = within(searchInput).getByRole('textbox', { name: placeholder });
 		expect(searchInputTextBox).toBeVisible();
-		const searchInputIcon = within(searchInput).getByTestId(TESTID_SELECTORS.ICONS.SEARCH_MEMBERS);
+		const searchInputIcon = within(searchInput).getByTestId(TESTID_SELECTORS.ICONS.FILTER_MEMBERS);
 		expect(searchInputIcon).toBeVisible();
 	});
 
@@ -366,35 +366,35 @@ describe('Edit DL Component', () => {
 				expect(screen.queryByText(errorMessage)).not.toBeInTheDocument();
 			});
 
-			//
-			// 		it('should render AlertCircle error icon inside chip when the chip is a duplicated email and remove the icon error when duplicated item is removed from the bottom list', async () => {
-			// 			const validMail = faker.internet.email();
-			// 			const { user } = setup(<NewContactGroupBoard />);
-			// 			const contactInput = getContactInput();
-			// 			await user.type(contactInput, validMail);
-			// 			await act(async () => {
-			// 				await user.type(contactInput, ',');
-			// 			});
-			// 			await act(async () => {
-			// 				await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
-			// 			});
-			// 			await user.type(contactInput, validMail);
-			// 			await act(async () => {
-			// 				await user.type(contactInput, ',');
-			// 			});
-			//
-			// 			expect(
-			// 				within(screen.getByTestId('default-chip')).getByTestId(ICON_REGEXP.duplicated)
-			// 			).toBeVisible();
-			// 			await act(async () => {
-			// 				await user.click(
-			// 					screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.trash, name: /remove/i })
-			// 				);
-			// 			});
-			// 			const chip = screen.getByTestId('default-chip');
-			// 			expect(within(chip).queryByTestId(ICON_REGEXP.duplicated)).not.toBeInTheDocument();
-			// 		});
-			//
+			it.todo(
+				'should render AlertCircle error icon inside chip when the chip is a duplicated email and remove the icon error when duplicated item is removed from the bottom list' /* , async () => {
+						const validMail = faker.internet.email();
+						const { user } = setup(<NewContactGroupBoard />);
+						const contactInput = getContactInput();
+						await user.type(contactInput, validMail);
+						await act(async () => {
+							await user.type(contactInput, ',');
+						});
+						await act(async () => {
+							await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
+						});
+						await user.type(contactInput, validMail);
+						await act(async () => {
+							await user.type(contactInput, ',');
+						});
+
+						expect(
+							within(screen.getByTestId('default-chip')).getByTestId(ICON_REGEXP.duplicated)
+						).toBeVisible();
+						await act(async () => {
+							await user.click(
+								screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.trash, name: /remove/i })
+							);
+						});
+						const chip = screen.getByTestId('default-chip');
+						expect(within(chip).queryByTestId(ICON_REGEXP.duplicated)).not.toBeInTheDocument();
+					} */
+			);
 		});
 	});
 
@@ -441,7 +441,7 @@ describe('Edit DL Component', () => {
 				'do-not-reply@unknown.net'
 			];
 			const { user } = setupTest(<EditDLComponent {...buildProps({ members })} />, { store });
-			await user.type(screen.getByRole('textbox', { name: 'Search an address' }), 'mari');
+			await user.type(screen.getByRole('textbox', { name: 'Filter an address' }), 'mari');
 			await waitFor(() =>
 				expect(screen.getAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM)).toHaveLength(2)
 			);
@@ -459,7 +459,7 @@ describe('Edit DL Component', () => {
 				'do-not-reply@unknown.net'
 			];
 			const { user } = setupTest(<EditDLComponent {...buildProps({ members })} />, { store });
-			const searchInput = screen.getByRole('textbox', { name: 'Search an address' });
+			const searchInput = screen.getByRole('textbox', { name: 'Filter an address' });
 			await user.type(searchInput, 'mari');
 			await waitFor(() =>
 				expect(screen.getAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM)).toHaveLength(2)

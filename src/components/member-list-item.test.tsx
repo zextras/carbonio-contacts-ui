@@ -13,11 +13,9 @@ import { TESTID_SELECTORS } from '../constants/tests';
 
 const buildProps = ({
 	email = '',
-	isOwner = false,
 	onRemove = jest.fn()
 }: Partial<MemberListItemComponentProps> = {}): MemberListItemComponentProps => ({
 	email,
-	isOwner,
 	onRemove
 });
 
@@ -32,16 +30,6 @@ describe('Member item', () => {
 		const email = faker.internet.email();
 		setupTest(<MemberListItemComponent {...buildProps({ email })} />);
 		expect(screen.getByTestId(TESTID_SELECTORS.AVATAR)).toBeVisible();
-	});
-
-	it('should show the label manager if the member is an owner', () => {
-		setupTest(<MemberListItemComponent {...buildProps({ isOwner: true })} />);
-		expect(screen.getByText('Manager')).toBeVisible();
-	});
-
-	it('should not show the label manager if the member is not an owner', () => {
-		setupTest(<MemberListItemComponent {...buildProps({ isOwner: false })} />);
-		expect(screen.queryByText('Manager')).not.toBeInTheDocument();
 	});
 
 	it('should show the remove action button', () => {

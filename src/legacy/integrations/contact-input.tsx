@@ -153,7 +153,7 @@ type ContactInputProps = Pick<
 	chipDisplayName?: ContactInputChipDisplayName;
 };
 
-export const ContactInput: FC<ContactInputProps> = ({
+const ContactInputCore: FC<ContactInputProps> = ({
 	onChange,
 	defaultValue,
 	placeholder,
@@ -544,37 +544,41 @@ export const ContactInput: FC<ContactInputProps> = ({
 	);
 
 	return (
-		<StoreProvider>
-			<Container width="100%" onDrop={onDrop} height="100%">
-				<ChipInput
-					data-testid={'contact-input'}
-					disableOptions
-					placeholder={placeholder}
-					confirmChipOnBlur
-					confirmChipOnSpace={false}
-					inputRef={inputRef}
-					onInputType={onInputType}
-					onChange={onChange}
-					options={options}
-					value={contactInputValue}
-					background={background}
-					onAdd={onAdd}
-					requireUniqueChips
-					createChipOnPaste
-					pasteSeparators={[',', ' ', ';', '\n']}
-					separators={[
-						{ code: 'NumpadEnter', ctrlKey: false },
-						{ key: ',', ctrlKey: false }
-					]}
-					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-					// @ts-ignore
-					ChipComponent={ChipComponent}
-					onDragEnter={dragAndDropEnabled ? onDragEnter : noop}
-					onDragOver={dragAndDropEnabled ? onDragEnter : noop}
-					onDragEnd={dragAndDropEnabled ? onDragEnd : noop}
-					{...props}
-				/>
-			</Container>
-		</StoreProvider>
+		<Container width="100%" onDrop={onDrop} height="100%">
+			<ChipInput
+				data-testid={'contact-input'}
+				disableOptions
+				placeholder={placeholder}
+				confirmChipOnBlur
+				confirmChipOnSpace={false}
+				inputRef={inputRef}
+				onInputType={onInputType}
+				onChange={onChange}
+				options={options}
+				value={contactInputValue}
+				background={background}
+				onAdd={onAdd}
+				requireUniqueChips
+				createChipOnPaste
+				pasteSeparators={[',', ' ', ';', '\n']}
+				separators={[
+					{ code: 'NumpadEnter', ctrlKey: false },
+					{ key: ',', ctrlKey: false }
+				]}
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+				// @ts-ignore
+				ChipComponent={ChipComponent}
+				onDragEnter={dragAndDropEnabled ? onDragEnter : noop}
+				onDragOver={dragAndDropEnabled ? onDragEnter : noop}
+				onDragEnd={dragAndDropEnabled ? onDragEnd : noop}
+				{...props}
+			/>
+		</Container>
 	);
 };
+
+export const ContactInput = (props: ContactInputProps): ReactElement => (
+	<StoreProvider>
+		<ContactInputCore {...props} />
+	</StoreProvider>
+);

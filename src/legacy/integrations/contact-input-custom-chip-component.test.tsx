@@ -90,6 +90,22 @@ describe('Contact input custom chip component', () => {
 
 		expect(defaultChipEmail).toBeVisible();
 	});
+
+	it('should show email if the label is empty', () => {
+		setupTest(
+			<ContactInputCustomChipComponent
+				id={user1.id}
+				label={''}
+				email={user1.email}
+				isGroup={false}
+				_onChange={jest.fn()}
+				contactInputValue={[]}
+				chipDisplayName={CHIP_DISPLAY_NAME_VALUES.EMAIL}
+			/>
+		);
+		expect(screen.getByText(user1.email)).toBeVisible();
+	});
+
 	test('if it is a group it will render a normal chip', () => {
 		setupTest(
 			<ContactInputCustomChipComponent
@@ -175,6 +191,35 @@ describe('Contact input custom chip component', () => {
 		expect(user2Element).toBeVisible();
 		expect(user3Element).toBeVisible();
 	});
+
+	test('the dropdown will contain a placeholder when the chevron action is clicked and there is no members', async () => {
+		registerGetDistributionListHandler(distributionList);
+		const response = getDistributionListCustomResponse({ dlm: [], total: 0, more: false });
+
+		getSetupServer().use(
+			rest.post(getDistributionListMembersRequest, async (req, res, ctx) => res(ctx.json(response)))
+		);
+
+		const { user } = setupTest(
+			<ContactInputCustomChipComponent
+				id={distributionList.id}
+				label={distributionList.displayName}
+				email={distributionList.email}
+				isGroup
+				_onChange={jest.fn()}
+				contactInputValue={[]}
+			/>
+		);
+
+		const chevronAction = await screen.findByTestId(TESTID_SELECTORS.ICONS.EXPAND_DL);
+
+		await user.click(chevronAction);
+
+		await screen.findByTestId(TESTID_SELECTORS.DROPDOWN_LIST);
+		expect(screen.queryByText(selectAll)).not.toBeInTheDocument();
+		expect(screen.getByText('PLACEHOLDER')).toBeVisible();
+	});
+
 	test('the dropdown will contain also the show more button when more results can be retrieved', async () => {
 		const dlm = [{ _content: user1.email }, { _content: user2Mail }, { _content: user3Mail }];
 		const total = 6;
@@ -200,10 +245,8 @@ describe('Contact input custom chip component', () => {
 		await waitFor(() => expect(handler).toHaveBeenCalled());
 		const chevronAction = await screen.findByTestId(TESTID_SELECTORS.ICONS.EXPAND_DL);
 
-		await waitFor(() => {
-			user.click(chevronAction);
-		});
-		jest.advanceTimersByTime(600);
+		await user.click(chevronAction);
+		await screen.findByText(user1.email);
 
 		const showMore = screen.getByText(/show more/i);
 

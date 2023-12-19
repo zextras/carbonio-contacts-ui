@@ -6,35 +6,35 @@
 import React, { useCallback, useMemo } from 'react';
 
 import { useModal } from '@zextras/carbonio-design-system';
-import { useUserAccount } from '@zextras/carbonio-shell-ui';
-import { some } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { DefaultTheme } from 'styled-components';
 
 import { EditDLControllerComponent } from '../components/edit-dl-controller';
 import { ACTION_IDS } from '../constants';
+import { DistributionList } from '../model/distribution-list';
 
-export type UIAction<ExecArg> = {
+export type UIAction<ExecArg, CanExecArg> = {
 	id: string;
 	label: string;
 	icon: keyof DefaultTheme['icons'];
 	execute: (arg: ExecArg) => void;
+	canExecute: (arg: CanExecArg) => boolean;
 };
 
-export type EditDLAction = UIAction<{ displayName?: string; email: string }> & {
-	canExecute: (arg: { owners: Array<{ id: string }> }) => boolean;
-};
+export type EditDLAction = UIAction<
+	Pick<DistributionList, 'displayName' | 'email'>,
+	Pick<DistributionList, 'isOwner'>
+>;
 
 export const useActionEditDL = (): EditDLAction => {
 	const [t] = useTranslation();
 	const createModal = useModal();
-	const userAccount = useUserAccount();
 
 	const execute = useCallback<EditDLAction['execute']>(
 		({ email, displayName = email }) => {
 			const closeModal = createModal({
 				title: t('modal.edit_distribution_list.title', 'Edit "{{displayName}}"', { displayName }),
-				size: 'medium',
+				size: 'small',
 				onClose: () => {
 					closeModal();
 				},
@@ -52,10 +52,7 @@ export const useActionEditDL = (): EditDLAction => {
 		[createModal, t]
 	);
 
-	const canExecute = useCallback<EditDLAction['canExecute']>(
-		({ owners }) => some(owners, (owner) => owner.id === userAccount?.id),
-		[userAccount?.id]
-	);
+	const canExecute = useCallback<EditDLAction['canExecute']>(({ isOwner }) => isOwner, []);
 
 	return useMemo(
 		() => ({

@@ -19,6 +19,7 @@ export interface GetDistributionListRequest extends GenericSoapPayload<typeof NA
 export interface GetDistributionListResponse extends GenericSoapPayload<typeof NAMESPACES.account> {
 	dl: Array<{
 		name: string;
+		isOwner?: boolean;
 		owners?: Array<{ owner: Array<{ id?: string; name?: string }> }>;
 		_attrs?: {
 			displayName?: string;
