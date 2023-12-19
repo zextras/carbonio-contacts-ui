@@ -3,15 +3,14 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import { useModal } from '@zextras/carbonio-design-system';
 import { useUserAccount } from '@zextras/carbonio-shell-ui';
-import { first, some } from 'lodash';
+import { some } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { DefaultTheme } from 'styled-components';
 
-import { getDistributionList } from '../api/get-distribution-list';
 import { EditDLControllerComponent } from '../components/edit-dl-controller';
 import { ACTION_IDS } from '../constants';
 
@@ -23,7 +22,7 @@ export type UIAction<ExecArg> = {
 };
 
 export type EditDLAction = UIAction<{ displayName?: string; email: string }> & {
-	canExecute: (arg: { email: string }) => Promise<boolean>;
+	canExecute: (arg: { owners: Array<{ id: string }> }) => boolean;
 };
 
 export const useActionEditDL = (): EditDLAction => {
@@ -54,18 +53,18 @@ export const useActionEditDL = (): EditDLAction => {
 	);
 
 	const canExecute = useCallback<EditDLAction['canExecute']>(
-		({ email }) =>
-			getDistributionList(email).then((dlDetails) =>
-				some(first(dlDetails.dl)?.owners, ({ owner }) => first(owner)?.id === userAccount?.id)
-			),
+		({ owners }) => some(owners, (owner) => owner.id === userAccount?.id),
 		[userAccount?.id]
 	);
 
-	return {
-		id: ACTION_IDS.EDIT_DL,
-		label: t('action.edit_distribution_list', 'Edit address list'),
-		icon: 'Edit2Outline',
-		execute,
-		canExecute
-	};
+	return useMemo(
+		() => ({
+			id: ACTION_IDS.EDIT_DL,
+			label: t('action.edit_distribution_list', 'Edit address list'),
+			icon: 'Edit2Outline',
+			execute,
+			canExecute
+		}),
+		[canExecute, execute, t]
+	);
 };

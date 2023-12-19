@@ -20,12 +20,14 @@ import { getDLContactInput } from '../tests/utils';
 describe('useActionEditDL', () => {
 	it('should return an object with the specif data', () => {
 		const { result } = setupHook(useActionEditDL);
-		expect(result.current).toEqual<UIAction<unknown>>({
-			icon: 'Edit2Outline',
-			label: 'Edit address list',
-			id: 'dl-edit-action',
-			execute: expect.anything()
-		});
+		expect(result.current).toEqual<UIAction<unknown>>(
+			expect.objectContaining({
+				icon: 'Edit2Outline',
+				label: 'Edit address list',
+				id: 'dl-edit-action',
+				execute: expect.anything()
+			})
+		);
 	});
 
 	it('should return an execute field which opens a UI with the dl info and members', async () => {

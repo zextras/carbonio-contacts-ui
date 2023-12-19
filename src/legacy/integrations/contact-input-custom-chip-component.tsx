@@ -5,7 +5,7 @@
  */
 
 /* eslint-disable arrow-body-style */
-import React, { ReactElement, useCallback, useMemo, useState } from 'react';
+import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
 	Chip,
@@ -16,11 +16,12 @@ import {
 	ChipAction
 } from '@zextras/carbonio-design-system';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
-import { debounce, DebouncedFuncLeading, filter, map, noop, uniqBy } from 'lodash';
+import { debounce, DebouncedFuncLeading, filter, first, map, noop, reduce, uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { useActionEditDL } from '../../actions/edit-dl';
+import { getDistributionList, GetDistributionListResponse } from '../../api/get-distribution-list';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
 import { ContactInputOnChange, ContactInputValue, CustomChipProps } from '../types/integrations';
 
@@ -255,16 +256,10 @@ const CustomComponent = ({
 	});
 
 	const actionEditDL = useActionEditDL();
+	const [chipActions, setChipActions] = useState<ChipAction[]>([]);
 
-	const chipActions = useMemo<ChipAction[]>(() => {
-		return [
-			{
-				id: `chip-action-${actionEditDL.id}`,
-				label: actionEditDL.label,
-				type: 'button',
-				icon: actionEditDL.icon,
-				onClick: () => actionEditDL.execute({ displayName: label, email })
-			},
+	const actionsAlwaysAvailable = useMemo(
+		(): ChipAction[] => [
 			{
 				id: 'action2',
 				label: t('expand_distribution_list', 'Expand address list'),
@@ -272,8 +267,49 @@ const CustomComponent = ({
 				icon: open ? 'ChevronUpOutline' : 'ChevronDownOutline',
 				onClick: debounceUserInput(onChevronClick)
 			}
-		];
-	}, [actionEditDL, email, label, onChevronClick, open, t]);
+		],
+		[onChevronClick, open, t]
+	);
+
+	useEffect(() => {
+		getDistributionList(email)
+			.then((dlDetails) => {
+				const actions: ChipAction[] = [];
+				const dlOwners = reduce<
+					NonNullable<GetDistributionListResponse['dl'][number]['owners']>[number],
+					Array<{ id: string }>
+				>(
+					first(dlDetails.dl)?.owners,
+					(result, item) => {
+						const owner = first(item.owner);
+						if (owner?.id) {
+							result.push({ id: owner.id });
+						}
+						return result;
+					},
+					[]
+				);
+				if (
+					actionEditDL.canExecute({
+						owners: dlOwners
+					})
+				) {
+					actions.push({
+						id: `chip-action-${actionEditDL.id}`,
+						label: actionEditDL.label,
+						type: 'button',
+						icon: actionEditDL.icon,
+						onClick: () => actionEditDL.execute({ displayName: label, email })
+					});
+				}
+				actions.push(...actionsAlwaysAvailable);
+				setChipActions(actions);
+			})
+			.catch((error) => {
+				setChipActions(actionsAlwaysAvailable);
+				console.error(error);
+			});
+	}, [actionEditDL, actionsAlwaysAvailable, email, label, onChevronClick, open, t]);
 
 	const onChipClick = useCallback<React.MouseEventHandler>((e) => {
 		e.stopPropagation();

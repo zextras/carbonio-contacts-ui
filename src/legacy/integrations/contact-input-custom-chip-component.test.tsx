@@ -11,6 +11,7 @@ import { rest } from 'msw';
 
 import { ContactInputCustomChipComponent } from './contact-input-custom-chip-component';
 import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
+import { mockedAccount } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
 import { screen, setupTest, within } from '../../carbonio-ui-commons/test/test-setup';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
 import { TESTID_SELECTORS, TIMERS } from '../../constants/tests';
@@ -23,7 +24,8 @@ const getDistributionListMembersRequest = '/service/soap/GetDistributionListMemb
 const distributionList = {
 	id: 'dl-1',
 	email: 'dl1@mail.com',
-	label: 'dl 1'
+	displayName: 'dl 1',
+	owners: [{ id: mockedAccount.id, name: mockedAccount.name }]
 };
 
 const user1 = {
@@ -118,11 +120,12 @@ describe('Contact input custom chip component', () => {
 		const defaultChip = screen.getByTestId('default-chip');
 		expect(defaultChip).toBeVisible();
 	});
-	test('if it is a distribution list it will render the distribution list custom chip', () => {
+	test('if it is a distribution list it will render the distribution list custom chip', async () => {
+		const handler = registerGetDistributionListHandler(distributionList);
 		setupTest(
 			<ContactInputCustomChipComponent
 				id={distributionList.id}
-				label={distributionList.label}
+				label={distributionList.displayName}
 				email={distributionList.email}
 				isGroup
 				_onChange={jest.fn()}
@@ -130,6 +133,7 @@ describe('Contact input custom chip component', () => {
 			/>
 		);
 
+		await waitFor(() => expect(handler).toHaveBeenCalled());
 		const distributionListChip = screen.getByTestId('distribution-list-chip');
 		expect(distributionListChip).toBeVisible();
 	});
@@ -137,6 +141,7 @@ describe('Contact input custom chip component', () => {
 		const dlm = [{ _content: user1.email }, { _content: user2Mail }, { _content: user3Mail }];
 		const total = 3;
 		const more = false;
+		registerGetDistributionListHandler(distributionList);
 		const response = getDistributionListCustomResponse({ dlm, total, more });
 
 		getSetupServer().use(
@@ -146,7 +151,7 @@ describe('Contact input custom chip component', () => {
 		const { user } = setupTest(
 			<ContactInputCustomChipComponent
 				id={distributionList.id}
-				label={distributionList.label}
+				label={distributionList.displayName}
 				email={distributionList.email}
 				isGroup
 				_onChange={jest.fn()}
@@ -154,7 +159,7 @@ describe('Contact input custom chip component', () => {
 			/>
 		);
 
-		const chevronAction = screen.getByTestId(TESTID_SELECTORS.ICONS.EXPAND_DL);
+		const chevronAction = await screen.findByTestId(TESTID_SELECTORS.ICONS.EXPAND_DL);
 
 		await waitFor(() => {
 			user.click(chevronAction);
@@ -174,6 +179,7 @@ describe('Contact input custom chip component', () => {
 		const dlm = [{ _content: user1.email }, { _content: user2Mail }, { _content: user3Mail }];
 		const total = 6;
 		const more = true;
+		const handler = registerGetDistributionListHandler(distributionList);
 		const response = getDistributionListCustomResponse({ dlm, total, more });
 
 		getSetupServer().use(
@@ -183,7 +189,7 @@ describe('Contact input custom chip component', () => {
 		const { user } = setupTest(
 			<ContactInputCustomChipComponent
 				id={distributionList.id}
-				label={distributionList.label}
+				label={distributionList.displayName}
 				email={distributionList.email}
 				isGroup
 				_onChange={jest.fn()}
@@ -191,7 +197,8 @@ describe('Contact input custom chip component', () => {
 			/>
 		);
 
-		const chevronAction = screen.getByTestId(TESTID_SELECTORS.ICONS.EXPAND_DL);
+		await waitFor(() => expect(handler).toHaveBeenCalled());
+		const chevronAction = await screen.findByTestId(TESTID_SELECTORS.ICONS.EXPAND_DL);
 
 		await waitFor(() => {
 			user.click(chevronAction);
@@ -205,7 +212,7 @@ describe('Contact input custom chip component', () => {
 	test('clicking show more button will increase the dropdown items, if all items are retrieved show more will disappear', async () => {
 		const dlm = [{ _content: user1.email }, { _content: user2Mail }, { _content: user3Mail }];
 		const dlm2 = [{ _content: user4Mail }, { _content: user5Mail }, { _content: user6Mail }];
-
+		const handler = registerGetDistributionListHandler(distributionList);
 		const firstResponse = getDistributionListCustomResponse({ dlm, total: 6, more: true });
 		const secondResponse = getDistributionListCustomResponse({ dlm: dlm2, total: 6, more: false });
 
@@ -218,7 +225,7 @@ describe('Contact input custom chip component', () => {
 		const { user } = setupTest(
 			<ContactInputCustomChipComponent
 				id={distributionList.id}
-				label={distributionList.label}
+				label={distributionList.displayName}
 				email={distributionList.email}
 				isGroup
 				_onChange={jest.fn()}
@@ -226,7 +233,8 @@ describe('Contact input custom chip component', () => {
 			/>
 		);
 
-		const chevronAction = screen.getByTestId(TESTID_SELECTORS.ICONS.EXPAND_DL);
+		await waitFor(() => expect(handler).toHaveBeenCalled());
+		const chevronAction = await screen.findByTestId(TESTID_SELECTORS.ICONS.EXPAND_DL);
 
 		await waitFor(() => {
 			user.click(chevronAction);
@@ -256,25 +264,28 @@ describe('Contact input custom chip component', () => {
 	});
 	test('clicking select all when all data are retrieved, it wont make any other call to the server', async () => {
 		const dlm = [{ _content: user1.email }, { _content: user2Mail }, { _content: user3Mail }];
+		const handler = registerGetDistributionListHandler(distributionList);
 		const response = getDistributionListCustomResponse({ dlm, total: 3, more: false });
 		const dispatchRequest = jest.fn();
 
 		getSetupServer().use(
-			rest.post(getDistributionListMembersRequest, async (req, res, ctx) => res(ctx.json(response)))
+			rest.post(getDistributionListMembersRequest, async (req, res, ctx) => {
+				dispatchRequest();
+				return res(ctx.json(response));
+			})
 		);
-		getSetupServer().events.on('request:start', dispatchRequest);
 		const { user } = setupTest(
 			<ContactInputCustomChipComponent
 				id={distributionList.id}
-				label={distributionList.label}
+				label={distributionList.displayName}
 				email={distributionList.email}
 				isGroup
 				_onChange={jest.fn()}
 				contactInputValue={[]}
 			/>
 		);
-
-		const chevronAction = screen.getByTestId(TESTID_SELECTORS.ICONS.EXPAND_DL);
+		await waitFor(() => expect(handler).toHaveBeenCalled());
+		const chevronAction = await screen.findByTestId(TESTID_SELECTORS.ICONS.EXPAND_DL);
 
 		await waitFor(() => {
 			user.click(chevronAction);
@@ -287,9 +298,11 @@ describe('Contact input custom chip component', () => {
 		});
 		expect(dispatchRequest).toHaveBeenCalledTimes(1);
 	});
+
 	test('clicking select all when more data are available, it will make another call to the server', async () => {
 		const dlm = [{ _content: user1.email }, { _content: user2Mail }, { _content: user3Mail }];
 		const dlm2 = [{ _content: user4Mail }, { _content: user5Mail }, { _content: user6Mail }];
+		const handler = registerGetDistributionListHandler(distributionList);
 		const firstResponse = getDistributionListCustomResponse({ dlm, total: 6, more: true });
 		const secondResponse = getDistributionListCustomResponse({ dlm: dlm2, total: 6, more: false });
 		const dispatchRequest = jest.fn();
@@ -312,15 +325,15 @@ describe('Contact input custom chip component', () => {
 		const { user } = setupTest(
 			<ContactInputCustomChipComponent
 				id={distributionList.id}
-				label={distributionList.label}
+				label={distributionList.displayName}
 				email={distributionList.email}
 				isGroup
 				_onChange={jest.fn()}
 				contactInputValue={[]}
 			/>
 		);
-
-		const chevronAction = screen.getByTestId(TESTID_SELECTORS.ICONS.EXPAND_DL);
+		await waitFor(() => expect(handler).toHaveBeenCalled());
+		const chevronAction = await screen.findByTestId(TESTID_SELECTORS.ICONS.EXPAND_DL);
 
 		await waitFor(() => {
 			user.click(chevronAction);
@@ -342,6 +355,8 @@ describe('Contact input custom chip component', () => {
 
 	describe('Editing DL', () => {
 		it("doesn't show the edit icon if the contact isn't a DL", () => {
+			const handler = registerGetDistributionListHandler(distributionList);
+
 			setupTest(
 				<ContactInputCustomChipComponent
 					id={'user-1'}
@@ -357,38 +372,18 @@ describe('Contact input custom chip component', () => {
 				icon: TESTID_SELECTORS.ICONS.EDIT_DL
 			});
 			expect(editButton).not.toBeInTheDocument();
-		});
-
-		it('shows the edit icon if the contact is a DL', () => {
-			setupTest(
-				<ContactInputCustomChipComponent
-					id={distributionList.id}
-					label={distributionList.label}
-					email={distributionList.email}
-					isGroup
-					_onChange={jest.fn()}
-					contactInputValue={[]}
-				/>
-			);
-
-			const editButton = screen.getByRoleWithIcon('button', {
-				icon: TESTID_SELECTORS.ICONS.EDIT_DL
-			});
-			expect(editButton).toBeVisible();
+			expect(handler).not.toHaveBeenCalled();
 		});
 
 		it('should not show the edit icon if the contact is a DL but the current user is not the DL owner', async () => {
-			const dl = {
-				email: faker.internet.email(),
-				owners: [{ id: faker.string.uuid(), name: faker.person.fullName() }]
-			};
+			distributionList.owners = [{ id: faker.string.uuid(), name: faker.person.fullName() }];
 
-			const handler = registerGetDistributionListHandler(dl);
+			const handler = registerGetDistributionListHandler(distributionList);
 
 			setupTest(
 				<ContactInputCustomChipComponent
 					id={distributionList.id}
-					label={distributionList.label}
+					label={distributionList.displayName}
 					email={distributionList.email}
 					isGroup
 					_onChange={jest.fn()}
@@ -402,16 +397,37 @@ describe('Contact input custom chip component', () => {
 			).not.toBeInTheDocument();
 		});
 
-		it.todo(
-			'should show the edit icon if the contact is a DL and the current user is the DL owner'
-		);
+		it('should show the edit icon if the contact is a DL and the current user is the DL owner', async () => {
+			distributionList.owners = [{ id: mockedAccount.id, name: mockedAccount.name }];
+
+			const handler = registerGetDistributionListHandler(distributionList);
+
+			setupTest(
+				<ContactInputCustomChipComponent
+					id={distributionList.id}
+					label={distributionList.displayName}
+					email={distributionList.email}
+					isGroup
+					_onChange={jest.fn()}
+					contactInputValue={[]}
+				/>
+			);
+
+			await waitFor(() => expect(handler).toHaveBeenCalled());
+			expect(
+				screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.ICONS.EDIT_DL })
+			).toBeVisible();
+		});
 
 		it('if the user clicks on the edit icon the DL title is displayed inside a modal', async () => {
 			const store = generateStore();
+
+			const handler = registerGetDistributionListHandler(distributionList);
+
 			const { user } = setupTest(
 				<ContactInputCustomChipComponent
 					id={distributionList.id}
-					label={distributionList.label}
+					label={distributionList.displayName}
 					email={distributionList.email}
 					isGroup
 					_onChange={jest.fn()}
@@ -420,17 +436,18 @@ describe('Contact input custom chip component', () => {
 				{ store }
 			);
 
-			const editButton = screen.getByRoleWithIcon('button', {
+			await waitFor(() => expect(handler).toHaveBeenCalled());
+			const editButton = await screen.findByRoleWithIcon('button', {
 				icon: TESTID_SELECTORS.ICONS.EDIT_DL
 			});
 			await user.click(editButton);
-			await screen.findByText(`Edit "${distributionList.label}"`);
+			await screen.findByText(`Edit "${distributionList.displayName}"`);
 			act(() => {
 				jest.advanceTimersByTime(TIMERS.MODAL.DELAY_OPEN);
 			});
 			expect(
 				within(screen.getByTestId(TESTID_SELECTORS.MODAL)).getByText(
-					`Edit "${distributionList.label}"`
+					`Edit "${distributionList.displayName}"`
 				)
 			).toBeVisible();
 		});
