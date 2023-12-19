@@ -266,6 +266,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 			background={'gray5'}
 			padding={{ horizontal: 'large', bottom: '2.625rem' }}
 			height={'fill'}
+			minHeight={'30rem'}
 		>
 			<Container
 				gap={'0.5rem'}
@@ -299,7 +300,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 				padding={'1rem 0'}
 			>
 				<Avatar size="large" label={titleValue} icon="PeopleOutline" />
-				<Container height={'fit'} crossAlignment={'flex-start'}>
+				<Container height={'fit'} crossAlignment={'flex-start'} minWidth={0}>
 					<Text weight={'bold'}>{titleValue}</Text>
 					<Text color={'gray1'}>
 						{t('board.newContactGroup.addresses.label', 'Addresses')}: {memberListEmails.length}

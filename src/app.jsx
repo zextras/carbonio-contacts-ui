@@ -150,7 +150,7 @@ export default function App() {
 				type: ACTION_TYPES.NEW,
 				action: () => ({
 					id: 'new-contact-group',
-					label: t('label.newContactGroup', 'New Contact Group'),
+					label: t('label.newContactGroup', 'New contact group'),
 					icon: 'PeopleOutline',
 					onClick: () => {
 						addBoard({
