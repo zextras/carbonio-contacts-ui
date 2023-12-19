@@ -113,6 +113,9 @@ export const EditDLControllerComponent: FC<EditDLControllerComponentProps> = ({
 				onRemoveMember={onRemoveMember}
 				onAddMembers={onAddMembers}
 			/>
+			{/* TODO: add divider */}
+			{/* TODO: change colors of cancel */}
+			{/* TODO: fix spaces */}
 			<ModalFooter
 				confirmLabel={t('label.save', 'save')}
 				onConfirm={onConfirm}
