@@ -5,7 +5,7 @@
  */
 import React, { FC, useCallback } from 'react';
 
-import { Avatar, Button, Row, Text } from '@zextras/carbonio-design-system';
+import { Avatar, Button, Row, Text, TextWithTooltip } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
 export type MemberListItemComponentProps = {
@@ -31,7 +31,7 @@ export const MemberListItemComponent: FC<MemberListItemComponentProps> = ({
 		>
 			<Row gap={'0.5rem'}>
 				<Avatar size={'medium'} label={email} />
-				<Text size={'small'}>{email}</Text>
+				<TextWithTooltip size={'small'}>{email}</TextWithTooltip>
 			</Row>
 			<Row gap={'1rem'}>
 				{isOwner && (
