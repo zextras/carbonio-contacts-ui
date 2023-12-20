@@ -23,6 +23,7 @@ import userEvent from '@testing-library/user-event';
 import { ModalManager, SnackbarManager, ThemeProvider } from '@zextras/carbonio-design-system';
 import { filter } from 'lodash';
 import { I18nextProvider } from 'react-i18next';
+import { MemoryRouter } from 'react-router-dom';
 
 import I18nTestFactory from '../carbonio-ui-commons/test/i18n/i18n-test-factory';
 
@@ -30,6 +31,7 @@ export type UserEvent = ReturnType<(typeof userEvent)['setup']>;
 
 interface WrapperProps {
 	children?: React.ReactNode;
+	initialRouterEntries?: string[];
 }
 
 /**
@@ -132,35 +134,47 @@ export function within(
 
 export const screen: Screen<typeof queriesExtended> = { ...rtlScreen, ...within(document.body) };
 
-const Wrapper = ({ children }: WrapperProps): React.JSX.Element => {
+const Wrapper = ({ initialRouterEntries, children }: WrapperProps): React.JSX.Element => {
 	const i18n = useMemo(() => {
 		const i18nFactory = new I18nTestFactory();
 		return i18nFactory.getAppI18n();
 	}, []);
 
 	return (
-		<ThemeProvider>
-			<SnackbarManager>
-				<I18nextProvider i18n={i18n}>
-					<ModalManager>{children}</ModalManager>
-				</I18nextProvider>
-			</SnackbarManager>
-		</ThemeProvider>
+		<MemoryRouter
+			initialEntries={initialRouterEntries}
+			initialIndex={(initialRouterEntries?.length || 1) - 1}
+		>
+			<ThemeProvider>
+				<SnackbarManager>
+					<I18nextProvider i18n={i18n}>
+						<ModalManager>{children}</ModalManager>
+					</I18nextProvider>
+				</SnackbarManager>
+			</ThemeProvider>
+		</MemoryRouter>
 	);
 };
 
 function customRender(
 	ui: React.ReactElement,
-	options: Omit<RenderOptions, 'queries' | 'wrapper'> = {}
+	{
+		initialRouterEntries = ['/'],
+		...options
+	}: WrapperProps & {
+		options?: Omit<RenderOptions, 'queries' | 'wrapper'>;
+	} = {}
 ): RenderResult<typeof queriesExtended> {
 	return render(ui, {
-		wrapper: ({ children }: Pick<WrapperProps, 'children'>) => <Wrapper>{children}</Wrapper>,
+		wrapper: ({ children }: Pick<WrapperProps, 'children'>) => (
+			<Wrapper initialRouterEntries={initialRouterEntries}>{children}</Wrapper>
+		),
 		queries: { ...queries, ...customQueries },
 		...options
 	});
 }
 
-type SetupOptions = {
+type SetupOptions = Pick<WrapperProps, 'initialRouterEntries'> & {
 	renderOptions?: Omit<RenderOptions, 'queries' | 'wrapper'>;
 	setupOptions?: Parameters<(typeof userEvent)['setup']>[0];
 };
@@ -173,5 +187,8 @@ export const setup = (
 		advanceTimers: jest.advanceTimersByTime,
 		...options?.setupOptions
 	}),
-	...customRender(ui, options?.renderOptions)
+	...customRender(ui, {
+		initialRouterEntries: options?.initialRouterEntries,
+		...options?.renderOptions
+	})
 });

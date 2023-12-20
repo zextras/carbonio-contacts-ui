@@ -37,5 +37,44 @@ export const client = {
 				return response.json();
 			}
 			throw new Error('Something went wrong');
+		}),
+	findContactGroups: (offset = 0): Promise<any> =>
+		fetch(`/service/soap/SearchRequest`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				Body: {
+					[`SearchRequest`]: {
+						_jsns: 'urn:zimbraMail',
+						limit: 100,
+						offset,
+						sortBy: 'nameAsc',
+						types: 'contact',
+						query: '#type:group in:contacts'
+					}
+				},
+				Header: {
+					context: {
+						_jsns: 'urn:zimbra'
+					}
+				}
+			})
 		})
+			.then((response) => {
+				if (response.ok) {
+					return response.json();
+				}
+				throw new Error('Something went wrong');
+			})
+			.then((res) => {
+				if (res.Body.SearchResponse.cn) {
+					return res.Body.SearchResponse.cn.map((value: any) => ({
+						id: value.id,
+						title: value._attrs.fullName
+					}));
+				}
+				return [];
+			})
 };

@@ -21,10 +21,15 @@ import { useTranslation } from 'react-i18next';
 import { CONTACTS_APP_ID, CONTACTS_ROUTE, NEW_CONTACT_GROUP_BOARD_ID } from './constants/app';
 import ContactInput from './integrations/contact-input';
 import { StoreProvider } from './store/redux';
+import { GROUPS_ROUTE } from './v2/constants';
 import SidebarItems from './views/secondary-bar/sidebar';
 import { SyncDataHandler } from './views/secondary-bar/sync-data-handler';
 
 const LazyAppView = lazy(() => import(/* webpackChunkName: "contacts-view" */ './views/app-view'));
+
+const LazyGroupsAppView = lazy(() =>
+	import(/* webpackChunkName: "groupsAppView" */ './v2/views/GroupsAppView')
+);
 
 const LazySettingsView = lazy(() =>
 	import(/* webpackChunkName: "settings-view" */ './views/settings/settings-view')
@@ -46,6 +51,12 @@ const AppView = (props) => (
 		<StoreProvider>
 			<LazyAppView {...props} />
 		</StoreProvider>
+	</Suspense>
+);
+
+const GroupsAppView = (props) => (
+	<Suspense fallback={<Spinner />}>
+		<LazyGroupsAppView {...props} />
 	</Suspense>
 );
 
@@ -97,6 +108,15 @@ export default function App() {
 			primaryBar: 'ContactsModOutline',
 			secondaryBar: SidebarView,
 			appView: AppView
+		});
+		addRoute({
+			route: GROUPS_ROUTE,
+			position: 4,
+			visible: true,
+			label: 'Contact Groups',
+			primaryBar: 'ContactsModOutline',
+			secondaryBar: SidebarView,
+			appView: GroupsAppView
 		});
 		addSettingsView({
 			route: CONTACTS_ROUTE,
