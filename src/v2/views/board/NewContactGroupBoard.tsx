@@ -178,7 +178,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 	): void => {
 		// TODO item are filtered to be uniq, because the ContactInput filters out, dropdown duplicated, only visually
 		//  but provide that item inside onChange parameter
-		const uniqNewContactInputValue = uniqBy(newContactInputValue, 'email');
+		const uniqNewContactInputValue = uniqBy(newContactInputValue, (value) => value.email);
 
 		const uniqNewContactInputValueWithActions = uniqNewContactInputValue.map((value) => {
 			const duplicated = memberListEmails.includes(value.email);
