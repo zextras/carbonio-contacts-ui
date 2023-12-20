@@ -278,7 +278,7 @@ describe('New contact group board', () => {
 			expect(within(chipInput).getByText(newEmail2)).toBeVisible();
 		});
 
-		it('should not use unconfirmed mails(valid chip in contactInput) in createContact request', async () => {
+		it('should not use unconfirmed mails (valid chips in contactInput) in createContact request', async () => {
 			getSetupServer().use(
 				rest.post('/service/soap/CreateContactRequest', async (req, res, ctx) =>
 					res(
