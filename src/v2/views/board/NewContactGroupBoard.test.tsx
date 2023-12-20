@@ -317,7 +317,7 @@ describe('New contact group board', () => {
 			});
 			await screen.findByText('Contact group successfully created');
 
-			expect(createContactGroupSpy).toBeCalledWith('New Group', [newEmail1]);
+			expect(createContactGroupSpy).toHaveBeenCalledWith('New Group', [newEmail1]);
 		});
 
 		it('should use inserted title in createContact request', async () => {
