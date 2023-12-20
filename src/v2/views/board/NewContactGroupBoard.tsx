@@ -131,19 +131,13 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 				'Invalid and already present addresses'
 			);
 		}
-		if (invalid === 1 && duplicated === 0) {
+		if (invalid > 0 && duplicated === 0) {
 			return t(
 				'board.newContactGroup.input.contact_input.error.invalid_address',
-				'Invalid address',
-				{ count: invalid }
-			);
-		}
-		if (invalid > 1 && duplicated === 0) {
-			return t(
-				'board.newContactGroup.input.contact_input.error.invalid_address',
-				'Invalid addresses',
 				{
-					count: invalid
+					count: invalid,
+					defaultValue: 'Invalid address',
+					defaultValue_plural: 'Invalid addresses'
 				}
 			);
 		}
