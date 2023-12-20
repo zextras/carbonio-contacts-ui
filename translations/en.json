@@ -258,6 +258,9 @@
     },
     "modal": {
         "address_book_name": "Address book name",
+        "close": {
+            "tooltip": "Close"
+        },
         "destination": "Destination folder",
         "edit_distribution_list": {
             "title": "Edit \"{{displayName}}\""

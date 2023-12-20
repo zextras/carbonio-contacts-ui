@@ -5,7 +5,13 @@
  */
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { ModalFooter, useSnackbar } from '@zextras/carbonio-design-system';
+import {
+	Divider,
+	ModalBody,
+	ModalFooter,
+	ModalHeader,
+	useSnackbar
+} from '@zextras/carbonio-design-system';
 import { difference, xor } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
@@ -106,22 +112,29 @@ export const EditDLControllerComponent: FC<EditDLControllerComponentProps> = ({
 
 	return (
 		<>
-			<EditDLComponent
-				email={email}
-				members={members}
-				totalMembers={totalMembers}
-				onRemoveMember={onRemoveMember}
-				onAddMembers={onAddMembers}
+			<ModalHeader
+				title={t('modal.edit_distribution_list.title', 'Edit "{{displayName}}"', { displayName })}
+				showCloseIcon
+				closeIconTooltip={t('modal.close.tooltip', 'Close')}
+				onClose={onClose}
 			/>
-			{/* TODO: add divider */}
-			{/* TODO: change colors of cancel */}
-			{/* TODO: fix spaces */}
+			<Divider />
+			<ModalBody>
+				<EditDLComponent
+					email={email}
+					members={members}
+					totalMembers={totalMembers}
+					onRemoveMember={onRemoveMember}
+					onAddMembers={onAddMembers}
+				/>
+			</ModalBody>
+			<Divider />
 			<ModalFooter
 				confirmLabel={t('label.save', 'save')}
 				onConfirm={onConfirm}
 				confirmDisabled={!isDirty}
-				secondaryActionLabel={t('label.cancel', 'cancel')}
-				onSecondaryAction={onClose}
+				dismissLabel={t('label.cancel', 'cancel')}
+				onClose={onClose}
 			/>
 		</>
 	);

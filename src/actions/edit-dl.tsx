@@ -32,24 +32,25 @@ export const useActionEditDL = (): EditDLAction => {
 
 	const execute = useCallback<EditDLAction['execute']>(
 		({ email, displayName = email }) => {
-			const closeModal = createModal({
-				title: t('modal.edit_distribution_list.title', 'Edit "{{displayName}}"', { displayName }),
-				size: 'small',
-				onClose: () => {
-					closeModal();
+			const closeModal = createModal(
+				{
+					size: 'small',
+					onClose: () => {
+						closeModal();
+					},
+					children: (
+						<EditDLControllerComponent
+							email={email}
+							displayName={displayName}
+							onClose={(): void => closeModal()}
+							onSave={(): void => closeModal()}
+						/>
+					)
 				},
-				children: (
-					<EditDLControllerComponent
-						email={email}
-						displayName={displayName}
-						onClose={(): void => closeModal()}
-						onSave={(): void => closeModal()}
-					/>
-				),
-				hideFooter: true
-			});
+				true
+			);
 		},
-		[createModal, t]
+		[createModal]
 	);
 
 	const canExecute = useCallback<EditDLAction['canExecute']>(({ isOwner }) => isOwner, []);

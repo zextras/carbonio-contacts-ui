@@ -18,14 +18,13 @@ import {
 import { getDLContactInput } from '../tests/utils';
 
 describe('useActionEditDL', () => {
-	it('should return an object with the specif data', () => {
+	it('should return an object with the specific data', () => {
 		const { result } = setupHook(useActionEditDL);
-		expect(result.current).toEqual<UIAction<unknown>>(
+		expect(result.current).toEqual<UIAction<unknown, unknown>>(
 			expect.objectContaining({
 				icon: 'Edit2Outline',
 				label: 'Edit address list',
-				id: 'dl-edit-action',
-				execute: expect.anything()
+				id: 'dl-edit-action'
 			})
 		);
 	});
