@@ -21,6 +21,7 @@ import {
 	registerDistributionListActionHandler,
 	registerGetDistributionListMembersHandler
 } from '../tests/msw-handlers';
+import { getDLContactInput } from '../tests/utils';
 
 const buildProps = ({
 	email = '',
@@ -160,7 +161,7 @@ describe('EditDLControllerComponent', () => {
 		expect(screen.getByText(/member list 4/i)).toBeVisible();
 	});
 
-	test('should decrease the member list counter when a member is removed', async () => {
+	it('should decrease the member list counter when a member is removed', async () => {
 		const dlEmail = 'dl-mail@domain.net';
 		const store = generateStore();
 		const members = [faker.internet.email(), faker.internet.email(), faker.internet.email()];
@@ -175,6 +176,31 @@ describe('EditDLControllerComponent', () => {
 		) as HTMLElement;
 		await user.click(within(memberToRemoveElement).getByRole('button', { name: /remove/i }));
 		expect(screen.getByText(/member list 2/i)).toBeVisible();
+	});
+
+	it('should remove duplicated icon from chip when member is removed from the members list', async () => {
+		const dlEmail = 'dl-mail@domain.net';
+		const store = generateStore();
+		const duplicatedEmail = faker.internet.email();
+		const members = [duplicatedEmail, faker.internet.email(), faker.internet.email()];
+		registerGetDistributionListMembersHandler(members);
+		const { user } = setupTest(<EditDLControllerComponent {...buildProps({ email: dlEmail })} />, {
+			store
+		});
+		await screen.findByText(dlEmail);
+		const membersListItems = await screen.findAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM);
+		await act(async () => {
+			await user.type(getDLContactInput().textbox, `${duplicatedEmail},`);
+		});
+		expect(screen.getByTestId(TESTID_SELECTORS.ICONS.DUPLICATED_MEMBER)).toBeVisible();
+		const memberToRemoveElement = membersListItems.find(
+			(element) => within(element).queryByText(duplicatedEmail) !== null
+		) as HTMLElement;
+		await user.click(within(memberToRemoveElement).getByRole('button', { name: /remove/i }));
+		await waitFor(() => expect(memberToRemoveElement).not.toBeInTheDocument());
+		await waitFor(() =>
+			expect(screen.queryByTestId(TESTID_SELECTORS.ICONS.DUPLICATED_MEMBER)).not.toBeInTheDocument()
+		);
 	});
 
 	describe('Modal footer', () => {

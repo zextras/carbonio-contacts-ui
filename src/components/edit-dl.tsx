@@ -3,15 +3,25 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { FC, useCallback, useMemo, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Container, Icon, Input, ListV2, Text } from '@zextras/carbonio-design-system';
-import { reduce } from 'lodash';
+import {
+	ChipAction,
+	ChipItem,
+	Container,
+	Icon,
+	Input,
+	ListV2,
+	Text
+} from '@zextras/carbonio-design-system';
+import { reduce, uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { MemberListItemComponent } from './member-list-item';
 import { CHIP_DISPLAY_NAME_VALUES } from '../constants/contact-input';
 import { ContactInput } from '../legacy/integrations/contact-input';
+
+const DUPLICATED_MEMBER_ACTION_ID = 'duplicated';
 
 export type EditDLComponentProps = {
 	email: string;
@@ -21,11 +31,18 @@ export type EditDLComponentProps = {
 	onAddMembers: (members: Array<string>) => void;
 };
 
-type ContactInputValue = Array<{ email: string; error: boolean }>;
+type ContactInputValue = Array<ChipItem & { email: string; error: boolean }>;
 
 const FilterMembersIcon = (): React.JSX.Element => (
 	<Icon icon={'FunnelOutline'} size={'large'}></Icon>
 );
+
+const createDuplicatedMemberAction = (): ChipAction => ({
+	id: DUPLICATED_MEMBER_ACTION_ID,
+	color: 'error',
+	type: 'icon',
+	icon: 'AlertCircle'
+});
 
 export const EditDLComponent: FC<EditDLComponentProps> = ({
 	email,
@@ -135,9 +152,45 @@ export const EditDLComponent: FC<EditDLComponentProps> = ({
 
 	const isAddMembersAllowed = useMemo(() => validEmails.length > 0, [validEmails]);
 
-	const onContactInputChange = useCallback((value: ContactInputValue) => {
-		setContactInputValue(value);
-	}, []);
+	const decorateContactInputValue = useCallback(
+		(value: ContactInputValue) =>
+			value.map((item): ContactInputValue[number] => {
+				const duplicated = isMemberDuplicated(item.email);
+				const hasDuplicatedAction = item.actions?.some(
+					(action) => action.id === DUPLICATED_MEMBER_ACTION_ID
+				);
+				if (duplicated && !hasDuplicatedAction) {
+					return {
+						...item,
+						actions: [createDuplicatedMemberAction(), ...(item.actions ?? [])]
+					};
+				}
+				if (!duplicated && hasDuplicatedAction) {
+					return {
+						...item,
+						actions:
+							item.actions?.filter((action) => action.id !== DUPLICATED_MEMBER_ACTION_ID) ?? []
+					};
+				}
+
+				return item;
+			}),
+		[isMemberDuplicated]
+	);
+
+	useEffect(() => {
+		setContactInputValue((prevState) => decorateContactInputValue(prevState));
+	}, [decorateContactInputValue]);
+
+	const onContactInputChange = useCallback(
+		(value: ContactInputValue) => {
+			// TODO item are filtered to be uniq, because the ContactInput filters out dropdown duplicated items only visually,
+			//  but provide them inside onChange arg
+			const uniqueValue = uniqBy(value, (item) => item.email);
+			setContactInputValue(decorateContactInputValue(uniqueValue));
+		},
+		[decorateContactInputValue]
+	);
 
 	const onSearchChange = useCallback<React.ChangeEventHandler<HTMLInputElement>>((event) => {
 		setSearchValue(event.currentTarget.value);

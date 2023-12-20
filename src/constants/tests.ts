@@ -12,11 +12,13 @@ export const TESTID_SELECTORS = {
 		EXPAND_DL: 'icon: ChevronDownOutline',
 		FILTER_MEMBERS: 'icon: FunnelOutline',
 		ADD_MEMBERS: 'icon: Plus',
-		REMOVE_MEMBER: 'icon: Trash2Outline'
+		REMOVE_MEMBER: 'icon: Trash2Outline',
+		DUPLICATED_MEMBER: 'icon: AlertCircle'
 	} as const,
 	AVATAR: 'avatar',
 	MODAL: 'modal',
 	CONTACT_INPUT: 'contact-input',
+	CONTACT_INPUT_CHIP: 'default-chip',
 	DROPDOWN_LIST: 'dropdown-popper-list',
 	DL_MEMBERS_FILTER_INPUT: 'dl-members-filter-input',
 	MEMBERS_LIST_ITEM: 'member-list-item',

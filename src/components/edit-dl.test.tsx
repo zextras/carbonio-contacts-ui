@@ -366,35 +366,22 @@ describe('Edit DL Component', () => {
 				expect(screen.queryByText(errorMessage)).not.toBeInTheDocument();
 			});
 
-			it.todo(
-				'should render AlertCircle error icon inside chip when the chip is a duplicated email and remove the icon error when duplicated item is removed from the bottom list' /* , async () => {
-						const validMail = faker.internet.email();
-						const { user } = setup(<NewContactGroupBoard />);
-						const contactInput = getContactInput();
-						await user.type(contactInput, validMail);
-						await act(async () => {
-							await user.type(contactInput, ',');
-						});
-						await act(async () => {
-							await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
-						});
-						await user.type(contactInput, validMail);
-						await act(async () => {
-							await user.type(contactInput, ',');
-						});
+			it('should render AlertCircle error icon inside chip when the chip is a duplicated email and remove the icon error when duplicated item is removed from the members list', async () => {
+				const validMail = faker.internet.email();
+				const members = [validMail];
+				const { user } = setupTest(<EditDLComponent {...buildProps({ members })} />);
+				const contactInput = getDLContactInput();
 
-						expect(
-							within(screen.getByTestId('default-chip')).getByTestId(ICON_REGEXP.duplicated)
-						).toBeVisible();
-						await act(async () => {
-							await user.click(
-								screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.trash, name: /remove/i })
-							);
-						});
-						const chip = screen.getByTestId('default-chip');
-						expect(within(chip).queryByTestId(ICON_REGEXP.duplicated)).not.toBeInTheDocument();
-					} */
-			);
+				await act(async () => {
+					await user.type(contactInput.textbox, `${validMail},`);
+				});
+
+				expect(
+					within(screen.getByTestId(TESTID_SELECTORS.CONTACT_INPUT_CHIP)).getByTestId(
+						TESTID_SELECTORS.ICONS.DUPLICATED_MEMBER
+					)
+				).toBeVisible();
+			});
 		});
 	});
 
