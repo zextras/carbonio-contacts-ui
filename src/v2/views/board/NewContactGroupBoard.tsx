@@ -132,14 +132,11 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 			);
 		}
 		if (invalid > 0 && duplicated === 0) {
-			return t(
-				'board.newContactGroup.input.contact_input.error.invalid_address',
-				{
-					count: invalid,
-					defaultValue: 'Invalid address',
-					defaultValue_plural: 'Invalid addresses'
-				}
-			);
+			return t('board.newContactGroup.input.contact_input.error.invalid_address', {
+				count: invalid,
+				defaultValue: 'Invalid address',
+				defaultValue_plural: 'Invalid addresses'
+			});
 		}
 		if (duplicated === 1 && invalid === 0) {
 			return t(

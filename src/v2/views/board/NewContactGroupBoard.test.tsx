@@ -272,7 +272,7 @@ describe('New contact group board', () => {
 			await user.click(saveButton);
 			await screen.findByText('Something went wrong, please try again');
 			expect(screen.getByText(newTitle)).toBeVisible();
-			const memberList = await screen.findByTestId('member-list');
+			const memberList = await screen.findByTestId(SELECTORS.memberList);
 			expect(within(memberList).getByText(newEmail1)).toBeVisible();
 			const chipInput = screen.getByTestId('contact-group-contact-input');
 			expect(within(chipInput).getByText(newEmail2)).toBeVisible();
@@ -388,7 +388,7 @@ describe('New contact group board', () => {
 			});
 			await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
 			await user.click(screen.getByRole('button', { name: /discard/i }));
-			const memberList = await screen.findByTestId('member-list');
+			const memberList = await screen.findByTestId(SELECTORS.memberList);
 			expect(within(memberList).queryByText(newEmail)).not.toBeInTheDocument();
 		});
 
@@ -468,7 +468,7 @@ describe('New contact group board', () => {
 				await user.type(contactInput, ',');
 			});
 			await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
-			await screen.findByTestId('member-list');
+			await screen.findByTestId(SELECTORS.memberList);
 			expect(screen.getByText('Addresses: 1')).toBeVisible();
 		});
 		describe('Plus button and contact input', () => {
@@ -577,7 +577,7 @@ describe('New contact group board', () => {
 					await user.type(contactInput, ',');
 				});
 				await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
-				const memberList = await screen.findByTestId('member-list');
+				const memberList = await screen.findByTestId(SELECTORS.memberList);
 				expect(within(memberList).getByText(email)).toBeVisible();
 			});
 
@@ -591,7 +591,7 @@ describe('New contact group board', () => {
 					await user.type(contactInput, ',');
 				});
 				await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
-				const memberList = await screen.findByTestId('member-list');
+				const memberList = await screen.findByTestId(SELECTORS.memberList);
 				expect(within(memberList).getByText(email)).toBeVisible();
 
 				await user.type(contactInput, email2);
@@ -612,7 +612,7 @@ describe('New contact group board', () => {
 					await user.type(contactInput, ',');
 				});
 				await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
-				const memberList = await screen.findByTestId('member-list');
+				const memberList = await screen.findByTestId(SELECTORS.memberList);
 				const avatar = within(memberList).getByTestId('avatar');
 				expect(avatar).toBeVisible();
 				expect(avatar).toHaveTextContent(`${first(email)}${last(email)}`.toUpperCase());
@@ -631,7 +631,7 @@ describe('New contact group board', () => {
 				await user.click(
 					screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.trash, name: /remove/i })
 				);
-				const memberList = await screen.findByTestId('member-list');
+				const memberList = await screen.findByTestId(SELECTORS.memberList);
 				expect(within(memberList).queryByText(email)).not.toBeInTheDocument();
 			});
 
@@ -705,7 +705,7 @@ describe('New contact group board', () => {
 				expect(within(chipInput).getByText(invalidMail1)).toBeVisible();
 				expect(within(chipInput).getByText(invalidMail2)).toBeVisible();
 
-				expect(within(screen.getByTestId('member-list')).getByText(newEmail)).toBeVisible();
+				expect(within(screen.getByTestId(SELECTORS.memberList)).getByText(newEmail)).toBeVisible();
 			});
 
 			it('should move valid chip addresses in bottom list and maintain duplicated ones in the contact input', async () => {
@@ -736,8 +736,8 @@ describe('New contact group board', () => {
 				expect(within(chipInput).queryByText(email2)).not.toBeInTheDocument();
 				expect(within(chipInput).getByText(email1)).toBeVisible();
 
-				expect(within(screen.getByTestId('member-list')).getByText(email1)).toBeVisible();
-				expect(within(screen.getByTestId('member-list')).getByText(email2)).toBeVisible();
+				expect(within(screen.getByTestId(SELECTORS.memberList)).getByText(email1)).toBeVisible();
+				expect(within(screen.getByTestId(SELECTORS.memberList)).getByText(email2)).toBeVisible();
 			});
 		});
 
