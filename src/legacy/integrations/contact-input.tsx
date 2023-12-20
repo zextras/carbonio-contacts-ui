@@ -14,7 +14,8 @@ import {
 	Text,
 	ChipProps,
 	ChipItem,
-	ChipInputProps
+	ChipInputProps,
+	ChipAction
 } from '@zextras/carbonio-design-system';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
 import {
@@ -142,6 +143,10 @@ const Loader = (): ReactElement => (
 	</Container>
 );
 
+export type ContactInputChipAction = ChipAction & {
+	isVisible: (contact: Partial<Contact>) => boolean;
+};
+
 type ContactInputProps = Pick<
 	ChipInputProps,
 	'placeholder' | 'background' | 'icon' | 'iconAction' | 'iconDisabled'
@@ -151,6 +156,7 @@ type ContactInputProps = Pick<
 	dragAndDropEnabled?: boolean;
 	extraAccountsIds: Array<string>;
 	chipDisplayName?: ContactInputChipDisplayName;
+	actions?: Array<ContactInputChipAction>;
 };
 
 const ContactInputCore: FC<ContactInputProps> = ({
@@ -161,6 +167,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	dragAndDropEnabled = false,
 	chipDisplayName = CHIP_DISPLAY_NAME_VALUES.LABEL,
 	extraAccountsIds,
+	actions,
 	...rest
 }) => {
 	const props = omit(rest, 'ChipComponent');
@@ -482,6 +489,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 				chipDisplayName={chipDisplayName}
 				_onChange={onChange}
 				contactInputValue={contactInputValue}
+				actions={actions}
 			/>
 		),
 		[chipDisplayName, contactInputValue, onChange]

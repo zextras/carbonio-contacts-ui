@@ -203,6 +203,28 @@ describe('EditDLControllerComponent', () => {
 		);
 	});
 
+	it('should remove the duplication error message under the contact input when member is removed from the members list', async () => {
+		const dlEmail = 'dl-mail@domain.net';
+		const errorMessage = 'Address already present';
+		const duplicatedEmail = faker.internet.email();
+		const members = [duplicatedEmail];
+		registerGetDistributionListMembersHandler(members);
+		const { user } = setupTest(<EditDLControllerComponent {...buildProps({ email: dlEmail })} />, {
+			store: generateStore()
+		});
+		await screen.findByText(dlEmail);
+		const membersListItems = await screen.findAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM);
+		await act(async () => {
+			await user.type(getDLContactInput().textbox, `${duplicatedEmail},`);
+		});
+		const memberToRemoveElement = membersListItems.find(
+			(element) => within(element).queryByText(duplicatedEmail) !== null
+		) as HTMLElement;
+		await user.click(within(memberToRemoveElement).getByRole('button', { name: /remove/i }));
+		await waitFor(() => expect(memberToRemoveElement).not.toBeInTheDocument());
+		await waitFor(() => expect(screen.queryByText(errorMessage)).not.toBeInTheDocument());
+	});
+
 	describe('Modal footer', () => {
 		describe('Cancel action button', () => {
 			it('should be enabled', async () => {

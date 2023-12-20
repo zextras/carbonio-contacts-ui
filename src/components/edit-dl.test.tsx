@@ -302,6 +302,25 @@ describe('Edit DL Component', () => {
 				expect(screen.queryByText(errorMessage)).not.toBeInTheDocument();
 			});
 
+			it('should remove the invalid address error message under the contact input when the invalid chip is removed', async () => {
+				const errorMessage = 'Invalid address';
+				const invalidMail = faker.string.alpha(10);
+				const { user } = setupTest(<EditDLComponent {...buildProps()} />, {
+					store: generateStore()
+				});
+				const contactInput = getDLContactInput();
+				await act(async () => {
+					await user.type(contactInput.textbox, `${invalidMail},`);
+				});
+
+				const closeButton = screen.getByRoleWithIcon('button', {
+					icon: TESTID_SELECTORS.ICONS.CLOSE
+				});
+
+				await user.click(closeButton);
+				await waitFor(() => expect(screen.queryByText(errorMessage)).not.toBeInTheDocument());
+			});
+
 			it('should render "Address already present" error message when there is only a duplicated email as a chip and remove the error when a valid chip is added', async () => {
 				const errorMessage = 'Address already present';
 				const validMail = faker.internet.email();

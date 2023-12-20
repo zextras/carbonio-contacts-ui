@@ -336,6 +336,7 @@ export const ContactInputCustomChipComponent = ({
 	isGroup,
 	label,
 	chipDisplayName = CHIP_DISPLAY_NAME_VALUES.LABEL,
+	actions,
 	...rest
 }: CustomChipProps): ReactElement => {
 	const _label = useMemo(() => {
@@ -348,8 +349,20 @@ export const ContactInputCustomChipComponent = ({
 		return label || email || '';
 	}, [chipDisplayName, email, label]);
 
+	const validActions = useMemo(() => {
+		return actions?.filter((action) => action.isVisible());
+	}, [actions]);
+
 	if (!isDistributionList({ email, isGroup })) {
-		return <Chip {...rest} label={_label} data-testid={'default-chip'} />;
+		return <Chip {...rest} label={_label} data-testid={'default-chip'} actions={validActions} />;
 	}
-	return <CustomComponent {...rest} label={_label} email={email} isGroup={isGroup} />;
+	return (
+		<CustomComponent
+			{...rest}
+			label={_label}
+			email={email}
+			isGroup={isGroup}
+			actions={validActions}
+		/>
+	);
 };

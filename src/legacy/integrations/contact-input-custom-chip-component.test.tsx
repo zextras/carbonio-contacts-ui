@@ -499,5 +499,7 @@ describe('Contact input custom chip component', () => {
 				)
 			).toBeVisible();
 		});
+
+		it.todo('should not show the edit message if the distribution list cannot be retrieved');
 	});
 });

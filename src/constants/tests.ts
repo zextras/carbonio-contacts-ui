@@ -13,7 +13,8 @@ export const TESTID_SELECTORS = {
 		FILTER_MEMBERS: 'icon: FunnelOutline',
 		ADD_MEMBERS: 'icon: Plus',
 		REMOVE_MEMBER: 'icon: Trash2Outline',
-		DUPLICATED_MEMBER: 'icon: AlertCircle'
+		DUPLICATED_MEMBER: 'icon: AlertCircle',
+		CLOSE: 'icon: Close'
 	} as const,
 	AVATAR: 'avatar',
 	MODAL: 'modal',
