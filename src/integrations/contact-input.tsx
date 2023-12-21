@@ -382,7 +382,8 @@ const ContactInput: FC<ContactInput> = ({
 												groupId: contact?.id,
 												label: contact?.label ?? getChipLabel(contact)
 											},
-											customComponent: <Hint contact={contact} />
+											customComponent: <Hint contact={contact} />,
+											id: `${contact.id} ${contact.email}`
 										})
 									)
 								);
