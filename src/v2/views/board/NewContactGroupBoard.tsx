@@ -34,7 +34,7 @@ const List = styled(ListV2)`
 const NewContactGroupBoard = (): React.JSX.Element => {
 	const [t] = useTranslation();
 	const { updateBoard, closeBoard } = useBoardHooks();
-	const createSnackbar = useContext(SnackbarManagerContext);
+	const createSnackbar = useSnackbar();
 
 	const initialTitle = t('board.newContactGroup.title', 'New Group');
 	const [titleValue, setTitleValue] = useState(initialTitle);
