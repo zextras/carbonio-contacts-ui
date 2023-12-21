@@ -8,27 +8,12 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { act, screen, within } from '@testing-library/react';
-import * as shell from '@zextras/carbonio-shell-ui';
 import { rest } from 'msw';
 
 import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
 import { setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { generateStore } from '../../tests/generators/store';
 import ContactInput from '../contact-input';
-
-function spyUseBoardHooks(updateBoardFn?: jest.Mock, closeBoardFn?: jest.Mock): void {
-	jest.spyOn(shell, 'useBoardHooks').mockReturnValue({
-		updateBoard: updateBoardFn ?? jest.fn(),
-		setCurrentBoard: jest.fn(),
-		getBoardContext: jest.fn(),
-		getBoard: jest.fn(),
-		closeBoard: closeBoardFn ?? jest.fn()
-	});
-}
-
-beforeAll(() => {
-	spyUseBoardHooks();
-});
 
 describe('Contact input', () => {
 	it('should render a component', async () => {
