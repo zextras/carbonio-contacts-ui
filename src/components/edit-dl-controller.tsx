@@ -49,7 +49,7 @@ export const EditDLControllerComponent: FC<EditDLControllerComponentProps> = ({
 	useEffect(() => {
 		getDistributionListMembers(email)
 			.then((response) => {
-				const memberList = response.dlm.map(({ _content }) => _content);
+				const memberList = response.dlm ? response.dlm.map(({ _content }) => _content) : [];
 				setMembers(() => {
 					originalMembersRef.current = memberList;
 					return memberList;

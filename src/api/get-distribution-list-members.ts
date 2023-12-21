@@ -3,9 +3,10 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { ErrorSoapBodyResponse, NameSpace, soapFetch } from '@zextras/carbonio-shell-ui';
-import { NAMESPACES } from '../constants/api';
+import { ErrorSoapBodyResponse, soapFetch } from '@zextras/carbonio-shell-ui';
+
 import { GenericSoapPayload } from './types';
+import { NAMESPACES } from '../constants/api';
 
 export interface GetDistributionListMembersRequest
 	extends GenericSoapPayload<typeof NAMESPACES.account> {
@@ -18,7 +19,7 @@ export interface GetDistributionListMembersRequest
 
 export interface GetDistributionListMembersResponse
 	extends GenericSoapPayload<typeof NAMESPACES.account> {
-	dlm: Array<{ _content: string }>;
+	dlm?: Array<{ _content: string }>;
 	more: boolean;
 	total: number;
 }
@@ -39,5 +40,8 @@ export const getDistributionListMembers = (
 		if ('Fault' in response) {
 			throw new Error(response.Fault.Reason.Text, { cause: response.Fault });
 		}
+
+		// TODO use an model type
+		// TODO set a default empty array if there is no members
 		return response;
 	});

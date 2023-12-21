@@ -349,20 +349,15 @@ export const ContactInputCustomChipComponent = ({
 		return label || email || '';
 	}, [chipDisplayName, email, label]);
 
+	// TODO
 	const validActions = useMemo(() => {
-		return actions?.filter((action) => action.isVisible());
+		return actions?.filter((action) => action.isVisible({}));
 	}, [actions]);
 
 	if (!isDistributionList({ email, isGroup })) {
-		return <Chip {...rest} label={_label} data-testid={'default-chip'} actions={validActions} />;
+		return <Chip {...rest} label={_label} data-testid={'default-chip'} actions={actions} />;
 	}
 	return (
-		<CustomComponent
-			{...rest}
-			label={_label}
-			email={email}
-			isGroup={isGroup}
-			actions={validActions}
-		/>
+		<CustomComponent {...rest} label={_label} email={email} isGroup={isGroup} actions={actions} />
 	);
 };
