@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback, useContext, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import {
 	Container,
@@ -13,8 +13,8 @@ import {
 	InputProps,
 	Avatar,
 	ListV2,
-	SnackbarManagerContext,
-	Row
+	Row,
+	useSnackbar
 } from '@zextras/carbonio-design-system';
 import { useBoardHooks } from '@zextras/carbonio-shell-ui';
 import { remove, size, some, uniqBy } from 'lodash';
