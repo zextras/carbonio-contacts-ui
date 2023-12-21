@@ -142,7 +142,7 @@ const Loader = (): ReactElement => (
 	</Container>
 );
 
-type ContactInputProps = Pick<
+export type ContactInputProps = Pick<
 	ChipInputProps,
 	'placeholder' | 'background' | 'icon' | 'iconAction' | 'iconDisabled'
 > & {

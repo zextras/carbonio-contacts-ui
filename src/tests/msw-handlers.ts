@@ -28,6 +28,7 @@ import {
 import { getSetupServer } from '../carbonio-ui-commons/test/jest-setup';
 import { mockedAccount } from '../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
 import { NAMESPACES } from '../constants/api';
+import { FullAutocompleteResponse, Match } from '../legacy/types/contact';
 
 const buildSoapResponse = <T>(responseData: Record<string, T>): SuccessSoapResponse<T> => ({
 	Header: {
@@ -208,6 +209,43 @@ export const registerGetDistributionListHandler = (
 			SoapResponse<GetDistributionListResponse>
 		>('/service/soap/GetDistributionListRequest', handler)
 	);
+
+	return handler;
+};
+
+const createAutocompleteResponse = (match: Array<Match>): string => {
+	const matchString = match.map(
+		(item) =>
+			`<match last="${item.last}" fileas="8:${item.first} ${item.last}" ranking="${
+				item.ranking
+			}" type="${item.type}" isGroup="${item.isGroup ? '1' : '0'}" email="&quot;${item.first} ${
+				item.last
+			}&quot; &lt;${item.email}&gt;" first="${item.first}" full="${item.first} ${item.last}"/>`
+	);
+	return `<FullAutocompleteResponse canBeCached='0' xmlns='${NAMESPACES.mail}'>
+		${matchString}
+		</FullAutocompleteResponse>`;
+};
+
+type FullAutoCompleteHandler = ResponseResolver<
+	RestRequest<{ Body: { FullAutocompleteRequest: FullAutocompleteResponse } }>,
+	RestContext,
+	SoapResponse<string>
+>;
+export const registerFullAutocompleteHandler = (
+	results: Array<Match>
+): jest.Mock<ReturnType<FullAutoCompleteHandler>, Parameters<FullAutoCompleteHandler>> => {
+	const handler = jest.fn<ReturnType<FullAutoCompleteHandler>, Parameters<FullAutoCompleteHandler>>(
+		(req, res, ctx) =>
+			res(
+				ctx.json(
+					buildSoapResponse<string>({
+						FullAutocompleteResponse: createAutocompleteResponse(results)
+					})
+				)
+			)
+	);
+	getSetupServer().use(rest.post('/service/soap/FullAutocompleteRequest', handler));
 
 	return handler;
 };

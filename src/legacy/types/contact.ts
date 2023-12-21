@@ -120,13 +120,14 @@ export type Group = {
 };
 
 export type Match = {
-	last: string;
-	fileas: string;
-	ranking: string;
-	type: string;
+	first?: string;
+	last?: string;
+	fileas?: string;
+	ranking?: string;
+	type?: string;
 	isGroup?: boolean;
-	email: string;
-	full: string;
+	email?: string;
+	full?: string;
 };
 
 export type FullAutocompleteResponse = {

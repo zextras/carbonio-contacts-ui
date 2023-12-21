@@ -8,15 +8,13 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import { act, waitFor } from '@testing-library/react';
 import { times } from 'lodash';
-import { rest } from 'msw';
 
 import { EditDLComponent, EditDLComponentProps } from './edit-dl';
-import { getSetupServer } from '../carbonio-ui-commons/test/jest-setup';
 import { screen, setupTest, within } from '../carbonio-ui-commons/test/test-setup';
-import { NAMESPACES } from '../constants/api';
 import { PALETTE, TESTID_SELECTORS } from '../constants/tests';
 import { generateStore } from '../legacy/tests/generators/store';
 import 'jest-styled-components';
+import { registerFullAutocompleteHandler } from '../tests/msw-handlers';
 import { getDLContactInput } from '../tests/utils';
 
 const buildProps = ({
@@ -32,14 +30,6 @@ const buildProps = ({
 	onRemoveMember,
 	onAddMembers
 });
-
-const createAutocompleteResponse = (
-	firstName: string,
-	lastName: string,
-	email: string
-): string => `<FullAutocompleteResponse canBeCached="0" xmlns="${NAMESPACES.mail}">
-		<match last="${lastName}" fileas="8:${firstName} ${lastName}" ranking="66" type="gal" isGroup="0" email="&quot;${firstName} ${lastName}&quot; &lt;${email}>" first="${firstName}" full="${firstName} ${lastName}"/>' +
-		</FullAutocompleteResponse>`;
 
 describe('Edit DL Component', () => {
 	it('should show email address', () => {
@@ -149,17 +139,7 @@ describe('Edit DL Component', () => {
 			const lastName = faker.person.lastName();
 			const email = faker.internet.email({ firstName, lastName });
 
-			getSetupServer().use(
-				rest.post('/service/soap/FullAutocompleteRequest', async (req, res, ctx) =>
-					res(
-						ctx.json({
-							Body: {
-								FullAutocompleteResponse: createAutocompleteResponse(firstName, lastName, email)
-							}
-						})
-					)
-				)
-			);
+			registerFullAutocompleteHandler([{ first: firstName, last: lastName, email }]);
 
 			const store = generateStore();
 			const { user } = setupTest(<EditDLComponent {...buildProps()} />, { store });

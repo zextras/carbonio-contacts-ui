@@ -78,7 +78,7 @@
 		"@reduxjs/toolkit": "^1.9.2",
 		"@types/react-redux": "^7.1.25",
 		"@zextras/carbonio-design-system": "^4.0.0",
-		"@zextras/carbonio-shell-ui": "^5.0.0",
+		"@zextras/carbonio-shell-ui": "5.0.2-devel.1702917571393",
 		"core-js": "^3.29.1",
 		"i18next": "^22.4.12",
 		"lodash": "^4.17.21",

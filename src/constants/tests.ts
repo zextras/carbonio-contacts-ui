@@ -8,6 +8,7 @@
 
 export const TESTID_SELECTORS = {
 	ICONS: {
+		EDIT_CHIP: 'icon: EditOutline',
 		EDIT_DL: 'icon: Edit2Outline',
 		EXPAND_DL: 'icon: ChevronDownOutline',
 		FILTER_MEMBERS: 'icon: FunnelOutline',
