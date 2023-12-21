@@ -274,7 +274,7 @@ describe('New contact group board', () => {
 			expect(screen.getByText(newTitle)).toBeVisible();
 			const memberList = await screen.findByTestId(SELECTORS.memberList);
 			expect(within(memberList).getByText(newEmail1)).toBeVisible();
-			const chipInput = screen.getByTestId('contact-group-contact-input');
+			const chipInput = screen.getByTestId(SELECTORS.contactInput);
 			expect(within(chipInput).getByText(newEmail2)).toBeVisible();
 		});
 
@@ -375,7 +375,7 @@ describe('New contact group board', () => {
 			await act(async () => {
 				await user.click(screen.getByRole('button', { name: /discard/i }));
 			});
-			expect(screen.queryByTestId('default-chip')).not.toBeInTheDocument();
+			expect(screen.queryByTestId(SELECTORS.contactInputChip)).not.toBeInTheDocument();
 		});
 
 		it('should delete member list when click on the discard button', async () => {
@@ -643,11 +643,11 @@ describe('New contact group board', () => {
 				await act(async () => {
 					await user.type(contactInput, ',');
 				});
-				expect(screen.getByTestId('default-chip')).toBeVisible();
+				expect(screen.getByTestId(SELECTORS.contactInputChip)).toBeVisible();
 				await act(async () => {
 					await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
 				});
-				expect(screen.queryByTestId('default-chip')).not.toBeInTheDocument();
+				expect(screen.queryByTestId(SELECTORS.contactInputChip)).not.toBeInTheDocument();
 			});
 
 			it('should update contactInput chips and icon when item is removed from the bottom list', async () => {
@@ -694,7 +694,7 @@ describe('New contact group board', () => {
 					await user.type(contactInput, ',');
 				});
 
-				const chipInput = screen.getByTestId('contact-group-contact-input');
+				const chipInput = screen.getByTestId(SELECTORS.contactInput);
 				expect(within(chipInput).getByText(invalidMail1)).toBeVisible();
 				expect(within(chipInput).getByText(invalidMail2)).toBeVisible();
 				expect(within(chipInput).getByText(newEmail)).toBeVisible();
@@ -720,7 +720,7 @@ describe('New contact group board', () => {
 				await act(async () => {
 					await user.click(screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.plus }));
 				});
-				const chipInput = screen.getByTestId('contact-group-contact-input');
+				const chipInput = screen.getByTestId(SELECTORS.contactInput);
 				expect(within(chipInput).queryByText(email1)).not.toBeInTheDocument();
 				await user.type(contactInput, email2);
 				await act(async () => {
@@ -827,14 +827,14 @@ describe('New contact group board', () => {
 				});
 
 				expect(
-					within(screen.getByTestId('default-chip')).getByTestId(ICON_REGEXP.duplicated)
+					within(screen.getByTestId(SELECTORS.contactInputChip)).getByTestId(ICON_REGEXP.duplicated)
 				).toBeVisible();
 				await act(async () => {
 					await user.click(
 						screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.trash, name: /remove/i })
 					);
 				});
-				const chip = screen.getByTestId('default-chip');
+				const chip = screen.getByTestId(SELECTORS.contactInputChip);
 				expect(within(chip).queryByTestId(ICON_REGEXP.duplicated)).not.toBeInTheDocument();
 			});
 

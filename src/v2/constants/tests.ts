@@ -115,5 +115,7 @@ export const PALETTE = {
 
 export const SELECTORS = {
 	dropdownList: 'dropdown-popper-list',
-	memberList: 'member-list'
+	memberList: 'member-list',
+	contactInput: 'contact-group-contact-input',
+	contactInputChip: 'default-chip'
 };
