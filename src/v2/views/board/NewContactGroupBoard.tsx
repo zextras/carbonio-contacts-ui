@@ -138,23 +138,12 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 				defaultValue_plural: 'Invalid addresses'
 			});
 		}
-		if (duplicated === 1 && invalid === 0) {
-			return t(
-				'board.newContactGroup.input.contact_input.error.address_already_present',
-				'Address already present',
-				{
-					count: duplicated
-				}
-			);
-		}
-		if (duplicated > 1 && invalid === 0) {
-			return t(
-				'board.newContactGroup.input.contact_input.error.address_already_present',
-				'Addresses already present',
-				{
-					count: duplicated
-				}
-			);
+		if (duplicated > 0 && invalid === 0) {
+			return t('board.newContactGroup.input.contact_input.error.address_already_present', {
+				count: duplicated,
+				defaultValue: 'Address already present',
+				defaultValue_plural: 'Addresses already present'
+			});
 		}
 		return undefined;
 	}, [contactInputValue, t]);
