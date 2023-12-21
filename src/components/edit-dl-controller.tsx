@@ -54,7 +54,7 @@ export const EditDLControllerComponent: FC<EditDLControllerComponentProps> = ({
 					originalMembersRef.current = memberList;
 					return memberList;
 				});
-				setTotalMembers(response.total);
+				setTotalMembers(response.total ?? 0);
 			})
 			.catch((error: Error) => {
 				createSnackbar({

@@ -20,8 +20,8 @@ export interface GetDistributionListMembersRequest
 export interface GetDistributionListMembersResponse
 	extends GenericSoapPayload<typeof NAMESPACES.account> {
 	dlm?: Array<{ _content: string }>;
-	more: boolean;
-	total: number;
+	more?: boolean;
+	total?: number;
 }
 
 export const getDistributionListMembers = (

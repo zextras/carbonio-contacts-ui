@@ -44,6 +44,15 @@ describe('EditDLControllerComponent', () => {
 		expect(await screen.findByText(dlEmail)).toBeVisible();
 	});
 
+	it('should render the component when the member field of the response is undefined', async () => {
+		const dlEmail = 'dl-mail@domain.net';
+		const store = generateStore();
+		registerGetDistributionListMembersHandler(undefined);
+		setupTest(<EditDLControllerComponent {...buildProps({ email: dlEmail })} />, { store });
+		expect(await screen.findByText(dlEmail)).toBeVisible();
+		expect(screen.getByText('Member list 0')).toBeVisible();
+	});
+
 	it('should load all members on first load', async () => {
 		const store = generateStore();
 		const dlEmail = 'dl-mail@domain.net';

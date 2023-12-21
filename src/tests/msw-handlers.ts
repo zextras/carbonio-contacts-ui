@@ -37,7 +37,7 @@ const buildSoapResponse = <T>(responseData: Record<string, T>): SuccessSoapRespo
 });
 
 export const registerGetDistributionListMembersHandler = (
-	members: Array<string>,
+	members?: Array<string>,
 	error?: string
 ): void => {
 	getSetupServer().use(
@@ -70,13 +70,14 @@ export const registerGetDistributionListMembersHandler = (
 					})
 				);
 			}
+
 			return res(
 				ctx.json(
 					buildSoapResponse<GetDistributionListMembersResponse>({
 						GetDistributionListMembersResponse: {
-							dlm: members.map((member) => ({ _content: member })),
+							dlm: members?.map((member) => ({ _content: member })),
 							more: false,
-							total: members.length,
+							total: members?.length,
 							_jsns: NAMESPACES.account
 						}
 					})
