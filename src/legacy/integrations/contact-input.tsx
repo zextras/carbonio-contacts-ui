@@ -39,6 +39,7 @@ import styled, { DefaultTheme } from 'styled-components';
 
 import { ContactInputCustomChipComponent } from './contact-input-custom-chip-component';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
+import { DistributionList } from '../../model/distribution-list';
 import { parseFullAutocompleteXML } from '../helpers/autocomplete';
 import { useAppSelector } from '../hooks/redux';
 import { StoreProvider } from '../store/redux';
@@ -147,9 +148,9 @@ export type ContactInputItem = { email: string; isGroup?: boolean } & Partial<
 	Omit<Contact, 'email'>
 >;
 
-export type ContactChipAction = {
-	id: string;
-	getAction: (chipItem: ContactInputItem) => Promise<ChipAction | undefined>;
+export type ContactChipAction = Omit<ChipAction, 'onClick'> & {
+	isVisible: (chipItem: ContactInputItem | DistributionList) => boolean;
+	onClick: (chipItem: ContactInputItem | DistributionList) => void;
 };
 
 export type ContactInputProps = Pick<

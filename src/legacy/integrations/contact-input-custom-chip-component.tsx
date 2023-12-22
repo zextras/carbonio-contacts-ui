@@ -16,11 +16,13 @@ import {
 	ChipAction
 } from '@zextras/carbonio-design-system';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
-import { debounce, DebouncedFuncLeading, filter, map, noop, uniqBy } from 'lodash';
+import { debounce, DebouncedFuncLeading, filter, first, map, noop, uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
+import { getDistributionList } from '../../api/get-distribution-list';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
+import { DistributionList } from '../../model/distribution-list';
 import { ContactInputOnChange, ContactInputValue, CustomChipProps } from '../types/integrations';
 
 const StyledChip = styled(Chip)`
@@ -35,7 +37,7 @@ const DISTRIBUTION_ITEM = {
 	MORE_ITEM: 'dl-get-more'
 };
 
-export const isDistributionList = ({
+export const isChipItemDistributionList = ({
 	isGroup,
 	email
 }: {
@@ -219,7 +221,7 @@ const useDistributionListFunctions = ({
 	const onChevronClick = useCallback(() => {
 		setOpen((prevValue: boolean) => !prevValue);
 
-		if (!open && isDistributionList({ isGroup, email }) && !dlm.length && !loading) {
+		if (!open && isChipItemDistributionList({ isGroup, email }) && !dlm.length && !loading) {
 			setLoading(true);
 			getDistributionListMembers({ email }).then((result) => {
 				updateStates(result);
@@ -343,7 +345,8 @@ export const ContactInputCustomChipComponent = ({
 	contactActions,
 	...rest
 }: CustomChipProps): ReactElement => {
-	const [chipActions, setChipActions] = useState<ChipAction[]>([]);
+	// const [chipActions, setChipActions] = useState<ChipAction[]>([]);
+	const [distributionList, setDistributionList] = useState<DistributionList>();
 	const _label = useMemo(() => {
 		if (label && chipDisplayName === CHIP_DISPLAY_NAME_VALUES.LABEL) {
 			return label;
@@ -355,22 +358,41 @@ export const ContactInputCustomChipComponent = ({
 	}, [chipDisplayName, email, label]);
 
 	useEffect(() => {
-		if (contactActions) {
-			Promise.allSettled(
-				contactActions.map((contactAction) => contactAction.getAction({ email, isGroup }))
-			).then((promisedActions) => {
-				const actions = promisedActions.reduce<ChipAction[]>((result, promisedAction) => {
-					if (promisedAction.status === 'fulfilled' && promisedAction.value !== undefined) {
-						result.push(promisedAction.value);
+		if (isChipItemDistributionList({ email, isGroup })) {
+			getDistributionList(email)
+				.then((response) => {
+					const dlData = first(response.dl);
+					if (dlData) {
+						setDistributionList({
+							email: dlData.name,
+							displayName: dlData._attrs?.displayName,
+							isOwner: dlData.isOwner ?? false
+						});
 					}
-					return result;
-				}, []);
-				setChipActions(actions);
-			});
+				})
+				.catch((error) => {
+					setDistributionList(undefined);
+					console.error(error);
+				});
 		}
-	}, [contactActions, email, isGroup]);
+	}, [email, isGroup]);
 
-	if (!isDistributionList({ email, isGroup })) {
+	const chipActions = useMemo(() => {
+		return contactActions?.reduce<Array<ChipAction>>((result, contactAction) => {
+			if (contactAction.isVisible(distributionList || { email, isGroup })) {
+				result.push({
+					...contactAction,
+					onClick: () => {
+						contactAction.onClick(distributionList || { email, isGroup });
+					}
+				});
+			}
+
+			return result;
+		}, []);
+	}, [contactActions, distributionList, email, isGroup]);
+
+	if (!isChipItemDistributionList({ email, isGroup })) {
 		return <Chip {...rest} label={_label} data-testid={'default-chip'} actions={chipActions} />;
 	}
 
