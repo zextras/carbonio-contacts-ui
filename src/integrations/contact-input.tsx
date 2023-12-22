@@ -336,7 +336,9 @@ const ContactInput: FC<ContactInput> = ({
 								const results = parseFullAutocompleteXML(autoCompleteResult);
 								return map(results.match, (m) => ({
 									...m,
-									email: isContactGroup(m) ? undefined : emailRegex.exec(m.email)?.[0]?.slice(1, -1)
+									email: isContactGroup(m)
+										? undefined
+										: emailRegex.exec(m.email ?? '')?.[0]?.slice(1, -1)
 								}));
 							})
 							.then((remoteResults: any) => {
