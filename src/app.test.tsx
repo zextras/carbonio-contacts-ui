@@ -9,7 +9,8 @@ import * as shell from '@zextras/carbonio-shell-ui';
 
 import App from './app';
 import { setupTest } from './carbonio-ui-commons/test/test-setup';
-import { ContactInput, ContactInputProps } from './legacy/integrations/contact-input';
+import { ContactInputProps } from './legacy/integrations/contact-input';
+import { ContactInputIntegrationWrapper } from './legacy/integrations/contact-input-integration-wrapper';
 
 describe('App', () => {
 	it('should register a contact-input component', async () => {
@@ -19,7 +20,7 @@ describe('App', () => {
 			Parameters<typeof shell.registerComponents<ContactInputProps>>
 		>({
 			id: 'contact-input',
-			component: ContactInput
+			component: ContactInputIntegrationWrapper
 		});
 	});
 });
