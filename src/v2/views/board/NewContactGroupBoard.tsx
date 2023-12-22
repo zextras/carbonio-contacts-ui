@@ -14,7 +14,9 @@ import {
 	Avatar,
 	ListV2,
 	Row,
-	useSnackbar
+	useSnackbar,
+	ChipItem,
+	ChipAction
 } from '@zextras/carbonio-design-system';
 import { useBoardHooks } from '@zextras/carbonio-shell-ui';
 import { remove, some, uniqBy } from 'lodash';
@@ -31,6 +33,11 @@ const List = styled(ListV2)`
 	min-height: 0;
 `;
 
+type EnhancedChipItem = ChipItem & {
+	email: string;
+	duplicated: boolean;
+};
+
 const NewContactGroupBoard = (): React.JSX.Element => {
 	const [t] = useTranslation();
 	const { updateBoard, closeBoard } = useBoardHooks();
@@ -39,14 +46,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 	const initialName = t('board.newContactGroup.name', 'New Group');
 	const [nameValue, setNameValue] = useState(initialName);
 
-	const [contactInputValue, setContactInputValue] = useState<
-		Array<{
-			email: string;
-			error: boolean;
-			duplicated: boolean;
-			actions: Array<{ color: string; icon: string; id: string; type: string }>;
-		}>
-	>([]);
+	const [contactInputValue, setContactInputValue] = useState<Array<EnhancedChipItem>>([]);
 
 	const [memberListEmails, setMemberListEmails] = useState<string[]>([]);
 
@@ -145,12 +145,9 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 	}, [contactInputValue, t]);
 
 	const contactInputOnChange = (
-		newContactInputValue: Array<{
-			actions: Array<{ color: string; icon: string; id: string; type: string }>;
-			email: string;
-			error: boolean;
-			duplicated?: boolean;
-		}>
+		newContactInputValue: Array<
+			Omit<EnhancedChipItem, 'duplicated'> & { duplicated?: Pick<EnhancedChipItem, 'duplicated'> }
+		>
 	): void => {
 		// TODO item are filtered to be uniq, because the ContactInput filters out, dropdown duplicated, only visually
 		//  but provide that item inside onChange parameter
@@ -159,18 +156,20 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 		const uniqNewContactInputValueWithActions = uniqNewContactInputValue.map((value) => {
 			const duplicated = memberListEmails.includes(value.email);
 
+			const duplicatedChipAction: ChipAction = {
+				id: 'duplicated',
+				color: 'error',
+				type: 'icon',
+				icon: 'AlertCircle'
+			};
+
+			const duplicatedChipActionNotPresent = !value.actions?.find(
+				(action) => action.id === 'duplicated'
+			);
+
 			const actions = [
-				...value.actions,
-				...(duplicated && !value.duplicated
-					? [
-							{
-								id: 'duplicated',
-								color: 'error',
-								type: 'icon',
-								icon: 'AlertCircle'
-							}
-					  ]
-					: [])
+				...(value.actions ?? []),
+				...(duplicated && duplicatedChipActionNotPresent ? [duplicatedChipAction] : [])
 			];
 
 			return {
@@ -196,7 +195,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 				prevState.map((value) => {
 					const duplicated = newMemberListEmails.includes(value.email);
 
-					const actions = [...value.actions];
+					const actions = [...(value.actions ?? [])];
 					if (!duplicated && value.duplicated) {
 						remove(actions, (action) => action.id === 'duplicated');
 					}
