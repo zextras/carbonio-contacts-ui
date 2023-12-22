@@ -36,11 +36,17 @@ import { useTranslation } from 'react-i18next';
 import styled, { DefaultTheme } from 'styled-components';
 
 import { ContactInputCustomChipComponent } from './contact-input-custom-chip-component';
+import { CHIP_DISPLAY_NAME_VALUES } from '../constants/contact-input';
 import { parseFullAutocompleteXML } from '../helpers/autocomplete';
 import { useAppSelector } from '../hooks/redux';
 import { StoreProvider } from '../store/redux';
 import { Contact, Group } from '../types/contact';
-import { ContactInputOnChange, ContactInputValue, CustomChipProps } from '../types/integrations';
+import {
+	ContactInputChipDisplayName,
+	ContactInputOnChange,
+	ContactInputValue,
+	CustomChipProps
+} from '../types/integrations';
 import { ContactsSlice, State } from '../types/store';
 
 const emailRegex = /[^\s@]+@[^\s@]+\.[^\s@]+/;
@@ -140,6 +146,7 @@ type ContactInput = {
 	defaultValue: Array<Contact>;
 	placeholder: string;
 	background?: keyof DefaultTheme['palette'];
+	chipDisplayName?: ContactInputChipDisplayName;
 	dragAndDropEnabled?: boolean;
 	extraAccountsIds: Array<string>;
 };
@@ -150,6 +157,7 @@ const ContactInput: FC<ContactInput> = ({
 	placeholder,
 	background = 'gray5',
 	dragAndDropEnabled = false,
+	chipDisplayName = CHIP_DISPLAY_NAME_VALUES.LABEL,
 	extraAccountsIds,
 	...rest
 }) => {
@@ -296,7 +304,7 @@ const ContactInput: FC<ContactInput> = ({
 						customComponent: <Loader />
 					}
 				]);
-				new Promise((resolve, reject) => {
+				new Promise((resolve, promiseReject) => {
 					try {
 						resolve(
 							filter(allContacts, (c) =>
@@ -306,7 +314,7 @@ const ContactInput: FC<ContactInput> = ({
 							)
 						);
 					} catch (err: any) {
-						reject(new Error(err));
+						promiseReject(new Error(err));
 					}
 				})
 					.then((localResults: any) => {
@@ -471,11 +479,12 @@ const ContactInput: FC<ContactInput> = ({
 		(_props: CustomChipProps): React.JSX.Element => (
 			<ContactInputCustomChipComponent
 				{..._props}
+				chipDisplayName={chipDisplayName}
 				_onChange={onChange}
 				contactInputValue={contactInputValue}
 			/>
 		),
-		[contactInputValue, onChange]
+		[chipDisplayName, contactInputValue, onChange]
 	);
 
 	const onDragEnter = useCallback((ev) => {

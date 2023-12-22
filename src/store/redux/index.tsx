@@ -6,7 +6,7 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import React, { FC } from 'react';
 import { Provider } from 'react-redux';
-import { CONTACTS_APP_ID } from '../../constants';
+import { CONTACTS_APP_ID } from '../../constants/app';
 import { storeReducers } from '../reducers/reducers';
 
 export default combineReducers({});
