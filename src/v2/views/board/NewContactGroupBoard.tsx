@@ -17,7 +17,7 @@ import {
 	useSnackbar
 } from '@zextras/carbonio-design-system';
 import { useBoardHooks } from '@zextras/carbonio-shell-ui';
-import { remove, size, some, uniqBy } from 'lodash';
+import { remove, some, uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
@@ -53,11 +53,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 	const onNameChange = useCallback<NonNullable<InputProps['onChange']>>(
 		(ev) => {
 			setNameValue(ev.target.value);
-			if (size(ev.target.value) === 0) {
-				updateBoard({ title: '' });
-			} else {
-				updateBoard({ title: ev.target.value });
-			}
+			updateBoard({ title: ev.target.value });
 		},
 		[updateBoard]
 	);
