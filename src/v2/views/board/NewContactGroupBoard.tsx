@@ -24,7 +24,7 @@ import styled from 'styled-components';
 import { MemberListItemComponent } from '../../../components/member-list-item';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../../constants/contact-input';
 import ContactInput from '../../../integrations/contact-input';
-import { CONTACT_GROUP_TITLE_MAX_LENGTH } from '../../constants';
+import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../constants';
 import { client } from '../../network/client';
 
 const List = styled(ListV2)`
@@ -36,8 +36,8 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 	const { updateBoard, closeBoard } = useBoardHooks();
 	const createSnackbar = useSnackbar();
 
-	const initialTitle = t('board.newContactGroup.title', 'New Group');
-	const [titleValue, setTitleValue] = useState(initialTitle);
+	const initialName = t('board.newContactGroup.name', 'New Group');
+	const [nameValue, setNameValue] = useState(initialName);
 
 	const [contactInputValue, setContactInputValue] = useState<
 		Array<{
@@ -50,9 +50,9 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 
 	const [memberListEmails, setMemberListEmails] = useState<string[]>([]);
 
-	const onTitleChange = useCallback<NonNullable<InputProps['onChange']>>(
+	const onNameChange = useCallback<NonNullable<InputProps['onChange']>>(
 		(ev) => {
-			setTitleValue(ev.target.value);
+			setNameValue(ev.target.value);
 			if (size(ev.target.value) === 0) {
 				updateBoard({ title: '' });
 			} else {
@@ -63,15 +63,15 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 	);
 
 	const discardChanges = useCallback(() => {
-		setTitleValue(initialTitle);
+		setNameValue(initialName);
 		setContactInputValue([]);
 		setMemberListEmails([]);
-		updateBoard({ title: initialTitle });
-	}, [initialTitle, updateBoard]);
+		updateBoard({ title: initialName });
+	}, [initialName, updateBoard]);
 
 	const onSave = useCallback(() => {
 		client
-			.createContactGroup(titleValue, memberListEmails)
+			.createContactGroup(nameValue, memberListEmails)
 			.then(() => {
 				createSnackbar({
 					key: new Date().toLocaleString(),
@@ -90,23 +90,23 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 					label: t('label.error_try_again', 'Something went wrong, please try again')
 				});
 			});
-	}, [closeBoard, createSnackbar, memberListEmails, t, titleValue]);
+	}, [closeBoard, createSnackbar, memberListEmails, t, nameValue]);
 
-	const titleDescription = useMemo(() => {
-		if (titleValue.trim().length === 0) {
+	const nameDescription = useMemo(() => {
+		if (nameValue.trim().length === 0) {
 			return t(
-				'board.newContactGroup.input.title_input.error.required',
+				'board.newContactGroup.input.name_input.error.required',
 				'Group name is required, enter a name to proceed'
 			);
 		}
-		if (titleValue.length > CONTACT_GROUP_TITLE_MAX_LENGTH) {
+		if (nameValue.length > CONTACT_GROUP_NAME_MAX_LENGTH) {
 			return t(
-				'board.newContactGroup.input.title_input.error.max_length',
+				'board.newContactGroup.input.name_input.error.max_length',
 				'Maximum length allowed is 256 characters'
 			);
 		}
 		return undefined;
-	}, [t, titleValue]);
+	}, [t, nameValue]);
 
 	const contactInputDescription = useMemo(() => {
 		let valid = 0;
@@ -264,7 +264,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 				/>
 				<Button
 					disabled={
-						titleValue.trim().length === 0 || titleValue.length > CONTACT_GROUP_TITLE_MAX_LENGTH
+						nameValue.trim().length === 0 || nameValue.length > CONTACT_GROUP_NAME_MAX_LENGTH
 					}
 					size={'medium'}
 					label={t('label.save', 'save')}
@@ -279,9 +279,9 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 				gap={'1rem'}
 				padding={'1rem 0'}
 			>
-				<Avatar size="large" label={titleValue} icon="PeopleOutline" />
+				<Avatar size="large" label={nameValue} icon="PeopleOutline" />
 				<Container height={'fit'} crossAlignment={'flex-start'} minWidth={0}>
-					<Text weight={'bold'}>{titleValue}</Text>
+					<Text weight={'bold'}>{nameValue}</Text>
 					<Text color={'gray1'}>
 						{t('board.newContactGroup.addresses.label', 'Addresses')}: {memberListEmails.length}
 					</Text>
@@ -296,14 +296,14 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 				height={'calc(100% - 8rem)'}
 			>
 				<Input
-					label={t('board.newContactGroup.input.title_input.title.label', 'Group title*')}
+					label={t('board.newContactGroup.input.name_input.name.label', 'Group name*')}
 					backgroundColor={'gray5'}
 					borderColor={'gray3'}
-					value={titleValue}
-					onChange={onTitleChange}
-					description={titleDescription}
+					value={nameValue}
+					onChange={onNameChange}
+					description={nameDescription}
 					hasError={
-						titleValue.trim().length === 0 || titleValue.length > CONTACT_GROUP_TITLE_MAX_LENGTH
+						nameValue.trim().length === 0 || nameValue.length > CONTACT_GROUP_NAME_MAX_LENGTH
 					}
 				/>
 				<Row padding={{ top: '0.5rem' }}>

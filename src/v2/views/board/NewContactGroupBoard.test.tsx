@@ -16,7 +16,7 @@ import { rest } from 'msw';
 import NewContactGroupBoard from './NewContactGroupBoard';
 import { getSetupServer } from '../../../carbonio-ui-commons/test/jest-setup';
 import { screen, setup } from '../../../utils/testUtils';
-import { CONTACT_GROUP_TITLE_MAX_LENGTH } from '../../constants';
+import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../constants';
 import { ICON_REGEXP, PALETTE, SELECTORS } from '../../constants/tests';
 import { client } from '../../network/client';
 
@@ -39,9 +39,9 @@ describe('New contact group board', () => {
 		});
 	}
 	describe('Default visualization', () => {
-		it('should show fields for group title and addresses list', () => {
+		it('should show fields for group name and addresses list', () => {
 			setup(<NewContactGroupBoard />);
-			expect(screen.getByRole('textbox', { name: 'Group title*' })).toBeVisible();
+			expect(screen.getByRole('textbox', { name: 'Group name*' })).toBeVisible();
 			expect(screen.getByText('Addresses list')).toBeVisible();
 			expect(getContactInput()).toBeVisible();
 			expect(screen.getByText(`Type an address, click ‘+’ to add to the group`)).toHaveStyleRule(
@@ -58,45 +58,45 @@ describe('New contact group board', () => {
 			).toBeVisible();
 		});
 
-		it('should render the avatar icon, title and the number of addresses', () => {
+		it('should render the avatar icon, name and the number of addresses', () => {
 			setup(<NewContactGroupBoard />);
 			expect(screen.getByTestId(ICON_REGEXP.avatar)).toBeVisible();
 			expect(screen.getByText('New Group')).toBeVisible();
 			expect(screen.getByText('Addresses: 0')).toBeVisible();
 		});
 
-		it('should render New Group string by default in the title input', () => {
+		it('should render New Group string by default in the name input', () => {
 			setup(<NewContactGroupBoard />);
-			expect(screen.getByRole('textbox', { name: 'Group title*' })).toHaveValue('New Group');
+			expect(screen.getByRole('textbox', { name: 'Group name*' })).toHaveValue('New Group');
 		});
 	});
 
 	describe('Save button behaviours', () => {
 		describe('Save button disabled', () => {
-			it('should disable the save button when title input is empty string', async () => {
+			it('should disable the save button when name input is empty string', async () => {
 				const { user } = setup(<NewContactGroupBoard />);
-				await user.clear(screen.getByRole('textbox', { name: 'Group title*' }));
+				await user.clear(screen.getByRole('textbox', { name: 'Group name*' }));
 				expect(
 					screen.getByRoleWithIcon('button', { name: /SAVE/i, icon: ICON_REGEXP.save })
 				).toBeDisabled();
 			});
 
-			it('should disable save button when title input contains only space characters', async () => {
+			it('should disable save button when name input contains only space characters', async () => {
 				const { user } = setup(<NewContactGroupBoard />);
-				const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
-				await user.clear(titleInput);
-				await user.type(titleInput, '   ');
+				const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
+				await user.clear(nameInput);
+				await user.type(nameInput, '   ');
 				expect(
 					screen.getByRoleWithIcon('button', { name: /SAVE/i, icon: ICON_REGEXP.save })
 				).toBeDisabled();
 			});
 
-			it('should disable save button when title input length is greater than 256', async () => {
-				const newTitle = faker.string.alphanumeric(CONTACT_GROUP_TITLE_MAX_LENGTH + 1);
+			it('should disable save button when name input length is greater than 256', async () => {
+				const newName = faker.string.alphanumeric(CONTACT_GROUP_NAME_MAX_LENGTH + 1);
 				const { user } = setup(<NewContactGroupBoard />);
-				const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
-				await user.clear(titleInput);
-				await user.type(titleInput, newTitle);
+				const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
+				await user.clear(nameInput);
+				await user.type(nameInput, newName);
 				expect(
 					screen.getByRoleWithIcon('button', { name: /SAVE/i, icon: ICON_REGEXP.save })
 				).toBeDisabled();
@@ -118,11 +118,11 @@ describe('New contact group board', () => {
 				)
 			);
 
-			const newTitle = faker.string.alpha(10);
+			const newName = faker.string.alpha(10);
 			const { user } = setup(<NewContactGroupBoard />);
-			const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
-			await user.clear(titleInput);
-			await user.type(titleInput, newTitle);
+			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
+			await user.clear(nameInput);
+			await user.type(nameInput, newName);
 			const saveButton = screen.getByRoleWithIcon('button', {
 				name: /SAVE/i,
 				icon: ICON_REGEXP.save
@@ -144,11 +144,11 @@ describe('New contact group board', () => {
 				)
 			);
 
-			const newTitle = faker.string.alpha(10);
+			const newName = faker.string.alpha(10);
 			const { user } = setup(<NewContactGroupBoard />);
-			const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
-			await user.clear(titleInput);
-			await user.type(titleInput, newTitle);
+			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
+			await user.clear(nameInput);
+			await user.type(nameInput, newName);
 			const saveButton = screen.getByRoleWithIcon('button', {
 				name: /SAVE/i,
 				icon: ICON_REGEXP.save
@@ -178,11 +178,11 @@ describe('New contact group board', () => {
 				)
 			);
 
-			const newTitle = faker.string.alpha(10);
+			const newName = faker.string.alpha(10);
 			const { user } = setup(<NewContactGroupBoard />);
-			const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
-			await user.clear(titleInput);
-			await user.type(titleInput, newTitle);
+			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
+			await user.clear(nameInput);
+			await user.type(nameInput, newName);
 			const saveButton = screen.getByRoleWithIcon('button', {
 				name: /SAVE/i,
 				icon: ICON_REGEXP.save
@@ -214,11 +214,11 @@ describe('New contact group board', () => {
 				)
 			);
 
-			const newTitle = faker.string.alpha(10);
+			const newName = faker.string.alpha(10);
 			const { user } = setup(<NewContactGroupBoard />);
-			const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
-			await user.clear(titleInput);
-			await user.type(titleInput, newTitle);
+			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
+			await user.clear(nameInput);
+			await user.type(nameInput, newName);
 			const saveButton = screen.getByRoleWithIcon('button', {
 				name: /SAVE/i,
 				icon: ICON_REGEXP.save
@@ -250,12 +250,12 @@ describe('New contact group board', () => {
 			);
 			const newEmail1 = faker.internet.email();
 			const newEmail2 = faker.internet.email();
-			const newTitle = faker.string.alpha(10);
+			const newName = faker.string.alpha(10);
 			const { user } = setup(<NewContactGroupBoard />);
 			const contactInput = getContactInput();
-			const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
-			await user.clear(titleInput);
-			await user.type(titleInput, newTitle);
+			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
+			await user.clear(nameInput);
+			await user.type(nameInput, newName);
 			await user.type(contactInput, newEmail1);
 			await act(async () => {
 				await user.type(contactInput, ',');
@@ -271,7 +271,7 @@ describe('New contact group board', () => {
 			});
 			await user.click(saveButton);
 			await screen.findByText('Something went wrong, please try again');
-			expect(screen.getByText(newTitle)).toBeVisible();
+			expect(screen.getByText(newName)).toBeVisible();
 			const memberList = await screen.findByTestId(SELECTORS.memberList);
 			expect(within(memberList).getByText(newEmail1)).toBeVisible();
 			const chipInput = screen.getByTestId(SELECTORS.contactInput);
@@ -320,7 +320,7 @@ describe('New contact group board', () => {
 			expect(createContactGroupSpy).toHaveBeenCalledWith('New Group', [newEmail1]);
 		});
 
-		it('should use inserted title in createContact request', async () => {
+		it('should use inserted name in createContact request', async () => {
 			getSetupServer().use(
 				rest.post('/service/soap/CreateContactRequest', async (req, res, ctx) =>
 					res(
@@ -332,12 +332,12 @@ describe('New contact group board', () => {
 					)
 				)
 			);
-			const newTitle = faker.string.alpha(10);
+			const newName = faker.string.alpha(10);
 			const createContactGroupSpy = jest.spyOn(client, 'createContactGroup');
 			const { user } = setup(<NewContactGroupBoard />);
-			const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
-			await user.clear(titleInput);
-			await user.type(titleInput, newTitle);
+			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
+			await user.clear(nameInput);
+			await user.type(nameInput, newName);
 
 			const saveButton = screen.getByRoleWithIcon('button', {
 				name: /SAVE/i,
@@ -348,20 +348,20 @@ describe('New contact group board', () => {
 			});
 			await screen.findByText('Contact group successfully created');
 
-			expect(createContactGroupSpy).toBeCalledWith(newTitle, []);
+			expect(createContactGroupSpy).toBeCalledWith(newName, []);
 		});
 	});
 
 	describe('Discard button', () => {
-		it('should reset to the initial title when click on the discard button', async () => {
+		it('should reset to the initial name when click on the discard button', async () => {
 			const { user } = setup(<NewContactGroupBoard />);
-			const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
-			const newTitle = faker.string.alphanumeric(CONTACT_GROUP_TITLE_MAX_LENGTH + 1);
-			await user.clear(titleInput);
-			await user.type(titleInput, newTitle);
-			expect(titleInput).toHaveValue(newTitle);
+			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
+			const newName = faker.string.alphanumeric(CONTACT_GROUP_NAME_MAX_LENGTH + 1);
+			await user.clear(nameInput);
+			await user.type(nameInput, newName);
+			expect(nameInput).toHaveValue(newName);
 			await user.click(screen.getByRole('button', { name: /discard/i }));
-			expect(titleInput).toHaveValue('New Group');
+			expect(nameInput).toHaveValue('New Group');
 		});
 
 		it('should delete chips when click on the discard button', async () => {
@@ -397,61 +397,61 @@ describe('New contact group board', () => {
 			spyUseBoardHooks(updateBoard);
 			const { user } = setup(<NewContactGroupBoard />);
 
-			const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
-			await user.clear(titleInput);
+			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
+			await user.clear(nameInput);
 			await user.click(screen.getByRole('button', { name: /discard/i }));
 			expect(updateBoard).toBeCalledTimes(2);
 			expect(updateBoard).toHaveBeenLastCalledWith({ title: 'New Group' });
 		});
 	});
 
-	describe('Title', () => {
-		it('should update title text', async () => {
-			const newTitle = faker.string.alpha(10);
+	describe('Name', () => {
+		it('should update name text', async () => {
+			const newName = faker.string.alpha(10);
 			const { user } = setup(<NewContactGroupBoard />);
-			const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
-			await user.clear(titleInput);
-			await user.type(titleInput, newTitle);
-			expect(screen.getByText(newTitle)).toBeVisible();
+			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
+			await user.clear(nameInput);
+			await user.type(nameInput, newName);
+			expect(screen.getByText(newName)).toBeVisible();
 		});
 
 		it('should update board title', async () => {
 			const updateBoard = jest.fn();
 			spyUseBoardHooks(updateBoard);
-			const newTitle = faker.string.alpha(10);
+			const newName = faker.string.alpha(10);
 			const { user } = setup(<NewContactGroupBoard />);
 
-			const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
-			await user.clear(titleInput);
-			await user.type(titleInput, newTitle);
-			expect(updateBoard).toHaveBeenLastCalledWith({ title: newTitle });
+			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
+			await user.clear(nameInput);
+			await user.type(nameInput, newName);
+			expect(updateBoard).toHaveBeenLastCalledWith({ title: newName });
 		});
 
 		describe('Error message', () => {
-			it('should show the error message in red when the title input length is 0', async () => {
+			it('should show the error message in red when the name input length is 0', async () => {
 				const errorMessage = 'Group name is required, enter a name to proceed';
 				const { user } = setup(<NewContactGroupBoard />);
-				const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
-				await user.clear(titleInput);
+				const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
+				await user.clear(nameInput);
 				expect(screen.getByText(errorMessage)).toBeVisible();
 				expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
 			});
 
-			it('should show the error message when the title input contains only space characters', async () => {
+			it('should show the error message when the name input contains only space characters', async () => {
 				const { user } = setup(<NewContactGroupBoard />);
-				const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
-				await user.clear(titleInput);
-				await user.type(titleInput, '   ');
+				const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
+				await user.clear(nameInput);
+				await user.type(nameInput, '   ');
 				expect(screen.getByText('Group name is required, enter a name to proceed')).toBeVisible();
 			});
 
-			it('should show the error message in red when the title input length is greater than 256', async () => {
+			it('should show the error message in red when the name input length is greater than 256', async () => {
 				const errorMessage = 'Maximum length allowed is 256 characters';
-				const newTitle = faker.string.alphanumeric(CONTACT_GROUP_TITLE_MAX_LENGTH + 1);
+				const newName = faker.string.alphanumeric(CONTACT_GROUP_NAME_MAX_LENGTH + 1);
 				const { user } = setup(<NewContactGroupBoard />);
-				const titleInput = screen.getByRole('textbox', { name: 'Group title*' });
-				await user.clear(titleInput);
-				await user.type(titleInput, newTitle);
+				const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
+				await user.clear(nameInput);
+				await user.type(nameInput, newName);
 				expect(screen.getByText(errorMessage)).toBeVisible();
 				expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
 			});

@@ -4,4 +4,4 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-export const CONTACT_GROUP_TITLE_MAX_LENGTH = 256;
+export const CONTACT_GROUP_NAME_MAX_LENGTH = 256;
