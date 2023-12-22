@@ -16,14 +16,11 @@ import {
 	ChipAction
 } from '@zextras/carbonio-design-system';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
-import { debounce, DebouncedFuncLeading, filter, first, map, noop, uniqBy } from 'lodash';
+import { debounce, DebouncedFuncLeading, filter, map, noop, uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { useActionEditDL } from '../../actions/edit-dl';
-import { getDistributionList } from '../../api/get-distribution-list';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
-import { DistributionList } from '../../model/distribution-list';
 import { ContactInputOnChange, ContactInputValue, CustomChipProps } from '../types/integrations';
 
 const StyledChip = styled(Chip)`
@@ -38,7 +35,13 @@ const DISTRIBUTION_ITEM = {
 	MORE_ITEM: 'dl-get-more'
 };
 
-const isDistributionList = ({ isGroup, email }: { isGroup?: boolean; email?: string }): boolean => {
+export const isDistributionList = ({
+	isGroup,
+	email
+}: {
+	isGroup?: boolean;
+	email?: string;
+}): boolean => {
 	return (isGroup && !!email) ?? false;
 };
 
@@ -241,6 +244,7 @@ const CustomComponent = ({
 	isGroup,
 	_onChange,
 	contactInputValue,
+	actions: propActions,
 	...rest
 }: CustomChipProps): React.JSX.Element => {
 	const [t] = useTranslation();
@@ -256,20 +260,20 @@ const CustomComponent = ({
 		contactInputValue
 	});
 
-	const actionEditDL = useActionEditDL();
-	const [distributionList, setDistributionList] = useState<DistributionList>();
+	// const actionEditDL = useActionEditDL();
+	// const [distributionList, setDistributionList] = useState<DistributionList>();
 
 	const chipActions = useMemo((): ChipAction[] => {
-		const actions: ChipAction[] = [];
-		if (distributionList && actionEditDL.canExecute(distributionList)) {
-			actions.push({
-				id: `chip-action-${actionEditDL.id}`,
-				label: actionEditDL.label,
-				type: 'button',
-				icon: actionEditDL.icon,
-				onClick: () => actionEditDL.execute(distributionList)
-			});
-		}
+		const actions: ChipAction[] = [...(propActions ?? [])];
+		// if (distributionList && actionEditDL.canExecute(distributionList)) {
+		// 	actions.push({
+		// 		id: `chip-action-${actionEditDL.id}`,
+		// 		label: actionEditDL.label,
+		// 		type: 'button',
+		// 		icon: actionEditDL.icon,
+		// 		onClick: () => actionEditDL.execute(distributionList)
+		// 	});
+		// }
 		actions.push({
 			id: 'action2',
 			label: t('expand_distribution_list', 'Expand address list'),
@@ -278,25 +282,25 @@ const CustomComponent = ({
 			onClick: debounceUserInput(onChevronClick)
 		});
 		return actions;
-	}, [actionEditDL, distributionList, onChevronClick, open, t]);
+	}, [onChevronClick, open, propActions, t]);
 
-	useEffect(() => {
-		getDistributionList(email)
-			.then((response) => {
-				const dlData = first(response.dl);
-				if (dlData) {
-					setDistributionList({
-						email: dlData.name,
-						displayName: dlData._attrs?.displayName,
-						isOwner: dlData.isOwner ?? false
-					});
-				}
-			})
-			.catch((error) => {
-				setDistributionList(undefined);
-				console.error(error);
-			});
-	}, [email]);
+	// useEffect(() => {
+	// 	getDistributionList(email)
+	// 		.then((response) => {
+	// 			const dlData = first(response.dl);
+	// 			if (dlData) {
+	// 				setDistributionList({
+	// 					email: dlData.name,
+	// 					displayName: dlData._attrs?.displayName,
+	// 					isOwner: dlData.isOwner ?? false
+	// 				});
+	// 			}
+	// 		})
+	// 		.catch((error) => {
+	// 			setDistributionList(undefined);
+	// 			console.error(error);
+	// 		});
+	// }, [email]);
 
 	const onChipClick = useCallback<React.MouseEventHandler>((e) => {
 		e.stopPropagation();
@@ -336,8 +340,10 @@ export const ContactInputCustomChipComponent = ({
 	isGroup,
 	label,
 	chipDisplayName = CHIP_DISPLAY_NAME_VALUES.LABEL,
+	contactActions,
 	...rest
 }: CustomChipProps): ReactElement => {
+	const [chipActions, setChipActions] = useState<ChipAction[]>([]);
 	const _label = useMemo(() => {
 		if (label && chipDisplayName === CHIP_DISPLAY_NAME_VALUES.LABEL) {
 			return label;
@@ -348,8 +354,33 @@ export const ContactInputCustomChipComponent = ({
 		return label || email || '';
 	}, [chipDisplayName, email, label]);
 
+	useEffect(() => {
+		if (contactActions) {
+			Promise.allSettled(
+				contactActions.map((contactAction) => contactAction.getAction({ email, isGroup }))
+			).then((promisedActions) => {
+				const actions = promisedActions.reduce<ChipAction[]>((result, promisedAction) => {
+					if (promisedAction.status === 'fulfilled' && promisedAction.value !== undefined) {
+						result.push(promisedAction.value);
+					}
+					return result;
+				}, []);
+				setChipActions(actions);
+			});
+		}
+	}, [contactActions, email, isGroup]);
+
 	if (!isDistributionList({ email, isGroup })) {
-		return <Chip {...rest} label={_label} data-testid={'default-chip'} />;
+		return <Chip {...rest} label={_label} data-testid={'default-chip'} actions={chipActions} />;
 	}
-	return <CustomComponent {...rest} label={_label} email={email} isGroup={isGroup} />;
+
+	return (
+		<CustomComponent
+			{...rest}
+			label={_label}
+			email={email}
+			isGroup={isGroup}
+			actions={chipActions}
+		/>
+	);
 };

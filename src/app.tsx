@@ -20,7 +20,7 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import { CONTACTS_ROUTE, CONTACTS_APP_ID } from './constants';
-import { ContactInput } from './legacy/integrations/contact-input';
+import { ContactInputIntegrationWrapper } from './legacy/integrations/contact-input-integration-wrapper';
 import { StoreProvider } from './legacy/store/redux';
 import { EditViewProps } from './legacy/types/views/edit-view';
 import { SidebarProps } from './legacy/types/views/sidebar';
@@ -114,7 +114,7 @@ const App: FC = () => {
 		registerComponents({
 			id: 'contact-input',
 			// FIXME: remove cast when SHELL-185 will be released
-			component: ContactInput as ComponentType
+			component: ContactInputIntegrationWrapper as ComponentType
 		});
 
 		registerActions({

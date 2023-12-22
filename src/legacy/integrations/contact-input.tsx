@@ -14,7 +14,8 @@ import {
 	Text,
 	ChipProps,
 	ChipItem,
-	ChipInputProps
+	ChipInputProps,
+	ChipAction
 } from '@zextras/carbonio-design-system';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
 import {
@@ -142,6 +143,15 @@ const Loader = (): ReactElement => (
 	</Container>
 );
 
+export type ContactInputItem = { email: string; isGroup?: boolean } & Partial<
+	Omit<Contact, 'email'>
+>;
+
+export type ContactChipAction = {
+	id: string;
+	getAction: (chipItem: ContactInputItem) => Promise<ChipAction | undefined>;
+};
+
 export type ContactInputProps = Pick<
 	ChipInputProps,
 	'placeholder' | 'background' | 'icon' | 'iconAction' | 'iconDisabled'
@@ -151,6 +161,7 @@ export type ContactInputProps = Pick<
 	dragAndDropEnabled?: boolean;
 	extraAccountsIds: Array<string>;
 	chipDisplayName?: ContactInputChipDisplayName;
+	contactActions?: Array<ContactChipAction>;
 };
 
 const ContactInputCore: FC<ContactInputProps> = ({
@@ -161,6 +172,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	dragAndDropEnabled = false,
 	chipDisplayName = CHIP_DISPLAY_NAME_VALUES.LABEL,
 	extraAccountsIds,
+	contactActions,
 	...rest
 }) => {
 	const props = omit(rest, 'ChipComponent');
@@ -249,11 +261,12 @@ const ContactInputCore: FC<ContactInputProps> = ({
 				: '';
 		}
 	}, []);
-	const onInputType = useCallback(
+	const onInputType = useCallback<NonNullable<ChipInputProps['onInputType']>>(
 		(e) => {
-			if (e.keyCode && e.keyCode === 13) {
+			if (e.key === 'Enter') {
 				if (inputRef?.current) {
-					inputRef.current.innerText = inputRef.current.innerText.replaceAll('\n', '');
+					// FIXME: innerText does not contain new line chars at this point
+					inputRef.current.innerText = inputRef.current.innerText?.replaceAll('\n', '');
 				}
 				if (options?.length > 0 && !find(options, { id: 'loading' })) {
 					onChange &&
@@ -337,7 +350,9 @@ const ContactInputCore: FC<ContactInputProps> = ({
 								const results = parseFullAutocompleteXML(autoCompleteResult);
 								return map(results.match, (m) => ({
 									...m,
-									email: isContactGroup(m) ? undefined : emailRegex.exec(m.email)?.[0]?.slice(1, -1)
+									email: isContactGroup(m)
+										? undefined
+										: emailRegex.exec(m.email ?? '')?.[0]?.slice(1, -1)
 								}));
 							})
 							.then((remoteResults: any) => {
@@ -373,7 +388,8 @@ const ContactInputCore: FC<ContactInputProps> = ({
 												// eslint-disable-next-line max-len
 												[c?.firstName, c?.lastName, c?.company, c?.email, c?.fullName, c?.display],
 												(field: any) =>
-													startsWith(field?.toLowerCase().trim(), e.textContent.toLowerCase())
+													// eslint-disable-next-line max-len
+													startsWith(field?.toLowerCase().trim(), e.textContent?.toLowerCase())
 											)
 										),
 										(contact: any) => ({
@@ -479,12 +495,13 @@ const ContactInputCore: FC<ContactInputProps> = ({
 		(_props: CustomChipProps): React.JSX.Element => (
 			<ContactInputCustomChipComponent
 				{..._props}
+				contactActions={contactActions}
 				chipDisplayName={chipDisplayName}
 				_onChange={onChange}
 				contactInputValue={contactInputValue}
 			/>
 		),
-		[chipDisplayName, contactInputValue, onChange]
+		[chipDisplayName, contactActions, contactInputValue, onChange]
 	);
 
 	const onDragEnter = useCallback((ev) => {

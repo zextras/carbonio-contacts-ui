@@ -5,11 +5,11 @@
  */
 import React from 'react';
 
-import { ChipItem } from '@zextras/carbonio-design-system';
+import type { ChipInputProps, ChipItem } from '@zextras/carbonio-design-system';
 
-import { Contact } from './contact';
+import type { Contact } from './contact';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
-import { ContactInputChipAction } from '../integrations/contact-input';
+import type { ContactChipAction } from '../integrations/contact-input';
 
 export type ContactInputValue = Array<
 	ChipItem<string | Contact | ((prevState: ChipItem<string | Contact>[]) => ChipItem[])>
@@ -19,7 +19,9 @@ export type ContactInputOnChange = ((items: ContactInputValue) => void) | undefi
 export type ContactInputChipDisplayName =
 	(typeof CHIP_DISPLAY_NAME_VALUES)[keyof typeof CHIP_DISPLAY_NAME_VALUES];
 
-export type CustomChipProps = React.PropsWithChildren<{
+export type CustomChipProps = React.ComponentPropsWithoutRef<
+	NonNullable<ChipInputProps['ChipComponent']>
+> & {
 	id: string;
 	label: string;
 	email: string;
@@ -27,5 +29,5 @@ export type CustomChipProps = React.PropsWithChildren<{
 	chipDisplayName?: ContactInputChipDisplayName;
 	_onChange: ContactInputOnChange;
 	contactInputValue: ContactInputValue;
-	actions?: Array<ContactInputChipAction>;
-}>;
+	contactActions?: Array<ContactChipAction>;
+};
