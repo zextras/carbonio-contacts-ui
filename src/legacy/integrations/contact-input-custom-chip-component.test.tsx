@@ -5,18 +5,16 @@
  */
 import React from 'react';
 
-import { faker } from '@faker-js/faker';
-import { act, waitFor } from '@testing-library/react';
+import { waitFor } from '@testing-library/react';
 import { rest } from 'msw';
 
 import { ContactInputCustomChipComponent } from './contact-input-custom-chip-component';
 import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
 import { mockedAccount } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
-import { screen, setupTest, within } from '../../carbonio-ui-commons/test/test-setup';
+import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
-import { TESTID_SELECTORS, TIMERS } from '../../constants/tests';
+import { TESTID_SELECTORS } from '../../constants/tests';
 import { registerGetDistributionListHandler } from '../../tests/msw-handlers';
-import { generateStore } from '../tests/generators/store';
 import { getDistributionListCustomResponse } from '../tests/msw/handle-get-distribution-list-members-request';
 
 const getDistributionListMembersRequest = '/service/soap/GetDistributionListMembersRequest';
@@ -399,107 +397,5 @@ describe('Contact input custom chip component', () => {
 			user.click(selectAllLabel);
 		});
 		expect(dispatchRequest).toHaveBeenCalledTimes(2);
-	});
-
-	describe('Editing DL', () => {
-		it("doesn't show the edit icon if the contact isn't a DL", () => {
-			const handler = registerGetDistributionListHandler(distributionList);
-
-			setupTest(
-				<ContactInputCustomChipComponent
-					id={'user-1'}
-					label={'user 1'}
-					email={user1.email}
-					isGroup={false}
-					_onChange={jest.fn()}
-					contactInputValue={[]}
-				/>
-			);
-
-			const editButton = screen.queryByRoleWithIcon('button', {
-				icon: TESTID_SELECTORS.ICONS.EDIT_DL
-			});
-			expect(editButton).not.toBeInTheDocument();
-			expect(handler).not.toHaveBeenCalled();
-		});
-
-		it('should not show the edit icon if the contact is a DL but the current user is not the DL owner', async () => {
-			distributionList.owners = [{ id: faker.string.uuid(), name: faker.person.fullName() }];
-
-			const handler = registerGetDistributionListHandler(distributionList);
-
-			setupTest(
-				<ContactInputCustomChipComponent
-					id={distributionList.id}
-					label={distributionList.displayName}
-					email={distributionList.email}
-					isGroup
-					_onChange={jest.fn()}
-					contactInputValue={[]}
-				/>
-			);
-
-			await waitFor(() => expect(handler).toHaveBeenCalled());
-			expect(
-				screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.ICONS.EDIT_DL })
-			).not.toBeInTheDocument();
-		});
-
-		it('should show the edit icon if the contact is a DL and the current user is the DL owner', async () => {
-			distributionList.owners = [{ id: mockedAccount.id, name: mockedAccount.name }];
-
-			const handler = registerGetDistributionListHandler(distributionList);
-
-			setupTest(
-				<ContactInputCustomChipComponent
-					id={distributionList.id}
-					label={distributionList.displayName}
-					email={distributionList.email}
-					isGroup
-					_onChange={jest.fn()}
-					contactInputValue={[]}
-				/>
-			);
-
-			await waitFor(() => expect(handler).toHaveBeenCalled());
-			expect(
-				screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.ICONS.EDIT_DL })
-			).toBeVisible();
-		});
-
-		it('if the user clicks on the edit icon the DL title is displayed inside a modal', async () => {
-			const store = generateStore();
-
-			const handler = registerGetDistributionListHandler(distributionList);
-
-			const { user } = setupTest(
-				<ContactInputCustomChipComponent
-					id={distributionList.id}
-					label={distributionList.displayName}
-					email={distributionList.email}
-					isGroup
-					_onChange={jest.fn()}
-					contactInputValue={[]}
-				/>,
-				{ store }
-			);
-
-			await waitFor(() => expect(handler).toHaveBeenCalled());
-			const editButton = await screen.findByRoleWithIcon('button', {
-				icon: TESTID_SELECTORS.ICONS.EDIT_DL
-			});
-			await user.click(editButton);
-			await screen.findByText(`Edit "${distributionList.displayName}"`);
-			act(() => {
-				jest.advanceTimersByTime(TIMERS.MODAL.DELAY_OPEN);
-			});
-			expect(
-				within(screen.getByTestId(TESTID_SELECTORS.MODAL)).getByText(
-					`Edit "${distributionList.displayName}"`
-				)
-			).toBeVisible();
-		});
-
-		it.todo('should not show the edit message if the distribution list cannot be retrieved');
 	});
 });

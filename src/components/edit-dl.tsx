@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next';
 
 import { MemberListItemComponent } from './member-list-item';
 import { CHIP_DISPLAY_NAME_VALUES } from '../constants/contact-input';
-import { ContactInputIntegrationWrapper } from '../legacy/integrations/contact-input-integration-wrapper';
+import { ContactInput } from '../legacy/integrations/contact-input';
 
 const DUPLICATED_MEMBER_ACTION_ID = 'duplicated';
 
@@ -221,7 +221,7 @@ export const EditDLComponent: FC<EditDLComponentProps> = ({
 					'You can filter this list by looking for specific member’s name or add new ones by editing the Distribution List.'
 				)}
 			</Text>
-			<ContactInputIntegrationWrapper
+			<ContactInput
 				placeholder={t(
 					'edit_dl_component.placeholder.add_members',
 					'Insert an address to add a new element'

@@ -16,10 +16,21 @@ import {
 	ChipAction
 } from '@zextras/carbonio-design-system';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
-import { debounce, DebouncedFuncLeading, filter, first, map, noop, uniqBy } from 'lodash';
+import {
+	debounce,
+	DebouncedFuncLeading,
+	filter,
+	first,
+	map,
+	noop,
+	reduce,
+	some,
+	uniqBy
+} from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
+import { ContactChipAction } from './contact-input';
 import { getDistributionList } from '../../api/get-distribution-list';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
 import { DistributionList } from '../../model/distribution-list';
@@ -262,20 +273,8 @@ const CustomComponent = ({
 		contactInputValue
 	});
 
-	// const actionEditDL = useActionEditDL();
-	// const [distributionList, setDistributionList] = useState<DistributionList>();
-
 	const chipActions = useMemo((): ChipAction[] => {
 		const actions: ChipAction[] = [...(propActions ?? [])];
-		// if (distributionList && actionEditDL.canExecute(distributionList)) {
-		// 	actions.push({
-		// 		id: `chip-action-${actionEditDL.id}`,
-		// 		label: actionEditDL.label,
-		// 		type: 'button',
-		// 		icon: actionEditDL.icon,
-		// 		onClick: () => actionEditDL.execute(distributionList)
-		// 	});
-		// }
 		actions.push({
 			id: 'action2',
 			label: t('expand_distribution_list', 'Expand address list'),
@@ -343,9 +342,9 @@ export const ContactInputCustomChipComponent = ({
 	label,
 	chipDisplayName = CHIP_DISPLAY_NAME_VALUES.LABEL,
 	contactActions,
+	actions,
 	...rest
 }: CustomChipProps): ReactElement => {
-	// const [chipActions, setChipActions] = useState<ChipAction[]>([]);
 	const [distributionList, setDistributionList] = useState<DistributionList>();
 	const _label = useMemo(() => {
 		if (label && chipDisplayName === CHIP_DISPLAY_NAME_VALUES.LABEL) {
@@ -378,19 +377,27 @@ export const ContactInputCustomChipComponent = ({
 	}, [email, isGroup]);
 
 	const chipActions = useMemo(() => {
-		return contactActions?.reduce<Array<ChipAction>>((result, contactAction) => {
-			if (contactAction.isVisible(distributionList || { email, isGroup })) {
-				result.push({
-					...contactAction,
-					onClick: () => {
-						contactAction.onClick(distributionList || { email, isGroup });
-					}
-				});
-			}
+		return reduce<ContactChipAction, Array<ChipAction>>(
+			contactActions,
+			(result, contactAction) => {
+				if (some(result, (action) => contactAction.id === action.id)) {
+					return result;
+				}
 
-			return result;
-		}, []);
-	}, [contactActions, distributionList, email, isGroup]);
+				if (contactAction.isVisible(distributionList || { email, isGroup })) {
+					result.push({
+						...contactAction,
+						onClick: () => {
+							contactAction.onClick(distributionList || { email, isGroup });
+						}
+					});
+				}
+
+				return result;
+			},
+			actions ?? []
+		);
+	}, [actions, contactActions, distributionList, email, isGroup]);
 
 	if (!isChipItemDistributionList({ email, isGroup })) {
 		return <Chip {...rest} label={_label} data-testid={'default-chip'} actions={chipActions} />;
