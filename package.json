@@ -1,6 +1,6 @@
 {
 	"name": "carbonio-contacts-ui",
-	"version": "1.6.2",
+	"version": "1.6.4",
 	"description": "Contacts module",
 	"main": "src/app.tsx",
 	"engines": {
@@ -48,7 +48,7 @@
 		"@types/webpack": "^5.28.2",
 		"@types/webpack-env": "^1.18.1",
 		"@zextras/carbonio-ui-configs": "^0.1.12",
-		"@zextras/carbonio-ui-sdk": "^1.6.0",
+		"@zextras/carbonio-ui-sdk": "^1.7.0",
 		"babel-jest": "^28.1.3",
 		"babel-plugin-i18next-extract": "^0.9.0",
 		"babel-plugin-styled-components": "^2.0.7",

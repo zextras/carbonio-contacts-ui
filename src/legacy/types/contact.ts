@@ -118,7 +118,6 @@ export type Group = {
 	type: string;
 	galType?: string;
 };
-
 export type Match = {
 	first?: string;
 	last?: string;
