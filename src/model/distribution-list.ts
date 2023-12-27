@@ -7,4 +7,5 @@ export type DistributionList = {
 	email: string;
 	displayName?: string;
 	isOwner: boolean;
+	owners?: Array<{ id: string; name: string }>;
 };

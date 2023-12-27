@@ -12,7 +12,8 @@ import { ChipAction } from '@zextras/carbonio-design-system';
 import { ContactInputIntegrationWrapper } from './contact-input-integration-wrapper';
 import { mockedAccount } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
 import { screen, setupTest, within } from '../../carbonio-ui-commons/test/test-setup';
-import { TESTID_SELECTORS, TIMERS } from '../../constants/tests';
+import { JEST_MOCKED_ERROR, TESTID_SELECTORS, TIMERS } from '../../constants/tests';
+import { DistributionList } from '../../model/distribution-list';
 import {
 	registerFullAutocompleteHandler,
 	registerGetDistributionListHandler
@@ -53,11 +54,10 @@ const editInvalidChipAction: ChipAction = expect.objectContaining<Partial<ChipAc
 });
 
 const distributionList = {
-	id: 'dl-1',
 	email: distributionListChipItem.email,
 	displayName: 'dl 1',
 	owners: [{ id: mockedAccount.id, name: mockedAccount.name }]
-};
+} satisfies Partial<DistributionList>;
 
 const user1 = {
 	id: 'user1ID',
@@ -166,9 +166,8 @@ describe('Contact input integration wrapper', () => {
 		});
 
 		describe('on distribution list contact', () => {
-			// FIXME(characterization test): on distribution list chip actions set from outside are overwritten
-			it('should not show custom action if value is set from outside and contain the action', async () => {
-				const handler = registerGetDistributionListHandler(distributionListChipItem);
+			it('should show custom action if value is set from outside and contain the action', async () => {
+				const handler = registerGetDistributionListHandler(distributionList);
 
 				setupTest(
 					<ContactInputIntegrationWrapper
@@ -187,12 +186,12 @@ describe('Contact input integration wrapper', () => {
 
 				await waitFor(() => expect(handler).toHaveBeenCalled());
 				expect(
-					screen.queryByRoleWithIcon('button', { icon: `icon: ${customAction.icon}` })
-				).not.toBeInTheDocument();
+					screen.getByRoleWithIcon('button', { icon: `icon: ${customAction.icon}` })
+				).toBeVisible();
 			});
 
 			it('should show action to see the members list', async () => {
-				const handler = registerGetDistributionListHandler(distributionListChipItem);
+				const handler = registerGetDistributionListHandler(distributionList);
 				setupTest(
 					<ContactInputIntegrationWrapper
 						defaultValue={[
@@ -235,9 +234,10 @@ describe('Contact input integration wrapper', () => {
 				});
 
 				it('should not show the edit icon if the contact is a DL but the current user is not the DL owner', async () => {
-					distributionList.owners = [{ id: faker.string.uuid(), name: faker.person.fullName() }];
-
-					const handler = registerGetDistributionListHandler(distributionList);
+					const handler = registerGetDistributionListHandler({
+						...distributionList,
+						owners: [{ id: faker.string.uuid(), name: faker.person.fullName() }]
+					});
 
 					setupTest(
 						<ContactInputIntegrationWrapper
@@ -268,7 +268,7 @@ describe('Contact input integration wrapper', () => {
 
 					await waitFor(() => expect(handler).toHaveBeenCalled());
 					expect(
-						screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.ICONS.EDIT_DL })
+						await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.ICONS.EDIT_DL })
 					).toBeVisible();
 				});
 
@@ -300,7 +300,23 @@ describe('Contact input integration wrapper', () => {
 					).toBeVisible();
 				});
 
-				it.todo('should not show the edit message if the distribution list cannot be retrieved');
+				it('should not show the edit action if the distribution list cannot be retrieved', async () => {
+					const handler = registerGetDistributionListHandler(distributionList, JEST_MOCKED_ERROR);
+
+					setupTest(
+						<ContactInputIntegrationWrapper
+							// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+							// @ts-ignore
+							defaultValue={[distributionListChipItem]}
+							extraAccountsIds={[]}
+						/>
+					);
+
+					await waitFor(() => expect(handler).toHaveBeenCalled());
+					expect(
+						screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.ICONS.EDIT_DL })
+					).not.toBeInTheDocument();
+				});
 			});
 		});
 

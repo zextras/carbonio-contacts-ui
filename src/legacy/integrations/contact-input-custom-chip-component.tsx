@@ -30,11 +30,15 @@ import {
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { ContactChipAction } from './contact-input';
+import type { ContactChipAction } from './contact-input';
 import { getDistributionList } from '../../api/get-distribution-list';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
-import { DistributionList } from '../../model/distribution-list';
-import { ContactInputOnChange, ContactInputValue, CustomChipProps } from '../types/integrations';
+import type { DistributionList } from '../../model/distribution-list';
+import type {
+	ContactInputOnChange,
+	ContactInputValue,
+	CustomChipProps
+} from '../types/integrations';
 
 const StyledChip = styled(Chip)`
 	cursor: default;
