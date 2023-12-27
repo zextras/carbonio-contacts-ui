@@ -5,7 +5,7 @@
  */
 
 /* eslint-disable arrow-body-style */
-import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { ReactElement, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import {
 	Chip,
@@ -15,7 +15,6 @@ import {
 	DropdownItem,
 	ChipAction
 } from '@zextras/carbonio-design-system';
-import { soapFetch } from '@zextras/carbonio-shell-ui';
 import {
 	debounce,
 	DebouncedFuncLeading,
@@ -24,6 +23,7 @@ import {
 	map,
 	noop,
 	reduce,
+	size,
 	some,
 	uniqBy
 } from 'lodash';
@@ -32,6 +32,10 @@ import styled from 'styled-components';
 
 import type { ContactChipAction } from './contact-input';
 import { getDistributionList } from '../../api/get-distribution-list';
+import {
+	getDistributionListMembers,
+	GetDistributionListMembersResponse
+} from '../../api/get-distribution-list-members';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
 import type { DistributionList } from '../../model/distribution-list';
 import type {
@@ -70,42 +74,18 @@ const debounceUserInput = (
 		leading: true
 	});
 
-const getDistributionListMembers = async ({
-	email,
-	limit = 100,
-	offset = 0
-}: {
-	email: string;
-	limit?: number;
-	offset?: number;
-}): Promise<{ dlm: Array<{ _content: string }>; total: number; more: boolean; offset: number }> => {
-	const result: { dlm: Array<{ _content: string }>; total: number; more: boolean } =
-		await soapFetch('GetDistributionListMembers', {
-			_jsns: 'urn:zimbraAccount',
-			dl: {
-				_content: email
-			},
-			limit,
-			offset
-		});
-	return {
-		...result,
-		offset
-	};
-};
-
 const getAllDistributionListMembers = async (
 	email: string,
 	members: Array<{ _content: string }> = [],
 	offset = 0
 ): Promise<{ total: number; dlm: Array<{ _content?: string }> }> => {
-	const response = await getDistributionListMembers({ email, offset });
+	const response = await getDistributionListMembers(email, { limit: 100, offset });
 	if (response.dlm) {
 		const newValue = members.concat(response.dlm);
 		if (response.more) {
 			return getAllDistributionListMembers(email, newValue, offset + response.dlm.length);
 		}
-		return { total: response.total, dlm: newValue };
+		return { total: response.total ?? 0, dlm: newValue };
 	}
 	return { total: 0, dlm: [] };
 };
@@ -114,9 +94,7 @@ const useDistributionListFunctions = ({
 	email,
 	id,
 	isGroup,
-	open,
-	setOpen,
-	_onChange,
+	contactInputOnChange,
 	contactInputValue
 }: {
 	email: string;
@@ -124,12 +102,10 @@ const useDistributionListFunctions = ({
 	isGroup?: boolean;
 	galType?: string;
 	exp?: boolean;
-	open: boolean;
-	setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-	_onChange: ContactInputOnChange;
+	contactInputOnChange: ContactInputOnChange;
 	contactInputValue: ContactInputValue;
-}): { items: Array<DropdownItem>; onChevronClick: () => void } => {
-	const [loading, setLoading] = useState(false);
+}): { items: Array<DropdownItem>; loadMembers: () => void } => {
+	const loadingRef = useRef(false);
 	const [dlm, setDlm] = useState<Array<{ _content: string }>>([]);
 	const [offset, setOffset] = useState(0);
 	const [more, setMore] = useState(false);
@@ -157,23 +133,33 @@ const useDistributionListFunctions = ({
 		[dlm]
 	);
 
-	const updateStates = useCallback((result) => {
-		setMore((prevValue) => (prevValue !== result.more ? result.more : prevValue));
-		setOffset((prevValue) => prevValue + result.dlm.length);
-		setDlm((prevValue) => uniqBy([...prevValue, ...result.dlm], '_content'));
-		setTotal((prevValue) => (prevValue !== result.total ? result.total : prevValue));
-	}, []);
+	const updateStates = useCallback(
+		(result: GetDistributionListMembersResponse, reset?: boolean) => {
+			setMore(result.more ?? false);
+			setOffset((prevValue) => (reset ? size(result.dlm) : prevValue + size(result.dlm)));
+			setDlm((prevValue) =>
+				reset
+					? result.dlm ?? []
+					: uniqBy([...prevValue, ...(result.dlm ?? [])], (item) => item._content)
+			);
+			setTotal(result.total ?? 0);
+		},
+		[]
+	);
 
 	const onSelectAllClick = useCallback(() => {
-		const updateDefaults = (_items: Array<{ _content?: string | undefined }>): void => {
+		const updateDefaults = (_items: Array<{ _content?: string }>): void => {
 			const newValue = map(_items, (item) => ({
 				label: item._content,
 				value: item._content,
 				id: item._content,
 				email: item._content
 			}));
-			_onChange &&
-				_onChange([...filter(contactInputValue, (value) => value.id !== id), ...newValue]);
+
+			contactInputOnChange?.([
+				...filter(contactInputValue, (value) => value.id !== id),
+				...newValue
+			]);
 		};
 		if (more) {
 			getAllDistributionListMembers(email, dlm, offset).then((result) => {
@@ -182,11 +168,11 @@ const useDistributionListFunctions = ({
 		} else {
 			updateDefaults(dlm);
 		}
-	}, [contactInputValue, dlm, email, id, more, offset, _onChange]);
+	}, [contactInputValue, dlm, email, id, more, offset, contactInputOnChange]);
 
 	const onShowMoreClick = useCallback(() => {
-		getDistributionListMembers({ email, offset }).then((result) => {
-			updateStates(result);
+		getDistributionListMembers(email, { limit: 100, offset }).then((result) => {
+			updateStates(result, false);
 		});
 	}, [email, offset, updateStates]);
 
@@ -233,16 +219,19 @@ const useDistributionListFunctions = ({
 		[onShowMoreClick, showMoreLabel]
 	);
 
-	const onChevronClick = useCallback(() => {
-		setOpen((prevValue: boolean) => !prevValue);
-
-		if (!open && isChipItemDistributionList({ isGroup, email }) && !dlm.length && !loading) {
-			setLoading(true);
-			getDistributionListMembers({ email }).then((result) => {
-				updateStates(result);
-			});
+	const loadMembers = useCallback(() => {
+		if (isChipItemDistributionList({ isGroup, email }) && !loadingRef.current) {
+			loadingRef.current = true;
+			getDistributionListMembers(email, { limit: 100 })
+				.then((result) => {
+					loadingRef.current = false;
+					updateStates(result, true);
+				})
+				.catch((error) => {
+					console.error(error);
+				});
 		}
-	}, [dlm.length, email, isGroup, loading, open, setOpen, updateStates]);
+	}, [email, isGroup, updateStates]);
 
 	const items = useMemo(() => {
 		if (more) {
@@ -251,7 +240,7 @@ const useDistributionListFunctions = ({
 		return [selectAllButton, ...members];
 	}, [members, more, moreButton, selectAllButton]);
 
-	return { items, onChevronClick };
+	return { items, loadMembers };
 };
 
 const CustomComponent = ({
@@ -259,7 +248,7 @@ const CustomComponent = ({
 	label,
 	email,
 	isGroup,
-	_onChange,
+	contactInputOnChange,
 	contactInputValue,
 	actions: propActions,
 	...rest
@@ -267,15 +256,22 @@ const CustomComponent = ({
 	const [t] = useTranslation();
 	const [open, setOpen] = useState(false);
 
-	const { items, onChevronClick } = useDistributionListFunctions({
+	const { items, loadMembers } = useDistributionListFunctions({
 		id,
 		email,
-		open,
-		setOpen,
 		isGroup,
-		_onChange,
+		contactInputOnChange,
 		contactInputValue
 	});
+
+	const expandDLAction = useCallback(() => {
+		setOpen(true);
+		loadMembers();
+	}, [loadMembers]);
+
+	const collapseDLAction = useCallback(() => {
+		setOpen(false);
+	}, []);
 
 	const chipActions = useMemo((): ChipAction[] => {
 		const actions: ChipAction[] = [...(propActions ?? [])];
@@ -284,28 +280,10 @@ const CustomComponent = ({
 			label: t('expand_distribution_list', 'Expand address list'),
 			type: 'button',
 			icon: open ? 'ChevronUpOutline' : 'ChevronDownOutline',
-			onClick: debounceUserInput(onChevronClick)
+			onClick: open ? collapseDLAction : debounceUserInput(expandDLAction)
 		});
 		return actions;
-	}, [onChevronClick, open, propActions, t]);
-
-	// useEffect(() => {
-	// 	getDistributionList(email)
-	// 		.then((response) => {
-	// 			const dlData = first(response.dl);
-	// 			if (dlData) {
-	// 				setDistributionList({
-	// 					email: dlData.name,
-	// 					displayName: dlData._attrs?.displayName,
-	// 					isOwner: dlData.isOwner ?? false
-	// 				});
-	// 			}
-	// 		})
-	// 		.catch((error) => {
-	// 			setDistributionList(undefined);
-	// 			console.error(error);
-	// 		});
-	// }, [email]);
+	}, [collapseDLAction, expandDLAction, open, propActions, t]);
 
 	const onChipClick = useCallback<React.MouseEventHandler>((e) => {
 		e.stopPropagation();
@@ -318,8 +296,7 @@ const CustomComponent = ({
 			forceOpen={open}
 			disableAutoFocus
 			width={'18.75rem'}
-			onOpen={(): void => setOpen(true)}
-			onClose={(): void => setOpen(false)}
+			onClose={collapseDLAction}
 		>
 			<div>
 				<StyledChip

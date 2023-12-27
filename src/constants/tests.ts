@@ -11,6 +11,7 @@ export const TESTID_SELECTORS = {
 		EDIT_CHIP: 'icon: EditOutline',
 		EDIT_DL: 'icon: Edit2Outline',
 		EXPAND_DL: 'icon: ChevronDownOutline',
+		COLLAPSE_DL: 'icon: ChevronUpOutline',
 		FILTER_MEMBERS: 'icon: FunnelOutline',
 		ADD_MEMBERS: 'icon: Plus',
 		REMOVE_MEMBER: 'icon: Trash2Outline',

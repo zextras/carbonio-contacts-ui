@@ -30,62 +30,76 @@ import { mockedAccount } from '../carbonio-ui-commons/test/mocks/carbonio-shell-
 import { NAMESPACES } from '../constants/api';
 import { FullAutocompleteResponse, Match } from '../legacy/types/contact';
 
-const buildSoapResponse = <T>(responseData: Record<string, T>): SuccessSoapResponse<T> => ({
+export const buildSoapResponse = <T>(responseData: Record<string, T>): SuccessSoapResponse<T> => ({
 	Header: {
 		context: {}
 	},
 	Body: responseData
 });
 
+type GetDistributionListMembersHandler = ResponseResolver<
+	RestRequest<{ Body: { GetDistributionListMembersRequest: GetDistributionListMembersRequest } }>,
+	RestContext,
+	SoapResponse<GetDistributionListMembersResponse>
+>;
+
 export const registerGetDistributionListMembersHandler = (
 	members?: Array<string>,
+	more?: boolean,
 	error?: string
-): void => {
+): jest.Mock<
+	ReturnType<GetDistributionListMembersHandler>,
+	Parameters<GetDistributionListMembersHandler>
+> => {
+	const handler = jest.fn<
+		ReturnType<GetDistributionListMembersHandler>,
+		Parameters<GetDistributionListMembersHandler>
+	>(async (req, res, ctx) => {
+		const reqBody = await req.json<{
+			Body: { GetDistributionListMembersRequest: GetDistributionListMembersRequest };
+		}>();
+		const { limit } = reqBody.Body.GetDistributionListMembersRequest;
+		if (error) {
+			return res(
+				ctx.json<ErrorSoapResponse>({
+					Header: {
+						context: {}
+					},
+					Body: {
+						Fault: {
+							Reason: { Text: error },
+							Detail: {
+								Error: { Code: '', Detail: error }
+							}
+						}
+					}
+				})
+			);
+		}
+
+		return res(
+			ctx.json(
+				buildSoapResponse<GetDistributionListMembersResponse>({
+					GetDistributionListMembersResponse: {
+						dlm: members?.slice(0, limit).map((member) => ({ _content: member })),
+						more: more ?? false,
+						total: members?.length,
+						_jsns: NAMESPACES.account
+					}
+				})
+			)
+		);
+	});
+
 	getSetupServer().use(
 		rest.post<
 			{ Body: { GetDistributionListMembersRequest: GetDistributionListMembersRequest } },
 			never,
 			SoapResponse<GetDistributionListMembersResponse>
-		>('/service/soap/GetDistributionListMembersRequest', async (req, res, ctx) => {
-			const reqBody = await req.json<{
-				Body: { GetDistributionListMembersRequest: GetDistributionListMembersRequest };
-			}>();
-			const { limit } = reqBody.Body.GetDistributionListMembersRequest;
-			if (limit !== undefined && limit > 0) {
-				throw new Error('expected limit to be undefined or 0 to load all members');
-			}
-			if (error) {
-				return res(
-					ctx.json<ErrorSoapResponse>({
-						Header: {
-							context: {}
-						},
-						Body: {
-							Fault: {
-								Reason: { Text: error },
-								Detail: {
-									Error: { Code: '', Detail: error }
-								}
-							}
-						}
-					})
-				);
-			}
-
-			return res(
-				ctx.json(
-					buildSoapResponse<GetDistributionListMembersResponse>({
-						GetDistributionListMembersResponse: {
-							dlm: members?.map((member) => ({ _content: member })),
-							more: false,
-							total: members?.length,
-							_jsns: NAMESPACES.account
-						}
-					})
-				)
-			);
-		})
+		>('/service/soap/GetDistributionListMembersRequest', handler)
 	);
+
+	return handler;
 };
 
 type DistributionListActionHandlerResponseResolver = ResponseResolver<

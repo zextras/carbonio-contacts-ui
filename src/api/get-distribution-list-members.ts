@@ -15,6 +15,7 @@ export interface GetDistributionListMembersRequest
 		_content: string;
 	};
 	limit?: number;
+	offset?: number;
 }
 
 export interface GetDistributionListMembersResponse
@@ -25,7 +26,8 @@ export interface GetDistributionListMembersResponse
 }
 
 export const getDistributionListMembers = (
-	email: string
+	email: string,
+	options: { offset?: number; limit?: number } = {}
 ): Promise<GetDistributionListMembersResponse> =>
 	soapFetch<
 		GetDistributionListMembersRequest,
@@ -35,7 +37,9 @@ export const getDistributionListMembers = (
 		dl: {
 			by: 'name',
 			_content: email
-		}
+		},
+		limit: options.limit,
+		offset: options.offset
 	}).then((response) => {
 		if ('Fault' in response) {
 			throw new Error(response.Fault.Reason.Text, { cause: response.Fault });

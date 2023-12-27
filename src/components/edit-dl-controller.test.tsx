@@ -47,7 +47,7 @@ describe('EditDLControllerComponent', () => {
 	it('should render the component when the member field of the response is undefined', async () => {
 		const dlEmail = 'dl-mail@domain.net';
 		const store = generateStore();
-		registerGetDistributionListMembersHandler(undefined);
+		registerGetDistributionListMembersHandler();
 		setupTest(<EditDLControllerComponent {...buildProps({ email: dlEmail })} />, { store });
 		expect(await screen.findByText(dlEmail)).toBeVisible();
 		expect(screen.getByText('Member list 0')).toBeVisible();
@@ -69,7 +69,7 @@ describe('EditDLControllerComponent', () => {
 		const store = generateStore();
 		const dlEmail = 'dl-mail@domain.net';
 		const onClose = jest.fn();
-		registerGetDistributionListMembersHandler([], JEST_MOCKED_ERROR);
+		registerGetDistributionListMembersHandler([], false, JEST_MOCKED_ERROR);
 		setupTest(<EditDLControllerComponent {...buildProps({ email: dlEmail, onClose })} />, {
 			store
 		});

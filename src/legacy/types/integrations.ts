@@ -27,7 +27,7 @@ export type CustomChipProps = React.ComponentPropsWithoutRef<
 	email: string;
 	isGroup: boolean;
 	chipDisplayName?: ContactInputChipDisplayName;
-	_onChange: ContactInputOnChange;
+	contactInputOnChange: ContactInputOnChange;
 	contactInputValue: ContactInputValue;
 	contactActions?: Array<ContactChipAction>;
 };

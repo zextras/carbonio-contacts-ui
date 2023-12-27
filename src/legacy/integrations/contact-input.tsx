@@ -498,7 +498,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 				{..._props}
 				contactActions={contactActions}
 				chipDisplayName={chipDisplayName}
-				_onChange={onChange}
+				contactInputOnChange={onChange}
 				contactInputValue={contactInputValue}
 			/>
 		),
