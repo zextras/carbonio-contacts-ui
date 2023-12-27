@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { lazy, useEffect, Suspense, FC, ComponentType } from 'react';
+import React, { lazy, useEffect, Suspense } from 'react';
 
 import {
 	Spinner,
@@ -82,7 +82,7 @@ const SidebarView = (props: SidebarProps): React.JSX.Element => (
 	</Suspense>
 );
 
-const App: FC = () => {
+const App = (): React.JSX.Element => {
 	const [t] = useTranslation();
 	useEffect(() => {
 		addRoute({
@@ -113,8 +113,7 @@ const App: FC = () => {
 	useEffect(() => {
 		registerComponents({
 			id: 'contact-input',
-			// FIXME: remove cast when SHELL-185 will be released
-			component: ContactInputIntegrationWrapper as ComponentType
+			component: ContactInputIntegrationWrapper
 		});
 
 		registerActions({

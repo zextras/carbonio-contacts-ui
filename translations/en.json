@@ -277,11 +277,6 @@
     "search": {
         "shared_folders_note": "Include shared address books in searches."
     },
-    "secondaryBar": {
-        "contextualMenu": {
-            "new_contact_group_creation_action": "New Contact Group"
-        }
-    },
     "section": {
         "field": {
             "city": "City",

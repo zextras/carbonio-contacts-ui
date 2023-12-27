@@ -568,7 +568,6 @@ const ContactInputCore: FC<ContactInputProps> = ({
 				disableOptions
 				placeholder={placeholder}
 				confirmChipOnBlur
-				confirmChipOnSpace={false}
 				inputRef={inputRef}
 				onInputType={onInputType}
 				onChange={onChange}
