@@ -10,3 +10,9 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: 
 export type ContactGroupsPathParams = {
 	contactGroupId: string;
 };
+
+export type ContactGroup = {
+	title: string;
+	id: string;
+	members: Array<string>;
+};

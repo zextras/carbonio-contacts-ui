@@ -22,8 +22,8 @@ function getSnackbarTitle(title: string): string {
 	return title.length > 50 ? title.substring(0, 50).concat('...') : title;
 }
 
-export const useActions = (contact: { id: string; title: string }): Action[] => {
-	const { id, title } = contact;
+export const useActions = (contactGroup: { id: string; title: string }): Action[] => {
+	const { id, title } = contactGroup;
 	const [t] = useTranslation();
 	const createModal = useModal();
 
@@ -32,9 +32,17 @@ export const useActions = (contact: { id: string; title: string }): Action[] => 
 
 	const openDeleteModal = useCallback(() => {
 		const closeModal = createModal({
-			title: t('modal.delete.header', 'This action is irreversible'),
+			title: t('folder.action.deleteContactGroup', 'Delete "{{contactGroupTitle}}"', {
+				replace: {
+					contactGroupTitle: `${
+						contactGroup.title.length > 50
+							? contactGroup.title.substring(0, 50).concat('...')
+							: contactGroup.title
+					}`
+				}
+			}),
 			size: 'medium',
-			confirmLabel: t('modal.delete.button.confirm', 'Delete permanently'),
+			confirmLabel: t('action.delete', 'Delete'),
 			confirmColor: 'error',
 			onConfirm: () => {
 				// trashAction().then(() => {
@@ -52,35 +60,41 @@ export const useActions = (contact: { id: string; title: string }): Action[] => 
 				closeModal();
 			},
 			children: (
-				<Container padding={{ vertical: 'large' }}>
+				<Container padding={{ vertical: 'large' }} crossAlignment={'flex-start'}>
 					<Text overflow="break-word" size="medium">
-						{t(
-							'modal.delete.body',
-							'You will delete permanently this task. You will not be able to recover this tasks anymore. This action is irreversible.'
-						)}
+						Are you sure to delete the selected contact group?
+					</Text>
+					<Text overflow="break-word" size="medium">
+						If you delete it will be lost forever.
 					</Text>
 				</Container>
 			)
 		});
-	}, [createModal, t]);
+	}, [contactGroup.title, createModal, t]);
 
 	const editAction = useCallback<Action['onClick']>(() => {
-		const board = getBoardById(`edit-contactGroup-${contact.id}`);
+		const board = getBoardById(`edit-contactGroup-${contactGroup.id}`);
 		if (board) {
 			setCurrentBoard(board.id);
 			reopenBoards();
 		} else {
 			addBoard({
-				id: `edit-contactGroup-${contact.id}`,
+				id: `edit-contactGroup-${contactGroup.id}`,
 				url: `${GROUPS_ROUTE}/edit`,
 				title: 'Edit Contact group',
-				context: { contactGroupId: contact.id }
+				context: { contactGroupId: contactGroup.id }
 			});
 		}
-	}, [contact.id]);
+	}, [contactGroup.id]);
 
 	return useMemo<Action[]>((): Action[] => {
 		const orderedActions: Action[] = [
+			{
+				id: 'mail',
+				label: t('action.mail', 'Mail'),
+				icon: 'EmailOutline',
+				onClick: noop
+			},
 			{
 				id: 'edit',
 				label: t('action.edit', 'Edit'),

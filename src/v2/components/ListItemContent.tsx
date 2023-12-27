@@ -19,7 +19,7 @@ import { useActions } from '../hooks/useActions';
 type ListItemContentProps = {
 	id: string;
 	title: string;
-	memberCount: number;
+	membersCount: number;
 	visible?: boolean;
 	onClick?: (id: string) => void;
 };
@@ -35,7 +35,7 @@ export const ListItemContent = React.memo<ListItemContentProps>(
 		visible,
 		id,
 		title,
-		memberCount
+		membersCount
 	}) => {
 		const [t] = useTranslation();
 		const actions = useActions({ id, title });
@@ -77,14 +77,18 @@ export const ListItemContent = React.memo<ListItemContentProps>(
 								width="fill"
 								mainAlignment={'flex-start'}
 							>
-								<Row gap={'0.25rem'} width="fill" wrap="nowrap">
-									<Avatar label={''} icon={'PeopleOutline'} />
-									<Container>
-										<Text overflow="ellipsis" size="medium">
+								<Row gap={'0.5rem'} width="fill" wrap="nowrap" mainAlignment={'flex-start'}>
+									<Avatar colorLabel={title} label={title} icon={'PeopleOutline'} size={'large'} />
+									<Container crossAlignment={'flex-start'} gap={'0.25rem'} minWidth={0}>
+										<Text overflow="ellipsis" size="small">
 											{title}
 										</Text>
-										<Text overflow="ellipsis" size="medium">
-											{`${memberCount} address`}
+										<Text overflow="ellipsis" size="small" color={'gray1'}>
+											{t('contactGroupList.addressCount', {
+												count: membersCount,
+												defaultValue: '{{count}} address',
+												defaultValue_plural: `{{count}} addresses`
+											})}
 										</Text>
 									</Container>
 								</Row>

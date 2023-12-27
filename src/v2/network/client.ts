@@ -4,8 +4,10 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
+import { ContactGroup } from '../types/utils';
+
 export const client = {
-	createContactGroup: (title: string, members: Array<string>): Promise<any> =>
+	createContactGroup: (title: string, members: Array<string>): Promise<Array<ContactGroup>> =>
 		fetch(`/service/soap/CreateContactRequest`, {
 			method: 'POST',
 			headers: {
@@ -72,7 +74,11 @@ export const client = {
 				if (res.Body.SearchResponse.cn) {
 					return res.Body.SearchResponse.cn.map((value: any) => ({
 						id: value.id,
-						title: value._attrs.fullName
+						title: value._attrs.fullName ?? '',
+						members:
+							value.m
+								?.filter((value: any) => value.type === 'I')
+								.map((value: any) => value.value) ?? []
 					}));
 				}
 				return [];

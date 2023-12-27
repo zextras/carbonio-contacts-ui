@@ -8,12 +8,12 @@ import React, { useEffect, useState } from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
 
-import { ContactList, ContactListProps } from '../components/ContactList';
+import { ContactGroupsList, ContactGroupsListProps } from '../components/ContactGroupsList';
 import { DISPLAYER_WIDTH } from '../constants';
 import { client } from '../network/client';
 
 export const ContactGroupsView = (): React.JSX.Element => {
-	const [contactGroups, setContactGroups] = useState<ContactListProps['contacts']>([]);
+	const [contactGroups, setContactGroups] = useState<ContactGroupsListProps['contactGroups']>([]);
 
 	useEffect(() => {
 		client.findContactGroups().then((result) => {
@@ -32,7 +32,7 @@ export const ContactGroupsView = (): React.JSX.Element => {
 			borderRadius="none"
 			maxHeight="100%"
 		>
-			<ContactList contacts={contactGroups} />
+			<ContactGroupsList contactGroups={contactGroups} />
 			<Container
 				width={DISPLAYER_WIDTH}
 				mainAlignment="flex-start"
@@ -40,7 +40,7 @@ export const ContactGroupsView = (): React.JSX.Element => {
 				borderRadius="none"
 				style={{ maxHeight: '100%' }}
 			>
-				{/* <Displayer translationKey="displayer.allTasks" /> */}
+				{/* <Displayer /> */}
 			</Container>
 		</Container>
 	);

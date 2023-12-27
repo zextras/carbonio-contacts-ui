@@ -25,9 +25,10 @@ import { HoverBarContainer } from './StyledComponents';
 import { Text } from './Text';
 import { LIST_WIDTH } from '../constants';
 import { useActiveItem } from '../hooks/useActiveItem';
+import { ContactGroup } from '../types/utils';
 
-export type ContactListProps = {
-	contacts: Array<{ title: string; id: string }>;
+export type ContactGroupsListProps = {
+	contactGroups: Array<ContactGroup>;
 };
 
 const StyledListItem = styled(ListItem).attrs<
@@ -72,30 +73,30 @@ const StyledListItem = styled(ListItem).attrs<
 		`}
 `;
 
-export const ContactList = ({ contacts }: ContactListProps): React.JSX.Element => {
+export const ContactGroupsList = ({ contactGroups }: ContactGroupsListProps): React.JSX.Element => {
 	const [t] = useTranslation();
 	const { activeItem, setActive } = useActiveItem();
 
 	const items = useMemo(
 		() =>
-			map(contacts, (contact) => (
+			map(contactGroups, (contactGroup) => (
 				<StyledListItem
-					key={contact.id}
-					active={contact.id === activeItem}
+					key={contactGroup.id}
+					active={contactGroup.id === activeItem}
 					data-testid={'list-item'}
 				>
 					{(visible): React.JSX.Element => (
 						<ListItemContent
 							visible={visible}
-							title={contact.title}
-							id={contact.id}
+							title={contactGroup.title}
+							id={contactGroup.id}
 							onClick={setActive}
-							memberCount={1}
+							membersCount={contactGroup.members.length}
 						/>
 					)}
 				</StyledListItem>
 			)),
-		[activeItem, setActive, contacts]
+		[activeItem, contactGroups, setActive]
 	);
 
 	return (
