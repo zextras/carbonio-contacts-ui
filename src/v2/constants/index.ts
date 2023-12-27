@@ -15,3 +15,5 @@ export const LIST_WIDTH = '40%';
 
 export const LIST_ITEM_HEIGHT = '4rem';
 export const CONTACT_GROUP_NAME_MAX_LENGTH = 256;
+
+export const FIND_CONTACT_GROUP_LIMIT = 100;

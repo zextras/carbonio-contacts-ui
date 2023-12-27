@@ -29,6 +29,7 @@ import { ContactGroup } from '../types/utils';
 
 export type ContactGroupsListProps = {
 	contactGroups: Array<ContactGroup>;
+	onListBottom?: () => void;
 };
 
 const StyledListItem = styled(ListItem).attrs<
@@ -73,7 +74,10 @@ const StyledListItem = styled(ListItem).attrs<
 		`}
 `;
 
-export const ContactGroupsList = ({ contactGroups }: ContactGroupsListProps): React.JSX.Element => {
+export const ContactGroupsList = ({
+	contactGroups,
+	onListBottom
+}: ContactGroupsListProps): React.JSX.Element => {
 	const [t] = useTranslation();
 	const { activeItem, setActive } = useActiveItem();
 
@@ -124,7 +128,7 @@ export const ContactGroupsList = ({ contactGroups }: ContactGroupsListProps): Re
 			<Divider color="gray3" />
 			<Container minHeight={0} maxHeight={'100%'}>
 				{(!isEmpty(items) && (
-					<ListV2 data-testid="main-list" background={'gray6'}>
+					<ListV2 data-testid="main-list" background={'gray6'} onListBottom={onListBottom}>
 						{items}
 					</ListV2>
 				)) || (

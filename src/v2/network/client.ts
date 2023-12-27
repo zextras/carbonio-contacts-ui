@@ -4,10 +4,11 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
+import { FIND_CONTACT_GROUP_LIMIT } from '../constants';
 import { ContactGroup } from '../types/utils';
 
 export const client = {
-	createContactGroup: (title: string, members: Array<string>): Promise<Array<ContactGroup>> =>
+	createContactGroup: (title: string, members: Array<string>): Promise<any> =>
 		fetch(`/service/soap/CreateContactRequest`, {
 			method: 'POST',
 			headers: {
@@ -40,7 +41,9 @@ export const client = {
 			}
 			throw new Error('Something went wrong');
 		}),
-	findContactGroups: (offset = 0): Promise<any> =>
+	findContactGroups: (
+		offset = 0
+	): Promise<{ contactGroups: Array<ContactGroup>; hasMore: boolean }> =>
 		fetch(`/service/soap/SearchRequest`, {
 			method: 'POST',
 			headers: {
@@ -50,7 +53,7 @@ export const client = {
 				Body: {
 					[`SearchRequest`]: {
 						_jsns: 'urn:zimbraMail',
-						limit: 100,
+						limit: FIND_CONTACT_GROUP_LIMIT,
 						offset,
 						sortBy: 'nameAsc',
 						types: 'contact',
@@ -71,8 +74,9 @@ export const client = {
 				throw new Error('Something went wrong');
 			})
 			.then((res) => {
+				let contactGroups = [];
 				if (res.Body.SearchResponse.cn) {
-					return res.Body.SearchResponse.cn.map((value: any) => ({
+					contactGroups = res.Body.SearchResponse.cn.map((value: any) => ({
 						id: value.id,
 						title: value._attrs.fullName ?? '',
 						members:
@@ -81,6 +85,6 @@ export const client = {
 								.map((value: any) => value.value) ?? []
 					}));
 				}
-				return [];
+				return { contactGroups, hasMore: res.Body.SearchResponse.more };
 			})
 };

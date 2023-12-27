@@ -4,22 +4,16 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
 
-import { ContactGroupsList, ContactGroupsListProps } from '../components/ContactGroupsList';
+import { ContactGroupsList } from '../components/ContactGroupsList';
 import { DISPLAYER_WIDTH } from '../constants';
-import { client } from '../network/client';
+import { useFindContactGroups } from '../hooks/useFindContactGroups';
 
 export const ContactGroupsView = (): React.JSX.Element => {
-	const [contactGroups, setContactGroups] = useState<ContactGroupsListProps['contactGroups']>([]);
-
-	useEffect(() => {
-		client.findContactGroups().then((result) => {
-			setContactGroups(result);
-		});
-	}, []);
+	const { contactGroups, hasMore, findMore } = useFindContactGroups();
 
 	return (
 		<Container
@@ -32,7 +26,10 @@ export const ContactGroupsView = (): React.JSX.Element => {
 			borderRadius="none"
 			maxHeight="100%"
 		>
-			<ContactGroupsList contactGroups={contactGroups} />
+			<ContactGroupsList
+				contactGroups={contactGroups}
+				onListBottom={hasMore ? findMore : undefined}
+			/>
 			<Container
 				width={DISPLAYER_WIDTH}
 				mainAlignment="flex-start"

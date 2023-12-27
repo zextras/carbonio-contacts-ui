@@ -12,7 +12,6 @@ import { Route } from 'react-router-dom';
 
 import { ContactGroupsView } from './ContactGroupsView';
 import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
-import { makeListItemsVisible } from '../../carbonio-ui-commons/test/test-setup';
 import { setup, screen } from '../../utils/testUtils';
 import { ROUTES } from '../constants';
 
@@ -111,8 +110,6 @@ describe('Contact Group View', () => {
 
 		await waitForElementToBeRemoved(screen.queryByText('emptyListPlaceholder'));
 
-		makeListItemsVisible();
-
 		expect(await screen.findByText(contactGroupName)).toBeVisible();
 		expect(screen.getByTestId('icon: PeopleOutline')).toBeVisible();
 		expect(screen.getByText('2 addresses')).toBeVisible();
@@ -162,8 +159,6 @@ describe('Contact Group View', () => {
 
 		await waitForElementToBeRemoved(screen.queryByText('emptyListPlaceholder'));
 
-		makeListItemsVisible();
-
 		expect(await screen.findByText(contactGroupName)).toBeVisible();
 		expect(screen.getByTestId('icon: PeopleOutline')).toBeVisible();
 		expect(screen.getByText('0 addresses')).toBeVisible();
@@ -180,7 +175,6 @@ describe('Contact Group View', () => {
 		);
 
 		await waitForElementToBeRemoved(screen.queryByText('emptyListPlaceholder'), { timeout: 2000 });
-		makeListItemsVisible();
 
 		expect(await screen.findByText(contactGroupName)).toBeVisible();
 		expect(screen.getByTestId('icon: PeopleOutline')).toBeVisible();
@@ -201,8 +195,6 @@ describe('Contact Group View', () => {
 			await waitForElementToBeRemoved(screen.queryByText('emptyListPlaceholder'), {
 				timeout: 2000
 			});
-
-			makeListItemsVisible();
 
 			await user.hover(await screen.findByText(contactGroupName));
 			expect(screen.getByTestId('icon: Edit2Outline')).toBeVisible();
