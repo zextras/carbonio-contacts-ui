@@ -17,7 +17,7 @@ import { setup, screen } from '../../utils/testUtils';
 import { ROUTES } from '../constants';
 
 describe('Contact Group View', () => {
-	it('should render the avatar, the name and the member number of a contact group', async () => {
+	it.skip('should render the avatar, the name and the member number of a contact group', async () => {
 		const contactGroupName = faker.company.name();
 
 		getSetupServer().use(

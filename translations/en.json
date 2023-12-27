@@ -7,7 +7,6 @@
         "send_msg": "Send e-mail",
         "share_folder": "Share folder"
     },
-    "attendee_unavailable": "Attendee not available at the selected time of the event",
     "board": {
         "label": {
             "description": "Description"
@@ -28,16 +27,17 @@
                     "placeholder": "Type an address, click ‘+’ to add to the group",
                     "title": "Addresses list"
                 },
-                "title_input": {
+                "name_input": {
                     "error": {
                         "max_length": "Maximum length allowed is 256 characters",
                         "required": "Group name is required, enter a name to proceed"
                     },
-                    "title": {
-                        "label": "Group title*"
+                    "name": {
+                        "label": "Group name*"
                     }
                 }
             },
+            "name": "New Group",
             "snackbar": {
                 "contact_group_created": "Contact group successfully created"
             },
