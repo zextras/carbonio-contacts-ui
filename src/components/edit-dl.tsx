@@ -224,7 +224,7 @@ export const EditDLComponent: FC<EditDLComponentProps> = ({
 			<ContactInput
 				placeholder={t(
 					'edit_dl_component.placeholder.add_members',
-					'Insert an address to add a new element'
+					"Type an address, click '+' to add to the distribution list"
 				)}
 				// FIXME: remove ts-ignore when contact-input types are fixed
 				// eslint-disable-next-line @typescript-eslint/ban-ts-comment

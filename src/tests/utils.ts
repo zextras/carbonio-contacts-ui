@@ -13,7 +13,7 @@ export const getDLContactInput = (): {
 } => {
 	const contactInput = screen.getByTestId(TESTID_SELECTORS.CONTACT_INPUT);
 	const contactInputTextBox = within(contactInput).getByRole('textbox', {
-		name: /Insert an address to add a new element/i
+		name: /Type an address, click '\+' to add to the distribution list/i
 	});
 	const contactInputIcon = within(contactInput).getByRoleWithIcon('button', {
 		icon: TESTID_SELECTORS.ICONS.ADD_MEMBERS

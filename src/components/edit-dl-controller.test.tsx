@@ -88,10 +88,7 @@ describe('EditDLControllerComponent', () => {
 		});
 		const emails = ['john.doe@test.com', 'invalid-email.com', 'mary.white@example.org'];
 		await act(async () => {
-			await user.type(
-				screen.getByRole('textbox', { name: /insert an address/i }),
-				emails.join(',')
-			);
+			await user.type(screen.getByRole('textbox', { name: /type an address/i }), emails.join(','));
 		});
 		await user.click(
 			screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.ICONS.ADD_MEMBERS })
@@ -115,10 +112,7 @@ describe('EditDLControllerComponent', () => {
 		await screen.findByText(dlEmail);
 		await screen.findAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM);
 		await act(async () => {
-			await user.type(
-				screen.getByRole('textbox', { name: /insert an address/i }),
-				emails.join(',')
-			);
+			await user.type(screen.getByRole('textbox', { name: /type an address/i }), emails.join(','));
 		});
 		await user.click(
 			screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.ICONS.ADD_MEMBERS })
@@ -163,7 +157,7 @@ describe('EditDLControllerComponent', () => {
 		await screen.findAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM);
 
 		const newMember = 'newmember@example.com';
-		await user.type(screen.getByRole('textbox', { name: /insert an address/i }), newMember);
+		await user.type(screen.getByRole('textbox', { name: /type an address/i }), newMember);
 		await user.click(
 			screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.ICONS.ADD_MEMBERS })
 		);
@@ -294,7 +288,7 @@ describe('EditDLControllerComponent', () => {
 				await screen.findByText(dlEmail);
 				await screen.findAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM);
 				const newMember = 'newmember@example.com';
-				await user.type(screen.getByRole('textbox', { name: /insert an address/i }), newMember);
+				await user.type(screen.getByRole('textbox', { name: /type an address/i }), newMember);
 				await user.click(
 					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.ICONS.ADD_MEMBERS })
 				);
@@ -331,7 +325,7 @@ describe('EditDLControllerComponent', () => {
 				) as HTMLElement;
 				await user.click(within(initialMemberItem).getByRole('button', { name: /remove/i }));
 				await waitFor(() => expect(screen.getByRole('button', { name: 'save' })).toBeEnabled());
-				await user.type(screen.getByRole('textbox', { name: /insert an address/i }), initialMember);
+				await user.type(screen.getByRole('textbox', { name: /type an address/i }), initialMember);
 				await user.click(
 					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.ICONS.ADD_MEMBERS })
 				);
