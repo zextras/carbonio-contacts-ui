@@ -10,7 +10,8 @@ export const ICON_REGEXP = {
 	plus: /icon: Plus/i,
 	trash: /icon: Trash2Outline/i,
 	duplicated: /icon: AlertCircle/i,
-	closeDisplayer: /^icon: CloseOutline$/i
+	closeDisplayer: /icon: CloseOutline/i,
+	queryLoading: /icon: Refresh/i
 } as const;
 
 export const PALETTE = {

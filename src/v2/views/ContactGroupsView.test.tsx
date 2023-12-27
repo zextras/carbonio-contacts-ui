@@ -12,7 +12,7 @@ import { Route } from 'react-router-dom';
 
 import { ContactGroupsView } from './ContactGroupsView';
 import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
-import { setup, screen } from '../../utils/testUtils';
+import { setup, screen, triggerLoadMore } from '../../utils/testUtils';
 import { ROUTES } from '../constants';
 
 describe('Contact Group View', () => {
@@ -56,6 +56,62 @@ describe('Contact Group View', () => {
 			)
 		);
 	}
+
+	it.skip('pagination', async () => {
+		const contactGroupName = faker.company.name();
+
+		getSetupServer().use(
+			rest.post('/service/soap/SearchRequest', async (req, res, ctx) =>
+				res(
+					ctx.json({
+						Body: {
+							SearchResponse: {
+								sortBy: 'nameAsc',
+								offset: 0,
+								cn: [
+									{
+										id: faker.number.int({ min: 100, max: 999 }),
+										l: '7',
+										d: faker.date.recent().valueOf(),
+										rev: 12974,
+										fileAsStr: contactGroupName,
+										_attrs: {
+											nickname: contactGroupName,
+											fullName: contactGroupName,
+											type: 'group',
+											fileAs: `8:${contactGroupName}`
+										},
+										m: [
+											{
+												type: 'I',
+												value: faker.internet.email()
+											},
+											{
+												type: 'I',
+												value: faker.internet.email()
+											}
+										],
+										sf: 'bo0000000276'
+									}
+								],
+								more: true,
+								_jsns: 'urn:zimbraMail'
+							}
+						}
+					})
+				)
+			)
+		);
+		setup(
+			<Route path={ROUTES.contactGroup}>
+				<ContactGroupsView />
+			</Route>
+		);
+
+		await waitForElementToBeRemoved(screen.queryByText('emptyListPlaceholder'));
+		expect(await screen.findByText(contactGroupName)).toBeVisible();
+		triggerLoadMore();
+	});
 
 	it('should render the avatar, the name and the member number (case 1+ addresses string) of a contact group', async () => {
 		const contactGroupName = faker.company.name();

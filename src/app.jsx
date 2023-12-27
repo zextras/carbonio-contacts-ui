@@ -27,6 +27,10 @@ import { SyncDataHandler } from './views/secondary-bar/sync-data-handler';
 
 const LazyAppView = lazy(() => import(/* webpackChunkName: "contacts-view" */ './views/app-view'));
 
+const LazySecondaryBarView = lazy(() =>
+	import(/* webpackChunkName: "secondaryBarView" */ './v2/views/SecondaryBarView')
+);
+
 const LazyGroupsAppView = lazy(() =>
 	import(/* webpackChunkName: "groupsAppView" */ './v2/views/GroupsAppView')
 );
@@ -51,6 +55,12 @@ const AppView = (props) => (
 		<StoreProvider>
 			<LazyAppView {...props} />
 		</StoreProvider>
+	</Suspense>
+);
+
+const SecondaryBarView = (props) => (
+	<Suspense fallback={<Spinner />}>
+		<LazySecondaryBarView {...props} />
 	</Suspense>
 );
 
@@ -115,7 +125,7 @@ export default function App() {
 			visible: true,
 			label: 'Contact Groups',
 			primaryBar: 'ContactsModOutline',
-			secondaryBar: SidebarView,
+			secondaryBar: SecondaryBarView,
 			appView: GroupsAppView
 		});
 		addSettingsView({

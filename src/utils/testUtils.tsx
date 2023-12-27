@@ -22,10 +22,12 @@ import {
 import userEvent from '@testing-library/user-event';
 import { ModalManager, SnackbarManager, ThemeProvider } from '@zextras/carbonio-design-system';
 import { filter } from 'lodash';
+import { act } from 'react-dom/test-utils';
 import { I18nextProvider } from 'react-i18next';
 import { MemoryRouter } from 'react-router-dom';
 
 import I18nTestFactory from '../carbonio-ui-commons/test/i18n/i18n-test-factory';
+import { ICON_REGEXP } from '../v2/constants/tests';
 
 export type UserEvent = ReturnType<(typeof userEvent)['setup']>;
 
@@ -192,3 +194,23 @@ export const setup = (
 		...options?.renderOptions
 	})
 });
+
+export function triggerLoadMore(): void {
+	const { calls, instances } = (window.IntersectionObserver as jest.Mock<IntersectionObserver>)
+		.mock;
+	const [onChange] = calls[calls.length - 1];
+	const instance = instances[instances.length - 1];
+
+	act(() => {
+		onChange(
+			[
+				{
+					target: screen.getByTestId(ICON_REGEXP.queryLoading),
+					intersectionRatio: 0,
+					isIntersecting: true
+				} as unknown as IntersectionObserverEntry
+			],
+			instance
+		);
+	});
+}

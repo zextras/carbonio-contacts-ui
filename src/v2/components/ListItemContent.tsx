@@ -65,7 +65,7 @@ export const ListItemContent = React.memo<ListItemContentProps>(
 							wrap="nowrap"
 							mainAlignment="flex-start"
 							crossAlignment="center"
-							padding={{ all: 'small' }}
+							padding={{ horizontal: 'large', vertical: 'small' }}
 							width="fill"
 							gap={'1rem'}
 						>
