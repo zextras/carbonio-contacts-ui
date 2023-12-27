@@ -15,29 +15,15 @@ import {
 	DropdownItem,
 	ChipAction
 } from '@zextras/carbonio-design-system';
-import {
-	debounce,
-	DebouncedFuncLeading,
-	filter,
-	first,
-	map,
-	noop,
-	reduce,
-	size,
-	some,
-	uniqBy
-} from 'lodash';
+import { debounce, DebouncedFuncLeading, filter, map, noop, reduce, some, uniq } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import type { ContactChipAction } from './contact-input';
 import { getDistributionList } from '../../api/get-distribution-list';
-import {
-	getDistributionListMembers,
-	GetDistributionListMembersResponse
-} from '../../api/get-distribution-list-members';
+import { getDistributionListMembers } from '../../api/get-distribution-list-members';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
-import type { DistributionList } from '../../model/distribution-list';
+import type { DistributionList, DistributionListMembersPage } from '../../model/distribution-list';
 import type {
 	ContactInputOnChange,
 	ContactInputValue,
@@ -76,18 +62,15 @@ const debounceUserInput = (
 
 const getAllDistributionListMembers = async (
 	email: string,
-	members: Array<{ _content: string }> = [],
+	members: DistributionListMembersPage['members'] = [],
 	offset = 0
-): Promise<{ total: number; dlm: Array<{ _content?: string }> }> => {
+): Promise<Pick<DistributionListMembersPage, 'total' | 'members'>> => {
 	const response = await getDistributionListMembers(email, { limit: 100, offset });
-	if (response.dlm) {
-		const newValue = members.concat(response.dlm);
-		if (response.more) {
-			return getAllDistributionListMembers(email, newValue, offset + response.dlm.length);
-		}
-		return { total: response.total ?? 0, dlm: newValue };
+	const newValue = members.concat(response.members);
+	if (response.more) {
+		return getAllDistributionListMembers(email, newValue, offset + response.members.length);
 	}
-	return { total: 0, dlm: [] };
+	return { total: response.total, members: newValue };
 };
 
 const useDistributionListFunctions = ({
@@ -106,7 +89,7 @@ const useDistributionListFunctions = ({
 	contactInputValue: ContactInputValue;
 }): { items: Array<DropdownItem>; loadMembers: () => void } => {
 	const loadingRef = useRef(false);
-	const [dlm, setDlm] = useState<Array<{ _content: string }>>([]);
+	const [members, setMembers] = useState<DistributionListMembersPage['members']>([]);
 	const [offset, setOffset] = useState(0);
 	const [more, setMore] = useState(false);
 	const [total, setTotal] = useState(0);
@@ -121,39 +104,32 @@ const useDistributionListFunctions = ({
 		defaultValue_plural: `Select all {{count}} addresses`
 	});
 
-	const members = useMemo(
+	const memberDropdownItems = useMemo(
 		() =>
-			map(dlm, (item) => ({
-				id: item?._content,
-				label: item?._content,
+			map(members, (item) => ({
+				id: item,
+				label: item,
 				keepOpen: true,
 				icon: 'PersonOutline',
 				itemIconSize: 'large'
 			})),
-		[dlm]
+		[members]
 	);
 
-	const updateStates = useCallback(
-		(result: GetDistributionListMembersResponse, reset?: boolean) => {
-			setMore(result.more ?? false);
-			setOffset((prevValue) => (reset ? size(result.dlm) : prevValue + size(result.dlm)));
-			setDlm((prevValue) =>
-				reset
-					? result.dlm ?? []
-					: uniqBy([...prevValue, ...(result.dlm ?? [])], (item) => item._content)
-			);
-			setTotal(result.total ?? 0);
-		},
-		[]
-	);
+	const updateStates = useCallback((result: DistributionListMembersPage, reset?: boolean) => {
+		setMore(result.more);
+		setOffset((prevValue) => (reset ? result.members.length : prevValue + result.members.length));
+		setMembers((prevValue) => (reset ? result.members : uniq([...prevValue, ...result.members])));
+		setTotal(result.total ?? 0);
+	}, []);
 
 	const onSelectAllClick = useCallback(() => {
-		const updateDefaults = (_items: Array<{ _content?: string }>): void => {
-			const newValue = map(_items, (item) => ({
-				label: item._content,
-				value: item._content,
-				id: item._content,
-				email: item._content
+		const updateDefaults = (itemsToSet: DistributionListMembersPage['members']): void => {
+			const newValue = map(itemsToSet, (item) => ({
+				label: item,
+				value: item,
+				id: item,
+				email: item
 			}));
 
 			contactInputOnChange?.([
@@ -162,13 +138,13 @@ const useDistributionListFunctions = ({
 			]);
 		};
 		if (more) {
-			getAllDistributionListMembers(email, dlm, offset).then((result) => {
-				updateDefaults(result.dlm);
+			getAllDistributionListMembers(email, members, offset).then((result) => {
+				updateDefaults(result.members);
 			});
 		} else {
-			updateDefaults(dlm);
+			updateDefaults(members);
 		}
-	}, [contactInputValue, dlm, email, id, more, offset, contactInputOnChange]);
+	}, [contactInputValue, members, email, id, more, offset, contactInputOnChange]);
 
 	const onShowMoreClick = useCallback(() => {
 		getDistributionListMembers(email, { limit: 100, offset }).then((result) => {
@@ -235,10 +211,10 @@ const useDistributionListFunctions = ({
 
 	const items = useMemo(() => {
 		if (more) {
-			return [selectAllButton, ...members, moreButton];
+			return [selectAllButton, ...memberDropdownItems, moreButton];
 		}
-		return [selectAllButton, ...members];
-	}, [members, more, moreButton, selectAllButton]);
+		return [selectAllButton, ...memberDropdownItems];
+	}, [memberDropdownItems, more, moreButton, selectAllButton]);
 
 	return { items, loadMembers };
 };
@@ -341,14 +317,7 @@ export const ContactInputCustomChipComponent = ({
 		if (isChipItemDistributionList({ email, isGroup })) {
 			getDistributionList(email)
 				.then((response) => {
-					const dlData = first(response.dl);
-					if (dlData) {
-						setDistributionList({
-							email: dlData.name,
-							displayName: dlData._attrs?.displayName,
-							isOwner: dlData.isOwner ?? false
-						});
-					}
+					setDistributionList(response);
 				})
 				.catch((error) => {
 					setDistributionList(undefined);

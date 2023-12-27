@@ -9,3 +9,11 @@ export type DistributionList = {
 	isOwner: boolean;
 	owners?: Array<{ id: string; name: string }>;
 };
+
+export type DLMember = string;
+
+export type DistributionListMembersPage = {
+	total: number;
+	more: boolean;
+	members: Array<DLMember>;
+};
