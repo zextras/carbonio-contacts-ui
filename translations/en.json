@@ -242,9 +242,6 @@
     "members_list_item_component": {
         "button": {
             "remove": "remove"
-        },
-        "label": {
-            "manager": "Manager"
         }
     },
     "message": {
