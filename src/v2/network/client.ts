@@ -13,7 +13,7 @@ export const client = {
 			},
 			body: JSON.stringify({
 				Body: {
-					[`CreateContactRequest`]: {
+					CreateContactRequest: {
 						_jsns: 'urn:zimbraMail',
 						cn: {
 							a: [
