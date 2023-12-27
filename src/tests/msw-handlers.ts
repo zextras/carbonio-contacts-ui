@@ -228,14 +228,21 @@ export const registerGetDistributionListHandler = (
 };
 
 const createAutocompleteResponse = (match: Array<Match>): string => {
-	const matchString = match.map(
-		(item) =>
-			`<match last="${item.last}" fileas="8:${item.first} ${item.last}" ranking="${
-				item.ranking
-			}" type="${item.type}" isGroup="${item.isGroup ? '1' : '0'}" email="&quot;${item.first} ${
-				item.last
-			}&quot; &lt;${item.email}&gt;" first="${item.first}" full="${item.first} ${item.last}"/>`
-	);
+	const matchString = match.map((item) => {
+		const full = item.full ?? [item.first ?? '', item.last ?? ''].join(' ');
+		const filledMatch: Record<keyof Match, string> = {
+			first: item.first ?? '',
+			last: item.last ?? '',
+			full,
+			email: `&quot;${full}&quot; &lt;${item.email ?? ''}&gt;`,
+			isGroup: item.isGroup ? '1' : '0',
+			type: item.type ?? '',
+			fileas: item.fileas ?? `8:${full}`,
+			ranking: item.ranking ?? ''
+		};
+		return `<match last="${filledMatch.last}" fileas="${filledMatch.fileas}" ranking="${filledMatch.ranking}" type="${filledMatch.type}" isGroup="${filledMatch.isGroup}" email="${filledMatch.email}" first="${filledMatch.first}" full="${full}" />`;
+	});
+
 	return `<FullAutocompleteResponse canBeCached='0' xmlns='${NAMESPACES.mail}'>
 		${matchString}
 		</FullAutocompleteResponse>`;

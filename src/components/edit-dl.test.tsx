@@ -33,34 +33,30 @@ const buildProps = ({
 
 describe('Edit DL Component', () => {
 	it('should show email address', () => {
-		const store = generateStore();
 		const dlEmail = 'dl@domain.com';
 
-		setupTest(<EditDLComponent {...buildProps({ email: dlEmail })} />, { store });
+		setupTest(<EditDLComponent {...buildProps({ email: dlEmail })} />);
 		expect(screen.getByText('Distribution list')).toBeVisible();
 		expect(screen.getByText(dlEmail)).toBeVisible();
 	});
 
 	it('should show a description to let the user understand how to use the inputs', () => {
-		const store = generateStore();
 		const hint =
 			'You can filter this list by looking for specific member’s name or add new ones by editing the Distribution List.';
-		setupTest(<EditDLComponent {...buildProps()} />, { store });
+		setupTest(<EditDLComponent {...buildProps()} />);
 		expect(screen.getByText(hint)).toBeVisible();
 	});
 
 	it('should show the input to add new elements', () => {
-		const store = generateStore();
-		setupTest(<EditDLComponent {...buildProps()} />, { store });
+		setupTest(<EditDLComponent {...buildProps()} />);
 		const contactInput = getDLContactInput();
 		expect(contactInput.textbox).toBeVisible();
 		expect(contactInput.addMembersIcon).toBeVisible();
 	});
 
 	it('should show the input to filter an address', () => {
-		const store = generateStore();
 		const placeholder = 'Filter an address';
-		setupTest(<EditDLComponent {...buildProps()} />, { store });
+		setupTest(<EditDLComponent {...buildProps()} />);
 		const searchInput = screen.getByTestId(TESTID_SELECTORS.DL_MEMBERS_FILTER_INPUT);
 		const searchInputTextBox = within(searchInput).getByRole('textbox', { name: placeholder });
 		expect(searchInputTextBox).toBeVisible();
@@ -69,22 +65,19 @@ describe('Edit DL Component', () => {
 	});
 
 	it('should show the total number of members', () => {
-		const store = generateStore();
 		const totalMembers = 10;
-		setupTest(<EditDLComponent {...buildProps({ totalMembers })} />, { store });
+		setupTest(<EditDLComponent {...buildProps({ totalMembers })} />);
 		expect(screen.getByText(`Member list ${totalMembers}`)).toBeVisible();
 	});
 
 	describe('Add members', () => {
 		it('add action should be disabled if the input is empty', () => {
-			const store = generateStore();
-			setupTest(<EditDLComponent {...buildProps()} />, { store });
+			setupTest(<EditDLComponent {...buildProps()} />);
 			expect(getDLContactInput().addMembersIcon).toBeDisabled();
 		});
 
 		it('add action should be disabled if all values are invalid', async () => {
-			const store = generateStore();
-			const { user } = setupTest(<EditDLComponent {...buildProps()} />, { store });
+			const { user } = setupTest(<EditDLComponent {...buildProps()} />);
 			const invalidValues = ['bad', 'worst'];
 			await act(async () => {
 				await user.type(getDLContactInput().textbox, invalidValues.join(','));
@@ -96,9 +89,8 @@ describe('Edit DL Component', () => {
 		});
 
 		it('add action should be disabled if all values are duplicated', async () => {
-			const store = generateStore();
 			const members = ['1@domain.com', '2@domain.com'];
-			const { user } = setupTest(<EditDLComponent {...buildProps({ members })} />, { store });
+			const { user } = setupTest(<EditDLComponent {...buildProps({ members })} />);
 			const contactInput = getDLContactInput();
 			const values = ['1@domain.com', '2@domain.com'];
 			await act(async () => {
@@ -109,9 +101,8 @@ describe('Edit DL Component', () => {
 		});
 
 		it('add action should be disabled if all values are duplicated or invalid', async () => {
-			const store = generateStore();
 			const members = ['1@domain.com', '2@domain.com'];
-			const { user } = setupTest(<EditDLComponent {...buildProps({ members })} />, { store });
+			const { user } = setupTest(<EditDLComponent {...buildProps({ members })} />);
 			const contactInput = getDLContactInput();
 			const values = ['1@domain.com', '2@domain.com', '3453453', 'aaaaaaabbbbbb'];
 			await act(async () => {
@@ -122,8 +113,7 @@ describe('Edit DL Component', () => {
 		});
 
 		it('add action should be enabled if the input contains at least a valid value', async () => {
-			const store = generateStore();
-			const { user } = setupTest(<EditDLComponent {...buildProps()} />, { store });
+			const { user } = setupTest(<EditDLComponent {...buildProps()} />);
 			const values = ['bad', 'correct.email@domain.com', 'worst'];
 			await act(async () => {
 				await user.type(getDLContactInput().textbox, values.join(','));
@@ -141,8 +131,7 @@ describe('Edit DL Component', () => {
 
 			registerFullAutocompleteHandler([{ first: firstName, last: lastName, email }]);
 
-			const store = generateStore();
-			const { user } = setupTest(<EditDLComponent {...buildProps()} />, { store });
+			const { user } = setupTest(<EditDLComponent {...buildProps()} />);
 
 			const contactInput = getDLContactInput();
 
@@ -162,8 +151,7 @@ describe('Edit DL Component', () => {
 		});
 
 		it('chip should show email if contact is added manually by typing', async () => {
-			const store = generateStore();
-			const { user } = setupTest(<EditDLComponent {...buildProps()} />, { store });
+			const { user } = setupTest(<EditDLComponent {...buildProps()} />);
 			const contactInput = getDLContactInput();
 			const email = faker.internet.email();
 			await act(async () => {
@@ -175,9 +163,8 @@ describe('Edit DL Component', () => {
 		});
 
 		it('should call the onAddMember callback when the user clicks the add action', async () => {
-			const store = generateStore();
 			const onAddMembers = jest.fn();
-			const { user } = setupTest(<EditDLComponent {...buildProps({ onAddMembers })} />, { store });
+			const { user } = setupTest(<EditDLComponent {...buildProps({ onAddMembers })} />);
 			const contactInput = getDLContactInput();
 			await act(async () => {
 				await user.type(contactInput.textbox, `${faker.internet.email()},`);
@@ -188,9 +175,8 @@ describe('Edit DL Component', () => {
 		});
 
 		it('should call the onAddMember callback with only the valid emails', async () => {
-			const store = generateStore();
 			const onAddMembers = jest.fn();
-			const { user } = setupTest(<EditDLComponent {...buildProps({ onAddMembers })} />, { store });
+			const { user } = setupTest(<EditDLComponent {...buildProps({ onAddMembers })} />);
 			const contactInput = getDLContactInput();
 			const values = ['bad', 'correct.email@domain.com', 'worst', 'supercorrect.email@domain.net'];
 			await act(async () => {
@@ -205,9 +191,8 @@ describe('Edit DL Component', () => {
 		});
 
 		it('should leave only invalid values inside input when user clicks on add action', async () => {
-			const store = generateStore();
 			const onAddMembers = jest.fn();
-			const { user } = setupTest(<EditDLComponent {...buildProps({ onAddMembers })} />, { store });
+			const { user } = setupTest(<EditDLComponent {...buildProps({ onAddMembers })} />);
 			const contactInput = getDLContactInput();
 			const values = ['bad', 'correct.email@domain.com', 'worst', 'supercorrect.email@domain.net'];
 			await act(async () => {
@@ -224,9 +209,8 @@ describe('Edit DL Component', () => {
 		});
 
 		it('should leave duplicated values inside the input when the user clicks on add', async () => {
-			const store = generateStore();
 			const members = ['duplicated.email@domain.com'];
-			const { user } = setupTest(<EditDLComponent {...buildProps({ members })} />, { store });
+			const { user } = setupTest(<EditDLComponent {...buildProps({ members })} />);
 			const contactInput = getDLContactInput();
 			const values = ['duplicated.email@domain.com', 'correct.email@domain.net'];
 			await act(async () => {
@@ -386,28 +370,25 @@ describe('Edit DL Component', () => {
 
 	describe('Members list', () => {
 		it('should show the list of members', () => {
-			const store = generateStore();
 			const totalMembers = 10;
 			const members: Array<string> = [];
 			times(totalMembers, () => {
 				members.push(faker.internet.email());
 			});
-			setupTest(<EditDLComponent {...buildProps({ totalMembers, members })} />, { store });
+			setupTest(<EditDLComponent {...buildProps({ totalMembers, members })} />);
 			members.forEach((member) => {
 				expect(screen.getByText(member)).toBeVisible();
 			});
 		});
 
 		it('should call onRemoveMember with member email if the remove action button for that member is clicked', async () => {
-			const store = generateStore();
 			const members: Array<string> = [];
 			times(10, () => {
 				members.push(faker.internet.email());
 			});
 			const onRemoveFn = jest.fn();
 			const { user } = setupTest(
-				<EditDLComponent {...buildProps({ members, onRemoveMember: onRemoveFn })} />,
-				{ store }
+				<EditDLComponent {...buildProps({ members, onRemoveMember: onRemoveFn })} />
 			);
 			const listItem = screen
 				.getAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM)
@@ -418,7 +399,6 @@ describe('Edit DL Component', () => {
 		});
 
 		it('should show only members with a match with the search input content', async () => {
-			const store = generateStore();
 			const members: Array<string> = [
 				'john.smith@example.org',
 				'mario.rossi@test.com',
@@ -426,7 +406,7 @@ describe('Edit DL Component', () => {
 				'bianchi@radiomaria.com',
 				'do-not-reply@unknown.net'
 			];
-			const { user } = setupTest(<EditDLComponent {...buildProps({ members })} />, { store });
+			const { user } = setupTest(<EditDLComponent {...buildProps({ members })} />);
 			await user.type(screen.getByRole('textbox', { name: 'Filter an address' }), 'mari');
 			await waitFor(() =>
 				expect(screen.getAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM)).toHaveLength(2)
@@ -436,7 +416,6 @@ describe('Edit DL Component', () => {
 		});
 
 		it('should show all members if the search input is cleared', async () => {
-			const store = generateStore();
 			const members: Array<string> = [
 				'john.smith@example.org',
 				'mario.rossi@test.com',
@@ -444,7 +423,7 @@ describe('Edit DL Component', () => {
 				'bianchi@radiomaria.com',
 				'do-not-reply@unknown.net'
 			];
-			const { user } = setupTest(<EditDLComponent {...buildProps({ members })} />, { store });
+			const { user } = setupTest(<EditDLComponent {...buildProps({ members })} />);
 			const searchInput = screen.getByRole('textbox', { name: 'Filter an address' });
 			await user.type(searchInput, 'mari');
 			await waitFor(() =>

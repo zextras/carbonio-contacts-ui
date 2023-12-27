@@ -10,7 +10,6 @@ import { times } from 'lodash';
 import { UIAction, useActionEditDL } from './edit-dl';
 import { screen, setupHook } from '../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS, TIMERS } from '../constants/tests';
-import { generateStore } from '../legacy/tests/generators/store';
 import {
 	registerDistributionListActionHandler,
 	registerGetDistributionListMembersHandler
@@ -30,8 +29,7 @@ describe('useActionEditDL', () => {
 	});
 
 	it('should return an execute field which opens a UI with the dl info and members', async () => {
-		const store = generateStore();
-		const { result } = setupHook(useActionEditDL, { store });
+		const { result } = setupHook(useActionEditDL);
 		const action = result.current;
 		const dlEmail = 'dl-mail@domain.org';
 		const dlDisplayName = 'Custom distribution list';
@@ -51,8 +49,7 @@ describe('useActionEditDL', () => {
 	});
 
 	it('should show the email in the title if the dl has no display name', async () => {
-		const store = generateStore();
-		const { result } = setupHook(useActionEditDL, { store });
+		const { result } = setupHook(useActionEditDL);
 		const action = result.current;
 		const dlEmail = 'dl-mail@domain.org';
 		const members = times(10, () => faker.internet.email());
@@ -70,8 +67,7 @@ describe('useActionEditDL', () => {
 	});
 
 	it('should close the edit view on save', async () => {
-		const store = generateStore();
-		const { result, user } = setupHook(useActionEditDL, { store });
+		const { result, user } = setupHook(useActionEditDL);
 		const action = result.current;
 		const dlEmail = 'dl-mail@domain.org';
 		const dlDisplayName = 'Custom distribution list';
@@ -99,8 +95,7 @@ describe('useActionEditDL', () => {
 	});
 
 	it('should close the edit view on cancel', async () => {
-		const store = generateStore();
-		const { result, user } = setupHook(useActionEditDL, { store });
+		const { result, user } = setupHook(useActionEditDL);
 		const action = result.current;
 		const dlEmail = 'dl-mail@domain.org';
 		const dlDisplayName = 'Custom distribution list';

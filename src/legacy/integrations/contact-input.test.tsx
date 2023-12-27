@@ -6,36 +6,98 @@
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
-import { act } from '@testing-library/react';
+import { act, within } from '@testing-library/react';
 
 import { ContactInput } from './contact-input';
 import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
-import { generateStore } from '../tests/generators/store';
-
-const contactChipItem = {
-	email: faker.internet.email()
-};
+import { TESTID_SELECTORS } from '../../constants/tests';
+import { registerFullAutocompleteHandler } from '../../tests/msw-handlers';
+import { Match } from '../types/contact';
 
 describe('Contact input', () => {
+	it('should render a textbox', async () => {
+		const placeholder = faker.string.alpha();
+		setupTest(<ContactInput defaultValue={[]} placeholder={placeholder} extraAccountsIds={[]} />);
+		expect(screen.getByRole('textbox', { name: placeholder })).toBeVisible();
+	});
+
+	it('should render a dropdown with a contact', async () => {
+		const contact = {
+			email: faker.internet.email(),
+			first: faker.person.firstName(),
+			isGroup: false
+		} satisfies Match;
+		registerFullAutocompleteHandler([contact]);
+
+		const { user } = setupTest(<ContactInput defaultValue={[]} extraAccountsIds={[]} />);
+
+		const input = screen.getByRole('textbox');
+		await user.type(input, contact.email);
+		act(() => {
+			// run timers of dropdown
+			jest.runOnlyPendingTimers();
+		});
+		const dropdown = await screen.findByTestId(TESTID_SELECTORS.DROPDOWN_LIST);
+		expect(within(dropdown).getByText(contact.email)).toBeVisible();
+		expect(within(dropdown).getByText(contact.first)).toBeVisible();
+	});
+	it('should render a dropdown with a contact group', async () => {
+		const contact = {
+			first: faker.person.firstName(),
+			isGroup: true
+		} satisfies Match;
+		registerFullAutocompleteHandler([contact]);
+
+		const { user } = setupTest(<ContactInput defaultValue={[]} extraAccountsIds={[]} />);
+
+		const input = screen.getByRole('textbox');
+		await user.type(input, contact.first);
+		act(() => {
+			// run timers of dropdown
+			jest.runOnlyPendingTimers();
+		});
+		const dropdown = await screen.findByTestId(TESTID_SELECTORS.DROPDOWN_LIST);
+		expect(within(dropdown).getByText(contact.first)).toBeVisible();
+	});
+	it('should render a dropdown with a contact group with an avatar', async () => {
+		const contact = {
+			first: faker.person.firstName(),
+			isGroup: true
+		} satisfies Match;
+		registerFullAutocompleteHandler([contact]);
+
+		const { user } = setupTest(<ContactInput defaultValue={[]} extraAccountsIds={[]} />);
+
+		const input = screen.getByRole('textbox');
+		await user.type(input, contact.first);
+		act(() => {
+			// run timers of dropdown
+			jest.runOnlyPendingTimers();
+		});
+		const dropdown = await screen.findByTestId(TESTID_SELECTORS.DROPDOWN_LIST);
+		const avatar = within(dropdown).getByTestId(TESTID_SELECTORS.AVATAR);
+		expect(within(dropdown).getByText(contact.first)).toBeVisible();
+		expect(within(avatar).queryByText('?')).not.toBeInTheDocument();
+	});
+
 	it('should call onChange with the new chip to create', async () => {
-		const store = generateStore();
+		const contact = {
+			email: faker.internet.email()
+		};
 		const onChange = jest.fn();
 		const { user } = setupTest(
-			<ContactInput defaultValue={[]} placeholder={''} extraAccountsIds={[]} onChange={onChange} />,
-			{
-				store
-			}
+			<ContactInput defaultValue={[]} placeholder={''} extraAccountsIds={[]} onChange={onChange} />
 		);
 
-		await user.type(screen.getByRole('textbox'), contactChipItem.email);
+		await user.type(screen.getByRole('textbox'), contact.email);
 		await act(async () => {
 			await user.type(screen.getByRole('textbox'), ',');
 		});
 		expect(onChange).toHaveBeenCalledWith([
 			expect.objectContaining({
-				email: contactChipItem.email,
+				email: contact.email,
 				id: expect.anything(),
-				label: contactChipItem.email,
+				label: contact.email,
 				error: false
 			})
 		]);
