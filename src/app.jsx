@@ -18,7 +18,7 @@ import {
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
-import { CONTACTS_APP_ID, CONTACTS_ROUTE } from './constants/app';
+import { CONTACTS_APP_ID, CONTACTS_ROUTE, NEW_CONTACT_GROUP_BOARD_ID } from './constants/app';
 import ContactInput from './integrations/contact-input';
 import { StoreProvider } from './store/redux';
 import SidebarItems from './views/secondary-bar/sidebar';
@@ -37,6 +37,10 @@ const LazyBoardView = lazy(() =>
 	import(/* webpackChunkName: "edit-view" */ './views/edit/edit-view')
 );
 
+const LazyNewContactGroupBoardView = lazy(() =>
+	import(/* webpackChunkName: "newContactGroupView" */ './v2/views/board/NewContactGroupBoard')
+);
+
 const AppView = (props) => (
 	<Suspense fallback={<Spinner />}>
 		<StoreProvider>
@@ -50,6 +54,12 @@ const BoardView = (props) => (
 		<StoreProvider>
 			<LazyBoardView {...props} />
 		</StoreProvider>
+	</Suspense>
+);
+
+const NewContactGroupBoardView = () => (
+	<Suspense fallback={<Spinner />}>
+		<LazyNewContactGroupBoardView />
 	</Suspense>
 );
 
@@ -102,6 +112,11 @@ export default function App() {
 			route: CONTACTS_ROUTE,
 			component: BoardView
 		});
+		addBoardView({
+			id: NEW_CONTACT_GROUP_BOARD_ID,
+			route: NEW_CONTACT_GROUP_BOARD_ID,
+			component: NewContactGroupBoardView
+		});
 	}, [t]);
 
 	useEffect(() => {
@@ -110,22 +125,45 @@ export default function App() {
 			component: ContactInput
 		});
 
-		registerActions({
-			action: () => ({
+		registerActions(
+			{
+				action: () => ({
+					id: 'new-contact',
+					label: t('label.new_contact', 'New Contact'),
+					icon: 'ContactsModOutline',
+					onClick: (ev) => {
+						ev?.preventDefault?.();
+						addBoard({
+							url: `${CONTACTS_ROUTE}/new`,
+							title: t('label.new_contact', 'New Contact')
+						});
+					},
+					disabled: false,
+					group: CONTACTS_APP_ID,
+					primary: true
+				}),
 				id: 'new-contact',
-				label: t('label.new_contact', 'New Contact'),
-				icon: 'ContactsModOutline',
-				onClick: (ev) => {
-					ev?.preventDefault?.();
-					addBoard({ url: `${CONTACTS_ROUTE}/new`, title: t('label.new_contact', 'New Contact') });
-				},
-				disabled: false,
-				group: CONTACTS_APP_ID,
-				primary: true
-			}),
-			id: 'new-contact',
-			type: ACTION_TYPES.NEW
-		});
+				type: ACTION_TYPES.NEW
+			},
+			{
+				id: 'new-contact-group',
+				type: ACTION_TYPES.NEW,
+				action: () => ({
+					id: 'new-contact-group',
+					label: t('label.newContactGroup', 'New contact group'),
+					icon: 'PeopleOutline',
+					onClick: () => {
+						addBoard({
+							url: NEW_CONTACT_GROUP_BOARD_ID,
+							title: t('board.newContactGroup.title', 'New Group')
+						});
+					},
+					disabled: false,
+					primary: false,
+					group: CONTACTS_APP_ID
+				})
+			}
+		);
 	}, [t]);
 
 	return (

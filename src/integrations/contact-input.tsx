@@ -13,7 +13,8 @@ import {
 	Row,
 	Text,
 	ChipProps,
-	ChipItem
+	ChipItem,
+	ChipInputProps
 } from '@zextras/carbonio-design-system';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
 import {
@@ -149,7 +150,7 @@ type ContactInput = {
 	chipDisplayName?: ContactInputChipDisplayName;
 	dragAndDropEnabled?: boolean;
 	extraAccountsIds: Array<string>;
-};
+} & Pick<ChipInputProps, 'icon' | 'iconAction' | 'iconDisabled' | 'description' | 'hasError'>;
 
 const ContactInput: FC<ContactInput> = ({
 	onChange,
@@ -470,7 +471,21 @@ const ContactInput: FC<ContactInput> = ({
 				}
 				return chip;
 			}
-			return valueToAdd;
+			return {
+				...valueToAdd,
+				error: !isValidEmail(valueToAdd.email),
+				actions: [
+					{
+						id: 'action1',
+						label: isValidEmail(valueToAdd.email)
+							? t('label.edit_email', 'Edit E-mail')
+							: t('label.edit_invalid_email', 'E-mail is invalid, click to edit it'),
+						icon: 'EditOutline',
+						type: 'button',
+						onClick: () => editChip(valueToAdd, valueToAdd.id)
+					}
+				]
+			};
 		},
 		[editChip, isValidEmail, t]
 	);

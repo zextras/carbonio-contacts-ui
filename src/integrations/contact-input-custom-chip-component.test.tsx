@@ -36,7 +36,7 @@ const user6Mail = 'user6@mail.com';
 
 const chevronTestId = 'icon: ChevronDownOutline';
 
-const selectAll = 'Select address';
+const selectAll = /Select address|Select all \d+ addresses/;
 
 describe('Contact input custom chip component', () => {
 	test('if chipDisplayName is not passed it will show chips label by default', () => {

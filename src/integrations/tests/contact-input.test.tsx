@@ -24,9 +24,9 @@ describe('Contact input', () => {
 	});
 	it('should render a dropdown with a contact', async () => {
 		const contact = {
-			id: faker.datatype.uuid(),
+			id: faker.string.uuid(),
 			email: faker.internet.email(),
-			firstName: faker.name.firstName()
+			firstName: faker.person.firstName()
 		};
 		getSetupServer().use(
 			rest.post('/service/soap/FullAutocompleteRequest', async (req, res, ctx) =>
@@ -57,7 +57,7 @@ describe('Contact input', () => {
 	});
 	it('should render a dropdown with a contact group', async () => {
 		const contact = {
-			display: faker.name.firstName()
+			display: faker.person.firstName()
 		};
 		getSetupServer().use(
 			rest.post('/service/soap/FullAutocompleteRequest', async (req, res, ctx) =>
@@ -87,7 +87,7 @@ describe('Contact input', () => {
 	});
 	it('should render a dropdown with a contact group with an avatar', async () => {
 		const contact = {
-			display: faker.name.firstName()
+			display: faker.person.firstName()
 		};
 		getSetupServer().use(
 			rest.post('/service/soap/FullAutocompleteRequest', async (req, res, ctx) =>
