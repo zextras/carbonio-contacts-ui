@@ -209,7 +209,7 @@ describe('Contact input integration wrapper', () => {
 
 				await waitFor(() => expect(handler).toHaveBeenCalled());
 				expect(
-					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.ICONS.EXPAND_DL })
+					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.EXPAND_DL })
 				).toBeVisible();
 			});
 
@@ -227,7 +227,7 @@ describe('Contact input integration wrapper', () => {
 					);
 
 					const editButton = screen.queryByRoleWithIcon('button', {
-						icon: TESTID_SELECTORS.ICONS.EDIT_DL
+						icon: TESTID_SELECTORS.icons.EDIT_DL
 					});
 					expect(editButton).not.toBeInTheDocument();
 					expect(handler).not.toHaveBeenCalled();
@@ -250,7 +250,7 @@ describe('Contact input integration wrapper', () => {
 
 					await waitFor(() => expect(handler).toHaveBeenCalled());
 					expect(
-						screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.ICONS.EDIT_DL })
+						screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.EDIT_DL })
 					).not.toBeInTheDocument();
 				});
 
@@ -268,7 +268,7 @@ describe('Contact input integration wrapper', () => {
 
 					await waitFor(() => expect(handler).toHaveBeenCalled());
 					expect(
-						await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.ICONS.EDIT_DL })
+						await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.EDIT_DL })
 					).toBeVisible();
 				});
 
@@ -286,7 +286,7 @@ describe('Contact input integration wrapper', () => {
 
 					await waitFor(() => expect(handler).toHaveBeenCalled());
 					const editButton = await screen.findByRoleWithIcon('button', {
-						icon: TESTID_SELECTORS.ICONS.EDIT_DL
+						icon: TESTID_SELECTORS.icons.EDIT_DL
 					});
 					await user.click(editButton);
 					await screen.findByText(`Edit "${distributionList.displayName}"`);
@@ -314,7 +314,7 @@ describe('Contact input integration wrapper', () => {
 
 					await waitFor(() => expect(handler).toHaveBeenCalled());
 					expect(
-						screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.ICONS.EDIT_DL })
+						screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.EDIT_DL })
 					).not.toBeInTheDocument();
 				});
 			});
@@ -331,7 +331,7 @@ describe('Contact input integration wrapper', () => {
 					/>
 				);
 				expect(
-					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.ICONS.CLOSE })
+					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.CLOSE })
 				).toBeVisible();
 			});
 
@@ -345,7 +345,7 @@ describe('Contact input integration wrapper', () => {
 					/>
 				);
 				expect(
-					screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.ICONS.EDIT_CHIP })
+					screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.EDIT_CHIP })
 				).not.toBeInTheDocument();
 			});
 

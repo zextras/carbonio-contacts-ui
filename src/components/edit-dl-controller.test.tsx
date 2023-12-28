@@ -81,7 +81,7 @@ describe('EditDLControllerComponent', () => {
 			await user.type(screen.getByRole('textbox', { name: /type an address/i }), emails.join(','));
 		});
 		await user.click(
-			screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.ICONS.ADD_MEMBERS })
+			screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.ADD_MEMBERS })
 		);
 		const memberElements = await screen.findAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM);
 		expect(memberElements).toHaveLength(2);
@@ -102,7 +102,7 @@ describe('EditDLControllerComponent', () => {
 			await user.type(screen.getByRole('textbox', { name: /type an address/i }), emails.join(','));
 		});
 		await user.click(
-			screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.ICONS.ADD_MEMBERS })
+			screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.ADD_MEMBERS })
 		);
 		const memberElements = screen.getAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM);
 		expect(memberElements).toHaveLength(12);
@@ -140,7 +140,7 @@ describe('EditDLControllerComponent', () => {
 		const newMember = 'newmember@example.com';
 		await user.type(screen.getByRole('textbox', { name: /type an address/i }), newMember);
 		await user.click(
-			screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.ICONS.ADD_MEMBERS })
+			screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.ADD_MEMBERS })
 		);
 		expect(screen.getByText(/member list 4/i)).toBeVisible();
 	});
@@ -170,14 +170,14 @@ describe('EditDLControllerComponent', () => {
 		await act(async () => {
 			await user.type(getDLContactInput().textbox, `${duplicatedEmail},`);
 		});
-		expect(screen.getByTestId(TESTID_SELECTORS.ICONS.DUPLICATED_MEMBER)).toBeVisible();
+		expect(screen.getByTestId(TESTID_SELECTORS.icons.DUPLICATED_MEMBER)).toBeVisible();
 		const memberToRemoveElement = membersListItems.find(
 			(element) => within(element).queryByText(duplicatedEmail) !== null
 		) as HTMLElement;
 		await user.click(within(memberToRemoveElement).getByRole('button', { name: /remove/i }));
 		await waitFor(() => expect(memberToRemoveElement).not.toBeInTheDocument());
 		await waitFor(() =>
-			expect(screen.queryByTestId(TESTID_SELECTORS.ICONS.DUPLICATED_MEMBER)).not.toBeInTheDocument()
+			expect(screen.queryByTestId(TESTID_SELECTORS.icons.DUPLICATED_MEMBER)).not.toBeInTheDocument()
 		);
 	});
 
@@ -256,7 +256,7 @@ describe('EditDLControllerComponent', () => {
 				const newMember = 'newmember@example.com';
 				await user.type(screen.getByRole('textbox', { name: /type an address/i }), newMember);
 				await user.click(
-					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.ICONS.ADD_MEMBERS })
+					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.ADD_MEMBERS })
 				);
 				await waitFor(() => expect(screen.getByRole('button', { name: 'save' })).toBeEnabled());
 			});
@@ -289,7 +289,7 @@ describe('EditDLControllerComponent', () => {
 				await waitFor(() => expect(screen.getByRole('button', { name: 'save' })).toBeEnabled());
 				await user.type(screen.getByRole('textbox', { name: /type an address/i }), initialMember);
 				await user.click(
-					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.ICONS.ADD_MEMBERS })
+					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.ADD_MEMBERS })
 				);
 				await waitFor(() => expect(screen.getByRole('button', { name: 'save' })).toBeDisabled());
 			});

@@ -16,8 +16,7 @@ import { difference, xor } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { EditDLComponent } from './edit-dl';
-import { distributionListAction } from '../api/distribution-list-action';
-import { getDistributionListMembers } from '../api/get-distribution-list-members';
+import { client } from '../network/client';
 
 export type EditDLControllerComponentProps = {
 	email: string;
@@ -47,7 +46,8 @@ export const EditDLControllerComponent: FC<EditDLControllerComponentProps> = ({
 	const createSnackbar = useSnackbar();
 
 	useEffect(() => {
-		getDistributionListMembers(email)
+		client
+			.getDistributionListMembers(email)
 			.then((response) => {
 				setMembers(() => {
 					originalMembersRef.current = response.members;
@@ -82,7 +82,8 @@ export const EditDLControllerComponent: FC<EditDLControllerComponentProps> = ({
 			originalMembersRef.current,
 			members
 		);
-		distributionListAction(email, membersToAdd, membersToRemove)
+		client
+			.distributionListAction(email, membersToAdd, membersToRemove)
 			.then(() => {
 				createSnackbar({
 					key: `dl-save-success-${email}`,

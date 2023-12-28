@@ -12,23 +12,23 @@ import {
 import { map, some } from 'lodash';
 import { ResponseResolver, rest, RestContext, RestRequest } from 'msw';
 
-import {
-	BatchDistributionListActionRequest,
-	BatchDistributionListActionResponse,
-	DistributionListActionResponse
-} from '../api/distribution-list-action';
-import {
-	GetDistributionListRequest,
-	GetDistributionListResponse
-} from '../api/get-distribution-list';
-import {
-	GetDistributionListMembersRequest,
-	GetDistributionListMembersResponse
-} from '../api/get-distribution-list-members';
 import { getSetupServer } from '../carbonio-ui-commons/test/jest-setup';
 import { mockedAccount } from '../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
 import { NAMESPACES } from '../constants/api';
 import { FullAutocompleteResponse, Match } from '../legacy/types/contact';
+import {
+	BatchDistributionListActionRequest,
+	BatchDistributionListActionResponse,
+	DistributionListActionResponse
+} from '../network/api/distribution-list-action';
+import {
+	GetDistributionListRequest,
+	GetDistributionListResponse
+} from '../network/api/get-distribution-list';
+import {
+	GetDistributionListMembersRequest,
+	GetDistributionListMembersResponse
+} from '../network/api/get-distribution-list-members';
 
 export const buildSoapResponse = <T>(responseData: Record<string, T>): SuccessSoapResponse<T> => ({
 	Header: {

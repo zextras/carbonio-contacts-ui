@@ -19,7 +19,7 @@ import {
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
-import { CONTACTS_ROUTE, CONTACTS_APP_ID } from './constants';
+import { CONTACTS_ROUTE, CONTACTS_APP_ID, NEW_CONTACT_GROUP_BOARD_ID } from './constants';
 import { ContactInputIntegrationWrapper } from './legacy/integrations/contact-input-integration-wrapper';
 import { StoreProvider } from './legacy/store/redux';
 import { EditViewProps } from './legacy/types/views/edit-view';
@@ -42,6 +42,11 @@ const LazyBoardView = lazy(
 	() => import(/* webpackChunkName: "edit-view" */ './legacy/views/edit/edit-view')
 );
 
+const LazyNewContactGroupBoardView = lazy(
+	() =>
+		import(/* webpackChunkName: "newContactGroupView" */ './v2/views/board/NewContactGroupBoard')
+);
+
 const AppView = (): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
 		<StoreProvider>
@@ -55,6 +60,12 @@ const BoardView = (props: EditViewProps): React.JSX.Element => (
 		<StoreProvider>
 			<LazyBoardView {...props} />
 		</StoreProvider>
+	</Suspense>
+);
+
+const NewContactGroupBoardView = () => (
+	<Suspense fallback={<Spinner />}>
+		<LazyNewContactGroupBoardView />
 	</Suspense>
 );
 
@@ -108,6 +119,11 @@ const App = (): React.JSX.Element => {
 			route: CONTACTS_ROUTE,
 			component: BoardView
 		});
+		addBoardView({
+			id: NEW_CONTACT_GROUP_BOARD_ID,
+			route: NEW_CONTACT_GROUP_BOARD_ID,
+			component: NewContactGroupBoardView
+		});
 	}, [t]);
 
 	useEffect(() => {
@@ -116,22 +132,45 @@ const App = (): React.JSX.Element => {
 			component: ContactInputIntegrationWrapper
 		});
 
-		registerActions({
-			action: () => ({
+		registerActions(
+			{
+				action: () => ({
+					id: 'new-contact',
+					label: t('label.new_contact', 'New Contact'),
+					icon: 'ContactsModOutline',
+					onClick: (ev): void => {
+						ev?.preventDefault?.();
+						addBoard({
+							url: `${CONTACTS_ROUTE}/new`,
+							title: t('label.new_contact', 'New Contact')
+						});
+					},
+					disabled: false,
+					group: CONTACTS_APP_ID,
+					primary: true
+				}),
 				id: 'new-contact',
-				label: t('label.new_contact', 'New Contact'),
-				icon: 'ContactsModOutline',
-				onClick: (ev): void => {
-					ev?.preventDefault?.();
-					addBoard({ url: `${CONTACTS_ROUTE}/new`, title: t('label.new_contact', 'New Contact') });
-				},
-				disabled: false,
-				group: CONTACTS_APP_ID,
-				primary: true
-			}),
-			id: 'new-contact',
-			type: ACTION_TYPES.NEW
-		});
+				type: ACTION_TYPES.NEW
+			},
+			{
+				id: 'new-contact-group',
+				type: ACTION_TYPES.NEW,
+				action: () => ({
+					id: 'new-contact-group',
+					label: t('label.newContactGroup', 'New contact group'),
+					icon: 'PeopleOutline',
+					onClick: (ev): void => {
+						addBoard({
+							url: NEW_CONTACT_GROUP_BOARD_ID,
+							title: t('board.newContactGroup.title', 'New Group')
+						});
+					},
+					disabled: false,
+					primary: false,
+					group: CONTACTS_APP_ID
+				})
+			}
+		);
 	}, [t]);
 
 	return (

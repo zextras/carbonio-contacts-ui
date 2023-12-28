@@ -8,15 +8,15 @@ import React from 'react';
 import { waitFor } from '@testing-library/react';
 
 import { ContactInputCustomChipComponent } from './contact-input-custom-chip-component';
-import {
-	GetDistributionListMembersRequest,
-	GetDistributionListMembersResponse
-} from '../../api/get-distribution-list-members';
 import { mockedAccount } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
 import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { NAMESPACES } from '../../constants/api';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
 import { TESTID_SELECTORS } from '../../constants/tests';
+import {
+	GetDistributionListMembersRequest,
+	GetDistributionListMembersResponse
+} from '../../network/api/get-distribution-list-members';
 import {
 	buildSoapResponse,
 	registerGetDistributionListHandler,
@@ -204,17 +204,17 @@ describe('Contact input custom chip component', () => {
 			/>
 		);
 
-		let chevronExpandAction = await screen.findByTestId(TESTID_SELECTORS.ICONS.EXPAND_DL);
+		let chevronExpandAction = await screen.findByTestId(TESTID_SELECTORS.icons.EXPAND_DL);
 		await user.click(chevronExpandAction);
 		await screen.findByText(user1.email);
 
-		const chevronCollapseAction = await screen.findByTestId(TESTID_SELECTORS.ICONS.COLLAPSE_DL);
+		const chevronCollapseAction = await screen.findByTestId(TESTID_SELECTORS.icons.COLLAPSE_DL);
 		await user.click(chevronCollapseAction);
 
 		await waitFor(() => {
 			expect(screen.queryByText(user1.email)).not.toBeInTheDocument();
 		});
-		chevronExpandAction = await screen.findByTestId(TESTID_SELECTORS.ICONS.EXPAND_DL);
+		chevronExpandAction = await screen.findByTestId(TESTID_SELECTORS.icons.EXPAND_DL);
 		await user.click(chevronExpandAction);
 		expect(handler).toHaveBeenCalledTimes(2);
 		expect(await screen.findByText(user2Mail)).toBeVisible();
@@ -237,7 +237,7 @@ describe('Contact input custom chip component', () => {
 			/>
 		);
 
-		const chevronAction = await screen.findByTestId(TESTID_SELECTORS.ICONS.EXPAND_DL);
+		const chevronAction = await screen.findByTestId(TESTID_SELECTORS.icons.EXPAND_DL);
 		await user.click(chevronAction);
 		await waitFor(() => expect(getMembersHandler).toHaveBeenCalled());
 		expect(await screen.findByText(user1.email)).toBeVisible();
@@ -296,7 +296,7 @@ describe('Contact input custom chip component', () => {
 		);
 
 		await waitFor(() => expect(getDistributionListHandler).toHaveBeenCalled());
-		const chevronAction = await screen.findByTestId(TESTID_SELECTORS.ICONS.EXPAND_DL);
+		const chevronAction = await screen.findByTestId(TESTID_SELECTORS.icons.EXPAND_DL);
 
 		await user.click(chevronAction);
 		await waitFor(() => expect(getMembersHandler).toHaveBeenCalled());
@@ -355,7 +355,7 @@ describe('Contact input custom chip component', () => {
 		);
 
 		await waitFor(() => expect(getDistributionListHandler).toHaveBeenCalled());
-		const chevronAction = await screen.findByTestId(TESTID_SELECTORS.ICONS.EXPAND_DL);
+		const chevronAction = await screen.findByTestId(TESTID_SELECTORS.icons.EXPAND_DL);
 		await user.click(chevronAction);
 		await waitFor(() => expect(getMembersHandler).toHaveBeenCalled());
 		await screen.findByText(user1.email);
@@ -384,7 +384,7 @@ describe('Contact input custom chip component', () => {
 			/>
 		);
 		await waitFor(() => expect(getDistributionListHandler).toHaveBeenCalled());
-		const chevronAction = await screen.findByTestId(TESTID_SELECTORS.ICONS.EXPAND_DL);
+		const chevronAction = await screen.findByTestId(TESTID_SELECTORS.icons.EXPAND_DL);
 		await user.click(chevronAction);
 		await waitFor(() => expect(getMembersHandler).toHaveBeenCalled());
 		await screen.findByText(user1.email);
@@ -437,7 +437,7 @@ describe('Contact input custom chip component', () => {
 			/>
 		);
 		await waitFor(() => expect(getDistributionListHandler).toHaveBeenCalled());
-		const chevronAction = await screen.findByTestId(TESTID_SELECTORS.ICONS.EXPAND_DL);
+		const chevronAction = await screen.findByTestId(TESTID_SELECTORS.icons.EXPAND_DL);
 		await user.click(chevronAction);
 		await waitFor(() => expect(getMembersHandler).toHaveBeenCalled());
 		await screen.findByText(user1.email);

@@ -16,7 +16,7 @@ export const getDLContactInput = (): {
 		name: /Type an address, click '\+' to add to the distribution list/i
 	});
 	const contactInputIcon = within(contactInput).getByRoleWithIcon('button', {
-		icon: TESTID_SELECTORS.ICONS.ADD_MEMBERS
+		icon: TESTID_SELECTORS.icons.ADD_MEMBERS
 	});
 
 	return {

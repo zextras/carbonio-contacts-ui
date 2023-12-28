@@ -60,7 +60,7 @@ describe('Edit DL Component', () => {
 		const searchInput = screen.getByTestId(TESTID_SELECTORS.DL_MEMBERS_FILTER_INPUT);
 		const searchInputTextBox = within(searchInput).getByRole('textbox', { name: placeholder });
 		expect(searchInputTextBox).toBeVisible();
-		const searchInputIcon = within(searchInput).getByTestId(TESTID_SELECTORS.ICONS.FILTER_MEMBERS);
+		const searchInputIcon = within(searchInput).getByTestId(TESTID_SELECTORS.icons.FILTER_MEMBERS);
 		expect(searchInputIcon).toBeVisible();
 	});
 
@@ -84,7 +84,7 @@ describe('Edit DL Component', () => {
 			});
 
 			expect(
-				screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.ICONS.ADD_MEMBERS })
+				screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.ADD_MEMBERS })
 			).toBeDisabled();
 		});
 
@@ -120,7 +120,7 @@ describe('Edit DL Component', () => {
 			});
 
 			expect(
-				screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.ICONS.ADD_MEMBERS })
+				screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.ADD_MEMBERS })
 			).toBeEnabled();
 		});
 
@@ -278,7 +278,7 @@ describe('Edit DL Component', () => {
 				});
 
 				const closeButton = screen.getByRoleWithIcon('button', {
-					icon: TESTID_SELECTORS.ICONS.CLOSE
+					icon: TESTID_SELECTORS.icons.CLOSE
 				});
 
 				await user.click(closeButton);
@@ -361,7 +361,7 @@ describe('Edit DL Component', () => {
 
 				expect(
 					within(screen.getByTestId(TESTID_SELECTORS.CONTACT_INPUT_CHIP)).getByTestId(
-						TESTID_SELECTORS.ICONS.DUPLICATED_MEMBER
+						TESTID_SELECTORS.icons.DUPLICATED_MEMBER
 					)
 				).toBeVisible();
 			});

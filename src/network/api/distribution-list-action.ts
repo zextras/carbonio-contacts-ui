@@ -6,7 +6,7 @@
 import { SoapFault, soapFetch } from '@zextras/carbonio-shell-ui';
 
 import { GenericSoapPayload } from './types';
-import { NAMESPACES } from '../constants/api';
+import { NAMESPACES } from '../../constants/api';
 
 export type DistributionListActionOperation = 'addMembers' | 'removeMembers';
 

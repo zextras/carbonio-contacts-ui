@@ -8,6 +8,43 @@
         "send_msg": "Send e-mail",
         "share_folder": "Share folder"
     },
+    "board": {
+        "label": {
+            "description": "Description"
+        },
+        "newContactGroup": {
+            "addresses": {
+                "label": "Addresses"
+            },
+            "input": {
+                "contact_input": {
+                    "error": {
+                        "address_already_present": "Address already present",
+                        "address_already_present_plural": "Addresses already present",
+                        "invalid_address": "Invalid address",
+                        "invalid_address_plural": "Invalid addresses",
+                        "invalid_already_present_addresses": "Invalid and already present addresses"
+                    },
+                    "placeholder": "Type an address, click ‘+’ to add to the group",
+                    "title": "Addresses list"
+                },
+                "name_input": {
+                    "error": {
+                        "max_length": "Maximum length allowed is 256 characters",
+                        "required": "Group name is required, enter a name to proceed"
+                    },
+                    "name": {
+                        "label": "Group name*"
+                    }
+                }
+            },
+            "name": "New Group",
+            "snackbar": {
+                "contact_group_created": "Contact group successfully created"
+            },
+            "title": "New Group"
+        }
+    },
     "contact_restored": "Contact restored",
     "displayer": {
         "description2": "Click the “NEW” button to start creating a new one.",
@@ -166,6 +203,7 @@
         "delete_tag": "Delete Tag",
         "delete_tag_name": "Delete \"{{name}}\" tag",
         "destination_address_book": "Destination address book",
+        "discard": "discard",
         "discard_changes": "DISCARD CHANGES",
         "edit": "Edit",
         "edit_access": "Edit access",
@@ -181,6 +219,7 @@
         "folder_name": "Folder name",
         "include_shared_folders": "Include shared address books",
         "move": "Move",
+        "newContactGroup": "New contact group",
         "new_address_book": "New address Book",
         "new_contact": "New contact",
         "new_contact_created": "New contact created",
@@ -222,9 +261,6 @@
     "members_list_item_component": {
         "button": {
             "remove": "remove"
-        },
-        "label": {
-            "manager": "Manager"
         }
     },
     "message": {
@@ -276,6 +312,11 @@
     },
     "search": {
         "shared_folders_note": "Include shared address books in searches."
+    },
+    "secondaryBar": {
+        "contextualMenu": {
+            "new_contact_group_creation_action": "New Contact Group"
+        }
     },
     "section": {
         "field": {

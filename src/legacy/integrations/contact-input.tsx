@@ -155,7 +155,7 @@ export type ContactChipAction = Omit<ChipAction, 'onClick'> & {
 
 export type ContactInputProps = Pick<
 	ChipInputProps,
-	'placeholder' | 'background' | 'icon' | 'iconAction' | 'iconDisabled'
+	'icon' | 'iconAction' | 'placeholder' | 'background' | 'iconDisabled' | 'description' | 'hasError'
 > & {
 	onChange?: ContactInputOnChange;
 	defaultValue: Array<Contact>;
@@ -487,7 +487,21 @@ const ContactInputCore: FC<ContactInputProps> = ({
 				}
 				return chip;
 			}
-			return valueToAdd;
+			return {
+				...valueToAdd,
+				error: !isValidEmail(valueToAdd.email),
+				actions: [
+					{
+						id: 'action1',
+						label: isValidEmail(valueToAdd.email)
+							? t('label.edit_email', 'Edit E-mail')
+							: t('label.edit_invalid_email', 'E-mail is invalid, click to edit it'),
+						icon: 'EditOutline',
+						type: 'button',
+						onClick: () => editChip(valueToAdd, valueToAdd.id)
+					}
+				]
+			};
 		},
 		[editChip, isValidEmail, t]
 	);

@@ -37,7 +37,7 @@ describe('Member item', () => {
 		expect(
 			screen.getByRoleWithIcon('button', {
 				name: 'remove',
-				icon: TESTID_SELECTORS.ICONS.REMOVE_MEMBER
+				icon: TESTID_SELECTORS.icons.REMOVE_MEMBER
 			})
 		).toBeVisible();
 	});

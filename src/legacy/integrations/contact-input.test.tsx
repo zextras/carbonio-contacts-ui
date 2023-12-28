@@ -3,6 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
@@ -41,6 +42,7 @@ describe('Contact input', () => {
 		expect(within(dropdown).getByText(contact.email)).toBeVisible();
 		expect(within(dropdown).getByText(contact.first)).toBeVisible();
 	});
+
 	it('should render a dropdown with a contact group', async () => {
 		const contact = {
 			first: faker.person.firstName(),
@@ -59,6 +61,7 @@ describe('Contact input', () => {
 		const dropdown = await screen.findByTestId(TESTID_SELECTORS.DROPDOWN_LIST);
 		expect(within(dropdown).getByText(contact.first)).toBeVisible();
 	});
+
 	it('should render a dropdown with a contact group with an avatar', async () => {
 		const contact = {
 			first: faker.person.firstName(),

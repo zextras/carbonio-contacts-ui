@@ -4,29 +4,13 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-// FIXME decide a case convention and rename constants fields
-
-export const TESTID_SELECTORS = {
-	icons: {
-		EDIT_CHIP: 'icon: EditOutline',
-		EDIT_DL: 'icon: Edit2Outline',
-		EXPAND_DL: 'icon: ChevronDownOutline',
-		COLLAPSE_DL: 'icon: ChevronUpOutline',
-		FILTER_MEMBERS: 'icon: FunnelOutline',
-		ADD_MEMBERS: 'icon: Plus',
-		REMOVE_MEMBER: 'icon: Trash2Outline',
-		DUPLICATED_MEMBER: 'icon: AlertCircle',
-		CLOSE: 'icon: Close'
-	},
-	AVATAR: 'avatar',
-	MODAL: 'modal',
-	CONTACT_INPUT: 'contact-input',
-	CONTACT_INPUT_CHIP: 'default-chip',
-	DROPDOWN_LIST: 'dropdown-popper-list',
-	DL_MEMBERS_FILTER_INPUT: 'dl-members-filter-input',
-	MEMBERS_LIST_ITEM: 'member-list-item',
-	SNACKBAR: 'snackbar'
-};
+export const ICON_REGEXP = {
+	save: /icon: SaveOutline/i,
+	avatar: /icon: PeopleOutline/i,
+	plus: /icon: Plus/i,
+	trash: /icon: Trash2Outline/i,
+	duplicated: /icon: AlertCircle/i
+} as const;
 
 export const PALETTE = {
 	primary: {
@@ -129,6 +113,9 @@ export const PALETTE = {
 	}
 };
 
-export const TIMERS = { MODAL: { DELAY_OPEN: 1 } as const } as const;
-
-export const JEST_MOCKED_ERROR = 'jest mocked error';
+export const SELECTORS = {
+	dropdownList: 'dropdown-popper-list',
+	memberList: 'member-list',
+	contactInput: 'contact-group-contact-input',
+	contactInputChip: 'default-chip'
+};

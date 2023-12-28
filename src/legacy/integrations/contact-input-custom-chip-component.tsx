@@ -20,10 +20,9 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import type { ContactChipAction } from './contact-input';
-import { getDistributionList } from '../../api/get-distribution-list';
-import { getDistributionListMembers } from '../../api/get-distribution-list-members';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
 import type { DistributionList, DistributionListMembersPage } from '../../model/distribution-list';
+import { client } from '../../network/client';
 import type {
 	ContactInputOnChange,
 	ContactInputValue,
@@ -65,7 +64,7 @@ const getAllDistributionListMembers = async (
 	members: DistributionListMembersPage['members'] = [],
 	offset = 0
 ): Promise<Pick<DistributionListMembersPage, 'total' | 'members'>> => {
-	const response = await getDistributionListMembers(email, { limit: 100, offset });
+	const response = await client.getDistributionListMembers(email, { limit: 100, offset });
 	const newValue = members.concat(response.members);
 	if (response.more) {
 		return getAllDistributionListMembers(email, newValue, offset + response.members.length);
@@ -147,7 +146,7 @@ const useDistributionListFunctions = ({
 	}, [contactInputValue, members, email, id, more, offset, contactInputOnChange]);
 
 	const onShowMoreClick = useCallback(() => {
-		getDistributionListMembers(email, { limit: 100, offset }).then((result) => {
+		client.getDistributionListMembers(email, { limit: 100, offset }).then((result) => {
 			updateStates(result, false);
 		});
 	}, [email, offset, updateStates]);
@@ -198,7 +197,8 @@ const useDistributionListFunctions = ({
 	const loadMembers = useCallback(() => {
 		if (isChipItemDistributionList({ isGroup, email }) && !loadingRef.current) {
 			loadingRef.current = true;
-			getDistributionListMembers(email, { limit: 100 })
+			client
+				.getDistributionListMembers(email, { limit: 100 })
 				.then((result) => {
 					loadingRef.current = false;
 					updateStates(result, true);
@@ -315,7 +315,8 @@ export const ContactInputCustomChipComponent = ({
 
 	useEffect(() => {
 		if (isChipItemDistributionList({ email, isGroup })) {
-			getDistributionList(email)
+			client
+				.getDistributionList(email)
 				.then((response) => {
 					setDistributionList(response);
 				})

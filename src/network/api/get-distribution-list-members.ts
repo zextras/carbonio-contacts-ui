@@ -7,8 +7,8 @@ import { ErrorSoapBodyResponse, soapFetch } from '@zextras/carbonio-shell-ui';
 import { map } from 'lodash';
 
 import { GenericSoapPayload } from './types';
-import { NAMESPACES } from '../constants/api';
-import { DistributionListMembersPage } from '../model/distribution-list';
+import { NAMESPACES } from '../../constants/api';
+import { DistributionListMembersPage } from '../../model/distribution-list';
 
 export interface GetDistributionListMembersRequest
 	extends GenericSoapPayload<typeof NAMESPACES.account> {
