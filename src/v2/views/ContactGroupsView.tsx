@@ -9,6 +9,7 @@ import React from 'react';
 import { Container } from '@zextras/carbonio-design-system';
 
 import { ContactGroupsList } from '../components/ContactGroupsList';
+import { Displayer } from '../components/Displayer';
 import { DISPLAYER_WIDTH } from '../constants';
 import { useFindContactGroups } from '../hooks/useFindContactGroups';
 
@@ -37,7 +38,7 @@ export const ContactGroupsView = (): React.JSX.Element => {
 				borderRadius="none"
 				style={{ maxHeight: '100%' }}
 			>
-				{/* <Displayer /> */}
+				<Displayer />
 			</Container>
 		</Container>
 	);

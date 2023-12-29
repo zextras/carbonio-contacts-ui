@@ -10,11 +10,12 @@ import { faker } from '@faker-js/faker';
 
 import { ContactGroupsList } from './ContactGroupsList';
 import { screen, setup } from '../../utils/testUtils';
+import { EMPTY_LIST_HINT } from '../constants/tests';
 
 describe('Task list', () => {
 	test('Show a placeholder when the list is empty', async () => {
 		setup(<ContactGroupsList contactGroups={[]} />);
-		expect(await screen.findByText('emptyListPlaceholder')).toBeVisible();
+		expect(await screen.findByText(EMPTY_LIST_HINT)).toBeVisible();
 	});
 
 	test('Show list items if the list is not empty', async () => {

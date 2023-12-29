@@ -302,7 +302,8 @@
     "secondaryBar": {
         "contextualMenu": {
             "new_contact_group_creation_action": "New Contact Group"
-        }
+        },
+        "myContactGroups": "My Contact Groups"
     },
     "section": {
         "field": {

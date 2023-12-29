@@ -24,6 +24,7 @@ import { ListItemContent } from './ListItemContent';
 import { HoverBarContainer } from './StyledComponents';
 import { Text } from './Text';
 import { LIST_WIDTH } from '../constants';
+import { EMPTY_LIST_HINT } from '../constants/tests';
 import { useActiveItem } from '../hooks/useActiveItem';
 import { ContactGroup } from '../types/utils';
 
@@ -127,13 +128,13 @@ export const ContactGroupsList = ({
 			></Row>
 			<Divider color="gray3" />
 			<Container minHeight={0} maxHeight={'100%'}>
-				{(!isEmpty(items) && (
+				{!isEmpty(items) ? (
 					<ListV2 data-testid="main-list" background={'gray6'} onListBottom={onListBottom}>
 						{items}
 					</ListV2>
-				)) || (
+				) : (
 					<Text size={'small'} weight={'bold'} overflow={'break-word'} color={'secondary'} centered>
-						{'emptyListPlaceholder'}
+						{EMPTY_LIST_HINT}
 					</Text>
 				)}
 			</Container>

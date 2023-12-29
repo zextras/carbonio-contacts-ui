@@ -119,5 +119,10 @@ export const SELECTORS = {
 	dropdownList: 'dropdown-popper-list',
 	memberList: 'member-list',
 	contactInput: 'contact-group-contact-input',
-	contactInputChip: 'default-chip'
+	contactInputChip: 'default-chip',
+	listItemContent: 'list-item-content'
 };
+
+export const EMPTY_DISPLAYER_HINT = 'Stay in touch with your colleagues.';
+
+export const EMPTY_LIST_HINT = "It looks like there's nothing here.";
