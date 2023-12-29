@@ -349,7 +349,7 @@ describe('Edit DL Component', () => {
 				expect(screen.queryByText(errorMessage)).not.toBeInTheDocument();
 			});
 
-			it('should render AlertCircle error icon inside chip when the chip is a duplicated email and remove the icon error when duplicated item is removed from the members list', async () => {
+			it('should render AlertCircle error icon inside chip when the chip is a duplicated email', async () => {
 				const validMail = faker.internet.email();
 				const members = [validMail];
 				const { user } = setupTest(<EditDLComponent {...buildProps({ members })} />);
