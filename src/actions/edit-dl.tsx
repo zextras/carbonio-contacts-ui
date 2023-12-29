@@ -57,7 +57,7 @@ export const useActionEditDL = (): EditDLAction => {
 
 	return useMemo(
 		() => ({
-			id: ACTION_IDS.EDIT_DL,
+			id: ACTION_IDS.editDL,
 			label: t('action.edit_distribution_list', 'Edit distribution list'),
 			icon: 'Edit2Outline',
 			execute,

@@ -43,8 +43,7 @@ const LazyBoardView = lazy(
 );
 
 const LazyNewContactGroupBoardView = lazy(
-	() =>
-		import(/* webpackChunkName: "newContactGroupView" */ './v2/views/board/NewContactGroupBoard')
+	() => import(/* webpackChunkName: "newContactGroupView" */ './views/board/NewContactGroupBoard')
 );
 
 const AppView = (): React.JSX.Element => (
@@ -63,7 +62,7 @@ const BoardView = (props: EditViewProps): React.JSX.Element => (
 	</Suspense>
 );
 
-const NewContactGroupBoardView = () => (
+const NewContactGroupBoardView = (): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
 		<LazyNewContactGroupBoardView />
 	</Suspense>

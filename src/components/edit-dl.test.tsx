@@ -57,10 +57,10 @@ describe('Edit DL Component', () => {
 	it('should show the input to filter an address', () => {
 		const placeholder = 'Filter an address';
 		setupTest(<EditDLComponent {...buildProps()} />);
-		const searchInput = screen.getByTestId(TESTID_SELECTORS.DL_MEMBERS_FILTER_INPUT);
+		const searchInput = screen.getByTestId(TESTID_SELECTORS.dlMembersFilterInput);
 		const searchInputTextBox = within(searchInput).getByRole('textbox', { name: placeholder });
 		expect(searchInputTextBox).toBeVisible();
-		const searchInputIcon = within(searchInput).getByTestId(TESTID_SELECTORS.icons.FILTER_MEMBERS);
+		const searchInputIcon = within(searchInput).getByTestId(TESTID_SELECTORS.icons.filterMembers);
 		expect(searchInputIcon).toBeVisible();
 	});
 
@@ -84,7 +84,7 @@ describe('Edit DL Component', () => {
 			});
 
 			expect(
-				screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.ADD_MEMBERS })
+				screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
 			).toBeDisabled();
 		});
 
@@ -120,7 +120,7 @@ describe('Edit DL Component', () => {
 			});
 
 			expect(
-				screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.ADD_MEMBERS })
+				screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
 			).toBeEnabled();
 		});
 
@@ -140,7 +140,7 @@ describe('Edit DL Component', () => {
 				// run timers of dropdown
 				jest.runOnlyPendingTimers();
 			});
-			await screen.findByTestId(TESTID_SELECTORS.DROPDOWN_LIST);
+			await screen.findByTestId(TESTID_SELECTORS.dropdownList);
 			const dropdownOption = await screen.findByText(email);
 			expect(dropdownOption).toBeVisible();
 			await act(async () => {
@@ -278,7 +278,7 @@ describe('Edit DL Component', () => {
 				});
 
 				const closeButton = screen.getByRoleWithIcon('button', {
-					icon: TESTID_SELECTORS.icons.CLOSE
+					icon: TESTID_SELECTORS.icons.close
 				});
 
 				await user.click(closeButton);
@@ -360,8 +360,8 @@ describe('Edit DL Component', () => {
 				});
 
 				expect(
-					within(screen.getByTestId(TESTID_SELECTORS.CONTACT_INPUT_CHIP)).getByTestId(
-						TESTID_SELECTORS.icons.DUPLICATED_MEMBER
+					within(screen.getByTestId(TESTID_SELECTORS.contactInputChip)).getByTestId(
+						TESTID_SELECTORS.icons.duplicatedMember
 					)
 				).toBeVisible();
 			});
@@ -391,7 +391,7 @@ describe('Edit DL Component', () => {
 				<EditDLComponent {...buildProps({ members, onRemoveMember: onRemoveFn })} />
 			);
 			const listItem = screen
-				.getAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM)
+				.getAllByTestId(TESTID_SELECTORS.membersListItem)
 				.find((item) => within(item).queryByText(members[4]) !== null);
 			expect(listItem).toBeDefined();
 			await user.click(within(listItem as HTMLElement).getByRole('button', { name: 'remove' }));
@@ -409,7 +409,7 @@ describe('Edit DL Component', () => {
 			const { user } = setupTest(<EditDLComponent {...buildProps({ members })} />);
 			await user.type(screen.getByRole('textbox', { name: 'Filter an address' }), 'mari');
 			await waitFor(() =>
-				expect(screen.getAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM)).toHaveLength(2)
+				expect(screen.getAllByTestId(TESTID_SELECTORS.membersListItem)).toHaveLength(2)
 			);
 			expect(screen.getByText(members[1])).toBeVisible();
 			expect(screen.getByText(members[3])).toBeVisible();
@@ -427,13 +427,11 @@ describe('Edit DL Component', () => {
 			const searchInput = screen.getByRole('textbox', { name: 'Filter an address' });
 			await user.type(searchInput, 'mari');
 			await waitFor(() =>
-				expect(screen.getAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM)).toHaveLength(2)
+				expect(screen.getAllByTestId(TESTID_SELECTORS.membersListItem)).toHaveLength(2)
 			);
 			await user.clear(searchInput);
 			await waitFor(() =>
-				expect(screen.getAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM)).toHaveLength(
-					members.length
-				)
+				expect(screen.getAllByTestId(TESTID_SELECTORS.membersListItem)).toHaveLength(members.length)
 			);
 		});
 	});

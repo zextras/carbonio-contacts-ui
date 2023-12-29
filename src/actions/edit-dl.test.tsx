@@ -40,12 +40,12 @@ describe('useActionEditDL', () => {
 		});
 
 		act(() => {
-			jest.advanceTimersByTime(TIMERS.MODAL.DELAY_OPEN);
+			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 
 		expect(await screen.findByText(dlEmail)).toBeVisible();
 		expect(screen.getByText(`Edit "${dlDisplayName}"`)).toBeVisible();
-		expect(screen.getAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM)).toHaveLength(members.length);
+		expect(screen.getAllByTestId(TESTID_SELECTORS.membersListItem)).toHaveLength(members.length);
 	});
 
 	it('should show the email in the title if the dl has no display name', async () => {
@@ -59,7 +59,7 @@ describe('useActionEditDL', () => {
 		});
 
 		act(() => {
-			jest.advanceTimersByTime(TIMERS.MODAL.DELAY_OPEN);
+			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 
 		expect(await screen.findByText(dlEmail)).toBeVisible();
@@ -79,7 +79,7 @@ describe('useActionEditDL', () => {
 		});
 
 		act(() => {
-			jest.advanceTimersByTime(TIMERS.MODAL.DELAY_OPEN);
+			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 
 		expect(await screen.findByText(dlEmail)).toBeVisible();
@@ -88,7 +88,7 @@ describe('useActionEditDL', () => {
 			await user.type(contactInput.textbox, `${newMember},`);
 		});
 		await user.click(contactInput.addMembersIcon);
-		await screen.findByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM);
+		await screen.findByTestId(TESTID_SELECTORS.membersListItem);
 		await user.click(screen.getByRole('button', { name: /save/i }));
 		await waitForElementToBeRemoved(screen.queryByText(dlEmail));
 		expect(screen.queryByText(dlDisplayName)).not.toBeInTheDocument();
@@ -105,7 +105,7 @@ describe('useActionEditDL', () => {
 		});
 
 		act(() => {
-			jest.advanceTimersByTime(TIMERS.MODAL.DELAY_OPEN);
+			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 
 		expect(await screen.findByText(dlEmail)).toBeVisible();

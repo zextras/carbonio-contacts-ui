@@ -171,7 +171,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	placeholder,
 	background = 'gray5',
 	dragAndDropEnabled = false,
-	chipDisplayName = CHIP_DISPLAY_NAME_VALUES.LABEL,
+	chipDisplayName = CHIP_DISPLAY_NAME_VALUES.label,
 	extraAccountsIds,
 	contactActions,
 	...rest
@@ -487,21 +487,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 				}
 				return chip;
 			}
-			return {
-				...valueToAdd,
-				error: !isValidEmail(valueToAdd.email),
-				actions: [
-					{
-						id: 'action1',
-						label: isValidEmail(valueToAdd.email)
-							? t('label.edit_email', 'Edit E-mail')
-							: t('label.edit_invalid_email', 'E-mail is invalid, click to edit it'),
-						icon: 'EditOutline',
-						type: 'button',
-						onClick: () => editChip(valueToAdd, valueToAdd.id)
-					}
-				]
-			};
+			return valueToAdd;
 		},
 		[editChip, isValidEmail, t]
 	);

@@ -107,7 +107,7 @@ describe('Contact input integration wrapper', () => {
 				act(() => {
 					jest.runOnlyPendingTimers();
 				});
-				await screen.findByTestId(TESTID_SELECTORS.DROPDOWN_LIST);
+				await screen.findByTestId(TESTID_SELECTORS.dropdownList);
 				expect(await screen.findByText(contact3.email)).toBeVisible();
 				await act(async () => {
 					await user.keyboard('{Enter}');
@@ -133,7 +133,7 @@ describe('Contact input integration wrapper', () => {
 				act(() => {
 					jest.runOnlyPendingTimers();
 				});
-				const dropdown = await screen.findByTestId(TESTID_SELECTORS.DROPDOWN_LIST);
+				const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
 				const dropdownItem = await within(dropdown).findByText(contact.email);
 				await user.click(dropdownItem);
 				expect(onChange).toHaveBeenCalledWith([
@@ -209,7 +209,7 @@ describe('Contact input integration wrapper', () => {
 
 				await waitFor(() => expect(handler).toHaveBeenCalled());
 				expect(
-					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.EXPAND_DL })
+					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL })
 				).toBeVisible();
 			});
 
@@ -227,7 +227,7 @@ describe('Contact input integration wrapper', () => {
 					);
 
 					const editButton = screen.queryByRoleWithIcon('button', {
-						icon: TESTID_SELECTORS.icons.EDIT_DL
+						icon: TESTID_SELECTORS.icons.editDL
 					});
 					expect(editButton).not.toBeInTheDocument();
 					expect(handler).not.toHaveBeenCalled();
@@ -250,7 +250,7 @@ describe('Contact input integration wrapper', () => {
 
 					await waitFor(() => expect(handler).toHaveBeenCalled());
 					expect(
-						screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.EDIT_DL })
+						screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.editDL })
 					).not.toBeInTheDocument();
 				});
 
@@ -268,7 +268,7 @@ describe('Contact input integration wrapper', () => {
 
 					await waitFor(() => expect(handler).toHaveBeenCalled());
 					expect(
-						await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.EDIT_DL })
+						await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.editDL })
 					).toBeVisible();
 				});
 
@@ -286,15 +286,15 @@ describe('Contact input integration wrapper', () => {
 
 					await waitFor(() => expect(handler).toHaveBeenCalled());
 					const editButton = await screen.findByRoleWithIcon('button', {
-						icon: TESTID_SELECTORS.icons.EDIT_DL
+						icon: TESTID_SELECTORS.icons.editDL
 					});
 					await user.click(editButton);
 					await screen.findByText(`Edit "${distributionList.displayName}"`);
 					act(() => {
-						jest.advanceTimersByTime(TIMERS.MODAL.DELAY_OPEN);
+						jest.advanceTimersByTime(TIMERS.modal.delayOpen);
 					});
 					expect(
-						within(screen.getByTestId(TESTID_SELECTORS.MODAL)).getByText(
+						within(screen.getByTestId(TESTID_SELECTORS.modal)).getByText(
 							`Edit "${distributionList.displayName}"`
 						)
 					).toBeVisible();
@@ -314,7 +314,7 @@ describe('Contact input integration wrapper', () => {
 
 					await waitFor(() => expect(handler).toHaveBeenCalled());
 					expect(
-						screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.EDIT_DL })
+						screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.editDL })
 					).not.toBeInTheDocument();
 				});
 			});
@@ -331,7 +331,7 @@ describe('Contact input integration wrapper', () => {
 					/>
 				);
 				expect(
-					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.CLOSE })
+					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.close })
 				).toBeVisible();
 			});
 
@@ -345,7 +345,7 @@ describe('Contact input integration wrapper', () => {
 					/>
 				);
 				expect(
-					screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.EDIT_CHIP })
+					screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.editChip })
 				).not.toBeInTheDocument();
 			});
 
@@ -380,7 +380,7 @@ describe('Contact input integration wrapper', () => {
 				act(() => {
 					jest.runOnlyPendingTimers();
 				});
-				const dropdown = await screen.findByTestId(TESTID_SELECTORS.DROPDOWN_LIST);
+				const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
 				const dropdownItem = await within(dropdown).findByText(RegExp(invalidChipItem.email));
 				await user.click(dropdownItem);
 				expect(onChange).toHaveBeenCalledWith([

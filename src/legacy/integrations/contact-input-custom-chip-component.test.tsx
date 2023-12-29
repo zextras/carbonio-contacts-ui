@@ -69,7 +69,7 @@ describe('Contact input custom chip component', () => {
 				isGroup={false}
 				contactInputOnChange={jest.fn()}
 				contactInputValue={[]}
-				chipDisplayName={CHIP_DISPLAY_NAME_VALUES.LABEL}
+				chipDisplayName={CHIP_DISPLAY_NAME_VALUES.label}
 			/>
 		);
 		const defaultChipLabel = screen.getByText(user1.label);
@@ -85,7 +85,7 @@ describe('Contact input custom chip component', () => {
 				isGroup={false}
 				contactInputOnChange={jest.fn()}
 				contactInputValue={[]}
-				chipDisplayName={CHIP_DISPLAY_NAME_VALUES.EMAIL}
+				chipDisplayName={CHIP_DISPLAY_NAME_VALUES.email}
 			/>
 		);
 		const defaultChipEmail = screen.getByText(user1.email);
@@ -102,7 +102,7 @@ describe('Contact input custom chip component', () => {
 				isGroup={false}
 				contactInputOnChange={jest.fn()}
 				contactInputValue={[]}
-				chipDisplayName={CHIP_DISPLAY_NAME_VALUES.EMAIL}
+				chipDisplayName={CHIP_DISPLAY_NAME_VALUES.email}
 			/>
 		);
 		expect(screen.getByText(user1.email)).toBeVisible();
@@ -204,17 +204,17 @@ describe('Contact input custom chip component', () => {
 			/>
 		);
 
-		let chevronExpandAction = await screen.findByTestId(TESTID_SELECTORS.icons.EXPAND_DL);
+		let chevronExpandAction = await screen.findByTestId(TESTID_SELECTORS.icons.expandDL);
 		await user.click(chevronExpandAction);
 		await screen.findByText(user1.email);
 
-		const chevronCollapseAction = await screen.findByTestId(TESTID_SELECTORS.icons.COLLAPSE_DL);
+		const chevronCollapseAction = await screen.findByTestId(TESTID_SELECTORS.icons.collapseDL);
 		await user.click(chevronCollapseAction);
 
 		await waitFor(() => {
 			expect(screen.queryByText(user1.email)).not.toBeInTheDocument();
 		});
-		chevronExpandAction = await screen.findByTestId(TESTID_SELECTORS.icons.EXPAND_DL);
+		chevronExpandAction = await screen.findByTestId(TESTID_SELECTORS.icons.expandDL);
 		await user.click(chevronExpandAction);
 		expect(handler).toHaveBeenCalledTimes(2);
 		expect(await screen.findByText(user2Mail)).toBeVisible();
@@ -237,7 +237,7 @@ describe('Contact input custom chip component', () => {
 			/>
 		);
 
-		const chevronAction = await screen.findByTestId(TESTID_SELECTORS.icons.EXPAND_DL);
+		const chevronAction = await screen.findByTestId(TESTID_SELECTORS.icons.expandDL);
 		await user.click(chevronAction);
 		await waitFor(() => expect(getMembersHandler).toHaveBeenCalled());
 		expect(await screen.findByText(user1.email)).toBeVisible();
@@ -296,7 +296,7 @@ describe('Contact input custom chip component', () => {
 		);
 
 		await waitFor(() => expect(getDistributionListHandler).toHaveBeenCalled());
-		const chevronAction = await screen.findByTestId(TESTID_SELECTORS.icons.EXPAND_DL);
+		const chevronAction = await screen.findByTestId(TESTID_SELECTORS.icons.expandDL);
 
 		await user.click(chevronAction);
 		await waitFor(() => expect(getMembersHandler).toHaveBeenCalled());
@@ -355,7 +355,7 @@ describe('Contact input custom chip component', () => {
 		);
 
 		await waitFor(() => expect(getDistributionListHandler).toHaveBeenCalled());
-		const chevronAction = await screen.findByTestId(TESTID_SELECTORS.icons.EXPAND_DL);
+		const chevronAction = await screen.findByTestId(TESTID_SELECTORS.icons.expandDL);
 		await user.click(chevronAction);
 		await waitFor(() => expect(getMembersHandler).toHaveBeenCalled());
 		await screen.findByText(user1.email);
@@ -384,7 +384,7 @@ describe('Contact input custom chip component', () => {
 			/>
 		);
 		await waitFor(() => expect(getDistributionListHandler).toHaveBeenCalled());
-		const chevronAction = await screen.findByTestId(TESTID_SELECTORS.icons.EXPAND_DL);
+		const chevronAction = await screen.findByTestId(TESTID_SELECTORS.icons.expandDL);
 		await user.click(chevronAction);
 		await waitFor(() => expect(getMembersHandler).toHaveBeenCalled());
 		await screen.findByText(user1.email);
@@ -437,7 +437,7 @@ describe('Contact input custom chip component', () => {
 			/>
 		);
 		await waitFor(() => expect(getDistributionListHandler).toHaveBeenCalled());
-		const chevronAction = await screen.findByTestId(TESTID_SELECTORS.icons.EXPAND_DL);
+		const chevronAction = await screen.findByTestId(TESTID_SELECTORS.icons.expandDL);
 		await user.click(chevronAction);
 		await waitFor(() => expect(getMembersHandler).toHaveBeenCalled());
 		await screen.findByText(user1.email);

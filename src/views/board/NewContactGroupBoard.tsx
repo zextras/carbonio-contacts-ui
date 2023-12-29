@@ -23,11 +23,11 @@ import { remove, some, uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { MemberListItemComponent } from '../../../components/member-list-item';
-import { CHIP_DISPLAY_NAME_VALUES } from '../../../constants/contact-input';
-import ContactInput from '../../../integrations/contact-input';
-import { client } from '../../../network/client';
+import { MemberListItemComponent } from '../../components/member-list-item';
 import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../constants';
+import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
+import { ContactInput } from '../../legacy/integrations/contact-input';
+import { client } from '../../network/client';
 
 const List = styled(ListV2)`
 	min-height: 0;
@@ -324,10 +324,10 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 						iconDisabled={noValidChip}
 						description={contactInputDescription}
 						hasError={contactInputValue.length > 0 && noValidChip}
-						chipDisplayName={CHIP_DISPLAY_NAME_VALUES.EMAIL}
+						chipDisplayName={CHIP_DISPLAY_NAME_VALUES.email}
 					/>
 				</Container>
-				<List data-testid={'member-list'}>{listItems}</List>
+				<List data-testid={'members-list'}>{listItems}</List>
 			</Container>
 		</Container>
 	);

@@ -297,17 +297,17 @@ export const ContactInputCustomChipComponent = ({
 	email,
 	isGroup,
 	label,
-	chipDisplayName = CHIP_DISPLAY_NAME_VALUES.LABEL,
+	chipDisplayName = CHIP_DISPLAY_NAME_VALUES.label,
 	contactActions,
 	actions,
 	...rest
 }: CustomChipProps): ReactElement => {
 	const [distributionList, setDistributionList] = useState<DistributionList>();
 	const _label = useMemo(() => {
-		if (label && chipDisplayName === CHIP_DISPLAY_NAME_VALUES.LABEL) {
+		if (label && chipDisplayName === CHIP_DISPLAY_NAME_VALUES.label) {
 			return label;
 		}
-		if (email && chipDisplayName === CHIP_DISPLAY_NAME_VALUES.EMAIL) {
+		if (email && chipDisplayName === CHIP_DISPLAY_NAME_VALUES.email) {
 			return email;
 		}
 		return label || email || '';

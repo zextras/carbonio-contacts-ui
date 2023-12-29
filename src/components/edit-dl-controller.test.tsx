@@ -58,7 +58,7 @@ describe('EditDLControllerComponent', () => {
 		setupTest(<EditDLControllerComponent {...buildProps({ email: dlEmail })} />);
 		await screen.findByText(dlEmail);
 		await screen.findByText(`Member list ${members.length}`);
-		expect(screen.getAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM)).toHaveLength(members.length);
+		expect(screen.getAllByTestId(TESTID_SELECTORS.membersListItem)).toHaveLength(members.length);
 	});
 
 	it('should show an error snackbar and call the close callback when the members cannot be loaded', async () => {
@@ -81,9 +81,9 @@ describe('EditDLControllerComponent', () => {
 			await user.type(screen.getByRole('textbox', { name: /type an address/i }), emails.join(','));
 		});
 		await user.click(
-			screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.ADD_MEMBERS })
+			screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
 		);
-		const memberElements = await screen.findAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM);
+		const memberElements = await screen.findAllByTestId(TESTID_SELECTORS.membersListItem);
 		expect(memberElements).toHaveLength(2);
 		expect(screen.getByText(emails[0])).toBeVisible();
 		expect(screen.getByText(emails[2])).toBeVisible();
@@ -97,14 +97,14 @@ describe('EditDLControllerComponent', () => {
 		const { user } = setupTest(<EditDLControllerComponent {...buildProps({ email: dlEmail })} />);
 		const emails = ['john.doe@test.com', 'mary.white@example.org'];
 		await screen.findByText(dlEmail);
-		await screen.findAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM);
+		await screen.findAllByTestId(TESTID_SELECTORS.membersListItem);
 		await act(async () => {
 			await user.type(screen.getByRole('textbox', { name: /type an address/i }), emails.join(','));
 		});
 		await user.click(
-			screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.ADD_MEMBERS })
+			screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
 		);
-		const memberElements = screen.getAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM);
+		const memberElements = screen.getAllByTestId(TESTID_SELECTORS.membersListItem);
 		expect(memberElements).toHaveLength(12);
 		expect(within(memberElements[0]).getByText(emails[0])).toBeVisible();
 		expect(within(memberElements[1]).getByText(emails[1])).toBeVisible();
@@ -118,7 +118,7 @@ describe('EditDLControllerComponent', () => {
 
 		const { user } = setupTest(<EditDLControllerComponent {...buildProps({ email: dlEmail })} />);
 		await screen.findByText(dlEmail);
-		const membersListItems = await screen.findAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM);
+		const membersListItems = await screen.findAllByTestId(TESTID_SELECTORS.membersListItem);
 		const memberToRemoveElement = membersListItems.find(
 			(element) => within(element).queryByText(members[4]) !== null
 		) as HTMLElement;
@@ -135,12 +135,12 @@ describe('EditDLControllerComponent', () => {
 		]);
 		const { user } = setupTest(<EditDLControllerComponent {...buildProps({ email: dlEmail })} />);
 		await screen.findByText(dlEmail);
-		await screen.findAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM);
+		await screen.findAllByTestId(TESTID_SELECTORS.membersListItem);
 
 		const newMember = 'newmember@example.com';
 		await user.type(screen.getByRole('textbox', { name: /type an address/i }), newMember);
 		await user.click(
-			screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.ADD_MEMBERS })
+			screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
 		);
 		expect(screen.getByText(/member list 4/i)).toBeVisible();
 	});
@@ -151,7 +151,7 @@ describe('EditDLControllerComponent', () => {
 		registerGetDistributionListMembersHandler(members);
 		const { user } = setupTest(<EditDLControllerComponent {...buildProps({ email: dlEmail })} />);
 		await screen.findByText(dlEmail);
-		const membersListItems = await screen.findAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM);
+		const membersListItems = await screen.findAllByTestId(TESTID_SELECTORS.membersListItem);
 		const memberToRemoveElement = membersListItems.find(
 			(element) => within(element).queryByText(members[1]) !== null
 		) as HTMLElement;
@@ -166,18 +166,18 @@ describe('EditDLControllerComponent', () => {
 		registerGetDistributionListMembersHandler(members);
 		const { user } = setupTest(<EditDLControllerComponent {...buildProps({ email: dlEmail })} />);
 		await screen.findByText(dlEmail);
-		const membersListItems = await screen.findAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM);
+		const membersListItems = await screen.findAllByTestId(TESTID_SELECTORS.membersListItem);
 		await act(async () => {
 			await user.type(getDLContactInput().textbox, `${duplicatedEmail},`);
 		});
-		expect(screen.getByTestId(TESTID_SELECTORS.icons.DUPLICATED_MEMBER)).toBeVisible();
+		expect(screen.getByTestId(TESTID_SELECTORS.icons.duplicatedMember)).toBeVisible();
 		const memberToRemoveElement = membersListItems.find(
 			(element) => within(element).queryByText(duplicatedEmail) !== null
 		) as HTMLElement;
 		await user.click(within(memberToRemoveElement).getByRole('button', { name: /remove/i }));
 		await waitFor(() => expect(memberToRemoveElement).not.toBeInTheDocument());
 		await waitFor(() =>
-			expect(screen.queryByTestId(TESTID_SELECTORS.icons.DUPLICATED_MEMBER)).not.toBeInTheDocument()
+			expect(screen.queryByTestId(TESTID_SELECTORS.icons.duplicatedMember)).not.toBeInTheDocument()
 		);
 	});
 
@@ -189,7 +189,7 @@ describe('EditDLControllerComponent', () => {
 		registerGetDistributionListMembersHandler(members);
 		const { user } = setupTest(<EditDLControllerComponent {...buildProps({ email: dlEmail })} />);
 		await screen.findByText(dlEmail);
-		const membersListItems = await screen.findAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM);
+		const membersListItems = await screen.findAllByTestId(TESTID_SELECTORS.membersListItem);
 		await act(async () => {
 			await user.type(getDLContactInput().textbox, `${duplicatedEmail},`);
 		});
@@ -208,7 +208,7 @@ describe('EditDLControllerComponent', () => {
 				registerGetDistributionListMembersHandler([faker.internet.email()]);
 				setupTest(<EditDLControllerComponent {...buildProps({ email: dlEmail })} />);
 				await screen.findByText(dlEmail);
-				await screen.findAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM);
+				await screen.findAllByTestId(TESTID_SELECTORS.membersListItem);
 				expect(screen.getByRole('button', { name: 'cancel' })).toBeEnabled();
 			});
 
@@ -232,7 +232,7 @@ describe('EditDLControllerComponent', () => {
 				registerGetDistributionListMembersHandler([faker.internet.email()]);
 				setupTest(<EditDLControllerComponent {...buildProps({ email: dlEmail })} />);
 				await screen.findByText(dlEmail);
-				await screen.findAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM);
+				await screen.findAllByTestId(TESTID_SELECTORS.membersListItem);
 				expect(screen.getByRole('button', { name: 'save' })).toBeVisible();
 			});
 
@@ -241,7 +241,7 @@ describe('EditDLControllerComponent', () => {
 				registerGetDistributionListMembersHandler([faker.internet.email()]);
 				setupTest(<EditDLControllerComponent {...buildProps({ email: dlEmail })} />);
 				await screen.findByText(dlEmail);
-				await screen.findAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM);
+				await screen.findAllByTestId(TESTID_SELECTORS.membersListItem);
 				expect(screen.getByRole('button', { name: 'save' })).toBeDisabled();
 			});
 
@@ -252,11 +252,11 @@ describe('EditDLControllerComponent', () => {
 					<EditDLControllerComponent {...buildProps({ email: dlEmail })} />
 				);
 				await screen.findByText(dlEmail);
-				await screen.findAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM);
+				await screen.findAllByTestId(TESTID_SELECTORS.membersListItem);
 				const newMember = 'newmember@example.com';
 				await user.type(screen.getByRole('textbox', { name: /type an address/i }), newMember);
 				await user.click(
-					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.ADD_MEMBERS })
+					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
 				);
 				await waitFor(() => expect(screen.getByRole('button', { name: 'save' })).toBeEnabled());
 			});
@@ -268,7 +268,7 @@ describe('EditDLControllerComponent', () => {
 					<EditDLControllerComponent {...buildProps({ email: dlEmail })} />
 				);
 				await screen.findByText(dlEmail);
-				await screen.findAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM);
+				await screen.findAllByTestId(TESTID_SELECTORS.membersListItem);
 				await user.click(screen.getByRole('button', { name: /remove/i }));
 				await waitFor(() => expect(screen.getByRole('button', { name: 'save' })).toBeEnabled());
 			});
@@ -281,7 +281,7 @@ describe('EditDLControllerComponent', () => {
 					<EditDLControllerComponent {...buildProps({ email: dlEmail })} />
 				);
 				await screen.findByText(dlEmail);
-				const listItems = await screen.findAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM);
+				const listItems = await screen.findAllByTestId(TESTID_SELECTORS.membersListItem);
 				const initialMemberItem = listItems.find(
 					(item) => within(item).queryByText(initialMember) !== null
 				) as HTMLElement;
@@ -289,7 +289,7 @@ describe('EditDLControllerComponent', () => {
 				await waitFor(() => expect(screen.getByRole('button', { name: 'save' })).toBeEnabled());
 				await user.type(screen.getByRole('textbox', { name: /type an address/i }), initialMember);
 				await user.click(
-					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.ADD_MEMBERS })
+					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
 				);
 				await waitFor(() => expect(screen.getByRole('button', { name: 'save' })).toBeDisabled());
 			});
@@ -303,11 +303,11 @@ describe('EditDLControllerComponent', () => {
 					<EditDLControllerComponent {...buildProps({ email: dlEmail })} />
 				);
 				await screen.findByText(dlEmail);
-				await screen.findAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM);
+				await screen.findAllByTestId(TESTID_SELECTORS.membersListItem);
 				await user.click(screen.getByRole('button', { name: /remove/i }));
 				const button = screen.getByRole('button', { name: 'save' });
 				await user.click(button);
-				await screen.findByTestId(TESTID_SELECTORS.SNACKBAR);
+				await screen.findByTestId(TESTID_SELECTORS.snackbar);
 				expect(handler).toHaveBeenCalled();
 			});
 
@@ -323,7 +323,7 @@ describe('EditDLControllerComponent', () => {
 					/>
 				);
 				await screen.findByText(dlEmail);
-				await screen.findAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM);
+				await screen.findAllByTestId(TESTID_SELECTORS.membersListItem);
 				await user.click(screen.getByRole('button', { name: /remove/i }));
 				const button = screen.getByRole('button', { name: 'save' });
 				await user.click(button);
@@ -340,11 +340,11 @@ describe('EditDLControllerComponent', () => {
 					<EditDLControllerComponent {...buildProps({ email: dlEmail, onSave })} />
 				);
 				await screen.findByText(dlEmail);
-				await screen.findAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM);
+				await screen.findAllByTestId(TESTID_SELECTORS.membersListItem);
 				await user.click(screen.getByRole('button', { name: /remove/i }));
 				const button = screen.getByRole('button', { name: 'save' });
 				await user.click(button);
-				await screen.findByTestId(TESTID_SELECTORS.SNACKBAR);
+				await screen.findByTestId(TESTID_SELECTORS.snackbar);
 				expect(onSave).toHaveBeenCalled();
 			});
 
@@ -360,7 +360,7 @@ describe('EditDLControllerComponent', () => {
 					/>
 				);
 				await screen.findByText(dlEmail);
-				await screen.findAllByTestId(TESTID_SELECTORS.MEMBERS_LIST_ITEM);
+				await screen.findAllByTestId(TESTID_SELECTORS.membersListItem);
 				await user.click(screen.getByRole('button', { name: /remove/i }));
 				const button = screen.getByRole('button', { name: 'save' });
 				await user.click(button);

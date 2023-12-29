@@ -4,28 +4,31 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-// FIXME decide a case convention and rename constants fields
-
 export const TESTID_SELECTORS = {
 	icons: {
-		EDIT_CHIP: 'icon: EditOutline',
-		EDIT_DL: 'icon: Edit2Outline',
-		EXPAND_DL: 'icon: ChevronDownOutline',
-		COLLAPSE_DL: 'icon: ChevronUpOutline',
-		FILTER_MEMBERS: 'icon: FunnelOutline',
-		ADD_MEMBERS: 'icon: Plus',
-		REMOVE_MEMBER: 'icon: Trash2Outline',
-		DUPLICATED_MEMBER: 'icon: AlertCircle',
-		CLOSE: 'icon: Close'
+		save: /icon: SaveOutline/i,
+		trash: /icon: Trash2Outline/i,
+		avatar: /icon: PeopleOutline/i,
+		editChip: 'icon: EditOutline',
+		editDL: 'icon: Edit2Outline',
+		expandDL: 'icon: ChevronDownOutline',
+		collapseDL: 'icon: ChevronUpOutline',
+		filterMembers: 'icon: FunnelOutline',
+		addMembers: 'icon: Plus',
+		removeMembers: 'icon: Trash2Outline',
+		duplicatedMember: 'icon: AlertCircle',
+		close: 'icon: Close'
 	},
-	AVATAR: 'avatar',
-	MODAL: 'modal',
-	CONTACT_INPUT: 'contact-input',
-	CONTACT_INPUT_CHIP: 'default-chip',
-	DROPDOWN_LIST: 'dropdown-popper-list',
-	DL_MEMBERS_FILTER_INPUT: 'dl-members-filter-input',
-	MEMBERS_LIST_ITEM: 'member-list-item',
-	SNACKBAR: 'snackbar'
+	avatar: 'avatar',
+	modal: 'modal',
+	contactInput: 'contact-input',
+	cgContactInput: 'contact-group-contact-input',
+	contactInputChip: 'default-chip',
+	dropdownList: 'dropdown-popper-list',
+	dlMembersFilterInput: 'dl-members-filter-input',
+	membersList: 'members-list',
+	membersListItem: 'member-list-item',
+	snackbar: 'snackbar'
 };
 
 export const PALETTE = {
@@ -129,6 +132,6 @@ export const PALETTE = {
 	}
 };
 
-export const TIMERS = { MODAL: { DELAY_OPEN: 1 } as const } as const;
+export const TIMERS = { modal: { delayOpen: 1 } as const } as const;
 
 export const JEST_MOCKED_ERROR = 'jest mocked error';

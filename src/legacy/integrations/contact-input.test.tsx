@@ -38,7 +38,7 @@ describe('Contact input', () => {
 			// run timers of dropdown
 			jest.runOnlyPendingTimers();
 		});
-		const dropdown = await screen.findByTestId(TESTID_SELECTORS.DROPDOWN_LIST);
+		const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
 		expect(within(dropdown).getByText(contact.email)).toBeVisible();
 		expect(within(dropdown).getByText(contact.first)).toBeVisible();
 	});
@@ -58,7 +58,7 @@ describe('Contact input', () => {
 			// run timers of dropdown
 			jest.runOnlyPendingTimers();
 		});
-		const dropdown = await screen.findByTestId(TESTID_SELECTORS.DROPDOWN_LIST);
+		const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
 		expect(within(dropdown).getByText(contact.first)).toBeVisible();
 	});
 
@@ -77,8 +77,8 @@ describe('Contact input', () => {
 			// run timers of dropdown
 			jest.runOnlyPendingTimers();
 		});
-		const dropdown = await screen.findByTestId(TESTID_SELECTORS.DROPDOWN_LIST);
-		const avatar = within(dropdown).getByTestId(TESTID_SELECTORS.AVATAR);
+		const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
+		const avatar = within(dropdown).getByTestId(TESTID_SELECTORS.avatar);
 		expect(within(dropdown).getByText(contact.first)).toBeVisible();
 		expect(within(avatar).queryByText('?')).not.toBeInTheDocument();
 	});

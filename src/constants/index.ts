@@ -7,7 +7,8 @@ export const CONTACTS_ROUTE = 'contacts';
 export const CONTACTS_APP_ID = 'carbonio-contacts-ui';
 
 export const ACTION_IDS = {
-	EDIT_DL: 'dl-edit-action'
+	editDL: 'dl-edit-action'
 } as const;
 
 export const NEW_CONTACT_GROUP_BOARD_ID = 'new-contact-group-board';
+export const CONTACT_GROUP_NAME_MAX_LENGTH = 256;

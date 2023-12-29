@@ -29,7 +29,7 @@ describe('Member item', () => {
 	it('should show the avatar', () => {
 		const email = faker.internet.email();
 		setupTest(<MemberListItemComponent {...buildProps({ email })} />);
-		expect(screen.getByTestId(TESTID_SELECTORS.AVATAR)).toBeVisible();
+		expect(screen.getByTestId(TESTID_SELECTORS.avatar)).toBeVisible();
 	});
 
 	it('should show the remove action button', () => {
@@ -37,7 +37,7 @@ describe('Member item', () => {
 		expect(
 			screen.getByRoleWithIcon('button', {
 				name: 'remove',
-				icon: TESTID_SELECTORS.icons.REMOVE_MEMBER
+				icon: TESTID_SELECTORS.icons.removeMembers
 			})
 		).toBeVisible();
 	});

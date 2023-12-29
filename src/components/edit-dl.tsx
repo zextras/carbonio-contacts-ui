@@ -237,7 +237,7 @@ export const EditDLComponent: FC<EditDLComponentProps> = ({
 				// @ts-ignore
 				onChange={onContactInputChange}
 				iconDisabled={!isAddMembersAllowed}
-				chipDisplayName={CHIP_DISPLAY_NAME_VALUES.EMAIL}
+				chipDisplayName={CHIP_DISPLAY_NAME_VALUES.email}
 				description={contactInputErrorDescription}
 				hasError={isOnlyInvalidContacts}
 			/>

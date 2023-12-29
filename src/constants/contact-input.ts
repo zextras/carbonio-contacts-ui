@@ -5,6 +5,6 @@
  */
 
 export const CHIP_DISPLAY_NAME_VALUES = {
-	LABEL: 'label',
-	EMAIL: 'email'
+	label: 'label',
+	email: 'email'
 } as const;
