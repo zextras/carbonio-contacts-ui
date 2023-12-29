@@ -125,9 +125,6 @@ describe.skip('Contact Slice', () => {
 			const prevContact = store.getState().contacts.contacts[7][0];
 			const updatedContact = {
 				...prevContact
-				// company: faker.company.companyName(),
-				// firstName: faker.person.firstName(),
-				// lastName: faker.person.lastName()
 			};
 			await store.dispatch(modifyContact({ updatedContact, editContact: prevContact }));
 			expect(store.getState().contacts.contacts[7]).toBeDefined();
@@ -146,58 +143,36 @@ describe.skip('Contact Slice', () => {
 			const prevContact = store.getState().contacts.contacts[7][0];
 			const updatedContact = {
 				...prevContact,
-				// company: faker.company.companyName(),
-				// firstName: faker.person.firstName(),
-				// lastName: faker.person.lastName(),
 				address: {
 					workAddress: {
-						// city: faker.address.city(),
-						// country: faker.address.country(),
-						// postalCode: faker.address.zipCode(),
-						// state: faker.address.state(),
-						// street: faker.address.streetName(),
 						type: 'work'
 					},
 					homeAddress: {
-						// city: faker.address.city(),
-						// country: faker.address.country(),
-						// postalCode: faker.address.zipCode(),
-						// state: faker.address.state(),
-						// street: faker.address.streetName(),
 						type: 'home'
 					}
 				},
 				phone: {
 					homePhone: {
-						// number: faker.phone.phoneNumber(),
 						type: 'home'
 					},
 					mobilePhone: {
-						// number: faker.phone.phoneNumber(),
 						type: 'mobile'
 					},
 					mobilePhone2: {
-						// number: faker.phone.phoneNumber(),
 						type: 'mobile'
 					}
 				},
 				URL: {
 					homeURL: {
 						type: 'home'
-						// url: faker.internet.url()
 					},
 					otherURL: {
 						type: 'other'
-						// url: faker.internet.url()
 					}
 				},
 				email: {
-					email: {
-						// mail: faker.internet.email()
-					},
-					email2: {
-						// mail: faker.internet.email()
-					}
+					email: {},
+					email2: {}
 				}
 			};
 			await store.dispatch(modifyContact({ prevContact, updatedContact }));
