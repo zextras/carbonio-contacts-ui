@@ -29,15 +29,18 @@ function spyUseBoardHooks(updateBoardFn?: jest.Mock, closeBoardFn?: jest.Mock): 
 		closeBoard: closeBoardFn ?? jest.fn()
 	});
 }
+
 beforeAll(() => {
 	spyUseBoardHooks();
 });
+
 describe('New contact group board', () => {
 	function getContactInput(): HTMLElement {
 		return screen.getByRole('textbox', {
 			name: `Type an address, click ‘+’ to add to the group`
 		});
 	}
+
 	describe('Default visualization', () => {
 		it('should show fields for group name and addresses list', () => {
 			setupTest(<NewContactGroupBoard />);
@@ -479,6 +482,7 @@ describe('New contact group board', () => {
 			await screen.findByTestId(TESTID_SELECTORS.membersList);
 			expect(screen.getByText('Addresses: 1')).toBeVisible();
 		});
+
 		describe('Plus button and contact input', () => {
 			it('should enable the plus button when at least a valid chip is in the contact input', async () => {
 				const newEmail = faker.internet.email();
@@ -589,6 +593,7 @@ describe('New contact group board', () => {
 				'should disable the plus button when the user add a contact with invalid mail from the dropdown'
 			);
 		});
+
 		describe('Contact group add and remove members', () => {
 			it('should render the valid email on the list', async () => {
 				const email = faker.internet.email();
