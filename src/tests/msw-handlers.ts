@@ -55,10 +55,6 @@ export const registerGetDistributionListMembersHandler = (
 		ReturnType<GetDistributionListMembersHandler>,
 		Parameters<GetDistributionListMembersHandler>
 	>(async (req, res, ctx) => {
-		const reqBody = await req.json<{
-			Body: { GetDistributionListMembersRequest: GetDistributionListMembersRequest };
-		}>();
-		const { limit } = reqBody.Body.GetDistributionListMembersRequest;
 		if (error) {
 			return res(
 				ctx.json<ErrorSoapResponse>({
@@ -76,6 +72,11 @@ export const registerGetDistributionListMembersHandler = (
 				})
 			);
 		}
+
+		const reqBody = await req.json<{
+			Body: { GetDistributionListMembersRequest: GetDistributionListMembersRequest };
+		}>();
+		const { limit } = reqBody.Body.GetDistributionListMembersRequest;
 
 		return res(
 			ctx.json(

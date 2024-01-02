@@ -36,7 +36,7 @@ export const ContactInputIntegrationWrapper = ({
 				type: 'button',
 				icon: actionEditDL.icon,
 				isVisible: (contact: DistributionList | ContactInputItem) =>
-					isDistributionList(contact) && contact.isOwner,
+					isDistributionList(contact) && actionEditDL.canExecute(contact),
 				onClick: (contact: DistributionList | ContactInputItem): void => {
 					isDistributionList(contact) &&
 						actionEditDL.execute({
