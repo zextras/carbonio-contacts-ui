@@ -378,7 +378,7 @@ describe('getMembersPartition', () => {
 		expect(result).toEqual({ membersToAdd: [], membersToRemove: [] });
 	});
 
-	it('should return an object with empty members the two parameters contain the same values', () => {
+	it('should return an object with empty members if the two parameters contain the same values', () => {
 		const originalMembers: Array<string> = ['john.doe@domain.org', 'mario.rossi@dominio.it'];
 		const updatedMembers: Array<string> = ['mario.rossi@dominio.it', 'john.doe@domain.org'];
 		const result = getMembersPartition(originalMembers, updatedMembers);
