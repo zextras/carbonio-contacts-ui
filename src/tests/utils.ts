@@ -11,6 +11,7 @@ export const getDLContactInput = (): {
 	textbox: HTMLElement;
 	addMembersIcon: HTMLElement;
 } => {
+	// TODO check if it is possible to add more criteria beside the test-id
 	const contactInput = screen.getByTestId(TESTID_SELECTORS.contactInput);
 	const contactInputTextBox = within(contactInput).getByRole('textbox', {
 		name: /Type an address, click '\+' to add to the distribution list/i

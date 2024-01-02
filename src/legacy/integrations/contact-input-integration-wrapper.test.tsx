@@ -119,7 +119,7 @@ describe('Contact input integration wrapper', () => {
 			});
 
 			// FIXME(characterization test): edit action should be available also on chip created from dropdown
-			it('should not set edit action on chip to create when valid chip is created by clicking on a dropdown option', async () => {
+			it('should set edit action on chip to create when valid chip is created by clicking on a dropdown option', async () => {
 				const onChange = jest.fn();
 				registerFullAutocompleteHandler([contact]);
 				const { user } = setupTest(
@@ -137,7 +137,7 @@ describe('Contact input integration wrapper', () => {
 				const dropdownItem = await within(dropdown).findByText(contact.email);
 				await user.click(dropdownItem);
 				expect(onChange).toHaveBeenCalledWith([
-					expect.not.objectContaining({ actions: [editValidChipAction] })
+					expect.objectContaining({ actions: [editValidChipAction] })
 				]);
 			});
 		});
@@ -366,7 +366,7 @@ describe('Contact input integration wrapper', () => {
 				]);
 			});
 
-			it('should not set edit action on invalid chip to create when chip is created by clicking on a dropdown option', async () => {
+			it('should set edit action on invalid chip to create when chip is created by clicking on a dropdown option', async () => {
 				const onChange = jest.fn();
 				registerFullAutocompleteHandler([{ ...invalidChipItem, first: invalidChipItem.email }]);
 				const { user } = setupTest(
@@ -384,7 +384,7 @@ describe('Contact input integration wrapper', () => {
 				const dropdownItem = await within(dropdown).findByText(RegExp(invalidChipItem.email));
 				await user.click(dropdownItem);
 				expect(onChange).toHaveBeenCalledWith([
-					expect.not.objectContaining({ actions: [editInvalidChipAction] })
+					expect.objectContaining({ actions: [editInvalidChipAction] })
 				]);
 			});
 		});
