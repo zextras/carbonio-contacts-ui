@@ -19,6 +19,7 @@ import { useActions } from '../hooks/useActions';
 type ListItemContentProps = {
 	id: string;
 	title: string;
+	members: string[];
 	membersCount: number;
 	visible?: boolean;
 	onClick?: (id: string) => void;
@@ -35,10 +36,11 @@ export const ListItemContent = React.memo<ListItemContentProps>(
 		visible,
 		id,
 		title,
-		membersCount
+		membersCount,
+		members
 	}) => {
 		const [t] = useTranslation();
-		const actions = useActions({ id, title });
+		const actions = useActions({ id, title, members });
 
 		const clickHandler = useCallback<React.MouseEventHandler<HTMLDivElement>>(() => {
 			onClick?.(id);

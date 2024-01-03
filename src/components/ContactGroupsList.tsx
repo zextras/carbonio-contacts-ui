@@ -97,6 +97,7 @@ export const ContactGroupsList = ({
 							id={contactGroup.id}
 							onClick={setActive}
 							membersCount={contactGroup.members.length}
+							members={contactGroup.members}
 						/>
 					)}
 				</StyledListItem>
