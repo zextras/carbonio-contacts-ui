@@ -9,12 +9,12 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 
 import { ContactGroupsList } from './ContactGroupsList';
-import { screen, setup } from '../../utils/testUtils';
+import { setupTest, screen } from '../../carbonio-ui-commons/test/test-setup';
 import { EMPTY_LIST_HINT } from '../constants/tests';
 
 describe('Task list', () => {
 	test('Show a placeholder when the list is empty', async () => {
-		setup(<ContactGroupsList contactGroups={[]} />);
+		setupTest(<ContactGroupsList contactGroups={[]} />);
 		expect(await screen.findByText(EMPTY_LIST_HINT)).toBeVisible();
 	});
 
@@ -31,7 +31,7 @@ describe('Task list', () => {
 				members: []
 			}
 		];
-		setup(<ContactGroupsList contactGroups={contactGroups} />);
+		setupTest(<ContactGroupsList contactGroups={contactGroups} />);
 		expect(screen.getByText('hello')).toBeVisible();
 		expect(screen.getByText('test')).toBeVisible();
 	});

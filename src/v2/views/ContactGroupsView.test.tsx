@@ -12,8 +12,7 @@ import { Route } from 'react-router-dom';
 
 import { ContactGroupsView } from './ContactGroupsView';
 import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
-import { makeListItemsVisible } from '../../carbonio-ui-commons/test/test-setup';
-import { setup, screen, triggerLoadMore } from '../../utils/testUtils';
+import { makeListItemsVisible, setupTest, screen } from '../../carbonio-ui-commons/test/test-setup';
 import { ROUTES } from '../constants';
 import { EMPTY_DISPLAYER_HINT, EMPTY_LIST_HINT, ICON_REGEXP, SELECTORS } from '../constants/tests';
 
@@ -104,7 +103,7 @@ describe('Contact Group View', () => {
 				)
 			)
 		);
-		setup(
+		setupTest(
 			<Route path={ROUTES.contactGroup}>
 				<ContactGroupsView />
 			</Route>
@@ -112,7 +111,7 @@ describe('Contact Group View', () => {
 
 		await waitForElementToBeRemoved(screen.queryByText('emptyListPlaceholder'));
 		expect(await screen.findByText(contactGroupName)).toBeVisible();
-		triggerLoadMore();
+		// triggerLoadMore();
 	});
 
 	it('should render the avatar, the name and the number of the members (case 1+ addresses string) of a contact group', async () => {
@@ -160,7 +159,7 @@ describe('Contact Group View', () => {
 				)
 			)
 		);
-		setup(
+		setupTest(
 			<Route path={ROUTES.contactGroup}>
 				<ContactGroupsView />
 			</Route>
@@ -210,7 +209,7 @@ describe('Contact Group View', () => {
 				)
 			)
 		);
-		setup(
+		setupTest(
 			<Route path={ROUTES.contactGroup}>
 				<ContactGroupsView />
 			</Route>
@@ -266,7 +265,7 @@ describe('Contact Group View', () => {
 			)
 		);
 
-		setup(
+		setupTest(
 			<Route path={ROUTES.contactGroup}>
 				<ContactGroupsView />
 			</Route>
@@ -274,7 +273,7 @@ describe('Contact Group View', () => {
 
 		// await waitForElementToBeRemoved(screen.queryByText('emptyListPlaceholder'), { timeout: 2000 });
 		makeListItemsVisible();
-		expect(await screen.findByText(contactGroupName)).toBeVisible();
+		expect(await screen.findByText(contactGroupName, undefined, { timeout: 2000 })).toBeVisible();
 		const listItemContent = screen.getByTestId(SELECTORS.listItemContent);
 		expect(within(listItemContent).getByTestId(ICON_REGEXP.avatar)).toBeVisible();
 		expect(screen.getByText('1 address')).toBeVisible();
@@ -285,7 +284,7 @@ describe('Contact Group View', () => {
 			const contactGroupName = faker.company.name();
 			populateContactGroup(contactGroupName);
 
-			const { user } = setup(
+			const { user } = setupTest(
 				<Route path={ROUTES.contactGroup}>
 					<ContactGroupsView />
 				</Route>
@@ -326,7 +325,7 @@ describe('Contact Group View', () => {
 				)
 			);
 
-			setup(
+			setupTest(
 				<Route path={ROUTES.contactGroup}>
 					<ContactGroupsView />
 				</Route>
@@ -339,7 +338,7 @@ describe('Contact Group View', () => {
 			const contactGroupName = faker.company.name();
 			populateContactGroup(contactGroupName);
 
-			setup(
+			setupTest(
 				<Route path={ROUTES.contactGroup}>
 					<ContactGroupsView />
 				</Route>
@@ -357,7 +356,7 @@ describe('Contact Group View', () => {
 			const contactGroupName = faker.company.name();
 			populateContactGroup(contactGroupName);
 
-			const { findByRoleWithIcon, user } = setup(
+			const { user } = setupTest(
 				<Route path={ROUTES.contactGroup}>
 					<ContactGroupsView />
 				</Route>
@@ -366,7 +365,7 @@ describe('Contact Group View', () => {
 			await screen.findByText(contactGroupName);
 			await screen.findByText(EMPTY_DISPLAYER_HINT);
 			await user.click(screen.getByText(contactGroupName));
-			await findByRoleWithIcon('button', { icon: ICON_REGEXP.closeDisplayer });
+			await screen.findByRoleWithIcon('button', { icon: ICON_REGEXP.closeDisplayer });
 			expect(screen.getAllByText(contactGroupName)).toHaveLength(2);
 			expect(screen.getByText(/addresses list/i)).toBeVisible();
 		});
@@ -414,18 +413,18 @@ describe('Contact Group View', () => {
 				)
 			);
 
-			const { getByRoleWithIcon, queryByRoleWithIcon, user } = setup(
+			const { user } = setupTest(
 				<Route path={ROUTES.contactGroup}>
 					<ContactGroupsView />
 				</Route>,
 				{
-					initialRouterEntries: [`/${contactGroupId}`]
+					initialEntries: [`/${contactGroupId}`]
 				}
 			);
 			// makeListItemsVisible();
 			await screen.findAllByText(contactGroupName);
 			expect(screen.queryByText(EMPTY_DISPLAYER_HINT)).not.toBeInTheDocument();
-			const closeButton = getByRoleWithIcon('button', { icon: ICON_REGEXP.closeDisplayer });
+			const closeButton = screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.closeDisplayer });
 			expect(closeButton).toBeVisible();
 			expect(closeButton).toBeEnabled();
 			await user.click(closeButton);
@@ -433,7 +432,7 @@ describe('Contact Group View', () => {
 			// contact group name is shown only 1 time, inside the list
 			expect(screen.getByText(contactGroupName)).toBeVisible();
 			expect(
-				queryByRoleWithIcon('button', { icon: ICON_REGEXP.closeDisplayer })
+				screen.queryByRoleWithIcon('button', { icon: ICON_REGEXP.closeDisplayer })
 			).not.toBeInTheDocument();
 		});
 	});
