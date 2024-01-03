@@ -7,8 +7,8 @@
 import React from 'react';
 
 import { Displayer } from './Displayer';
-import { setupTest, screen } from '../../carbonio-ui-commons/test/test-setup';
-import { EMPTY_DISPLAYER_HINT, ICON_REGEXP } from '../constants/tests';
+import { setupTest, screen } from '../carbonio-ui-commons/test/test-setup';
+import { EMPTY_DISPLAYER_HINT, ICON_REGEXP } from '../v2/constants/tests';
 
 describe('Displayer', () => {
 	it('should show suggestions if no contact group is active', async () => {

@@ -10,7 +10,7 @@ import { Container } from '@zextras/carbonio-design-system';
 
 import { ContactGroupDisplayer } from './ContactGroupDisplayer';
 import { EmptyDisplayer } from './EmptyDisplayer';
-import { useActiveItem } from '../../hooks/useActiveItem';
+import { useActiveItem } from '../hooks/useActiveItem';
 
 export const Displayer = (): React.JSX.Element => {
 	const { activeItem } = useActiveItem();

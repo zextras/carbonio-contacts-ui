@@ -7,7 +7,7 @@ import React from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
 
-import { useActions } from '../../hooks/useActions';
+import { useActions } from '../hooks/useActions';
 
 interface ContactGroupDisplayerProps {
 	contactGroup: any;

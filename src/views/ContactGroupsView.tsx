@@ -8,9 +8,9 @@ import React from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
 
+import { ContactGroupsList } from '../components/ContactGroupsList';
+import { Displayer } from '../components/Displayer';
 import { useFindContactGroups } from '../hooks/useFindContactGroups';
-import { ContactGroupsList } from '../v2/components/ContactGroupsList';
-import { Displayer } from '../v2/components/Displayer';
 import { DISPLAYER_WIDTH } from '../v2/constants';
 
 export const ContactGroupsView = (): React.JSX.Element => {

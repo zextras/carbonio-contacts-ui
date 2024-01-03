@@ -23,10 +23,10 @@ import styled, { css, type DefaultTheme, type SimpleInterpolation } from 'styled
 import { ListItemContent } from './ListItemContent';
 import { HoverBarContainer } from './StyledComponents';
 import { Text } from './Text';
-import { useActiveItem } from '../../hooks/useActiveItem';
-import { LIST_WIDTH } from '../constants';
-import { EMPTY_LIST_HINT } from '../constants/tests';
-import { ContactGroup } from '../types/utils';
+import { useActiveItem } from '../hooks/useActiveItem';
+import { LIST_WIDTH } from '../v2/constants';
+import { EMPTY_LIST_HINT } from '../v2/constants/tests';
+import { ContactGroup } from '../v2/types/utils';
 
 export type ContactGroupsListProps = {
 	contactGroups: Array<ContactGroup>;

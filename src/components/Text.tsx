@@ -13,7 +13,7 @@ import {
 } from '@zextras/carbonio-design-system';
 import styled, { type SimpleInterpolation } from 'styled-components';
 
-import { MakeOptional } from '../types/utils';
+import { MakeOptional } from '../v2/types/utils';
 
 interface TextExtendedProps {
 	width?: string;
