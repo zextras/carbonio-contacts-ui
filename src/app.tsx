@@ -32,10 +32,10 @@ const LazyAppView = lazy(
 	() => import(/* webpackChunkName: "contacts-view" */ './legacy/views/app-view')
 );
 const LazySecondaryBarView = lazy(
-	() => import(/* webpackChunkName: "secondaryBarView" */ './v2/views/SecondaryBarView')
+	() => import(/* webpackChunkName: "secondaryBarView" */ './views/SecondaryBarView')
 );
 const LazyGroupsAppView = lazy(
-	() => import(/* webpackChunkName: "groupsAppView" */ './v2/views/GroupsAppView')
+	() => import(/* webpackChunkName: "groupsAppView" */ './views/GroupsAppView')
 );
 const LazySettingsView = lazy(
 	() => import(/* webpackChunkName: "settings-view" */ './legacy/views/settings/settings-view')

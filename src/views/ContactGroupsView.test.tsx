@@ -11,10 +11,15 @@ import { rest } from 'msw';
 import { Route } from 'react-router-dom';
 
 import { ContactGroupsView } from './ContactGroupsView';
-import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
-import { makeListItemsVisible, setupTest, screen } from '../../carbonio-ui-commons/test/test-setup';
-import { ROUTES } from '../constants';
-import { EMPTY_DISPLAYER_HINT, EMPTY_LIST_HINT, ICON_REGEXP, SELECTORS } from '../constants/tests';
+import { getSetupServer } from '../carbonio-ui-commons/test/jest-setup';
+import { makeListItemsVisible, setupTest, screen } from '../carbonio-ui-commons/test/test-setup';
+import { ROUTES } from '../v2/constants';
+import {
+	EMPTY_DISPLAYER_HINT,
+	EMPTY_LIST_HINT,
+	ICON_REGEXP,
+	SELECTORS
+} from '../v2/constants/tests';
 
 describe('Contact Group View', () => {
 	function populateContactGroup(contactGroupName = faker.company.name()): void {
