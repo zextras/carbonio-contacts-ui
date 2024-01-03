@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-export const createContactGroup = (title: string, members: Array<string>): Promise<any> =>
+export const createContactGroup = (title: string, members: Array<string>): Promise<unknown> =>
 	fetch(`/service/soap/CreateContactRequest`, {
 		method: 'POST',
 		headers: {
