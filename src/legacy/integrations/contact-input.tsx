@@ -498,7 +498,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 							: t('label.edit_invalid_email', 'E-mail is invalid, click to edit it'),
 						icon: 'EditOutline',
 						type: 'button',
-						onClick: () => editChip(valueToAdd, valueToAdd.id)
+						onClick: () => editChip(valueToAdd.email, valueToAdd.id)
 					}
 				]
 			};
