@@ -6,8 +6,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { FIND_CONTACT_GROUP_LIMIT } from '../constants';
+import { ContactGroup } from '../model/contact-group';
 import { client } from '../network/client';
-import { ContactGroup } from '../v2/types/utils';
 
 type UseFindContactGroupsReturnType = {
 	contactGroups: Array<ContactGroup>;

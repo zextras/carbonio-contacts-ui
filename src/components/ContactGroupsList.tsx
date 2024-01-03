@@ -26,7 +26,7 @@ import { Text } from './Text';
 import { LIST_WIDTH } from '../constants';
 import { EMPTY_LIST_HINT } from '../constants/tests';
 import { useActiveItem } from '../hooks/useActiveItem';
-import { ContactGroup } from '../v2/types/utils';
+import { ContactGroup } from '../model/contact-group';
 
 export type ContactGroupsListProps = {
 	contactGroups: Array<ContactGroup>;

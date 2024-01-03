@@ -13,7 +13,8 @@ import {
 } from '@zextras/carbonio-design-system';
 import styled, { type SimpleInterpolation } from 'styled-components';
 
-import { MakeOptional } from '../v2/types/utils';
+type Maybe<T> = T | null;
+type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 
 interface TextExtendedProps {
 	width?: string;
