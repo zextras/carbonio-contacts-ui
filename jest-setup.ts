@@ -15,10 +15,12 @@ import {
 	getFailOnConsoleDefaultConfig
 } from './src/carbonio-ui-commons/test/jest-setup';
 import { registerRestHandler } from './src/carbonio-ui-commons/test/mocks/network/msw/handlers';
-import { handleGetDistributionListMembersRequest } from './src/tests/msw/handle-get-distribution-list-members-request';
+import { JEST_MOCKED_ERROR } from './src/constants/tests';
+import { handleGetDistributionListMembersRequest } from './src/legacy/tests/msw/handle-get-distribution-list-members-request';
 
 failOnConsole({
-	...getFailOnConsoleDefaultConfig()
+	...getFailOnConsoleDefaultConfig(),
+	silenceMessage: (message): boolean => message.includes(JEST_MOCKED_ERROR)
 });
 
 beforeAll(() => {
