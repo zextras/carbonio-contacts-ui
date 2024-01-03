@@ -13,8 +13,8 @@ import { ContextualMenu } from './ContextualMenu';
 import { ListItemHoverBar } from './ListItemHoverBar';
 import { HoverContainer, ListItemContainer } from './StyledComponents';
 import { Text } from './Text';
+import { useActions } from '../../hooks/useActions';
 import { LIST_ITEM_HEIGHT } from '../constants';
-import { useActions } from '../hooks/useActions';
 
 type ListItemContentProps = {
 	id: string;

@@ -23,9 +23,9 @@ import styled, { css, type DefaultTheme, type SimpleInterpolation } from 'styled
 import { ListItemContent } from './ListItemContent';
 import { HoverBarContainer } from './StyledComponents';
 import { Text } from './Text';
+import { useActiveItem } from '../../hooks/useActiveItem';
 import { LIST_WIDTH } from '../constants';
 import { EMPTY_LIST_HINT } from '../constants/tests';
-import { useActiveItem } from '../hooks/useActiveItem';
 import { ContactGroup } from '../types/utils';
 
 export type ContactGroupsListProps = {

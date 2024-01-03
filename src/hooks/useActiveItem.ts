@@ -8,7 +8,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { useNavigation, type UseNavigationReturnType } from './useNavigation';
-import { ContactGroupsPathParams } from '../types/utils';
+import { ContactGroupsPathParams } from '../v2/types/utils';
 
 type UseActiveItemReturnType = {
 	activeItem: string;

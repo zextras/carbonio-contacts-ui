@@ -7,7 +7,7 @@ import { useCallback } from 'react';
 
 import { usePushHistoryCallback, useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
 
-import { GROUPS_ROUTE } from '../constants';
+import { GROUPS_ROUTE } from '../v2/constants';
 
 export type UseNavigationReturnType = {
 	navigateTo: (path: string, options?: { replace?: boolean }) => void;
