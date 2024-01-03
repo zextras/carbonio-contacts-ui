@@ -596,6 +596,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 					{ code: 'NumpadEnter', ctrlKey: false },
 					{ key: ',', ctrlKey: false }
 				]}
+				// FIXME: remove ts-ignore when contact-input types are fixed
 				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-ignore
 				ChipComponent={ChipComponent}
