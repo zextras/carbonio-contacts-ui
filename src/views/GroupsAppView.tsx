@@ -11,7 +11,7 @@ import { trimEnd } from 'lodash';
 import { Route, useRouteMatch } from 'react-router-dom';
 
 import { ContactGroupsView } from './ContactGroupsView';
-import { ROUTES } from '../v2/constants';
+import { ROUTES } from '../constants';
 
 const AppView = (): React.JSX.Element => {
 	const { path } = useRouteMatch();

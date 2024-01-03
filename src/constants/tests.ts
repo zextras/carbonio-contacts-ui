@@ -17,7 +17,8 @@ export const TESTID_SELECTORS = {
 		addMembers: 'icon: Plus',
 		removeMembers: 'icon: Trash2Outline',
 		duplicatedMember: 'icon: AlertCircle',
-		close: 'icon: Close'
+		close: 'icon: Close',
+		closeDisplayer: /icon: CloseOutline/i
 	},
 	avatar: 'avatar',
 	modal: 'modal',
@@ -28,7 +29,8 @@ export const TESTID_SELECTORS = {
 	dlMembersFilterInput: 'dl-members-filter-input',
 	membersList: 'members-list',
 	membersListItem: 'member-list-item',
-	snackbar: 'snackbar'
+	snackbar: 'snackbar',
+	listItemContent: 'list-item-content'
 };
 
 export const PALETTE = {
@@ -135,3 +137,5 @@ export const PALETTE = {
 export const TIMERS = { modal: { delayOpen: 1 } as const } as const;
 
 export const JEST_MOCKED_ERROR = 'jest mocked error';
+export const EMPTY_DISPLAYER_HINT = 'Stay in touch with your colleagues.';
+export const EMPTY_LIST_HINT = "It looks like there's nothing here.";

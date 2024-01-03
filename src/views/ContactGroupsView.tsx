@@ -10,8 +10,8 @@ import { Container } from '@zextras/carbonio-design-system';
 
 import { ContactGroupsList } from '../components/ContactGroupsList';
 import { Displayer } from '../components/Displayer';
+import { DISPLAYER_WIDTH } from '../constants';
 import { useFindContactGroups } from '../hooks/useFindContactGroups';
-import { DISPLAYER_WIDTH } from '../v2/constants';
 
 export const ContactGroupsView = (): React.JSX.Element => {
 	const { contactGroups, hasMore, findMore } = useFindContactGroups();

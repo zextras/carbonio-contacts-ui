@@ -12,3 +12,11 @@ export const ACTION_IDS = {
 
 export const NEW_CONTACT_GROUP_BOARD_ID = 'new-contact-group-board';
 export const CONTACT_GROUP_NAME_MAX_LENGTH = 256;
+export const GROUPS_ROUTE = 'groups';
+export const ROUTES = {
+	contactGroup: '/:contactGroupId?'
+} as const;
+export const DISPLAYER_WIDTH = '60%';
+export const LIST_WIDTH = '40%';
+export const LIST_ITEM_HEIGHT = '4rem';
+export const FIND_CONTACT_GROUP_LIMIT = 100;

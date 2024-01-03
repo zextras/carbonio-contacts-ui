@@ -13,13 +13,8 @@ import { Route } from 'react-router-dom';
 import { ContactGroupsView } from './ContactGroupsView';
 import { getSetupServer } from '../carbonio-ui-commons/test/jest-setup';
 import { makeListItemsVisible, setupTest, screen } from '../carbonio-ui-commons/test/test-setup';
-import { ROUTES } from '../v2/constants';
-import {
-	EMPTY_DISPLAYER_HINT,
-	EMPTY_LIST_HINT,
-	ICON_REGEXP,
-	SELECTORS
-} from '../v2/constants/tests';
+import { ROUTES } from '../constants';
+import { EMPTY_DISPLAYER_HINT, EMPTY_LIST_HINT, TESTID_SELECTORS } from '../constants/tests';
 
 describe('Contact Group View', () => {
 	function populateContactGroup(contactGroupName = faker.company.name()): void {
@@ -173,8 +168,8 @@ describe('Contact Group View', () => {
 		// await waitForElementToBeRemoved(screen.queryByText('emptyListPlaceholder'));
 
 		expect(await screen.findByText(contactGroupName)).toBeVisible();
-		const listItemContent = screen.getByTestId(SELECTORS.listItemContent);
-		expect(within(listItemContent).getByTestId(ICON_REGEXP.avatar)).toBeVisible();
+		const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
+		expect(within(listItemContent).getByTestId(TESTID_SELECTORS.icons.avatar)).toBeVisible();
 		expect(screen.getByText('2 addresses')).toBeVisible();
 	});
 
@@ -224,8 +219,8 @@ describe('Contact Group View', () => {
 
 		expect(await screen.findByText(contactGroupName)).toBeVisible();
 		expect(screen.getByText('0 addresses')).toBeVisible();
-		const listItemContent = screen.getByTestId(SELECTORS.listItemContent);
-		expect(within(listItemContent).getByTestId(ICON_REGEXP.avatar)).toBeVisible();
+		const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
+		expect(within(listItemContent).getByTestId(TESTID_SELECTORS.icons.avatar)).toBeVisible();
 	});
 
 	it('should render the avatar, the name and the number of the members (case 1 address string) of a contact group', async () => {
@@ -279,8 +274,8 @@ describe('Contact Group View', () => {
 		// await waitForElementToBeRemoved(screen.queryByText('emptyListPlaceholder'), { timeout: 2000 });
 		makeListItemsVisible();
 		expect(await screen.findByText(contactGroupName, undefined, { timeout: 2000 })).toBeVisible();
-		const listItemContent = screen.getByTestId(SELECTORS.listItemContent);
-		expect(within(listItemContent).getByTestId(ICON_REGEXP.avatar)).toBeVisible();
+		const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
+		expect(within(listItemContent).getByTestId(TESTID_SELECTORS.icons.avatar)).toBeVisible();
 		expect(screen.getByText('1 address')).toBeVisible();
 	});
 
@@ -370,7 +365,7 @@ describe('Contact Group View', () => {
 			await screen.findByText(contactGroupName);
 			await screen.findByText(EMPTY_DISPLAYER_HINT);
 			await user.click(screen.getByText(contactGroupName));
-			await screen.findByRoleWithIcon('button', { icon: ICON_REGEXP.closeDisplayer });
+			await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.closeDisplayer });
 			expect(screen.getAllByText(contactGroupName)).toHaveLength(2);
 			expect(screen.getByText(/addresses list/i)).toBeVisible();
 		});
@@ -429,7 +424,9 @@ describe('Contact Group View', () => {
 			// makeListItemsVisible();
 			await screen.findAllByText(contactGroupName);
 			expect(screen.queryByText(EMPTY_DISPLAYER_HINT)).not.toBeInTheDocument();
-			const closeButton = screen.getByRoleWithIcon('button', { icon: ICON_REGEXP.closeDisplayer });
+			const closeButton = screen.getByRoleWithIcon('button', {
+				icon: TESTID_SELECTORS.icons.closeDisplayer
+			});
 			expect(closeButton).toBeVisible();
 			expect(closeButton).toBeEnabled();
 			await user.click(closeButton);
@@ -437,7 +434,7 @@ describe('Contact Group View', () => {
 			// contact group name is shown only 1 time, inside the list
 			expect(screen.getByText(contactGroupName)).toBeVisible();
 			expect(
-				screen.queryByRoleWithIcon('button', { icon: ICON_REGEXP.closeDisplayer })
+				screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.closeDisplayer })
 			).not.toBeInTheDocument();
 		});
 	});

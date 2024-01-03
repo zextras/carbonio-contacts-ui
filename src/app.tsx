@@ -19,14 +19,18 @@ import {
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
-import { CONTACTS_ROUTE, CONTACTS_APP_ID, NEW_CONTACT_GROUP_BOARD_ID } from './constants';
+import {
+	CONTACTS_ROUTE,
+	CONTACTS_APP_ID,
+	NEW_CONTACT_GROUP_BOARD_ID,
+	GROUPS_ROUTE
+} from './constants';
 import { ContactInputIntegrationWrapper } from './legacy/integrations/contact-input-integration-wrapper';
 import { StoreProvider } from './legacy/store/redux';
 import { EditViewProps } from './legacy/types/views/edit-view';
 import { SidebarProps } from './legacy/types/views/sidebar';
 import SidebarItems from './legacy/views/secondary-bar/sidebar';
 import { SyncDataHandler } from './legacy/views/secondary-bar/sync-data-handler';
-import { GROUPS_ROUTE } from './v2/constants';
 
 const LazyAppView = lazy(
 	() => import(/* webpackChunkName: "contacts-view" */ './legacy/views/app-view')

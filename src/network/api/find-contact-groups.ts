@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { FIND_CONTACT_GROUP_LIMIT } from '../../v2/constants';
+import { FIND_CONTACT_GROUP_LIMIT } from '../../constants';
 import { ContactGroup } from '../../v2/types/utils';
 
 export const findContactGroups = (

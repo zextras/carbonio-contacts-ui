@@ -16,7 +16,7 @@ import { addBoard, getBoardById, reopenBoards, setCurrentBoard } from '@zextras/
 import { noop } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { GROUPS_ROUTE } from '../v2/constants';
+import { GROUPS_ROUTE } from '../constants';
 
 function getSnackbarTitle(title: string): string {
 	return title.length > 50 ? title.substring(0, 50).concat('...') : title;

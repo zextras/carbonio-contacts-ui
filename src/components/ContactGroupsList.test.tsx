@@ -10,7 +10,7 @@ import { faker } from '@faker-js/faker';
 
 import { ContactGroupsList } from './ContactGroupsList';
 import { setupTest, screen } from '../carbonio-ui-commons/test/test-setup';
-import { EMPTY_LIST_HINT } from '../v2/constants/tests';
+import { EMPTY_LIST_HINT } from '../constants/tests';
 
 describe('Task list', () => {
 	test('Show a placeholder when the list is empty', async () => {
