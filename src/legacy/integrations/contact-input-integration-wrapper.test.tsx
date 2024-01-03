@@ -59,12 +59,6 @@ const distributionList = {
 	owners: [{ id: mockedAccount.id, name: mockedAccount.name }]
 } satisfies Partial<DistributionList>;
 
-const user1 = {
-	id: 'user1ID',
-	email: 'user1@mail.com',
-	label: 'user1'
-};
-
 describe('Contact input integration wrapper', () => {
 	describe('actions', () => {
 		describe.each([
@@ -118,7 +112,6 @@ describe('Contact input integration wrapper', () => {
 				]);
 			});
 
-			// FIXME(characterization test): edit action should be available also on chip created from dropdown
 			it('should set edit action on chip to create when valid chip is created by clicking on a dropdown option', async () => {
 				const onChange = jest.fn();
 				registerFullAutocompleteHandler([contact]);
