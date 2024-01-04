@@ -231,7 +231,7 @@ export const registerGetDistributionListHandler = (
 const createAutocompleteResponse = (match: Array<Match>): string => {
 	const matchString = match.map((item) => {
 		const full = item.full ?? [item.first ?? '', item.last ?? ''].join(' ');
-		const filledMatch: Record<keyof Match, string> = {
+		const filledMatch: Partial<Record<keyof Match, string>> = {
 			first: item.first ?? '',
 			last: item.last ?? '',
 			full,

@@ -5,14 +5,10 @@
  */
 import React, { useMemo } from 'react';
 
-import {
-	type ContactChipAction,
-	ContactInput,
-	ContactInputItem,
-	type ContactInputProps
-} from './contact-input';
+import { ContactInput, type ContactInputProps } from './contact-input';
 import { useActionEditDL } from '../../actions/edit-dl';
-import { DistributionList } from '../../model/distribution-list';
+import type { DistributionList } from '../../model/distribution-list';
+import type { ContactChipAction, ContactInputItem } from '../types/integrations';
 
 export type ContactInputIntegrationWrapperProps = Omit<ContactInputProps, 'contactActions'> & {
 	actions?: ContactInputProps['contactActions'];
