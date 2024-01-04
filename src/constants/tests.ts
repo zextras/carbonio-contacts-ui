@@ -10,7 +10,7 @@ export const TESTID_SELECTORS = {
 		trash: /icon: Trash2Outline/i,
 		avatar: /icon: PeopleOutline/i,
 		editChip: 'icon: EditOutline',
-		editDL: 'icon: Edit2Outline',
+		editDL: 'icon: Settings2Outline',
 		expandDL: 'icon: ChevronDownOutline',
 		collapseDL: 'icon: ChevronUpOutline',
 		filterMembers: 'icon: FunnelOutline',
@@ -18,7 +18,7 @@ export const TESTID_SELECTORS = {
 		removeMembers: 'icon: Trash2Outline',
 		duplicatedMember: 'icon: AlertCircle',
 		close: 'icon: Close',
-		closeDisplayer: /icon: CloseOutline/i
+		closeDisplayer: 'icon: CloseOutline'
 	},
 	avatar: 'avatar',
 	modal: 'modal',

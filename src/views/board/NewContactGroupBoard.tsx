@@ -309,9 +309,11 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 				<Container orientation={'horizontal'} height={'fit'} crossAlignment={'flex-start'}>
 					<ContactInput
 						data-testid={'contact-group-contact-input'}
+						// FIXME: remove ts-ignore when contact-input types are fixed
 						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 						// @ts-ignore
 						defaultValue={contactInputValue}
+						// FIXME: remove ts-ignore when contact-input types are fixed
 						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 						// @ts-ignore
 						onChange={contactInputOnChange}

@@ -338,7 +338,7 @@ export const ContactInputCustomChipComponent = ({
 				if (contactAction.isVisible(distributionList || { email, isGroup })) {
 					result.push({
 						...contactAction,
-						onClick: () => {
+						onClick: (): void => {
 							contactAction.onClick(distributionList || { email, isGroup });
 						}
 					});
@@ -346,7 +346,7 @@ export const ContactInputCustomChipComponent = ({
 
 				return result;
 			},
-			actions ?? []
+			[...(actions ?? [])]
 		);
 	}, [actions, contactActions, distributionList, email, isGroup]);
 

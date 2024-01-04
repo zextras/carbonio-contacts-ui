@@ -143,6 +143,7 @@ describe('Contact input integration wrapper', () => {
 						defaultValue={[
 							{
 								...contactChipItem,
+								// FIXME: remove ts-ignore when contact-input types are fixed
 								// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 								// @ts-ignore
 								actions: [customAction]
@@ -167,7 +168,7 @@ describe('Contact input integration wrapper', () => {
 						defaultValue={[
 							{
 								...distributionListChipItem,
-
+								// FIXME: remove ts-ignore when contact-input types are fixed
 								// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 								// @ts-ignore
 								actions: [customAction]
@@ -190,7 +191,7 @@ describe('Contact input integration wrapper', () => {
 						defaultValue={[
 							{
 								...distributionListChipItem,
-
+								// FIXME: remove ts-ignore when contact-input types are fixed
 								// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 								// @ts-ignore
 								actions: [customAction]
@@ -212,6 +213,7 @@ describe('Contact input integration wrapper', () => {
 
 					setupTest(
 						<ContactInputIntegrationWrapper
+							// FIXME: remove ts-ignore when contact-input types are fixed
 							// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 							// @ts-ignore
 							defaultValue={[contactChipItem]}
@@ -234,6 +236,7 @@ describe('Contact input integration wrapper', () => {
 
 					setupTest(
 						<ContactInputIntegrationWrapper
+							// FIXME: remove ts-ignore when contact-input types are fixed
 							// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 							// @ts-ignore
 							defaultValue={[distributionListChipItem]}
@@ -252,6 +255,7 @@ describe('Contact input integration wrapper', () => {
 
 					setupTest(
 						<ContactInputIntegrationWrapper
+							// FIXME: remove ts-ignore when contact-input types are fixed
 							// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 							// @ts-ignore
 							defaultValue={[distributionListChipItem]}
@@ -270,6 +274,7 @@ describe('Contact input integration wrapper', () => {
 
 					const { user } = setupTest(
 						<ContactInputIntegrationWrapper
+							// FIXME: remove ts-ignore when contact-input types are fixed
 							// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 							// @ts-ignore
 							defaultValue={[distributionListChipItem]}
@@ -298,6 +303,7 @@ describe('Contact input integration wrapper', () => {
 
 					setupTest(
 						<ContactInputIntegrationWrapper
+							// FIXME: remove ts-ignore when contact-input types are fixed
 							// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 							// @ts-ignore
 							defaultValue={[distributionListChipItem]}
@@ -317,6 +323,7 @@ describe('Contact input integration wrapper', () => {
 			it('should show remove action on value set from outside', () => {
 				setupTest(
 					<ContactInputIntegrationWrapper
+						// FIXME: remove ts-ignore when contact-input types are fixed
 						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 						// @ts-ignore
 						defaultValue={[invalidChipItem]}
@@ -331,6 +338,7 @@ describe('Contact input integration wrapper', () => {
 			it('should not show edit action if invalid contact is set from outside', () => {
 				setupTest(
 					<ContactInputIntegrationWrapper
+						// FIXME: remove ts-ignore when contact-input types are fixed
 						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 						// @ts-ignore
 						defaultValue={[invalidChipItem]}
