@@ -1,6 +1,7 @@
 {
     "action": {
         "delete_permanently": "Delete Permanently",
+        "edit_distribution_list": "Edit distribution list",
         "goto_folder": "Go to folder",
         "reset_filters": "Reset Filters",
         "search": "Search",
@@ -74,6 +75,24 @@
         "title7": "Stay in touch with your colleagues",
         "title8": "Send shared e-mail",
         "title9": "Click the trash icon to delete a contact."
+    },
+    "edit_dl_component": {
+        "error": {
+            "duplicated_address": "Address already present",
+            "duplicated_address_plural": "Addresses already present",
+            "invalid_address": "Invalid address",
+            "invalid_address_plural": "Invalid addresses",
+            "invalid_and_duplicated_addresses": "Invalid and already present addresses"
+        },
+        "label": {
+            "dl_email": "Distribution list",
+            "hint": "You can filter this list by looking for specific member’s name or add new ones by editing the Distribution List.",
+            "members_total": "Member list {{total}}"
+        },
+        "placeholder": {
+            "add_members": "Type an address, click '+' to add to the distribution list",
+            "filter_member": "Filter an address"
+        }
     },
     "expand_distribution_list": "Expand address list",
     "folder": {
@@ -275,7 +294,13 @@
     },
     "modal": {
         "address_book_name": "Address book name",
-        "destination": "Destination folder"
+        "close": {
+            "tooltip": "Close"
+        },
+        "destination": "Destination folder",
+        "edit_distribution_list": {
+            "title": "Edit \"{{displayName}}\""
+        }
     },
     "name": {
         "first_name": "First Name",
@@ -362,6 +387,11 @@
         "write": "Write"
     },
     "snackbar": {
+        "edit_distribution_list": {
+            "save": {
+                "success": "\"{{displayName}}\" distribution list edits saved successfully"
+            }
+        },
         "folder_edited": "Address book edited successfully",
         "folder_shared": "Address book shared",
         "share_resend": "Share invite resent",

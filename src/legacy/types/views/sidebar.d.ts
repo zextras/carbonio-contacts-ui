@@ -3,8 +3,4 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-
-export const CHIP_DISPLAY_NAME_VALUES = {
-	label: 'label',
-	email: 'email'
-} as const;
+export type SidebarProps = { expanded?: boolean };

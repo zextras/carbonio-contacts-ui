@@ -33,6 +33,7 @@ export const MemberListItemComponent: FC<MemberListItemComponentProps> = ({ emai
 			</Row>
 			<Button
 				type={'outlined'}
+				size={'medium'}
 				label={t('members_list_item_component.button.remove', 'remove')}
 				icon={'Trash2Outline'}
 				color={'error'}
