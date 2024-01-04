@@ -2,7 +2,7 @@
 	"name": "carbonio-contacts-ui",
 	"version": "1.6.4",
 	"description": "Contacts module",
-	"main": "src/app.jsx",
+	"main": "src/app.tsx",
 	"engines": {
 		"node": "v16",
 		"npm": "v8"
@@ -35,7 +35,7 @@
 		"@babel/preset-typescript": "^7.21.0",
 		"@commitlint/cli": "^17.4.3",
 		"@commitlint/config-conventional": "^17.4.3",
-		"@faker-js/faker": "^7.6.0",
+		"@faker-js/faker": "^8.3.1",
 		"@testing-library/jest-dom": "^5.16.5",
 		"@testing-library/react": "^12.1.5",
 		"@testing-library/react-hooks": "^8.0.1",
@@ -45,6 +45,8 @@
 		"@types/react": "^17.0.35",
 		"@types/react-router-dom": "^5.3.3",
 		"@types/styled-components": "^5.1.26",
+		"@types/webpack": "^5.28.2",
+		"@types/webpack-env": "^1.18.1",
 		"@zextras/carbonio-ui-configs": "^0.1.12",
 		"@zextras/carbonio-ui-sdk": "^1.7.0",
 		"babel-jest": "^28.1.3",
@@ -63,8 +65,10 @@
 		"jest-fail-on-console": "^3.0.2",
 		"jest-fetch-mock": "^3.0.3",
 		"jest-junit": "^15.0.0",
+		"jest-styled-components": "^7.2.0",
 		"msw": "^1.0.1",
-		"pinst": "^3.0.0"
+		"pinst": "^3.0.0",
+		"typescript": "^4.9.0"
 	},
 	"dependencies": {
 		"@emotion/react": "^11.10.5",
@@ -73,8 +77,8 @@
 		"@mui/material": "^5.11.8",
 		"@reduxjs/toolkit": "^1.9.2",
 		"@types/react-redux": "^7.1.25",
-		"@zextras/carbonio-design-system": "^4.0.0",
-		"@zextras/carbonio-shell-ui": "^5.0.0",
+		"@zextras/carbonio-design-system": "^4.0.1",
+		"@zextras/carbonio-shell-ui": "5.0.3",
 		"core-js": "^3.29.1",
 		"i18next": "^22.4.12",
 		"lodash": "^4.17.21",
