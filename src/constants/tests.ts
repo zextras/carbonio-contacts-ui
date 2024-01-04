@@ -10,7 +10,7 @@ export const TESTID_SELECTORS = {
 		trash: /icon: Trash2Outline/i,
 		avatar: /icon: PeopleOutline/i,
 		editChip: 'icon: EditOutline',
-		editDL: 'icon: Edit2Outline',
+		editDL: 'icon: Settings2Outline',
 		expandDL: 'icon: ChevronDownOutline',
 		collapseDL: 'icon: ChevronUpOutline',
 		filterMembers: 'icon: FunnelOutline',
