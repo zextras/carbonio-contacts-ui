@@ -21,7 +21,7 @@ describe('useActionEditDL', () => {
 		const { result } = setupHook(useActionEditDL);
 		expect(result.current).toEqual<UIAction<unknown, unknown>>(
 			expect.objectContaining({
-				icon: 'Edit2Outline',
+				icon: 'Settings2Outline',
 				label: 'Edit distribution list',
 				id: 'dl-edit-action'
 			})

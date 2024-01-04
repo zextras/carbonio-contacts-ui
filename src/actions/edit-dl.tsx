@@ -59,7 +59,7 @@ export const useActionEditDL = (): EditDLAction => {
 		() => ({
 			id: ACTION_IDS.editDL,
 			label: t('action.edit_distribution_list', 'Edit distribution list'),
-			icon: 'Edit2Outline',
+			icon: 'Settings2Outline',
 			execute,
 			canExecute
 		}),
