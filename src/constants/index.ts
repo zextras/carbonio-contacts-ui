@@ -14,7 +14,10 @@ export const NEW_CONTACT_GROUP_BOARD_ID = 'new-contact-group-board';
 export const CONTACT_GROUP_NAME_MAX_LENGTH = 256;
 export const GROUPS_ROUTE = 'groups';
 export const ROUTES = {
-	contactGroup: '/:contactGroupId?'
+	contactGroup: '/:contactGroupId?',
+	contactGroups: '/',
+	distributionListsMember: '/distribution-lists/member',
+	distributionListsManager: '/distribution-lists/manager'
 } as const;
 export const DISPLAYER_WIDTH = '60%';
 export const LIST_WIDTH = '40%';

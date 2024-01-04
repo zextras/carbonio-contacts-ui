@@ -18,7 +18,8 @@ export const TESTID_SELECTORS = {
 		removeMembers: 'icon: Trash2Outline',
 		duplicatedMember: 'icon: AlertCircle',
 		close: 'icon: Close',
-		closeDisplayer: 'icon: CloseOutline'
+		closeDisplayer: 'icon: CloseOutline',
+		accordionExpandAction: 'icon: ChevronDown'
 	},
 	avatar: 'avatar',
 	modal: 'modal',
@@ -30,7 +31,8 @@ export const TESTID_SELECTORS = {
 	membersList: 'members-list',
 	membersListItem: 'member-list-item',
 	snackbar: 'snackbar',
-	listItemContent: 'list-item-content'
+	listItemContent: 'list-item-content',
+	accordionItem: 'accordion-item'
 };
 
 export const PALETTE = {
