@@ -10,13 +10,12 @@ import {
 	Button,
 	Text,
 	Input,
-	InputProps,
+	type InputProps,
 	Avatar,
 	ListV2,
 	Row,
 	useSnackbar,
-	ChipItem,
-	ChipAction
+	type ChipAction
 } from '@zextras/carbonio-design-system';
 import { useBoardHooks } from '@zextras/carbonio-shell-ui';
 import { remove, some, uniqBy } from 'lodash';
@@ -27,14 +26,14 @@ import { MemberListItemComponent } from '../../components/member-list-item';
 import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../constants';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
 import { ContactInput } from '../../legacy/integrations/contact-input';
+import type { ContactInputItem } from '../../legacy/types/integrations';
 import { client } from '../../network/client';
 
 const List = styled(ListV2)`
 	min-height: 0;
 `;
 
-type EnhancedChipItem = ChipItem & {
-	email: string;
+type EnhancedChipItem = ContactInputItem & {
 	duplicated: boolean;
 };
 
@@ -154,7 +153,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 		const uniqNewContactInputValue = uniqBy(newContactInputValue, (value) => value.email);
 
 		const uniqNewContactInputValueWithActions = uniqNewContactInputValue.map((value) => {
-			const duplicated = memberListEmails.includes(value.email);
+			const duplicated = value.email !== undefined && memberListEmails.includes(value.email);
 
 			const duplicatedChipAction: ChipAction = {
 				id: 'duplicated',
@@ -193,7 +192,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 			setMemberListEmails(newMemberListEmails);
 			setContactInputValue((prevState) =>
 				prevState.map((value) => {
-					const duplicated = newMemberListEmails.includes(value.email);
+					const duplicated = value.email !== undefined && newMemberListEmails.includes(value.email);
 
 					const actions = [...(value.actions ?? [])];
 					if (!duplicated && value.duplicated) {
@@ -220,19 +219,19 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 	);
 
 	const contactInputIconAction = useCallback(() => {
-		const valid: typeof contactInputValue = [];
+		const valid: string[] = [];
 		const invalid: typeof contactInputValue = [];
 
 		contactInputValue.forEach((value) => {
-			if (value.error || value.duplicated) {
+			if (value.error || value.duplicated || value.email === undefined) {
 				invalid.push(value);
 			} else {
-				valid.push(value);
+				valid.push(value.email);
 			}
 		});
 
 		setContactInputValue(invalid);
-		setMemberListEmails((prevState) => [...prevState, ...valid.map((value) => value.email)]);
+		setMemberListEmails((prevState) => [...prevState, ...valid]);
 	}, [contactInputValue]);
 
 	return (
@@ -309,13 +308,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 				<Container orientation={'horizontal'} height={'fit'} crossAlignment={'flex-start'}>
 					<ContactInput
 						data-testid={'contact-group-contact-input'}
-						// FIXME: remove ts-ignore when contact-input types are fixed
-						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-						// @ts-ignore
 						defaultValue={contactInputValue}
-						// FIXME: remove ts-ignore when contact-input types are fixed
-						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-						// @ts-ignore
 						onChange={contactInputOnChange}
 						placeholder={t(
 							'board.newContactGroup.input.contact_input.placeholder',

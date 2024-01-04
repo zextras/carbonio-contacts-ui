@@ -143,9 +143,6 @@ describe('Contact input integration wrapper', () => {
 						defaultValue={[
 							{
 								...contactChipItem,
-								// FIXME: remove ts-ignore when contact-input types are fixed
-								// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-								// @ts-ignore
 								actions: [customAction]
 							}
 						]}
@@ -168,9 +165,6 @@ describe('Contact input integration wrapper', () => {
 						defaultValue={[
 							{
 								...distributionListChipItem,
-								// FIXME: remove ts-ignore when contact-input types are fixed
-								// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-								// @ts-ignore
 								actions: [customAction]
 							}
 						]}
@@ -191,9 +185,6 @@ describe('Contact input integration wrapper', () => {
 						defaultValue={[
 							{
 								...distributionListChipItem,
-								// FIXME: remove ts-ignore when contact-input types are fixed
-								// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-								// @ts-ignore
 								actions: [customAction]
 							}
 						]}
@@ -213,9 +204,6 @@ describe('Contact input integration wrapper', () => {
 
 					setupTest(
 						<ContactInputIntegrationWrapper
-							// FIXME: remove ts-ignore when contact-input types are fixed
-							// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-							// @ts-ignore
 							defaultValue={[contactChipItem]}
 							extraAccountsIds={[]}
 						/>
@@ -236,9 +224,6 @@ describe('Contact input integration wrapper', () => {
 
 					setupTest(
 						<ContactInputIntegrationWrapper
-							// FIXME: remove ts-ignore when contact-input types are fixed
-							// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-							// @ts-ignore
 							defaultValue={[distributionListChipItem]}
 							extraAccountsIds={[]}
 						/>
@@ -255,9 +240,6 @@ describe('Contact input integration wrapper', () => {
 
 					setupTest(
 						<ContactInputIntegrationWrapper
-							// FIXME: remove ts-ignore when contact-input types are fixed
-							// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-							// @ts-ignore
 							defaultValue={[distributionListChipItem]}
 							extraAccountsIds={[]}
 						/>
@@ -274,9 +256,6 @@ describe('Contact input integration wrapper', () => {
 
 					const { user } = setupTest(
 						<ContactInputIntegrationWrapper
-							// FIXME: remove ts-ignore when contact-input types are fixed
-							// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-							// @ts-ignore
 							defaultValue={[distributionListChipItem]}
 							extraAccountsIds={[]}
 						/>
@@ -303,9 +282,6 @@ describe('Contact input integration wrapper', () => {
 
 					setupTest(
 						<ContactInputIntegrationWrapper
-							// FIXME: remove ts-ignore when contact-input types are fixed
-							// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-							// @ts-ignore
 							defaultValue={[distributionListChipItem]}
 							extraAccountsIds={[]}
 						/>
@@ -322,13 +298,7 @@ describe('Contact input integration wrapper', () => {
 		describe('on invalid contact', () => {
 			it('should show remove action on value set from outside', () => {
 				setupTest(
-					<ContactInputIntegrationWrapper
-						// FIXME: remove ts-ignore when contact-input types are fixed
-						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-						// @ts-ignore
-						defaultValue={[invalidChipItem]}
-						extraAccountsIds={[]}
-					/>
+					<ContactInputIntegrationWrapper defaultValue={[invalidChipItem]} extraAccountsIds={[]} />
 				);
 				expect(
 					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.close })
@@ -337,13 +307,7 @@ describe('Contact input integration wrapper', () => {
 
 			it('should not show edit action if invalid contact is set from outside', () => {
 				setupTest(
-					<ContactInputIntegrationWrapper
-						// FIXME: remove ts-ignore when contact-input types are fixed
-						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-						// @ts-ignore
-						defaultValue={[invalidChipItem]}
-						extraAccountsIds={[]}
-					/>
+					<ContactInputIntegrationWrapper defaultValue={[invalidChipItem]} extraAccountsIds={[]} />
 				);
 				expect(
 					screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.editChip })
