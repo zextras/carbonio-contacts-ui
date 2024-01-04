@@ -8,6 +8,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { FIND_CONTACT_GROUP_LIMIT } from '../constants';
 import { ContactGroup } from '../model/contact-group';
 import { client } from '../network/client';
+import { useContactGroupStore } from '../store/contact-groups';
 
 type UseFindContactGroupsReturnType = {
 	contactGroups: Array<ContactGroup>;
@@ -16,19 +17,27 @@ type UseFindContactGroupsReturnType = {
 };
 
 export const useFindContactGroups = (): UseFindContactGroupsReturnType => {
-	const [contactGroups, setContactGroups] = useState<Array<ContactGroup>>([]);
-	const offset = useRef<number>(0);
-	const [hasMore, setHasMore] = useState(true);
+	const { addStoredContactGroups, setStoredOffset } = useContactGroupStore();
+	const [contactGroups, setContactGroups] = useState<Array<ContactGroup>>(
+		useContactGroupStore.getState().storedContactGroups
+	);
+	const offset = useRef<number>(useContactGroupStore.getState().storedOffset);
+	const [hasMore, setHasMore] = useState(useContactGroupStore.getState().storedOffset !== -1);
 
 	const findCallback = useCallback(() => {
 		client.findContactGroups(offset.current).then(({ hasMore, contactGroups }) => {
+			addStoredContactGroups(contactGroups);
 			setContactGroups((oldNodes) => [...(oldNodes ?? []), ...(contactGroups ?? [])]);
 			offset.current += FIND_CONTACT_GROUP_LIMIT;
+			setStoredOffset(hasMore ? offset.current : -1);
 			setHasMore(hasMore);
 		});
-	}, []);
+	}, [addStoredContactGroups, setStoredOffset]);
 
 	useEffect(() => {
+		if (useContactGroupStore.getState().storedContactGroups.length > 0) {
+			return;
+		}
 		findCallback();
 	}, [findCallback]);
 

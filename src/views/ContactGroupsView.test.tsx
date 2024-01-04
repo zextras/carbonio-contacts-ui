@@ -15,6 +15,12 @@ import { getSetupServer } from '../carbonio-ui-commons/test/jest-setup';
 import { makeListItemsVisible, setupTest, screen } from '../carbonio-ui-commons/test/test-setup';
 import { ROUTES } from '../constants';
 import { EMPTY_DISPLAYER_HINT, EMPTY_LIST_HINT, TESTID_SELECTORS } from '../constants/tests';
+import { useContactGroupStore } from '../store/contact-groups';
+
+beforeEach(() => {
+	useContactGroupStore.getState().setStoredOffset(0);
+	useContactGroupStore.getState().emptyStoredContactGroups();
+});
 
 describe('Contact Group View', () => {
 	function populateContactGroup(contactGroupName = faker.company.name()): void {
@@ -165,8 +171,6 @@ describe('Contact Group View', () => {
 			</Route>
 		);
 
-		// await waitForElementToBeRemoved(screen.queryByText('emptyListPlaceholder'));
-
 		expect(await screen.findByText(contactGroupName)).toBeVisible();
 		const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
 		expect(within(listItemContent).getByTestId(TESTID_SELECTORS.icons.avatar)).toBeVisible();
@@ -214,8 +218,6 @@ describe('Contact Group View', () => {
 				<ContactGroupsView />
 			</Route>
 		);
-
-		// await waitForElementToBeRemoved(screen.queryByText(EMPTY_LIST_HINT));
 
 		expect(await screen.findByText(contactGroupName)).toBeVisible();
 		expect(screen.getByText('0 addresses')).toBeVisible();
