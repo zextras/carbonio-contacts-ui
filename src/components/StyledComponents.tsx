@@ -4,8 +4,15 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { Container, Row } from '@zextras/carbonio-design-system';
-import styled from 'styled-components';
+import {
+	Container,
+	getColor,
+	ListItem,
+	type ListItemProps,
+	pseudoClasses,
+	Row
+} from '@zextras/carbonio-design-system';
+import styled, { css, type DefaultTheme, type SimpleInterpolation } from 'styled-components';
 
 export const HoverContainer = styled(Row)``;
 
@@ -29,4 +36,46 @@ export const ListItemContainer = styled(Container)`
 			display: flex;
 		}
 	}
+`;
+
+export const StyledListItem = styled(ListItem).attrs<
+	ListItemProps,
+	{ backgroundColor?: string | keyof DefaultTheme['palette'] }
+>(({ background, selectedBackground, activeBackground, active, selected }) => ({
+	backgroundColor: (active && activeBackground) || (selected && selectedBackground) || background
+}))`
+	${({ backgroundColor, theme }): SimpleInterpolation =>
+		backgroundColor && pseudoClasses(theme, backgroundColor, 'color')}
+	transition: none;
+
+	${({ backgroundColor, theme }): SimpleInterpolation =>
+		backgroundColor &&
+		css`
+			${HoverBarContainer} {
+				background: linear-gradient(to right, transparent, ${getColor(backgroundColor, theme)});
+			}
+			&:focus ${HoverBarContainer} {
+				background: linear-gradient(
+					to right,
+					transparent,
+					${getColor(`${backgroundColor}.focus`, theme)}
+				);
+			}
+
+			&:hover ${HoverBarContainer} {
+				background: linear-gradient(
+					to right,
+					transparent,
+					${getColor(`${backgroundColor}.hover`, theme)}
+				);
+			}
+
+			&:active ${HoverBarContainer} {
+				background: linear-gradient(
+					to right,
+					transparent,
+					${getColor(`${backgroundColor}.active`, theme)}
+				);
+			}
+		`}
 `;

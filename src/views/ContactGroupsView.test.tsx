@@ -104,7 +104,7 @@ describe('Contact Group View', () => {
 			)
 		);
 		setupTest(
-			<Route path={ROUTES.contactGroup}>
+			<Route path={ROUTES.contactGroups}>
 				<ContactGroupsView />
 			</Route>
 		);
@@ -160,7 +160,7 @@ describe('Contact Group View', () => {
 			)
 		);
 		setupTest(
-			<Route path={ROUTES.contactGroup}>
+			<Route path={ROUTES.contactGroups}>
 				<ContactGroupsView />
 			</Route>
 		);
@@ -210,7 +210,7 @@ describe('Contact Group View', () => {
 			)
 		);
 		setupTest(
-			<Route path={ROUTES.contactGroup}>
+			<Route path={ROUTES.contactGroups}>
 				<ContactGroupsView />
 			</Route>
 		);
@@ -266,7 +266,7 @@ describe('Contact Group View', () => {
 		);
 
 		setupTest(
-			<Route path={ROUTES.contactGroup}>
+			<Route path={ROUTES.contactGroups}>
 				<ContactGroupsView />
 			</Route>
 		);
@@ -285,7 +285,7 @@ describe('Contact Group View', () => {
 			populateContactGroup(contactGroupName);
 
 			const { user } = setupTest(
-				<Route path={ROUTES.contactGroup}>
+				<Route path={ROUTES.contactGroups}>
 					<ContactGroupsView />
 				</Route>
 			);
@@ -326,7 +326,7 @@ describe('Contact Group View', () => {
 			);
 
 			setupTest(
-				<Route path={ROUTES.contactGroup}>
+				<Route path={ROUTES.contactGroups}>
 					<ContactGroupsView />
 				</Route>
 			);
@@ -339,7 +339,7 @@ describe('Contact Group View', () => {
 			populateContactGroup(contactGroupName);
 
 			setupTest(
-				<Route path={ROUTES.contactGroup}>
+				<Route path={ROUTES.contactGroups}>
 					<ContactGroupsView />
 				</Route>
 			);
@@ -357,7 +357,7 @@ describe('Contact Group View', () => {
 			populateContactGroup(contactGroupName);
 
 			const { user } = setupTest(
-				<Route path={ROUTES.contactGroup}>
+				<Route path={ROUTES.contactGroups}>
 					<ContactGroupsView />
 				</Route>
 			);
@@ -414,7 +414,7 @@ describe('Contact Group View', () => {
 			);
 
 			const { user } = setupTest(
-				<Route path={ROUTES.contactGroup}>
+				<Route path={ROUTES.contactGroups}>
 					<ContactGroupsView />
 				</Route>,
 				{

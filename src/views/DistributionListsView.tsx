@@ -1,0 +1,67 @@
+/*
+ * SPDX-FileCopyrightText: 2023 Zextras <https://www.zextras.com>
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only
+ */
+
+import React, { useMemo } from 'react';
+
+import { Container } from '@zextras/carbonio-design-system';
+import { useParams } from 'react-router-dom';
+
+import { DLListItem } from '../components/dl-list-item';
+import { MainList } from '../components/main-list';
+import { StyledListItem } from '../components/StyledComponents';
+import { ROUTES_INTERNAL_PARAMS, RouteParams } from '../constants';
+import { useActiveItem } from '../hooks/useActiveItem';
+import { useFindDistributionLists } from '../hooks/useFindDistributionLists';
+
+export const DistributionListsView = (): React.JSX.Element => {
+	const { activeItem, setActive } = useActiveItem();
+	const { filter } = useParams<RouteParams>();
+	const distributionLists = useFindDistributionLists({
+		ownerOf: filter === ROUTES_INTERNAL_PARAMS.filter.manager,
+		memberOf: filter === ROUTES_INTERNAL_PARAMS.filter.member
+	});
+
+	const items = useMemo(
+		() =>
+			distributionLists.map((dl) => (
+				<StyledListItem key={dl.id} active={dl.id === activeItem} data-testid={'list-item'}>
+					{(visible): React.JSX.Element => (
+						<DLListItem
+							visible={visible}
+							title={dl.displayName || dl.email}
+							id={dl.id}
+							onClick={setActive}
+						/>
+					)}
+				</StyledListItem>
+			)),
+		[activeItem, distributionLists, setActive]
+	);
+
+	return (
+		<Container
+			orientation="row"
+			crossAlignment="flex-start"
+			mainAlignment="flex-start"
+			width="fill"
+			height="fill"
+			background="gray5"
+			borderRadius="none"
+			maxHeight="100%"
+		>
+			<MainList>{items}</MainList>
+			{/* <Container */}
+			{/*	width={DISPLAYER_WIDTH} */}
+			{/*	mainAlignment="flex-start" */}
+			{/*	crossAlignment="flex-start" */}
+			{/*	borderRadius="none" */}
+			{/*	style={{ maxHeight: '100%' }} */}
+			{/* > */}
+			{/*	<Displayer /> */}
+			{/* </Container> */}
+		</Container>
+	);
+};

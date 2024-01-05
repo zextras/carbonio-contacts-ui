@@ -20,6 +20,7 @@ export interface GetDistributionListRequest extends GenericSoapPayload<typeof NA
 
 export interface GetDistributionListResponse extends GenericSoapPayload<typeof NAMESPACES.account> {
 	dl: Array<{
+		id: string;
 		name: string;
 		isOwner?: boolean;
 		owners?: Array<{ owner: Array<{ id?: string; name?: string }> }>;
@@ -36,6 +37,7 @@ const normalizeResponse = (response: GetDistributionListResponse): DistributionL
 	}
 
 	return {
+		id: dl.id,
 		email: dl.name,
 		displayName: dl._attrs?.displayName,
 		isOwner: dl.isOwner ?? false,
@@ -43,8 +45,8 @@ const normalizeResponse = (response: GetDistributionListResponse): DistributionL
 			dl.owners,
 			(result, item) => {
 				const owner = first(item.owner);
-				if (owner !== undefined && owner.id !== undefined && owner.name) {
-					result.push({ id: owner.id, name: owner.name ?? '' });
+				if (owner?.id !== undefined && owner.name) {
+					result.push({ id: owner.id, name: owner.name });
 				}
 				return result;
 			},

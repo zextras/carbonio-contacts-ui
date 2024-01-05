@@ -9,6 +9,3 @@ export type ContactGroup = {
 	id: string;
 	members: Array<string>;
 };
-export type ContactGroupsPathParams = {
-	contactGroupId: string;
-};
