@@ -3,8 +3,34 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+import { GenericSoapPayload } from './types';
 import { FIND_CONTACT_GROUP_LIMIT } from '../../constants';
+import { NAMESPACES } from '../../constants/api';
 import { ContactGroup } from '../../model/contact-group';
+
+export interface FindContactGroupsRequest extends GenericSoapPayload<typeof NAMESPACES.mail> {
+	limit: number;
+	offset: number;
+	sortBy: string;
+	types: string;
+	query: string;
+}
+
+export interface FindContactGroupsResponse extends GenericSoapPayload<typeof NAMESPACES.mail> {
+	cn?: Array<{
+		id: string;
+		l: string;
+		d: number;
+		rev: number;
+		fileAsStr: string;
+		_attrs: { fullName?: string; nickname?: string; type: string; fileAs: string };
+		m: Array<{ type: 'I'; value: string }>;
+		sf: string;
+	}>;
+	sortBy: string;
+	offset: number;
+	more: boolean;
+}
 
 export const findContactGroups = (
 	offset = 0
@@ -38,16 +64,14 @@ export const findContactGroups = (
 			}
 			throw new Error('Something went wrong');
 		})
-		.then((res) => {
-			let contactGroups = [];
-			if (res.Body.SearchResponse.cn) {
-				contactGroups = res.Body.SearchResponse.cn.map((value: any) => ({
-					id: value.id,
-					title: value._attrs.fullName ?? '',
-					members:
-						value.m?.filter((value: any) => value.type === 'I').map((value: any) => value.value) ??
-						[]
-				}));
-			}
+		.then((res: { Body: { SearchResponse: FindContactGroupsResponse } }) => {
+			const contactGroups = res.Body.SearchResponse.cn
+				? res.Body.SearchResponse.cn.map((value) => ({
+						id: value.id,
+						title: value._attrs.fullName ?? '',
+						members:
+							value.m?.filter((value) => value.type === 'I').map((value) => value.value) ?? []
+				  }))
+				: [];
 			return { contactGroups, hasMore: res.Body.SearchResponse.more };
 		});

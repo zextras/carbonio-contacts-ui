@@ -16,6 +16,11 @@ import { makeListItemsVisible, setupTest, screen } from '../carbonio-ui-commons/
 import { ROUTES } from '../constants';
 import { EMPTY_DISPLAYER_HINT, EMPTY_LIST_HINT, TESTID_SELECTORS } from '../constants/tests';
 import { useContactGroupStore } from '../store/contact-groups';
+import {
+	createFindContactGroupsResponse,
+	createFindContactGroupsResponseCnItem,
+	registerFindContactGroupsHandler
+} from '../tests/msw-handlers';
 
 beforeEach(() => {
 	useContactGroupStore.getState().setStoredOffset(0);
@@ -23,147 +28,36 @@ beforeEach(() => {
 });
 
 describe('Contact Group View', () => {
-	function populateContactGroup(contactGroupName = faker.company.name()): void {
-		return getSetupServer().use(
-			rest.post('/service/soap/SearchRequest', async (req, res, ctx) =>
-				res(
-					ctx.json({
-						Body: {
-							SearchResponse: {
-								sortBy: 'nameAsc',
-								offset: 0,
-								cn: [
-									{
-										id: faker.number.int({ min: 100, max: 999 }),
-										l: '7',
-										d: faker.date.recent().valueOf(),
-										rev: 12974,
-										fileAsStr: contactGroupName,
-										_attrs: {
-											nickname: contactGroupName,
-											fullName: contactGroupName,
-											type: 'group',
-											fileAs: `8:${contactGroupName}`
-										},
-										m: [
-											{
-												type: 'I',
-												value: faker.internet.email()
-											}
-										],
-										sf: 'bo0000000276'
-									}
-								],
-								more: false,
-								_jsns: 'urn:zimbraMail'
-							}
-						}
-					})
-				)
-			)
-		);
-	}
-
 	it.skip('pagination', async () => {
 		const contactGroupName = faker.company.name();
-
-		getSetupServer().use(
-			rest.post('/service/soap/SearchRequest', async (req, res, ctx) =>
-				res(
-					ctx.json({
-						Body: {
-							SearchResponse: {
-								sortBy: 'nameAsc',
-								offset: 0,
-								cn: [
-									{
-										id: faker.number.int({ min: 100, max: 999 }),
-										l: '7',
-										d: faker.date.recent().valueOf(),
-										rev: 12974,
-										fileAsStr: contactGroupName,
-										_attrs: {
-											nickname: contactGroupName,
-											fullName: contactGroupName,
-											type: 'group',
-											fileAs: `8:${contactGroupName}`
-										},
-										m: [
-											{
-												type: 'I',
-												value: faker.internet.email()
-											},
-											{
-												type: 'I',
-												value: faker.internet.email()
-											}
-										],
-										sf: 'bo0000000276'
-									}
-								],
-								more: true,
-								_jsns: 'urn:zimbraMail'
-							}
-						}
-					})
-				)
-			)
+		registerFindContactGroupsHandler(
+			createFindContactGroupsResponse([
+				createFindContactGroupsResponseCnItem(contactGroupName, [
+					faker.internet.email(),
+					faker.internet.email()
+				])
+			])
 		);
+
 		setupTest(
 			<Route path={ROUTES.contactGroup}>
 				<ContactGroupsView />
 			</Route>
 		);
 
-		await waitForElementToBeRemoved(screen.queryByText('emptyListPlaceholder'));
 		expect(await screen.findByText(contactGroupName)).toBeVisible();
 		// triggerLoadMore();
 	});
 
 	it('should render the avatar, the name and the number of the members (case 1+ addresses string) of a contact group', async () => {
 		const contactGroupName = faker.company.name();
-
-		getSetupServer().use(
-			rest.post('/service/soap/SearchRequest', async (req, res, ctx) =>
-				res(
-					ctx.json({
-						Body: {
-							SearchResponse: {
-								sortBy: 'nameAsc',
-								offset: 0,
-								cn: [
-									{
-										id: faker.number.int({ min: 100, max: 999 }),
-										l: '7',
-										d: faker.date.recent().valueOf(),
-										rev: 12974,
-										fileAsStr: contactGroupName,
-										_attrs: {
-											nickname: contactGroupName,
-											fullName: contactGroupName,
-											type: 'group',
-											fileAs: `8:${contactGroupName}`
-										},
-										m: [
-											{
-												type: 'I',
-												value: faker.internet.email()
-											},
-											{
-												type: 'I',
-												value: faker.internet.email()
-											}
-										],
-										sf: 'bo0000000276'
-									}
-								],
-								more: false,
-								_jsns: 'urn:zimbraMail'
-							}
-						}
-					})
-				)
-			)
+		registerFindContactGroupsHandler(
+			createFindContactGroupsResponse([
+				createFindContactGroupsResponseCnItem(contactGroupName, [
+					faker.internet.email(),
+					faker.internet.email()
+				])
+			])
 		);
 		setupTest(
 			<Route path={ROUTES.contactGroup}>
@@ -179,39 +73,8 @@ describe('Contact Group View', () => {
 
 	it('should render the avatar, the name and the number of the members (case 0 addresses string) of a contact group', async () => {
 		const contactGroupName = faker.company.name();
-
-		getSetupServer().use(
-			rest.post('/service/soap/SearchRequest', async (req, res, ctx) =>
-				res(
-					ctx.json({
-						Body: {
-							SearchResponse: {
-								sortBy: 'nameAsc',
-								offset: 0,
-								cn: [
-									{
-										id: faker.number.int({ min: 100, max: 999 }),
-										l: '7',
-										d: faker.date.recent().valueOf(),
-										rev: 12974,
-										fileAsStr: contactGroupName,
-										_attrs: {
-											nickname: contactGroupName,
-											fullName: contactGroupName,
-											type: 'group',
-											fileAs: `8:${contactGroupName}`
-										},
-										m: [],
-										sf: 'bo0000000276'
-									}
-								],
-								more: false,
-								_jsns: 'urn:zimbraMail'
-							}
-						}
-					})
-				)
-			)
+		registerFindContactGroupsHandler(
+			createFindContactGroupsResponse([createFindContactGroupsResponseCnItem(contactGroupName)])
 		);
 		setupTest(
 			<Route path={ROUTES.contactGroup}>
@@ -227,44 +90,10 @@ describe('Contact Group View', () => {
 
 	it('should render the avatar, the name and the number of the members (case 1 address string) of a contact group', async () => {
 		const contactGroupName = faker.company.name();
-
-		getSetupServer().use(
-			rest.post('/service/soap/SearchRequest', async (req, res, ctx) =>
-				res(
-					ctx.json({
-						Body: {
-							SearchResponse: {
-								sortBy: 'nameAsc',
-								offset: 0,
-								cn: [
-									{
-										id: faker.number.int({ min: 100, max: 999 }),
-										l: '7',
-										d: faker.date.recent().valueOf(),
-										rev: 12974,
-										fileAsStr: contactGroupName,
-										_attrs: {
-											nickname: contactGroupName,
-											fullName: contactGroupName,
-											type: 'group',
-											fileAs: `8:${contactGroupName}`
-										},
-										m: [
-											{
-												type: 'I',
-												value: faker.internet.email()
-											}
-										],
-										sf: 'bo0000000276'
-									}
-								],
-								more: false,
-								_jsns: 'urn:zimbraMail'
-							}
-						}
-					})
-				)
-			)
+		registerFindContactGroupsHandler(
+			createFindContactGroupsResponse([
+				createFindContactGroupsResponseCnItem(contactGroupName, [faker.internet.email()])
+			])
 		);
 
 		setupTest(
@@ -273,7 +102,6 @@ describe('Contact Group View', () => {
 			</Route>
 		);
 
-		// await waitForElementToBeRemoved(screen.queryByText('emptyListPlaceholder'), { timeout: 2000 });
 		makeListItemsVisible();
 		expect(await screen.findByText(contactGroupName, undefined, { timeout: 2000 })).toBeVisible();
 		const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
@@ -284,7 +112,9 @@ describe('Contact Group View', () => {
 	describe.skip('Actions', () => {
 		it('should render the mail, edit and delete actions on hover', async () => {
 			const contactGroupName = faker.company.name();
-			populateContactGroup(contactGroupName);
+			registerFindContactGroupsHandler(
+				createFindContactGroupsResponse([createFindContactGroupsResponseCnItem(contactGroupName)])
+			);
 
 			const { user } = setupTest(
 				<Route path={ROUTES.contactGroup}>
@@ -338,7 +168,9 @@ describe('Contact Group View', () => {
 
 		it('should show the contact group list and the empty displayer', async () => {
 			const contactGroupName = faker.company.name();
-			populateContactGroup(contactGroupName);
+			registerFindContactGroupsHandler(
+				createFindContactGroupsResponse([createFindContactGroupsResponseCnItem(contactGroupName)])
+			);
 
 			setupTest(
 				<Route path={ROUTES.contactGroup}>
@@ -356,14 +188,15 @@ describe('Contact Group View', () => {
 
 		test('Click on a list item open the displayer for that item', async () => {
 			const contactGroupName = faker.company.name();
-			populateContactGroup(contactGroupName);
+			registerFindContactGroupsHandler(
+				createFindContactGroupsResponse([createFindContactGroupsResponseCnItem(contactGroupName)])
+			);
 
 			const { user } = setupTest(
 				<Route path={ROUTES.contactGroup}>
 					<ContactGroupsView />
 				</Route>
 			);
-			// makeListItemsVisible();
 			await screen.findByText(contactGroupName);
 			await screen.findByText(EMPTY_DISPLAYER_HINT);
 			await user.click(screen.getByText(contactGroupName));
@@ -374,45 +207,11 @@ describe('Contact Group View', () => {
 
 		test('Click on close action close the displayer', async () => {
 			const contactGroupName = faker.company.name();
-			const contactGroupId = faker.number.int({ min: 100, max: 999 });
-
-			getSetupServer().use(
-				rest.post('/service/soap/SearchRequest', async (req, res, ctx) =>
-					res(
-						ctx.json({
-							Body: {
-								SearchResponse: {
-									sortBy: 'nameAsc',
-									offset: 0,
-									cn: [
-										{
-											id: contactGroupId,
-											l: '7',
-											d: faker.date.recent().valueOf(),
-											rev: 12974,
-											fileAsStr: contactGroupName,
-											_attrs: {
-												nickname: contactGroupName,
-												fullName: contactGroupName,
-												type: 'group',
-												fileAs: `8:${contactGroupName}`
-											},
-											m: [
-												{
-													type: 'I',
-													value: faker.internet.email()
-												}
-											],
-											sf: 'bo0000000276'
-										}
-									],
-									more: false,
-									_jsns: 'urn:zimbraMail'
-								}
-							}
-						})
-					)
-				)
+			const contactGroupId = faker.number.int({ min: 100, max: 999 }).toString();
+			registerFindContactGroupsHandler(
+				createFindContactGroupsResponse([
+					createFindContactGroupsResponseCnItem(contactGroupName, undefined, contactGroupId)
+				])
 			);
 
 			const { user } = setupTest(
@@ -423,7 +222,6 @@ describe('Contact Group View', () => {
 					initialEntries: [`/${contactGroupId}`]
 				}
 			);
-			// makeListItemsVisible();
 			await screen.findAllByText(contactGroupName);
 			expect(screen.queryByText(EMPTY_DISPLAYER_HINT)).not.toBeInTheDocument();
 			const closeButton = screen.getByRoleWithIcon('button', {

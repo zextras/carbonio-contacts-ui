@@ -3,6 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+import { faker } from '@faker-js/faker';
 import {
 	ErrorSoapResponse,
 	SoapFault,
@@ -21,6 +22,10 @@ import {
 	BatchDistributionListActionResponse,
 	DistributionListActionResponse
 } from '../network/api/distribution-list-action';
+import {
+	FindContactGroupsRequest,
+	FindContactGroupsResponse
+} from '../network/api/find-contact-groups';
 import {
 	GetDistributionListRequest,
 	GetDistributionListResponse
@@ -227,6 +232,89 @@ export const registerGetDistributionListHandler = (
 
 	return handler;
 };
+
+type FindContactGroupsHandler = ResponseResolver<
+	RestRequest<{ Body: { SearchRequest: FindContactGroupsRequest } }>,
+	RestContext,
+	SoapResponse<FindContactGroupsResponse>
+>;
+export const registerFindContactGroupsHandler = (
+	findContactGroupsResponse: FindContactGroupsResponse,
+	error?: string
+): jest.Mock<ReturnType<FindContactGroupsHandler>, Parameters<FindContactGroupsHandler>> => {
+	const handler = jest.fn<
+		ReturnType<FindContactGroupsHandler>,
+		Parameters<FindContactGroupsHandler>
+	>((req, res, ctx) => {
+		if (error) {
+			return res(
+				ctx.json<ErrorSoapResponse>({
+					Header: {
+						context: {}
+					},
+					Body: {
+						Fault: {
+							Reason: { Text: error },
+							Detail: {
+								Error: { Code: '', Detail: error }
+							}
+						}
+					}
+				})
+			);
+		}
+
+		return res(
+			ctx.json(
+				buildSoapResponse<FindContactGroupsResponse>({
+					SearchResponse: findContactGroupsResponse
+				})
+			)
+		);
+	});
+	getSetupServer().use(
+		rest.post<
+			{ Body: { SearchRequest: FindContactGroupsRequest } },
+			never,
+			SoapResponse<FindContactGroupsResponse>
+		>('/service/soap/SearchRequest', handler)
+	);
+
+	return handler;
+};
+
+export const createFindContactGroupsResponseCnItem = (
+	contactGroupName: string,
+	members: string[] = [],
+	id = faker.number.int({ min: 100, max: 999 }).toString()
+): Required<FindContactGroupsResponse>['cn'][number] => {
+	const mappedMembers = members.map((member) => ({ type: 'I' as const, value: member }));
+
+	return {
+		id,
+		l: '7',
+		d: faker.date.recent().valueOf(),
+		rev: 12974,
+		fileAsStr: contactGroupName,
+		_attrs: {
+			nickname: contactGroupName,
+			fullName: contactGroupName,
+			type: 'group',
+			fileAs: `8:${contactGroupName}`
+		},
+		m: mappedMembers,
+		sf: 'bo0000000276'
+	};
+};
+export const createFindContactGroupsResponse = (
+	cn: FindContactGroupsResponse['cn']
+): FindContactGroupsResponse => ({
+	sortBy: 'nameAsc',
+	offset: 0,
+	cn,
+	more: false,
+	_jsns: 'urn:zimbraMail'
+});
 
 const createAutocompleteResponse = (match: Array<Match>): string => {
 	const matchString = match.map((item) => {
