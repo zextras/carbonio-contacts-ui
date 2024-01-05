@@ -138,4 +138,4 @@ export const TIMERS = { modal: { delayOpen: 1 } as const } as const;
 
 export const JEST_MOCKED_ERROR = 'jest mocked error';
 export const EMPTY_DISPLAYER_HINT = 'Stay in touch with your colleagues.';
-export const EMPTY_LIST_HINT = "It looks like there's nothing here.";
+export const EMPTY_LIST_HINT = 'No contact groups have been created yet';

@@ -24,7 +24,6 @@ import { ListItemContent } from './ListItemContent';
 import { HoverBarContainer } from './StyledComponents';
 import { Text } from './Text';
 import { LIST_WIDTH } from '../constants';
-import { EMPTY_LIST_HINT } from '../constants/tests';
 import { useActiveItem } from '../hooks/useActiveItem';
 import { ContactGroup } from '../model/contact-group';
 
@@ -135,7 +134,7 @@ export const ContactGroupsList = ({
 					</ListV2>
 				) : (
 					<Text size={'small'} weight={'bold'} overflow={'break-word'} color={'secondary'} centered>
-						{EMPTY_LIST_HINT}
+						{t('contact_group_list.emptyList', 'No contact groups have been created yet')}
 					</Text>
 				)}
 			</Container>
