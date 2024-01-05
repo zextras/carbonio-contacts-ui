@@ -12,8 +12,13 @@ import { Route } from 'react-router-dom';
 
 import { ContactGroupsView } from './ContactGroupsView';
 import { getSetupServer } from '../carbonio-ui-commons/test/jest-setup';
-import { makeListItemsVisible, setupTest, screen } from '../carbonio-ui-commons/test/test-setup';
-import { ROUTES } from '../constants';
+import {
+	makeListItemsVisible,
+	setupTest,
+	screen,
+	triggerLoadMore
+} from '../carbonio-ui-commons/test/test-setup';
+import { FIND_CONTACT_GROUP_LIMIT, ROUTES } from '../constants';
 import { EMPTY_DISPLAYER_HINT, EMPTY_LIST_HINT, TESTID_SELECTORS } from '../constants/tests';
 import { useContactGroupStore } from '../store/contact-groups';
 import {
@@ -28,15 +33,26 @@ beforeEach(() => {
 });
 
 describe('Contact Group View', () => {
-	it.skip('pagination', async () => {
-		const contactGroupName = faker.company.name();
+	it('should load the second page only when bottom element becomes visible', async () => {
+		const cnItem1 = createFindContactGroupsResponseCnItem();
+		const cnItem101 = createFindContactGroupsResponseCnItem();
 		registerFindContactGroupsHandler(
-			createFindContactGroupsResponse([
-				createFindContactGroupsResponseCnItem(contactGroupName, [
-					faker.internet.email(),
-					faker.internet.email()
-				])
-			])
+			{
+				findContactGroupsResponse: createFindContactGroupsResponse(
+					[
+						cnItem1,
+						...[...Array(FIND_CONTACT_GROUP_LIMIT - 1)].map(() =>
+							createFindContactGroupsResponseCnItem()
+						)
+					],
+					true
+				),
+				offset: 0
+			},
+			{
+				findContactGroupsResponse: createFindContactGroupsResponse([cnItem101], true),
+				offset: 100
+			}
 		);
 
 		setupTest(
@@ -45,20 +61,23 @@ describe('Contact Group View', () => {
 			</Route>
 		);
 
-		expect(await screen.findByText(contactGroupName)).toBeVisible();
-		// triggerLoadMore();
+		expect(await screen.findByText(cnItem1.fileAsStr)).toBeVisible();
+		expect(screen.queryByText(cnItem101.fileAsStr)).not.toBeInTheDocument();
+		triggerLoadMore();
+		expect(await screen.findByText(cnItem101.fileAsStr)).toBeVisible();
 	});
 
 	it('should render the avatar, the name and the number of the members (case 1+ addresses string) of a contact group', async () => {
 		const contactGroupName = faker.company.name();
-		registerFindContactGroupsHandler(
-			createFindContactGroupsResponse([
+		registerFindContactGroupsHandler({
+			findContactGroupsResponse: createFindContactGroupsResponse([
 				createFindContactGroupsResponseCnItem(contactGroupName, [
 					faker.internet.email(),
 					faker.internet.email()
 				])
-			])
-		);
+			]),
+			offset: 0
+		});
 		setupTest(
 			<Route path={ROUTES.contactGroup}>
 				<ContactGroupsView />
@@ -73,16 +92,19 @@ describe('Contact Group View', () => {
 
 	it('should render the avatar, the name and the number of the members (case 0 addresses string) of a contact group', async () => {
 		const contactGroupName = faker.company.name();
-		registerFindContactGroupsHandler(
-			createFindContactGroupsResponse([createFindContactGroupsResponseCnItem(contactGroupName)])
-		);
+		registerFindContactGroupsHandler({
+			findContactGroupsResponse: createFindContactGroupsResponse([
+				createFindContactGroupsResponseCnItem(contactGroupName)
+			]),
+			offset: 0
+		});
 		setupTest(
 			<Route path={ROUTES.contactGroup}>
 				<ContactGroupsView />
 			</Route>
 		);
 
-		expect(await screen.findByText(contactGroupName)).toBeVisible();
+		expect(await screen.findByText(contactGroupName, undefined, { timeout: 2000 })).toBeVisible();
 		expect(screen.getByText('0 addresses')).toBeVisible();
 		const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
 		expect(within(listItemContent).getByTestId(TESTID_SELECTORS.icons.avatar)).toBeVisible();
@@ -90,19 +112,18 @@ describe('Contact Group View', () => {
 
 	it('should render the avatar, the name and the number of the members (case 1 address string) of a contact group', async () => {
 		const contactGroupName = faker.company.name();
-		registerFindContactGroupsHandler(
-			createFindContactGroupsResponse([
+		registerFindContactGroupsHandler({
+			findContactGroupsResponse: createFindContactGroupsResponse([
 				createFindContactGroupsResponseCnItem(contactGroupName, [faker.internet.email()])
-			])
-		);
-
+			]),
+			offset: 0
+		});
 		setupTest(
 			<Route path={ROUTES.contactGroup}>
 				<ContactGroupsView />
 			</Route>
 		);
 
-		makeListItemsVisible();
 		expect(await screen.findByText(contactGroupName, undefined, { timeout: 2000 })).toBeVisible();
 		const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
 		expect(within(listItemContent).getByTestId(TESTID_SELECTORS.icons.avatar)).toBeVisible();
@@ -112,10 +133,12 @@ describe('Contact Group View', () => {
 	describe.skip('Actions', () => {
 		it('should render the mail, edit and delete actions on hover', async () => {
 			const contactGroupName = faker.company.name();
-			registerFindContactGroupsHandler(
-				createFindContactGroupsResponse([createFindContactGroupsResponseCnItem(contactGroupName)])
-			);
-
+			registerFindContactGroupsHandler({
+				findContactGroupsResponse: createFindContactGroupsResponse([
+					createFindContactGroupsResponseCnItem(contactGroupName)
+				]),
+				offset: 0
+			});
 			const { user } = setupTest(
 				<Route path={ROUTES.contactGroup}>
 					<ContactGroupsView />
@@ -168,10 +191,12 @@ describe('Contact Group View', () => {
 
 		it('should show the contact group list and the empty displayer', async () => {
 			const contactGroupName = faker.company.name();
-			registerFindContactGroupsHandler(
-				createFindContactGroupsResponse([createFindContactGroupsResponseCnItem(contactGroupName)])
-			);
-
+			registerFindContactGroupsHandler({
+				findContactGroupsResponse: createFindContactGroupsResponse([
+					createFindContactGroupsResponseCnItem(contactGroupName)
+				]),
+				offset: 0
+			});
 			setupTest(
 				<Route path={ROUTES.contactGroup}>
 					<ContactGroupsView />
@@ -188,10 +213,12 @@ describe('Contact Group View', () => {
 
 		test('Click on a list item open the displayer for that item', async () => {
 			const contactGroupName = faker.company.name();
-			registerFindContactGroupsHandler(
-				createFindContactGroupsResponse([createFindContactGroupsResponseCnItem(contactGroupName)])
-			);
-
+			registerFindContactGroupsHandler({
+				findContactGroupsResponse: createFindContactGroupsResponse([
+					createFindContactGroupsResponseCnItem(contactGroupName)
+				]),
+				offset: 0
+			});
 			const { user } = setupTest(
 				<Route path={ROUTES.contactGroup}>
 					<ContactGroupsView />
@@ -208,12 +235,12 @@ describe('Contact Group View', () => {
 		test('Click on close action close the displayer', async () => {
 			const contactGroupName = faker.company.name();
 			const contactGroupId = faker.number.int({ min: 100, max: 999 }).toString();
-			registerFindContactGroupsHandler(
-				createFindContactGroupsResponse([
+			registerFindContactGroupsHandler({
+				findContactGroupsResponse: createFindContactGroupsResponse([
 					createFindContactGroupsResponseCnItem(contactGroupName, undefined, contactGroupId)
-				])
-			);
-
+				]),
+				offset: 0
+			});
 			const { user } = setupTest(
 				<Route path={ROUTES.contactGroup}>
 					<ContactGroupsView />

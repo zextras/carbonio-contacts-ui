@@ -233,60 +233,21 @@ export const registerGetDistributionListHandler = (
 	return handler;
 };
 
-type FindContactGroupsHandler = ResponseResolver<
-	RestRequest<{ Body: { SearchRequest: FindContactGroupsRequest } }>,
-	RestContext,
-	SoapResponse<FindContactGroupsResponse>
->;
-export const registerFindContactGroupsHandler = (
-	findContactGroupsResponse: FindContactGroupsResponse,
-	error?: string
-): jest.Mock<ReturnType<FindContactGroupsHandler>, Parameters<FindContactGroupsHandler>> => {
-	const handler = jest.fn<
-		ReturnType<FindContactGroupsHandler>,
-		Parameters<FindContactGroupsHandler>
-	>((req, res, ctx) => {
-		if (error) {
-			return res(
-				ctx.json<ErrorSoapResponse>({
-					Header: {
-						context: {}
-					},
-					Body: {
-						Fault: {
-							Reason: { Text: error },
-							Detail: {
-								Error: { Code: '', Detail: error }
-							}
-						}
-					}
-				})
-			);
-		}
-
-		return res(
-			ctx.json(
-				buildSoapResponse<FindContactGroupsResponse>({
-					SearchResponse: findContactGroupsResponse
-				})
-			)
-		);
-	});
-	getSetupServer().use(
-		rest.post<
-			{ Body: { SearchRequest: FindContactGroupsRequest } },
-			never,
-			SoapResponse<FindContactGroupsResponse>
-		>('/service/soap/SearchRequest', handler)
-	);
-
-	return handler;
-};
+export const createFindContactGroupsResponse = (
+	cn: FindContactGroupsResponse['cn'],
+	more = false
+): FindContactGroupsResponse => ({
+	sortBy: 'nameAsc',
+	offset: 0,
+	cn,
+	more,
+	_jsns: 'urn:zimbraMail'
+});
 
 export const createFindContactGroupsResponseCnItem = (
-	contactGroupName: string,
+	contactGroupName = faker.company.name(),
 	members: string[] = [],
-	id = faker.number.int({ min: 100, max: 999 }).toString()
+	id = faker.number.int({ min: 100 }).toString()
 ): Required<FindContactGroupsResponse>['cn'][number] => {
 	const mappedMembers = members.map((member) => ({ type: 'I' as const, value: member }));
 
@@ -306,15 +267,49 @@ export const createFindContactGroupsResponseCnItem = (
 		sf: 'bo0000000276'
 	};
 };
-export const createFindContactGroupsResponse = (
-	cn: FindContactGroupsResponse['cn']
-): FindContactGroupsResponse => ({
-	sortBy: 'nameAsc',
-	offset: 0,
-	cn,
-	more: false,
-	_jsns: 'urn:zimbraMail'
-});
+
+type FindContactGroupsHandler = ResponseResolver<
+	RestRequest<{ Body: { SearchRequest: FindContactGroupsRequest } }>,
+	RestContext,
+	SoapResponse<FindContactGroupsResponse>
+>;
+export const registerFindContactGroupsHandler = (
+	...args: Array<{
+		offset: number;
+		findContactGroupsResponse: FindContactGroupsResponse;
+	}>
+): jest.Mock<ReturnType<FindContactGroupsHandler>, Parameters<FindContactGroupsHandler>> => {
+	const handler = jest.fn<
+		ReturnType<FindContactGroupsHandler>,
+		Parameters<FindContactGroupsHandler>
+	>(async (req, res, ctx) => {
+		const reqBody = await req.json<{
+			Body: { SearchRequest: FindContactGroupsRequest };
+		}>();
+		const { offset } = reqBody.Body.SearchRequest;
+
+		const match = args.find((value) => value.offset === offset);
+
+		return res(
+			ctx.json(
+				buildSoapResponse<FindContactGroupsResponse>({
+					SearchResponse:
+						match?.findContactGroupsResponse ??
+						createFindContactGroupsResponse([createFindContactGroupsResponseCnItem()])
+				})
+			)
+		);
+	});
+	getSetupServer().use(
+		rest.post<
+			{ Body: { SearchRequest: FindContactGroupsRequest } },
+			never,
+			SoapResponse<FindContactGroupsResponse>
+		>('/service/soap/SearchRequest', handler)
+	);
+
+	return handler;
+};
 
 const createAutocompleteResponse = (match: Array<Match>): string => {
 	const matchString = match.map((item) => {

@@ -30,7 +30,8 @@ export const TESTID_SELECTORS = {
 	membersList: 'members-list',
 	membersListItem: 'member-list-item',
 	snackbar: 'snackbar',
-	listItemContent: 'list-item-content'
+	listItemContent: 'list-item-content',
+	listBottomElement: 'list-bottom-element'
 };
 
 export const PALETTE = {
