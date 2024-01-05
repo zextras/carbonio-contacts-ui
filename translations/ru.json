@@ -177,7 +177,11 @@
         "contact_created_in_folder": "Этот контакт будет создан в папке \"{{name}}\"",
         "include_shared_folders": "Включить общие адресные книги",
         "destination_address_book": "Адресная книга назначения",
-        "autocomplete": "Автозаполнение"
+        "autocomplete": "Автозаполнение",
+        "select_all_addresses_0": "Выбрать {{count}} адрес",
+        "select_all_addresses_1": "Выбрать {{count}} адреса",
+        "select_all_addresses_2": "Выбрать {{count}} адресов",
+        "show_more": "показать детали"
     },
     "job": {
         "title": "Должность",
@@ -331,5 +335,11 @@
     },
     "search": {
         "shared_folders_note": "Включить в поиск общие адресные книги."
-    }
+    },
+    "secondaryBar": {
+        "contextualMenu": {
+            "new_contact_group_creation_action": "Новая группа контактов"
+        }
+    },
+    "expand_distribution_list": "Развернуть список адресов"
 }
