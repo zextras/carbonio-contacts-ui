@@ -19,7 +19,8 @@ export const TESTID_SELECTORS = {
 		duplicatedMember: 'icon: AlertCircle',
 		close: 'icon: Close',
 		closeDisplayer: 'icon: CloseOutline',
-		accordionExpandAction: 'icon: ChevronDown'
+		accordionExpandAction: 'icon: ChevronDown',
+		sendEmail: 'icon: EmailOutline'
 	},
 	avatar: 'avatar',
 	modal: 'modal',

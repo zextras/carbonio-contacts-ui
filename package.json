@@ -11,7 +11,7 @@
 		"build": "sdk build",
 		"start": "sdk watch",
 		"deploy": "sdk deploy",
-		"test": "jest",
+		"test": "jest --maxWorkers=2",
 		"postinstall": "is-ci || husky install",
 		"prepublishOnly": "pinst --disable",
 		"postpublish": "pinst --enable",

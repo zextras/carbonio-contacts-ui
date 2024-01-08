@@ -9,7 +9,7 @@ import React, { useMemo } from 'react';
 import { Container } from '@zextras/carbonio-design-system';
 import { useParams } from 'react-router-dom';
 
-import { DLListItem } from '../components/dl-list-item';
+import { DLListItemWrapper } from '../components/dl-list-item';
 import { MainList } from '../components/main-list';
 import { StyledListItem } from '../components/StyledComponents';
 import { ROUTES_INTERNAL_PARAMS, RouteParams } from '../constants';
@@ -29,12 +29,7 @@ export const DistributionListsView = (): React.JSX.Element => {
 			distributionLists.map((dl) => (
 				<StyledListItem key={dl.id} active={dl.id === activeItem} data-testid={'list-item'}>
 					{(visible): React.JSX.Element => (
-						<DLListItem
-							visible={visible}
-							title={dl.displayName || dl.email}
-							id={dl.id}
-							onClick={setActive}
-						/>
+						<DLListItemWrapper visible={visible} distributionList={dl} onClick={setActive} />
 					)}
 				</StyledListItem>
 			)),

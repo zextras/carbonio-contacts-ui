@@ -9,7 +9,8 @@ export const CONTACTS_ROUTE = 'contacts';
 export const CONTACTS_APP_ID = 'carbonio-contacts-ui';
 
 export const ACTION_IDS = {
-	editDL: 'dl-edit-action'
+	editDL: 'dl-edit-action',
+	sendEmail: 'send-email-action'
 } as const;
 
 export const NEW_CONTACT_GROUP_BOARD_ID = 'new-contact-group-board';

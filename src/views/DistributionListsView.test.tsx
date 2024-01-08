@@ -6,39 +6,20 @@
 
 import React from 'react';
 
-import { faker } from '@faker-js/faker';
 import { waitFor } from '@testing-library/react';
-import { times } from 'lodash';
 import { Route } from 'react-router-dom';
 
 import { DistributionListsView } from './DistributionListsView';
 import { screen, setupTest } from '../carbonio-ui-commons/test/test-setup';
 import { ROUTES, ROUTES_INTERNAL_PARAMS } from '../constants';
 import { EMPTY_LIST_HINT } from '../constants/tests';
-import { DistributionList } from '../model/distribution-list';
 import { registerGetAccountDistributionListsHandler } from '../tests/msw-handlers/get-account-distribution-lists';
-import { MakeRequired } from '../types/utils';
-
-const generateDistributionList = (
-	data: Partial<DistributionList> = {}
-): MakeRequired<DistributionList, 'displayName'> => ({
-	id: faker.string.uuid(),
-	email: faker.internet.email(),
-	displayName: faker.internet.displayName(),
-	isOwner: faker.datatype.boolean(),
-	isMember: faker.datatype.boolean(),
-	...data
-});
-
-const generateDistributionLists = (
-	limit = 10
-): Array<ReturnType<typeof generateDistributionList>> =>
-	times(limit, () => generateDistributionList());
+import { generateDistributionList, generateDistributionLists } from '../tests/utils';
 
 describe('Distribution Lists View', () => {
 	it('should show the list of distribution lists', async () => {
 		const items = generateDistributionLists();
-		registerGetAccountDistributionListsHandler(items);
+		const handler = registerGetAccountDistributionListsHandler(items);
 		setupTest(
 			<Route path={ROUTES.distributionLists}>
 				<DistributionListsView />

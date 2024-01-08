@@ -5,27 +5,29 @@
  */
 import React, { useCallback } from 'react';
 
-import { Avatar, Container } from '@zextras/carbonio-design-system';
+import { Action as DSAction, Avatar, Container } from '@zextras/carbonio-design-system';
 
 import { ContextualMenu } from './ContextualMenu';
 import { ListItemHoverBar } from './ListItemHoverBar';
 import { HoverContainer, ListItemContainer } from './StyledComponents';
 import { Text } from './Text';
 import { LIST_ITEM_HEIGHT } from '../constants';
+import { useDLActions } from '../hooks/use-dl-actions';
+import { DistributionList } from '../model/distribution-list';
 
-export type DLListItemProps = {
+type DLListItemProps = {
 	onClick?: (id: string) => void;
-	visible: boolean;
 	id: string;
 	title: string;
+	actions: Array<DSAction>;
 };
 
-export const DLListItem = React.memo<DLListItemProps>(function DLListItemMemo({
+const DLListItem = React.memo<DLListItemProps>(function DLListItemMemo({
 	onClick,
 	// others props
-	visible,
 	id,
-	title
+	title,
+	actions
 }) {
 	const clickHandler = useCallback<React.MouseEventHandler<HTMLDivElement>>(() => {
 		onClick?.(id);
@@ -78,9 +80,30 @@ export const DLListItem = React.memo<DLListItemProps>(function DLListItemMemo({
 							</Container>
 						</Container>
 					</HoverContainer>
-					<ListItemHoverBar actions={[]} />
+					<ListItemHoverBar actions={actions} />
 				</ListItemContainer>
 			</ContextualMenu>
 		</Container>
 	);
 });
+
+type DLListItemWrapperProps = {
+	distributionList: DistributionList;
+	visible: boolean;
+	onClick?: (id: string) => void;
+};
+export const DLListItemWrapper = ({
+	distributionList,
+	visible,
+	onClick
+}: DLListItemWrapperProps): React.JSX.Element => {
+	const actions = useDLActions(distributionList);
+	return (
+		<DLListItem
+			id={distributionList.id}
+			title={distributionList.displayName || distributionList.email}
+			actions={actions}
+			onClick={onClick}
+		/>
+	);
+};
