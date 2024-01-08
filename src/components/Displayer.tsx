@@ -7,13 +7,19 @@
 import React from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
+import { useParams } from 'react-router-dom';
 
 import { ContactGroupDisplayer } from './ContactGroupDisplayer';
+import { DistributionListDisplayer } from './dl-displayer';
 import { EmptyDisplayer } from './EmptyDisplayer';
+import { RouteParams, ROUTES_INTERNAL_PARAMS } from '../constants';
 import { useActiveContactGroup } from '../hooks/useActiveContactGroup';
+import { useActiveItem } from '../hooks/useActiveItem';
 
 export const Displayer = (): React.JSX.Element => {
 	const contactGroup = useActiveContactGroup();
+	const { activeItem } = useActiveItem();
+	const { route } = useParams<RouteParams>();
 
 	return (
 		<Container
@@ -22,7 +28,13 @@ export const Displayer = (): React.JSX.Element => {
 			crossAlignment="flex-start"
 			data-testid="displayer"
 		>
-			{contactGroup ? <ContactGroupDisplayer contactGroup={contactGroup} /> : <EmptyDisplayer />}
+			{(activeItem &&
+				((contactGroup !== undefined && route === ROUTES_INTERNAL_PARAMS.route.contactGroups && (
+					<ContactGroupDisplayer contactGroup={contactGroup} />
+				)) ||
+					(route === ROUTES_INTERNAL_PARAMS.route.distributionLists && (
+						<DistributionListDisplayer id={activeItem} />
+					)))) || <EmptyDisplayer />}
 		</Container>
 	);
 };

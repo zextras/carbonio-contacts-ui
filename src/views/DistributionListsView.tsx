@@ -9,10 +9,11 @@ import React, { useMemo } from 'react';
 import { Container } from '@zextras/carbonio-design-system';
 import { useParams } from 'react-router-dom';
 
+import { Displayer } from '../components/Displayer';
 import { DLListItemWrapper } from '../components/dl-list-item';
 import { MainList } from '../components/main-list';
 import { StyledListItem } from '../components/StyledComponents';
-import { ROUTES_INTERNAL_PARAMS, RouteParams } from '../constants';
+import { ROUTES_INTERNAL_PARAMS, RouteParams, DISPLAYER_WIDTH } from '../constants';
 import { useActiveItem } from '../hooks/useActiveItem';
 import { useFindDistributionLists } from '../hooks/useFindDistributionLists';
 
@@ -48,15 +49,15 @@ export const DistributionListsView = (): React.JSX.Element => {
 			maxHeight="100%"
 		>
 			<MainList>{items}</MainList>
-			{/* <Container */}
-			{/*	width={DISPLAYER_WIDTH} */}
-			{/*	mainAlignment="flex-start" */}
-			{/*	crossAlignment="flex-start" */}
-			{/*	borderRadius="none" */}
-			{/*	style={{ maxHeight: '100%' }} */}
-			{/* > */}
-			{/*	<Displayer /> */}
-			{/* </Container> */}
+			<Container
+				width={DISPLAYER_WIDTH}
+				mainAlignment="flex-start"
+				crossAlignment="flex-start"
+				borderRadius="none"
+				style={{ maxHeight: '100%' }}
+			>
+				<Displayer />
+			</Container>
 		</Container>
 	);
 };
