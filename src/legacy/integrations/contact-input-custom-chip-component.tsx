@@ -316,7 +316,7 @@ export const ContactInputCustomChipComponent = ({
 	useEffect(() => {
 		if (isChipItemDistributionList({ email, isGroup })) {
 			client
-				.getDistributionList(email)
+				.getDistributionList({ email })
 				.then((response) => {
 					setDistributionList(response);
 				})

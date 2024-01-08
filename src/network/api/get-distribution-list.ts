@@ -9,10 +9,11 @@ import { first, reduce } from 'lodash';
 import { GenericSoapPayload } from './types';
 import { NAMESPACES } from '../../constants/api';
 import { DistributionList } from '../../model/distribution-list';
+import { RequireAtLeastOne } from '../../types/utils';
 
 export interface GetDistributionListRequest extends GenericSoapPayload<typeof NAMESPACES.account> {
 	dl: {
-		by: 'name';
+		by: 'name' | 'id';
 		_content: string;
 	};
 	needOwners?: number;
@@ -55,15 +56,32 @@ const normalizeResponse = (response: GetDistributionListResponse): DistributionL
 	};
 };
 
-export const getDistributionList = (email: string): Promise<DistributionList | undefined> =>
-	soapFetch<GetDistributionListRequest, GetDistributionListResponse | ErrorSoapBodyResponse>(
+export const getDistributionList = ({
+	id,
+	email
+}: RequireAtLeastOne<Pick<DistributionList, 'id' | 'email'>>): Promise<
+	DistributionList | undefined
+> => {
+	if (id === undefined && email === undefined) {
+		throw new Error('At least one between id and email is required');
+	}
+	let request: GetDistributionListRequest['dl'] = { by: 'name', _content: '' };
+	if (email !== undefined) {
+		request = {
+			by: 'name',
+			_content: email
+		};
+	} else if (id !== undefined) {
+		request = {
+			by: 'id',
+			_content: id
+		};
+	}
+	return soapFetch<GetDistributionListRequest, GetDistributionListResponse | ErrorSoapBodyResponse>(
 		'GetDistributionList',
 		{
 			_jsns: NAMESPACES.account,
-			dl: {
-				by: 'name',
-				_content: email
-			}
+			dl: request
 		}
 	).then((response) => {
 		if ('Fault' in response) {
@@ -71,3 +89,4 @@ export const getDistributionList = (email: string): Promise<DistributionList | u
 		}
 		return normalizeResponse(response);
 	});
+};

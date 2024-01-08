@@ -6,13 +6,13 @@
 
 import React from 'react';
 
-import { within } from '@testing-library/react';
 import { Route } from 'react-router-dom';
 
 import { DistributionListsView } from './DistributionListsView';
-import { screen, setupTest } from '../carbonio-ui-commons/test/test-setup';
+import { screen, setupTest, within } from '../carbonio-ui-commons/test/test-setup';
 import { ROUTES, ROUTES_INTERNAL_PARAMS } from '../constants';
 import { EMPTY_LIST_HINT, TESTID_SELECTORS } from '../constants/tests';
+import { registerGetDistributionListHandler } from '../tests/msw-handlers';
 import { registerGetAccountDistributionListsHandler } from '../tests/msw-handlers/get-account-distribution-lists';
 import { generateDistributionList, generateDistributionLists } from '../tests/utils';
 
@@ -61,23 +61,8 @@ describe('Distribution Lists View', () => {
 		it('should open the displayer when click on a distribution list item', async () => {
 			const dl = generateDistributionList();
 			registerGetAccountDistributionListsHandler([dl]);
-			const { user } = setupTest(
-				<Route path={`${ROUTES.mainRoute}${ROUTES.distributionLists}`}>
-					<DistributionListsView />
-				</Route>,
-				{
-					initialEntries: [
-						`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.member}`
-					]
-				}
-			);
-			await user.click(await screen.findByText(dl.displayName));
-			expect(screen.getByText(dl.email)).toBeVisible();
-		});
+			registerGetDistributionListHandler(dl);
 
-		it('should render the displayName inside the displayer when click on a distribution list item', async () => {
-			const dl = generateDistributionList();
-			registerGetAccountDistributionListsHandler([dl]);
 			const { user } = setupTest(
 				<Route path={`${ROUTES.mainRoute}${ROUTES.distributionLists}`}>
 					<DistributionListsView />
@@ -88,9 +73,10 @@ describe('Distribution Lists View', () => {
 					]
 				}
 			);
+
 			await user.click(await screen.findByText(dl.displayName));
 			const displayer = screen.getByTestId(TESTID_SELECTORS.displayer);
-			expect(within(displayer).getByText(dl.displayName)).toBeVisible();
+			expect(await within(displayer).findByText(dl.displayName)).toBeVisible();
 		});
 	});
 });

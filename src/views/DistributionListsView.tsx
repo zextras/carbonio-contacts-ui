@@ -54,7 +54,7 @@ export const DistributionListsView = (): React.JSX.Element => {
 				mainAlignment="flex-start"
 				crossAlignment="flex-start"
 				borderRadius="none"
-				style={{ maxHeight: '100%' }}
+				maxHeight={'100%'}
 			>
 				<Displayer />
 			</Container>
