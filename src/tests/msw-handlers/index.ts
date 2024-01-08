@@ -23,6 +23,10 @@ import {
 	DistributionListActionResponse
 } from '../../network/api/distribution-list-action';
 import {
+	FindContactGroupsRequest,
+	FindContactGroupsResponse
+} from '../../network/api/find-contact-groups';
+import {
 	GetDistributionListRequest,
 	GetDistributionListResponse
 } from '../../network/api/get-distribution-list';
@@ -219,6 +223,84 @@ export const registerGetDistributionListHandler = (
 			never,
 			SoapResponse<GetDistributionListResponse>
 		>('/service/soap/GetDistributionListRequest', handler)
+	);
+
+	return handler;
+};
+
+export const createFindContactGroupsResponse = (
+	cn: FindContactGroupsResponse['cn'],
+	more = false
+): FindContactGroupsResponse => ({
+	sortBy: 'nameAsc',
+	offset: 0,
+	cn,
+	more,
+	_jsns: 'urn:zimbraMail'
+});
+
+export const createFindContactGroupsResponseCnItem = (
+	contactGroupName = faker.company.name(),
+	members: string[] = [],
+	id = faker.number.int({ min: 100 }).toString()
+): Required<FindContactGroupsResponse>['cn'][number] => {
+	const mappedMembers = members.map((member) => ({ type: 'I' as const, value: member }));
+
+	return {
+		id,
+		l: '7',
+		d: faker.date.recent().valueOf(),
+		rev: 12974,
+		fileAsStr: contactGroupName,
+		_attrs: {
+			nickname: contactGroupName,
+			fullName: contactGroupName,
+			type: 'group',
+			fileAs: `8:${contactGroupName}`
+		},
+		m: mappedMembers,
+		sf: 'bo0000000276'
+	};
+};
+
+type FindContactGroupsHandler = ResponseResolver<
+	RestRequest<{ Body: { SearchRequest: FindContactGroupsRequest } }>,
+	RestContext,
+	SoapResponse<FindContactGroupsResponse>
+>;
+export const registerFindContactGroupsHandler = (
+	...args: Array<{
+		offset: number;
+		findContactGroupsResponse: FindContactGroupsResponse;
+	}>
+): jest.Mock<ReturnType<FindContactGroupsHandler>, Parameters<FindContactGroupsHandler>> => {
+	const handler = jest.fn<
+		ReturnType<FindContactGroupsHandler>,
+		Parameters<FindContactGroupsHandler>
+	>(async (req, res, ctx) => {
+		const reqBody = await req.json<{
+			Body: { SearchRequest: FindContactGroupsRequest };
+		}>();
+		const { offset } = reqBody.Body.SearchRequest;
+
+		const match = args.find((value) => value.offset === offset);
+
+		return res(
+			ctx.json(
+				buildSoapResponse<FindContactGroupsResponse>({
+					SearchResponse:
+						match?.findContactGroupsResponse ??
+						createFindContactGroupsResponse([createFindContactGroupsResponseCnItem()])
+				})
+			)
+		);
+	});
+	getSetupServer().use(
+		rest.post<
+			{ Body: { SearchRequest: FindContactGroupsRequest } },
+			never,
+			SoapResponse<FindContactGroupsResponse>
+		>('/service/soap/SearchRequest', handler)
 	);
 
 	return handler;

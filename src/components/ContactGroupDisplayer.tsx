@@ -7,10 +7,14 @@ import React from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
 
+import { ActionsHeader } from './ActionsHeader';
+import { ContactGroupDetails } from './ContactGroupDetails';
+import { DisplayerHeader } from './DisplayerHeader';
 import { useActions } from '../hooks/useActions';
+import { ContactGroup } from '../model/contact-group';
 
 interface ContactGroupDisplayerProps {
-	contactGroup: any;
+	contactGroup: ContactGroup;
 }
 export const ContactGroupDisplayer = ({
 	contactGroup
@@ -18,14 +22,15 @@ export const ContactGroupDisplayer = ({
 	const actions = useActions(contactGroup);
 	return (
 		<Container background={'gray5'} mainAlignment={'flex-start'} padding={{ bottom: '1rem' }}>
-			{/* <DisplayerHeader title={contactGroup.title} /> */}
+			<DisplayerHeader title={contactGroup.title} />
 			<Container
 				padding={{ horizontal: '1rem' }}
 				mainAlignment={'flex-start'}
 				minHeight={0}
 				maxHeight={'100%'}
 			>
-				{/* <ActionsHeader actions={actions} /> */}
+				<ActionsHeader actions={actions} />
+				<ContactGroupDetails />
 			</Container>
 		</Container>
 	);
