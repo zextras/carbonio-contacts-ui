@@ -8,7 +8,7 @@ import React from 'react';
 import { Container } from '@zextras/carbonio-design-system';
 
 import { ActionsHeader } from './ActionsHeader';
-import { ContactGroupDetails } from './ContactGroupDetails';
+import { CGDisplayerDetails } from './cg-displayer-details';
 import { DisplayerHeader } from './DisplayerHeader';
 import { useContactGroupActions } from '../hooks/use-contact-group-actions';
 import { ContactGroup } from '../model/contact-group';
@@ -16,6 +16,7 @@ import { ContactGroup } from '../model/contact-group';
 interface ContactGroupDisplayerProps {
 	contactGroup: ContactGroup;
 }
+
 export const ContactGroupDisplayer = ({
 	contactGroup
 }: ContactGroupDisplayerProps): React.JSX.Element => {
@@ -30,7 +31,11 @@ export const ContactGroupDisplayer = ({
 				maxHeight={'100%'}
 			>
 				<ActionsHeader actions={actions} />
-				<ContactGroupDetails />
+				<CGDisplayerDetails
+					id={contactGroup.id}
+					title={contactGroup.title}
+					members={contactGroup.members}
+				/>
 			</Container>
 		</Container>
 	);

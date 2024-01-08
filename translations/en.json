@@ -48,6 +48,11 @@
             "title": "New Group"
         }
     },
+    "cg_displayer": {
+        "label": {
+            "members_total": "Addresses: {{count}}"
+        }
+    },
     "contactGroupList": {
         "addressCount": "{{count}} address",
         "addressCount_plural": "{{count}} addresses"

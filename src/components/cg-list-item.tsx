@@ -16,7 +16,7 @@ import { Text } from './Text';
 import { LIST_ITEM_HEIGHT } from '../constants';
 import { useContactGroupActions } from '../hooks/use-contact-group-actions';
 
-type ListItemContentProps = {
+type CGListItemProps = {
 	id: string;
 	title: string;
 	members: string[];
@@ -28,7 +28,7 @@ const ContentContainer = styled(Container)`
 	overflow: hidden;
 `;
 
-export const CGListItem = React.memo<ListItemContentProps>(
+export const CGListItem = React.memo<CGListItemProps>(
 	({
 		onClick,
 		// others props

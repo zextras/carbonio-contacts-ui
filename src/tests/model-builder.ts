@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { faker } from '@faker-js/faker';
+import { times } from 'lodash';
 
 import { ContactGroup } from '../model/contact-group';
 
@@ -18,5 +19,5 @@ export const buildContactGroup = ({
 });
 
 export function buildMembers(count: number): string[] {
-	return Array(count).map(() => faker.internet.email());
+	return times(count, () => faker.internet.email());
 }

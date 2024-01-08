@@ -20,7 +20,7 @@ import { isEmpty, map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled, { css, type DefaultTheme, type SimpleInterpolation } from 'styled-components';
 
-import { CGListItem } from './c-g-list-item';
+import { CGListItem } from './cg-list-item';
 import { HoverBarContainer } from './StyledComponents';
 import { Text } from './Text';
 import { LIST_WIDTH } from '../constants';

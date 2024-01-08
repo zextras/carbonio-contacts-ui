@@ -7,7 +7,7 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 
-import { CGListItem } from './c-g-list-item';
+import { CGListItem } from './cg-list-item';
 import { screen, setupTest } from '../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../constants/tests';
 import { buildContactGroup, buildMembers } from '../tests/model-builder';
