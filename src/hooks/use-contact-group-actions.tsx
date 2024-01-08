@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ContactGroup } from '../model/contact-group';
 
-export const useActions = (contactGroup: ContactGroup): Action[] => {
+export const useContactGroupActions = (contactGroup: ContactGroup): Action[] => {
 	const { id, title, members } = contactGroup;
 	const [t] = useTranslation();
 
@@ -22,14 +22,15 @@ export const useActions = (contactGroup: ContactGroup): Action[] => {
 	}, [members, openMailComposer]);
 
 	return useMemo<Action[]>((): Action[] => {
-		const orderedActions: Action[] = [
-			{
+		const orderedActions: Action[] = [];
+		if (contactGroup.members.length > 0) {
+			orderedActions.push({
 				id: 'mail',
 				label: t('action.mail', 'Mail'),
 				icon: 'EmailOutline',
 				onClick: sendMail
-			}
-		];
+			});
+		}
 		return orderedActions;
-	}, [sendMail, t]);
+	}, [contactGroup.members.length, sendMail, t]);
 };

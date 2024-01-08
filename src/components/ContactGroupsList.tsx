@@ -20,7 +20,7 @@ import { isEmpty, map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled, { css, type DefaultTheme, type SimpleInterpolation } from 'styled-components';
 
-import { ListItemContent } from './ListItemContent';
+import { CGListItem } from './c-g-list-item';
 import { HoverBarContainer } from './StyledComponents';
 import { Text } from './Text';
 import { LIST_WIDTH } from '../constants';
@@ -90,12 +90,11 @@ export const ContactGroupsList = ({
 					data-testid={'list-item'}
 				>
 					{(visible): React.JSX.Element => (
-						<ListItemContent
+						<CGListItem
 							visible={visible}
 							title={contactGroup.title}
 							id={contactGroup.id}
 							onClick={setActive}
-							membersCount={contactGroup.members.length}
 							members={contactGroup.members}
 						/>
 					)}

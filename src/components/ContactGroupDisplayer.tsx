@@ -10,7 +10,7 @@ import { Container } from '@zextras/carbonio-design-system';
 import { ActionsHeader } from './ActionsHeader';
 import { ContactGroupDetails } from './ContactGroupDetails';
 import { DisplayerHeader } from './DisplayerHeader';
-import { useActions } from '../hooks/useActions';
+import { useContactGroupActions } from '../hooks/use-contact-group-actions';
 import { ContactGroup } from '../model/contact-group';
 
 interface ContactGroupDisplayerProps {
@@ -19,7 +19,7 @@ interface ContactGroupDisplayerProps {
 export const ContactGroupDisplayer = ({
 	contactGroup
 }: ContactGroupDisplayerProps): React.JSX.Element => {
-	const actions = useActions(contactGroup);
+	const actions = useContactGroupActions(contactGroup);
 	return (
 		<Container background={'gray5'} mainAlignment={'flex-start'} padding={{ bottom: '1rem' }}>
 			<DisplayerHeader title={contactGroup.title} />

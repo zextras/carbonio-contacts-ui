@@ -167,6 +167,22 @@ describe('Contact Group View', () => {
 			expect(openMailComposer).toHaveBeenCalledWith({ recipients: [{ email: member }] });
 		});
 
+		it('should hide send mail hover action when the contact group has 0 members', async () => {
+			const openMailComposer = jest.fn();
+			jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
+			const contactGroupName = faker.company.name();
+			registerFindContactGroupsHandler({
+				findContactGroupsResponse: createFindContactGroupsResponse([
+					createFindContactGroupsResponseCnItem(contactGroupName, [])
+				]),
+				offset: 0
+			});
+			setupTest(<ContactGroupsView />);
+
+			await screen.findAllByText(contactGroupName);
+			expect(screen.queryByTestId(TESTID_SELECTORS.icons.sendMail)).not.toBeInTheDocument();
+		});
+
 		it('should open the mail board (Contextual menu trigger)', async () => {
 			const openMailComposer = jest.fn();
 			jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
