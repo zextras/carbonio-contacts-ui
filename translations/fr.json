@@ -184,7 +184,11 @@
         "contact_created_in_folder": "Ce contact sera créé dans le dossier \"{{name}}\"",
         "destination_address_book": "Carnet d'adresse de destination",
         "include_shared_folders": "Inclure les carnets d'adresses partagés",
-        "autocomplete": "Auto-complétion"
+        "autocomplete": "Auto-complétion",
+        "select_all_addresses_0": "Sélectionner l'adresse",
+        "select_all_addresses_1": "Sélectionner les {{count}} adresses",
+        "select_all_addresses_2": "Sélectionner les {{count}} adresses",
+        "show_more": "plus de détail"
     },
     "name": {
         "nickName": "Surnom",
@@ -336,5 +340,11 @@
     },
     "search": {
         "shared_folders_note": "Inclure les carnets d'adresses partagés dans les recherches"
-    }
+    },
+    "secondaryBar": {
+        "contextualMenu": {
+            "new_contact_group_creation_action": "Nouveau groupe de contact"
+        }
+    },
+    "expand_distribution_list": "Élargir la liste d'adresses"
 }
