@@ -5,16 +5,18 @@
  */
 import React, { useCallback } from 'react';
 
-import { Container, Divider, IconButton } from '@zextras/carbonio-design-system';
+import { Container, Divider, Icon, IconButton } from '@zextras/carbonio-design-system';
+import { DefaultTheme } from 'styled-components';
 
 import { Text } from './Text';
 import { useActiveItem } from '../hooks/useActiveItem';
 
 interface DisplayerHeaderProps {
 	title: string;
+	icon: keyof DefaultTheme['icons'];
 }
 
-export const DisplayerHeader = ({ title }: DisplayerHeaderProps): React.JSX.Element => {
+export const DisplayerHeader = ({ title, icon }: DisplayerHeaderProps): React.JSX.Element => {
 	const { removeActive } = useActiveItem();
 
 	const closeDisplayer = useCallback(() => {
@@ -22,15 +24,21 @@ export const DisplayerHeader = ({ title }: DisplayerHeaderProps): React.JSX.Elem
 	}, [removeActive]);
 
 	return (
-		<Container orientation={'vertical'} width={'fill'} height={'auto'}>
+		<Container
+			orientation={'vertical'}
+			width={'fill'}
+			height={'auto'}
+			data-testid={'displayer-header'}
+		>
 			<Container
 				mainAlignment={'flex-start'}
 				orientation={'horizontal'}
 				width={'fill'}
 				height={'auto'}
 				padding={{ top: '0.5rem', right: '0.5rem', bottom: '0.5rem', left: '1rem' }}
-				gap={'0.5rem'}
+				gap={'0.75rem'}
 			>
+				<Icon icon={icon} />
 				<Text withTooltip>{title}</Text>
 				<Container margin={{ left: 'auto' }} width={'fit'} height={'fit'} flexShrink={0}>
 					<IconButton icon={'CloseOutline'} size={'medium'} onClick={closeDisplayer} />

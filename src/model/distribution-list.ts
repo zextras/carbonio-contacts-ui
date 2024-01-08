@@ -10,6 +10,7 @@ export type DistributionList = {
 	isOwner: boolean;
 	isMember?: boolean;
 	owners?: Array<{ id: string; name: string }>;
+	description?: string;
 };
 
 export type DistributionListMembersPage = {

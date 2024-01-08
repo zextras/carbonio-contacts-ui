@@ -10,10 +10,13 @@ import { Action as DSAction } from '@zextras/carbonio-design-system';
 import { useActionSendEmail } from '../actions/send-email';
 import { DistributionList } from '../model/distribution-list';
 
-export const useDLActions = (distributionList: DistributionList): Array<DSAction> => {
+export const useDLActions = (distributionList: DistributionList | undefined): Array<DSAction> => {
 	const sendEmailAction = useActionSendEmail();
 
 	return useMemo(() => {
+		if (distributionList === undefined) {
+			return [];
+		}
 		const actions: Array<DSAction> = [];
 		if (sendEmailAction.canExecute()) {
 			actions.push({

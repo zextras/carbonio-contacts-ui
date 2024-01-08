@@ -10,12 +10,12 @@ import { Container } from '@zextras/carbonio-design-system';
 import { useParams } from 'react-router-dom';
 
 import { Displayer } from '../components/Displayer';
-import { DLListItemWrapper } from '../components/dl-list-item';
+import { DLListItem } from '../components/dl-list-item';
 import { MainList } from '../components/main-list';
 import { StyledListItem } from '../components/StyledComponents';
 import { ROUTES_INTERNAL_PARAMS, RouteParams, DISPLAYER_WIDTH } from '../constants';
+import { useFindDistributionLists } from '../hooks/use-find-distribution-lists';
 import { useActiveItem } from '../hooks/useActiveItem';
-import { useFindDistributionLists } from '../hooks/useFindDistributionLists';
 
 export const DistributionListsView = (): React.JSX.Element => {
 	const { activeItem, setActive } = useActiveItem();
@@ -30,7 +30,7 @@ export const DistributionListsView = (): React.JSX.Element => {
 			distributionLists.map((dl) => (
 				<StyledListItem key={dl.id} active={dl.id === activeItem} data-testid={'list-item'}>
 					{(visible): React.JSX.Element => (
-						<DLListItemWrapper visible={visible} distributionList={dl} onClick={setActive} />
+						<DLListItem visible={visible} distributionList={dl} onClick={setActive} />
 					)}
 				</StyledListItem>
 			)),

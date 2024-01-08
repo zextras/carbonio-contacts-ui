@@ -79,3 +79,7 @@ export const StyledListItem = styled(ListItem).attrs<
 			}
 		`}
 `;
+
+export const ScrollableContainer = styled(Container)`
+	overflow-y: auto;
+`;

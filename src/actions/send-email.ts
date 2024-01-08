@@ -13,10 +13,18 @@ import { ACTION_IDS } from '../constants';
 
 export type SendEmailAction = UIAction<Array<string>, never>;
 
+export type OpenMailComposerIntegratedFunction = (arg: {
+	recipients: Array<{ email: string }>;
+}) => void;
+
 export const useActionSendEmail = (): SendEmailAction => {
 	const [t] = useTranslation();
 
-	const [openMailComposer, isMailAvailable] = useIntegratedFunction('composePrefillMessage');
+	// FIXME: remove cast when shell will have generics
+	const [openMailComposer, isMailAvailable] = useIntegratedFunction('composePrefillMessage') as [
+		OpenMailComposerIntegratedFunction,
+		boolean
+	];
 
 	const sendEmail = useCallback<SendEmailAction['execute']>(
 		(recipients) => {
@@ -35,7 +43,7 @@ export const useActionSendEmail = (): SendEmailAction => {
 	return useMemo(
 		() => ({
 			id: ACTION_IDS.sendEmail,
-			label: t('action.mail', 'Send email'),
+			label: t('action.mail', 'Send e-mail'),
 			icon: 'EmailOutline',
 			canExecute,
 			execute: sendEmail

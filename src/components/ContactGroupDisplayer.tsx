@@ -22,7 +22,7 @@ export const ContactGroupDisplayer = ({
 	const actions = useActions(contactGroup);
 	return (
 		<Container background={'gray5'} mainAlignment={'flex-start'} padding={{ bottom: '1rem' }}>
-			<DisplayerHeader title={contactGroup.title} />
+			<DisplayerHeader title={contactGroup.title} icon={'PeopleOutline'} />
 			<Container
 				padding={{ horizontal: '1rem' }}
 				mainAlignment={'flex-start'}

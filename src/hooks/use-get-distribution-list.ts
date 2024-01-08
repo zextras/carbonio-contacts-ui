@@ -12,7 +12,7 @@ import { RequireAtLeastOne } from '../types/utils';
 export const useGetDistributionList = (
 	item: RequireAtLeastOne<Pick<DistributionList, 'id' | 'email'>>
 ): DistributionList | undefined => {
-	const [distributionList, setDistributionList] = useState<DistributionList | undefined>(undefined);
+	const [distributionList, setDistributionList] = useState<DistributionList | undefined>();
 
 	useEffect(() => {
 		client.getDistributionList(item).then((dl) => {

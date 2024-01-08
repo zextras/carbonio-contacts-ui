@@ -15,14 +15,14 @@ import { LIST_ITEM_HEIGHT } from '../constants';
 import { useDLActions } from '../hooks/use-dl-actions';
 import { DistributionList } from '../model/distribution-list';
 
-type DLListItemProps = {
+type DLListItemContentProps = {
 	onClick?: (id: string) => void;
 	id: string;
 	title: string;
 	actions: Array<DSAction>;
 };
 
-const DLListItem = React.memo<DLListItemProps>(function DLListItemMemo({
+const DLListItemContent = React.memo<DLListItemContentProps>(function DLListItemMemo({
 	onClick,
 	// others props
 	id,
@@ -87,19 +87,20 @@ const DLListItem = React.memo<DLListItemProps>(function DLListItemMemo({
 	);
 });
 
-type DLListItemWrapperProps = {
+type DLListItemProps = {
 	distributionList: DistributionList;
 	visible: boolean;
 	onClick?: (id: string) => void;
 };
-export const DLListItemWrapper = ({
+
+export const DLListItem = ({
 	distributionList,
 	visible,
 	onClick
-}: DLListItemWrapperProps): React.JSX.Element => {
+}: DLListItemProps): React.JSX.Element => {
 	const actions = useDLActions(distributionList);
 	return (
-		<DLListItem
+		<DLListItemContent
 			id={distributionList.id}
 			title={distributionList.displayName || distributionList.email}
 			actions={actions}

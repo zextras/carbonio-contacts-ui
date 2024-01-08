@@ -7,11 +7,8 @@ import React from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
 
-const ScrollableContainer = styled(Container)`
-	overflow-y: auto;
-`;
+import { ScrollableContainer } from './StyledComponents';
 
 export const ContactGroupDetails = (): React.JSX.Element => {
 	const [t] = useTranslation();
