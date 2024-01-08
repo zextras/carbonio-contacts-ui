@@ -12,7 +12,7 @@ import { Route } from 'react-router-dom';
 
 import { ContactGroupsView } from './ContactGroupsView';
 import { setupTest, screen, triggerLoadMore } from '../carbonio-ui-commons/test/test-setup';
-import { FIND_CONTACT_GROUP_LIMIT, ROUTES } from '../constants';
+import { FIND_CONTACT_GROUP_LIMIT, ROUTES, ROUTES_INTERNAL_PARAMS } from '../constants';
 import { EMPTY_DISPLAYER_HINT, EMPTY_LIST_HINT, TESTID_SELECTORS } from '../constants/tests';
 import { useContactGroupStore } from '../store/contact-groups';
 import {
@@ -49,11 +49,7 @@ describe('Contact Group View', () => {
 			}
 		);
 
-		setupTest(
-			<Route path={ROUTES.contactGroup}>
-				<ContactGroupsView />
-			</Route>
-		);
+		setupTest(<ContactGroupsView />);
 
 		expect(await screen.findByText(cnItem1.fileAsStr)).toBeVisible();
 		expect(screen.queryByText(cnItem101.fileAsStr)).not.toBeInTheDocument();
@@ -72,11 +68,7 @@ describe('Contact Group View', () => {
 			]),
 			offset: 0
 		});
-		setupTest(
-			<Route path={ROUTES.contactGroup}>
-				<ContactGroupsView />
-			</Route>
-		);
+		setupTest(<ContactGroupsView />);
 
 		expect(await screen.findByText(contactGroupName)).toBeVisible();
 		const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
@@ -92,11 +84,7 @@ describe('Contact Group View', () => {
 			]),
 			offset: 0
 		});
-		setupTest(
-			<Route path={ROUTES.contactGroup}>
-				<ContactGroupsView />
-			</Route>
-		);
+		setupTest(<ContactGroupsView />);
 
 		expect(await screen.findByText(contactGroupName)).toBeVisible();
 		expect(screen.getByText('0 addresses')).toBeVisible();
@@ -112,11 +100,7 @@ describe('Contact Group View', () => {
 			]),
 			offset: 0
 		});
-		setupTest(
-			<Route path={ROUTES.contactGroup}>
-				<ContactGroupsView />
-			</Route>
-		);
+		setupTest(<ContactGroupsView />);
 
 		expect(await screen.findByText(contactGroupName)).toBeVisible();
 		const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
@@ -130,11 +114,7 @@ describe('Contact Group View', () => {
 			offset: 0
 		});
 
-		setupTest(
-			<Route path={ROUTES.contactGroup}>
-				<ContactGroupsView />
-			</Route>
-		);
+		setupTest(<ContactGroupsView />);
 		expect(await screen.findByText(EMPTY_LIST_HINT)).toBeVisible();
 	});
 
@@ -151,9 +131,10 @@ describe('Contact Group View', () => {
 				offset: 0
 			});
 			const { user } = setupTest(
-				<Route path={ROUTES.contactGroup}>
+				<Route path={`${ROUTES.mainRoute}${ROUTES.contactGroups}`}>
 					<ContactGroupsView />
-				</Route>
+				</Route>,
+				{ initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}`] }
 			);
 
 			await screen.findByText(contactGroupName);
@@ -177,11 +158,7 @@ describe('Contact Group View', () => {
 				]),
 				offset: 0
 			});
-			const { user } = setupTest(
-				<Route path={ROUTES.contactGroup}>
-					<ContactGroupsView />
-				</Route>
-			);
+			const { user } = setupTest(<ContactGroupsView />);
 
 			await screen.findAllByText(contactGroupName);
 			const action = screen.getByTestId(TESTID_SELECTORS.icons.sendMail);
@@ -201,19 +178,13 @@ describe('Contact Group View', () => {
 				]),
 				offset: 0
 			});
-			const { user } = setupTest(
-				<Route path={ROUTES.contactGroup}>
-					<ContactGroupsView />
-				</Route>
-			);
+			const { user } = setupTest(<ContactGroupsView />);
 
 			await screen.findByText(contactGroupName);
 			const listItem = await screen.findByTestId('list-item-content');
 			await user.rightClick(listItem);
 
-			const contextualMenu = await screen.findByTestId(TESTID_SELECTORS.dropdownList, undefined, {
-				timeout: 2000
-			});
+			const contextualMenu = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
 			const action = within(contextualMenu).getByText('Mail');
 			await user.click(action);
 			expect(openMailComposer).toHaveBeenCalledTimes(1);
@@ -227,11 +198,7 @@ describe('Contact Group View', () => {
 				findContactGroupsResponse: createFindContactGroupsResponse([]),
 				offset: 0
 			});
-			setupTest(
-				<Route path={ROUTES.contactGroup}>
-					<ContactGroupsView />
-				</Route>
-			);
+			setupTest(<ContactGroupsView />);
 
 			expect(await screen.findByText(EMPTY_DISPLAYER_HINT)).toBeVisible();
 		});
@@ -245,11 +212,12 @@ describe('Contact Group View', () => {
 				offset: 0
 			});
 			const { user } = setupTest(
-				<Route path={ROUTES.contactGroup}>
+				<Route path={`${ROUTES.mainRoute}${ROUTES.contactGroups}`}>
 					<ContactGroupsView />
-				</Route>
+				</Route>,
+				{ initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}`] }
 			);
-			await screen.findByText(contactGroupName, undefined, { timeout: 2000 });
+			await screen.findByText(contactGroupName);
 			await screen.findByText(EMPTY_DISPLAYER_HINT);
 			await user.click(screen.getByText(contactGroupName));
 			await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.closeDisplayer });
@@ -265,14 +233,12 @@ describe('Contact Group View', () => {
 				offset: 0
 			});
 			const { user } = setupTest(
-				<Route path={ROUTES.contactGroup}>
+				<Route path={`${ROUTES.mainRoute}${ROUTES.contactGroups}`}>
 					<ContactGroupsView />
 				</Route>,
-				{
-					initialEntries: [`/${cnItem.id}`]
-				}
+				{ initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${cnItem.id}`] }
 			);
-			await screen.findAllByText(cnItem.fileAsStr, undefined, { timeout: 2000 });
+			await screen.findAllByText(cnItem.fileAsStr);
 			expect(screen.queryByText(EMPTY_DISPLAYER_HINT)).not.toBeInTheDocument();
 			const closeButton = screen.getByRoleWithIcon('button', {
 				icon: TESTID_SELECTORS.icons.closeDisplayer

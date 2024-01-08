@@ -11,7 +11,7 @@ export const TESTID_SELECTORS = {
 		trash: /icon: Trash2Outline/i,
 		avatar: /icon: PeopleOutline/i,
 		editChip: 'icon: EditOutline',
-		editDL: 'icon: Edit2Outline',
+		editDL: 'icon: Settings2Outline',
 		expandDL: 'icon: ChevronDownOutline',
 		collapseDL: 'icon: ChevronUpOutline',
 		filterMembers: 'icon: FunnelOutline',
@@ -19,7 +19,8 @@ export const TESTID_SELECTORS = {
 		removeMembers: 'icon: Trash2Outline',
 		duplicatedMember: 'icon: AlertCircle',
 		close: 'icon: Close',
-		closeDisplayer: /icon: CloseOutline/i
+		closeDisplayer: 'icon: CloseOutline',
+		accordionExpandAction: 'icon: ChevronDown'
 	},
 	avatar: 'avatar',
 	modal: 'modal',
@@ -33,7 +34,8 @@ export const TESTID_SELECTORS = {
 	snackbar: 'snackbar',
 	listItemContent: 'list-item-content',
 	listBottomElement: 'list-bottom-element',
-	displayer: 'displayer'
+	displayer: 'displayer',
+	accordionItem: 'accordion-item'
 };
 
 export const PALETTE = {

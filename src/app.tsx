@@ -15,7 +15,8 @@ import {
 	ACTION_TYPES,
 	addBoard,
 	registerComponents,
-	SearchViewProps
+	SearchViewProps,
+	SecondaryBarComponentProps
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
@@ -64,15 +65,15 @@ const AppView = (): React.JSX.Element => (
 	</Suspense>
 );
 
-const SecondaryBarView = (props: any): React.JSX.Element => (
+const SecondaryBarView = (props: SecondaryBarComponentProps): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
 		<LazySecondaryBarView {...props} />
 	</Suspense>
 );
 
-const GroupsAppView = (props: any): React.JSX.Element => (
+const AppViewV2 = (): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
-		<LazyGroupsAppView {...props} />
+		<LazyGroupsAppView />
 	</Suspense>
 );
 
@@ -127,13 +128,14 @@ const App = (): React.JSX.Element => {
 			appView: AppView
 		});
 		addRoute({
+			// TODO: update route name and label
 			route: GROUPS_ROUTE,
 			position: 4,
 			visible: true,
 			label: 'Contact Groups',
 			primaryBar: 'ContactsModOutline',
 			secondaryBar: SecondaryBarView,
-			appView: GroupsAppView
+			appView: AppViewV2
 		});
 		addSettingsView({
 			route: CONTACTS_ROUTE,

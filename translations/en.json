@@ -328,6 +328,9 @@
         "contextualMenu": {
             "new_contact_group_creation_action": "New Contact Group"
         },
+        "distributionLists": "Distribution Lists",
+        "distributionListsManager": "Manager",
+        "distributionListsMember": "Member",
         "myContactGroups": "My Contact Groups"
     },
     "section": {

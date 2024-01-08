@@ -13,34 +13,28 @@ import {
 import { map, some } from 'lodash';
 import { ResponseResolver, rest, RestContext, RestRequest } from 'msw';
 
-import { getSetupServer } from '../carbonio-ui-commons/test/jest-setup';
-import { mockedAccount } from '../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
-import { NAMESPACES } from '../constants/api';
-import { FullAutocompleteResponse, Match } from '../legacy/types/contact';
+import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
+import { mockedAccount } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
+import { NAMESPACES } from '../../constants/api';
+import { FullAutocompleteResponse, Match } from '../../legacy/types/contact';
 import {
 	BatchDistributionListActionRequest,
 	BatchDistributionListActionResponse,
 	DistributionListActionResponse
-} from '../network/api/distribution-list-action';
+} from '../../network/api/distribution-list-action';
 import {
 	FindContactGroupsRequest,
 	FindContactGroupsResponse
-} from '../network/api/find-contact-groups';
+} from '../../network/api/find-contact-groups';
 import {
 	GetDistributionListRequest,
 	GetDistributionListResponse
-} from '../network/api/get-distribution-list';
+} from '../../network/api/get-distribution-list';
 import {
 	GetDistributionListMembersRequest,
 	GetDistributionListMembersResponse
-} from '../network/api/get-distribution-list-members';
-
-export const buildSoapResponse = <T>(responseData: Record<string, T>): SuccessSoapResponse<T> => ({
-	Header: {
-		context: {}
-	},
-	Body: responseData
-});
+} from '../../network/api/get-distribution-list-members';
+import { buildSoapResponse } from '../utils';
 
 type GetDistributionListMembersHandler = ResponseResolver<
 	RestRequest<{ Body: { GetDistributionListMembersRequest: GetDistributionListMembersRequest } }>,
@@ -208,6 +202,7 @@ export const registerGetDistributionListHandler = (
 					GetDistributionListResponse: {
 						dl: [
 							{
+								id: faker.string.uuid(),
 								name: dl.email,
 								_attrs: {
 									displayName: dl.displayName

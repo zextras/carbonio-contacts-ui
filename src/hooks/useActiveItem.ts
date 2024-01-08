@@ -3,12 +3,12 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { useParams } from 'react-router-dom';
 
 import { useNavigation, type UseNavigationReturnType } from './useNavigation';
-import { ContactGroupsPathParams } from '../model/contact-group';
+import { RouteParams, ROUTES_INTERNAL_PARAMS } from '../constants';
 
 type UseActiveItemReturnType = {
 	activeItem: string;
@@ -19,12 +19,12 @@ type UseActiveItemReturnType = {
 
 export const useActiveItem = (): UseActiveItemReturnType => {
 	const { navigateTo } = useNavigation();
-	const { contactGroupId } = useParams<ContactGroupsPathParams>();
-	const activeTaskIdRef = useRef<string>();
+	const { id, route, filter } = useParams<RouteParams>();
+	const activeIdRef = useRef<string>();
 
 	useEffect(() => {
-		activeTaskIdRef.current = contactGroupId;
-	}, [contactGroupId]);
+		activeIdRef.current = id;
+	}, [id]);
 
 	/**
 	 * Check if the given id matches the active id.
@@ -32,23 +32,30 @@ export const useActiveItem = (): UseActiveItemReturnType => {
 	 * Use activeItem field if you need the dependency to update.
 	 */
 	const isActive = useCallback<UseActiveItemReturnType['isActive']>(
-		(id) => activeTaskIdRef.current === id,
+		(itemId) => activeIdRef.current === itemId,
 		[]
 	);
 
+	const currentPath = useMemo(() => {
+		if (route === ROUTES_INTERNAL_PARAMS.route.distributionLists) {
+			return `${route}/${filter}`;
+		}
+		return route;
+	}, [filter, route]);
+
 	const setActive = useCallback<UseActiveItemReturnType['setActive']>(
-		(id, options) => {
-			navigateTo(id, options);
+		(itemId, options) => {
+			navigateTo(`${currentPath}/${itemId}`, options);
 		},
-		[navigateTo]
+		[currentPath, navigateTo]
 	);
 
 	const removeActive = useCallback<UseActiveItemReturnType['removeActive']>(
 		(options) => {
-			navigateTo('/', options);
+			navigateTo(currentPath, options);
 		},
-		[navigateTo]
+		[currentPath, navigateTo]
 	);
 
-	return { activeItem: contactGroupId, isActive, setActive, removeActive };
+	return { activeItem: id, isActive, setActive, removeActive };
 };

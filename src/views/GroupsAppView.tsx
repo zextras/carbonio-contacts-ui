@@ -8,19 +8,32 @@ import React, { useMemo } from 'react';
 
 import { ModalManager, ThemeProvider } from '@zextras/carbonio-design-system';
 import { trimEnd } from 'lodash';
-import { Route, useRouteMatch } from 'react-router-dom';
+import { Route, Switch, useRouteMatch } from 'react-router-dom';
 
 import { ContactGroupsView } from './ContactGroupsView';
-import { ROUTES } from '../constants';
+import { DistributionListsView } from './DistributionListsView';
+import { RouteParams, ROUTES, ROUTES_INTERNAL_PARAMS } from '../constants';
 
 const AppView = (): React.JSX.Element => {
-	const { path } = useRouteMatch();
+	const { path, params } = useRouteMatch<RouteParams>();
+
+	const trimmedPath = useMemo(() => trimEnd(path, '/'), [path]);
 
 	const routes = useMemo(
 		() => (
-			<Route path={`${trimEnd(path, '/')}${ROUTES.contactGroup}`} component={ContactGroupsView} />
+			<Switch>
+				{params.route === ROUTES_INTERNAL_PARAMS.route.contactGroups && (
+					<Route path={`${trimmedPath}${ROUTES.contactGroups}`} component={ContactGroupsView} />
+				)}
+				{params.route === ROUTES_INTERNAL_PARAMS.route.distributionLists && (
+					<Route
+						path={`${trimmedPath}${ROUTES.distributionLists}`}
+						component={DistributionListsView}
+					/>
+				)}
+			</Switch>
 		),
-		[path]
+		[trimmedPath, params]
 	);
 
 	return (
@@ -30,4 +43,12 @@ const AppView = (): React.JSX.Element => {
 	);
 };
 
-export default AppView;
+const MainRouteAppView = (): React.JSX.Element => {
+	const { path } = useRouteMatch();
+
+	const trimmedPath = useMemo(() => trimEnd(path, '/'), [path]);
+
+	return <Route path={`${trimmedPath}${ROUTES.mainRoute}`} component={AppView} />;
+};
+
+export default MainRouteAppView;
