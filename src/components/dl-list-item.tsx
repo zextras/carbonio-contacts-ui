@@ -41,7 +41,7 @@ const DLListItem = React.memo<DLListItemProps>(function DLListItemMemo({
 
 	return (
 		<Container data-testid={id} height={LIST_ITEM_HEIGHT}>
-			<ContextualMenu actions={[]}>
+			<ContextualMenu actions={actions}>
 				<ListItemContainer
 					height={'fit'}
 					crossAlignment={'flex-end'}

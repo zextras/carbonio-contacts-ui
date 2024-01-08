@@ -24,5 +24,15 @@ describe('DL list item', () => {
 				screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.sendEmail })
 			).toBeInTheDocument();
 		});
+
+		it('should show send email action on contextual menu', async () => {
+			const openMailComposer = jest.fn();
+			jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
+
+			const dl = generateDistributionList();
+			const { user } = setupTest(<DLListItemWrapper distributionList={dl} visible />);
+			await user.rightClick(screen.getByText(dl.displayName));
+			expect(await screen.findByText(/send email/i)).toBeVisible();
+		});
 	});
 });

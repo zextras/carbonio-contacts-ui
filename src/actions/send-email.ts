@@ -35,7 +35,7 @@ export const useActionSendEmail = (): SendEmailAction => {
 	return useMemo(
 		() => ({
 			id: ACTION_IDS.sendEmail,
-			label: t('action.mail', 'Mail'),
+			label: t('action.mail', 'Send email'),
 			icon: 'EmailOutline',
 			canExecute,
 			execute: sendEmail
