@@ -8,11 +8,11 @@ import React from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
 
-import { ContactGroupDisplayer } from './ContactGroupDisplayer';
+import { ContactGroupDisplayer } from './contact-group-displayer';
 import { EmptyDisplayer } from './EmptyDisplayer';
 import { useActiveContactGroup } from '../hooks/useActiveContactGroup';
 
-export const Displayer = (): React.JSX.Element => {
+export const ContactGroupDisplayerController = (): React.JSX.Element => {
 	const contactGroup = useActiveContactGroup();
 
 	return (

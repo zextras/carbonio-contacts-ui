@@ -6,13 +6,13 @@
 
 import React from 'react';
 
-import { Displayer } from './Displayer';
+import { ContactGroupDisplayerController } from './contact-group-displayer-controller';
 import { setupTest, screen } from '../carbonio-ui-commons/test/test-setup';
 import { EMPTY_DISPLAYER_HINT, TESTID_SELECTORS } from '../constants/tests';
 
-describe('Displayer', () => {
+describe('Contact group displayer controller', () => {
 	it('should show suggestions if no contact group is active', async () => {
-		setupTest(<Displayer />);
+		setupTest(<ContactGroupDisplayerController />);
 		await screen.findByText(EMPTY_DISPLAYER_HINT);
 		expect(screen.getByText(EMPTY_DISPLAYER_HINT)).toBeVisible();
 		expect(

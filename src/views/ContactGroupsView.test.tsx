@@ -119,7 +119,7 @@ describe('Contact Group View', () => {
 	});
 
 	describe('Send mail action', () => {
-		it('should open the mail board (Displayer trigger)', async () => {
+		it('should open the mail board (ContactGroupDisplayerController trigger)', async () => {
 			const openMailComposer = jest.fn();
 			jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
 			const contactGroupName = faker.company.name();
