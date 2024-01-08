@@ -6,6 +6,7 @@
 
 export const TESTID_SELECTORS = {
 	icons: {
+		sendMail: 'icon: EmailOutline',
 		save: /icon: SaveOutline/i,
 		trash: /icon: Trash2Outline/i,
 		avatar: /icon: PeopleOutline/i,
@@ -31,7 +32,8 @@ export const TESTID_SELECTORS = {
 	membersListItem: 'member-list-item',
 	snackbar: 'snackbar',
 	listItemContent: 'list-item-content',
-	listBottomElement: 'list-bottom-element'
+	listBottomElement: 'list-bottom-element',
+	displayer: 'displayer'
 };
 
 export const PALETTE = {

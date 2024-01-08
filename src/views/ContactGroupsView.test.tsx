@@ -6,7 +6,8 @@
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
-import { waitForElementToBeRemoved, within } from '@testing-library/react';
+import { within } from '@testing-library/react';
+import * as shell from '@zextras/carbonio-shell-ui';
 import { Route } from 'react-router-dom';
 
 import { ContactGroupsView } from './ContactGroupsView';
@@ -97,7 +98,7 @@ describe('Contact Group View', () => {
 			</Route>
 		);
 
-		expect(await screen.findByText(contactGroupName, undefined, { timeout: 2000 })).toBeVisible();
+		expect(await screen.findByText(contactGroupName)).toBeVisible();
 		expect(screen.getByText('0 addresses')).toBeVisible();
 		const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
 		expect(within(listItemContent).getByTestId(TESTID_SELECTORS.icons.avatar)).toBeVisible();
@@ -117,7 +118,7 @@ describe('Contact Group View', () => {
 			</Route>
 		);
 
-		expect(await screen.findByText(contactGroupName, undefined, { timeout: 2000 })).toBeVisible();
+		expect(await screen.findByText(contactGroupName)).toBeVisible();
 		const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
 		expect(within(listItemContent).getByTestId(TESTID_SELECTORS.icons.avatar)).toBeVisible();
 		expect(screen.getByText('1 address')).toBeVisible();
@@ -137,12 +138,15 @@ describe('Contact Group View', () => {
 		expect(await screen.findByText(EMPTY_LIST_HINT)).toBeVisible();
 	});
 
-	describe.skip('Actions', () => {
-		it('should render the mail, edit and delete actions on hover', async () => {
+	describe('Send mail action', () => {
+		it('should open the mail board (Displayer trigger)', async () => {
+			const openMailComposer = jest.fn();
+			jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
 			const contactGroupName = faker.company.name();
+			const member = faker.internet.email();
 			registerFindContactGroupsHandler({
 				findContactGroupsResponse: createFindContactGroupsResponse([
-					createFindContactGroupsResponseCnItem(contactGroupName)
+					createFindContactGroupsResponseCnItem(contactGroupName, [member])
 				]),
 				offset: 0
 			});
@@ -152,19 +156,69 @@ describe('Contact Group View', () => {
 				</Route>
 			);
 
-			await waitForElementToBeRemoved(screen.queryByText('emptyListPlaceholder'), {
-				timeout: 2000
-			});
-
-			await user.hover(await screen.findByText(contactGroupName));
-			expect(screen.getByTestId('icon: Edit2Outline')).toBeVisible();
-			expect(screen.getByTestId('icon: Trash2Outline')).toBeVisible();
-			expect(screen.getByTestId('icon: EmailOutline')).toBeVisible();
+			await screen.findByText(contactGroupName);
+			const listItem = await screen.findByTestId('list-item-content');
+			await user.click(listItem);
+			const displayer = await screen.findByTestId(TESTID_SELECTORS.displayer);
+			const action = within(displayer).getByRole('button', { name: /mail/i });
+			await user.click(action);
+			expect(openMailComposer).toHaveBeenCalledTimes(1);
+			expect(openMailComposer).toHaveBeenCalledWith({ recipients: [{ email: member }] });
 		});
 
-		it.todo('should render the dropdown with the actions when right click');
+		it('should open the mail board (Hover trigger)', async () => {
+			const openMailComposer = jest.fn();
+			jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
+			const contactGroupName = faker.company.name();
+			const member = faker.internet.email();
+			registerFindContactGroupsHandler({
+				findContactGroupsResponse: createFindContactGroupsResponse([
+					createFindContactGroupsResponseCnItem(contactGroupName, [member])
+				]),
+				offset: 0
+			});
+			const { user } = setupTest(
+				<Route path={ROUTES.contactGroup}>
+					<ContactGroupsView />
+				</Route>
+			);
 
-		it.todo('should open the mail board if the user clicks on the mail icon');
+			await screen.findAllByText(contactGroupName);
+			const action = screen.getByTestId(TESTID_SELECTORS.icons.sendMail);
+			await user.click(action);
+			expect(openMailComposer).toHaveBeenCalledTimes(1);
+			expect(openMailComposer).toHaveBeenCalledWith({ recipients: [{ email: member }] });
+		});
+
+		it('should open the mail board (Contextual menu trigger)', async () => {
+			const openMailComposer = jest.fn();
+			jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
+			const contactGroupName = faker.company.name();
+			const member = faker.internet.email();
+			registerFindContactGroupsHandler({
+				findContactGroupsResponse: createFindContactGroupsResponse([
+					createFindContactGroupsResponseCnItem(contactGroupName, [member])
+				]),
+				offset: 0
+			});
+			const { user } = setupTest(
+				<Route path={ROUTES.contactGroup}>
+					<ContactGroupsView />
+				</Route>
+			);
+
+			await screen.findByText(contactGroupName);
+			const listItem = await screen.findByTestId('list-item-content');
+			await user.rightClick(listItem);
+
+			const contextualMenu = await screen.findByTestId(TESTID_SELECTORS.dropdownList, undefined, {
+				timeout: 2000
+			});
+			const action = within(contextualMenu).getByText('Mail');
+			await user.click(action);
+			expect(openMailComposer).toHaveBeenCalledTimes(1);
+			expect(openMailComposer).toHaveBeenCalledWith({ recipients: [{ email: member }] });
+		});
 	});
 
 	describe('Displayer', () => {
