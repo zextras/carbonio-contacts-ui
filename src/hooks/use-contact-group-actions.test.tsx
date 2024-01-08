@@ -18,8 +18,8 @@ describe('useContactGroupActions', () => {
 		const { result } = setupHook(useContactGroupActions, { initialProps: [contactGroup] });
 
 		expect(result.current).toContainEqual({
-			id: 'mail',
-			label: 'Mail',
+			id: 'send-email',
+			label: 'Send e-mail',
 			icon: 'EmailOutline',
 			onClick: expect.anything()
 		});
@@ -29,8 +29,8 @@ describe('useContactGroupActions', () => {
 		const contactGroup = buildContactGroup();
 		const { result } = setupHook(useContactGroupActions, { initialProps: [contactGroup] });
 		expect(result.current).not.toContainEqual({
-			id: 'mail',
-			label: 'Mail',
+			id: 'send-email',
+			label: 'Send e-mail',
 			icon: 'EmailOutline',
 			onClick: expect.anything()
 		});

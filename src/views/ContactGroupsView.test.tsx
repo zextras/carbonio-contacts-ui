@@ -201,7 +201,7 @@ describe('Contact Group View', () => {
 			await user.rightClick(listItem);
 
 			const contextualMenu = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
-			const action = within(contextualMenu).getByText('Mail');
+			const action = within(contextualMenu).getByText('Send e-mail');
 			await user.click(action);
 			expect(openMailComposer).toHaveBeenCalledTimes(1);
 			expect(openMailComposer).toHaveBeenCalledWith({ recipients: [{ email: member }] });

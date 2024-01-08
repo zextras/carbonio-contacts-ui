@@ -25,8 +25,8 @@ export const useContactGroupActions = (contactGroup: ContactGroup): Action[] => 
 		const orderedActions: Action[] = [];
 		if (contactGroup.members.length > 0) {
 			orderedActions.push({
-				id: 'mail',
-				label: t('action.mail', 'Mail'),
+				id: 'send-email',
+				label: t('action.mail', 'Send e-mail'),
 				icon: 'EmailOutline',
 				onClick: sendMail
 			});
