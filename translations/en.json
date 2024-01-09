@@ -274,6 +274,11 @@
         "website": "Website",
         "website_plural": "Websites"
     },
+    "member_displayer_list_item_component": {
+        "snackbar": {
+            "email_copied_to_clipboard": "Email copied to clipboard."
+        }
+    },
     "members_list_item_component": {
         "button": {
             "remove": "remove"

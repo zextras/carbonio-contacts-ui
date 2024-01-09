@@ -10,7 +10,7 @@ import { useParams } from 'react-router-dom';
 import { useNavigation, type UseNavigationReturnType } from './useNavigation';
 import { RouteParams, ROUTES_INTERNAL_PARAMS } from '../constants';
 
-type UseActiveItemReturnType = {
+export type UseActiveItemReturnType = {
 	activeItem: string;
 	isActive: (id: string) => boolean;
 	setActive: (id: string, options?: Parameters<UseNavigationReturnType['navigateTo']>[1]) => void;

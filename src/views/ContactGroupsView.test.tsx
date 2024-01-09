@@ -11,7 +11,7 @@ import * as shell from '@zextras/carbonio-shell-ui';
 import { Route } from 'react-router-dom';
 
 import { ContactGroupsView } from './ContactGroupsView';
-import { setupTest, screen, triggerLoadMore } from '../carbonio-ui-commons/test/test-setup';
+import { screen, setupTest, triggerLoadMore } from '../carbonio-ui-commons/test/test-setup';
 import { FIND_CONTACT_GROUP_LIMIT, ROUTES, ROUTES_INTERNAL_PARAMS } from '../constants';
 import { EMPTY_DISPLAYER_HINT, EMPTY_LIST_HINT, TESTID_SELECTORS } from '../constants/tests';
 import { useContactGroupStore } from '../store/contact-groups';
@@ -237,7 +237,7 @@ describe('Contact Group View', () => {
 			await screen.findByText(EMPTY_DISPLAYER_HINT);
 			await user.click(screen.getByText(contactGroupName));
 			await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.closeDisplayer });
-			expect(screen.getAllByText(contactGroupName)).toHaveLength(2);
+			expect(screen.getAllByText(contactGroupName)).toHaveLength(3);
 			// FIXME
 			// expect(screen.getByText(/addresses list/i)).toBeVisible();
 		});

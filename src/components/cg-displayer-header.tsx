@@ -10,11 +10,11 @@ import { Container, Divider, IconButton } from '@zextras/carbonio-design-system'
 import { Text } from './Text';
 import { useActiveItem } from '../hooks/useActiveItem';
 
-interface DisplayerHeaderProps {
+interface CGDisplayerHeaderProps {
 	title: string;
 }
 
-export const DisplayerHeader = ({ title }: DisplayerHeaderProps): React.JSX.Element => {
+export const CGDisplayerHeader = ({ title }: CGDisplayerHeaderProps): React.JSX.Element => {
 	const { removeActive } = useActiveItem();
 
 	const closeDisplayer = useCallback(() => {
