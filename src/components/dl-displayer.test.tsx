@@ -52,7 +52,7 @@ describe('Distribution List displayer', () => {
 				const dl = generateDistributionList();
 				registerGetDistributionListHandler(dl);
 				setupTest(<DistributionListDisplayer id={dl.id} />);
-				await screen.findByText(dl.displayName);
+				await screen.findAllByText(dl.displayName);
 				expect(screen.queryByText(/send e-mail/i)).not.toBeInTheDocument();
 			});
 
@@ -68,5 +68,17 @@ describe('Distribution List displayer', () => {
 				>({ recipients: [{ email: dl.email }] });
 			});
 		});
+	});
+
+	it('should render the description', async () => {
+		const description = 'This is the description';
+		const dl = generateDistributionList({ description });
+
+		registerGetDistributionListHandler(dl);
+		setupTest(<DistributionListDisplayer id={dl.id} />);
+		expect(
+			await within(screen.getByTestId(TESTID_SELECTORS.displayerHeader)).findByText(dl.displayName)
+		).toBeVisible();
+		expect(await screen.findByText(description)).toBeVisible();
 	});
 });

@@ -176,6 +176,7 @@ export const registerGetDistributionListHandler = (
 		email: string;
 		displayName?: string;
 		owners?: Array<{ id?: string; name?: string }>;
+		description?: string;
 	},
 	error?: string
 ): jest.Mock<ReturnType<GetDistributionListHandler>, Parameters<GetDistributionListHandler>> => {
@@ -201,6 +202,8 @@ export const registerGetDistributionListHandler = (
 			);
 		}
 
+		const descriptionField = dl.description ? { description: dl.description } : {};
+
 		return res(
 			ctx.json(
 				buildSoapResponse<GetDistributionListResponse>({
@@ -210,7 +213,8 @@ export const registerGetDistributionListHandler = (
 								id: dl.id ?? faker.string.uuid(),
 								name: dl.email,
 								_attrs: {
-									displayName: dl.displayName
+									displayName: dl.displayName,
+									...descriptionField
 								},
 								owners: map(dl.owners, (owner) => ({ owner: [owner] })),
 								isOwner: some(dl.owners, (owner) => owner.id === mockedAccount.id)

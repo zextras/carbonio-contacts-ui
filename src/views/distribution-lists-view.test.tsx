@@ -60,7 +60,7 @@ describe('Distribution Lists View', () => {
 
 			await user.click(await screen.findByText(dl.displayName));
 			const displayer = screen.getByTestId(TESTID_SELECTORS.displayer);
-			await within(displayer).findByTestId(TESTID_SELECTORS.icons.distributionList);
+			await within(displayer).findAllByTestId(TESTID_SELECTORS.icons.distributionList);
 			expect(await within(displayer).findByText(dl.displayName)).toBeVisible();
 		});
 

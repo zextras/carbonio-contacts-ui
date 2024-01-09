@@ -27,6 +27,7 @@ export interface GetDistributionListResponse extends GenericSoapPayload<typeof N
 		owners?: Array<{ owner: Array<{ id?: string; name?: string }> }>;
 		_attrs?: {
 			displayName?: string;
+			description?: string;
 		};
 	}>;
 }
@@ -52,7 +53,8 @@ const normalizeResponse = (response: GetDistributionListResponse): DistributionL
 				return result;
 			},
 			[]
-		)
+		),
+		description: dl._attrs?.description
 	};
 };
 

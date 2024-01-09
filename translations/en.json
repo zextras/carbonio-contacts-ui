@@ -1,5 +1,6 @@
 {
     "action": {
+        "copy": "Copy",
         "delete": "Delete",
         "delete_permanently": "Delete Permanently",
         "edit": "Edit",
@@ -64,6 +65,21 @@
         "description6": "Use the “Edit” mode to add any personal note to a contact.",
         "description7": "Create a group of contacts by clicking the “NEW” button.",
         "description8": "Select a contact or a group of contacts to send shared emails.",
+        "distributionList": {
+            "label": {
+                "filterHint": "You can filter this list by looking for specific member’s name.",
+                "manager_total": "Manager list {{total}}",
+                "member_total": "Member list {{total}}"
+            },
+            "placeholder": {
+                "filter_member": "Filter an address"
+            }
+        },
+        "distributionLists": {
+            "label": {
+                "description": "Description"
+            }
+        },
         "list_title1": "It looks like there are no contacts yet",
         "list_title2": "The trash is empty",
         "search_description1": "Or select “Advanced Filters” to refine your search.",
@@ -407,6 +423,7 @@
                 "success": "\"{{displayName}}\" distribution list edits saved successfully"
             }
         },
+        "email_copied_to_clipboard": "Email copied to clipboard.",
         "folder_edited": "Address book edited successfully",
         "folder_shared": "Address book shared",
         "share_resend": "Share invite resent",

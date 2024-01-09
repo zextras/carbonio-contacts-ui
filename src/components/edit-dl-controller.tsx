@@ -47,7 +47,7 @@ export const EditDLControllerComponent: FC<EditDLControllerComponentProps> = ({
 
 	useEffect(() => {
 		client
-			.getDistributionListMembers(email)
+			.getDistributionListMembers({ email })
 			.then((response) => {
 				setMembers(() => {
 					originalMembersRef.current = response.members;
