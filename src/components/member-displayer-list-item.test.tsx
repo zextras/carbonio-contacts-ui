@@ -62,11 +62,15 @@ describe('Member displayer item', () => {
 	});
 
 	it('should call copy into clipboard function when user clicks on copy address button', async () => {
-		const copyToClipboard = jest.spyOn(clipboard, 'copyToClipboard').mockImplementation();
+		const copyToClipboard = jest
+			.spyOn(clipboard, 'copyToClipboard')
+			.mockImplementation(() => Promise.resolve());
 		const email = faker.internet.email();
 		const { user } = setupTest(<MemberDisplayerListItemComponent email={email} />);
 		const button = screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.copy });
-		await user.click(button);
+		await act(async () => {
+			await user.click(button);
+		});
 		expect(copyToClipboard).toHaveBeenCalledWith(email);
 	});
 
