@@ -8,7 +8,7 @@ import React from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
 
-import { ContactGroupDisplayer } from './contact-group-displayer';
+import { CGDisplayer } from './cg-displayer';
 import { EmptyDisplayer } from './EmptyDisplayer';
 import { useActiveContactGroup } from '../hooks/useActiveContactGroup';
 
@@ -22,7 +22,7 @@ export const ContactGroupDisplayerController = (): React.JSX.Element => {
 			crossAlignment="flex-start"
 			data-testid="displayer"
 		>
-			{contactGroup ? <ContactGroupDisplayer contactGroup={contactGroup} /> : <EmptyDisplayer />}
+			{contactGroup ? <CGDisplayer contactGroup={contactGroup} /> : <EmptyDisplayer />}
 		</Container>
 	);
 };

@@ -35,6 +35,8 @@ describe('Contact group displayer details', () => {
 		expect(screen.getByText(`Addresses: ${count}`)).toBeVisible();
 	});
 
+	it.todo('should displays the the avatar with the icon associated to the CG');
+
 	it('should displays the members of the CG', () => {
 		const count = faker.number.int({ min: 1, max: 10 });
 		const members = buildMembers(count);

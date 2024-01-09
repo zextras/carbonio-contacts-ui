@@ -17,9 +17,7 @@ interface ContactGroupDisplayerProps {
 	contactGroup: ContactGroup;
 }
 
-export const ContactGroupDisplayer = ({
-	contactGroup
-}: ContactGroupDisplayerProps): React.JSX.Element => {
+export const CGDisplayer = ({ contactGroup }: ContactGroupDisplayerProps): React.JSX.Element => {
 	const actions = useContactGroupActions(contactGroup);
 	return (
 		<Container background={'gray5'} mainAlignment={'flex-start'} padding={{ bottom: '1rem' }}>
