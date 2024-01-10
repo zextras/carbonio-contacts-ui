@@ -5,27 +5,29 @@
  */
 import React, { useCallback } from 'react';
 
-import { Avatar, Container } from '@zextras/carbonio-design-system';
+import { Action as DSAction, Avatar, Container } from '@zextras/carbonio-design-system';
 
 import { ContextualMenu } from './ContextualMenu';
 import { ListItemHoverBar } from './ListItemHoverBar';
 import { HoverContainer, ListItemContainer } from './StyledComponents';
 import { Text } from './Text';
 import { LIST_ITEM_HEIGHT } from '../constants';
+import { useDLActions } from '../hooks/use-dl-actions';
+import { DistributionList } from '../model/distribution-list';
 
-export type DLListItemProps = {
+type DLListItemContentProps = {
 	onClick?: (id: string) => void;
-	visible: boolean;
 	id: string;
 	title: string;
+	actions: Array<DSAction>;
 };
 
-export const DLListItem = React.memo<DLListItemProps>(function DLListItemMemo({
+const DLListItemContent = React.memo<DLListItemContentProps>(function DLListItemMemo({
 	onClick,
 	// others props
-	visible,
 	id,
-	title
+	title,
+	actions
 }) {
 	const clickHandler = useCallback<React.MouseEventHandler<HTMLDivElement>>(() => {
 		onClick?.(id);
@@ -39,7 +41,7 @@ export const DLListItem = React.memo<DLListItemProps>(function DLListItemMemo({
 
 	return (
 		<Container data-testid={id} height={LIST_ITEM_HEIGHT}>
-			<ContextualMenu actions={[]}>
+			<ContextualMenu actions={actions}>
 				<ListItemContainer
 					height={'fit'}
 					crossAlignment={'flex-end'}
@@ -78,9 +80,31 @@ export const DLListItem = React.memo<DLListItemProps>(function DLListItemMemo({
 							</Container>
 						</Container>
 					</HoverContainer>
-					<ListItemHoverBar actions={[]} />
+					<ListItemHoverBar actions={actions} />
 				</ListItemContainer>
 			</ContextualMenu>
 		</Container>
 	);
 });
+
+type DLListItemProps = {
+	distributionList: DistributionList;
+	visible: boolean;
+	onClick?: (id: string) => void;
+};
+
+export const DLListItem = ({
+	distributionList,
+	visible,
+	onClick
+}: DLListItemProps): React.JSX.Element => {
+	const actions = useDLActions(distributionList);
+	return (
+		<DLListItemContent
+			id={distributionList.id}
+			title={distributionList.displayName || distributionList.email}
+			actions={actions}
+			onClick={onClick}
+		/>
+	);
+};

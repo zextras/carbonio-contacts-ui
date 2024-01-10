@@ -11,7 +11,7 @@ import { trimEnd } from 'lodash';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 
 import { ContactGroupsView } from './ContactGroupsView';
-import { DistributionListsView } from './DistributionListsView';
+import { DistributionListsView } from './distribution-lists-view';
 import { RouteParams, ROUTES, ROUTES_INTERNAL_PARAMS } from '../constants';
 
 const AppView = (): React.JSX.Element => {

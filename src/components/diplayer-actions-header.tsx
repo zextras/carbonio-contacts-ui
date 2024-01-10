@@ -7,13 +7,13 @@ import React, { useMemo } from 'react';
 
 import { type Action, Button, Container } from '@zextras/carbonio-design-system';
 
-interface CGDisplayerActionsHeaderProps {
+interface DisplayerActionsHeaderProps {
 	actions: Action[];
 }
 
-export const CGDisplayerActionsHeader = ({
+export const DisplayerActionsHeader = ({
 	actions
-}: CGDisplayerActionsHeaderProps): React.JSX.Element => {
+}: DisplayerActionsHeaderProps): React.JSX.Element => {
 	const actionButtons = useMemo<React.JSX.Element[]>(
 		() =>
 			actions.map((action) => (

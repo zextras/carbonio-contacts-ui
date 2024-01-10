@@ -23,7 +23,7 @@ describe('App view', () => {
 			// TODO: cannot read from json right now
 			//  because json is already read inside the handler and throws an error
 			// 	"Failed to execute "json" on "IsomorphicRequest": body buffer already read"
-			expect(handler.mock.lastCall[0].body).toEqual(
+			expect(handler.mock.lastCall?.[0].body).toEqual(
 				expect.objectContaining({
 					Body: {
 						GetAccountDistributionListsRequest: expect.objectContaining<
@@ -44,7 +44,7 @@ describe('App view', () => {
 			// TODO: cannot read from json right now
 			//  because json is already read inside the handler and throws the error
 			// 	"Failed to execute "json" on "IsomorphicRequest": body buffer already read"
-			expect(handler.mock.lastCall[0].body).toEqual(
+			expect(handler.mock.lastCall?.[0].body).toEqual(
 				expect.objectContaining({
 					Body: {
 						GetAccountDistributionListsRequest: expect.objectContaining<

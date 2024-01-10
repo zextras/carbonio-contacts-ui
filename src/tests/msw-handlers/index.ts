@@ -171,7 +171,13 @@ type GetDistributionListHandler = ResponseResolver<
 >;
 
 export const registerGetDistributionListHandler = (
-	dl: { email: string; displayName?: string; owners?: Array<{ id?: string; name?: string }> },
+	dl: {
+		id?: string;
+		email: string;
+		displayName?: string;
+		owners?: Array<{ id?: string; name?: string }>;
+		description?: string;
+	},
 	error?: string
 ): jest.Mock<ReturnType<GetDistributionListHandler>, Parameters<GetDistributionListHandler>> => {
 	const handler = jest.fn<
@@ -202,10 +208,11 @@ export const registerGetDistributionListHandler = (
 					GetDistributionListResponse: {
 						dl: [
 							{
-								id: faker.string.uuid(),
+								id: dl.id ?? faker.string.uuid(),
 								name: dl.email,
 								_attrs: {
-									displayName: dl.displayName
+									displayName: dl.displayName,
+									description: dl.description
 								},
 								owners: map(dl.owners, (owner) => ({ owner: [owner] })),
 								isOwner: some(dl.owners, (owner) => owner.id === mockedAccount.id)

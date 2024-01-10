@@ -7,19 +7,11 @@ import React, { useCallback, useMemo } from 'react';
 
 import { useModal } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
-import { DefaultTheme } from 'styled-components';
 
+import { UIAction } from './types';
 import { EditDLControllerComponent } from '../components/edit-dl-controller';
 import { ACTION_IDS } from '../constants';
 import { DistributionList } from '../model/distribution-list';
-
-export type UIAction<ExecArg, CanExecArg> = {
-	id: string;
-	label: string;
-	icon: keyof DefaultTheme['icons'];
-	execute: (arg: ExecArg) => void;
-	canExecute: (arg: CanExecArg) => boolean;
-};
 
 export type EditDLAction = UIAction<
 	Pick<DistributionList, 'displayName' | 'email'>,
@@ -31,29 +23,31 @@ export const useActionEditDL = (): EditDLAction => {
 	const createModal = useModal();
 
 	const execute = useCallback<EditDLAction['execute']>(
-		({ email, displayName = email }) => {
-			const closeModal = createModal(
-				{
-					size: 'small',
-					onClose: () => {
-						closeModal();
+		(distributionList) => {
+			if (distributionList !== undefined) {
+				const closeModal = createModal(
+					{
+						size: 'small',
+						onClose: () => {
+							closeModal();
+						},
+						children: (
+							<EditDLControllerComponent
+								email={distributionList.email}
+								displayName={distributionList.displayName || distributionList.email}
+								onClose={(): void => closeModal()}
+								onSave={(): void => closeModal()}
+							/>
+						)
 					},
-					children: (
-						<EditDLControllerComponent
-							email={email}
-							displayName={displayName}
-							onClose={(): void => closeModal()}
-							onSave={(): void => closeModal()}
-						/>
-					)
-				},
-				true
-			);
+					true
+				);
+			}
 		},
 		[createModal]
 	);
 
-	const canExecute = useCallback<EditDLAction['canExecute']>(({ isOwner }) => isOwner, []);
+	const canExecute = useCallback<EditDLAction['canExecute']>((dl) => dl?.isOwner === true, []);
 
 	return useMemo(
 		() => ({

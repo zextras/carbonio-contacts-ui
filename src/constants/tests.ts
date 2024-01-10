@@ -21,6 +21,8 @@ export const TESTID_SELECTORS = {
 		close: 'icon: Close',
 		closeDisplayer: 'icon: CloseOutline',
 		accordionExpandAction: 'icon: ChevronDown',
+		sendEmail: 'icon: EmailOutline',
+		distributionList: 'icon: DistributionListOutline',
 		copy: 'icon: Copy'
 	},
 	avatar: 'avatar',
@@ -36,6 +38,7 @@ export const TESTID_SELECTORS = {
 	listItemContent: 'list-item-content',
 	listBottomElement: 'list-bottom-element',
 	displayer: 'displayer',
+	displayerHeader: 'displayer-header',
 	accordionItem: 'accordion-item'
 };
 
