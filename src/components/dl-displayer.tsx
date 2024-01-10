@@ -8,7 +8,7 @@ import React, { useMemo } from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
 
-import { ActionsHeader } from './ActionsHeader';
+import { ActionsHeader } from './actions-header';
 import { DisplayerHeader } from './DisplayerHeader';
 import { DistributionListDetails } from './dl-details';
 import { ManagerList } from './manager-list';
