@@ -5,14 +5,24 @@
  */
 import React from 'react';
 
+import { faker } from '@faker-js/faker';
 import * as shell from '@zextras/carbonio-shell-ui';
+import { times } from 'lodash';
 
 import { DistributionListDisplayer } from './dl-displayer';
 import { OpenMailComposerIntegratedFunction } from '../actions/send-email';
 import { screen, setupTest, within } from '../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../constants/tests';
-import { registerGetDistributionListHandler } from '../tests/msw-handlers';
+import { DistributionList } from '../model/distribution-list';
+import {
+	registerGetDistributionListHandler,
+	registerGetDistributionListMembersHandler
+} from '../tests/msw-handlers';
 import { generateDistributionList } from '../tests/utils';
+
+beforeEach(() => {
+	registerGetDistributionListMembersHandler();
+});
 
 describe('Distribution List displayer', () => {
 	it('should show the display name in the title', async () => {
@@ -70,15 +80,61 @@ describe('Distribution List displayer', () => {
 		});
 	});
 
-	it('should render the description', async () => {
-		const description = 'This is the description';
-		const dl = generateDistributionList({ description });
-
+	it('should render the display name', async () => {
+		const dl = generateDistributionList();
 		registerGetDistributionListHandler(dl);
 		setupTest(<DistributionListDisplayer id={dl.id} />);
-		expect(
-			await within(screen.getByTestId(TESTID_SELECTORS.displayerHeader)).findByText(dl.displayName)
-		).toBeVisible();
+		expect(await screen.findAllByText(dl.displayName)).toHaveLength(2);
+	});
+
+	it('should render the email just one time if the display name is set', async () => {
+		const dl = generateDistributionList();
+		registerGetDistributionListHandler(dl);
+		setupTest(<DistributionListDisplayer id={dl.id} />);
+		expect(await screen.findByText(dl.email)).toBeVisible();
+	});
+
+	it('should render the email two time if the display name is not set', async () => {
+		const dl = generateDistributionList({ displayName: undefined });
+		registerGetDistributionListHandler(dl);
+		setupTest(<DistributionListDisplayer id={dl.id} />);
+		expect(await screen.findAllByText(dl.email)).toHaveLength(2);
+	});
+
+	it('should render the description', async () => {
+		const description = faker.lorem.words();
+		const dl = generateDistributionList({ description });
+		registerGetDistributionListHandler(dl);
+		setupTest(<DistributionListDisplayer id={dl.id} />);
+		expect(await screen.findByText(/description/i)).toBeVisible();
 		expect(await screen.findByText(description)).toBeVisible();
+	});
+
+	it('should render the manager list', async () => {
+		const owners = times(10, () => ({
+			id: faker.string.uuid(),
+			name: faker.internet.email()
+		})) satisfies DistributionList['owners'];
+		const dl = generateDistributionList({ owners });
+		registerGetDistributionListHandler(dl);
+		setupTest(<DistributionListDisplayer id={dl.id} />);
+		expect(await screen.findByText(/manager list 1/i)).toBeVisible();
+		await screen.findByText(owners[0].name);
+		owners.forEach((owner) => {
+			expect(screen.getByText(owner.name)).toBeVisible();
+		});
+	});
+
+	it('should render the member list', async () => {
+		const members = times(10, () => faker.internet.email());
+		const dl = generateDistributionList();
+		registerGetDistributionListHandler(dl);
+		registerGetDistributionListMembersHandler(members);
+		setupTest(<DistributionListDisplayer id={dl.id} />);
+		await screen.findByText(dl.email);
+		expect(await screen.findByText(/member list 10/i)).toBeVisible();
+		members.forEach((member) => {
+			expect(screen.getByText(member)).toBeVisible();
+		});
 	});
 });

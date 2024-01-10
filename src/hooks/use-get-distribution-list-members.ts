@@ -5,11 +5,7 @@
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { FIND_CONTACT_GROUP_LIMIT } from '../constants';
-import { DistributionList } from '../model/distribution-list';
 import { client } from '../network/client';
-import { useContactGroupStore } from '../store/contact-groups';
-import { RequireAtLeastOne } from '../types/utils';
 
 type UseGetDistributionListMembersReturnType = {
 	members: Array<string>;
@@ -19,7 +15,7 @@ type UseGetDistributionListMembersReturnType = {
 };
 
 export const useGetDistributionListMembers = (
-	item: RequireAtLeastOne<Pick<DistributionList, 'id' | 'email'>>,
+	email: string,
 	limit?: number
 ): UseGetDistributionListMembersReturnType => {
 	const [distributionListMembers, setDistributionListMembers] = useState<Array<string>>([]);
@@ -27,29 +23,33 @@ export const useGetDistributionListMembers = (
 	const [hasMore, setHasMore] = useState(false);
 	const [totalMembers, setTotalMembers] = useState(0);
 
-	const findCallback = useCallback(() => {
-		client
-			.getDistributionListMembers(item, { offset: offsetRef.current, limit })
-			.then(({ total, members, more }) => {
-				setDistributionListMembers((oldNodes) => [...oldNodes, ...members]);
-				offsetRef.current += FIND_CONTACT_GROUP_LIMIT;
-				setHasMore(more);
-				setTotalMembers(total);
-			});
-	}, [item, limit]);
+	const findCallback = useCallback(
+		(offset: number) => {
+			if (email) {
+				client
+					.getDistributionListMembers(email, { offset, limit })
+					.then(({ total, members, more }) => {
+						setDistributionListMembers((prevState) =>
+							offset === 0 ? members : [...prevState, ...members]
+						);
+						offsetRef.current += members.length;
+						setHasMore(more);
+						setTotalMembers(total);
+					});
+			}
+		},
+		[email, limit]
+	);
 
 	useEffect(() => {
-		if (useContactGroupStore.getState().storedContactGroups.length > 0) {
-			return;
-		}
-		findCallback();
+		findCallback(0);
 	}, [findCallback]);
 
 	const findMore = useCallback(() => {
 		if (!hasMore) {
-			throw new Error('No more nodes available');
+			throw new Error('No more members available');
 		}
-		findCallback();
+		findCallback(offsetRef.current);
 	}, [findCallback, hasMore]);
 
 	return { members: distributionListMembers, hasMore, findMore, totalMembers };

@@ -9,7 +9,7 @@ import { Container } from '@zextras/carbonio-design-system';
 
 import { ActionsHeader } from './actions-header';
 import { ContactGroupDetails } from './ContactGroupDetails';
-import { DisplayerHeader } from './DisplayerHeader';
+import { DisplayerHeader } from './displayer-header';
 import { useActions } from '../hooks/useActions';
 import { ContactGroup } from '../model/contact-group';
 

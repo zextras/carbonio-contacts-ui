@@ -9,7 +9,7 @@ import React, { useMemo } from 'react';
 import { Container } from '@zextras/carbonio-design-system';
 
 import { ActionsHeader } from './actions-header';
-import { DisplayerHeader } from './DisplayerHeader';
+import { DisplayerHeader } from './displayer-header';
 import { DistributionListDetails } from './dl-details';
 import { ManagerList } from './manager-list';
 import { MemberList } from './member-list';
@@ -27,7 +27,7 @@ export const DistributionListDisplayer = ({
 	const dlToLoad = useMemo(() => ({ id }), [id]);
 	const distributionList = useGetDistributionList(dlToLoad);
 	const actions = useDLActions(distributionList);
-	const { members, totalMembers } = useGetDistributionListMembers(dlToLoad);
+	const { members, totalMembers } = useGetDistributionListMembers(distributionList?.email ?? '');
 
 	return (
 		<Container background={'gray5'} mainAlignment={'flex-start'} padding={{ bottom: '1rem' }}>
@@ -52,11 +52,11 @@ export const DistributionListDisplayer = ({
 						crossAlignment={'flex-start'}
 					>
 						<DistributionListDetails
-							email={distributionList?.email || ''}
+							email={distributionList?.email ?? ''}
 							displayName={distributionList?.displayName}
 							description={distributionList?.description}
 						/>
-						<ManagerList managers={distributionList?.owners || []} />
+						<ManagerList managers={distributionList?.owners} />
 						<MemberList members={members} membersCount={totalMembers} />
 					</Container>
 				</ScrollableContainer>

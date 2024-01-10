@@ -11,9 +11,10 @@ import { map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { MemberDisplayerListItemComponent } from './member-displayer-list-item';
+import { DistributionList } from '../model/distribution-list';
 
 type ManagerListProps = {
-	managers: Array<{ id: string; name: string }>;
+	managers: DistributionList['owners'];
 };
 
 export const ManagerList = ({ managers }: ManagerListProps): React.JSX.Element => {
@@ -31,10 +32,10 @@ export const ManagerList = ({ managers }: ManagerListProps): React.JSX.Element =
 		<Container mainAlignment={'flex-start'} crossAlignment={'flex-start'} gap={'0.5rem'}>
 			<Text size={'small'} color={'secondary'}>
 				{t('displayer.distributionList.label.manager_total', 'Manager list {{total}}', {
-					total: managers.length
+					total: managers?.length ?? 0
 				})}
 			</Text>
-			<Container height={'15rem'}>
+			<Container height={'auto'} maxHeight={'15rem'}>
 				<ListV2 maxWidth={'fill'}>{memberItems}</ListV2>
 			</Container>
 		</Container>

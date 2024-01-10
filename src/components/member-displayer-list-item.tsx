@@ -45,22 +45,24 @@ export const MemberDisplayerListItemComponent = ({
 					<TextWithTooltip size={'small'}>{email}</TextWithTooltip>
 				</Row>
 			</Row>
-			{canSendEmail && (
+			<Row wrap={'nowrap'} gap={'0.25rem'} flexShrink={1} minWidth={'fit-content'}>
+				{canSendEmail && (
+					<Button
+						type={'outlined'}
+						size={'medium'}
+						icon={sendEmailAction.icon}
+						onClick={onSendEmail}
+						minWidth={'fit-content'}
+					/>
+				)}
 				<Button
 					type={'outlined'}
 					size={'medium'}
-					icon={sendEmailAction.icon}
-					onClick={onSendEmail}
+					icon={copyToClipboardAction.icon}
+					onClick={onCopyEmail}
 					minWidth={'fit-content'}
 				/>
-			)}
-			<Button
-				type={'outlined'}
-				size={'medium'}
-				icon={copyToClipboardAction.icon}
-				onClick={onCopyEmail}
-				minWidth={'fit-content'}
-			/>
+			</Row>
 		</Row>
 	);
 };

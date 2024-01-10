@@ -55,7 +55,7 @@ export const MemberList = ({ members, membersCount }: MemberListProps): React.JS
 				value={searchValue}
 				onChange={onSearchChange}
 			/>
-			<Container height={'15rem'}>
+			<Container height={'auto'} maxHeight={'15rem'}>
 				<ListV2 maxWidth={'fill'}>{memberItems}</ListV2>
 			</Container>
 		</Container>

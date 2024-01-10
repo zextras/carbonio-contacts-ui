@@ -202,8 +202,6 @@ export const registerGetDistributionListHandler = (
 			);
 		}
 
-		const descriptionField = dl.description ? { description: dl.description } : {};
-
 		return res(
 			ctx.json(
 				buildSoapResponse<GetDistributionListResponse>({
@@ -214,7 +212,7 @@ export const registerGetDistributionListHandler = (
 								name: dl.email,
 								_attrs: {
 									displayName: dl.displayName,
-									...descriptionField
+									description: dl.description
 								},
 								owners: map(dl.owners, (owner) => ({ owner: [owner] })),
 								isOwner: some(dl.owners, (owner) => owner.id === mockedAccount.id)

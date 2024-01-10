@@ -64,7 +64,7 @@ const getAllDistributionListMembers = async (
 	members: DistributionListMembersPage['members'] = [],
 	offset = 0
 ): Promise<Pick<DistributionListMembersPage, 'total' | 'members'>> => {
-	const response = await client.getDistributionListMembers({ email }, { limit: 100, offset });
+	const response = await client.getDistributionListMembers(email, { limit: 100, offset });
 	const newValue = members.concat(response.members);
 	if (response.more) {
 		return getAllDistributionListMembers(email, newValue, offset + response.members.length);
@@ -146,7 +146,7 @@ const useDistributionListFunctions = ({
 	}, [contactInputValue, members, email, id, more, offset, contactInputOnChange]);
 
 	const onShowMoreClick = useCallback(() => {
-		client.getDistributionListMembers({ email }, { limit: 100, offset }).then((result) => {
+		client.getDistributionListMembers(email, { limit: 100, offset }).then((result) => {
 			updateStates(result, false);
 		});
 	}, [email, offset, updateStates]);
@@ -198,7 +198,7 @@ const useDistributionListFunctions = ({
 		if (isChipItemDistributionList({ isGroup, email }) && !loadingRef.current) {
 			loadingRef.current = true;
 			client
-				.getDistributionListMembers({ email }, { limit: 100 })
+				.getDistributionListMembers(email, { limit: 100 })
 				.then((result) => {
 					loadingRef.current = false;
 					updateStates(result, true);

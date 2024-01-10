@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { ErrorSoapBodyResponse, soapFetch } from '@zextras/carbonio-shell-ui';
-import { first, reduce } from 'lodash';
+import { filter, first, flatMap } from 'lodash';
 
 import { GenericSoapPayload } from './types';
 import { NAMESPACES } from '../../constants/api';
-import { DistributionList } from '../../model/distribution-list';
+import { DistributionList, DistributionListOwner } from '../../model/distribution-list';
 import { RequireAtLeastOne } from '../../types/utils';
 
 export interface GetDistributionListRequest extends GenericSoapPayload<typeof NAMESPACES.account> {
@@ -16,7 +16,7 @@ export interface GetDistributionListRequest extends GenericSoapPayload<typeof NA
 		by: 'name' | 'id';
 		_content: string;
 	};
-	needOwners?: number;
+	needOwners?: boolean;
 }
 
 export interface GetDistributionListResponse extends GenericSoapPayload<typeof NAMESPACES.account> {
@@ -32,6 +32,13 @@ export interface GetDistributionListResponse extends GenericSoapPayload<typeof N
 	}>;
 }
 
+const normalizeOwners = (
+	response: GetDistributionListResponse['dl'][number]['owners']
+): DistributionList['owners'] =>
+	flatMap<NonNullable<typeof response>[number], DistributionListOwner>(response, (item) =>
+		filter(item.owner, (owner): owner is DistributionListOwner => !!owner?.id && !!owner.name)
+	);
+
 const normalizeResponse = (response: GetDistributionListResponse): DistributionList | undefined => {
 	const dl = first(response.dl);
 	if (dl === undefined) {
@@ -43,17 +50,7 @@ const normalizeResponse = (response: GetDistributionListResponse): DistributionL
 		email: dl.name,
 		displayName: dl._attrs?.displayName,
 		isOwner: dl.isOwner ?? false,
-		owners: reduce<NonNullable<typeof dl.owners>[number], NonNullable<DistributionList['owners']>>(
-			dl.owners,
-			(result, item) => {
-				const owner = first(item.owner);
-				if (owner?.id !== undefined && owner.name) {
-					result.push({ id: owner.id, name: owner.name });
-				}
-				return result;
-			},
-			[]
-		),
+		owners: normalizeOwners(dl.owners),
 		description: dl._attrs?.description
 	};
 };
@@ -83,7 +80,8 @@ export const getDistributionList = ({
 		'GetDistributionList',
 		{
 			_jsns: NAMESPACES.account,
-			dl: request
+			dl: request,
+			needOwners: true
 		}
 	).then((response) => {
 		if ('Fault' in response) {

@@ -38,7 +38,14 @@ export const DisplayerHeader = ({ title, icon }: DisplayerHeaderProps): React.JS
 				padding={{ top: '0.5rem', right: '0.5rem', bottom: '0.5rem', left: '1rem' }}
 				gap={'0.75rem'}
 			>
-				<Icon icon={icon} />
+				<Container
+					width={'fit-content'}
+					height={'fit-content'}
+					minWidth={'fit-content'}
+					minHeight={'fit-content'}
+				>
+					<Icon icon={icon} />
+				</Container>
 				<Text withTooltip>{title}</Text>
 				<Container margin={{ left: 'auto' }} width={'fit'} height={'fit'} flexShrink={0}>
 					<IconButton icon={'CloseOutline'} size={'medium'} onClick={closeDisplayer} />
