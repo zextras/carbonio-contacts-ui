@@ -5,7 +5,7 @@
  */
 import React, { useCallback } from 'react';
 
-import { Container, Divider, IconButton } from '@zextras/carbonio-design-system';
+import { Container, Divider, Icon, IconButton } from '@zextras/carbonio-design-system';
 
 import { Text } from './Text';
 import { useActiveItem } from '../hooks/useActiveItem';
@@ -31,6 +31,7 @@ export const CGDisplayerHeader = ({ title }: CGDisplayerHeaderProps): React.JSX.
 				padding={{ top: '0.5rem', right: '0.5rem', bottom: '0.5rem', left: '1rem' }}
 				gap={'0.5rem'}
 			>
+				<Icon icon={'PeopleOutline'} />
 				<Text withTooltip>{title}</Text>
 				<Container margin={{ left: 'auto' }} width={'fit'} height={'fit'} flexShrink={0}>
 					<IconButton icon={'CloseOutline'} size={'medium'} onClick={closeDisplayer} />

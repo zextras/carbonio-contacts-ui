@@ -63,7 +63,7 @@ describe('New contact group board', () => {
 
 		it('should render the avatar icon, name and the number of addresses', () => {
 			setupTest(<NewContactGroupBoard />);
-			expect(screen.getByTestId(TESTID_SELECTORS.icons.avatar)).toBeVisible();
+			expect(screen.getByTestId(TESTID_SELECTORS.icons.contactGroup)).toBeVisible();
 			expect(screen.getByText('New Group')).toBeVisible();
 			expect(screen.getByText('Addresses: 0')).toBeVisible();
 		});

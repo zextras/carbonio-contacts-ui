@@ -72,7 +72,7 @@ describe('Contact Group View', () => {
 
 		expect(await screen.findByText(contactGroupName)).toBeVisible();
 		const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
-		expect(within(listItemContent).getByTestId(TESTID_SELECTORS.icons.avatar)).toBeVisible();
+		expect(within(listItemContent).getByTestId(TESTID_SELECTORS.icons.contactGroup)).toBeVisible();
 		expect(screen.getByText('2 addresses')).toBeVisible();
 	});
 
@@ -89,7 +89,7 @@ describe('Contact Group View', () => {
 		expect(await screen.findByText(contactGroupName)).toBeVisible();
 		expect(screen.getByText('0 addresses')).toBeVisible();
 		const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
-		expect(within(listItemContent).getByTestId(TESTID_SELECTORS.icons.avatar)).toBeVisible();
+		expect(within(listItemContent).getByTestId(TESTID_SELECTORS.icons.contactGroup)).toBeVisible();
 	});
 
 	it('should render the avatar, the name and the number of the members (case 1 address string) of a contact group', async () => {
@@ -104,7 +104,7 @@ describe('Contact Group View', () => {
 
 		expect(await screen.findByText(contactGroupName)).toBeVisible();
 		const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
-		expect(within(listItemContent).getByTestId(TESTID_SELECTORS.icons.avatar)).toBeVisible();
+		expect(within(listItemContent).getByTestId(TESTID_SELECTORS.icons.contactGroup)).toBeVisible();
 		expect(screen.getByText('1 address')).toBeVisible();
 	});
 

@@ -112,7 +112,7 @@ export const ContactGroupsList = ({
 			background={'gray6'}
 		>
 			<Row
-				minHeight={'2.5rem'}
+				minHeight={'3rem'}
 				height="auto"
 				background={'gray5'}
 				mainAlignment={'space-between'}

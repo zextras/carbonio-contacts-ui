@@ -14,6 +14,12 @@ import * as activeItem from '../hooks/useActiveItem';
 import { UseActiveItemReturnType } from '../hooks/useActiveItem';
 
 describe('Displayer header', () => {
+	it('should display the icon for the CGs', () => {
+		const title = faker.word.noun();
+		setupTest(<CGDisplayerHeader title={title} />);
+		expect(screen.getByTestId(TESTID_SELECTORS.icons.contactGroup)).toBeVisible();
+	});
+
 	it('should display the CG name', () => {
 		const title = faker.word.noun();
 		setupTest(<CGDisplayerHeader title={title} />);
