@@ -110,7 +110,11 @@
         "contact_created_in_folder": "Questo contatto verrà creato nella cartella \"{{name}}\"",
         "destination_address_book": "Rubrica di destinazione",
         "include_shared_folders": "Includi rubriche condivise",
-        "autocomplete": "Auto completamento"
+        "autocomplete": "Auto completamento",
+        "select_all_addresses_0": "Seleziona l'indirizzo",
+        "select_all_addresses_1": "Seleziona tutti i {{count}} indirizzi",
+        "select_all_addresses_2": "Seleziona tutti i {{count}} indirizzi",
+        "show_more": "mostra di più"
     },
     "job": {
         "title": "Ruolo",
@@ -333,5 +337,11 @@
     },
     "search": {
         "shared_folders_note": "Includi nella ricerche anche le rubriche condivise."
+    },
+    "expand_distribution_list": "Espandi elenco indirizzi",
+    "secondaryBar": {
+        "contextualMenu": {
+            "new_contact_group_creation_action": "Nuovo gruppo di contatti"
+        }
     }
 }

@@ -3,13 +3,12 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
-import { Avatar, Button, Row, TextWithTooltip, useSnackbar } from '@zextras/carbonio-design-system';
-import { useIntegratedFunction } from '@zextras/carbonio-shell-ui';
-import { useTranslation } from 'react-i18next';
+import { Avatar, Button, Row, TextWithTooltip } from '@zextras/carbonio-design-system';
 
-import { copyToClipboard } from '../carbonio-ui-commons/utils/clipboard';
+import { useActionCopyToClipboard } from '../actions/copy-to-clipboard';
+import { useActionSendEmail } from '../actions/send-email';
 
 export type MemberDisplayerListItemComponentProps = {
 	email: string;
@@ -18,29 +17,18 @@ export type MemberDisplayerListItemComponentProps = {
 export const MemberDisplayerListItemComponent = ({
 	email
 }: MemberDisplayerListItemComponentProps): React.JSX.Element => {
-	const createSnackbar = useSnackbar();
-	const [t] = useTranslation();
-	const [openMailComposer, isComposePrefillMessageAvailable] =
-		useIntegratedFunction('composePrefillMessage');
+	const sendEmailAction = useActionSendEmail();
+	const copyToClipboardAction = useActionCopyToClipboard();
 
 	const onSendEmail = useCallback(() => {
-		openMailComposer({ recipients: [{ email }] });
-	}, [email, openMailComposer]);
+		sendEmailAction.execute([email]);
+	}, [email, sendEmailAction]);
 
 	const onCopyEmail = useCallback(() => {
-		copyToClipboard(email).then(() => {
-			createSnackbar({
-				key: `clipboard-copy-success`,
-				replace: true,
-				type: 'success',
-				hideButton: true,
-				label: t(
-					'member_displayer_list_item_component.snackbar.email_copied_to_clipboard',
-					'Email copied to clipboard.'
-				)
-			});
-		});
-	}, [createSnackbar, email, t]);
+		copyToClipboardAction.execute(email);
+	}, [copyToClipboardAction, email]);
+
+	const canSendEmail = useMemo(() => sendEmailAction.canExecute(), [sendEmailAction]);
 
 	return (
 		<Row
@@ -57,12 +45,12 @@ export const MemberDisplayerListItemComponent = ({
 					<TextWithTooltip size={'small'}>{email}</TextWithTooltip>
 				</Row>
 			</Row>
-			<Row wrap={'nowrap'} gap={'0.5rem'}>
-				{isComposePrefillMessageAvailable && (
+			<Row wrap={'nowrap'} gap={'0.25rem'} flexShrink={1} minWidth={'fit-content'}>
+				{canSendEmail && (
 					<Button
 						type={'outlined'}
 						size={'medium'}
-						icon={'EmailOutline'}
+						icon={sendEmailAction.icon}
 						onClick={onSendEmail}
 						minWidth={'fit-content'}
 					/>
@@ -70,7 +58,7 @@ export const MemberDisplayerListItemComponent = ({
 				<Button
 					type={'outlined'}
 					size={'medium'}
-					icon={'Copy'}
+					icon={copyToClipboardAction.icon}
 					onClick={onCopyEmail}
 					minWidth={'fit-content'}
 				/>

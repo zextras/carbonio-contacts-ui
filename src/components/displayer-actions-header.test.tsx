@@ -9,13 +9,13 @@ import { faker } from '@faker-js/faker';
 import { Action } from '@zextras/carbonio-design-system';
 import { times } from 'lodash';
 
-import { CGDisplayerActionsHeader } from './cg-displayer-actions-header';
+import { DisplayerActionsHeader } from './displayer-actions-header';
 import { screen, setupTest } from '../carbonio-ui-commons/test/test-setup';
 
 describe('Contact group displayer header actions', () => {
 	it('should display no buttons if no action is passed', () => {
 		const actions: Array<Action> = [];
-		setupTest(<CGDisplayerActionsHeader actions={actions} />);
+		setupTest(<DisplayerActionsHeader actions={actions} />);
 		expect(screen.queryByRole('button')).not.toBeInTheDocument();
 	});
 
@@ -26,7 +26,7 @@ describe('Contact group displayer header actions', () => {
 			label: `Stub action ${index}`,
 			onClick: jest.fn()
 		}));
-		setupTest(<CGDisplayerActionsHeader actions={actions} />);
+		setupTest(<DisplayerActionsHeader actions={actions} />);
 		actions.forEach((action) => {
 			expect(screen.getByRole('button', { name: action.label })).toBeVisible();
 		});

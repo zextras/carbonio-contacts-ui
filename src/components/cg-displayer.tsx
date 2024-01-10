@@ -7,9 +7,9 @@ import React from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
 
-import { CGDisplayerActionsHeader } from './cg-displayer-actions-header';
 import { CGDisplayerDetails } from './cg-displayer-details';
-import { CGDisplayerHeader } from './cg-displayer-header';
+import { DisplayerActionsHeader } from './displayer-actions-header';
+import { DisplayerHeader } from './displayer-header';
 import { useContactGroupActions } from '../hooks/use-contact-group-actions';
 import { ContactGroup } from '../model/contact-group';
 
@@ -21,14 +21,14 @@ export const CGDisplayer = ({ contactGroup }: ContactGroupDisplayerProps): React
 	const actions = useContactGroupActions(contactGroup);
 	return (
 		<Container background={'gray5'} mainAlignment={'flex-start'} padding={{ bottom: '3rem' }}>
-			<CGDisplayerHeader title={contactGroup.title} />
+			<DisplayerHeader title={contactGroup.title} icon={'PeopleOutline'} />
 			<Container
 				padding={{ horizontal: '1rem' }}
 				mainAlignment={'flex-start'}
 				minHeight={0}
 				maxHeight={'100%'}
 			>
-				<CGDisplayerActionsHeader actions={actions} />
+				<DisplayerActionsHeader actions={actions} />
 				<CGDisplayerDetails contactGroup={contactGroup} />
 			</Container>
 		</Container>

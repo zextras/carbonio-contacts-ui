@@ -9,12 +9,13 @@ import React, { useMemo } from 'react';
 import { Container } from '@zextras/carbonio-design-system';
 import { useParams } from 'react-router-dom';
 
+import { DisplayerController } from '../components/displayer-controller';
 import { DLListItem } from '../components/dl-list-item';
 import { MainList } from '../components/main-list';
 import { StyledListItem } from '../components/StyledComponents';
-import { ROUTES_INTERNAL_PARAMS, RouteParams } from '../constants';
+import { DISPLAYER_WIDTH, RouteParams, ROUTES_INTERNAL_PARAMS } from '../constants';
+import { useFindDistributionLists } from '../hooks/use-find-distribution-lists';
 import { useActiveItem } from '../hooks/useActiveItem';
-import { useFindDistributionLists } from '../hooks/useFindDistributionLists';
 
 export const DistributionListsView = (): React.JSX.Element => {
 	const { activeItem, setActive } = useActiveItem();
@@ -29,12 +30,7 @@ export const DistributionListsView = (): React.JSX.Element => {
 			distributionLists.map((dl) => (
 				<StyledListItem key={dl.id} active={dl.id === activeItem} data-testid={'list-item'}>
 					{(visible): React.JSX.Element => (
-						<DLListItem
-							visible={visible}
-							title={dl.displayName || dl.email}
-							id={dl.id}
-							onClick={setActive}
-						/>
+						<DLListItem visible={visible} distributionList={dl} onClick={setActive} />
 					)}
 				</StyledListItem>
 			)),
@@ -53,15 +49,15 @@ export const DistributionListsView = (): React.JSX.Element => {
 			maxHeight="100%"
 		>
 			<MainList>{items}</MainList>
-			{/* <Container */}
-			{/*	width={DISPLAYER_WIDTH} */}
-			{/*	mainAlignment="flex-start" */}
-			{/*	crossAlignment="flex-start" */}
-			{/*	borderRadius="none" */}
-			{/*	style={{ maxHeight: '100%' }} */}
-			{/* > */}
-			{/*	<Displayer /> */}
-			{/* </Container> */}
+			<Container
+				width={DISPLAYER_WIDTH}
+				mainAlignment="flex-start"
+				crossAlignment="flex-start"
+				borderRadius="none"
+				maxHeight={'100%'}
+			>
+				<DisplayerController />
+			</Container>
 		</Container>
 	);
 };
