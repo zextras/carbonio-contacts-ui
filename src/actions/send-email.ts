@@ -11,11 +11,12 @@ import { useTranslation } from 'react-i18next';
 import { UIAction } from './types';
 import { ACTION_IDS } from '../constants';
 
-export type SendEmailAction = UIAction<Array<string>, never>;
-
+export type MailComposerRecipient = { email?: string; isGroup?: boolean };
 export type OpenMailComposerIntegratedFunction = (arg: {
-	recipients: Array<{ email: string }>;
+	recipients: Array<MailComposerRecipient>;
 }) => void;
+
+export type SendEmailAction = UIAction<Array<string | MailComposerRecipient>, never>;
 
 export const useActionSendEmail = (): SendEmailAction => {
 	const [t] = useTranslation();
@@ -29,7 +30,11 @@ export const useActionSendEmail = (): SendEmailAction => {
 	const sendEmail = useCallback<SendEmailAction['execute']>(
 		(recipients) => {
 			if (recipients) {
-				openMailComposer({ recipients: recipients.map((recipient) => ({ email: recipient })) });
+				openMailComposer({
+					recipients: recipients.map((recipient) =>
+						typeof recipient === 'string' ? { email: recipient } : recipient
+					)
+				});
 			}
 		},
 		[openMailComposer]

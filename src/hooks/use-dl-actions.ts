@@ -23,7 +23,7 @@ export const useDLActions = (distributionList: DistributionList | undefined): Ar
 				id: sendEmailAction.id,
 				label: sendEmailAction.label,
 				onClick: () => {
-					sendEmailAction.execute([distributionList.email]);
+					sendEmailAction.execute([{ email: distributionList.email, isGroup: true }]);
 				},
 				icon: sendEmailAction.icon
 			});
