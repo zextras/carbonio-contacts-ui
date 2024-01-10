@@ -57,22 +57,24 @@ export const MemberDisplayerListItemComponent = ({
 					<TextWithTooltip size={'small'}>{email}</TextWithTooltip>
 				</Row>
 			</Row>
-			{isComposePrefillMessageAvailable && (
+			<Row wrap={'nowrap'} gap={'0.5rem'}>
+				{isComposePrefillMessageAvailable && (
+					<Button
+						type={'outlined'}
+						size={'medium'}
+						icon={'EmailOutline'}
+						onClick={onSendEmail}
+						minWidth={'fit-content'}
+					/>
+				)}
 				<Button
 					type={'outlined'}
 					size={'medium'}
-					icon={'EmailOutline'}
-					onClick={onSendEmail}
+					icon={'Copy'}
+					onClick={onCopyEmail}
 					minWidth={'fit-content'}
 				/>
-			)}
-			<Button
-				type={'outlined'}
-				size={'medium'}
-				icon={'Copy'}
-				onClick={onCopyEmail}
-				minWidth={'fit-content'}
-			/>
+			</Row>
 		</Row>
 	);
 };

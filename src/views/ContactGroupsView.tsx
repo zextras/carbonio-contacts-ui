@@ -21,11 +21,8 @@ export const ContactGroupsView = (): React.JSX.Element => {
 			orientation="row"
 			crossAlignment="flex-start"
 			mainAlignment="flex-start"
-			width="fill"
-			height="fill"
 			background="gray5"
 			borderRadius="none"
-			maxHeight="100%"
 		>
 			<ContactGroupsList
 				contactGroups={contactGroups}

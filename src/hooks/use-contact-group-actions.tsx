@@ -26,7 +26,7 @@ export const useContactGroupActions = (contactGroup: ContactGroup): Action[] => 
 		if (contactGroup.members.length > 0) {
 			orderedActions.push({
 				id: 'send-email',
-				label: t('action.mail', 'Send e-mail'),
+				label: t('action.send_msg', 'Send e-mail'),
 				icon: 'EmailOutline',
 				onClick: sendMail
 			});

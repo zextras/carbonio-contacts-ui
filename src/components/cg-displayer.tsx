@@ -20,7 +20,7 @@ interface ContactGroupDisplayerProps {
 export const CGDisplayer = ({ contactGroup }: ContactGroupDisplayerProps): React.JSX.Element => {
 	const actions = useContactGroupActions(contactGroup);
 	return (
-		<Container background={'gray5'} mainAlignment={'flex-start'} padding={{ bottom: '1rem' }}>
+		<Container background={'gray5'} mainAlignment={'flex-start'} padding={{ bottom: '3rem' }}>
 			<CGDisplayerHeader title={contactGroup.title} />
 			<Container
 				padding={{ horizontal: '1rem' }}
@@ -29,11 +29,7 @@ export const CGDisplayer = ({ contactGroup }: ContactGroupDisplayerProps): React
 				maxHeight={'100%'}
 			>
 				<CGDisplayerActionsHeader actions={actions} />
-				<CGDisplayerDetails
-					id={contactGroup.id}
-					title={contactGroup.title}
-					members={contactGroup.members}
-				/>
+				<CGDisplayerDetails contactGroup={contactGroup} />
 			</Container>
 		</Container>
 	);
