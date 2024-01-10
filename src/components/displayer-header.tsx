@@ -16,7 +16,6 @@ interface DisplayerHeaderProps {
 	icon: keyof DefaultTheme['icons'];
 }
 
-
 export const DisplayerHeader = ({ title, icon }: DisplayerHeaderProps): React.JSX.Element => {
 	const { removeActive } = useActiveItem();
 
