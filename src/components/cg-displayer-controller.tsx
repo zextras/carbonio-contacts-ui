@@ -16,7 +16,7 @@ import { RouteParams, ROUTES_INTERNAL_PARAMS } from '../constants';
 import { useActiveContactGroup } from '../hooks/useActiveContactGroup';
 import { useActiveItem } from '../hooks/useActiveItem';
 
-export const DisplayerController = (): React.JSX.Element => {
+export const CGDisplayerController = (): React.JSX.Element => {
 	const contactGroup = useActiveContactGroup();
 	const { activeItem } = useActiveItem();
 	const { route } = useParams<RouteParams>();

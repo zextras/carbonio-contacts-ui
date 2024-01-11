@@ -21,13 +21,13 @@ import { useTranslation } from 'react-i18next';
 import styled, { css, type DefaultTheme, type SimpleInterpolation } from 'styled-components';
 
 import { CGListItem } from './cg-list-item';
-import { HoverBarContainer } from './StyledComponents';
+import { HoverBarContainer } from './styled-components';
 import { Text } from './Text';
 import { LIST_WIDTH } from '../constants';
 import { useActiveItem } from '../hooks/useActiveItem';
 import { ContactGroup } from '../model/contact-group';
 
-export type ContactGroupsListProps = {
+export type CGListProps = {
 	contactGroups: Array<ContactGroup>;
 	onListBottom?: () => void;
 };
@@ -48,6 +48,7 @@ const StyledListItem = styled(ListItem).attrs<
 			${HoverBarContainer} {
 				background: linear-gradient(to right, transparent, ${getColor(backgroundColor, theme)});
 			}
+
 			&:focus ${HoverBarContainer} {
 				background: linear-gradient(
 					to right,
@@ -74,10 +75,7 @@ const StyledListItem = styled(ListItem).attrs<
 		`}
 `;
 
-export const ContactGroupsList = ({
-	contactGroups,
-	onListBottom
-}: ContactGroupsListProps): React.JSX.Element => {
+export const CGList = ({ contactGroups, onListBottom }: CGListProps): React.JSX.Element => {
 	const [t] = useTranslation();
 	const { activeItem, setActive } = useActiveItem();
 
@@ -110,6 +108,7 @@ export const ContactGroupsList = ({
 			crossAlignment="unset"
 			borderRadius="none"
 			background={'gray6'}
+			borderColor={{ right: 'gray3' }}
 		>
 			<Row
 				minHeight={'3rem'}

@@ -13,7 +13,7 @@ import { DisplayerHeader } from './displayer-header';
 import { DistributionListDetails } from './dl-details';
 import { ManagerList } from './manager-list';
 import { MemberList } from './member-list';
-import { ScrollableContainer } from './StyledComponents';
+import { ScrollableContainer } from './styled-components';
 import { useDLActions } from '../hooks/use-dl-actions';
 import { useGetDistributionList } from '../hooks/use-get-distribution-list';
 import { useGetDistributionListMembers } from '../hooks/use-get-distribution-list-members';

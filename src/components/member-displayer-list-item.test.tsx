@@ -32,7 +32,7 @@ describe('Member displayer item', () => {
 		const email = faker.internet.email();
 		setupTest(<MemberDisplayerListItemComponent email={email} />);
 		expect(
-			screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.sendMail })
+			screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.sendEmail })
 		).toBeVisible();
 	});
 
@@ -41,7 +41,7 @@ describe('Member displayer item', () => {
 		const email = faker.internet.email();
 		setupTest(<MemberDisplayerListItemComponent email={email} />);
 		expect(
-			screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.sendMail })
+			screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.sendEmail })
 		).not.toBeInTheDocument();
 	});
 
@@ -56,7 +56,7 @@ describe('Member displayer item', () => {
 		jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
 		const email = faker.internet.email();
 		const { user } = setupTest(<MemberDisplayerListItemComponent email={email} />);
-		const button = screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.sendMail });
+		const button = screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.sendEmail });
 		await user.click(button);
 		expect(openMailComposer).toHaveBeenCalledWith({ recipients: [{ email }] });
 	});

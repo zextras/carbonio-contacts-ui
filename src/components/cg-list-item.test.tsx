@@ -19,12 +19,12 @@ describe('Contact group list item', () => {
 				members: buildMembers(faker.number.int({ min: 1, max: 100 }))
 			});
 			setupTest(<CGListItem {...contactGroup} />);
-			expect(screen.getByTestId(TESTID_SELECTORS.icons.sendMail)).toBeVisible();
+			expect(screen.getByTestId(TESTID_SELECTORS.icons.sendEmail)).toBeVisible();
 		});
 		it('should hide send mail action when the contact group has 0 members', () => {
 			const contactGroup = buildContactGroup();
 			setupTest(<CGListItem {...contactGroup} />);
-			expect(screen.queryByTestId(TESTID_SELECTORS.icons.sendMail)).not.toBeInTheDocument();
+			expect(screen.queryByTestId(TESTID_SELECTORS.icons.sendEmail)).not.toBeInTheDocument();
 		});
 	});
 });

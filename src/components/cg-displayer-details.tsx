@@ -9,7 +9,7 @@ import { Avatar, Container, Divider, ListV2, Row, Text } from '@zextras/carbonio
 import { useTranslation } from 'react-i18next';
 
 import { MemberDisplayerListItemComponent } from './member-displayer-list-item';
-import { TextWithLineHeight } from './StyledComponents';
+import { TextWithLineHeight } from './styled-components';
 import { ContactGroup } from '../model/contact-group';
 
 export type CGDisplayerDetailsProps = {

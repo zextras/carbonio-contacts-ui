@@ -10,7 +10,7 @@ import { within } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { Route } from 'react-router-dom';
 
-import { ContactGroupsView } from './ContactGroupsView';
+import { CGView } from './cg-view';
 import { screen, setupTest, triggerLoadMore } from '../carbonio-ui-commons/test/test-setup';
 import { FIND_CONTACT_GROUP_LIMIT, ROUTES, ROUTES_INTERNAL_PARAMS } from '../constants';
 import { EMPTY_DISPLAYER_HINT, EMPTY_LIST_HINT, TESTID_SELECTORS } from '../constants/tests';
@@ -49,7 +49,7 @@ describe('Contact Group View', () => {
 			}
 		);
 
-		setupTest(<ContactGroupsView />);
+		setupTest(<CGView />);
 
 		expect(await screen.findByText(cnItem1.fileAsStr)).toBeVisible();
 		expect(screen.queryByText(cnItem101.fileAsStr)).not.toBeInTheDocument();
@@ -68,7 +68,7 @@ describe('Contact Group View', () => {
 			]),
 			offset: 0
 		});
-		setupTest(<ContactGroupsView />);
+		setupTest(<CGView />);
 
 		expect(await screen.findByText(contactGroupName)).toBeVisible();
 		const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
@@ -84,7 +84,7 @@ describe('Contact Group View', () => {
 			]),
 			offset: 0
 		});
-		setupTest(<ContactGroupsView />);
+		setupTest(<CGView />);
 
 		expect(await screen.findByText(contactGroupName)).toBeVisible();
 		expect(screen.getByText('0 addresses')).toBeVisible();
@@ -100,7 +100,7 @@ describe('Contact Group View', () => {
 			]),
 			offset: 0
 		});
-		setupTest(<ContactGroupsView />);
+		setupTest(<CGView />);
 
 		expect(await screen.findByText(contactGroupName)).toBeVisible();
 		const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
@@ -114,7 +114,7 @@ describe('Contact Group View', () => {
 			offset: 0
 		});
 
-		setupTest(<ContactGroupsView />);
+		setupTest(<CGView />);
 		expect(await screen.findByText(EMPTY_LIST_HINT)).toBeVisible();
 	});
 
@@ -132,7 +132,7 @@ describe('Contact Group View', () => {
 			});
 			const { user } = setupTest(
 				<Route path={`${ROUTES.mainRoute}${ROUTES.contactGroups}`}>
-					<ContactGroupsView />
+					<CGView />
 				</Route>,
 				{ initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}`] }
 			);
@@ -158,10 +158,10 @@ describe('Contact Group View', () => {
 				]),
 				offset: 0
 			});
-			const { user } = setupTest(<ContactGroupsView />);
+			const { user } = setupTest(<CGView />);
 
 			await screen.findAllByText(contactGroupName);
-			const action = screen.getByTestId(TESTID_SELECTORS.icons.sendMail);
+			const action = screen.getByTestId(TESTID_SELECTORS.icons.sendEmail);
 			await user.click(action);
 			expect(openMailComposer).toHaveBeenCalledTimes(1);
 			expect(openMailComposer).toHaveBeenCalledWith({ recipients: [{ email: member }] });
@@ -177,10 +177,10 @@ describe('Contact Group View', () => {
 				]),
 				offset: 0
 			});
-			setupTest(<ContactGroupsView />);
+			setupTest(<CGView />);
 
 			await screen.findAllByText(contactGroupName);
-			expect(screen.queryByTestId(TESTID_SELECTORS.icons.sendMail)).not.toBeInTheDocument();
+			expect(screen.queryByTestId(TESTID_SELECTORS.icons.sendEmail)).not.toBeInTheDocument();
 		});
 
 		it('should open the mail board (Contextual menu trigger)', async () => {
@@ -194,7 +194,7 @@ describe('Contact Group View', () => {
 				]),
 				offset: 0
 			});
-			const { user } = setupTest(<ContactGroupsView />);
+			const { user } = setupTest(<CGView />);
 
 			await screen.findByText(contactGroupName);
 			const listItem = await screen.findByTestId('list-item-content');
@@ -214,7 +214,7 @@ describe('Contact Group View', () => {
 				findContactGroupsResponse: createFindContactGroupsResponse([]),
 				offset: 0
 			});
-			setupTest(<ContactGroupsView />);
+			setupTest(<CGView />);
 
 			expect(await screen.findByText(EMPTY_DISPLAYER_HINT)).toBeVisible();
 		});
@@ -229,7 +229,7 @@ describe('Contact Group View', () => {
 			});
 			const { user } = setupTest(
 				<Route path={`${ROUTES.mainRoute}${ROUTES.contactGroups}`}>
-					<ContactGroupsView />
+					<CGView />
 				</Route>,
 				{ initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}`] }
 			);
@@ -250,7 +250,7 @@ describe('Contact Group View', () => {
 			});
 			const { user } = setupTest(
 				<Route path={`${ROUTES.mainRoute}${ROUTES.contactGroups}`}>
-					<ContactGroupsView />
+					<CGView />
 				</Route>,
 				{ initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${cnItem.id}`] }
 			);
