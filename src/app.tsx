@@ -130,7 +130,7 @@ const App = (): React.JSX.Element => {
 		addRoute({
 			// TODO: update route name and label
 			route: GROUPS_ROUTE,
-			position: 4,
+			position: 310,
 			visible: true,
 			label: 'Contact Groups',
 			primaryBar: 'ContactsModOutline',
