@@ -5,12 +5,21 @@
  */
 import React from 'react';
 
+import { faker } from '@faker-js/faker';
 import { waitFor } from '@testing-library/react';
+import { Link } from 'react-router-dom';
 
 import GroupsAppView from './GroupsAppView';
-import { setupTest } from '../carbonio-ui-commons/test/test-setup';
+import { screen, setupTest } from '../carbonio-ui-commons/test/test-setup';
+import { ROUTES_INTERNAL_PARAMS } from '../constants';
 import { GetAccountDistributionListsRequest } from '../network/api/get-account-distribution-lists';
+import {
+	createFindContactGroupsResponse,
+	createFindContactGroupsResponseCnItem,
+	registerFindContactGroupsHandler
+} from '../tests/msw-handlers';
 import { registerGetAccountDistributionListsHandler } from '../tests/msw-handlers/get-account-distribution-lists';
+import { generateDistributionList } from '../tests/utils';
 
 describe('App view', () => {
 	it.todo(/* .each(['/', '/groups']) */ 'should render groups on %s');
@@ -57,5 +66,42 @@ describe('App view', () => {
 				})
 			);
 		});
+	});
+
+	it('should not make a network request when the user navigates back to the distribution list view', async () => {
+		const contactGroupName = faker.company.name();
+		registerFindContactGroupsHandler({
+			findContactGroupsResponse: createFindContactGroupsResponse([
+				createFindContactGroupsResponseCnItem(contactGroupName)
+			]),
+			offset: 0
+		});
+		const dl = generateDistributionList();
+		const dlHandler = registerGetAccountDistributionListsHandler([dl]);
+		const { user } = setupTest(
+			<>
+				<Link to={`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}`}>contact group</Link>
+				<Link
+					to={`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.member}`}
+				>
+					distribution list
+				</Link>
+				<GroupsAppView />
+			</>,
+			{
+				initialEntries: [
+					`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.member}`
+				]
+			}
+		);
+		expect(await screen.findByText(dl.displayName)).toBeVisible();
+		expect(dlHandler).toHaveBeenCalledTimes(1);
+		await user.click(screen.getByRole('link', { name: 'contact group' }));
+		await waitFor(() => expect(screen.queryByText(dl.displayName)).not.toBeInTheDocument());
+		expect(await screen.findByText(contactGroupName)).toBeVisible();
+		await user.click(screen.getByRole('link', { name: 'distribution list' }));
+		expect(await screen.findByText(dl.displayName)).toBeVisible();
+		// the handler is not being called again
+		expect(dlHandler).toHaveBeenCalledTimes(1);
 	});
 });

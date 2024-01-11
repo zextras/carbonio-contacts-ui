@@ -3,10 +3,11 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import { DistributionList } from '../model/distribution-list';
 import { client } from '../network/client';
+import { useDistributionListsStore } from '../store/distribution-lists';
 
 export const useFindDistributionLists = ({
 	ownerOf,
@@ -15,13 +16,15 @@ export const useFindDistributionLists = ({
 	ownerOf: boolean;
 	memberOf: boolean;
 }): Array<DistributionList> => {
-	const [items, setItems] = useState<Array<DistributionList>>([]);
+	const { storedDistributionLists, setStoredDistributionLists } = useDistributionListsStore();
 
 	useEffect(() => {
-		client.getAccountDistributionLists({ ownerOf, memberOf }).then((newItems) => {
-			setItems(newItems);
-		});
-	}, [memberOf, ownerOf]);
+		if (storedDistributionLists === undefined) {
+			client.getAccountDistributionLists({ ownerOf, memberOf }).then((newItems) => {
+				setStoredDistributionLists(newItems);
+			});
+		}
+	}, [setStoredDistributionLists, memberOf, ownerOf, storedDistributionLists]);
 
-	return items;
+	return storedDistributionLists ?? [];
 };

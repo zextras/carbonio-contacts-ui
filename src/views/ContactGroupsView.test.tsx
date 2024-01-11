@@ -14,17 +14,11 @@ import { ContactGroupsView } from './ContactGroupsView';
 import { setupTest, screen, triggerLoadMore } from '../carbonio-ui-commons/test/test-setup';
 import { FIND_CONTACT_GROUP_LIMIT, ROUTES, ROUTES_INTERNAL_PARAMS } from '../constants';
 import { EMPTY_DISPLAYER_HINT, EMPTY_LIST_HINT, TESTID_SELECTORS } from '../constants/tests';
-import { useContactGroupStore } from '../store/contact-groups';
 import {
 	createFindContactGroupsResponse,
 	createFindContactGroupsResponseCnItem,
 	registerFindContactGroupsHandler
 } from '../tests/msw-handlers';
-
-beforeEach(() => {
-	useContactGroupStore.getState().setStoredOffset(0);
-	useContactGroupStore.getState().emptyStoredContactGroups();
-});
 
 describe('Contact Group View', () => {
 	it('should load the second page only when bottom element becomes visible', async () => {
