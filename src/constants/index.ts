@@ -24,9 +24,9 @@ export const ROUTES = {
 } as const;
 
 export type RouteParams = {
-	route: 'contact-groups' | 'distribution-lists';
-	id: string;
-	filter: 'member' | 'manager';
+	route?: 'contact-groups' | 'distribution-lists';
+	id?: string;
+	filter?: 'member' | 'manager';
 };
 
 export const ROUTES_INTERNAL_PARAMS = {
@@ -39,7 +39,10 @@ export const ROUTES_INTERNAL_PARAMS = {
 		manager: 'manager'
 	}
 } satisfies Partial<{
-	[K in keyof RouteParams]: Record<KebabToCamelCase<RouteParams[K]>, RouteParams[K]>;
+	[K in keyof RouteParams]: Record<
+		KebabToCamelCase<NonNullable<RouteParams[K]>>,
+		NonNullable<RouteParams[K]>
+	>;
 }>;
 
 export const DISPLAYER_WIDTH = '60%';

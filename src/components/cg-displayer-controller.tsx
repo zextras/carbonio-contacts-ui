@@ -10,7 +10,7 @@ import { Container } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
 import { CGDisplayer } from './cg-displayer';
-import { EmptyDisplayer } from './EmptyDisplayer';
+import { EmptyDisplayer } from './empty-displayer';
 import { useActiveContactGroup } from '../hooks/useActiveContactGroup';
 
 export const CGDisplayerController = (): React.JSX.Element => {

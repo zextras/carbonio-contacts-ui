@@ -69,7 +69,7 @@ export const DistributionListDetails = ({
 			{description && (
 				<Container height={'auto'} mainAlignment={'flex-start'} crossAlignment={'flex-start'}>
 					<Text size={'small'} color={'secondary'}>
-						{t('displayer.distributionLists.label.description', 'Description')}
+						{t('displayer.distribution_list.label.description', 'Description')}
 					</Text>
 					<Text overflow={'break-word'}>{description}</Text>
 				</Container>

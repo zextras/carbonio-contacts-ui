@@ -38,19 +38,19 @@ export const MemberList = ({ members, membersCount }: MemberListProps): React.JS
 	return (
 		<Container mainAlignment={'flex-start'} crossAlignment={'flex-start'} gap={'0.5rem'}>
 			<Text size={'small'} color={'secondary'}>
-				{t('displayer.distributionList.label.member_total', 'Member list {{total}}', {
+				{t('displayer.distribution_list.label.member_total', 'Member list {{total}}', {
 					total: membersCount
 				})}
 			</Text>
 			<Text size={'small'} overflow={'break-word'}>
 				{t(
-					'displayer.distributionList.label.filterHint',
+					'displayer.distribution_list.label.filter_hint',
 					'You can filter this list by looking for specific member’s name.'
 				)}
 			</Text>
 			<Input
 				data-testid={'dl-members-filter-input'}
-				label={t('displayer.distributionList.placeholder.filter_member', 'Filter an address')}
+				label={t('displayer.distribution_list.placeholder.filter_member', 'Filter an address')}
 				CustomIcon={FilterMembersIcon}
 				value={searchValue}
 				onChange={onSearchChange}

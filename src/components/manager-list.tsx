@@ -31,7 +31,7 @@ export const ManagerList = ({ managers }: ManagerListProps): React.JSX.Element =
 	return (
 		<Container mainAlignment={'flex-start'} crossAlignment={'flex-start'} gap={'0.5rem'}>
 			<Text size={'small'} color={'secondary'}>
-				{t('displayer.distributionList.label.manager_total', 'Manager list {{total}}', {
+				{t('displayer.distribution_list.label.manager_total', 'Manager list {{total}}', {
 					total: managers?.length ?? 0
 				})}
 			</Text>

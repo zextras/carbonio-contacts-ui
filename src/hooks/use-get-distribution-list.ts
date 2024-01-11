@@ -10,14 +10,16 @@ import { client } from '../network/client';
 import { RequireAtLeastOne } from '../types/utils';
 
 export const useGetDistributionList = (
-	item: RequireAtLeastOne<Pick<DistributionList, 'id' | 'email'>>
+	item: RequireAtLeastOne<Pick<DistributionList, 'id' | 'email'>> | undefined
 ): DistributionList | undefined => {
 	const [distributionList, setDistributionList] = useState<DistributionList | undefined>();
 
 	useEffect(() => {
-		client.getDistributionList(item).then((dl) => {
-			setDistributionList(dl);
-		});
+		if (item !== undefined) {
+			client.getDistributionList(item).then((dl) => {
+				setDistributionList(dl);
+			});
+		}
 	}, [item]);
 
 	return distributionList;

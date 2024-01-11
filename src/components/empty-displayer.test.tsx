@@ -6,7 +6,7 @@
 
 import React from 'react';
 
-import { EmptyDisplayer } from './EmptyDisplayer';
+import { EmptyDisplayer } from './empty-displayer';
 import { screen, setupTest } from '../carbonio-ui-commons/test/test-setup';
 import { EMPTY_DISPLAYER_HINT, TESTID_SELECTORS } from '../constants/tests';
 

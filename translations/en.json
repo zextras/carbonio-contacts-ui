@@ -1,5 +1,4 @@
 {
-    "": "There are no distribution lists yet.",
     "action": {
         "copy": "Copy",
         "delete": "Delete",
@@ -65,7 +64,6 @@
     },
     "contact_restored": "Contact restored",
     "displayer": {
-        "": "Select a distribution list or contact the Admin to have one.",
         "description2": "Click the “NEW” button to start creating a new one.",
         "description3": "Click the “NEW” button to create a new group of contacts.",
         "description4": "Create a new one by clicking the “NEW” button.",
@@ -74,22 +72,16 @@
         "description7": "Create a group of contacts by clicking the “NEW” button.",
         "description8": "Select a contact or a group of contacts to send shared emails.",
         "description9": "Select a distribution list or contact the Admin to have one.",
-        "distributionList": {
-            "": "Select a distribution list or contact the Admin to have one.",
-            "emptyDisplayer": "Select a distribution list or contact the Admin to have one.",
+        "distribution_list": {
+            "empty_displayer": "Select a distribution list or contact the Admin to have one.",
             "label": {
-                "emptyMessage": "There are no distribution lists yet.",
-                "filterHint": "You can filter this list by looking for specific member’s name.",
+                "description": "Description",
+                "filter_hint": "You can filter this list by looking for specific member’s name.",
                 "manager_total": "Manager list {{total}}",
                 "member_total": "Member list {{total}}"
             },
             "placeholder": {
                 "filter_member": "Filter an address"
-            }
-        },
-        "distributionLists": {
-            "label": {
-                "description": "Description"
             }
         },
         "list_title1": "It looks like there are no contacts yet",
@@ -116,7 +108,7 @@
     },
     "distribution_list": {
         "label": {
-            "emptyMessage": "There are no distribution lists yet."
+            "empty_message": "There are no distribution lists yet."
         }
     },
     "edit_dl_component": {

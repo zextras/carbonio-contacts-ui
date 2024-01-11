@@ -48,7 +48,7 @@ export const MainList = ({ onListBottom, children }: MainListProps): React.JSX.E
 					</ListV2>
 				) : (
 					<Text size={'small'} weight={'bold'} overflow={'break-word'} color={'secondary'} centered>
-						{t('distribution_list.label.emptyMessage', 'There are no distribution lists yet.')}
+						{t('distribution_list.label.empty_message', 'There are no distribution lists yet.')}
 					</Text>
 				)}
 			</Container>

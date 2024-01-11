@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import React, { useMemo } from 'react';
+import React from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
 
@@ -15,20 +15,20 @@ import { ManagerList } from './manager-list';
 import { MemberList } from './member-list';
 import { ScrollableContainer } from './styled-components';
 import { useDLActions } from '../hooks/use-dl-actions';
-import { useGetDistributionList } from '../hooks/use-get-distribution-list';
-import { useGetDistributionListMembers } from '../hooks/use-get-distribution-list-members';
+import { DistributionList } from '../model/distribution-list';
 
 interface DistributionListDisplayerProps {
-	id: string;
+	members: Array<string>;
+	totalMembers: number;
+	distributionList: DistributionList | undefined;
 }
 
 export const DistributionListDisplayer = ({
-	id
+	members,
+	totalMembers,
+	distributionList
 }: DistributionListDisplayerProps): React.JSX.Element => {
-	const dlToLoad = useMemo(() => ({ id }), [id]);
-	const distributionList = useGetDistributionList(dlToLoad);
 	const actions = useDLActions(distributionList);
-	const { members, totalMembers } = useGetDistributionListMembers(distributionList?.email ?? '');
 
 	return (
 		<Container background={'gray5'} mainAlignment={'flex-start'} padding={{ bottom: '1rem' }}>
