@@ -81,10 +81,6 @@ export const StyledListItem = styled(ListItem).attrs<
 		`}
 `;
 
-export const ScrollableContainer = styled(Container)`
-	overflow-y: auto;
-`;
-
 export const TextWithLineHeight = styled(Text)`
 	line-height: 1.5;
 `;

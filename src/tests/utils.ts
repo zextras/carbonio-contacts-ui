@@ -3,14 +3,10 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { faker } from '@faker-js/faker';
 import { SuccessSoapResponse } from '@zextras/carbonio-shell-ui';
-import { times } from 'lodash';
 
 import { screen, within } from '../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../constants/tests';
-import { DistributionList } from '../model/distribution-list';
-import { MakeRequired } from '../types/utils';
 
 export const getDLContactInput = (): {
 	container: HTMLElement;
@@ -38,19 +34,3 @@ export const buildSoapResponse = <T>(responseData: Record<string, T>): SuccessSo
 	},
 	Body: responseData
 });
-
-export const generateDistributionList = (
-	data: Partial<DistributionList> = {}
-): MakeRequired<DistributionList, 'displayName'> => ({
-	id: faker.string.uuid(),
-	email: faker.internet.email(),
-	displayName: faker.internet.displayName(),
-	isOwner: faker.datatype.boolean(),
-	isMember: faker.datatype.boolean(),
-	...data
-});
-
-export const generateDistributionLists = (
-	limit = 10
-): Array<ReturnType<typeof generateDistributionList>> =>
-	times(limit, () => generateDistributionList());

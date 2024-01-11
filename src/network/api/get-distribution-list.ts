@@ -4,40 +4,30 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { ErrorSoapBodyResponse, soapFetch } from '@zextras/carbonio-shell-ui';
-import { filter, first, flatMap } from 'lodash';
+import { first, reduce } from 'lodash';
 
 import { GenericSoapPayload } from './types';
 import { NAMESPACES } from '../../constants/api';
-import { DistributionList, DistributionListOwner } from '../../model/distribution-list';
-import { RequireAtLeastOne } from '../../types/utils';
+import { DistributionList } from '../../model/distribution-list';
 
 export interface GetDistributionListRequest extends GenericSoapPayload<typeof NAMESPACES.account> {
 	dl: {
-		by: 'name' | 'id';
+		by: 'name';
 		_content: string;
 	};
-	needOwners?: boolean;
+	needOwners?: number;
 }
 
 export interface GetDistributionListResponse extends GenericSoapPayload<typeof NAMESPACES.account> {
 	dl: Array<{
-		id: string;
 		name: string;
 		isOwner?: boolean;
 		owners?: Array<{ owner: Array<{ id?: string; name?: string }> }>;
 		_attrs?: {
 			displayName?: string;
-			description?: string;
 		};
 	}>;
 }
-
-const normalizeOwners = (
-	response: GetDistributionListResponse['dl'][number]['owners']
-): DistributionList['owners'] =>
-	flatMap<NonNullable<typeof response>[number], DistributionListOwner>(response, (item) =>
-		filter(item.owner, (owner): owner is DistributionListOwner => !!owner?.id && !!owner.name)
-	);
 
 const normalizeResponse = (response: GetDistributionListResponse): DistributionList | undefined => {
 	const dl = first(response.dl);
@@ -46,42 +36,32 @@ const normalizeResponse = (response: GetDistributionListResponse): DistributionL
 	}
 
 	return {
-		id: dl.id,
 		email: dl.name,
 		displayName: dl._attrs?.displayName,
 		isOwner: dl.isOwner ?? false,
-		owners: normalizeOwners(dl.owners),
-		description: dl._attrs?.description
+		owners: reduce<NonNullable<typeof dl.owners>[number], NonNullable<DistributionList['owners']>>(
+			dl.owners,
+			(result, item) => {
+				const owner = first(item.owner);
+				if (owner !== undefined && owner.id !== undefined && owner.name) {
+					result.push({ id: owner.id, name: owner.name ?? '' });
+				}
+				return result;
+			},
+			[]
+		)
 	};
 };
 
-export const getDistributionList = ({
-	id,
-	email
-}: RequireAtLeastOne<Pick<DistributionList, 'id' | 'email'>>): Promise<
-	DistributionList | undefined
-> => {
-	if (id === undefined && email === undefined) {
-		throw new Error('At least one between id and email is required');
-	}
-	let request: GetDistributionListRequest['dl'] = { by: 'name', _content: '' };
-	if (email !== undefined) {
-		request = {
-			by: 'name',
-			_content: email
-		};
-	} else if (id !== undefined) {
-		request = {
-			by: 'id',
-			_content: id
-		};
-	}
-	return soapFetch<GetDistributionListRequest, GetDistributionListResponse | ErrorSoapBodyResponse>(
+export const getDistributionList = (email: string): Promise<DistributionList | undefined> =>
+	soapFetch<GetDistributionListRequest, GetDistributionListResponse | ErrorSoapBodyResponse>(
 		'GetDistributionList',
 		{
 			_jsns: NAMESPACES.account,
-			dl: request,
-			needOwners: true
+			dl: {
+				by: 'name',
+				_content: email
+			}
 		}
 	).then((response) => {
 		if ('Fault' in response) {
@@ -89,4 +69,3 @@ export const getDistributionList = ({
 		}
 		return normalizeResponse(response);
 	});
-};

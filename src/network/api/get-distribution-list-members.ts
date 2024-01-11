@@ -13,7 +13,7 @@ import { DistributionListMembersPage } from '../../model/distribution-list';
 export interface GetDistributionListMembersRequest
 	extends GenericSoapPayload<typeof NAMESPACES.account> {
 	dl: {
-		// get members request works only by passing the email as content of the dl field
+		by: 'name';
 		_content: string;
 	};
 	limit?: number;
@@ -45,6 +45,7 @@ export const getDistributionListMembers = (
 	>('GetDistributionListMembers', {
 		_jsns: NAMESPACES.account,
 		dl: {
+			by: 'name',
 			_content: email
 		},
 		limit: options.limit,

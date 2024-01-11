@@ -9,6 +9,7 @@ import {
 	ChipAction,
 	ChipItem,
 	Container,
+	Icon,
 	Input,
 	ListV2,
 	Text
@@ -16,7 +17,6 @@ import {
 import { reduce, uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { FilterMembersIcon } from './filter-members-icon';
 import { MemberListItemComponent } from './member-list-item';
 import { CHIP_DISPLAY_NAME_VALUES } from '../constants/contact-input';
 import { ContactInput } from '../legacy/integrations/contact-input';
@@ -32,6 +32,10 @@ export type EditDLComponentProps = {
 };
 
 type ContactInputValue = Array<ChipItem & { email: string; error: boolean }>;
+
+const FilterMembersIcon = (): React.JSX.Element => (
+	<Icon icon={'FunnelOutline'} size={'large'}></Icon>
+);
 
 const createDuplicatedMemberAction = (): ChipAction => ({
 	id: DUPLICATED_MEMBER_ACTION_ID,
