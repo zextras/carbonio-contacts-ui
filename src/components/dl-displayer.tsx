@@ -8,12 +8,12 @@ import React, { useMemo } from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
 
-import { ActionsHeader } from './actions-header';
+import { DisplayerActionsHeader } from './displayer-actions-header';
 import { DisplayerHeader } from './displayer-header';
 import { DistributionListDetails } from './dl-details';
 import { ManagerList } from './manager-list';
 import { MemberList } from './member-list';
-import { ScrollableContainer } from './StyledComponents';
+import { ScrollableContainer } from './styled-components';
 import { useDLActions } from '../hooks/use-dl-actions';
 import { useGetDistributionList } from '../hooks/use-get-distribution-list';
 import { useGetDistributionListMembers } from '../hooks/use-get-distribution-list-members';
@@ -21,6 +21,7 @@ import { useGetDistributionListMembers } from '../hooks/use-get-distribution-lis
 interface DistributionListDisplayerProps {
 	id: string;
 }
+
 export const DistributionListDisplayer = ({
 	id
 }: DistributionListDisplayerProps): React.JSX.Element => {
@@ -41,7 +42,7 @@ export const DistributionListDisplayer = ({
 				minHeight={0}
 				maxHeight={'100%'}
 			>
-				<ActionsHeader actions={actions} />
+				<DisplayerActionsHeader actions={actions} />
 				<ScrollableContainer mainAlignment={'flex-start'}>
 					<Container
 						background={'gray6'}

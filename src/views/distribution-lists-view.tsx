@@ -12,8 +12,8 @@ import { useParams } from 'react-router-dom';
 import { Displayer } from '../components/Displayer';
 import { DLListItem } from '../components/dl-list-item';
 import { MainList } from '../components/main-list';
-import { StyledListItem } from '../components/StyledComponents';
-import { ROUTES_INTERNAL_PARAMS, RouteParams, DISPLAYER_WIDTH } from '../constants';
+import { StyledListItem } from '../components/styled-components';
+import { DISPLAYER_WIDTH, RouteParams, ROUTES_INTERNAL_PARAMS } from '../constants';
 import { useFindDistributionLists } from '../hooks/use-find-distribution-lists';
 import { useActiveItem } from '../hooks/useActiveItem';
 

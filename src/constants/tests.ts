@@ -6,10 +6,9 @@
 
 export const TESTID_SELECTORS = {
 	icons: {
-		sendMail: 'icon: EmailOutline',
 		save: /icon: SaveOutline/i,
 		trash: /icon: Trash2Outline/i,
-		avatar: /icon: PeopleOutline/i,
+		contactGroup: /icon: PeopleOutline/i,
 		editChip: 'icon: EditOutline',
 		editDL: 'icon: Settings2Outline',
 		expandDL: 'icon: ChevronDownOutline',

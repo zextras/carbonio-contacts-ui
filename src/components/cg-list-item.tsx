@@ -9,18 +9,17 @@ import { Avatar, Container, Row } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { ContextualMenu } from './ContextualMenu';
+import { ContextualMenu } from './contextual-menu';
 import { ListItemHoverBar } from './ListItemHoverBar';
-import { HoverContainer, ListItemContainer } from './StyledComponents';
+import { HoverContainer, ListItemContainer } from './styled-components';
 import { Text } from './Text';
 import { LIST_ITEM_HEIGHT } from '../constants';
-import { useActions } from '../hooks/useActions';
+import { useContactGroupActions } from '../hooks/use-contact-group-actions';
 
-type ListItemContentProps = {
+type CGListItemProps = {
 	id: string;
 	title: string;
 	members: string[];
-	membersCount: number;
 	visible?: boolean;
 	onClick?: (id: string) => void;
 };
@@ -29,18 +28,17 @@ const ContentContainer = styled(Container)`
 	overflow: hidden;
 `;
 
-export const ListItemContent = React.memo<ListItemContentProps>(
+export const CGListItem = React.memo<CGListItemProps>(
 	({
 		onClick,
 		// others props
 		visible,
 		id,
 		title,
-		membersCount,
 		members
 	}) => {
 		const [t] = useTranslation();
-		const actions = useActions({ id, title, members });
+		const actions = useContactGroupActions({ id, title, members });
 
 		const clickHandler = useCallback<React.MouseEventHandler<HTMLDivElement>>(() => {
 			onClick?.(id);
@@ -87,7 +85,7 @@ export const ListItemContent = React.memo<ListItemContentProps>(
 										</Text>
 										<Text overflow="ellipsis" size="small" color={'gray1'}>
 											{t('contactGroupList.addressCount', {
-												count: membersCount,
+												count: members.length,
 												defaultValue: '{{count}} address',
 												defaultValue_plural: `{{count}} addresses`
 											})}
@@ -104,4 +102,4 @@ export const ListItemContent = React.memo<ListItemContentProps>(
 	}
 );
 
-ListItemContent.displayName = 'ListItemContent';
+CGListItem.displayName = 'CgListItem';

@@ -9,12 +9,12 @@ import React from 'react';
 import { Container } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
-import { DistributionListDisplayer } from './dl-displayer';
+import { CGDisplayer } from './cg-displayer';
 import { EmptyDisplayer } from './EmptyDisplayer';
-import { useActiveItem } from '../hooks/useActiveItem';
+import { useActiveContactGroup } from '../hooks/useActiveContactGroup';
 
-export const Displayer = (): React.JSX.Element => {
-	const { activeItem } = useActiveItem();
+export const CGDisplayerController = (): React.JSX.Element => {
+	const contactGroup = useActiveContactGroup();
 	const [t] = useTranslation();
 
 	return (
@@ -24,14 +24,14 @@ export const Displayer = (): React.JSX.Element => {
 			crossAlignment="flex-start"
 			data-testid="displayer"
 		>
-			{(activeItem && <DistributionListDisplayer id={activeItem} />) || (
+			{(contactGroup && <CGDisplayer contactGroup={contactGroup} />) || (
 				<EmptyDisplayer
-					icon={'DistributionListOutline'}
-					title={t('displayer.title3', 'Stay in touch with your colleagues.')}
 					description={t(
-						'displayer.distributionList.emptyDisplayer',
-						'Select a distribution list or contact the Admin to have one.'
+						'emptyDisplayer.contactGroup.hint',
+						'Click the “NEW” button to create a new contacts group.'
 					)}
+					title={t('displayer.title3', 'Stay in touch with your colleagues.')}
+					icon={'PeopleOutline'}
 				/>
 			)}
 		</Container>

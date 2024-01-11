@@ -10,7 +10,8 @@ import {
 	ListItem,
 	type ListItemProps,
 	pseudoClasses,
-	Row
+	Row,
+	Text
 } from '@zextras/carbonio-design-system';
 import styled, { css, type DefaultTheme, type SimpleInterpolation } from 'styled-components';
 
@@ -82,4 +83,8 @@ export const StyledListItem = styled(ListItem).attrs<
 
 export const ScrollableContainer = styled(Container)`
 	overflow-y: auto;
+`;
+
+export const TextWithLineHeight = styled(Text)`
+	line-height: 1.5;
 `;

@@ -7,9 +7,9 @@ import React, { useCallback } from 'react';
 
 import { Action as DSAction, Avatar, Container } from '@zextras/carbonio-design-system';
 
-import { ContextualMenu } from './ContextualMenu';
+import { ContextualMenu } from './contextual-menu';
 import { ListItemHoverBar } from './ListItemHoverBar';
-import { HoverContainer, ListItemContainer } from './StyledComponents';
+import { HoverContainer, ListItemContainer } from './styled-components';
 import { Text } from './Text';
 import { LIST_ITEM_HEIGHT } from '../constants';
 import { useDLActions } from '../hooks/use-dl-actions';

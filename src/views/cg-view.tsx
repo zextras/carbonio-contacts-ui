@@ -8,12 +8,12 @@ import React from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
 
-import { ContactGroupsList } from '../components/ContactGroupsList';
-import { Displayer } from '../components/Displayer';
+import { CGDisplayerController } from '../components/cg-displayer-controller';
+import { CGList } from '../components/cg-list';
 import { DISPLAYER_WIDTH } from '../constants';
 import { useFindContactGroups } from '../hooks/useFindContactGroups';
 
-export const ContactGroupsView = (): React.JSX.Element => {
+export const CGView = (): React.JSX.Element => {
 	const { contactGroups, hasMore, findMore } = useFindContactGroups();
 
 	return (
@@ -21,16 +21,10 @@ export const ContactGroupsView = (): React.JSX.Element => {
 			orientation="row"
 			crossAlignment="flex-start"
 			mainAlignment="flex-start"
-			width="fill"
-			height="fill"
 			background="gray5"
 			borderRadius="none"
-			maxHeight="100%"
 		>
-			<ContactGroupsList
-				contactGroups={contactGroups}
-				onListBottom={hasMore ? findMore : undefined}
-			/>
+			<CGList contactGroups={contactGroups} onListBottom={hasMore ? findMore : undefined} />
 			<Container
 				width={DISPLAYER_WIDTH}
 				mainAlignment="flex-start"
@@ -38,7 +32,7 @@ export const ContactGroupsView = (): React.JSX.Element => {
 				borderRadius="none"
 				style={{ maxHeight: '100%' }}
 			>
-				<Displayer />
+				<CGDisplayerController />
 			</Container>
 		</Container>
 	);

@@ -10,8 +10,8 @@ import { within } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { Route } from 'react-router-dom';
 
-import { ContactGroupsView } from './ContactGroupsView';
-import { setupTest, screen, triggerLoadMore } from '../carbonio-ui-commons/test/test-setup';
+import { CGView } from './cg-view';
+import { screen, setupTest, triggerLoadMore } from '../carbonio-ui-commons/test/test-setup';
 import { FIND_CONTACT_GROUP_LIMIT, ROUTES, ROUTES_INTERNAL_PARAMS } from '../constants';
 import { EMPTY_DISPLAYER_HINT, EMPTY_LIST_HINT, TESTID_SELECTORS } from '../constants/tests';
 import { useContactGroupStore } from '../store/contact-groups';
@@ -49,7 +49,7 @@ describe('Contact Group View', () => {
 			}
 		);
 
-		setupTest(<ContactGroupsView />);
+		setupTest(<CGView />);
 
 		expect(await screen.findByText(cnItem1.fileAsStr)).toBeVisible();
 		expect(screen.queryByText(cnItem101.fileAsStr)).not.toBeInTheDocument();
@@ -68,11 +68,11 @@ describe('Contact Group View', () => {
 			]),
 			offset: 0
 		});
-		setupTest(<ContactGroupsView />);
+		setupTest(<CGView />);
 
 		expect(await screen.findByText(contactGroupName)).toBeVisible();
 		const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
-		expect(within(listItemContent).getByTestId(TESTID_SELECTORS.icons.avatar)).toBeVisible();
+		expect(within(listItemContent).getByTestId(TESTID_SELECTORS.icons.contactGroup)).toBeVisible();
 		expect(screen.getByText('2 addresses')).toBeVisible();
 	});
 
@@ -84,12 +84,12 @@ describe('Contact Group View', () => {
 			]),
 			offset: 0
 		});
-		setupTest(<ContactGroupsView />);
+		setupTest(<CGView />);
 
 		expect(await screen.findByText(contactGroupName)).toBeVisible();
 		expect(screen.getByText('0 addresses')).toBeVisible();
 		const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
-		expect(within(listItemContent).getByTestId(TESTID_SELECTORS.icons.avatar)).toBeVisible();
+		expect(within(listItemContent).getByTestId(TESTID_SELECTORS.icons.contactGroup)).toBeVisible();
 	});
 
 	it('should render the avatar, the name and the number of the members (case 1 address string) of a contact group', async () => {
@@ -100,11 +100,11 @@ describe('Contact Group View', () => {
 			]),
 			offset: 0
 		});
-		setupTest(<ContactGroupsView />);
+		setupTest(<CGView />);
 
 		expect(await screen.findByText(contactGroupName)).toBeVisible();
 		const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
-		expect(within(listItemContent).getByTestId(TESTID_SELECTORS.icons.avatar)).toBeVisible();
+		expect(within(listItemContent).getByTestId(TESTID_SELECTORS.icons.contactGroup)).toBeVisible();
 		expect(screen.getByText('1 address')).toBeVisible();
 	});
 
@@ -114,12 +114,12 @@ describe('Contact Group View', () => {
 			offset: 0
 		});
 
-		setupTest(<ContactGroupsView />);
+		setupTest(<CGView />);
 		expect(await screen.findByText(EMPTY_LIST_HINT)).toBeVisible();
 	});
 
 	describe('Send mail action', () => {
-		it('should open the mail board (Displayer trigger)', async () => {
+		it('should open the mail board (ContactGroupDisplayerController trigger)', async () => {
 			const openMailComposer = jest.fn();
 			jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
 			const contactGroupName = faker.company.name();
@@ -132,7 +132,7 @@ describe('Contact Group View', () => {
 			});
 			const { user } = setupTest(
 				<Route path={`${ROUTES.mainRoute}${ROUTES.contactGroups}`}>
-					<ContactGroupsView />
+					<CGView />
 				</Route>,
 				{ initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}`] }
 			);
@@ -158,13 +158,29 @@ describe('Contact Group View', () => {
 				]),
 				offset: 0
 			});
-			const { user } = setupTest(<ContactGroupsView />);
+			const { user } = setupTest(<CGView />);
 
 			await screen.findAllByText(contactGroupName);
-			const action = screen.getByTestId(TESTID_SELECTORS.icons.sendMail);
+			const action = screen.getByTestId(TESTID_SELECTORS.icons.sendEmail);
 			await user.click(action);
 			expect(openMailComposer).toHaveBeenCalledTimes(1);
 			expect(openMailComposer).toHaveBeenCalledWith({ recipients: [{ email: member }] });
+		});
+
+		it('should hide send mail hover action when the contact group has 0 members', async () => {
+			const openMailComposer = jest.fn();
+			jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
+			const contactGroupName = faker.company.name();
+			registerFindContactGroupsHandler({
+				findContactGroupsResponse: createFindContactGroupsResponse([
+					createFindContactGroupsResponseCnItem(contactGroupName, [])
+				]),
+				offset: 0
+			});
+			setupTest(<CGView />);
+
+			await screen.findAllByText(contactGroupName);
+			expect(screen.queryByTestId(TESTID_SELECTORS.icons.sendEmail)).not.toBeInTheDocument();
 		});
 
 		it('should open the mail board (Contextual menu trigger)', async () => {
@@ -178,14 +194,14 @@ describe('Contact Group View', () => {
 				]),
 				offset: 0
 			});
-			const { user } = setupTest(<ContactGroupsView />);
+			const { user } = setupTest(<CGView />);
 
 			await screen.findByText(contactGroupName);
 			const listItem = await screen.findByTestId('list-item-content');
 			await user.rightClick(listItem);
 
 			const contextualMenu = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
-			const action = within(contextualMenu).getByText('Mail');
+			const action = within(contextualMenu).getByText('Send e-mail');
 			await user.click(action);
 			expect(openMailComposer).toHaveBeenCalledTimes(1);
 			expect(openMailComposer).toHaveBeenCalledWith({ recipients: [{ email: member }] });
@@ -198,7 +214,7 @@ describe('Contact Group View', () => {
 				findContactGroupsResponse: createFindContactGroupsResponse([]),
 				offset: 0
 			});
-			setupTest(<ContactGroupsView />);
+			setupTest(<CGView />);
 
 			expect(await screen.findByText(EMPTY_DISPLAYER_HINT)).toBeVisible();
 		});
@@ -213,7 +229,7 @@ describe('Contact Group View', () => {
 			});
 			const { user } = setupTest(
 				<Route path={`${ROUTES.mainRoute}${ROUTES.contactGroups}`}>
-					<ContactGroupsView />
+					<CGView />
 				</Route>,
 				{ initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}`] }
 			);
@@ -221,7 +237,7 @@ describe('Contact Group View', () => {
 			await screen.findByText(EMPTY_DISPLAYER_HINT);
 			await user.click(screen.getByText(contactGroupName));
 			await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.closeDisplayer });
-			expect(screen.getAllByText(contactGroupName)).toHaveLength(2);
+			expect(screen.getAllByText(contactGroupName)).toHaveLength(3);
 			// FIXME
 			// expect(screen.getByText(/addresses list/i)).toBeVisible();
 		});
@@ -234,7 +250,7 @@ describe('Contact Group View', () => {
 			});
 			const { user } = setupTest(
 				<Route path={`${ROUTES.mainRoute}${ROUTES.contactGroups}`}>
-					<ContactGroupsView />
+					<CGView />
 				</Route>,
 				{ initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${cnItem.id}`] }
 			);

@@ -8,14 +8,15 @@ import React from 'react';
 
 import { Route } from 'react-router-dom';
 
+import { CGDisplayerController } from './cg-displayer-controller';
 import { Displayer } from './Displayer';
-import { setupTest, screen } from '../carbonio-ui-commons/test/test-setup';
+import { screen, setupTest } from '../carbonio-ui-commons/test/test-setup';
 import { ROUTES, ROUTES_INTERNAL_PARAMS } from '../constants';
 import { EMPTY_DISPLAYER_HINT, TESTID_SELECTORS } from '../constants/tests';
 
-describe('Displayer', () => {
+describe('Displayer controller', () => {
 	it('should show suggestions if no contact group is active', async () => {
-		setupTest(<Displayer />);
+		setupTest(<CGDisplayerController />);
 		await screen.findByText(EMPTY_DISPLAYER_HINT);
 		expect(screen.getByText(EMPTY_DISPLAYER_HINT)).toBeVisible();
 		expect(

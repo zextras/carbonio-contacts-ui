@@ -20,14 +20,14 @@ import { isEmpty, map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled, { css, type DefaultTheme, type SimpleInterpolation } from 'styled-components';
 
-import { ListItemContent } from './ListItemContent';
-import { HoverBarContainer } from './StyledComponents';
+import { CGListItem } from './cg-list-item';
+import { HoverBarContainer } from './styled-components';
 import { Text } from './Text';
 import { LIST_WIDTH } from '../constants';
 import { useActiveItem } from '../hooks/useActiveItem';
 import { ContactGroup } from '../model/contact-group';
 
-export type ContactGroupsListProps = {
+export type CGListProps = {
 	contactGroups: Array<ContactGroup>;
 	onListBottom?: () => void;
 };
@@ -48,6 +48,7 @@ const StyledListItem = styled(ListItem).attrs<
 			${HoverBarContainer} {
 				background: linear-gradient(to right, transparent, ${getColor(backgroundColor, theme)});
 			}
+
 			&:focus ${HoverBarContainer} {
 				background: linear-gradient(
 					to right,
@@ -74,10 +75,7 @@ const StyledListItem = styled(ListItem).attrs<
 		`}
 `;
 
-export const ContactGroupsList = ({
-	contactGroups,
-	onListBottom
-}: ContactGroupsListProps): React.JSX.Element => {
+export const CGList = ({ contactGroups, onListBottom }: CGListProps): React.JSX.Element => {
 	const [t] = useTranslation();
 	const { activeItem, setActive } = useActiveItem();
 
@@ -90,12 +88,11 @@ export const ContactGroupsList = ({
 					data-testid={'list-item'}
 				>
 					{(visible): React.JSX.Element => (
-						<ListItemContent
+						<CGListItem
 							visible={visible}
 							title={contactGroup.title}
 							id={contactGroup.id}
 							onClick={setActive}
-							membersCount={contactGroup.members.length}
 							members={contactGroup.members}
 						/>
 					)}
@@ -111,9 +108,10 @@ export const ContactGroupsList = ({
 			crossAlignment="unset"
 			borderRadius="none"
 			background={'gray6'}
+			borderColor={{ right: 'gray3' }}
 		>
 			<Row
-				minHeight={'2.5rem'}
+				minHeight={'3rem'}
 				height="auto"
 				background={'gray5'}
 				mainAlignment={'space-between'}
@@ -134,7 +132,7 @@ export const ContactGroupsList = ({
 					</ListV2>
 				) : (
 					<Text size={'small'} weight={'bold'} overflow={'break-word'} color={'secondary'} centered>
-						{t('contact_group_list.emptyList', 'No contact groups have been created yet')}
+						{t('contactGroupList.emptyList', 'No contact groups have been created yet')}
 					</Text>
 				)}
 			</Container>
