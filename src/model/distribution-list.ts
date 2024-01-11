@@ -13,7 +13,6 @@ export type DistributionList = {
 	isMember?: boolean;
 	owners?: Array<DistributionListOwner>;
 	description?: string;
-	members?: DistributionListMembersPage;
 };
 
 export type DistributionListMembersPage = {
