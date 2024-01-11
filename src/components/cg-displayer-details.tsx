@@ -48,7 +48,7 @@ export const CGDisplayerDetails = ({
 				<Container height={'fit'} crossAlignment={'flex-start'} minWidth={0}>
 					<TextWithLineHeight weight={'bold'}>{title}</TextWithLineHeight>
 					<TextWithLineHeight size={'small'} color={'secondary'}>
-						{t('cg_displayer.label.members_total', 'Addresses: {{count}}', {
+						{t('contactGroupDisplayer.label.members_total', 'Addresses: {{count}}', {
 							count: members.length
 						})}
 					</TextWithLineHeight>

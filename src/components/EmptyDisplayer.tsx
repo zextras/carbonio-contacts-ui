@@ -23,7 +23,10 @@ export const EmptyDisplayer = (): React.JSX.Element => {
 				</Text>
 			</Padding>
 			<Text size="small" color="gray1" overflow="break-word" width="60%" centered>
-				Click the “NEW” button to create a new contacts group.
+				{t(
+					`emptyDisplayer.contactGroup.hint`,
+					'Click the “NEW” button to create a new contacts group.'
+				)}
 			</Text>
 		</Container>
 	);

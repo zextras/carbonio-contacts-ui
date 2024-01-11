@@ -6,6 +6,7 @@
         "edit": "Edit",
         "edit_distribution_list": "Edit distribution list",
         "goto_folder": "Go to folder",
+        "mail": "Send e-mail",
         "reset_filters": "Reset Filters",
         "search": "Search",
         "send_msg": "Send e-mail",
@@ -48,16 +49,14 @@
             "title": "New Group"
         }
     },
-    "cg_displayer": {
+    "contactGroupDisplayer": {
         "label": {
             "members_total": "Addresses: {{count}}"
         }
     },
     "contactGroupList": {
         "addressCount": "{{count}} address",
-        "addressCount_plural": "{{count}} addresses"
-    },
-    "contact_group_list": {
+        "addressCount_plural": "{{count}} addresses",
         "emptyList": "No contact groups have been created yet"
     },
     "contact_restored": "Contact restored",
@@ -122,6 +121,11 @@
         "placeholder": {
             "add_members": "Type an address, click '+' to add to the distribution list",
             "filter_member": "Filter an address"
+        }
+    },
+    "emptyDisplayer": {
+        "contactGroup": {
+            "hint": "Click the “NEW” button to create a new contacts group."
         }
     },
     "expand_distribution_list": "Expand address list",

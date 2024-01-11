@@ -132,7 +132,7 @@ export const CGList = ({ contactGroups, onListBottom }: CGListProps): React.JSX.
 					</ListV2>
 				) : (
 					<Text size={'small'} weight={'bold'} overflow={'break-word'} color={'secondary'} centered>
-						{t('contact_group_list.emptyList', 'No contact groups have been created yet')}
+						{t('contactGroupList.emptyList', 'No contact groups have been created yet')}
 					</Text>
 				)}
 			</Container>
