@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
 import { useParams } from 'react-router-dom';
@@ -21,6 +21,20 @@ export const Displayer = (): React.JSX.Element => {
 	const { activeItem } = useActiveItem();
 	const { route } = useParams<RouteParams>();
 
+	const { icon, title, description } = useMemo(() => {
+		if (route === ROUTES_INTERNAL_PARAMS.route.contactGroups) {
+			return {
+				icon: 'PeopleOutline',
+				title: 'Stay in touch with your colleagues.',
+				description: 'Click the “NEW” button to create a new contacts group.'
+			};
+		}
+		return {
+			icon: 'DistributionListOutline',
+			title: 'Stay in touch with your colleagues.',
+			description: 'Select a distribution list or contact the Admin to have one.'
+		};
+	}, [route]);
 	return (
 		<Container
 			orientation="vertical"
@@ -34,7 +48,7 @@ export const Displayer = (): React.JSX.Element => {
 				)) ||
 					(route === ROUTES_INTERNAL_PARAMS.route.distributionLists && (
 						<DistributionListDisplayer id={activeItem} />
-					)))) || <EmptyDisplayer />}
+					)))) || <EmptyDisplayer icon={icon} title={title} description={description} />}
 		</Container>
 	);
 };

@@ -1,4 +1,5 @@
 {
+    "": "There are no distribution lists yet.",
     "action": {
         "copy": "Copy",
         "delete": "Delete",
@@ -67,6 +68,7 @@
         "description8": "Select a contact or a group of contacts to send shared emails.",
         "distributionList": {
             "label": {
+                "emptyMessage": "There are no distribution lists yet.",
                 "filterHint": "You can filter this list by looking for specific member’s name.",
                 "manager_total": "Manager list {{total}}",
                 "member_total": "Member list {{total}}"
@@ -101,6 +103,11 @@
         "title7": "Stay in touch with your colleagues",
         "title8": "Send shared e-mail",
         "title9": "Click the trash icon to delete a contact."
+    },
+    "distribution_list": {
+        "label": {
+            "emptyMessage": "There are no distribution lists yet."
+        }
     },
     "edit_dl_component": {
         "error": {

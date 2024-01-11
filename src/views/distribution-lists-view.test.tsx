@@ -16,7 +16,11 @@ import { DistributionListsView } from './distribution-lists-view';
 import { screen, setupTest, within } from '../carbonio-ui-commons/test/test-setup';
 import { ROUTES, ROUTES_INTERNAL_PARAMS } from '../constants';
 import { NAMESPACES } from '../constants/api';
-import { EMPTY_DISPLAYER_HINT, EMPTY_LIST_HINT, TESTID_SELECTORS } from '../constants/tests';
+import {
+	EMPTY_DISPLAYER_HINT,
+	EMPTY_DISTRIBUTION_LIST_HINT,
+	TESTID_SELECTORS
+} from '../constants/tests';
 import { DistributionList } from '../model/distribution-list';
 import {
 	GetDistributionListRequest,
@@ -51,15 +55,19 @@ describe('Distribution Lists View', () => {
 		items.forEach((item) => expect(screen.getByText(item.displayName)).toBeVisible());
 	});
 
-	it('should show the empty list placeholder when there are no items', async () => {
+	it('should render empty list message when the distribution list is empty', () => {
 		registerGetAccountDistributionListsHandler([]);
 		setupTest(
-			<Route path={'/:filter'}>
+			<Route path={`${ROUTES.mainRoute}${ROUTES.distributionLists}`}>
 				<DistributionListsView />
 			</Route>,
-			{ initialEntries: [`/${ROUTES_INTERNAL_PARAMS.filter.member}`] }
+			{
+				initialEntries: [
+					`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.member}/`
+				]
+			}
 		);
-		expect(await screen.findByText(EMPTY_LIST_HINT)).toBeVisible();
+		expect(screen.getByText(EMPTY_DISTRIBUTION_LIST_HINT)).toBeVisible();
 	});
 
 	describe('Displayer', () => {
