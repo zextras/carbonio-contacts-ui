@@ -5,15 +5,18 @@
  */
 import { useCallback, useMemo } from 'react';
 
-import { type Action } from '@zextras/carbonio-design-system';
+import { type Action as DSAction } from '@zextras/carbonio-design-system';
 import { useIntegratedFunction } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
+import { useActionDeleteCG } from '../actions/delete-cg';
 import { ContactGroup } from '../model/contact-group';
 
-export const useContactGroupActions = (contactGroup: ContactGroup): Action[] => {
+export const useContactGroupActions = (contactGroup: ContactGroup): DSAction[] => {
 	const { id, title, members } = contactGroup;
 	const [t] = useTranslation();
+
+	const deleteCGAction = useActionDeleteCG();
 
 	const [openMailComposer, isMailAvailable] = useIntegratedFunction('composePrefillMessage');
 
@@ -21,8 +24,8 @@ export const useContactGroupActions = (contactGroup: ContactGroup): Action[] => 
 		openMailComposer({ recipients: members.map((member) => ({ email: member })) });
 	}, [members, openMailComposer]);
 
-	return useMemo<Action[]>((): Action[] => {
-		const orderedActions: Action[] = [];
+	return useMemo<DSAction[]>((): DSAction[] => {
+		const orderedActions: DSAction[] = [];
 		if (contactGroup.members.length > 0) {
 			orderedActions.push({
 				id: 'send-email',
@@ -31,6 +34,16 @@ export const useContactGroupActions = (contactGroup: ContactGroup): Action[] => 
 				onClick: sendMail
 			});
 		}
+		if (deleteCGAction.canExecute()) {
+			orderedActions.push({
+				id: deleteCGAction.id,
+				label: deleteCGAction.label,
+				onClick: () => {
+					deleteCGAction.execute(contactGroup);
+				},
+				icon: deleteCGAction.icon
+			});
+		}
 		return orderedActions;
-	}, [contactGroup.members.length, sendMail, t]);
+	}, [contactGroup, deleteCGAction, sendMail, t]);
 };
