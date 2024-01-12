@@ -252,6 +252,7 @@
         "empty": "Empty",
         "error_try_again": "Something went wrong, please try again",
         "folder_name": "Folder name",
+        "groups_app_name": "Contact Groups and Distribution Lists",
         "include_shared_folders": "Include shared address books",
         "move": "Move",
         "newContactGroup": "New contact group",
