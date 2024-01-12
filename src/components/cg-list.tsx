@@ -7,23 +7,18 @@
 import React, { useMemo } from 'react';
 
 import {
-	Container,
-	Divider,
 	getColor,
 	ListItem,
 	type ListItemProps,
-	ListV2,
-	pseudoClasses,
-	Row
+	pseudoClasses
 } from '@zextras/carbonio-design-system';
-import { isEmpty, map } from 'lodash';
+import { map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled, { css, type DefaultTheme, type SimpleInterpolation } from 'styled-components';
 
 import { CGListItem } from './cg-list-item';
+import { MainList } from './main-list';
 import { HoverBarContainer } from './styled-components';
-import { Text } from './Text';
-import { LIST_WIDTH } from '../constants';
 import { useActiveItem } from '../hooks/useActiveItem';
 import { ContactGroup } from '../model/contact-group';
 
@@ -102,40 +97,11 @@ export const CGList = ({ contactGroups, onListBottom }: CGListProps): React.JSX.
 	);
 
 	return (
-		<Container
-			width={LIST_WIDTH}
-			mainAlignment="flex-start"
-			crossAlignment="unset"
-			borderRadius="none"
-			background={'gray6'}
-			borderColor={{ right: 'gray3' }}
+		<MainList
+			emptyMessage={t('contactGroupList.emptyList', 'No contact groups have been created yet')}
+			onListBottom={onListBottom}
 		>
-			<Row
-				minHeight={'3rem'}
-				height="auto"
-				background={'gray5'}
-				mainAlignment={'space-between'}
-				padding={{ left: 'large' }}
-				wrap={'nowrap'}
-				width={'fill'}
-				maxWidth={'100%'}
-				data-testid="list-header"
-				flexShrink={0}
-				flexGrow={1}
-				gap="medium"
-			></Row>
-			<Divider color="gray3" />
-			<Container minHeight={0} maxHeight={'100%'}>
-				{!isEmpty(items) ? (
-					<ListV2 data-testid="main-list" background={'gray6'} onListBottom={onListBottom}>
-						{items}
-					</ListV2>
-				) : (
-					<Text size={'small'} weight={'bold'} overflow={'break-word'} color={'secondary'} centered>
-						{t('contactGroupList.emptyList', 'No contact groups have been created yet')}
-					</Text>
-				)}
-			</Container>
-		</Container>
+			{items}
+		</MainList>
 	);
 };

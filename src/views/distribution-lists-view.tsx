@@ -7,6 +7,7 @@
 import React, { useMemo } from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { DLDisplayerController } from '../components/dl-displayer-controller';
@@ -18,6 +19,7 @@ import { useFindDistributionLists } from '../hooks/use-find-distribution-lists';
 import { useActiveItem } from '../hooks/useActiveItem';
 
 export const DistributionListsView = (): React.JSX.Element => {
+	const [t] = useTranslation();
 	const { activeItem, setActive } = useActiveItem();
 	const { filter } = useParams<RouteParams>();
 	const distributionLists = useFindDistributionLists({
@@ -48,7 +50,14 @@ export const DistributionListsView = (): React.JSX.Element => {
 			borderRadius="none"
 			maxHeight="100%"
 		>
-			<MainList>{items}</MainList>
+			<MainList
+				emptyMessage={t(
+					'distribution_list.label.empty_message',
+					'There are no distribution lists yet.'
+				)}
+			>
+				{items}
+			</MainList>
 			<Container
 				width={DISPLAYER_WIDTH}
 				mainAlignment="flex-start"
