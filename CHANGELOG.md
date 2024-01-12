@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.8.0](https://github.com/zextras/carbonio-contacts-ui/compare/v1.7.0...v1.8.0) (2024-01-12)
+
+
+### Features
+
+* change the icon position of the primary bar ([51f530d](https://github.com/zextras/carbonio-contacts-ui/commit/51f530d68101b306c5ca203051bdbf330ffe0258))
+* change the icon position of the primary bar ([733497d](https://github.com/zextras/carbonio-contacts-ui/commit/733497d73991125ddf42eed67ea807b902d86c20))
+
 ## [1.7.0](https://github.com/zextras/carbonio-contacts-ui/compare/v1.6.4...v1.7.0) (2024-01-04)
 
 
