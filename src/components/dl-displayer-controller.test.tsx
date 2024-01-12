@@ -12,7 +12,7 @@ import { Route } from 'react-router-dom';
 import { DLDisplayerController } from './dl-displayer-controller';
 import { screen, setupTest } from '../carbonio-ui-commons/test/test-setup';
 import { ROUTES, ROUTES_INTERNAL_PARAMS } from '../constants';
-import { EMPTY_DISPLAYER_HINT, TESTID_SELECTORS } from '../constants/tests';
+import { EMPTY_DISPLAYER_HINT, JEST_MOCKED_ERROR, TESTID_SELECTORS } from '../constants/tests';
 import { DistributionList } from '../model/distribution-list';
 import {
 	registerGetDistributionListHandler,
@@ -101,5 +101,39 @@ describe('Distribution List Displayer Controller', () => {
 		expect(await screen.findByText(/member list 10/i)).toBeVisible();
 		expect(await screen.findByText(members[0])).toBeVisible();
 		expect(await screen.findByText(members[9])).toBeVisible();
+	});
+
+	it('should show an error snackbar if there is a network error while loading the details', async () => {
+		const dl = generateDistributionList();
+		registerGetDistributionListHandler(dl, JEST_MOCKED_ERROR);
+		setupTest(
+			<Route path={`${ROUTES.mainRoute}${ROUTES.distributionLists}`}>
+				<DLDisplayerController />
+			</Route>,
+			{
+				initialEntries: [
+					`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.member}/${dl.id}`
+				]
+			}
+		);
+		expect(await screen.findByText(/something went wrong/i)).toBeVisible();
+	});
+
+	it('should show an error snackbar if there is a network error while loading the member list', async () => {
+		const dl = generateDistributionList();
+		registerGetDistributionListHandler(dl);
+		registerGetDistributionListMembersHandler(undefined, undefined, JEST_MOCKED_ERROR);
+		setupTest(
+			<Route path={`${ROUTES.mainRoute}${ROUTES.distributionLists}`}>
+				<DLDisplayerController />
+			</Route>,
+			{
+				initialEntries: [
+					`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.member}/${dl.id}`
+				]
+			}
+		);
+		expect(await screen.findAllByText(dl.displayName)).toHaveLength(2);
+		expect(await screen.findByText(/something went wrong/i)).toBeVisible();
 	});
 });

@@ -9,8 +9,9 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import { waitFor } from '@testing-library/react';
 import { ErrorSoapResponse } from '@zextras/carbonio-shell-ui';
+import { EventEmitter } from 'events';
 import { times } from 'lodash';
-import { Route } from 'react-router-dom';
+import { Link, Route } from 'react-router-dom';
 
 import { DistributionListsView } from './distribution-lists-view';
 import { screen, setupTest, within } from '../carbonio-ui-commons/test/test-setup';
@@ -19,9 +20,14 @@ import { NAMESPACES } from '../constants/api';
 import {
 	EMPTY_DISPLAYER_HINT,
 	EMPTY_DISTRIBUTION_LIST_HINT,
+	JEST_MOCKED_ERROR,
 	TESTID_SELECTORS
 } from '../constants/tests';
 import { DistributionList } from '../model/distribution-list';
+import {
+	GetAccountDistributionListsRequest,
+	GetAccountDistributionListsResponse
+} from '../network/api/get-account-distribution-lists';
 import {
 	GetDistributionListRequest,
 	GetDistributionListResponse
@@ -36,7 +42,9 @@ import {
 } from '../tests/msw-handlers';
 import { registerGetAccountDistributionListsHandler } from '../tests/msw-handlers/get-account-distribution-lists';
 import {
+	buildSoapError,
 	buildSoapResponse,
+	delayUntil,
 	generateDistributionList,
 	generateDistributionLists
 } from '../tests/utils';
@@ -58,17 +66,101 @@ describe('Distribution Lists View', () => {
 	it('should render empty list message when the distribution list is empty', async () => {
 		const handler = registerGetAccountDistributionListsHandler([]);
 		setupTest(
-			<Route path={`${ROUTES.mainRoute}${ROUTES.distributionLists}`}>
+			<Route path={ROUTES.distributionLists}>
 				<DistributionListsView />
 			</Route>,
 			{
-				initialEntries: [
-					`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.member}/`
-				]
+				initialEntries: [`/${ROUTES_INTERNAL_PARAMS.filter.member}`]
 			}
 		);
 		await waitFor(() => expect(handler).toHaveBeenCalled());
 		expect(screen.getByText(EMPTY_DISTRIBUTION_LIST_HINT)).toBeVisible();
+	});
+
+	it('should show empty message while loading a list and another list of a different filter has been already loaded', async () => {
+		const EMIT_ON = 'resolve-manager';
+		const emitter = new EventEmitter();
+		const memberList = generateDistributionLists(1);
+		const managerList = generateDistributionLists(1);
+		const getAccountDLHandler = registerGetAccountDistributionListsHandler([]);
+		getAccountDLHandler.mockImplementation(async (req, res, ctx) => {
+			const {
+				Body: {
+					GetAccountDistributionListsRequest: { ownerOf, memberOf }
+				}
+			} = await req.json<{
+				Body: { GetAccountDistributionListsRequest: GetAccountDistributionListsRequest };
+			}>();
+			const resData: DistributionList[] = [];
+			if (ownerOf) {
+				await delayUntil(emitter, EMIT_ON);
+				resData.push(...managerList);
+			}
+
+			if (memberOf !== 'none') {
+				resData.push(...memberList);
+			}
+
+			return res(
+				ctx.json(
+					buildSoapResponse<GetAccountDistributionListsResponse>({
+						GetAccountDistributionListsResponse: {
+							_jsns: NAMESPACES.account,
+							dl: resData.map((item) => ({
+								id: item.id,
+								name: item.email,
+								d: item.displayName,
+								isOwner: item.isOwner,
+								isMember: item.isMember
+							}))
+						}
+					})
+				)
+			);
+		});
+
+		const { user } = setupTest(
+			<>
+				<Link to={`/${ROUTES_INTERNAL_PARAMS.filter.manager}`}>Manager</Link>
+				<Route path={ROUTES.distributionLists}>
+					<DistributionListsView />
+				</Route>
+			</>,
+			{
+				initialEntries: [`/${ROUTES_INTERNAL_PARAMS.filter.member}`]
+			}
+		);
+		expect(await screen.findByText(memberList[0].displayName)).toBeVisible();
+		await user.click(screen.getByRole('link', { name: 'Manager' }));
+		// // FIXME: for some reason, something to "slow down"
+		//  the test is needed to allow react to update the ui,
+		//  and make the following waitFor work even when run with all other tests
+		await waitFor(
+			() =>
+				new Promise((resolve) => {
+					setTimeout(resolve, 0);
+				})
+		);
+		await waitFor(() =>
+			expect(screen.queryByText(memberList[0].displayName)).not.toBeInTheDocument()
+		);
+		expect(await screen.findByText(EMPTY_DISTRIBUTION_LIST_HINT)).toBeVisible();
+		await waitFor(() => expect(getAccountDLHandler).toHaveBeenCalledTimes(2));
+		emitter.emit(EMIT_ON);
+		expect(await screen.findByText(managerList[0].displayName)).toBeVisible();
+	});
+
+	it('should show an error snackbar if there is a network error while loading the list', async () => {
+		registerGetAccountDistributionListsHandler([], JEST_MOCKED_ERROR);
+		setupTest(
+			<Route path={ROUTES.distributionLists}>
+				<DistributionListsView />
+			</Route>,
+			{
+				initialEntries: [`/${ROUTES_INTERNAL_PARAMS.filter.member}/`]
+			}
+		);
+		expect(await screen.findByText(/something went wrong/i)).toBeVisible();
 	});
 
 	describe('Displayer', () => {
@@ -143,26 +235,7 @@ describe('Distribution Lists View', () => {
 				}
 
 				if (resData === undefined) {
-					return res(
-						ctx.json<ErrorSoapResponse>({
-							Header: {
-								context: {}
-							},
-							Body: {
-								Fault: {
-									Detail: {
-										Error: {
-											Code: '',
-											Detail: 'DL not found'
-										}
-									},
-									Reason: {
-										Text: 'DL not found'
-									}
-								}
-							}
-						})
-					);
+					return res(ctx.json(buildSoapError('DL not found')));
 				}
 
 				return res(
@@ -208,24 +281,9 @@ describe('Distribution Lists View', () => {
 
 				if (_content === dl2.email && offset !== 0) {
 					return res(
-						ctx.json<ErrorSoapResponse>({
-							Header: {
-								context: {}
-							},
-							Body: {
-								Fault: {
-									Detail: {
-										Error: {
-											Code: '',
-											Detail: 'Received offset greater than 0 while loading first page of dl2'
-										}
-									},
-									Reason: {
-										Text: 'Received offset greater than 0 while loading first page of dl2'
-									}
-								}
-							}
-						})
+						ctx.json(
+							buildSoapError('Received offset greater than 0 while loading first page of dl2')
+						)
 					);
 				}
 				let data: Array<string> | undefined;
@@ -236,26 +294,7 @@ describe('Distribution Lists View', () => {
 					data = dl2Members;
 				}
 				if (data === undefined) {
-					return res(
-						ctx.json<ErrorSoapResponse>({
-							Header: {
-								context: {}
-							},
-							Body: {
-								Fault: {
-									Detail: {
-										Error: {
-											Code: '',
-											Detail: 'DL not found'
-										}
-									},
-									Reason: {
-										Text: 'DL not found'
-									}
-								}
-							}
-						})
-					);
+					return res(ctx.json<ErrorSoapResponse>(buildSoapError('DL not found')));
 				}
 				return res(
 					ctx.json(

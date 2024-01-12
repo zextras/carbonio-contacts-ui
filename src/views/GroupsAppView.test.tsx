@@ -59,18 +59,18 @@ describe('App view', () => {
 				})
 			);
 		});
-	});
 
-	it.each(['', '/', '/wrong'])(
-		'should render member filter if a wrong filter `%s` is specified in the path',
-		async (nextPath) => {
-			const dl = generateDistributionList();
-			const handler = registerGetAccountDistributionListsHandler([dl]);
-			setupTest(<GroupsAppView />, {
-				initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}${nextPath}`]
-			});
-			await waitFor(() => expect(handler).toHaveBeenCalled());
-			await screen.findByText(dl.displayName);
-		}
-	);
+		it.each(['', '/', '/wrong'])(
+			'should render member filter if a wrong filter `%s` is specified in the path',
+			async (nextPath) => {
+				const dl = generateDistributionList();
+				const handler = registerGetAccountDistributionListsHandler([dl]);
+				setupTest(<GroupsAppView />, {
+					initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}${nextPath}`]
+				});
+				await waitFor(() => expect(handler).toHaveBeenCalled());
+				await screen.findByText(dl.displayName);
+			}
+		);
+	});
 });

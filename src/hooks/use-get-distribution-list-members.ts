@@ -5,6 +5,9 @@
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { useSnackbar } from '@zextras/carbonio-design-system';
+import { useTranslation } from 'react-i18next';
+
 import { client } from '../network/client';
 
 type UseGetDistributionListMembersReturnType = {
@@ -18,6 +21,8 @@ export const useGetDistributionListMembers = (
 	email: string,
 	limit?: number
 ): UseGetDistributionListMembersReturnType => {
+	const [t] = useTranslation();
+	const createSnackbar = useSnackbar();
 	const [distributionListMembers, setDistributionListMembers] = useState<Array<string>>([]);
 	const offsetRef = useRef<number>(0);
 	const [hasMore, setHasMore] = useState(false);
@@ -35,10 +40,20 @@ export const useGetDistributionListMembers = (
 						offsetRef.current += members.length;
 						setHasMore(more);
 						setTotalMembers(total);
+					})
+					.catch(() => {
+						createSnackbar({
+							key: new Date().toDateString(),
+							replace: true,
+							type: 'error',
+							label: t('label.error_try_again', 'Something went wrong, please try again'),
+							autoHideTimeout: 3000,
+							hideButton: true
+						});
 					});
 			}
 		},
-		[email, limit]
+		[createSnackbar, email, limit, t]
 	);
 
 	useEffect(() => {

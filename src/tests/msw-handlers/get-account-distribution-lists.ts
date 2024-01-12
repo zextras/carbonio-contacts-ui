@@ -13,7 +13,7 @@ import type {
 	GetAccountDistributionListsRequest,
 	GetAccountDistributionListsResponse
 } from '../../network/api/get-account-distribution-lists';
-import { buildSoapResponse } from '../utils';
+import { buildSoapError, buildSoapResponse } from '../utils';
 
 type GetAccountDistributionListsHandler = ResponseResolver<
 	RestRequest<{ Body: { GetAccountDistributionListsRequest: GetAccountDistributionListsRequest } }>,
@@ -22,7 +22,8 @@ type GetAccountDistributionListsHandler = ResponseResolver<
 >;
 
 export const registerGetAccountDistributionListsHandler = (
-	items: Array<DistributionList>
+	items: Array<DistributionList>,
+	error?: string
 ): jest.Mock<
 	ReturnType<GetAccountDistributionListsHandler>,
 	Parameters<GetAccountDistributionListsHandler>
@@ -31,6 +32,9 @@ export const registerGetAccountDistributionListsHandler = (
 		ReturnType<GetAccountDistributionListsHandler>,
 		Parameters<GetAccountDistributionListsHandler>
 	>(async (req, res, ctx) => {
+		if (error) {
+			return res(ctx.json(buildSoapError(error)));
+		}
 		const reqBody = await req.json<{
 			Body: { GetAccountDistributionListsRequest: GetAccountDistributionListsRequest };
 		}>();
