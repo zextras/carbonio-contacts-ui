@@ -19,58 +19,60 @@ export const useActionDeleteCG = (): DeleteCGAction => {
 	const createModal = useModal();
 	const createSnackbar = useSnackbar();
 
+	const canExecute = useCallback<DeleteCGAction['canExecute']>(() => true, []);
+
 	const openDeleteModal = useCallback<DeleteCGAction['execute']>(
 		(contactGroup) => {
-			if (contactGroup !== undefined) {
-				const closeModal = createModal({
-					title: t('modal.delete.contactGroup.header', {
-						default: 'Delete "{{contactGroupName}}',
-						contactGroupName: contactGroup.title
-					}),
-					size: 'medium',
-					confirmLabel: t('modal.delete.button.confirm', 'delete'),
-					confirmColor: 'error',
-					onConfirm: () => {
-						// trashAction().then(() => {
-						// 	closeModal();
-						// 	createSnackbar({
-						// 		type: 'success',
-						// 		key: `snackbar-${Date.now()}`,
-						// 		label: t('snackbar.permanentlyDeletedTask', 'Task permanently deleted'),
-						// 		hideButton: true
-						// 	});
-						// });
-					},
-					showCloseIcon: true,
-					onClose: () => {
-						closeModal();
-					},
-					children: (
-						<Container padding={{ vertical: 'large' }}>
-							<Text overflow="break-word" size="medium">
-								{t(
-									'modal.delete.contactGroup.body1',
-									'Are you sure to delete the selected contact group?'
-								)}
-							</Text>
-							<Text overflow="break-word" size="medium">
-								{t('modal.delete.contactGroup.body2', 'If you delete it will be lost forever.')}
-							</Text>
-						</Container>
-					)
-				});
+			if (contactGroup === undefined) {
+				return;
 			}
+
+			const closeModal = createModal({
+				title: t('modal.delete.contactGroup.header', 'Delete "{{contactGroupName}}"', {
+					contactGroupName: contactGroup.title
+				}),
+				size: 'medium',
+				confirmLabel: t('modal.delete.button.confirm', 'delete'),
+				confirmColor: 'error',
+				onConfirm: () => {
+					// trashAction().then(() => {
+					// 	closeModal();
+					// 	createSnackbar({
+					// 		type: 'success',
+					// 		key: `snackbar-${Date.now()}`,
+					// 		label: t('snackbar.permanentlyDeletedTask', 'Task permanently deleted'),
+					// 		hideButton: true
+					// 	});
+					// });
+				},
+				dismissLabel: t('modal.cancel', 'cancel'),
+				showCloseIcon: true,
+				onClose: () => {
+					closeModal();
+				},
+				children: (
+					<Container padding={{ vertical: 'large' }}>
+						<Text overflow="break-word" size="medium">
+							{t(
+								'modal.delete.contactGroup.body1',
+								'Are you sure to delete the selected contact group?'
+							)}
+						</Text>
+						<Text overflow="break-word" size="medium">
+							{t('modal.delete.contactGroup.body2', 'If you delete it will be lost forever.')}
+						</Text>
+					</Container>
+				)
+			});
 		},
 		[createModal, t]
 	);
 
-	const canExecute = useCallback<DeleteCGAction['canExecute']>(() => true, []);
-
 	return useMemo(
 		() => ({
-			id: ACTION_IDS.sendEmail,
-			label: t('action.mail', 'Send e-mail'),
-			icon: 'EmailOutline',
+			id: ACTION_IDS.deleteCG,
+			label: t('action.contactGroup.delete', 'Delete'),
+			icon: 'Trash2Outline',
 			canExecute,
 			execute: openDeleteModal
 		}),

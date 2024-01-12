@@ -11,6 +11,8 @@ export const CONTACTS_APP_ID = 'carbonio-contacts-ui';
 export const ACTION_IDS = {
 	editDL: 'dl-edit-action',
 	sendEmail: 'send-email-action',
+	sendEmailCG: 'cg-send-email-action',
+	deleteCG: 'cg-delete-action',
 	copyToClipboard: 'copy-to-clipboard-action'
 } as const;
 
