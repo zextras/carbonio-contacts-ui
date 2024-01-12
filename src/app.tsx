@@ -3,20 +3,20 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { lazy, useEffect, Suspense } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 
 import {
-	Spinner,
-	addRoute,
-	addSettingsView,
-	addSearchView,
-	addBoardView,
-	registerActions,
 	ACTION_TYPES,
 	addBoard,
+	addBoardView,
+	addRoute,
+	addSearchView,
+	addSettingsView,
+	registerActions,
 	registerComponents,
 	SearchViewProps,
-	SecondaryBarComponentProps
+	SecondaryBarComponentProps,
+	Spinner
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
@@ -120,7 +120,7 @@ const App = (): React.JSX.Element => {
 	useEffect(() => {
 		addRoute({
 			route: CONTACTS_ROUTE,
-			position: 3,
+			position: 300,
 			visible: true,
 			label: t('label.app_name', 'Contacts'),
 			primaryBar: 'ContactsModOutline',
