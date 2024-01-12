@@ -9,6 +9,7 @@ import { faker } from '@faker-js/faker';
 
 import { CGDisplayerDetails } from './cg-displayer-details';
 import { screen, setupTest } from '../carbonio-ui-commons/test/test-setup';
+import { TESTID_SELECTORS } from '../constants/tests';
 import { buildContactGroup, buildMembers } from '../tests/model-builder';
 
 describe('Contact group displayer details', () => {
@@ -25,7 +26,11 @@ describe('Contact group displayer details', () => {
 		expect(screen.getByText(`Addresses: ${count}`)).toBeVisible();
 	});
 
-	it.todo('should displays the the avatar with the icon associated to the CG');
+	it('should displays the the avatar with the icon associated to the CG', () => {
+		setupTest(<CGDisplayerDetails contactGroup={buildContactGroup()} />);
+		expect(screen.getByTestId('avatar')).toBeVisible();
+		expect(screen.getByTestId(TESTID_SELECTORS.icons.contactGroup)).toBeVisible();
+	});
 
 	it('should displays the members of the CG', () => {
 		const count = faker.number.int({ min: 1, max: 10 });
