@@ -55,8 +55,8 @@ describe('Distribution Lists View', () => {
 		items.forEach((item) => expect(screen.getByText(item.displayName)).toBeVisible());
 	});
 
-	it('should render empty list message when the distribution list is empty', () => {
-		registerGetAccountDistributionListsHandler([]);
+	it('should render empty list message when the distribution list is empty', async () => {
+		const handler = registerGetAccountDistributionListsHandler([]);
 		setupTest(
 			<Route path={`${ROUTES.mainRoute}${ROUTES.distributionLists}`}>
 				<DistributionListsView />
@@ -67,6 +67,7 @@ describe('Distribution Lists View', () => {
 				]
 			}
 		);
+		await waitFor(() => expect(handler).toHaveBeenCalled());
 		expect(screen.getByText(EMPTY_DISTRIBUTION_LIST_HINT)).toBeVisible();
 	});
 
