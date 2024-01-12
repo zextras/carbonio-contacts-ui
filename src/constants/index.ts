@@ -20,7 +20,7 @@ export const GROUPS_ROUTE = 'groups';
 export const ROUTES = {
 	mainRoute: '/:route',
 	contactGroups: '/:id?',
-	distributionLists: '/:filter/:id?'
+	distributionLists: '/:filter?/:id?'
 } as const;
 
 export type RouteParams = {

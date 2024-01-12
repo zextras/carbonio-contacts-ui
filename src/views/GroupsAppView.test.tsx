@@ -8,9 +8,11 @@ import React from 'react';
 import { waitFor } from '@testing-library/react';
 
 import GroupsAppView from './GroupsAppView';
-import { setupTest } from '../carbonio-ui-commons/test/test-setup';
+import { screen, setupTest } from '../carbonio-ui-commons/test/test-setup';
+import { ROUTES_INTERNAL_PARAMS } from '../constants';
 import { GetAccountDistributionListsRequest } from '../network/api/get-account-distribution-lists';
 import { registerGetAccountDistributionListsHandler } from '../tests/msw-handlers/get-account-distribution-lists';
+import { generateDistributionList } from '../tests/utils';
 
 describe('App view', () => {
 	it.todo(/* .each(['/', '/groups']) */ 'should render groups on %s');
@@ -58,4 +60,17 @@ describe('App view', () => {
 			);
 		});
 	});
+
+	it.each(['', '/', '/wrong'])(
+		'should render member filter if a wrong filter `%s` is specified in the path',
+		async (nextPath) => {
+			const dl = generateDistributionList();
+			const handler = registerGetAccountDistributionListsHandler([dl]);
+			setupTest(<GroupsAppView />, {
+				initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}${nextPath}`]
+			});
+			await waitFor(() => expect(handler).toHaveBeenCalled());
+			await screen.findByText(dl.displayName);
+		}
+	);
 });

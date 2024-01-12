@@ -6,6 +6,8 @@
 
 import React from 'react';
 
+import 'jest-styled-components';
+
 import SecondaryBarView from './SecondaryBarView';
 import { screen, setupTest, within } from '../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../constants/tests';
@@ -43,4 +45,8 @@ describe('SecondaryBar', () => {
 		expect(screen.getByText('Member')).toBeVisible();
 		expect(screen.getByText('Manager')).toBeVisible();
 	});
+
+	it.todo('should highlight the selected distribution list entry');
+
+	it.todo('should highlight contact groups');
 });

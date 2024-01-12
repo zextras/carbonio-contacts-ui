@@ -72,7 +72,7 @@ const SecondaryBarView = ({ expanded }: { expanded: boolean }): React.JSX.Elemen
 							ev.stopPropagation();
 							navigateTo(ROUTES_INTERNAL_PARAMS.route.contactGroups);
 						},
-						active: pathname.endsWith(`${ROUTES_INTERNAL_PARAMS.route.contactGroups}`)
+						active: pathname.includes(ROUTES_INTERNAL_PARAMS.route.contactGroups)
 					},
 					{
 						id: 'distribution-lists',
@@ -89,7 +89,10 @@ const SecondaryBarView = ({ expanded }: { expanded: boolean }): React.JSX.Elemen
 									navigateTo(
 										`${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.member}`
 									);
-								}
+								},
+								active: pathname.includes(
+									`${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.member}`
+								)
 							},
 							{
 								id: 'distribution-lists-manager',
@@ -100,7 +103,10 @@ const SecondaryBarView = ({ expanded }: { expanded: boolean }): React.JSX.Elemen
 									navigateTo(
 										`${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.manager}`
 									);
-								}
+								},
+								active: pathname.includes(
+									`${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.manager}`
+								)
 							}
 						]
 					}
