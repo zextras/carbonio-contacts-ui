@@ -128,11 +128,10 @@ const App = (): React.JSX.Element => {
 			appView: AppView
 		});
 		addRoute({
-			// TODO: update route name and label
 			route: GROUPS_ROUTE,
 			position: 310,
 			visible: true,
-			label: 'Contact Groups',
+			label: t('label.groups_app_name', 'Contact Groups and Distribution Lists'),
 			primaryBar: 'ContactsModOutline',
 			secondaryBar: SecondaryBarView,
 			appView: AppViewV2
