@@ -23,7 +23,9 @@ export const DLDisplayerController = (): React.JSX.Element => {
 		[activeItem]
 	);
 	const distributionList = useGetDistributionList(dlToLoad);
-	const { members, totalMembers } = useGetDistributionListMembers(distributionList?.email ?? '');
+	const { members, totalMembers } = useGetDistributionListMembers(
+		distributionList?.canRequireMembers ? distributionList?.email ?? '' : ''
+	);
 
 	return (
 		<Container
@@ -37,6 +39,7 @@ export const DLDisplayerController = (): React.JSX.Element => {
 					members={members}
 					totalMembers={totalMembers}
 					distributionList={distributionList}
+					showMembersList={distributionList?.canRequireMembers ?? false}
 				/>
 			)) || (
 				<EmptyDisplayer

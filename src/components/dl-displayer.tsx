@@ -21,12 +21,14 @@ interface DistributionListDisplayerProps {
 	members: Array<string>;
 	totalMembers: number;
 	distributionList: DistributionList | undefined;
+	showMembersList: boolean;
 }
 
 export const DistributionListDisplayer = ({
 	members,
 	totalMembers,
-	distributionList
+	distributionList,
+	showMembersList
 }: DistributionListDisplayerProps): React.JSX.Element => {
 	const actions = useDLActions(distributionList);
 
@@ -58,7 +60,7 @@ export const DistributionListDisplayer = ({
 							description={distributionList?.description}
 						/>
 						<ManagerList managers={distributionList?.owners} />
-						<MemberList members={members} membersCount={totalMembers} />
+						{showMembersList && <MemberList members={members} membersCount={totalMembers} />}
 					</Container>
 				</ScrollableContainer>
 			</Container>

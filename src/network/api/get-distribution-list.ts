@@ -28,6 +28,7 @@ export interface GetDistributionListResponse extends GenericSoapPayload<typeof N
 		_attrs?: {
 			displayName?: string;
 			description?: string;
+			zimbraHideInGal?: 'TRUE' | 'FALSE';
 		};
 	}>;
 }
@@ -51,7 +52,8 @@ const normalizeResponse = (response: GetDistributionListResponse): DistributionL
 		displayName: dl._attrs?.displayName,
 		isOwner: dl.isOwner ?? false,
 		owners: normalizeOwners(dl.owners),
-		description: dl._attrs?.description
+		description: dl._attrs?.description,
+		canRequireMembers: dl._attrs?.zimbraHideInGal !== 'TRUE'
 	};
 };
 
