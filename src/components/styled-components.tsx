@@ -11,8 +11,7 @@ import {
 	ListItem,
 	type ListItemProps,
 	pseudoClasses,
-	Row,
-	Text
+	Row
 } from '@zextras/carbonio-design-system';
 import styled, { css, type DefaultTheme, type SimpleInterpolation } from 'styled-components';
 
@@ -80,10 +79,6 @@ export const StyledListItem = styled(ListItem).attrs<
 				);
 			}
 		`}
-`;
-
-export const TextWithLineHeight = styled(Text)`
-	line-height: 1.5;
 `;
 
 export const CustomIconAvatar = styled(Avatar)`
