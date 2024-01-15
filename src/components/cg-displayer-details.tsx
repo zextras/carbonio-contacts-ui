@@ -45,7 +45,7 @@ export const CGDisplayerDetails = ({
 				mainAlignment={'flex-start'}
 				gap={'1rem'}
 			>
-				<CustomIconAvatar label={''} size={'large'} icon={'PeopleOutline'} />
+				<CustomIconAvatar label={title} size={'large'} icon={'PeopleOutline'} />
 				<Container height={'fit'} crossAlignment={'flex-start'} minWidth={0}>
 					<Text weight={'bold'}>{title}</Text>
 					<Text size={'small'} color={'secondary'}>

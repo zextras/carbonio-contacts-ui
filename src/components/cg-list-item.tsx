@@ -78,12 +78,7 @@ export const CGListItem = React.memo<CGListItemProps>(
 								mainAlignment={'flex-start'}
 							>
 								<Row gap={'0.5rem'} width="fill" wrap="nowrap" mainAlignment={'flex-start'}>
-									<CustomIconAvatar
-										colorLabel={title}
-										label={title}
-										icon={'PeopleOutline'}
-										size={'large'}
-									/>
+									<CustomIconAvatar label={title} icon={'PeopleOutline'} size={'large'} />
 									<Container crossAlignment={'flex-start'} gap={'0.25rem'} minWidth={0}>
 										<Text overflow="ellipsis" size="small">
 											{title}
