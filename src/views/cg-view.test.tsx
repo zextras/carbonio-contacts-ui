@@ -209,7 +209,7 @@ describe('Contact Group View', () => {
 	});
 
 	describe('Displayer', () => {
-		it('should show and the empty displayer message as default', async () => {
+		it('should show the empty displayer message as default', async () => {
 			registerFindContactGroupsHandler({
 				findContactGroupsResponse: createFindContactGroupsResponse([]),
 				offset: 0
