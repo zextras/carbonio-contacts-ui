@@ -238,8 +238,7 @@ describe('Contact Group View', () => {
 			await user.click(screen.getByText(contactGroupName));
 			await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.closeDisplayer });
 			expect(screen.getAllByText(contactGroupName)).toHaveLength(3);
-			// FIXME
-			// expect(screen.getByText(/addresses list/i)).toBeVisible();
+			expect(screen.getByText('Addresses list')).toBeVisible();
 		});
 
 		it('Click on close action close the displayer', async () => {
