@@ -42,7 +42,7 @@ export const findContactGroups = (
 		},
 		body: JSON.stringify({
 			Body: {
-				[`SearchRequest`]: {
+				SearchRequest: {
 					_jsns: 'urn:zimbraMail',
 					limit: FIND_CONTACT_GROUP_LIMIT,
 					offset,
