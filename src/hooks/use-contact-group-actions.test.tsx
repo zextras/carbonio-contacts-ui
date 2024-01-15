@@ -5,6 +5,7 @@
  */
 
 import { faker } from '@faker-js/faker';
+import * as shell from '@zextras/carbonio-shell-ui';
 
 import { useContactGroupActions } from './use-contact-group-actions';
 import { setupHook } from '../carbonio-ui-commons/test/test-setup';
@@ -12,6 +13,7 @@ import { buildContactGroup, buildMembers } from '../tests/model-builder';
 
 describe('useContactGroupActions', () => {
 	it('should show send mail action when the contact group has at least 1 member', () => {
+		jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([jest.fn(), true]);
 		const contactGroup = buildContactGroup({
 			members: buildMembers(faker.number.int({ min: 1, max: 100 }))
 		});

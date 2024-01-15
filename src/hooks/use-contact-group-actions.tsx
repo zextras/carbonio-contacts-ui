@@ -22,7 +22,7 @@ export const useContactGroupActions = ({ members }: ContactGroup): Action[] => {
 
 	return useMemo<Action[]>((): Action[] => {
 		const orderedActions: Action[] = [];
-		if (members.length > 0) {
+		if (members.length > 0 && isMailAvailable) {
 			orderedActions.push({
 				id: 'send-email',
 				label: t('action.send_msg', 'Send e-mail'),
@@ -31,5 +31,5 @@ export const useContactGroupActions = ({ members }: ContactGroup): Action[] => {
 			});
 		}
 		return orderedActions;
-	}, [members.length, sendMail, t]);
+	}, [isMailAvailable, members.length, sendMail, t]);
 };
