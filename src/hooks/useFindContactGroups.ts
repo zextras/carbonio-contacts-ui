@@ -25,12 +25,12 @@ export const useFindContactGroups = (): UseFindContactGroupsReturnType => {
 	const [hasMore, setHasMore] = useState(useContactGroupStore.getState().storedOffset !== -1);
 
 	const findCallback = useCallback(() => {
-		client.findContactGroups(offset.current).then(({ hasMore, contactGroups }) => {
-			addStoredContactGroups(contactGroups);
-			setContactGroups((oldNodes) => [...(oldNodes ?? []), ...(contactGroups ?? [])]);
+		client.findContactGroups(offset.current).then((result) => {
+			addStoredContactGroups(result.contactGroups);
+			setContactGroups((oldNodes) => [...(oldNodes ?? []), ...(result.contactGroups ?? [])]);
 			offset.current += FIND_CONTACT_GROUP_LIMIT;
-			setStoredOffset(hasMore ? offset.current : -1);
-			setHasMore(hasMore);
+			setStoredOffset(result.hasMore ? offset.current : -1);
+			setHasMore(result.hasMore);
 		});
 	}, [addStoredContactGroups, setStoredOffset]);
 

@@ -138,7 +138,7 @@ describe('Contact Group View', () => {
 			);
 
 			await screen.findByText(contactGroupName);
-			const listItem = await screen.findByTestId('list-item-content');
+			const listItem = await screen.findByTestId(TESTID_SELECTORS.listItemContent);
 			await user.click(listItem);
 			const displayer = await screen.findByTestId(TESTID_SELECTORS.displayer);
 			const action = within(displayer).getByRole('button', { name: /mail/i });
@@ -197,7 +197,7 @@ describe('Contact Group View', () => {
 			const { user } = setupTest(<CGView />);
 
 			await screen.findByText(contactGroupName);
-			const listItem = await screen.findByTestId('list-item-content');
+			const listItem = await screen.findByTestId(TESTID_SELECTORS.listItemContent);
 			await user.rightClick(listItem);
 
 			const contextualMenu = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
