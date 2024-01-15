@@ -5,6 +5,7 @@
  */
 
 import {
+	Avatar,
 	Container,
 	getColor,
 	ListItem,
@@ -83,4 +84,13 @@ export const StyledListItem = styled(ListItem).attrs<
 
 export const TextWithLineHeight = styled(Text)`
 	line-height: 1.5;
+`;
+
+export const CustomIconAvatar = styled(Avatar)`
+	& > svg {
+		max-width: 1.5rem;
+		max-height: 1.5rem;
+		min-width: 1.5rem;
+		min-height: 1.5rem;
+	}
 `;
