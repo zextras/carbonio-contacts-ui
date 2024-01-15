@@ -108,7 +108,7 @@ describe('Contact Group View', () => {
 		expect(screen.getByText('1 address')).toBeVisible();
 	});
 
-	it('should show the empty list message if there is no contact groups', async () => {
+	it('should show the empty list message if there is no contact group', async () => {
 		registerFindContactGroupsHandler({
 			findContactGroupsResponse: createFindContactGroupsResponse([]),
 			offset: 0
