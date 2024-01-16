@@ -36,7 +36,7 @@ export const useActionSendEmailCG = (): SendEmailActionCG => {
 
 			sendMailAction.execute(contactGroup.members);
 		},
-		[sendMailAction]
+		[canExecute, sendMailAction]
 	);
 
 	return useMemo(

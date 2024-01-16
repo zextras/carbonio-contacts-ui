@@ -12,7 +12,7 @@ import { CGList } from './cg-list';
 import { screen, setupTest } from '../carbonio-ui-commons/test/test-setup';
 import { EMPTY_LIST_HINT } from '../constants/tests';
 
-describe('Task list', () => {
+describe('Contact groups list', () => {
 	test('Show a placeholder when the list is empty', async () => {
 		setupTest(<CGList contactGroups={[]} />);
 		expect(await screen.findByText(EMPTY_LIST_HINT)).toBeVisible();

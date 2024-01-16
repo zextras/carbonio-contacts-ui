@@ -37,7 +37,7 @@ describe('Displayer controller', () => {
 		);
 
 		expect(
-			within(screen.getByTestId('displayer-header')).getByText(contactGroup.title)
+			within(screen.getByTestId(TESTID_SELECTORS.displayerHeader)).getByText(contactGroup.title)
 		).toBeVisible();
 	});
 });

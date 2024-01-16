@@ -8,15 +8,21 @@ import React from 'react';
 
 import { Container, Icon, Padding } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
 
 import { Text } from './Text';
+
+const CustomIcon = styled(Icon)`
+	height: 2rem;
+	width: 2rem;
+`;
 
 export const EmptyDisplayer = (): React.JSX.Element => {
 	const [t] = useTranslation();
 
 	return (
 		<Container>
-			<Icon icon={'PeopleOutline'} size={'large'} />
+			<CustomIcon icon={'PeopleOutline'} color="secondary" />
 			<Padding all="medium">
 				<Text color="gray1" overflow="break-word" weight="bold" size="large" centered>
 					{t(`displayer.title3`, 'Stay in touch with your colleagues.')}

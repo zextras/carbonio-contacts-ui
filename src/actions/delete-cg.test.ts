@@ -179,7 +179,7 @@ describe('useActionDeleteCG', () => {
 		// }
 	);
 
-	it(
+	it.todo(
 		'should close the modal if the user clicks on the delete action button'
 		// , async () => {
 		// const { result, user } = setupHook(useActionDeleteCG);

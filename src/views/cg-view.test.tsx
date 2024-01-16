@@ -108,7 +108,7 @@ describe('Contact Group View', () => {
 		expect(screen.getByText('1 address')).toBeVisible();
 	});
 
-	it('should show the empty list message if there is no contact groups', async () => {
+	it('should show the empty list message if there is no contact group', async () => {
 		registerFindContactGroupsHandler({
 			findContactGroupsResponse: createFindContactGroupsResponse([]),
 			offset: 0
@@ -138,7 +138,7 @@ describe('Contact Group View', () => {
 			);
 
 			await screen.findByText(contactGroupName);
-			const listItem = await screen.findByTestId('list-item-content');
+			const listItem = await screen.findByTestId(TESTID_SELECTORS.listItemContent);
 			await user.click(listItem);
 			const displayer = await screen.findByTestId(TESTID_SELECTORS.displayer);
 			const action = within(displayer).getByRole('button', { name: /mail/i });
@@ -197,7 +197,7 @@ describe('Contact Group View', () => {
 			const { user } = setupTest(<CGView />);
 
 			await screen.findByText(contactGroupName);
-			const listItem = await screen.findByTestId('list-item-content');
+			const listItem = await screen.findByTestId(TESTID_SELECTORS.listItemContent);
 			await user.rightClick(listItem);
 
 			const contextualMenu = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
@@ -209,7 +209,7 @@ describe('Contact Group View', () => {
 	});
 
 	describe('Displayer', () => {
-		it('should show and the empty displayer message as default', async () => {
+		it('should show the empty displayer message as default', async () => {
 			registerFindContactGroupsHandler({
 				findContactGroupsResponse: createFindContactGroupsResponse([]),
 				offset: 0
@@ -238,8 +238,7 @@ describe('Contact Group View', () => {
 			await user.click(screen.getByText(contactGroupName));
 			await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.closeDisplayer });
 			expect(screen.getAllByText(contactGroupName)).toHaveLength(3);
-			// FIXME
-			// expect(screen.getByText(/addresses list/i)).toBeVisible();
+			expect(screen.getByText('Addresses list')).toBeVisible();
 		});
 
 		it('Click on close action close the displayer', async () => {

@@ -72,7 +72,7 @@ const SecondaryBarView = ({ expanded }: { expanded: boolean }): React.JSX.Elemen
 							ev.stopPropagation();
 							navigateTo(ROUTES_INTERNAL_PARAMS.route.contactGroups);
 						},
-						active: pathname.endsWith(`${ROUTES_INTERNAL_PARAMS.route.contactGroups}`)
+						active: pathname.includes(`${ROUTES_INTERNAL_PARAMS.route.contactGroups}`)
 					}
 				],
 				onClick: (ev: React.SyntheticEvent | KeyboardEvent): void => {

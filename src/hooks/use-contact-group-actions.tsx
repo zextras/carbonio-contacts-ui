@@ -13,7 +13,6 @@ import { useActionDeleteCG } from '../actions/delete-cg';
 import { ContactGroup } from '../model/contact-group';
 
 export const useContactGroupActions = (contactGroup: ContactGroup): DSAction[] => {
-	const { id, title, members } = contactGroup;
 	const [t] = useTranslation();
 
 	const deleteCGAction = useActionDeleteCG();
@@ -21,12 +20,12 @@ export const useContactGroupActions = (contactGroup: ContactGroup): DSAction[] =
 	const [openMailComposer, isMailAvailable] = useIntegratedFunction('composePrefillMessage');
 
 	const sendMail = useCallback(() => {
-		openMailComposer({ recipients: members.map((member) => ({ email: member })) });
-	}, [members, openMailComposer]);
+		openMailComposer({ recipients: contactGroup.members.map((member) => ({ email: member })) });
+	}, [contactGroup, openMailComposer]);
 
 	return useMemo<DSAction[]>((): DSAction[] => {
 		const orderedActions: DSAction[] = [];
-		if (contactGroup.members.length > 0) {
+		if (contactGroup.members.length > 0 && isMailAvailable) {
 			orderedActions.push({
 				id: 'send-email',
 				label: t('action.send_msg', 'Send e-mail'),
@@ -45,5 +44,5 @@ export const useContactGroupActions = (contactGroup: ContactGroup): DSAction[] =
 			});
 		}
 		return orderedActions;
-	}, [contactGroup, deleteCGAction, sendMail, t]);
+	}, [contactGroup, deleteCGAction, isMailAvailable, sendMail, t]);
 };

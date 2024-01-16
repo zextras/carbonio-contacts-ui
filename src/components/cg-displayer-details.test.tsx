@@ -19,7 +19,7 @@ describe('Contact group displayer details', () => {
 		expect(screen.getByText(title)).toBeVisible();
 	});
 
-	it('should displays the number of the members of the CG', () => {
+	it('should display the number of the members of the CG', () => {
 		const count = faker.number.int({ min: 1, max: 300 });
 		const members = buildMembers(count);
 		setupTest(<CGDisplayerDetails contactGroup={buildContactGroup({ members })} />);
