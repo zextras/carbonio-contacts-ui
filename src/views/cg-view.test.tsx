@@ -19,7 +19,7 @@ import {
 	createFindContactGroupsResponse,
 	createFindContactGroupsResponseCnItem,
 	registerFindContactGroupsHandler
-} from '../tests/msw-handlers';
+} from '../tests/msw-handlers/find-contact-groups';
 
 beforeEach(() => {
 	useContactGroupStore.getState().setStoredOffset(0);

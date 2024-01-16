@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { UIAction } from './types';
 import { ACTION_IDS } from '../constants';
 import { ContactGroup } from '../model/contact-group';
+import { client } from '../network/client';
 
 export type DeleteCGAction = UIAction<ContactGroup, never>;
 
@@ -35,15 +36,15 @@ export const useActionDeleteCG = (): DeleteCGAction => {
 				confirmLabel: t('modal.delete.button.confirm', 'delete'),
 				confirmColor: 'error',
 				onConfirm: () => {
-					// trashAction().then(() => {
-					// 	closeModal();
-					// 	createSnackbar({
-					// 		type: 'success',
-					// 		key: `snackbar-${Date.now()}`,
-					// 		label: t('snackbar.permanentlyDeletedTask', 'Task permanently deleted'),
-					// 		hideButton: true
-					// 	});
-					// });
+					client.deleteContactAction([contactGroup.id]).then((result) => {
+						// closeModal();
+						// createSnackbar({
+						// 	type: 'success',
+						// 	key: `snackbar-${Date.now()}`,
+						// 	label: 'CG permanently deleted',
+						// 	hideButton: true
+						// });
+					});
 				},
 				dismissLabel: t('modal.cancel', 'cancel'),
 				showCloseIcon: true,

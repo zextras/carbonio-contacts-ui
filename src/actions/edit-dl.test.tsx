@@ -11,10 +11,8 @@ import { useActionEditDL } from './edit-dl';
 import { UIAction } from './types';
 import { screen, setupHook } from '../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS, TIMERS } from '../constants/tests';
-import {
-	registerDistributionListActionHandler,
-	registerGetDistributionListMembersHandler
-} from '../tests/msw-handlers';
+import { registerDistributionListActionHandler } from '../tests/msw-handlers/distribution-list-action';
+import { registerGetDistributionListMembersHandler } from '../tests/msw-handlers/get-distribution-list-members';
 import { getDLContactInput } from '../tests/utils';
 
 describe('useActionEditDL', () => {
