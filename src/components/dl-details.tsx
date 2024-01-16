@@ -5,9 +5,10 @@
  */
 import React, { useCallback } from 'react';
 
-import { Avatar, Container, Divider, IconButton, Row } from '@zextras/carbonio-design-system';
+import { Container, Divider, IconButton, Row } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
+import { CustomIconAvatar } from './styled-components';
 import { Text } from './Text';
 import { useActionCopyToClipboard } from '../actions/copy-to-clipboard';
 
@@ -42,7 +43,7 @@ export const DistributionListDetails = ({
 				mainAlignment={'flex-start'}
 				crossAlignment={'flex-start'}
 			>
-				<Avatar
+				<CustomIconAvatar
 					shape={'square'}
 					icon={'DistributionListOutline'}
 					label={displayName || email}
@@ -53,7 +54,7 @@ export const DistributionListDetails = ({
 						{displayName}
 					</Text>
 					<Row gap={'0.25rem'}>
-						<Text size={'small'} weight={displayName ? 'regular' : 'bold'}>
+						<Text size={'small'} weight={displayName ? 'regular' : 'bold'} color={'gray1'}>
 							{email}
 						</Text>
 						<IconButton

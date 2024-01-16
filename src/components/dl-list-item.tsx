@@ -5,11 +5,11 @@
  */
 import React, { useCallback } from 'react';
 
-import { Action as DSAction, Avatar, Container } from '@zextras/carbonio-design-system';
+import { Action as DSAction, Container } from '@zextras/carbonio-design-system';
 
 import { ContextualMenu } from './contextual-menu';
 import { ListItemHoverBar } from './ListItemHoverBar';
-import { HoverContainer, ListItemContainer } from './styled-components';
+import { CustomIconAvatar, HoverContainer, ListItemContainer } from './styled-components';
 import { Text } from './Text';
 import { LIST_ITEM_HEIGHT } from '../constants';
 import { useDLActions } from '../hooks/use-dl-actions';
@@ -67,7 +67,7 @@ const DLListItemContent = React.memo<DLListItemContentProps>(function DLListItem
 							maxWidth={'100%'}
 							mainAlignment={'flex-start'}
 						>
-							<Avatar
+							<CustomIconAvatar
 								label={title}
 								icon={'DistributionListOutline'}
 								size={'large'}

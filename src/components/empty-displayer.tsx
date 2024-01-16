@@ -7,6 +7,7 @@
 import React from 'react';
 
 import { Container, Icon, Padding } from '@zextras/carbonio-design-system';
+import styled from 'styled-components';
 
 import { Text } from './Text';
 
@@ -16,13 +17,18 @@ type EmptyDisplayerProps = {
 	description: string;
 };
 
+const CustomIcon = styled(Icon)`
+	width: 2.625rem;
+	height: 2.625rem;
+`;
+
 export const EmptyDisplayer = ({
 	icon,
 	title,
 	description
 }: EmptyDisplayerProps): React.JSX.Element => (
 	<Container>
-		<Icon icon={icon} size={'large'} />
+		<CustomIcon icon={icon} color={'secondary'} />
 		<Padding all="medium">
 			<Text color="gray1" overflow="break-word" weight="bold" size="large" centered>
 				{title}

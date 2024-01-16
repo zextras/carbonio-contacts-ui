@@ -37,17 +37,19 @@ export const MemberList = ({ members, membersCount }: MemberListProps): React.JS
 
 	return (
 		<Container mainAlignment={'flex-start'} crossAlignment={'flex-start'} gap={'0.5rem'}>
-			<Text size={'small'} color={'secondary'}>
-				{t('displayer.distribution_list.label.member_total', 'Member list {{total}}', {
-					total: membersCount
-				})}
-			</Text>
-			<Text size={'small'} overflow={'break-word'}>
-				{t(
-					'displayer.distribution_list.label.filter_hint',
-					'You can filter this list by looking for specific member’s name.'
-				)}
-			</Text>
+			<Container mainAlignment={'flex-start'} crossAlignment={'flex-start'} gap={'0.25rem'}>
+				<Text size={'small'} color={'secondary'}>
+					{t('displayer.distribution_list.label.member_total', 'Member list {{total}}', {
+						total: membersCount
+					})}
+				</Text>
+				<Text size={'small'} overflow={'break-word'}>
+					{t(
+						'displayer.distribution_list.label.filter_hint',
+						'You can filter this list by looking for specific member’s name.'
+					)}
+				</Text>
+			</Container>
 			<Input
 				data-testid={'dl-members-filter-input'}
 				label={t('displayer.distribution_list.placeholder.filter_member', 'Filter an address')}
