@@ -21,7 +21,7 @@ describe('useContactGroupActions', () => {
 		const { result } = setupHook(useContactGroupActions, { initialProps: [contactGroup] });
 
 		expect(result.current).toContainEqual({
-			id: 'send-email',
+			id: ACTION_IDS.sendEmailCG,
 			label: 'Send e-mail',
 			icon: 'EmailOutline',
 			onClick: expect.anything()

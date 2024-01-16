@@ -3,34 +3,29 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 
 import { type Action as DSAction } from '@zextras/carbonio-design-system';
-import { useIntegratedFunction } from '@zextras/carbonio-shell-ui';
-import { useTranslation } from 'react-i18next';
 
 import { useActionDeleteCG } from '../actions/delete-cg';
+import { useActionSendEmailCG } from '../actions/send-email-cg';
 import { ContactGroup } from '../model/contact-group';
 
 export const useContactGroupActions = (contactGroup: ContactGroup): DSAction[] => {
-	const [t] = useTranslation();
-
 	const deleteCGAction = useActionDeleteCG();
-
-	const [openMailComposer, isMailAvailable] = useIntegratedFunction('composePrefillMessage');
-
-	const sendMail = useCallback(() => {
-		openMailComposer({ recipients: contactGroup.members.map((member) => ({ email: member })) });
-	}, [contactGroup, openMailComposer]);
+	const sendEmailAction = useActionSendEmailCG();
 
 	return useMemo<DSAction[]>((): DSAction[] => {
 		const orderedActions: DSAction[] = [];
-		if (contactGroup.members.length > 0 && isMailAvailable) {
+
+		if (sendEmailAction.canExecute(contactGroup)) {
 			orderedActions.push({
-				id: 'send-email',
-				label: t('action.send_msg', 'Send e-mail'),
-				icon: 'EmailOutline',
-				onClick: sendMail
+				id: sendEmailAction.id,
+				label: sendEmailAction.label,
+				onClick: () => {
+					sendEmailAction.execute(contactGroup);
+				},
+				icon: sendEmailAction.icon
 			});
 		}
 		if (deleteCGAction.canExecute()) {
@@ -44,5 +39,5 @@ export const useContactGroupActions = (contactGroup: ContactGroup): DSAction[] =
 			});
 		}
 		return orderedActions;
-	}, [contactGroup, deleteCGAction, isMailAvailable, sendMail, t]);
+	}, [contactGroup, deleteCGAction, sendEmailAction]);
 };
