@@ -3,6 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+import { faker } from '@faker-js/faker';
 import {
 	ErrorSoapResponse,
 	SoapFault,
@@ -12,30 +13,28 @@ import {
 import { map, some } from 'lodash';
 import { ResponseResolver, rest, RestContext, RestRequest } from 'msw';
 
-import { getSetupServer } from '../carbonio-ui-commons/test/jest-setup';
-import { mockedAccount } from '../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
-import { NAMESPACES } from '../constants/api';
-import { FullAutocompleteResponse, Match } from '../legacy/types/contact';
+import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
+import { mockedAccount } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
+import { NAMESPACES } from '../../constants/api';
+import { FullAutocompleteResponse, Match } from '../../legacy/types/contact';
 import {
 	BatchDistributionListActionRequest,
 	BatchDistributionListActionResponse,
 	DistributionListActionResponse
-} from '../network/api/distribution-list-action';
+} from '../../network/api/distribution-list-action';
+import {
+	FindContactGroupsRequest,
+	FindContactGroupsResponse
+} from '../../network/api/find-contact-groups';
 import {
 	GetDistributionListRequest,
 	GetDistributionListResponse
-} from '../network/api/get-distribution-list';
+} from '../../network/api/get-distribution-list';
 import {
 	GetDistributionListMembersRequest,
 	GetDistributionListMembersResponse
-} from '../network/api/get-distribution-list-members';
-
-export const buildSoapResponse = <T>(responseData: Record<string, T>): SuccessSoapResponse<T> => ({
-	Header: {
-		context: {}
-	},
-	Body: responseData
-});
+} from '../../network/api/get-distribution-list-members';
+import { buildSoapResponse } from '../utils';
 
 type GetDistributionListMembersHandler = ResponseResolver<
 	RestRequest<{ Body: { GetDistributionListMembersRequest: GetDistributionListMembersRequest } }>,
@@ -223,6 +222,84 @@ export const registerGetDistributionListHandler = (
 			never,
 			SoapResponse<GetDistributionListResponse>
 		>('/service/soap/GetDistributionListRequest', handler)
+	);
+
+	return handler;
+};
+
+export const createFindContactGroupsResponse = (
+	cn: FindContactGroupsResponse['cn'],
+	more = false
+): FindContactGroupsResponse => ({
+	sortBy: 'nameAsc',
+	offset: 0,
+	cn,
+	more,
+	_jsns: 'urn:zimbraMail'
+});
+
+export const createFindContactGroupsResponseCnItem = (
+	contactGroupName = faker.company.name(),
+	members: string[] = [],
+	id = faker.number.int({ min: 100 }).toString()
+): Required<FindContactGroupsResponse>['cn'][number] => {
+	const mappedMembers = members.map((member) => ({ type: 'I' as const, value: member }));
+
+	return {
+		id,
+		l: '7',
+		d: faker.date.recent().valueOf(),
+		rev: 12974,
+		fileAsStr: contactGroupName,
+		_attrs: {
+			nickname: contactGroupName,
+			fullName: contactGroupName,
+			type: 'group',
+			fileAs: `8:${contactGroupName}`
+		},
+		m: mappedMembers,
+		sf: 'bo0000000276'
+	};
+};
+
+type FindContactGroupsHandler = ResponseResolver<
+	RestRequest<{ Body: { SearchRequest: FindContactGroupsRequest } }>,
+	RestContext,
+	SoapResponse<FindContactGroupsResponse>
+>;
+export const registerFindContactGroupsHandler = (
+	...args: Array<{
+		offset: number;
+		findContactGroupsResponse: FindContactGroupsResponse;
+	}>
+): jest.Mock<ReturnType<FindContactGroupsHandler>, Parameters<FindContactGroupsHandler>> => {
+	const handler = jest.fn<
+		ReturnType<FindContactGroupsHandler>,
+		Parameters<FindContactGroupsHandler>
+	>(async (req, res, ctx) => {
+		const reqBody = await req.json<{
+			Body: { SearchRequest: FindContactGroupsRequest };
+		}>();
+		const { offset } = reqBody.Body.SearchRequest;
+
+		const match = args.find((value) => value.offset === offset);
+
+		return res(
+			ctx.json(
+				buildSoapResponse<FindContactGroupsResponse>({
+					SearchResponse:
+						match?.findContactGroupsResponse ??
+						createFindContactGroupsResponse([createFindContactGroupsResponseCnItem()])
+				})
+			)
+		);
+	});
+	getSetupServer().use(
+		rest.post<
+			{ Body: { SearchRequest: FindContactGroupsRequest } },
+			never,
+			SoapResponse<FindContactGroupsResponse>
+		>('/service/soap/SearchRequest', handler)
 	);
 
 	return handler;

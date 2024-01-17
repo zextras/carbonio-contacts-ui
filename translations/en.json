@@ -1,8 +1,12 @@
 {
     "action": {
+        "copy": "Copy",
+        "delete": "Delete",
         "delete_permanently": "Delete Permanently",
+        "edit": "Edit",
         "edit_distribution_list": "Edit distribution list",
         "goto_folder": "Go to folder",
+        "mail": "Send e-mail",
         "reset_filters": "Reset Filters",
         "search": "Search",
         "send_msg": "Send e-mail",
@@ -44,6 +48,16 @@
             },
             "title": "New Group"
         }
+    },
+    "contactGroupDisplayer": {
+        "label": {
+            "members_total": "Addresses: {{count}}"
+        }
+    },
+    "contactGroupList": {
+        "addressCount": "{{count}} address",
+        "addressCount_plural": "{{count}} addresses",
+        "emptyList": "No contact groups have been created yet"
     },
     "contact_restored": "Contact restored",
     "displayer": {
@@ -92,6 +106,11 @@
         "placeholder": {
             "add_members": "Type an address, click '+' to add to the distribution list",
             "filter_member": "Filter an address"
+        }
+    },
+    "emptyDisplayer": {
+        "contactGroup": {
+            "hint": "Click the “NEW” button to create a new contacts group."
         }
     },
     "expand_distribution_list": "Expand address list",
@@ -217,6 +236,7 @@
         "empty": "Empty",
         "error_try_again": "Something went wrong, please try again",
         "folder_name": "Folder name",
+        "groups_app_name": "Contact Groups and Distribution Lists",
         "include_shared_folders": "Include shared address books",
         "move": "Move",
         "newContactGroup": "New contact group",
@@ -316,7 +336,8 @@
     "secondaryBar": {
         "contextualMenu": {
             "new_contact_group_creation_action": "New Contact Group"
-        }
+        },
+        "myContactGroups": "My Contact Groups"
     },
     "section": {
         "field": {
@@ -392,6 +413,7 @@
                 "success": "\"{{displayName}}\" distribution list edits saved successfully"
             }
         },
+        "email_copied_to_clipboard": "Email copied to clipboard.",
         "folder_edited": "Address book edited successfully",
         "folder_shared": "Address book shared",
         "share_resend": "Share invite resent",
@@ -414,10 +436,5 @@
         "mobile": "mobile",
         "other": "other",
         "work": "work"
-    },
-    "secondaryBar": {
-        "contextualMenu": {
-            "new_contact_group_creation_action": "New Contact Group"
-        }
     }
 }

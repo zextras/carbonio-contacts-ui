@@ -3,6 +3,8 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+import { SuccessSoapResponse } from '@zextras/carbonio-shell-ui';
+
 import { screen, within } from '../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../constants/tests';
 
@@ -26,3 +28,9 @@ export const getDLContactInput = (): {
 		addMembersIcon: contactInputIcon
 	};
 };
+export const buildSoapResponse = <T>(responseData: Record<string, T>): SuccessSoapResponse<T> => ({
+	Header: {
+		context: {}
+	},
+	Body: responseData
+});

@@ -7,7 +7,8 @@ import { faker } from '@faker-js/faker';
 import { act, waitForElementToBeRemoved } from '@testing-library/react';
 import { times } from 'lodash';
 
-import { UIAction, useActionEditDL } from './edit-dl';
+import { useActionEditDL } from './edit-dl';
+import { UIAction } from './types';
 import { screen, setupHook } from '../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS, TIMERS } from '../constants/tests';
 import {
