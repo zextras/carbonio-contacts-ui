@@ -12,6 +12,7 @@ import { UIAction } from './types';
 import { ACTION_IDS } from '../constants';
 import { ContactGroup } from '../model/contact-group';
 import { client } from '../network/client';
+import { useContactGroupStore } from '../store/contact-groups';
 
 export type DeleteCGAction = UIAction<ContactGroup, never>;
 
@@ -19,6 +20,7 @@ export const useActionDeleteCG = (): DeleteCGAction => {
 	const [t] = useTranslation();
 	const createModal = useModal();
 	const createSnackbar = useSnackbar();
+	const { removeStoredContactGroup } = useContactGroupStore();
 
 	const canExecute = useCallback<DeleteCGAction['canExecute']>(() => true, []);
 
@@ -37,6 +39,7 @@ export const useActionDeleteCG = (): DeleteCGAction => {
 				onConfirm: () => {
 					closeModal();
 					client.deleteContactAction([contactGroup.id]).then((result) => {
+						removeStoredContactGroup(contactGroup.id);
 						createSnackbar({
 							type: 'success',
 							key: `snackbar-${Date.now()}`,
@@ -67,7 +70,7 @@ export const useActionDeleteCG = (): DeleteCGAction => {
 				)
 			});
 		},
-		[createModal, createSnackbar, t]
+		[createModal, createSnackbar, removeStoredContactGroup, t]
 	);
 
 	return useMemo(
