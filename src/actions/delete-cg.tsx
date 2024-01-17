@@ -35,8 +35,8 @@ export const useActionDeleteCG = (): DeleteCGAction => {
 				confirmLabel: t('modal.delete.button.confirm', 'delete'),
 				confirmColor: 'error',
 				onConfirm: () => {
+					closeModal();
 					client.deleteContactAction([contactGroup.id]).then((result) => {
-						closeModal();
 						createSnackbar({
 							type: 'success',
 							key: `snackbar-${Date.now()}`,
@@ -48,7 +48,6 @@ export const useActionDeleteCG = (): DeleteCGAction => {
 						});
 					});
 				},
-				dismissLabel: t('modal.cancel', 'cancel'),
 				showCloseIcon: true,
 				onClose: () => {
 					closeModal();

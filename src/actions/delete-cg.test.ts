@@ -85,22 +85,6 @@ describe('useActionDeleteCG', () => {
 		expect(closeIcon).toBeEnabled();
 	});
 
-	it('should return an execute field which opens a modal with a cancel action button', async () => {
-		const { result } = setupHook(useActionDeleteCG);
-		const action = result.current;
-		act(() => {
-			action.execute(contactGroupWithMembers);
-		});
-
-		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
-		});
-
-		const button = await screen.findByRole('button', { name: 'cancel' });
-		expect(button).toBeVisible();
-		expect(button).toBeEnabled();
-	});
-
 	it('should return an execute field which opens a modal with a delete action button', async () => {
 		const { result } = setupHook(useActionDeleteCG);
 		const action = result.current;
@@ -130,25 +114,6 @@ describe('useActionDeleteCG', () => {
 
 		const button = await screen.findByRoleWithIcon('button', {
 			icon: TESTID_SELECTORS.icons.close
-		});
-		await user.click(button);
-		const title = `Delete "${contactGroupWithMembers.title}"`;
-		expect(screen.queryByText(title)).not.toBeInTheDocument();
-	});
-
-	it('should close the UI if the user clicks on the cancel action button', async () => {
-		const { result, user } = setupHook(useActionDeleteCG);
-		const action = result.current;
-		act(() => {
-			action.execute(contactGroupWithMembers);
-		});
-
-		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
-		});
-
-		const button = await screen.findByRole('button', {
-			name: 'cancel'
 		});
 		await user.click(button);
 		const title = `Delete "${contactGroupWithMembers.title}"`;

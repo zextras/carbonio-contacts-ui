@@ -422,6 +422,11 @@
         "write": "Write"
     },
     "snackbar": {
+        "delete_contact_group": {
+            "confirm": {
+                "success": "Contact group successfully deleted"
+            }
+        },
         "edit_distribution_list": {
             "save": {
                 "success": "\"{{displayName}}\" distribution list edits saved successfully"
