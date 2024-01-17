@@ -29,14 +29,7 @@ const ContentContainer = styled(Container)`
 `;
 
 export const CGListItem = React.memo<CGListItemProps>(
-	({
-		onClick,
-		// others props
-		visible,
-		id,
-		title,
-		members
-	}) => {
+	({ onClick, visible, id, title, members }) => {
 		const [t] = useTranslation();
 		const actions = useContactGroupActions({ id, title, members });
 
