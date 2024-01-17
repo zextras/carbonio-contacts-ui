@@ -53,7 +53,7 @@ export const DistributionListDetails = ({
 					<Text weight={'bold'}>{displayName}</Text>
 					<Row gap={'0.25rem'}>
 						<Text
-							size={'small'}
+							size={displayName ? 'small' : 'medium'}
 							weight={displayName ? 'regular' : 'bold'}
 							color={displayName ? 'gray1' : 'text'}
 						>
