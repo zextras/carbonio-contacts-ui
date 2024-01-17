@@ -5,13 +5,13 @@
  */
 import React, { useCallback } from 'react';
 
-import { Avatar, Container, Row } from '@zextras/carbonio-design-system';
+import { Container, Row } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { ContextualMenu } from './contextual-menu';
 import { ListItemHoverBar } from './ListItemHoverBar';
-import { HoverContainer, ListItemContainer } from './styled-components';
+import { CustomIconAvatar, HoverContainer, ListItemContainer } from './styled-components';
 import { Text } from './Text';
 import { LIST_ITEM_HEIGHT } from '../constants';
 import { useContactGroupActions } from '../hooks/use-contact-group-actions';
@@ -29,14 +29,7 @@ const ContentContainer = styled(Container)`
 `;
 
 export const CGListItem = React.memo<CGListItemProps>(
-	({
-		onClick,
-		// others props
-		visible,
-		id,
-		title,
-		members
-	}) => {
+	({ onClick, visible, id, title, members }) => {
 		const [t] = useTranslation();
 		const actions = useContactGroupActions({ id, title, members });
 
@@ -78,7 +71,7 @@ export const CGListItem = React.memo<CGListItemProps>(
 								mainAlignment={'flex-start'}
 							>
 								<Row gap={'0.5rem'} width="fill" wrap="nowrap" mainAlignment={'flex-start'}>
-									<Avatar colorLabel={title} label={title} icon={'PeopleOutline'} size={'large'} />
+									<CustomIconAvatar label={title} icon={'PeopleOutline'} size={'large'} />
 									<Container crossAlignment={'flex-start'} gap={'0.25rem'} minWidth={0}>
 										<Text overflow="ellipsis" size="small">
 											{title}

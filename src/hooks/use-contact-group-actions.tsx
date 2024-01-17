@@ -11,8 +11,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ContactGroup } from '../model/contact-group';
 
-export const useContactGroupActions = (contactGroup: ContactGroup): Action[] => {
-	const { id, title, members } = contactGroup;
+export const useContactGroupActions = ({ members }: ContactGroup): Action[] => {
 	const [t] = useTranslation();
 
 	const [openMailComposer, isMailAvailable] = useIntegratedFunction('composePrefillMessage');
@@ -23,7 +22,7 @@ export const useContactGroupActions = (contactGroup: ContactGroup): Action[] => 
 
 	return useMemo<Action[]>((): Action[] => {
 		const orderedActions: Action[] = [];
-		if (contactGroup.members.length > 0) {
+		if (members.length > 0 && isMailAvailable) {
 			orderedActions.push({
 				id: 'send-email',
 				label: t('action.send_msg', 'Send e-mail'),
@@ -32,5 +31,5 @@ export const useContactGroupActions = (contactGroup: ContactGroup): Action[] => 
 			});
 		}
 		return orderedActions;
-	}, [contactGroup.members.length, sendMail, t]);
+	}, [isMailAvailable, members.length, sendMail, t]);
 };

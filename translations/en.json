@@ -59,9 +59,6 @@
         "addressCount_plural": "{{count}} addresses",
         "emptyList": "No contact groups have been created yet"
     },
-    "contact_group_list": {
-        "emptyList": "No contact groups have been created yet"
-    },
     "contact_restored": "Contact restored",
     "displayer": {
         "description2": "Click the “NEW” button to start creating a new one.",

@@ -5,11 +5,12 @@
  */
 import React, { useMemo } from 'react';
 
-import { Avatar, Container, Divider, ListV2, Row, Text } from '@zextras/carbonio-design-system';
+import { Container, Divider, ListV2, Row } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
 import { MemberDisplayerListItemComponent } from './member-displayer-list-item';
-import { TextWithLineHeight } from './styled-components';
+import { CustomIconAvatar } from './styled-components';
+import { Text } from './Text';
 import { ContactGroup } from '../model/contact-group';
 
 export type CGDisplayerDetailsProps = {
@@ -44,14 +45,14 @@ export const CGDisplayerDetails = ({
 				mainAlignment={'flex-start'}
 				gap={'1rem'}
 			>
-				<Avatar label={''} size={'large'} icon={'PeopleOutline'} />
+				<CustomIconAvatar label={title} size={'large'} icon={'PeopleOutline'} />
 				<Container height={'fit'} crossAlignment={'flex-start'} minWidth={0}>
-					<TextWithLineHeight weight={'bold'}>{title}</TextWithLineHeight>
-					<TextWithLineHeight size={'small'} color={'secondary'}>
+					<Text weight={'bold'}>{title}</Text>
+					<Text size={'small'} color={'secondary'}>
 						{t('contactGroupDisplayer.label.members_total', 'Addresses: {{count}}', {
 							count: members.length
 						})}
-					</TextWithLineHeight>
+					</Text>
 				</Container>
 			</Container>
 			<Divider color={'gray3'} />
