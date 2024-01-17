@@ -32,7 +32,7 @@ describe('Contact group displayer details', () => {
 		expect(screen.getByTestId(TESTID_SELECTORS.icons.contactGroup)).toBeVisible();
 	});
 
-	it('should displays the members of the CG', () => {
+	it('should display the members of the CG', () => {
 		const count = faker.number.int({ min: 1, max: 10 });
 		const members = buildMembers(count);
 		setupTest(<CGDisplayerDetails contactGroup={buildContactGroup({ members })} />);
