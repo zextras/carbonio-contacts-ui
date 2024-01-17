@@ -26,7 +26,7 @@ describe('Contact group displayer details', () => {
 		expect(screen.getByText(`Addresses: ${count}`)).toBeVisible();
 	});
 
-	it('should displays the the avatar with the icon associated to the CG', () => {
+	it('should display the avatar with the icon associated to the CG', () => {
 		setupTest(<CGDisplayerDetails contactGroup={buildContactGroup()} />);
 		expect(screen.getByTestId('avatar')).toBeVisible();
 		expect(screen.getByTestId(TESTID_SELECTORS.icons.contactGroup)).toBeVisible();
