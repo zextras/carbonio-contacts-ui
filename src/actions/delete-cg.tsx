@@ -32,18 +32,20 @@ export const useActionDeleteCG = (): DeleteCGAction => {
 				title: t('modal.delete.contactGroup.header', 'Delete "{{contactGroupName}}"', {
 					contactGroupName: contactGroup.title
 				}),
-				size: 'medium',
 				confirmLabel: t('modal.delete.button.confirm', 'delete'),
 				confirmColor: 'error',
 				onConfirm: () => {
 					client.deleteContactAction([contactGroup.id]).then((result) => {
-						// closeModal();
-						// createSnackbar({
-						// 	type: 'success',
-						// 	key: `snackbar-${Date.now()}`,
-						// 	label: 'CG permanently deleted',
-						// 	hideButton: true
-						// });
+						closeModal();
+						createSnackbar({
+							type: 'success',
+							key: `snackbar-${Date.now()}`,
+							label: t(
+								'snackbar.delete_contact_group.confirm.success',
+								'Contact group successfully deleted'
+							),
+							hideButton: true
+						});
 					});
 				},
 				dismissLabel: t('modal.cancel', 'cancel'),
@@ -52,7 +54,7 @@ export const useActionDeleteCG = (): DeleteCGAction => {
 					closeModal();
 				},
 				children: (
-					<Container padding={{ vertical: 'large' }}>
+					<Container padding={{ vertical: 'large' }} crossAlignment={'flex-start'}>
 						<Text overflow="break-word" size="medium">
 							{t(
 								'modal.delete.contactGroup.body1',
@@ -66,7 +68,7 @@ export const useActionDeleteCG = (): DeleteCGAction => {
 				)
 			});
 		},
-		[createModal, t]
+		[createModal, createSnackbar, t]
 	);
 
 	return useMemo(
