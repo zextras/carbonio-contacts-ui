@@ -50,11 +50,13 @@ export const DistributionListDetails = ({
 					size={'large'}
 				/>
 				<Container minWidth={0} crossAlignment={'flex-start'} mainAlignment={'center'}>
-					<Text size={'small'} weight={'bold'}>
-						{displayName}
-					</Text>
+					<Text weight={'bold'}>{displayName}</Text>
 					<Row gap={'0.25rem'}>
-						<Text size={'small'} weight={displayName ? 'regular' : 'bold'} color={'gray1'}>
+						<Text
+							size={'small'}
+							weight={displayName ? 'regular' : 'bold'}
+							color={displayName ? 'gray1' : 'text'}
+						>
 							{email}
 						</Text>
 						<IconButton
