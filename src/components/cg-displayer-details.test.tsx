@@ -26,13 +26,13 @@ describe('Contact group displayer details', () => {
 		expect(screen.getByText(`Addresses: ${count}`)).toBeVisible();
 	});
 
-	it('should displays the the avatar with the icon associated to the CG', () => {
+	it('should display the avatar with the icon associated to the CG', () => {
 		setupTest(<CGDisplayerDetails contactGroup={buildContactGroup()} />);
 		expect(screen.getByTestId('avatar')).toBeVisible();
 		expect(screen.getByTestId(TESTID_SELECTORS.icons.contactGroup)).toBeVisible();
 	});
 
-	it('should displays the members of the CG', () => {
+	it('should display the members of the CG', () => {
 		const count = faker.number.int({ min: 1, max: 10 });
 		const members = buildMembers(count);
 		setupTest(<CGDisplayerDetails contactGroup={buildContactGroup({ members })} />);
