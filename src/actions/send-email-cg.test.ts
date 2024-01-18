@@ -9,6 +9,7 @@ import * as shell from '@zextras/carbonio-shell-ui';
 import { useActionSendEmailCG } from './send-email-cg';
 import { UIAction } from './types';
 import { setupHook } from '../carbonio-ui-commons/test/test-setup';
+import { ACTION_IDS } from '../constants';
 import { buildContactGroup, buildMembers } from '../tests/model-builder';
 
 describe('useActionSendEmailCG', () => {
@@ -22,7 +23,7 @@ describe('useActionSendEmailCG', () => {
 			expect.objectContaining({
 				icon: 'EmailOutline',
 				label: 'Send e-mail',
-				id: 'cg-send-email-action',
+				id: ACTION_IDS.sendEmailCG,
 				canExecute: expect.anything(),
 				execute: expect.anything()
 			})

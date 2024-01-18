@@ -11,6 +11,7 @@ import { UIAction } from './types';
 import { screen, setupHook } from '../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS, TIMERS } from '../constants/tests';
 import { buildContactGroup, buildMembers } from '../tests/model-builder';
+import { registerDeleteContactHandler } from '../tests/msw-handlers/delete-contact';
 
 describe('useActionDeleteCG', () => {
 	const membersCount = faker.number.int({ min: 1, max: 42 });
@@ -120,55 +121,70 @@ describe('useActionDeleteCG', () => {
 		expect(screen.queryByText(title)).not.toBeInTheDocument();
 	});
 
-	it.todo(
-		'should call the API if the user clicks on the delete action button'
-		// 	, async () => {
-		// 	{
-		// 		const { result, user } = setupHook(useActionDeleteCG);
-		// 		const action = result.current;
-		// 		act(() => {
-		// 			action.execute(contactGroupWithMembers);
-		// 		});
-		//
-		// 		act(() => {
-		// 			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
-		// 		});
-		//
-		// 		const button = await screen.findByRole('button', {
-		// 			name: 'delete'
-		// 		});
-		// 		await user.click(button);
-		// 		// const title = `Delete "${contactGroupWithMembers.title}"`;
-		// 		// expect(screen.queryByText(title)).not.toBeInTheDocument();
-		// 	}
-		// }
-	);
+	it('should show a success snackbar if the user clicks on the delete action button and the process completes successfully', async () => {
+		registerDeleteContactHandler(contactGroupWithMembers.id);
+		const { result, user } = setupHook(useActionDeleteCG);
+		const action = result.current;
+		act(() => {
+			action.execute(contactGroupWithMembers);
+		});
 
-	it.todo(
-		'should close the modal if the user clicks on the delete action button'
-		// , async () => {
-		// const { result, user } = setupHook(useActionDeleteCG);
-		// const action = result.current;
-		// act(() => {
-		// 	action.execute(contactGroupWithMembers);
-		// });
-		//
-		// act(() => {
-		// 	jest.advanceTimersByTime(TIMERS.modal.delayOpen);
-		// });
-		//
-		// const button = await screen.findByRole('button', {
-		// 	name: 'cancel'
-		// });
-		// await user.click(button);
-		// const title = `Delete "${contactGroupWithMembers.title}"`;
-		// expect(screen.queryByText(title)).not.toBeInTheDocument();
-		// }
-	);
+		act(() => {
+			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+		});
 
-	it.todo(
-		'should show a success snackbar if the user clicks on the delete action button and the process completes successfully'
-	);
+		const button = await screen.findByRole('button', {
+			name: 'delete'
+		});
+
+		await user.click(button);
+		expect(await screen.findByText('Contact group successfully deleted')).toBeVisible();
+	});
+
+	it('should call the API if the user clicks on the delete action button', async () => {
+		const handler = registerDeleteContactHandler(contactGroupWithMembers.id);
+		const { result, user } = setupHook(useActionDeleteCG);
+		const action = result.current;
+		act(() => {
+			action.execute(contactGroupWithMembers);
+		});
+
+		act(() => {
+			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+		});
+
+		const button = await screen.findByRole('button', {
+			name: 'delete'
+		});
+		const titleElement = screen.getByText(`Delete "${contactGroupWithMembers.title}"`);
+		expect(titleElement).toBeVisible();
+
+		await user.click(button);
+		await screen.findByText('Contact group successfully deleted');
+		expect(handler).toHaveBeenCalled();
+	});
+
+	it('should close the modal if the user clicks on the delete action button', async () => {
+		registerDeleteContactHandler(contactGroupWithMembers.id);
+		const { result, user } = setupHook(useActionDeleteCG);
+		const action = result.current;
+		act(() => {
+			action.execute(contactGroupWithMembers);
+		});
+
+		act(() => {
+			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+		});
+
+		const button = await screen.findByRole('button', {
+			name: 'delete'
+		});
+		const titleElement = screen.getByText(`Delete "${contactGroupWithMembers.title}"`);
+
+		await user.click(button);
+		await screen.findByText('Contact group successfully deleted');
+		expect(titleElement).not.toBeInTheDocument();
+	});
 
 	it.todo(
 		'should show an error snackbar if the user clicks on the delete action button and the process completes successfully'
