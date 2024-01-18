@@ -9,7 +9,9 @@ import { Container, useModal, useSnackbar, Text } from '@zextras/carbonio-design
 import { useTranslation } from 'react-i18next';
 
 import { UIAction } from './types';
-import { ACTION_IDS } from '../constants';
+import { ACTION_IDS, ROUTES_INTERNAL_PARAMS } from '../constants';
+import { useActiveContactGroup } from '../hooks/useActiveContactGroup';
+import { useNavigation } from '../hooks/useNavigation';
 import { ContactGroup } from '../model/contact-group';
 import { client } from '../network/client';
 import { useContactGroupStore } from '../store/contact-groups';
@@ -21,6 +23,8 @@ export const useActionDeleteCG = (): DeleteCGAction => {
 	const createModal = useModal();
 	const createSnackbar = useSnackbar();
 	const { removeStoredContactGroup } = useContactGroupStore();
+	const { navigateTo } = useNavigation();
+	const activeContactGroup = useActiveContactGroup();
 
 	const canExecute = useCallback<DeleteCGAction['canExecute']>(() => true, []);
 
@@ -38,18 +42,32 @@ export const useActionDeleteCG = (): DeleteCGAction => {
 				confirmColor: 'error',
 				onConfirm: () => {
 					closeModal();
-					client.deleteContactAction([contactGroup.id]).then((result) => {
-						removeStoredContactGroup(contactGroup.id);
-						createSnackbar({
-							type: 'success',
-							key: `snackbar-${Date.now()}`,
-							label: t(
-								'snackbar.delete_contact_group.confirm.success',
-								'Contact group successfully deleted'
-							),
-							hideButton: true
+					client
+						.deleteContactAction([contactGroup.id])
+						.then(() => {
+							if (activeContactGroup?.id === contactGroup.id) {
+								navigateTo(ROUTES_INTERNAL_PARAMS.route.contactGroups, { replace: true });
+							}
+							removeStoredContactGroup(contactGroup.id);
+							createSnackbar({
+								type: 'success',
+								key: `snackbar-${Date.now()}`,
+								label: t(
+									'snackbar.delete_contact_group.confirm.success',
+									'Contact group successfully deleted'
+								),
+								hideButton: true
+							});
+						})
+						.catch((error: Error) => {
+							createSnackbar({
+								key: `snackbar-${Date.now()}`,
+								type: 'error',
+								label: t('label.error_try_again', 'Something went wrong, please try again'),
+								hideButton: true
+							});
+							console.error(error);
 						});
-					});
 				},
 				showCloseIcon: true,
 				onClose: () => {
@@ -70,7 +88,7 @@ export const useActionDeleteCG = (): DeleteCGAction => {
 				)
 			});
 		},
-		[createModal, createSnackbar, removeStoredContactGroup, t]
+		[activeContactGroup?.id, createModal, createSnackbar, navigateTo, removeStoredContactGroup, t]
 	);
 
 	return useMemo(
