@@ -20,7 +20,11 @@ describe('App view', () => {
 	describe('Distribution lists', () => {
 		it('should load the list of distribution lists of which the user is member of on /member', async () => {
 			const handler = registerGetAccountDistributionListsHandler([]);
-			setupTest(<GroupsAppView />, { initialEntries: ['/distribution-lists/member'] });
+			setupTest(<GroupsAppView />, {
+				initialEntries: [
+					`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.member}`
+				]
+			});
 			await waitFor(() => expect(handler).toHaveBeenCalled());
 			// TODO: cannot read from json right now
 			//  because json is already read inside the handler and throws an error
@@ -41,7 +45,11 @@ describe('App view', () => {
 
 		it('should load the list of distribution lists of which the user is owner of on /manager', async () => {
 			const handler = registerGetAccountDistributionListsHandler([]);
-			setupTest(<GroupsAppView />, { initialEntries: ['/distribution-lists/manager'] });
+			setupTest(<GroupsAppView />, {
+				initialEntries: [
+					`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.manager}`
+				]
+			});
 			await waitFor(() => expect(handler).toHaveBeenCalled());
 			// TODO: cannot read from json right now
 			//  because json is already read inside the handler and throws the error
