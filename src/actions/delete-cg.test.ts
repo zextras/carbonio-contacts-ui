@@ -9,7 +9,7 @@ import { act } from '@testing-library/react';
 import { useActionDeleteCG } from './delete-cg';
 import { UIAction } from './types';
 import { screen, setupHook } from '../carbonio-ui-commons/test/test-setup';
-import { TESTID_SELECTORS, TIMERS } from '../constants/tests';
+import { JEST_MOCKED_ERROR, TESTID_SELECTORS, TIMERS } from '../constants/tests';
 import { buildContactGroup, buildMembers } from '../tests/model-builder';
 import { registerDeleteContactHandler } from '../tests/msw-handlers/delete-contact';
 
@@ -34,6 +34,18 @@ describe('useActionDeleteCG', () => {
 	it('should return an action which is always executable', () => {
 		const { result } = setupHook(useActionDeleteCG);
 		expect(result.current.canExecute()).toBeTruthy();
+	});
+
+	it('should not open the modal if pass undefined argument  to execute function', async () => {
+		const { result } = setupHook(useActionDeleteCG);
+		const action = result.current;
+		act(() => {
+			action.execute();
+		});
+		act(() => {
+			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+		});
+		expect(screen.queryByText(`Delete "${contactGroupWithMembers.title}"`)).not.toBeInTheDocument();
 	});
 
 	it('should return an execute field which opens a modal with the CG name', async () => {
@@ -141,6 +153,26 @@ describe('useActionDeleteCG', () => {
 		expect(await screen.findByText('Contact group successfully deleted')).toBeVisible();
 	});
 
+	it('should show an error snackbar if the user clicks on the delete action button and the API call return an error', async () => {
+		registerDeleteContactHandler(contactGroupNoMembers.id, JEST_MOCKED_ERROR);
+		const { result, user } = setupHook(useActionDeleteCG);
+		const action = result.current;
+		act(() => {
+			action.execute(contactGroupWithMembers);
+		});
+
+		act(() => {
+			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+		});
+
+		const button = await screen.findByRole('button', {
+			name: 'delete'
+		});
+
+		await user.click(button);
+		expect(await screen.findByText('Something went wrong, please try again')).toBeVisible();
+	});
+
 	it('should call the API if the user clicks on the delete action button', async () => {
 		const handler = registerDeleteContactHandler(contactGroupWithMembers.id);
 		const { result, user } = setupHook(useActionDeleteCG);
@@ -185,8 +217,4 @@ describe('useActionDeleteCG', () => {
 		await screen.findByText('Contact group successfully deleted');
 		expect(titleElement).not.toBeInTheDocument();
 	});
-
-	it.todo(
-		'should show an error snackbar if the user clicks on the delete action button and the process completes successfully'
-	);
 });

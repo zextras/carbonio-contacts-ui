@@ -35,7 +35,8 @@ export const useContactGroupActions = (contactGroup: ContactGroup): DSAction[] =
 				onClick: () => {
 					deleteCGAction.execute(contactGroup);
 				},
-				icon: deleteCGAction.icon
+				icon: deleteCGAction.icon,
+				color: deleteCGAction.color
 			});
 		}
 		return orderedActions;

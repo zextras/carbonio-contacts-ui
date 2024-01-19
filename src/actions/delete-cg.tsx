@@ -5,10 +5,11 @@
  */
 import React, { useCallback, useMemo } from 'react';
 
-import { Container, useModal, useSnackbar, Text } from '@zextras/carbonio-design-system';
+import { Container, useModal, useSnackbar } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
 import { UIAction } from './types';
+import { Text } from '../components/Text';
 import { ACTION_IDS, ROUTES_INTERNAL_PARAMS } from '../constants';
 import { useActiveContactGroup } from '../hooks/useActiveContactGroup';
 import { useNavigation } from '../hooks/useNavigation';
@@ -74,14 +75,14 @@ export const useActionDeleteCG = (): DeleteCGAction => {
 					closeModal();
 				},
 				children: (
-					<Container padding={{ vertical: 'large' }} crossAlignment={'flex-start'}>
-						<Text overflow="break-word" size="medium">
+					<Container padding={{ vertical: 'medium' }} crossAlignment={'flex-start'}>
+						<Text lineHeight={1.3125} overflow="break-word" size="small">
 							{t(
 								'modal.delete.contactGroup.body1',
 								'Are you sure to delete the selected contact group?'
 							)}
 						</Text>
-						<Text overflow="break-word" size="medium">
+						<Text lineHeight={1.3125} overflow="break-word" size="small">
 							{t('modal.delete.contactGroup.body2', 'If you delete it will be lost forever.')}
 						</Text>
 					</Container>
@@ -97,7 +98,8 @@ export const useActionDeleteCG = (): DeleteCGAction => {
 			label: t('action.contactGroup.delete', 'Delete'),
 			icon: 'Trash2Outline',
 			canExecute,
-			execute: openDeleteModal
+			execute: openDeleteModal,
+			color: 'error'
 		}),
 		[openDeleteModal, canExecute, t]
 	);

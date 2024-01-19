@@ -47,7 +47,8 @@ describe('useContactGroupActions', () => {
 			id: ACTION_IDS.deleteCG,
 			label: 'Delete',
 			icon: 'Trash2Outline',
-			onClick: expect.anything()
+			onClick: expect.anything(),
+			color: 'error'
 		});
 	});
 });

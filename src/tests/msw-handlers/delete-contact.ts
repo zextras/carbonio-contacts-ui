@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { SoapResponse } from '@zextras/carbonio-shell-ui';
+import { ErrorSoapResponse, SoapResponse } from '@zextras/carbonio-shell-ui';
 import { ResponseResolver, rest, RestContext, RestRequest } from 'msw';
 
 import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
@@ -21,11 +21,30 @@ type DeleteContactHandler = ResponseResolver<
 	SoapResponse<ContactActionResponse>
 >;
 export const registerDeleteContactHandler = (
-	id: string
+	id: string,
+	error?: string
 ): jest.Mock<ReturnType<DeleteContactHandler>, Parameters<DeleteContactHandler>> => {
 	const handler = jest.fn<ReturnType<DeleteContactHandler>, Parameters<DeleteContactHandler>>(
-		(req, res, ctx) =>
-			res(
+		(req, res, ctx) => {
+			if (error) {
+				return res(
+					ctx.json<ErrorSoapResponse>({
+						Header: {
+							context: {}
+						},
+						Body: {
+							Fault: {
+								Reason: { Text: error },
+								Detail: {
+									Error: { Code: '', Detail: error }
+								}
+							}
+						}
+					})
+				);
+			}
+
+			return res(
 				ctx.json(
 					buildSoapResponse<ContactActionResponse>({
 						ContactActionResponse: {
@@ -34,7 +53,8 @@ export const registerDeleteContactHandler = (
 						}
 					})
 				)
-			)
+			);
+		}
 	);
 	getSetupServer().use(
 		rest.post<
