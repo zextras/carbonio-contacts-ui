@@ -9,20 +9,12 @@ import { GenericSoapPayload } from './types';
 import { NAMESPACES } from '../../constants/api';
 
 export const CONTACT_ACTION_OPERATION = {
+	move: 'move',
 	delete: 'delete',
-	rename: 'rename',
-	modify: 'modify',
-	addOwners: 'addOwners',
-	removeOwners: 'removeOwners',
-	setOwners: 'setOwners',
-	grantRights: 'grantRights',
-	revokeRights: 'revokeRights',
-	setRights: 'setRights',
-	addMembers: 'addMembers',
-	removeMembers: 'removeMembers',
-	acceptSubsReq: 'acceptSubsReq',
-	rejectSubsReq: 'rejectSubsReq',
-	resetimapuid: 'resetimapuid'
+	flag: 'flag',
+	trash: 'trash',
+	tag: 'tag',
+	update: 'update'
 } as const;
 
 type ContactActionOperation =
