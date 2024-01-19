@@ -68,6 +68,18 @@
         "description6": "Use the “Edit” mode to add any personal note to a contact.",
         "description7": "Create a group of contacts by clicking the “NEW” button.",
         "description8": "Select a contact or a group of contacts to send shared emails.",
+        "distribution_list": {
+            "empty_displayer": "Select a distribution list or contact the Admin to have one.",
+            "label": {
+                "description": "Description",
+                "filter_hint": "You can filter this list by looking for specific member’s name.",
+                "manager_total": "Manager list {{total}}",
+                "member_total": "Member list {{total}}"
+            },
+            "placeholder": {
+                "filter_member": "Filter an address"
+            }
+        },
         "list_title1": "It looks like there are no contacts yet",
         "list_title2": "The trash is empty",
         "search_description1": "Or select “Advanced Filters” to refine your search.",
@@ -89,6 +101,11 @@
         "title7": "Stay in touch with your colleagues",
         "title8": "Send shared e-mail",
         "title9": "Click the trash icon to delete a contact."
+    },
+    "distribution_list": {
+        "label": {
+            "empty_message": "There are no distribution lists yet."
+        }
     },
     "edit_dl_component": {
         "error": {
@@ -117,6 +134,7 @@
     "folder": {
         "action": {
             "delete": "Delete address book",
+            "deleteContactGroup": "Delete \"{{contactGroupTitle}}\"",
             "delete_permanently": "Delete address book permanently",
             "edit": "Edit address book",
             "empty": {
@@ -337,6 +355,9 @@
         "contextualMenu": {
             "new_contact_group_creation_action": "New Contact Group"
         },
+        "distributionLists": "Distribution Lists",
+        "distributionListsManager": "Manager",
+        "distributionListsMember": "Member",
         "myContactGroups": "My Contact Groups"
     },
     "section": {

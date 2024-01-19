@@ -11,7 +11,7 @@ import { useNavigation, type UseNavigationReturnType } from './useNavigation';
 import { RouteParams, ROUTES_INTERNAL_PARAMS } from '../constants';
 
 export type UseActiveItemReturnType = {
-	activeItem: string;
+	activeItem: string | undefined;
 	isActive: (id: string) => boolean;
 	setActive: (id: string, options?: Parameters<UseNavigationReturnType['navigateTo']>[1]) => void;
 	removeActive: (options?: Parameters<UseNavigationReturnType['navigateTo']>[1]) => void;
@@ -36,11 +36,11 @@ export const useActiveItem = (): UseActiveItemReturnType => {
 		[]
 	);
 
-	const currentPath = useMemo(() => {
+	const currentPath = useMemo<string>(() => {
 		if (route === ROUTES_INTERNAL_PARAMS.route.distributionLists) {
-			return `${route}/${filter}`;
+			return `${route}/${filter ?? ''}`;
 		}
-		return route;
+		return route ?? '';
 	}, [filter, route]);
 
 	const setActive = useCallback<UseActiveItemReturnType['setActive']>(

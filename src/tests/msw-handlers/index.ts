@@ -4,12 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { faker } from '@faker-js/faker';
-import {
-	ErrorSoapResponse,
-	SoapFault,
-	SoapResponse,
-	SuccessSoapResponse
-} from '@zextras/carbonio-shell-ui';
+import { SoapFault, SoapResponse, SuccessSoapResponse } from '@zextras/carbonio-shell-ui';
 import { map, some } from 'lodash';
 import { ResponseResolver, rest, RestContext, RestRequest } from 'msw';
 
@@ -34,7 +29,7 @@ import {
 	GetDistributionListMembersRequest,
 	GetDistributionListMembersResponse
 } from '../../network/api/get-distribution-list-members';
-import { buildSoapResponse } from '../utils';
+import { buildSoapError, buildSoapResponse } from '../utils';
 
 type GetDistributionListMembersHandler = ResponseResolver<
 	RestRequest<{ Body: { GetDistributionListMembersRequest: GetDistributionListMembersRequest } }>,
@@ -55,21 +50,7 @@ export const registerGetDistributionListMembersHandler = (
 		Parameters<GetDistributionListMembersHandler>
 	>(async (req, res, ctx) => {
 		if (error) {
-			return res(
-				ctx.json<ErrorSoapResponse>({
-					Header: {
-						context: {}
-					},
-					Body: {
-						Fault: {
-							Reason: { Text: error },
-							Detail: {
-								Error: { Code: '', Detail: error }
-							}
-						}
-					}
-				})
-			);
+			return res(ctx.json(buildSoapError(error)));
 		}
 
 		const reqBody = await req.json<{
@@ -171,7 +152,13 @@ type GetDistributionListHandler = ResponseResolver<
 >;
 
 export const registerGetDistributionListHandler = (
-	dl: { email: string; displayName?: string; owners?: Array<{ id?: string; name?: string }> },
+	dl: {
+		id?: string;
+		email: string;
+		displayName?: string;
+		owners?: Array<{ id?: string; name?: string }>;
+		description?: string;
+	},
 	error?: string
 ): jest.Mock<ReturnType<GetDistributionListHandler>, Parameters<GetDistributionListHandler>> => {
 	const handler = jest.fn<
@@ -179,21 +166,7 @@ export const registerGetDistributionListHandler = (
 		Parameters<GetDistributionListHandler>
 	>((req, res, ctx) => {
 		if (error) {
-			return res(
-				ctx.json<ErrorSoapResponse>({
-					Header: {
-						context: {}
-					},
-					Body: {
-						Fault: {
-							Reason: { Text: error },
-							Detail: {
-								Error: { Code: '', Detail: error }
-							}
-						}
-					}
-				})
-			);
+			return res(ctx.json(buildSoapError(error)));
 		}
 
 		return res(
@@ -202,9 +175,11 @@ export const registerGetDistributionListHandler = (
 					GetDistributionListResponse: {
 						dl: [
 							{
+								id: dl.id ?? faker.string.uuid(),
 								name: dl.email,
 								_attrs: {
-									displayName: dl.displayName
+									displayName: dl.displayName,
+									description: dl.description
 								},
 								owners: map(dl.owners, (owner) => ({ owner: [owner] })),
 								isOwner: some(dl.owners, (owner) => owner.id === mockedAccount.id)

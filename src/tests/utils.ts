@@ -3,10 +3,15 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { SuccessSoapResponse } from '@zextras/carbonio-shell-ui';
+import { faker } from '@faker-js/faker';
+import { ErrorSoapResponse, SuccessSoapResponse } from '@zextras/carbonio-shell-ui';
+import { EventEmitter } from 'events';
+import { times } from 'lodash';
 
 import { screen, within } from '../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../constants/tests';
+import { DistributionList } from '../model/distribution-list';
+import { MakeRequired } from '../types/utils';
 
 export const getDLContactInput = (): {
 	container: HTMLElement;
@@ -34,3 +39,46 @@ export const buildSoapResponse = <T>(responseData: Record<string, T>): SuccessSo
 	},
 	Body: responseData
 });
+
+export const buildSoapError = (error: string): ErrorSoapResponse => ({
+	Header: {
+		context: {}
+	},
+	Body: {
+		Fault: {
+			Reason: {
+				Text: error
+			},
+			Detail: {
+				Error: {
+					Code: error,
+					Detail: error
+				}
+			}
+		}
+	}
+});
+
+export const generateDistributionList = (
+	data: Partial<DistributionList> = {}
+): MakeRequired<DistributionList, 'displayName'> => ({
+	id: faker.string.uuid(),
+	email: faker.internet.email(),
+	displayName: faker.internet.displayName(),
+	isOwner: faker.datatype.boolean(),
+	isMember: faker.datatype.boolean(),
+	...data
+});
+
+export const generateDistributionLists = (
+	limit = 10
+): Array<ReturnType<typeof generateDistributionList>> =>
+	times(limit, () => generateDistributionList());
+
+// utility to make msw respond in a controlled way
+// see https://github.com/mswjs/msw/discussions/1307
+export async function delayUntil(emitter: EventEmitter, event: string): Promise<void> {
+	return new Promise((resolve) => {
+		emitter.once(event, resolve);
+	});
+}

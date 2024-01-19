@@ -8,13 +8,14 @@ import React, { useMemo } from 'react';
 
 import { ModalManager, ThemeProvider } from '@zextras/carbonio-design-system';
 import { trimEnd } from 'lodash';
-import { Route, Switch, useRouteMatch } from 'react-router-dom';
+import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
 
 import { CGView } from './cg-view';
+import { DistributionListsView } from './distribution-lists-view';
 import { RouteParams, ROUTES, ROUTES_INTERNAL_PARAMS } from '../constants';
 
 const AppView = (): React.JSX.Element => {
-	const { path, params } = useRouteMatch<RouteParams>();
+	const { path, params, url } = useRouteMatch<RouteParams>();
 
 	const trimmedPath = useMemo(() => trimEnd(path, '/'), [path]);
 
@@ -24,9 +25,21 @@ const AppView = (): React.JSX.Element => {
 				{params.route === ROUTES_INTERNAL_PARAMS.route.contactGroups && (
 					<Route path={`${trimmedPath}${ROUTES.contactGroups}`} component={CGView} />
 				)}
+				{params.route === ROUTES_INTERNAL_PARAMS.route.distributionLists && (
+					<Route path={`${trimmedPath}${ROUTES.distributionLists}`}>
+						{({ match }): React.JSX.Element =>
+							match?.params.filter &&
+							Object.values<string>(ROUTES_INTERNAL_PARAMS.filter).includes(match.params.filter) ? (
+								<DistributionListsView />
+							) : (
+								<Redirect to={`${url}/${ROUTES_INTERNAL_PARAMS.filter.member}`} />
+							)
+						}
+					</Route>
+				)}
 			</Switch>
 		),
-		[trimmedPath, params]
+		[params.route, trimmedPath, url]
 	);
 
 	return (

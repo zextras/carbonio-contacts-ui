@@ -6,7 +6,7 @@
 import React, { useCallback } from 'react';
 
 import { Container, Divider, Icon, IconButton } from '@zextras/carbonio-design-system';
-import { DefaultTheme } from 'styled-components';
+import styled, { DefaultTheme } from 'styled-components';
 
 import { Text } from './Text';
 import { useActiveItem } from '../hooks/useActiveItem';
@@ -15,6 +15,11 @@ interface DisplayerHeaderProps {
 	title: string;
 	icon: keyof DefaultTheme['icons'];
 }
+
+const CustomIcon = styled(Icon)`
+	width: 1.125rem;
+	height: 1.125rem;
+`;
 
 export const DisplayerHeader = ({ title, icon }: DisplayerHeaderProps): React.JSX.Element => {
 	const { removeActive } = useActiveItem();
@@ -44,7 +49,7 @@ export const DisplayerHeader = ({ title, icon }: DisplayerHeaderProps): React.JS
 					minWidth={'fit-content'}
 					minHeight={'fit-content'}
 				>
-					<Icon icon={icon} />
+					<CustomIcon icon={icon} />
 				</Container>
 				<Text withTooltip>{title}</Text>
 				<Container margin={{ left: 'auto' }} width={'fit'} height={'fit'} flexShrink={0}>
