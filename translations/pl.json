@@ -48,7 +48,7 @@
                     "message1": "Nazwa nowej książki adresowej",
                     "message2": "Wybierz książkę adresową, która będzie zawierać nowo utworzony element:"
                 },
-                "create_footer": "Stwórz i Przenieś",
+                "create_footer": "Stwórz i przenieś",
                 "title": "Stwórz nową książkę adresową",
                 "title2": "Tworzenie nowego folderu"
             },
@@ -130,23 +130,29 @@
         "folder_name": "Nazwa folderu",
         "note": "Notatka:",
         "options": "Opcje",
-        "tags": "Tagi",
-        "tag_name": "Nazwa Tagu",
+        "tags": "Etykiety",
+        "tag_name": "Nazwa etykiety",
         "tag_max_length": "Dozwolone max. 128 znaków",
         "no_special_char_allowed": "Nazwa nie może zawierać żadnych znaków specjalnych",
-        "new_tag": "Nowy tag",
-        "edit_tag_name": "Edytuj tag \"{{name}}\"",
-        "edit_tag": "Edytuj tag",
-        "delete_tag_name": "Usuń tag \"{{name}}\"",
-        "delete_tag": "Usuń tag",
-        "create_tag": "Stwórz tag",
-        "tag": "Tag",
+        "new_tag": "Nowa etykieta",
+        "edit_tag_name": "Edytuj etykietę \"{{name}}\"",
+        "edit_tag": "Edytuj etykietę",
+        "delete_tag_name": "Usuń etykietę \"{{name}}\"",
+        "delete_tag": "Usuń etykietę",
+        "create_tag": "Stwórz etykietę",
+        "tag": "Etykieta",
         "no_name": "Brak imienia",
         "no_data": "Brak danych",
         "contact_created_in_folder": "Kontakt zostanie utworzony w folderze \"{{name}}\"",
         "destination_address_book": "Docelowa książka adresowa",
         "include_shared_folders": "Uwzględnij udostępnione książki adresowe",
-        "autocomplete": "Automatyczne uzupełnianie"
+        "autocomplete": "Automatyczne uzupełnianie",
+        "discard": "odrzuć",
+        "newContactGroup": "Nowa grupa kontaktów",
+        "select_all_addresses_0": "Wybierz adres",
+        "select_all_addresses_1": "Wybierz wszystkie {{count}} adresy",
+        "select_all_addresses_2": "Wybierz wszystkie {{count}} adresów",
+        "show_more": "pokaż więcej"
     },
     "displayer": {
         "search_description1": "Lub wybierz \"Zaawansowane filtry\", aby udoskonalić wyniki wyszukiwania.",
@@ -183,16 +189,17 @@
         "share_folder": "Udostępnij folder",
         "delete_permanently": "Trwale usuń",
         "goto_folder": "Idź do folderu",
-        "reset_filters": "Zresetuj Filtry",
-        "send_msg": "Wyślij e-maila"
+        "reset_filters": "Zresetuj filtry",
+        "send_msg": "Wyślij e-maila",
+        "edit_distribution_list": "Edytuj listę dystrybucyjną"
     },
     "message": {
         "snackbar": {
             "settings_saved": "Zmiany zostały zapisane"
         },
         "require_field": "Uzupełnij co najmniej jedno z wymaganych pól",
-        "delete_tag_message2": "Po usunięciu tag zostanie zdjęty z każdego elementu oznaczonego nim.",
-        "delete_tag_message1": "Czy na pewno chcesz usunąć Tag \"{{name}}\"?",
+        "delete_tag_message2": "Po usunięciu etykieta zostanie zdjęta z każdego elementu oznaczonego nią.",
+        "delete_tag_message1": "Czy na pewno chcesz usunąć etykietę \"{{name}}\"?",
         "new_contact": "Kontakt zostanie stworzony w folderze \"Kontakty\""
     },
     "share": {
@@ -239,8 +246,13 @@
         "folder_edited": "Książka adresowa została zedytowana pomyślnie",
         "folder_shared": "Książka adresowa została udostępniona pomyślnie",
         "share_updated": "Uprawnienia dostępu zostały zaktualizowane",
-        "tag_removed": "Tag \"{{tag}}\" został zdjęty",
-        "tag_applied": "Tag \"{{tag}}\" został zastosowany"
+        "tag_removed": "Etykieta \"{{tag}}\" została zdjęta",
+        "tag_applied": "Etykieta \"{{tag}}\" została zastosowana",
+        "edit_distribution_list": {
+            "save": {
+                "success": "Zmiany listy dystrybucyjnej \"{{displayName}}\" zostały zapisane"
+            }
+        }
     },
     "tooltip": {
         "revoke": "Odbierz dostęp",
@@ -262,10 +274,10 @@
             "contact_deleted_permanently": "Kontakt został trwale usunięty",
             "contact_moved_to_trash": "Kontakt został przeniesiony do kosza",
             "address_book_moved": "Książka adresowa została przeniesiona do folderu docelowego",
-            "tag_updated": "Tag został zaktualizowany pomyślnie",
-            "tag_not_updated": "Coś poszło nie tak, tag nie został zaktualizowany. Spróbuj ponownie.",
-            "tag_deleted": "Tag {{name}} został usunięty",
-            "tag_created": "Tag {{name}} został stworzony pomyślnie"
+            "tag_updated": "Etykieta została zaktualizowana",
+            "tag_not_updated": "Coś poszło nie tak, etykieta nie została zaktualizowana. Spróbuj ponownie.",
+            "tag_deleted": "Etykieta {{name}} został usunięta",
+            "tag_created": "Etykieta {{name}} została stworzona"
         },
         "modal": {
             "delete": {
@@ -287,7 +299,13 @@
     },
     "modal": {
         "address_book_name": "Nazwa książki adresowej",
-        "destination": "Folder docelowy"
+        "destination": "Folder docelowy",
+        "close": {
+            "tooltip": "Zamknij"
+        },
+        "edit_distribution_list": {
+            "title": "Edytuj \"{{displayName}}\""
+        }
     },
     "name": {
         "first_name": "Imię",
@@ -336,5 +354,75 @@
     },
     "search": {
         "shared_folders_note": "Uzwględnij udostępnione książki adresowe w wynikach wyszukiwań."
-    }
+    },
+    "board": {
+        "label": {
+            "description": "Opis"
+        },
+        "newContactGroup": {
+            "addresses": {
+                "label": "Adresy"
+            },
+            "input": {
+                "contact_input": {
+                    "error": {
+                        "address_already_present_0": "Adres już obecny",
+                        "address_already_present_1": "Adresy już obecne",
+                        "address_already_present_2": "Adresów już obecnych",
+                        "invalid_address_0": "Nieprawidłowy adres",
+                        "invalid_address_1": "Nieprawidłowe adresy",
+                        "invalid_address_2": "Nieprawidłowych adresów",
+                        "invalid_already_present_addresses": "Nieprawidłowe i już obecne adresy"
+                    },
+                    "placeholder": "Wpisz adres i kliknij na \"+\", aby dodać do grupy",
+                    "title": "Lista adresów"
+                },
+                "name_input": {
+                    "error": {
+                        "max_length": "Max. dozwolona długość to 256 znaków",
+                        "required": "Nazwa grupy jest wymagana. Wprowadź nazwę, aby kontynuować"
+                    },
+                    "name": {
+                        "label": "Nazwa grupy*"
+                    }
+                }
+            },
+            "name": "Nowa grupa",
+            "snackbar": {
+                "contact_group_created": "Grupa kontaktów została stworzona"
+            },
+            "title": "Nowa grupa"
+        }
+    },
+    "edit_dl_component": {
+        "error": {
+            "invalid_and_duplicated_addresses": "Nieprawidłowe i już obecne adresy",
+            "duplicated_address_0": "Adres już obecny",
+            "duplicated_address_1": "Adresy już obecne",
+            "duplicated_address_2": "Adresów już obecnych",
+            "invalid_address_0": "Nieprawidłowy adres",
+            "invalid_address_1": "Nieprawidłowe adresy",
+            "invalid_address_2": "Nieprawidłowych adresów"
+        },
+        "label": {
+            "dl_email": "Lista dystrybucyjna",
+            "members_total": "Lista członków {{total}}",
+            "hint": "Możesz filtrować tę listę szukając imienia danego członka. Możesz też dodawać nowych członków edytując listę dystrybucyjną."
+        },
+        "placeholder": {
+            "add_members": "Wprowadź adres i kliknij na \"+\", aby dodać do listy dystrybucyjnej",
+            "filter_member": "Wyszukaj adres"
+        }
+    },
+    "members_list_item_component": {
+        "button": {
+            "remove": "usuń"
+        }
+    },
+    "secondaryBar": {
+        "contextualMenu": {
+            "new_contact_group_creation_action": "Nowa grupa kontaktów"
+        }
+    },
+    "expand_distribution_list": "Rozwiń listę adresów"
 }
