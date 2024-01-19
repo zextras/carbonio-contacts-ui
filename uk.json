@@ -1,0 +1,41 @@
+{
+    "action": {
+        "delete_permanently": "Видалити назавжди",
+        "goto_folder": "Перейти до папки",
+        "reset_filters": "Скинути фільтри",
+        "search": "Пошук",
+        "send_msg": "Надіслати лист",
+        "edit_distribution_list": "Редагувати список розсилки",
+        "share_folder": "Поділитися папкою"
+    },
+    "board": {
+        "newContactGroup": {
+            "input": {
+                "contact_input": {
+                    "error": {
+                        "invalid_address_0": "Невірна адреса",
+                        "invalid_address_1": "Невірні адреси",
+                        "invalid_address_2": "Невірні адреси",
+                        "invalid_already_present_addresses": "Недійсні та вже наявні адреси",
+                        "address_already_present_0": "Уже наявна адреси",
+                        "address_already_present_1": "Уже наявні адреси",
+                        "address_already_present_2": "Уже наявні адреси"
+                    },
+                    "placeholder": "Введіть адресу, натисніть \"+\", щоб додати до групи",
+                    "title": "Список адрес"
+                }
+            }
+        }
+    },
+    "label": {
+        "discard_changes": "СКАСУВАТИ ЗМІНИ",
+        "save": "Зберегти",
+        "cancel": "Скасувати",
+        "delete": "Видалити"
+    },
+    "message": {
+        "snackbar": {
+            "settings_saved": "Зміни збережено"
+        }
+    }
+}
