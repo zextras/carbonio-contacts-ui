@@ -18,8 +18,8 @@ type EmptyDisplayerProps = {
 };
 
 const CustomIcon = styled(Icon)`
-	width: 2.625rem;
-	height: 2.625rem;
+	width: 2rem;
+	height: 2rem;
 `;
 
 export const EmptyDisplayer = ({

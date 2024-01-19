@@ -68,7 +68,6 @@
         "description6": "Use the “Edit” mode to add any personal note to a contact.",
         "description7": "Create a group of contacts by clicking the “NEW” button.",
         "description8": "Select a contact or a group of contacts to send shared emails.",
-        "description9": "Select a distribution list or contact the Admin to have one.",
         "distribution_list": {
             "empty_displayer": "Select a distribution list or contact the Admin to have one.",
             "label": {
