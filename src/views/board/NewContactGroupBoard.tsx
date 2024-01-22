@@ -10,7 +10,10 @@ import { useBoardHooks } from '@zextras/carbonio-shell-ui';
 import { remove, uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import CommonContactGroupBoard, { EnhancedChipItem } from './common-contact-group-board';
+import CommonContactGroupBoard, {
+	EnhancedChipItem,
+	isContactGroupNameInvalid
+} from './common-contact-group-board';
 import { client } from '../../network/client';
 
 const NewContactGroupBoard = (): React.JSX.Element => {
@@ -152,6 +155,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 			contactInputIconAction={contactInputIconAction}
 			removeItem={removeItem}
 			memberListEmails={memberListEmails}
+			isOnSaveDisabled={isContactGroupNameInvalid(nameValue)}
 		/>
 	);
 };

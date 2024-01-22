@@ -3,14 +3,17 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import { InputProps, useSnackbar, ChipAction } from '@zextras/carbonio-design-system';
 import { useBoard, useBoardHooks } from '@zextras/carbonio-shell-ui';
-import { remove, uniqBy } from 'lodash';
+import { remove, uniqBy, xor } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import CommonContactGroupBoard, { EnhancedChipItem } from './common-contact-group-board';
+import CommonContactGroupBoard, {
+	EnhancedChipItem,
+	isContactGroupNameInvalid
+} from './common-contact-group-board';
 import { ContactGroup } from '../../model/contact-group';
 import { useContactGroupStore } from '../../store/contact-groups';
 
@@ -137,6 +140,13 @@ const EditContactGroupBoard = (): React.JSX.Element => {
 		setMemberListEmails((prevState) => [...prevState, ...valid.map((value) => value.email)]);
 	}, [contactInputValue]);
 
+	const isOnSaveDisabled = useMemo(
+		() =>
+			isContactGroupNameInvalid(nameValue) ||
+			xor(memberListEmails, contactGroup.members).length === 0,
+		[contactGroup.members, memberListEmails, nameValue]
+	);
+
 	return (
 		<CommonContactGroupBoard
 			onSave={onSave}
@@ -148,6 +158,7 @@ const EditContactGroupBoard = (): React.JSX.Element => {
 			contactInputIconAction={contactInputIconAction}
 			removeItem={removeItem}
 			memberListEmails={memberListEmails}
+			isOnSaveDisabled={isOnSaveDisabled}
 		/>
 	);
 };

@@ -25,6 +25,10 @@ import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../constants';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
 import { ContactInput } from '../../legacy/integrations/contact-input';
 
+export function isContactGroupNameInvalid(nameValue: string): boolean {
+	return nameValue.trim().length === 0 || nameValue.length > CONTACT_GROUP_NAME_MAX_LENGTH;
+}
+
 const List = styled(ListV2)`
 	min-height: 0;
 `;
@@ -48,6 +52,7 @@ export interface CommonContactGroupBoardProps {
 	contactInputIconAction: () => void;
 	removeItem: (email: string) => void;
 	memberListEmails: string[];
+	isOnSaveDisabled: boolean;
 }
 
 const CommonContactGroupBoard = ({
@@ -59,7 +64,8 @@ const CommonContactGroupBoard = ({
 	contactInputOnChange,
 	contactInputIconAction,
 	removeItem,
-	memberListEmails
+	memberListEmails,
+	isOnSaveDisabled
 }: CommonContactGroupBoardProps): React.JSX.Element => {
 	const [t] = useTranslation();
 
@@ -155,9 +161,7 @@ const CommonContactGroupBoard = ({
 					type="outlined"
 				/>
 				<Button
-					disabled={
-						nameValue.trim().length === 0 || nameValue.length > CONTACT_GROUP_NAME_MAX_LENGTH
-					}
+					disabled={isOnSaveDisabled}
 					size={'medium'}
 					label={t('label.save', 'save')}
 					icon={'SaveOutline'}
