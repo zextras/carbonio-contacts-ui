@@ -114,7 +114,9 @@
         "select_all_addresses_0": "Seleziona l'indirizzo",
         "select_all_addresses_1": "Seleziona tutti i {{count}} indirizzi",
         "select_all_addresses_2": "Seleziona tutti i {{count}} indirizzi",
-        "show_more": "mostra di più"
+        "show_more": "mostra di più",
+        "discard": "eliminare",
+        "newContactGroup": "Nuovo gruppo contatti"
     },
     "job": {
         "title": "Ruolo",
@@ -205,7 +207,8 @@
         "goto_folder": "Vai alla cartella",
         "reset_filters": "Ripristina Filtri",
         "search": "Cerca",
-        "share_folder": "Condividi cartella"
+        "share_folder": "Condividi cartella",
+        "edit_distribution_list": "Modifica distribution list"
     },
     "settings": {
         "contacts": {
@@ -283,11 +286,22 @@
         "share_revoke": "Condivisione accesso revocata",
         "share_updated": "Diritti di accesso aggiornati",
         "tag_removed": "Etichetta \"{{tag}}\" rimossa",
-        "tag_applied": "Etichetta \"{{tag}}\" applicata"
+        "tag_applied": "Etichetta \"{{tag}}\" applicata",
+        "edit_distribution_list": {
+            "save": {
+                "success": "Modifiche alla distribution list \"{{displayName}}\" salvate correttamente"
+            }
+        }
     },
     "modal": {
         "address_book_name": "Nome rubrica",
-        "destination": "Cartella di destinazione"
+        "destination": "Cartella di destinazione",
+        "close": {
+            "tooltip": "Chiudi"
+        },
+        "edit_distribution_list": {
+            "title": "Modifica \"{{displayName}}\""
+        }
     },
     "title": {
         "advanced_filters": "Filtri Avanzati"
@@ -342,6 +356,70 @@
     "secondaryBar": {
         "contextualMenu": {
             "new_contact_group_creation_action": "Nuovo gruppo di contatti"
+        }
+    },
+    "board": {
+        "label": {
+            "description": "Descrizione"
+        },
+        "newContactGroup": {
+            "addresses": {
+                "label": "Indirizzi"
+            },
+            "input": {
+                "contact_input": {
+                    "error": {
+                        "invalid_address_0": "Indirizzo non valido",
+                        "invalid_address_1": "Indirizzi non validi",
+                        "invalid_address_2": "Indirizzi non validi",
+                        "invalid_already_present_addresses": "Indirizzi non validi e già presenti",
+                        "address_already_present_0": "Indirizzo già presente",
+                        "address_already_present_1": "Indirizzi già presenti",
+                        "address_already_present_2": "Indirizzi già presenti"
+                    },
+                    "placeholder": "Scrivi un indirizzo, clicca ‘+’ per aggiungerlo al gruppo",
+                    "title": "Elenco indirizzi"
+                },
+                "name_input": {
+                    "error": {
+                        "required": "Il nome del gruppo è obbligatorio, inserire un nome per procedere",
+                        "max_length": "Il numero massimo di caratteri consentiti è 256"
+                    },
+                    "name": {
+                        "label": "Nome gruppo*"
+                    }
+                }
+            },
+            "name": "Nuovo gruppo",
+            "snackbar": {
+                "contact_group_created": "Gruppo di contatti creato correttamente"
+            },
+            "title": "Nuovo gruppo"
+        }
+    },
+    "edit_dl_component": {
+        "error": {
+            "duplicated_address_0": "Indirizzo già presente",
+            "duplicated_address_1": "Indirizzi già presenti",
+            "duplicated_address_2": "Indirizzi già presenti",
+            "invalid_address_0": "Indirizzo non valido",
+            "invalid_address_1": "Indirizzi non validi",
+            "invalid_address_2": "Indirizzi non validi",
+            "invalid_and_duplicated_addresses": "Indirizzi non validi e già presenti"
+        },
+        "label": {
+            "dl_email": "Distribution list",
+            "hint": "È possibile filtrare questo elenco ricercando il nome di un membro specifico o aggiungendone di nuovi modificando la Distribution List.",
+            "members_total": "Elenco membri {{total}}"
+        },
+        "placeholder": {
+            "filter_member": "Filtra un indirizzo",
+            "add_members": "Digita un indirizzo, clicca '+' per aggiungerlo alla distribution list"
+        }
+    },
+    "members_list_item_component": {
+        "button": {
+            "remove": "rimuovi"
         }
     }
 }

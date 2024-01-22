@@ -21,8 +21,8 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import {
-	CONTACTS_ROUTE,
 	CONTACTS_APP_ID,
+	CONTACTS_ROUTE,
 	NEW_CONTACT_GROUP_BOARD_ID,
 	GROUPS_ROUTE
 } from './constants';

@@ -7,13 +7,15 @@
 import React from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
+import { useTranslation } from 'react-i18next';
 
 import { CGDisplayer } from './cg-displayer';
-import { EmptyDisplayer } from './EmptyDisplayer';
+import { EmptyDisplayer } from './empty-displayer';
 import { useActiveContactGroup } from '../hooks/useActiveContactGroup';
 
 export const CGDisplayerController = (): React.JSX.Element => {
 	const contactGroup = useActiveContactGroup();
+	const [t] = useTranslation();
 
 	return (
 		<Container
@@ -22,7 +24,16 @@ export const CGDisplayerController = (): React.JSX.Element => {
 			crossAlignment="flex-start"
 			data-testid="displayer"
 		>
-			{(contactGroup && <CGDisplayer contactGroup={contactGroup} />) || <EmptyDisplayer />}
+			{(contactGroup && <CGDisplayer contactGroup={contactGroup} />) || (
+				<EmptyDisplayer
+					description={t(
+						'emptyDisplayer.contactGroup.hint',
+						'Click the “NEW” button to create a new contacts group.'
+					)}
+					title={t('displayer.title3', 'Stay in touch with your colleagues.')}
+					icon={'PeopleOutline'}
+				/>
+			)}
 		</Container>
 	);
 };

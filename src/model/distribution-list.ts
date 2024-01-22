@@ -3,17 +3,21 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+export type DistributionListOwner = { id: string; name: string };
+
 export type DistributionList = {
+	id: string;
 	email: string;
 	displayName?: string;
 	isOwner: boolean;
-	owners?: Array<{ id: string; name: string }>;
+	isMember?: boolean;
+	owners?: Array<DistributionListOwner>;
+	description?: string;
+	canRequireMembers?: boolean;
 };
-
-export type DLMember = string;
 
 export type DistributionListMembersPage = {
 	total: number;
 	more: boolean;
-	members: Array<DLMember>;
+	members: Array<string>;
 };

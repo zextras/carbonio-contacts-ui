@@ -6,8 +6,11 @@
 
 import React from 'react';
 
+import 'jest-styled-components';
+
 import SecondaryBarView from './SecondaryBarView';
-import { screen, setupTest } from '../carbonio-ui-commons/test/test-setup';
+import { screen, setupTest, within } from '../carbonio-ui-commons/test/test-setup';
+import { TESTID_SELECTORS } from '../constants/tests';
 
 // function spyUseNavigation(navigateTo: jest.Mock): void {
 // 	jest.spyOn(useNavigationHook, 'useNavigation').mockReturnValue({
@@ -32,4 +35,18 @@ describe('SecondaryBar', () => {
 		expect(navigateToFn).toHaveBeenCalledWith('/contact-groups');
 	} */
 	);
+
+	it('should show distribution list entry with member and manager sub-entries', async () => {
+		setupTest(<SecondaryBarView expanded />);
+		const accordionItem = screen
+			.getAllByTestId(TESTID_SELECTORS.accordionItem)
+			.find((element) => within(element).queryByText('Distribution Lists') !== null) as HTMLElement;
+		expect(accordionItem).toBeVisible();
+		expect(screen.getByText('Member')).toBeVisible();
+		expect(screen.getByText('Manager')).toBeVisible();
+	});
+
+	it.todo('should highlight the selected distribution list entry');
+
+	it.todo('should highlight contact groups');
 });

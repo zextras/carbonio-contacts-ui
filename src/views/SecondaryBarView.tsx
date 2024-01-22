@@ -72,7 +72,43 @@ const SecondaryBarView = ({ expanded }: { expanded: boolean }): React.JSX.Elemen
 							ev.stopPropagation();
 							navigateTo(ROUTES_INTERNAL_PARAMS.route.contactGroups);
 						},
-						active: pathname.includes(`${ROUTES_INTERNAL_PARAMS.route.contactGroups}`)
+						active: pathname.includes(ROUTES_INTERNAL_PARAMS.route.contactGroups)
+					},
+					{
+						id: 'distribution-lists',
+						icon: 'DistributionListOutline',
+						label: t('secondaryBar.distributionLists', 'Distribution Lists'),
+						open: true,
+						items: [
+							{
+								id: 'distribution-lists-member',
+								icon: 'DistributionListOutline',
+								label: t('secondaryBar.distributionListsMember', 'Member'),
+								onClick: (ev): void => {
+									ev.stopPropagation();
+									navigateTo(
+										`${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.member}`
+									);
+								},
+								active: pathname.includes(
+									`${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.member}`
+								)
+							},
+							{
+								id: 'distribution-lists-manager',
+								icon: 'DistributionListOutline',
+								label: t('secondaryBar.distributionListsManager', 'Manager'),
+								onClick: (ev): void => {
+									ev.stopPropagation();
+									navigateTo(
+										`${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.manager}`
+									);
+								},
+								active: pathname.includes(
+									`${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.manager}`
+								)
+							}
+						]
 					}
 				],
 				onClick: (ev: React.SyntheticEvent | KeyboardEvent): void => {

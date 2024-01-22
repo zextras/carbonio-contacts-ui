@@ -81,6 +81,10 @@ export const StyledListItem = styled(ListItem).attrs<
 		`}
 `;
 
+export const ScrollableContainer = styled(Container)`
+	overflow-y: auto;
+`;
+
 export const CustomIconAvatar = styled(Avatar)`
 	& > svg {
 		max-width: 1.5rem;

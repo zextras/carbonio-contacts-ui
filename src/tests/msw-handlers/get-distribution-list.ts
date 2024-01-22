@@ -3,7 +3,8 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { ErrorSoapResponse, SoapResponse } from '@zextras/carbonio-shell-ui';
+import { faker } from '@faker-js/faker';
+import { SoapResponse } from '@zextras/carbonio-shell-ui';
 import { map, some } from 'lodash';
 import { ResponseResolver, rest, RestContext, RestRequest } from 'msw';
 
@@ -14,7 +15,7 @@ import {
 	GetDistributionListRequest,
 	GetDistributionListResponse
 } from '../../network/api/get-distribution-list';
-import { buildSoapResponse } from '../utils';
+import { buildSoapError, buildSoapResponse } from '../utils';
 
 type GetDistributionList = ResponseResolver<
 	RestRequest<{ Body: { GetDistributionListRequest: GetDistributionListRequest } }>,
@@ -22,27 +23,19 @@ type GetDistributionList = ResponseResolver<
 	SoapResponse<GetDistributionListResponse>
 >;
 export const registerGetDistributionListHandler = (
-	dl: { email: string; displayName?: string; owners?: Array<{ id?: string; name?: string }> },
+	dl: {
+		id?: string;
+		email: string;
+		displayName?: string;
+		owners?: Array<{ id?: string; name?: string }>;
+		description?: string;
+	},
 	error?: string
 ): jest.Mock<ReturnType<GetDistributionList>, Parameters<GetDistributionList>> => {
 	const handler = jest.fn<ReturnType<GetDistributionList>, Parameters<GetDistributionList>>(
 		(req, res, ctx) => {
 			if (error) {
-				return res(
-					ctx.json<ErrorSoapResponse>({
-						Header: {
-							context: {}
-						},
-						Body: {
-							Fault: {
-								Reason: { Text: error },
-								Detail: {
-									Error: { Code: '', Detail: error }
-								}
-							}
-						}
-					})
-				);
+				return res(ctx.json(buildSoapError(error)));
 			}
 
 			return res(
@@ -51,9 +44,11 @@ export const registerGetDistributionListHandler = (
 						GetDistributionListResponse: {
 							dl: [
 								{
+									id: dl.id ?? faker.string.uuid(),
 									name: dl.email,
 									_attrs: {
-										displayName: dl.displayName
+										displayName: dl.displayName,
+										description: dl.description
 									},
 									owners: map(dl.owners, (owner) => ({ owner: [owner] })),
 									isOwner: some(dl.owners, (owner) => owner.id === mockedAccount.id)

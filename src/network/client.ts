@@ -8,6 +8,7 @@ import { deleteContactAction } from './api/contact-action';
 import { createContactGroup } from './api/create-contact-group';
 import { distributionListAction } from './api/distribution-list-action';
 import { findContactGroups } from './api/find-contact-groups';
+import { getAccountDistributionLists } from './api/get-account-distribution-lists';
 import { getDistributionList } from './api/get-distribution-list';
 import { getDistributionListMembers } from './api/get-distribution-list-members';
 
@@ -17,5 +18,6 @@ export const client = {
 	getDistributionList,
 	getDistributionListMembers,
 	findContactGroups,
-	deleteContactAction
+	deleteContactAction,
+	getAccountDistributionLists
 };

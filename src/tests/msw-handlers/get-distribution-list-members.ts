@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { ErrorSoapResponse, SoapResponse } from '@zextras/carbonio-shell-ui';
+import { SoapResponse } from '@zextras/carbonio-shell-ui';
 import { ResponseResolver, rest, RestContext, RestRequest } from 'msw';
 
 import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
@@ -12,7 +12,7 @@ import {
 	GetDistributionListMembersRequest,
 	GetDistributionListMembersResponse
 } from '../../network/api/get-distribution-list-members';
-import { buildSoapResponse } from '../utils';
+import { buildSoapError, buildSoapResponse } from '../utils';
 
 type GetDistributionListMembersHandler = ResponseResolver<
 	RestRequest<{ Body: { GetDistributionListMembersRequest: GetDistributionListMembersRequest } }>,
@@ -32,21 +32,7 @@ export const registerGetDistributionListMembersHandler = (
 		Parameters<GetDistributionListMembersHandler>
 	>(async (req, res, ctx) => {
 		if (error) {
-			return res(
-				ctx.json<ErrorSoapResponse>({
-					Header: {
-						context: {}
-					},
-					Body: {
-						Fault: {
-							Reason: { Text: error },
-							Detail: {
-								Error: { Code: '', Detail: error }
-							}
-						}
-					}
-				})
-			);
+			return res(ctx.json(buildSoapError(error)));
 		}
 
 		const reqBody = await req.json<{

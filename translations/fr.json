@@ -5,7 +5,8 @@
         "search": "Rechercher",
         "share_folder": "Partager le dossier",
         "reset_filters": "Réinitialiser les filtres",
-        "send_msg": "Envoyer un email"
+        "send_msg": "Envoyer un email",
+        "edit_distribution_list": "Modifier la liste de distribution"
     },
     "displayer": {
         "list_title2": "La corbeille est vide",
@@ -188,7 +189,9 @@
         "select_all_addresses_0": "Sélectionner l'adresse",
         "select_all_addresses_1": "Sélectionner les {{count}} adresses",
         "select_all_addresses_2": "Sélectionner les {{count}} adresses",
-        "show_more": "plus de détail"
+        "show_more": "plus de détail",
+        "discard": "Annuler",
+        "newContactGroup": "Nouveau groupe de contact"
     },
     "name": {
         "nickName": "Surnom",
@@ -260,7 +263,12 @@
         "folder_shared": "Le carnet d'adresses a été partagé",
         "share_updated": "Les droits d'accès ont été mis à jour",
         "tag_removed": "L'étiquette \"{{tag}}\" a été supprimée",
-        "tag_applied": "Étiquette \"{{tag}}\" appliquée"
+        "tag_applied": "Étiquette \"{{tag}}\" appliquée",
+        "edit_distribution_list": {
+            "save": {
+                "success": "Les modification à la liste de distribution \"{{displayName}}\" ont été enregistrés avec succès"
+            }
+        }
     },
     "title": {
         "advanced_filters": "Filtres avancés"
@@ -310,7 +318,13 @@
     },
     "modal": {
         "address_book_name": "Nom du carnet d'adresses",
-        "destination": "Dossier de destination"
+        "destination": "Dossier de destination",
+        "close": {
+            "tooltip": "Fermer"
+        },
+        "edit_distribution_list": {
+            "title": "Modifier \"{{displayName}}\""
+        }
     },
     "select": {
         "default": "Sélectionner un type"
@@ -346,5 +360,69 @@
             "new_contact_group_creation_action": "Nouveau groupe de contact"
         }
     },
-    "expand_distribution_list": "Élargir la liste d'adresses"
+    "expand_distribution_list": "Élargir la liste d'adresses",
+    "board": {
+        "label": {
+            "description": "Description"
+        },
+        "newContactGroup": {
+            "addresses": {
+                "label": "Adresses"
+            },
+            "input": {
+                "contact_input": {
+                    "error": {
+                        "address_already_present_0": "Adresse déjà existante",
+                        "address_already_present_1": "Adresses déjà existantes",
+                        "address_already_present_2": "Adresses déjà existantes",
+                        "invalid_address_0": "Adresse invalide",
+                        "invalid_address_1": "Adresses invalides",
+                        "invalid_address_2": "Adresses invalides",
+                        "invalid_already_present_addresses": "Adresses invalides et déjà présentes"
+                    },
+                    "placeholder": "Saisissez une adresse puis cliquez sur \"+\" pour l'ajouter au groupe",
+                    "title": "Liste des adresses"
+                },
+                "name_input": {
+                    "error": {
+                        "max_length": "La taille maximum autorisée est de 256 caractères",
+                        "required": "Le nom de groupe est requis, entrez un nom de groupe pour continuer"
+                    },
+                    "name": {
+                        "label": "Nom du groupe*"
+                    }
+                }
+            },
+            "name": "Nouveau groupe",
+            "title": "Nouveau groupe",
+            "snackbar": {
+                "contact_group_created": "Le groupe de contact a été créé avec succès"
+            }
+        }
+    },
+    "edit_dl_component": {
+        "error": {
+            "duplicated_address_0": "Adresse déjà présente",
+            "duplicated_address_1": "Adresses déjà présentes",
+            "duplicated_address_2": "Adresses déjà présentes",
+            "invalid_address_0": "Adresse invalide",
+            "invalid_address_1": "Adresses invalides",
+            "invalid_address_2": "Adresses invalides",
+            "invalid_and_duplicated_addresses": "Adresse invalides et déjà présentes"
+        },
+        "label": {
+            "dl_email": "Liste de distribution",
+            "members_total": "{{total}} membres de la liste",
+            "hint": "Vous pouvez filtrer cette liste en recherchant le nom d'un membre spécifique ou en ajouter de nouveaux en modifiant la liste de distribution."
+        },
+        "placeholder": {
+            "add_members": "Tapez une adresse, cliquez sur \"+\" pour l'ajouter à la liste de distribution",
+            "filter_member": "Filtrer une adresse"
+        }
+    },
+    "members_list_item_component": {
+        "button": {
+            "remove": "Enlever"
+        }
+    }
 }
