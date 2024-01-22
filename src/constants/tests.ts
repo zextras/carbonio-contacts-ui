@@ -8,7 +8,7 @@ export const TESTID_SELECTORS = {
 	icons: {
 		save: /icon: SaveOutline/i,
 		trash: /icon: Trash2Outline/i,
-		avatar: /icon: PeopleOutline/i,
+		contactGroup: /icon: PeopleOutline/i,
 		editChip: 'icon: EditOutline',
 		editDL: 'icon: Settings2Outline',
 		expandDL: 'icon: ChevronDownOutline',
@@ -17,7 +17,12 @@ export const TESTID_SELECTORS = {
 		addMembers: 'icon: Plus',
 		removeMembers: 'icon: Trash2Outline',
 		duplicatedMember: 'icon: AlertCircle',
-		close: 'icon: Close'
+		close: 'icon: Close',
+		closeDisplayer: 'icon: CloseOutline',
+		accordionExpandAction: 'icon: ChevronDown',
+		sendEmail: 'icon: EmailOutline',
+		distributionList: 'icon: DistributionListOutline',
+		copy: 'icon: Copy'
 	},
 	avatar: 'avatar',
 	modal: 'modal',
@@ -28,7 +33,12 @@ export const TESTID_SELECTORS = {
 	dlMembersFilterInput: 'dl-members-filter-input',
 	membersList: 'members-list',
 	membersListItem: 'member-list-item',
-	snackbar: 'snackbar'
+	snackbar: 'snackbar',
+	listItemContent: 'list-item-content',
+	listBottomElement: 'list-bottom-element',
+	displayer: 'displayer',
+	displayerHeader: 'displayer-header',
+	accordionItem: 'accordion-item'
 };
 
 export const PALETTE = {
@@ -135,3 +145,7 @@ export const PALETTE = {
 export const TIMERS = { modal: { delayOpen: 1 } as const } as const;
 
 export const JEST_MOCKED_ERROR = 'jest mocked error';
+export const EMPTY_DISPLAYER_HINT = 'Stay in touch with your colleagues.';
+export const EMPTY_LIST_HINT = 'No contact groups have been created yet';
+
+export const EMPTY_DISTRIBUTION_LIST_HINT = 'There are no distribution lists yet.';

@@ -31,7 +31,6 @@ import {
 	uniqBy,
 	noop
 } from 'lodash';
-import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import styled, { type DefaultTheme } from 'styled-components';
 
@@ -282,7 +281,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 					return;
 				}
 				const valueToAdd = inputRef.current?.innerText.replaceAll('\n', '');
-				const id = moment().valueOf().toString();
+				const id = Date.now().toString();
 				const chip: ContactInputItem = {
 					id,
 					label: valueToAdd,
@@ -443,7 +442,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 					},
 					derefGroupMember: true
 				}).then((result) => {
-					const id = moment().valueOf().toString();
+					const id = Date.now().toString();
 					const members = result?.cn?.[0].m;
 					const newContacts = map(members, (member): ContactInputItem => {
 						const email = member.cn?.[0]._attrs.email ?? member.value;
@@ -470,7 +469,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	const onAdd = useCallback(
 		(valueToAdd) => {
 			if (typeof valueToAdd === 'string') {
-				const id = moment().valueOf().toString();
+				const id = Date.now().toString();
 				const chip: ContactInputItem = {
 					email: valueToAdd,
 					id,

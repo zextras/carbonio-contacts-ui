@@ -1,8 +1,12 @@
 {
     "action": {
+        "copy": "Copy",
+        "delete": "Delete",
         "delete_permanently": "Delete Permanently",
+        "edit": "Edit",
         "edit_distribution_list": "Edit distribution list",
         "goto_folder": "Go to folder",
+        "mail": "Send e-mail",
         "reset_filters": "Reset Filters",
         "search": "Search",
         "send_msg": "Send e-mail",
@@ -45,6 +49,16 @@
             "title": "New Group"
         }
     },
+    "contactGroupDisplayer": {
+        "label": {
+            "members_total": "Addresses: {{count}}"
+        }
+    },
+    "contactGroupList": {
+        "addressCount": "{{count}} address",
+        "addressCount_plural": "{{count}} addresses",
+        "emptyList": "No contact groups have been created yet"
+    },
     "contact_restored": "Contact restored",
     "displayer": {
         "description2": "Click the “NEW” button to start creating a new one.",
@@ -54,6 +68,18 @@
         "description6": "Use the “Edit” mode to add any personal note to a contact.",
         "description7": "Create a group of contacts by clicking the “NEW” button.",
         "description8": "Select a contact or a group of contacts to send shared emails.",
+        "distribution_list": {
+            "empty_displayer": "Select a distribution list or contact the Admin to have one.",
+            "label": {
+                "description": "Description",
+                "filter_hint": "You can filter this list by looking for specific member’s name.",
+                "manager_total": "Manager list {{total}}",
+                "member_total": "Member list {{total}}"
+            },
+            "placeholder": {
+                "filter_member": "Filter an address"
+            }
+        },
         "list_title1": "It looks like there are no contacts yet",
         "list_title2": "The trash is empty",
         "search_description1": "Or select “Advanced Filters” to refine your search.",
@@ -76,6 +102,11 @@
         "title8": "Send shared e-mail",
         "title9": "Click the trash icon to delete a contact."
     },
+    "distribution_list": {
+        "label": {
+            "empty_message": "There are no distribution lists yet."
+        }
+    },
     "edit_dl_component": {
         "error": {
             "duplicated_address": "Address already present",
@@ -94,10 +125,16 @@
             "filter_member": "Filter an address"
         }
     },
+    "emptyDisplayer": {
+        "contactGroup": {
+            "hint": "Click the “NEW” button to create a new contacts group."
+        }
+    },
     "expand_distribution_list": "Expand address list",
     "folder": {
         "action": {
             "delete": "Delete address book",
+            "deleteContactGroup": "Delete \"{{contactGroupTitle}}\"",
             "delete_permanently": "Delete address book permanently",
             "edit": "Edit address book",
             "empty": {
@@ -217,6 +254,7 @@
         "empty": "Empty",
         "error_try_again": "Something went wrong, please try again",
         "folder_name": "Folder name",
+        "groups_app_name": "Contact Groups and Distribution Lists",
         "include_shared_folders": "Include shared address books",
         "move": "Move",
         "newContactGroup": "New contact group",
@@ -316,7 +354,11 @@
     "secondaryBar": {
         "contextualMenu": {
             "new_contact_group_creation_action": "New Contact Group"
-        }
+        },
+        "distributionLists": "Distribution Lists",
+        "distributionListsManager": "Manager",
+        "distributionListsMember": "Member",
+        "myContactGroups": "My Contact Groups"
     },
     "section": {
         "field": {
@@ -392,6 +434,7 @@
                 "success": "\"{{displayName}}\" distribution list edits saved successfully"
             }
         },
+        "email_copied_to_clipboard": "Email copied to clipboard.",
         "folder_edited": "Address book edited successfully",
         "folder_shared": "Address book shared",
         "share_resend": "Share invite resent",
@@ -414,5 +457,10 @@
         "mobile": "mobile",
         "other": "other",
         "work": "work"
+    },
+    "secondaryBar": {
+        "contextualMenu": {
+            "new_contact_group_creation_action": "New Contact Group"
+        }
     }
 }

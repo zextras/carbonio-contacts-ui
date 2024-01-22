@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.8.1](https://github.com/zextras/carbonio-contacts-ui/compare/v1.8.0...v1.8.1) (2024-01-19)
+
+## [1.8.0](https://github.com/zextras/carbonio-contacts-ui/compare/v1.7.0...v1.8.0) (2024-01-12)
+
+
+### Features
+
+* change the icon position of the primary bar ([51f530d](https://github.com/zextras/carbonio-contacts-ui/commit/51f530d68101b306c5ca203051bdbf330ffe0258))
+* change the icon position of the primary bar ([733497d](https://github.com/zextras/carbonio-contacts-ui/commit/733497d73991125ddf42eed67ea807b902d86c20))
+
+## [1.7.0](https://github.com/zextras/carbonio-contacts-ui/compare/v1.6.4...v1.7.0) (2024-01-04)
+
+
+### Features
+
+* add DL editor ([df380a2](https://github.com/zextras/carbonio-contacts-ui/commit/df380a2d0eff125cd0ed0bb01ba5007aedfa916d))
+* contact input receives a prop to customize chip label ([6a4fd5e](https://github.com/zextras/carbonio-contacts-ui/commit/6a4fd5ede78421f88905325375f8b74880e8e872))
+* implement contacts groups creation ([1c7d7b5](https://github.com/zextras/carbonio-contacts-ui/commit/1c7d7b5bb05d4e33de24e7c81ec936518118c8a0))
+
 ### [1.6.4](https://github.com/zextras/carbonio-contacts-ui/compare/v1.6.3...v1.6.4) (2023-12-22)
 
 

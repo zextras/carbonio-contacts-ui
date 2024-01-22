@@ -18,10 +18,10 @@ import {
 	GetDistributionListMembersResponse
 } from '../../network/api/get-distribution-list-members';
 import {
-	buildSoapResponse,
 	registerGetDistributionListHandler,
 	registerGetDistributionListMembersHandler
 } from '../../tests/msw-handlers';
+import { buildSoapResponse } from '../../tests/utils';
 
 const distributionList = {
 	id: 'dl-1',

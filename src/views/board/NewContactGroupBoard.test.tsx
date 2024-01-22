@@ -63,7 +63,7 @@ describe('New contact group board', () => {
 
 		it('should render the avatar icon, name and the number of addresses', () => {
 			setupTest(<NewContactGroupBoard />);
-			expect(screen.getByTestId(TESTID_SELECTORS.icons.avatar)).toBeVisible();
+			expect(screen.getByTestId(TESTID_SELECTORS.icons.contactGroup)).toBeVisible();
 			expect(screen.getByText('New Group')).toBeVisible();
 			expect(screen.getByText('Addresses: 0')).toBeVisible();
 		});
@@ -648,7 +648,7 @@ describe('New contact group board', () => {
 					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
 				);
 				const memberList = await screen.findByTestId(TESTID_SELECTORS.membersList);
-				const avatar = within(memberList).getByTestId('avatar');
+				const avatar = within(memberList).getByTestId(TESTID_SELECTORS.avatar);
 				expect(avatar).toBeVisible();
 				expect(avatar).toHaveTextContent(`${first(email)}${last(email)}`.toUpperCase());
 				expect(

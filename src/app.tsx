@@ -3,23 +3,29 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { lazy, useEffect, Suspense } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 
 import {
-	Spinner,
-	addRoute,
-	addSettingsView,
-	addSearchView,
-	addBoardView,
-	registerActions,
 	ACTION_TYPES,
 	addBoard,
+	addBoardView,
+	addRoute,
+	addSearchView,
+	addSettingsView,
+	registerActions,
 	registerComponents,
-	SearchViewProps
+	SearchViewProps,
+	SecondaryBarComponentProps,
+	Spinner
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
-import { CONTACTS_ROUTE, CONTACTS_APP_ID, NEW_CONTACT_GROUP_BOARD_ID } from './constants';
+import {
+	CONTACTS_APP_ID,
+	CONTACTS_ROUTE,
+	NEW_CONTACT_GROUP_BOARD_ID,
+	GROUPS_ROUTE
+} from './constants';
 import { ContactInputIntegrationWrapper } from './legacy/integrations/contact-input-integration-wrapper';
 import { StoreProvider } from './legacy/store/redux';
 import { EditViewProps } from './legacy/types/views/edit-view';
@@ -30,7 +36,12 @@ import { SyncDataHandler } from './legacy/views/secondary-bar/sync-data-handler'
 const LazyAppView = lazy(
 	() => import(/* webpackChunkName: "contacts-view" */ './legacy/views/app-view')
 );
-
+const LazySecondaryBarView = lazy(
+	() => import(/* webpackChunkName: "secondaryBarView" */ './views/SecondaryBarView')
+);
+const LazyGroupsAppView = lazy(
+	() => import(/* webpackChunkName: "groupsAppView" */ './views/GroupsAppView')
+);
 const LazySettingsView = lazy(
 	() => import(/* webpackChunkName: "settings-view" */ './legacy/views/settings/settings-view')
 );
@@ -51,6 +62,18 @@ const AppView = (): React.JSX.Element => (
 		<StoreProvider>
 			<LazyAppView />
 		</StoreProvider>
+	</Suspense>
+);
+
+const SecondaryBarView = (props: SecondaryBarComponentProps): React.JSX.Element => (
+	<Suspense fallback={<Spinner />}>
+		<LazySecondaryBarView {...props} />
+	</Suspense>
+);
+
+const AppViewV2 = (): React.JSX.Element => (
+	<Suspense fallback={<Spinner />}>
+		<LazyGroupsAppView />
 	</Suspense>
 );
 
@@ -97,12 +120,21 @@ const App = (): React.JSX.Element => {
 	useEffect(() => {
 		addRoute({
 			route: CONTACTS_ROUTE,
-			position: 3,
+			position: 300,
 			visible: true,
 			label: t('label.app_name', 'Contacts'),
 			primaryBar: 'ContactsModOutline',
 			secondaryBar: SidebarView,
 			appView: AppView
+		});
+		addRoute({
+			route: GROUPS_ROUTE,
+			position: 310,
+			visible: true,
+			label: t('label.groups_app_name', 'Contact Groups and Distribution Lists'),
+			primaryBar: 'ContactsModOutline',
+			secondaryBar: SecondaryBarView,
+			appView: AppViewV2
 		});
 		addSettingsView({
 			route: CONTACTS_ROUTE,
