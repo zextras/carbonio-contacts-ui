@@ -283,7 +283,7 @@ describe('Contact Group View', () => {
 			await screen.findByText('Something went wrong, please try again');
 
 			expect(screen.getByText(cnItem1.fileAsStr)).toBeVisible();
-			expect(screen.getAllByTestId(TESTID_SELECTORS.listItemContent).length).toBe(3);
+			expect(screen.getAllByTestId(TESTID_SELECTORS.listItemContent)).toHaveLength(3);
 		});
 	});
 
