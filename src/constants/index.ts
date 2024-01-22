@@ -13,10 +13,14 @@ export const ACTION_IDS = {
 	sendEmail: 'send-email-action',
 	sendEmailCG: 'cg-send-email-action',
 	deleteCG: 'cg-delete-action',
+	editCG: 'cg-edit-action',
 	copyToClipboard: 'copy-to-clipboard-action'
 } as const;
 
 export const NEW_CONTACT_GROUP_BOARD_ID = 'new-contact-group-board';
+
+export const EDIT_CONTACT_GROUP_BOARD_ID = 'edit-contact-group-board';
+
 export const CONTACT_GROUP_NAME_MAX_LENGTH = 256;
 export const GROUPS_ROUTE = 'groups';
 export const ROUTES = {

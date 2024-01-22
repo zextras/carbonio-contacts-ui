@@ -6,24 +6,39 @@
 import React, { useCallback, useState } from 'react';
 
 import { InputProps, useSnackbar, ChipAction } from '@zextras/carbonio-design-system';
-import { useBoardHooks } from '@zextras/carbonio-shell-ui';
+import { useBoard, useBoardHooks } from '@zextras/carbonio-shell-ui';
 import { remove, uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import CommonContactGroupBoard, { EnhancedChipItem } from './common-contact-group-board';
-import { client } from '../../network/client';
+import { ContactGroup } from '../../model/contact-group';
+import { useContactGroupStore } from '../../store/contact-groups';
 
-const NewContactGroupBoard = (): React.JSX.Element => {
+const EditContactGroupBoard = (): React.JSX.Element => {
 	const [t] = useTranslation();
+
+	const { context } = useBoard<{ contactGroupId: string }>();
+	const contactGroupId = context?.contactGroupId;
+	const contactGroup =
+		useContactGroupStore
+			.getState()
+			.storedContactGroups.find(
+				(contactGroupElement) => contactGroupElement.id === contactGroupId
+			) ??
+		({
+			title: t('board.newContactGroup.name', 'New Group'),
+			id: 'missing-cg-id',
+			members: []
+		} satisfies ContactGroup);
+
 	const { updateBoard, closeBoard } = useBoardHooks();
 	const createSnackbar = useSnackbar();
 
-	const initialName = t('board.newContactGroup.name', 'New Group');
-	const [nameValue, setNameValue] = useState(initialName);
+	const [nameValue, setNameValue] = useState(contactGroup.title);
 
 	const [contactInputValue, setContactInputValue] = useState<Array<EnhancedChipItem>>([]);
 
-	const [memberListEmails, setMemberListEmails] = useState<string[]>([]);
+	const [memberListEmails, setMemberListEmails] = useState<string[]>(contactGroup.members);
 
 	const onNameChange = useCallback<NonNullable<InputProps['onChange']>>(
 		(ev) => {
@@ -34,34 +49,15 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 	);
 
 	const discardChanges = useCallback(() => {
-		setNameValue(initialName);
+		setNameValue(contactGroup.title);
 		setContactInputValue([]);
-		setMemberListEmails([]);
-		updateBoard({ title: initialName });
-	}, [initialName, updateBoard]);
+		setMemberListEmails(contactGroup.members);
+		updateBoard({ title: contactGroup.title });
+	}, [contactGroup.members, contactGroup.title, updateBoard]);
 
 	const onSave = useCallback(() => {
-		client
-			.createContactGroup(nameValue, memberListEmails)
-			.then(() => {
-				createSnackbar({
-					key: new Date().toLocaleString(),
-					type: 'success',
-					label: t(
-						'board.newContactGroup.snackbar.contact_group_created',
-						'Contact group successfully created'
-					)
-				});
-				closeBoard();
-			})
-			.catch(() => {
-				createSnackbar({
-					key: new Date().toLocaleString(),
-					type: 'error',
-					label: t('label.error_try_again', 'Something went wrong, please try again')
-				});
-			});
-	}, [closeBoard, createSnackbar, memberListEmails, t, nameValue]);
+		// TODO enable only if there are changes
+	}, []);
 
 	const contactInputOnChange = (
 		newContactInputValue: Array<
@@ -156,4 +152,4 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 	);
 };
 
-export default NewContactGroupBoard;
+export default EditContactGroupBoard;

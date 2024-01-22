@@ -29,7 +29,7 @@ const List = styled(ListV2)`
 	min-height: 0;
 `;
 
-type EnhancedChipItem = ChipItem & {
+export type EnhancedChipItem = ChipItem & {
 	email: string;
 	duplicated: boolean;
 };
