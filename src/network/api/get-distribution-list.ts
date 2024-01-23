@@ -53,7 +53,7 @@ const normalizeResponse = (response: GetDistributionListResponse): DistributionL
 		isOwner: dl.isOwner ?? false,
 		owners: normalizeOwners(dl.owners),
 		description: dl._attrs?.description,
-		canRequireMembers: dl._attrs?.zimbraHideInGal !== 'TRUE'
+		canRequireMembers: dl._attrs?.zimbraHideInGal !== 'TRUE' || dl.isOwner
 	};
 };
 
