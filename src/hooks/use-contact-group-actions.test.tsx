@@ -32,7 +32,7 @@ describe('useContactGroupActions', () => {
 		const contactGroup = buildContactGroup();
 		const { result } = setupHook(useContactGroupActions, { initialProps: [contactGroup] });
 		expect(result.current).not.toContainEqual({
-			id: 'send-email',
+			id: ACTION_IDS.sendEmailCG,
 			label: 'Send e-mail',
 			icon: 'EmailOutline',
 			onClick: expect.anything()
