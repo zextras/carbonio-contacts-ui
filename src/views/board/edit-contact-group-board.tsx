@@ -17,6 +17,7 @@ import CommonContactGroupBoard, {
 import { ContactGroup } from '../../model/contact-group';
 import { client } from '../../network/client';
 import { useContactGroupStore } from '../../store/contact-groups';
+import { ModifyContactResponse } from '../../network/api/modify-contact';
 
 const EditContactGroupBoard = (): React.JSX.Element => {
 	const [t] = useTranslation();
@@ -70,7 +71,8 @@ const EditContactGroupBoard = (): React.JSX.Element => {
 				removedMembers: removedMembers.length > 0 ? removedMembers : undefined,
 				name: contactGroup.title !== nameValue ? nameValue : undefined
 			})
-			.then(() => {
+			.then((contactGroup: ContactGroup) => {
+				useContactGroupStore.getState().updateContactGroup(contactGroup);
 				createSnackbar({
 					key: new Date().toLocaleString(),
 					type: 'success',

@@ -7,6 +7,8 @@ import { ErrorSoapBodyResponse, soapFetch } from '@zextras/carbonio-shell-ui';
 
 import { GenericSoapPayload } from './types';
 import { NAMESPACES } from '../../constants/api';
+import { ContactGroup } from '../../model/contact-group';
+import { values } from 'lodash';
 
 export type ModifyContactAttribute = { n: 'fullName' | 'nickname' | 'fileAs'; _content: string };
 
@@ -80,7 +82,7 @@ export const modifyContactGroup = ({
 	addedMembers?: string[];
 	removedMembers?: string[];
 	name?: string;
-}): Promise<ModifyContactResponse> => {
+}): Promise<ContactGroup> => {
 	const attributes: Array<ModifyContactAttribute> | undefined = name
 		? [
 				{ n: 'fullName', _content: name },
@@ -88,5 +90,12 @@ export const modifyContactGroup = ({
 				{ n: 'nickname', _content: name }
 		  ]
 		: undefined;
-	return modifyContact({ id, addedMembers, removedMembers, attributes });
+	return modifyContact({ id, addedMembers, removedMembers, attributes }).then(
+		(res: ModifyContactResponse) =>
+			({
+				id: res.cn[0].id,
+				title: res.cn[0]._attrs.fullName ?? '',
+				members: res.cn[0].m?.map((value) => value.value) ?? []
+			} as ContactGroup)
+	);
 };
