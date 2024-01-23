@@ -24,7 +24,8 @@ import {
 	CONTACTS_APP_ID,
 	CONTACTS_ROUTE,
 	NEW_CONTACT_GROUP_BOARD_ID,
-	GROUPS_ROUTE
+	GROUPS_ROUTE,
+	EDIT_DL_BOARD_ID
 } from './constants';
 import { ContactInputIntegrationWrapper } from './legacy/integrations/contact-input-integration-wrapper';
 import { StoreProvider } from './legacy/store/redux';
@@ -55,6 +56,10 @@ const LazyBoardView = lazy(
 
 const LazyNewContactGroupBoardView = lazy(
 	() => import(/* webpackChunkName: "newContactGroupView" */ './views/board/NewContactGroupBoard')
+);
+
+const LazyEditDLBoardView = lazy(
+	() => import(/* webpackChunkName: "edit-dl-view" */ './views/board/edit-dl-board')
 );
 
 const AppView = (): React.JSX.Element => (
@@ -88,6 +93,12 @@ const BoardView = (props: EditViewProps): React.JSX.Element => (
 const NewContactGroupBoardView = (): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
 		<LazyNewContactGroupBoardView />
+	</Suspense>
+);
+
+const EditDLBoardView = (): React.JSX.Element => (
+	<Suspense fallback={<Spinner />}>
+		<LazyEditDLBoardView />
 	</Suspense>
 );
 
@@ -155,6 +166,11 @@ const App = (): React.JSX.Element => {
 			route: NEW_CONTACT_GROUP_BOARD_ID,
 			component: NewContactGroupBoardView
 		});
+		addBoardView({
+			id: EDIT_DL_BOARD_ID,
+			route: EDIT_DL_BOARD_ID,
+			component: EditDLBoardView
+		});
 	}, [t]);
 
 	useEffect(() => {
@@ -190,7 +206,7 @@ const App = (): React.JSX.Element => {
 					id: 'new-contact-group',
 					label: t('label.newContactGroup', 'New contact group'),
 					icon: 'PeopleOutline',
-					onClick: (ev): void => {
+					onClick: (): void => {
 						addBoard({
 							url: NEW_CONTACT_GROUP_BOARD_ID,
 							title: t('board.newContactGroup.title', 'New Group')

@@ -7,25 +7,29 @@
 import React, { useMemo } from 'react';
 
 import { Container, ListV2, Text } from '@zextras/carbonio-design-system';
-import { map } from 'lodash';
+import { map, times } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { MemberDisplayerListItemComponent } from './member-displayer-list-item';
-import { DistributionList } from '../model/distribution-list';
+import { ShimmedDisplayerListItem } from './shimmed-displayer-list-item';
+import { DistributionList, DistributionListOwner } from '../model/distribution-list';
 
 type ManagerListProps = {
 	managers: DistributionList['owners'];
+	loading?: boolean;
 };
 
-export const ManagerList = ({ managers }: ManagerListProps): React.JSX.Element => {
+export const ManagerList = ({ managers, loading }: ManagerListProps): React.JSX.Element => {
 	const [t] = useTranslation();
 
 	const memberItems = useMemo(
 		() =>
-			map<{ id: string; name: string }, React.JSX.Element>(managers, (manager) => (
-				<MemberDisplayerListItemComponent email={manager.name} key={manager.id} />
-			)),
-		[managers]
+			(loading &&
+				map<DistributionListOwner, React.JSX.Element>(managers, (manager) => (
+					<MemberDisplayerListItemComponent email={manager.name} key={manager.id} />
+				))) ||
+			times(3, (index) => <ShimmedDisplayerListItem key={index} />),
+		[loading, managers]
 	);
 
 	return (

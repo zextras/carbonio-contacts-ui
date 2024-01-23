@@ -20,6 +20,7 @@ export const useGetDistributionList = (
 	const [distributionList, setDistributionList] = useState<DistributionList | undefined>();
 
 	useEffect(() => {
+		setDistributionList(undefined);
 		if (item !== undefined) {
 			client
 				.getDistributionList(item)

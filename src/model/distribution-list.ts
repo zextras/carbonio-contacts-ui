@@ -14,6 +14,7 @@ export type DistributionList = {
 	owners?: Array<DistributionListOwner>;
 	description?: string;
 	canRequireMembers?: boolean;
+	members?: DistributionListMembersPage;
 };
 
 export type DistributionListMembersPage = {

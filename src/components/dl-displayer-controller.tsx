@@ -34,12 +34,13 @@ export const DLDisplayerController = (): React.JSX.Element => {
 			crossAlignment="flex-start"
 			data-testid="displayer"
 		>
-			{(activeItem && (
+			{(activeItem && distributionList && (
 				<DistributionListDisplayer
 					members={members}
 					totalMembers={totalMembers}
 					distributionList={distributionList}
 					showMembersList={distributionList?.canRequireMembers ?? false}
+					key={activeItem}
 				/>
 			)) || (
 				<EmptyDisplayer

@@ -7,11 +7,13 @@ import { useMemo } from 'react';
 
 import { Action as DSAction } from '@zextras/carbonio-design-system';
 
+import { useActionEditDL } from '../actions/edit-dl';
 import { useActionSendEmail } from '../actions/send-email';
 import { DistributionList } from '../model/distribution-list';
 
 export const useDLActions = (distributionList: DistributionList | undefined): Array<DSAction> => {
 	const sendEmailAction = useActionSendEmail();
+	const editDLAction = useActionEditDL();
 
 	return useMemo(() => {
 		if (distributionList === undefined) {
@@ -28,6 +30,17 @@ export const useDLActions = (distributionList: DistributionList | undefined): Ar
 				icon: sendEmailAction.icon
 			});
 		}
+
+		if (editDLAction.canExecute(distributionList)) {
+			actions.push({
+				id: editDLAction.id,
+				label: editDLAction.label,
+				onClick: () => {
+					editDLAction.execute(distributionList);
+				},
+				icon: editDLAction.icon
+			});
+		}
 		return actions;
-	}, [distributionList, sendEmailAction]);
+	}, [distributionList, editDLAction, sendEmailAction]);
 };

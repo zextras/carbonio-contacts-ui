@@ -3,14 +3,13 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback } from 'react';
+import React from 'react';
 
-import { Container, Divider, IconButton, Row } from '@zextras/carbonio-design-system';
+import { Container, Divider } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
-import { CustomIconAvatar } from './styled-components';
+import { DLDetailsInfo } from './dl-details-info';
 import { Text } from './Text';
-import { useActionCopyToClipboard } from '../actions/copy-to-clipboard';
 
 type DistributionListDetailsProps = {
 	email: string;
@@ -24,11 +23,6 @@ export const DistributionListDetails = ({
 	description
 }: DistributionListDetailsProps): React.JSX.Element => {
 	const [t] = useTranslation();
-	const copyToClipboardAction = useActionCopyToClipboard();
-
-	const copyEmail = useCallback(() => {
-		copyToClipboardAction.execute(email);
-	}, [copyToClipboardAction, email]);
 
 	return (
 		<Container
@@ -37,37 +31,7 @@ export const DistributionListDetails = ({
 			crossAlignment={'flex-start'}
 			gap={'1rem'}
 		>
-			<Container
-				orientation={'horizontal'}
-				gap={'1rem'}
-				mainAlignment={'flex-start'}
-				crossAlignment={'flex-start'}
-			>
-				<CustomIconAvatar
-					shape={'square'}
-					icon={'DistributionListOutline'}
-					label={displayName || email}
-					size={'large'}
-				/>
-				<Container minWidth={0} crossAlignment={'flex-start'} mainAlignment={'center'}>
-					<Text weight={'bold'}>{displayName}</Text>
-					<Row gap={'0.25rem'}>
-						<Text
-							size={displayName ? 'small' : 'medium'}
-							weight={displayName ? 'regular' : 'bold'}
-							color={displayName ? 'gray1' : 'text'}
-						>
-							{email}
-						</Text>
-						<IconButton
-							icon={copyToClipboardAction.icon}
-							color={'primary'}
-							onClick={copyEmail}
-							type={'ghost'}
-						/>
-					</Row>
-				</Container>
-			</Container>
+			<DLDetailsInfo displayName={displayName} email={email} />
 			<Divider color={'gray3'} />
 			{description && (
 				<Container height={'auto'} mainAlignment={'flex-start'} crossAlignment={'flex-start'}>

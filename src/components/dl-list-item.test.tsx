@@ -11,6 +11,7 @@ import * as shell from '@zextras/carbonio-shell-ui';
 import { DLListItem } from './dl-list-item';
 import { OpenMailComposerIntegratedFunction } from '../actions/send-email';
 import { screen, setupTest, within } from '../carbonio-ui-commons/test/test-setup';
+import { EDIT_DL_BOARD_ID } from '../constants';
 import { TESTID_SELECTORS } from '../constants/tests';
 import { generateDistributionList } from '../tests/utils';
 
@@ -114,6 +115,109 @@ describe('DL list item', () => {
 					expect(openMailComposer).toHaveBeenCalledWith<
 						Parameters<OpenMailComposerIntegratedFunction>
 					>({ recipients: [{ email: dl.email, isGroup: true }] });
+				});
+			});
+		});
+
+		describe('edit', () => {
+			describe('on hover bar', () => {
+				it('should be visible if user is owner', () => {
+					const dl = generateDistributionList({ isOwner: true });
+					setupTest(<DLListItem distributionList={dl} visible />);
+					expect(
+						screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.editDL })
+					).toBeInTheDocument();
+				});
+
+				it('should not be visible if user is not owner', () => {
+					const dl = generateDistributionList({ isOwner: false });
+					setupTest(<DLListItem distributionList={dl} visible />);
+					expect(
+						screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.editDL })
+					).not.toBeInTheDocument();
+				});
+
+				it('should open the board to edit the dl', async () => {
+					const addBoardFn = jest.spyOn(shell, 'addBoard');
+					const dl = generateDistributionList({ isOwner: true });
+					const { user } = setupTest(<DLListItem distributionList={dl} visible />);
+					await user.click(
+						screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.editDL })
+					);
+					expect(addBoardFn).toHaveBeenCalledWith(
+						expect.objectContaining<Partial<Parameters<typeof shell.addBoard>[0]>>({
+							url: EDIT_DL_BOARD_ID,
+							context: dl
+						})
+					);
+				});
+			});
+
+			describe('on contextual menu', () => {
+				it('should be visible if user is owner', async () => {
+					const dl = generateDistributionList({ isOwner: true });
+					const { user } = setupTest(<DLListItem distributionList={dl} visible />);
+					await user.rightClick(screen.getByText(dl.displayName));
+					expect(await screen.findByText('Edit')).toBeVisible();
+				});
+
+				it('should not be visible if user is not owner', async () => {
+					const dl = generateDistributionList({ isOwner: false });
+					const { user } = setupTest(<DLListItem distributionList={dl} visible />);
+					await user.rightClick(screen.getByText(dl.displayName));
+					await screen.findByTestId(TESTID_SELECTORS.dropdownList);
+					expect(screen.queryByText('Edit')).not.toBeInTheDocument();
+				});
+
+				it('should open the board to edit the dl', async () => {
+					const addBoardFn = jest.spyOn(shell, 'addBoard');
+					const dl = generateDistributionList({ isOwner: true });
+					const { user } = setupTest(<DLListItem distributionList={dl} visible />);
+					await user.rightClick(screen.getByText(dl.displayName));
+					await user.click(await screen.findByText('Edit'));
+					expect(addBoardFn).toHaveBeenCalledWith(
+						expect.objectContaining<Partial<Parameters<typeof shell.addBoard>[0]>>({
+							url: EDIT_DL_BOARD_ID,
+							context: dl
+						})
+					);
+				});
+			});
+		});
+
+		describe('edit', () => {
+			describe('on hover bar', () => {
+				it('should be visible if user is owner', () => {
+					const dl = generateDistributionList({ isOwner: true });
+					setupTest(<DLListItem distributionList={dl} visible />);
+					expect(
+						screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.editDL })
+					).toBeInTheDocument();
+				});
+
+				it('should not be visible if user is not owner', () => {
+					const dl = generateDistributionList({ isOwner: false });
+					setupTest(<DLListItem distributionList={dl} visible />);
+					expect(
+						screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.editDL })
+					).not.toBeInTheDocument();
+				});
+			});
+
+			describe('on contextual menu', () => {
+				it('should be visible on contextual menu if user is owner', async () => {
+					const dl = generateDistributionList({ isOwner: true });
+					const { user } = setupTest(<DLListItem distributionList={dl} visible />);
+					await user.rightClick(screen.getByText(dl.displayName));
+					expect(await screen.findByText('Edit')).toBeVisible();
+				});
+
+				it('should not be visible on contextual menu if user is not owner', async () => {
+					const dl = generateDistributionList({ isOwner: false });
+					const { user } = setupTest(<DLListItem distributionList={dl} visible />);
+					await user.rightClick(screen.getByText(dl.displayName));
+					await screen.findByTestId(TESTID_SELECTORS.dropdownList);
+					expect(screen.queryByText('Edit')).not.toBeInTheDocument();
 				});
 			});
 		});

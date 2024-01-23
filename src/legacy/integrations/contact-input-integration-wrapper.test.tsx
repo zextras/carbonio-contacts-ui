@@ -12,7 +12,7 @@ import { ChipAction } from '@zextras/carbonio-design-system';
 import { ContactInputIntegrationWrapper } from './contact-input-integration-wrapper';
 import { mockedAccount } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
 import { screen, setupTest, within } from '../../carbonio-ui-commons/test/test-setup';
-import { JEST_MOCKED_ERROR, TESTID_SELECTORS, TIMERS } from '../../constants/tests';
+import { TESTID_SELECTORS } from '../../constants/tests';
 import { DistributionList } from '../../model/distribution-list';
 import {
 	registerFullAutocompleteHandler,
@@ -207,115 +207,23 @@ describe('Contact input integration wrapper', () => {
 				).toBeVisible();
 			});
 
-			describe('Editing DL', () => {
-				it("doesn't show the edit icon if the contact isn't a DL", () => {
-					const handler = registerGetDistributionListHandler(distributionList);
+			it('should not show the edit DL action', async () => {
+				const handler = registerGetDistributionListHandler(distributionList);
 
-					setupTest(
-						<ContactInputIntegrationWrapper
-							// FIXME: remove ts-ignore when contact-input types are fixed
-							// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-							// @ts-ignore
-							defaultValue={[contactChipItem]}
-							extraAccountsIds={[]}
-						/>
-					);
+				setupTest(
+					<ContactInputIntegrationWrapper
+						// FIXME: remove ts-ignore when contact-input types are fixed
+						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+						// @ts-ignore
+						defaultValue={[distributionListChipItem]}
+						extraAccountsIds={[]}
+					/>
+				);
 
-					const editButton = screen.queryByRoleWithIcon('button', {
-						icon: TESTID_SELECTORS.icons.editDL
-					});
-					expect(editButton).not.toBeInTheDocument();
-					expect(handler).not.toHaveBeenCalled();
-				});
-
-				it('should not show the edit icon if the contact is a DL but the current user is not the DL owner', async () => {
-					const handler = registerGetDistributionListHandler({
-						...distributionList,
-						owners: [{ id: faker.string.uuid(), name: faker.person.fullName() }]
-					});
-
-					setupTest(
-						<ContactInputIntegrationWrapper
-							// FIXME: remove ts-ignore when contact-input types are fixed
-							// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-							// @ts-ignore
-							defaultValue={[distributionListChipItem]}
-							extraAccountsIds={[]}
-						/>
-					);
-
-					await waitFor(() => expect(handler).toHaveBeenCalled());
-					expect(
-						screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.editDL })
-					).not.toBeInTheDocument();
-				});
-
-				it('should show the edit icon if the contact is a DL and the current user is the DL owner', async () => {
-					const handler = registerGetDistributionListHandler(distributionList);
-
-					setupTest(
-						<ContactInputIntegrationWrapper
-							// FIXME: remove ts-ignore when contact-input types are fixed
-							// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-							// @ts-ignore
-							defaultValue={[distributionListChipItem]}
-							extraAccountsIds={[]}
-						/>
-					);
-
-					await waitFor(() => expect(handler).toHaveBeenCalled());
-					expect(
-						await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.editDL })
-					).toBeVisible();
-				});
-
-				it('if the user clicks on the edit icon the DL title is displayed inside a modal', async () => {
-					const handler = registerGetDistributionListHandler(distributionList);
-
-					const { user } = setupTest(
-						<ContactInputIntegrationWrapper
-							// FIXME: remove ts-ignore when contact-input types are fixed
-							// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-							// @ts-ignore
-							defaultValue={[distributionListChipItem]}
-							extraAccountsIds={[]}
-						/>
-					);
-
-					await waitFor(() => expect(handler).toHaveBeenCalled());
-					const editButton = await screen.findByRoleWithIcon('button', {
-						icon: TESTID_SELECTORS.icons.editDL
-					});
-					await user.click(editButton);
-					await screen.findByText(`Edit "${distributionList.displayName}"`);
-					act(() => {
-						jest.advanceTimersByTime(TIMERS.modal.delayOpen);
-					});
-					expect(
-						within(screen.getByTestId(TESTID_SELECTORS.modal)).getByText(
-							`Edit "${distributionList.displayName}"`
-						)
-					).toBeVisible();
-				});
-
-				it('should not show the edit action if the distribution list cannot be retrieved', async () => {
-					const handler = registerGetDistributionListHandler(distributionList, JEST_MOCKED_ERROR);
-
-					setupTest(
-						<ContactInputIntegrationWrapper
-							// FIXME: remove ts-ignore when contact-input types are fixed
-							// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-							// @ts-ignore
-							defaultValue={[distributionListChipItem]}
-							extraAccountsIds={[]}
-						/>
-					);
-
-					await waitFor(() => expect(handler).toHaveBeenCalled());
-					expect(
-						screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.editDL })
-					).not.toBeInTheDocument();
-				});
+				await waitFor(() => expect(handler).toHaveBeenCalled());
+				expect(
+					screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.editDL })
+				).not.toBeInTheDocument();
 			});
 		});
 

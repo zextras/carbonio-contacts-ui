@@ -12,6 +12,7 @@ import { times } from 'lodash';
 import { DistributionListDisplayer } from './dl-displayer';
 import { OpenMailComposerIntegratedFunction } from '../actions/send-email';
 import { screen, setupTest, within } from '../carbonio-ui-commons/test/test-setup';
+import { EDIT_DL_BOARD_ID } from '../constants';
 import { TESTID_SELECTORS } from '../constants/tests';
 import { DistributionList } from '../model/distribution-list';
 import { generateDistributionList } from '../tests/utils';
@@ -64,7 +65,7 @@ describe('Distribution List displayer', () => {
 						showMembersList
 					/>
 				);
-				expect(await screen.findByText(/send e-mail/i)).toBeVisible();
+				expect(await screen.findByRole('button', { name: /send e-mail/i })).toBeVisible();
 			});
 
 			it('should not be visible if integration is not available', async () => {
@@ -79,7 +80,7 @@ describe('Distribution List displayer', () => {
 					/>
 				);
 				await screen.findAllByText(dl.displayName);
-				expect(screen.queryByText(/send e-mail/i)).not.toBeInTheDocument();
+				expect(screen.queryByRole('button', { name: /send e-mail/i })).not.toBeInTheDocument();
 			});
 
 			it('should open the composer with the email of the distribution list set as recipient', async () => {
@@ -94,10 +95,60 @@ describe('Distribution List displayer', () => {
 						showMembersList
 					/>
 				);
-				await user.click(await screen.findByText(/send e-mail/i));
+				await user.click(await screen.findByRole('button', { name: /send e-mail/i }));
 				expect(openMailComposer).toHaveBeenCalledWith<
 					Parameters<OpenMailComposerIntegratedFunction>
 				>({ recipients: [{ email: dl.email, isGroup: true }] });
+			});
+		});
+
+		describe('edit', () => {
+			it('should be visible if user is owner of the dl', async () => {
+				const dl = generateDistributionList({ isOwner: true });
+				setupTest(
+					<DistributionListDisplayer
+						distributionList={dl}
+						members={[]}
+						totalMembers={0}
+						showMembersList
+					/>
+				);
+				expect(await screen.findByRole('button', { name: 'Edit' })).toBeVisible();
+			});
+
+			it('should not be visible if user is not owner of the dl', async () => {
+				const dl = generateDistributionList({ isOwner: false });
+				setupTest(
+					<DistributionListDisplayer
+						distributionList={dl}
+						members={[]}
+						totalMembers={0}
+						showMembersList
+					/>
+				);
+				await screen.findAllByText(dl.displayName);
+				expect(screen.queryByRole('button', { name: 'Edit' })).not.toBeInTheDocument();
+			});
+
+			it('should open the board to edit the dl with both the details and the members', async () => {
+				const addBoardFn = jest.spyOn(shell, 'addBoard');
+				const members = times(10, () => faker.internet.email());
+				const dl = generateDistributionList({ isOwner: true });
+				const { user } = setupTest(
+					<DistributionListDisplayer
+						distributionList={dl}
+						members={members}
+						totalMembers={members.length}
+						showMembersList
+					/>
+				);
+				await user.click(await screen.findByRole('button', { name: 'Edit' }));
+				expect(addBoardFn).toHaveBeenCalledWith(
+					expect.objectContaining<Partial<Parameters<typeof shell.addBoard>[0]>>({
+						url: EDIT_DL_BOARD_ID,
+						context: { ...dl, members: { members, total: members.length, more: false } }
+					})
+				);
 			});
 		});
 	});

@@ -11,24 +11,26 @@ import {
 	Container,
 	Input,
 	ListV2,
-	Text
+	Row
 } from '@zextras/carbonio-design-system';
-import { reduce, uniqBy } from 'lodash';
+import { reduce, times, uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { FilterMembersIcon } from './filter-members-icon';
 import { MemberListItemComponent } from './member-list-item';
+import { ShimmedDisplayerListItem } from './shimmed-displayer-list-item';
+import { Text } from './Text';
 import { CHIP_DISPLAY_NAME_VALUES } from '../constants/contact-input';
 import { ContactInput } from '../legacy/integrations/contact-input';
 
 const DUPLICATED_MEMBER_ACTION_ID = 'duplicated';
 
 export type EditDLComponentProps = {
-	email: string;
 	totalMembers: number;
 	members: Array<string>;
 	onRemoveMember: (member: string) => void;
 	onAddMembers: (members: Array<string>) => void;
+	loading?: boolean;
 };
 
 type ContactInputValue = Array<ChipItem & { email: string; error: boolean }>;
@@ -40,12 +42,12 @@ const createDuplicatedMemberAction = (): ChipAction => ({
 	icon: 'AlertCircle'
 });
 
-export const EditDLComponent: FC<EditDLComponentProps> = ({
-	email,
+export const EditDLMembersComponent: FC<EditDLComponentProps> = ({
 	members,
 	totalMembers,
 	onRemoveMember,
-	onAddMembers
+	onAddMembers,
+	loading
 }) => {
 	const [t] = useTranslation();
 	const [contactInputValue, setContactInputValue] = useState<ContactInputValue>([]);
@@ -53,23 +55,25 @@ export const EditDLComponent: FC<EditDLComponentProps> = ({
 
 	const memberItems = useMemo(
 		() =>
-			reduce<string, React.JSX.Element[]>(
-				members,
-				(accumulator, member) => {
-					if (member.includes(searchValue)) {
-						accumulator.push(
-							<MemberListItemComponent
-								email={member}
-								onRemove={(): void => onRemoveMember(member)}
-								key={member}
-							/>
-						);
-					}
-					return accumulator;
-				},
-				[]
-			),
-		[members, onRemoveMember, searchValue]
+			(!loading &&
+				reduce<string, React.JSX.Element[]>(
+					members,
+					(accumulator, member) => {
+						if (member.includes(searchValue)) {
+							accumulator.push(
+								<MemberListItemComponent
+									email={member}
+									onRemove={(): void => onRemoveMember(member)}
+									key={member}
+								/>
+							);
+						}
+						return accumulator;
+					},
+					[]
+				)) ||
+			times(3, (index) => <ShimmedDisplayerListItem key={index} />),
+		[loading, members, onRemoveMember, searchValue]
 	);
 
 	const isMemberDuplicated = useCallback(
@@ -200,43 +204,47 @@ export const EditDLComponent: FC<EditDLComponentProps> = ({
 	}, [duplicatedContacts, invalidEmailContacts, onAddMembers, validEmails]);
 
 	return (
-		<Container mainAlignment={'flex-start'} crossAlignment={'flex-start'} gap={'0.5rem'}>
-			<Container
-				mainAlignment={'flex-start'}
-				crossAlignment={'flex-start'}
-				padding={{ bottom: 'small' }}
-			>
+		<Container
+			mainAlignment={'flex-start'}
+			crossAlignment={'flex-start'}
+			gap={'0.5rem'}
+			padding={{ top: 'large' }}
+		>
+			<Row>
 				<Text size={'small'} color={'secondary'}>
-					{t('edit_dl_component.label.dl_email', 'Distribution list')}
+					{t('edit_dl_component.label.members_total', 'Member list {{total}}', {
+						total: totalMembers
+					})}
 				</Text>
-				<Text size={'small'}>{email}</Text>
-			</Container>
+			</Row>
 			<Text size={'small'} overflow={'break-word'}>
 				{t(
 					'edit_dl_component.label.hint',
 					'You can filter this list by looking for specific member’s name or add new ones by editing the Distribution List.'
 				)}
 			</Text>
-			<ContactInput
-				placeholder={t(
-					'edit_dl_component.placeholder.add_members',
-					"Type an address, click '+' to add to the distribution list"
-				)}
-				// FIXME: remove ts-ignore when contact-input types are fixed
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
-				defaultValue={contactInputValue}
-				icon={'Plus'}
-				iconAction={onAddRawMembers}
-				// FIXME: remove ts-ignore when contact-input types are fixed
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
-				onChange={onContactInputChange}
-				iconDisabled={!isAddMembersAllowed}
-				chipDisplayName={CHIP_DISPLAY_NAME_VALUES.email}
-				description={contactInputErrorDescription}
-				hasError={isOnlyInvalidContacts}
-			/>
+			<Row width={'fill'}>
+				<ContactInput
+					placeholder={t(
+						'edit_dl_component.placeholder.add_members',
+						"Type an address, click '+' to add to the distribution list"
+					)}
+					// FIXME: remove ts-ignore when contact-input types are fixed
+					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+					// @ts-ignore
+					defaultValue={contactInputValue}
+					icon={'Plus'}
+					iconAction={onAddRawMembers}
+					// FIXME: remove ts-ignore when contact-input types are fixed
+					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+					// @ts-ignore
+					onChange={onContactInputChange}
+					iconDisabled={!isAddMembersAllowed}
+					chipDisplayName={CHIP_DISPLAY_NAME_VALUES.email}
+					description={contactInputErrorDescription}
+					hasError={isOnlyInvalidContacts}
+				/>
+			</Row>
 			<Input
 				data-testid={'dl-members-filter-input'}
 				label={t('edit_dl_component.placeholder.filter_member', 'Filter an address')}
@@ -244,11 +252,6 @@ export const EditDLComponent: FC<EditDLComponentProps> = ({
 				value={searchValue}
 				onChange={onSearchChange}
 			/>
-			<Text size={'small'} color={'secondary'}>
-				{t('edit_dl_component.label.members_total', 'Member list {{total}}', {
-					total: totalMembers
-				})}
-			</Text>
 			<Container height={'15rem'}>
 				<ListV2 maxWidth={'fill'}>{memberItems}</ListV2>
 			</Container>

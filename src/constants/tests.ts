@@ -10,7 +10,7 @@ export const TESTID_SELECTORS = {
 		trash: /icon: Trash2Outline/i,
 		contactGroup: /icon: PeopleOutline/i,
 		editChip: 'icon: EditOutline',
-		editDL: 'icon: Settings2Outline',
+		editDL: 'icon: Edit2Outline',
 		expandDL: 'icon: ChevronDownOutline',
 		collapseDL: 'icon: ChevronUpOutline',
 		filterMembers: 'icon: FunnelOutline',
@@ -38,7 +38,8 @@ export const TESTID_SELECTORS = {
 	listBottomElement: 'list-bottom-element',
 	displayer: 'displayer',
 	displayerHeader: 'displayer-header',
-	accordionItem: 'accordion-item'
+	accordionItem: 'accordion-item',
+	infoContainer: 'info-container'
 };
 
 export const PALETTE = {

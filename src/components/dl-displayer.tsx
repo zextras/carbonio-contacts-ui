@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
 
@@ -30,7 +30,15 @@ export const DistributionListDisplayer = ({
 	distributionList,
 	showMembersList
 }: DistributionListDisplayerProps): React.JSX.Element => {
-	const actions = useDLActions(distributionList);
+	const dlWithMembers = useMemo(
+		(): DistributionList | undefined =>
+			distributionList && {
+				...distributionList,
+				members: { members, total: totalMembers, more: false }
+			},
+		[distributionList, members, totalMembers]
+	);
+	const actions = useDLActions(dlWithMembers);
 
 	return (
 		<Container background={'gray5'} mainAlignment={'flex-start'} padding={{ bottom: '1rem' }}>

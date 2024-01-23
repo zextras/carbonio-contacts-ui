@@ -10,7 +10,7 @@ import { times } from 'lodash';
 
 import { screen, within } from '../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../constants/tests';
-import { DistributionList } from '../model/distribution-list';
+import { DistributionList, DistributionListMembersPage } from '../model/distribution-list';
 import { MakeRequired } from '../types/utils';
 
 export const getDLContactInput = (): {
@@ -68,6 +68,14 @@ export const generateDistributionList = (
 	isOwner: faker.datatype.boolean(),
 	isMember: faker.datatype.boolean(),
 	...data
+});
+
+export const generateDistributionListMembersPage = (
+	members: string[] = []
+): DistributionListMembersPage => ({
+	members,
+	total: members.length,
+	more: false
 });
 
 export const generateDistributionLists = (
