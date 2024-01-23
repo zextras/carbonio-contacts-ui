@@ -16,6 +16,11 @@
         "share_folder": "Share folder"
     },
     "board": {
+        "editContactGroup": {
+            "snackbar": {
+                "contact_group_edited": "Group successfully updated"
+            }
+        },
         "label": {
             "description": "Description"
         },

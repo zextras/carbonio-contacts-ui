@@ -7,7 +7,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 
 import { InputProps, useSnackbar, ChipAction } from '@zextras/carbonio-design-system';
 import { useBoard, useBoardHooks } from '@zextras/carbonio-shell-ui';
-import { remove, uniqBy, xor } from 'lodash';
+import { difference, remove, uniqBy, xor } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import CommonContactGroupBoard, {
@@ -15,6 +15,7 @@ import CommonContactGroupBoard, {
 	isContactGroupNameInvalid
 } from './common-contact-group-board';
 import { ContactGroup } from '../../model/contact-group';
+import { client } from '../../network/client';
 import { useContactGroupStore } from '../../store/contact-groups';
 
 const EditContactGroupBoard = (): React.JSX.Element => {
@@ -34,7 +35,7 @@ const EditContactGroupBoard = (): React.JSX.Element => {
 			members: []
 		} satisfies ContactGroup);
 
-	const { updateBoard, closeBoard } = useBoardHooks();
+	const { updateBoard } = useBoardHooks();
 	const createSnackbar = useSnackbar();
 
 	const [nameValue, setNameValue] = useState(contactGroup.title);
@@ -59,8 +60,42 @@ const EditContactGroupBoard = (): React.JSX.Element => {
 	}, [contactGroup.members, contactGroup.title, updateBoard]);
 
 	const onSave = useCallback(() => {
-		// TODO enable only if there are changes
-	}, []);
+		const addedMembers = difference(memberListEmails, contactGroup.members);
+		const removedMembers = difference(contactGroup.members, memberListEmails);
+
+		client
+			.modifyContactGroup({
+				id: contactGroup.id,
+				addedMembers: addedMembers.length > 0 ? addedMembers : undefined,
+				removedMembers: removedMembers.length > 0 ? removedMembers : undefined,
+				name: contactGroup.title !== nameValue ? nameValue : undefined
+			})
+			.then(() => {
+				createSnackbar({
+					key: new Date().toLocaleString(),
+					type: 'success',
+					label: t(
+						'board.editContactGroup.snackbar.contact_group_edited',
+						'Group successfully updated'
+					)
+				});
+			})
+			.catch(() => {
+				createSnackbar({
+					key: new Date().toLocaleString(),
+					type: 'error',
+					label: t('label.error_try_again', 'Something went wrong, please try again')
+				});
+			});
+	}, [
+		contactGroup.id,
+		contactGroup.members,
+		contactGroup.title,
+		createSnackbar,
+		memberListEmails,
+		nameValue,
+		t
+	]);
 
 	const contactInputOnChange = (
 		newContactInputValue: Array<
@@ -143,8 +178,9 @@ const EditContactGroupBoard = (): React.JSX.Element => {
 	const isOnSaveDisabled = useMemo(
 		() =>
 			isContactGroupNameInvalid(nameValue) ||
-			xor(memberListEmails, contactGroup.members).length === 0,
-		[contactGroup.members, memberListEmails, nameValue]
+			(xor(memberListEmails, contactGroup.members).length === 0 &&
+				contactGroup.title === nameValue),
+		[contactGroup.members, contactGroup.title, memberListEmails, nameValue]
 	);
 
 	return (
