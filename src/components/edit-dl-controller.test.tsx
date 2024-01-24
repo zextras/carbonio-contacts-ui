@@ -16,8 +16,10 @@ import {
 } from './edit-dl-controller';
 import { screen, setupTest, within } from '../carbonio-ui-commons/test/test-setup';
 import { JEST_MOCKED_ERROR, TESTID_SELECTORS } from '../constants/tests';
+import { DistributionListOwner } from '../model/distribution-list';
 import {
 	registerDistributionListActionHandler,
+	registerGetDistributionListHandler,
 	registerGetDistributionListMembersHandler
 } from '../tests/msw-handlers';
 import { generateDistributionList, getDLContactInput } from '../tests/utils';
@@ -105,7 +107,7 @@ describe('EditDLControllerComponent', () => {
 			expect(screen.getAllByTestId(TESTID_SELECTORS.membersListItem)).toHaveLength(members.length);
 		});
 
-		it('should not retrieve members from network if they are valued in the dl prop', async () => {
+		it('should not retrieve members from network if they are provided as prop', async () => {
 			const members = times(10, () => faker.internet.email());
 			const dl = generateDistributionList({
 				members: { members, total: members.length, more: false }
@@ -271,6 +273,43 @@ describe('EditDLControllerComponent', () => {
 			await user.click(within(memberToRemoveElement).getByRole('button', { name: /remove/i }));
 			await waitFor(() => expect(memberToRemoveElement).not.toBeInTheDocument());
 			await waitFor(() => expect(screen.queryByText(errorMessage)).not.toBeInTheDocument());
+		});
+	});
+
+	describe('Managers tab', () => {
+		it('should retrieve managers from network only once', async () => {
+			const owners = times<DistributionListOwner>(10, () => ({
+				id: faker.string.uuid(),
+				name: faker.internet.email()
+			}));
+			const dl = generateDistributionList({ owners: undefined });
+			const getDLHandler = registerGetDistributionListHandler({ ...dl, owners });
+			const { user } = setupTest(<EditDLControllerComponent {...buildProps(dl)} />);
+			await screen.findByText(dl.displayName);
+			await user.click(screen.getByText(/manager list/i));
+			await screen.findByText(owners[0].name);
+			expect(getDLHandler).toHaveBeenCalledTimes(1);
+			await screen.findByText(owners[0].name);
+			expect(getDLHandler).toHaveBeenCalledTimes(1);
+			await user.click(screen.getByText(/details/i));
+			await screen.findByRole('textbox', { name: /name/i });
+			await user.click(screen.getByText(/manager list/i));
+			await screen.findByText(owners[0].name);
+			expect(getDLHandler).toHaveBeenCalledTimes(1);
+		});
+
+		it('should not retrieve managers from network if they are provided as props', async () => {
+			const owners = times<DistributionListOwner>(10, () => ({
+				id: faker.string.uuid(),
+				name: faker.internet.email()
+			}));
+			const dl = generateDistributionList({ owners });
+			const getDLHandler = registerGetDistributionListHandler({ ...dl, owners });
+			const { user } = setupTest(<EditDLControllerComponent {...buildProps(dl)} />);
+			await screen.findByText(dl.displayName);
+			await user.click(screen.getByText(/manager list/i));
+			await screen.findByText(owners[0].name);
+			expect(getDLHandler).not.toHaveBeenCalled();
 		});
 	});
 

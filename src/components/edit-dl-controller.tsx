@@ -93,7 +93,7 @@ export const EditDLControllerComponent = ({
 	}, [createSnackbar, email, membersPage, t]);
 
 	useEffect(() => {
-		if (selectedTab === DL_TABS.managers && ownersProp === undefined) {
+		if (selectedTab === DL_TABS.managers && owners === undefined) {
 			client
 				.getDistributionList({ email })
 				.then((data) => {
@@ -112,7 +112,7 @@ export const EditDLControllerComponent = ({
 					setLoadingOwners(false);
 				});
 		}
-	}, [createSnackbar, email, ownersProp, selectedTab, t]);
+	}, [createSnackbar, email, owners, selectedTab, t]);
 
 	const onAddMembers = useCallback((newMembers: string[]) => {
 		setMembers((prevState) => [...newMembers, ...prevState]);

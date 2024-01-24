@@ -202,7 +202,7 @@ describe('Distribution Lists View', () => {
 				}
 			);
 
-			const displayerHeader = screen.getByTestId(TESTID_SELECTORS.displayerHeader);
+			const displayerHeader = await screen.findByTestId(TESTID_SELECTORS.displayerHeader);
 			const closeAction = await within(displayerHeader).findByRoleWithIcon('button', {
 				icon: TESTID_SELECTORS.icons.closeDisplayer
 			});
@@ -322,7 +322,7 @@ describe('Distribution Lists View', () => {
 			);
 
 			await screen.findByText(dl2.displayName);
-			const displayer = screen.getByTestId(TESTID_SELECTORS.displayer);
+			const displayer = await screen.findByTestId(TESTID_SELECTORS.displayer);
 			await within(displayer).findAllByText(dl1.displayName);
 			await screen.findByText(dl1Members[0]);
 			await user.click(screen.getByText(dl2.displayName));

@@ -18,13 +18,11 @@ import { registerFullAutocompleteHandler } from '../tests/msw-handlers';
 import { getDLContactInput } from '../tests/utils';
 
 const buildProps = ({
-	email = '',
 	members = [],
 	totalMembers = 0,
 	onRemoveMember = jest.fn(),
 	onAddMembers = jest.fn()
 }: Partial<EditDLComponentProps> = {}): EditDLComponentProps => ({
-	email,
 	members,
 	totalMembers,
 	onRemoveMember,
