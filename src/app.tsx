@@ -55,7 +55,8 @@ const LazyBoardView = lazy(
 );
 
 const LazyNewContactGroupBoardView = lazy(
-	() => import(/* webpackChunkName: "newContactGroupView" */ './views/board/NewContactGroupBoard')
+	() =>
+		import(/* webpackChunkName: "newContactGroupView" */ './views/board/new-contact-group-board')
 );
 
 const LazyEditContactGroupBoardView = lazy(

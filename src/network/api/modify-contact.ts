@@ -8,7 +8,6 @@ import { ErrorSoapBodyResponse, soapFetch } from '@zextras/carbonio-shell-ui';
 import { GenericSoapPayload } from './types';
 import { NAMESPACES } from '../../constants/api';
 import { ContactGroup } from '../../model/contact-group';
-import { values } from 'lodash';
 
 export type ModifyContactAttribute = { n: 'fullName' | 'nickname' | 'fileAs'; _content: string };
 

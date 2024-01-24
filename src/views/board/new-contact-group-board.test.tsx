@@ -13,7 +13,7 @@ import * as shell from '@zextras/carbonio-shell-ui';
 import { first, last } from 'lodash';
 import { rest } from 'msw';
 
-import NewContactGroupBoard from './NewContactGroupBoard';
+import NewContactGroupBoard from './new-contact-group-board';
 import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
 import { setupTest, screen } from '../../carbonio-ui-commons/test/test-setup';
 import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../constants';
