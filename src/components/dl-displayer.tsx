@@ -68,7 +68,13 @@ export const DistributionListDisplayer = ({
 							description={distributionList?.description}
 						/>
 						<ManagerList managers={distributionList?.owners} />
-						{showMembersList && <MemberList members={members} membersCount={totalMembers} />}
+						{showMembersList && (
+							<MemberList
+								members={members}
+								membersCount={totalMembers}
+								key={distributionList?.email}
+							/>
+						)}
 					</Container>
 				</ScrollableContainer>
 			</Container>

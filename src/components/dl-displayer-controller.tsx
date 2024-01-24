@@ -13,14 +13,16 @@ import { DistributionListDisplayer } from './dl-displayer';
 import { EmptyDisplayer } from './empty-displayer';
 import { useGetDistributionList } from '../hooks/use-get-distribution-list';
 import { useGetDistributionListMembers } from '../hooks/use-get-distribution-list-members';
-import { useActiveItem } from '../hooks/useActiveItem';
 
-export const DLDisplayerController = (): React.JSX.Element => {
-	const { activeItem } = useActiveItem();
+type DLDisplayerControllerProps = {
+	id: string | undefined;
+};
+
+export const DLDisplayerController = ({ id }: DLDisplayerControllerProps): React.JSX.Element => {
 	const [t] = useTranslation();
 	const dlToLoad = useMemo<Parameters<typeof useGetDistributionList>[0] | undefined>(
-		() => (activeItem ? { id: activeItem } : undefined),
-		[activeItem]
+		() => (id ? { id } : undefined),
+		[id]
 	);
 	const distributionList = useGetDistributionList(dlToLoad);
 	const { members, totalMembers } = useGetDistributionListMembers(
@@ -34,13 +36,12 @@ export const DLDisplayerController = (): React.JSX.Element => {
 			crossAlignment="flex-start"
 			data-testid="displayer"
 		>
-			{(activeItem && distributionList && (
+			{(id && distributionList && (
 				<DistributionListDisplayer
 					members={members}
 					totalMembers={totalMembers}
 					distributionList={distributionList}
 					showMembersList={distributionList?.canRequireMembers ?? false}
-					key={activeItem}
 				/>
 			)) || (
 				<EmptyDisplayer

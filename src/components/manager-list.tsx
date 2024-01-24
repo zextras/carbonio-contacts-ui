@@ -24,7 +24,7 @@ export const ManagerList = ({ managers, loading }: ManagerListProps): React.JSX.
 
 	const memberItems = useMemo(
 		() =>
-			(loading &&
+			(!loading &&
 				map<DistributionListOwner, React.JSX.Element>(managers, (manager) => (
 					<MemberDisplayerListItemComponent email={manager.name} key={manager.id} />
 				))) ||

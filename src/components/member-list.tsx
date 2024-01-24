@@ -7,28 +7,36 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
 import { Container, Input, ListV2, Text } from '@zextras/carbonio-design-system';
-import { filter, map } from 'lodash';
+import { filter, map, times } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { FilterMembersIcon } from './filter-members-icon';
 import { MemberDisplayerListItemComponent } from './member-displayer-list-item';
+import { ShimmedDisplayerListItem } from './shimmed-displayer-list-item';
 
 type MemberListProps = {
 	members: Array<string>;
 	membersCount: number;
+	loading?: boolean;
 };
 
-export const MemberList = ({ members, membersCount }: MemberListProps): React.JSX.Element => {
+export const MemberList = ({
+	members,
+	membersCount,
+	loading
+}: MemberListProps): React.JSX.Element => {
 	const [t] = useTranslation();
 	const [searchValue, setSearchValue] = useState('');
 
 	const memberItems = useMemo(
 		() =>
-			map<string, React.JSX.Element>(
-				filter(members, (member) => member.includes(searchValue)),
-				(member) => <MemberDisplayerListItemComponent email={member} key={member} />
-			),
-		[members, searchValue]
+			(!loading &&
+				map<string, React.JSX.Element>(
+					filter(members, (member) => member.includes(searchValue)),
+					(member) => <MemberDisplayerListItemComponent email={member} key={member} />
+				)) ||
+			times(3, (index) => <ShimmedDisplayerListItem key={index} />),
+		[loading, members, searchValue]
 	);
 
 	const onSearchChange = useCallback<React.ChangeEventHandler<HTMLInputElement>>((event) => {

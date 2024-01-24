@@ -17,9 +17,11 @@ export const ShimmedDisplayerListItem = (): React.JSX.Element => (
 		wrap={'nowrap'}
 	>
 		<Row wrap={'nowrap'} gap={'0.5rem'} flexShrink={1} minWidth={'1rem'}>
-			<Shimmer.Avatar size={'large'} />
+			<Row flexShrink={0}>
+				<Shimmer.Avatar size={'medium'} />
+			</Row>
 			<Row flexShrink={1} minWidth={'1rem'}>
-				<Shimmer.Text size="small" width="180ch" />
+				<Shimmer.Text size="small" width="25ch" />
 			</Row>
 		</Row>
 	</Row>
