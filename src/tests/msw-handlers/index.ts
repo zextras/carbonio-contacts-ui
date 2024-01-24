@@ -10,6 +10,7 @@ import { ResponseResolver, rest, RestContext, RestRequest } from 'msw';
 
 import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
 import { mockedAccount } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
+import { ZimbraHideInGalType } from '../../constants';
 import { NAMESPACES } from '../../constants/api';
 import { FullAutocompleteResponse, Match } from '../../legacy/types/contact';
 import {
@@ -158,8 +159,11 @@ export const registerGetDistributionListHandler = (
 		displayName?: string;
 		owners?: Array<{ id?: string; name?: string }>;
 		description?: string;
+		canRequireMembers?: boolean;
+		isOwner?: boolean;
 	},
-	error?: string
+	error?: string,
+	zimbraHideParam: ZimbraHideInGalType = 'FALSE'
 ): jest.Mock<ReturnType<GetDistributionListHandler>, Parameters<GetDistributionListHandler>> => {
 	const handler = jest.fn<
 		ReturnType<GetDistributionListHandler>,
@@ -179,10 +183,11 @@ export const registerGetDistributionListHandler = (
 								name: dl.email,
 								_attrs: {
 									displayName: dl.displayName,
-									description: dl.description
+									description: dl.description,
+									zimbraHideInGal: zimbraHideParam
 								},
 								owners: map(dl.owners, (owner) => ({ owner: [owner] })),
-								isOwner: some(dl.owners, (owner) => owner.id === mockedAccount.id)
+								isOwner: some(dl.owners, (owner) => owner.id === mockedAccount.id) || dl.isOwner
 							}
 						],
 						_jsns: NAMESPACES.account

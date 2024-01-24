@@ -7,6 +7,7 @@ import { ErrorSoapBodyResponse, soapFetch } from '@zextras/carbonio-shell-ui';
 import { filter, first, flatMap } from 'lodash';
 
 import { GenericSoapPayload } from './types';
+import { ZimbraHideInGalType } from '../../constants';
 import { NAMESPACES } from '../../constants/api';
 import { DistributionList, DistributionListOwner } from '../../model/distribution-list';
 import { RequireAtLeastOne } from '../../types/utils';
@@ -28,7 +29,7 @@ export interface GetDistributionListResponse extends GenericSoapPayload<typeof N
 		_attrs?: {
 			displayName?: string;
 			description?: string;
-			zimbraHideInGal?: 'TRUE' | 'FALSE';
+			zimbraHideInGal: ZimbraHideInGalType;
 		};
 	}>;
 }
