@@ -130,7 +130,7 @@ export const EditDLControllerComponent = ({
 			members
 		);
 		client
-			.distributionListAction(email, membersToAdd, membersToRemove)
+			.distributionListAction({ email, membersToAdd, membersToRemove })
 			.then(() => {
 				createSnackbar({
 					key: `dl-save-success-${email}`,

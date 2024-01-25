@@ -425,7 +425,7 @@ describe('EditDLControllerComponent', () => {
 			it('should call the API when clicked', async () => {
 				const members = [faker.internet.email()];
 				registerGetDistributionListMembersHandler(members);
-				const handler = registerDistributionListActionHandler([], members);
+				const handler = registerDistributionListActionHandler({ membersToAdd: [] });
 				const dlEmail = 'dl-mail@domain.net';
 				const { user } = setupTest(
 					<EditDLControllerComponent {...buildProps({ email: dlEmail })} />
@@ -443,7 +443,7 @@ describe('EditDLControllerComponent', () => {
 			it('should show a success snackbar when then API return a success result', async () => {
 				const members = [faker.internet.email()];
 				registerGetDistributionListMembersHandler(members);
-				registerDistributionListActionHandler([], members);
+				registerDistributionListActionHandler({});
 				const dlEmail = 'dl-mail@domain.net';
 				const dlDisplayName = 'All group employees';
 				const { user } = setupTest(
@@ -465,7 +465,7 @@ describe('EditDLControllerComponent', () => {
 			it('should cause a error snackbar to appear when then API return an error result', async () => {
 				const members = [faker.internet.email()];
 				registerGetDistributionListMembersHandler(members);
-				registerDistributionListActionHandler([], members, [JEST_MOCKED_ERROR]);
+				registerDistributionListActionHandler({}, [JEST_MOCKED_ERROR]);
 				const dlEmail = 'dl-mail@domain.net';
 				const dlDisplayName = 'All group employees';
 				const { user } = setupTest(

@@ -5,7 +5,7 @@
  */
 import { faker } from '@faker-js/faker';
 import { SoapFault, SoapResponse, SuccessSoapResponse } from '@zextras/carbonio-shell-ui';
-import { map, some } from 'lodash';
+import { map, size, some } from 'lodash';
 import { ResponseResolver, rest, RestContext, RestRequest } from 'msw';
 
 import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
@@ -90,8 +90,12 @@ type DistributionListActionHandlerResponseResolver = ResponseResolver<
 >;
 
 export const registerDistributionListActionHandler = (
-	membersToAdd: Array<string>,
-	membersToRemove: Array<string>,
+	data: {
+		membersToAdd?: Array<string>;
+		membersToRemove?: Array<string>;
+		displayName?: string;
+		description?: string;
+	},
 	errors?: string[]
 ): jest.Mock<
 	ReturnType<DistributionListActionHandlerResponseResolver>,
@@ -102,12 +106,17 @@ export const registerDistributionListActionHandler = (
 		Parameters<DistributionListActionHandlerResponseResolver>
 	>(async (req, res, ctx) => {
 		const responses: Array<DistributionListActionResponse> = [];
-		if (membersToAdd.length > 0) {
+		if (size(data.membersToAdd) > 0) {
 			responses.push({
 				_jsns: NAMESPACES.account
 			});
 		}
-		if (membersToRemove.length > 0) {
+		if (size(data.membersToRemove) > 0) {
+			responses.push({
+				_jsns: NAMESPACES.account
+			});
+		}
+		if (data.displayName !== undefined || data.description !== undefined) {
 			responses.push({
 				_jsns: NAMESPACES.account
 			});

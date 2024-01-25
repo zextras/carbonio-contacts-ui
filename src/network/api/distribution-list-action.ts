@@ -8,7 +8,24 @@ import { SoapFault, soapFetch } from '@zextras/carbonio-shell-ui';
 import { GenericSoapPayload } from './types';
 import { NAMESPACES } from '../../constants/api';
 
-export type DistributionListActionOperation = 'addMembers' | 'removeMembers';
+export type DistributionListActionOperationMembers = 'addMembers' | 'removeMembers';
+export type DistributionListActionOperationModify = 'modify';
+
+export type DistributionListAttributes = {
+	displayName?: string;
+	description?: string;
+};
+
+type MappedAttributes = NonNullable<
+	{
+		[K in keyof DistributionListAttributes]-?: {
+			n: K;
+			_content: NonNullable<DistributionListAttributes[K]>;
+		};
+	}[keyof DistributionListAttributes]
+>;
+
+type AttributesArray = Array<MappedAttributes>;
 
 export interface DistributionListActionRequest
 	extends GenericSoapPayload<typeof NAMESPACES.account> {
@@ -16,12 +33,17 @@ export interface DistributionListActionRequest
 		by: 'name';
 		_content: string;
 	};
-	action: {
-		op: DistributionListActionOperation;
-		dlm: Array<{
-			_content: string;
-		}>;
-	};
+	action:
+		| {
+				op: DistributionListActionOperationMembers;
+				dlm: Array<{
+					_content: string;
+				}>;
+		  }
+		| {
+				op: DistributionListActionOperationModify;
+				a: AttributesArray;
+		  };
 }
 
 export type DistributionListActionResponse = GenericSoapPayload<typeof NAMESPACES.account>;
@@ -37,18 +59,44 @@ export interface BatchDistributionListActionResponse
 	Fault?: Array<SoapFault>;
 }
 
-export const distributionListAction = (
-	email: string,
-	membersToAdd: Array<string>,
-	membersToRemove: Array<string>
-): Promise<void> => {
-	if (!membersToAdd.length && !membersToRemove.length) {
-		return Promise.resolve();
-	}
-
+export const distributionListAction = ({
+	email,
+	displayName,
+	description,
+	membersToRemove,
+	membersToAdd
+}: {
+	email: string;
+	displayName?: string;
+	description?: string;
+	membersToAdd?: Array<string>;
+	membersToRemove?: Array<string>;
+}): Promise<void> => {
 	const actionRequests: Array<DistributionListActionRequest> = [];
 
-	if (membersToAdd.length > 0) {
+	if (displayName !== undefined || description !== undefined) {
+		const attributes: AttributesArray = [];
+		if (displayName !== undefined) {
+			attributes.push({ n: 'displayName', _content: displayName });
+		}
+		if (description !== undefined) {
+			attributes.push({ n: 'description', _content: description });
+		}
+
+		actionRequests.push({
+			dl: {
+				by: 'name',
+				_content: email
+			},
+			action: {
+				op: 'modify',
+				a: attributes
+			},
+			_jsns: NAMESPACES.account
+		});
+	}
+
+	if (membersToAdd && membersToAdd.length > 0) {
 		actionRequests.push({
 			dl: {
 				by: 'name',
@@ -62,7 +110,7 @@ export const distributionListAction = (
 		});
 	}
 
-	if (membersToRemove.length > 0) {
+	if (membersToRemove && membersToRemove.length > 0) {
 		actionRequests.push({
 			dl: {
 				by: 'name',
@@ -74,6 +122,10 @@ export const distributionListAction = (
 			},
 			_jsns: NAMESPACES.account
 		});
+	}
+
+	if (actionRequests.length === 0) {
+		return Promise.resolve();
 	}
 
 	return soapFetch<BatchDistributionListActionRequest, BatchDistributionListActionResponse>(
