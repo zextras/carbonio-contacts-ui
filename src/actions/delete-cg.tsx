@@ -6,11 +6,12 @@
 import React, { useCallback, useMemo } from 'react';
 
 import { Container, useModal, useSnackbar } from '@zextras/carbonio-design-system';
+import { closeBoard, getBoardById } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
 import { UIAction } from './types';
 import { Text } from '../components/Text';
-import { ACTION_IDS, ROUTES_INTERNAL_PARAMS } from '../constants';
+import { ACTION_IDS, EDIT_CONTACT_GROUP_BOARD_ID, ROUTES_INTERNAL_PARAMS } from '../constants';
 import { useActiveContactGroup } from '../hooks/useActiveContactGroup';
 import { useNavigation } from '../hooks/useNavigation';
 import { ContactGroup } from '../model/contact-group';
@@ -46,6 +47,11 @@ export const useActionDeleteCG = (): DeleteCGAction => {
 					client
 						.deleteContactAction([contactGroup.id])
 						.then(() => {
+							const boardId = `${EDIT_CONTACT_GROUP_BOARD_ID}-${contactGroup.id}`;
+							const board = getBoardById(boardId);
+							if (board) {
+								closeBoard(boardId);
+							}
 							if (activeContactGroup?.id === contactGroup.id) {
 								navigateTo(ROUTES_INTERNAL_PARAMS.route.contactGroups, { replace: true });
 							}
