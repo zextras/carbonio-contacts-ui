@@ -89,10 +89,7 @@ describe('Distribution List Displayer Controller', () => {
 			async (hideParam) => {
 				const members = times(10, () => faker.internet.email());
 				const dl = generateDistributionList();
-				registerGetDistributionListHandler(
-					{ ...dl, zimbraHideParam: hideParam as BooleanString },
-					undefined
-				);
+				registerGetDistributionListHandler({ ...dl, zimbraHideParam: hideParam as BooleanString });
 				registerGetDistributionListMembersHandler(members);
 				setupTest(
 					<Route path={`${ROUTES.mainRoute}${ROUTES.distributionLists}`}>
@@ -114,7 +111,7 @@ describe('Distribution List Displayer Controller', () => {
 		it('should render member list if the user is the owner even if the zimbraHideInGal is "TRUE"', async () => {
 			const members = times(10, () => faker.internet.email());
 			const dl = generateDistributionList({ isOwner: true });
-			registerGetDistributionListHandler({ ...dl, zimbraHideParam: 'TRUE' }, undefined);
+			registerGetDistributionListHandler({ ...dl, zimbraHideParam: 'TRUE' });
 			registerGetDistributionListMembersHandler(members);
 			setupTest(
 				<Route path={`${ROUTES.mainRoute}${ROUTES.distributionLists}`}>
@@ -137,7 +134,7 @@ describe('Distribution List Displayer Controller', () => {
 			async (isOwner) => {
 				const members = times(10, () => faker.internet.email());
 				const dl = generateDistributionList({ isOwner });
-				registerGetDistributionListHandler({ ...dl, zimbraHideParam: 'TRUE' }, undefined);
+				registerGetDistributionListHandler({ ...dl, zimbraHideParam: 'TRUE' });
 				registerGetDistributionListMembersHandler(members);
 				setupTest(
 					<Route path={`${ROUTES.mainRoute}${ROUTES.distributionLists}`}>
