@@ -4,7 +4,12 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { faker } from '@faker-js/faker';
-import { SoapFault, SoapResponse, SuccessSoapResponse } from '@zextras/carbonio-shell-ui';
+import {
+	BooleanString,
+	SoapFault,
+	SoapResponse,
+	SuccessSoapResponse
+} from '@zextras/carbonio-shell-ui';
 import { map, size, some } from 'lodash';
 import { ResponseResolver, rest, RestContext, RestRequest } from 'msw';
 
@@ -161,12 +166,14 @@ type GetDistributionListHandler = ResponseResolver<
 >;
 
 export const registerGetDistributionListHandler = (
-	dl: {
+	data: {
 		id?: string;
 		email: string;
 		displayName?: string;
 		owners?: Array<{ id?: string; name?: string }>;
 		description?: string;
+		isOwner?: boolean;
+		zimbraHideParam?: BooleanString;
 	},
 	error?: string
 ): jest.Mock<ReturnType<GetDistributionListHandler>, Parameters<GetDistributionListHandler>> => {
@@ -184,14 +191,15 @@ export const registerGetDistributionListHandler = (
 					GetDistributionListResponse: {
 						dl: [
 							{
-								id: dl.id ?? faker.string.uuid(),
-								name: dl.email,
+								id: data.id ?? faker.string.uuid(),
+								name: data.email,
 								_attrs: {
-									displayName: dl.displayName,
-									description: dl.description
+									displayName: data.displayName,
+									description: data.description,
+									zimbraHideInGal: data.zimbraHideParam
 								},
-								owners: map(dl.owners, (owner) => ({ owner: [owner] })),
-								isOwner: some(dl.owners, (owner) => owner.id === mockedAccount.id)
+								owners: map(data.owners, (owner) => ({ owner: [owner] })),
+								isOwner: some(data.owners, (owner) => owner.id === mockedAccount.id) || data.isOwner
 							}
 						],
 						_jsns: NAMESPACES.account

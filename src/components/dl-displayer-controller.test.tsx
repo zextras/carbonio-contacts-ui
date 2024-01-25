@@ -6,6 +6,7 @@
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
+import { BooleanString } from '@zextras/carbonio-shell-ui';
 import { times } from 'lodash';
 
 import { DLDisplayerController } from './dl-displayer-controller';
@@ -53,16 +54,48 @@ describe('Distribution List Displayer Controller', () => {
 		expect(await screen.findByText(owners[9].name)).toBeVisible();
 	});
 
-	it('should render member list', async () => {
-		const members = times(10, () => faker.internet.email());
-		const dl = generateDistributionList();
-		registerGetDistributionListHandler(dl);
-		registerGetDistributionListMembersHandler(members);
-		setupTest(<DLDisplayerController id={dl.id} />);
-		await screen.findAllByText(dl.displayName);
-		expect(await screen.findByText(/member list 10/i)).toBeVisible();
-		expect(await screen.findByText(members[0])).toBeVisible();
-		expect(await screen.findByText(members[9])).toBeVisible();
+	describe('Member list', () => {
+		it.each(['FALSE', undefined])(
+			'should render member list if zimbraHideInGal is %s',
+			async (hideParam) => {
+				const members = times(10, () => faker.internet.email());
+				const dl = generateDistributionList();
+				registerGetDistributionListHandler({ ...dl, zimbraHideParam: hideParam as BooleanString });
+				registerGetDistributionListMembersHandler(members);
+				const { user } = setupTest(<DLDisplayerController id={dl.id} />);
+				await screen.findAllByText(dl.displayName);
+				await user.click(screen.getByText(/member list/i));
+				expect(await screen.findByText(/member list 10/i)).toBeVisible();
+				expect(await screen.findByText(members[0])).toBeVisible();
+				expect(await screen.findByText(members[9])).toBeVisible();
+			}
+		);
+
+		it('should render member list if the user is the owner even if the zimbraHideInGal is "TRUE"', async () => {
+			const members = times(10, () => faker.internet.email());
+			const dl = generateDistributionList({ isOwner: true });
+			registerGetDistributionListHandler({ ...dl, zimbraHideParam: 'TRUE' });
+			registerGetDistributionListMembersHandler(members);
+			const { user } = setupTest(<DLDisplayerController id={dl.id} />);
+			await screen.findAllByText(dl.displayName);
+			await user.click(screen.getByText(/member list/i));
+			expect(await screen.findByText(/member list 10/i)).toBeVisible();
+			expect(await screen.findByText(members[0])).toBeVisible();
+			expect(await screen.findByText(members[9])).toBeVisible();
+		});
+
+		it.each([false, undefined])(
+			'should not render member list if isOwner is %s and zimbraHideInGal is "TRUE"',
+			async (isOwner) => {
+				const members = times(10, () => faker.internet.email());
+				const dl = generateDistributionList({ isOwner });
+				registerGetDistributionListHandler({ ...dl, zimbraHideParam: 'TRUE' });
+				registerGetDistributionListMembersHandler(members);
+				setupTest(<DLDisplayerController id={dl.id} />);
+				await screen.findAllByText(dl.displayName);
+				expect(screen.queryByText(/member list/i)).not.toBeInTheDocument();
+			}
+		);
 	});
 
 	it('should show an error snackbar if there is a network error while loading the details', async () => {
