@@ -10,10 +10,15 @@ import { GenericSoapPayload } from './types';
 import { NAMESPACES } from '../../constants/api';
 import { DistributionList } from '../../model/distribution-list';
 
+type Attributes = {
+	description?: string;
+};
+
 export interface GetAccountDistributionListsRequest
 	extends GenericSoapPayload<typeof NAMESPACES.account> {
 	ownerOf?: boolean;
 	memberOf?: 'none' | 'all' | 'directOnly';
+	attrs?: string;
 }
 
 export interface GetAccountDistributionListsResponse
@@ -24,6 +29,7 @@ export interface GetAccountDistributionListsResponse
 		isOwner?: boolean;
 		isMember?: boolean;
 		d?: string;
+		_attrs?: Attributes;
 	}>;
 }
 
@@ -35,7 +41,8 @@ const normalizeResponse = (
 		email: item.name,
 		displayName: item.d,
 		isOwner: item.isOwner ?? false,
-		isMember: item.isMember ?? false
+		isMember: item.isMember ?? false,
+		description: item._attrs?.description
 	}));
 
 export const getAccountDistributionLists = (options: {
@@ -48,7 +55,8 @@ export const getAccountDistributionLists = (options: {
 	>('GetAccountDistributionLists', {
 		_jsns: NAMESPACES.account,
 		ownerOf: options.ownerOf,
-		memberOf: options.memberOf ? 'all' : 'none'
+		memberOf: options.memberOf ? 'all' : 'none',
+		attrs: 'description'
 	}).then((response) => {
 		if ('Fault' in response) {
 			throw new Error(response.Fault.Reason.Text, { cause: response.Fault });

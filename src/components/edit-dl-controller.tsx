@@ -13,7 +13,7 @@ import {
 	TabBarProps,
 	useSnackbar
 } from '@zextras/carbonio-design-system';
-import { difference, isEqual, xor } from 'lodash';
+import { difference, isEqual, pickBy, xor } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { DLDetailsInfo } from './dl-details-info';
@@ -30,7 +30,7 @@ export type EditDLControllerComponentProps = Pick<
 	'email' | 'displayName' | 'owners' | 'members' | 'description'
 >;
 
-type DLDetails = Pick<DistributionList, 'displayName' | 'description'>;
+type DLDetails = Required<Pick<DistributionList, 'displayName' | 'description'>>;
 
 export const getMembersPartition = (
 	originalMembers: Array<string>,
@@ -129,8 +129,12 @@ export const EditDLControllerComponent = ({
 			originalMembersRef.current,
 			members
 		);
+		const detailDifference = pickBy(
+			details,
+			(value, key) => originalDetailsRef.current[key as keyof DLDetails] !== value
+		);
 		client
-			.distributionListAction({ email, membersToAdd, membersToRemove })
+			.distributionListAction({ email, membersToAdd, membersToRemove, ...detailDifference })
 			.then(() => {
 				createSnackbar({
 					key: `dl-save-success-${email}`,
@@ -152,7 +156,7 @@ export const EditDLControllerComponent = ({
 				});
 				console.error(error);
 			});
-	}, [createSnackbar, displayName, email, members, t]);
+	}, [createSnackbar, details, displayName, email, members, t]);
 
 	const isDirty = useMemo(
 		() =>
@@ -178,6 +182,11 @@ export const EditDLControllerComponent = ({
 		setDetails((prevState) => ({ ...prevState, ...newData }));
 	}, []);
 
+	const onDiscard = useCallback(() => {
+		setMembers(originalMembersRef.current);
+		setDetails(originalDetailsRef.current);
+	}, []);
+
 	return (
 		<Container
 			orientation={'vertical'}
@@ -194,7 +203,8 @@ export const EditDLControllerComponent = ({
 				gap={'0.5rem'}
 				height={'auto'}
 			>
-				<Button label={t('label.save', 'save')} disabled={!isDirty} onClick={onConfirm} />
+				<Button label={t('label.discard', 'Discard')} type={'outlined'} onClick={onDiscard} />
+				<Button label={t('label.save', 'Save')} disabled={!isDirty} onClick={onConfirm} />
 			</Container>
 			<DLDetailsInfo displayName={displayName} email={email} padding={{ bottom: 'large' }} />
 			<Divider />
@@ -217,7 +227,11 @@ export const EditDLControllerComponent = ({
 					borderColor={{ bottom: 'gray3' }}
 				/>
 				{selectedTab === DL_TABS.details && (
-					<EditDLDetails name={displayName} description={description} onChange={onDetailsChange} />
+					<EditDLDetails
+						name={details.displayName}
+						description={details.description}
+						onChange={onDetailsChange}
+					/>
 				)}
 				{selectedTab === DL_TABS.members && (
 					<EditDLMembersComponent

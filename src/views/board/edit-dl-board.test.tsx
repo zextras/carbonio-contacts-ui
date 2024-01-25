@@ -5,6 +5,7 @@
  */
 import React from 'react';
 
+import { faker } from '@faker-js/faker';
 import * as shell from '@zextras/carbonio-shell-ui';
 
 import EditDLBoard from './edit-dl-board';
@@ -24,6 +25,11 @@ describe('Edit DL board', () => {
 		});
 		setupTest(<EditDLBoard />);
 		expect(await screen.findByText(dl.email)).toBeVisible();
+		expect(screen.getByText(/details/i)).toBeVisible();
+		expect(screen.getByText(/member list/i)).toBeVisible();
+		expect(screen.getByText(/manager list/i)).toBeVisible();
+		expect(screen.getByRole('button', { name: /save/i })).toBeVisible();
+		expect(screen.getByRole('button', { name: /discard/i })).toBeVisible();
 	});
 
 	it('should show an error message if board is opened without a distribution list', () => {
@@ -37,5 +43,26 @@ describe('Edit DL board', () => {
 		});
 		setupTest(<EditDLBoard />);
 		expect(screen.getByText(/something went wrong/i)).toBeVisible();
+	});
+
+	describe('Details tab', () => {
+		it('should show dl data inside input fields', async () => {
+			const description = faker.word.words();
+			const dl = generateDistributionList({ description });
+			jest.spyOn(shell, 'useBoard').mockReturnValue({
+				context: dl,
+				id: '',
+				url: '',
+				app: '',
+				icon: '',
+				title: ''
+			});
+			setupTest(<EditDLBoard />);
+			await screen.findByText(dl.displayName);
+			expect(screen.getByRole('textbox', { name: 'Distribution List name' })).toHaveValue(
+				dl.displayName
+			);
+			expect(screen.getByRole('textbox', { name: 'Description' })).toHaveValue(description);
+		});
 	});
 });

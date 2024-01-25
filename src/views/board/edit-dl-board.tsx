@@ -29,6 +29,7 @@ const EditDLBoard = (): React.JSX.Element => {
 			displayName={distributionList.displayName}
 			members={distributionList.members}
 			owners={distributionList.owners}
+			description={distributionList.description}
 		/>
 	);
 };

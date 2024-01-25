@@ -15,14 +15,20 @@ import {
 	getMembersPartition
 } from './edit-dl-controller';
 import { screen, setupTest, within } from '../carbonio-ui-commons/test/test-setup';
+import { NAMESPACES } from '../constants/api';
 import { JEST_MOCKED_ERROR, TESTID_SELECTORS } from '../constants/tests';
 import { DistributionListOwner } from '../model/distribution-list';
+import { BatchDistributionListActionRequest } from '../network/api/distribution-list-action';
 import {
 	registerDistributionListActionHandler,
 	registerGetDistributionListHandler,
 	registerGetDistributionListMembersHandler
 } from '../tests/msw-handlers';
-import { generateDistributionList, getDLContactInput } from '../tests/utils';
+import {
+	generateDistributionList,
+	generateDistributionListMembersPage,
+	getDLContactInput
+} from '../tests/utils';
 
 const buildProps = ({
 	email = '',
@@ -70,19 +76,6 @@ describe('EditDLControllerComponent', () => {
 		expect(screen.getByRole('textbox', { name: 'Description' })).toBeVisible();
 		expect(screen.queryByText(/member list \d+/i)).not.toBeInTheDocument();
 		expect(screen.queryByText(/manager list \d+/i)).not.toBeInTheDocument();
-	});
-
-	describe('Details tab', () => {
-		it('should show dl data inside input fields', async () => {
-			const description = faker.lorem.sentences();
-			const dl = generateDistributionList({ description });
-			setupTest(<EditDLControllerComponent {...buildProps(dl)} />);
-			await screen.findByText(dl.displayName);
-			expect(screen.getByRole('textbox', { name: 'Distribution List name' })).toHaveValue(
-				dl.displayName
-			);
-			expect(screen.getByRole('textbox', { name: 'Description' })).toHaveValue(description);
-		});
 	});
 
 	describe('Members tab', () => {
@@ -320,7 +313,7 @@ describe('EditDLControllerComponent', () => {
 				registerGetDistributionListMembersHandler([faker.internet.email()]);
 				setupTest(<EditDLControllerComponent {...buildProps({ email: dlEmail })} />);
 				await screen.findByText(dlEmail);
-				expect(screen.getByRole('button', { name: 'save' })).toBeVisible();
+				expect(screen.getByRole('button', { name: /save/i })).toBeVisible();
 			});
 
 			it('should be disabled by default', async () => {
@@ -328,7 +321,7 @@ describe('EditDLControllerComponent', () => {
 				registerGetDistributionListMembersHandler([faker.internet.email()]);
 				setupTest(<EditDLControllerComponent {...buildProps({ email: dlEmail })} />);
 				await screen.findByText(dlEmail);
-				expect(screen.getByRole('button', { name: 'save' })).toBeDisabled();
+				expect(screen.getByRole('button', { name: /save/i })).toBeDisabled();
 			});
 
 			it('should become enabled when a new member is added', async () => {
@@ -345,7 +338,7 @@ describe('EditDLControllerComponent', () => {
 				await user.click(
 					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
 				);
-				await waitFor(() => expect(screen.getByRole('button', { name: 'save' })).toBeEnabled());
+				await waitFor(() => expect(screen.getByRole('button', { name: /save/i })).toBeEnabled());
 			});
 
 			it('should become enabled when a member is removed', async () => {
@@ -358,7 +351,7 @@ describe('EditDLControllerComponent', () => {
 				await user.click(screen.getByText(/member list/i));
 				await screen.findAllByTestId(TESTID_SELECTORS.membersListItem);
 				await user.click(screen.getByRole('button', { name: /remove/i }));
-				await waitFor(() => expect(screen.getByRole('button', { name: 'save' })).toBeEnabled());
+				await waitFor(() => expect(screen.getByRole('button', { name: /save/i })).toBeEnabled());
 			});
 
 			it('should become enabled when the display name change', async () => {
@@ -368,7 +361,7 @@ describe('EditDLControllerComponent', () => {
 				);
 				await screen.findByText(dlEmail);
 				await user.type(screen.getByRole('textbox', { name: /name/i }), 'new display name');
-				await waitFor(() => expect(screen.getByRole('button', { name: 'save' })).toBeEnabled());
+				await waitFor(() => expect(screen.getByRole('button', { name: /save/i })).toBeEnabled());
 			});
 
 			it('should become enabled when the description change', async () => {
@@ -378,7 +371,7 @@ describe('EditDLControllerComponent', () => {
 				);
 				await screen.findByText(dlEmail);
 				await user.type(screen.getByRole('textbox', { name: /description/i }), 'new description');
-				await waitFor(() => expect(screen.getByRole('button', { name: 'save' })).toBeEnabled());
+				await waitFor(() => expect(screen.getByRole('button', { name: /save/i })).toBeEnabled());
 			});
 
 			it('should become disabled when there are no differences from the initial state, while changing members only', async () => {
@@ -395,12 +388,12 @@ describe('EditDLControllerComponent', () => {
 					(item) => within(item).queryByText(initialMember) !== null
 				) as HTMLElement;
 				await user.click(within(initialMemberItem).getByRole('button', { name: /remove/i }));
-				await waitFor(() => expect(screen.getByRole('button', { name: 'save' })).toBeEnabled());
+				await waitFor(() => expect(screen.getByRole('button', { name: /save/i })).toBeEnabled());
 				await user.type(screen.getByRole('textbox', { name: /type an address/i }), initialMember);
 				await user.click(
 					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
 				);
-				await waitFor(() => expect(screen.getByRole('button', { name: 'save' })).toBeDisabled());
+				await waitFor(() => expect(screen.getByRole('button', { name: /save/i })).toBeDisabled());
 			});
 
 			it('should become disabled when there are no differences with the initial state, while editing the details only', async () => {
@@ -422,22 +415,88 @@ describe('EditDLControllerComponent', () => {
 				await waitFor(() => expect(saveButton).toBeDisabled());
 			});
 
-			it('should call the API when clicked', async () => {
-				const members = [faker.internet.email()];
-				registerGetDistributionListMembersHandler(members);
+			it('should call the API when clicked with the modified data', async () => {
+				const membersToRemove = [faker.internet.email()];
+				const membersToAdd = [faker.internet.email()];
+				const dlData = { displayName: faker.word.words(), description: faker.word.words() };
+				const dl = generateDistributionList({
+					owners: [],
+					members: generateDistributionListMembersPage(membersToRemove)
+				});
 				const handler = registerDistributionListActionHandler({ membersToAdd: [] });
-				const dlEmail = 'dl-mail@domain.net';
-				const { user } = setupTest(
-					<EditDLControllerComponent {...buildProps({ email: dlEmail })} />
-				);
-				await screen.findByText(dlEmail);
+				const { user } = setupTest(<EditDLControllerComponent {...buildProps(dl)} />);
+				await screen.findByText(dl.email);
 				await user.click(screen.getByText(/member list/i));
-				await screen.findAllByTestId(TESTID_SELECTORS.membersListItem);
+				await screen.findByTestId(TESTID_SELECTORS.membersListItem);
+				// remove a member
 				await user.click(screen.getByRole('button', { name: /remove/i }));
-				const button = screen.getByRole('button', { name: 'save' });
+				// add a member
+				const contactInput = getDLContactInput();
+				await user.type(contactInput.textbox, membersToAdd[0]);
+				await user.click(contactInput.addMembersIcon);
+				await screen.findByTestId(TESTID_SELECTORS.membersListItem);
+				// go to details tab
+				await user.click(screen.getByText(/details/i));
+				const nameInput = await screen.findByRole('textbox', { name: /name/i });
+				await user.clear(nameInput);
+				await user.type(nameInput, dlData.displayName);
+				const descriptionInput = screen.getByRole('textbox', { name: /description/i });
+				await user.clear(descriptionInput);
+				await user.type(descriptionInput, dlData.description);
+				// save
+				const button = screen.getByRole('button', { name: /save/i });
 				await user.click(button);
 				await screen.findByTestId(TESTID_SELECTORS.snackbar);
-				expect(handler).toHaveBeenCalled();
+				expect(handler).toHaveBeenCalledTimes(1);
+				expect(await handler.mock.lastCall?.[0].json()).toEqual(
+					expect.objectContaining<{
+						Body: { BatchRequest: BatchDistributionListActionRequest };
+					}>({
+						Body: {
+							BatchRequest: {
+								_jsns: NAMESPACES.generic,
+								DistributionListActionRequest: [
+									{
+										action: {
+											op: 'modify',
+											a: [
+												{ n: 'displayName', _content: dlData.displayName },
+												{ n: 'description', _content: dlData.description }
+											]
+										},
+										_jsns: NAMESPACES.account,
+										dl: {
+											by: 'name',
+											_content: dl.email
+										}
+									},
+									{
+										action: {
+											op: 'addMembers',
+											dlm: membersToAdd.map((member) => ({ _content: member }))
+										},
+										_jsns: NAMESPACES.account,
+										dl: {
+											by: 'name',
+											_content: dl.email
+										}
+									},
+									{
+										action: {
+											op: 'removeMembers',
+											dlm: membersToRemove.map((member) => ({ _content: member }))
+										},
+										_jsns: NAMESPACES.account,
+										dl: {
+											by: 'name',
+											_content: dl.email
+										}
+									}
+								]
+							}
+						}
+					})
+				);
 			});
 
 			it('should show a success snackbar when then API return a success result', async () => {
@@ -455,7 +514,7 @@ describe('EditDLControllerComponent', () => {
 				await user.click(screen.getByText(/member list/i));
 				await screen.findAllByTestId(TESTID_SELECTORS.membersListItem);
 				await user.click(screen.getByRole('button', { name: /remove/i }));
-				const button = screen.getByRole('button', { name: 'save' });
+				const button = screen.getByRole('button', { name: /save/i });
 				await user.click(button);
 				expect(
 					await screen.findByText(`"${dlDisplayName}" distribution list edits saved successfully`)
@@ -477,18 +536,88 @@ describe('EditDLControllerComponent', () => {
 				await user.click(screen.getByText(/member list/i));
 				await screen.findAllByTestId(TESTID_SELECTORS.membersListItem);
 				await user.click(screen.getByRole('button', { name: /remove/i }));
-				const button = screen.getByRole('button', { name: 'save' });
+				const button = screen.getByRole('button', { name: /save/i });
 				await user.click(button);
 				expect(await screen.findByText('Something went wrong, please try again')).toBeVisible();
 			});
 		});
 
 		describe('Discard', () => {
-			it.todo('should be enabled by default');
+			it('should be enabled by default', async () => {
+				const dlEmail = 'dl-mail@domain.net';
+				registerGetDistributionListMembersHandler([faker.internet.email()]);
+				setupTest(<EditDLControllerComponent {...buildProps({ email: dlEmail })} />);
+				await screen.findByText(dlEmail);
+				const discardButton = screen.getByRole('button', { name: /discard/i });
+				expect(discardButton).toBeVisible();
+				expect(discardButton).toBeEnabled();
+			});
 
-			it.todo('should reset all fields to the initial state');
+			it('should reset all fields to the initial state', async () => {
+				const membersToRemove = [faker.internet.email()];
+				const membersToAdd = [faker.internet.email()];
+				const dlData = { displayName: faker.word.words(), description: faker.word.words() };
+				const dl = generateDistributionList({
+					owners: [],
+					members: generateDistributionListMembersPage(membersToRemove),
+					description: faker.lorem.sentence()
+				});
+				const { user } = setupTest(<EditDLControllerComponent {...buildProps(dl)} />);
+				await screen.findByText(dl.email);
+				await user.click(screen.getByText(/member list/i));
+				await screen.findByTestId(TESTID_SELECTORS.membersListItem);
+				// check initial data
+				expect(screen.getByText(membersToRemove[0])).toBeVisible();
+				expect(screen.queryByText(membersToAdd[0])).not.toBeInTheDocument();
+				// remove the existing member
+				await user.click(screen.getByRole('button', { name: /remove/i }));
+				// add a member
+				const contactInput = getDLContactInput();
+				await user.type(contactInput.textbox, membersToAdd[0]);
+				await user.click(contactInput.addMembersIcon);
+				await screen.findByTestId(TESTID_SELECTORS.membersListItem);
+				// check updated data
+				expect(screen.queryByText(membersToRemove[0])).not.toBeInTheDocument();
+				expect(screen.getByText(membersToAdd[0])).toBeVisible();
+				// go to details tab
+				await user.click(screen.getByText(/details/i));
+				const nameInput = await screen.findByRole('textbox', { name: /name/i });
+				// initial data is visible
+				expect(nameInput).toHaveValue(dl.displayName);
+				await user.clear(nameInput);
+				await user.type(nameInput, dlData.displayName);
+				const descriptionInput = screen.getByRole('textbox', { name: /description/i });
+				// initial data is visible
+				expect(descriptionInput).toHaveValue(dl.description);
+				await user.clear(descriptionInput);
+				await user.type(descriptionInput, dlData.description);
+				// check updated data
+				expect(nameInput).toHaveValue(dlData.displayName);
+				expect(descriptionInput).toHaveValue(dlData.description);
 
-			it.todo('should make save button become disabled');
+				// discard action
+				const button = screen.getByRole('button', { name: /discard/i });
+				await user.click(button);
+
+				// check that initial data is set again
+				await waitFor(() => expect(nameInput).toHaveValue(dl.displayName));
+				expect(descriptionInput).toHaveValue(dl.description);
+				await user.click(screen.getByText(/member list/i));
+				expect(await screen.findByText(membersToRemove[0])).toBeVisible();
+				expect(screen.queryByText(membersToAdd[0])).not.toBeInTheDocument();
+			});
+
+			it('should make save button become disabled', async () => {
+				const dlEmail = 'dl-mail@domain.net';
+				registerGetDistributionListMembersHandler([faker.internet.email()]);
+				const { user } = setupTest(
+					<EditDLControllerComponent {...buildProps({ email: dlEmail })} />
+				);
+				await screen.findByText(dlEmail);
+				await user.type(screen.getByRole('textbox', { name: /name/i }), 'something');
+				await user.click(screen.getByRole('button', { name: /discard/i }));
+				expect(screen.getByRole('button', { name: /save/i })).toBeDisabled();
+			});
 		});
 	});
 });

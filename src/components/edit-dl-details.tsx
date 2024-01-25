@@ -29,16 +29,14 @@ export const EditDLDetails = ({
 }: EditDLDetailsProps): React.JSX.Element => {
 	const [t] = useTranslation();
 
-	const onDisplayNameInput = useCallback<NonNullable<InputProps['onInput']>>(
+	const onDisplayNameChange = useCallback<NonNullable<InputProps['onChange']>>(
 		(ev) => {
-			if (ev.target instanceof HTMLInputElement) {
-				onChange({ displayName: ev.target.value });
-			}
+			onChange({ displayName: ev.currentTarget.value });
 		},
 		[onChange]
 	);
 
-	const onDescriptionInput = useCallback<NonNullable<TextAreaProps['onInput']>>(
+	const onDescriptionChange = useCallback<NonNullable<TextAreaProps['onChange']>>(
 		(ev) => {
 			onChange({ description: ev.currentTarget.value });
 		},
@@ -49,13 +47,13 @@ export const EditDLDetails = ({
 		<Container padding={{ top: 'large' }} gap={'1rem'} height={'auto'}>
 			<Input
 				label={t('edit_dl_component.input.name', 'Distribution List name')}
-				defaultValue={name}
-				onInput={onDisplayNameInput}
+				value={name}
+				onChange={onDisplayNameChange}
 			/>
 			<TextArea
 				label={t('edit_dl_component.input.description', 'Description')}
-				defaultValue={description}
-				onInput={onDescriptionInput}
+				value={description}
+				onChange={onDescriptionChange}
 			/>
 		</Container>
 	);
