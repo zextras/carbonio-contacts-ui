@@ -5,15 +5,11 @@
  */
 import React, { useCallback, useState } from 'react';
 
-import { InputProps, useSnackbar, ChipAction } from '@zextras/carbonio-design-system';
+import { InputProps, useSnackbar } from '@zextras/carbonio-design-system';
 import { useBoardHooks } from '@zextras/carbonio-shell-ui';
-import { remove, uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import CommonContactGroupBoard, {
-	EnhancedChipItem,
-	isContactGroupNameInvalid
-} from './common-contact-group-board';
+import CommonContactGroupBoard, { isContactGroupNameInvalid } from './common-contact-group-board';
 import { client } from '../../network/client';
 
 const NewContactGroupBoard = (): React.JSX.Element => {
@@ -23,8 +19,6 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 
 	const initialName = t('board.newContactGroup.name', 'New Group');
 	const [nameValue, setNameValue] = useState(initialName);
-
-	const [contactInputValue, setContactInputValue] = useState<Array<EnhancedChipItem>>([]);
 
 	const [memberListEmails, setMemberListEmails] = useState<string[]>([]);
 
@@ -38,7 +32,6 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 
 	const discardChanges = useCallback(() => {
 		setNameValue(initialName);
-		setContactInputValue([]);
 		setMemberListEmails([]);
 		updateBoard({ title: initialName });
 	}, [initialName, updateBoard]);
@@ -66,96 +59,15 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 			});
 	}, [closeBoard, createSnackbar, memberListEmails, t, nameValue]);
 
-	const contactInputOnChange = (
-		newContactInputValue: Array<
-			Omit<EnhancedChipItem, 'duplicated'> & { duplicated?: Pick<EnhancedChipItem, 'duplicated'> }
-		>
-	): void => {
-		// TODO item are filtered to be uniq, because the ContactInput filters out, dropdown duplicated, only visually
-		//  but provide that item inside onChange parameter
-		const uniqNewContactInputValue = uniqBy(newContactInputValue, (value) => value.email);
-
-		const uniqNewContactInputValueWithActions = uniqNewContactInputValue.map((value) => {
-			const duplicated = memberListEmails.includes(value.email);
-
-			const duplicatedChipAction: ChipAction = {
-				id: 'duplicated',
-				color: 'error',
-				type: 'icon',
-				icon: 'AlertCircle'
-			};
-
-			const duplicatedChipActionNotPresent = !value.actions?.find(
-				(action) => action.id === 'duplicated'
-			);
-
-			const actions = [
-				...(value.actions ?? []),
-				...(duplicated && duplicatedChipActionNotPresent ? [duplicatedChipAction] : [])
-			];
-
-			return {
-				...value,
-				duplicated,
-				actions
-			};
-		});
-
-		setContactInputValue(uniqNewContactInputValueWithActions);
-	};
-
-	const removeItem = useCallback(
-		(email: string) => {
-			const newMemberListEmails = memberListEmails.filter((value) => value !== email);
-			setMemberListEmails(newMemberListEmails);
-			setContactInputValue((prevState) =>
-				prevState.map((value) => {
-					const duplicated = newMemberListEmails.includes(value.email);
-
-					const actions = [...(value.actions ?? [])];
-					if (!duplicated && value.duplicated) {
-						remove(actions, (action) => action.id === 'duplicated');
-					}
-
-					return {
-						...value,
-						duplicated,
-						actions
-					};
-				})
-			);
-		},
-		[memberListEmails]
-	);
-
-	const contactInputIconAction = useCallback(() => {
-		const valid: typeof contactInputValue = [];
-		const invalid: typeof contactInputValue = [];
-
-		contactInputValue.forEach((value) => {
-			if (value.error || value.duplicated) {
-				invalid.push(value);
-			} else {
-				valid.push(value);
-			}
-		});
-
-		setContactInputValue(invalid);
-		setMemberListEmails((prevState) => [...prevState, ...valid.map((value) => value.email)]);
-	}, [contactInputValue]);
-
 	return (
 		<CommonContactGroupBoard
 			onSave={onSave}
 			discardChanges={discardChanges}
 			nameValue={nameValue}
 			onNameChange={onNameChange}
-			contactInputValue={contactInputValue}
-			contactInputOnChange={contactInputOnChange}
-			contactInputIconAction={contactInputIconAction}
-			removeItem={removeItem}
 			memberListEmails={memberListEmails}
 			isOnSaveDisabled={isContactGroupNameInvalid(nameValue)}
+			setMemberListEmails={setMemberListEmails}
 		/>
 	);
 };

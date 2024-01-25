@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import {
 	Container,
@@ -14,9 +14,10 @@ import {
 	Avatar,
 	ListV2,
 	Row,
-	ChipItem
+	ChipItem,
+	ChipAction
 } from '@zextras/carbonio-design-system';
-import { some } from 'lodash';
+import { remove, some, uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
@@ -43,29 +44,19 @@ export interface CommonContactGroupBoardProps {
 	discardChanges: () => void;
 	nameValue: string;
 	onNameChange: NonNullable<InputProps['onChange']>;
-	contactInputValue: Array<EnhancedChipItem>;
-	contactInputOnChange: (
-		newContactInputValue: Array<
-			Omit<EnhancedChipItem, 'duplicated'> & { duplicated?: Pick<EnhancedChipItem, 'duplicated'> }
-		>
-	) => void;
-	contactInputIconAction: () => void;
-	removeItem: (email: string) => void;
 	memberListEmails: string[];
 	isOnSaveDisabled: boolean;
+	setMemberListEmails: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 const CommonContactGroupBoard = ({
 	onSave,
-	discardChanges,
+	discardChanges: discardChangesProp,
 	nameValue,
 	onNameChange,
-	contactInputValue,
-	contactInputOnChange,
-	contactInputIconAction,
-	removeItem,
 	memberListEmails,
-	isOnSaveDisabled
+	isOnSaveDisabled,
+	setMemberListEmails
 }: CommonContactGroupBoardProps): React.JSX.Element => {
 	const [t] = useTranslation();
 
@@ -84,6 +75,86 @@ const CommonContactGroupBoard = ({
 		}
 		return undefined;
 	}, [t, nameValue]);
+
+	const [contactInputValue, setContactInputValue] = useState<Array<EnhancedChipItem>>([]);
+
+	const contactInputOnChange = (
+		newContactInputValue: Array<
+			Omit<EnhancedChipItem, 'duplicated'> & { duplicated?: Pick<EnhancedChipItem, 'duplicated'> }
+		>
+	): void => {
+		// TODO item are filtered to be uniq, because the ContactInput filters out, dropdown duplicated, only visually
+		//  but provide that item inside onChange parameter
+		const uniqNewContactInputValue = uniqBy(newContactInputValue, (value) => value.email);
+
+		const uniqNewContactInputValueWithActions = uniqNewContactInputValue.map((value) => {
+			const duplicated = memberListEmails.includes(value.email);
+
+			const duplicatedChipAction: ChipAction = {
+				id: 'duplicated',
+				color: 'error',
+				type: 'icon',
+				icon: 'AlertCircle'
+			};
+
+			const duplicatedChipActionNotPresent = !value.actions?.find(
+				(action) => action.id === 'duplicated'
+			);
+
+			const actions = [
+				...(value.actions ?? []),
+				...(duplicated && duplicatedChipActionNotPresent ? [duplicatedChipAction] : [])
+			];
+
+			return {
+				...value,
+				duplicated,
+				actions
+			};
+		});
+
+		setContactInputValue(uniqNewContactInputValueWithActions);
+	};
+
+	const contactInputIconAction = useCallback(() => {
+		const valid: typeof contactInputValue = [];
+		const invalid: typeof contactInputValue = [];
+
+		contactInputValue.forEach((value) => {
+			if (value.error || value.duplicated) {
+				invalid.push(value);
+			} else {
+				valid.push(value);
+			}
+		});
+
+		setContactInputValue(invalid);
+		setMemberListEmails((prevState) => [...prevState, ...valid.map((value) => value.email)]);
+	}, [contactInputValue, setMemberListEmails]);
+
+	const removeItem = useCallback(
+		(email: string) => {
+			const newMemberListEmails = memberListEmails.filter((value) => value !== email);
+			setMemberListEmails(newMemberListEmails);
+			setContactInputValue((prevState) =>
+				prevState.map((value) => {
+					const duplicated = newMemberListEmails.includes(value.email);
+
+					const actions = [...(value.actions ?? [])];
+					if (!duplicated && value.duplicated) {
+						remove(actions, (action) => action.id === 'duplicated');
+					}
+
+					return {
+						...value,
+						duplicated,
+						actions
+					};
+				})
+			);
+		},
+		[memberListEmails, setMemberListEmails]
+	);
 
 	const contactInputDescription = useMemo(() => {
 		let valid = 0;
@@ -137,6 +208,11 @@ const CommonContactGroupBoard = ({
 			)),
 		[memberListEmails, removeItem]
 	);
+
+	const discardChanges = useCallback(() => {
+		discardChangesProp();
+		setContactInputValue([]);
+	}, [discardChangesProp]);
 
 	return (
 		<Container
