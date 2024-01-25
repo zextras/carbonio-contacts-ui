@@ -62,10 +62,10 @@ describe('EditDLControllerComponent', () => {
 		const dl = generateDistributionList();
 		setupTest(<EditDLControllerComponent {...buildProps(dl)} />);
 		await screen.findByText(dl.displayName);
+		expect(screen.getAllByTestId(/tab\d+/i)).toHaveLength(3);
 		expect(screen.getByText('Details')).toBeVisible();
 		expect(screen.getByText('Member list')).toBeVisible();
 		expect(screen.getByText('Manager list')).toBeVisible();
-		expect(screen.getAllByTestId(/tab\d+/i)).toHaveLength(3);
 	});
 
 	it('should show details tab by default', async () => {

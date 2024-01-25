@@ -192,9 +192,8 @@ describe('Distribution List displayer', () => {
 		expect(await screen.findAllByText(dl.email)).toHaveLength(2);
 	});
 
-	it('should render the description', async () => {
-		const description = faker.lorem.words();
-		const dl = generateDistributionList({ description });
+	it('should show tabs for details, member list and manager list', async () => {
+		const dl = generateDistributionList();
 		setupTest(
 			<DistributionListDisplayer
 				distributionList={dl}
@@ -203,61 +202,87 @@ describe('Distribution List displayer', () => {
 				showMembersList
 			/>
 		);
-		expect(await screen.findByText(/description/i)).toBeVisible();
-		expect(await screen.findByText(description)).toBeVisible();
+		expect(screen.getAllByTestId(/tab\d+/i)).toHaveLength(3);
+		expect(screen.getByText('Details')).toBeVisible();
+		expect(screen.getByText('Member list')).toBeVisible();
+		expect(screen.getByText('Manager list')).toBeVisible();
 	});
 
-	it('should render the manager list', async () => {
-		const owners = times(10, () => ({
-			id: faker.string.uuid(),
-			name: faker.internet.email()
-		})) satisfies DistributionList['owners'];
-		const dl = generateDistributionList({ owners });
-		setupTest(
-			<DistributionListDisplayer
-				distributionList={dl}
-				members={[]}
-				totalMembers={0}
-				showMembersList
-			/>
-		);
-		expect(await screen.findByText(/manager list 1/i)).toBeVisible();
-		await screen.findByText(owners[0].name);
-		owners.forEach((owner) => {
-			expect(screen.getByText(owner.name)).toBeVisible();
+	describe('Details tab', () => {
+		it('should render the description', async () => {
+			const description = faker.lorem.words();
+			const dl = generateDistributionList({ description });
+			setupTest(
+				<DistributionListDisplayer
+					distributionList={dl}
+					members={[]}
+					totalMembers={0}
+					showMembersList
+				/>
+			);
+			expect(await screen.findByText(/description/i)).toBeVisible();
+			expect(await screen.findByText(description)).toBeVisible();
 		});
 	});
 
-	it('should render the member list', async () => {
-		const members = times(10, () => faker.internet.email());
-		const dl = generateDistributionList();
-		setupTest(
-			<DistributionListDisplayer
-				distributionList={dl}
-				members={members}
-				totalMembers={10}
-				showMembersList
-			/>
-		);
-		await screen.findByText(dl.email);
-		expect(await screen.findByText(/member list 10/i)).toBeVisible();
-		members.forEach((member) => {
-			expect(screen.getByText(member)).toBeVisible();
+	describe('Manager list tab', () => {
+		it('should render the manager list', async () => {
+			const owners = times(10, () => ({
+				id: faker.string.uuid(),
+				name: faker.internet.email()
+			})) satisfies DistributionList['owners'];
+			const dl = generateDistributionList({ owners });
+			const { user } = setupTest(
+				<DistributionListDisplayer
+					distributionList={dl}
+					members={[]}
+					totalMembers={0}
+					showMembersList
+				/>
+			);
+			await screen.findByText(dl.displayName);
+			await user.click(screen.getByText(/manager list/i));
+			expect(await screen.findByText(/manager list 1/i)).toBeVisible();
+			await screen.findByText(owners[0].name);
+			owners.forEach((owner) => {
+				expect(screen.getByText(owner.name)).toBeVisible();
+			});
 		});
 	});
 
-	it('should not render the member list component', async () => {
-		const members = times(10, () => faker.internet.email());
-		const dl = generateDistributionList();
-		setupTest(
-			<DistributionListDisplayer
-				distributionList={dl}
-				members={members}
-				totalMembers={10}
-				showMembersList={false}
-			/>
-		);
-		await screen.findByText(dl.email);
-		expect(screen.queryByText(/member list/i)).not.toBeInTheDocument();
+	describe('Member list tab', () => {
+		it('should render the member list', async () => {
+			const members = times(10, () => faker.internet.email());
+			const dl = generateDistributionList();
+			const { user } = setupTest(
+				<DistributionListDisplayer
+					distributionList={dl}
+					members={members}
+					totalMembers={10}
+					showMembersList
+				/>
+			);
+			await screen.findByText(dl.email);
+			await user.click(screen.getByText(/member list/i));
+			expect(await screen.findByText(/member list 10/i)).toBeVisible();
+			members.forEach((member) => {
+				expect(screen.getByText(member)).toBeVisible();
+			});
+		});
+
+		it('should not render the member list component', async () => {
+			const members = times(10, () => faker.internet.email());
+			const dl = generateDistributionList();
+			setupTest(
+				<DistributionListDisplayer
+					distributionList={dl}
+					members={members}
+					totalMembers={10}
+					showMembersList={false}
+				/>
+			);
+			await screen.findByText(dl.email);
+			expect(screen.queryByText(/member list/i)).not.toBeInTheDocument();
+		});
 	});
 });
