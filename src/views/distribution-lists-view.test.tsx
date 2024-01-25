@@ -251,8 +251,7 @@ describe('Distribution Lists View', () => {
 										owners: resData.owners?.map((owner) => ({ owner: [owner] })),
 										_attrs: {
 											displayName: resData.displayName,
-											description: resData.description,
-											zimbraHideInGal: 'FALSE'
+											description: resData.description
 										}
 									}
 								]

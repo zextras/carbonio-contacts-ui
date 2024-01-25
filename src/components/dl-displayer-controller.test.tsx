@@ -6,12 +6,13 @@
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
+import { BooleanString } from '@zextras/carbonio-shell-ui';
 import { times } from 'lodash';
 import { Route } from 'react-router-dom';
 
 import { DLDisplayerController } from './dl-displayer-controller';
 import { screen, setupTest } from '../carbonio-ui-commons/test/test-setup';
-import { ROUTES, ROUTES_INTERNAL_PARAMS, ZimbraHideInGalType } from '../constants';
+import { ROUTES, ROUTES_INTERNAL_PARAMS } from '../constants';
 import { EMPTY_DISPLAYER_HINT, JEST_MOCKED_ERROR, TESTID_SELECTORS } from '../constants/tests';
 import { DistributionList } from '../model/distribution-list';
 import {
@@ -88,7 +89,10 @@ describe('Distribution List Displayer Controller', () => {
 			async (hideParam) => {
 				const members = times(10, () => faker.internet.email());
 				const dl = generateDistributionList();
-				registerGetDistributionListHandler(dl, undefined, hideParam as ZimbraHideInGalType);
+				registerGetDistributionListHandler(
+					{ ...dl, zimbraHideParam: hideParam as BooleanString },
+					undefined
+				);
 				registerGetDistributionListMembersHandler(members);
 				setupTest(
 					<Route path={`${ROUTES.mainRoute}${ROUTES.distributionLists}`}>
@@ -110,7 +114,7 @@ describe('Distribution List Displayer Controller', () => {
 		it('should render member list if the user is the owner even if the zimbraHideInGal is "TRUE"', async () => {
 			const members = times(10, () => faker.internet.email());
 			const dl = generateDistributionList({ isOwner: true });
-			registerGetDistributionListHandler(dl, undefined, 'TRUE');
+			registerGetDistributionListHandler({ ...dl, zimbraHideParam: 'TRUE' }, undefined);
 			registerGetDistributionListMembersHandler(members);
 			setupTest(
 				<Route path={`${ROUTES.mainRoute}${ROUTES.distributionLists}`}>
@@ -133,7 +137,7 @@ describe('Distribution List Displayer Controller', () => {
 			async (isOwner) => {
 				const members = times(10, () => faker.internet.email());
 				const dl = generateDistributionList({ isOwner });
-				registerGetDistributionListHandler(dl, undefined, 'TRUE');
+				registerGetDistributionListHandler({ ...dl, zimbraHideParam: 'TRUE' }, undefined);
 				registerGetDistributionListMembersHandler(members);
 				setupTest(
 					<Route path={`${ROUTES.mainRoute}${ROUTES.distributionLists}`}>

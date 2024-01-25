@@ -29,8 +29,6 @@ export type RouteParams = {
 	filter?: 'member' | 'manager';
 };
 
-export type ZimbraHideInGalType = 'TRUE' | 'FALSE' | undefined;
-
 export const ROUTES_INTERNAL_PARAMS = {
 	route: {
 		contactGroups: 'contact-groups',

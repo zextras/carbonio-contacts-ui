@@ -4,13 +4,17 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { faker } from '@faker-js/faker';
-import { SoapFault, SoapResponse, SuccessSoapResponse } from '@zextras/carbonio-shell-ui';
+import {
+	BooleanString,
+	SoapFault,
+	SoapResponse,
+	SuccessSoapResponse
+} from '@zextras/carbonio-shell-ui';
 import { map, some } from 'lodash';
 import { ResponseResolver, rest, RestContext, RestRequest } from 'msw';
 
 import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
 import { mockedAccount } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
-import { ZimbraHideInGalType } from '../../constants';
 import { NAMESPACES } from '../../constants/api';
 import { FullAutocompleteResponse, Match } from '../../legacy/types/contact';
 import {
@@ -153,17 +157,16 @@ type GetDistributionListHandler = ResponseResolver<
 >;
 
 export const registerGetDistributionListHandler = (
-	dl: {
+	data: {
 		id?: string;
 		email: string;
 		displayName?: string;
 		owners?: Array<{ id?: string; name?: string }>;
 		description?: string;
-		canRequireMembers?: boolean;
 		isOwner?: boolean;
+		zimbraHideParam?: BooleanString;
 	},
-	error?: string,
-	zimbraHideParam: ZimbraHideInGalType = 'FALSE'
+	error?: string
 ): jest.Mock<ReturnType<GetDistributionListHandler>, Parameters<GetDistributionListHandler>> => {
 	const handler = jest.fn<
 		ReturnType<GetDistributionListHandler>,
@@ -179,15 +182,15 @@ export const registerGetDistributionListHandler = (
 					GetDistributionListResponse: {
 						dl: [
 							{
-								id: dl.id ?? faker.string.uuid(),
-								name: dl.email,
+								id: data.id ?? faker.string.uuid(),
+								name: data.email,
 								_attrs: {
-									displayName: dl.displayName,
-									description: dl.description,
-									zimbraHideInGal: zimbraHideParam
+									displayName: data.displayName,
+									description: data.description,
+									zimbraHideInGal: data.zimbraHideParam
 								},
-								owners: map(dl.owners, (owner) => ({ owner: [owner] })),
-								isOwner: some(dl.owners, (owner) => owner.id === mockedAccount.id) || dl.isOwner
+								owners: map(data.owners, (owner) => ({ owner: [owner] })),
+								isOwner: some(data.owners, (owner) => owner.id === mockedAccount.id) || data.isOwner
 							}
 						],
 						_jsns: NAMESPACES.account
