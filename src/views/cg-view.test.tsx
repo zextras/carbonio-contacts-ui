@@ -33,9 +33,9 @@ beforeEach(() => {
 });
 
 describe('Contact Group View', () => {
-	it.skip('should load the second page only when bottom element becomes visible', async () => {
+	it('should load the second page only when bottom element becomes visible', async () => {
 		const cnItem1 = createFindContactGroupsResponseCnItem();
-		const cnItem101 = createFindContactGroupsResponseCnItem();
+		const cnItem101 = createFindContactGroupsResponseCnItem('cgName101');
 		registerFindContactGroupsHandler(
 			{
 				findContactGroupsResponse: createFindContactGroupsResponse(
