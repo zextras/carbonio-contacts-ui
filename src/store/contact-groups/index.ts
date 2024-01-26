@@ -16,6 +16,7 @@ export type ContactGroupsState = {
 	setStoredOffset: (offset: number) => void;
 	emptyStoredContactGroups: () => void;
 	removeStoredContactGroup: (contactGroupId: string) => void;
+	getStoredContactGroup: (contactGroupId: string) => ContactGroup | undefined;
 };
 
 // extra currying as suggested in https://github.com/pmndrs/zustand/blob/main/docs/guides/typescript.md#basic-usage
@@ -28,15 +29,19 @@ export const useContactGroupStore = create<ContactGroupsState>()((set, get) => (
 				cg.id === contactGroup.id ? contactGroup : cg
 			)
 		})),
-	setStoredOffset: (offset: number): void => set(() => ({ storedOffset: offset })),
-	addStoredContactGroups: (contactGroups: Array<ContactGroup>): void =>
+	setStoredOffset: (offset): void => set(() => ({ storedOffset: offset })),
+	addStoredContactGroups: (contactGroups): void =>
 		set(() => ({ storedContactGroups: [...(get().storedContactGroups ?? []), ...contactGroups] })),
 	emptyStoredContactGroups: (): void => set(() => ({ storedContactGroups: [] })),
-	removeStoredContactGroup: (contactGroupId: string): void =>
+	removeStoredContactGroup: (contactGroupId): void =>
 		set(() => ({
 			storedContactGroups: get().storedContactGroups.filter(
 				(contactGroup) => contactGroup.id !== contactGroupId
 			),
 			storedOffset: get().storedOffset - 1
-		}))
+		})),
+	getStoredContactGroup: (contactGroupId): ContactGroup | undefined =>
+		get().storedContactGroups.find(
+			(contactGroupElement) => contactGroupElement.id === contactGroupId
+		)
 }));

@@ -19,6 +19,8 @@ import { setupTest, screen } from '../../carbonio-ui-commons/test/test-setup';
 import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../constants';
 import { PALETTE, TESTID_SELECTORS } from '../../constants/tests';
 import { client } from '../../network/client';
+import { useContactGroupStore } from '../../store/contact-groups';
+import { buildContactGroup } from '../../tests/model-builder';
 
 function spyUseBoardHooks(updateBoardFn?: jest.Mock, closeBoardFn?: jest.Mock): void {
 	jest.spyOn(shell, 'useBoardHooks').mockReturnValue({
@@ -32,7 +34,7 @@ function spyUseBoardHooks(updateBoardFn?: jest.Mock, closeBoardFn?: jest.Mock): 
 
 function spyUseBoard(contactGroupId?: string): void {
 	jest.spyOn(shell, 'useBoard').mockReturnValue({
-		context: contactGroupId,
+		context: { contactGroupId },
 		id: '',
 		url: '',
 		app: '',
@@ -41,9 +43,11 @@ function spyUseBoard(contactGroupId?: string): void {
 	});
 }
 
+const contactGroup = buildContactGroup();
 beforeAll(() => {
 	spyUseBoardHooks();
-	spyUseBoard('id');
+	spyUseBoard(contactGroup.id);
+	useContactGroupStore.getState().addStoredContactGroups([contactGroup]);
 });
 
 describe('Edit contact group board', () => {
@@ -76,13 +80,13 @@ describe('Edit contact group board', () => {
 		it('should render the avatar icon, name and the number of addresses', () => {
 			setupTest(<EditContactGroupBoard />);
 			expect(screen.getByTestId(TESTID_SELECTORS.icons.contactGroup)).toBeVisible();
-			expect(screen.getByText('New Group')).toBeVisible();
+			expect(screen.getByText(contactGroup.title)).toBeVisible();
 			expect(screen.getByText('Addresses: 0')).toBeVisible();
 		});
 
 		it('should render New Group string by default in the name input', () => {
 			setupTest(<EditContactGroupBoard />);
-			expect(screen.getByRole('textbox', { name: 'Group name*' })).toHaveValue('New Group');
+			expect(screen.getByRole('textbox', { name: 'Group name*' })).toHaveValue(contactGroup.title);
 		});
 	});
 
@@ -380,7 +384,7 @@ describe('Edit contact group board', () => {
 			await user.type(nameInput, newName);
 			expect(nameInput).toHaveValue(newName);
 			await user.click(screen.getByRole('button', { name: /discard/i }));
-			expect(nameInput).toHaveValue('New Group');
+			expect(nameInput).toHaveValue(contactGroup.title);
 		});
 
 		it('should delete chips when click on the discard button', async () => {
@@ -422,7 +426,7 @@ describe('Edit contact group board', () => {
 			await user.clear(nameInput);
 			await user.click(screen.getByRole('button', { name: /discard/i }));
 			expect(updateBoard).toBeCalledTimes(2);
-			expect(updateBoard).toHaveBeenLastCalledWith({ title: 'New Group' });
+			expect(updateBoard).toHaveBeenLastCalledWith({ title: contactGroup.title });
 		});
 	});
 

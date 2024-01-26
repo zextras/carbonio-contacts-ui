@@ -6,34 +6,23 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
 import { useSnackbar } from '@zextras/carbonio-design-system';
-import { useBoard } from '@zextras/carbonio-shell-ui';
 import { difference, xor } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import CommonContactGroupBoard, { isContactGroupNameInvalid } from './common-contact-group-board';
+import { useGetContactGroup } from '../../hooks/use-get-contact-group';
 import { ContactGroup } from '../../model/contact-group';
 import { client } from '../../network/client';
 import { useContactGroupStore } from '../../store/contact-groups';
 
-const EditContactGroupBoard = (): React.JSX.Element => {
+const InnerEditContactGroupBoard = ({
+	contactGroup
+}: {
+	contactGroup: ContactGroup;
+}): React.JSX.Element => {
 	const [t] = useTranslation();
 
-	const { context } = useBoard<{ contactGroupId: string }>();
-	const contactGroupId = context?.contactGroupId;
-	const contactGroup =
-		useContactGroupStore
-			.getState()
-			.storedContactGroups.find(
-				(contactGroupElement) => contactGroupElement.id === contactGroupId
-			) ??
-		({
-			title: t('board.newContactGroup.name', 'New Group'),
-			id: 'missing-cg-id',
-			members: []
-		} satisfies ContactGroup);
-
 	const createSnackbar = useSnackbar();
-
 	const [nameValue, setNameValue] = useState(contactGroup.title);
 
 	const [memberListEmails, setMemberListEmails] = useState<string[]>(contactGroup.members);
@@ -97,6 +86,11 @@ const EditContactGroupBoard = (): React.JSX.Element => {
 			setNameValue={setNameValue}
 		/>
 	);
+};
+
+const EditContactGroupBoard = (): React.JSX.Element | null => {
+	const contactGroup = useGetContactGroup();
+	return contactGroup ? <InnerEditContactGroupBoard contactGroup={contactGroup} /> : null;
 };
 
 export default EditContactGroupBoard;
