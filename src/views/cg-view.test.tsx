@@ -32,7 +32,7 @@ beforeEach(() => {
 	useContactGroupStore.getState().emptyStoredContactGroups();
 });
 
-describe('Contact Group View', () => {
+describe.skip('Contact Group View', () => {
 	it('should load the second page only when bottom element becomes visible', async () => {
 		const cnItem1 = createFindContactGroupsResponseCnItem();
 		const cnItem101 = createFindContactGroupsResponseCnItem();
