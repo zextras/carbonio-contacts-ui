@@ -6,7 +6,7 @@
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
-import { within } from '@testing-library/react';
+import { waitFor, within } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { Route } from 'react-router-dom';
 
@@ -36,7 +36,7 @@ describe('Contact Group View', () => {
 	it('should load the second page only when bottom element becomes visible', async () => {
 		const cnItem1 = createFindContactGroupsResponseCnItem();
 		const cnItem101 = createFindContactGroupsResponseCnItem('cgName101');
-		registerFindContactGroupsHandler(
+		const findHandler = registerFindContactGroupsHandler(
 			{
 				findContactGroupsResponse: createFindContactGroupsResponse(
 					[
@@ -57,18 +57,13 @@ describe('Contact Group View', () => {
 
 		setupTest(<CGView />);
 
-		console.log('uno');
-
 		expect(await screen.findByText(cnItem1.fileAsStr)).toBeVisible();
-		console.log('due');
 		expect(screen.queryByText(cnItem101.fileAsStr)).not.toBeInTheDocument();
-		console.log('tre');
 
 		triggerLoadMore();
-		console.log('quattro');
+		await waitFor(() => expect(findHandler).toHaveBeenCalledTimes(2));
 
 		expect(await screen.findByText(cnItem101.fileAsStr)).toBeVisible();
-		console.log('cinque');
 	});
 
 	it('should render the avatar, the name and the number of the members (case 1+ addresses string) of a contact group', async () => {
