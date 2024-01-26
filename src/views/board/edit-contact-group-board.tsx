@@ -5,8 +5,8 @@
  */
 import React, { useCallback, useMemo, useState } from 'react';
 
-import { InputProps, useSnackbar } from '@zextras/carbonio-design-system';
-import { useBoard, useBoardHooks } from '@zextras/carbonio-shell-ui';
+import { useSnackbar } from '@zextras/carbonio-design-system';
+import { useBoard } from '@zextras/carbonio-shell-ui';
 import { difference, xor } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
@@ -32,26 +32,11 @@ const EditContactGroupBoard = (): React.JSX.Element => {
 			members: []
 		} satisfies ContactGroup);
 
-	const { updateBoard } = useBoardHooks();
 	const createSnackbar = useSnackbar();
 
 	const [nameValue, setNameValue] = useState(contactGroup.title);
 
 	const [memberListEmails, setMemberListEmails] = useState<string[]>(contactGroup.members);
-
-	const onNameChange = useCallback<NonNullable<InputProps['onChange']>>(
-		(ev) => {
-			setNameValue(ev.target.value);
-			updateBoard({ title: ev.target.value });
-		},
-		[updateBoard]
-	);
-
-	const discardChanges = useCallback(() => {
-		setNameValue(contactGroup.title);
-		setMemberListEmails(contactGroup.members);
-		updateBoard({ title: contactGroup.title });
-	}, [contactGroup.members, contactGroup.title, updateBoard]);
 
 	const onSave = useCallback(() => {
 		const addedMembers = difference(memberListEmails, contactGroup.members);
@@ -103,12 +88,13 @@ const EditContactGroupBoard = (): React.JSX.Element => {
 	return (
 		<CommonContactGroupBoard
 			onSave={onSave}
-			discardChanges={discardChanges}
 			nameValue={nameValue}
-			onNameChange={onNameChange}
 			memberListEmails={memberListEmails}
 			isOnSaveDisabled={isOnSaveDisabled}
 			setMemberListEmails={setMemberListEmails}
+			initialNameValue={contactGroup.title}
+			initialMemberListEmails={contactGroup.members}
+			setNameValue={setNameValue}
 		/>
 	);
 };

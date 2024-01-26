@@ -17,6 +17,7 @@ import {
 	ChipItem,
 	ChipAction
 } from '@zextras/carbonio-design-system';
+import { useBoardHooks } from '@zextras/carbonio-shell-ui';
 import { remove, some, uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
@@ -41,24 +42,36 @@ export type EnhancedChipItem = ChipItem & {
 
 export interface CommonContactGroupBoardProps {
 	onSave: () => void;
-	discardChanges: () => void;
 	nameValue: string;
-	onNameChange: NonNullable<InputProps['onChange']>;
 	memberListEmails: string[];
 	isOnSaveDisabled: boolean;
 	setMemberListEmails: React.Dispatch<React.SetStateAction<string[]>>;
+	initialNameValue: string;
+	initialMemberListEmails: string[];
+	setNameValue: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const CommonContactGroupBoard = ({
 	onSave,
-	discardChanges: discardChangesProp,
 	nameValue,
-	onNameChange,
 	memberListEmails,
 	isOnSaveDisabled,
-	setMemberListEmails
+	setMemberListEmails,
+	initialNameValue,
+	initialMemberListEmails,
+	setNameValue
 }: CommonContactGroupBoardProps): React.JSX.Element => {
 	const [t] = useTranslation();
+
+	const { updateBoard } = useBoardHooks();
+
+	const onNameChange = useCallback<NonNullable<InputProps['onChange']>>(
+		(ev) => {
+			setNameValue(ev.target.value);
+			updateBoard({ title: ev.target.value });
+		},
+		[setNameValue, updateBoard]
+	);
 
 	const nameDescription = useMemo(() => {
 		if (nameValue.trim().length === 0) {
@@ -77,6 +90,13 @@ const CommonContactGroupBoard = ({
 	}, [t, nameValue]);
 
 	const [contactInputValue, setContactInputValue] = useState<Array<EnhancedChipItem>>([]);
+
+	const discardChanges = useCallback(() => {
+		setNameValue(initialNameValue);
+		setMemberListEmails(initialMemberListEmails);
+		updateBoard({ title: initialNameValue });
+		setContactInputValue([]);
+	}, [initialMemberListEmails, initialNameValue, setMemberListEmails, setNameValue, updateBoard]);
 
 	const contactInputOnChange = (
 		newContactInputValue: Array<
@@ -208,11 +228,6 @@ const CommonContactGroupBoard = ({
 			)),
 		[memberListEmails, removeItem]
 	);
-
-	const discardChanges = useCallback(() => {
-		discardChangesProp();
-		setContactInputValue([]);
-	}, [discardChangesProp]);
 
 	return (
 		<Container
