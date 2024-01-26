@@ -36,7 +36,7 @@ export const DLDisplayerController = ({ id }: DLDisplayerControllerProps): React
 			crossAlignment="flex-start"
 			data-testid="displayer"
 		>
-			{(id && distributionList && (
+			{(id && (
 				<DistributionListDisplayer
 					members={members}
 					totalMembers={totalMembers}

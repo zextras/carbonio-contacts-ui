@@ -340,14 +340,14 @@ describe('Distribution Lists View', () => {
 			);
 
 			await screen.findByText(dl2.displayName);
-			const displayer = await screen.findByTestId(TESTID_SELECTORS.displayer);
+			await screen.findByTestId(TESTID_SELECTORS.displayer);
 			await user.click(await screen.findByText(/member list/i));
 			await screen.findByText(dl1Members[0]);
 			await user.click(screen.getByText(dl2.displayName));
-			await waitFor(() =>
-				expect(within(displayer).queryByText(dl2.displayName)).not.toBeInTheDocument()
-			);
-			expect(await within(displayer).findAllByText(dl2.displayName)).toHaveLength(2);
+			expect(
+				await within(screen.getByTestId(TESTID_SELECTORS.displayer)).findAllByText(dl2.displayName)
+			).toHaveLength(2);
+			await user.click(screen.getByText(/member list/i));
 			expect(await screen.findByText(dl2Members[0])).toBeVisible();
 			expect(screen.getByText(/member list 10/i)).toBeVisible();
 			expect(screen.queryByText(dl1Members[0])).not.toBeInTheDocument();

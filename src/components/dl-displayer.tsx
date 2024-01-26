@@ -24,7 +24,7 @@ import { DistributionList } from '../model/distribution-list';
 interface DistributionListDisplayerProps {
 	members: Array<string>;
 	totalMembers: number;
-	distributionList: DistributionList;
+	distributionList?: DistributionList;
 }
 
 export const DistributionListDisplayer = ({
@@ -53,7 +53,7 @@ export const DistributionListDisplayer = ({
 			minHeight={0}
 		>
 			<DisplayerHeader
-				title={(distributionList.displayName || distributionList.email) ?? ''}
+				title={(distributionList?.displayName || distributionList?.email) ?? ''}
 				icon={'DistributionListOutline'}
 			/>
 			<Container
@@ -76,8 +76,8 @@ export const DistributionListDisplayer = ({
 					maxHeight={'100%'}
 				>
 					<DLDetailsInfo
-						displayName={distributionList.displayName}
-						email={distributionList.email ?? ''}
+						displayName={distributionList?.displayName}
+						email={distributionList?.email ?? ''}
 					/>
 					<Divider color={'gray3'} />
 					<TabBar
@@ -105,7 +105,7 @@ export const DistributionListDisplayer = ({
 								maxHeight={'100%'}
 								minHeight={0}
 							>
-								{(distributionList.description && (
+								{(distributionList?.description && (
 									<>
 										<Text size={'small'} color={'secondary'}>
 											{t('displayer.distribution_list.label.description', 'Description')}
@@ -130,9 +130,9 @@ export const DistributionListDisplayer = ({
 							</ScrollableContainer>
 						)}
 
-						{selected === DL_TABS.managers && <ManagerList managers={distributionList.owners} />}
+						{selected === DL_TABS.managers && <ManagerList managers={distributionList?.owners} />}
 						{selected === DL_TABS.members &&
-							((distributionList.canRequireMembers && (
+							((distributionList?.canRequireMembers && (
 								<MemberList
 									members={members}
 									membersCount={totalMembers}
