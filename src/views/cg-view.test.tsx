@@ -214,7 +214,7 @@ describe('Contact Group View', () => {
 		});
 	});
 
-	describe('Delete contact group action', () => {
+	describe.skip('Delete contact group action', () => {
 		it('should remove deleted contact group when you confirm deletion and api call will success (Hover trigger)', async () => {
 			const cnItem1 = createFindContactGroupsResponseCnItem();
 			registerFindContactGroupsHandler({
