@@ -39,11 +39,12 @@ describe('Distribution list action', () => {
 									op: 'removeMembers',
 									dlm: membersToRemove.map((member) => ({ _content: member }))
 								},
-								_jsns: NAMESPACES.account,
 								dl: {
 									by: 'name',
 									_content: dlEmail
-								}
+								},
+								_jsns: NAMESPACES.account,
+								requestId: 'removeMembers'
 							}
 						]
 					}
@@ -70,11 +71,12 @@ describe('Distribution list action', () => {
 									op: 'addMembers',
 									dlm: membersToAdd.map((member) => ({ _content: member }))
 								},
-								_jsns: NAMESPACES.account,
 								dl: {
 									by: 'name',
 									_content: dlEmail
-								}
+								},
+								_jsns: NAMESPACES.account,
+								requestId: 'addMembers'
 							}
 						]
 					}
@@ -101,11 +103,12 @@ describe('Distribution list action', () => {
 									op: 'modify',
 									a: [{ n: 'displayName', _content: dlData.displayName }]
 								},
-								_jsns: NAMESPACES.account,
 								dl: {
 									by: 'name',
 									_content: dlEmail
-								}
+								},
+								_jsns: NAMESPACES.account,
+								requestId: 'modify'
 							}
 						]
 					}
@@ -132,11 +135,12 @@ describe('Distribution list action', () => {
 									op: 'modify',
 									a: [{ n: 'description', _content: dlData.description }]
 								},
-								_jsns: NAMESPACES.account,
 								dl: {
 									by: 'name',
 									_content: dlEmail
-								}
+								},
+								_jsns: NAMESPACES.account,
+								requestId: 'modify'
 							}
 						]
 					}
@@ -166,11 +170,12 @@ describe('Distribution list action', () => {
 										{ n: 'description', _content: dlData.description }
 									]
 								},
-								_jsns: NAMESPACES.account,
 								dl: {
 									by: 'name',
 									_content: dlEmail
-								}
+								},
+								_jsns: NAMESPACES.account,
+								requestId: 'modify'
 							}
 						]
 					}
@@ -207,33 +212,36 @@ describe('Distribution list action', () => {
 										{ n: 'description', _content: dlData.description }
 									]
 								},
-								_jsns: NAMESPACES.account,
 								dl: {
 									by: 'name',
 									_content: dlEmail
-								}
+								},
+								_jsns: NAMESPACES.account,
+								requestId: 'modify'
 							},
 							{
 								action: {
 									op: 'addMembers',
 									dlm: membersToAdd.map((member) => ({ _content: member }))
 								},
-								_jsns: NAMESPACES.account,
 								dl: {
 									by: 'name',
 									_content: dlEmail
-								}
+								},
+								_jsns: NAMESPACES.account,
+								requestId: 'addMembers'
 							},
 							{
 								action: {
 									op: 'removeMembers',
 									dlm: membersToRemove.map((member) => ({ _content: member }))
 								},
-								_jsns: NAMESPACES.account,
 								dl: {
 									by: 'name',
 									_content: dlEmail
-								}
+								},
+								_jsns: NAMESPACES.account,
+								requestId: 'removeMembers'
 							}
 						]
 					}

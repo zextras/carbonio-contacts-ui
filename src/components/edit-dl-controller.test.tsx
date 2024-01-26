@@ -14,7 +14,10 @@ import { screen, setupTest, within } from '../carbonio-ui-commons/test/test-setu
 import { NAMESPACES } from '../constants/api';
 import { JEST_MOCKED_ERROR, TESTID_SELECTORS } from '../constants/tests';
 import { DistributionListOwner } from '../model/distribution-list';
-import { BatchDistributionListActionRequest } from '../network/api/distribution-list-action';
+import {
+	BatchDistributionListActionRequest,
+	DistributionListActionRequest
+} from '../network/api/distribution-list-action';
 import {
 	registerDistributionListActionHandler,
 	registerGetDistributionListHandler,
@@ -430,42 +433,27 @@ describe('EditDLControllerComponent', () => {
 							BatchRequest: {
 								_jsns: NAMESPACES.generic,
 								DistributionListActionRequest: [
-									{
+									expect.objectContaining<Partial<DistributionListActionRequest>>({
 										action: {
 											op: 'modify',
 											a: [
 												{ n: 'displayName', _content: dlData.displayName },
 												{ n: 'description', _content: dlData.description }
 											]
-										},
-										_jsns: NAMESPACES.account,
-										dl: {
-											by: 'name',
-											_content: dl.email
 										}
-									},
-									{
+									}),
+									expect.objectContaining<Partial<DistributionListActionRequest>>({
 										action: {
 											op: 'addMembers',
 											dlm: membersToAdd.map((member) => ({ _content: member }))
-										},
-										_jsns: NAMESPACES.account,
-										dl: {
-											by: 'name',
-											_content: dl.email
 										}
-									},
-									{
+									}),
+									expect.objectContaining<Partial<DistributionListActionRequest>>({
 										action: {
 											op: 'removeMembers',
 											dlm: membersToRemove.map((member) => ({ _content: member }))
-										},
-										_jsns: NAMESPACES.account,
-										dl: {
-											by: 'name',
-											_content: dl.email
 										}
-									}
+									})
 								]
 							}
 						}

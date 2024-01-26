@@ -92,7 +92,8 @@ export const distributionListAction = ({
 				op: 'modify',
 				a: attributes
 			},
-			_jsns: NAMESPACES.account
+			_jsns: NAMESPACES.account,
+			requestId: 'modify'
 		});
 	}
 
@@ -106,7 +107,8 @@ export const distributionListAction = ({
 				op: 'addMembers',
 				dlm: membersToAdd.map((member) => ({ _content: member }))
 			},
-			_jsns: NAMESPACES.account
+			_jsns: NAMESPACES.account,
+			requestId: 'addMembers'
 		});
 	}
 
@@ -120,7 +122,8 @@ export const distributionListAction = ({
 				op: 'removeMembers',
 				dlm: membersToRemove.map((member) => ({ _content: member }))
 			},
-			_jsns: NAMESPACES.account
+			_jsns: NAMESPACES.account,
+			requestId: 'removeMembers'
 		});
 	}
 
