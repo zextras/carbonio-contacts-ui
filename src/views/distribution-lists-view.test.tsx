@@ -51,7 +51,7 @@ import {
 
 describe('Distribution Lists View', () => {
 	it('should show the list of distribution lists', async () => {
-		const items = generateDistributionLists();
+		const items = generateDistributionLists(10, { isMember: true });
 		registerGetAccountDistributionListsHandler(items);
 		setupTest(
 			<Route path={ROUTES.distributionLists}>
@@ -80,8 +80,8 @@ describe('Distribution Lists View', () => {
 	it('should show empty message while loading a list and another list of a different filter has been already loaded', async () => {
 		const EMIT_ON = 'resolve-manager';
 		const emitter = new EventEmitter();
-		const memberList = generateDistributionLists(1);
-		const managerList = generateDistributionLists(1);
+		const memberList = generateDistributionLists(1, { isMember: true });
+		const managerList = generateDistributionLists(1, { isOwner: true });
 		const getAccountDLHandler = registerGetAccountDistributionListsHandler([]);
 		getAccountDLHandler.mockImplementation(async (req, res, ctx) => {
 			const {
@@ -92,11 +92,10 @@ describe('Distribution Lists View', () => {
 				Body: { GetAccountDistributionListsRequest: GetAccountDistributionListsRequest };
 			}>();
 			const resData: DistributionList[] = [];
-			if (ownerOf) {
+			if (ownerOf && memberOf === 'none') {
 				await delayUntil(emitter, EMIT_ON);
 				resData.push(...managerList);
 			}
-
 			if (memberOf !== 'none') {
 				resData.push(...memberList);
 			}
@@ -132,7 +131,7 @@ describe('Distribution Lists View', () => {
 		);
 		expect(await screen.findByText(memberList[0].displayName)).toBeVisible();
 		await user.click(screen.getByRole('link', { name: 'Manager' }));
-		// // FIXME: for some reason, something to "slow down"
+		// FIXME: for some reason, something to "slow down"
 		//  the test is needed to allow react to update the ui,
 		//  and make the following waitFor work even when run with all other tests
 		await waitFor(
@@ -163,9 +162,28 @@ describe('Distribution Lists View', () => {
 		expect(await screen.findByText(/something went wrong/i)).toBeVisible();
 	});
 
+	it('should show edit action on item of which the user is also owner, inside the member filter', async () => {
+		const dl = generateDistributionList({ isOwner: true, isMember: true });
+		registerGetAccountDistributionListsHandler([dl]);
+		const { user } = setupTest(
+			<Route path={ROUTES.distributionLists}>
+				<DistributionListsView />
+			</Route>,
+			{ initialEntries: [`/${ROUTES_INTERNAL_PARAMS.filter.member}`] }
+		);
+		const listItem = await screen.findByText(dl.displayName);
+		expect(
+			screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.editDL })
+		).toBeVisible();
+		await user.rightClick(listItem);
+		expect(
+			within(await screen.findByTestId(TESTID_SELECTORS.dropdownList)).getByText('Edit')
+		).toBeVisible();
+	});
+
 	describe('Displayer', () => {
 		it('should open the displayer when click on a distribution list item', async () => {
-			const dl = generateDistributionList();
+			const dl = generateDistributionList({ isMember: true });
 			registerGetAccountDistributionListsHandler([dl]);
 			registerGetDistributionListHandler(dl);
 
@@ -187,7 +205,7 @@ describe('Distribution Lists View', () => {
 		});
 
 		it('should close the displayer when click on close', async () => {
-			const dl = generateDistributionList();
+			const dl = generateDistributionList({ isMember: true });
 			registerGetAccountDistributionListsHandler([dl]);
 			registerGetDistributionListHandler(dl);
 
@@ -212,8 +230,8 @@ describe('Distribution Lists View', () => {
 		});
 
 		it('should show only members of the new active distribution list starting from first page when setting a different distribution list as active with the displayer already open', async () => {
-			const dl1 = generateDistributionList();
-			const dl2 = generateDistributionList();
+			const dl1 = generateDistributionList({ isMember: true });
+			const dl2 = generateDistributionList({ isMember: true });
 			registerGetAccountDistributionListsHandler([dl1, dl2]);
 			const getDLHandler = registerGetDistributionListHandler(dl1);
 			getDLHandler.mockImplementation(async (req, res, ctx) => {

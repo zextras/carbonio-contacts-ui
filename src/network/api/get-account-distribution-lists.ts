@@ -29,6 +29,7 @@ export interface GetAccountDistributionListsResponse
 		name: string;
 		isOwner?: boolean;
 		isMember?: boolean;
+		// display name
 		d?: string;
 		_attrs?: Attributes;
 	}>;
@@ -41,10 +42,10 @@ const normalizeResponse = (
 		id: item.id,
 		email: item.name,
 		displayName: item.d,
-		isOwner: item.isOwner ?? false,
-		isMember: item.isMember ?? false,
+		isOwner: item.isOwner,
+		isMember: item.isMember,
 		description: item._attrs?.description,
-		canRequireMembers: item._attrs?.zimbraHideInGal === 'TRUE' || item.isOwner === true
+		canRequireMembers: item._attrs?.zimbraHideInGal !== 'TRUE' || item.isOwner === true
 	}));
 
 export const getAccountDistributionLists = (options: {

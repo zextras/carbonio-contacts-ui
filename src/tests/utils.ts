@@ -80,9 +80,10 @@ export const generateDistributionListMembersPage = (
 });
 
 export const generateDistributionLists = (
-	limit = 10
+	limit = 10,
+	defaultData: Partial<DistributionList> = {}
 ): Array<ReturnType<typeof generateDistributionList>> =>
-	times(limit, () => generateDistributionList());
+	times(limit, () => generateDistributionList(defaultData));
 
 // utility to make msw respond in a controlled way
 // see https://github.com/mswjs/msw/discussions/1307
