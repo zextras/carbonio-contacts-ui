@@ -18,7 +18,8 @@
     "board": {
         "editContactGroup": {
             "snackbar": {
-                "contact_group_edited": "Group successfully updated"
+                "contact_group_edited": "Group successfully updated",
+                "error": "Something went wrong saving the edits, try again"
             }
         },
         "label": {

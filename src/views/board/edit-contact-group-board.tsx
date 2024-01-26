@@ -53,7 +53,10 @@ const InnerEditContactGroupBoard = ({
 				createSnackbar({
 					key: new Date().toLocaleString(),
 					type: 'error',
-					label: t('label.error_try_again', 'Something went wrong, please try again')
+					label: t(
+						'board.editContactGroup.snackbar.error',
+						'Something went wrong saving the edits, try again'
+					)
 				});
 			});
 	}, [
