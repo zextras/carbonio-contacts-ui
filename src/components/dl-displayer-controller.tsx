@@ -41,6 +41,7 @@ export const DLDisplayerController = ({ id }: DLDisplayerControllerProps): React
 					members={members}
 					totalMembers={totalMembers}
 					distributionList={distributionList}
+					key={id}
 				/>
 			)) || (
 				<EmptyDisplayer

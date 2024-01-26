@@ -45,7 +45,13 @@ export const DistributionListDisplayer = ({
 	const actions = useDLActions(dlWithMembers);
 
 	return (
-		<Container background={'gray5'} mainAlignment={'flex-start'} padding={{ bottom: '1rem' }}>
+		<Container
+			background={'gray5'}
+			mainAlignment={'flex-start'}
+			padding={{ bottom: '1rem' }}
+			maxHeight={'100%'}
+			minHeight={0}
+		>
 			<DisplayerHeader
 				title={(distributionList.displayName || distributionList.email) ?? ''}
 				icon={'DistributionListOutline'}
@@ -53,107 +59,97 @@ export const DistributionListDisplayer = ({
 			<Container
 				padding={{ horizontal: '1rem' }}
 				mainAlignment={'flex-start'}
-				minHeight={0}
 				maxHeight={'100%'}
+				minHeight={0}
 			>
 				<DisplayerActionsHeader actions={actions} />
-				<ScrollableContainer mainAlignment={'flex-start'}>
-					<Container
+				<Container
+					background={'gray6'}
+					padding={'1rem'}
+					gap={'1rem'}
+					mainAlignment={'flex-start'}
+					crossAlignment={'flex-start'}
+					height={'auto'}
+					flexGrow={1}
+					flexShrink={1}
+					minHeight={0}
+					maxHeight={'100%'}
+				>
+					<DLDetailsInfo
+						displayName={distributionList.displayName}
+						email={distributionList.email ?? ''}
+					/>
+					<Divider color={'gray3'} />
+					<TabBar
+						items={items}
+						selected={selected}
+						onChange={onChange}
 						background={'gray6'}
-						padding={'1rem'}
-						gap={'1rem'}
-						height={'auto'}
+						flexShrink={0}
+						height={'3rem'}
+						width={'fill'}
+						borderColor={{ bottom: 'gray3' }}
+					/>
+					<Container
+						padding={{ top: 'large' }}
 						mainAlignment={'flex-start'}
 						crossAlignment={'flex-start'}
-						flexGrow={1}
+						maxHeight={'100%'}
+						minHeight={0}
 					>
-						<Container
-							height={'auto'}
-							mainAlignment={'flex-start'}
-							crossAlignment={'flex-start'}
-							gap={'1rem'}
-						>
-							<DLDetailsInfo
-								displayName={distributionList.displayName}
-								email={distributionList.email ?? ''}
-							/>
-							<Divider color={'gray3'} />
-							<TabBar
-								items={items}
-								selected={selected}
-								onChange={onChange}
-								background={'gray6'}
-								flexShrink={0}
-								height={'3rem'}
-								width={'fill'}
-								borderColor={{ bottom: 'gray3' }}
-							/>
-							<Container
-								padding={{ top: 'large' }}
+						{selected === DL_TABS.details && (
+							<ScrollableContainer
 								height={'auto'}
 								mainAlignment={'flex-start'}
 								crossAlignment={'flex-start'}
+								maxHeight={'100%'}
+								minHeight={0}
 							>
-								{selected === DL_TABS.details && (
-									<Container
-										height={'auto'}
-										mainAlignment={'flex-start'}
-										crossAlignment={'flex-start'}
-									>
-										{(distributionList.description && (
-											<>
-												<Text size={'small'} color={'secondary'}>
-													{t('displayer.distribution_list.label.description', 'Description')}
-												</Text>
-												<Text overflow={'break-word'}>{distributionList.description}</Text>
-											</>
-										)) || (
-											<Row width={'fill'}>
-												<Text
-													overflow={'break-word'}
-													size={'small'}
-													color={'secondary'}
-													weight={'light'}
-												>
-													{t(
-														'displayer.distribution_list.no_details',
-														'There are no additional details for this distribution list. For more information, ask to the administrator.'
-													)}
-												</Text>
-											</Row>
-										)}
-									</Container>
+								{(distributionList.description && (
+									<>
+										<Text size={'small'} color={'secondary'}>
+											{t('displayer.distribution_list.label.description', 'Description')}
+										</Text>
+										<Text overflow={'break-word'}>{distributionList.description}</Text>
+									</>
+								)) || (
+									<Row width={'fill'}>
+										<Text
+											overflow={'break-word'}
+											size={'small'}
+											color={'secondary'}
+											weight={'light'}
+										>
+											{t(
+												'displayer.distribution_list.no_details',
+												'There are no additional details for this distribution list. For more information, ask to the administrator.'
+											)}
+										</Text>
+									</Row>
 								)}
+							</ScrollableContainer>
+						)}
 
-								{selected === DL_TABS.managers && (
-									<ManagerList managers={distributionList.owners} />
-								)}
-								{selected === DL_TABS.members &&
-									((distributionList.canRequireMembers && (
-										<MemberList
-											members={members}
-											membersCount={totalMembers}
-											key={distributionList.email}
-										/>
-									)) || (
-										<Row width={'fill'}>
-											<Text
-												overflow={'break-word'}
-												size={'small'}
-												color={'secondary'}
-												weight={'light'}
-											>
-												{t(
-													'displayer.distribution_list.member_not_visible',
-													"You don't have the permissions to see the members of this distribution list. For more information, ask to the administrator."
-												)}
-											</Text>
-										</Row>
-									))}
-							</Container>
-						</Container>
+						{selected === DL_TABS.managers && <ManagerList managers={distributionList.owners} />}
+						{selected === DL_TABS.members &&
+							((distributionList.canRequireMembers && (
+								<MemberList
+									members={members}
+									membersCount={totalMembers}
+									key={distributionList.email}
+								/>
+							)) || (
+								<Row width={'fill'}>
+									<Text overflow={'break-word'} size={'small'} color={'secondary'} weight={'light'}>
+										{t(
+											'displayer.distribution_list.member_not_visible',
+											"You don't have the permissions to see the members of this distribution list. For more information, ask to the administrator."
+										)}
+									</Text>
+								</Row>
+							))}
 					</Container>
-				</ScrollableContainer>
+				</Container>
 			</Container>
 		</Container>
 	);

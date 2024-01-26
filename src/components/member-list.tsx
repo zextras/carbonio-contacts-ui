@@ -44,8 +44,19 @@ export const MemberList = ({
 	}, []);
 
 	return (
-		<Container mainAlignment={'flex-start'} crossAlignment={'flex-start'} gap={'0.5rem'}>
-			<Container mainAlignment={'flex-start'} crossAlignment={'flex-start'} gap={'0.25rem'}>
+		<Container
+			mainAlignment={'flex-start'}
+			crossAlignment={'flex-start'}
+			gap={'0.5rem'}
+			minHeight={0}
+		>
+			<Container
+				mainAlignment={'flex-start'}
+				crossAlignment={'flex-start'}
+				gap={'0.25rem'}
+				height={'auto'}
+				minHeight={'fit-content'}
+			>
 				<Text size={'small'} color={'secondary'}>
 					{t('displayer.distribution_list.label.member_total', 'Member list {{total}}', {
 						total: membersCount
@@ -65,8 +76,8 @@ export const MemberList = ({
 				value={searchValue}
 				onChange={onSearchChange}
 			/>
-			<Container height={'auto'} maxHeight={'15rem'}>
-				<ListV2 maxWidth={'fill'}>{memberItems}</ListV2>
+			<Container minHeight={0} mainAlignment={'flex-start'}>
+				<ListV2>{memberItems}</ListV2>
 			</Container>
 		</Container>
 	);

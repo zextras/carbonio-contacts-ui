@@ -39,8 +39,8 @@ export const ManagerList = ({ managers, loading }: ManagerListProps): React.JSX.
 					total: managers?.length ?? 0
 				})}
 			</Text>
-			<Container height={'auto'} maxHeight={'15rem'}>
-				<ListV2 maxWidth={'fill'}>{memberItems}</ListV2>
+			<Container minHeight={'0'} mainAlignment={'flex-start'}>
+				<ListV2>{memberItems}</ListV2>
 			</Container>
 		</Container>
 	);
