@@ -76,6 +76,8 @@
                 "manager_total": "Manager list {{total}}",
                 "member_total": "Member list {{total}}"
             },
+            "member_not_visible": "You don't have the permissions to see the members of this distribution list. For more information, ask to the administrator.",
+            "no_details": "There are no additional details for this distribution list. For more information, ask to the administrator.",
             "placeholder": {
                 "filter_member": "Filter an address"
             }

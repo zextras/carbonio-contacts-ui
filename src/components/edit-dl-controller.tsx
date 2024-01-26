@@ -200,7 +200,7 @@ export const EditDLControllerComponent = ({
 					background={'gray6'}
 					flexShrink={0}
 					height={'3rem'}
-					maxWidth={'32rem'}
+					maxWidth={'50vw'}
 					borderColor={{ bottom: 'gray3' }}
 				/>
 				{selectedTab === DL_TABS.details && (

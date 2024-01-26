@@ -6,7 +6,7 @@
 
 import React, { useMemo } from 'react';
 
-import { Container, Divider, TabBar } from '@zextras/carbonio-design-system';
+import { Container, Divider, Row, TabBar } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
 import { DisplayerActionsHeader } from './displayer-actions-header';
@@ -85,7 +85,7 @@ export const DistributionListDisplayer = ({
 								background={'gray6'}
 								flexShrink={0}
 								height={'3rem'}
-								maxWidth={'32rem'}
+								width={'fill'}
 								borderColor={{ bottom: 'gray3' }}
 							/>
 							<Container
@@ -108,12 +108,19 @@ export const DistributionListDisplayer = ({
 												<Text overflow={'break-word'}>{distributionList.description}</Text>
 											</>
 										)) || (
-											<Text overflow={'break-word'}>
-												{t(
-													'displayer.distribution_list.no_details',
-													'There are no additional details for this distribution list. For more information, ask to the administrator.'
-												)}
-											</Text>
+											<Row width={'fill'}>
+												<Text
+													overflow={'break-word'}
+													size={'small'}
+													color={'secondary'}
+													weight={'light'}
+												>
+													{t(
+														'displayer.distribution_list.no_details',
+														'There are no additional details for this distribution list. For more information, ask to the administrator.'
+													)}
+												</Text>
+											</Row>
 										)}
 									</Container>
 								)}
@@ -129,12 +136,19 @@ export const DistributionListDisplayer = ({
 											key={distributionList.email}
 										/>
 									)) || (
-										<Text overflow={'break-word'}>
-											{t(
-												'displayer.distribution_list.member_not_visible',
-												"You don't have the permissions to see the members of this distribution list. For more information, ask to the administrator."
-											)}
-										</Text>
+										<Row width={'fill'}>
+											<Text
+												overflow={'break-word'}
+												size={'small'}
+												color={'secondary'}
+												weight={'light'}
+											>
+												{t(
+													'displayer.distribution_list.member_not_visible',
+													"You don't have the permissions to see the members of this distribution list. For more information, ask to the administrator."
+												)}
+											</Text>
+										</Row>
 									))}
 							</Container>
 						</Container>
