@@ -67,6 +67,7 @@ export const generateDistributionList = (
 	displayName: faker.internet.displayName(),
 	isOwner: faker.datatype.boolean(),
 	isMember: faker.datatype.boolean(),
+	canRequireMembers: true,
 	...data
 });
 

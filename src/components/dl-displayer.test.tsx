@@ -20,14 +20,7 @@ import { generateDistributionList } from '../tests/utils';
 describe('Distribution List displayer', () => {
 	it('should show the display name in the title', async () => {
 		const dl = generateDistributionList();
-		setupTest(
-			<DistributionListDisplayer
-				distributionList={dl}
-				members={[]}
-				totalMembers={0}
-				showMembersList
-			/>
-		);
+		setupTest(<DistributionListDisplayer distributionList={dl} members={[]} totalMembers={0} />);
 		expect(
 			await within(screen.getByTestId(TESTID_SELECTORS.displayerHeader)).findByText(dl.displayName)
 		).toBeVisible();
@@ -37,14 +30,7 @@ describe('Distribution List displayer', () => {
 		'should show the email in the title if the displayName is %s',
 		async (displayName) => {
 			const dl = generateDistributionList({ displayName });
-			setupTest(
-				<DistributionListDisplayer
-					distributionList={dl}
-					members={[]}
-					totalMembers={0}
-					showMembersList
-				/>
-			);
+			setupTest(<DistributionListDisplayer distributionList={dl} members={[]} totalMembers={0} />);
 			expect(
 				await within(screen.getByTestId(TESTID_SELECTORS.displayerHeader)).findByText(dl.email)
 			).toBeVisible();
@@ -58,12 +44,7 @@ describe('Distribution List displayer', () => {
 				jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
 				const dl = generateDistributionList();
 				setupTest(
-					<DistributionListDisplayer
-						distributionList={dl}
-						members={[]}
-						totalMembers={0}
-						showMembersList
-					/>
+					<DistributionListDisplayer distributionList={dl} members={[]} totalMembers={0} />
 				);
 				expect(await screen.findByRole('button', { name: /send e-mail/i })).toBeVisible();
 			});
@@ -72,12 +53,7 @@ describe('Distribution List displayer', () => {
 				jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([jest.fn(), false]);
 				const dl = generateDistributionList();
 				setupTest(
-					<DistributionListDisplayer
-						distributionList={dl}
-						members={[]}
-						totalMembers={0}
-						showMembersList
-					/>
+					<DistributionListDisplayer distributionList={dl} members={[]} totalMembers={0} />
 				);
 				await screen.findAllByText(dl.displayName);
 				expect(screen.queryByRole('button', { name: /send e-mail/i })).not.toBeInTheDocument();
@@ -88,12 +64,7 @@ describe('Distribution List displayer', () => {
 				jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
 				const dl = generateDistributionList();
 				const { user } = setupTest(
-					<DistributionListDisplayer
-						distributionList={dl}
-						members={[]}
-						totalMembers={0}
-						showMembersList
-					/>
+					<DistributionListDisplayer distributionList={dl} members={[]} totalMembers={0} />
 				);
 				await user.click(await screen.findByRole('button', { name: /send e-mail/i }));
 				expect(openMailComposer).toHaveBeenCalledWith<
@@ -106,12 +77,7 @@ describe('Distribution List displayer', () => {
 			it('should be visible if user is owner of the dl', async () => {
 				const dl = generateDistributionList({ isOwner: true });
 				setupTest(
-					<DistributionListDisplayer
-						distributionList={dl}
-						members={[]}
-						totalMembers={0}
-						showMembersList
-					/>
+					<DistributionListDisplayer distributionList={dl} members={[]} totalMembers={0} />
 				);
 				expect(await screen.findByRole('button', { name: 'Edit' })).toBeVisible();
 			});
@@ -119,12 +85,7 @@ describe('Distribution List displayer', () => {
 			it('should not be visible if user is not owner of the dl', async () => {
 				const dl = generateDistributionList({ isOwner: false });
 				setupTest(
-					<DistributionListDisplayer
-						distributionList={dl}
-						members={[]}
-						totalMembers={0}
-						showMembersList
-					/>
+					<DistributionListDisplayer distributionList={dl} members={[]} totalMembers={0} />
 				);
 				await screen.findAllByText(dl.displayName);
 				expect(screen.queryByRole('button', { name: 'Edit' })).not.toBeInTheDocument();
@@ -139,7 +100,6 @@ describe('Distribution List displayer', () => {
 						distributionList={dl}
 						members={members}
 						totalMembers={members.length}
-						showMembersList
 					/>
 				);
 				await user.click(await screen.findByRole('button', { name: 'Edit' }));
@@ -155,53 +115,25 @@ describe('Distribution List displayer', () => {
 
 	it('should render the display name', async () => {
 		const dl = generateDistributionList();
-		setupTest(
-			<DistributionListDisplayer
-				distributionList={dl}
-				members={[]}
-				totalMembers={0}
-				showMembersList
-			/>
-		);
+		setupTest(<DistributionListDisplayer distributionList={dl} members={[]} totalMembers={0} />);
 		expect(await screen.findAllByText(dl.displayName)).toHaveLength(2);
 	});
 
 	it('should render the email just one time if the display name is set', async () => {
 		const dl = generateDistributionList();
-		setupTest(
-			<DistributionListDisplayer
-				distributionList={dl}
-				members={[]}
-				totalMembers={0}
-				showMembersList
-			/>
-		);
+		setupTest(<DistributionListDisplayer distributionList={dl} members={[]} totalMembers={0} />);
 		expect(await screen.findByText(dl.email)).toBeVisible();
 	});
 
 	it('should render the email two times if the display name is not set', async () => {
 		const dl = generateDistributionList({ displayName: undefined });
-		setupTest(
-			<DistributionListDisplayer
-				distributionList={dl}
-				members={[]}
-				totalMembers={0}
-				showMembersList
-			/>
-		);
+		setupTest(<DistributionListDisplayer distributionList={dl} members={[]} totalMembers={0} />);
 		expect(await screen.findAllByText(dl.email)).toHaveLength(2);
 	});
 
 	it('should show tabs for details, member list and manager list', async () => {
 		const dl = generateDistributionList();
-		setupTest(
-			<DistributionListDisplayer
-				distributionList={dl}
-				members={[]}
-				totalMembers={0}
-				showMembersList
-			/>
-		);
+		setupTest(<DistributionListDisplayer distributionList={dl} members={[]} totalMembers={0} />);
 		expect(screen.getAllByTestId(/tab\d+/i)).toHaveLength(3);
 		expect(screen.getByText('Details')).toBeVisible();
 		expect(screen.getByText('Member list')).toBeVisible();
@@ -209,17 +141,26 @@ describe('Distribution List displayer', () => {
 	});
 
 	describe('Details tab', () => {
-		it('should render the description', async () => {
+		it('should not show the description label if there is no description', () => {
+			const dl = generateDistributionList({ description: undefined });
+			setupTest(<DistributionListDisplayer distributionList={dl} members={[]} totalMembers={0} />);
+			expect(screen.queryByText(/description/i)).not.toBeInTheDocument();
+		});
+
+		it('should show a placeholder if there is no description', () => {
+			const dl = generateDistributionList({ description: undefined });
+			setupTest(<DistributionListDisplayer distributionList={dl} members={[]} totalMembers={0} />);
+			expect(
+				screen.getByText(
+					'There are no additional details for this distribution list. For more information, ask to the administrator.'
+				)
+			).toBeVisible();
+		});
+
+		it('should show the description if there is a description', async () => {
 			const description = faker.lorem.words();
 			const dl = generateDistributionList({ description });
-			setupTest(
-				<DistributionListDisplayer
-					distributionList={dl}
-					members={[]}
-					totalMembers={0}
-					showMembersList
-				/>
-			);
+			setupTest(<DistributionListDisplayer distributionList={dl} members={[]} totalMembers={0} />);
 			expect(await screen.findByText(/description/i)).toBeVisible();
 			expect(await screen.findByText(description)).toBeVisible();
 		});
@@ -233,15 +174,9 @@ describe('Distribution List displayer', () => {
 			})) satisfies DistributionList['owners'];
 			const dl = generateDistributionList({ owners });
 			const { user } = setupTest(
-				<DistributionListDisplayer
-					distributionList={dl}
-					members={[]}
-					totalMembers={0}
-					showMembersList
-				/>
+				<DistributionListDisplayer distributionList={dl} members={[]} totalMembers={0} />
 			);
-			await screen.findByText(dl.displayName);
-			await user.click(screen.getByText(/manager list/i));
+			await user.click(await screen.findByText(/manager list/i));
 			expect(await screen.findByText(/manager list 1/i)).toBeVisible();
 			await screen.findByText(owners[0].name);
 			owners.forEach((owner) => {
@@ -251,16 +186,11 @@ describe('Distribution List displayer', () => {
 	});
 
 	describe('Member list tab', () => {
-		it('should render the member list', async () => {
+		it('should render the member list if user can see the members', async () => {
 			const members = times(10, () => faker.internet.email());
 			const dl = generateDistributionList();
 			const { user } = setupTest(
-				<DistributionListDisplayer
-					distributionList={dl}
-					members={members}
-					totalMembers={10}
-					showMembersList
-				/>
+				<DistributionListDisplayer distributionList={dl} members={members} totalMembers={10} />
 			);
 			await screen.findByText(dl.email);
 			await user.click(screen.getByText(/member list/i));
@@ -270,19 +200,21 @@ describe('Distribution List displayer', () => {
 			});
 		});
 
-		it('should not render the member list component', async () => {
+		it('should render the member list tab with a placeholder if user cannot see the members', async () => {
 			const members = times(10, () => faker.internet.email());
-			const dl = generateDistributionList();
-			setupTest(
-				<DistributionListDisplayer
-					distributionList={dl}
-					members={members}
-					totalMembers={10}
-					showMembersList={false}
-				/>
+			const dl = generateDistributionList({ canRequireMembers: false });
+			const { user } = setupTest(
+				<DistributionListDisplayer distributionList={dl} members={members} totalMembers={10} />
 			);
 			await screen.findByText(dl.email);
-			expect(screen.queryByText(/member list/i)).not.toBeInTheDocument();
+			expect(screen.getByText(/member list/i)).toBeVisible();
+			await user.click(screen.getByText(/member list/i));
+			expect(screen.queryByTestId(TESTID_SELECTORS.membersListItem)).not.toBeInTheDocument();
+			expect(
+				await screen.findByText(
+					"You don't have the permissions to see the members of this distribution list. For more information, ask to the administrator."
+				)
+			).toBeVisible();
 		});
 	});
 });

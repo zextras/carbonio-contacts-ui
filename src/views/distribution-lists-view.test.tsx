@@ -323,7 +323,7 @@ describe('Distribution Lists View', () => {
 
 			await screen.findByText(dl2.displayName);
 			const displayer = await screen.findByTestId(TESTID_SELECTORS.displayer);
-			await within(displayer).findAllByText(dl1.displayName);
+			await user.click(await screen.findByText(/member list/i));
 			await screen.findByText(dl1Members[0]);
 			await user.click(screen.getByText(dl2.displayName));
 			await waitFor(() =>

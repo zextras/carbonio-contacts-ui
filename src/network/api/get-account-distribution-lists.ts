@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { ErrorSoapBodyResponse, soapFetch } from '@zextras/carbonio-shell-ui';
+import { BooleanString, ErrorSoapBodyResponse, soapFetch } from '@zextras/carbonio-shell-ui';
 import { map } from 'lodash';
 
 import { GenericSoapPayload } from './types';
@@ -12,6 +12,7 @@ import { DistributionList } from '../../model/distribution-list';
 
 type Attributes = {
 	description?: string;
+	zimbraHideInGal?: BooleanString;
 };
 
 export interface GetAccountDistributionListsRequest
@@ -42,7 +43,8 @@ const normalizeResponse = (
 		displayName: item.d,
 		isOwner: item.isOwner ?? false,
 		isMember: item.isMember ?? false,
-		description: item._attrs?.description
+		description: item._attrs?.description,
+		canRequireMembers: item._attrs?.zimbraHideInGal === 'TRUE' || item.isOwner === true
 	}));
 
 export const getAccountDistributionLists = (options: {
@@ -56,7 +58,7 @@ export const getAccountDistributionLists = (options: {
 		_jsns: NAMESPACES.account,
 		ownerOf: options.ownerOf,
 		memberOf: options.memberOf ? 'all' : 'none',
-		attrs: 'description'
+		attrs: 'description,zimbraHideInGal'
 	}).then((response) => {
 		if ('Fault' in response) {
 			throw new Error(response.Fault.Reason.Text, { cause: response.Fault });

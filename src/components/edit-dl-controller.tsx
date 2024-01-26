@@ -5,14 +5,7 @@
  */
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import {
-	Button,
-	Container,
-	Divider,
-	TabBar,
-	TabBarProps,
-	useSnackbar
-} from '@zextras/carbonio-design-system';
+import { Button, Container, Divider, TabBar, useSnackbar } from '@zextras/carbonio-design-system';
 import { difference, isEqual, pickBy, xor } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
@@ -22,13 +15,13 @@ import { EditDLMembersComponent } from './edit-dl-members';
 import { ManagerList } from './manager-list';
 import { ScrollableContainer } from './styled-components';
 import { DL_TABS } from '../constants';
+import { useDLTabs } from '../hooks/use-dl-tabs';
 import { DistributionList } from '../model/distribution-list';
 import { client } from '../network/client';
 
-export type EditDLControllerComponentProps = Pick<
-	DistributionList,
-	'email' | 'displayName' | 'owners' | 'members' | 'description'
->;
+export type EditDLControllerComponentProps = {
+	distributionList: DistributionList;
+};
 
 type DLDetails = Required<Pick<DistributionList, 'displayName' | 'description'>>;
 
@@ -41,27 +34,24 @@ export const getMembersPartition = (
 });
 
 export const EditDLControllerComponent = ({
-	email,
-	displayName = '',
-	members: membersPage,
-	owners: ownersProp,
-	description = ''
+	distributionList
 }: EditDLControllerComponentProps): React.JSX.Element => {
+	const { email, displayName, description, members: membersPage } = distributionList;
 	const [members, setMembers] = useState<string[]>(membersPage?.members ?? []);
 	const [loadingMembers, setLoadingMembers] = useState(membersPage === undefined);
 	const originalMembersRef = useRef<string[]>(membersPage?.members ?? []);
 	const [details, setDetails] = useState<DLDetails>({
-		displayName,
-		description
+		displayName: displayName ?? '',
+		description: description ?? ''
 	});
 	const originalDetailsRef = useRef<DLDetails>({
-		displayName,
-		description
+		displayName: displayName ?? '',
+		description: description ?? ''
 	});
+	const { items: tabItems, onChange: onTabChange, selected: selectedTab } = useDLTabs();
 	const [totalMembers, setTotalMembers] = useState<number>(membersPage?.total ?? 0);
-	const [selectedTab, setSelectedTab] = useState<string>(DL_TABS.details);
-	const [owners, setOwners] = useState<DistributionList['owners']>(ownersProp);
-	const [loadingOwners, setLoadingOwners] = useState(ownersProp === undefined);
+	const [owners, setOwners] = useState<DistributionList['owners']>(distributionList.owners);
+	const [loadingOwners, setLoadingOwners] = useState(distributionList.owners === undefined);
 
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
@@ -164,19 +154,6 @@ export const EditDLControllerComponent = ({
 			!isEqual(details, originalDetailsRef.current),
 		[details, members]
 	);
-
-	const tabItems = useMemo(
-		(): TabBarProps['items'] => [
-			{ id: DL_TABS.details, label: t('distribution_list.tabs.details', 'Details') },
-			{ id: DL_TABS.members, label: t('distribution_list.tabs.members', 'Member list') },
-			{ id: DL_TABS.managers, label: t('distribution_list.tabs.managers', 'Manager list') }
-		],
-		[t]
-	);
-
-	const onTabChange = useCallback<TabBarProps['onChange']>((ev, selectedId) => {
-		setSelectedTab(selectedId);
-	}, []);
 
 	const onDetailsChange = useCallback<EditDLDetailsProps['onChange']>((newData) => {
 		setDetails((prevState) => ({ ...prevState, ...newData }));

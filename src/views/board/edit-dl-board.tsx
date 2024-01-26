@@ -24,13 +24,7 @@ const EditDLBoard = (): React.JSX.Element => {
 			</Text>
 		</Container>
 	) : (
-		<EditDLControllerComponent
-			email={distributionList.email}
-			displayName={distributionList.displayName}
-			members={distributionList.members}
-			owners={distributionList.owners}
-			description={distributionList.description}
-		/>
+		<EditDLControllerComponent distributionList={distributionList} />
 	);
 };
 

@@ -6,30 +6,34 @@
 
 import React, { useMemo } from 'react';
 
-import { Container } from '@zextras/carbonio-design-system';
+import { Container, Divider, TabBar } from '@zextras/carbonio-design-system';
+import { useTranslation } from 'react-i18next';
 
 import { DisplayerActionsHeader } from './displayer-actions-header';
 import { DisplayerHeader } from './displayer-header';
-import { DistributionListDetails } from './dl-details';
+import { DLDetailsInfo } from './dl-details-info';
 import { ManagerList } from './manager-list';
 import { MemberList } from './member-list';
 import { ScrollableContainer } from './styled-components';
+import { Text } from './Text';
+import { DL_TABS } from '../constants';
 import { useDLActions } from '../hooks/use-dl-actions';
+import { useDLTabs } from '../hooks/use-dl-tabs';
 import { DistributionList } from '../model/distribution-list';
 
 interface DistributionListDisplayerProps {
 	members: Array<string>;
 	totalMembers: number;
-	distributionList: DistributionList | undefined;
-	showMembersList: boolean;
+	distributionList: DistributionList;
 }
 
 export const DistributionListDisplayer = ({
 	members,
 	totalMembers,
-	distributionList,
-	showMembersList
+	distributionList
 }: DistributionListDisplayerProps): React.JSX.Element => {
+	const [t] = useTranslation();
+	const { items, onChange, selected } = useDLTabs();
 	const dlWithMembers = useMemo(
 		(): DistributionList | undefined =>
 			distributionList && {
@@ -43,7 +47,7 @@ export const DistributionListDisplayer = ({
 	return (
 		<Container background={'gray5'} mainAlignment={'flex-start'} padding={{ bottom: '1rem' }}>
 			<DisplayerHeader
-				title={(distributionList?.displayName || distributionList?.email) ?? ''}
+				title={(distributionList.displayName || distributionList.email) ?? ''}
 				icon={'DistributionListOutline'}
 			/>
 			<Container
@@ -61,20 +65,79 @@ export const DistributionListDisplayer = ({
 						height={'auto'}
 						mainAlignment={'flex-start'}
 						crossAlignment={'flex-start'}
+						flexGrow={1}
 					>
-						<DistributionListDetails
-							email={distributionList?.email ?? ''}
-							displayName={distributionList?.displayName}
-							description={distributionList?.description}
-						/>
-						<ManagerList managers={distributionList?.owners} />
-						{showMembersList && (
-							<MemberList
-								members={members}
-								membersCount={totalMembers}
-								key={distributionList?.email}
+						<Container
+							height={'auto'}
+							mainAlignment={'flex-start'}
+							crossAlignment={'flex-start'}
+							gap={'1rem'}
+						>
+							<DLDetailsInfo
+								displayName={distributionList.displayName}
+								email={distributionList.email ?? ''}
 							/>
-						)}
+							<Divider color={'gray3'} />
+							<TabBar
+								items={items}
+								selected={selected}
+								onChange={onChange}
+								background={'gray6'}
+								flexShrink={0}
+								height={'3rem'}
+								maxWidth={'32rem'}
+								borderColor={{ bottom: 'gray3' }}
+							/>
+							<Container
+								padding={{ top: 'large' }}
+								height={'auto'}
+								mainAlignment={'flex-start'}
+								crossAlignment={'flex-start'}
+							>
+								{selected === DL_TABS.details && (
+									<Container
+										height={'auto'}
+										mainAlignment={'flex-start'}
+										crossAlignment={'flex-start'}
+									>
+										{(distributionList.description && (
+											<>
+												<Text size={'small'} color={'secondary'}>
+													{t('displayer.distribution_list.label.description', 'Description')}
+												</Text>
+												<Text overflow={'break-word'}>{distributionList.description}</Text>
+											</>
+										)) || (
+											<Text overflow={'break-word'}>
+												{t(
+													'displayer.distribution_list.no_details',
+													'There are no additional details for this distribution list. For more information, ask to the administrator.'
+												)}
+											</Text>
+										)}
+									</Container>
+								)}
+
+								{selected === DL_TABS.managers && (
+									<ManagerList managers={distributionList.owners} />
+								)}
+								{selected === DL_TABS.members &&
+									((distributionList.canRequireMembers && (
+										<MemberList
+											members={members}
+											membersCount={totalMembers}
+											key={distributionList.email}
+										/>
+									)) || (
+										<Text overflow={'break-word'}>
+											{t(
+												'displayer.distribution_list.member_not_visible',
+												"You don't have the permissions to see the members of this distribution list. For more information, ask to the administrator."
+											)}
+										</Text>
+									))}
+							</Container>
+						</Container>
 					</Container>
 				</ScrollableContainer>
 			</Container>

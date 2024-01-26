@@ -22,6 +22,7 @@ import { generateDistributionList } from '../tests/utils';
 beforeEach(() => {
 	registerGetDistributionListMembersHandler();
 });
+
 describe('Distribution List Displayer Controller', () => {
 	it('should render empty distribution list displayer suggestions', async () => {
 		setupTest(<DLDisplayerController id={undefined} />);
@@ -48,19 +49,20 @@ describe('Distribution List Displayer Controller', () => {
 		})) satisfies DistributionList['owners'];
 		const dl = generateDistributionList({ owners });
 		registerGetDistributionListHandler(dl);
-		setupTest(<DLDisplayerController id={dl.id} />);
+		const { user } = setupTest(<DLDisplayerController id={dl.id} />);
+		await user.click(await screen.findByText(/manager list/i));
 		expect(await screen.findByText(/manager list 1/i)).toBeVisible();
 		expect(await screen.findByText(owners[0].name)).toBeVisible();
 		expect(await screen.findByText(owners[9].name)).toBeVisible();
 	});
 
 	describe('Member list', () => {
-		it.each(['FALSE', undefined])(
+		it.each<BooleanString | undefined>(['FALSE', undefined])(
 			'should render member list if zimbraHideInGal is %s',
 			async (hideParam) => {
 				const members = times(10, () => faker.internet.email());
 				const dl = generateDistributionList();
-				registerGetDistributionListHandler({ ...dl, zimbraHideParam: hideParam as BooleanString });
+				registerGetDistributionListHandler({ ...dl, zimbraHideParam: hideParam });
 				registerGetDistributionListMembersHandler(members);
 				const { user } = setupTest(<DLDisplayerController id={dl.id} />);
 				await screen.findAllByText(dl.displayName);
@@ -91,9 +93,16 @@ describe('Distribution List Displayer Controller', () => {
 				const dl = generateDistributionList({ isOwner });
 				registerGetDistributionListHandler({ ...dl, zimbraHideParam: 'TRUE' });
 				registerGetDistributionListMembersHandler(members);
-				setupTest(<DLDisplayerController id={dl.id} />);
+				const { user } = setupTest(<DLDisplayerController id={dl.id} />);
 				await screen.findAllByText(dl.displayName);
-				expect(screen.queryByText(/member list/i)).not.toBeInTheDocument();
+				expect(screen.getByText(/member list/i)).toBeVisible();
+				await user.click(screen.getByText(/member list/i));
+				expect(screen.queryByTestId(TESTID_SELECTORS.membersListItem)).not.toBeInTheDocument();
+				expect(
+					await screen.findByText(
+						"You don't have the permissions to see the members of this distribution list. For more information, ask to the administrator."
+					)
+				).toBeVisible();
 			}
 		);
 	});

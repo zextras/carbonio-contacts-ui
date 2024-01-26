@@ -13,7 +13,7 @@ export type DistributionList = {
 	isMember?: boolean;
 	owners?: Array<DistributionListOwner>;
 	description?: string;
-	canRequireMembers?: boolean;
+	canRequireMembers: boolean;
 	members?: DistributionListMembersPage;
 };
 
