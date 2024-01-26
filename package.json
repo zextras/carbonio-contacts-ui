@@ -11,7 +11,7 @@
 		"build": "sdk build",
 		"start": "sdk watch",
 		"deploy": "sdk deploy",
-		"test": "jest --maxWorkers=2",
+		"test": "jest --runInBand",
 		"prepare": "is-ci || husky install",
 		"test:watch": "jest --watch",
 		"type-check": "tsc --noEmit",
