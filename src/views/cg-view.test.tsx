@@ -6,7 +6,7 @@
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
-import { within } from '@testing-library/react';
+import { waitFor, within } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { Route } from 'react-router-dom';
 
@@ -35,8 +35,8 @@ beforeEach(() => {
 describe('Contact Group View', () => {
 	it('should load the second page only when bottom element becomes visible', async () => {
 		const cnItem1 = createFindContactGroupsResponseCnItem();
-		const cnItem101 = createFindContactGroupsResponseCnItem();
-		registerFindContactGroupsHandler(
+		const cnItem101 = createFindContactGroupsResponseCnItem('cgName101');
+		const findHandler = registerFindContactGroupsHandler(
 			{
 				findContactGroupsResponse: createFindContactGroupsResponse(
 					[
@@ -60,6 +60,7 @@ describe('Contact Group View', () => {
 		expect(await screen.findByText(cnItem1.fileAsStr)).toBeVisible();
 		expect(screen.queryByText(cnItem101.fileAsStr)).not.toBeInTheDocument();
 		triggerLoadMore();
+		await waitFor(() => expect(findHandler).toHaveBeenCalledTimes(2));
 		expect(await screen.findByText(cnItem101.fileAsStr)).toBeVisible();
 	});
 
