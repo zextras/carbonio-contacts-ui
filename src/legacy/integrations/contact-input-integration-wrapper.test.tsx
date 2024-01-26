@@ -206,7 +206,7 @@ describe('Contact input integration wrapper', () => {
 			});
 
 			describe('Editing DL', () => {
-				it("doesn't show the edit icon if the contact isn't a DL", () => {
+				it("doesn't show the edit icon if the contact isn't a DL", async () => {
 					const handler = registerGetDistributionListHandler(distributionList);
 
 					setupTest(
