@@ -17,10 +17,8 @@ import {
 	GetDistributionListMembersRequest,
 	GetDistributionListMembersResponse
 } from '../../network/api/get-distribution-list-members';
-import {
-	registerGetDistributionListHandler,
-	registerGetDistributionListMembersHandler
-} from '../../tests/msw-handlers';
+import { registerGetDistributionListHandler } from '../../tests/msw-handlers/get-distribution-list';
+import { registerGetDistributionListMembersHandler } from '../../tests/msw-handlers/get-distribution-list-members';
 import { buildSoapResponse } from '../../tests/utils';
 
 const distributionList = {
