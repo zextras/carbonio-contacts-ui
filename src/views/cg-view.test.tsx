@@ -32,8 +32,8 @@ beforeEach(() => {
 	useContactGroupStore.getState().emptyStoredContactGroups();
 });
 
-describe.skip('Contact Group View', () => {
-	it('should load the second page only when bottom element becomes visible', async () => {
+describe('Contact Group View', () => {
+	it.skip('should load the second page only when bottom element becomes visible', async () => {
 		const cnItem1 = createFindContactGroupsResponseCnItem();
 		const cnItem101 = createFindContactGroupsResponseCnItem();
 		registerFindContactGroupsHandler(
@@ -214,7 +214,7 @@ describe.skip('Contact Group View', () => {
 		});
 	});
 
-	describe.skip('Delete contact group action', () => {
+	describe('Delete contact group action', () => {
 		it('should remove deleted contact group when you confirm deletion and api call will success (Hover trigger)', async () => {
 			const cnItem1 = createFindContactGroupsResponseCnItem();
 			registerFindContactGroupsHandler({
