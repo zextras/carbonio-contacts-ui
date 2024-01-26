@@ -57,10 +57,18 @@ describe('Contact Group View', () => {
 
 		setupTest(<CGView />);
 
+		console.log('uno');
+
 		expect(await screen.findByText(cnItem1.fileAsStr)).toBeVisible();
+		console.log('due');
 		expect(screen.queryByText(cnItem101.fileAsStr)).not.toBeInTheDocument();
+		console.log('tre');
+
 		triggerLoadMore();
+		console.log('quattro');
+
 		expect(await screen.findByText(cnItem101.fileAsStr)).toBeVisible();
+		console.log('cinque');
 	});
 
 	it('should render the avatar, the name and the number of the members (case 1+ addresses string) of a contact group', async () => {
