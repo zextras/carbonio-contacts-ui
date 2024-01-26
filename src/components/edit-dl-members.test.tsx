@@ -14,7 +14,7 @@ import { screen, setupTest, within } from '../carbonio-ui-commons/test/test-setu
 import { PALETTE, TESTID_SELECTORS } from '../constants/tests';
 import { generateStore } from '../legacy/tests/generators/store';
 import 'jest-styled-components';
-import { registerFullAutocompleteHandler } from '../tests/msw-handlers';
+import { registerFullAutocompleteHandler } from '../tests/msw-handlers/full-autocomplete';
 import { getDLContactInput } from '../tests/utils';
 
 const buildProps = ({

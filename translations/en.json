@@ -1,5 +1,8 @@
 {
     "action": {
+        "contactGroup": {
+            "delete": "Delete"
+        },
         "copy": "Copy",
         "delete": "Delete",
         "delete_permanently": "Delete Permanently",
@@ -343,8 +346,19 @@
     },
     "modal": {
         "address_book_name": "Address book name",
+        "cancel": "cancel",
         "close": {
             "tooltip": "Close"
+        },
+        "delete": {
+            "button": {
+                "confirm": "delete"
+            },
+            "contactGroup": {
+                "body1": "Are you sure to delete the selected contact group?",
+                "body2": "If you delete it will be lost forever.",
+                "header": "Delete \"{{contactGroupName}}\""
+            }
         },
         "destination": "Destination folder",
         "edit_distribution_list": {
@@ -440,6 +454,11 @@
         "write": "Write"
     },
     "snackbar": {
+        "delete_contact_group": {
+            "confirm": {
+                "success": "Contact group successfully deleted"
+            }
+        },
         "edit_distribution_list": {
             "save": {
                 "success": "\"{{displayName}}\" distribution list edits saved successfully"

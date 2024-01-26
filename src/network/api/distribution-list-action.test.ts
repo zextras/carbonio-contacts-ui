@@ -11,7 +11,7 @@ import {
 	distributionListAction
 } from './distribution-list-action';
 import { NAMESPACES } from '../../constants/api';
-import { registerDistributionListActionHandler } from '../../tests/msw-handlers';
+import { registerDistributionListActionHandler } from '../../tests/msw-handlers/distribution-list-action';
 
 describe('Distribution list action', () => {
 	it('should not call API if there is no data to update set in the argument', async () => {

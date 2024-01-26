@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { FIND_CONTACT_GROUP_LIMIT } from '../constants';
 import { ContactGroup } from '../model/contact-group';
@@ -17,19 +17,22 @@ type UseFindContactGroupsReturnType = {
 };
 
 export const useFindContactGroups = (): UseFindContactGroupsReturnType => {
-	const { addStoredContactGroups, setStoredOffset } = useContactGroupStore();
-	const [contactGroups, setContactGroups] = useState<Array<ContactGroup>>(
-		useContactGroupStore.getState().storedContactGroups
-	);
-	const offset = useRef<number>(useContactGroupStore.getState().storedOffset);
+	const {
+		addStoredContactGroups,
+		setStoredOffset,
+		storedContactGroups: contactGroups
+	} = useContactGroupStore();
+
 	const [hasMore, setHasMore] = useState(useContactGroupStore.getState().storedOffset !== -1);
 
 	const findCallback = useCallback(() => {
-		client.findContactGroups(offset.current).then((result) => {
+		client.findContactGroups(useContactGroupStore.getState().storedOffset).then((result) => {
 			addStoredContactGroups(result.contactGroups);
-			setContactGroups((oldNodes) => [...(oldNodes ?? []), ...(result.contactGroups ?? [])]);
-			offset.current += FIND_CONTACT_GROUP_LIMIT;
-			setStoredOffset(result.hasMore ? offset.current : -1);
+			setStoredOffset(
+				result.hasMore
+					? useContactGroupStore.getState().storedOffset + FIND_CONTACT_GROUP_LIMIT
+					: -1
+			);
 			setHasMore(result.hasMore);
 		});
 	}, [addStoredContactGroups, setStoredOffset]);

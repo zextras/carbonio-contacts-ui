@@ -13,10 +13,8 @@ import { DLDisplayerController } from './dl-displayer-controller';
 import { screen, setupTest } from '../carbonio-ui-commons/test/test-setup';
 import { EMPTY_DISPLAYER_HINT, JEST_MOCKED_ERROR, TESTID_SELECTORS } from '../constants/tests';
 import { DistributionList } from '../model/distribution-list';
-import {
-	registerGetDistributionListHandler,
-	registerGetDistributionListMembersHandler
-} from '../tests/msw-handlers';
+import { registerGetDistributionListHandler } from '../tests/msw-handlers/get-distribution-list';
+import { registerGetDistributionListMembersHandler } from '../tests/msw-handlers/get-distribution-list-members';
 import { generateDistributionList } from '../tests/utils';
 
 beforeEach(() => {

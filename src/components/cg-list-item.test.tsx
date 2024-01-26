@@ -28,5 +28,10 @@ describe('Contact group list item', () => {
 			setupTest(<CGListItem {...contactGroup} />);
 			expect(screen.queryByTestId(TESTID_SELECTORS.icons.sendEmail)).not.toBeInTheDocument();
 		});
+		it('should show delete action', () => {
+			const contactGroup = buildContactGroup();
+			setupTest(<CGListItem {...contactGroup} />);
+			expect(screen.getByTestId(TESTID_SELECTORS.icons.trash)).toBeVisible();
+		});
 	});
 });
