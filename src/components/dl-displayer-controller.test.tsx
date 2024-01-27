@@ -84,12 +84,12 @@ describe('Distribution List Displayer Controller', () => {
 	});
 
 	describe('Member list', () => {
-		it.each(['FALSE', undefined])(
+		it.each<BooleanString | undefined>(['FALSE', undefined])(
 			'should render member list if zimbraHideInGal is %s',
 			async (hideParam) => {
 				const members = times(10, () => faker.internet.email());
 				const dl = generateDistributionList();
-				registerGetDistributionListHandler({ ...dl, zimbraHideParam: hideParam as BooleanString });
+				registerGetDistributionListHandler({ ...dl, zimbraHideParam: hideParam });
 				registerGetDistributionListMembersHandler(members);
 				setupTest(
 					<Route path={`${ROUTES.mainRoute}${ROUTES.distributionLists}`}>
