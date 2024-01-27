@@ -16,10 +16,8 @@ import {
 } from './edit-dl-controller';
 import { screen, setupTest, within } from '../carbonio-ui-commons/test/test-setup';
 import { JEST_MOCKED_ERROR, TESTID_SELECTORS } from '../constants/tests';
-import {
-	registerDistributionListActionHandler,
-	registerGetDistributionListMembersHandler
-} from '../tests/msw-handlers';
+import { registerDistributionListActionHandler } from '../tests/msw-handlers/distribution-list-action';
+import { registerGetDistributionListMembersHandler } from '../tests/msw-handlers/get-distribution-list-members';
 import { getDLContactInput } from '../tests/utils';
 
 const buildProps = ({

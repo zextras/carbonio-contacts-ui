@@ -6,20 +6,26 @@
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
-import { within } from '@testing-library/react';
+import { waitFor, within } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { Route } from 'react-router-dom';
 
 import { CGView } from './cg-view';
 import { screen, setupTest, triggerLoadMore } from '../carbonio-ui-commons/test/test-setup';
 import { FIND_CONTACT_GROUP_LIMIT, ROUTES, ROUTES_INTERNAL_PARAMS } from '../constants';
-import { EMPTY_DISPLAYER_HINT, EMPTY_LIST_HINT, TESTID_SELECTORS } from '../constants/tests';
+import {
+	EMPTY_DISPLAYER_HINT,
+	EMPTY_LIST_HINT,
+	JEST_MOCKED_ERROR,
+	TESTID_SELECTORS
+} from '../constants/tests';
 import { useContactGroupStore } from '../store/contact-groups';
+import { registerDeleteContactHandler } from '../tests/msw-handlers/delete-contact';
 import {
 	createFindContactGroupsResponse,
 	createFindContactGroupsResponseCnItem,
 	registerFindContactGroupsHandler
-} from '../tests/msw-handlers';
+} from '../tests/msw-handlers/find-contact-groups';
 
 beforeEach(() => {
 	useContactGroupStore.getState().setStoredOffset(0);
@@ -29,8 +35,8 @@ beforeEach(() => {
 describe('Contact Group View', () => {
 	it('should load the second page only when bottom element becomes visible', async () => {
 		const cnItem1 = createFindContactGroupsResponseCnItem();
-		const cnItem101 = createFindContactGroupsResponseCnItem();
-		registerFindContactGroupsHandler(
+		const cnItem101 = createFindContactGroupsResponseCnItem('cgName101');
+		const findHandler = registerFindContactGroupsHandler(
 			{
 				findContactGroupsResponse: createFindContactGroupsResponse(
 					[
@@ -54,6 +60,7 @@ describe('Contact Group View', () => {
 		expect(await screen.findByText(cnItem1.fileAsStr)).toBeVisible();
 		expect(screen.queryByText(cnItem101.fileAsStr)).not.toBeInTheDocument();
 		triggerLoadMore();
+		await waitFor(() => expect(findHandler).toHaveBeenCalledTimes(2));
 		expect(await screen.findByText(cnItem101.fileAsStr)).toBeVisible();
 	});
 
@@ -205,6 +212,79 @@ describe('Contact Group View', () => {
 			await user.click(action);
 			expect(openMailComposer).toHaveBeenCalledTimes(1);
 			expect(openMailComposer).toHaveBeenCalledWith({ recipients: [{ email: member }] });
+		});
+	});
+
+	describe('Delete contact group action', () => {
+		it('should remove deleted contact group when you confirm deletion and api call will success (Hover trigger)', async () => {
+			const cnItem1 = createFindContactGroupsResponseCnItem();
+			registerFindContactGroupsHandler({
+				findContactGroupsResponse: createFindContactGroupsResponse(
+					[cnItem1, ...[...Array(2)].map(() => createFindContactGroupsResponseCnItem())],
+					false
+				),
+				offset: 0
+			});
+			registerDeleteContactHandler(cnItem1.id);
+
+			const { user } = setupTest(<CGView />);
+
+			await screen.findByText(cnItem1.fileAsStr);
+
+			const listElement = screen
+				.getAllByTestId(TESTID_SELECTORS.listItemContent)
+				.find((element) => element.textContent?.includes(cnItem1.fileAsStr));
+
+			expect(listElement).toBeVisible();
+
+			const deleteAction = within(listElement as HTMLElement).getByTestId(
+				TESTID_SELECTORS.icons.trash
+			);
+
+			await user.click(deleteAction);
+			const button = await screen.findByRole('button', {
+				name: 'delete'
+			});
+			await user.click(button);
+			await screen.findByText('Contact group successfully deleted');
+
+			expect(screen.queryByText(cnItem1.fileAsStr)).not.toBeInTheDocument();
+		});
+
+		it('should not remove deleted contact group when you confirm deletion and api call fail (Hover trigger)', async () => {
+			const cnItem1 = createFindContactGroupsResponseCnItem();
+			registerFindContactGroupsHandler({
+				findContactGroupsResponse: createFindContactGroupsResponse(
+					[cnItem1, ...[...Array(2)].map(() => createFindContactGroupsResponseCnItem())],
+					false
+				),
+				offset: 0
+			});
+			registerDeleteContactHandler(cnItem1.id, JEST_MOCKED_ERROR);
+
+			const { user } = setupTest(<CGView />);
+
+			await screen.findByText(cnItem1.fileAsStr);
+
+			const listElement = screen
+				.getAllByTestId(TESTID_SELECTORS.listItemContent)
+				.find((element) => element.textContent?.includes(cnItem1.fileAsStr));
+
+			expect(listElement).toBeVisible();
+
+			const deleteAction = within(listElement as HTMLElement).getByTestId(
+				TESTID_SELECTORS.icons.trash
+			);
+
+			await user.click(deleteAction);
+			const button = await screen.findByRole('button', {
+				name: 'delete'
+			});
+			await user.click(button);
+			await screen.findByText('Something went wrong, please try again');
+
+			expect(screen.getByText(cnItem1.fileAsStr)).toBeVisible();
+			expect(screen.getAllByTestId(TESTID_SELECTORS.listItemContent)).toHaveLength(3);
 		});
 	});
 
