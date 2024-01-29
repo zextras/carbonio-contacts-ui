@@ -41,8 +41,8 @@ describe('Contact Group View', () => {
 				findContactGroupsResponse: createFindContactGroupsResponse(
 					[
 						cnItem1,
-						...[...Array(FIND_CONTACT_GROUP_LIMIT - 1)].map(() =>
-							createFindContactGroupsResponseCnItem()
+						...[...Array(FIND_CONTACT_GROUP_LIMIT - 1)].map((value, index) =>
+							createFindContactGroupsResponseCnItem(undefined, undefined, index.toString())
 						)
 					],
 					true
