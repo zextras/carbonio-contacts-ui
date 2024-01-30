@@ -10,7 +10,11 @@ import * as shell from '@zextras/carbonio-shell-ui';
 
 import EditDLBoard from './edit-dl-board';
 import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
-import { generateDistributionList } from '../../tests/utils';
+import { generateDistributionList, spyUseBoardHooks } from '../../tests/utils';
+
+beforeEach(() => {
+	spyUseBoardHooks();
+});
 
 describe('Edit DL board', () => {
 	it('should show the distribution list edit view', async () => {

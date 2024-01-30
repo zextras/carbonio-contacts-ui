@@ -7,12 +7,14 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { act, waitFor } from '@testing-library/react';
+import { useBoardHooks } from '@zextras/carbonio-shell-ui';
 import { times } from 'lodash';
+import 'jest-styled-components';
 
 import { EditDLControllerComponent, getMembersPartition } from './edit-dl-controller';
 import { screen, setupTest, within } from '../carbonio-ui-commons/test/test-setup';
 import { NAMESPACES } from '../constants/api';
-import { JEST_MOCKED_ERROR, TESTID_SELECTORS } from '../constants/tests';
+import { JEST_MOCKED_ERROR, PALETTE, TESTID_SELECTORS } from '../constants/tests';
 import { DistributionListOwner } from '../model/distribution-list';
 import {
 	BatchDistributionListActionRequest,
@@ -24,11 +26,13 @@ import { registerGetDistributionListMembersHandler } from '../tests/msw-handlers
 import {
 	generateDistributionList,
 	generateDistributionListMembersPage,
-	getDLContactInput
+	getDLContactInput,
+	spyUseBoardHooks
 } from '../tests/utils';
 
 beforeEach(() => {
 	registerGetDistributionListMembersHandler([]);
+	spyUseBoardHooks();
 });
 
 describe('EditDLControllerComponent', () => {
@@ -63,6 +67,55 @@ describe('EditDLControllerComponent', () => {
 		expect(screen.getByRole('textbox', { name: 'Description' })).toBeVisible();
 		expect(screen.queryByText(/member list \d+/i)).not.toBeInTheDocument();
 		expect(screen.queryByText(/manager list \d+/i)).not.toBeInTheDocument();
+	});
+
+	describe('Details tab', () => {
+		describe('display name input', () => {
+			it('should show error if length is greater than 256 chars', async () => {
+				const dl = generateDistributionList({
+					displayName: '',
+					members: generateDistributionListMembersPage([])
+				});
+				const errorMessage = 'Maximum length allowed is 256 characters';
+				const { user } = setupTest(<EditDLControllerComponent distributionList={dl} />);
+				const newName = faker.string.alpha(257);
+				await user.type(screen.getByRole('textbox', { name: /name/i }), newName.substring(0, 256));
+				await screen.findByText(newName.substring(0, 256));
+				expect(screen.queryByText(errorMessage)).not.toBeInTheDocument();
+				await user.type(screen.getByRole('textbox', { name: /name/i }), newName[256]);
+				expect(await screen.findByText(errorMessage)).toBeVisible();
+				await screen.findByText(newName);
+				expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
+			});
+
+			it('should update board title when change', async () => {
+				const updateBoardFn = jest.fn();
+				spyUseBoardHooks(updateBoardFn);
+				const dl = generateDistributionList({
+					displayName: '',
+					members: generateDistributionListMembersPage([])
+				});
+				const { user } = setupTest(<EditDLControllerComponent distributionList={dl} />);
+				const newName = faker.word.words();
+				await user.type(screen.getByRole('textbox', { name: /name/i }), newName);
+				expect(updateBoardFn).toHaveBeenCalledWith<
+					Parameters<ReturnType<typeof useBoardHooks>['updateBoard']>
+				>({ title: newName });
+			});
+
+			it('should update info panel when change', async () => {
+				const dl = generateDistributionList({
+					displayName: '',
+					members: generateDistributionListMembersPage([])
+				});
+				const { user } = setupTest(<EditDLControllerComponent distributionList={dl} />);
+				const newName = faker.word.words();
+				await user.type(screen.getByRole('textbox', { name: /name/i }), newName);
+				expect(
+					await within(screen.getByTestId(TESTID_SELECTORS.infoContainer)).findByText(newName)
+				).toBeVisible();
+			});
+		});
 	});
 
 	describe('Members tab', () => {
@@ -387,6 +440,20 @@ describe('EditDLControllerComponent', () => {
 				await user.type(descriptionInput, 'new value');
 				await waitFor(() => expect(saveButton).toBeEnabled());
 				await user.clear(descriptionInput);
+				await waitFor(() => expect(saveButton).toBeDisabled());
+			});
+
+			it('should become disabled if there is an error', async () => {
+				const dl = generateDistributionList({ description: '' });
+				const { user } = setupTest(<EditDLControllerComponent distributionList={dl} />);
+				await screen.findByText(dl.email);
+				const saveButton = screen.getByRole('button', { name: /save/i });
+				await user.type(screen.getByRole('textbox', { name: /description/i }), faker.word.words());
+				await waitFor(() => expect(saveButton).toBeEnabled());
+				await user.type(
+					screen.getByRole('textbox', { name: /name/i }),
+					faker.string.alpha({ length: 257 })
+				);
 				await waitFor(() => expect(saveButton).toBeDisabled());
 			});
 

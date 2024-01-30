@@ -6,6 +6,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Button, Container, Divider, TabBar, useSnackbar } from '@zextras/carbonio-design-system';
+import { useBoardHooks } from '@zextras/carbonio-shell-ui';
 import { difference, isEqual, pickBy, xor } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
@@ -55,6 +56,7 @@ export const EditDLControllerComponent = ({
 
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
+	const { updateBoard } = useBoardHooks();
 
 	useEffect(() => {
 		if (membersPage === undefined) {
@@ -160,9 +162,13 @@ export const EditDLControllerComponent = ({
 		[details, members]
 	);
 
-	const onDetailsChange = useCallback<EditDLDetailsProps['onChange']>((newData) => {
-		setDetails((prevState) => ({ ...prevState, ...newData }));
-	}, []);
+	const onDetailsChange = useCallback<EditDLDetailsProps['onChange']>(
+		(newData) => {
+			updateBoard({ title: newData.displayName });
+			setDetails((prevState) => ({ ...prevState, ...newData }));
+		},
+		[updateBoard]
+	);
 
 	const nameError = useMemo(() => {
 		if (details.displayName.length > DL_NAME_MAX_LENGTH) {
@@ -204,7 +210,11 @@ export const EditDLControllerComponent = ({
 					onClick={onConfirm}
 				/>
 			</Container>
-			<DLDetailsInfo displayName={displayName} email={email} padding={{ bottom: 'large' }} />
+			<DLDetailsInfo
+				displayName={details.displayName}
+				email={email}
+				padding={{ bottom: 'large' }}
+			/>
 			<Divider />
 			<ScrollableContainer
 				padding={{ top: 'large', bottom: 'extralarge', left: 'large', right: 'large' }}

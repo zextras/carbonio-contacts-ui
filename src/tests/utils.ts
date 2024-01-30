@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { faker } from '@faker-js/faker';
+import * as shell from '@zextras/carbonio-shell-ui';
 import { ErrorSoapResponse, SuccessSoapResponse } from '@zextras/carbonio-shell-ui';
 import { EventEmitter } from 'events';
 import { times } from 'lodash';
@@ -90,5 +91,15 @@ export const generateDistributionLists = (
 export async function delayUntil(emitter: EventEmitter, event: string): Promise<void> {
 	return new Promise((resolve) => {
 		emitter.once(event, resolve);
+	});
+}
+
+export function spyUseBoardHooks(updateBoardFn?: jest.Mock, closeBoardFn?: jest.Mock): void {
+	jest.spyOn(shell, 'useBoardHooks').mockReturnValue({
+		updateBoard: updateBoardFn ?? jest.fn(),
+		setCurrentBoard: jest.fn(),
+		getBoardContext: jest.fn(),
+		getBoard: jest.fn(),
+		closeBoard: closeBoardFn ?? jest.fn()
 	});
 }
