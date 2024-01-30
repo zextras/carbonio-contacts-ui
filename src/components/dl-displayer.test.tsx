@@ -148,11 +148,21 @@ describe('Distribution List displayer', () => {
 		});
 
 		it('should show a placeholder if there is no description', () => {
-			const dl = generateDistributionList({ description: undefined });
+			const dl = generateDistributionList({ description: undefined, isOwner: false });
 			setupTest(<DistributionListDisplayer distributionList={dl} members={[]} totalMembers={0} />);
 			expect(
 				screen.getByText(
 					'There are no additional details for this distribution list. For more information, ask to the administrator.'
+				)
+			).toBeVisible();
+		});
+
+		it('should show a placeholder specific for the owner if there is no description and the user is owner', () => {
+			const dl = generateDistributionList({ description: undefined, isOwner: true });
+			setupTest(<DistributionListDisplayer distributionList={dl} members={[]} totalMembers={0} />);
+			expect(
+				screen.getByText(
+					'There are no additional details for this distribution list. Edit the distribution list to add them or ask to the administrator.'
 				)
 			).toBeVisible();
 		});
