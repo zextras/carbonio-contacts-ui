@@ -11,6 +11,7 @@ import { times } from 'lodash';
 import { screen, within } from '../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../constants/tests';
 import { DistributionList } from '../model/distribution-list';
+import { CnItem } from '../network/api/types';
 import { MakeRequired } from '../types/utils';
 
 export const getDLContactInput = (): {
@@ -82,3 +83,27 @@ export async function delayUntil(emitter: EventEmitter, event: string): Promise<
 		emitter.once(event, resolve);
 	});
 }
+
+export const createCnItem = (
+	contactGroupName = faker.company.name(),
+	members: string[] = [],
+	id = faker.number.int({ min: 100 }).toString()
+): CnItem => {
+	const mappedMembers = members.map((member) => ({ type: 'I' as const, value: member }));
+
+	return {
+		id,
+		l: '7',
+		d: faker.date.recent().valueOf(),
+		rev: 12974,
+		fileAsStr: contactGroupName,
+		_attrs: {
+			nickname: contactGroupName,
+			fullName: contactGroupName,
+			type: 'group',
+			fileAs: `8:${contactGroupName}`
+		},
+		m: mappedMembers,
+		sf: 'bo0000000276'
+	};
+};

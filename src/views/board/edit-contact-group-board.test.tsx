@@ -10,17 +10,16 @@ import { faker } from '@faker-js/faker';
 import 'jest-styled-components';
 import { act, waitFor, within } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
-import { rest } from 'msw';
 
 import { getContactInput } from './common-contact-group-board.test';
 import EditContactGroupBoard from './edit-contact-group-board';
-import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
 import { setupTest, screen } from '../../carbonio-ui-commons/test/test-setup';
 import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../constants';
-import { PALETTE, TESTID_SELECTORS } from '../../constants/tests';
+import { JEST_MOCKED_ERROR, PALETTE, TESTID_SELECTORS } from '../../constants/tests';
 import { client } from '../../network/client';
 import { useContactGroupStore } from '../../store/contact-groups';
 import { buildContactGroup } from '../../tests/model-builder';
+import { registerModifyContactGroupHandler } from '../../tests/msw-handlers/modify-contact-group';
 
 function spyUseBoardHooks(updateBoardFn?: jest.Mock, closeBoardFn?: jest.Mock): void {
 	jest.spyOn(shell, 'useBoardHooks').mockReturnValue({
@@ -83,20 +82,59 @@ describe('Edit contact group board', () => {
 			});
 		});
 
-		it.skip('should close the board when save button is clicked and the request is done successfully', async () => {
+		it('should not close the board when save button is clicked and the request is done successfully', async () => {
+			const handler = registerModifyContactGroupHandler();
+
+			const newName = faker.string.alpha(10);
+			const { user } = setupTest(<EditContactGroupBoard />);
+			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
+			await user.clear(nameInput);
+			await user.type(nameInput, newName);
+			const saveButton = screen.getByRoleWithIcon('button', {
+				name: /SAVE/i,
+				icon: TESTID_SELECTORS.icons.save
+			});
+			await user.click(saveButton);
+			await waitFor(() => expect(handler).toHaveBeenCalledTimes(1));
+			expect(screen.getByText(newName)).toBeVisible();
+		});
+
+		it('should show success snackbar when save button is clicked and the request is done successfully', async () => {
+			registerModifyContactGroupHandler();
+			const newName = faker.string.alpha(10);
+			const { user } = setupTest(<EditContactGroupBoard />);
+			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
+			await user.clear(nameInput);
+			await user.type(nameInput, newName);
+			const saveButton = screen.getByRoleWithIcon('button', {
+				name: /SAVE/i,
+				icon: TESTID_SELECTORS.icons.save
+			});
+			await user.click(saveButton);
+			expect(await screen.findByText('Group successfully updated')).toBeVisible();
+		});
+
+		it('should show error snackbar when modify contact fails', async () => {
+			registerModifyContactGroupHandler(undefined, JEST_MOCKED_ERROR);
+			const newName = faker.string.alpha(10);
+			const { user } = setupTest(<EditContactGroupBoard />);
+			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
+			await user.clear(nameInput);
+			await user.type(nameInput, newName);
+			const saveButton = screen.getByRoleWithIcon('button', {
+				name: /SAVE/i,
+				icon: TESTID_SELECTORS.icons.save
+			});
+			await user.click(saveButton);
+			expect(
+				await screen.findByText('Something went wrong saving the edits, try again')
+			).toBeVisible();
+		});
+
+		it('should not close the board when modify contact fails', async () => {
 			const closeBoard = jest.fn();
 			spyUseBoardHooks(undefined, closeBoard);
-			getSetupServer().use(
-				rest.post('/service/soap/CreateContactRequest', async (req, res, ctx) =>
-					res(
-						ctx.json({
-							Body: {
-								CreateContactResponse: {}
-							}
-						})
-					)
-				)
-			);
+			registerModifyContactGroupHandler(undefined, JEST_MOCKED_ERROR);
 
 			const newName = faker.string.alpha(10);
 			const { user } = setupTest(<EditContactGroupBoard />);
@@ -108,126 +146,13 @@ describe('Edit contact group board', () => {
 				icon: TESTID_SELECTORS.icons.save
 			});
 			await user.click(saveButton);
-			await waitFor(() => expect(closeBoard).toHaveBeenCalledTimes(1));
-		});
-
-		it.skip('should show success snackbar when save button is clicked and the request is done successfully', async () => {
-			getSetupServer().use(
-				rest.post('/service/soap/CreateContactRequest', async (req, res, ctx) =>
-					res(
-						ctx.json({
-							Body: {
-								CreateContactResponse: {}
-							}
-						})
-					)
-				)
-			);
-
-			const newName = faker.string.alpha(10);
-			const { user } = setupTest(<EditContactGroupBoard />);
-			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
-			await user.clear(nameInput);
-			await user.type(nameInput, newName);
-			const saveButton = screen.getByRoleWithIcon('button', {
-				name: /SAVE/i,
-				icon: TESTID_SELECTORS.icons.save
-			});
-			await user.click(saveButton);
-			expect(await screen.findByText('Contact group successfully created')).toBeVisible();
-		});
-
-		it.skip('should show error snackbar when create contact fails', async () => {
-			getSetupServer().use(
-				rest.post('/service/soap/CreateContactRequest', async (req, res, ctx) =>
-					res(
-						ctx.status(500),
-						ctx.json({
-							Body: {
-								Fault: {
-									Reason: { Text: 'invalid request: contact must have fields' },
-									Detail: {
-										Error: {
-											Code: 'service.INVALID_REQUEST'
-										}
-									}
-								}
-							}
-						})
-					)
-				)
-			);
-
-			const newName = faker.string.alpha(10);
-			const { user } = setupTest(<EditContactGroupBoard />);
-			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
-			await user.clear(nameInput);
-			await user.type(nameInput, newName);
-			const saveButton = screen.getByRoleWithIcon('button', {
-				name: /SAVE/i,
-				icon: TESTID_SELECTORS.icons.save
-			});
-			await user.click(saveButton);
-			expect(await screen.findByText('Something went wrong, please try again')).toBeVisible();
-		});
-
-		it.skip('should not close the board when create contact fails', async () => {
-			const closeBoard = jest.fn();
-			spyUseBoardHooks(undefined, closeBoard);
-			getSetupServer().use(
-				rest.post('/service/soap/CreateContactRequest', async (req, res, ctx) =>
-					res(
-						ctx.status(500),
-						ctx.json({
-							Body: {
-								Fault: {
-									Reason: { Text: 'invalid request: contact must have fields' },
-									Detail: {
-										Error: {
-											Code: 'service.INVALID_REQUEST'
-										}
-									}
-								}
-							}
-						})
-					)
-				)
-			);
-
-			const newName = faker.string.alpha(10);
-			const { user } = setupTest(<EditContactGroupBoard />);
-			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
-			await user.clear(nameInput);
-			await user.type(nameInput, newName);
-			const saveButton = screen.getByRoleWithIcon('button', {
-				name: /SAVE/i,
-				icon: TESTID_SELECTORS.icons.save
-			});
-			await user.click(saveButton);
-			await screen.findByText('Something went wrong, please try again');
+			await screen.findByText('Something went wrong saving the edits, try again');
 			expect(closeBoard).not.toHaveBeenCalled();
+			expect(screen.getByText(newName)).toBeVisible();
 		});
 
-		it.skip('should not reset the fields when create contact fails', async () => {
-			getSetupServer().use(
-				rest.post('/service/soap/CreateContactRequest', async (req, res, ctx) =>
-					res(
-						ctx.status(500),
-						ctx.json({
-							Body: {
-								Fault: {
-									Reason: { Text: 'invalid request: contact must have fields' },
-									Detail: {
-										Error: {
-											Code: 'service.INVALID_REQUEST'
-										}
-									}
-								}
-							}
-						})
-					)
-				)
-			);
+		it('should not reset the fields when modify contact fails', async () => {
+			registerModifyContactGroupHandler(undefined, JEST_MOCKED_ERROR);
 			const newEmail1 = faker.internet.email();
 			const newEmail2 = faker.internet.email();
 			const newName = faker.string.alpha(10);
@@ -252,7 +177,7 @@ describe('Edit contact group board', () => {
 				icon: TESTID_SELECTORS.icons.save
 			});
 			await user.click(saveButton);
-			await screen.findByText('Something went wrong, please try again');
+			await screen.findByText('Something went wrong saving the edits, try again');
 			expect(screen.getByText(newName)).toBeVisible();
 			const memberList = await screen.findByTestId(TESTID_SELECTORS.membersList);
 			expect(within(memberList).getByText(newEmail1)).toBeVisible();
@@ -260,20 +185,9 @@ describe('Edit contact group board', () => {
 			expect(within(chipInput).getByText(newEmail2)).toBeVisible();
 		});
 
-		it.skip('should not use unconfirmed mails (valid chips in contactInput) in createContact request', async () => {
-			getSetupServer().use(
-				rest.post('/service/soap/CreateContactRequest', async (req, res, ctx) =>
-					res(
-						ctx.json({
-							Body: {
-								CreateContactResponse: {}
-							}
-						})
-					)
-				)
-			);
-
-			const createContactGroupSpy = jest.spyOn(client, 'createContactGroup');
+		it('should not use unconfirmed mails (valid chips in contactInput) in modifyContactGroup request', async () => {
+			registerModifyContactGroupHandler();
+			const modifyContactGroupSpy = jest.spyOn(client, 'modifyContactGroup');
 			const newEmail1 = faker.internet.email();
 			const newEmail2 = faker.internet.email();
 			const { user } = setupTest(<EditContactGroupBoard />);
@@ -299,25 +213,17 @@ describe('Edit contact group board', () => {
 			await act(async () => {
 				await user.click(saveButton);
 			});
-			await screen.findByText('Contact group successfully created');
+			await screen.findByText('Group successfully updated');
 
-			expect(createContactGroupSpy).toHaveBeenCalledWith('New Group', [newEmail1]);
+			expect(modifyContactGroupSpy).toHaveBeenCalledWith(
+				expect.objectContaining({ addedMembers: [newEmail1] })
+			);
 		});
 
-		it.skip('should use inserted name in createContact request', async () => {
-			getSetupServer().use(
-				rest.post('/service/soap/CreateContactRequest', async (req, res, ctx) =>
-					res(
-						ctx.json({
-							Body: {
-								CreateContactResponse: {}
-							}
-						})
-					)
-				)
-			);
+		it('should use inserted name in modifyContactGroup request', async () => {
+			registerModifyContactGroupHandler();
 			const newName = faker.string.alpha(10);
-			const createContactGroupSpy = jest.spyOn(client, 'createContactGroup');
+			const modifyContactGroupSpy = jest.spyOn(client, 'modifyContactGroup');
 			const { user } = setupTest(<EditContactGroupBoard />);
 			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
 			await user.clear(nameInput);
@@ -330,9 +236,9 @@ describe('Edit contact group board', () => {
 			await act(async () => {
 				await user.click(saveButton);
 			});
-			await screen.findByText('Contact group successfully created');
+			await screen.findByText('Group successfully updated');
 
-			expect(createContactGroupSpy).toBeCalledWith(newName, []);
+			expect(modifyContactGroupSpy).toBeCalledWith(expect.objectContaining({ name: newName }));
 		});
 	});
 

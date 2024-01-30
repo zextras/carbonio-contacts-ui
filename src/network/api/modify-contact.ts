@@ -5,7 +5,7 @@
  */
 import { ErrorSoapBodyResponse, soapFetch } from '@zextras/carbonio-shell-ui';
 
-import { GenericSoapPayload } from './types';
+import { CnItem, GenericSoapPayload } from './types';
 import { NAMESPACES } from '../../constants/api';
 import { ContactGroup } from '../../model/contact-group';
 
@@ -20,15 +20,7 @@ export interface ModifyContactRequest extends GenericSoapPayload<typeof NAMESPAC
 }
 
 export interface ModifyContactResponse extends GenericSoapPayload<typeof NAMESPACES.mail> {
-	cn: Array<{
-		id: string;
-		l: string;
-		d: number;
-		rev: number;
-		fileAsStr: string;
-		_attrs: { fullName?: string; nickname?: string; type: string; fileAs: string };
-		m: Array<{ type: 'I'; value: string }>;
-	}>;
+	cn: Array<CnItem>;
 }
 
 export const modifyContact = ({

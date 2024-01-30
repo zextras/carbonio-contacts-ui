@@ -23,9 +23,9 @@ import { useContactGroupStore } from '../store/contact-groups';
 import { registerDeleteContactHandler } from '../tests/msw-handlers/delete-contact';
 import {
 	createFindContactGroupsResponse,
-	createFindContactGroupsResponseCnItem,
 	registerFindContactGroupsHandler
 } from '../tests/msw-handlers/find-contact-groups';
+import { createCnItem } from '../tests/utils';
 
 beforeEach(() => {
 	useContactGroupStore.getState().setStoredOffset(0);
@@ -34,15 +34,15 @@ beforeEach(() => {
 
 describe('Contact Group View', () => {
 	it('should load the second page only when bottom element becomes visible', async () => {
-		const cnItem1 = createFindContactGroupsResponseCnItem();
-		const cnItem101 = createFindContactGroupsResponseCnItem('cgName101');
+		const cnItem1 = createCnItem();
+		const cnItem101 = createCnItem('cgName101');
 		const findHandler = registerFindContactGroupsHandler(
 			{
 				findContactGroupsResponse: createFindContactGroupsResponse(
 					[
 						cnItem1,
 						...[...Array(FIND_CONTACT_GROUP_LIMIT - 1)].map((value, index) =>
-							createFindContactGroupsResponseCnItem(undefined, undefined, index.toString())
+							createCnItem(undefined, undefined, index.toString())
 						)
 					],
 					true
@@ -68,10 +68,7 @@ describe('Contact Group View', () => {
 		const contactGroupName = faker.company.name();
 		registerFindContactGroupsHandler({
 			findContactGroupsResponse: createFindContactGroupsResponse([
-				createFindContactGroupsResponseCnItem(contactGroupName, [
-					faker.internet.email(),
-					faker.internet.email()
-				])
+				createCnItem(contactGroupName, [faker.internet.email(), faker.internet.email()])
 			]),
 			offset: 0
 		});
@@ -86,9 +83,7 @@ describe('Contact Group View', () => {
 	it('should render the avatar, the name and the number of the members (case 0 addresses string) of a contact group', async () => {
 		const contactGroupName = faker.company.name();
 		registerFindContactGroupsHandler({
-			findContactGroupsResponse: createFindContactGroupsResponse([
-				createFindContactGroupsResponseCnItem(contactGroupName)
-			]),
+			findContactGroupsResponse: createFindContactGroupsResponse([createCnItem(contactGroupName)]),
 			offset: 0
 		});
 		setupTest(<CGView />);
@@ -103,7 +98,7 @@ describe('Contact Group View', () => {
 		const contactGroupName = faker.company.name();
 		registerFindContactGroupsHandler({
 			findContactGroupsResponse: createFindContactGroupsResponse([
-				createFindContactGroupsResponseCnItem(contactGroupName, [faker.internet.email()])
+				createCnItem(contactGroupName, [faker.internet.email()])
 			]),
 			offset: 0
 		});
@@ -133,7 +128,7 @@ describe('Contact Group View', () => {
 			const member = faker.internet.email();
 			registerFindContactGroupsHandler({
 				findContactGroupsResponse: createFindContactGroupsResponse([
-					createFindContactGroupsResponseCnItem(contactGroupName, [member])
+					createCnItem(contactGroupName, [member])
 				]),
 				offset: 0
 			});
@@ -161,7 +156,7 @@ describe('Contact Group View', () => {
 			const member = faker.internet.email();
 			registerFindContactGroupsHandler({
 				findContactGroupsResponse: createFindContactGroupsResponse([
-					createFindContactGroupsResponseCnItem(contactGroupName, [member])
+					createCnItem(contactGroupName, [member])
 				]),
 				offset: 0
 			});
@@ -180,7 +175,7 @@ describe('Contact Group View', () => {
 			const contactGroupName = faker.company.name();
 			registerFindContactGroupsHandler({
 				findContactGroupsResponse: createFindContactGroupsResponse([
-					createFindContactGroupsResponseCnItem(contactGroupName, [])
+					createCnItem(contactGroupName, [])
 				]),
 				offset: 0
 			});
@@ -197,7 +192,7 @@ describe('Contact Group View', () => {
 			const member = faker.internet.email();
 			registerFindContactGroupsHandler({
 				findContactGroupsResponse: createFindContactGroupsResponse([
-					createFindContactGroupsResponseCnItem(contactGroupName, [member])
+					createCnItem(contactGroupName, [member])
 				]),
 				offset: 0
 			});
@@ -217,10 +212,10 @@ describe('Contact Group View', () => {
 
 	describe('Delete contact group action', () => {
 		it('should remove deleted contact group when you confirm deletion and api call will success (Hover trigger)', async () => {
-			const cnItem1 = createFindContactGroupsResponseCnItem();
+			const cnItem1 = createCnItem();
 			registerFindContactGroupsHandler({
 				findContactGroupsResponse: createFindContactGroupsResponse(
-					[cnItem1, ...[...Array(2)].map(() => createFindContactGroupsResponseCnItem())],
+					[cnItem1, ...[...Array(2)].map(() => createCnItem())],
 					false
 				),
 				offset: 0
@@ -252,10 +247,10 @@ describe('Contact Group View', () => {
 		});
 
 		it('should not remove deleted contact group when you confirm deletion and api call fail (Hover trigger)', async () => {
-			const cnItem1 = createFindContactGroupsResponseCnItem();
+			const cnItem1 = createCnItem();
 			registerFindContactGroupsHandler({
 				findContactGroupsResponse: createFindContactGroupsResponse(
-					[cnItem1, ...[...Array(2)].map(() => createFindContactGroupsResponseCnItem())],
+					[cnItem1, ...[...Array(2)].map(() => createCnItem())],
 					false
 				),
 				offset: 0
@@ -303,7 +298,7 @@ describe('Contact Group View', () => {
 			const contactGroupName = faker.company.name();
 			registerFindContactGroupsHandler({
 				findContactGroupsResponse: createFindContactGroupsResponse([
-					createFindContactGroupsResponseCnItem(contactGroupName)
+					createCnItem(contactGroupName)
 				]),
 				offset: 0
 			});
@@ -322,7 +317,7 @@ describe('Contact Group View', () => {
 		});
 
 		it('Click on close action close the displayer', async () => {
-			const cnItem = createFindContactGroupsResponseCnItem();
+			const cnItem = createCnItem();
 			registerFindContactGroupsHandler({
 				findContactGroupsResponse: createFindContactGroupsResponse([cnItem]),
 				offset: 0
