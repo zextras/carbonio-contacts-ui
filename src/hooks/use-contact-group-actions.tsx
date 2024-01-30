@@ -3,33 +3,42 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 
-import { type Action } from '@zextras/carbonio-design-system';
-import { useIntegratedFunction } from '@zextras/carbonio-shell-ui';
-import { useTranslation } from 'react-i18next';
+import { type Action as DSAction } from '@zextras/carbonio-design-system';
 
+import { useActionDeleteCG } from '../actions/delete-cg';
+import { useActionSendEmailCG } from '../actions/send-email-cg';
 import { ContactGroup } from '../model/contact-group';
 
-export const useContactGroupActions = ({ members }: ContactGroup): Action[] => {
-	const [t] = useTranslation();
+export const useContactGroupActions = (contactGroup: ContactGroup): DSAction[] => {
+	const deleteCGAction = useActionDeleteCG();
+	const sendEmailAction = useActionSendEmailCG();
 
-	const [openMailComposer, isMailAvailable] = useIntegratedFunction('composePrefillMessage');
+	return useMemo<DSAction[]>((): DSAction[] => {
+		const orderedActions: DSAction[] = [];
 
-	const sendMail = useCallback(() => {
-		openMailComposer({ recipients: members.map((member) => ({ email: member })) });
-	}, [members, openMailComposer]);
-
-	return useMemo<Action[]>((): Action[] => {
-		const orderedActions: Action[] = [];
-		if (members.length > 0 && isMailAvailable) {
+		if (sendEmailAction.canExecute(contactGroup)) {
 			orderedActions.push({
-				id: 'send-email',
-				label: t('action.send_msg', 'Send e-mail'),
-				icon: 'EmailOutline',
-				onClick: sendMail
+				id: sendEmailAction.id,
+				label: sendEmailAction.label,
+				onClick: () => {
+					sendEmailAction.execute(contactGroup);
+				},
+				icon: sendEmailAction.icon
+			});
+		}
+		if (deleteCGAction.canExecute()) {
+			orderedActions.push({
+				id: deleteCGAction.id,
+				label: deleteCGAction.label,
+				onClick: () => {
+					deleteCGAction.execute(contactGroup);
+				},
+				icon: deleteCGAction.icon,
+				color: deleteCGAction.color
 			});
 		}
 		return orderedActions;
-	}, [isMailAvailable, members.length, sendMail, t]);
+	}, [contactGroup, deleteCGAction, sendEmailAction]);
 };

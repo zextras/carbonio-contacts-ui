@@ -12,7 +12,7 @@ import { act, within } from '@testing-library/react';
 import { ContactInput } from './contact-input';
 import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../../constants/tests';
-import { registerFullAutocompleteHandler } from '../../tests/msw-handlers';
+import { registerFullAutocompleteHandler } from '../../tests/msw-handlers/full-autocomplete';
 import { Match } from '../types/contact';
 
 describe('Contact input', () => {

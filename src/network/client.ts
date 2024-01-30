@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
+import { deleteContactAction } from './api/contact-action';
 import { createContactGroup } from './api/create-contact-group';
 import { distributionListAction } from './api/distribution-list-action';
 import { findContactGroups } from './api/find-contact-groups';
@@ -17,5 +18,6 @@ export const client = {
 	getDistributionList,
 	getDistributionListMembers,
 	findContactGroups,
+	deleteContactAction,
 	getAccountDistributionLists
 };

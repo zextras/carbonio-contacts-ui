@@ -14,10 +14,8 @@ import { mockedAccount } from '../../carbonio-ui-commons/test/mocks/carbonio-she
 import { screen, setupTest, within } from '../../carbonio-ui-commons/test/test-setup';
 import { JEST_MOCKED_ERROR, TESTID_SELECTORS, TIMERS } from '../../constants/tests';
 import { DistributionList } from '../../model/distribution-list';
-import {
-	registerFullAutocompleteHandler,
-	registerGetDistributionListHandler
-} from '../../tests/msw-handlers';
+import { registerFullAutocompleteHandler } from '../../tests/msw-handlers/full-autocomplete';
+import { registerGetDistributionListHandler } from '../../tests/msw-handlers/get-distribution-list';
 
 const contactChipItem = {
 	email: faker.internet.email()
