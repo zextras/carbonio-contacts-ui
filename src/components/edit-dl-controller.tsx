@@ -14,7 +14,7 @@ import { EditDLDetails, EditDLDetailsProps } from './edit-dl-details';
 import { EditDLMembersComponent } from './edit-dl-members';
 import { ManagerList } from './manager-list';
 import { ScrollableContainer } from './styled-components';
-import { DL_TABS } from '../constants';
+import { DL_NAME_MAX_LENGTH, DL_TABS } from '../constants';
 import { useDLTabs } from '../hooks/use-dl-tabs';
 import { DistributionList } from '../model/distribution-list';
 import { client } from '../network/client';
@@ -132,7 +132,12 @@ export const EditDLControllerComponent = ({
 					label: t(
 						'snackbar.edit_distribution_list.save.success',
 						'"{{displayName}}" distribution list edits saved successfully',
-						{ displayName }
+						{
+							displayName:
+								(details.displayName.length > 50 && `${details.displayName.substring(0, 50)}...`) ||
+								details.displayName ||
+								email
+						}
 					),
 					hideButton: true
 				});
@@ -146,7 +151,7 @@ export const EditDLControllerComponent = ({
 				});
 				console.error(error);
 			});
-	}, [createSnackbar, details, displayName, email, members, t]);
+	}, [createSnackbar, details, email, members, t]);
 
 	const isDirty = useMemo(
 		() =>
@@ -158,6 +163,18 @@ export const EditDLControllerComponent = ({
 	const onDetailsChange = useCallback<EditDLDetailsProps['onChange']>((newData) => {
 		setDetails((prevState) => ({ ...prevState, ...newData }));
 	}, []);
+
+	const nameError = useMemo(() => {
+		if (details.displayName.length > DL_NAME_MAX_LENGTH) {
+			return t(
+				'edit_dl_component.input.name.error.max_length',
+				'Maximum length allowed is 256 characters'
+			);
+		}
+		return undefined;
+	}, [t, details.displayName]);
+
+	const hasErrors = useMemo(() => nameError !== undefined, [nameError]);
 
 	const onDiscard = useCallback(() => {
 		setMembers(originalMembersRef.current);
@@ -181,7 +198,11 @@ export const EditDLControllerComponent = ({
 				height={'auto'}
 			>
 				<Button label={t('label.discard', 'Discard')} type={'outlined'} onClick={onDiscard} />
-				<Button label={t('label.save', 'Save')} disabled={!isDirty} onClick={onConfirm} />
+				<Button
+					label={t('label.save', 'Save')}
+					disabled={!isDirty || hasErrors}
+					onClick={onConfirm}
+				/>
 			</Container>
 			<DLDetailsInfo displayName={displayName} email={email} padding={{ bottom: 'large' }} />
 			<Divider />
@@ -190,7 +211,6 @@ export const EditDLControllerComponent = ({
 				mainAlignment={'flex-start'}
 				crossAlignment={'flex-start'}
 				background={'gray6'}
-				height={'100%'}
 				flexGrow={1}
 			>
 				<TabBar
@@ -203,27 +223,28 @@ export const EditDLControllerComponent = ({
 					maxWidth={'50vw'}
 					borderColor={{ bottom: 'gray3' }}
 				/>
-				{selectedTab === DL_TABS.details && (
-					<EditDLDetails
-						name={details.displayName}
-						description={details.description}
-						onChange={onDetailsChange}
-					/>
-				)}
-				{selectedTab === DL_TABS.members && (
-					<EditDLMembersComponent
-						members={members}
-						totalMembers={totalMembers}
-						onRemoveMember={onRemoveMember}
-						onAddMembers={onAddMembers}
-						loading={loadingMembers}
-					/>
-				)}
-				{selectedTab === DL_TABS.managers && (
-					<Container padding={{ top: 'large' }} height={'auto'}>
+				<ScrollableContainer padding={{ top: 'large' }} mainAlignment={'flex-start'}>
+					{selectedTab === DL_TABS.details && (
+						<EditDLDetails
+							name={details.displayName}
+							nameError={nameError}
+							description={details.description}
+							onChange={onDetailsChange}
+						/>
+					)}
+					{selectedTab === DL_TABS.members && (
+						<EditDLMembersComponent
+							members={members}
+							totalMembers={totalMembers}
+							onRemoveMember={onRemoveMember}
+							onAddMembers={onAddMembers}
+							loading={loadingMembers}
+						/>
+					)}
+					{selectedTab === DL_TABS.managers && (
 						<ManagerList managers={owners} loading={loadingOwners} />
-					</Container>
-				)}
+					)}
+				</ScrollableContainer>
 			</ScrollableContainer>
 		</Container>
 	);

@@ -18,12 +18,14 @@ import { DistributionList } from '../model/distribution-list';
 
 export type EditDLDetailsProps = {
 	name: string;
+	nameError?: string;
 	description: string;
 	onChange: (newData: Partial<Pick<DistributionList, 'displayName' | 'description'>>) => void;
 };
 
 export const EditDLDetails = ({
 	name,
+	nameError,
 	description,
 	onChange
 }: EditDLDetailsProps): React.JSX.Element => {
@@ -44,14 +46,16 @@ export const EditDLDetails = ({
 	);
 
 	return (
-		<Container padding={{ top: 'large' }} gap={'1rem'} height={'auto'}>
+		<Container gap={'1rem'} height={'auto'}>
 			<Input
-				label={t('edit_dl_component.input.name', 'Distribution List name')}
+				label={t('edit_dl_component.input.name.label', 'Distribution List name')}
 				value={name}
 				onChange={onDisplayNameChange}
+				description={nameError}
+				hasError={!!nameError}
 			/>
 			<TextArea
-				label={t('edit_dl_component.input.description', 'Description')}
+				label={t('edit_dl_component.input.description.label', 'Description')}
 				value={description}
 				onChange={onDescriptionChange}
 			/>

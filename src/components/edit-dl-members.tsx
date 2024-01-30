@@ -204,12 +204,7 @@ export const EditDLMembersComponent: FC<EditDLComponentProps> = ({
 	}, [duplicatedContacts, invalidEmailContacts, onAddMembers, validEmails]);
 
 	return (
-		<Container
-			mainAlignment={'flex-start'}
-			crossAlignment={'flex-start'}
-			gap={'0.5rem'}
-			padding={{ top: 'large' }}
-		>
+		<Container mainAlignment={'flex-start'} crossAlignment={'flex-start'} gap={'0.5rem'}>
 			<Row>
 				<Text size={'small'} color={'secondary'}>
 					{t('edit_dl_component.label.members_total', 'Member list {{total}}', {
@@ -252,8 +247,8 @@ export const EditDLMembersComponent: FC<EditDLComponentProps> = ({
 				value={searchValue}
 				onChange={onSearchChange}
 			/>
-			<Container height={'15rem'}>
-				<ListV2 maxWidth={'fill'}>{memberItems}</ListV2>
+			<Container minHeight={'10rem'} mainAlignment={'flex-start'}>
+				<ListV2>{memberItems}</ListV2>
 			</Container>
 		</Container>
 	);

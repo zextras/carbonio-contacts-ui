@@ -6,12 +6,13 @@
 
 import React, { useMemo } from 'react';
 
-import { Container, ListV2, Text } from '@zextras/carbonio-design-system';
+import { Container, ListV2, Row } from '@zextras/carbonio-design-system';
 import { map, times } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { MemberDisplayerListItemComponent } from './member-displayer-list-item';
 import { ShimmedDisplayerListItem } from './shimmed-displayer-list-item';
+import { Text } from './Text';
 import { DistributionList, DistributionListOwner } from '../model/distribution-list';
 
 type ManagerListProps = {
@@ -34,12 +35,14 @@ export const ManagerList = ({ managers, loading }: ManagerListProps): React.JSX.
 
 	return (
 		<Container mainAlignment={'flex-start'} crossAlignment={'flex-start'} gap={'0.5rem'}>
-			<Text size={'small'} color={'secondary'}>
-				{t('displayer.distribution_list.label.manager_total', 'Manager list {{total}}', {
-					total: managers?.length ?? 0
-				})}
-			</Text>
-			<Container minHeight={'0'} mainAlignment={'flex-start'}>
+			<Row>
+				<Text size={'small'} color={'secondary'}>
+					{t('displayer.distribution_list.label.manager_total', 'Manager list {{total}}', {
+						total: managers?.length ?? 0
+					})}
+				</Text>
+			</Row>
+			<Container minHeight={0} mainAlignment={'flex-start'}>
 				<ListV2>{memberItems}</ListV2>
 			</Container>
 		</Container>

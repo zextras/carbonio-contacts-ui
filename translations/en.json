@@ -126,8 +126,15 @@
             "invalid_and_duplicated_addresses": "Invalid and already present addresses"
         },
         "input": {
-            "description": "Description",
-            "name": "Distribution List name"
+            "description": {
+                "label": "Description"
+            },
+            "name": {
+                "error": {
+                    "max_length": "Maximum length allowed is 256 characters"
+                },
+                "label": "Distribution List name"
+            }
         },
         "label": {
             "dl_email": "Distribution list",

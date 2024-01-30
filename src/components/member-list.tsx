@@ -76,7 +76,7 @@ export const MemberList = ({
 				value={searchValue}
 				onChange={onSearchChange}
 			/>
-			<Container minHeight={0} mainAlignment={'flex-start'}>
+			<Container minHeight={'10rem'} mainAlignment={'flex-start'}>
 				<ListV2>{memberItems}</ListV2>
 			</Container>
 		</Container>
