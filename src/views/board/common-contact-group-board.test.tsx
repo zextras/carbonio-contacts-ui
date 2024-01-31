@@ -58,7 +58,7 @@ function spyUseBoardHooks(updateBoardFn?: jest.Mock, closeBoardFn?: jest.Mock): 
 }
 
 const contactGroup = buildContactGroup();
-beforeAll(() => {
+beforeEach(() => {
 	spyUseBoardHooks();
 });
 
