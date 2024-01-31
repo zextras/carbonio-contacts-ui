@@ -89,7 +89,10 @@ export const createCnItem = (
 	members: string[] = [],
 	id = faker.number.int({ min: 100 }).toString()
 ): CnItem => {
-	const mappedMembers = members.map((member) => ({ type: 'I' as const, value: member }));
+	const mappedMembers = members.map<CnItem['m'][number]>((member) => ({
+		type: 'I',
+		value: member
+	}));
 
 	return {
 		id,
