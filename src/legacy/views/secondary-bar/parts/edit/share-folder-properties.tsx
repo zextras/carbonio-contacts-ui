@@ -3,55 +3,73 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+import React, { FC, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+
 import {
 	ButtonOld as Button,
 	Chip,
+	ChipProps,
 	Container,
 	Padding,
+	SnackbarManagerContext,
 	Text,
 	Tooltip
 } from '@zextras/carbonio-design-system';
-import { useUserAccounts } from '@zextras/carbonio-shell-ui';
-import { map, replace, split } from 'lodash';
-import React, { useCallback, useContext, useMemo, useState } from 'react';
+import { Grant, soapFetch, useUserAccounts } from '@zextras/carbonio-shell-ui';
+import { map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import { sendShareNotification } from '../../../../store/actions/send-share-notification';
-import { ShareFolderRoleOptions, findLabel } from '../../commons/utils';
-import { capitalise } from '../../utils';
+
 import { Context } from './edit-context';
 import { useAppDispatch } from '../../../../hooks/redux';
+import { sendShareNotification } from '../../../../store/actions/send-share-notification';
+import {
+	ActionProps,
+	GranteeInfoProps,
+	GranteeProps,
+	ShareFolderPropertiesProps
+} from '../../../../types/contact';
+import { ShareFolderRoleOptions, findLabel } from '../../commons/utils';
 
-const HoverChip = styled(Chip)`
-	background-color: ${({ theme, hovered }) =>
+const HoverChip = styled(Chip)<ChipProps & { hovered?: boolean }>`
+	background-color: ${({ theme, hovered }): string =>
 		hovered ? theme.palette.gray3.hover : theme.palette.gray3.regular};
 `;
-export const GranteeInfo = ({ grant, shareFolderRoleOptions, hovered }) => {
+
+export const GranteeInfo: FC<GranteeInfoProps> = ({ grant, shareFolderRoleOptions, hovered }) => {
 	const role = useMemo(
 		() => findLabel(shareFolderRoleOptions, grant.perm || ''),
 		[shareFolderRoleOptions, grant.perm]
 	);
-	const label = useMemo(
-		() => `${replace(split(grant.d, '@')?.[0], '.', ' ')} - ${role}`,
-		[grant.d, role]
-	);
-	const upperCaseLabel = useMemo(() => capitalise(label), [label]);
+
+	const label = useMemo(() => {
+		const composeLabel = (name: string): string => `${name} - ${role}`;
+		return grant.d ? composeLabel(grant.d) : composeLabel(grant?.zid);
+	}, [grant, role]);
+
 	return (
 		<Container crossAlignment="flex-start">
 			<Text>
-				<HoverChip label={upperCaseLabel} hovered={hovered} />
+				<HoverChip label={label} hovered={hovered} />
 			</Text>
 		</Container>
 	);
 };
 
-const Actions = ({ folder, grant, createSnackbar, setActiveModal, onMouseLeave, onMouseEnter }) => {
+const Actions: FC<ActionProps> = ({
+	folder,
+	grant,
+	setActiveModal,
+	onMouseLeave,
+	onMouseEnter
+}) => {
 	const [t] = useTranslation();
 	const accounts = useUserAccounts();
+	const createSnackbar = useContext(SnackbarManagerContext);
 	const { setActiveGrant } = useContext(Context);
 	const dispatch = useAppDispatch();
 	const onRevoke = useCallback(() => {
-		setActiveGrant(grant);
+		setActiveGrant && setActiveGrant(grant);
 		setActiveModal('revoke');
 	}, [setActiveModal, setActiveGrant, grant]);
 
@@ -65,19 +83,20 @@ const Actions = ({ folder, grant, createSnackbar, setActiveModal, onMouseLeave, 
 			})
 		).then((res) => {
 			if (res.type.includes('fulfilled')) {
-				createSnackbar({
-					key: `resend-${folder.id}`,
-					replace: true,
-					type: 'info',
-					label: t('snackbar.share_resend', 'Share invite resent'),
-					autoHideTimeout: 2000,
-					hideButton: true
-				});
+				createSnackbar &&
+					createSnackbar({
+						key: `resend-${folder.id}`,
+						replace: true,
+						type: 'info',
+						label: t('snackbar.share_resend', 'Share invite resent'),
+						autoHideTimeout: 2000,
+						hideButton: true
+					});
 			}
 		});
 	}, [accounts, dispatch, folder, t, grant.d, createSnackbar]);
 	const onEdit = useCallback(() => {
-		setActiveGrant(grant);
+		setActiveGrant && setActiveGrant(grant);
 		setActiveModal('edit');
 	}, [setActiveModal, setActiveGrant, grant]);
 
@@ -114,18 +133,7 @@ const Actions = ({ folder, grant, createSnackbar, setActiveModal, onMouseLeave, 
 	);
 };
 
-const Grantee = ({
-	grant,
-	folder,
-	createSnackbar,
-	folders,
-	allCalendars,
-	setModal,
-	totalAppointments,
-	setActiveModal,
-	shareFolderRoleOptions,
-	setActiveGrant
-}) => {
+const Grantee: FC<GranteeProps> = ({ grant, folder, setActiveModal, shareFolderRoleOptions }) => {
 	const [hovered, setHovered] = useState(false);
 	const onMouseEnter = useCallback(() => {
 		setHovered(true);
@@ -145,35 +153,32 @@ const Grantee = ({
 				onMouseLeave={onMouseLeave}
 				onMouseEnter={onMouseEnter}
 				grant={grant}
-				createSnackbar={createSnackbar}
-				folders={folders}
-				allCalendars={allCalendars}
-				setModal={setModal}
 				setActiveModal={setActiveModal}
-				totalAppointments={totalAppointments}
-				setActiveGrant={setActiveGrant}
 			/>
 		</Container>
 	);
 };
 
-export const ShareFolderProperties = ({
+export const ShareFolderProperties: FC<ShareFolderPropertiesProps> = ({
 	folder,
-	createSnackbar,
-	folders,
-	allCalendars,
-	setModal,
-	setActiveGrant,
-	totalAppointments,
 	setActiveModal
 }) => {
 	const [t] = useTranslation();
-	const { grant } = folder.sharedWith;
+	const [grant, setGrant] = useState<Array<Grant> | undefined>();
 	const shareFolderRoleOptions = useMemo(
-		() => ShareFolderRoleOptions(t, grant.perm?.includes('p')),
-		[t, grant.perm]
+		() => ShareFolderRoleOptions(t, grant?.[0]?.perm?.includes('p')),
+		[t, grant]
 	);
-
+	useEffect(() => {
+		soapFetch('GetFolder', {
+			_jsns: 'urn:zimbraMail',
+			folder: { l: folder.id }
+		}).then((res: any): void => {
+			if (res?.folder) {
+				setGrant(res.folder[0].acl.grant);
+			}
+		});
+	}, [folder, folder.id]);
 	return (
 		<Container mainAlignment="center" crossAlignment="flex-start" height="fit">
 			<Padding vertical="small" />
@@ -182,15 +187,9 @@ export const ShareFolderProperties = ({
 			{map(grant, (item) => (
 				<Grantee
 					key={item.zid}
-					setActiveGrant={setActiveGrant}
 					grant={item}
 					folder={folder}
-					createSnackbar={createSnackbar}
-					folders={folders}
-					allCalendars={allCalendars}
-					setModal={setModal}
 					setActiveModal={setActiveModal}
-					totalAppointments={totalAppointments}
 					shareFolderRoleOptions={shareFolderRoleOptions}
 				/>
 			))}

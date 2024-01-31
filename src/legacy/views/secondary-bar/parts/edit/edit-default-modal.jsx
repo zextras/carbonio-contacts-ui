@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React, { useState, useMemo, useCallback } from 'react';
+
 import {
 	Container,
 	Select,
@@ -13,23 +14,17 @@ import {
 	Row,
 	Divider
 } from '@zextras/carbonio-design-system';
+import { getBridgedFunctions, t } from '@zextras/carbonio-shell-ui';
 import { isEmpty, reduce, filter, first } from 'lodash';
-import ModalFooter from '../../commons/modal-footer';
-import { ModalHeader } from '../../commons/modal-header';
+
+import { ShareFolderProperties } from './share-folder-properties';
+import ColorSelect from '../../../../commons/ColorSelect';
 import { folderAction } from '../../../../store/actions/folder-action';
 import { extractFolders } from '../../../../utils/helpers';
-import ColorSelect from '../../../../commons/ColorSelect';
-import { ShareFolderProperties } from './share-folder-properties';
+import ModalFooter from '../../commons/modal-footer';
+import { ModalHeader } from '../../commons/modal-header';
 
-const EditDefaultModal = ({
-	currentFolder,
-	accordions,
-	setModal,
-	dispatch,
-	t,
-	setActiveModal,
-	createSnackbar
-}) => {
+const EditDefaultModal = ({ currentFolder, accordions, setModal, dispatch, setActiveModal }) => {
 	const [inputValue, setInputValue] = useState('');
 	const [parent, setParent] = useState('');
 	const folders = useMemo(() => extractFolders(accordions), [accordions]);
@@ -91,7 +86,7 @@ const EditDefaultModal = ({
 			},
 			accItem
 		);
-	}, [currentFolder.level, currentFolder.id, currentFolder.parent, folders, t]);
+	}, [currentFolder.level, currentFolder.id, currentFolder.parent, folders]);
 
 	useMemo(() => {
 		setParent(currentFolder.parent);
@@ -117,7 +112,7 @@ const EditDefaultModal = ({
 			})
 		).then((res) => {
 			if (res.type.includes('fulfilled')) {
-				createSnackbar({
+				getBridgedFunctions()?.createSnackbar({
 					key: `edit`,
 					replace: true,
 					type: 'info',
@@ -126,7 +121,7 @@ const EditDefaultModal = ({
 					autoHideTimeout: 3000
 				});
 			} else {
-				createSnackbar({
+				getBridgedFunctions()?.createSnackbar({
 					key: `edit`,
 					replace: true,
 					type: 'error',
@@ -137,7 +132,7 @@ const EditDefaultModal = ({
 			}
 		});
 		setModal('');
-	}, [dispatch, currentFolder, inputValue, parent, setModal, folderColor, createSnackbar, t]);
+	}, [dispatch, currentFolder, inputValue, parent, setModal, folderColor]);
 
 	const onClose = useCallback(() => setModal(''), [setModal]);
 
@@ -271,7 +266,6 @@ const EditDefaultModal = ({
 					<ShareFolderProperties
 						folder={currentFolder}
 						setCurrentFolder={() => null}
-						createSnackbar={createSnackbar}
 						setModal={setModal}
 						setActiveModal={setActiveModal}
 					/>

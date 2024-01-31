@@ -178,6 +178,12 @@ type FolderActionDelete = {
 	id: string;
 };
 
+export type GetFolderActionRequest = {
+	folder: {
+		l: string;
+	};
+};
+
 export type FolderActionRequest = {
 	action: FolderActionRename | FolderActionMove | FolderActionDelete;
 };
