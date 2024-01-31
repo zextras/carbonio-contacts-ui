@@ -82,11 +82,10 @@ export const modifyContactGroup = ({
 		  ]
 		: undefined;
 	return modifyContact({ id, addedMembers, removedMembers, attributes }).then(
-		(res: ModifyContactResponse) =>
-			({
-				id: res.cn[0].id,
-				title: res.cn[0]._attrs.fullName ?? '',
-				members: res.cn[0].m?.map((value) => value.value) ?? []
-			} as ContactGroup)
+		(res: ModifyContactResponse) => ({
+			id: res.cn[0].id,
+			title: res.cn[0]._attrs.fullName ?? '',
+			members: res.cn[0].m?.map((value) => value.value) ?? []
+		})
 	);
 };

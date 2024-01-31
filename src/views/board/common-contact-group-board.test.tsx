@@ -11,16 +11,15 @@ import 'jest-styled-components';
 import { act, within } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { first, forEach, last, noop } from 'lodash';
-import { rest } from 'msw';
 
 import CommonContactGroupBoard, {
 	CommonContactGroupBoardProps
 } from './common-contact-group-board';
-import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
 import { setupTest, screen } from '../../carbonio-ui-commons/test/test-setup';
 import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../constants';
 import { PALETTE, TESTID_SELECTORS } from '../../constants/tests';
 import { buildContactGroup } from '../../tests/model-builder';
+import { registerFullAutocompleteHandler } from '../../tests/msw-handlers/full-autocomplete';
 
 export function getContactInput(): HTMLElement {
 	return screen.getByRole('textbox', {
@@ -305,17 +304,7 @@ describe('Common contact group board', () => {
 
 			it('should enable the plus button when the user add a chip from the dropdown', async () => {
 				const email = faker.internet.email();
-				getSetupServer().use(
-					rest.post('/service/soap/FullAutocompleteRequest', async (req, res, ctx) =>
-						res(
-							ctx.json({
-								Body: {
-									FullAutocompleteResponse: `<FullAutocompleteResponse xmlns="urn:zimbraMail"><match email="&lt;${email}>" first="${faker.person.firstName()}" /></FullAutocompleteResponse>`
-								}
-							})
-						)
-					)
-				);
+				registerFullAutocompleteHandler([{ first: faker.person.firstName(), email }]);
 				const { user } = setupTest(<CommonContactGroupBoard {...buildProps()} />);
 				const contactInput = getContactInput();
 				await user.type(contactInput, email.substring(0, 3));
