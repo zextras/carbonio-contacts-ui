@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { ErrorSoapBodyResponse, soapFetch } from '@zextras/carbonio-shell-ui';
+import { BooleanString, ErrorSoapBodyResponse, soapFetch } from '@zextras/carbonio-shell-ui';
 import { filter, first, flatMap } from 'lodash';
 
 import { GenericSoapPayload } from './types';
@@ -28,7 +28,7 @@ export interface GetDistributionListResponse extends GenericSoapPayload<typeof N
 		_attrs?: {
 			displayName?: string;
 			description?: string;
-			zimbraHideInGal?: 'TRUE' | 'FALSE';
+			zimbraHideInGal?: BooleanString;
 		};
 	}>;
 }
@@ -53,7 +53,7 @@ const normalizeResponse = (response: GetDistributionListResponse): DistributionL
 		isOwner: dl.isOwner ?? false,
 		owners: normalizeOwners(dl.owners),
 		description: dl._attrs?.description,
-		canRequireMembers: dl._attrs?.zimbraHideInGal !== 'TRUE'
+		canRequireMembers: dl._attrs?.zimbraHideInGal !== 'TRUE' || dl.isOwner
 	};
 };
 
