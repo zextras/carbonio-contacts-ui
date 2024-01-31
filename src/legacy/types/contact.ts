@@ -3,7 +3,8 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-// eslint-disable-next-line no-shadow
+import type { NameSpace } from '@zextras/carbonio-shell-ui';
+
 export enum ContactPhoneType {
 	MOBILE = 'mobile',
 	WORK = 'work',
@@ -11,14 +12,12 @@ export enum ContactPhoneType {
 	OTHER = 'other'
 }
 
-// eslint-disable-next-line no-shadow
 export enum ContactAddressType {
 	OTHER = 'other',
 	WORK = 'work',
 	HOME = 'home'
 }
 
-// eslint-disable-next-line no-shadow
 export enum ContactUrlType {
 	OTHER = 'other',
 	WORK = 'work',
@@ -121,13 +120,20 @@ export type Group = {
 
 export type Match = {
 	first?: string;
+	middle?: string;
 	last?: string;
+	nick?: string;
 	fileas?: string;
 	ranking?: string;
 	type?: string;
 	isGroup?: boolean;
 	email?: string;
 	full?: string;
+	company?: string;
+	display?: string;
+	id?: string;
+	l?: string;
+	exp?: string;
 };
 
 export type FullAutocompleteResponse = {
@@ -136,4 +142,13 @@ export type FullAutocompleteResponse = {
 		canBeCached: string | null;
 		xmlns: string | null;
 	};
+};
+
+export type FullAutocompleteRequest = {
+	extraAccountId?: Array<{ _content: string }>;
+	AutoCompleteRequest: {
+		name: string;
+		includeGal: 0 | 1;
+	};
+	_jsns: NameSpace;
 };
