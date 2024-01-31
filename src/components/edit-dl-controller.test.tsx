@@ -116,6 +116,18 @@ describe('EditDLControllerComponent', () => {
 				).toBeVisible();
 			});
 		});
+
+		it('should not update board title when description input change', async () => {
+			const updateBoardFn = jest.fn();
+			spyUseBoardHooks(updateBoardFn);
+			const dl = generateDistributionList({
+				displayName: '',
+				members: generateDistributionListMembersPage([])
+			});
+			const { user } = setupTest(<EditDLControllerComponent distributionList={dl} />);
+			await user.type(screen.getByRole('textbox', { name: /description/i }), faker.word.words());
+			expect(updateBoardFn).not.toHaveBeenCalled();
+		});
 	});
 
 	describe('Members tab', () => {

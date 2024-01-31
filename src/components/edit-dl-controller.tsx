@@ -164,7 +164,7 @@ export const EditDLControllerComponent = ({
 
 	const onDetailsChange = useCallback<EditDLDetailsProps['onChange']>(
 		(newData) => {
-			updateBoard({ title: newData.displayName });
+			newData.displayName !== undefined && updateBoard({ title: newData.displayName });
 			setDetails((prevState) => ({ ...prevState, ...newData }));
 		},
 		[updateBoard]
