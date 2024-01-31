@@ -19,14 +19,15 @@ import {
 } from '../../network/api/get-distribution-list-members';
 import { registerGetDistributionListHandler } from '../../tests/msw-handlers/get-distribution-list';
 import { registerGetDistributionListMembersHandler } from '../../tests/msw-handlers/get-distribution-list-members';
-import { buildSoapResponse } from '../../tests/utils';
+import { buildSoapResponse, generateDistributionList } from '../../tests/utils';
 
-const distributionList = {
+const distributionList = generateDistributionList({
 	id: 'dl-1',
 	email: 'dl1@mail.com',
 	displayName: 'dl 1',
-	owners: [{ id: mockedAccount.id, name: mockedAccount.name }]
-};
+	owners: [{ id: mockedAccount.id, name: mockedAccount.name }],
+	isOwner: true
+});
 
 const user1 = {
 	id: 'user1ID',

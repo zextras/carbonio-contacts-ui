@@ -3,14 +3,13 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { faker } from '@faker-js/faker';
 import { SoapResponse } from '@zextras/carbonio-shell-ui';
-import { map, some } from 'lodash';
+import { map } from 'lodash';
 import { ResponseResolver, rest, RestContext, RestRequest } from 'msw';
 
 import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
-import { mockedAccount } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
 import { NAMESPACES } from '../../constants/api';
+import { DistributionList } from '../../model/distribution-list';
 import {
 	GetDistributionListRequest,
 	GetDistributionListResponse
@@ -22,14 +21,28 @@ type GetDistributionList = ResponseResolver<
 	RestContext,
 	SoapResponse<GetDistributionListResponse>
 >;
+
+export const buildGetDistributionListResponse = (
+	dl: DistributionList
+): GetDistributionListResponse => ({
+	dl: [
+		{
+			id: dl.id,
+			name: dl.email,
+			_attrs: {
+				displayName: dl.displayName,
+				description: dl.description,
+				zimbraHideInGal: dl.canRequireMembers ? undefined : 'TRUE'
+			},
+			owners: map(dl.owners, (owner) => ({ owner: [owner] })),
+			isOwner: dl.isOwner
+		}
+	],
+	_jsns: NAMESPACES.account
+});
+
 export const registerGetDistributionListHandler = (
-	dl: {
-		id?: string;
-		email: string;
-		displayName?: string;
-		owners?: Array<{ id?: string; name?: string }>;
-		description?: string;
-	},
+	dl: DistributionList,
 	error?: string
 ): jest.Mock<ReturnType<GetDistributionList>, Parameters<GetDistributionList>> => {
 	const handler = jest.fn<ReturnType<GetDistributionList>, Parameters<GetDistributionList>>(
@@ -41,21 +54,7 @@ export const registerGetDistributionListHandler = (
 			return res(
 				ctx.json(
 					buildSoapResponse<GetDistributionListResponse>({
-						GetDistributionListResponse: {
-							dl: [
-								{
-									id: dl.id ?? faker.string.uuid(),
-									name: dl.email,
-									_attrs: {
-										displayName: dl.displayName,
-										description: dl.description
-									},
-									owners: map(dl.owners, (owner) => ({ owner: [owner] })),
-									isOwner: some(dl.owners, (owner) => owner.id === mockedAccount.id)
-								}
-							],
-							_jsns: NAMESPACES.account
-						}
+						GetDistributionListResponse: buildGetDistributionListResponse(dl)
 					})
 				)
 			);
