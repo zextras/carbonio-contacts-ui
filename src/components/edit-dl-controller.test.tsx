@@ -645,6 +645,26 @@ describe('EditDLControllerComponent', () => {
 				await user.click(screen.getByRole('button', { name: /discard/i }));
 				expect(screen.getByRole('button', { name: /save/i })).toBeDisabled();
 			});
+
+			it('should reset board title to the initial one', async () => {
+				const updateBoardFn = jest.fn();
+				spyUseBoardHooks(updateBoardFn);
+				const dlData = { displayName: faker.word.words(), description: faker.word.words() };
+				const dl = generateDistributionList({
+					owners: [],
+					members: generateDistributionListMembersPage([]),
+					description: faker.lorem.sentence()
+				});
+				const { user } = setupTest(<EditDLControllerComponent distributionList={dl} />);
+				const nameInput = await screen.findByRole('textbox', { name: /name/i });
+				await user.clear(nameInput);
+				await user.type(nameInput, dlData.displayName);
+				await screen.findByText(dlData.displayName);
+				expect(updateBoardFn).toHaveBeenCalledWith({ title: dlData.displayName });
+				await user.click(screen.getByRole('button', { name: /discard/i }));
+				await screen.findByText(dl.displayName);
+				expect(updateBoardFn).toHaveBeenLastCalledWith({ title: dl.displayName });
+			});
 		});
 	});
 });

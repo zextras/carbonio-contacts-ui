@@ -185,7 +185,8 @@ export const EditDLControllerComponent = ({
 	const onDiscard = useCallback(() => {
 		setMembers(originalMembersRef.current);
 		setDetails(originalDetailsRef.current);
-	}, []);
+		updateBoard({ title: originalDetailsRef.current.displayName });
+	}, [updateBoard]);
 
 	return (
 		<Container
