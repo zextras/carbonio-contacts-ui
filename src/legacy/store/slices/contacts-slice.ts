@@ -4,16 +4,13 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { createSlice } from '@reduxjs/toolkit';
-import { createContact } from '../actions/create-contact';
+
+import { State } from '../../types/store';
 import { contactAction } from '../actions/contact-action';
+import { createContact } from '../actions/create-contact';
 import { folderAction } from '../actions/folder-action';
-import { searchContacts } from '../actions/search-contacts';
 import { modifyContact } from '../actions/modify-contact';
-import {
-	handleDeletedContactsSyncReducer,
-	handleCreatedContactsSyncReducer,
-	handleModifiedContactsSyncReducer
-} from '../reducers/handle-contacts-sync';
+import { searchContacts } from '../actions/search-contacts';
 import {
 	contactActionFulFilled,
 	contactActionPending,
@@ -26,6 +23,11 @@ import {
 } from '../reducers/create-contact';
 import { folderActionPending, folderActionRejected } from '../reducers/folder-action';
 import {
+	handleDeletedContactsSyncReducer,
+	handleCreatedContactsSyncReducer,
+	handleModifiedContactsSyncReducer
+} from '../reducers/handle-contacts-sync';
+import {
 	modifyContactFulFilled,
 	modifyContactPending,
 	modifyContactRejected
@@ -36,14 +38,16 @@ import {
 	searchContactsRejected
 } from '../reducers/search-contacts';
 
+const initialState: State['contacts'] = {
+	status: {
+		pendingActions: false
+	},
+	contacts: {}
+};
+
 export const contactsSlice = createSlice({
 	name: 'contacts',
-	initialState: {
-		status: {
-			pendingActions: false
-		},
-		contacts: {}
-	},
+	initialState,
 	reducers: {
 		handleModifiedContactsSync: handleModifiedContactsSyncReducer,
 		handleCreatedContactsSync: handleCreatedContactsSyncReducer,

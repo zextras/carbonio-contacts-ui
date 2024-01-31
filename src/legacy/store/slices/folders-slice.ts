@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { createSlice } from '@reduxjs/toolkit';
+
+import { State } from '../../types/store';
 import { contactAction } from '../actions/contact-action';
 import { createContact } from '../actions/create-contact';
 import { createFolder } from '../actions/create-folder';
@@ -26,16 +28,18 @@ import {
 	folderActionPending,
 	folderActionRejected
 } from '../reducers/folder-action';
+import { getFolderFulFilled } from '../reducers/get-folder';
 import { handleFolderSyncReducer, handleRefreshReducer } from '../reducers/handle-folder-sync';
 import { searchContactsFullFilled } from '../reducers/search-contacts';
-import { getFolderFulFilled } from '../reducers/get-folder';
+
+const initialState: State['folders'] = {
+	status: 'idle',
+	folders: []
+};
 
 export const foldersSlice = createSlice({
 	name: 'folders',
-	initialState: {
-		status: 'idle',
-		folders: []
-	},
+	initialState,
 	reducers: {
 		handleFoldersSync: handleFolderSyncReducer,
 		handleRefresh: handleRefreshReducer

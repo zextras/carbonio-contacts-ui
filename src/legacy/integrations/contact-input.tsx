@@ -12,10 +12,9 @@ import {
 	Container,
 	Row,
 	Text,
-	ChipProps,
-	ChipItem,
-	ChipInputProps,
-	ChipAction
+	type ChipItem,
+	type ChipInputProps,
+	type DropdownItem
 } from '@zextras/carbonio-design-system';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
 import {
@@ -30,34 +29,36 @@ import {
 	forEach,
 	reject,
 	uniqBy,
-	omit,
 	noop
 } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import styled, { DefaultTheme } from 'styled-components';
+import styled, { type DefaultTheme } from 'styled-components';
 
 import { ContactInputCustomChipComponent } from './contact-input-custom-chip-component';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
-import { DistributionList } from '../../model/distribution-list';
 import { parseFullAutocompleteXML } from '../helpers/autocomplete';
 import { useAppSelector } from '../hooks/redux';
 import { StoreProvider } from '../store/redux';
-import { Contact, Group } from '../types/contact';
-import {
+import type { Contact, FullAutocompleteRequest, Match } from '../types/contact';
+import type {
+	ContactChipAction,
 	ContactInputChipDisplayName,
+	ContactInputContact,
+	ContactInputGroup,
+	ContactInputItem,
 	ContactInputOnChange,
-	ContactInputValue,
-	CustomChipProps
+	ContactInputValue
 } from '../types/integrations';
-import { ContactsSlice, State } from '../types/store';
+import type { GetContactsRequest, GetContactsResponse } from '../types/soap';
+import type { State } from '../types/store';
 
 const emailRegex = /[^\s@]+@[^\s@]+\.[^\s@]+/;
 
 function isContactGroup(contact: {
 	isGroup?: boolean;
-	display?: string | undefined | null;
-	email?: string | undefined;
-}): boolean {
+	display?: string | null;
+	email?: string;
+}): contact is ContactInputGroup {
 	return (
 		(contact?.isGroup &&
 			contact?.display !== undefined &&
@@ -67,16 +68,23 @@ function isContactGroup(contact: {
 	);
 }
 
-const getChipLabel = (contact: any): string => {
+const getChipLabel = (
+	contact: Pick<
+		ContactInputItem,
+		'firstName' | 'middleName' | 'lastName' | 'email' | 'address' | 'display' | 'fullName' | 'name'
+	>
+): string => {
 	if (contact.firstName ?? contact.middleName ?? contact.lastName) {
 		return trim(`${contact.firstName ?? ''} ${contact.middleName ?? ''} ${contact.lastName ?? ''}`);
 	}
-	return (
-		contact.fullName ?? contact.email ?? contact.name ?? contact.address ?? contact.display ?? ''
-	);
+
+	const email = typeof contact.email === 'string' ? contact.email : undefined;
+	const address = typeof contact.address === 'string' ? contact.address : undefined;
+
+	return contact.fullName ?? email ?? contact.name ?? address ?? contact.display ?? '';
 };
 
-const Hint = ({ contact }: { contact: Group }): ReactElement => {
+const Hint = ({ contact }: { contact: ContactInputItem }): ReactElement => {
 	const label = getChipLabel(contact);
 	return (
 		<Container
@@ -143,23 +151,14 @@ const Loader = (): ReactElement => (
 	</Container>
 );
 
-export type ContactInputItem = { email: string; isGroup?: boolean } & Partial<
-	Omit<Contact, 'email'>
->;
-
-export type ContactChipAction = Omit<ChipAction, 'onClick'> & {
-	isVisible: (chipItem: ContactInputItem | DistributionList) => boolean;
-	onClick: (chipItem: ContactInputItem | DistributionList) => void;
-};
-
 export type ContactInputProps = Pick<
 	ChipInputProps,
 	'icon' | 'iconAction' | 'placeholder' | 'background' | 'iconDisabled' | 'description' | 'hasError'
 > & {
 	onChange?: ContactInputOnChange;
-	defaultValue: Array<Contact>;
+	defaultValue: Array<ContactInputItem>;
 	dragAndDropEnabled?: boolean;
-	extraAccountsIds: Array<string>;
+	extraAccountsIds?: Array<string>;
 	chipDisplayName?: ContactInputChipDisplayName;
 	contactActions?: Array<ContactChipAction>;
 };
@@ -171,13 +170,12 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	background = 'gray5',
 	dragAndDropEnabled = false,
 	chipDisplayName = CHIP_DISPLAY_NAME_VALUES.label,
-	extraAccountsIds,
+	extraAccountsIds = [],
 	contactActions,
 	...rest
 }) => {
-	const props = omit(rest, 'ChipComponent');
 	const [defaults, setDefaults] = useState<ContactInputValue>([]);
-	const [options, setOptions] = useState<any>([]);
+	const [options, setOptions] = useState<Array<DropdownItem & { value?: ContactInputItem }>>([]);
 	const [idToRemove, setIdToRemove] = useState('');
 	const [t] = useTranslation();
 	const inputRef = useRef<HTMLInputElement | null>(null);
@@ -221,19 +219,19 @@ const ContactInputCore: FC<ContactInputProps> = ({
 		[buildDragStartHandler]
 	);
 
-	const allContacts: Array<Contact> = useAppSelector(
+	const allContacts = useAppSelector(
 		createSelector(
 			(state: State) => state.contacts.contacts,
-			(contacts: ContactsSlice['contacts']) =>
-				reduce(
+			(contacts) =>
+				reduce<typeof contacts, ContactInputContact[]>(
 					contacts,
-					(acc: Array<Contact>, folderContacts) =>
+					(acc, folderContacts) =>
 						folderContacts
 							? [
 									...acc,
-									...reduce(
+									...reduce<Contact, ContactInputContact[]>(
 										folderContacts,
-										(acc2: any, contact) => [
+										(acc2, contact) => [
 											...acc2,
 											...map(contact.email, (email) => ({
 												...contact,
@@ -261,30 +259,30 @@ const ContactInputCore: FC<ContactInputProps> = ({
 				: '';
 		}
 	}, []);
+
 	const onInputType = useCallback<NonNullable<ChipInputProps['onInputType']>>(
-		(e) => {
-			if (e.key === 'Enter') {
+		({ key, textContent }) => {
+			if (key === 'Enter') {
 				if (inputRef?.current) {
 					// FIXME: innerText does not contain new line chars at this point
 					inputRef.current.innerText = inputRef.current.innerText?.replaceAll('\n', '');
 				}
-				if (options?.length > 0 && !find(options, { id: 'loading' })) {
-					onChange &&
-						onChange([
-							...defaults,
-							{
-								...(options[0]?.value as Contact)
-							}
-						] as ChipItem<string | Contact>[]);
-					if (inputRef?.current) {
+				if (options.length > 0 && !find(options, { id: 'loading' })) {
+					onChange?.([
+						...defaults,
+						{
+							...options[0].value
+						}
+					]);
+					if (inputRef.current) {
 						inputRef.current.innerText = '';
 					}
 					setOptions([]);
 					return;
 				}
-				const valueToAdd = inputRef?.current?.innerText.replaceAll('\n', '');
+				const valueToAdd = inputRef.current?.innerText.replaceAll('\n', '');
 				const id = Date.now().toString();
-				const chip: ChipProps = {
+				const chip: ContactInputItem = {
 					id,
 					label: valueToAdd,
 					error: !isValidEmail(valueToAdd),
@@ -304,14 +302,14 @@ const ContactInputCore: FC<ContactInputProps> = ({
 					chip.avatarIcon = 'AlertCircleOutline';
 				}
 				if (valueToAdd !== '') {
-					onChange && onChange([...defaults, { ...chip }] as ChipItem<string | Contact>[]);
+					onChange?.([...defaults, { ...chip }]);
 				}
 				if (inputRef?.current) {
 					inputRef.current.innerText = '';
 				}
 				return;
 			}
-			if (e.textContent && e.textContent !== '') {
+			if (textContent && textContent !== '') {
 				setOptions([
 					{
 						id: 'loading',
@@ -319,12 +317,14 @@ const ContactInputCore: FC<ContactInputProps> = ({
 						customComponent: <Loader />
 					}
 				]);
-				new Promise((resolve, promiseReject) => {
+				// FIXME: Why this promise? There is nothing async in here
+				new Promise<ContactInputContact[]>((resolve, promiseReject) => {
+					// FIXME: Why this try? This code should not throw exceptions
 					try {
 						resolve(
 							filter(allContacts, (c) =>
 								some([c.firstName, c.lastName, c.company, c.email], (field) =>
-									startsWith(field?.toString().toLowerCase().trim(), e.textContent?.toLowerCase())
+									startsWith(field?.toString().toLowerCase().trim(), textContent.toLowerCase())
 								)
 							)
 						);
@@ -332,33 +332,39 @@ const ContactInputCore: FC<ContactInputProps> = ({
 						promiseReject(new Error(err));
 					}
 				})
-					.then((localResults: any) => {
+					.then((localResults) => {
 						if (localResults.length > 0) {
-							setOptions(localResults);
+							setOptions(
+								localResults.map((localContact, index) => ({
+									id: `default-id-${index}`,
+									...localContact,
+									label: getChipLabel(localContact)
+								}))
+							);
 						}
-						soapFetch('FullAutocomplete', {
+						soapFetch<FullAutocompleteRequest, string>('FullAutocomplete', {
 							...(extraAccountsIds?.length > 0 && {
 								extraAccountId: extraAccountsIds.map((id) => ({ _content: id }))
 							}),
 							AutoCompleteRequest: {
-								name: e.textContent,
+								name: textContent,
 								includeGal: 1
 							},
 							_jsns: 'urn:zimbraMail'
 						})
-							.then((autoCompleteResult: any) => {
+							.then((autoCompleteResult) => {
 								const results = parseFullAutocompleteXML(autoCompleteResult);
-								return map(results.match, (m) => ({
+								return map<Match, Match>(results.match, (m) => ({
 									...m,
 									email: isContactGroup(m)
 										? undefined
 										: emailRegex.exec(m.email ?? '')?.[0]?.slice(1, -1)
 								}));
 							})
-							.then((remoteResults: any) => {
-								const normRemoteResults = reduce(
+							.then((remoteResults) => {
+								const normRemoteResults = reduce<Match, ContactInputItem[]>(
 									remoteResults,
-									(acc, result: any) => {
+									(acc, result) => {
 										const localIndex = findIndex(acc, ['email', result.email]);
 										if (localIndex >= 0) {
 											return acc;
@@ -383,16 +389,15 @@ const ContactInputCore: FC<ContactInputProps> = ({
 								);
 								setOptions(
 									map(
-										filter(normRemoteResults, (c: any) =>
+										filter(normRemoteResults, (c) =>
 											some(
-												// eslint-disable-next-line max-len
-												[c?.firstName, c?.lastName, c?.company, c?.email, c?.fullName, c?.display],
-												(field: any) =>
-													// eslint-disable-next-line max-len
-													startsWith(field?.toLowerCase().trim(), e.textContent?.toLowerCase())
+												[c.firstName, c.lastName, c.company, c.email, c.fullName, c.display],
+												(field) =>
+													typeof field === 'string' &&
+													startsWith(field.toLowerCase().trim(), textContent.toLowerCase())
 											)
 										),
-										(contact: any) => ({
+										(contact) => ({
 											label: contact?.label ?? getChipLabel(contact),
 											value: {
 												id: `${contact.id} ${contact.email}`,
@@ -419,39 +424,40 @@ const ContactInputCore: FC<ContactInputProps> = ({
 					.catch(() => {
 						setOptions([]);
 					});
-			} else setOptions([]);
+			} else {
+				setOptions([]);
+			}
 		},
 		[allContacts, defaults, editChip, extraAccountsIds, isValidEmail, onChange, options, t]
 	);
 
 	useEffect(() => {
-		const groups = filter(defaults, (def) => isContactGroup(def));
-		const newContacts: any = [];
+		const groups = filter(defaults, (def): def is ContactInputGroup => isContactGroup(def));
 		if (groups.length > 0) {
-			forEach(groups, (def: any) => {
-				soapFetch('GetContacts', {
+			forEach(groups, (def) => {
+				soapFetch<GetContactsRequest, GetContactsResponse>('GetContacts', {
 					_jsns: 'urn:zimbraMail',
 					cn: {
 						id: def.groupId
 					},
 					derefGroupMember: true
-				}).then((result: any) => {
+				}).then((result) => {
 					const id = Date.now().toString();
-					const members = result && result?.cn && result?.cn[0].m;
-					forEach(members, (member) => {
+					const members = result?.cn?.[0].m;
+					const newContacts = map(members, (member): ContactInputItem => {
 						const email = member.cn?.[0]._attrs.email ?? member.value;
-						newContacts.push({
+						return {
 							email,
 							id,
 							label: email,
 							error: !isValidEmail(email),
 							draggable: true,
 							onDragStart: buildDragStartHandler({ id, email, label: email })
-						});
+						};
 					});
 					const newValue = reject(defaults, (chip) => isContactGroup(chip));
 					const updatedValue = [...newValue, ...newContacts];
-					onChange && onChange(updatedValue);
+					onChange?.(updatedValue);
 					setDefaults(updatedValue);
 				});
 			});
@@ -464,7 +470,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 		(valueToAdd) => {
 			if (typeof valueToAdd === 'string') {
 				const id = Date.now().toString();
-				const chip: any = {
+				const chip: ContactInputItem = {
 					email: valueToAdd,
 					id,
 					label: valueToAdd,
@@ -506,9 +512,11 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	);
 
 	const ChipComponent = useCallback(
-		(_props: CustomChipProps): React.JSX.Element => (
+		(
+			props: React.ComponentPropsWithoutRef<NonNullable<ChipInputProps['ChipComponent']>>
+		): React.JSX.Element => (
 			<ContactInputCustomChipComponent
-				{..._props}
+				{...props}
 				contactActions={contactActions}
 				chipDisplayName={chipDisplayName}
 				contactInputOnChange={onChange}
@@ -518,7 +526,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 		[chipDisplayName, contactActions, contactInputValue, onChange]
 	);
 
-	const onDragEnter = useCallback((ev) => {
+	const onDragEnter = useCallback<React.DragEventHandler>((ev) => {
 		ev.preventDefault();
 		ev.dataTransfer.dropEffect = 'move';
 	}, []);
@@ -527,7 +535,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 		draggedChip.current = emptyDraggedChip;
 	}, [emptyDraggedChip]);
 
-	const onDragEnd = useCallback(
+	const onDragEnd = useCallback<React.DragEventHandler>(
 		(ev) => {
 			ev.preventDefault();
 			// if the drop is cancelled (e.g. by dropping outside of the dropzone or by pressing ESC), no dragleave action is fired
@@ -539,19 +547,20 @@ const ContactInputCore: FC<ContactInputProps> = ({
 			setDefaults((prevState) =>
 				filter(prevState, (contact) => contact.id !== draggedChip.current.id)
 			);
-			const newDefaults = filter(defaults, (c: any) => {
-				if (c.email) return c.email !== draggedChip.current.email;
-
+			const newDefaults = filter(defaults, (c) => {
+				if (c.email) {
+					return c.email !== draggedChip.current.email;
+				}
 				return c.id !== draggedChip.current.id;
 			});
-			onChange && onChange(newDefaults);
+			onChange?.(newDefaults);
 			resetDraggedChip();
 			isSameElement.current = false;
 		},
 		[defaults, onChange, resetDraggedChip]
 	);
 
-	const onDrop = useCallback(
+	const onDrop = useCallback<React.DragEventHandler>(
 		(ev) => {
 			ev.preventDefault();
 			if (draggedChip.current.dragStartRef === inputRef.current) {
@@ -562,11 +571,11 @@ const ContactInputCore: FC<ContactInputProps> = ({
 			const chipJson = ev.dataTransfer.getData('contact');
 			if (chipJson) {
 				const chip = JSON.parse(chipJson);
-				const newChip = buildDraggableChip(chip) as ChipItem<string | Contact>;
+				const newChip = buildDraggableChip(chip);
 				setDefaults((prevState) =>
 					find(prevState, { id: newChip.id }) ? prevState : { ...prevState, newChip }
 				);
-				onChange && onChange([...defaults, { ...newChip }] as ChipItem<string | Contact>[]);
+				onChange?.([...defaults, { ...newChip }]);
 				resetDraggedChip();
 				isSameElement.current = false;
 			}
@@ -595,14 +604,11 @@ const ContactInputCore: FC<ContactInputProps> = ({
 					{ code: 'NumpadEnter', ctrlKey: false },
 					{ key: ',', ctrlKey: false }
 				]}
-				// FIXME: remove ts-ignore when contact-input types are fixed
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
 				ChipComponent={ChipComponent}
 				onDragEnter={dragAndDropEnabled ? onDragEnter : noop}
 				onDragOver={dragAndDropEnabled ? onDragEnter : noop}
 				onDragEnd={dragAndDropEnabled ? onDragEnd : noop}
-				{...props}
+				{...rest}
 			/>
 		</Container>
 	);
