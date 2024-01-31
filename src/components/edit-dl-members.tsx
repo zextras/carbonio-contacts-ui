@@ -5,14 +5,7 @@
  */
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 
-import {
-	ChipAction,
-	ChipItem,
-	Container,
-	Input,
-	ListV2,
-	Row
-} from '@zextras/carbonio-design-system';
+import { type ChipAction, Container, Input, ListV2, Row } from '@zextras/carbonio-design-system';
 import { reduce, times, uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
@@ -22,6 +15,7 @@ import { ShimmedDisplayerListItem } from './shimmed-displayer-list-item';
 import { Text } from './Text';
 import { CHIP_DISPLAY_NAME_VALUES } from '../constants/contact-input';
 import { ContactInput } from '../legacy/integrations/contact-input';
+import type { ContactInputValue } from '../legacy/types/integrations';
 
 const DUPLICATED_MEMBER_ACTION_ID = 'duplicated';
 
@@ -32,8 +26,6 @@ export type EditDLComponentProps = {
 	onAddMembers: (members: Array<string>) => void;
 	loading?: boolean;
 };
-
-type ContactInputValue = Array<ChipItem & { email: string; error: boolean }>;
 
 const createDuplicatedMemberAction = (): ChipAction => ({
 	id: DUPLICATED_MEMBER_ACTION_ID,
@@ -89,7 +81,7 @@ export const EditDLMembersComponent: FC<EditDLComponentProps> = ({
 				duplicatedContacts: ContactInputValue;
 			}>(
 				(result, contactInputItem) => {
-					if (contactInputItem.error) {
+					if (contactInputItem.error || contactInputItem.email === undefined) {
 						result.invalidEmailContacts.push(contactInputItem);
 					} else if (isMemberDuplicated(contactInputItem.email)) {
 						result.duplicatedContacts.push(contactInputItem);
@@ -155,7 +147,7 @@ export const EditDLMembersComponent: FC<EditDLComponentProps> = ({
 	const decorateContactInputValue = useCallback(
 		(value: ContactInputValue) =>
 			value.map((item): ContactInputValue[number] => {
-				const duplicated = isMemberDuplicated(item.email);
+				const duplicated = item.email !== undefined && isMemberDuplicated(item.email);
 				const hasDuplicatedAction = item.actions?.some(
 					(action) => action.id === DUPLICATED_MEMBER_ACTION_ID
 				);
@@ -224,15 +216,9 @@ export const EditDLMembersComponent: FC<EditDLComponentProps> = ({
 						'edit_dl_component.placeholder.add_members',
 						"Type an address, click '+' to add to the distribution list"
 					)}
-					// FIXME: remove ts-ignore when contact-input types are fixed
-					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-					// @ts-ignore
 					defaultValue={contactInputValue}
 					icon={'Plus'}
 					iconAction={onAddRawMembers}
-					// FIXME: remove ts-ignore when contact-input types are fixed
-					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-					// @ts-ignore
 					onChange={onContactInputChange}
 					iconDisabled={!isAddMembersAllowed}
 					chipDisplayName={CHIP_DISPLAY_NAME_VALUES.email}

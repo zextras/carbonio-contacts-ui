@@ -22,7 +22,9 @@ export const TESTID_SELECTORS = {
 		accordionExpandAction: 'icon: ChevronDown',
 		sendEmail: 'icon: EmailOutline',
 		distributionList: 'icon: DistributionListOutline',
-		copy: 'icon: Copy'
+		copy: 'icon: Copy',
+		edit: 'icon: EditOutline',
+		displayerIcon: 'icon: PeopleOutline'
 	},
 	avatar: 'avatar',
 	modal: 'modal',
