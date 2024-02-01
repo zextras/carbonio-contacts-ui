@@ -8,12 +8,14 @@ import { useMemo } from 'react';
 import { type Action as DSAction } from '@zextras/carbonio-design-system';
 
 import { useActionDeleteCG } from '../actions/delete-cg';
+import { useActionEditCG } from '../actions/edit-cg';
 import { useActionSendEmailCG } from '../actions/send-email-cg';
 import { ContactGroup } from '../model/contact-group';
 
 export const useContactGroupActions = (contactGroup: ContactGroup): DSAction[] => {
 	const deleteCGAction = useActionDeleteCG();
 	const sendEmailAction = useActionSendEmailCG();
+	const editCGAction = useActionEditCG();
 
 	return useMemo<DSAction[]>((): DSAction[] => {
 		const orderedActions: DSAction[] = [];
@@ -28,6 +30,16 @@ export const useContactGroupActions = (contactGroup: ContactGroup): DSAction[] =
 				icon: sendEmailAction.icon
 			});
 		}
+		if (editCGAction.canExecute()) {
+			orderedActions.push({
+				id: editCGAction.id,
+				label: editCGAction.label,
+				icon: editCGAction.icon,
+				onClick: () => {
+					editCGAction.execute(contactGroup);
+				}
+			});
+		}
 		if (deleteCGAction.canExecute()) {
 			orderedActions.push({
 				id: deleteCGAction.id,
@@ -40,5 +52,5 @@ export const useContactGroupActions = (contactGroup: ContactGroup): DSAction[] =
 			});
 		}
 		return orderedActions;
-	}, [contactGroup, deleteCGAction, sendEmailAction]);
+	}, [contactGroup, deleteCGAction, editCGAction, sendEmailAction]);
 };
