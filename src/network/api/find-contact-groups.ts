@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { GenericSoapPayload } from './types';
+import { CnItem, GenericSoapPayload } from './types';
 import { FIND_CONTACT_GROUP_LIMIT } from '../../constants';
 import { NAMESPACES } from '../../constants/api';
 import { ContactGroup } from '../../model/contact-group';
@@ -17,16 +17,7 @@ export interface FindContactGroupsRequest extends GenericSoapPayload<typeof NAME
 }
 
 export interface FindContactGroupsResponse extends GenericSoapPayload<typeof NAMESPACES.mail> {
-	cn?: Array<{
-		id: string;
-		l: string;
-		d: number;
-		rev: number;
-		fileAsStr: string;
-		_attrs: { fullName?: string; nickname?: string; type: string; fileAs: string };
-		m: Array<{ type: 'I'; value: string }>;
-		sf: string;
-	}>;
+	cn?: Array<CnItem>;
 	sortBy: string;
 	offset: number;
 	more: boolean;

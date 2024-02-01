@@ -11,6 +11,7 @@ import { ContactGroup } from '../../model/contact-group';
 export type ContactGroupsState = {
 	storedContactGroups: Array<ContactGroup>;
 	addStoredContactGroups: (newContactGroups: Array<ContactGroup>) => void;
+	updateContactGroup: (contactGroup: ContactGroup) => void;
 	storedOffset: number;
 	setStoredOffset: (offset: number) => void;
 	emptyStoredContactGroups: () => void;
@@ -21,8 +22,14 @@ export type ContactGroupsState = {
 export const useContactGroupStore = create<ContactGroupsState>()((set, get) => ({
 	storedContactGroups: [],
 	storedOffset: 0,
-	setStoredOffset: (offset: number): void => set(() => ({ storedOffset: offset })),
-	addStoredContactGroups: (contactGroups: Array<ContactGroup>): void =>
+	updateContactGroup: (contactGroup): void =>
+		set(() => ({
+			storedContactGroups: get().storedContactGroups.map((cg) =>
+				cg.id === contactGroup.id ? contactGroup : cg
+			)
+		})),
+	setStoredOffset: (offset): void => set(() => ({ storedOffset: offset })),
+	addStoredContactGroups: (contactGroups): void =>
 		set(() => ({ storedContactGroups: [...(get().storedContactGroups ?? []), ...contactGroups] })),
 	emptyStoredContactGroups: (): void => set(() => ({ storedContactGroups: [] })),
 	removeStoredContactGroup: (contactGroupId: string): void => {
