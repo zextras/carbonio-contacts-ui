@@ -10,17 +10,11 @@ import { waitFor } from '@testing-library/react';
 import { CGView } from './cg-view';
 import { screen, setupTest, triggerLoadMore } from '../carbonio-ui-commons/test/test-setup';
 import { FIND_CONTACT_GROUP_LIMIT } from '../constants';
-import { useContactGroupStore } from '../store/contact-groups';
 import {
 	createFindContactGroupsResponse,
 	registerFindContactGroupsHandler
 } from '../tests/msw-handlers/find-contact-groups';
 import { createCnItem } from '../tests/utils';
-
-beforeEach(() => {
-	useContactGroupStore.getState().setStoredOffset(0);
-	useContactGroupStore.getState().emptyStoredContactGroups();
-});
 
 describe('Contact Group View pagination', () => {
 	it('should load the second page only when bottom element becomes visible', async () => {

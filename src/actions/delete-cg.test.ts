@@ -14,11 +14,6 @@ import { useContactGroupStore } from '../store/contact-groups';
 import { buildContactGroup, buildMembers } from '../tests/model-builder';
 import { registerDeleteContactHandler } from '../tests/msw-handlers/delete-contact';
 
-beforeEach(() => {
-	useContactGroupStore.getState().setStoredOffset(0);
-	useContactGroupStore.getState().emptyStoredContactGroups();
-});
-
 describe('useActionDeleteCG', () => {
 	const membersCount = faker.number.int({ min: 1, max: 42 });
 	const contactGroupWithMembers = buildContactGroup({ members: buildMembers(membersCount) });

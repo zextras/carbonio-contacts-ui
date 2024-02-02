@@ -9,11 +9,11 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import { waitFor } from '@testing-library/react';
 import { ErrorSoapResponse } from '@zextras/carbonio-shell-ui';
-import { EventEmitter } from 'events';
 import { times } from 'lodash';
 import { Link, Route } from 'react-router-dom';
 
 import { DistributionListsView } from './distribution-lists-view';
+import GroupsAppView from './GroupsAppView';
 import { screen, setupTest, within } from '../carbonio-ui-commons/test/test-setup';
 import { ROUTES, ROUTES_INTERNAL_PARAMS } from '../constants';
 import { NAMESPACES } from '../constants/api';
@@ -42,7 +42,6 @@ import { registerGetDistributionListMembersHandler } from '../tests/msw-handlers
 import {
 	buildSoapError,
 	buildSoapResponse,
-	delayUntil,
 	generateDistributionList,
 	generateDistributionLists
 } from '../tests/utils';
@@ -61,6 +60,19 @@ describe('Distribution Lists View', () => {
 		items.forEach((item) => expect(screen.getByText(item.displayName)).toBeVisible());
 	});
 
+	it('should show only the list of distribution lists of which the user is owner of on manager filter', async () => {
+		const dlMember = generateDistributionList({ isOwner: false, isMember: true });
+		const dlOwner = generateDistributionList({ isOwner: true, isMember: false });
+		registerGetAccountDistributionListsHandler([dlMember, dlOwner]);
+		setupTest(<GroupsAppView />, {
+			initialEntries: [
+				`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.manager}`
+			]
+		});
+		expect(await screen.findByText(dlOwner.displayName)).toBeVisible();
+		expect(screen.queryByText(dlMember.displayName)).not.toBeInTheDocument();
+	});
+
 	it('should render empty list message when the distribution list is empty', async () => {
 		const handler = registerGetAccountDistributionListsHandler([]);
 		setupTest(
@@ -75,13 +87,11 @@ describe('Distribution Lists View', () => {
 		expect(screen.getByText(EMPTY_DISTRIBUTION_LIST_HINT)).toBeVisible();
 	});
 
-	it('should show empty message while loading a list and another list of a different filter has been already loaded', async () => {
-		const EMIT_ON = 'resolve-manager';
-		const emitter = new EventEmitter();
-		const memberList = generateDistributionLists(1, { isMember: true });
-		const managerList = generateDistributionLists(1, { isOwner: true });
+	it('should only ask data once to the network and show list immediately when navigating on a different filter', async () => {
+		const memberList = generateDistributionLists(1, { isMember: true, isOwner: false });
+		const managerList = generateDistributionLists(1, { isOwner: true, isMember: false });
 		const getAccountDLHandler = registerGetAccountDistributionListsHandler([]);
-		getAccountDLHandler.mockImplementation(async (req, res, ctx) => {
+		getAccountDLHandler.mockImplementationOnce(async (req, res, ctx) => {
 			const {
 				Body: {
 					GetAccountDistributionListsRequest: { ownerOf, memberOf }
@@ -90,8 +100,7 @@ describe('Distribution Lists View', () => {
 				Body: { GetAccountDistributionListsRequest: GetAccountDistributionListsRequest };
 			}>();
 			const resData: DistributionList[] = [];
-			if (ownerOf && memberOf === 'none') {
-				await delayUntil(emitter, EMIT_ON);
+			if (ownerOf) {
 				resData.push(...managerList);
 			}
 			if (memberOf !== 'none') {
@@ -141,10 +150,8 @@ describe('Distribution Lists View', () => {
 		await waitFor(() =>
 			expect(screen.queryByText(memberList[0].displayName)).not.toBeInTheDocument()
 		);
-		expect(await screen.findByText(EMPTY_DISTRIBUTION_LIST_HINT)).toBeVisible();
-		await waitFor(() => expect(getAccountDLHandler).toHaveBeenCalledTimes(2));
-		emitter.emit(EMIT_ON);
 		expect(await screen.findByText(managerList[0].displayName)).toBeVisible();
+		expect(getAccountDLHandler).toHaveBeenCalledTimes(1);
 	});
 
 	it('should show an error snackbar if there is a network error while loading the list', async () => {

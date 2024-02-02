@@ -9,7 +9,6 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import 'jest-styled-components';
 import { act, waitFor, within } from '@testing-library/react';
-import { first, last } from 'lodash';
 import { rest } from 'msw';
 
 import { getContactInput } from './common-contact-group-board.test';
