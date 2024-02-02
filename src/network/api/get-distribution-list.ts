@@ -24,6 +24,7 @@ export interface GetDistributionListResponse extends GenericSoapPayload<typeof N
 		id: string;
 		name: string;
 		isOwner?: boolean;
+		isMember?: boolean;
 		owners?: Array<{ owner: Array<{ id?: string; name?: string }> }>;
 		_attrs?: {
 			displayName?: string;
@@ -49,10 +50,11 @@ const normalizeResponse = (response: GetDistributionListResponse): DistributionL
 	return {
 		id: dl.id,
 		email: dl.name,
-		displayName: dl._attrs?.displayName,
+		displayName: dl._attrs?.displayName ?? '',
 		isOwner: dl.isOwner ?? false,
+		isMember: dl.isMember ?? false,
 		owners: normalizeOwners(dl.owners),
-		description: dl._attrs?.description,
+		description: dl._attrs?.description ?? '',
 		canRequireMembers: dl._attrs?.zimbraHideInGal !== 'TRUE' || dl.isOwner === true
 	};
 };

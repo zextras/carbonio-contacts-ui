@@ -14,7 +14,7 @@ type State = {
 
 type Actions = {
 	setDistributionLists: (newItems: Array<DistributionList>) => void;
-	updateDistributionList: (item: DistributionList) => void;
+	upsertDistributionList: (item: DistributionList) => void;
 	reset: () => void;
 };
 
@@ -23,16 +23,13 @@ export const useDistributionListsStore = create<State & Actions>()((set, get) =>
 	setDistributionLists: (newItems: Array<DistributionList>): void => {
 		set({ distributionLists: newItems });
 	},
-	updateDistributionList: (item: DistributionList): void => {
+	upsertDistributionList: (item: DistributionList): void => {
 		const idx = get().distributionLists.findIndex((dl) => dl.id === item.id);
-		if (idx > -1) {
-			// TODO use toSpliced once available
-			const newDistributionLists = get().distributionLists.map((dl) =>
-				dl.id === item.id ? item : dl
-			);
-			// Keep array sorted by "name" (display name in fallback to email) ascending
-			set({ distributionLists: sortBy(newDistributionLists, (dl) => dl.displayName || dl.email) });
-		}
+		// TODO use toSpliced once available
+		const newDistributionLists = [...get().distributionLists];
+		newDistributionLists.splice(idx, idx === -1 ? 0 : 1, item);
+		// Keep array sorted by "name" (display name in fallback to email) ascending
+		set({ distributionLists: sortBy(newDistributionLists, (dl) => dl.displayName || dl.email) });
 	},
 	reset: (): void => {
 		set({ distributionLists: [] });
