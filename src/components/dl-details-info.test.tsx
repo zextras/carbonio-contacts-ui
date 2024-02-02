@@ -5,10 +5,9 @@
  */
 import React from 'react';
 
-import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 
-import { DistributionListDetails } from './dl-details';
+import { DLDetailsInfo } from './dl-details-info';
 import { screen, setupTest, within } from '../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../constants/tests';
 import { generateDistributionList } from '../tests/utils';
@@ -16,19 +15,19 @@ import { generateDistributionList } from '../tests/utils';
 describe('Distribution list details', () => {
 	it('should show the display name', () => {
 		const dl = generateDistributionList();
-		setupTest(<DistributionListDetails email={dl.email} displayName={dl.displayName} />);
+		setupTest(<DLDetailsInfo email={dl.email} displayName={dl.displayName} />);
 		expect(screen.getByText(dl.displayName)).toBeVisible();
 	});
 
 	it('should show the email', () => {
 		const dl = generateDistributionList();
-		setupTest(<DistributionListDetails email={dl.email} displayName={dl.displayName} />);
+		setupTest(<DLDetailsInfo email={dl.email} displayName={dl.displayName} />);
 		expect(screen.getByText(dl.email)).toBeVisible();
 	});
 
 	it('should show the avatar', () => {
 		const dl = generateDistributionList();
-		setupTest(<DistributionListDetails email={dl.email} displayName={dl.displayName} />);
+		setupTest(<DLDetailsInfo email={dl.email} displayName={dl.displayName} />);
 		expect(
 			within(screen.getByTestId(TESTID_SELECTORS.avatar)).getByTestId(
 				TESTID_SELECTORS.icons.distributionList
@@ -38,9 +37,7 @@ describe('Distribution list details', () => {
 
 	it('should allow the user to copy the email', async () => {
 		const dl = generateDistributionList();
-		const { user } = setupTest(
-			<DistributionListDetails email={dl.email} displayName={dl.displayName} />
-		);
+		const { user } = setupTest(<DLDetailsInfo email={dl.email} displayName={dl.displayName} />);
 		const copyAction = screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.copy });
 		expect(copyAction).toBeVisible();
 		await act(async () => {
@@ -48,27 +45,5 @@ describe('Distribution list details', () => {
 		});
 		expect(await screen.findByText(/Email copied to clipboard/i)).toBeVisible();
 		expect(await window.navigator.clipboard.readText()).toEqual(dl.email);
-	});
-
-	it('should not show the description label if there is no description', () => {
-		const dl = generateDistributionList();
-		setupTest(
-			<DistributionListDetails email={dl.email} displayName={dl.displayName} description={''} />
-		);
-		expect(screen.queryByText(/description/i)).not.toBeInTheDocument();
-	});
-
-	it('should show the description if there is a description', () => {
-		const description = faker.lorem.paragraph();
-		const dl = generateDistributionList();
-		setupTest(
-			<DistributionListDetails
-				email={dl.email}
-				displayName={dl.displayName}
-				description={description}
-			/>
-		);
-		expect(screen.getByText(/description/i)).toBeVisible();
-		expect(screen.getByText(description)).toBeVisible();
 	});
 });

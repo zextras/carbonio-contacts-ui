@@ -8,11 +8,9 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import { BooleanString } from '@zextras/carbonio-shell-ui';
 import { times } from 'lodash';
-import { Route } from 'react-router-dom';
 
 import { DLDisplayerController } from './dl-displayer-controller';
 import { screen, setupTest } from '../carbonio-ui-commons/test/test-setup';
-import { ROUTES, ROUTES_INTERNAL_PARAMS } from '../constants';
 import { EMPTY_DISPLAYER_HINT, JEST_MOCKED_ERROR, TESTID_SELECTORS } from '../constants/tests';
 import { DistributionList } from '../model/distribution-list';
 import {
@@ -28,16 +26,7 @@ beforeEach(() => {
 
 describe('Distribution List Displayer Controller', () => {
 	it('should render empty distribution list displayer suggestions', async () => {
-		setupTest(
-			<Route path={`${ROUTES.mainRoute}${ROUTES.distributionLists}`}>
-				<DLDisplayerController />
-			</Route>,
-			{
-				initialEntries: [
-					`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.member}/`
-				]
-			}
-		);
+		setupTest(<DLDisplayerController id={undefined} />);
 		expect(screen.getByTestId(TESTID_SELECTORS.icons.distributionList)).toBeVisible();
 		expect(screen.getByText(EMPTY_DISPLAYER_HINT)).toBeVisible();
 		expect(
@@ -49,16 +38,7 @@ describe('Distribution List Displayer Controller', () => {
 		const description = faker.word.words();
 		const dl = generateDistributionList({ description });
 		registerGetDistributionListHandler(dl);
-		setupTest(
-			<Route path={`${ROUTES.mainRoute}${ROUTES.distributionLists}`}>
-				<DLDisplayerController />
-			</Route>,
-			{
-				initialEntries: [
-					`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.member}/${dl.id}`
-				]
-			}
-		);
+		setupTest(<DLDisplayerController id={dl.id} />);
 		expect(await screen.findAllByText(dl.displayName)).toHaveLength(2);
 		expect(screen.getByText(description)).toBeVisible();
 	});
@@ -70,16 +50,8 @@ describe('Distribution List Displayer Controller', () => {
 		})) satisfies DistributionList['owners'];
 		const dl = generateDistributionList({ owners });
 		registerGetDistributionListHandler(dl);
-		setupTest(
-			<Route path={`${ROUTES.mainRoute}${ROUTES.distributionLists}`}>
-				<DLDisplayerController />
-			</Route>,
-			{
-				initialEntries: [
-					`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.member}/${dl.id}`
-				]
-			}
-		);
+		const { user } = setupTest(<DLDisplayerController id={dl.id} />);
+		await user.click(await screen.findByText(/manager list/i));
 		expect(await screen.findByText(/manager list 1/i)).toBeVisible();
 		expect(await screen.findByText(owners[0].name)).toBeVisible();
 		expect(await screen.findByText(owners[9].name)).toBeVisible();
@@ -97,17 +69,9 @@ describe('Distribution List Displayer Controller', () => {
 					return res(ctx.json(buildSoapResponse({ GetDistributionListResponse: response })));
 				});
 				registerGetDistributionListMembersHandler(members);
-				setupTest(
-					<Route path={`${ROUTES.mainRoute}${ROUTES.distributionLists}`}>
-						<DLDisplayerController />
-					</Route>,
-					{
-						initialEntries: [
-							`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.member}/${dl.id}`
-						]
-					}
-				);
+				const { user } = setupTest(<DLDisplayerController id={dl.id} />);
 				await screen.findAllByText(dl.displayName);
+				await user.click(screen.getByText(/member list/i));
 				expect(await screen.findByText(/member list 10/i)).toBeVisible();
 				expect(await screen.findByText(members[0])).toBeVisible();
 				expect(await screen.findByText(members[9])).toBeVisible();
@@ -124,17 +88,9 @@ describe('Distribution List Displayer Controller', () => {
 				return res(ctx.json(buildSoapResponse({ GetDistributionListResponse: response })));
 			});
 			registerGetDistributionListMembersHandler(members);
-			setupTest(
-				<Route path={`${ROUTES.mainRoute}${ROUTES.distributionLists}`}>
-					<DLDisplayerController />
-				</Route>,
-				{
-					initialEntries: [
-						`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.member}/${dl.id}`
-					]
-				}
-			);
+			const { user } = setupTest(<DLDisplayerController id={dl.id} />);
 			await screen.findAllByText(dl.displayName);
+			await user.click(screen.getByText(/member list/i));
 			expect(await screen.findByText(/member list 10/i)).toBeVisible();
 			expect(await screen.findByText(members[0])).toBeVisible();
 			expect(await screen.findByText(members[9])).toBeVisible();
@@ -151,20 +107,17 @@ describe('Distribution List Displayer Controller', () => {
 					response.dl[0].isOwner = isOwner;
 					return res(ctx.json(buildSoapResponse({ GetDistributionListResponse: response })));
 				});
-
 				registerGetDistributionListMembersHandler(members);
-				setupTest(
-					<Route path={`${ROUTES.mainRoute}${ROUTES.distributionLists}`}>
-						<DLDisplayerController />
-					</Route>,
-					{
-						initialEntries: [
-							`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.member}/${dl.id}`
-						]
-					}
-				);
+				const { user } = setupTest(<DLDisplayerController id={dl.id} />);
 				await screen.findAllByText(dl.displayName);
-				expect(screen.queryByText(/member list/i)).not.toBeInTheDocument();
+				expect(screen.getByText(/member list/i)).toBeVisible();
+				await user.click(screen.getByText(/member list/i));
+				expect(screen.queryByTestId(TESTID_SELECTORS.membersListItem)).not.toBeInTheDocument();
+				expect(
+					await screen.findByText(
+						"You don't have the permissions to see the members of this distribution list. For more information, ask to the administrator."
+					)
+				).toBeVisible();
 			}
 		);
 	});
@@ -172,16 +125,7 @@ describe('Distribution List Displayer Controller', () => {
 	it('should show an error snackbar if there is a network error while loading the details', async () => {
 		const dl = generateDistributionList();
 		registerGetDistributionListHandler(dl, JEST_MOCKED_ERROR);
-		setupTest(
-			<Route path={`${ROUTES.mainRoute}${ROUTES.distributionLists}`}>
-				<DLDisplayerController />
-			</Route>,
-			{
-				initialEntries: [
-					`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.member}/${dl.id}`
-				]
-			}
-		);
+		setupTest(<DLDisplayerController id={dl.id} />);
 		expect(await screen.findByText(/something went wrong/i)).toBeVisible();
 	});
 
@@ -189,16 +133,7 @@ describe('Distribution List Displayer Controller', () => {
 		const dl = generateDistributionList();
 		registerGetDistributionListHandler(dl);
 		registerGetDistributionListMembersHandler(undefined, undefined, JEST_MOCKED_ERROR);
-		setupTest(
-			<Route path={`${ROUTES.mainRoute}${ROUTES.distributionLists}`}>
-				<DLDisplayerController />
-			</Route>,
-			{
-				initialEntries: [
-					`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.member}/${dl.id}`
-				]
-			}
-		);
+		setupTest(<DLDisplayerController id={dl.id} />);
 		expect(await screen.findAllByText(dl.displayName)).toHaveLength(2);
 		expect(await screen.findByText(/Something went wrong, please try again/i)).toBeVisible();
 	});

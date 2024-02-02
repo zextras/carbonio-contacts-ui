@@ -16,7 +16,7 @@ import {
 } from '../../network/api/get-distribution-list';
 import { buildSoapError, buildSoapResponse } from '../utils';
 
-type GetDistributionList = ResponseResolver<
+type GetDistributionListHandler = ResponseResolver<
 	RestRequest<{ Body: { GetDistributionListRequest: GetDistributionListRequest } }>,
 	RestContext,
 	SoapResponse<GetDistributionListResponse>
@@ -44,22 +44,23 @@ export const buildGetDistributionListResponse = (
 export const registerGetDistributionListHandler = (
 	dl: DistributionList,
 	error?: string
-): jest.Mock<ReturnType<GetDistributionList>, Parameters<GetDistributionList>> => {
-	const handler = jest.fn<ReturnType<GetDistributionList>, Parameters<GetDistributionList>>(
-		(req, res, ctx) => {
-			if (error) {
-				return res(ctx.json(buildSoapError(error)));
-			}
-
-			return res(
-				ctx.json(
-					buildSoapResponse<GetDistributionListResponse>({
-						GetDistributionListResponse: buildGetDistributionListResponse(dl)
-					})
-				)
-			);
+): jest.Mock<ReturnType<GetDistributionListHandler>, Parameters<GetDistributionListHandler>> => {
+	const handler = jest.fn<
+		ReturnType<GetDistributionListHandler>,
+		Parameters<GetDistributionListHandler>
+	>((req, res, ctx) => {
+		if (error) {
+			return res(ctx.json(buildSoapError(error)));
 		}
-	);
+
+		return res(
+			ctx.json(
+				buildSoapResponse<GetDistributionListResponse>({
+					GetDistributionListResponse: buildGetDistributionListResponse(dl)
+				})
+			)
+		);
+	});
 	getSetupServer().use(
 		rest.post<
 			{ Body: { GetDistributionListRequest: GetDistributionListRequest } },
