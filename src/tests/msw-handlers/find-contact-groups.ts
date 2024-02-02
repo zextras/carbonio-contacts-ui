@@ -3,7 +3,6 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { faker } from '@faker-js/faker';
 import { SoapResponse } from '@zextras/carbonio-shell-ui';
 import { ResponseResolver, rest, RestContext, RestRequest } from 'msw';
 
@@ -12,7 +11,7 @@ import {
 	FindContactGroupsRequest,
 	FindContactGroupsResponse
 } from '../../network/api/find-contact-groups';
-import { buildSoapResponse } from '../utils';
+import { buildSoapResponse, createCnItem } from '../utils';
 
 export const createFindContactGroupsResponse = (
 	cn: FindContactGroupsResponse['cn'],
@@ -24,29 +23,6 @@ export const createFindContactGroupsResponse = (
 	more,
 	_jsns: 'urn:zimbraMail'
 });
-export const createFindContactGroupsResponseCnItem = (
-	contactGroupName = faker.company.name(),
-	members: string[] = [],
-	id = faker.number.int({ min: 100 }).toString()
-): Required<FindContactGroupsResponse>['cn'][number] => {
-	const mappedMembers = members.map((member) => ({ type: 'I' as const, value: member }));
-
-	return {
-		id,
-		l: '7',
-		d: faker.date.recent().valueOf(),
-		rev: 12974,
-		fileAsStr: contactGroupName,
-		_attrs: {
-			nickname: contactGroupName,
-			fullName: contactGroupName,
-			type: 'group',
-			fileAs: `8:${contactGroupName}`
-		},
-		m: mappedMembers,
-		sf: 'bo0000000276'
-	};
-};
 type FindContactGroupsHandler = ResponseResolver<
 	RestRequest<{ Body: { SearchRequest: FindContactGroupsRequest } }>,
 	RestContext,
@@ -73,8 +49,7 @@ export const registerFindContactGroupsHandler = (
 			ctx.json(
 				buildSoapResponse<FindContactGroupsResponse>({
 					SearchResponse:
-						match?.findContactGroupsResponse ??
-						createFindContactGroupsResponse([createFindContactGroupsResponseCnItem()])
+						match?.findContactGroupsResponse ?? createFindContactGroupsResponse([createCnItem()])
 				})
 			)
 		);

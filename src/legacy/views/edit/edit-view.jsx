@@ -8,30 +8,28 @@ import React, { useCallback, useEffect, useMemo, useReducer, useState } from 're
 import {
 	ButtonOld as Button,
 	Container,
-	IconButton,
 	Input,
 	Padding,
 	Row,
-	Select,
 	Text,
-	Tooltip
+	Tooltip,
+	useSnackbar
 } from '@zextras/carbonio-design-system';
 import {
 	FOLDERS,
 	ZIMBRA_STANDARD_COLORS,
-	getBridgedFunctions,
-	replaceHistory,
+	useReplaceHistoryCallback,
 	report,
-	t,
 	useBoardHooks
 } from '@zextras/carbonio-shell-ui';
-import { filter, find, map, omit, reduce, set } from 'lodash';
+import { filter, find, map, reduce } from 'lodash';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { ContactEditorRow, CustomMultivalueField } from './CustomMultivalueField';
 import reducer, { op } from './form-reducer';
-import FormSection from './form-section';
 import { FoldersSelector } from '../../../carbonio-ui-commons/components/select/folders-selector';
 import { CompactView } from '../../commons/contact-compact-view';
 import { useAppSelector } from '../../hooks/redux';
@@ -65,17 +63,6 @@ const cleanMultivalueFields = (contact) => ({
 	URL: filterEmptyValues(contact.URL)
 });
 
-const ContactEditorRow = ({ children, wrap }) => (
-	<Row
-		orientation="horizontal"
-		mainAlignment="space-between"
-		crossAlignment="flex-start"
-		width="fill"
-		wrap={wrap || 'nowrap'}
-	>
-		{children}
-	</Row>
-);
 const CustomStringField = ({ name, label, value, dispatch, autoFocus = false }) => (
 	<Container padding={{ all: 'small' }}>
 		<Input
@@ -90,219 +77,6 @@ const CustomStringField = ({ name, label, value, dispatch, autoFocus = false }) 
 	</Container>
 );
 
-const capitalize = (lower) => lower.replace(/^\w/, (c) => c.toUpperCase());
-
-const CustomMultivalueField = ({
-	name,
-	label,
-	types,
-	typeField,
-	typeLabel,
-	subFields,
-	fieldLabels,
-	wrap,
-	value,
-	dispatch
-}) => {
-	const typeCounts = useMemo(
-		() =>
-			reduce(
-				types,
-				(acc, type) => ({
-					...acc,
-					[type.value]: filter(value, (v) => v[typeLabel] === type.value).length
-				}),
-				{}
-			),
-		[value, typeLabel, types]
-	);
-
-	const emptyValue = useMemo(
-		() =>
-			reduce(
-				subFields,
-				(acc, val) => set(acc, val, ''),
-				typeField ? { [typeField]: types[0].value } : {}
-			),
-		[subFields, typeField, types]
-	);
-
-	const generateNewTypedId = useCallback(
-		(type) => {
-			const substring = `${type}${capitalize(name)}`;
-			const recursiveIdIncrement = (candidateId, increment) => {
-				if (value[candidateId]) {
-					return recursiveIdIncrement(`${substring}${increment}`, increment + 1);
-				}
-				return candidateId;
-			};
-			return recursiveIdIncrement(
-				`${substring}${typeCounts[type] > 0 ? typeCounts[type] + 1 : ''}`,
-				2
-			);
-		},
-		[value, name, typeCounts]
-	);
-
-	const generateNewUntypedId = useCallback(() => {
-		const recursiveIdIncrement = (candidateId, increment) => {
-			if (value[candidateId] || candidateId === 'email1') {
-				return recursiveIdIncrement(`${name}${increment}`, increment + 1);
-			}
-			return candidateId;
-		};
-		return recursiveIdIncrement(!value[name] ? name : name + 2, 1);
-	}, [value, name]);
-
-	const addValue = useCallback(() => {
-		dispatch({
-			type: op.setRowInput,
-			payload: {
-				...value,
-				[types && types[0].value ? generateNewTypedId(types[0].value) : generateNewUntypedId()]:
-					emptyValue
-			},
-			name
-		});
-	}, [dispatch, emptyValue, generateNewTypedId, generateNewUntypedId, name, types, value]);
-
-	const removeValue = useCallback(
-		(index) => {
-			dispatch({
-				type: op.setRowInput,
-				payload: { ...omit(value, [index]) },
-				name
-			});
-		},
-		[dispatch, value, name]
-	);
-
-	const updateValue = useCallback(
-		(newString, subField, id) => {
-			if (newString === value[id][subField]) return;
-			if (subField === typeField) {
-				dispatch({
-					type: op.setRowInput,
-					payload: {
-						...omit(value, [id]),
-						[generateNewTypedId(newString)]: {
-							...value[id],
-							type: newString
-						}
-					},
-					name
-				});
-			} else {
-				dispatch({
-					type: op.setRowInput,
-					payload: {
-						...value,
-						[id]: { ...value[id], [subField]: newString }
-					},
-					name
-				});
-			}
-		},
-		[value, name, generateNewTypedId, dispatch, typeField]
-	);
-
-	useEffect(() => {
-		if (Object.values(value).length === 0) {
-			addValue();
-		}
-	}, [addValue, value]);
-
-	return (
-		<FormSection label={label}>
-			{map(Object.entries(value), ([id, item], index) => (
-				<ContactEditorRow wrap={wrap ? 'wrap' : 'nowrap'} key={`${label}${id}`}>
-					{map(subFields, (subField, subIndex) => (
-						<Padding
-							right="small"
-							top="small"
-							key={`${fieldLabels[subIndex]}${id}`}
-							style={{ width: wrap ? '32%' : '100%', flexGrow: 1 }}
-						>
-							<Input
-								inputName={name}
-								backgroundColor="gray5"
-								label={fieldLabels[subIndex]}
-								defaultValue={item[subField]}
-								onChange={(ev) =>
-									dispatch({
-										type: op.setSelect,
-										payload: { ev: ev.target, id, subField }
-									})
-								}
-							/>
-						</Padding>
-					))}
-					<Container
-						style={{ flexGrow: 1, minWidth: typeField ? '12.5rem' : '6.5rem' }}
-						width={typeField ? 'calc(32% + 0.5rem)' : '6.5rem'}
-						orientation="horizontal"
-						mainAlignment="space-between"
-						crossAlignment="flex-start"
-						padding={{ top: 'small', right: 'small' }}
-					>
-						<Padding right="small" style={{ width: 'calc(100% - 5.5rem)' }}>
-							{typeField && typeLabel && types && types.length > 0 && (
-								<Select
-									items={types}
-									label={typeLabel}
-									onChange={(val) => updateValue(val, typeField, id)}
-									defaultSelection={find(types, ['value', value[id][typeField]])}
-								/>
-							)}
-						</Padding>
-						<Container
-							orientation="horizontal"
-							mainAlignment="flex-end"
-							height="fit"
-							width="5.5rem"
-							style={{ minWidth: '5.5rem' }}
-						>
-							{index >= Object.entries(value).length - 1 ? (
-								<>
-									<Padding right="small">
-										<IconButton
-											icon="Plus"
-											customSize={{
-												iconSize: 'medium',
-												paddingSize: 'medium'
-											}}
-											iconColor="gray6"
-											backgroundColor="primary"
-											onClick={() => addValue()}
-										/>
-									</Padding>
-									<IconButton
-										icon="Minus"
-										iconColor="gray6"
-										customSize={{
-											iconSize: 'medium',
-											paddingSize: 'medium'
-										}}
-										backgroundColor="secondary"
-										onClick={() => removeValue(id)}
-									/>
-								</>
-							) : (
-								<IconButton
-									icon="Minus"
-									iconColor="gray6"
-									backgroundColor="secondary"
-									onClick={() => removeValue(id)}
-								/>
-							)}
-						</Container>
-					</Container>
-				</ContactEditorRow>
-			))}
-		</FormSection>
-	);
-};
-
 export default function EditView({ panel }) {
 	const { folderId, editId } = useParams();
 	const storeDispatch = useDispatch();
@@ -312,13 +86,14 @@ export default function EditView({ panel }) {
 	const [compareToContact, setCompareToContact] = useState(existingContact);
 	const [selectFolderId, setSelectFolderId] = useState(FOLDERS.CONTACTS);
 	const keys = Object.keys(existingContact ?? {});
+	const [t] = useTranslation();
+	const createSnackbar = useSnackbar();
 
 	useEffect(() => {
 		if (!compareToContact && keys?.length > 0) setCompareToContact(existingContact);
 		let canSet = true;
 		if (editId && editId !== 'new' && existingContact) {
 			canSet && dispatch({ type: op.setExistingContact, payload: { existingContact } });
-			setSelectFolderId(existingContact.parent);
 		}
 		if (editId && editId === 'new') {
 			canSet && dispatch({ type: op.setEmptyContact, payload: {} });
@@ -346,7 +121,7 @@ export default function EditView({ panel }) {
 		return selectFolderId === FOLDERS.CONTACTS
 			? t('folders.contacts', 'Contacts')
 			: selectedFolder.label;
-	}, [folders, selectFolderId]);
+	}, [folders, selectFolderId, t]);
 	const folderWithWritePerm = useMemo(
 		() =>
 			filter(
@@ -364,7 +139,7 @@ export default function EditView({ panel }) {
 				value: item.id,
 				color: ZIMBRA_STANDARD_COLORS[item.color || 0].hex
 			})),
-		[folderWithWritePerm]
+		[folderWithWritePerm, t]
 	);
 
 	const isDisabled = useMemo(() => {
@@ -391,7 +166,8 @@ export default function EditView({ panel }) {
 			contact?.middleName,
 			contact?.namePrefix,
 			contact?.nameSuffix,
-			contact?.nickName
+			contact?.nickName,
+			t
 		]
 	);
 
@@ -400,6 +176,8 @@ export default function EditView({ panel }) {
 			boardUtilities?.updateBoard({ title });
 		}
 	}, [panel, title, boardUtilities]);
+
+	const replaceHistory = useReplaceHistoryCallback();
 
 	const onSubmit = useCallback(() => {
 		const updatedContact = cleanMultivalueFields(contact);
@@ -410,7 +188,7 @@ export default function EditView({ panel }) {
 						replaceHistory(`/folder/${folderId}/contacts/${res.payload[0].id}`);
 					} else if (res.type.includes('fulfilled')) {
 						boardUtilities?.closeBoard();
-						getBridgedFunctions().createSnackbar({
+						createSnackbar({
 							key: `edit`,
 							replace: true,
 							type: 'success',
@@ -435,7 +213,17 @@ export default function EditView({ panel }) {
 				})
 				.catch(report);
 		}
-	}, [boardUtilities, contact, existingContact, folderId, panel, storeDispatch]);
+	}, [
+		boardUtilities,
+		contact,
+		createSnackbar,
+		existingContact,
+		folderId,
+		panel,
+		replaceHistory,
+		storeDispatch,
+		t
+	]);
 
 	const defaultTypes = useMemo(
 		() => [
@@ -443,7 +231,7 @@ export default function EditView({ panel }) {
 			{ label: t('types.home', 'home'), value: 'home' },
 			{ label: t('types.other', 'other'), value: 'other' }
 		],
-		[]
+		[t]
 	);
 
 	const mobileTypes = useMemo(
@@ -453,7 +241,7 @@ export default function EditView({ panel }) {
 			{ label: t('types.home', 'home'), value: 'home' },
 			{ label: t('types.other', 'other'), value: 'other' }
 		],
-		[]
+		[t]
 	);
 
 	return contact ? (
