@@ -13,7 +13,7 @@ export const ShimmedDisplayerListItem = (): React.JSX.Element => (
 		mainAlignment={'space-between'}
 		padding={'small'}
 		gap={'0.5rem'}
-		data-testid={'member-list-item'}
+		data-testid={'shimmed-list-item'}
 		wrap={'nowrap'}
 	>
 		<Row wrap={'nowrap'} gap={'0.5rem'} flexShrink={1} minWidth={'1rem'}>

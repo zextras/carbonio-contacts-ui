@@ -21,12 +21,14 @@ const buildProps = ({
 	members = [],
 	totalMembers = 0,
 	onRemoveMember = jest.fn(),
-	onAddMembers = jest.fn()
+	onAddMembers = jest.fn(),
+	...rest
 }: Partial<EditDLComponentProps> = {}): EditDLComponentProps => ({
 	members,
 	totalMembers,
 	onRemoveMember,
-	onAddMembers
+	onAddMembers,
+	...rest
 });
 
 describe('Edit DL Members Component', () => {
@@ -423,6 +425,18 @@ describe('Edit DL Members Component', () => {
 			await waitFor(() =>
 				expect(screen.getAllByTestId(TESTID_SELECTORS.membersListItem)).toHaveLength(members.length)
 			);
+		});
+
+		it('should show 3 shimmed list items while loading', () => {
+			setupTest(
+				<EditDLMembersComponent
+					{...buildProps({ members: ['john.smith@example.org'], loading: true })}
+				/>
+			);
+			expect(screen.queryByText('john.smith@example.org')).not.toBeInTheDocument();
+			const shimmedItems = screen.getAllByTestId(TESTID_SELECTORS.shimmedListItem);
+			expect(shimmedItems).toHaveLength(3);
+			expect(shimmedItems[0]).toBeVisible();
 		});
 	});
 });

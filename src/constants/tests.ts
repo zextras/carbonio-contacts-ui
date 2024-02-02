@@ -41,7 +41,8 @@ export const TESTID_SELECTORS = {
 	displayer: 'displayer',
 	displayerHeader: 'displayer-header',
 	accordionItem: 'accordion-item',
-	infoContainer: 'info-container'
+	infoContainer: 'info-container',
+	shimmedListItem: 'shimmed-list-item'
 };
 
 export const PALETTE = {

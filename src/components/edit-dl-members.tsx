@@ -6,12 +6,12 @@
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { type ChipAction, Container, Input, ListV2, Row } from '@zextras/carbonio-design-system';
-import { reduce, times, uniqBy } from 'lodash';
+import { reduce, uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { FilterMembersIcon } from './filter-members-icon';
+import { loadingItems } from './loading-items';
 import { MemberListItemComponent } from './member-list-item';
-import { ShimmedDisplayerListItem } from './shimmed-displayer-list-item';
 import { Text } from './Text';
 import { CHIP_DISPLAY_NAME_VALUES } from '../constants/contact-input';
 import { ContactInput } from '../legacy/integrations/contact-input';
@@ -47,25 +47,23 @@ export const EditDLMembersComponent: FC<EditDLComponentProps> = ({
 
 	const memberItems = useMemo(
 		() =>
-			(!loading &&
-				reduce<string, React.JSX.Element[]>(
-					members,
-					(accumulator, member) => {
-						if (member.includes(searchValue)) {
-							accumulator.push(
-								<MemberListItemComponent
-									email={member}
-									onRemove={(): void => onRemoveMember(member)}
-									key={member}
-								/>
-							);
-						}
-						return accumulator;
-					},
-					[]
-				)) ||
-			times(3, (index) => <ShimmedDisplayerListItem key={index} />),
-		[loading, members, onRemoveMember, searchValue]
+			reduce<string, React.JSX.Element[]>(
+				members,
+				(accumulator, member) => {
+					if (member.includes(searchValue)) {
+						accumulator.push(
+							<MemberListItemComponent
+								email={member}
+								onRemove={(): void => onRemoveMember(member)}
+								key={member}
+							/>
+						);
+					}
+					return accumulator;
+				},
+				[]
+			),
+		[members, onRemoveMember, searchValue]
 	);
 
 	const isMemberDuplicated = useCallback(
@@ -234,7 +232,7 @@ export const EditDLMembersComponent: FC<EditDLComponentProps> = ({
 				onChange={onSearchChange}
 			/>
 			<Container minHeight={'10rem'} mainAlignment={'flex-start'}>
-				<ListV2>{memberItems}</ListV2>
+				<ListV2>{(!loading && memberItems) || loadingItems(3)}</ListV2>
 			</Container>
 		</Container>
 	);

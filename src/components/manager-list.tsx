@@ -7,11 +7,11 @@
 import React, { useMemo } from 'react';
 
 import { Container, ListV2, Row } from '@zextras/carbonio-design-system';
-import { map, times } from 'lodash';
+import { map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
+import { loadingItems } from './loading-items';
 import { MemberDisplayerListItemComponent } from './member-displayer-list-item';
-import { ShimmedDisplayerListItem } from './shimmed-displayer-list-item';
 import { Text } from './Text';
 import { DistributionList, DistributionListOwner } from '../model/distribution-list';
 
@@ -25,12 +25,10 @@ export const ManagerList = ({ managers, loading }: ManagerListProps): React.JSX.
 
 	const memberItems = useMemo(
 		() =>
-			(!loading &&
-				map<DistributionListOwner, React.JSX.Element>(managers, (manager) => (
-					<MemberDisplayerListItemComponent email={manager.name} key={manager.id} />
-				))) ||
-			times(3, (index) => <ShimmedDisplayerListItem key={index} />),
-		[loading, managers]
+			map<DistributionListOwner, React.JSX.Element>(managers, (manager) => (
+				<MemberDisplayerListItemComponent email={manager.name} key={manager.id} />
+			)),
+		[managers]
 	);
 
 	return (
@@ -43,7 +41,7 @@ export const ManagerList = ({ managers, loading }: ManagerListProps): React.JSX.
 				</Text>
 			</Row>
 			<Container minHeight={0} mainAlignment={'flex-start'}>
-				<ListV2>{memberItems}</ListV2>
+				<ListV2>{(!loading && memberItems) || loadingItems(3)}</ListV2>
 			</Container>
 		</Container>
 	);
