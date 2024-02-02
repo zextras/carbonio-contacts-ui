@@ -116,7 +116,7 @@ export const EditDLControllerComponent = ({
 		setTotalMembers((prevState) => prevState - 1);
 	}, []);
 
-	const onConfirm = useCallback(() => {
+	const onSave = useCallback(() => {
 		const { membersToAdd, membersToRemove } = getMembersPartition(
 			originalMembersRef.current,
 			members
@@ -128,6 +128,8 @@ export const EditDLControllerComponent = ({
 		client
 			.distributionListAction({ email, membersToAdd, membersToRemove, ...detailDifference })
 			.then(() => {
+				originalMembersRef.current = members;
+				originalDetailsRef.current = details;
 				createSnackbar({
 					key: `dl-save-success-${email}`,
 					type: 'success',
@@ -205,11 +207,7 @@ export const EditDLControllerComponent = ({
 				height={'auto'}
 			>
 				<Button label={t('label.discard', 'Discard')} type={'outlined'} onClick={onDiscard} />
-				<Button
-					label={t('label.save', 'Save')}
-					disabled={!isDirty || hasErrors}
-					onClick={onConfirm}
-				/>
+				<Button label={t('label.save', 'Save')} disabled={!isDirty || hasErrors} onClick={onSave} />
 			</Container>
 			<DLDetailsInfo
 				displayName={details.displayName}

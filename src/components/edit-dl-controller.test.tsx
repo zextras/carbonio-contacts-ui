@@ -666,6 +666,44 @@ describe('EditDLControllerComponent', () => {
 				expect(updateBoardFn).toHaveBeenLastCalledWith({ title: dl.displayName });
 			});
 		});
+
+		it('should update initial state on save and reset to this new state on following discard', async () => {
+			const initialState = generateDistributionList({
+				members: generateDistributionListMembersPage([])
+			});
+			const updatedMembers = [faker.internet.email()];
+			const updatedState = generateDistributionList({
+				members: generateDistributionListMembersPage(updatedMembers)
+			});
+			registerDistributionListActionHandler({
+				displayName: updatedState.displayName,
+				membersToAdd: updatedMembers
+			});
+			const { user } = setupTest(<EditDLControllerComponent distributionList={initialState} />);
+			await screen.findByText(initialState.email);
+			let nameInput = screen.getByRole('textbox', { name: /name/i });
+			await user.clear(nameInput);
+			await user.type(nameInput, updatedState.displayName);
+			await screen.findByText(updatedState.displayName);
+			await user.click(screen.getByText(/member list/i));
+			const contactInput = getDLContactInput();
+			await user.type(contactInput.textbox, updatedMembers[0]);
+			await user.click(contactInput.addMembersIcon);
+			await user.click(screen.getByRole('button', { name: /save/i }));
+			await screen.findByText(/edits saved successfully/i);
+			await user.click(screen.getByRole('button', { name: /remove/i }));
+			await user.click(screen.getByText(/details/i));
+			nameInput = await screen.findByRole('textbox', { name: /name/i });
+			await user.clear(nameInput);
+			const textToDiscard = faker.word.words();
+			await user.type(nameInput, textToDiscard);
+			await screen.findByText(textToDiscard);
+			await user.click(screen.getByRole('button', { name: /discard/i }));
+			await screen.findByText(updatedState.displayName);
+			expect(nameInput).toHaveValue(updatedState.displayName);
+			await user.click(screen.getByText(/member list/i));
+			expect(await screen.findByText(updatedMembers[0])).toBeVisible();
+		});
 	});
 });
 
