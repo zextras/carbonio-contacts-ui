@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Button, Container, Divider, TabBar, useSnackbar } from '@zextras/carbonio-design-system';
 import { useBoardHooks } from '@zextras/carbonio-shell-ui';
@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next';
 
 import { DLDetailsInfo } from './dl-details-info';
 import { EditDLDetails, EditDLDetailsProps } from './edit-dl-details';
-import { EditDLMembersComponent } from './edit-dl-members';
+import { EditDLMembersComponent, ResetMembers } from './edit-dl-members';
 import { ManagerList } from './manager-list';
 import { ScrollableContainer } from './styled-components';
 import { DL_NAME_MAX_LENGTH, DL_TABS } from '../constants';
@@ -177,10 +177,12 @@ export const EditDLControllerComponent = ({
 
 	const hasErrors = useMemo(() => nameError !== undefined, [nameError]);
 
+	const resetMembersRef = useRef<ResetMembers>(null);
 	const onDiscard = useCallback(() => {
 		setMembers(originalMembers);
 		setDetails(originalDetails);
 		updateBoard({ title: originalDetails.displayName });
+		resetMembersRef.current?.reset();
 	}, [originalDetails, originalMembers, updateBoard]);
 
 	return (
@@ -241,6 +243,7 @@ export const EditDLControllerComponent = ({
 							onRemoveMember={onRemoveMember}
 							onAddMembers={onAddMembers}
 							loading={loadingMembers}
+							resetRef={resetMembersRef}
 						/>
 					)}
 					{selectedTab === DL_TABS.managers && (

@@ -6,7 +6,7 @@
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
-import { waitFor } from '@testing-library/react';
+import { act, waitFor } from '@testing-library/react';
 
 import { EditDLControllerComponent } from './edit-dl-controller';
 import { screen, setupTest, within } from '../carbonio-ui-commons/test/test-setup';
@@ -17,6 +17,7 @@ import {
 	DistributionListActionRequest
 } from '../network/api/distribution-list-action';
 import { registerDistributionListActionHandler } from '../tests/msw-handlers/distribution-list-action';
+import { registerFullAutocompleteHandler } from '../tests/msw-handlers/full-autocomplete';
 import { registerGetDistributionListMembersHandler } from '../tests/msw-handlers/get-distribution-list-members';
 import {
 	generateDistributionList,
@@ -334,6 +335,30 @@ describe('EditDLControllerComponent', () => {
 				await user.click(screen.getByText(/member list/i));
 				expect(await screen.findByText(membersToRemove[0])).toBeVisible();
 				expect(screen.queryByText(membersToAdd[0])).not.toBeInTheDocument();
+			});
+
+			it('should clear members contact input', async () => {
+				registerFullAutocompleteHandler([]);
+				const dl = generateDistributionList({
+					owners: [],
+					members: generateDistributionListMembersPage([faker.internet.email()]),
+					description: faker.lorem.sentence()
+				});
+				const { user } = setupTest(<EditDLControllerComponent distributionList={dl} />);
+				await screen.findByText(dl.email);
+				await user.click(screen.getByText(/member list/i));
+				await screen.findByTestId(TESTID_SELECTORS.membersListItem);
+				const validEmail = 'a@a.a';
+				const partialText = 'b';
+				const contactInput = getDLContactInput();
+				await act(async () => {
+					await user.type(contactInput.textbox, `${validEmail},${partialText}`);
+				});
+				await user.click(screen.getByRole('button', { name: /discard/i }));
+				await waitFor(() => expect(contactInput.textbox).not.toHaveValue(partialText));
+				await waitFor(() => expect(screen.queryByText(validEmail)).not.toBeInTheDocument());
+				expect(screen.queryByText(partialText)).not.toBeInTheDocument();
+				expect(contactInput.textbox).not.toHaveValue(partialText);
 			});
 
 			it('should make save button become disabled', async () => {
