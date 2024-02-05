@@ -390,6 +390,36 @@ describe('EditDLControllerComponent', () => {
 				await screen.findByText(dl.displayName);
 				expect(updateBoardFn).toHaveBeenLastCalledWith({ title: dl.displayName });
 			});
+
+			it('should reset total members counter', async () => {
+				registerFullAutocompleteHandler([]);
+				const dl = generateDistributionList({
+					owners: [],
+					members: generateDistributionListMembersPage([faker.internet.email()]),
+					description: faker.lorem.sentence()
+				});
+				const { user } = setupTest(<EditDLControllerComponent distributionList={dl} />);
+				await screen.findByText(dl.email);
+				await user.click(screen.getByText(/member list/i));
+				await screen.findByTestId(TESTID_SELECTORS.membersListItem);
+				await user.click(screen.getByRole('button', { name: /remove/i }));
+				await waitFor(() =>
+					expect(screen.queryByTestId(TESTID_SELECTORS.membersListItem)).not.toBeInTheDocument()
+				);
+				await user.click(screen.getByRole('button', { name: /discard/i }));
+				expect(await screen.findByText('Member list 1')).toBeVisible();
+				const validEmail = 'a@a.a';
+				const contactInput = getDLContactInput();
+				await act(async () => {
+					await user.type(contactInput.textbox, `${validEmail},`);
+				});
+				await user.click(contactInput.addMembersIcon);
+				await waitFor(() =>
+					expect(screen.getAllByTestId(TESTID_SELECTORS.membersListItem)).toHaveLength(2)
+				);
+				await user.click(screen.getByRole('button', { name: /discard/i }));
+				expect(await screen.findByText('Member list 1')).toBeVisible();
+			});
 		});
 
 		it('should update initial state on save and reset to this new state on following discard', async () => {
