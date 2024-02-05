@@ -334,8 +334,6 @@ describe('EditDLControllerComponent', () => {
 			await user.click(screen.getByText(/manager list/i));
 			await screen.findByText(owners[0].name);
 			expect(getDLHandler).toHaveBeenCalledTimes(1);
-			await screen.findByText(owners[0].name);
-			expect(getDLHandler).toHaveBeenCalledTimes(1);
 			await user.click(screen.getByText(/details/i));
 			await screen.findByRole('textbox', { name: /name/i });
 			await user.click(screen.getByText(/manager list/i));

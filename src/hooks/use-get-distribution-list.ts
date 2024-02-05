@@ -11,26 +11,25 @@ import { useTranslation } from 'react-i18next';
 
 import { DistributionList } from '../model/distribution-list';
 import { client } from '../network/client';
-import { useDistributionListsStore } from '../store/distribution-lists';
-import { RequireAtLeastOne } from '../types/utils';
+import { StoredDistributionList, useDistributionListsStore } from '../store/distribution-lists';
+import { OptionalPropertyOf } from '../types/utils';
 
-export const useGetDistributionList = (
-	item: RequireAtLeastOne<Pick<DistributionList, 'id' | 'email'>> | undefined
-): DistributionList | undefined => {
+export const useGetDistributionList = (id: string | undefined): DistributionList | undefined => {
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
 	const { distributionLists, upsertDistributionList } = useDistributionListsStore();
 
 	const storedItem = useMemo(
-		() => distributionLists.find((dl) => dl.id === item?.id || dl.email === item?.email),
-		[distributionLists, item?.email, item?.id]
+		() => distributionLists.find((dl): dl is DistributionList => dl.id === id),
+		[distributionLists, id]
 	);
 	const shouldLoadData = useMemo(() => {
-		const requiredFields: Array<keyof DistributionList> = [
+		const requiredFields: Array<OptionalPropertyOf<StoredDistributionList>> = [
 			'displayName',
 			'owners',
 			'description',
-			'isMember'
+			'isMember',
+			'isOwner'
 		];
 		return (
 			storedItem === undefined || some(requiredFields, (field) => storedItem[field] === undefined)
@@ -38,9 +37,9 @@ export const useGetDistributionList = (
 	}, [storedItem]);
 
 	useEffect(() => {
-		if (shouldLoadData && item !== undefined) {
+		if (shouldLoadData && id !== undefined) {
 			client
-				.getDistributionList(item)
+				.getDistributionList({ id })
 				.then((dl) => {
 					if (dl) {
 						upsertDistributionList(dl);
@@ -57,7 +56,7 @@ export const useGetDistributionList = (
 					});
 				});
 		}
-	}, [createSnackbar, item, shouldLoadData, t, upsertDistributionList]);
+	}, [createSnackbar, id, shouldLoadData, t, upsertDistributionList]);
 
 	return storedItem;
 };

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import React, { useMemo } from 'react';
+import React from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
@@ -20,11 +20,8 @@ type DLDisplayerControllerProps = {
 
 export const DLDisplayerController = ({ id }: DLDisplayerControllerProps): React.JSX.Element => {
 	const [t] = useTranslation();
-	const dlToLoad = useMemo<Parameters<typeof useGetDistributionList>[0] | undefined>(
-		() => (id ? { id } : undefined),
-		[id]
-	);
-	const distributionList = useGetDistributionList(dlToLoad);
+	const distributionList = useGetDistributionList(id);
+
 	const { members, totalMembers } = useGetDistributionListMembers(
 		distributionList?.canRequireMembers ? distributionList?.email ?? '' : ''
 	);

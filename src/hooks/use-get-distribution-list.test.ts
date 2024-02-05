@@ -28,7 +28,7 @@ describe('Use get distribution list hook', () => {
 		const handler = registerGetDistributionListHandler(dlDetails);
 		useDistributionListsStore.getState().setDistributionLists([dlDetails]);
 		const { result } = setupHook(useGetDistributionList, {
-			initialProps: [{ id: dlDetails.id }]
+			initialProps: [dlDetails.id]
 		});
 		await waitFor(() => expect(result.current).toEqual(dlDetails));
 		expect(handler).not.toHaveBeenCalled();
@@ -37,13 +37,13 @@ describe('Use get distribution list hook', () => {
 	it('should request data to the network if item is not in the store', async () => {
 		const handler = registerGetDistributionListHandler(dlDetails);
 		const { result } = setupHook(useGetDistributionList, {
-			initialProps: [{ id: dlDetails.id }]
+			initialProps: [dlDetails.id]
 		});
 		await waitFor(() => expect(result.current).toEqual(dlDetails));
 		expect(handler).toHaveBeenCalled();
 	});
 
-	it.each<keyof DistributionList>(['owners', 'displayName', 'description', 'isMember'])(
+	it.each<keyof DistributionList>(['owners', 'displayName', 'description', 'isMember', 'isOwner'])(
 		'should request data to the network if %s field is missing inside the store',
 		async (field) => {
 			useDistributionListsStore
@@ -51,7 +51,7 @@ describe('Use get distribution list hook', () => {
 				.setDistributionLists([{ ...dlDetails, [field]: undefined }]);
 			const handler = registerGetDistributionListHandler(dlDetails);
 			const { result } = setupHook(useGetDistributionList, {
-				initialProps: [{ id: dlDetails.id }]
+				initialProps: [dlDetails.id]
 			});
 			await waitFor(() => expect(result.current).toEqual(dlDetails));
 			expect(handler).toHaveBeenCalled();
@@ -61,7 +61,7 @@ describe('Use get distribution list hook', () => {
 	it('should request data only once', async () => {
 		const handler = registerGetDistributionListHandler(dlDetails);
 		const { result, rerender } = setupHook(useGetDistributionList, {
-			initialProps: [{ id: dlDetails.id }]
+			initialProps: [dlDetails.id]
 		});
 		await waitFor(() => expect(result.current).toEqual(dlDetails));
 		expect(handler).toHaveBeenCalledTimes(1);

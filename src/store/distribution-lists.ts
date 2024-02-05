@@ -7,27 +7,29 @@ import { sortBy } from 'lodash';
 import { create } from 'zustand';
 
 import { DistributionList } from '../model/distribution-list';
+import { MakeOptional } from '../types/utils';
 
+export type StoredDistributionList = MakeOptional<DistributionList, 'id'>;
 type State = {
-	distributionLists: Array<DistributionList>;
+	distributionLists: Array<StoredDistributionList>;
 };
 
 type Actions = {
-	setDistributionLists: (newItems: Array<DistributionList>) => void;
-	upsertDistributionList: (item: DistributionList) => void;
+	setDistributionLists: (newItems: Array<StoredDistributionList>) => void;
+	upsertDistributionList: (item: StoredDistributionList) => void;
 	reset: () => void;
 };
 
 export const useDistributionListsStore = create<State & Actions>()((set, get) => ({
 	distributionLists: [],
-	setDistributionLists: (newItems: Array<DistributionList>): void => {
+	setDistributionLists: (newItems): void => {
 		set({ distributionLists: newItems });
 	},
-	upsertDistributionList: (item: DistributionList): void => {
+	upsertDistributionList: (item): void => {
 		const idx = get().distributionLists.findIndex((dl) => dl.id === item.id);
 		// TODO use toSpliced once available
 		const newDistributionLists = [...get().distributionLists];
-		newDistributionLists.splice(idx, idx === -1 ? 0 : 1, item);
+		newDistributionLists.splice(idx, idx === -1 ? 0 : 1, { ...newDistributionLists[idx], ...item });
 		// Keep array sorted by "name" (display name in fallback to email) ascending
 		set({ distributionLists: sortBy(newDistributionLists, (dl) => dl.displayName || dl.email) });
 	},

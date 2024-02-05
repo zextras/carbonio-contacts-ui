@@ -3,12 +3,13 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { useSnackbar } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
 import { client } from '../network/client';
+import { StoredDistributionList, useDistributionListsStore } from '../store/distribution-lists';
 
 type UseGetDistributionListMembersReturnType = {
 	members: Array<string>;
@@ -23,10 +24,24 @@ export const useGetDistributionListMembers = (
 ): UseGetDistributionListMembersReturnType => {
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
-	const [distributionListMembers, setDistributionListMembers] = useState<Array<string>>([]);
+	const { distributionLists, upsertDistributionList } = useDistributionListsStore();
+
+	const findStoredMembersPage = useCallback(
+		(items: Array<StoredDistributionList>) => items.find((item) => item.email === email)?.members,
+		[email]
+	);
+
+	const storedDistributionListMembersPage = useMemo(
+		() => findStoredMembersPage(distributionLists),
+		[distributionLists, findStoredMembersPage]
+	);
+
 	const offsetRef = useRef<number>(0);
-	const [hasMore, setHasMore] = useState(false);
-	const [totalMembers, setTotalMembers] = useState(0);
+
+	const shouldLoadData = useMemo(
+		() => storedDistributionListMembersPage === undefined,
+		[storedDistributionListMembersPage]
+	);
 
 	const findCallback = useCallback(
 		(offset: number) => {
@@ -34,12 +49,19 @@ export const useGetDistributionListMembers = (
 				client
 					.getDistributionListMembers(email, { offset, limit })
 					.then(({ total, members, more }) => {
-						setDistributionListMembers((prevState) =>
-							offset === 0 ? members : [...prevState, ...members]
-						);
 						offsetRef.current += members.length;
-						setHasMore(more);
-						setTotalMembers(total);
+						const previousMembers =
+							findStoredMembersPage(useDistributionListsStore.getState().distributionLists)
+								?.members ?? [];
+						upsertDistributionList({
+							email,
+							members: {
+								members: offset === 0 ? members : [...previousMembers, ...members],
+								more,
+								total
+							},
+							canRequireMembers: true
+						});
 					})
 					.catch(() => {
 						createSnackbar({
@@ -53,19 +75,26 @@ export const useGetDistributionListMembers = (
 					});
 			}
 		},
-		[createSnackbar, email, limit, t]
+		[createSnackbar, email, findStoredMembersPage, limit, t, upsertDistributionList]
 	);
 
 	useEffect(() => {
-		findCallback(0);
-	}, [findCallback]);
+		if (shouldLoadData) {
+			findCallback(0);
+		}
+	}, [findCallback, shouldLoadData]);
 
 	const findMore = useCallback(() => {
-		if (!hasMore) {
+		if (!storedDistributionListMembersPage?.more) {
 			throw new Error('No more members available');
 		}
 		findCallback(offsetRef.current);
-	}, [findCallback, hasMore]);
+	}, [storedDistributionListMembersPage?.more, findCallback]);
 
-	return { members: distributionListMembers, hasMore, findMore, totalMembers };
+	return {
+		members: storedDistributionListMembersPage?.members ?? [],
+		hasMore: storedDistributionListMembersPage?.more ?? false,
+		totalMembers: storedDistributionListMembersPage?.total ?? 0,
+		findMore
+	};
 };

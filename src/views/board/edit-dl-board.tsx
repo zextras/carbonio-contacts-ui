@@ -11,11 +11,15 @@ import { useTranslation } from 'react-i18next';
 
 import { EditDLControllerComponent } from '../../components/edit-dl-controller';
 import { Text } from '../../components/Text';
+import { useGetDistributionList } from '../../hooks/use-get-distribution-list';
 import { DistributionList } from '../../model/distribution-list';
+
+export type EditDLBoardContext = Pick<DistributionList, 'id'>;
 
 const EditDLBoard = (): React.JSX.Element => {
 	const [t] = useTranslation();
-	const { context: distributionList } = useBoard<DistributionList>();
+	const { context } = useBoard<EditDLBoardContext>();
+	const distributionList = useGetDistributionList(context?.id);
 
 	return distributionList === undefined ? (
 		<Container>

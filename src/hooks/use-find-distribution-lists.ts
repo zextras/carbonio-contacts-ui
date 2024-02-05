@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import { useSnackbar } from '@zextras/carbonio-design-system';
 import { filter } from 'lodash';
@@ -23,18 +23,20 @@ export const useFindDistributionLists = ({
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
 	const { distributionLists, setDistributionLists } = useDistributionListsStore();
-	const shouldLoadDataRef = useRef(true);
+	const shouldLoadData = useMemo(
+		() => distributionLists.some((item) => item.id === undefined),
+		[distributionLists]
+	);
 
 	useEffect(() => {
 		// Since we need
 		// to ask all distribution lists of the account to have both the isOwner and isMember info,
 		// perform the request only once, and then filter the results based on the requested filter.
-		if (shouldLoadDataRef.current) {
+		if (shouldLoadData) {
 			client
 				.getAccountDistributionLists({ ownerOf: true, memberOf: true })
 				.then((response) => {
 					setDistributionLists(response);
-					shouldLoadDataRef.current = false;
 				})
 				.catch(() => {
 					createSnackbar({
@@ -47,13 +49,14 @@ export const useFindDistributionLists = ({
 					});
 				});
 		}
-	}, [createSnackbar, setDistributionLists, t]);
+	}, [createSnackbar, setDistributionLists, shouldLoadData, t]);
 
 	return useMemo(
 		() =>
 			filter(
 				distributionLists,
-				(item) => (ownerOf && item.isOwner) || (memberOf && item.isMember === true)
+				(item): item is DistributionList =>
+					(item.id !== undefined && ownerOf && item.isOwner) || (memberOf && item.isMember === true)
 			),
 		[distributionLists, memberOf, ownerOf]
 	);
