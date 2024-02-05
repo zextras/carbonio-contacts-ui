@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Button, Container, Divider, TabBar, useSnackbar } from '@zextras/carbonio-design-system';
 import { useBoardHooks } from '@zextras/carbonio-shell-ui';
@@ -40,12 +40,12 @@ export const EditDLControllerComponent = ({
 	const { email, displayName, description, members: membersPage } = distributionList;
 	const [members, setMembers] = useState<string[]>(membersPage?.members ?? []);
 	const [loadingMembers, setLoadingMembers] = useState(membersPage === undefined);
-	const originalMembersRef = useRef<string[]>(membersPage?.members ?? []);
+	const [originalMembers, setOriginalMembers] = useState<string[]>(membersPage?.members ?? []);
 	const [details, setDetails] = useState<DLDetails>({
 		displayName: displayName ?? '',
 		description: description ?? ''
 	});
-	const originalDetailsRef = useRef<DLDetails>({
+	const [originalDetails, setOriginalDetails] = useState<DLDetails>({
 		displayName: displayName ?? '',
 		description: description ?? ''
 	});
@@ -63,10 +63,8 @@ export const EditDLControllerComponent = ({
 			client
 				.getDistributionListMembers(email)
 				.then((response) => {
-					setMembers(() => {
-						originalMembersRef.current = response.members;
-						return response.members;
-					});
+					setOriginalMembers(response.members);
+					setMembers(response.members);
 					setTotalMembers(response.total ?? 0);
 				})
 				.catch((error: Error) => {
@@ -117,19 +115,16 @@ export const EditDLControllerComponent = ({
 	}, []);
 
 	const onSave = useCallback(() => {
-		const { membersToAdd, membersToRemove } = getMembersPartition(
-			originalMembersRef.current,
-			members
-		);
+		const { membersToAdd, membersToRemove } = getMembersPartition(originalMembers, members);
 		const detailDifference = pickBy(
 			details,
-			(value, key) => originalDetailsRef.current[key as keyof DLDetails] !== value
+			(value, key) => originalDetails[key as keyof DLDetails] !== value
 		);
 		client
 			.distributionListAction({ email, membersToAdd, membersToRemove, ...detailDifference })
 			.then(() => {
-				originalMembersRef.current = members;
-				originalDetailsRef.current = details;
+				setOriginalMembers(members);
+				setOriginalDetails(details);
 				createSnackbar({
 					key: `dl-save-success-${email}`,
 					type: 'success',
@@ -155,13 +150,11 @@ export const EditDLControllerComponent = ({
 				});
 				console.error(error);
 			});
-	}, [createSnackbar, details, email, members, t]);
+	}, [createSnackbar, details, email, members, originalDetails, originalMembers, t]);
 
 	const isDirty = useMemo(
-		() =>
-			xor(members, originalMembersRef.current).length > 0 ||
-			!isEqual(details, originalDetailsRef.current),
-		[details, members]
+		() => xor(members, originalMembers).length > 0 || !isEqual(details, originalDetails),
+		[details, members, originalDetails, originalMembers]
 	);
 
 	const onDetailsChange = useCallback<EditDLDetailsProps['onChange']>(
@@ -185,10 +178,10 @@ export const EditDLControllerComponent = ({
 	const hasErrors = useMemo(() => nameError !== undefined, [nameError]);
 
 	const onDiscard = useCallback(() => {
-		setMembers(originalMembersRef.current);
-		setDetails(originalDetailsRef.current);
-		updateBoard({ title: originalDetailsRef.current.displayName });
-	}, [updateBoard]);
+		setMembers(originalMembers);
+		setDetails(originalDetails);
+		updateBoard({ title: originalDetails.displayName });
+	}, [originalDetails, originalMembers, updateBoard]);
 
 	return (
 		<Container

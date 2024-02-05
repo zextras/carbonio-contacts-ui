@@ -469,6 +469,33 @@ describe('EditDLControllerComponent', () => {
 				await waitFor(() => expect(saveButton).toBeDisabled());
 			});
 
+			it('should become disabled if save action is successful', async () => {
+				const initialState = generateDistributionList({
+					members: generateDistributionListMembersPage([])
+				});
+				const updatedMembers = [faker.internet.email()];
+				const updatedState = generateDistributionList({
+					members: generateDistributionListMembersPage(updatedMembers)
+				});
+				registerDistributionListActionHandler({
+					displayName: updatedState.displayName,
+					membersToAdd: updatedMembers
+				});
+				const { user } = setupTest(<EditDLControllerComponent distributionList={initialState} />);
+				await screen.findByText(initialState.email);
+				const nameInput = screen.getByRole('textbox', { name: /name/i });
+				await user.clear(nameInput);
+				await user.type(nameInput, updatedState.displayName);
+				await screen.findByText(updatedState.displayName);
+				await user.click(screen.getByText(/member list/i));
+				const contactInput = getDLContactInput();
+				await user.type(contactInput.textbox, updatedMembers[0]);
+				await user.click(contactInput.addMembersIcon);
+				await user.click(screen.getByRole('button', { name: /save/i }));
+				await screen.findByText(/edits saved successfully/i);
+				await waitFor(() => expect(screen.getByRole('button', { name: /save/i })).toBeDisabled());
+			});
+
 			it('should call the API when clicked with the modified data', async () => {
 				const membersToRemove = [faker.internet.email()];
 				const membersToAdd = [faker.internet.email()];
