@@ -16,6 +16,12 @@
         "share_folder": "Share folder"
     },
     "board": {
+        "editContactGroup": {
+            "snackbar": {
+                "contact_group_edited": "Group successfully updated",
+                "error": "Something went wrong saving the edits, try again"
+            }
+        },
         "label": {
             "description": "Description"
         },

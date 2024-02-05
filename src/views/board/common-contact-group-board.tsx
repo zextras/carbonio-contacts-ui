@@ -10,12 +10,11 @@ import {
 	Button,
 	Text,
 	Input,
-	type InputProps,
+	InputProps,
 	Avatar,
 	ListV2,
 	Row,
-	useSnackbar,
-	type ChipAction
+	ChipAction
 } from '@zextras/carbonio-design-system';
 import { useBoardHooks } from '@zextras/carbonio-shell-ui';
 import { remove, some, uniqBy } from 'lodash';
@@ -26,66 +25,52 @@ import { MemberListItemComponent } from '../../components/member-list-item';
 import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../constants';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
 import { ContactInput } from '../../legacy/integrations/contact-input';
-import type { ContactInputItem } from '../../legacy/types/integrations';
-import { client } from '../../network/client';
+import { ContactInputItem } from '../../legacy/types/integrations';
+
+export function isContactGroupNameInvalid(nameValue: string): boolean {
+	return nameValue.trim().length === 0 || nameValue.length > CONTACT_GROUP_NAME_MAX_LENGTH;
+}
 
 const List = styled(ListV2)`
 	min-height: 0;
 `;
 
-type EnhancedChipItem = ContactInputItem & {
+export type EnhancedChipItem = ContactInputItem & {
 	duplicated: boolean;
 };
 
-const NewContactGroupBoard = (): React.JSX.Element => {
+export interface CommonContactGroupBoardProps {
+	onSave: () => void;
+	nameValue: string;
+	memberListEmails: string[];
+	isOnSaveDisabled: boolean;
+	setMemberListEmails: React.Dispatch<React.SetStateAction<string[]>>;
+	initialNameValue: string;
+	initialMemberListEmails: string[];
+	setNameValue: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const CommonContactGroupBoard = ({
+	onSave,
+	nameValue,
+	memberListEmails,
+	isOnSaveDisabled,
+	setMemberListEmails,
+	initialNameValue,
+	initialMemberListEmails,
+	setNameValue
+}: CommonContactGroupBoardProps): React.JSX.Element => {
 	const [t] = useTranslation();
-	const { updateBoard, closeBoard } = useBoardHooks();
-	const createSnackbar = useSnackbar();
 
-	const initialName = t('board.newContactGroup.name', 'New Group');
-	const [nameValue, setNameValue] = useState(initialName);
-
-	const [contactInputValue, setContactInputValue] = useState<Array<EnhancedChipItem>>([]);
-
-	const [memberListEmails, setMemberListEmails] = useState<string[]>([]);
+	const { updateBoard } = useBoardHooks();
 
 	const onNameChange = useCallback<NonNullable<InputProps['onChange']>>(
 		(ev) => {
 			setNameValue(ev.target.value);
 			updateBoard({ title: ev.target.value });
 		},
-		[updateBoard]
+		[setNameValue, updateBoard]
 	);
-
-	const discardChanges = useCallback(() => {
-		setNameValue(initialName);
-		setContactInputValue([]);
-		setMemberListEmails([]);
-		updateBoard({ title: initialName });
-	}, [initialName, updateBoard]);
-
-	const onSave = useCallback(() => {
-		client
-			.createContactGroup(nameValue, memberListEmails)
-			.then(() => {
-				createSnackbar({
-					key: new Date().toLocaleString(),
-					type: 'success',
-					label: t(
-						'board.newContactGroup.snackbar.contact_group_created',
-						'Contact group successfully created'
-					)
-				});
-				closeBoard();
-			})
-			.catch(() => {
-				createSnackbar({
-					key: new Date().toLocaleString(),
-					type: 'error',
-					label: t('label.error_try_again', 'Something went wrong, please try again')
-				});
-			});
-	}, [closeBoard, createSnackbar, memberListEmails, t, nameValue]);
 
 	const nameDescription = useMemo(() => {
 		if (nameValue.trim().length === 0) {
@@ -102,6 +87,93 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 		}
 		return undefined;
 	}, [t, nameValue]);
+
+	const [contactInputValue, setContactInputValue] = useState<Array<EnhancedChipItem>>([]);
+
+	const discardChanges = useCallback(() => {
+		setNameValue(initialNameValue);
+		setMemberListEmails(initialMemberListEmails);
+		updateBoard({ title: initialNameValue });
+		setContactInputValue([]);
+	}, [initialMemberListEmails, initialNameValue, setMemberListEmails, setNameValue, updateBoard]);
+
+	const contactInputOnChange = (
+		newContactInputValue: Array<
+			Omit<EnhancedChipItem, 'duplicated'> & { duplicated?: Pick<EnhancedChipItem, 'duplicated'> }
+		>
+	): void => {
+		// TODO item are filtered to be uniq, because the ContactInput filters out, dropdown duplicated, only visually
+		//  but provide that item inside onChange parameter
+		const uniqNewContactInputValue = uniqBy(newContactInputValue, (value) => value.email);
+
+		const uniqNewContactInputValueWithActions = uniqNewContactInputValue.map((value) => {
+			const duplicated = value.email !== undefined && memberListEmails.includes(value.email);
+
+			const duplicatedChipAction: ChipAction = {
+				id: 'duplicated',
+				color: 'error',
+				type: 'icon',
+				icon: 'AlertCircle'
+			};
+
+			const duplicatedChipActionNotPresent = !value.actions?.find(
+				(action) => action.id === 'duplicated'
+			);
+
+			const actions = [
+				...(value.actions ?? []),
+				...(duplicated && duplicatedChipActionNotPresent ? [duplicatedChipAction] : [])
+			];
+
+			return {
+				...value,
+				duplicated,
+				actions
+			};
+		});
+
+		setContactInputValue(uniqNewContactInputValueWithActions);
+	};
+
+	const contactInputIconAction = useCallback(() => {
+		const valid: string[] = [];
+		const invalid: typeof contactInputValue = [];
+
+		contactInputValue.forEach((value) => {
+			if (value.error || value.duplicated || value.email === undefined) {
+				invalid.push(value);
+			} else {
+				valid.push(value.email);
+			}
+		});
+
+		setContactInputValue(invalid);
+		setMemberListEmails((prevState) => [...prevState, ...valid]);
+	}, [contactInputValue, setMemberListEmails]);
+
+	const removeItem = useCallback(
+		(email: string) => {
+			const newMemberListEmails = memberListEmails.filter((value) => value !== email);
+			setMemberListEmails(newMemberListEmails);
+			setContactInputValue((prevState) =>
+				prevState.map((value) => {
+					const duplicated = value.email !== undefined && newMemberListEmails.includes(value.email);
+
+					const actions = [...(value.actions ?? [])];
+					if (!duplicated && value.duplicated) {
+						remove(actions, (action) => action.id === 'duplicated');
+					}
+
+					return {
+						...value,
+						duplicated,
+						actions
+					};
+				})
+			);
+		},
+		[memberListEmails, setMemberListEmails]
+	);
 
 	const contactInputDescription = useMemo(() => {
 		let valid = 0;
@@ -143,71 +215,9 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 		return undefined;
 	}, [contactInputValue, t]);
 
-	const contactInputOnChange = (
-		newContactInputValue: Array<
-			Omit<EnhancedChipItem, 'duplicated'> & { duplicated?: Pick<EnhancedChipItem, 'duplicated'> }
-		>
-	): void => {
-		// TODO item are filtered to be uniq, because the ContactInput filters out, dropdown duplicated, only visually
-		//  but provide that item inside onChange parameter
-		const uniqNewContactInputValue = uniqBy(newContactInputValue, (value) => value.email);
-
-		const uniqNewContactInputValueWithActions = uniqNewContactInputValue.map((value) => {
-			const duplicated = value.email !== undefined && memberListEmails.includes(value.email);
-
-			const duplicatedChipAction: ChipAction = {
-				id: 'duplicated',
-				color: 'error',
-				type: 'icon',
-				icon: 'AlertCircle'
-			};
-
-			const duplicatedChipActionNotPresent = !value.actions?.find(
-				(action) => action.id === 'duplicated'
-			);
-
-			const actions = [
-				...(value.actions ?? []),
-				...(duplicated && duplicatedChipActionNotPresent ? [duplicatedChipAction] : [])
-			];
-
-			return {
-				...value,
-				duplicated,
-				actions
-			};
-		});
-
-		setContactInputValue(uniqNewContactInputValueWithActions);
-	};
-
 	const noValidChip = useMemo(
 		() => !some(contactInputValue, (chip) => !chip.error && !chip.duplicated),
 		[contactInputValue]
-	);
-
-	const removeItem = useCallback(
-		(email: string) => {
-			const newMemberListEmails = memberListEmails.filter((value) => value !== email);
-			setMemberListEmails(newMemberListEmails);
-			setContactInputValue((prevState) =>
-				prevState.map((value) => {
-					const duplicated = value.email !== undefined && newMemberListEmails.includes(value.email);
-
-					const actions = [...(value.actions ?? [])];
-					if (!duplicated && value.duplicated) {
-						remove(actions, (action) => action.id === 'duplicated');
-					}
-
-					return {
-						...value,
-						duplicated,
-						actions
-					};
-				})
-			);
-		},
-		[memberListEmails]
 	);
 
 	const listItems = useMemo(
@@ -217,22 +227,6 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 			)),
 		[memberListEmails, removeItem]
 	);
-
-	const contactInputIconAction = useCallback(() => {
-		const valid: string[] = [];
-		const invalid: typeof contactInputValue = [];
-
-		contactInputValue.forEach((value) => {
-			if (value.error || value.duplicated || value.email === undefined) {
-				invalid.push(value);
-			} else {
-				valid.push(value.email);
-			}
-		});
-
-		setContactInputValue(invalid);
-		setMemberListEmails((prevState) => [...prevState, ...valid]);
-	}, [contactInputValue]);
 
 	return (
 		<Container
@@ -257,9 +251,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 					type="outlined"
 				/>
 				<Button
-					disabled={
-						nameValue.trim().length === 0 || nameValue.length > CONTACT_GROUP_NAME_MAX_LENGTH
-					}
+					disabled={isOnSaveDisabled}
 					size={'medium'}
 					label={t('label.save', 'save')}
 					icon={'SaveOutline'}
@@ -328,4 +320,4 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 	);
 };
 
-export default NewContactGroupBoard;
+export default CommonContactGroupBoard;
