@@ -15,8 +15,9 @@ import {
 	Row,
 	SnackbarManagerContext
 } from '@zextras/carbonio-design-system';
-import { FOLDERS, replaceHistory, t } from '@zextras/carbonio-shell-ui';
+import { FOLDERS, replaceHistory } from '@zextras/carbonio-shell-ui';
 import { filter, findIndex, isEqual, map, maxBy, remove, sortBy, uniqWith } from 'lodash';
+import { useTranslation } from 'react-i18next';
 
 import ModalWrapper from './commons/modal-wrapper';
 import { DeleteModal } from './delete-modal';
@@ -107,6 +108,7 @@ export default function Sidebar({ expanded }) {
 	const [modal, setModal] = useState('');
 	const [currentFolder, setCurrentFolder] = useState();
 	const [modalAccordions, setModalAccordions] = useState();
+	const [t] = useTranslation();
 	const [accordionItems, setAccordionItems] = useState([]);
 	const [sideBarItems, setSidebarItems] = useState([]);
 	const createModal = useContext(ModalManagerContext);
@@ -151,7 +153,7 @@ export default function Sidebar({ expanded }) {
 			})
 		);
 		setModalAccordions(temp);
-	}, [folders, dispatch, createModal, createSnackbar, expanded]);
+	}, [folders, dispatch, createModal, createSnackbar, expanded, t]);
 
 	return (
 		<>

@@ -8,19 +8,19 @@ import React, { FC, useCallback, useContext, useEffect, useMemo, useState } from
 import {
 	ButtonOld as Button,
 	Chip,
-	ChipProps,
 	Container,
 	Padding,
-	SnackbarManagerContext,
 	Text,
-	Tooltip
+	Tooltip,
+	useSnackbar
 } from '@zextras/carbonio-design-system';
-import { Grant, soapFetch, useUserAccounts } from '@zextras/carbonio-shell-ui';
+import { soapFetch, useUserAccounts } from '@zextras/carbonio-shell-ui';
 import { map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { Context } from './edit-context';
+import { Grant } from '../../../../../carbonio-ui-commons/types/folder';
 import { useAppDispatch } from '../../../../hooks/redux';
 import { sendShareNotification } from '../../../../store/actions/send-share-notification';
 import {
@@ -31,20 +31,24 @@ import {
 } from '../../../../types/contact';
 import { ShareFolderRoleOptions, findLabel } from '../../commons/utils';
 
-const HoverChip = styled(Chip)<ChipProps & { hovered?: boolean }>`
+const HoverChip = styled(Chip)<{ hovered?: boolean }>`
 	background-color: ${({ theme, hovered }): string =>
 		hovered ? theme.palette.gray3.hover : theme.palette.gray3.regular};
 `;
 
-export const GranteeInfo: FC<GranteeInfoProps> = ({ grant, shareFolderRoleOptions, hovered }) => {
+export const GranteeInfo = ({
+	grant,
+	shareFolderRoleOptions,
+	hovered
+}: GranteeInfoProps): React.JSX.Element => {
 	const role = useMemo(
 		() => findLabel(shareFolderRoleOptions, grant.perm || ''),
 		[shareFolderRoleOptions, grant.perm]
 	);
 
 	const label = useMemo(() => {
-		const composeLabel = (name: string): string => `${name} - ${role}`;
-		return grant.d ? composeLabel(grant.d) : composeLabel(grant?.zid);
+		const composeLabel = (name?: string): string => `${name} - ${role}`;
+		return grant.d ? composeLabel(grant.d) : composeLabel(grant.zid);
 	}, [grant, role]);
 
 	return (
@@ -56,20 +60,20 @@ export const GranteeInfo: FC<GranteeInfoProps> = ({ grant, shareFolderRoleOption
 	);
 };
 
-const Actions: FC<ActionProps> = ({
+const Actions = ({
 	folder,
 	grant,
 	setActiveModal,
 	onMouseLeave,
 	onMouseEnter
-}) => {
+}: ActionProps): React.JSX.Element => {
 	const [t] = useTranslation();
 	const accounts = useUserAccounts();
-	const createSnackbar = useContext(SnackbarManagerContext);
+	const createSnackbar = useSnackbar();
 	const { setActiveGrant } = useContext(Context);
 	const dispatch = useAppDispatch();
 	const onRevoke = useCallback(() => {
-		setActiveGrant && setActiveGrant(grant);
+		setActiveGrant?.(grant);
 		setActiveModal('revoke');
 	}, [setActiveModal, setActiveGrant, grant]);
 
@@ -96,7 +100,7 @@ const Actions: FC<ActionProps> = ({
 		});
 	}, [accounts, dispatch, folder, t, grant.d, createSnackbar]);
 	const onEdit = useCallback(() => {
-		setActiveGrant && setActiveGrant(grant);
+		setActiveGrant?.(grant);
 		setActiveModal('edit');
 	}, [setActiveModal, setActiveGrant, grant]);
 
@@ -159,10 +163,10 @@ const Grantee: FC<GranteeProps> = ({ grant, folder, setActiveModal, shareFolderR
 	);
 };
 
-export const ShareFolderProperties: FC<ShareFolderPropertiesProps> = ({
+export const ShareFolderProperties = ({
 	folder,
 	setActiveModal
-}) => {
+}: ShareFolderPropertiesProps): React.JSX.Element => {
 	const [t] = useTranslation();
 	const [grant, setGrant] = useState<Array<Grant> | undefined>();
 	const shareFolderRoleOptions = useMemo(

@@ -12,10 +12,11 @@ import {
 	Text,
 	Padding,
 	Row,
-	Divider
+	Divider,
+	useSnackbar
 } from '@zextras/carbonio-design-system';
-import { getBridgedFunctions, t } from '@zextras/carbonio-shell-ui';
 import { isEmpty, reduce, filter, first } from 'lodash';
+import { useTranslation } from 'react-i18next';
 
 import { ShareFolderProperties } from './share-folder-properties';
 import ColorSelect from '../../../../commons/ColorSelect';
@@ -25,6 +26,8 @@ import ModalFooter from '../../commons/modal-footer';
 import { ModalHeader } from '../../commons/modal-header';
 
 const EditDefaultModal = ({ currentFolder, accordions, setModal, dispatch, setActiveModal }) => {
+	const createSnackbar = useSnackbar();
+	const [t] = useTranslation();
 	const [inputValue, setInputValue] = useState('');
 	const [parent, setParent] = useState('');
 	const folders = useMemo(() => extractFolders(accordions), [accordions]);
@@ -86,7 +89,7 @@ const EditDefaultModal = ({ currentFolder, accordions, setModal, dispatch, setAc
 			},
 			accItem
 		);
-	}, [currentFolder.level, currentFolder.id, currentFolder.parent, folders]);
+	}, [currentFolder.parent, currentFolder.level, currentFolder.id, folders, t]);
 
 	useMemo(() => {
 		setParent(currentFolder.parent);
@@ -112,7 +115,7 @@ const EditDefaultModal = ({ currentFolder, accordions, setModal, dispatch, setAc
 			})
 		).then((res) => {
 			if (res.type.includes('fulfilled')) {
-				getBridgedFunctions()?.createSnackbar({
+				createSnackbar({
 					key: `edit`,
 					replace: true,
 					type: 'info',
@@ -121,7 +124,7 @@ const EditDefaultModal = ({ currentFolder, accordions, setModal, dispatch, setAc
 					autoHideTimeout: 3000
 				});
 			} else {
-				getBridgedFunctions()?.createSnackbar({
+				createSnackbar({
 					key: `edit`,
 					replace: true,
 					type: 'error',
@@ -132,7 +135,7 @@ const EditDefaultModal = ({ currentFolder, accordions, setModal, dispatch, setAc
 			}
 		});
 		setModal('');
-	}, [dispatch, currentFolder, inputValue, parent, setModal, folderColor]);
+	}, [dispatch, currentFolder, inputValue, parent, folderColor, setModal, createSnackbar, t]);
 
 	const onClose = useCallback(() => setModal(''), [setModal]);
 

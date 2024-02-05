@@ -199,6 +199,10 @@ export type GetFolderActionRequest = {
 	};
 };
 
+export type GetFolderActionResponse = {
+	folder: Array<ISoapFolderObj>;
+};
+
 export type FolderActionRequest = {
 	action: FolderActionRename | FolderActionMove | FolderActionDelete;
 };

@@ -4,8 +4,9 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { Grant } from '@zextras/carbonio-shell-ui';
 import type { NameSpace } from '@zextras/carbonio-shell-ui';
+
+import { Grant } from '../../carbonio-ui-commons/types/folder';
 
 export enum ContactPhoneType {
 	MOBILE = 'mobile',
@@ -146,14 +147,14 @@ export type FullAutocompleteResponse = {
 	};
 };
 
-export type shareFolderRoleOptions = {
+export type ShareFolderRoleOptions = {
 	label: string;
 	value: string;
 };
 
 export type GranteeInfoProps = {
 	grant: Grant;
-	shareFolderRoleOptions: shareFolderRoleOptions;
+	shareFolderRoleOptions: ShareFolderRoleOptions;
 	hovered?: boolean;
 };
 
@@ -171,7 +172,7 @@ export type GranteeProps = {
 	onMouseLeave?: () => void;
 	onMouseEnter?: () => void;
 	setActiveModal: (modal: string) => void;
-	shareFolderRoleOptions: shareFolderRoleOptions;
+	shareFolderRoleOptions: ShareFolderRoleOptions;
 };
 
 export type ShareFolderPropertiesProps = {

@@ -5,17 +5,18 @@
  */
 import React from 'react';
 
-import { rest } from 'msw';
+import { faker } from '@faker-js/faker';
+import { screen } from '@testing-library/react';
 
-import { getSetupServer } from '../../../../carbonio-ui-commons/test/jest-setup';
+import { createAPIInterceptor } from '../../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { setupTest } from '../../../../carbonio-ui-commons/test/test-setup';
 import { generateStore } from '../../../tests/generators/store';
 import { ContactsFolder } from '../../../types/contact';
-import { GetFolderActionRequest } from '../../../types/soap';
+import { GetFolderActionRequest, GetFolderActionResponse } from '../../../types/soap';
 import { ShareFolderProperties } from '../parts/edit/share-folder-properties';
 
 describe('share-folder-properties', () => {
-	test('getFolderRequest will call with correct parameters', async () => {
+	test('getFolderRequest will call and grantee will set as per response', async () => {
 		const setActiveModal = jest.fn();
 		const store = generateStore();
 		const currentFolder: ContactsFolder = {
@@ -34,25 +35,60 @@ describe('share-folder-properties', () => {
 			to: '/folder/3022'
 		};
 
+		const email1 = faker.internet.email();
+		const email2 = faker.internet.email();
+		const response: GetFolderActionResponse = {
+			folder: [
+				{
+					id: '3022',
+					uuid: faker.string.uuid(),
+					deletable: true,
+					name: 'Test contacts',
+					absFolderPath: '/Test contacts',
+					l: '1',
+					luuid: '3990af7f-6493-4d45-bbdf-ab3d144163e1',
+					color: 5,
+					view: 'contact',
+					rev: 41305,
+					ms: 127744,
+					webOfflineSyncDays: 0,
+					activesyncdisabled: false,
+					n: 11,
+					s: 0,
+					i4ms: 86802,
+					i4next: 35851,
+					perm: 'r',
+					cn: [],
+					acl: {
+						grant: [
+							{
+								zid: faker.string.uuid(),
+								gt: 'usr',
+								perm: 'r',
+								d: email1
+							},
+							{
+								zid: faker.string.uuid(),
+								gt: 'usr',
+								perm: 'rwidx',
+								d: email2
+							}
+						]
+					}
+				}
+			]
+		};
+
+		createAPIInterceptor<GetFolderActionRequest, GetFolderActionResponse>(
+			'GetFolder',
+			undefined,
+			response
+		);
+
 		setupTest(<ShareFolderProperties folder={currentFolder} setActiveModal={setActiveModal} />, {
 			store
 		});
-
-		const folderActionInterceptor = new Promise<GetFolderActionRequest>((resolve, reject) => {
-			// Register a handler for the REST call
-			getSetupServer().use(
-				rest.post('/service/soap/GetFolderRequest', async (req, res, ctx) => {
-					if (!req) {
-						reject(new Error('Empty request'));
-					}
-					const action = (await req.json()).Body.GetFolderRequest;
-					resolve(action);
-
-					return res(ctx.json({}));
-				})
-			);
-		});
-		const req = await folderActionInterceptor;
-		expect(req.folder.l).toBe('3022');
+		expect(await screen.findByText(`${email1} - Viewer`, { exact: false }));
+		expect(await screen.findByText(`${email2} - Manager`, { exact: false }));
 	});
 });

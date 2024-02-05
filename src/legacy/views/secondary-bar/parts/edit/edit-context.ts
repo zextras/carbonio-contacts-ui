@@ -5,10 +5,12 @@
  */
 import { createContext } from 'react';
 
+import { Grant } from '../../../../../carbonio-ui-commons/types/folder';
+
 export const Context = createContext<{
-	setActiveGrant?: (arg: any) => void;
+	setActiveGrant?: (grant: Grant) => void;
 	activeModal?: string;
 	setActiveModal?: (arg: string) => void;
-	activeGrant?: any;
+	activeGrant?: Grant;
 	onClose?: () => void;
 }>({});
