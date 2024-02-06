@@ -14,10 +14,13 @@ import { client } from '../network/client';
 import { StoredDistributionList, useDistributionListsStore } from '../store/distribution-lists';
 import { OptionalPropertyOf } from '../types/utils';
 
-export const useGetDistributionList = (id: string | undefined): DistributionList | undefined => {
+export const useGetDistributionList = (
+	id: string | undefined
+): { distributionList: DistributionList | undefined; loading: boolean } => {
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
 	const { distributionLists, upsertDistributionList } = useDistributionListsStore();
+	const [loading, setLoading] = useState(false);
 
 	const storedItem = useMemo(
 		() => distributionLists?.find((dl): dl is DistributionList => dl.id === id),
@@ -41,7 +44,7 @@ export const useGetDistributionList = (id: string | undefined): DistributionList
 
 	useEffect(() => {
 		if (shouldLoadData && id !== undefined) {
-			setDistributionList(undefined);
+			setLoading(true);
 			client
 				.getDistributionList({ id })
 				.then((dl) => {
@@ -59,9 +62,12 @@ export const useGetDistributionList = (id: string | undefined): DistributionList
 						autoHideTimeout: 3000,
 						hideButton: true
 					});
+				})
+				.finally(() => {
+					setLoading(false);
 				});
 		}
 	}, [createSnackbar, id, shouldLoadData, t, upsertDistributionList]);
 
-	return storedItem ?? distributionList;
+	return { distributionList: storedItem ?? distributionList, loading };
 };

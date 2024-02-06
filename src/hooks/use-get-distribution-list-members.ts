@@ -12,11 +12,9 @@ import { DistributionListMembersPage } from '../model/distribution-list';
 import { client } from '../network/client';
 import { StoredDistributionList, useDistributionListsStore } from '../store/distribution-lists';
 
-type UseGetDistributionListMembersReturnType = {
-	members: Array<string>;
-	hasMore: boolean;
+type UseGetDistributionListMembersReturnType = DistributionListMembersPage & {
 	findMore: () => void;
-	totalMembers: number;
+	loading: boolean;
 };
 
 export const useGetDistributionListMembers = (
@@ -30,6 +28,7 @@ export const useGetDistributionListMembers = (
 	const [innerDistributionListMembersPage, setInnerDistributionListMembersPage] = useState<
 		DistributionListMembersPage | undefined
 	>();
+	const [loading, setLoading] = useState(false);
 
 	const findStoredMembersPage = useCallback(
 		(items: Array<StoredDistributionList>) => items.find((item) => item.email === email)?.members,
@@ -82,6 +81,7 @@ export const useGetDistributionListMembers = (
 	const findCallback = useCallback(
 		(offset: number) => {
 			if (email) {
+				setLoading(true);
 				client
 					.getDistributionListMembers(email, { offset, limit })
 					.then((newMembersPage) => {
@@ -96,6 +96,9 @@ export const useGetDistributionListMembers = (
 							autoHideTimeout: 3000,
 							hideButton: true
 						});
+					})
+					.finally(() => {
+						setLoading(false);
 					});
 			}
 		},
@@ -117,8 +120,9 @@ export const useGetDistributionListMembers = (
 
 	return {
 		members: distributionListMembersPage?.members ?? [],
-		hasMore: distributionListMembersPage?.more ?? false,
-		totalMembers: distributionListMembersPage?.total ?? 0,
-		findMore
+		more: distributionListMembersPage?.more ?? false,
+		total: distributionListMembersPage?.total ?? 0,
+		findMore,
+		loading
 	};
 };

@@ -5,7 +5,7 @@
  */
 
 import { faker } from '@faker-js/faker';
-import { waitFor } from '@testing-library/react';
+import { act, waitFor } from '@testing-library/react';
 import { times } from 'lodash';
 
 import { useGetDistributionListMembers } from './use-get-distribution-list-members';
@@ -31,7 +31,7 @@ describe('Use get distribution list members hook', () => {
 		useDistributionListsStore.getState().setDistributionLists([dl]);
 		const { result } = setupHook(useGetDistributionListMembers, { initialProps: [dl.email] });
 		await waitFor(() => expect(result.current.members).toEqual(members));
-		expect(result.current.totalMembers).toEqual(members.length);
+		expect(result.current.total).toEqual(members.length);
 		expect(handler).toHaveBeenCalled();
 	});
 
@@ -42,7 +42,7 @@ describe('Use get distribution list members hook', () => {
 		useDistributionListsStore.getState().setDistributionLists([dl]);
 		const { result } = setupHook(useGetDistributionListMembers, { initialProps: [dl.email] });
 		await waitFor(() => expect(result.current.members).toEqual(members));
-		expect(result.current.totalMembers).toEqual(members.length);
+		expect(result.current.total).toEqual(members.length);
 		expect(handler).not.toHaveBeenCalled();
 	});
 
@@ -96,7 +96,9 @@ describe('Use get distribution list members hook', () => {
 		});
 		await waitFor(() => expect(result.current.members).toEqual(firstPage));
 		expect(handler).toHaveBeenCalledTimes(1);
-		result.current.findMore();
+		act(() => {
+			result.current.findMore();
+		});
 		await waitFor(() => expect(result.current.members).toEqual([...firstPage, ...secondPage]));
 		expect(handler).toHaveBeenCalledTimes(2);
 	});

@@ -20,9 +20,9 @@ type DLDisplayerControllerProps = {
 
 export const DLDisplayerController = ({ id }: DLDisplayerControllerProps): React.JSX.Element => {
 	const [t] = useTranslation();
-	const distributionList = useGetDistributionList(id);
+	const { distributionList } = useGetDistributionList(id);
 
-	const { members, totalMembers } = useGetDistributionListMembers(
+	const { members, total } = useGetDistributionListMembers(
 		(distributionList?.canRequireMembers && distributionList?.email) || ''
 	);
 
@@ -36,7 +36,7 @@ export const DLDisplayerController = ({ id }: DLDisplayerControllerProps): React
 			{(id && (
 				<DistributionListDisplayer
 					members={members}
-					totalMembers={totalMembers}
+					totalMembers={total}
 					distributionList={distributionList}
 					key={id}
 				/>

@@ -20,6 +20,16 @@ type GetDistributionListMembersHandler = ResponseResolver<
 	SoapResponse<GetDistributionListMembersResponse>
 >;
 
+export const buildGetDistributionListMembersResponse = (
+	members: Array<string> | undefined,
+	limit?: number,
+	more?: boolean
+): GetDistributionListMembersResponse => ({
+	dlm: members?.slice(0, limit).map((member) => ({ _content: member })),
+	more: more ?? false,
+	total: members?.length,
+	_jsns: NAMESPACES.account
+});
 export const registerGetDistributionListMembersHandler = (
 	members?: Array<string>,
 	more?: boolean,
@@ -44,12 +54,11 @@ export const registerGetDistributionListMembersHandler = (
 		return res(
 			ctx.json(
 				buildSoapResponse<GetDistributionListMembersResponse>({
-					GetDistributionListMembersResponse: {
-						dlm: members?.slice(0, limit).map((member) => ({ _content: member })),
-						more: more ?? false,
-						total: members?.length,
-						_jsns: NAMESPACES.account
-					}
+					GetDistributionListMembersResponse: buildGetDistributionListMembersResponse(
+						members,
+						limit,
+						more
+					)
 				})
 			)
 		);

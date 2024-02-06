@@ -42,7 +42,9 @@ export const TESTID_SELECTORS = {
 	displayerHeader: 'displayer-header',
 	accordionItem: 'accordion-item',
 	infoContainer: 'info-container',
-	shimmedListItem: 'shimmed-list-item'
+	shimmedListItem: 'shimmed-list-item',
+	mainList: 'main-list',
+	editDLComponent: 'edit-dl-component'
 };
 
 export const PALETTE = {

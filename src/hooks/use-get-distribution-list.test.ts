@@ -30,7 +30,7 @@ describe('Use get distribution list hook', () => {
 		const { result } = setupHook(useGetDistributionList, {
 			initialProps: [dlDetails.id]
 		});
-		await waitFor(() => expect(result.current).toEqual(dlDetails));
+		await waitFor(() => expect(result.current.distributionList).toEqual(dlDetails));
 		expect(handler).not.toHaveBeenCalled();
 	});
 
@@ -39,7 +39,7 @@ describe('Use get distribution list hook', () => {
 		const { result } = setupHook(useGetDistributionList, {
 			initialProps: [dlDetails.id]
 		});
-		await waitFor(() => expect(result.current).toEqual(dlDetails));
+		await waitFor(() => expect(result.current.distributionList).toEqual(dlDetails));
 		expect(handler).toHaveBeenCalled();
 	});
 
@@ -53,7 +53,7 @@ describe('Use get distribution list hook', () => {
 			const { result } = setupHook(useGetDistributionList, {
 				initialProps: [dlDetails.id]
 			});
-			await waitFor(() => expect(result.current).toEqual(dlDetails));
+			await waitFor(() => expect(result.current.distributionList).toEqual(dlDetails));
 			expect(handler).toHaveBeenCalled();
 		}
 	);
@@ -63,7 +63,7 @@ describe('Use get distribution list hook', () => {
 		const { result, rerender } = setupHook(useGetDistributionList, {
 			initialProps: [dlDetails.id]
 		});
-		await waitFor(() => expect(result.current).toEqual(dlDetails));
+		await waitFor(() => expect(result.current.distributionList).toEqual(dlDetails));
 		expect(handler).toHaveBeenCalledTimes(1);
 		rerender();
 		expect(handler).toHaveBeenCalledTimes(1);

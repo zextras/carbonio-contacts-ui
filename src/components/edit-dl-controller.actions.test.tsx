@@ -8,17 +8,17 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import { act, waitFor } from '@testing-library/react';
 
-import { EditDLControllerComponent } from './edit-dl-controller';
+import { EditDLControllerComponent, EditDLControllerComponentProps } from './edit-dl-controller';
 import { screen, setupTest, within } from '../carbonio-ui-commons/test/test-setup';
 import { NAMESPACES } from '../constants/api';
 import { JEST_MOCKED_ERROR, TESTID_SELECTORS } from '../constants/tests';
+import { DistributionList } from '../model/distribution-list';
 import {
 	BatchDistributionListActionRequest,
 	DistributionListActionRequest
 } from '../network/api/distribution-list-action';
 import { registerDistributionListActionHandler } from '../tests/msw-handlers/distribution-list-action';
 import { registerFullAutocompleteHandler } from '../tests/msw-handlers/full-autocomplete';
-import { registerGetDistributionListMembersHandler } from '../tests/msw-handlers/get-distribution-list-members';
 import {
 	generateDistributionList,
 	generateDistributionListMembersPage,
@@ -27,33 +27,41 @@ import {
 } from '../tests/utils';
 
 beforeEach(() => {
-	registerGetDistributionListMembersHandler([]);
 	spyUseBoardHooks();
+});
+
+const buildProps = (dl: DistributionList): EditDLControllerComponentProps => ({
+	email: dl.email,
+	displayName: dl.displayName,
+	description: dl.description,
+	members: dl.members,
+	owners: dl.owners,
+	loadingOwners: false,
+	loadingMembers: false
 });
 
 describe('EditDLControllerComponent', () => {
 	describe('Actions', () => {
 		describe('Save', () => {
 			it('should be visible', async () => {
-				const dl = generateDistributionList();
-				registerGetDistributionListMembersHandler([faker.internet.email()]);
-				setupTest(<EditDLControllerComponent distributionList={dl} />);
+				const dl = generateDistributionList({ members: generateDistributionListMembersPage([]) });
+				setupTest(<EditDLControllerComponent {...buildProps(dl)} />);
 				await screen.findByText(dl.email);
 				expect(screen.getByRole('button', { name: /save/i })).toBeVisible();
 			});
 
 			it('should be disabled by default', async () => {
 				const dl = generateDistributionList();
-				registerGetDistributionListMembersHandler([faker.internet.email()]);
-				setupTest(<EditDLControllerComponent distributionList={dl} />);
+				setupTest(<EditDLControllerComponent {...buildProps(dl)} />);
 				await screen.findByText(dl.email);
 				expect(screen.getByRole('button', { name: /save/i })).toBeDisabled();
 			});
 
 			it('should become enabled when a new member is added', async () => {
-				const dl = generateDistributionList();
-				registerGetDistributionListMembersHandler([faker.internet.email()]);
-				const { user } = setupTest(<EditDLControllerComponent distributionList={dl} />);
+				const dl = generateDistributionList({
+					members: generateDistributionListMembersPage([faker.internet.email()])
+				});
+				const { user } = setupTest(<EditDLControllerComponent {...buildProps(dl)} />);
 				await user.click(await screen.findByText(/member list/i));
 				await screen.findAllByTestId(TESTID_SELECTORS.membersListItem);
 				const newMember = 'newmember@example.com';
@@ -65,9 +73,10 @@ describe('EditDLControllerComponent', () => {
 			});
 
 			it('should become enabled when a member is removed', async () => {
-				const dl = generateDistributionList();
-				registerGetDistributionListMembersHandler([faker.internet.email()]);
-				const { user } = setupTest(<EditDLControllerComponent distributionList={dl} />);
+				const dl = generateDistributionList({
+					members: generateDistributionListMembersPage([faker.internet.email()])
+				});
+				const { user } = setupTest(<EditDLControllerComponent {...buildProps(dl)} />);
 				await screen.findByText(dl.email);
 				await user.click(screen.getByText(/member list/i));
 				await screen.findAllByTestId(TESTID_SELECTORS.membersListItem);
@@ -77,7 +86,7 @@ describe('EditDLControllerComponent', () => {
 
 			it('should become enabled when the display name change', async () => {
 				const dl = generateDistributionList();
-				const { user } = setupTest(<EditDLControllerComponent distributionList={dl} />);
+				const { user } = setupTest(<EditDLControllerComponent {...buildProps(dl)} />);
 				await screen.findByText(dl.email);
 				await user.type(screen.getByRole('textbox', { name: /name/i }), 'new display name');
 				await waitFor(() => expect(screen.getByRole('button', { name: /save/i })).toBeEnabled());
@@ -85,7 +94,7 @@ describe('EditDLControllerComponent', () => {
 
 			it('should become enabled when the description change', async () => {
 				const dl = generateDistributionList();
-				const { user } = setupTest(<EditDLControllerComponent distributionList={dl} />);
+				const { user } = setupTest(<EditDLControllerComponent {...buildProps(dl)} />);
 				await screen.findByText(dl.email);
 				await user.type(screen.getByRole('textbox', { name: /description/i }), 'new description');
 				await waitFor(() => expect(screen.getByRole('button', { name: /save/i })).toBeEnabled());
@@ -93,9 +102,10 @@ describe('EditDLControllerComponent', () => {
 
 			it('should become disabled when there are no differences from the initial state, while changing members only', async () => {
 				const initialMember = faker.internet.email();
-				registerGetDistributionListMembersHandler([faker.internet.email(), initialMember]);
-				const dl = generateDistributionList();
-				const { user } = setupTest(<EditDLControllerComponent distributionList={dl} />);
+				const dl = generateDistributionList({
+					members: generateDistributionListMembersPage([faker.internet.email(), initialMember])
+				});
+				const { user } = setupTest(<EditDLControllerComponent {...buildProps(dl)} />);
 				await screen.findByText(dl.email);
 				await user.click(screen.getByText(/member list/i));
 				const listItems = await screen.findAllByTestId(TESTID_SELECTORS.membersListItem);
@@ -113,7 +123,7 @@ describe('EditDLControllerComponent', () => {
 
 			it('should become disabled when there are no differences with the initial state, while editing the details only', async () => {
 				const dl = generateDistributionList({ description: '' });
-				const { user } = setupTest(<EditDLControllerComponent distributionList={dl} />);
+				const { user } = setupTest(<EditDLControllerComponent {...buildProps(dl)} />);
 				await screen.findByText(dl.email);
 				const saveButton = screen.getByRole('button', { name: /save/i });
 				const nameInput = screen.getByRole('textbox', { name: /name/i });
@@ -131,7 +141,7 @@ describe('EditDLControllerComponent', () => {
 
 			it('should become disabled if there is an error', async () => {
 				const dl = generateDistributionList({ description: '' });
-				const { user } = setupTest(<EditDLControllerComponent distributionList={dl} />);
+				const { user } = setupTest(<EditDLControllerComponent {...buildProps(dl)} />);
 				await screen.findByText(dl.email);
 				const saveButton = screen.getByRole('button', { name: /save/i });
 				await user.type(screen.getByRole('textbox', { name: /description/i }), faker.word.words());
@@ -155,7 +165,7 @@ describe('EditDLControllerComponent', () => {
 					displayName: updatedState.displayName,
 					membersToAdd: updatedMembers
 				});
-				const { user } = setupTest(<EditDLControllerComponent distributionList={initialState} />);
+				const { user } = setupTest(<EditDLControllerComponent {...buildProps(initialState)} />);
 				await screen.findByText(initialState.email);
 				const nameInput = screen.getByRole('textbox', { name: /name/i });
 				await user.clear(nameInput);
@@ -179,7 +189,7 @@ describe('EditDLControllerComponent', () => {
 					members: generateDistributionListMembersPage(membersToRemove)
 				});
 				const handler = registerDistributionListActionHandler({ membersToAdd: [] });
-				const { user } = setupTest(<EditDLControllerComponent distributionList={dl} />);
+				const { user } = setupTest(<EditDLControllerComponent {...buildProps(dl)} />);
 				await screen.findByText(dl.email);
 				await user.click(screen.getByText(/member list/i));
 				await screen.findByTestId(TESTID_SELECTORS.membersListItem);
@@ -241,27 +251,26 @@ describe('EditDLControllerComponent', () => {
 
 			it('should show a success snackbar when then API return a success result', async () => {
 				const members = [faker.internet.email()];
-				registerGetDistributionListMembersHandler(members);
-				registerDistributionListActionHandler({});
-				const dl = generateDistributionList();
-				const { user } = setupTest(<EditDLControllerComponent distributionList={dl} />);
+				const dl = generateDistributionList({
+					members: generateDistributionListMembersPage(members)
+				});
+				registerDistributionListActionHandler({ membersToRemove: members });
+				const { user } = setupTest(<EditDLControllerComponent {...buildProps(dl)} />);
 				await screen.findByText(dl.email);
 				await user.click(screen.getByText(/member list/i));
 				await screen.findAllByTestId(TESTID_SELECTORS.membersListItem);
 				await user.click(screen.getByRole('button', { name: /remove/i }));
-				const button = screen.getByRole('button', { name: /save/i });
-				await user.click(button);
-				expect(
-					await screen.findByText(`"${dl.displayName}" distribution list edits saved successfully`)
-				).toBeVisible();
+				await user.click(screen.getByRole('button', { name: /save/i }));
+				expect(await screen.findByText(/edits saved successfully/i)).toBeVisible();
 			});
 
 			it('should cause a error snackbar to appear when then API return an error result', async () => {
 				const members = [faker.internet.email()];
-				registerGetDistributionListMembersHandler(members);
+				const dl = generateDistributionList({
+					members: generateDistributionListMembersPage(members)
+				});
 				registerDistributionListActionHandler({}, [JEST_MOCKED_ERROR]);
-				const dl = generateDistributionList();
-				const { user } = setupTest(<EditDLControllerComponent distributionList={dl} />);
+				const { user } = setupTest(<EditDLControllerComponent {...buildProps(dl)} />);
 				await screen.findByText(dl.email);
 				await user.click(screen.getByText(/member list/i));
 				await screen.findAllByTestId(TESTID_SELECTORS.membersListItem);
@@ -274,9 +283,10 @@ describe('EditDLControllerComponent', () => {
 
 		describe('Discard', () => {
 			it('should be enabled by default', async () => {
-				registerGetDistributionListMembersHandler([faker.internet.email()]);
-				const dl = generateDistributionList();
-				setupTest(<EditDLControllerComponent distributionList={dl} />);
+				const dl = generateDistributionList({
+					members: generateDistributionListMembersPage([faker.internet.email()])
+				});
+				setupTest(<EditDLControllerComponent {...buildProps(dl)} />);
 				await screen.findByText(dl.email);
 				const discardButton = screen.getByRole('button', { name: /discard/i });
 				expect(discardButton).toBeVisible();
@@ -292,7 +302,7 @@ describe('EditDLControllerComponent', () => {
 					members: generateDistributionListMembersPage(membersToRemove),
 					description: faker.lorem.sentence()
 				});
-				const { user } = setupTest(<EditDLControllerComponent distributionList={dl} />);
+				const { user } = setupTest(<EditDLControllerComponent {...buildProps(dl)} />);
 				await screen.findByText(dl.email);
 				await user.click(screen.getByText(/member list/i));
 				await screen.findByTestId(TESTID_SELECTORS.membersListItem);
@@ -344,7 +354,7 @@ describe('EditDLControllerComponent', () => {
 					members: generateDistributionListMembersPage([faker.internet.email()]),
 					description: faker.lorem.sentence()
 				});
-				const { user } = setupTest(<EditDLControllerComponent distributionList={dl} />);
+				const { user } = setupTest(<EditDLControllerComponent {...buildProps(dl)} />);
 				await screen.findByText(dl.email);
 				await user.click(screen.getByText(/member list/i));
 				await screen.findByTestId(TESTID_SELECTORS.membersListItem);
@@ -362,9 +372,8 @@ describe('EditDLControllerComponent', () => {
 			});
 
 			it('should make save button become disabled', async () => {
-				registerGetDistributionListMembersHandler([faker.internet.email()]);
 				const dl = generateDistributionList();
-				const { user } = setupTest(<EditDLControllerComponent distributionList={dl} />);
+				const { user } = setupTest(<EditDLControllerComponent {...buildProps(dl)} />);
 				await screen.findByText(dl.email);
 				await user.type(screen.getByRole('textbox', { name: /name/i }), 'something');
 				await user.click(screen.getByRole('button', { name: /discard/i }));
@@ -380,7 +389,7 @@ describe('EditDLControllerComponent', () => {
 					members: generateDistributionListMembersPage([]),
 					description: faker.lorem.sentence()
 				});
-				const { user } = setupTest(<EditDLControllerComponent distributionList={dl} />);
+				const { user } = setupTest(<EditDLControllerComponent {...buildProps(dl)} />);
 				const nameInput = await screen.findByRole('textbox', { name: /name/i });
 				await user.clear(nameInput);
 				await user.type(nameInput, dlData.displayName);
@@ -398,7 +407,7 @@ describe('EditDLControllerComponent', () => {
 					members: generateDistributionListMembersPage([faker.internet.email()]),
 					description: faker.lorem.sentence()
 				});
-				const { user } = setupTest(<EditDLControllerComponent distributionList={dl} />);
+				const { user } = setupTest(<EditDLControllerComponent {...buildProps(dl)} />);
 				await screen.findByText(dl.email);
 				await user.click(screen.getByText(/member list/i));
 				await screen.findByTestId(TESTID_SELECTORS.membersListItem);
@@ -434,7 +443,7 @@ describe('EditDLControllerComponent', () => {
 				displayName: updatedState.displayName,
 				membersToAdd: updatedMembers
 			});
-			const { user } = setupTest(<EditDLControllerComponent distributionList={initialState} />);
+			const { user } = setupTest(<EditDLControllerComponent {...buildProps(initialState)} />);
 			await screen.findByText(initialState.email);
 			let nameInput = screen.getByRole('textbox', { name: /name/i });
 			await user.clear(nameInput);
