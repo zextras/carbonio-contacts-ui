@@ -5,7 +5,7 @@
  */
 import { useCallback, useMemo } from 'react';
 
-import { addBoard } from '@zextras/carbonio-shell-ui';
+import { addBoard, getBoardById, reopenBoards, setCurrentBoard } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
 import { UIAction } from './types';
@@ -19,12 +19,20 @@ export const useActionEditDL = (): EditDLAction => {
 
 	const execute = useCallback<EditDLAction['execute']>((distributionList) => {
 		if (distributionList !== undefined) {
-			addBoard({
-				context: distributionList,
-				icon: 'DistributionListOutline',
-				title: distributionList.displayName || distributionList.email,
-				url: EDIT_DL_BOARD_ID
-			});
+			const boardId = `${EDIT_DL_BOARD_ID}-${distributionList.id}`;
+			const board = getBoardById(boardId);
+			if (board) {
+				setCurrentBoard(board.id);
+				reopenBoards();
+			} else {
+				addBoard({
+					context: distributionList,
+					icon: 'DistributionListOutline',
+					title: distributionList.displayName || distributionList.email,
+					id: boardId,
+					url: EDIT_DL_BOARD_ID
+				});
+			}
 		}
 	}, []);
 

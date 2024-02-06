@@ -22,12 +22,14 @@ const buildProps = ({
 	totalMembers = 0,
 	onRemoveMember = jest.fn(),
 	onAddMembers = jest.fn(),
+	resetRef = React.createRef(),
 	...rest
 }: Partial<EditDLComponentProps> = {}): EditDLComponentProps => ({
 	members,
 	totalMembers,
 	onRemoveMember,
 	onAddMembers,
+	resetRef,
 	...rest
 });
 

@@ -10,6 +10,7 @@ import { times } from 'lodash';
 import { useActionEditDL } from './edit-dl';
 import { UIAction } from './types';
 import { setupHook } from '../carbonio-ui-commons/test/test-setup';
+import { EDIT_DL_BOARD_ID } from '../constants';
 import { generateDistributionList } from '../tests/utils';
 
 describe('useActionEditDL', () => {
@@ -39,6 +40,7 @@ describe('useActionEditDL', () => {
 			title: dl.displayName,
 			icon: 'DistributionListOutline',
 			context: dl,
+			id: `${EDIT_DL_BOARD_ID}-${dl.id}`,
 			url: expect.anything()
 		});
 	});
@@ -55,7 +57,34 @@ describe('useActionEditDL', () => {
 			title: dl.email,
 			icon: 'DistributionListOutline',
 			context: dl,
+			id: `${EDIT_DL_BOARD_ID}-${dl.id}`,
 			url: expect.anything()
 		});
+	});
+
+	it('should not open a new board, but reopen the existing tab, if the user is already editing the distribution list', async () => {
+		const addBoardFn = jest.spyOn(shell, 'addBoard');
+		const dl = generateDistributionList();
+		const boardId = `${EDIT_DL_BOARD_ID}-${dl.id}`;
+		jest.spyOn(shell, 'getBoardById').mockReturnValue({
+			id: boardId,
+			url: EDIT_DL_BOARD_ID,
+			app: '',
+			icon: '',
+			title: ''
+		});
+		const setCurrentBoardFn = jest.spyOn(shell, 'setCurrentBoard');
+		const reopenBoardsFn = jest.spyOn(shell, 'reopenBoards');
+
+		const { result } = setupHook(useActionEditDL);
+		const action = result.current;
+		action.execute(dl);
+
+		expect(addBoardFn).not.toHaveBeenCalled();
+		expect(setCurrentBoardFn).toHaveBeenCalledTimes(1);
+		expect(setCurrentBoardFn).toHaveBeenCalledWith<Parameters<typeof shell.setCurrentBoard>>(
+			boardId
+		);
+		expect(reopenBoardsFn).toHaveBeenCalledTimes(1);
 	});
 });

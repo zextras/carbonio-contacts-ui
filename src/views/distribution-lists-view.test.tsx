@@ -37,7 +37,10 @@ import {
 	GetDistributionListMembersResponse
 } from '../network/api/get-distribution-list-members';
 import { registerGetAccountDistributionListsHandler } from '../tests/msw-handlers/get-account-distribution-lists';
-import { registerGetDistributionListHandler } from '../tests/msw-handlers/get-distribution-list';
+import {
+	buildGetDistributionListResponse,
+	registerGetDistributionListHandler
+} from '../tests/msw-handlers/get-distribution-list';
 import { registerGetDistributionListMembersHandler } from '../tests/msw-handlers/get-distribution-list-members';
 import {
 	buildSoapError,
@@ -187,6 +190,9 @@ describe('Distribution Lists View', () => {
 	});
 
 	describe('Displayer', () => {
+		beforeEach(() => {
+			registerGetDistributionListMembersHandler([]);
+		});
 		it('should open the displayer when click on a distribution list item', async () => {
 			const dl = generateDistributionList({ isMember: true });
 			registerGetAccountDistributionListsHandler([dl]);
@@ -264,21 +270,7 @@ describe('Distribution Lists View', () => {
 				return res(
 					ctx.json(
 						buildSoapResponse<GetDistributionListResponse>({
-							GetDistributionListResponse: {
-								_jsns: NAMESPACES.account,
-								dl: [
-									{
-										id: resData.id,
-										name: resData.email,
-										isOwner: resData.isOwner,
-										owners: resData.owners?.map((owner) => ({ owner: [owner] })),
-										_attrs: {
-											displayName: resData.displayName,
-											description: resData.description
-										}
-									}
-								]
-							}
+							GetDistributionListResponse: buildGetDistributionListResponse(resData)
 						})
 					)
 				);
@@ -317,7 +309,9 @@ describe('Distribution Lists View', () => {
 					data = dl2Members;
 				}
 				if (data === undefined) {
-					return res(ctx.json<ErrorSoapResponse>(buildSoapError('DL not found')));
+					return res(
+						ctx.json<ErrorSoapResponse>(buildSoapError('DL not found while loading members'))
+					);
 				}
 				return res(
 					ctx.json(
@@ -356,6 +350,55 @@ describe('Distribution Lists View', () => {
 			expect(await screen.findByText(dl2Members[0])).toBeVisible();
 			expect(screen.getByText(/member list 10/i)).toBeVisible();
 			expect(screen.queryByText(dl1Members[0])).not.toBeInTheDocument();
+		});
+
+		it('should reset tabs and show details when changing active item', async () => {
+			const dl1 = generateDistributionList({ isMember: true, description: 'description 1' });
+			const dl2 = generateDistributionList({ isMember: true, description: 'description 2' });
+			registerGetAccountDistributionListsHandler([dl1, dl2]);
+			registerGetDistributionListHandler(dl1).mockImplementation(async (req, res, ctx) => {
+				const {
+					Body: {
+						GetDistributionListRequest: {
+							dl: { _content }
+						}
+					}
+				} = await req.json<{
+					Body: { GetDistributionListRequest: GetDistributionListRequest };
+				}>();
+
+				const response = _content === dl1.id || _content === dl1.email ? dl1 : dl2;
+				return res(
+					ctx.json(
+						buildSoapResponse({
+							GetDistributionListResponse: buildGetDistributionListResponse(response)
+						})
+					)
+				);
+			});
+
+			const { user } = setupTest(
+				<Route path={`${ROUTES.mainRoute}${ROUTES.distributionLists}`}>
+					<DistributionListsView />
+				</Route>,
+				{
+					initialEntries: [
+						`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.member}`
+					]
+				}
+			);
+
+			await user.click(await screen.findByText(dl1.displayName));
+			await screen.findByText(dl1.description as string);
+			// navigate to a different tab
+			await user.click(screen.getByText(/manager list/i));
+			await waitFor(() =>
+				expect(screen.queryByText(dl1.description as string)).not.toBeInTheDocument()
+			);
+			// change active item
+			await user.click(screen.getByText(dl2.displayName));
+			// description inside details tab is visible for dl2. Tab has been reset
+			expect(await screen.findByText(dl2.description as string)).toBeVisible();
 		});
 	});
 });

@@ -3,7 +3,14 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+	useCallback,
+	useEffect,
+	useImperativeHandle,
+	useMemo,
+	useRef,
+	useState
+} from 'react';
 
 import { type ChipAction, Container, Input, ListV2, Row } from '@zextras/carbonio-design-system';
 import { reduce, uniqBy } from 'lodash';
@@ -19,12 +26,15 @@ import type { ContactInputValue } from '../legacy/types/integrations';
 
 const DUPLICATED_MEMBER_ACTION_ID = 'duplicated';
 
+export type ResetMembers = { reset: () => void };
+
 export type EditDLComponentProps = {
 	totalMembers: number;
 	members: Array<string>;
 	onRemoveMember: (member: string) => void;
 	onAddMembers: (members: Array<string>) => void;
 	loading?: boolean;
+	resetRef: React.RefObject<ResetMembers>;
 };
 
 const createDuplicatedMemberAction = (): ChipAction => ({
@@ -34,16 +44,31 @@ const createDuplicatedMemberAction = (): ChipAction => ({
 	icon: 'AlertCircle'
 });
 
-export const EditDLMembersComponent: FC<EditDLComponentProps> = ({
+export const EditDLMembersComponent = ({
 	members,
 	totalMembers,
 	onRemoveMember,
 	onAddMembers,
-	loading
-}) => {
+	loading,
+	resetRef
+}: EditDLComponentProps): React.JSX.Element => {
 	const [t] = useTranslation();
 	const [contactInputValue, setContactInputValue] = useState<ContactInputValue>([]);
 	const [searchValue, setSearchValue] = useState('');
+	const contactInputInputRef = useRef<HTMLInputElement>(null);
+
+	useImperativeHandle(
+		resetRef,
+		() => ({
+			reset: (): void => {
+				setContactInputValue([]);
+				if (contactInputInputRef.current) {
+					contactInputInputRef.current.value = '';
+				}
+			}
+		}),
+		[]
+	);
 
 	const memberItems = useMemo(
 		() =>
@@ -222,6 +247,7 @@ export const EditDLMembersComponent: FC<EditDLComponentProps> = ({
 					chipDisplayName={CHIP_DISPLAY_NAME_VALUES.email}
 					description={contactInputErrorDescription}
 					hasError={isOnlyInvalidContacts}
+					inputRef={contactInputInputRef}
 				/>
 			</Row>
 			<Input
