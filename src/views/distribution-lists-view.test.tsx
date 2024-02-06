@@ -210,9 +210,12 @@ describe('Distribution Lists View', () => {
 			);
 
 			await user.click(await screen.findByText(dl.displayName));
-			const displayer = screen.getByTestId(TESTID_SELECTORS.displayer);
-			await within(displayer).findAllByTestId(TESTID_SELECTORS.icons.distributionList);
-			expect(await within(displayer).findAllByText(dl.displayName)).toHaveLength(2);
+			await within(screen.getByTestId(TESTID_SELECTORS.displayer)).findAllByTestId(
+				TESTID_SELECTORS.icons.distributionList
+			);
+			expect(
+				await within(screen.getByTestId(TESTID_SELECTORS.displayer)).findAllByText(dl.displayName)
+			).toHaveLength(2);
 		});
 
 		it('should close the displayer when click on close', async () => {

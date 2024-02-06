@@ -20,7 +20,7 @@ export const useGetDistributionList = (id: string | undefined): DistributionList
 	const { distributionLists, upsertDistributionList } = useDistributionListsStore();
 
 	const storedItem = useMemo(
-		() => distributionLists.find((dl): dl is DistributionList => dl.id === id),
+		() => distributionLists?.find((dl): dl is DistributionList => dl.id === id),
 		[distributionLists, id]
 	);
 	const shouldLoadData = useMemo(() => {

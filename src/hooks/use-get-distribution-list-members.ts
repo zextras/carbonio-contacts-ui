@@ -32,7 +32,7 @@ export const useGetDistributionListMembers = (
 	);
 
 	const storedDistributionListMembersPage = useMemo(
-		() => findStoredMembersPage(distributionLists),
+		() => distributionLists && findStoredMembersPage(distributionLists),
 		[distributionLists, findStoredMembersPage]
 	);
 
@@ -50,9 +50,9 @@ export const useGetDistributionListMembers = (
 					.getDistributionListMembers(email, { offset, limit })
 					.then(({ total, members, more }) => {
 						offsetRef.current += members.length;
+						const storedLists = useDistributionListsStore.getState().distributionLists;
 						const previousMembers =
-							findStoredMembersPage(useDistributionListsStore.getState().distributionLists)
-								?.members ?? [];
+							(storedLists && findStoredMembersPage(storedLists)?.members) ?? [];
 						upsertDistributionList({
 							email,
 							members: {

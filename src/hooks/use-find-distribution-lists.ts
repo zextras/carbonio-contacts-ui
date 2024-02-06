@@ -24,7 +24,8 @@ export const useFindDistributionLists = ({
 	const createSnackbar = useSnackbar();
 	const { distributionLists, setDistributionLists } = useDistributionListsStore();
 	const shouldLoadData = useMemo(
-		() => distributionLists.some((item) => item.id === undefined),
+		() =>
+			distributionLists === undefined || distributionLists.some((item) => item.id === undefined),
 		[distributionLists]
 	);
 
