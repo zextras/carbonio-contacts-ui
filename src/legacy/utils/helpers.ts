@@ -4,8 +4,9 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { Folder, FOLDERS } from '@zextras/carbonio-shell-ui';
-import { cloneDeep, filter, find, forEach, map, merge, reduce, reject, some } from 'lodash';
 import type { TFunction } from 'i18next';
+import { cloneDeep, filter, find, forEach, map, merge, reduce, reject, some } from 'lodash';
+
 import { Contact, ContactsFolder } from '../types/contact';
 import { ContactsSlice, FoldersSlice } from '../types/store';
 

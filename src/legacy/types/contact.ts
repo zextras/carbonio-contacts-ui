@@ -52,18 +52,6 @@ export type ContactEmailMap = { [key: string]: ContactEmail };
 export type ContactPhoneMap = { [key: string]: ContactPhone };
 export type ContactUrlMap = { [key: string]: ContactUrl };
 
-export type AccordionFolder = {
-	id: string;
-	label: string;
-	level?: number;
-	items: AccordionFolder[];
-	view: string;
-	itemsCount: number;
-	parent: string;
-	path: string;
-	all: any;
-	onClick: any;
-};
 export type ContactsFolder = {
 	items: ContactsFolder[] | [];
 	/** Internal UUID */ _id?: string;

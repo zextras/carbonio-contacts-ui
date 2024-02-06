@@ -4,8 +4,9 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { find } from 'lodash';
-import { FoldersSlice } from '../../types/store';
+
 import { ContactsFolder } from '../../types/contact';
+import { FoldersSlice } from '../../types/store';
 
 export function selectFolder(state: { folders: FoldersSlice }, id: string): ContactsFolder {
 	return find(state.folders.folders, (item) => item.id === id) as ContactsFolder;
