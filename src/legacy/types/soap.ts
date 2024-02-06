@@ -201,6 +201,7 @@ export type GetFolderActionRequest = {
 
 export type GetFolderActionResponse = {
 	folder: Array<ISoapFolderObj>;
+	_jsns: string;
 };
 
 export type FolderActionRequest = {

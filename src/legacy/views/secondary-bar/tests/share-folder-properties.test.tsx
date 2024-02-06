@@ -76,7 +76,8 @@ describe('share-folder-properties', () => {
 						]
 					}
 				}
-			]
+			],
+			_jsns: 'urn:zimbraMail'
 		};
 
 		createAPIInterceptor<GetFolderActionRequest, GetFolderActionResponse>(

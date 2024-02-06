@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { FC, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 import {
 	ButtonOld as Button,
@@ -29,6 +29,7 @@ import {
 	GranteeProps,
 	ShareFolderPropertiesProps
 } from '../../../../types/contact';
+import { GetFolderActionResponse } from '../../../../types/soap';
 import { ShareFolderRoleOptions, findLabel } from '../../commons/utils';
 
 const HoverChip = styled(Chip)<{ hovered?: boolean }>`
@@ -87,15 +88,14 @@ const Actions = ({
 			})
 		).then((res) => {
 			if (res.type.includes('fulfilled')) {
-				createSnackbar &&
-					createSnackbar({
-						key: `resend-${folder.id}`,
-						replace: true,
-						type: 'info',
-						label: t('snackbar.share_resend', 'Share invite resent'),
-						autoHideTimeout: 2000,
-						hideButton: true
-					});
+				createSnackbar({
+					key: `resend-${folder.id}`,
+					replace: true,
+					type: 'info',
+					label: t('snackbar.share_resend', 'Share invite resent'),
+					autoHideTimeout: 2000,
+					hideButton: true
+				});
 			}
 		});
 	}, [accounts, dispatch, folder, t, grant.d, createSnackbar]);
@@ -137,7 +137,12 @@ const Actions = ({
 	);
 };
 
-const Grantee: FC<GranteeProps> = ({ grant, folder, setActiveModal, shareFolderRoleOptions }) => {
+const Grantee = ({
+	grant,
+	folder,
+	setActiveModal,
+	shareFolderRoleOptions
+}: GranteeProps): React.JSX.Element => {
 	const [hovered, setHovered] = useState(false);
 	const onMouseEnter = useCallback(() => {
 		setHovered(true);
@@ -177,9 +182,10 @@ export const ShareFolderProperties = ({
 		soapFetch('GetFolder', {
 			_jsns: 'urn:zimbraMail',
 			folder: { l: folder.id }
-		}).then((res: any): void => {
-			if (res?.folder) {
-				setGrant(res.folder[0].acl.grant);
+		}).then((res): void => {
+			const response = res as GetFolderActionResponse;
+			if (res && response?.folder && response?.folder) {
+				setGrant(response.folder[0].acl.grant);
 			}
 		});
 	}, [folder, folder.id]);
