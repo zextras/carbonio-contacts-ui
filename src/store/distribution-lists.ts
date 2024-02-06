@@ -30,18 +30,20 @@ export const useDistributionListsStore = create<State & Actions>()((set, get) =>
 		set({ distributionLists: newItems });
 	},
 	upsertDistributionList: (item): void => {
-		const current = get().distributionLists ?? [];
-		const idx = current.findIndex((dl) => dl.id === item.id || dl.email === item.email);
-		// TODO use toSpliced once available
-		const newDistributionLists = [...current];
-		newDistributionLists.splice(idx, idx === -1 ? 0 : 1, {
-			...newDistributionLists[idx],
-			...item
-		});
-		// Keep array sorted by "name" (display name in fallback to email) ascending
-		set({
-			distributionLists: sortBy(newDistributionLists, (dl) => toLower(dl.displayName || dl.email))
-		});
+		const current = get().distributionLists;
+		if (current !== undefined) {
+			const idx = current.findIndex((dl) => dl.id === item.id || dl.email === item.email);
+			// TODO use toSpliced once available
+			const newDistributionLists = [...current];
+			newDistributionLists.splice(idx, idx === -1 ? 0 : 1, {
+				...newDistributionLists[idx],
+				...item
+			});
+			// Keep array sorted by "name" (display name in fallback to email) ascending
+			set({
+				distributionLists: sortBy(newDistributionLists, (dl) => toLower(dl.displayName || dl.email))
+			});
+		}
 	},
 	reset: (): void => {
 		set(initialState);

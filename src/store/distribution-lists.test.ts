@@ -125,9 +125,9 @@ describe('Distribution lists store', () => {
 		]);
 	});
 
-	it('should create list on upsert if no list has been set', () => {
+	it('should not create list on upsert if no list has been set yet', () => {
 		const dl = generateDistributionList();
 		useDistributionListsStore.getState().upsertDistributionList(dl);
-		expect(useDistributionListsStore.getState().distributionLists).toStrictEqual([dl]);
+		expect(useDistributionListsStore.getState().distributionLists).toBeUndefined();
 	});
 });

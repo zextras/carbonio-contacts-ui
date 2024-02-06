@@ -23,7 +23,7 @@ export const DLDisplayerController = ({ id }: DLDisplayerControllerProps): React
 	const distributionList = useGetDistributionList(id);
 
 	const { members, totalMembers } = useGetDistributionListMembers(
-		distributionList?.canRequireMembers ? distributionList?.email ?? '' : ''
+		(distributionList?.canRequireMembers && distributionList?.email) || ''
 	);
 
 	return (

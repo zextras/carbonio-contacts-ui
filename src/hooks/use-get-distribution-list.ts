@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { useSnackbar } from '@zextras/carbonio-design-system';
 import { some } from 'lodash';
@@ -23,6 +23,9 @@ export const useGetDistributionList = (id: string | undefined): DistributionList
 		() => distributionLists?.find((dl): dl is DistributionList => dl.id === id),
 		[distributionLists, id]
 	);
+
+	const [distributionList, setDistributionList] = useState<DistributionList | undefined>();
+
 	const shouldLoadData = useMemo(() => {
 		const requiredFields: Array<OptionalPropertyOf<StoredDistributionList>> = [
 			'displayName',
@@ -38,10 +41,12 @@ export const useGetDistributionList = (id: string | undefined): DistributionList
 
 	useEffect(() => {
 		if (shouldLoadData && id !== undefined) {
+			setDistributionList(undefined);
 			client
 				.getDistributionList({ id })
 				.then((dl) => {
 					if (dl) {
+						setDistributionList(dl);
 						upsertDistributionList(dl);
 					}
 				})
@@ -58,5 +63,5 @@ export const useGetDistributionList = (id: string | undefined): DistributionList
 		}
 	}, [createSnackbar, id, shouldLoadData, t, upsertDistributionList]);
 
-	return storedItem;
+	return storedItem ?? distributionList;
 };
