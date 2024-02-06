@@ -5,6 +5,7 @@
  */
 import React, { lazy, Suspense, useEffect } from 'react';
 
+import { ModalManager } from '@zextras/carbonio-design-system';
 import {
 	ACTION_TYPES,
 	addBoard,
@@ -67,14 +68,18 @@ const LazyEditContactGroupBoardView = lazy(
 const AppView = (): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
 		<StoreProvider>
-			<LazyAppView />
+			<ModalManager>
+				<LazyAppView />
+			</ModalManager>
 		</StoreProvider>
 	</Suspense>
 );
 
 const SecondaryBarView = (props: SecondaryBarComponentProps): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
-		<LazySecondaryBarView {...props} />
+		<ModalManager>
+			<LazySecondaryBarView {...props} />
+		</ModalManager>
 	</Suspense>
 );
 
@@ -87,27 +92,35 @@ const AppViewV2 = (): React.JSX.Element => (
 const BoardView = (props: EditViewProps): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
 		<StoreProvider>
-			<LazyBoardView {...props} />
+			<ModalManager>
+				<LazyBoardView {...props} />
+			</ModalManager>
 		</StoreProvider>
 	</Suspense>
 );
 
 const NewContactGroupBoardView = (): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
-		<LazyNewContactGroupBoardView />
+		<ModalManager>
+			<LazyNewContactGroupBoardView />
+		</ModalManager>
 	</Suspense>
 );
 
 const EditContactGroupBoardView = (): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
-		<LazyEditContactGroupBoardView />
+		<ModalManager>
+			<LazyEditContactGroupBoardView />
+		</ModalManager>
 	</Suspense>
 );
 
 const SettingsView = (): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
 		<StoreProvider>
-			<LazySettingsView />
+			<ModalManager>
+				<LazySettingsView />
+			</ModalManager>
 		</StoreProvider>
 	</Suspense>
 );
@@ -115,7 +128,9 @@ const SettingsView = (): React.JSX.Element => (
 const SearchView = (props: SearchViewProps): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
 		<StoreProvider>
-			<LazySearchView {...props} />
+			<ModalManager>
+				<LazySearchView {...props} />
+			</ModalManager>
 		</StoreProvider>
 	</Suspense>
 );
@@ -123,7 +138,9 @@ const SearchView = (props: SearchViewProps): React.JSX.Element => (
 const SidebarView = (props: SidebarProps): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
 		<StoreProvider>
-			<SidebarItems {...props} />
+			<ModalManager>
+				<SidebarItems {...props} />
+			</ModalManager>
 		</StoreProvider>
 	</Suspense>
 );
