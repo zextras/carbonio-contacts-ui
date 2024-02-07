@@ -3,10 +3,12 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { Dispatch } from '@reduxjs/toolkit';
 import React, { useMemo, useContext, ReactElement, FC, SyntheticEvent } from 'react';
+
+import { Dispatch } from '@reduxjs/toolkit';
 import { Container, Dropdown, IconButton, Padding, Divider } from '@zextras/carbonio-design-system';
 import { map, noop } from 'lodash';
+
 import { ActionsContext } from '../../ui-actions/actions-context';
 
 interface SelectPanelActionsProps {
@@ -69,6 +71,7 @@ const SelectPanelActions: FC<SelectPanelActionsProps> = ({ deselectAll }): React
 						data-testid="secondary-actions-dropdown"
 						items={map(secondaryActions, (action) => ({
 							id: action.label,
+							key: action.id,
 							icon: action.icon,
 							label: action.label,
 							onClick: (ev: React.SyntheticEvent<HTMLElement> | KeyboardEvent): void => {

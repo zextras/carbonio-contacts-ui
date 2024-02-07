@@ -14,6 +14,7 @@ import {
 	isNil,
 	filter
 } from 'lodash';
+
 import {
 	Contact,
 	ContactAddress,
