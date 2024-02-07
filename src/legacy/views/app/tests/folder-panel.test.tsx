@@ -5,6 +5,7 @@
  */
 import React from 'react';
 
+import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 import { forEach } from 'lodash';
 import { Route } from 'react-router-dom';
@@ -53,7 +54,7 @@ const mockMailToAction = (): void => {
 describe('Folder panel', () => {
 	it('should render the component', () => {
 		const folder = FOLDERS_DESCRIPTORS.contacts;
-		const contact = buildContact();
+		const contact = buildContact({ lastName: faker.string.uuid() });
 		const state = generateState({
 			folders: [
 				{
@@ -112,7 +113,7 @@ describe('Folder panel', () => {
 					assertion: DisplayAssertionType;
 				}) => {
 					mockMailToAction();
-					const contact = buildContact();
+					const contact = buildContact({ lastName: faker.string.uuid() });
 					const state = generateState({
 						folders: [
 							{
@@ -191,7 +192,7 @@ describe('Folder panel', () => {
 					assertion: DisplayAssertionType;
 				}) => {
 					mockMailToAction();
-					const contact = buildContact();
+					const contact = buildContact({ lastName: faker.string.uuid() });
 					const state = generateState({
 						folders: [
 							{
