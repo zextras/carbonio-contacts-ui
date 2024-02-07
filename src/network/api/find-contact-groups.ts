@@ -39,7 +39,7 @@ export const findContactGroups = (
 					offset,
 					sortBy: 'nameAsc',
 					types: 'contact',
-					query: '#type:group in:contacts'
+					query: '(#type:group not is:local) or (#type:group is:local)'
 				}
 			},
 			Header: {
