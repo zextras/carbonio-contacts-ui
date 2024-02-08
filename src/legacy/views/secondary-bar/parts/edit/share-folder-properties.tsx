@@ -184,7 +184,7 @@ export const ShareFolderProperties = ({
 			_jsns: 'urn:zimbraMail',
 			folder: { l: folder.id }
 		}).then((response): void => {
-			if (response && response?.folder && response?.folder) {
+			if (response && response?.folder) {
 				setGrant(response.folder[0].acl.grant);
 			}
 		});
