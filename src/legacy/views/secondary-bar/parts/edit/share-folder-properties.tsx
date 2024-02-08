@@ -14,7 +14,7 @@ import {
 	Tooltip,
 	useSnackbar
 } from '@zextras/carbonio-design-system';
-import { soapFetch, useUserAccounts } from '@zextras/carbonio-shell-ui';
+import { ErrorSoapBodyResponse, soapFetch, useUserAccounts } from '@zextras/carbonio-shell-ui';
 import { map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
@@ -172,6 +172,7 @@ export const ShareFolderProperties = ({
 	folder,
 	setActiveModal
 }: ShareFolderPropertiesProps): React.JSX.Element => {
+	const createSnackbar = useSnackbar();
 	const [t] = useTranslation();
 	const [grant, setGrant] = useState<Array<Grant> | undefined>();
 	const shareFolderRoleOptions = useMemo(
@@ -180,15 +181,32 @@ export const ShareFolderProperties = ({
 	);
 
 	useEffect(() => {
-		soapFetch<GetFolderActionRequest, GetFolderActionResponse>('GetFolder', {
-			_jsns: 'urn:zimbraMail',
-			folder: { l: folder.id }
-		}).then((response): void => {
-			if (response && response?.folder) {
-				setGrant(response.folder[0].acl.grant);
+		soapFetch<GetFolderActionRequest, GetFolderActionResponse | ErrorSoapBodyResponse>(
+			'GetFolder',
+			{
+				_jsns: 'urn:zimbraMail',
+				folder: { l: folder.id }
 			}
-		});
-	}, [folder, folder.id]);
+		)
+			.then((response): void => {
+				if ('Fault' in response) {
+					throw new Error(response.Fault.Reason.Text, { cause: response.Fault });
+				}
+				if (response && response?.folder) {
+					setGrant(response.folder[0].acl.grant);
+				}
+			})
+			.catch(() => {
+				createSnackbar({
+					key: new Date().toDateString(),
+					replace: true,
+					type: 'error',
+					label: t('label.error_try_again', 'Something went wrong, please try again'),
+					autoHideTimeout: 3000,
+					hideButton: true
+				});
+			});
+	}, [createSnackbar, folder, folder.id, t]);
 	return (
 		<Container mainAlignment="center" crossAlignment="flex-start" height="fit">
 			<Padding vertical="small" />
