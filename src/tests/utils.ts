@@ -4,13 +4,14 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { faker } from '@faker-js/faker';
+import * as shell from '@zextras/carbonio-shell-ui';
 import { ErrorSoapResponse, SuccessSoapResponse } from '@zextras/carbonio-shell-ui';
 import { EventEmitter } from 'events';
 import { times } from 'lodash';
 
 import { screen, within } from '../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../constants/tests';
-import { DistributionList } from '../model/distribution-list';
+import { DistributionList, DistributionListMembersPage } from '../model/distribution-list';
 import { CnItem } from '../network/api/types';
 import { MakeRequired } from '../types/utils';
 
@@ -68,13 +69,23 @@ export const generateDistributionList = (
 	displayName: faker.internet.displayName(),
 	isOwner: faker.datatype.boolean(),
 	isMember: faker.datatype.boolean(),
+	canRequireMembers: true,
 	...data
 });
 
+export const generateDistributionListMembersPage = (
+	members: string[] = []
+): DistributionListMembersPage => ({
+	members,
+	total: members.length,
+	more: false
+});
+
 export const generateDistributionLists = (
-	limit = 10
+	limit = 10,
+	defaultData: Partial<DistributionList> = {}
 ): Array<ReturnType<typeof generateDistributionList>> =>
-	times(limit, () => generateDistributionList());
+	times(limit, () => generateDistributionList(defaultData));
 
 // utility to make msw respond in a controlled way
 // see https://github.com/mswjs/msw/discussions/1307
@@ -110,3 +121,13 @@ export const createCnItem = (
 		sf: 'bo0000000276'
 	};
 };
+
+export function spyUseBoardHooks(updateBoardFn?: jest.Mock, closeBoardFn?: jest.Mock): void {
+	jest.spyOn(shell, 'useBoardHooks').mockReturnValue({
+		updateBoard: updateBoardFn ?? jest.fn(),
+		setCurrentBoard: jest.fn(),
+		getBoardContext: jest.fn(),
+		getBoard: jest.fn(),
+		closeBoard: closeBoardFn ?? jest.fn()
+	});
+}
