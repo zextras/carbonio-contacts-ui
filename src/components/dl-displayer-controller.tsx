@@ -22,8 +22,9 @@ export const DLDisplayerController = ({ id }: DLDisplayerControllerProps): React
 	const [t] = useTranslation();
 	const { distributionList } = useGetDistributionList(id);
 
-	const { members, total } = useGetDistributionListMembers(
-		(distributionList?.canRequireMembers && distributionList?.email) || ''
+	const { members = [], total = 0 } = useGetDistributionListMembers(
+		(distributionList?.canRequireMembers && distributionList?.email) || '',
+		{ skip: !distributionList?.canRequireMembers || !distributionList?.email }
 	);
 
 	return (

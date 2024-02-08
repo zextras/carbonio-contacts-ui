@@ -23,13 +23,18 @@ type GetDistributionListMembersHandler = ResponseResolver<
 export const buildGetDistributionListMembersResponse = (
 	members: Array<string> | undefined,
 	limit?: number,
-	more?: boolean
-): GetDistributionListMembersResponse => ({
-	dlm: members?.slice(0, limit).map((member) => ({ _content: member })),
-	more: more ?? false,
-	total: members?.length,
-	_jsns: NAMESPACES.account
-});
+	more?: boolean,
+	offset = 0
+): GetDistributionListMembersResponse => {
+	const sliceTo = limit === undefined || limit === 0 ? undefined : offset + limit;
+	const dlm = members?.slice(offset, sliceTo).map((member) => ({ _content: member }));
+	return {
+		dlm,
+		more: more ?? false,
+		total: members?.length,
+		_jsns: NAMESPACES.account
+	};
+};
 export const registerGetDistributionListMembersHandler = (
 	members?: Array<string>,
 	more?: boolean,
@@ -46,10 +51,13 @@ export const registerGetDistributionListMembersHandler = (
 			return res(ctx.json(buildSoapError(error)));
 		}
 
-		const reqBody = await req.json<{
+		const {
+			Body: {
+				GetDistributionListMembersRequest: { limit, offset }
+			}
+		} = await req.json<{
 			Body: { GetDistributionListMembersRequest: GetDistributionListMembersRequest };
 		}>();
-		const { limit } = reqBody.Body.GetDistributionListMembersRequest;
 
 		return res(
 			ctx.json(
@@ -57,7 +65,8 @@ export const registerGetDistributionListMembersHandler = (
 					GetDistributionListMembersResponse: buildGetDistributionListMembersResponse(
 						members,
 						limit,
-						more
+						more,
+						offset
 					)
 				})
 			)

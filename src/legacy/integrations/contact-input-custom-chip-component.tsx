@@ -4,22 +4,23 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import React, { ReactElement, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
 	Chip,
 	Dropdown,
 	Button,
 	Container,
-	type DropdownItem,
 	type ChipAction,
 	type ChipInputProps
 } from '@zextras/carbonio-design-system';
-import { debounce, DebouncedFuncLeading, filter, map, noop, reduce, some, uniq } from 'lodash';
+import { debounce, DebouncedFuncLeading, filter, map, reduce, some } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
+import { ACTION_IDS, DL_MEMBERS_LOAD_LIMIT } from '../../constants';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
+import { useGetDistributionListMembers } from '../../hooks/use-get-distribution-list-members';
 import type { DistributionList, DistributionListMembersPage } from '../../model/distribution-list';
 import { client } from '../../network/client';
 import type {
@@ -65,54 +66,40 @@ export const isChipItemDistributionList = (
 	contact: Pick<ContactInputItem, 'email' | 'isGroup'>
 ): contact is ContactInputDistributionList => (contact.isGroup && !!contact.email) ?? false;
 
-const debounceUserInput = (
-	fn: (...args: Array<unknown>) => unknown
-): DebouncedFuncLeading<(...args: Array<unknown>) => unknown> =>
+const debounceUserInput = <T extends (...args: unknown[]) => unknown>(
+	fn: T
+): DebouncedFuncLeading<T> =>
 	debounce(fn, 500, {
 		trailing: false,
 		leading: true
 	});
 
-const getAllDistributionListMembers = async (
-	email: string,
-	members: DistributionListMembersPage['members'] = [],
-	offset = 0
-): Promise<Pick<DistributionListMembersPage, 'total' | 'members'>> => {
-	const response = await client.getDistributionListMembers(email, { limit: 100, offset });
-	const newValue = members.concat(response.members);
-	if (response.more) {
-		return getAllDistributionListMembers(email, newValue, offset + response.members.length);
-	}
-	return { total: response.total, members: newValue };
-};
-
-const useDistributionListFunctions = ({
-	email,
+const DistributionListChip = ({
 	id,
-	isGroup,
+	label,
+	email,
 	contactInputOnChange,
-	contactInputValue
-}: {
-	email: string;
-	id: string | undefined;
-	isGroup?: boolean;
-	galType?: string;
-	exp?: boolean;
-	contactInputOnChange: ContactInputOnChange;
-	contactInputValue: ContactInputValue;
-}): { items: Array<DropdownItem>; loadMembers: () => void } => {
-	const loadingRef = useRef(false);
-	const [members, setMembers] = useState<DistributionListMembersPage['members']>([]);
-	const [offset, setOffset] = useState(0);
-	const [more, setMore] = useState(false);
-	const [total, setTotal] = useState(0);
-
+	contactInputValue,
+	actions: propActions,
+	...rest
+}: MakeRequired<DLCustomChipProps, 'email'>): React.JSX.Element => {
 	const [t] = useTranslation();
+	const [open, setOpen] = useState(false);
 
-	const showMoreLabel = t('label.show_more', 'show more');
+	const {
+		members,
+		more,
+		total,
+		findMore: loadMembers
+	} = useGetDistributionListMembers(email, {
+		limit: DL_MEMBERS_LOAD_LIMIT,
+		skip: !open
+	});
+
+	const showMoreLabel = t('label.show_more', 'Show more');
 
 	const selectAllItemLabel = t('label.select_all_addresses', {
-		count: total ?? 0,
+		count: total,
 		defaultValue: `Select address`,
 		defaultValue_plural: `Select all {{count}} addresses`
 	});
@@ -129,16 +116,9 @@ const useDistributionListFunctions = ({
 		[members]
 	);
 
-	const updateStates = useCallback((result: DistributionListMembersPage, reset?: boolean) => {
-		setMore(result.more);
-		setOffset((prevValue) => (reset ? result.members.length : prevValue + result.members.length));
-		setMembers((prevValue) => (reset ? result.members : uniq([...prevValue, ...result.members])));
-		setTotal(result.total ?? 0);
-	}, []);
-
-	const onSelectAllClick = useCallback(() => {
-		const updateDefaults = (itemsToSet: DistributionListMembersPage['members']): void => {
-			const newValue = map(itemsToSet, (item) => ({
+	const updateContactInputValue = useCallback(
+		(newItems: DistributionListMembersPage['members']) => {
+			const newValue = map(newItems, (item) => ({
 				label: item,
 				value: item,
 				id: item,
@@ -149,21 +129,23 @@ const useDistributionListFunctions = ({
 				...filter(contactInputValue, (value) => value.id !== id),
 				...newValue
 			]);
-		};
-		if (more) {
-			getAllDistributionListMembers(email, members, offset).then((result) => {
-				updateDefaults(result.members);
-			});
-		} else {
-			updateDefaults(members);
-		}
-	}, [contactInputValue, members, email, id, more, offset, contactInputOnChange]);
+		},
+		[contactInputOnChange, contactInputValue, id]
+	);
 
-	const onShowMoreClick = useCallback(() => {
-		client.getDistributionListMembers(email, { limit: 100, offset }).then((result) => {
-			updateStates(result, false);
-		});
-	}, [email, offset, updateStates]);
+	const onSelectAllClick = useCallback(() => {
+		if (members !== undefined && members.length > 0) {
+			if (more) {
+				loadMembers(0).then((response) => {
+					if (response) {
+						updateContactInputValue([...members, ...response.members]);
+					}
+				});
+			} else {
+				updateContactInputValue(members);
+			}
+		}
+	}, [more, loadMembers, updateContactInputValue, members]);
 
 	const selectAllButton = useMemo(
 		() => ({
@@ -178,13 +160,15 @@ const useDistributionListFunctions = ({
 						shape="regular"
 						width="fill"
 						label={selectAllItemLabel}
-						onClick={total > 0 ? debounceUserInput(onSelectAllClick) : noop}
+						onClick={debounceUserInput(onSelectAllClick)}
 					/>
 				</Container>
 			)
 		}),
-		[onSelectAllClick, selectAllItemLabel, total]
+		[onSelectAllClick, selectAllItemLabel]
 	);
+
+	const onShowMore = useMemo(() => debounceUserInput(() => loadMembers()), [loadMembers]);
 
 	const moreButton = useMemo(
 		() => ({
@@ -200,28 +184,13 @@ const useDistributionListFunctions = ({
 						shape="regular"
 						width="fill"
 						label={showMoreLabel}
-						onClick={debounceUserInput(onShowMoreClick)}
+						onClick={onShowMore}
 					/>
 				</Container>
 			)
 		}),
-		[onShowMoreClick, showMoreLabel]
+		[onShowMore, showMoreLabel]
 	);
-
-	const loadMembers = useCallback(() => {
-		if (isChipItemDistributionList({ isGroup, email }) && !loadingRef.current) {
-			loadingRef.current = true;
-			client
-				.getDistributionListMembers(email, { limit: 100 })
-				.then((result) => {
-					loadingRef.current = false;
-					updateStates(result, true);
-				})
-				.catch((error) => {
-					console.error(error);
-				});
-		}
-	}, [email, isGroup, updateStates]);
 
 	const items = useMemo(() => {
 		if (more) {
@@ -230,34 +199,9 @@ const useDistributionListFunctions = ({
 		return [selectAllButton, ...memberDropdownItems];
 	}, [memberDropdownItems, more, moreButton, selectAllButton]);
 
-	return { items, loadMembers };
-};
-
-const CustomComponent = ({
-	id,
-	label,
-	email,
-	isGroup,
-	contactInputOnChange,
-	contactInputValue,
-	actions: propActions,
-	...rest
-}: MakeRequired<DLCustomChipProps, 'email'>): React.JSX.Element => {
-	const [t] = useTranslation();
-	const [open, setOpen] = useState(false);
-
-	const { items, loadMembers } = useDistributionListFunctions({
-		id,
-		email,
-		isGroup,
-		contactInputOnChange,
-		contactInputValue
-	});
-
 	const expandDLAction = useCallback(() => {
 		setOpen(true);
-		loadMembers();
-	}, [loadMembers]);
+	}, []);
 
 	const collapseDLAction = useCallback(() => {
 		setOpen(false);
@@ -266,11 +210,11 @@ const CustomComponent = ({
 	const chipActions = useMemo((): ChipAction[] => {
 		const actions: ChipAction[] = [...(propActions ?? [])];
 		actions.push({
-			id: 'action2',
+			id: ACTION_IDS.expandDL,
 			label: t('expand_distribution_list', 'Expand address list'),
 			type: 'button',
 			icon: open ? 'ChevronUpOutline' : 'ChevronDownOutline',
-			onClick: open ? collapseDLAction : debounceUserInput(expandDLAction)
+			onClick: open ? collapseDLAction : expandDLAction
 		});
 		return actions;
 	}, [collapseDLAction, expandDLAction, open, propActions, t]);
@@ -317,7 +261,7 @@ export const ContactInputCustomChipComponent = ({
 	...rest
 }: ContactInputCustomChipComponentProps): ReactElement => {
 	const [distributionList, setDistributionList] = useState<DistributionList>();
-	const _label = useMemo(() => {
+	const chipLabel = useMemo(() => {
 		if (label && chipDisplayName === CHIP_DISPLAY_NAME_VALUES.label) {
 			return label;
 		}
@@ -369,13 +313,13 @@ export const ContactInputCustomChipComponent = ({
 	);
 
 	if (!isChipItemDistributionList(contact)) {
-		return <Chip {...rest} label={_label} data-testid={'default-chip'} actions={chipActions} />;
+		return <Chip {...rest} label={chipLabel} data-testid={'default-chip'} actions={chipActions} />;
 	}
 
 	return (
-		<CustomComponent
+		<DistributionListChip
 			{...rest}
-			label={_label}
+			label={chipLabel}
 			email={contact.email}
 			isGroup={contact.isGroup}
 			actions={chipActions}

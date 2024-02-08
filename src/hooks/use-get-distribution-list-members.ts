@@ -12,14 +12,20 @@ import { DistributionListMembersPage } from '../model/distribution-list';
 import { client } from '../network/client';
 import { StoredDistributionList, useDistributionListsStore } from '../store/distribution-lists';
 
-type UseGetDistributionListMembersReturnType = DistributionListMembersPage & {
-	findMore: () => void;
+type UseGetDistributionListMembersReturnType = Partial<DistributionListMembersPage> & {
+	findMore: (limit?: number) => Promise<DistributionListMembersPage | undefined>;
 	loading: boolean;
 };
 
 export const useGetDistributionListMembers = (
 	email: string,
-	limit?: number
+	{
+		limit: initialLimit,
+		skip
+	}: {
+		limit?: number;
+		skip?: boolean;
+	} = {}
 ): UseGetDistributionListMembersReturnType => {
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
@@ -47,7 +53,7 @@ export const useGetDistributionListMembers = (
 
 	const updateDistributionListMembersPage = useCallback(
 		(newState: DistributionListMembersPage, offset: number) => {
-			offsetRef.current += newState.members.length;
+			offsetRef.current = offset + newState.members.length;
 			setInnerDistributionListMembersPage((prevState) => ({
 				members:
 					offset === 0 ? newState.members : [...(prevState?.members ?? []), ...newState.members],
@@ -73,19 +79,15 @@ export const useGetDistributionListMembers = (
 		[email, findStoredMembersPage, upsertDistributionList]
 	);
 
-	const shouldLoadData = useMemo(
-		() => storedDistributionListMembersPage === undefined,
-		[storedDistributionListMembersPage]
-	);
-
-	const findCallback = useCallback(
-		(offset: number) => {
+	const loadMembers = useCallback(
+		(offset: number, limit?: number): Promise<DistributionListMembersPage | undefined> => {
 			if (email) {
 				setLoading(true);
-				client
+				return client
 					.getDistributionListMembers(email, { offset, limit })
 					.then((newMembersPage) => {
 						updateDistributionListMembersPage(newMembersPage, offset);
+						return newMembersPage;
 					})
 					.catch(() => {
 						createSnackbar({
@@ -96,32 +98,50 @@ export const useGetDistributionListMembers = (
 							autoHideTimeout: 3000,
 							hideButton: true
 						});
+						return undefined;
 					})
 					.finally(() => {
 						setLoading(false);
 					});
 			}
+			return Promise.reject(
+				new Error(`Cannot load members of distribution list. Invalid email: "${email}"`)
+			);
 		},
-		[createSnackbar, email, limit, t, updateDistributionListMembersPage]
+		[createSnackbar, email, t, updateDistributionListMembersPage]
 	);
 
-	useEffect(() => {
-		if (shouldLoadData) {
-			findCallback(0);
-		}
-	}, [findCallback, shouldLoadData]);
+	const shouldLoadFirstPage = useMemo(() => {
+		const dataIsPartial =
+			storedDistributionListMembersPage === undefined ||
+			(initialLimit !== undefined &&
+				initialLimit > 0 &&
+				storedDistributionListMembersPage.members.length < initialLimit &&
+				storedDistributionListMembersPage.more);
 
-	const findMore = useCallback(() => {
-		if (!distributionListMembersPage?.more) {
-			throw new Error('No more members available');
+		return !skip && dataIsPartial;
+	}, [initialLimit, skip, storedDistributionListMembersPage]);
+
+	useEffect(() => {
+		if (shouldLoadFirstPage) {
+			loadMembers(0, initialLimit);
 		}
-		findCallback(offsetRef.current);
-	}, [distributionListMembersPage?.more, findCallback]);
+	}, [loadMembers, initialLimit, shouldLoadFirstPage]);
+
+	const findMore = useCallback<UseGetDistributionListMembersReturnType['findMore']>(
+		(limit = initialLimit) => {
+			if (distributionListMembersPage?.more === false) {
+				throw new Error('No more members available');
+			}
+			return loadMembers(offsetRef.current, limit);
+		},
+		[distributionListMembersPage?.more, loadMembers, initialLimit]
+	);
 
 	return {
-		members: distributionListMembersPage?.members ?? [],
-		more: distributionListMembersPage?.more ?? false,
-		total: distributionListMembersPage?.total ?? 0,
+		members: distributionListMembersPage?.members,
+		more: distributionListMembersPage?.more,
+		total: distributionListMembersPage?.total,
 		findMore,
 		loading
 	};

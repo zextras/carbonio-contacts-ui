@@ -23,10 +23,12 @@ const EditDLBoard = (): React.JSX.Element => {
 	const { distributionList, loading: loadingDL } = useGetDistributionList(context?.id);
 	const {
 		loading: loadingMembers,
-		members,
-		total,
-		more
-	} = useGetDistributionListMembers(distributionList?.email ?? '');
+		members = [],
+		total = 0,
+		more = false
+	} = useGetDistributionListMembers(distributionList?.email ?? '', {
+		skip: !distributionList?.email
+	});
 
 	const membersPage = useMemo(() => ({ members, total, more }), [members, more, total]);
 

@@ -10,6 +10,7 @@ export const CONTACTS_APP_ID = 'carbonio-contacts-ui';
 
 export const ACTION_IDS = {
 	editDL: 'dl-edit-action',
+	expandDL: 'dl-expand-action',
 	sendEmail: 'send-email-action',
 	sendEmailCG: 'cg-send-email-action',
 	deleteCG: 'cg-delete-action',
@@ -56,6 +57,7 @@ export const DISPLAYER_WIDTH = '60%';
 export const LIST_WIDTH = '40%';
 export const LIST_ITEM_HEIGHT = '4rem';
 export const FIND_CONTACT_GROUP_LIMIT = 100;
+export const DL_MEMBERS_LOAD_LIMIT = 100;
 
 export const DL_TABS = {
 	details: 'dl-details-tab',
