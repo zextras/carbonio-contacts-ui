@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { find, forEach, map, orderBy, reduce, reject, uniqBy } from 'lodash';
+
 import { Contact } from '../../types/contact';
 import { ContactsSlice } from '../../types/store';
 import { removeContactsFromStore } from '../../utils/helpers';

@@ -123,7 +123,7 @@ export default function Sidebar({ expanded }) {
 		).id;
 		const accordions = sortBy(nestedFolders, (item) => Number(item.id));
 		const maxSystemFolderIdIndex = findIndex(accordions, (item) => item.id === maxSystemFolderId);
-		accordions.splice(maxSystemFolderIdIndex + 1, 0, trashFolder[0]);
+		trashFolder[0] && accordions.splice(maxSystemFolderIdIndex + 1, 0, trashFolder[0]);
 		const temp = setCustomComponent(
 			accordions,
 			setModal,
@@ -140,17 +140,21 @@ export default function Sidebar({ expanded }) {
 		remove(sharedItems, (item) => item.broken);
 		setSidebarItems(temp);
 		setAccordionItems(
-			temp.concat(divider(1), {
-				id: 'shares',
-				label: t('share.shared_folders', 'Shared Address Books'),
-				divider: false,
-				CustomComponent: ShareLabel,
-				items: sharedItems.concat({
-					label: t('share.find_shares', 'Find Shares'),
-					context: { dispatch, t, createModal, createSnackbar },
-					CustomComponent: SharesItem
-				})
-			})
+			temp.concat(
+				// FIXME restore when CDS-204 will be released
+				// divider(1),
+				{
+					id: 'shares',
+					label: t('share.shared_folders', 'Shared Address Books'),
+					divider: false,
+					CustomComponent: ShareLabel,
+					items: sharedItems.concat({
+						label: t('share.find_shares', 'Find Shares'),
+						context: { dispatch, t, createModal, createSnackbar },
+						CustomComponent: SharesItem
+					})
+				}
+			)
 		);
 		setModalAccordions(temp);
 	}, [folders, dispatch, createModal, createSnackbar, expanded, t]);
@@ -160,7 +164,15 @@ export default function Sidebar({ expanded }) {
 			{expanded ? (
 				<>
 					<Accordion items={accordionItems} activeId={currentFolder?.id} />
-					<Accordion items={[divider(2), tagsAccordionItems, divider(3)]} />
+					<Accordion
+						items={[
+							// FIXME restore when CDS-204 will be released
+							// divider(2),
+							tagsAccordionItems
+							// FIXME restore when CDS-204 will be released
+							// , divider(3)
+						]}
+					/>
 				</>
 			) : (
 				sideBarItems.map((folder, index) => <CollapsedSideBarItems key={index} folder={folder} />)
