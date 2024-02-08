@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React, { ComponentType, ReactElement, useCallback, useMemo, useState } from 'react';
-
 import {
 	Row,
 	Text,

@@ -4,9 +4,10 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React, { Suspense, lazy, useState, useEffect } from 'react';
-import { Redirect, Switch, Route, useRouteMatch } from 'react-router-dom';
-import { setAppContext, Spinner } from '@zextras/carbonio-shell-ui';
+
 import { Container } from '@zextras/carbonio-design-system';
+import { setAppContext, Spinner } from '@zextras/carbonio-shell-ui';
+import { Redirect, Switch, Route, useRouteMatch } from 'react-router-dom';
 
 const LazyFolderView = lazy(() =>
 	import(/* webpackChunkName: "folder-view" */ './app/folder-panel')
