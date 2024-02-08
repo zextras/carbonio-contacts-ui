@@ -197,6 +197,7 @@ export type GetFolderActionRequest = {
 	folder: {
 		l: string;
 	};
+	_jsns: string;
 };
 
 export type GetFolderActionResponse = {

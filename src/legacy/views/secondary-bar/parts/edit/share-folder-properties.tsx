@@ -29,7 +29,7 @@ import {
 	GranteeProps,
 	ShareFolderPropertiesProps
 } from '../../../../types/contact';
-import { GetFolderActionResponse } from '../../../../types/soap';
+import { GetFolderActionRequest, GetFolderActionResponse } from '../../../../types/soap';
 import { ShareFolderRoleOptions, findLabel } from '../../commons/utils';
 
 const HoverChip = styled(Chip)<{ hovered?: boolean }>`
@@ -178,13 +178,13 @@ export const ShareFolderProperties = ({
 		() => ShareFolderRoleOptions(t, grant?.[0]?.perm?.includes('p')),
 		[t, grant]
 	);
+
 	useEffect(() => {
-		soapFetch('GetFolder', {
+		soapFetch<GetFolderActionRequest, GetFolderActionResponse>('GetFolder', {
 			_jsns: 'urn:zimbraMail',
 			folder: { l: folder.id }
-		}).then((res): void => {
-			const response = res as GetFolderActionResponse;
-			if (res && response?.folder && response?.folder) {
+		}).then((response): void => {
+			if (response && response?.folder && response?.folder) {
 				setGrant(response.folder[0].acl.grant);
 			}
 		});
