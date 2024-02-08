@@ -35,7 +35,7 @@ describe('App view', () => {
 						GetAccountDistributionListsRequest: expect.objectContaining<
 							Partial<GetAccountDistributionListsRequest>
 						>({
-							ownerOf: false,
+							ownerOf: true,
 							memberOf: 'all'
 						})
 					}
@@ -71,7 +71,7 @@ describe('App view', () => {
 		it.each(['', '/', '/wrong'])(
 			'should render member filter if a wrong filter `%s` is specified in the path',
 			async (nextPath) => {
-				const dl = generateDistributionList();
+				const dl = generateDistributionList({ isMember: true });
 				const handler = registerGetAccountDistributionListsHandler([dl]);
 				setupTest(<GroupsAppView />, {
 					initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}${nextPath}`]

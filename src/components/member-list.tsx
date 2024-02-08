@@ -11,14 +11,20 @@ import { filter, map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { FilterMembersIcon } from './filter-members-icon';
+import { loadingItems } from './loading-items';
 import { MemberDisplayerListItemComponent } from './member-displayer-list-item';
 
 type MemberListProps = {
 	members: Array<string>;
 	membersCount: number;
+	loading?: boolean;
 };
 
-export const MemberList = ({ members, membersCount }: MemberListProps): React.JSX.Element => {
+export const MemberList = ({
+	members,
+	membersCount,
+	loading
+}: MemberListProps): React.JSX.Element => {
 	const [t] = useTranslation();
 	const [searchValue, setSearchValue] = useState('');
 
@@ -36,8 +42,19 @@ export const MemberList = ({ members, membersCount }: MemberListProps): React.JS
 	}, []);
 
 	return (
-		<Container mainAlignment={'flex-start'} crossAlignment={'flex-start'} gap={'0.5rem'}>
-			<Container mainAlignment={'flex-start'} crossAlignment={'flex-start'} gap={'0.25rem'}>
+		<Container
+			mainAlignment={'flex-start'}
+			crossAlignment={'flex-start'}
+			gap={'0.5rem'}
+			minHeight={0}
+		>
+			<Container
+				mainAlignment={'flex-start'}
+				crossAlignment={'flex-start'}
+				gap={'0.25rem'}
+				height={'auto'}
+				minHeight={'fit-content'}
+			>
 				<Text size={'small'} color={'secondary'}>
 					{t('displayer.distribution_list.label.member_total', 'Member list {{total}}', {
 						total: membersCount
@@ -57,8 +74,8 @@ export const MemberList = ({ members, membersCount }: MemberListProps): React.JS
 				value={searchValue}
 				onChange={onSearchChange}
 			/>
-			<Container height={'auto'} maxHeight={'15rem'}>
-				<ListV2 maxWidth={'fill'}>{memberItems}</ListV2>
+			<Container minHeight={'10rem'} mainAlignment={'flex-start'}>
+				<ListV2>{(!loading && memberItems) || loadingItems(3)}</ListV2>
 			</Container>
 		</Container>
 	);

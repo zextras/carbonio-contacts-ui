@@ -9,11 +9,12 @@ export type DistributionList = {
 	id: string;
 	email: string;
 	displayName?: string;
-	isOwner: boolean;
+	isOwner?: boolean;
 	isMember?: boolean;
 	owners?: Array<DistributionListOwner>;
 	description?: string;
-	canRequireMembers?: boolean;
+	canRequireMembers: boolean;
+	members?: DistributionListMembersPage;
 };
 
 export type DistributionListMembersPage = {

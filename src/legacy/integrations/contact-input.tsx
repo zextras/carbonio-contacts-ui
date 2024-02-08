@@ -14,7 +14,8 @@ import {
 	Text,
 	type ChipItem,
 	type ChipInputProps,
-	type DropdownItem
+	type DropdownItem,
+	useCombinedRefs
 } from '@zextras/carbonio-design-system';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
 import {
@@ -153,7 +154,14 @@ const Loader = (): ReactElement => (
 
 export type ContactInputProps = Pick<
 	ChipInputProps,
-	'icon' | 'iconAction' | 'placeholder' | 'background' | 'iconDisabled' | 'description' | 'hasError'
+	| 'icon'
+	| 'iconAction'
+	| 'placeholder'
+	| 'background'
+	| 'iconDisabled'
+	| 'description'
+	| 'hasError'
+	| 'inputRef'
 > & {
 	onChange?: ContactInputOnChange;
 	defaultValue: Array<ContactInputItem>;
@@ -172,13 +180,14 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	chipDisplayName = CHIP_DISPLAY_NAME_VALUES.label,
 	extraAccountsIds = [],
 	contactActions,
+	inputRef: propsInputRef = null,
 	...rest
 }) => {
 	const [defaults, setDefaults] = useState<ContactInputValue>([]);
 	const [options, setOptions] = useState<Array<DropdownItem & { value?: ContactInputItem }>>([]);
 	const [idToRemove, setIdToRemove] = useState('');
 	const [t] = useTranslation();
-	const inputRef = useRef<HTMLInputElement | null>(null);
+	const inputRef = useCombinedRefs(propsInputRef);
 	const emptyDraggedChip = useMemo(() => ({ id: '', email: '', dragStartRef: null }), []);
 	const draggedChip = useRef<{
 		id?: string;
@@ -197,7 +206,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 				dragStartRef: inputRef.current
 			};
 		},
-		[]
+		[inputRef]
 	);
 	useEffect(() => {
 		setDefaults(
@@ -250,15 +259,18 @@ const ContactInputCore: FC<ContactInputProps> = ({
 
 	const isValidEmail = useCallback((email) => emailRegex.test(email), []);
 
-	const editChip = useCallback((text, id) => {
-		setIdToRemove(id);
-		if (inputRef?.current) {
-			inputRef.current.value = text;
-			inputRef.current.style.width = inputRef.current.value
-				? `${inputRef.current.scrollWidth}px`
-				: '';
-		}
-	}, []);
+	const editChip = useCallback(
+		(text, id) => {
+			setIdToRemove(id);
+			if (inputRef?.current) {
+				inputRef.current.value = text;
+				inputRef.current.style.width = inputRef.current.value
+					? `${inputRef.current.scrollWidth}px`
+					: '';
+			}
+		},
+		[inputRef]
+	);
 
 	const onInputType = useCallback<NonNullable<ChipInputProps['onInputType']>>(
 		({ key, textContent }) => {
@@ -428,7 +440,17 @@ const ContactInputCore: FC<ContactInputProps> = ({
 				setOptions([]);
 			}
 		},
-		[allContacts, defaults, editChip, extraAccountsIds, isValidEmail, onChange, options, t]
+		[
+			allContacts,
+			defaults,
+			editChip,
+			extraAccountsIds,
+			inputRef,
+			isValidEmail,
+			onChange,
+			options,
+			t
+		]
 	);
 
 	useEffect(() => {
@@ -580,7 +602,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 				isSameElement.current = false;
 			}
 		},
-		[buildDraggableChip, defaults, onChange, resetDraggedChip]
+		[buildDraggableChip, defaults, inputRef, onChange, resetDraggedChip]
 	);
 
 	return (

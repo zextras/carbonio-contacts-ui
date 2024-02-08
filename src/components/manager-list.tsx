@@ -6,23 +6,26 @@
 
 import React, { useMemo } from 'react';
 
-import { Container, ListV2, Text } from '@zextras/carbonio-design-system';
+import { Container, ListV2, Row } from '@zextras/carbonio-design-system';
 import { map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
+import { loadingItems } from './loading-items';
 import { MemberDisplayerListItemComponent } from './member-displayer-list-item';
-import { DistributionList } from '../model/distribution-list';
+import { Text } from './Text';
+import { DistributionList, DistributionListOwner } from '../model/distribution-list';
 
 type ManagerListProps = {
 	managers: DistributionList['owners'];
+	loading?: boolean;
 };
 
-export const ManagerList = ({ managers }: ManagerListProps): React.JSX.Element => {
+export const ManagerList = ({ managers, loading }: ManagerListProps): React.JSX.Element => {
 	const [t] = useTranslation();
 
 	const memberItems = useMemo(
 		() =>
-			map<{ id: string; name: string }, React.JSX.Element>(managers, (manager) => (
+			map<DistributionListOwner, React.JSX.Element>(managers, (manager) => (
 				<MemberDisplayerListItemComponent email={manager.name} key={manager.id} />
 			)),
 		[managers]
@@ -30,13 +33,15 @@ export const ManagerList = ({ managers }: ManagerListProps): React.JSX.Element =
 
 	return (
 		<Container mainAlignment={'flex-start'} crossAlignment={'flex-start'} gap={'0.5rem'}>
-			<Text size={'small'} color={'secondary'}>
-				{t('displayer.distribution_list.label.manager_total', 'Manager list {{total}}', {
-					total: managers?.length ?? 0
-				})}
-			</Text>
-			<Container height={'auto'} maxHeight={'15rem'}>
-				<ListV2 maxWidth={'fill'}>{memberItems}</ListV2>
+			<Row>
+				<Text size={'small'} color={'secondary'}>
+					{t('displayer.distribution_list.label.manager_total', 'Manager list {{total}}', {
+						total: managers?.length ?? 0
+					})}
+				</Text>
+			</Row>
+			<Container minHeight={0} mainAlignment={'flex-start'}>
+				<ListV2>{(!loading && memberItems) || loadingItems(3)}</ListV2>
 			</Container>
 		</Container>
 	);

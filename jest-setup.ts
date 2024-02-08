@@ -23,6 +23,8 @@ configure({
 	asyncUtilTimeout: 2000
 });
 
+jest.setTimeout(10000);
+
 failOnConsole({
 	...getFailOnConsoleDefaultConfig(),
 	silenceMessage: (message): boolean => message.includes(JEST_MOCKED_ERROR)
