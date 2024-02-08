@@ -31,4 +31,12 @@ describe('Manager list', () => {
 		).toBeVisible();
 		expect(screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.copy })).toBeVisible();
 	});
+
+	it('should show 3 shimmed list items while loading', () => {
+		setupTest(<ManagerList managers={[{ id: '1', name: 'email@email.com' }]} loading />);
+		expect(screen.queryByText('email@email.com')).not.toBeInTheDocument();
+		const shimmedItems = screen.getAllByTestId(TESTID_SELECTORS.shimmedListItem);
+		expect(shimmedItems).toHaveLength(3);
+		expect(shimmedItems[0]).toBeVisible();
+	});
 });

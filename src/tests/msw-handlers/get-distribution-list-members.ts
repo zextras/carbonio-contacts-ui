@@ -19,6 +19,7 @@ type GetDistributionListMembersHandler = ResponseResolver<
 	RestContext,
 	SoapResponse<GetDistributionListMembersResponse>
 >;
+
 export const registerGetDistributionListMembersHandler = (
 	members?: Array<string>,
 	more?: boolean,

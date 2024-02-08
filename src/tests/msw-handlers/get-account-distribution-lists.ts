@@ -38,7 +38,7 @@ export const registerGetAccountDistributionListsHandler = (
 		const reqBody = await req.json<{
 			Body: { GetAccountDistributionListsRequest: GetAccountDistributionListsRequest };
 		}>();
-		const { ownerOf, memberOf } = reqBody.Body.GetAccountDistributionListsRequest;
+		const { ownerOf, memberOf, attrs } = reqBody.Body.GetAccountDistributionListsRequest;
 
 		const dlArray = items.reduce<NonNullable<GetAccountDistributionListsResponse['dl']>>(
 			(result, item) => {
@@ -47,7 +47,12 @@ export const registerGetAccountDistributionListsHandler = (
 					name: item.email,
 					d: item.displayName,
 					isOwner: ownerOf === true ? item.isOwner : undefined,
-					isMember: memberOf !== 'none' ? item.isMember : undefined
+					isMember: memberOf === 'all' || memberOf === 'directOnly' ? item.isMember : undefined,
+					_attrs: {
+						zimbraHideInGal:
+							attrs?.includes('zimbraHideInGal') && !item.canRequireMembers ? 'TRUE' : undefined,
+						description: attrs?.includes('description') ? item.description : undefined
+					}
 				});
 				return result;
 			},

@@ -7,7 +7,7 @@
         "delete": "Delete",
         "delete_permanently": "Delete Permanently",
         "edit": "Edit",
-        "edit_distribution_list": "Edit distribution list",
+        "edit_distribution_list": "Edit",
         "goto_folder": "Go to folder",
         "mail": "Send e-mail",
         "reset_filters": "Reset Filters",
@@ -85,6 +85,9 @@
                 "manager_total": "Manager list {{total}}",
                 "member_total": "Member list {{total}}"
             },
+            "member_not_visible": "You don't have the permissions to see the members of this distribution list. For more information, ask to the administrator.",
+            "no_details": "There are no additional details for this distribution list. For more information, ask to the administrator.",
+            "no_details_owner": "There are no additional details for this distribution list. Edit the distribution list to add them or ask to the administrator.",
             "placeholder": {
                 "filter_member": "Filter an address"
             }
@@ -114,6 +117,11 @@
     "distribution_list": {
         "label": {
             "empty_message": "There are no distribution lists yet."
+        },
+        "tabs": {
+            "details": "Details",
+            "managers": "Manager list",
+            "members": "Member list"
         }
     },
     "edit_dl_component": {
@@ -123,6 +131,17 @@
             "invalid_address": "Invalid address",
             "invalid_address_plural": "Invalid addresses",
             "invalid_and_duplicated_addresses": "Invalid and already present addresses"
+        },
+        "input": {
+            "description": {
+                "label": "Description"
+            },
+            "name": {
+                "error": {
+                    "max_length": "Maximum length allowed is 256 characters"
+                },
+                "label": "Distribution List name"
+            }
         },
         "label": {
             "dl_email": "Distribution list",

@@ -6,6 +6,7 @@
 import { useEffect, useState } from 'react';
 
 import { useSnackbar } from '@zextras/carbonio-design-system';
+import { filter } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { DistributionList } from '../model/distribution-list';
@@ -24,10 +25,17 @@ export const useFindDistributionLists = ({
 
 	useEffect(() => {
 		setItems([]);
+		// To have the isOwner information on the dl where the user is member,
+		// we need to always ask for the distribution lists of which the user is also owner.
+		// The results will then be filtered based on the requested filter.
 		client
-			.getAccountDistributionLists({ ownerOf, memberOf })
-			.then((newItems) => {
-				setItems(newItems);
+			.getAccountDistributionLists({ ownerOf: true, memberOf })
+			.then((response) => {
+				const filteredResults = filter(
+					response,
+					(item) => (ownerOf && item.isOwner) || (memberOf && item.isMember === true)
+				);
+				setItems(filteredResults);
 			})
 			.catch(() => {
 				createSnackbar({
