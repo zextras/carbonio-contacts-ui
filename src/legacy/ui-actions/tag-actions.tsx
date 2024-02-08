@@ -3,27 +3,18 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, {
-	ComponentType,
-	ReactElement,
-	useCallback,
-	useContext,
-	useMemo,
-	useState
-} from 'react';
-import { TFunction } from 'i18next';
+import React, { ComponentType, ReactElement, useCallback, useMemo, useState } from 'react';
+
 import {
-	ModalManagerContext,
-	SnackbarManagerContext,
 	Row,
 	Text,
 	Padding,
 	Icon,
 	Checkbox,
-	Button
+	Button,
+	useModal,
+	useSnackbar
 } from '@zextras/carbonio-design-system';
-
-import { every, find, includes, map, reduce } from 'lodash';
 import {
 	ZIMBRA_STANDARD_COLORS,
 	replaceHistory,
@@ -31,16 +22,18 @@ import {
 	Tag,
 	Tags
 } from '@zextras/carbonio-shell-ui';
+import { TFunction } from 'i18next';
+import { every, find, includes, map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
+
+import { useAppDispatch } from '../hooks/redux';
+import { contactAction } from '../store/actions/contact-action';
 import { StoreProvider } from '../store/redux';
+import { Contact } from '../types/contact';
 import { TagsActionsType } from '../types/tags';
 import CreateUpdateTagModal from '../views/secondary-bar/parts/tags/create-update-tag-modal';
 import DeleteTagModal from '../views/secondary-bar/parts/tags/delete-tag-modal';
-import { contactAction } from '../store/actions/contact-action';
 import { ItemType } from '../views/secondary-bar/parts/tags/types';
-import { Contact } from '../types/contact';
-import { useAppDispatch } from '../hooks/redux';
 
 export type ReturnType = {
 	id: string;
@@ -172,7 +165,7 @@ export const TagsDropdownItem = ({
 	contact: Contact;
 }): ReactElement => {
 	const [t] = useTranslation();
-	const createSnackbar = useContext(SnackbarManagerContext);
+	const createSnackbar = useSnackbar();
 	const dispatch = useAppDispatch();
 	const [checked, setChecked] = useState(includes(contact.tags, tag.id));
 	const [isHovering, setIsHovering] = useState(false);
@@ -264,7 +257,7 @@ export const MultiSelectTagsDropdownItem = ({
 	folderId?: string;
 }): ReactElement => {
 	const [t] = useTranslation();
-	const createSnackbar = useContext(SnackbarManagerContext);
+	const createSnackbar = useSnackbar();
 	const dispatch = useAppDispatch();
 	const [isHovering, setIsHovering] = useState(false);
 
@@ -487,8 +480,8 @@ export const applyTag = ({
 };
 
 export const useGetTagsActions = ({ tag, t }: ArgumentType): Array<ReturnType> => {
-	const createModal = useContext(ModalManagerContext) as () => () => void;
-	const createSnackbar = useContext(SnackbarManagerContext) as () => void;
+	const createModal = useModal();
+	const createSnackbar = useSnackbar();
 	return useMemo(
 		() => [
 			createTag({ t, createModal }),
