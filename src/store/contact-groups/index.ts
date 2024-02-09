@@ -6,7 +6,6 @@
 
 import { differenceBy, findIndex } from 'lodash';
 import { create } from 'zustand';
-import { devtools } from 'zustand/middleware';
 
 import { ContactGroup } from '../../model/contact-group';
 
@@ -33,91 +32,91 @@ export type ContactGroupsState = {
 };
 
 // extra currying as suggested in https://github.com/pmndrs/zustand/blob/main/docs/guides/typescript.md#basic-usage
-export const useContactGroupStore = create<ContactGroupsState>()(
-	devtools((set, get) => ({
-		orderedContactGroups: [],
-		unorderedContactGroups: [],
-		offset: 0,
-		updateContactGroup: (contactGroup): void => {
-			get().removeContactGroup(contactGroup.id);
-			get().addContactGroupInSortedPosition(contactGroup);
-		},
-		setOffset: (offset): void => set(() => ({ offset })),
-		addContactGroups: (contactGroups): void => {
-			const unordered = get().unorderedContactGroups;
-			if (unordered.length > 0) {
-				const unorderedResult = differenceBy(unordered, contactGroups, (cg) => cg.id);
-				set(() => ({
-					orderedContactGroups: [...(get().orderedContactGroups ?? []), ...contactGroups],
-					unorderedContactGroups: unorderedResult
-				}));
-			} else {
-				set(() => ({
-					orderedContactGroups: [...(get().orderedContactGroups ?? []), ...contactGroups]
-				}));
-			}
-		},
-		emptyContactGroups: (): void =>
-			set(() => ({ orderedContactGroups: [], unorderedContactGroups: [] })),
-		removeContactGroup: (contactGroupId: string): void => {
-			const idx = get().orderedContactGroups.findIndex(
+export const useContactGroupStore = create<ContactGroupsState>()((set, get) => ({
+	orderedContactGroups: [],
+	unorderedContactGroups: [],
+	offset: 0,
+	updateContactGroup: (contactGroup): void => {
+		get().removeContactGroup(contactGroup.id);
+		get().addContactGroupInSortedPosition(contactGroup);
+	},
+	setOffset: (offset): void => set(() => ({ offset })),
+	addContactGroups: (contactGroups): void => {
+		const { orderedContactGroups, unorderedContactGroups } = get();
+
+		if (unorderedContactGroups.length > 0) {
+			const unorderedResult = differenceBy(unorderedContactGroups, contactGroups, (cg) => cg.id);
+			set(() => ({
+				orderedContactGroups: [...(orderedContactGroups ?? []), ...contactGroups],
+				unorderedContactGroups: unorderedResult
+			}));
+		} else {
+			set(() => ({
+				orderedContactGroups: [...(orderedContactGroups ?? []), ...contactGroups]
+			}));
+		}
+	},
+	emptyContactGroups: (): void =>
+		set(() => ({ orderedContactGroups: [], unorderedContactGroups: [] })),
+	removeContactGroup: (contactGroupId: string): void => {
+		const { orderedContactGroups, unorderedContactGroups, offset } = get();
+		const idx = orderedContactGroups.findIndex(
+			(contactGroup) => contactGroup.id === contactGroupId
+		);
+		if (idx >= 0) {
+			set(() => ({
+				// TODO replace with Array toSpliced when will be available
+				orderedContactGroups: orderedContactGroups.filter(
+					(contactGroup) => contactGroup.id !== contactGroupId
+				),
+				offset: offset - 1
+			}));
+		} else {
+			const uIdx = unorderedContactGroups.findIndex(
 				(contactGroup) => contactGroup.id === contactGroupId
 			);
-			if (idx >= 0) {
+			if (uIdx >= 0) {
 				set(() => ({
 					// TODO replace with Array toSpliced when will be available
-					orderedContactGroups: get().orderedContactGroups.filter(
+					unorderedContactGroups: unorderedContactGroups.filter(
 						(contactGroup) => contactGroup.id !== contactGroupId
-					),
-					offset: get().offset - 1
+					)
 				}));
 			} else {
-				const uIdx = get().unorderedContactGroups.findIndex(
-					(contactGroup) => contactGroup.id === contactGroupId
-				);
-				if (uIdx >= 0) {
-					set(() => ({
-						// TODO replace with Array toSpliced when will be available
-						unorderedContactGroups: get().unorderedContactGroups.filter(
-							(contactGroup) => contactGroup.id !== contactGroupId
-						)
-					}));
-				} else {
-					throw new Error('Contact group not found');
-				}
-			}
-		},
-		addContactGroupInSortedPosition: (newContactGroup: ContactGroup): void => {
-			const prevContactGroups = get().orderedContactGroups;
-
-			const idx = findIndex(
-				prevContactGroups,
-				(contactGroup) => compareContactGroupName(newContactGroup.title, contactGroup.title) < 0
-			);
-
-			if (idx < prevContactGroups.length && idx >= 0) {
-				set(() => ({
-					orderedContactGroups: [...prevContactGroups].splice(idx, 0, newContactGroup),
-					offset: get().offset + 1
-				}));
-			} else {
-				const prevUnorderedContactGroups = get().unorderedContactGroups;
-				if (prevUnorderedContactGroups.length === 0) {
-					set(() => ({ unorderedContactGroups: [newContactGroup] }));
-				} else {
-					const unorderedIdx = findIndex(
-						prevUnorderedContactGroups,
-						(contactGroup) => compareContactGroupName(newContactGroup.title, contactGroup.title) < 0
-					);
-					set(() => ({
-						unorderedContactGroups: [...prevUnorderedContactGroups].splice(
-							unorderedIdx,
-							0,
-							newContactGroup
-						)
-					}));
-				}
+				throw new Error('Contact group not found');
 			}
 		}
-	}))
-);
+	},
+	addContactGroupInSortedPosition: (newContactGroup: ContactGroup): void => {
+		const { orderedContactGroups, unorderedContactGroups, offset } = get();
+
+		const idx = findIndex(
+			orderedContactGroups,
+			(contactGroup) => compareContactGroupName(newContactGroup.title, contactGroup.title) < 0
+		);
+
+		if (idx < orderedContactGroups.length && idx >= 0) {
+			set(() => ({
+				orderedContactGroups: [...orderedContactGroups].splice(idx, 0, newContactGroup),
+				offset: offset + 1
+			}));
+		} else {
+			const prevUnorderedContactGroups = unorderedContactGroups;
+			if (prevUnorderedContactGroups.length === 0) {
+				set(() => ({ unorderedContactGroups: [newContactGroup] }));
+			} else {
+				const unorderedIdx = findIndex(
+					prevUnorderedContactGroups,
+					(contactGroup) => compareContactGroupName(newContactGroup.title, contactGroup.title) < 0
+				);
+				set(() => ({
+					unorderedContactGroups: [...prevUnorderedContactGroups].splice(
+						unorderedIdx,
+						0,
+						newContactGroup
+					)
+				}));
+			}
+		}
+	}
+}));
