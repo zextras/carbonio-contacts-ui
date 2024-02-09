@@ -18,14 +18,13 @@ import {
 import { useIntegratedComponent, useUserAccounts } from '@zextras/carbonio-shell-ui';
 import { map, replace, split } from 'lodash';
 
-import { shareFolder } from '../../store/actions/share-folder';
-import { sendShareNotification } from '../../store/actions/send-share-notification';
 import ModalFooter from './commons/modal-footer';
-
 import { ModalHeader } from './commons/modal-header';
-import { capitalise } from './utils';
 import { findLabel, ShareFolderRoleOptions, ShareFolderWithOptions } from './commons/utils';
 import { GranteeInfo } from './parts/edit/share-folder-properties';
+import { capitalise } from './utils';
+import { sendShareNotification } from '../../store/actions/send-share-notification';
+import { shareFolder } from '../../store/actions/share-folder';
 
 const ShareFolderModal = ({
 	goBack,
@@ -75,7 +74,6 @@ const ShareFolderModal = ({
 	const onConfirm = useCallback(() => {
 		dispatch(
 			shareFolder({
-				sendNotification,
 				standardMessage,
 				contacts: editMode ? [{ email: activeGrant.d }] : contacts,
 				shareWithUserType,
