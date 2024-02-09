@@ -12,7 +12,7 @@ import { useContactGroupStore } from '../store/contact-groups';
 export const useGetContactGroup = (): ContactGroup | undefined => {
 	const { context } = useBoard<{ contactGroupId: string }>();
 
-	const contactGroups = useContactGroupStore((state) => state.storedContactGroups);
+	const contactGroups = useContactGroupStore((state) => state.orderedContactGroups);
 
 	return contactGroups.find(
 		(contactGroupElement) => contactGroupElement.id === context?.contactGroupId

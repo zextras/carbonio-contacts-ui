@@ -46,8 +46,8 @@ const contactGroup = buildContactGroup();
 beforeEach(() => {
 	spyUseBoardHooks();
 	spyUseBoard(contactGroup.id);
-	useContactGroupStore.getState().emptyStoredContactGroups();
-	useContactGroupStore.getState().addStoredContactGroups([contactGroup]);
+	useContactGroupStore.getState().emptyContactGroups();
+	useContactGroupStore.getState().addContactGroups([contactGroup]);
 });
 
 describe('Edit contact group board', () => {

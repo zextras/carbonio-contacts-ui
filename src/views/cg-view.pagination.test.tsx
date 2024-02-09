@@ -18,8 +18,8 @@ import {
 import { createCnItem } from '../tests/utils';
 
 beforeEach(() => {
-	useContactGroupStore.getState().setStoredOffset(0);
-	useContactGroupStore.getState().emptyStoredContactGroups();
+	useContactGroupStore.getState().setOffset(0);
+	useContactGroupStore.getState().emptyContactGroups();
 });
 
 describe('Contact Group View pagination', () => {

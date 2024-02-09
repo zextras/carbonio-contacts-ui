@@ -21,84 +21,85 @@ function compareContactGroupName(nameA: string, nameB: string): number {
 }
 
 export type ContactGroupsState = {
-	storedContactGroups: Array<ContactGroup>;
-	unorderedStoredContactGroups: Array<ContactGroup>;
-	addStoredContactGroups: (newContactGroups: Array<ContactGroup>) => void;
-	addStoredContactGroupInSortedPosition: (newContactGroup: ContactGroup) => void;
+	orderedContactGroups: Array<ContactGroup>;
+	unorderedContactGroups: Array<ContactGroup>;
+	addContactGroups: (newContactGroups: Array<ContactGroup>) => void;
+	addContactGroupInSortedPosition: (newContactGroup: ContactGroup) => void;
 	updateContactGroup: (contactGroup: ContactGroup) => void;
-	storedOffset: number;
-	setStoredOffset: (offset: number) => void;
-	emptyStoredContactGroups: () => void;
-	removeStoredContactGroup: (contactGroupId: string) => void;
+	offset: number;
+	setOffset: (offset: number) => void;
+	emptyContactGroups: () => void;
+	removeContactGroup: (contactGroupId: string) => void;
 };
 
 // extra currying as suggested in https://github.com/pmndrs/zustand/blob/main/docs/guides/typescript.md#basic-usage
 export const useContactGroupStore = create<ContactGroupsState>()(
 	devtools((set, get) => ({
-		storedContactGroups: [],
-		unorderedStoredContactGroups: [],
-		storedOffset: 0,
+		orderedContactGroups: [],
+		unorderedContactGroups: [],
+		offset: 0,
 		updateContactGroup: (contactGroup): void =>
 			set(() => ({
-				storedContactGroups: get().storedContactGroups.map((cg) =>
+				orderedContactGroups: get().orderedContactGroups.map((cg) =>
 					cg.id === contactGroup.id ? contactGroup : cg
 				)
 			})),
-		setStoredOffset: (offset): void => set(() => ({ storedOffset: offset })),
-		addStoredContactGroups: (contactGroups): void => {
-			const unordered = get().unorderedStoredContactGroups;
+		setOffset: (offset): void => set(() => ({ offset })),
+		addContactGroups: (contactGroups): void => {
+			const unordered = get().unorderedContactGroups;
 			if (unordered.length > 0) {
 				const unorderedResult = differenceBy(unordered, contactGroups, (cg) => cg.id);
 				set(() => ({
-					storedContactGroups: [...(get().storedContactGroups ?? []), ...contactGroups],
-					unorderedStoredContactGroups: unorderedResult
+					orderedContactGroups: [...(get().orderedContactGroups ?? []), ...contactGroups],
+					unorderedContactGroups: unorderedResult
 				}));
 			} else {
 				set(() => ({
-					storedContactGroups: [...(get().storedContactGroups ?? []), ...contactGroups]
+					orderedContactGroups: [...(get().orderedContactGroups ?? []), ...contactGroups]
 				}));
 			}
 		},
-		emptyStoredContactGroups: (): void => set(() => ({ storedContactGroups: [] })),
-		removeStoredContactGroup: (contactGroupId: string): void => {
-			const idx = get().storedContactGroups.findIndex(
+		emptyContactGroups: (): void =>
+			set(() => ({ orderedContactGroups: [], unorderedContactGroups: [] })),
+		removeContactGroup: (contactGroupId: string): void => {
+			const idx = get().orderedContactGroups.findIndex(
 				(contactGroup) => contactGroup.id === contactGroupId
 			);
 			if (idx >= 0) {
 				set(() => ({
 					// TODO replace with Array toSpliced when will be available
-					storedContactGroups: get().storedContactGroups.filter(
+					orderedContactGroups: get().orderedContactGroups.filter(
 						(contactGroup) => contactGroup.id !== contactGroupId
 					),
-					storedOffset: get().storedOffset - 1
+					offset: get().offset - 1
 				}));
 			} else {
 				throw new Error('Contact group not found');
 			}
 		},
-		addStoredContactGroupInSortedPosition: (newContactGroup: ContactGroup): void => {
-			const prevStoredContactGroups = get().storedContactGroups;
+		addContactGroupInSortedPosition: (newContactGroup: ContactGroup): void => {
+			const prevContactGroups = get().orderedContactGroups;
 
 			const idx = findIndex(
-				prevStoredContactGroups,
+				prevContactGroups,
 				(contactGroup) => compareContactGroupName(newContactGroup.title, contactGroup.title) < 0
 			);
 
-			if (idx < prevStoredContactGroups.length && idx >= 0) {
-				const result = [...prevStoredContactGroups];
+			if (idx < prevContactGroups.length && idx >= 0) {
+				const result = [...prevContactGroups];
 				result.splice(idx, 0, newContactGroup);
-				set(() => ({ storedContactGroups: result, storedOffset: get().storedOffset + 1 }));
+				set(() => ({ orderedContactGroups: result, offset: get().offset + 1 }));
 			} else {
-				const prevUnorderedStoredContactGroups = get().unorderedStoredContactGroups;
-				if (prevUnorderedStoredContactGroups.length === 0) {
-					set(() => ({ unorderedStoredContactGroups: [newContactGroup] }));
+				const prevUnorderedContactGroups = get().unorderedContactGroups;
+				if (prevUnorderedContactGroups.length === 0) {
+					set(() => ({ unorderedContactGroups: [newContactGroup] }));
 				} else {
 					const unorderedIdx = findIndex(
-						prevUnorderedStoredContactGroups,
+						prevUnorderedContactGroups,
 						(contactGroup) => compareContactGroupName(newContactGroup.title, contactGroup.title) < 0
 					);
 					set(() => ({
-						unorderedStoredContactGroups: [...prevUnorderedStoredContactGroups].splice(
+						unorderedContactGroups: [...prevUnorderedContactGroups].splice(
 							unorderedIdx,
 							0,
 							newContactGroup

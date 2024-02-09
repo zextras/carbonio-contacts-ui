@@ -15,8 +15,8 @@ import { buildContactGroup, buildMembers } from '../tests/model-builder';
 import { registerDeleteContactHandler } from '../tests/msw-handlers/delete-contact';
 
 beforeEach(() => {
-	useContactGroupStore.getState().setStoredOffset(0);
-	useContactGroupStore.getState().emptyStoredContactGroups();
+	useContactGroupStore.getState().setOffset(0);
+	useContactGroupStore.getState().emptyContactGroups();
 });
 
 describe('useActionDeleteCG', () => {
@@ -140,7 +140,7 @@ describe('useActionDeleteCG', () => {
 	});
 
 	it('should show a success snackbar if the user clicks on the delete action button and the process completes successfully', async () => {
-		useContactGroupStore.getState().addStoredContactGroups([contactGroupWithMembers]);
+		useContactGroupStore.getState().addContactGroups([contactGroupWithMembers]);
 		registerDeleteContactHandler(contactGroupWithMembers.id);
 		const { result, user } = setupHook(useActionDeleteCG);
 		const action = result.current;
@@ -181,7 +181,7 @@ describe('useActionDeleteCG', () => {
 	});
 
 	it('should call the API if the user clicks on the delete action button', async () => {
-		useContactGroupStore.getState().addStoredContactGroups([contactGroupWithMembers]);
+		useContactGroupStore.getState().addContactGroups([contactGroupWithMembers]);
 		const handler = registerDeleteContactHandler(contactGroupWithMembers.id);
 		const { result, user } = setupHook(useActionDeleteCG);
 		const action = result.current;
@@ -205,7 +205,7 @@ describe('useActionDeleteCG', () => {
 	});
 
 	it('should close the modal if the user clicks on the delete action button', async () => {
-		useContactGroupStore.getState().addStoredContactGroups([contactGroupWithMembers]);
+		useContactGroupStore.getState().addContactGroups([contactGroupWithMembers]);
 		registerDeleteContactHandler(contactGroupWithMembers.id);
 		const { result, user } = setupHook(useActionDeleteCG);
 		const action = result.current;

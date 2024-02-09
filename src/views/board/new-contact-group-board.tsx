@@ -30,15 +30,15 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 			.createContactGroup(nameValue, memberListEmails)
 			.then((contactGroup) => {
 				if (window.location.pathname.includes(ROUTES_INTERNAL_PARAMS.route.contactGroups)) {
-					useContactGroupStore.getState().addStoredContactGroupInSortedPosition(contactGroup);
+					useContactGroupStore.getState().addContactGroupInSortedPosition(contactGroup);
 					const element = window.document.getElementById(contactGroup.id);
 					if (element) {
 						element.scrollIntoView({ block: 'end' });
 					}
 					context?.navigateTo(`${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${contactGroup.id}`);
 				} else {
-					useContactGroupStore.getState().emptyStoredContactGroups();
-					useContactGroupStore.getState().setStoredOffset(0);
+					useContactGroupStore.getState().emptyContactGroups();
+					useContactGroupStore.getState().setOffset(0);
 				}
 
 				createSnackbar({
