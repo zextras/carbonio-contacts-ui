@@ -74,7 +74,19 @@ export const useContactGroupStore = create<ContactGroupsState>()(
 					offset: get().offset - 1
 				}));
 			} else {
-				throw new Error('Contact group not found');
+				const uIdx = get().unorderedContactGroups.findIndex(
+					(contactGroup) => contactGroup.id === contactGroupId
+				);
+				if (uIdx >= 0) {
+					set(() => ({
+						// TODO replace with Array toSpliced when will be available
+						unorderedContactGroups: get().unorderedContactGroups.filter(
+							(contactGroup) => contactGroup.id !== contactGroupId
+						)
+					}));
+				} else {
+					throw new Error('Contact group not found');
+				}
 			}
 		},
 		addContactGroupInSortedPosition: (newContactGroup: ContactGroup): void => {
