@@ -40,7 +40,8 @@ export const TESTID_SELECTORS = {
 	listBottomElement: 'list-bottom-element',
 	displayer: 'displayer',
 	displayerHeader: 'displayer-header',
-	accordionItem: 'accordion-item'
+	accordionItem: 'accordion-item',
+	locationDisplay: 'location-display'
 };
 
 export const PALETTE = {

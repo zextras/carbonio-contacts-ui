@@ -20,7 +20,8 @@ export const useFindContactGroups = (): UseFindContactGroupsReturnType => {
 	const {
 		addStoredContactGroups,
 		setStoredOffset,
-		storedContactGroups: contactGroups
+		storedContactGroups: contactGroups,
+		unorderedStoredContactGroups: unorderedContactGroups
 	} = useContactGroupStore();
 
 	const [hasMore, setHasMore] = useState(useContactGroupStore.getState().storedOffset !== -1);
@@ -51,5 +52,5 @@ export const useFindContactGroups = (): UseFindContactGroupsReturnType => {
 		findCallback();
 	}, [findCallback, hasMore]);
 
-	return { contactGroups, hasMore, findMore };
+	return { contactGroups: [...contactGroups, ...unorderedContactGroups], hasMore, findMore };
 };

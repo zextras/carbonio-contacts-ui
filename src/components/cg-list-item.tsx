@@ -44,7 +44,7 @@ export const CGListItem = React.memo<CGListItemProps>(
 		}, []);
 
 		return (
-			<Container data-testid={id} height={LIST_ITEM_HEIGHT}>
+			<Container data-testid={id} height={LIST_ITEM_HEIGHT} id={id}>
 				<ContextualMenu actions={actions}>
 					<ListItemContainer
 						height={'fit'}

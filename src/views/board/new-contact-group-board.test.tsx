@@ -30,8 +30,23 @@ function spyUseBoardHooks(updateBoardFn?: jest.Mock, closeBoardFn?: jest.Mock): 
 	});
 }
 
+function spyUseBoard(navigateTo?: jest.Mock): void {
+	jest.spyOn(shell, 'useBoard').mockReturnValue({
+		context: { navigateTo: navigateTo ?? jest.fn() },
+		id: '',
+		url: '',
+		app: '',
+		icon: '',
+		title: ''
+	});
+}
+
 beforeAll(() => {
 	spyUseBoardHooks();
+});
+
+beforeEach(() => {
+	spyUseBoard();
 });
 
 describe('New contact group board', () => {
@@ -75,7 +90,7 @@ describe('New contact group board', () => {
 					res(
 						ctx.json({
 							Body: {
-								CreateContactResponse: {}
+								CreateContactResponse: { cn: [{ id: '', _attrs: {} }] }
 							}
 						})
 					)
@@ -101,7 +116,7 @@ describe('New contact group board', () => {
 					res(
 						ctx.json({
 							Body: {
-								CreateContactResponse: {}
+								CreateContactResponse: { cn: [{ id: '', _attrs: {} }] }
 							}
 						})
 					)
@@ -250,7 +265,7 @@ describe('New contact group board', () => {
 					res(
 						ctx.json({
 							Body: {
-								CreateContactResponse: {}
+								CreateContactResponse: { cn: [{ id: '', _attrs: {} }] }
 							}
 						})
 					)
@@ -294,7 +309,7 @@ describe('New contact group board', () => {
 					res(
 						ctx.json({
 							Body: {
-								CreateContactResponse: {}
+								CreateContactResponse: { cn: [{ id: '', _attrs: {} }] }
 							}
 						})
 					)

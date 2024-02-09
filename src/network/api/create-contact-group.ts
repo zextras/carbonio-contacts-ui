@@ -3,7 +3,10 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-export const createContactGroup = (title: string, members: Array<string>): Promise<unknown> =>
+import { CnItem } from './types';
+import { ContactGroup } from '../../model/contact-group';
+
+export const createContactGroup = (title: string, members: Array<string>): Promise<ContactGroup> =>
 	fetch(`/service/soap/CreateContactRequest`, {
 		method: 'POST',
 		headers: {
@@ -30,9 +33,19 @@ export const createContactGroup = (title: string, members: Array<string>): Promi
 				}
 			}
 		})
-	}).then((response) => {
-		if (response.ok) {
-			return response.json();
-		}
-		throw new Error('Something went wrong');
-	});
+	})
+		.then((response) => {
+			if (response.ok) {
+				return response.json();
+			}
+			throw new Error('Something went wrong');
+		})
+		.then(({ Body }: { Body: { CreateContactResponse: { cn: Array<CnItem> } } }) => {
+			const cnItem = Body.CreateContactResponse.cn[0];
+
+			return {
+				id: cnItem.id,
+				title: cnItem._attrs.fullName ?? '',
+				members: cnItem.m?.map((value) => value.value) ?? []
+			};
+		});
