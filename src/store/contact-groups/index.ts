@@ -38,12 +38,10 @@ export const useContactGroupStore = create<ContactGroupsState>()(
 		orderedContactGroups: [],
 		unorderedContactGroups: [],
 		offset: 0,
-		updateContactGroup: (contactGroup): void =>
-			set(() => ({
-				orderedContactGroups: get().orderedContactGroups.map((cg) =>
-					cg.id === contactGroup.id ? contactGroup : cg
-				)
-			})),
+		updateContactGroup: (contactGroup): void => {
+			get().removeContactGroup(contactGroup.id);
+			get().addContactGroupInSortedPosition(contactGroup);
+		},
 		setOffset: (offset): void => set(() => ({ offset })),
 		addContactGroups: (contactGroups): void => {
 			const unordered = get().unorderedContactGroups;
@@ -98,9 +96,10 @@ export const useContactGroupStore = create<ContactGroupsState>()(
 			);
 
 			if (idx < prevContactGroups.length && idx >= 0) {
-				const result = [...prevContactGroups];
-				result.splice(idx, 0, newContactGroup);
-				set(() => ({ orderedContactGroups: result, offset: get().offset + 1 }));
+				set(() => ({
+					orderedContactGroups: [...prevContactGroups].splice(idx, 0, newContactGroup),
+					offset: get().offset + 1
+				}));
 			} else {
 				const prevUnorderedContactGroups = get().unorderedContactGroups;
 				if (prevUnorderedContactGroups.length === 0) {
