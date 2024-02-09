@@ -20,7 +20,7 @@ type DLDisplayerControllerProps = {
 
 export const DLDisplayerController = ({ id }: DLDisplayerControllerProps): React.JSX.Element => {
 	const [t] = useTranslation();
-	const { distributionList } = useGetDistributionList(id);
+	const { distributionList } = useGetDistributionList({ id }, { skip: id === undefined });
 
 	const { members = [], total = 0 } = useGetDistributionListMembers(
 		(distributionList?.canRequireMembers && distributionList?.email) || '',

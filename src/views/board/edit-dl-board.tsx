@@ -20,7 +20,10 @@ export type EditDLBoardContext = Pick<DistributionList, 'id'>;
 const EditDLBoard = (): React.JSX.Element => {
 	const [t] = useTranslation();
 	const { context } = useBoard<EditDLBoardContext>();
-	const { distributionList, loading: loadingDL } = useGetDistributionList(context?.id);
+	const { distributionList, loading: loadingDL } = useGetDistributionList(
+		{ id: context?.id },
+		{ skip: context?.id === undefined }
+	);
 	const {
 		loading: loadingMembers,
 		members = [],

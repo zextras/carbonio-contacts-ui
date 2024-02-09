@@ -9,7 +9,6 @@ import { filter, first, flatMap } from 'lodash';
 import { GenericSoapPayload } from './types';
 import { NAMESPACES } from '../../constants/api';
 import { DistributionList, DistributionListOwner } from '../../model/distribution-list';
-import { RequireAtLeastOne } from '../../types/utils';
 
 export interface GetDistributionListRequest extends GenericSoapPayload<typeof NAMESPACES.account> {
 	dl: {
@@ -62,9 +61,7 @@ const normalizeResponse = (response: GetDistributionListResponse): DistributionL
 export const getDistributionList = ({
 	id,
 	email
-}: RequireAtLeastOne<Pick<DistributionList, 'id' | 'email'>>): Promise<
-	DistributionList | undefined
-> => {
+}: Partial<Pick<DistributionList, 'id' | 'email'>>): Promise<DistributionList | undefined> => {
 	if (id === undefined && email === undefined) {
 		throw new Error('At least one between id and email is required');
 	}

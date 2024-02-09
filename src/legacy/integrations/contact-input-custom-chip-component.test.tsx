@@ -16,6 +16,7 @@ import { DL_MEMBERS_LOAD_LIMIT } from '../../constants';
 import { NAMESPACES } from '../../constants/api';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
 import { TESTID_SELECTORS, TIMERS } from '../../constants/tests';
+import { DistributionList } from '../../model/distribution-list';
 import {
 	GetDistributionListMembersRequest,
 	GetDistributionListMembersResponse
@@ -23,7 +24,11 @@ import {
 import { useDistributionListsStore } from '../../store/distribution-lists';
 import { registerGetDistributionListHandler } from '../../tests/msw-handlers/get-distribution-list';
 import { registerGetDistributionListMembersHandler } from '../../tests/msw-handlers/get-distribution-list-members';
-import { buildSoapResponse, generateDistributionList } from '../../tests/utils';
+import {
+	buildSoapResponse,
+	generateDistributionList,
+	generateDistributionListMembersPage
+} from '../../tests/utils';
 
 const distributionList = generateDistributionList({
 	id: 'dl-1',
@@ -177,15 +182,21 @@ describe('Contact input custom chip component', () => {
 			);
 
 			await waitFor(() => expect(getDLHandler).toHaveBeenCalled());
-			await user.click(await screen.findByTestId(TESTID_SELECTORS.icons.expandDL));
+			await user.click(
+				await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL })
+			);
 			act(() => {
 				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
 			});
 			await waitFor(() => expect(getMemberHandler).toHaveBeenCalledTimes(1));
 			await screen.findByText(user1.email);
-			await user.click(await screen.findByTestId(TESTID_SELECTORS.icons.collapseDL));
+			await user.click(
+				await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.collapseDL })
+			);
 			await waitFor(() => expect(screen.queryByText(user1.email)).not.toBeInTheDocument());
-			await user.click(await screen.findByTestId(TESTID_SELECTORS.icons.expandDL));
+			await user.click(
+				await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL })
+			);
 			act(() => {
 				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
 			});
@@ -209,15 +220,21 @@ describe('Contact input custom chip component', () => {
 			);
 
 			await waitFor(() => expect(getDLHandler).toHaveBeenCalled());
-			await user.click(await screen.findByTestId(TESTID_SELECTORS.icons.expandDL));
+			await user.click(
+				await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL })
+			);
 			act(() => {
 				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
 			});
 			await waitFor(() => expect(getMembersHandler).toHaveBeenCalledTimes(1));
 			await screen.findByText(user1.email);
-			await user.click(await screen.findByTestId(TESTID_SELECTORS.icons.collapseDL));
+			await user.click(
+				await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.collapseDL })
+			);
 			await waitFor(() => expect(screen.queryByText(user1.email)).not.toBeInTheDocument());
-			await user.click(await screen.findByTestId(TESTID_SELECTORS.icons.expandDL));
+			await user.click(
+				await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL })
+			);
 			act(() => {
 				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
 			});
@@ -241,7 +258,12 @@ describe('Contact input custom chip component', () => {
 				/>
 			);
 			await waitFor(() => expect(getDLHandler).toHaveBeenCalled());
-			await user.click(await screen.findByTestId(TESTID_SELECTORS.icons.expandDL));
+			await user.click(
+				await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL })
+			);
+			act(() => {
+				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
+			});
 			await screen.findByText(user1.email);
 			expect(getMembersHandler).toHaveBeenCalled();
 			expect(screen.getByRole('button', { name: selectAll })).toBeVisible();
@@ -297,9 +319,14 @@ describe('Contact input custom chip component', () => {
 			);
 
 			await waitFor(() => expect(getDistributionListHandler).toHaveBeenCalled());
-			const chevronAction = await screen.findByTestId(TESTID_SELECTORS.icons.expandDL);
-
-			await user.click(chevronAction);
+			await user.click(
+				await screen.findByRoleWithIcon('button', {
+					icon: TESTID_SELECTORS.icons.expandDL
+				})
+			);
+			act(() => {
+				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
+			});
 			await waitFor(() => expect(getMembersHandler).toHaveBeenCalled());
 			await screen.findByText(user1.email);
 			expect(screen.getByRole('button', { name: /show more/i })).toBeVisible();
@@ -322,9 +349,14 @@ describe('Contact input custom chip component', () => {
 			);
 
 			await waitFor(() => expect(getDistributionListHandler).toHaveBeenCalled());
-			const chevronAction = await screen.findByTestId(TESTID_SELECTORS.icons.expandDL);
-
-			await user.click(chevronAction);
+			await user.click(
+				await screen.findByRoleWithIcon('button', {
+					icon: TESTID_SELECTORS.icons.expandDL
+				})
+			);
+			act(() => {
+				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
+			});
 			await waitFor(() => expect(getMembersHandler).toHaveBeenCalled());
 			await screen.findByText(user1.email);
 			expect(screen.queryByRole('button', { name: /show more/i })).not.toBeInTheDocument();
@@ -381,8 +413,13 @@ describe('Contact input custom chip component', () => {
 			);
 
 			await waitFor(() => expect(getDistributionListHandler).toHaveBeenCalled());
-			const chevronAction = await screen.findByTestId(TESTID_SELECTORS.icons.expandDL);
+			const chevronAction = await screen.findByRoleWithIcon('button', {
+				icon: TESTID_SELECTORS.icons.expandDL
+			});
 			await user.click(chevronAction);
+			act(() => {
+				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
+			});
 			await waitFor(() => expect(getMembersHandler).toHaveBeenCalled());
 			await screen.findByText(user1.email);
 			expect(screen.queryByText(user4Mail)).not.toBeInTheDocument();
@@ -399,23 +436,30 @@ describe('Contact input custom chip component', () => {
 			const dlm = [user1.email, user2Mail, user3Mail];
 			const getDistributionListHandler = registerGetDistributionListHandler(distributionList);
 			const getMembersHandler = registerGetDistributionListMembersHandler(dlm);
-
+			const contactInputOnChangeFn = jest.fn();
 			const { user } = setupTest(
 				<ContactInputCustomChipComponent
 					id={distributionList.id}
 					label={distributionList.displayName}
 					email={distributionList.email}
 					isGroup
-					contactInputOnChange={jest.fn()}
+					contactInputOnChange={contactInputOnChangeFn}
 					contactInputValue={[]}
 				/>
 			);
 			await waitFor(() => expect(getDistributionListHandler).toHaveBeenCalled());
-			const chevronAction = await screen.findByTestId(TESTID_SELECTORS.icons.expandDL);
-			await user.click(chevronAction);
+			await user.click(
+				await screen.findByRoleWithIcon('button', {
+					icon: TESTID_SELECTORS.icons.expandDL
+				})
+			);
+			act(() => {
+				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
+			});
 			await waitFor(() => expect(getMembersHandler).toHaveBeenCalled());
 			await screen.findByText(user1.email);
 			await user.click(screen.getByRole('button', { name: selectAll }));
+			await waitFor(() => expect(contactInputOnChangeFn).toHaveBeenCalled());
 			expect(getMembersHandler).toHaveBeenCalledTimes(1);
 		});
 
@@ -465,7 +509,12 @@ describe('Contact input custom chip component', () => {
 				/>
 			);
 			await waitFor(() => expect(getDistributionListHandler).toHaveBeenCalled());
-			await user.click(await screen.findByTestId(TESTID_SELECTORS.icons.expandDL));
+			await user.click(
+				await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL })
+			);
+			act(() => {
+				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
+			});
 			await waitFor(() => expect(getMembersHandler).toHaveBeenCalled());
 			await screen.findByText(user1.email);
 			await user.click(screen.getByRole('button', { name: selectAll }));
@@ -504,7 +553,12 @@ describe('Contact input custom chip component', () => {
 				/>
 			);
 			await waitFor(() => expect(getDLHandler).toHaveBeenCalled());
-			await user.click(await screen.findByTestId(TESTID_SELECTORS.icons.expandDL));
+			await user.click(
+				await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL })
+			);
+			act(() => {
+				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
+			});
 			await screen.findByText(members[0]);
 			expect(getMembersHandler).not.toHaveBeenCalled();
 		});
@@ -531,11 +585,58 @@ describe('Contact input custom chip component', () => {
 				/>
 			);
 			await waitFor(() => expect(getDLHandler).toHaveBeenCalled());
-			await user.click(await screen.findByTestId(TESTID_SELECTORS.icons.expandDL));
+			await user.click(
+				await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL })
+			);
+			act(() => {
+				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
+			});
 			await screen.findByText(members[0]);
 			await user.click(screen.getByRole('button', { name: selectAll }));
 			await screen.findByText(secondPage[0]);
 			expect(getMembersHandler).toHaveBeenCalledTimes(1);
+		});
+
+		it('should request distribution list data to the network if it is not stored', async () => {
+			const getDLHandler = registerGetDistributionListHandler(distributionList);
+			setupTest(
+				<ContactInputCustomChipComponent
+					id={distributionList.id}
+					label={distributionList.displayName}
+					email={distributionList.email}
+					isGroup
+					contactInputOnChange={jest.fn()}
+					contactInputValue={[]}
+				/>
+			);
+			await waitFor(() => expect(getDLHandler).toHaveBeenCalled());
+			await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL });
+		});
+
+		it('should not request distribution list data to the network if it is already stored', async () => {
+			const getDLHandler = registerGetDistributionListHandler(distributionList);
+			useDistributionListsStore.getState().setDistributionLists([
+				{
+					description: '',
+					isOwner: true,
+					isMember: true,
+					owners: [],
+					members: generateDistributionListMembersPage([]),
+					...distributionList
+				} satisfies Required<DistributionList>
+			]);
+			setupTest(
+				<ContactInputCustomChipComponent
+					id={distributionList.id}
+					label={distributionList.displayName}
+					email={distributionList.email}
+					isGroup
+					contactInputOnChange={jest.fn()}
+					contactInputValue={[]}
+				/>
+			);
+			await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL });
+			expect(getDLHandler).not.toHaveBeenCalled();
 		});
 	});
 });

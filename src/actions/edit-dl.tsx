@@ -12,7 +12,10 @@ import { UIAction } from './types';
 import { ACTION_IDS, EDIT_DL_BOARD_ID } from '../constants';
 import { DistributionList } from '../model/distribution-list';
 
-export type EditDLAction = UIAction<DistributionList, Pick<DistributionList, 'isOwner'>>;
+export type EditDLAction = UIAction<
+	Pick<DistributionList, 'email' | 'displayName' | 'id'>,
+	Pick<DistributionList, 'isOwner'>
+>;
 
 export const useActionEditDL = (): EditDLAction => {
 	const [t] = useTranslation();

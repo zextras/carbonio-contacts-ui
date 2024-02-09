@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { ReactElement, useCallback, useMemo, useState } from 'react';
 
 import {
 	Chip,
@@ -20,9 +20,9 @@ import styled from 'styled-components';
 
 import { ACTION_IDS, DL_MEMBERS_LOAD_LIMIT } from '../../constants';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
+import { useGetDistributionList } from '../../hooks/use-get-distribution-list';
 import { useGetDistributionListMembers } from '../../hooks/use-get-distribution-list-members';
-import type { DistributionList, DistributionListMembersPage } from '../../model/distribution-list';
-import { client } from '../../network/client';
+import type { DistributionListMembersPage } from '../../model/distribution-list';
 import type {
 	ContactChipAction,
 	ContactInputChipDisplayName,
@@ -260,7 +260,11 @@ export const ContactInputCustomChipComponent = ({
 	actions,
 	...rest
 }: ContactInputCustomChipComponentProps): ReactElement => {
-	const [distributionList, setDistributionList] = useState<DistributionList>();
+	const contact = useMemo(() => ({ email, isGroup }), [email, isGroup]);
+	const { distributionList } = useGetDistributionList(
+		{ email },
+		{ skip: !isChipItemDistributionList(contact) }
+	);
 	const chipLabel = useMemo(() => {
 		if (label && chipDisplayName === CHIP_DISPLAY_NAME_VALUES.label) {
 			return label;
@@ -270,22 +274,6 @@ export const ContactInputCustomChipComponent = ({
 		}
 		return label || email || '';
 	}, [chipDisplayName, email, label]);
-
-	const contact = useMemo(() => ({ email, isGroup }), [email, isGroup]);
-
-	useEffect(() => {
-		if (isChipItemDistributionList(contact)) {
-			client
-				.getDistributionList(contact)
-				.then((response) => {
-					setDistributionList(response);
-				})
-				.catch((error) => {
-					setDistributionList(undefined);
-					console.error(error);
-				});
-		}
-	}, [contact]);
 
 	const chipActions = useMemo(
 		() =>

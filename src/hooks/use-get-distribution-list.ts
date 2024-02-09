@@ -14,39 +14,48 @@ import { client } from '../network/client';
 import { StoredDistributionList, useDistributionListsStore } from '../store/distribution-lists';
 import { OptionalPropertyOf } from '../types/utils';
 
+export const REQUIRED_FIELDS: Array<OptionalPropertyOf<StoredDistributionList>> = [
+	'id',
+	'displayName',
+	'owners',
+	'description',
+	'isMember',
+	'isOwner'
+];
+
 export const useGetDistributionList = (
-	id: string | undefined
-): { distributionList: DistributionList | undefined; loading: boolean } => {
+	{ id, email }: Partial<Pick<DistributionList, 'id' | 'email'>>,
+	{ skip }: { skip?: boolean } = {}
+): {
+	distributionList: DistributionList | undefined;
+	loading: boolean;
+} => {
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
 	const { distributionLists, upsertDistributionList } = useDistributionListsStore();
 	const [loading, setLoading] = useState(false);
 
 	const storedItem = useMemo(
-		() => distributionLists?.find((dl): dl is DistributionList => dl.id === id),
-		[distributionLists, id]
+		() =>
+			distributionLists?.find(
+				(dl): dl is DistributionList => (dl.id === id || dl.email === email) && dl.id !== undefined
+			),
+		[distributionLists, email, id]
 	);
 
 	const [distributionList, setDistributionList] = useState<DistributionList | undefined>();
 
-	const shouldLoadData = useMemo(() => {
-		const requiredFields: Array<OptionalPropertyOf<StoredDistributionList>> = [
-			'displayName',
-			'owners',
-			'description',
-			'isMember',
-			'isOwner'
-		];
-		return (
-			storedItem === undefined || some(requiredFields, (field) => storedItem[field] === undefined)
-		);
-	}, [storedItem]);
+	const shouldLoadData = useMemo(
+		() =>
+			storedItem === undefined || some(REQUIRED_FIELDS, (field) => storedItem[field] === undefined),
+		[storedItem]
+	);
 
 	useEffect(() => {
-		if (shouldLoadData && id !== undefined) {
+		if (shouldLoadData && !skip) {
 			setLoading(true);
 			client
-				.getDistributionList({ id })
+				.getDistributionList({ id, email })
 				.then((dl) => {
 					if (dl) {
 						setDistributionList(dl);
@@ -67,7 +76,7 @@ export const useGetDistributionList = (
 					setLoading(false);
 				});
 		}
-	}, [createSnackbar, id, shouldLoadData, t, upsertDistributionList]);
+	}, [createSnackbar, email, id, shouldLoadData, skip, t, upsertDistributionList]);
 
 	return { distributionList: storedItem ?? distributionList, loading };
 };
