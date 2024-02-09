@@ -193,6 +193,18 @@ type FolderActionDelete = {
 	id: string;
 };
 
+export type GetFolderActionRequest = {
+	folder: {
+		l: string;
+	};
+	_jsns: string;
+};
+
+export type GetFolderActionResponse = {
+	folder: Array<ISoapFolderObj>;
+	_jsns: string;
+};
+
 export type FolderActionRequest = {
 	action: FolderActionRename | FolderActionMove | FolderActionDelete;
 };

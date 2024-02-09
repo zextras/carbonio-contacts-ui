@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { find } from 'lodash';
+
 import { Contact } from '../../types/contact';
 import { State } from '../../types/store';
 

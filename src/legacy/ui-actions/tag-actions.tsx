@@ -11,7 +11,7 @@ import React, {
 	useMemo,
 	useState
 } from 'react';
-import { TFunction } from 'i18next';
+
 import {
 	ModalManagerContext,
 	SnackbarManagerContext,
@@ -22,8 +22,6 @@ import {
 	Checkbox,
 	Button
 } from '@zextras/carbonio-design-system';
-
-import { every, find, includes, map, reduce } from 'lodash';
 import {
 	ZIMBRA_STANDARD_COLORS,
 	replaceHistory,
@@ -31,16 +29,18 @@ import {
 	Tag,
 	Tags
 } from '@zextras/carbonio-shell-ui';
+import { TFunction } from 'i18next';
+import { every, find, includes, map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
+
+import { useAppDispatch } from '../hooks/redux';
+import { contactAction } from '../store/actions/contact-action';
 import { StoreProvider } from '../store/redux';
+import { Contact } from '../types/contact';
 import { TagsActionsType } from '../types/tags';
 import CreateUpdateTagModal from '../views/secondary-bar/parts/tags/create-update-tag-modal';
 import DeleteTagModal from '../views/secondary-bar/parts/tags/delete-tag-modal';
-import { contactAction } from '../store/actions/contact-action';
 import { ItemType } from '../views/secondary-bar/parts/tags/types';
-import { Contact } from '../types/contact';
-import { useAppDispatch } from '../hooks/redux';
 
 export type ReturnType = {
 	id: string;

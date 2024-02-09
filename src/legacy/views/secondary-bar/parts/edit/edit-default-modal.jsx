@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React, { useState, useMemo, useCallback } from 'react';
+
 import {
 	Container,
 	Select,
@@ -11,25 +12,22 @@ import {
 	Text,
 	Padding,
 	Row,
-	Divider
+	Divider,
+	useSnackbar
 } from '@zextras/carbonio-design-system';
 import { isEmpty, reduce, filter, first } from 'lodash';
-import ModalFooter from '../../commons/modal-footer';
-import { ModalHeader } from '../../commons/modal-header';
+import { useTranslation } from 'react-i18next';
+
+import { ShareFolderProperties } from './share-folder-properties';
+import ColorSelect from '../../../../commons/ColorSelect';
 import { folderAction } from '../../../../store/actions/folder-action';
 import { extractFolders } from '../../../../utils/helpers';
-import ColorSelect from '../../../../commons/ColorSelect';
-import { ShareFolderProperties } from './share-folder-properties';
+import ModalFooter from '../../commons/modal-footer';
+import { ModalHeader } from '../../commons/modal-header';
 
-const EditDefaultModal = ({
-	currentFolder,
-	accordions,
-	setModal,
-	dispatch,
-	t,
-	setActiveModal,
-	createSnackbar
-}) => {
+const EditDefaultModal = ({ currentFolder, accordions, setModal, dispatch, setActiveModal }) => {
+	const createSnackbar = useSnackbar();
+	const [t] = useTranslation();
 	const [inputValue, setInputValue] = useState('');
 	const [parent, setParent] = useState('');
 	const folders = useMemo(() => extractFolders(accordions), [accordions]);
@@ -91,7 +89,7 @@ const EditDefaultModal = ({
 			},
 			accItem
 		);
-	}, [currentFolder.level, currentFolder.id, currentFolder.parent, folders, t]);
+	}, [currentFolder.parent, currentFolder.level, currentFolder.id, folders, t]);
 
 	useMemo(() => {
 		setParent(currentFolder.parent);
@@ -137,7 +135,7 @@ const EditDefaultModal = ({
 			}
 		});
 		setModal('');
-	}, [dispatch, currentFolder, inputValue, parent, setModal, folderColor, createSnackbar, t]);
+	}, [dispatch, currentFolder, inputValue, parent, folderColor, setModal, createSnackbar, t]);
 
 	const onClose = useCallback(() => setModal(''), [setModal]);
 
@@ -271,7 +269,6 @@ const EditDefaultModal = ({
 					<ShareFolderProperties
 						folder={currentFolder}
 						setCurrentFolder={() => null}
-						createSnackbar={createSnackbar}
 						setModal={setModal}
 						setActiveModal={setActiveModal}
 					/>

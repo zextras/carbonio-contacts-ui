@@ -4,6 +4,146 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
+import { FOLDERS } from '@zextras/carbonio-shell-ui';
+
+type TypeOfEnumeration<T> = T[keyof T];
+
+export const DISPLAY_ASSERTION = {
+	display: {
+		value: true,
+		desc: 'display'
+	},
+	notDisplay: {
+		value: false,
+		desc: 'not display'
+	}
+};
+
+export type DisplayAssertionType = TypeOfEnumeration<typeof DISPLAY_ASSERTION>;
+
+export const FOLDERS_DESCRIPTORS = {
+	contacts: {
+		id: FOLDERS.CONTACTS,
+		desc: 'contacts'
+	},
+	autoContacts: {
+		id: FOLDERS.AUTO_CONTACTS,
+		desc: 'emailed contacts'
+	},
+	trash: {
+		id: FOLDERS.TRASH,
+		desc: 'trash'
+	},
+	userDefined: {
+		id: '1234567',
+		desc: 'user defined'
+	}
+};
+
+export type FolderDescriptorType = TypeOfEnumeration<typeof FOLDERS_DESCRIPTORS>;
+
+export type ActionDescriptorType = {
+	id: string;
+	desc: string;
+	icon: string;
+};
+
+export const CONTACT_ACTIONS_DESCRIPTORS = {
+	mailTo: {
+		id: 'mail-to',
+		desc: 'Send e-mail',
+		icon: 'MailModOutline'
+	},
+	deletePermanently: {
+		id: 'deletePermanently',
+		desc: 'Delete Permanently',
+		icon: 'DeletePermanentlyOutline'
+	},
+	delete: {
+		id: 'delete',
+		desc: 'Delete',
+		icon: 'Trash2Outline'
+	},
+	move: {
+		id: 'move',
+		desc: 'Move',
+		icon: 'MoveOutline'
+	},
+	applyTag: {
+		id: 'apply',
+		desc: 'Tags',
+		icon: 'TagsMoreOutline'
+	},
+	applyMultiTag: {
+		id: 'apply',
+		desc: 'Tags',
+		icon: 'TagsMoreOutline'
+	},
+	restore: {
+		id: 'restore',
+		desc: 'Restore',
+		icon: 'RestoreOutline'
+	}
+} satisfies Record<string, ActionDescriptorType>;
+
+export const FOLDER_ACTIONS_DESCRIPTORS = {
+	new: {
+		id: 'new',
+		desc: 'New address book',
+		icon: 'AddressBookOutline'
+	},
+	move: {
+		id: 'move',
+		desc: 'Move',
+		icon: 'MoveOutline'
+	},
+	share: {
+		id: 'share',
+		desc: 'Share address book',
+		icon: 'ShareOutline'
+	},
+	empty: {
+		id: 'empty',
+		desc: 'Empty address book',
+		icon: 'EmptyFolderOutline'
+	},
+	emptyTrash: {
+		id: 'emptyTrash', // TODO the current action use the "empty" id
+		desc: 'Empty trash',
+		icon: 'DeletePermanentlyOutline'
+	},
+	edit: {
+		id: 'edit',
+		desc: 'Edit address book',
+		icon: 'Edit2Outline'
+	},
+	delete: {
+		id: 'delete',
+		desc: 'Delete address book',
+		icon: 'Trash2Outline'
+	},
+	deletePermanently: {
+		id: 'deletePermanently', // TODO the current action use the "delete" id
+		desc: 'Delete address book',
+		icon: 'Trash2Outline'
+	},
+	removeShare: {
+		id: 'removeFromList',
+		desc: 'Remove from this list',
+		icon: 'CloseOutline'
+	},
+	shareInfo: {
+		id: 'sharesInfo',
+		desc: "Shared address book's info",
+		icon: 'InfoOutline'
+	}
+} satisfies Record<string, ActionDescriptorType>;
+
+export const ACTIONS_DESCRIPTORS = {
+	contacts: CONTACT_ACTIONS_DESCRIPTORS,
+	folders: FOLDER_ACTIONS_DESCRIPTORS
+} satisfies Record<string, Record<string, ActionDescriptorType>>;
+
 export const TESTID_SELECTORS = {
 	icons: {
 		save: /icon: SaveOutline/i,
@@ -24,7 +164,9 @@ export const TESTID_SELECTORS = {
 		distributionList: 'icon: DistributionListOutline',
 		copy: 'icon: Copy',
 		edit: 'icon: EditOutline',
-		displayerIcon: 'icon: PeopleOutline'
+		displayerIcon: 'icon: PeopleOutline',
+		exitSelection: 'icon: ArrowBack',
+		moreOptions: 'icon: MoreVertical'
 	},
 	avatar: 'avatar',
 	modal: 'modal',
@@ -36,6 +178,7 @@ export const TESTID_SELECTORS = {
 	dlMembersFilterInput: 'dl-members-filter-input',
 	membersList: 'members-list',
 	membersListItem: 'member-list-item',
+	contactsListItem: 'contact-list-item',
 	snackbar: 'snackbar',
 	listItemContent: 'list-item-content',
 	listBottomElement: 'list-bottom-element',

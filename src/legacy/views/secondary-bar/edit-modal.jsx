@@ -4,22 +4,17 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React, { useCallback, useState } from 'react';
-import { Container, CustomModal } from '@zextras/carbonio-design-system';
 
-import EditDefaultModal from './parts/edit/edit-default-modal';
-import ShareFolderModal from './share-folder-modal';
-import ShareRevokeModal from './parts/edit/share-revoke-modal';
+import { Container, CustomModal, useSnackbar } from '@zextras/carbonio-design-system';
+import { t } from '@zextras/carbonio-shell-ui';
+
 import { Context } from './parts/edit/edit-context';
+import EditDefaultModal from './parts/edit/edit-default-modal';
+import ShareRevokeModal from './parts/edit/share-revoke-modal';
+import ShareFolderModal from './share-folder-modal';
 
-export const EditModal = ({
-	currentFolder,
-	accordions,
-	openModal,
-	setModal,
-	dispatch,
-	t,
-	createSnackbar
-}) => {
+export const EditModal = ({ currentFolder, accordions, openModal, setModal, dispatch }) => {
+	const createSnackbar = useSnackbar();
 	const [activeModal, setActiveModal] = useState('default');
 	const [activeGrant, setActiveGrant] = useState({});
 	const onClose = useCallback(() => {
@@ -39,16 +34,10 @@ export const EditModal = ({
 				>
 					{activeModal === 'default' && (
 						<EditDefaultModal
-							t={t}
 							currentFolder={currentFolder}
-							openModal={openModal}
 							setModal={setModal}
 							dispatch={dispatch}
-							createSnackbar={createSnackbar}
-							allFolders={[]}
-							onClose={onClose}
 							setActiveModal={setActiveModal}
-							setActiveGrant={setActiveGrant}
 							accordions={accordions}
 						/>
 					)}
