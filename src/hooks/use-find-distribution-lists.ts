@@ -57,7 +57,8 @@ export const useFindDistributionLists = ({
 			filter(
 				distributionLists,
 				(item): item is DistributionList =>
-					(item.id !== undefined && ownerOf && item.isOwner) || (memberOf && item.isMember === true)
+					item.id !== undefined &&
+					((ownerOf && item.isOwner) || (memberOf && item.isMember === true))
 			),
 		[distributionLists, memberOf, ownerOf]
 	);
