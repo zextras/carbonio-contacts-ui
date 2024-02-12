@@ -65,7 +65,7 @@ export const DistributionListsView = (): React.JSX.Element => {
 				borderRadius="none"
 				maxHeight={'100%'}
 			>
-				<DLDisplayerController />
+				<DLDisplayerController id={activeItem} />
 			</Container>
 		</Container>
 	);

@@ -7,6 +7,7 @@ import { NameSpace } from '@zextras/carbonio-shell-ui';
 
 export interface GenericSoapPayload<NS extends NameSpace> {
 	_jsns: NS;
+	requestId?: string;
 }
 
 export type CnItem = {

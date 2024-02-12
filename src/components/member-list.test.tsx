@@ -84,4 +84,12 @@ describe('Member list', () => {
 			);
 		});
 	});
+
+	it('should show 3 shimmed items while loading', () => {
+		setupTest(<MemberList members={['member 1']} membersCount={0} loading />);
+		expect(screen.queryByText('member 1')).not.toBeInTheDocument();
+		const shimmedItems = screen.getAllByTestId(TESTID_SELECTORS.shimmedListItem);
+		expect(shimmedItems).toHaveLength(3);
+		expect(shimmedItems[0]).toBeVisible();
+	});
 });
