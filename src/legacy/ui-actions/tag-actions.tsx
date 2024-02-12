@@ -3,24 +3,16 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, {
-	ComponentType,
-	ReactElement,
-	useCallback,
-	useContext,
-	useMemo,
-	useState
-} from 'react';
-
+import React, { ComponentType, ReactElement, useCallback, useMemo, useState } from 'react';
 import {
-	ModalManagerContext,
-	SnackbarManagerContext,
 	Row,
 	Text,
 	Padding,
 	Icon,
 	Checkbox,
-	Button
+	Button,
+	useModal,
+	useSnackbar
 } from '@zextras/carbonio-design-system';
 import {
 	ZIMBRA_STANDARD_COLORS,
@@ -172,7 +164,7 @@ export const TagsDropdownItem = ({
 	contact: Contact;
 }): ReactElement => {
 	const [t] = useTranslation();
-	const createSnackbar = useContext(SnackbarManagerContext);
+	const createSnackbar = useSnackbar();
 	const dispatch = useAppDispatch();
 	const [checked, setChecked] = useState(includes(contact.tags, tag.id));
 	const [isHovering, setIsHovering] = useState(false);
@@ -264,7 +256,7 @@ export const MultiSelectTagsDropdownItem = ({
 	folderId?: string;
 }): ReactElement => {
 	const [t] = useTranslation();
-	const createSnackbar = useContext(SnackbarManagerContext);
+	const createSnackbar = useSnackbar();
 	const dispatch = useAppDispatch();
 	const [isHovering, setIsHovering] = useState(false);
 
@@ -487,8 +479,8 @@ export const applyTag = ({
 };
 
 export const useGetTagsActions = ({ tag, t }: ArgumentType): Array<ReturnType> => {
-	const createModal = useContext(ModalManagerContext) as () => () => void;
-	const createSnackbar = useContext(SnackbarManagerContext) as () => void;
+	const createModal = useModal();
+	const createSnackbar = useSnackbar();
 	return useMemo(
 		() => [
 			createTag({ t, createModal }),

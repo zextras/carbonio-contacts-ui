@@ -4,10 +4,12 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import React, { ComponentType, FC, ReactElement, useCallback, useContext, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Container, Text, SnackbarManagerContext } from '@zextras/carbonio-design-system';
+import React, { ComponentType, FC, ReactElement, useCallback, useMemo } from 'react';
+
+import { Container, Text, useSnackbar } from '@zextras/carbonio-design-system';
 import { deleteTag } from '@zextras/carbonio-shell-ui';
+import { useTranslation } from 'react-i18next';
+
 import ModalFooter from '../../commons/modal-footer';
 import { ModalHeader } from '../../commons/modal-header';
 
@@ -25,7 +27,7 @@ type ComponentProps = {
 	};
 };
 const DeleteTagModal: FC<ComponentProps> = ({ onClose, tag }): ReactElement => {
-	const createSnackbar = useContext(SnackbarManagerContext);
+	const createSnackbar = useSnackbar();
 	const [t] = useTranslation();
 
 	const title = useMemo(
