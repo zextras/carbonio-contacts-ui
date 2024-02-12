@@ -16,7 +16,7 @@ import {
 	SnackbarManagerContext
 } from '@zextras/carbonio-design-system';
 import { FOLDERS, replaceHistory } from '@zextras/carbonio-shell-ui';
-import { filter, findIndex, isEqual, map, maxBy, remove, sortBy, uniqWith } from 'lodash';
+import { filter, findIndex, map, maxBy, remove, sortBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import ModalWrapper from './commons/modal-wrapper';
@@ -27,9 +27,9 @@ import { MoveModal } from './move-modal';
 import { NewModal } from './new-modal';
 import ShareFolderModal from './share-folder-modal';
 import { SharesModal } from './shares-modal';
+import { client } from '../../../network/client';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import useGetTagsAccordion from '../../hooks/use-get-tags-accordions';
-import { getShareInfo } from '../../store/actions/get-share-info';
 import { StoreProvider } from '../../store/redux';
 import { selectFolders } from '../../store/selectors/folders';
 import { FolderActionsType } from '../../types/folder';
@@ -61,34 +61,21 @@ const SharesItem = ({ item }) => (
 			size="fill"
 			onClick={(ev) => {
 				ev.stopPropagation();
-				item?.context?.dispatch(getShareInfo()).then((res) => {
-					if (res.type.includes('fulfilled')) {
-						const folders = uniqWith(
-							filter(res?.payload?.share ?? [], ['view', 'contact']),
-							isEqual
-						);
-
-						// eslint-disable-next-line consistent-return
-						const requiredFolders = filter(folders, (v) => {
-							if (v.ownerName) {
-								return v;
-							}
-						});
-						const closeModal = item.context.createModal(
-							{
-								children: (
-									<StoreProvider>
-										<SharesModal
-											folders={requiredFolders}
-											onClose={() => closeModal()}
-											createSnackbar={item?.context?.createSnackbar}
-										/>
-									</StoreProvider>
-								)
-							},
-							true
-						);
-					}
+				client.getShareInfo().then((shares) => {
+					const closeModal = item.context.createModal(
+						{
+							children: (
+								<StoreProvider>
+									<SharesModal
+										folders={shares}
+										onClose={() => closeModal()}
+										createSnackbar={item?.context?.createSnackbar}
+									/>
+								</StoreProvider>
+							)
+						},
+						true
+					);
 				});
 			}}
 		/>
