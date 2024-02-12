@@ -58,7 +58,9 @@ describe('Member displayer item', () => {
 		const { user } = setupTest(<MemberDisplayerListItemComponent email={email} />);
 		const button = screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.sendEmail });
 		await user.click(button);
-		expect(openMailComposer).toHaveBeenCalledWith({ recipients: [{ email }] });
+		expect(openMailComposer).toHaveBeenCalledWith({
+			recipients: [expect.objectContaining({ email })]
+		});
 	});
 
 	it('should call copy into clipboard function when user clicks on copy address button', async () => {

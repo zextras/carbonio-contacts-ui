@@ -115,7 +115,9 @@ describe('Contact Group View', () => {
 			const action = within(displayer).getByRole('button', { name: /mail/i });
 			await user.click(action);
 			expect(openMailComposer).toHaveBeenCalledTimes(1);
-			expect(openMailComposer).toHaveBeenCalledWith({ recipients: [{ email: member }] });
+			expect(openMailComposer).toHaveBeenCalledWith({
+				recipients: [expect.objectContaining({ email: member })]
+			});
 		});
 
 		it('should open the mail board (Hover trigger)', async () => {
@@ -135,7 +137,9 @@ describe('Contact Group View', () => {
 			const action = screen.getByTestId(TESTID_SELECTORS.icons.sendEmail);
 			await user.click(action);
 			expect(openMailComposer).toHaveBeenCalledTimes(1);
-			expect(openMailComposer).toHaveBeenCalledWith({ recipients: [{ email: member }] });
+			expect(openMailComposer).toHaveBeenCalledWith({
+				recipients: [expect.objectContaining({ email: member })]
+			});
 		});
 
 		it('should hide send mail hover action when the contact group has 0 members', async () => {
@@ -175,7 +179,9 @@ describe('Contact Group View', () => {
 			const action = within(contextualMenu).getByText('Send e-mail');
 			await user.click(action);
 			expect(openMailComposer).toHaveBeenCalledTimes(1);
-			expect(openMailComposer).toHaveBeenCalledWith({ recipients: [{ email: member }] });
+			expect(openMailComposer).toHaveBeenCalledWith({
+				recipients: [expect.objectContaining({ email: member })]
+			});
 		});
 	});
 

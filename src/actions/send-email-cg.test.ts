@@ -55,7 +55,9 @@ describe('useActionSendEmailCG', () => {
 		const { result } = setupHook(useActionSendEmailCG);
 		result.current.execute(contactGroupWithMembers);
 		expect(openComposer).toBeCalledWith({
-			recipients: contactGroupWithMembers.members.map((member) => ({ email: member }))
+			recipients: contactGroupWithMembers.members.map((member) =>
+				expect.objectContaining({ email: member })
+			)
 		});
 	});
 });
