@@ -157,7 +157,7 @@ export default function Sidebar({ expanded }) {
 			)
 		);
 		setModalAccordions(temp);
-	}, [folders, t, dispatch, createModal, createSnackbar, expanded]);
+	}, [folders, dispatch, createModal, createSnackbar, expanded, t]);
 
 	return (
 		<>
@@ -221,8 +221,6 @@ export default function Sidebar({ expanded }) {
 							openModal={modal === FolderActionsType.EDIT}
 							setModal={setModal}
 							dispatch={dispatch}
-							t={t}
-							createSnackbar={createSnackbar}
 						/>
 					)}
 					{modal === 'share' && (
