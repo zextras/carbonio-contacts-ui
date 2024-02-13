@@ -27,24 +27,31 @@ type State = {
 	offset: number;
 };
 
-type Actions = {
+export type ContactGroupStoreActions = {
 	addContactGroups: (newContactGroups: Array<ContactGroup>) => void;
 	addContactGroupInSortedPosition: (newContactGroup: ContactGroup) => void;
 	updateContactGroup: (contactGroup: ContactGroup) => void;
 	setOffset: (offset: number) => void;
 	removeContactGroup: (contactGroupId: string) => void;
 	reset: () => void;
+	// testing purpose
+	setUnorderedContactGroups: (contactGroups: Array<ContactGroup>) => void;
 };
 
-const initialState: State = {
+export const initialState: State = {
 	orderedContactGroups: [],
 	unorderedContactGroups: [],
 	offset: 0
 };
 
 // extra currying as suggested in https://github.com/pmndrs/zustand/blob/main/docs/guides/typescript.md#basic-usage
-export const useContactGroupStore = create<State & Actions>()((set, get) => ({
+export const useContactGroupStore = create<State & ContactGroupStoreActions>()((set, get) => ({
 	...initialState,
+	setUnorderedContactGroups: (contactGroups): void => {
+		set(() => ({
+			unorderedContactGroups: contactGroups
+		}));
+	},
 	reset: (): void => {
 		set(initialState);
 	},
