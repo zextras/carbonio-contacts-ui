@@ -3,10 +3,12 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useState, useMemo, useCallback, useContext } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
+
+import { Container, FormSection, useSnackbar } from '@zextras/carbonio-design-system';
 import { useUserSettings, editSettings, SettingsHeader } from '@zextras/carbonio-shell-ui';
-import { Container, FormSection, SnackbarManagerContext } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
+
 import { differenceObject } from './components/utils';
 import OptionsSettingsView from './options-settings-view';
 
@@ -15,7 +17,7 @@ export default function ContactSettingsView() {
 	const settings = useUserSettings()?.prefs;
 	const [settingsObj, setSettingsObj] = useState({ ...settings });
 	const [updatedSettings, setUpdatedSettings] = useState({});
-	const createSnackbar = useContext(SnackbarManagerContext);
+	const createSnackbar = useSnackbar();
 
 	const onClose = useCallback(() => {
 		setSettingsObj({ ...settings });

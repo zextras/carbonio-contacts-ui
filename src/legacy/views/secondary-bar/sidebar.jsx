@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
 	Accordion,
@@ -11,9 +11,9 @@ import {
 	ButtonOld as Button,
 	Container,
 	Icon,
-	ModalManagerContext,
 	Row,
-	SnackbarManagerContext
+	useModal,
+	useSnackbar
 } from '@zextras/carbonio-design-system';
 import { FOLDERS, replaceHistory } from '@zextras/carbonio-shell-ui';
 import { filter, findIndex, map, maxBy, remove, sortBy } from 'lodash';
@@ -98,8 +98,8 @@ export default function Sidebar({ expanded }) {
 	const [t] = useTranslation();
 	const [accordionItems, setAccordionItems] = useState([]);
 	const [sideBarItems, setSidebarItems] = useState([]);
-	const createModal = useContext(ModalManagerContext);
-	const createSnackbar = useContext(SnackbarManagerContext);
+	const createModal = useModal();
+	const createSnackbar = useSnackbar();
 	const tagsAccordionItems = useGetTagsAccordion();
 	const divider = (idx) => ({ divider: true, id: `divider-${idx}` });
 	useEffect(() => {
