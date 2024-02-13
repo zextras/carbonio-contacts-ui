@@ -19,7 +19,6 @@ import {
 	JEST_MOCKED_ERROR,
 	TESTID_SELECTORS
 } from '../constants/tests';
-import { useContactGroupStore } from '../store/contact-groups';
 import { LocationDisplay } from '../tests/location-display';
 import { registerDeleteContactHandler } from '../tests/msw-handlers/delete-contact';
 import {
@@ -27,11 +26,6 @@ import {
 	registerFindContactGroupsHandler
 } from '../tests/msw-handlers/find-contact-groups';
 import { createCnItem } from '../tests/utils';
-
-beforeEach(() => {
-	useContactGroupStore.getState().setOffset(0);
-	useContactGroupStore.getState().emptyContactGroups();
-});
 
 describe('Contact Group View', () => {
 	it('should render the avatar, the name and the number of the members (case 1+ addresses string) of a contact group', async () => {

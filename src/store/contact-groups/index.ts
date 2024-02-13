@@ -19,23 +19,33 @@ function compareContactGroupName(nameA: string, nameB: string): number {
 	return 0;
 }
 
-export type ContactGroupsState = {
+type State = {
 	orderedContactGroups: Array<ContactGroup>;
 	unorderedContactGroups: Array<ContactGroup>;
+	offset: number;
+};
+
+type Actions = {
 	addContactGroups: (newContactGroups: Array<ContactGroup>) => void;
 	addContactGroupInSortedPosition: (newContactGroup: ContactGroup) => void;
 	updateContactGroup: (contactGroup: ContactGroup) => void;
-	offset: number;
 	setOffset: (offset: number) => void;
-	emptyContactGroups: () => void;
 	removeContactGroup: (contactGroupId: string) => void;
+	reset: () => void;
+};
+
+const initialState: State = {
+	orderedContactGroups: [],
+	unorderedContactGroups: [],
+	offset: 0
 };
 
 // extra currying as suggested in https://github.com/pmndrs/zustand/blob/main/docs/guides/typescript.md#basic-usage
-export const useContactGroupStore = create<ContactGroupsState>()((set, get) => ({
-	orderedContactGroups: [],
-	unorderedContactGroups: [],
-	offset: 0,
+export const useContactGroupStore = create<State & Actions>()((set, get) => ({
+	...initialState,
+	reset: (): void => {
+		set(initialState);
+	},
 	updateContactGroup: (contactGroup): void => {
 		get().removeContactGroup(contactGroup.id);
 		get().addContactGroupInSortedPosition(contactGroup);
@@ -56,8 +66,6 @@ export const useContactGroupStore = create<ContactGroupsState>()((set, get) => (
 			}));
 		}
 	},
-	emptyContactGroups: (): void =>
-		set(() => ({ orderedContactGroups: [], unorderedContactGroups: [] })),
 	removeContactGroup: (contactGroupId: string): void => {
 		const { orderedContactGroups, unorderedContactGroups, offset } = get();
 		const idx = orderedContactGroups.findIndex(

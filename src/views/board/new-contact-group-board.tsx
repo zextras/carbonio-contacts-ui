@@ -37,8 +37,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 					}
 					context?.navigateTo(`${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${contactGroup.id}`);
 				} else {
-					useContactGroupStore.getState().emptyContactGroups();
-					useContactGroupStore.getState().setOffset(0);
+					useContactGroupStore.getState().reset();
 				}
 
 				createSnackbar({
