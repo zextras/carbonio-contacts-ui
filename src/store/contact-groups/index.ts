@@ -10,10 +10,12 @@ import { create } from 'zustand';
 import { ContactGroup } from '../../model/contact-group';
 
 function compareContactGroupName(nameA: string, nameB: string): number {
-	if (nameA > nameB) {
+	const nameALow = nameA.toLowerCase();
+	const nameBLow = nameB.toLowerCase();
+	if (nameALow > nameBLow) {
 		return 1;
 	}
-	if (nameB > nameA) {
+	if (nameBLow > nameALow) {
 		return -1;
 	}
 	return 0;
@@ -104,27 +106,24 @@ export const useContactGroupStore = create<State & Actions>()((set, get) => ({
 		);
 
 		if (idx < orderedContactGroups.length && idx >= 0) {
+			const result = [...orderedContactGroups];
+			result.splice(idx, 0, newContactGroup);
 			set(() => ({
-				orderedContactGroups: [...orderedContactGroups].splice(idx, 0, newContactGroup),
+				orderedContactGroups: result,
 				offset: offset + 1
 			}));
+		} else if (unorderedContactGroups.length === 0) {
+			set(() => ({ unorderedContactGroups: [newContactGroup] }));
 		} else {
-			const prevUnorderedContactGroups = unorderedContactGroups;
-			if (prevUnorderedContactGroups.length === 0) {
-				set(() => ({ unorderedContactGroups: [newContactGroup] }));
-			} else {
-				const unorderedIdx = findIndex(
-					prevUnorderedContactGroups,
-					(contactGroup) => compareContactGroupName(newContactGroup.title, contactGroup.title) < 0
-				);
-				set(() => ({
-					unorderedContactGroups: [...prevUnorderedContactGroups].splice(
-						unorderedIdx,
-						0,
-						newContactGroup
-					)
-				}));
-			}
+			const unorderedIdx = findIndex(
+				unorderedContactGroups,
+				(contactGroup) => compareContactGroupName(newContactGroup.title, contactGroup.title) < 0
+			);
+			const result = [...unorderedContactGroups];
+			result.splice(unorderedIdx, 0, newContactGroup);
+			set(() => ({
+				unorderedContactGroups: result
+			}));
 		}
 	}
 }));
