@@ -7,7 +7,7 @@
 import { differenceBy, findIndex } from 'lodash';
 import { create } from 'zustand';
 
-import { ContactGroup } from '../../model/contact-group';
+import { ContactGroup } from '../model/contact-group';
 
 function compareContactGroupName(nameA: string, nameB: string): number {
 	const nameALow = nameA.toLowerCase();
