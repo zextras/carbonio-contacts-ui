@@ -147,7 +147,7 @@ describe('DL list item', () => {
 					expect(addBoardFn).toHaveBeenCalledWith(
 						expect.objectContaining<Partial<Parameters<typeof shell.addBoard>[0]>>({
 							url: EDIT_DL_BOARD_ID,
-							context: dl
+							context: { id: dl.id }
 						})
 					);
 				});
@@ -178,7 +178,7 @@ describe('DL list item', () => {
 					expect(addBoardFn).toHaveBeenCalledWith(
 						expect.objectContaining<Partial<Parameters<typeof shell.addBoard>[0]>>({
 							url: EDIT_DL_BOARD_ID,
-							context: dl
+							context: { id: dl.id }
 						})
 					);
 				});
