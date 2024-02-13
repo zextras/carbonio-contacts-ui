@@ -34,6 +34,7 @@ export const TESTID_SELECTORS = {
 	dropdownList: 'dropdown-popper-list',
 	dlMembersFilterInput: 'dl-members-filter-input',
 	membersList: 'members-list',
+	mainList: 'main-list',
 	membersListItem: 'member-list-item',
 	snackbar: 'snackbar',
 	listItemContent: 'list-item-content',

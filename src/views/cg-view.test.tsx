@@ -299,7 +299,9 @@ describe('Contact Group View', () => {
 				{ initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}`] }
 			);
 			await screen.findAllByText(cnItem.fileAsStr);
-			const listItem = within(screen.getByTestId('main-list')).getByText(cnItem.fileAsStr);
+			const listItem = within(screen.getByTestId(TESTID_SELECTORS.mainList)).getByText(
+				cnItem.fileAsStr
+			);
 			await user.click(listItem);
 			expect(screen.queryByText(EMPTY_DISPLAYER_HINT)).not.toBeInTheDocument();
 			const closeButton = screen.getByRoleWithIcon('button', {
@@ -340,7 +342,9 @@ describe('Contact Group View', () => {
 				)
 			);
 			await screen.findAllByText(cnItem.fileAsStr);
-			const listItem = within(screen.getByTestId('main-list')).getByText(cnItem.fileAsStr);
+			const listItem = within(screen.getByTestId(TESTID_SELECTORS.mainList)).getByText(
+				cnItem.fileAsStr
+			);
 			await user.click(listItem);
 			expect(screen.queryByText(EMPTY_DISPLAYER_HINT)).not.toBeInTheDocument();
 			expect(
