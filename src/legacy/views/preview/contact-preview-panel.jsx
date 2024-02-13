@@ -3,25 +3,23 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import {
-	Divider,
-	ModalManagerContext,
-	SnackbarManagerContext
-} from '@zextras/carbonio-design-system';
+import React, { useCallback } from 'react';
+
+import { Divider, useModal, useSnackbar } from '@zextras/carbonio-design-system';
 import { FOLDERS, getAction, replaceHistory } from '@zextras/carbonio-shell-ui';
 import { head, includes, split } from 'lodash';
-import React, { useCallback, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
+
+import ContactPreviewContent from './contact-preview-content';
+import ContactPreviewHeader from './contact-preview-header';
+import { useAppSelector } from '../../hooks/redux';
 import { useDisplayName } from '../../hooks/use-display-name';
 import { contactAction } from '../../store/actions/contact-action';
 import { StoreProvider } from '../../store/redux';
 import { selectContact } from '../../store/selectors/contacts';
 import MoveModal from '../contact-actions/move-modal';
-import ContactPreviewContent from './contact-preview-content';
-import ContactPreviewHeader from './contact-preview-header';
-import { useAppSelector } from '../../hooks/redux';
 
 export default function ContactPreviewPanel() {
 	const [t] = useTranslation();
@@ -32,8 +30,8 @@ export default function ContactPreviewPanel() {
 	const { folderId, contactId } = useParams();
 	const contactInternalId = contactId;
 	const contact = useAppSelector((state) => selectContact(state, folderId, contactInternalId));
-	const createSnackbar = useContext(SnackbarManagerContext);
-	const createModal = useContext(ModalManagerContext);
+	const createSnackbar = useSnackbar();
+	const createModal = useModal();
 
 	const onEdit = useCallback(
 		() => replaceHistory(`/folder/${folderId}/edit/${contactInternalId}`),

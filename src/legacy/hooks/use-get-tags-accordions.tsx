@@ -3,9 +3,9 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+import React, { FC, useCallback, useMemo } from 'react';
+
 import { nanoid } from '@reduxjs/toolkit';
-import React, { FC, useCallback, useContext, useMemo } from 'react';
-import { useTags, ZIMBRA_STANDARD_COLORS, runSearch, QueryChip } from '@zextras/carbonio-shell-ui';
 import {
 	AccordionItem,
 	Dropdown,
@@ -13,10 +13,12 @@ import {
 	Icon,
 	Padding,
 	Tooltip,
-	ModalManagerContext
+	useModal
 } from '@zextras/carbonio-design-system';
+import { useTags, ZIMBRA_STANDARD_COLORS, runSearch, QueryChip } from '@zextras/carbonio-shell-ui';
 import { reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
+
 import { createTag, useGetTagsActions } from '../ui-actions/tag-actions';
 import { ItemType, TagsAccordionItems } from '../views/secondary-bar/parts/tags/types';
 
@@ -68,7 +70,7 @@ const CustomComp: FC<ItemProps> = (props) => {
 };
 
 export const TagLabel: FC<ItemType> = (props) => {
-	const createModal = useContext(ModalManagerContext) as () => () => void;
+	const createModal = useModal();
 	const [t] = useTranslation();
 	const alteredProps = { ...props, color: `$props.color` };
 	return (
