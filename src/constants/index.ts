@@ -18,10 +18,11 @@ export const ACTION_IDS = {
 } as const;
 
 export const NEW_CONTACT_GROUP_BOARD_ID = 'new-contact-group-board';
-
 export const EDIT_CONTACT_GROUP_BOARD_ID = 'edit-contact-group-board';
+export const EDIT_DL_BOARD_ID = 'edit-dl-board';
 
 export const CONTACT_GROUP_NAME_MAX_LENGTH = 256;
+export const DL_NAME_MAX_LENGTH = 256;
 export const GROUPS_ROUTE = 'groups';
 export const ROUTES = {
 	mainRoute: '/:route',
@@ -55,3 +56,9 @@ export const DISPLAYER_WIDTH = '60%';
 export const LIST_WIDTH = '40%';
 export const LIST_ITEM_HEIGHT = '4rem';
 export const FIND_CONTACT_GROUP_LIMIT = 100;
+
+export const DL_TABS = {
+	details: 'dl-details-tab',
+	members: 'dl-members-tab',
+	managers: 'dl-managers-tab'
+} as const;

@@ -19,16 +19,7 @@ import { setupTest, screen } from '../../carbonio-ui-commons/test/test-setup';
 import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../constants';
 import { PALETTE, TESTID_SELECTORS } from '../../constants/tests';
 import { client } from '../../network/client';
-
-function spyUseBoardHooks(updateBoardFn?: jest.Mock, closeBoardFn?: jest.Mock): void {
-	jest.spyOn(shell, 'useBoardHooks').mockReturnValue({
-		updateBoard: updateBoardFn ?? jest.fn(),
-		setCurrentBoard: jest.fn(),
-		getBoardContext: jest.fn(),
-		getBoard: jest.fn(),
-		closeBoard: closeBoardFn ?? jest.fn()
-	});
-}
+import { spyUseBoardHooks } from '../../tests/utils';
 
 function spyUseBoard(navigateTo?: jest.Mock): void {
 	jest.spyOn(shell, 'useBoard').mockReturnValue({

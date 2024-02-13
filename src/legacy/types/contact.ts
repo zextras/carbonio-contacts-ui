@@ -3,7 +3,10 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+
 import type { NameSpace } from '@zextras/carbonio-shell-ui';
+
+import { Grant } from '../../carbonio-ui-commons/types/folder';
 
 export enum ContactPhoneType {
 	MOBILE = 'mobile',
@@ -52,18 +55,6 @@ export type ContactEmailMap = { [key: string]: ContactEmail };
 export type ContactPhoneMap = { [key: string]: ContactPhone };
 export type ContactUrlMap = { [key: string]: ContactUrl };
 
-export type AccordionFolder = {
-	id: string;
-	label: string;
-	level?: number;
-	items: AccordionFolder[];
-	view: string;
-	itemsCount: number;
-	parent: string;
-	path: string;
-	all: any;
-	onClick: any;
-};
 export type ContactsFolder = {
 	items: ContactsFolder[] | [];
 	/** Internal UUID */ _id?: string;
@@ -142,6 +133,39 @@ export type FullAutocompleteResponse = {
 		canBeCached: string | null;
 		xmlns: string | null;
 	};
+};
+
+export type ShareFolderRoleOptions = {
+	label: string;
+	value: string;
+};
+
+export type GranteeInfoProps = {
+	grant: Grant;
+	shareFolderRoleOptions: ShareFolderRoleOptions;
+	hovered?: boolean;
+};
+
+export type ActionProps = {
+	folder: ContactsFolder;
+	grant: Grant;
+	setActiveModal: (arg: string) => void;
+	onMouseLeave: () => void;
+	onMouseEnter: () => void;
+};
+
+export type GranteeProps = {
+	grant: Grant;
+	folder: ContactsFolder;
+	onMouseLeave?: () => void;
+	onMouseEnter?: () => void;
+	setActiveModal: (modal: string) => void;
+	shareFolderRoleOptions: ShareFolderRoleOptions;
+};
+
+export type ShareFolderPropertiesProps = {
+	folder: ContactsFolder;
+	setActiveModal: (modal: string) => void;
 };
 
 export type FullAutocompleteRequest = {

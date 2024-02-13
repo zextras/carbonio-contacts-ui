@@ -5,6 +5,7 @@
  */
 import React, { lazy, Suspense, useEffect } from 'react';
 
+import { ModalManager } from '@zextras/carbonio-design-system';
 import {
 	ACTION_TYPES,
 	addBoard,
@@ -25,7 +26,8 @@ import {
 	CONTACTS_ROUTE,
 	NEW_CONTACT_GROUP_BOARD_ID,
 	GROUPS_ROUTE,
-	EDIT_CONTACT_GROUP_BOARD_ID
+	EDIT_CONTACT_GROUP_BOARD_ID,
+	EDIT_DL_BOARD_ID
 } from './constants';
 import { useNavigation } from './hooks/useNavigation';
 import { ContactInputIntegrationWrapper } from './legacy/integrations/contact-input-integration-wrapper';
@@ -65,17 +67,25 @@ const LazyEditContactGroupBoardView = lazy(
 		import(/* webpackChunkName: "editContactGroupView" */ './views/board/edit-contact-group-board')
 );
 
+const LazyEditDLBoardView = lazy(
+	() => import(/* webpackChunkName: "edit-dl-view" */ './views/board/edit-dl-board')
+);
+
 const AppView = (): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
 		<StoreProvider>
-			<LazyAppView />
+			<ModalManager>
+				<LazyAppView />
+			</ModalManager>
 		</StoreProvider>
 	</Suspense>
 );
 
 const SecondaryBarView = (props: SecondaryBarComponentProps): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
-		<LazySecondaryBarView {...props} />
+		<ModalManager>
+			<LazySecondaryBarView {...props} />
+		</ModalManager>
 	</Suspense>
 );
 
@@ -88,27 +98,41 @@ const AppViewV2 = (): React.JSX.Element => (
 const BoardView = (props: EditViewProps): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
 		<StoreProvider>
-			<LazyBoardView {...props} />
+			<ModalManager>
+				<LazyBoardView {...props} />
+			</ModalManager>
 		</StoreProvider>
 	</Suspense>
 );
 
 const NewContactGroupBoardView = (): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
-		<LazyNewContactGroupBoardView />
+		<ModalManager>
+			<LazyNewContactGroupBoardView />
+		</ModalManager>
 	</Suspense>
 );
 
 const EditContactGroupBoardView = (): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
-		<LazyEditContactGroupBoardView />
+		<ModalManager>
+			<LazyEditContactGroupBoardView />
+		</ModalManager>
+	</Suspense>
+);
+
+const EditDLBoardView = (): React.JSX.Element => (
+	<Suspense fallback={<Spinner />}>
+		<LazyEditDLBoardView />
 	</Suspense>
 );
 
 const SettingsView = (): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
 		<StoreProvider>
-			<LazySettingsView />
+			<ModalManager>
+				<LazySettingsView />
+			</ModalManager>
 		</StoreProvider>
 	</Suspense>
 );
@@ -116,7 +140,9 @@ const SettingsView = (): React.JSX.Element => (
 const SearchView = (props: SearchViewProps): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
 		<StoreProvider>
-			<LazySearchView {...props} />
+			<ModalManager>
+				<LazySearchView {...props} />
+			</ModalManager>
 		</StoreProvider>
 	</Suspense>
 );
@@ -124,7 +150,9 @@ const SearchView = (props: SearchViewProps): React.JSX.Element => (
 const SidebarView = (props: SidebarProps): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
 		<StoreProvider>
-			<SidebarItems {...props} />
+			<ModalManager>
+				<SidebarItems {...props} />
+			</ModalManager>
 		</StoreProvider>
 	</Suspense>
 );
@@ -176,6 +204,11 @@ const App = (): React.JSX.Element => {
 			route: EDIT_CONTACT_GROUP_BOARD_ID,
 			component: EditContactGroupBoardView
 		});
+		addBoardView({
+			id: EDIT_DL_BOARD_ID,
+			route: EDIT_DL_BOARD_ID,
+			component: EditDLBoardView
+		});
 	}, [t]);
 
 	useEffect(() => {
@@ -211,7 +244,7 @@ const App = (): React.JSX.Element => {
 					id: 'new-contact-group',
 					label: t('label.newContactGroup', 'New contact group'),
 					icon: 'PeopleOutline',
-					onClick: (ev): void => {
+					onClick: (): void => {
 						addBoard({
 							url: NEW_CONTACT_GROUP_BOARD_ID,
 							title: t('board.newContactGroup.title', 'New Group'),

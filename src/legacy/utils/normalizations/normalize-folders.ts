@@ -5,6 +5,7 @@
  */
 import { FOLDERS } from '@zextras/carbonio-shell-ui';
 import { isNil, map, omitBy, reduce } from 'lodash';
+
 import { ContactsFolder } from '../../types/contact';
 import { ISoapFolderObj } from '../../types/soap';
 

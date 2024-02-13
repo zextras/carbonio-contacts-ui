@@ -3,14 +3,15 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { ComponentType, createContext, FC, useCallback, useContext, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
+import React, { ComponentType, createContext, FC, useCallback, useMemo } from 'react';
+
+import { useModal, useSnackbar } from '@zextras/carbonio-design-system';
 import { replaceHistory, useTags } from '@zextras/carbonio-shell-ui';
-import { SnackbarManagerContext, ModalManagerContext } from '@zextras/carbonio-design-system';
-import { Contact } from '../types/contact';
+import { useTranslation } from 'react-i18next';
+
 import { contextActions, hoverActions, primaryActions, secondaryActions } from './contact-actions';
 import { useAppDispatch } from '../hooks/redux';
+import { Contact } from '../types/contact';
 
 type ACPProps = {
 	folderId: string;
@@ -55,8 +56,8 @@ export const ActionsContextProvider: FC<ACPProps & { selectedContacts: Contact[]
 	const [t] = useTranslation();
 	const ids = useMemo(() => Object.keys(selectedIds ?? []), [selectedIds]);
 	const dispatch = useAppDispatch();
-	const createSnackbar = useContext(SnackbarManagerContext);
-	const createModal = useContext(ModalManagerContext);
+	const createSnackbar = useSnackbar();
+	const createModal = useModal();
 	const tags = useTags();
 	const [
 		contextActionsCallback,
