@@ -11,8 +11,12 @@ import { useTranslation } from 'react-i18next';
 import { UIAction } from './types';
 import { ACTION_IDS, EDIT_DL_BOARD_ID } from '../constants';
 import { DistributionList } from '../model/distribution-list';
+import { EditDLBoardContext } from '../views/board/edit-dl-board';
 
-export type EditDLAction = UIAction<DistributionList, Pick<DistributionList, 'isOwner'>>;
+export type EditDLAction = UIAction<
+	Pick<DistributionList, 'email' | 'displayName' | 'id'>,
+	Pick<DistributionList, 'isOwner'>
+>;
 
 export const useActionEditDL = (): EditDLAction => {
 	const [t] = useTranslation();
@@ -25,8 +29,8 @@ export const useActionEditDL = (): EditDLAction => {
 				setCurrentBoard(board.id);
 				reopenBoards();
 			} else {
-				addBoard({
-					context: distributionList,
+				addBoard<EditDLBoardContext>({
+					context: { id: distributionList.id },
 					icon: 'DistributionListOutline',
 					title: distributionList.displayName || distributionList.email,
 					id: boardId,

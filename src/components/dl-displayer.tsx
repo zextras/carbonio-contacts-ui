@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import React, { useMemo } from 'react';
+import React from 'react';
 
 import { Container, Divider, Row, TabBar } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
@@ -34,15 +34,7 @@ export const DistributionListDisplayer = ({
 }: DistributionListDisplayerProps): React.JSX.Element => {
 	const [t] = useTranslation();
 	const { items, onChange, selected } = useDLTabs();
-	const dlWithMembers = useMemo(
-		(): DistributionList | undefined =>
-			distributionList && {
-				...distributionList,
-				members: { members, total: totalMembers, more: false }
-			},
-		[distributionList, members, totalMembers]
-	);
-	const actions = useDLActions(dlWithMembers);
+	const actions = useDLActions(distributionList);
 
 	return (
 		<Container

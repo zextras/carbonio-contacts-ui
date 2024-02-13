@@ -3,43 +3,91 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useSnackbar } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
+import { DistributionListMembersPage } from '../model/distribution-list';
 import { client } from '../network/client';
+import { StoredDistributionList, useDistributionListsStore } from '../store/distribution-lists';
 
-type UseGetDistributionListMembersReturnType = {
-	members: Array<string>;
-	hasMore: boolean;
-	findMore: () => void;
-	totalMembers: number;
+type UseGetDistributionListMembersReturnType = Partial<DistributionListMembersPage> & {
+	findMore: (limit?: number) => Promise<DistributionListMembersPage | undefined>;
+	loading: boolean;
 };
 
 export const useGetDistributionListMembers = (
 	email: string,
-	limit?: number
+	{
+		limit: initialLimit,
+		skip
+	}: {
+		limit?: number;
+		skip?: boolean;
+	} = {}
 ): UseGetDistributionListMembersReturnType => {
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
-	const [distributionListMembers, setDistributionListMembers] = useState<Array<string>>([]);
+	const { distributionLists, upsertDistributionList } = useDistributionListsStore();
 	const offsetRef = useRef<number>(0);
-	const [hasMore, setHasMore] = useState(false);
-	const [totalMembers, setTotalMembers] = useState(0);
+	const [innerDistributionListMembersPage, setInnerDistributionListMembersPage] = useState<
+		DistributionListMembersPage | undefined
+	>();
+	const [loading, setLoading] = useState(false);
 
-	const findCallback = useCallback(
-		(offset: number) => {
+	const findStoredMembersPage = useCallback(
+		(items: Array<StoredDistributionList>) => items.find((item) => item.email === email)?.members,
+		[email]
+	);
+
+	const storedDistributionListMembersPage = useMemo(
+		() => distributionLists && findStoredMembersPage(distributionLists),
+		[distributionLists, findStoredMembersPage]
+	);
+
+	const distributionListMembersPage = useMemo(
+		() => storedDistributionListMembersPage ?? innerDistributionListMembersPage,
+		[storedDistributionListMembersPage, innerDistributionListMembersPage]
+	);
+
+	const updateDistributionListMembersPage = useCallback(
+		(newState: DistributionListMembersPage, offset: number) => {
+			offsetRef.current = offset + newState.members.length;
+			setInnerDistributionListMembersPage((prevState) => ({
+				members:
+					offset === 0 ? newState.members : [...(prevState?.members ?? []), ...newState.members],
+				more: newState.more,
+				total: newState.total
+			}));
+			const storedMembers = findStoredMembersPage(
+				useDistributionListsStore.getState().distributionLists ?? []
+			);
+			upsertDistributionList({
+				email,
+				members: {
+					members:
+						offset === 0
+							? newState.members
+							: [...(storedMembers?.members ?? []), ...newState.members],
+					more: newState.more,
+					total: newState.total
+				},
+				canRequireMembers: true
+			});
+		},
+		[email, findStoredMembersPage, upsertDistributionList]
+	);
+
+	const loadMembers = useCallback(
+		(offset: number, limit?: number): Promise<DistributionListMembersPage | undefined> => {
 			if (email) {
-				client
+				setLoading(true);
+				return client
 					.getDistributionListMembers(email, { offset, limit })
-					.then(({ total, members, more }) => {
-						setDistributionListMembers((prevState) =>
-							offset === 0 ? members : [...prevState, ...members]
-						);
-						offsetRef.current += members.length;
-						setHasMore(more);
-						setTotalMembers(total);
+					.then((newMembersPage) => {
+						updateDistributionListMembersPage(newMembersPage, offset);
+						return newMembersPage;
 					})
 					.catch(() => {
 						createSnackbar({
@@ -50,22 +98,51 @@ export const useGetDistributionListMembers = (
 							autoHideTimeout: 3000,
 							hideButton: true
 						});
+						return undefined;
+					})
+					.finally(() => {
+						setLoading(false);
 					});
 			}
+			return Promise.reject(
+				new Error(`Cannot load members of distribution list. Invalid email: "${email}"`)
+			);
 		},
-		[createSnackbar, email, limit, t]
+		[createSnackbar, email, t, updateDistributionListMembersPage]
 	);
 
+	const shouldLoadFirstPage = useMemo(() => {
+		const dataIsPartial =
+			storedDistributionListMembersPage === undefined ||
+			(initialLimit !== undefined &&
+				initialLimit > 0 &&
+				storedDistributionListMembersPage.members.length < initialLimit &&
+				storedDistributionListMembersPage.more);
+
+		return !skip && dataIsPartial;
+	}, [initialLimit, skip, storedDistributionListMembersPage]);
+
 	useEffect(() => {
-		findCallback(0);
-	}, [findCallback]);
-
-	const findMore = useCallback(() => {
-		if (!hasMore) {
-			throw new Error('No more members available');
+		if (shouldLoadFirstPage) {
+			loadMembers(0, initialLimit);
 		}
-		findCallback(offsetRef.current);
-	}, [findCallback, hasMore]);
+	}, [loadMembers, initialLimit, shouldLoadFirstPage]);
 
-	return { members: distributionListMembers, hasMore, findMore, totalMembers };
+	const findMore = useCallback<UseGetDistributionListMembersReturnType['findMore']>(
+		(limit = initialLimit) => {
+			if (distributionListMembersPage?.more === false) {
+				throw new Error('No more members available');
+			}
+			return loadMembers(offsetRef.current, limit);
+		},
+		[distributionListMembersPage?.more, loadMembers, initialLimit]
+	);
+
+	return {
+		members: distributionListMembersPage?.members,
+		more: distributionListMembersPage?.more,
+		total: distributionListMembersPage?.total,
+		findMore,
+		loading
+	};
 };

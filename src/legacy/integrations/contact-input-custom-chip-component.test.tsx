@@ -5,21 +5,30 @@
  */
 import React from 'react';
 
-import { waitFor } from '@testing-library/react';
+import { faker } from '@faker-js/faker';
+import { act, waitFor } from '@testing-library/react';
+import { times } from 'lodash';
 
 import { ContactInputCustomChipComponent } from './contact-input-custom-chip-component';
 import { mockedAccount } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
 import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
+import { DL_MEMBERS_LOAD_LIMIT } from '../../constants';
 import { NAMESPACES } from '../../constants/api';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
-import { TESTID_SELECTORS } from '../../constants/tests';
+import { TESTID_SELECTORS, TIMERS } from '../../constants/tests';
+import { DistributionList } from '../../model/distribution-list';
 import {
 	GetDistributionListMembersRequest,
 	GetDistributionListMembersResponse
 } from '../../network/api/get-distribution-list-members';
+import { useDistributionListsStore } from '../../store/distribution-lists';
 import { registerGetDistributionListHandler } from '../../tests/msw-handlers/get-distribution-list';
 import { registerGetDistributionListMembersHandler } from '../../tests/msw-handlers/get-distribution-list-members';
-import { buildSoapResponse, generateDistributionList } from '../../tests/utils';
+import {
+	buildSoapResponse,
+	generateDistributionList,
+	generateDistributionListMembersPage
+} from '../../tests/utils';
 
 const distributionList = generateDistributionList({
 	id: 'dl-1',
@@ -119,7 +128,7 @@ describe('Contact input custom chip component', () => {
 			/>
 		);
 
-		const defaultChip = screen.getByTestId('default-chip');
+		const defaultChip = screen.getByTestId(TESTID_SELECTORS.contactInputChip);
 		expect(defaultChip).toBeVisible();
 	});
 	test('if it is a contact it will render a normal chip', () => {
@@ -134,10 +143,11 @@ describe('Contact input custom chip component', () => {
 			/>
 		);
 
-		const defaultChip = screen.getByTestId('default-chip');
+		const defaultChip = screen.getByTestId(TESTID_SELECTORS.contactInputChip);
 		expect(defaultChip).toBeVisible();
 	});
-	test('if it is a distribution list it will render the distribution list custom chip', async () => {
+
+	it('should show the distribution list custom chip if contact is a distribution list', async () => {
 		const getDistributionListHandler = registerGetDistributionListHandler(distributionList);
 		setupTest(
 			<ContactInputCustomChipComponent
@@ -151,111 +161,52 @@ describe('Contact input custom chip component', () => {
 		);
 
 		await waitFor(() => expect(getDistributionListHandler).toHaveBeenCalled());
-		const distributionListChip = screen.getByTestId('distribution-list-chip');
+		const distributionListChip = screen.getByTestId(TESTID_SELECTORS.dlChip);
 		expect(distributionListChip).toBeVisible();
 	});
 
-	it('should reload the list of members each time the user clicks on expand action', async () => {
-		registerGetDistributionListHandler(distributionList);
-
-		const dlm1 = [{ _content: user1.email }];
-		const dlm2 = [{ _content: user2Mail }];
-
-		const handler = registerGetDistributionListMembersHandler();
-		handler
-			.mockImplementationOnce((req, res, ctx) =>
-				res(
-					ctx.json(
-						buildSoapResponse<GetDistributionListMembersResponse>({
-							GetDistributionListMembersResponse: {
-								_jsns: NAMESPACES.account,
-								dlm: dlm1,
-								total: 1,
-								more: false
-							}
-						})
-					)
-				)
-			)
-			.mockImplementationOnce((req, res, ctx) =>
-				res(
-					ctx.json(
-						buildSoapResponse<GetDistributionListMembersResponse>({
-							GetDistributionListMembersResponse: {
-								_jsns: NAMESPACES.account,
-								dlm: dlm2,
-								total: 1,
-								more: false
-							}
-						})
-					)
-				)
+	describe('Distribution list expand members action', () => {
+		it('should request the list of members only the first time the user clicks on expand action and distribution list is stored without members', async () => {
+			const getDLHandler = registerGetDistributionListHandler(distributionList);
+			const getMemberHandler = registerGetDistributionListMembersHandler([user1.email]);
+			useDistributionListsStore.getState().setDistributionLists([distributionList]);
+			const { user } = setupTest(
+				<ContactInputCustomChipComponent
+					id={distributionList.id}
+					label={distributionList.displayName}
+					email={distributionList.email}
+					isGroup
+					contactInputOnChange={jest.fn()}
+					contactInputValue={[]}
+				/>
 			);
 
-		const { user } = setupTest(
-			<ContactInputCustomChipComponent
-				id={distributionList.id}
-				label={distributionList.displayName}
-				email={distributionList.email}
-				isGroup
-				contactInputOnChange={jest.fn()}
-				contactInputValue={[]}
-			/>
-		);
-
-		let chevronExpandAction = await screen.findByTestId(TESTID_SELECTORS.icons.expandDL);
-		await user.click(chevronExpandAction);
-		await screen.findByText(user1.email);
-
-		const chevronCollapseAction = await screen.findByTestId(TESTID_SELECTORS.icons.collapseDL);
-		await user.click(chevronCollapseAction);
-
-		await waitFor(() => {
-			expect(screen.queryByText(user1.email)).not.toBeInTheDocument();
+			await waitFor(() => expect(getDLHandler).toHaveBeenCalled());
+			await user.click(
+				await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL })
+			);
+			act(() => {
+				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
+			});
+			await waitFor(() => expect(getMemberHandler).toHaveBeenCalledTimes(1));
+			await screen.findByText(user1.email);
+			await user.click(
+				await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.collapseDL })
+			);
+			await waitFor(() => expect(screen.queryByText(user1.email)).not.toBeInTheDocument());
+			await user.click(
+				await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL })
+			);
+			act(() => {
+				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
+			});
+			await screen.findByText(user1.email);
+			expect(getMemberHandler).toHaveBeenCalledTimes(1);
 		});
-		chevronExpandAction = await screen.findByTestId(TESTID_SELECTORS.icons.expandDL);
-		await user.click(chevronExpandAction);
-		expect(handler).toHaveBeenCalledTimes(2);
-		expect(await screen.findByText(user2Mail)).toBeVisible();
-		expect(screen.queryByText(user1.email)).not.toBeInTheDocument();
-	});
 
-	test('the dropdown will contain the select all button and the users list when the chevron action is clicked', async () => {
-		const dlm = [user1.email, user2Mail, user3Mail];
-		registerGetDistributionListHandler(distributionList);
-		const getMembersHandler = registerGetDistributionListMembersHandler(dlm);
-
-		const { user } = setupTest(
-			<ContactInputCustomChipComponent
-				id={distributionList.id}
-				label={distributionList.displayName}
-				email={distributionList.email}
-				isGroup
-				contactInputOnChange={jest.fn()}
-				contactInputValue={[]}
-			/>
-		);
-
-		const chevronAction = await screen.findByTestId(TESTID_SELECTORS.icons.expandDL);
-		await user.click(chevronAction);
-		await waitFor(() => expect(getMembersHandler).toHaveBeenCalled());
-		expect(await screen.findByText(user1.email)).toBeVisible();
-		expect(screen.getByText(selectAll)).toBeVisible();
-		expect(screen.getByText(user2Mail)).toBeVisible();
-		expect(screen.getByText(user3Mail)).toBeVisible();
-	});
-
-	test.todo(
-		'the dropdown will contain a placeholder when the chevron action is clicked and there is no members'
-		/* async () => {
-			registerGetDistributionListHandler(distributionList);
-			const response = getDistributionListCustomResponse({ dlm: [], total: 0, more: false });
-
-			getSetupServer().use(
-				rest.post(getDistributionListMembersRequest, async (req, res, ctx) =>
-					res(ctx.json(response))
-				)
-			);
+		it('should request the list of members each time if the user clicks on expand action and distribution list is not stored', async () => {
+			const getDLHandler = registerGetDistributionListHandler(distributionList);
+			const getMembersHandler = registerGetDistributionListMembersHandler([user1.email]);
 
 			const { user } = setupTest(
 				<ContactInputCustomChipComponent
@@ -268,183 +219,424 @@ describe('Contact input custom chip component', () => {
 				/>
 			);
 
-			const chevronAction = await screen.findByTestId(TESTID_SELECTORS.ICONS.EXPAND_DL);
+			await waitFor(() => expect(getDLHandler).toHaveBeenCalled());
+			await user.click(
+				await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL })
+			);
+			act(() => {
+				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
+			});
+			await waitFor(() => expect(getMembersHandler).toHaveBeenCalledTimes(1));
+			await screen.findByText(user1.email);
+			await user.click(
+				await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.collapseDL })
+			);
+			await waitFor(() => expect(screen.queryByText(user1.email)).not.toBeInTheDocument());
+			await user.click(
+				await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL })
+			);
+			act(() => {
+				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
+			});
+			await waitFor(() => expect(getMembersHandler).toHaveBeenCalledTimes(2));
+			await screen.findByText(user1.email);
+		});
 
+		it('should show the select all action', async () => {
+			const dlm = [user1.email, user2Mail, user3Mail];
+			const getDLHandler = registerGetDistributionListHandler(distributionList);
+			const getMembersHandler = registerGetDistributionListMembersHandler(dlm);
+
+			const { user } = setupTest(
+				<ContactInputCustomChipComponent
+					id={distributionList.id}
+					label={distributionList.displayName}
+					email={distributionList.email}
+					isGroup
+					contactInputOnChange={jest.fn()}
+					contactInputValue={[]}
+				/>
+			);
+			await waitFor(() => expect(getDLHandler).toHaveBeenCalled());
+			await user.click(
+				await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL })
+			);
+			act(() => {
+				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
+			});
+			await screen.findByText(user1.email);
+			expect(getMembersHandler).toHaveBeenCalled();
+			expect(screen.getByRole('button', { name: selectAll })).toBeVisible();
+		});
+
+		it.todo(
+			'IRIS-4949 should show a placeholder when there is no member'
+			/* async () => {
+				registerGetDistributionListHandler(distributionList);
+				const response = getDistributionListCustomResponse({ dlm: [], total: 0, more: false });
+
+				getSetupServer().use(
+					rest.post(getDistributionListMembersRequest, async (req, res, ctx) =>
+						res(ctx.json(response))
+					)
+				);
+
+				const { user } = setupTest(
+					<ContactInputCustomChipComponent
+						id={distributionList.id}
+						label={distributionList.displayName}
+						email={distributionList.email}
+						isGroup
+						contactInputOnChange={jest.fn()}
+						contactInputValue={[]}
+					/>
+				);
+
+				const chevronAction = await screen.findByTestId(TESTID_SELECTORS.ICONS.EXPAND_DL);
+
+				await user.click(chevronAction);
+
+				await screen.findByTestId(TESTID_SELECTORS.DROPDOWN_LIST);
+				expect(screen.queryByRole('button', { name: selectAll })).not.toBeInTheDocument();
+				expect(screen.getByText('PLACEHOLDER')).toBeVisible();
+			} */
+		);
+
+		it('should show the "show more" action when there are more members to load', async () => {
+			const dlm = [user1.email, user2Mail, user3Mail];
+			const getDistributionListHandler = registerGetDistributionListHandler(distributionList);
+			const getMembersHandler = registerGetDistributionListMembersHandler(dlm, true);
+
+			const { user } = setupTest(
+				<ContactInputCustomChipComponent
+					id={distributionList.id}
+					label={distributionList.displayName}
+					email={distributionList.email}
+					isGroup
+					contactInputOnChange={jest.fn()}
+					contactInputValue={[]}
+				/>
+			);
+
+			await waitFor(() => expect(getDistributionListHandler).toHaveBeenCalled());
+			await user.click(
+				await screen.findByRoleWithIcon('button', {
+					icon: TESTID_SELECTORS.icons.expandDL
+				})
+			);
+			act(() => {
+				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
+			});
+			await waitFor(() => expect(getMembersHandler).toHaveBeenCalled());
+			await screen.findByText(user1.email);
+			expect(screen.getByRole('button', { name: /show more/i })).toBeVisible();
+		});
+
+		it('should not show "show more" action when there are no more members to load', async () => {
+			const dlm = [user1.email, user2Mail, user3Mail];
+			const getDistributionListHandler = registerGetDistributionListHandler(distributionList);
+			const getMembersHandler = registerGetDistributionListMembersHandler(dlm, false);
+
+			const { user } = setupTest(
+				<ContactInputCustomChipComponent
+					id={distributionList.id}
+					label={distributionList.displayName}
+					email={distributionList.email}
+					isGroup
+					contactInputOnChange={jest.fn()}
+					contactInputValue={[]}
+				/>
+			);
+
+			await waitFor(() => expect(getDistributionListHandler).toHaveBeenCalled());
+			await user.click(
+				await screen.findByRoleWithIcon('button', {
+					icon: TESTID_SELECTORS.icons.expandDL
+				})
+			);
+			act(() => {
+				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
+			});
+			await waitFor(() => expect(getMembersHandler).toHaveBeenCalled());
+			await screen.findByText(user1.email);
+			expect(screen.queryByRole('button', { name: /show more/i })).not.toBeInTheDocument();
+		});
+
+		it('should load more members on "show more" action', async () => {
+			const firstPage = [
+				{ _content: user1.email },
+				{ _content: user2Mail },
+				{ _content: user3Mail }
+			];
+			const secondPage = [
+				{ _content: user4Mail },
+				{ _content: user5Mail },
+				{ _content: user6Mail }
+			];
+			const getDistributionListHandler = registerGetDistributionListHandler(distributionList);
+			const getMembersHandler = registerGetDistributionListMembersHandler([]);
+			const firstResponse = { dlm: firstPage, total: 6, more: true };
+			const secondResponse = { dlm: secondPage, total: 6, more: false };
+
+			getMembersHandler.mockImplementation(async (req, res, ctx) => {
+				const {
+					Body: {
+						GetDistributionListMembersRequest: { offset }
+					}
+				} = await req.json<{
+					Body: {
+						GetDistributionListMembersRequest: GetDistributionListMembersRequest;
+					};
+				}>();
+				const response = offset === undefined || offset === 0 ? firstResponse : secondResponse;
+				return res(
+					ctx.json(
+						buildSoapResponse<GetDistributionListMembersResponse>({
+							GetDistributionListMembersResponse: {
+								_jsns: NAMESPACES.account,
+								...response
+							}
+						})
+					)
+				);
+			});
+
+			const { user } = setupTest(
+				<ContactInputCustomChipComponent
+					id={distributionList.id}
+					label={distributionList.displayName}
+					email={distributionList.email}
+					isGroup
+					contactInputOnChange={jest.fn()}
+					contactInputValue={[]}
+				/>
+			);
+
+			await waitFor(() => expect(getDistributionListHandler).toHaveBeenCalled());
+			const chevronAction = await screen.findByRoleWithIcon('button', {
+				icon: TESTID_SELECTORS.icons.expandDL
+			});
 			await user.click(chevronAction);
+			act(() => {
+				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
+			});
+			await waitFor(() => expect(getMembersHandler).toHaveBeenCalled());
+			await screen.findByText(user1.email);
+			expect(screen.queryByText(user4Mail)).not.toBeInTheDocument();
+			const showMore = screen.getByText(/show more/i);
+			await user.click(showMore);
+			await waitFor(() => expect(getMembersHandler).toHaveBeenCalledTimes(2));
+			expect(await screen.findByText(user4Mail)).toBeVisible();
+			expect(screen.getByText(user5Mail)).toBeVisible();
+			expect(screen.getByText(user6Mail)).toBeVisible();
+			expect(showMore).not.toBeInTheDocument();
+		});
 
-			await screen.findByTestId(TESTID_SELECTORS.DROPDOWN_LIST);
-			expect(screen.queryByText(selectAll)).not.toBeInTheDocument();
-			expect(screen.getByText('PLACEHOLDER')).toBeVisible();
-		} */
-	);
+		it('should not request more data to the server on "select all" if all members are loaded', async () => {
+			const dlm = [user1.email, user2Mail, user3Mail];
+			const getDistributionListHandler = registerGetDistributionListHandler(distributionList);
+			const getMembersHandler = registerGetDistributionListMembersHandler(dlm);
+			const contactInputOnChangeFn = jest.fn();
+			const { user } = setupTest(
+				<ContactInputCustomChipComponent
+					id={distributionList.id}
+					label={distributionList.displayName}
+					email={distributionList.email}
+					isGroup
+					contactInputOnChange={contactInputOnChangeFn}
+					contactInputValue={[]}
+				/>
+			);
+			await waitFor(() => expect(getDistributionListHandler).toHaveBeenCalled());
+			await user.click(
+				await screen.findByRoleWithIcon('button', {
+					icon: TESTID_SELECTORS.icons.expandDL
+				})
+			);
+			act(() => {
+				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
+			});
+			await waitFor(() => expect(getMembersHandler).toHaveBeenCalled());
+			await screen.findByText(user1.email);
+			await user.click(screen.getByRole('button', { name: selectAll }));
+			await waitFor(() => expect(contactInputOnChangeFn).toHaveBeenCalled());
+			expect(getMembersHandler).toHaveBeenCalledTimes(1);
+		});
 
-	test('the dropdown will contain also the show more button when more results can be retrieved', async () => {
-		const dlm = [user1.email, user2Mail, user3Mail];
-		const getDistributionListHandler = registerGetDistributionListHandler(distributionList);
-		const getMembersHandler = registerGetDistributionListMembersHandler(dlm, true);
-
-		const { user } = setupTest(
-			<ContactInputCustomChipComponent
-				id={distributionList.id}
-				label={distributionList.displayName}
-				email={distributionList.email}
-				isGroup
-				contactInputOnChange={jest.fn()}
-				contactInputValue={[]}
-			/>
-		);
-
-		await waitFor(() => expect(getDistributionListHandler).toHaveBeenCalled());
-		const chevronAction = await screen.findByTestId(TESTID_SELECTORS.icons.expandDL);
-
-		await user.click(chevronAction);
-		await waitFor(() => expect(getMembersHandler).toHaveBeenCalled());
-		await screen.findByText(user1.email);
-
-		const showMore = screen.getByText(/show more/i);
-
-		expect(showMore).toBeVisible();
-	});
-
-	test('clicking show more button will increase the dropdown items, if all items are retrieved show more will disappear', async () => {
-		const dlm = [{ _content: user1.email }, { _content: user2Mail }, { _content: user3Mail }];
-		const dlm2 = [{ _content: user4Mail }, { _content: user5Mail }, { _content: user6Mail }];
-		const getDistributionListHandler = registerGetDistributionListHandler(distributionList);
-		const getMembersHandler = registerGetDistributionListMembersHandler();
-		const firstResponse = { dlm, total: 6, more: true };
-		const secondResponse = { dlm: dlm2, total: 6, more: false };
-
-		getMembersHandler.mockImplementation(async (req, res, ctx) => {
-			const {
-				Body: {
-					GetDistributionListMembersRequest: { offset }
+		it('should request all members to the network on "select all" if not all members are loaded yet', async () => {
+			const dlm = [user1.email, user2Mail, user3Mail];
+			const dlm2 = [user4Mail, user5Mail, user6Mail];
+			const getDistributionListHandler = registerGetDistributionListHandler(distributionList);
+			const getMembersHandler = registerGetDistributionListMembersHandler();
+			const firstResponse = { dlm: dlm.map((m) => ({ _content: m })), total: 6, more: true };
+			const secondResponse = { dlm: dlm2.map((m) => ({ _content: m })), total: 6, more: false };
+			getMembersHandler.mockImplementation(async (req, res, ctx) => {
+				const {
+					Body: {
+						GetDistributionListMembersRequest: { offset }
+					}
+				} = await req.json<{
+					Body: { GetDistributionListMembersRequest: GetDistributionListMembersRequest };
+				}>();
+				let response: Omit<GetDistributionListMembersResponse, '_jsns'>;
+				if (offset === undefined || offset === 0) {
+					response = firstResponse;
+				} else {
+					response = secondResponse;
 				}
-			} = await req.json<{
-				Body: {
-					GetDistributionListMembersRequest: GetDistributionListMembersRequest;
-				};
-			}>();
-			let response: Omit<GetDistributionListMembersResponse, '_jsns'>;
-			if (offset === undefined || offset === 0) {
-				response = firstResponse;
-			} else {
-				response = secondResponse;
-			}
-			return res(
-				ctx.json(
-					buildSoapResponse<GetDistributionListMembersResponse>({
-						GetDistributionListMembersResponse: {
-							_jsns: NAMESPACES.account,
-							...response
-						}
-					})
+				return res(
+					ctx.json(
+						buildSoapResponse<GetDistributionListMembersResponse>({
+							GetDistributionListMembersResponse: {
+								_jsns: NAMESPACES.account,
+								...response
+							}
+						})
+					)
+				);
+			});
+
+			const contactInputOnChangeFn = jest.fn();
+
+			const { user } = setupTest(
+				<ContactInputCustomChipComponent
+					id={distributionList.id}
+					label={distributionList.displayName}
+					email={distributionList.email}
+					isGroup
+					contactInputOnChange={contactInputOnChangeFn}
+					contactInputValue={[]}
+				/>
+			);
+			await waitFor(() => expect(getDistributionListHandler).toHaveBeenCalled());
+			await user.click(
+				await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL })
+			);
+			act(() => {
+				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
+			});
+			await waitFor(() => expect(getMembersHandler).toHaveBeenCalled());
+			await screen.findByText(user1.email);
+			await user.click(screen.getByRole('button', { name: selectAll }));
+			await waitFor(() =>
+				expect(contactInputOnChangeFn).toHaveBeenCalledWith(
+					[...dlm, ...dlm2].map((m) => ({
+						email: m,
+						id: m,
+						label: m,
+						value: m
+					}))
 				)
 			);
+			expect(getMembersHandler).toHaveBeenCalledTimes(2);
 		});
 
-		const { user } = setupTest(
-			<ContactInputCustomChipComponent
-				id={distributionList.id}
-				label={distributionList.displayName}
-				email={distributionList.email}
-				isGroup
-				contactInputOnChange={jest.fn()}
-				contactInputValue={[]}
-			/>
-		);
-
-		await waitFor(() => expect(getDistributionListHandler).toHaveBeenCalled());
-		const chevronAction = await screen.findByTestId(TESTID_SELECTORS.icons.expandDL);
-		await user.click(chevronAction);
-		await waitFor(() => expect(getMembersHandler).toHaveBeenCalled());
-		await screen.findByText(user1.email);
-		const showMore = screen.getByText(/show more/i);
-		await user.click(showMore);
-		await waitFor(() => expect(getMembersHandler).toHaveBeenCalledTimes(2));
-		expect(await screen.findByText(user4Mail)).toBeVisible();
-		expect(screen.getByText(user5Mail)).toBeVisible();
-		expect(screen.getByText(user6Mail)).toBeVisible();
-		expect(showMore).not.toBeInTheDocument();
-	});
-
-	test('clicking select all when all data are retrieved, it wont make any other call to the server', async () => {
-		const dlm = [user1.email, user2Mail, user3Mail];
-		const getDistributionListHandler = registerGetDistributionListHandler(distributionList);
-		const getMembersHandler = registerGetDistributionListMembersHandler(dlm);
-
-		const { user } = setupTest(
-			<ContactInputCustomChipComponent
-				id={distributionList.id}
-				label={distributionList.displayName}
-				email={distributionList.email}
-				isGroup
-				contactInputOnChange={jest.fn()}
-				contactInputValue={[]}
-			/>
-		);
-		await waitFor(() => expect(getDistributionListHandler).toHaveBeenCalled());
-		const chevronAction = await screen.findByTestId(TESTID_SELECTORS.icons.expandDL);
-		await user.click(chevronAction);
-		await waitFor(() => expect(getMembersHandler).toHaveBeenCalled());
-		await screen.findByText(user1.email);
-		const selectAllLabel = screen.getByText(selectAll);
-		await user.click(selectAllLabel);
-		expect(getMembersHandler).toHaveBeenCalledTimes(1);
-	});
-
-	test('clicking select all when more data are available, it will make another call to the server', async () => {
-		const dlm = [{ _content: user1.email }, { _content: user2Mail }, { _content: user3Mail }];
-		const dlm2 = [{ _content: user4Mail }, { _content: user5Mail }, { _content: user6Mail }];
-		const getDistributionListHandler = registerGetDistributionListHandler(distributionList);
-		const getMembersHandler = registerGetDistributionListMembersHandler();
-		const firstResponse = { dlm, total: 6, more: true };
-		const secondResponse = { dlm: dlm2, total: 6, more: false };
-		getMembersHandler.mockImplementation(async (req, res, ctx) => {
-			const {
-				Body: {
-					GetDistributionListMembersRequest: { offset }
+		it('should not request data to the network if at least first page is already stored', async () => {
+			const members = times(DL_MEMBERS_LOAD_LIMIT, () => faker.internet.email());
+			const getDLHandler = registerGetDistributionListHandler(distributionList);
+			const getMembersHandler = registerGetDistributionListMembersHandler(members);
+			useDistributionListsStore.getState().setDistributionLists([
+				{
+					...distributionList,
+					members: { members, total: DL_MEMBERS_LOAD_LIMIT * 2, more: true }
 				}
-			} = await req.json<{
-				Body: { GetDistributionListMembersRequest: GetDistributionListMembersRequest };
-			}>();
-			let response: Omit<GetDistributionListMembersResponse, '_jsns'>;
-			if (offset === undefined || offset === 0) {
-				response = firstResponse;
-			} else {
-				response = secondResponse;
-			}
-			return res(
-				ctx.json(
-					buildSoapResponse<GetDistributionListMembersResponse>({
-						GetDistributionListMembersResponse: {
-							_jsns: NAMESPACES.account,
-							...response
-						}
-					})
-				)
+			]);
+
+			const { user } = setupTest(
+				<ContactInputCustomChipComponent
+					id={distributionList.id}
+					label={distributionList.displayName}
+					email={distributionList.email}
+					isGroup
+					contactInputOnChange={jest.fn()}
+					contactInputValue={[]}
+				/>
 			);
+			await waitFor(() => expect(getDLHandler).toHaveBeenCalled());
+			await user.click(
+				await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL })
+			);
+			act(() => {
+				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
+			});
+			await screen.findByText(members[0]);
+			expect(getMembersHandler).not.toHaveBeenCalled();
 		});
 
-		const { user } = setupTest(
-			<ContactInputCustomChipComponent
-				id={distributionList.id}
-				label={distributionList.displayName}
-				email={distributionList.email}
-				isGroup
-				contactInputOnChange={jest.fn()}
-				contactInputValue={[]}
-			/>
-		);
-		await waitFor(() => expect(getDistributionListHandler).toHaveBeenCalled());
-		const chevronAction = await screen.findByTestId(TESTID_SELECTORS.icons.expandDL);
-		await user.click(chevronAction);
-		await waitFor(() => expect(getMembersHandler).toHaveBeenCalled());
-		await screen.findByText(user1.email);
-		const selectAllLabel = screen.getByText(selectAll);
+		it('should request data to the network on "show more" if there are members already stored', async () => {
+			const members = [user1.email, user2Mail, user3Mail];
+			const secondPage = [faker.internet.email()];
+			const getDLHandler = registerGetDistributionListHandler(distributionList);
+			const getMembersHandler = registerGetDistributionListMembersHandler(secondPage);
+			useDistributionListsStore
+				.getState()
+				.setDistributionLists([
+					{ ...distributionList, members: { members, total: 10, more: true } }
+				]);
 
-		await waitFor(() => {
-			user.click(selectAllLabel);
+			const { user } = setupTest(
+				<ContactInputCustomChipComponent
+					id={distributionList.id}
+					label={distributionList.displayName}
+					email={distributionList.email}
+					isGroup
+					contactInputOnChange={jest.fn()}
+					contactInputValue={[]}
+				/>
+			);
+			await waitFor(() => expect(getDLHandler).toHaveBeenCalled());
+			await user.click(
+				await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL })
+			);
+			act(() => {
+				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
+			});
+			await screen.findByText(members[0]);
+			await user.click(screen.getByRole('button', { name: selectAll }));
+			await screen.findByText(secondPage[0]);
+			expect(getMembersHandler).toHaveBeenCalledTimes(1);
 		});
-		expect(getMembersHandler).toHaveBeenCalledTimes(2);
+
+		it('should request distribution list data to the network if it is not stored', async () => {
+			const getDLHandler = registerGetDistributionListHandler(distributionList);
+			setupTest(
+				<ContactInputCustomChipComponent
+					id={distributionList.id}
+					label={distributionList.displayName}
+					email={distributionList.email}
+					isGroup
+					contactInputOnChange={jest.fn()}
+					contactInputValue={[]}
+				/>
+			);
+			await waitFor(() => expect(getDLHandler).toHaveBeenCalled());
+			await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL });
+		});
+
+		it('should not request distribution list data to the network if it is already stored', async () => {
+			const getDLHandler = registerGetDistributionListHandler(distributionList);
+			useDistributionListsStore.getState().setDistributionLists([
+				{
+					description: '',
+					isOwner: true,
+					isMember: true,
+					owners: [],
+					members: generateDistributionListMembersPage([]),
+					...distributionList
+				} satisfies Required<DistributionList>
+			]);
+			setupTest(
+				<ContactInputCustomChipComponent
+					id={distributionList.id}
+					label={distributionList.displayName}
+					email={distributionList.email}
+					isGroup
+					contactInputOnChange={jest.fn()}
+					contactInputValue={[]}
+				/>
+			);
+			await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL });
+			expect(getDLHandler).not.toHaveBeenCalled();
+		});
 	});
 });

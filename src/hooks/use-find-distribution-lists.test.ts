@@ -33,10 +33,7 @@ describe('Use find distribution lists hook', () => {
 			initialProps: [{ memberOf: false, ownerOf: true }]
 		});
 		await waitFor(() => expect(result.current).toHaveLength(2));
-		expect(result.current).toEqual([
-			{ ...dlOwnerOnly, isMember: undefined },
-			{ ...dlMemberAndOwner, isMember: undefined }
-		]);
+		expect(result.current).toEqual([dlOwnerOnly, dlMemberAndOwner]);
 	});
 
 	it('should return all distribution lists if memberOf is true and ownerOf is true', async () => {

@@ -11,7 +11,9 @@ import { useActionEditDL } from '../actions/edit-dl';
 import { useActionSendEmail } from '../actions/send-email';
 import { DistributionList } from '../model/distribution-list';
 
-export const useDLActions = (distributionList: DistributionList | undefined): Array<DSAction> => {
+export const useDLActions = (
+	distributionList: Pick<DistributionList, 'email' | 'displayName' | 'id' | 'isOwner'> | undefined
+): Array<DSAction> => {
 	const sendEmailAction = useActionSendEmail();
 	const editDLAction = useActionEditDL();
 

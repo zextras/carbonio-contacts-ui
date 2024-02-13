@@ -74,11 +74,13 @@ export const generateDistributionList = (
 });
 
 export const generateDistributionListMembersPage = (
-	members: string[] = []
+	members: string[] = [],
+	total = members.length,
+	more = false
 ): DistributionListMembersPage => ({
 	members,
-	total: members.length,
-	more: false
+	total,
+	more
 });
 
 export const generateDistributionLists = (

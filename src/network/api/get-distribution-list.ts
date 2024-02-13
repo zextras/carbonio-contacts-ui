@@ -9,7 +9,6 @@ import { filter, first, flatMap } from 'lodash';
 import { GenericSoapPayload } from './types';
 import { NAMESPACES } from '../../constants/api';
 import { DistributionList, DistributionListOwner } from '../../model/distribution-list';
-import { RequireAtLeastOne } from '../../types/utils';
 
 export interface GetDistributionListRequest extends GenericSoapPayload<typeof NAMESPACES.account> {
 	dl: {
@@ -24,6 +23,7 @@ export interface GetDistributionListResponse extends GenericSoapPayload<typeof N
 		id: string;
 		name: string;
 		isOwner?: boolean;
+		isMember?: boolean;
 		owners?: Array<{ owner: Array<{ id?: string; name?: string }> }>;
 		_attrs?: {
 			displayName?: string;
@@ -49,10 +49,11 @@ const normalizeResponse = (response: GetDistributionListResponse): DistributionL
 	return {
 		id: dl.id,
 		email: dl.name,
-		displayName: dl._attrs?.displayName,
+		displayName: dl._attrs?.displayName ?? '',
 		isOwner: dl.isOwner ?? false,
+		isMember: dl.isMember ?? false,
 		owners: normalizeOwners(dl.owners),
-		description: dl._attrs?.description,
+		description: dl._attrs?.description ?? '',
 		canRequireMembers: dl._attrs?.zimbraHideInGal !== 'TRUE' || dl.isOwner === true
 	};
 };
@@ -60,9 +61,7 @@ const normalizeResponse = (response: GetDistributionListResponse): DistributionL
 export const getDistributionList = ({
 	id,
 	email
-}: RequireAtLeastOne<Pick<DistributionList, 'id' | 'email'>>): Promise<
-	DistributionList | undefined
-> => {
+}: Partial<Pick<DistributionList, 'id' | 'email'>>): Promise<DistributionList | undefined> => {
 	if (id === undefined && email === undefined) {
 		throw new Error('At least one between id and email is required');
 	}
