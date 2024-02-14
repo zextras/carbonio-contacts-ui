@@ -35,7 +35,8 @@ export const buildGetDistributionListResponse = (
 				zimbraHideInGal: dl.canRequireMembers ? undefined : 'TRUE'
 			},
 			owners: map(dl.owners, (owner) => ({ owner: [owner] })),
-			isOwner: dl.isOwner
+			isOwner: dl.isOwner,
+			isMember: dl.isMember
 		}
 	],
 	_jsns: NAMESPACES.account

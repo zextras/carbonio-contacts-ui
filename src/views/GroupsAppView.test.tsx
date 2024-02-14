@@ -5,68 +5,46 @@
  */
 import React from 'react';
 
+import { faker } from '@faker-js/faker';
 import { waitFor } from '@testing-library/react';
 
 import GroupsAppView from './GroupsAppView';
 import { screen, setupTest } from '../carbonio-ui-commons/test/test-setup';
 import { ROUTES_INTERNAL_PARAMS } from '../constants';
-import { GetAccountDistributionListsRequest } from '../network/api/get-account-distribution-lists';
+import {
+	createFindContactGroupsResponse,
+	registerFindContactGroupsHandler
+} from '../tests/msw-handlers/find-contact-groups';
 import { registerGetAccountDistributionListsHandler } from '../tests/msw-handlers/get-account-distribution-lists';
-import { generateDistributionList } from '../tests/utils';
+import { createCnItem, generateDistributionList } from '../tests/utils';
 
 describe('App view', () => {
-	it.todo(/* .each(['/', '/groups']) */ 'should render groups on %s');
+	it.each([/* '/' */ '/groups'])('should render groups on %s', async () => {
+		const cgName = faker.word.words();
+		const handler = registerFindContactGroupsHandler({
+			offset: 0,
+			findContactGroupsResponse: createFindContactGroupsResponse([createCnItem(cgName)])
+		});
+		setupTest(<GroupsAppView />, {
+			initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}`]
+		});
+		await waitFor(() => expect(handler).toHaveBeenCalled());
+		expect(await screen.findByText(cgName)).toBeVisible();
+	});
 
 	describe('Distribution lists', () => {
-		it('should load the list of distribution lists of which the user is member of on /member', async () => {
-			const handler = registerGetAccountDistributionListsHandler([]);
-			setupTest(<GroupsAppView />, {
-				initialEntries: [
-					`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.member}`
-				]
-			});
-			await waitFor(() => expect(handler).toHaveBeenCalled());
-			// TODO: cannot read from json right now
-			//  because json is already read inside the handler and throws an error
-			// 	"Failed to execute "json" on "IsomorphicRequest": body buffer already read"
-			expect(handler.mock.lastCall?.[0].body).toEqual(
-				expect.objectContaining({
-					Body: {
-						GetAccountDistributionListsRequest: expect.objectContaining<
-							Partial<GetAccountDistributionListsRequest>
-						>({
-							ownerOf: true,
-							memberOf: 'all'
-						})
-					}
-				})
-			);
-		});
-
-		it('should load the list of distribution lists of which the user is owner of on /manager', async () => {
-			const handler = registerGetAccountDistributionListsHandler([]);
-			setupTest(<GroupsAppView />, {
-				initialEntries: [
-					`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.manager}`
-				]
-			});
-			await waitFor(() => expect(handler).toHaveBeenCalled());
-			// TODO: cannot read from json right now
-			//  because json is already read inside the handler and throws the error
-			// 	"Failed to execute "json" on "IsomorphicRequest": body buffer already read"
-			expect(handler.mock.lastCall?.[0].body).toEqual(
-				expect.objectContaining({
-					Body: {
-						GetAccountDistributionListsRequest: expect.objectContaining<
-							Partial<GetAccountDistributionListsRequest>
-						>({
-							ownerOf: true,
-							memberOf: 'none'
-						})
-					}
-				})
-			);
-		});
+		it.each([ROUTES_INTERNAL_PARAMS.filter.member, ROUTES_INTERNAL_PARAMS.filter.manager])(
+			'should render distribution lists on filter %s',
+			async (filter) => {
+				const dl = generateDistributionList({ isOwner: true, isMember: true });
+				const handler = registerGetAccountDistributionListsHandler([dl]);
+				setupTest(<GroupsAppView />, {
+					initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${filter}`]
+				});
+				await waitFor(() => expect(handler).toHaveBeenCalled());
+				expect(await screen.findByText(dl.displayName)).toBeVisible();
+			}
+		);
 
 		it.each(['', '/', '/wrong'])(
 			'should render member filter if a wrong filter `%s` is specified in the path',

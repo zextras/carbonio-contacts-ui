@@ -30,7 +30,11 @@ export const DistributionListsView = (): React.JSX.Element => {
 	const items = useMemo(
 		() =>
 			distributionLists.map((dl) => (
-				<StyledListItem key={dl.id} active={dl.id === activeItem} data-testid={'list-item'}>
+				<StyledListItem
+					key={dl.id || dl.email}
+					active={dl.id === activeItem}
+					data-testid={'list-item'}
+				>
 					{(visible): React.JSX.Element => (
 						<DLListItem visible={visible} distributionList={dl} onClick={setActive} />
 					)}

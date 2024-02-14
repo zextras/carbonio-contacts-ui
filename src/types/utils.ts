@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-export type Maybe<T> = T | null;
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: T[SubKey] };
 export type MakeRequired<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
 
 export type KebabToCamelCase<S extends string> = S extends `${infer P1}-${infer P2}${infer P3}`
@@ -16,3 +15,10 @@ export type RequireAtLeastOne<T, Keys extends keyof T = keyof T> = Pick<T, Exclu
 	{
 		[K in Keys]-?: Required<Pick<T, K>> & Partial<Pick<T, Exclude<Keys, K>>>;
 	}[Keys];
+
+export type OptionalPropertyOf<T extends object> = Exclude<
+	{
+		[K in keyof T]: T extends Record<K, T[K]> ? never : K;
+	}[keyof T],
+	undefined
+>;
