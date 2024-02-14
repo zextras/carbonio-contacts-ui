@@ -4,8 +4,9 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { useMemo } from 'react';
-import { trim } from 'lodash';
+
 import { t } from '@zextras/carbonio-shell-ui';
+import { trim } from 'lodash';
 
 /*
  * UseDisplayName hook is returning the Display name
@@ -15,12 +16,15 @@ import { t } from '@zextras/carbonio-shell-ui';
 export const useDisplayName = (contact) =>
 	useMemo(() => {
 		if (contact) {
-			if (contact.firstName || contact.middleName || contact.lastName) {
+			if ((contact.firstName || contact.middleName || contact.lastName) && !contact.displayName) {
 				return trim(
 					`${contact.firstName || ''} ${contact.middleName || ''} ${contact.lastName || ''} ${
 						contact.nameSuffix || ''
 					}`
 				);
+			}
+			if (contact.displayName) {
+				return contact.displayName;
 			}
 			if (contact.email && contact.email.length > 0)
 				return `<${t('label.no_name', 'No Name')}> ${contact.email[0].mail}`;

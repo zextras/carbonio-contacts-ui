@@ -136,6 +136,11 @@ export const FOLDER_ACTIONS_DESCRIPTORS = {
 		id: 'sharesInfo',
 		desc: "Shared address book's info",
 		icon: 'InfoOutline'
+	},
+	importContacts: {
+		id: 'importContacts',
+		desc: 'Import csv file',
+		icon: 'UploadOutline'
 	}
 } satisfies Record<string, ActionDescriptorType>;
 

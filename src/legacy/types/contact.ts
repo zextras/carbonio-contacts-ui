@@ -82,6 +82,7 @@ export type Contact = {
 	middleName: string;
 	lastName: string;
 	nickName: string;
+	displayName?: string;
 	parent: string;
 	address: ContactAddressMap;
 	company: string;
