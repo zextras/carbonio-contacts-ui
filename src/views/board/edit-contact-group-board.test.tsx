@@ -46,7 +46,6 @@ const contactGroup = buildContactGroup();
 beforeEach(() => {
 	spyUseBoardHooks();
 	spyUseBoard(contactGroup.id);
-	useContactGroupStore.getState().emptyStoredContactGroups();
 	useContactGroupStore.getState().addStoredContactGroups([contactGroup]);
 });
 

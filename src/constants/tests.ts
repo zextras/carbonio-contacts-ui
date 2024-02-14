@@ -178,6 +178,7 @@ export const TESTID_SELECTORS = {
 	contactInput: 'contact-input',
 	cgContactInput: 'contact-group-contact-input',
 	contactInputChip: 'default-chip',
+	dlChip: 'distribution-list-chip',
 	dropdownList: 'dropdown-popper-list',
 	dlMembersFilterInput: 'dl-members-filter-input',
 	membersList: 'members-list',
@@ -190,7 +191,9 @@ export const TESTID_SELECTORS = {
 	displayerHeader: 'displayer-header',
 	accordionItem: 'accordion-item',
 	infoContainer: 'info-container',
-	shimmedListItem: 'shimmed-list-item'
+	shimmedListItem: 'shimmed-list-item',
+	mainList: 'main-list',
+	editDLComponent: 'edit-dl-component'
 };
 
 export const PALETTE = {
@@ -294,7 +297,10 @@ export const PALETTE = {
 	}
 };
 
-export const TIMERS = { modal: { delayOpen: 1 } as const } as const;
+export const TIMERS = {
+	modal: { delayOpen: 1 },
+	dropdown: { registerListeners: 1 }
+} as const;
 
 export const JEST_MOCKED_ERROR = 'jest mocked error';
 export const EMPTY_DISPLAYER_HINT = 'Stay in touch with your colleagues.';

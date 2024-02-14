@@ -39,7 +39,7 @@ describe('useActionEditDL', () => {
 		expect(addBoardFn).toHaveBeenCalledWith<Parameters<typeof shell.addBoard>>({
 			title: dl.displayName,
 			icon: 'DistributionListOutline',
-			context: dl,
+			context: { id: dl.id },
 			id: `${EDIT_DL_BOARD_ID}-${dl.id}`,
 			url: expect.anything()
 		});
@@ -56,7 +56,7 @@ describe('useActionEditDL', () => {
 		expect(addBoardFn).toHaveBeenCalledWith<Parameters<typeof shell.addBoard>>({
 			title: dl.email,
 			icon: 'DistributionListOutline',
-			context: dl,
+			context: { id: dl.id },
 			id: `${EDIT_DL_BOARD_ID}-${dl.id}`,
 			url: expect.anything()
 		});

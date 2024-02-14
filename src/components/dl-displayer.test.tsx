@@ -91,7 +91,7 @@ describe('Distribution List displayer', () => {
 				expect(screen.queryByRole('button', { name: 'Edit' })).not.toBeInTheDocument();
 			});
 
-			it('should open the board to edit the dl with both the details and the members', async () => {
+			it('should open the board to edit the dl with the id of the distribution list', async () => {
 				const addBoardFn = jest.spyOn(shell, 'addBoard');
 				const members = times(10, () => faker.internet.email());
 				const dl = generateDistributionList({ isOwner: true });
@@ -106,7 +106,8 @@ describe('Distribution List displayer', () => {
 				expect(addBoardFn).toHaveBeenCalledWith(
 					expect.objectContaining<Partial<Parameters<typeof shell.addBoard>[0]>>({
 						url: EDIT_DL_BOARD_ID,
-						context: { ...dl, members: { members, total: members.length, more: false } }
+						id: `${EDIT_DL_BOARD_ID}-${dl.id}`,
+						context: { id: dl.id }
 					})
 				);
 			});

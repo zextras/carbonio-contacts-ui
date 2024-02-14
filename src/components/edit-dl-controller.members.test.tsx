@@ -9,68 +9,44 @@ import { faker } from '@faker-js/faker';
 import { act, waitFor } from '@testing-library/react';
 import { times } from 'lodash';
 
-import { EditDLControllerComponent } from './edit-dl-controller';
+import { EditDLControllerComponent, EditDLControllerComponentProps } from './edit-dl-controller';
 import { screen, setupTest, within } from '../carbonio-ui-commons/test/test-setup';
-import { JEST_MOCKED_ERROR, TESTID_SELECTORS } from '../constants/tests';
-import { registerGetDistributionListMembersHandler } from '../tests/msw-handlers/get-distribution-list-members';
-import { generateDistributionList, getDLContactInput, spyUseBoardHooks } from '../tests/utils';
+import { TESTID_SELECTORS } from '../constants/tests';
+import { DistributionList } from '../model/distribution-list';
+import {
+	generateDistributionList,
+	generateDistributionListMembersPage,
+	getDLContactInput,
+	spyUseBoardHooks
+} from '../tests/utils';
 
 beforeEach(() => {
-	registerGetDistributionListMembersHandler([]);
 	spyUseBoardHooks();
+});
+
+const buildProps = (dl: DistributionList): EditDLControllerComponentProps => ({
+	email: dl.email,
+	displayName: dl.displayName,
+	description: dl.description,
+	members: dl.members,
+	owners: dl.owners,
+	loadingMembers: false,
+	loadingOwners: false
 });
 
 describe('EditDLControllerComponent', () => {
 	describe('Members tab', () => {
 		it('should render the component when the member field of the response is undefined', async () => {
 			const dl = generateDistributionList();
-			registerGetDistributionListMembersHandler(undefined);
-			const { user } = setupTest(<EditDLControllerComponent distributionList={dl} />);
+			const { user } = setupTest(<EditDLControllerComponent {...buildProps(dl)} />);
 			expect(await screen.findByText(dl.email)).toBeVisible();
 			await user.click(screen.getByText(/member list/i));
 			expect(await screen.findByText('Member list 0')).toBeVisible();
 		});
 
-		it('should load all members on first load', async () => {
-			const dl = generateDistributionList();
-			const members = times(10, () => faker.internet.email());
-			registerGetDistributionListMembersHandler(members);
-
-			const { user } = setupTest(<EditDLControllerComponent distributionList={dl} />);
-			await screen.findByText(dl.email);
-			await user.click(screen.getByText(/member list/i));
-			await screen.findByText(`Member list ${members.length}`);
-			expect(screen.getAllByTestId(TESTID_SELECTORS.membersListItem)).toHaveLength(members.length);
-		});
-
-		it('should not retrieve members from network if they are provided as prop', async () => {
-			const members = times(10, () => faker.internet.email());
-			const dl = generateDistributionList({
-				members: { members, total: members.length, more: false }
-			});
-			const handler = registerGetDistributionListMembersHandler(members);
-
-			const { user } = setupTest(<EditDLControllerComponent distributionList={dl} />);
-			await screen.findByText(dl.email);
-			await user.click(screen.getByText(/member list/i));
-			await screen.findByText(`Member list ${members.length}`);
-			expect(screen.getAllByTestId(TESTID_SELECTORS.membersListItem)).toHaveLength(members.length);
-			expect(handler).not.toHaveBeenCalled();
-		});
-
-		it('should show an error snackbar when the members cannot be loaded', async () => {
-			const dl = generateDistributionList();
-			registerGetDistributionListMembersHandler([], false, JEST_MOCKED_ERROR);
-			setupTest(<EditDLControllerComponent distributionList={dl} />);
-			await screen.findByText(dl.email);
-			expect(await screen.findByText('Something went wrong, please try again')).toBeVisible();
-		});
-
 		it('should add all valid emails inside the list when user clicks on add action', async () => {
 			const dl = generateDistributionList();
-			registerGetDistributionListMembersHandler([]);
-
-			const { user } = setupTest(<EditDLControllerComponent distributionList={dl} />);
+			const { user } = setupTest(<EditDLControllerComponent {...buildProps(dl)} />);
 			const emails = ['john.doe@test.com', 'invalid-email.com', 'mary.white@example.org'];
 			await user.click(screen.getByText(/member list/i));
 			await screen.findByText(/member list 0/i);
@@ -90,11 +66,12 @@ describe('EditDLControllerComponent', () => {
 		});
 
 		it('should add new members on top of the list of members', async () => {
-			const dl = generateDistributionList();
 			const members = times(10, () => faker.internet.email());
-			registerGetDistributionListMembersHandler(members);
+			const dl = generateDistributionList({
+				members: generateDistributionListMembersPage(members)
+			});
 
-			const { user } = setupTest(<EditDLControllerComponent distributionList={dl} />);
+			const { user } = setupTest(<EditDLControllerComponent {...buildProps(dl)} />);
 			const emails = ['john.doe@test.com', 'mary.white@example.org'];
 			await screen.findByText(dl.email);
 			await user.click(screen.getByText(/member list/i));
@@ -116,11 +93,12 @@ describe('EditDLControllerComponent', () => {
 		});
 
 		it('should remove a member from the members list when the user clicks on the remove button', async () => {
-			const dl = generateDistributionList();
 			const members = times(10, () => faker.internet.email());
-			registerGetDistributionListMembersHandler(members);
+			const dl = generateDistributionList({
+				members: generateDistributionListMembersPage(members)
+			});
 
-			const { user } = setupTest(<EditDLControllerComponent distributionList={dl} />);
+			const { user } = setupTest(<EditDLControllerComponent {...buildProps(dl)} />);
 			await screen.findByText(dl.email);
 			await user.click(screen.getByText(/member list/i));
 			const membersListItems = await screen.findAllByTestId(TESTID_SELECTORS.membersListItem);
@@ -132,13 +110,14 @@ describe('EditDLControllerComponent', () => {
 		});
 
 		it('should increase the member list counter when a new member is added', async () => {
-			const dl = generateDistributionList();
-			registerGetDistributionListMembersHandler([
-				faker.internet.email(),
-				faker.internet.email(),
-				faker.internet.email()
-			]);
-			const { user } = setupTest(<EditDLControllerComponent distributionList={dl} />);
+			const dl = generateDistributionList({
+				members: generateDistributionListMembersPage([
+					faker.internet.email(),
+					faker.internet.email(),
+					faker.internet.email()
+				])
+			});
+			const { user } = setupTest(<EditDLControllerComponent {...buildProps(dl)} />);
 			await screen.findByText(dl.email);
 			await user.click(screen.getByText(/member list/i));
 			await screen.findAllByTestId(TESTID_SELECTORS.membersListItem);
@@ -151,10 +130,11 @@ describe('EditDLControllerComponent', () => {
 		});
 
 		it('should decrease the member list counter when a member is removed', async () => {
-			const dl = generateDistributionList();
 			const members = [faker.internet.email(), faker.internet.email(), faker.internet.email()];
-			registerGetDistributionListMembersHandler(members);
-			const { user } = setupTest(<EditDLControllerComponent distributionList={dl} />);
+			const dl = generateDistributionList({
+				members: generateDistributionListMembersPage(members)
+			});
+			const { user } = setupTest(<EditDLControllerComponent {...buildProps(dl)} />);
 			await screen.findByText(dl.email);
 			await user.click(screen.getByText(/member list/i));
 			const membersListItems = await screen.findAllByTestId(TESTID_SELECTORS.membersListItem);
@@ -166,11 +146,12 @@ describe('EditDLControllerComponent', () => {
 		});
 
 		it('should remove duplicated icon from chip when member is removed from the members list', async () => {
-			const dl = generateDistributionList();
 			const duplicatedEmail = faker.internet.email();
 			const members = [duplicatedEmail, faker.internet.email(), faker.internet.email()];
-			registerGetDistributionListMembersHandler(members);
-			const { user } = setupTest(<EditDLControllerComponent distributionList={dl} />);
+			const dl = generateDistributionList({
+				members: generateDistributionListMembersPage(members)
+			});
+			const { user } = setupTest(<EditDLControllerComponent {...buildProps(dl)} />);
 			await screen.findByText(dl.email);
 			await user.click(screen.getByText(/member list/i));
 			const membersListItems = await screen.findAllByTestId(TESTID_SELECTORS.membersListItem);
@@ -191,12 +172,13 @@ describe('EditDLControllerComponent', () => {
 		});
 
 		it('should remove the duplication error message under the contact input when member is removed from the members list', async () => {
-			const dl = generateDistributionList();
-			const errorMessage = 'Address already present';
 			const duplicatedEmail = faker.internet.email();
 			const members = [duplicatedEmail];
-			registerGetDistributionListMembersHandler(members);
-			const { user } = setupTest(<EditDLControllerComponent distributionList={dl} />);
+			const dl = generateDistributionList({
+				members: generateDistributionListMembersPage(members)
+			});
+			const errorMessage = 'Address already present';
+			const { user } = setupTest(<EditDLControllerComponent {...buildProps(dl)} />);
 			await screen.findByText(dl.email);
 			await user.click(screen.getByText(/member list/i));
 			const membersListItems = await screen.findAllByTestId(TESTID_SELECTORS.membersListItem);

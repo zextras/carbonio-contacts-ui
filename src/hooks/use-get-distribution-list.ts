@@ -3,28 +3,64 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { useSnackbar } from '@zextras/carbonio-design-system';
+import { some } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { DistributionList } from '../model/distribution-list';
 import { client } from '../network/client';
-import { RequireAtLeastOne } from '../types/utils';
+import { StoredDistributionList, useDistributionListsStore } from '../store/distribution-lists';
+import { OptionalPropertyOf } from '../types/utils';
+
+export const REQUIRED_FIELDS: Array<OptionalPropertyOf<StoredDistributionList>> = [
+	'id',
+	'displayName',
+	'owners',
+	'description',
+	'isMember',
+	'isOwner'
+];
 
 export const useGetDistributionList = (
-	item: RequireAtLeastOne<Pick<DistributionList, 'id' | 'email'>> | undefined
-): DistributionList | undefined => {
+	{ id, email }: Partial<Pick<DistributionList, 'id' | 'email'>>,
+	{ skip }: { skip?: boolean } = {}
+): {
+	distributionList: DistributionList | undefined;
+	loading: boolean;
+} => {
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
+	const { distributionLists, upsertDistributionList } = useDistributionListsStore();
+	const [loading, setLoading] = useState(false);
+
+	const storedItem = useMemo(
+		() =>
+			distributionLists?.find(
+				(dl): dl is DistributionList => (dl.id === id || dl.email === email) && dl.id !== undefined
+			),
+		[distributionLists, email, id]
+	);
+
 	const [distributionList, setDistributionList] = useState<DistributionList | undefined>();
 
+	const shouldLoadData = useMemo(
+		() =>
+			storedItem === undefined || some(REQUIRED_FIELDS, (field) => storedItem[field] === undefined),
+		[storedItem]
+	);
+
 	useEffect(() => {
-		if (item !== undefined) {
+		if (shouldLoadData && !skip) {
+			setLoading(true);
 			client
-				.getDistributionList(item)
+				.getDistributionList({ id, email })
 				.then((dl) => {
-					setDistributionList(dl);
+					if (dl) {
+						setDistributionList(dl);
+						upsertDistributionList(dl);
+					}
 				})
 				.catch(() => {
 					createSnackbar({
@@ -35,9 +71,12 @@ export const useGetDistributionList = (
 						autoHideTimeout: 3000,
 						hideButton: true
 					});
+				})
+				.finally(() => {
+					setLoading(false);
 				});
 		}
-	}, [createSnackbar, item, t]);
+	}, [createSnackbar, email, id, shouldLoadData, skip, t, upsertDistributionList]);
 
-	return distributionList;
+	return { distributionList: storedItem ?? distributionList, loading };
 };

@@ -5,9 +5,9 @@
  */
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Button, Container, Divider, TabBar, useSnackbar } from '@zextras/carbonio-design-system';
+import { Button, Container, Divider, TabBar } from '@zextras/carbonio-design-system';
 import { useBoardHooks } from '@zextras/carbonio-shell-ui';
-import { difference, pickBy, some, xor } from 'lodash';
+import { pickBy, some, xor } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { DLDetailsInfo } from './dl-details-info';
@@ -17,102 +17,65 @@ import { ManagerList } from './manager-list';
 import { ScrollableContainer } from './styled-components';
 import { DL_NAME_MAX_LENGTH, DL_TABS } from '../constants';
 import { useDLTabs } from '../hooks/use-dl-tabs';
+import { useUpdateDistributionList } from '../hooks/use-update-distribution-list';
 import { DistributionList } from '../model/distribution-list';
-import { client } from '../network/client';
 
 export type EditDLControllerComponentProps = {
-	distributionList: DistributionList;
+	email: DistributionList['email'];
+	displayName: DistributionList['displayName'];
+	description: DistributionList['description'];
+	members: DistributionList['members'];
+	loadingMembers: boolean;
+	owners: DistributionList['owners'];
+	loadingOwners: boolean;
 };
 
 type DLDetails = Required<Pick<DistributionList, 'displayName' | 'description'>>;
 
-export const getMembersPartition = (
-	originalMembers: Array<string>,
-	updatedMembers: Array<string>
-): { membersToAdd: Array<string>; membersToRemove: Array<string> } => ({
-	membersToAdd: difference(updatedMembers, originalMembers),
-	membersToRemove: difference(originalMembers, updatedMembers)
-});
-
 export const EditDLControllerComponent = ({
-	distributionList
+	email,
+	displayName,
+	description,
+	members: membersPage,
+	loadingMembers,
+	owners,
+	loadingOwners
 }: EditDLControllerComponentProps): React.JSX.Element => {
-	const { email, displayName, description, members: membersPage } = distributionList;
 	const [t] = useTranslation();
 	const { items: tabItems, onChange: onTabChange, selected: selectedTab } = useDLTabs();
-	const [loadingMembers, setLoadingMembers] = useState(membersPage === undefined);
-	const [loadingOwners, setLoadingOwners] = useState(distributionList.owners === undefined);
-	const [owners, setOwners] = useState<DistributionList['owners']>(distributionList.owners);
 	const [details, setDetails] = useState<DLDetails>({
 		displayName: displayName ?? '',
 		description: description ?? ''
 	});
+
 	const [members, setMembers] = useState<string[]>(membersPage?.members ?? []);
 	const [totalMembers, setTotalMembers] = useState<number>(membersPage?.total ?? 0);
+
 	const [initialDistributionList, setInitialDistributionList] = useState<{
 		members: string[];
 		totalMembers: number;
 		displayName: string;
 		description: string;
 	}>({
-		members: distributionList.members?.members ?? [],
-		totalMembers: distributionList.members?.total ?? 0,
-		displayName: distributionList.displayName ?? '',
-		description: distributionList.description ?? ''
+		members: membersPage?.members ?? [],
+		totalMembers: membersPage?.total ?? 0,
+		displayName: displayName ?? '',
+		description: description ?? ''
 	});
 
-	const createSnackbar = useSnackbar();
+	useEffect(() => {
+		if (!loadingMembers) {
+			setMembers(membersPage?.members ?? []);
+		}
+	}, [loadingMembers, membersPage?.members]);
+
+	const updateDistributionList = useUpdateDistributionList({
+		email,
+		members: membersPage,
+		displayName,
+		description
+	});
 	const { updateBoard } = useBoardHooks();
-
-	useEffect(() => {
-		if (membersPage === undefined) {
-			client
-				.getDistributionListMembers(email)
-				.then((response) => {
-					setMembers(response.members);
-					setTotalMembers(response.total ?? 0);
-					setInitialDistributionList((prevState) => ({
-						...prevState,
-						members: response.members,
-						totalMembers: response.total
-					}));
-				})
-				.catch((error: Error) => {
-					createSnackbar({
-						key: `dl-members-load-error-${email}`,
-						type: 'error',
-						label: t('label.error_try_again', 'Something went wrong, please try again'),
-						hideButton: true
-					});
-					console.error(error);
-				})
-				.finally(() => {
-					setLoadingMembers(false);
-				});
-		}
-	}, [createSnackbar, email, membersPage, t]);
-
-	useEffect(() => {
-		if (selectedTab === DL_TABS.managers && owners === undefined) {
-			client
-				.getDistributionList({ email })
-				.then((data) => {
-					setOwners(data?.owners);
-				})
-				.catch((error: Error) => {
-					createSnackbar({
-						key: `dl-managers-load-error-${email}`,
-						type: 'error',
-						label: t('label.error_try_again', 'Something went wrong, please try again'),
-						hideButton: true
-					});
-					console.error(error);
-				})
-				.finally(() => {
-					setLoadingOwners(false);
-				});
-		}
-	}, [createSnackbar, email, owners, selectedTab, t]);
 
 	const onAddMembers = useCallback((newMembers: string[]) => {
 		setMembers((prevState) => [...newMembers, ...prevState]);
@@ -125,48 +88,22 @@ export const EditDLControllerComponent = ({
 	}, []);
 
 	const onSave = useCallback(() => {
-		const { membersToAdd, membersToRemove } = getMembersPartition(
-			initialDistributionList.members,
-			members
-		);
 		const detailDifference = pickBy(
 			details,
 			(value, key) => initialDistributionList[key as keyof DLDetails] !== value
 		);
-		client
-			.distributionListAction({ email, membersToAdd, membersToRemove, ...detailDifference })
-			.then(() => {
-				setInitialDistributionList({
-					members,
-					totalMembers,
-					...details
-				});
-				createSnackbar({
-					key: `dl-save-success-${email}`,
-					type: 'success',
-					label: t(
-						'snackbar.edit_distribution_list.save.success',
-						'"{{displayName}}" distribution list edits saved successfully',
-						{
-							displayName:
-								(details.displayName.length > 50 && `${details.displayName.substring(0, 50)}...`) ||
-								details.displayName ||
-								email
-						}
-					),
-					hideButton: true
-				});
-			})
-			.catch((error) => {
-				createSnackbar({
-					key: `dl-save-error-${email}`,
-					type: 'error',
-					label: t('label.error_try_again', 'Something went wrong, please try again'),
-					hideButton: true
-				});
-				console.error(error);
+		updateDistributionList({
+			email,
+			members: { members, total: totalMembers },
+			...detailDifference
+		}).then(() => {
+			setInitialDistributionList({
+				members,
+				totalMembers,
+				...details
 			});
-	}, [createSnackbar, details, email, initialDistributionList, members, t, totalMembers]);
+		});
+	}, [details, email, initialDistributionList, members, totalMembers, updateDistributionList]);
 
 	const isDirty = useMemo(
 		() =>
@@ -196,6 +133,7 @@ export const EditDLControllerComponent = ({
 	const hasErrors = useMemo(() => nameError !== undefined, [nameError]);
 
 	const resetMembersRef = useRef<ResetMembers>(null);
+
 	const onDiscard = useCallback(() => {
 		setMembers(initialDistributionList.members);
 		setTotalMembers(initialDistributionList.totalMembers);
@@ -215,6 +153,7 @@ export const EditDLControllerComponent = ({
 			crossAlignment={'flex-start'}
 			height={'100%'}
 			background={'gray5'}
+			data-testid={'edit-dl-component'}
 		>
 			<Container
 				orientation={'horizontal'}

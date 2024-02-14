@@ -4,17 +4,19 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { Input, Padding, SnackbarManagerContext, Text } from '@zextras/carbonio-design-system';
+import React, { FC, ReactElement, useCallback, useMemo, useState } from 'react';
+
+import { Input, Padding, Text, useSnackbar } from '@zextras/carbonio-design-system';
 import { changeTagColor, createTag, renameTag } from '@zextras/carbonio-shell-ui';
-import React, { FC, ReactElement, useCallback, useContext, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { ItemType } from './types';
 import ColorSelect from '../../../../commons/ColorSelect';
 import { useAppDispatch } from '../../../../hooks/redux';
 import { contactAction } from '../../../../store/actions/contact-action';
 import { Contact } from '../../../../types/contact';
 import ModalFooter from '../../commons/modal-footer';
 import { ModalHeader } from '../../commons/modal-header';
-import { ItemType } from './types';
 
 type ComponentProps = {
 	onClose: () => void;
@@ -29,7 +31,7 @@ const CreateUpdateTagModal: FC<ComponentProps> = ({
 	tag,
 	contact
 }): ReactElement => {
-	const createSnackbar = useContext(SnackbarManagerContext);
+	const createSnackbar = useSnackbar();
 	const [t] = useTranslation();
 	const [name, setName] = useState(tag?.name || '');
 	const [color, setColor] = useState(tag?.color || 0);
