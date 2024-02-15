@@ -5,7 +5,7 @@
  */
 
 import { faker } from '@faker-js/faker';
-import { last, times } from 'lodash';
+import { last, nth, times } from 'lodash';
 
 import {
 	compareContactGroupName,
@@ -226,6 +226,23 @@ describe('Contact groups store', () => {
 			});
 			expect(useContactGroupStore.getState().orderedContactGroups).toHaveLength(list.length - 1);
 			expect(useContactGroupStore.getState().unorderedContactGroups).toHaveLength(1);
+		});
+
+		it('should update position in ordered list when update the display name with a name before the last element name', () => {
+			const list = times(20, () => buildContactGroup());
+			list.sort((a, b) => compareContactGroupName(a.title, b.title));
+			const listCopy = [...list];
+			addContactGroups(list);
+			const updatedElement = {
+				...list[10],
+				title: `${nth(list, -2)?.title}${faker.string.sample(2)}`
+			};
+			useContactGroupStore.getState().updateContactGroup(updatedElement);
+			listCopy.splice(10, 1);
+			listCopy.splice(listCopy.length - 1, 0, updatedElement);
+			expect(useContactGroupStore.getState().orderedContactGroups).toHaveLength(list.length);
+			expect(useContactGroupStore.getState().orderedContactGroups).toEqual(listCopy);
+			expect(useContactGroupStore.getState().unorderedContactGroups).toHaveLength(0);
 		});
 	});
 });

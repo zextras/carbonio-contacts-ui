@@ -87,7 +87,7 @@ export const useContactGroupStore = create<State & ContactGroupStoreActions>()((
 				orderedContactGroups: newOrderedContactGroups,
 				unorderedContactGroups: newUnorderedContactGroups,
 				offset:
-					newOrderedContactGroups === orderedContactGroups
+					newOrderedContactGroups.length === orderedContactGroups.length
 						? offset
 						: offset + newOrderedContactGroups.length - orderedContactGroups.length
 			}));
@@ -100,7 +100,7 @@ export const useContactGroupStore = create<State & ContactGroupStoreActions>()((
 					orderedContactGroups: newOrderedContactGroups,
 					unorderedContactGroups: newUnorderedContactGroups,
 					offset:
-						newOrderedContactGroups === orderedContactGroups
+						newOrderedContactGroups.length === orderedContactGroups.length
 							? offset
 							: offset + newOrderedContactGroups.length - orderedContactGroups.length
 				}));
@@ -163,7 +163,7 @@ export const useContactGroupStore = create<State & ContactGroupStoreActions>()((
 			orderedContactGroups: newOrderedContactGroups,
 			unorderedContactGroups: newUnorderedContactGroups,
 			offset:
-				newOrderedContactGroups === orderedContactGroups
+				newOrderedContactGroups.length === orderedContactGroups.length
 					? offset
 					: offset + newOrderedContactGroups.length - orderedContactGroups.length
 		}));
