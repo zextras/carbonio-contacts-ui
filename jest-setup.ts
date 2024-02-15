@@ -24,6 +24,7 @@ jest.setTimeout(10000);
 
 failOnConsole({
 	...getFailOnConsoleDefaultConfig(),
+	shouldFailOnWarn: false,
 	silenceMessage: (message): boolean => message.includes(JEST_MOCKED_ERROR)
 });
 

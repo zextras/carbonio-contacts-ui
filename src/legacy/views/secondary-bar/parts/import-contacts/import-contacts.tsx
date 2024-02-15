@@ -165,6 +165,8 @@ function inputElementOnchange({
 			},
 			true
 		);
+		// required to select 2 times the same file/files
+		ev.currentTarget.value = '';
 	}
 }
 
