@@ -9,7 +9,7 @@ import { create } from 'zustand';
 
 import { ContactGroup } from '../model/contact-group';
 
-function compareContactGroupName(nameA: string, nameB: string): number {
+export function compareContactGroupName(nameA: string, nameB: string): number {
 	const nameALow = nameA.toLowerCase();
 	const nameBLow = nameB.toLowerCase();
 	if (nameALow > nameBLow) {
@@ -34,8 +34,6 @@ export type ContactGroupStoreActions = {
 	setOffset: (offset: number) => void;
 	removeContactGroup: (contactGroupId: string) => void;
 	reset: () => void;
-	// testing purpose
-	setUnorderedContactGroups: (contactGroups: Array<ContactGroup>) => void;
 };
 
 export const initialState: State = {
@@ -47,11 +45,6 @@ export const initialState: State = {
 // extra currying as suggested in https://github.com/pmndrs/zustand/blob/main/docs/guides/typescript.md#basic-usage
 export const useContactGroupStore = create<State & ContactGroupStoreActions>()((set, get) => ({
 	...initialState,
-	setUnorderedContactGroups: (contactGroups): void => {
-		set(() => ({
-			unorderedContactGroups: contactGroups
-		}));
-	},
 	reset: (): void => {
 		set(initialState);
 	},
