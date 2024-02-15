@@ -49,8 +49,73 @@ export const useContactGroupStore = create<State & ContactGroupStoreActions>()((
 		set(initialState);
 	},
 	updateContactGroup: (contactGroup): void => {
-		get().removeContactGroup(contactGroup.id);
-		get().addContactGroupInSortedPosition(contactGroup);
+		const { orderedContactGroups, unorderedContactGroups, offset } = get();
+		const idxToRemove = orderedContactGroups.findIndex((item) => item.id === contactGroup.id);
+
+		const newOrderedContactGroups = [...orderedContactGroups];
+		const newUnorderedContactGroups = [...unorderedContactGroups];
+		if (idxToRemove >= 0) {
+			newOrderedContactGroups.splice(idxToRemove, 1);
+
+			const idxToAdd = findIndex(
+				newOrderedContactGroups,
+				(item) => compareContactGroupName(contactGroup.title, item.title) < 0
+			);
+			if (idxToAdd < newOrderedContactGroups.length && idxToAdd >= 0) {
+				newOrderedContactGroups.splice(idxToAdd, 0, contactGroup);
+				set(() => ({
+					orderedContactGroups: newOrderedContactGroups
+				}));
+			} else if (unorderedContactGroups.length === 0) {
+				set(() => ({
+					orderedContactGroups: newOrderedContactGroups,
+					unorderedContactGroups: [contactGroup],
+					offset: offset - 1
+				}));
+			} else {
+				const unorderedIdxToAdd = findIndex(
+					newUnorderedContactGroups,
+					(item) => compareContactGroupName(contactGroup.title, item.title) < 0
+				);
+				newUnorderedContactGroups.splice(unorderedIdxToAdd, 0, contactGroup);
+				set(() => ({
+					orderedContactGroups: newOrderedContactGroups,
+					unorderedContactGroups: newUnorderedContactGroups,
+					offset: offset - 1
+				}));
+			}
+		} else {
+			const uIdxToRemove = unorderedContactGroups.findIndex((item) => item.id === contactGroup.id);
+			if (uIdxToRemove >= 0) {
+				newUnorderedContactGroups.splice(uIdxToRemove, 1);
+
+				const idxToAdd = findIndex(
+					newOrderedContactGroups,
+					(item) => compareContactGroupName(contactGroup.title, item.title) < 0
+				);
+				if (idxToAdd < newOrderedContactGroups.length && idxToAdd >= 0) {
+					newOrderedContactGroups.splice(idxToAdd, 0, contactGroup);
+					set(() => ({
+						orderedContactGroups: newOrderedContactGroups,
+						unorderedContactGroups: newUnorderedContactGroups,
+						offset: offset + 1
+					}));
+				} else if (unorderedContactGroups.length === 0) {
+					set(() => ({ unorderedContactGroups: [contactGroup] }));
+				} else {
+					const unorderedIdxToAdd = findIndex(
+						newUnorderedContactGroups,
+						(item) => compareContactGroupName(contactGroup.title, item.title) < 0
+					);
+					newUnorderedContactGroups.splice(unorderedIdxToAdd, 0, contactGroup);
+					set(() => ({
+						unorderedContactGroups: newUnorderedContactGroups
+					}));
+				}
+			} else {
+				throw new Error('Contact group not found');
+			}
+		}
 	},
 	setOffset: (offset): void => set(() => ({ offset })),
 	addContactGroups: (contactGroups): void => {
