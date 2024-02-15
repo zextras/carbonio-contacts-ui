@@ -293,6 +293,7 @@
 		"email": "E-mail",
 		"empty": "Empty",
 		"error_try_again": "Something went wrong, please try again",
+		"errors": { "upload_failed_generic": "Upload failed for the file \"{{filename}}\"" },
 		"folder_name": "Folder name",
 		"groups_app_name": "Contact Groups and Distribution Lists",
 		"import_address_book": "Import csv file",

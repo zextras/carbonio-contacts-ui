@@ -20,7 +20,15 @@ export type UploadAttachmentOptions = {
 		createSnackbar: CreateSnackbarFn;
 		t: TFunction;
 	}) => void;
-	onUploadError?: (file: File, uploadId: string, error: string) => void;
+	onUploadError?: ({
+		file,
+		createSnackbar,
+		t
+	}: {
+		file: File;
+		createSnackbar: CreateSnackbarFn;
+		t: TFunction;
+	}) => void;
 };
 
 export type UploadAttachmentResult = {

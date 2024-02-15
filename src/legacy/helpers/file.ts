@@ -15,7 +15,7 @@ export const buildArrayFromFileList = (filesList: FileList): Array<File> => {
 	return files;
 };
 
-export const convertToDecimal = (source: string): string => {
+export const encodeNonAsciiAndQuotesToDecimal = (source: string): string => {
 	let result = '';
 	for (let i = 0; i < source.length; i += 1) {
 		const charCode = source.charCodeAt(i);

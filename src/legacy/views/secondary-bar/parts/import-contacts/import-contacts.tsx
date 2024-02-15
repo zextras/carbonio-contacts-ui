@@ -11,7 +11,7 @@ import axios from 'axios';
 import { TFunction } from 'i18next';
 import { v4 as uuid } from 'uuid';
 
-import { buildArrayFromFileList, convertToDecimal } from '../../../../helpers/file';
+import { buildArrayFromFileList, encodeNonAsciiAndQuotesToDecimal } from '../../../../helpers/file';
 import { importAddressBook } from '../../../../store/actions/import-address-book';
 import { StoreProvider } from '../../../../store/redux';
 import {
@@ -65,6 +65,27 @@ function onUploadComplete({
 	});
 }
 
+function onUploadError({
+	file,
+	createSnackbar,
+	t
+}: {
+	file: File;
+	createSnackbar: CreateSnackbarFn;
+	t: TFunction;
+}): void {
+	createSnackbar({
+		key: `upload-error`,
+		replace: true,
+		type: 'error',
+		label: t('label.errors.upload_failed_generic', {
+			filename: file.name,
+			defaultValue: 'Upload failed for the file "{{filename}}"'
+		}),
+		autoHideTimeout: 3000
+	});
+}
+
 export const confirmCallback = ({
 	file,
 	folderId,
@@ -87,7 +108,9 @@ export const confirmCallback = ({
 				'Cache-Control': 'no-cache',
 				'X-Requested-With': 'XMLHttpRequest',
 				'Content-Type': `${file.type || 'application/octet-stream'};`,
-				'Content-Disposition': `attachment; filename="${convertToDecimal(file.name)}"`
+				'Content-Disposition': `attachment; filename="${encodeNonAsciiAndQuotesToDecimal(
+					file.name
+				)}"`
 			},
 			onUploadProgress: (progressEvent) => {
 				const { loaded, total } = progressEvent;
@@ -102,16 +125,15 @@ export const confirmCallback = ({
 		.then((txt) => parse(`[${txt}]`))
 		.then((val) => {
 			if (!val[2]) {
-				options?.onUploadError &&
-					options?.onUploadError(file, uploadId, 'The upload process returned no aid');
+				options?.onUploadError && options?.onUploadError({ file, createSnackbar, t });
 				return;
 			}
 
 			options?.onUploadComplete &&
 				options?.onUploadComplete({ attachmentId: val[2][0].aid, folderId, createSnackbar, t });
 		})
-		.catch((reason) => {
-			options?.onUploadError && options?.onUploadError(file, uploadId, reason);
+		.catch(() => {
+			options?.onUploadError && options?.onUploadError({ file, createSnackbar, t });
 		});
 
 	return {
@@ -154,7 +176,7 @@ function inputElementOnchange({
 									folderId,
 									createSnackbar,
 									t,
-									options: { onUploadComplete }
+									options: { onUploadComplete, onUploadError }
 								})
 							}
 							folderName={folderName}
