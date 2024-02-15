@@ -49,26 +49,26 @@ describe('Contact groups store', () => {
 		});
 
 		it('should remove unordered elements if present in addContactGroups list', () => {
-			const list1 = times(8, () => buildContactGroup());
-			list1.sort((a, b) => compareContactGroupName(a.title, b.title));
-			const unorderedCG = list1.splice(list1.length - 1, 1)[0];
+			const list = times(8, () => buildContactGroup());
+			list.sort((a, b) => compareContactGroupName(a.title, b.title));
+			const unorderedCG = list.splice(list.length - 1, 1)[0];
 
-			addContactGroups(list1);
+			addContactGroups(list);
 			useContactGroupStore.getState().addContactGroupInSortedPosition(unorderedCG);
 			expect(useContactGroupStore.getState().unorderedContactGroups).toHaveLength(1);
 
 			addContactGroups([unorderedCG]);
-			expect(useContactGroupStore.getState().orderedContactGroups).toEqual([...list1, unorderedCG]);
+			expect(useContactGroupStore.getState().orderedContactGroups).toEqual([...list, unorderedCG]);
 			expect(useContactGroupStore.getState().unorderedContactGroups).toHaveLength(0);
 		});
 
 		it('should not remove unordered elements if not present in addContactGroups list', () => {
-			const list1 = times(20, () => buildContactGroup());
-			list1.sort((a, b) => compareContactGroupName(a.title, b.title));
-			const unorderedCG = list1.splice(list1.length - 1, 1)[0];
+			const list = times(20, () => buildContactGroup());
+			list.sort((a, b) => compareContactGroupName(a.title, b.title));
+			const unorderedCG = list.splice(list.length - 1, 1)[0];
 
-			const page1 = list1.splice(0, 10);
-			const page2 = list1.splice(-10);
+			const page1 = list.splice(0, 10);
+			const page2 = list.splice(-10);
 
 			addContactGroups(page1);
 			useContactGroupStore.getState().addContactGroupInSortedPosition(unorderedCG);
@@ -89,11 +89,11 @@ describe('Contact groups store', () => {
 		});
 
 		it('should remove element from unOrdered list when present and not decrement offset', () => {
-			const list1 = times(8, () => buildContactGroup());
-			list1.sort((a, b) => compareContactGroupName(a.title, b.title));
-			const unorderedCG = list1.splice(list1.length - 1, 1)[0];
+			const list = times(8, () => buildContactGroup());
+			list.sort((a, b) => compareContactGroupName(a.title, b.title));
+			const unorderedCG = list.splice(list.length - 1, 1)[0];
 
-			addContactGroups(list1);
+			addContactGroups(list);
 			useContactGroupStore.getState().addContactGroupInSortedPosition(unorderedCG);
 
 			removeContactGroup(unorderedCG.id);
@@ -107,11 +107,11 @@ describe('Contact groups store', () => {
 	});
 
 	it('should reset initial state when call reset action', () => {
-		const list1 = times(8, () => buildContactGroup());
-		list1.sort((a, b) => compareContactGroupName(a.title, b.title));
-		const unorderedCG = list1.splice(list1.length - 1, 1)[0];
+		const list = times(8, () => buildContactGroup());
+		list.sort((a, b) => compareContactGroupName(a.title, b.title));
+		const unorderedCG = list.splice(list.length - 1, 1)[0];
 
-		addContactGroups(list1);
+		addContactGroups(list);
 		useContactGroupStore.getState().addContactGroupInSortedPosition(unorderedCG);
 		useContactGroupStore.getState().setOffset(100);
 
@@ -128,55 +128,55 @@ describe('Contact groups store', () => {
 
 	describe('AddContactGroupInSortedPosition action', () => {
 		it('should add an element in the middle in the ordered list and increment offset', () => {
-			const list1 = times(20, () => buildContactGroup());
-			list1.sort((a, b) => compareContactGroupName(a.title, b.title));
+			const list = times(20, () => buildContactGroup());
+			list.sort((a, b) => compareContactGroupName(a.title, b.title));
 
-			const list1Copy = [...list1];
-			const elementInTheMiddle = list1.splice(10, 1)[0];
-			addContactGroups(list1);
-			expect(useContactGroupStore.getState().orderedContactGroups).toEqual(list1);
+			const listCopy = [...list];
+			const elementInTheMiddle = list.splice(10, 1)[0];
+			addContactGroups(list);
+			expect(useContactGroupStore.getState().orderedContactGroups).toEqual(list);
 			useContactGroupStore.getState().addContactGroupInSortedPosition(elementInTheMiddle);
-			expect(useContactGroupStore.getState().orderedContactGroups).toEqual(list1Copy);
+			expect(useContactGroupStore.getState().orderedContactGroups).toEqual(listCopy);
 			expect(useContactGroupStore.getState().offset).toEqual(1);
 		});
 
 		it('should add the secondLast element in the ordered list and increment offset', () => {
-			const list1 = times(20, () => buildContactGroup());
-			list1.sort((a, b) => compareContactGroupName(a.title, b.title));
+			const list = times(20, () => buildContactGroup());
+			list.sort((a, b) => compareContactGroupName(a.title, b.title));
 
-			const list1Copy = [...list1];
-			const secondLast = list1.splice(list1.length - 2, 1)[0];
-			addContactGroups(list1);
-			expect(useContactGroupStore.getState().orderedContactGroups).toEqual(list1);
+			const listCopy = [...list];
+			const secondLast = list.splice(list.length - 2, 1)[0];
+			addContactGroups(list);
+			expect(useContactGroupStore.getState().orderedContactGroups).toEqual(list);
 			useContactGroupStore.getState().addContactGroupInSortedPosition(secondLast);
-			expect(useContactGroupStore.getState().orderedContactGroups).toEqual(list1Copy);
+			expect(useContactGroupStore.getState().orderedContactGroups).toEqual(listCopy);
 			expect(useContactGroupStore.getState().offset).toEqual(1);
 		});
 		it('should add the last element in the unordered list and not increment offset', () => {
-			const list1 = times(20, () => buildContactGroup());
-			list1.sort((a, b) => compareContactGroupName(a.title, b.title));
+			const list = times(20, () => buildContactGroup());
+			list.sort((a, b) => compareContactGroupName(a.title, b.title));
 
-			const last = list1.splice(list1.length - 1, 1)[0];
-			addContactGroups(list1);
-			expect(useContactGroupStore.getState().orderedContactGroups).toEqual(list1);
+			const last = list.splice(list.length - 1, 1)[0];
+			addContactGroups(list);
+			expect(useContactGroupStore.getState().orderedContactGroups).toEqual(list);
 			useContactGroupStore.getState().addContactGroupInSortedPosition(last);
-			expect(useContactGroupStore.getState().orderedContactGroups).toEqual(list1);
+			expect(useContactGroupStore.getState().orderedContactGroups).toEqual(list);
 			expect(useContactGroupStore.getState().unorderedContactGroups).toEqual([last]);
 			expect(useContactGroupStore.getState().offset).toEqual(0);
 		});
 		it('should add the last secondLast and thirdLast element in the unordered list, sort the unordered list and not increment offset', () => {
-			const list1 = times(20, () => buildContactGroup());
-			list1.sort((a, b) => compareContactGroupName(a.title, b.title));
+			const list = times(20, () => buildContactGroup());
+			list.sort((a, b) => compareContactGroupName(a.title, b.title));
 
-			const last = list1.splice(list1.length - 1, 1)[0];
-			const secondLast = list1.splice(list1.length - 1, 1)[0];
-			const thirdLast = list1.splice(list1.length - 1, 1)[0];
-			addContactGroups(list1);
+			const last = list.splice(list.length - 1, 1)[0];
+			const secondLast = list.splice(list.length - 1, 1)[0];
+			const thirdLast = list.splice(list.length - 1, 1)[0];
+			addContactGroups(list);
 			useContactGroupStore.getState().addContactGroupInSortedPosition(last);
 			useContactGroupStore.getState().addContactGroupInSortedPosition(thirdLast);
 			useContactGroupStore.getState().addContactGroupInSortedPosition(secondLast);
 
-			expect(useContactGroupStore.getState().orderedContactGroups).toEqual(list1);
+			expect(useContactGroupStore.getState().orderedContactGroups).toEqual(list);
 			expect(useContactGroupStore.getState().unorderedContactGroups).toEqual([
 				thirdLast,
 				secondLast,
@@ -186,14 +186,14 @@ describe('Contact groups store', () => {
 		});
 
 		it('should add element with the same name of the last element in the unordered list', () => {
-			const list1 = times(20, () => buildContactGroup());
-			list1.sort((a, b) => compareContactGroupName(a.title, b.title));
+			const list = times(20, () => buildContactGroup());
+			list.sort((a, b) => compareContactGroupName(a.title, b.title));
 
-			const withSameNameOfLast = buildContactGroup({ title: last(list1)?.title });
-			addContactGroups(list1);
-			expect(useContactGroupStore.getState().orderedContactGroups).toEqual(list1);
+			const withSameNameOfLast = buildContactGroup({ title: last(list)?.title });
+			addContactGroups(list);
+			expect(useContactGroupStore.getState().orderedContactGroups).toEqual(list);
 			useContactGroupStore.getState().addContactGroupInSortedPosition(withSameNameOfLast);
-			expect(useContactGroupStore.getState().orderedContactGroups).toEqual(list1);
+			expect(useContactGroupStore.getState().orderedContactGroups).toEqual(list);
 			expect(useContactGroupStore.getState().unorderedContactGroups).toEqual([withSameNameOfLast]);
 			expect(useContactGroupStore.getState().offset).toEqual(0);
 		});
