@@ -11,6 +11,7 @@ import { findContactGroups } from './api/find-contact-groups';
 import { getAccountDistributionLists } from './api/get-account-distribution-lists';
 import { getDistributionList } from './api/get-distribution-list';
 import { getDistributionListMembers } from './api/get-distribution-list-members';
+import { getShareInfo } from './api/get-share-info';
 import { modifyContactGroup } from './api/modify-contact';
 
 export const client = {
@@ -21,5 +22,6 @@ export const client = {
 	findContactGroups,
 	deleteContactAction,
 	getAccountDistributionLists,
-	modifyContactGroup
+	modifyContactGroup,
+	getShareInfo
 };

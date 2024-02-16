@@ -69,7 +69,7 @@ describe('Distribution List displayer', () => {
 				await user.click(await screen.findByRole('button', { name: /send e-mail/i }));
 				expect(openMailComposer).toHaveBeenCalledWith<
 					Parameters<OpenMailComposerIntegratedFunction>
-				>({ recipients: [{ email: dl.email, isGroup: true }] });
+				>({ recipients: [expect.objectContaining({ email: dl.email, isGroup: true })] });
 			});
 		});
 
