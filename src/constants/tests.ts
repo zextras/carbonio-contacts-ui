@@ -177,6 +177,7 @@ export const TESTID_SELECTORS = {
 	dropdownList: 'dropdown-popper-list',
 	dlMembersFilterInput: 'dl-members-filter-input',
 	membersList: 'members-list',
+	mainList: 'main-list',
 	membersListItem: 'member-list-item',
 	contactsListItem: 'contact-list-item',
 	snackbar: 'snackbar',
@@ -185,9 +186,9 @@ export const TESTID_SELECTORS = {
 	displayer: 'displayer',
 	displayerHeader: 'displayer-header',
 	accordionItem: 'accordion-item',
+	locationDisplay: 'location-display',
 	infoContainer: 'info-container',
 	shimmedListItem: 'shimmed-list-item',
-	mainList: 'main-list',
 	editDLComponent: 'edit-dl-component'
 };
 

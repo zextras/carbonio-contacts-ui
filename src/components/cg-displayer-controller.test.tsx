@@ -27,7 +27,7 @@ describe('Displayer controller', () => {
 
 	it('should show contact group details if a contact group is active', () => {
 		const contactGroup = buildContactGroup();
-		useContactGroupStore.getState().addStoredContactGroups([contactGroup]);
+		useContactGroupStore.getState().addContactGroups([contactGroup]);
 
 		setupTest(
 			<Route path={`${ROUTES.mainRoute}${ROUTES.contactGroups}`}>

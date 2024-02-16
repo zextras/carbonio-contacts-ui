@@ -9,9 +9,12 @@ import { ContactGroup } from '../model/contact-group';
 import { useContactGroupStore } from '../store/contact-groups';
 
 export const useActiveContactGroup = (): ContactGroup | undefined => {
-	const contactGroups = useContactGroupStore((state) => state.storedContactGroups);
+	const contactGroups = useContactGroupStore((state) => state.orderedContactGroups);
+	const unOrderedContactGroups = useContactGroupStore((state) => state.unorderedContactGroups);
 
 	const { activeItem } = useActiveItem();
 
-	return contactGroups.find((contactGroup) => contactGroup.id === activeItem);
+	return [...contactGroups, ...unOrderedContactGroups].find(
+		(contactGroup) => contactGroup.id === activeItem
+	);
 };

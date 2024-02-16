@@ -29,6 +29,7 @@ import {
 	EDIT_CONTACT_GROUP_BOARD_ID,
 	EDIT_DL_BOARD_ID
 } from './constants';
+import { useNavigation } from './hooks/useNavigation';
 import { ContactInputIntegrationWrapper } from './legacy/integrations/contact-input-integration-wrapper';
 import { StoreProvider } from './legacy/store/redux';
 import { EditViewProps } from './legacy/types/views/edit-view';
@@ -158,6 +159,8 @@ const SidebarView = (props: SidebarProps): React.JSX.Element => (
 
 const App = (): React.JSX.Element => {
 	const [t] = useTranslation();
+	const { navigateTo } = useNavigation();
+
 	useEffect(() => {
 		addRoute({
 			route: CONTACTS_ROUTE,
@@ -244,7 +247,8 @@ const App = (): React.JSX.Element => {
 					onClick: (): void => {
 						addBoard({
 							url: NEW_CONTACT_GROUP_BOARD_ID,
-							title: t('board.newContactGroup.title', 'New Group')
+							title: t('board.newContactGroup.title', 'New Group'),
+							context: { navigateTo }
 						});
 					},
 					disabled: false,
@@ -253,7 +257,7 @@ const App = (): React.JSX.Element => {
 				})
 			}
 		);
-	}, [t]);
+	}, [navigateTo, t]);
 
 	return (
 		<StoreProvider>

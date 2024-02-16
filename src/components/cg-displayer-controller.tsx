@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
@@ -12,9 +12,18 @@ import { useTranslation } from 'react-i18next';
 import { CGDisplayer } from './cg-displayer';
 import { EmptyDisplayer } from './empty-displayer';
 import { useActiveContactGroup } from '../hooks/useActiveContactGroup';
+import { useActiveItem } from '../hooks/useActiveItem';
 
 export const CGDisplayerController = (): React.JSX.Element => {
 	const contactGroup = useActiveContactGroup();
+	const { activeItem, removeActive } = useActiveItem();
+
+	useEffect(() => {
+		if (activeItem !== undefined && contactGroup === undefined) {
+			removeActive();
+		}
+	}, [activeItem, contactGroup, removeActive]);
+
 	const [t] = useTranslation();
 
 	return (

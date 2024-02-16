@@ -9,6 +9,7 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import 'jest-styled-components';
 import { act, waitFor, within } from '@testing-library/react';
+import * as shell from '@zextras/carbonio-shell-ui';
 import { rest } from 'msw';
 
 import { getContactInput } from './common-contact-group-board.test';
@@ -20,8 +21,23 @@ import { PALETTE, TESTID_SELECTORS } from '../../constants/tests';
 import { client } from '../../network/client';
 import { spyUseBoardHooks } from '../../tests/utils';
 
+function spyUseBoard(navigateTo?: jest.Mock): void {
+	jest.spyOn(shell, 'useBoard').mockReturnValue({
+		context: { navigateTo: navigateTo ?? jest.fn() },
+		id: '',
+		url: '',
+		app: '',
+		icon: '',
+		title: ''
+	});
+}
+
 beforeAll(() => {
 	spyUseBoardHooks();
+});
+
+beforeEach(() => {
+	spyUseBoard();
 });
 
 describe('New contact group board', () => {
@@ -65,7 +81,7 @@ describe('New contact group board', () => {
 					res(
 						ctx.json({
 							Body: {
-								CreateContactResponse: {}
+								CreateContactResponse: { cn: [{ id: '', _attrs: {} }] }
 							}
 						})
 					)
@@ -91,7 +107,7 @@ describe('New contact group board', () => {
 					res(
 						ctx.json({
 							Body: {
-								CreateContactResponse: {}
+								CreateContactResponse: { cn: [{ id: '', _attrs: {} }] }
 							}
 						})
 					)
@@ -240,7 +256,7 @@ describe('New contact group board', () => {
 					res(
 						ctx.json({
 							Body: {
-								CreateContactResponse: {}
+								CreateContactResponse: { cn: [{ id: '', _attrs: {} }] }
 							}
 						})
 					)
@@ -284,7 +300,7 @@ describe('New contact group board', () => {
 					res(
 						ctx.json({
 							Body: {
-								CreateContactResponse: {}
+								CreateContactResponse: { cn: [{ id: '', _attrs: {} }] }
 							}
 						})
 					)

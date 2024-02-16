@@ -6,16 +6,19 @@
 import React, { useCallback, useState } from 'react';
 
 import { useSnackbar } from '@zextras/carbonio-design-system';
-import { useBoardHooks } from '@zextras/carbonio-shell-ui';
+import { useBoard, useBoardHooks } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
 import CommonContactGroupBoard, { isContactGroupNameInvalid } from './common-contact-group-board';
+import { ROUTES_INTERNAL_PARAMS } from '../../constants';
 import { client } from '../../network/client';
+import { useContactGroupStore } from '../../store/contact-groups';
 
 const NewContactGroupBoard = (): React.JSX.Element => {
 	const [t] = useTranslation();
 	const { closeBoard } = useBoardHooks();
 	const createSnackbar = useSnackbar();
+	const { context } = useBoard<{ navigateTo: (id: string) => void }>();
 
 	const initialName = t('board.newContactGroup.name', 'New Group');
 	const [nameValue, setNameValue] = useState(initialName);
@@ -25,7 +28,18 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 	const onSave = useCallback(() => {
 		client
 			.createContactGroup(nameValue, memberListEmails)
-			.then(() => {
+			.then((contactGroup) => {
+				if (window.location.pathname.includes(ROUTES_INTERNAL_PARAMS.route.contactGroups)) {
+					useContactGroupStore.getState().addContactGroupInSortedPosition(contactGroup);
+					const element = window.document.getElementById(contactGroup.id);
+					if (element) {
+						element.scrollIntoView({ block: 'end' });
+					}
+					context?.navigateTo(`${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${contactGroup.id}`);
+				} else {
+					useContactGroupStore.getState().reset();
+				}
+
 				createSnackbar({
 					key: new Date().toLocaleString(),
 					type: 'success',
@@ -43,7 +57,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 					label: t('label.error_try_again', 'Something went wrong, please try again')
 				});
 			});
-	}, [closeBoard, createSnackbar, memberListEmails, t, nameValue]);
+	}, [nameValue, memberListEmails, createSnackbar, t, closeBoard, context]);
 
 	return (
 		<CommonContactGroupBoard

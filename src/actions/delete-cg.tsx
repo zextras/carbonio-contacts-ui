@@ -24,7 +24,7 @@ export const useActionDeleteCG = (): DeleteCGAction => {
 	const [t] = useTranslation();
 	const createModal = useModal();
 	const createSnackbar = useSnackbar();
-	const { removeStoredContactGroup } = useContactGroupStore();
+	const { removeContactGroup } = useContactGroupStore();
 	const { navigateTo } = useNavigation();
 	const activeContactGroup = useActiveContactGroup();
 
@@ -55,7 +55,7 @@ export const useActionDeleteCG = (): DeleteCGAction => {
 							if (activeContactGroup?.id === contactGroup.id) {
 								navigateTo(ROUTES_INTERNAL_PARAMS.route.contactGroups, { replace: true });
 							}
-							removeStoredContactGroup(contactGroup.id);
+							removeContactGroup(contactGroup.id);
 							createSnackbar({
 								type: 'success',
 								key: `snackbar-${Date.now()}`,
@@ -95,7 +95,7 @@ export const useActionDeleteCG = (): DeleteCGAction => {
 				)
 			});
 		},
-		[activeContactGroup?.id, createModal, createSnackbar, navigateTo, removeStoredContactGroup, t]
+		[activeContactGroup?.id, createModal, createSnackbar, navigateTo, removeContactGroup, t]
 	);
 
 	return useMemo(

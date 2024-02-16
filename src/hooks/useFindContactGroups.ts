@@ -17,28 +17,23 @@ type UseFindContactGroupsReturnType = {
 };
 
 export const useFindContactGroups = (): UseFindContactGroupsReturnType => {
-	const {
-		addStoredContactGroups,
-		setStoredOffset,
-		storedContactGroups: contactGroups
-	} = useContactGroupStore();
+	const { addContactGroups, setOffset, orderedContactGroups, unorderedContactGroups } =
+		useContactGroupStore();
 
-	const [hasMore, setHasMore] = useState(useContactGroupStore.getState().storedOffset !== -1);
+	const [hasMore, setHasMore] = useState(useContactGroupStore.getState().offset !== -1);
 
 	const findCallback = useCallback(() => {
-		client.findContactGroups(useContactGroupStore.getState().storedOffset).then((result) => {
-			addStoredContactGroups(result.contactGroups);
-			setStoredOffset(
-				result.hasMore
-					? useContactGroupStore.getState().storedOffset + FIND_CONTACT_GROUP_LIMIT
-					: -1
+		client.findContactGroups(useContactGroupStore.getState().offset).then((result) => {
+			addContactGroups(result.contactGroups);
+			setOffset(
+				result.hasMore ? useContactGroupStore.getState().offset + FIND_CONTACT_GROUP_LIMIT : -1
 			);
 			setHasMore(result.hasMore);
 		});
-	}, [addStoredContactGroups, setStoredOffset]);
+	}, [addContactGroups, setOffset]);
 
 	useEffect(() => {
-		if (useContactGroupStore.getState().storedContactGroups.length > 0) {
+		if (useContactGroupStore.getState().orderedContactGroups.length > 0) {
 			return;
 		}
 		findCallback();
@@ -51,5 +46,5 @@ export const useFindContactGroups = (): UseFindContactGroupsReturnType => {
 		findCallback();
 	}, [findCallback, hasMore]);
 
-	return { contactGroups, hasMore, findMore };
+	return { contactGroups: [...orderedContactGroups, ...unorderedContactGroups], hasMore, findMore };
 };

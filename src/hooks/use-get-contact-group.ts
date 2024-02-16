@@ -12,9 +12,10 @@ import { useContactGroupStore } from '../store/contact-groups';
 export const useGetContactGroup = (): ContactGroup | undefined => {
 	const { context } = useBoard<{ contactGroupId: string }>();
 
-	const contactGroups = useContactGroupStore((state) => state.storedContactGroups);
+	const contactGroups = useContactGroupStore((state) => state.orderedContactGroups);
+	const unOrderedContactGroups = useContactGroupStore((state) => state.unorderedContactGroups);
 
-	return contactGroups.find(
+	return [...contactGroups, ...unOrderedContactGroups].find(
 		(contactGroupElement) => contactGroupElement.id === context?.contactGroupId
 	);
 };

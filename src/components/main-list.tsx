@@ -46,7 +46,13 @@ export const MainList = ({
 		<Divider color="gray3" />
 		<Container minHeight={0} maxHeight={'100%'}>
 			{children && children.length > 0 ? (
-				<ListV2 data-testid="main-list" background={'gray6'} onListBottom={onListBottom}>
+				<ListV2
+					data-testid="main-list"
+					background={'gray6'}
+					onListBottom={onListBottom}
+					// TODO uncomment when CDS-205 is available
+					// intersectionObserverInitOptions={{ threshold: 0.5 }}
+				>
 					{children}
 				</ListV2>
 			) : (

@@ -20,16 +20,7 @@ import { client } from '../../network/client';
 import { useContactGroupStore } from '../../store/contact-groups';
 import { buildContactGroup } from '../../tests/model-builder';
 import { registerModifyContactGroupHandler } from '../../tests/msw-handlers/modify-contact-group';
-
-function spyUseBoardHooks(updateBoardFn?: jest.Mock, closeBoardFn?: jest.Mock): void {
-	jest.spyOn(shell, 'useBoardHooks').mockReturnValue({
-		updateBoard: updateBoardFn ?? jest.fn(),
-		setCurrentBoard: jest.fn(),
-		getBoardContext: jest.fn(),
-		getBoard: jest.fn(),
-		closeBoard: closeBoardFn ?? jest.fn()
-	});
-}
+import { createCnItem, spyUseBoardHooks } from '../../tests/utils';
 
 function spyUseBoard(contactGroupId?: string): void {
 	jest.spyOn(shell, 'useBoard').mockReturnValue({
@@ -46,7 +37,7 @@ const contactGroup = buildContactGroup();
 beforeEach(() => {
 	spyUseBoardHooks();
 	spyUseBoard(contactGroup.id);
-	useContactGroupStore.getState().addStoredContactGroups([contactGroup]);
+	useContactGroupStore.getState().addContactGroups([contactGroup]);
 });
 
 describe('Edit contact group board', () => {
@@ -100,7 +91,9 @@ describe('Edit contact group board', () => {
 		});
 
 		it('should show success snackbar when save button is clicked and the request is done successfully', async () => {
-			registerModifyContactGroupHandler();
+			registerModifyContactGroupHandler(
+				createCnItem(contactGroup.title, undefined, contactGroup.id)
+			);
 			const newName = faker.string.alpha(10);
 			const { user } = setupTest(<EditContactGroupBoard />);
 			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
@@ -186,7 +179,9 @@ describe('Edit contact group board', () => {
 		});
 
 		it('should not use unconfirmed mails (valid chips in contactInput) in modifyContactGroup request', async () => {
-			registerModifyContactGroupHandler();
+			registerModifyContactGroupHandler(
+				createCnItem(contactGroup.title, undefined, contactGroup.id)
+			);
 			const modifyContactGroupSpy = jest.spyOn(client, 'modifyContactGroup');
 			const newEmail1 = faker.internet.email();
 			const newEmail2 = faker.internet.email();
@@ -221,7 +216,9 @@ describe('Edit contact group board', () => {
 		});
 
 		it('should use inserted name in modifyContactGroup request', async () => {
-			registerModifyContactGroupHandler();
+			registerModifyContactGroupHandler(
+				createCnItem(contactGroup.title, undefined, contactGroup.id)
+			);
 			const newName = faker.string.alpha(10);
 			const modifyContactGroupSpy = jest.spyOn(client, 'modifyContactGroup');
 			const { user } = setupTest(<EditContactGroupBoard />);
