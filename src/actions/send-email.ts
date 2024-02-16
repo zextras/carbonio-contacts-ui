@@ -12,8 +12,14 @@ import { UIAction } from './types';
 import { ACTION_IDS } from '../constants';
 
 export type MailComposerRecipient = { email?: string; isGroup?: boolean };
+
 export type OpenMailComposerIntegratedFunction = (arg: {
-	recipients: Array<MailComposerRecipient>;
+	recipients: Array<{
+		type: 't';
+		address: string | undefined;
+		email?: string | undefined;
+		isGroup?: boolean | undefined;
+	}>;
 }) => void;
 
 export type SendEmailAction = UIAction<Array<string | MailComposerRecipient>, never>;
@@ -31,9 +37,12 @@ export const useActionSendEmail = (): SendEmailAction => {
 		(recipients) => {
 			if (recipients) {
 				openMailComposer({
-					recipients: recipients.map((recipient) =>
-						typeof recipient === 'string' ? { email: recipient } : recipient
-					)
+					recipients: recipients.map((recipient) => ({
+						type: 't',
+						address: typeof recipient === 'string' ? recipient : recipient.email,
+						email: typeof recipient === 'string' ? recipient : recipient.email,
+						isGroup: typeof recipient === 'string' ? false : recipient.isGroup
+					}))
 				});
 			}
 		},
