@@ -20,17 +20,7 @@ import { client } from '../../network/client';
 import { useContactGroupStore } from '../../store/contact-groups';
 import { buildContactGroup } from '../../tests/model-builder';
 import { registerModifyContactGroupHandler } from '../../tests/msw-handlers/modify-contact-group';
-import { createCnItem } from '../../tests/utils';
-
-function spyUseBoardHooks(updateBoardFn?: jest.Mock, closeBoardFn?: jest.Mock): void {
-	jest.spyOn(shell, 'useBoardHooks').mockReturnValue({
-		updateBoard: updateBoardFn ?? jest.fn(),
-		setCurrentBoard: jest.fn(),
-		getBoardContext: jest.fn(),
-		getBoard: jest.fn(),
-		closeBoard: closeBoardFn ?? jest.fn()
-	});
-}
+import { createCnItem, spyUseBoardHooks } from '../../tests/utils';
 
 function spyUseBoard(contactGroupId?: string): void {
 	jest.spyOn(shell, 'useBoard').mockReturnValue({

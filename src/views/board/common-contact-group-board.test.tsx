@@ -9,7 +9,6 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import 'jest-styled-components';
 import { act, within } from '@testing-library/react';
-import * as shell from '@zextras/carbonio-shell-ui';
 import { first, forEach, last, noop } from 'lodash';
 
 import CommonContactGroupBoard, {
@@ -20,6 +19,7 @@ import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../constants';
 import { PALETTE, TESTID_SELECTORS } from '../../constants/tests';
 import { buildContactGroup } from '../../tests/model-builder';
 import { registerFullAutocompleteHandler } from '../../tests/msw-handlers/full-autocomplete';
+import { spyUseBoardHooks } from '../../tests/utils';
 
 export function getContactInput(): HTMLElement {
 	return screen.getByRole('textbox', {
@@ -46,16 +46,6 @@ const buildProps = ({
 	setMemberListEmails,
 	onSave
 });
-
-function spyUseBoardHooks(updateBoardFn?: jest.Mock, closeBoardFn?: jest.Mock): void {
-	jest.spyOn(shell, 'useBoardHooks').mockReturnValue({
-		updateBoard: updateBoardFn ?? jest.fn(),
-		setCurrentBoard: jest.fn(),
-		getBoardContext: jest.fn(),
-		getBoard: jest.fn(),
-		closeBoard: closeBoardFn ?? jest.fn()
-	});
-}
 
 const contactGroup = buildContactGroup();
 beforeEach(() => {

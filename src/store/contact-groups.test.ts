@@ -5,7 +5,7 @@
  */
 
 import { faker } from '@faker-js/faker';
-import { last, nth, times } from 'lodash';
+import { dropRight, first, last, nth, times } from 'lodash';
 
 import {
 	compareContactGroupName,
@@ -243,6 +243,55 @@ describe('Contact groups store', () => {
 			expect(useContactGroupStore.getState().orderedContactGroups).toHaveLength(list.length);
 			expect(useContactGroupStore.getState().orderedContactGroups).toEqual(listCopy);
 			expect(useContactGroupStore.getState().unorderedContactGroups).toHaveLength(0);
+		});
+
+		it('should update the position of an unorderd contact group when the name change to a ordered one', () => {
+			const list = times(20, () => buildContactGroup());
+			list.sort((a, b) => compareContactGroupName(a.title, b.title));
+
+			const last = list.splice(list.length - 1, 1)[0];
+			addContactGroups(list);
+			useContactGroupStore.getState().addContactGroupInSortedPosition(last);
+			expect(useContactGroupStore.getState().unorderedContactGroups).toHaveLength(1);
+			const updatedElement = {
+				...last,
+				title: dropRight(first(list)?.title).join('')
+			};
+			useContactGroupStore.getState().updateContactGroup(updatedElement);
+			expect(useContactGroupStore.getState().unorderedContactGroups).toHaveLength(0);
+			expect(useContactGroupStore.getState().orderedContactGroups).toEqual([
+				updatedElement,
+				...list
+			]);
+		});
+
+		it('should update the position of an unordered contact group when the name change to a different unordered one', () => {
+			const list = times(20, () => buildContactGroup());
+			list.sort((a, b) => compareContactGroupName(a.title, b.title));
+
+			const last = list.splice(list.length - 1, 1)[0];
+			const secondLast = list.splice(list.length - 1, 1)[0];
+			const thirdLast = list.splice(list.length - 1, 1)[0];
+			addContactGroups(list);
+			useContactGroupStore.getState().addContactGroupInSortedPosition(last);
+			useContactGroupStore.getState().addContactGroupInSortedPosition(thirdLast);
+			useContactGroupStore.getState().addContactGroupInSortedPosition(secondLast);
+			expect(useContactGroupStore.getState().unorderedContactGroups).toEqual([
+				thirdLast,
+				secondLast,
+				last
+			]);
+
+			const updatedElement = {
+				...last,
+				title: dropRight(thirdLast?.title).join('')
+			};
+			useContactGroupStore.getState().updateContactGroup(updatedElement);
+			expect(useContactGroupStore.getState().unorderedContactGroups).toEqual([
+				updatedElement,
+				thirdLast,
+				secondLast
+			]);
 		});
 	});
 });
