@@ -140,6 +140,19 @@ describe('Contact groups store', () => {
 			expect(useContactGroupStore.getState().offset).toEqual(1);
 		});
 
+		it('should add an element in the middle in the ordered list and keep offset to -1 if already -1', () => {
+			const list = times(20, () => buildContactGroup());
+			list.sort((a, b) => compareContactGroupName(a.title, b.title));
+			const listCopy = [...list];
+
+			const elementInTheMiddle = list.splice(10, 1)[0];
+			addContactGroups(list);
+			useContactGroupStore.getState().setOffset(-1);
+			useContactGroupStore.getState().addContactGroupInSortedPosition(elementInTheMiddle);
+			expect(useContactGroupStore.getState().orderedContactGroups).toEqual(listCopy);
+			expect(useContactGroupStore.getState().offset).toEqual(-1);
+		});
+
 		it('should add the secondLast element in the ordered list and increment offset', () => {
 			const list = times(20, () => buildContactGroup());
 			list.sort((a, b) => compareContactGroupName(a.title, b.title));
@@ -216,16 +229,35 @@ describe('Contact groups store', () => {
 			).toEqual(list.map((item) => item.title));
 		});
 
-		it('should move element from ordered to unordered list when renamed over the last element name', () => {
+		it('should move element from ordered to unordered list when renamed over the last element name and decrement offset', () => {
 			const list = times(20, () => buildContactGroup());
 			list.sort((a, b) => compareContactGroupName(a.title, b.title));
 			addContactGroups(list);
+			useContactGroupStore.getState().setOffset(20);
+			expect(useContactGroupStore.getState().offset).toEqual(20);
 			useContactGroupStore.getState().updateContactGroup({
 				...list[10],
 				title: `${last(list)?.title}${faker.string.sample(2)}`
 			});
 			expect(useContactGroupStore.getState().orderedContactGroups).toHaveLength(list.length - 1);
 			expect(useContactGroupStore.getState().unorderedContactGroups).toHaveLength(1);
+			expect(useContactGroupStore.getState().offset).toEqual(19);
+		});
+
+		it('should move element from ordered to unordered list when renamed over the last element name and keep offset to -1 if already -1', () => {
+			const list = times(20, () => buildContactGroup());
+			list.sort((a, b) => compareContactGroupName(a.title, b.title));
+			addContactGroups(list);
+			// it means more is false
+			useContactGroupStore.getState().setOffset(-1);
+			expect(useContactGroupStore.getState().offset).toEqual(-1);
+			useContactGroupStore.getState().updateContactGroup({
+				...list[10],
+				title: `${last(list)?.title}${faker.string.sample(2)}`
+			});
+			expect(useContactGroupStore.getState().orderedContactGroups).toHaveLength(list.length - 1);
+			expect(useContactGroupStore.getState().unorderedContactGroups).toHaveLength(1);
+			expect(useContactGroupStore.getState().offset).toEqual(-1);
 		});
 
 		it('should update position in ordered list when update the display name with a name before the last element name', () => {
@@ -245,12 +277,14 @@ describe('Contact groups store', () => {
 			expect(useContactGroupStore.getState().unorderedContactGroups).toHaveLength(0);
 		});
 
-		it('should update the position of an unorderd contact group when the name change to a ordered one', () => {
+		it('should update the position of an unorderd contact group when the name change to a ordered one and increment offset', () => {
 			const list = times(20, () => buildContactGroup());
 			list.sort((a, b) => compareContactGroupName(a.title, b.title));
 
 			const last = list.splice(list.length - 1, 1)[0];
 			addContactGroups(list);
+			useContactGroupStore.getState().setOffset(20);
+			expect(useContactGroupStore.getState().offset).toEqual(20);
 			useContactGroupStore.getState().addContactGroupInSortedPosition(last);
 			expect(useContactGroupStore.getState().unorderedContactGroups).toHaveLength(1);
 			const updatedElement = {
@@ -263,6 +297,30 @@ describe('Contact groups store', () => {
 				updatedElement,
 				...list
 			]);
+			expect(useContactGroupStore.getState().offset).toEqual(21);
+		});
+
+		it('should update the position of an unorderd contact group when the name change to a ordered one and keep offset to -1 if already -1', () => {
+			const list = times(20, () => buildContactGroup());
+			list.sort((a, b) => compareContactGroupName(a.title, b.title));
+
+			const last = list.splice(list.length - 1, 1)[0];
+			addContactGroups(list);
+			useContactGroupStore.getState().setOffset(-1);
+			expect(useContactGroupStore.getState().offset).toEqual(-1);
+			useContactGroupStore.getState().addContactGroupInSortedPosition(last);
+			expect(useContactGroupStore.getState().unorderedContactGroups).toHaveLength(1);
+			const updatedElement = {
+				...last,
+				title: dropRight(first(list)?.title).join('')
+			};
+			useContactGroupStore.getState().updateContactGroup(updatedElement);
+			expect(useContactGroupStore.getState().unorderedContactGroups).toHaveLength(0);
+			expect(useContactGroupStore.getState().orderedContactGroups).toEqual([
+				updatedElement,
+				...list
+			]);
+			expect(useContactGroupStore.getState().offset).toEqual(-1);
 		});
 
 		it('should update the position of an unordered contact group when the name change to a different unordered one', () => {
