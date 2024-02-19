@@ -6,14 +6,15 @@
 import React, { SyntheticEvent } from 'react';
 
 import { CreateModalFn, CreateSnackbarFn } from '@zextras/carbonio-design-system';
-import { FOLDERS } from '@zextras/carbonio-shell-ui';
+import { ErrorSoapBodyResponse, FOLDERS } from '@zextras/carbonio-shell-ui';
 import { TFunction } from 'i18next';
 
 import { FolderAction } from '../../../../carbonio-ui-commons/types/actions';
+import { exportContacts } from '../../../store/actions/export-address-book';
 import { folderAction } from '../../../store/actions/folder-action';
 import { getFolder } from '../../../store/actions/get-folder';
 import { AppDispatch, StoreProvider } from '../../../store/redux';
-import { ContactsFolder } from '../../../types/contact';
+import { ContactsFolder, ExportContactsResponse } from '../../../types/contact';
 import { FolderActionsType } from '../../../types/folder';
 import { importContacts } from '../parts/import-contacts/import-contacts';
 import { SharesInfoModal } from '../shares-info-modal';
@@ -150,6 +151,42 @@ export const actionsRetriever = (
 					);
 				}
 			});
+		}
+	},
+	{
+		id: FolderActionsType.EXPORT_CONTACTS,
+		icon: 'DownloadOutline',
+		label: t('label.export_address_book', 'Export csv file'),
+		onClick: (e: SyntheticEvent): void => {
+			if (e) {
+				e.stopPropagation();
+			}
+			exportContacts({ folderId: folder.id })
+				.then((response: ExportContactsResponse | ErrorSoapBodyResponse) => {
+					if ('Fault' in response) {
+						throw new Error(response.Fault.Reason.Text, { cause: response.Fault });
+					}
+					if (response) {
+						const blob = new Blob([response.content[0]._content], { type: 'application/csv' });
+						const url = window.URL.createObjectURL(blob);
+						const a = document.createElement('a');
+						a.href = url;
+						a.download = `${folder.label}.csv`;
+						a.click();
+						window.URL.revokeObjectURL(url);
+					}
+				})
+				.catch(() => {
+					createSnackbar({
+						key: new Date().toDateString(),
+						replace: true,
+						type: 'error',
+						label: t('label.error_try_again', 'Something went wrong, please try again'),
+						autoHideTimeout: 3000,
+						hideButton: true
+					});
+				});
+			setCurrentFolder(folder);
 		}
 	},
 	{

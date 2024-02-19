@@ -137,6 +137,11 @@ export const FOLDER_ACTIONS_DESCRIPTORS = {
 		desc: "Shared address book's info",
 		icon: 'InfoOutline'
 	},
+	exportContacts: {
+		id: 'exportContacts',
+		desc: 'Export csv file',
+		icon: 'DownloadOutline'
+	},
 	importContacts: {
 		id: 'importContacts',
 		desc: 'Import csv file',

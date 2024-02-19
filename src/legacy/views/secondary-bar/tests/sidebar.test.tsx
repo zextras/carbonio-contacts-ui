@@ -50,6 +50,7 @@ describe('Sidebar', () => {
 		${FOLDERS_DESCRIPTORS.contacts}     | ${ACTIONS_DESCRIPTORS.folders.deletePermanently} | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.contacts}     | ${ACTIONS_DESCRIPTORS.folders.removeShare}       | ${DISPLAY_ASSERTION.notDisplay}
 		${FOLDERS_DESCRIPTORS.contacts}     | ${ACTIONS_DESCRIPTORS.folders.importContacts}    | ${DISPLAY_ASSERTION.display}
+		${FOLDERS_DESCRIPTORS.contacts}     | ${ACTIONS_DESCRIPTORS.folders.exportContacts}    | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.autoContacts} | ${ACTIONS_DESCRIPTORS.folders.new}               | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.autoContacts} | ${ACTIONS_DESCRIPTORS.folders.move}              | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.autoContacts} | ${ACTIONS_DESCRIPTORS.folders.delete}            | ${DISPLAY_ASSERTION.display}
@@ -61,6 +62,7 @@ describe('Sidebar', () => {
 		${FOLDERS_DESCRIPTORS.autoContacts} | ${ACTIONS_DESCRIPTORS.folders.deletePermanently} | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.autoContacts} | ${ACTIONS_DESCRIPTORS.folders.removeShare}       | ${DISPLAY_ASSERTION.notDisplay}
 		${FOLDERS_DESCRIPTORS.autoContacts} | ${ACTIONS_DESCRIPTORS.folders.importContacts}    | ${DISPLAY_ASSERTION.display}
+		${FOLDERS_DESCRIPTORS.autoContacts} | ${ACTIONS_DESCRIPTORS.folders.exportContacts}    | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.folders.new}               | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.folders.move}              | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.folders.delete}            | ${DISPLAY_ASSERTION.display}
@@ -72,6 +74,7 @@ describe('Sidebar', () => {
 		${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.folders.deletePermanently} | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.folders.removeShare}       | ${DISPLAY_ASSERTION.notDisplay}
 		${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.folders.importContacts}    | ${DISPLAY_ASSERTION.display}
+		${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.folders.exportContacts}    | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.trash}        | ${ACTIONS_DESCRIPTORS.folders.new}               | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.trash}        | ${ACTIONS_DESCRIPTORS.folders.move}              | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.trash}        | ${ACTIONS_DESCRIPTORS.folders.delete}            | ${DISPLAY_ASSERTION.display}
@@ -83,6 +86,7 @@ describe('Sidebar', () => {
 		${FOLDERS_DESCRIPTORS.trash}        | ${ACTIONS_DESCRIPTORS.folders.deletePermanently} | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.trash}        | ${ACTIONS_DESCRIPTORS.folders.removeShare}       | ${DISPLAY_ASSERTION.notDisplay}
 		${FOLDERS_DESCRIPTORS.trash}        | ${ACTIONS_DESCRIPTORS.folders.importContacts}    | ${DISPLAY_ASSERTION.notDisplay}
+		${FOLDERS_DESCRIPTORS.trash}        | ${ACTIONS_DESCRIPTORS.folders.exportContacts}    | ${DISPLAY_ASSERTION.notDisplay}
 	`(
 		`should $assertion.desc the action $action.desc for a contact in the "$folder.desc" folder`,
 		async ({

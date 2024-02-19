@@ -13,5 +13,6 @@ export const FolderActionsType = {
 	RESTORE: 'restore',
 	SHARE_INFO: 'sharesInfo',
 	SHARE: 'share',
-	IMPORT_CONTACTS: 'importContacts'
+	IMPORT_CONTACTS: 'importContacts',
+	EXPORT_CONTACTS: 'exportContacts'
 } as const;
