@@ -1,6 +1,6 @@
 {
 	"name": "carbonio-contacts-ui",
-	"version": "1.8.1",
+	"version": "1.9.0",
 	"description": "Contacts module",
 	"main": "src/app.tsx",
 	"engines": {

@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.9.0](https://github.com/zextras/carbonio-contacts-ui/compare/v1.8.1...v1.9.0) (2024-02-19)
+
+
+### Features
+
+* add contact groups visualization ([116c133](https://github.com/zextras/carbonio-contacts-ui/commit/116c1330d9062837d6205cb568e1af4879b9029e))
+* allow distribution list owner to manage also details ([6006e43](https://github.com/zextras/carbonio-contacts-ui/commit/6006e436eb23f9aa76fc2763b562e324acd4cd65))
+* contacts export feature added ([84231fa](https://github.com/zextras/carbonio-contacts-ui/commit/84231fa06ca18cdb14f746cc7cf96a95472c1a16))
+* handle contact groups store when a new contact group is created or edited ([7996d17](https://github.com/zextras/carbonio-contacts-ui/commit/7996d17c47a4f764760fdbcd3e22d497f2b56386)), closes [#199](https://github.com/zextras/carbonio-contacts-ui/issues/199)
+* let the user delete a group of contacts ([91c8d0a](https://github.com/zextras/carbonio-contacts-ui/commit/91c8d0a7c3a4a5298f5dfac5e6a6391ea48783ae))
+* let the user edit a group of contacts ([107385b](https://github.com/zextras/carbonio-contacts-ui/commit/107385b371fb98e867757b7ad297a8e1b5dcb64f))
+* let the user see distribution lists ([8915b79](https://github.com/zextras/carbonio-contacts-ui/commit/8915b79e0197380a1b63b2af1d2897d556412d3e))
+* update list and displayer on dl edit ([ddd2db2](https://github.com/zextras/carbonio-contacts-ui/commit/ddd2db2eb1f21810f55d592418b96b5419e34dea)), closes [#198](https://github.com/zextras/carbonio-contacts-ui/issues/198)
+
+
+### Bug Fixes
+
+* after address book has been shared owner cannot see shared account name ([55df3bf](https://github.com/zextras/carbonio-contacts-ui/commit/55df3bf5fff7dba992e97c0646678af958fbddeb))
+* **ContactInput:** update types and internal usages ([#176](https://github.com/zextras/carbonio-contacts-ui/issues/176)) ([d8d7023](https://github.com/zextras/carbonio-contacts-ui/commit/d8d70239853bc5fd00b829591c220be686bc95ee))
+* enable the listing shared addressbooks belonging to owner without display name ([9c075e1](https://github.com/zextras/carbonio-contacts-ui/commit/9c075e1c7cd4adefaae5361815580736bd74ba3c))
+* fix bug on edit contact of a shared address book ([#192](https://github.com/zextras/carbonio-contacts-ui/issues/192)) ([9f3f4f1](https://github.com/zextras/carbonio-contacts-ui/commit/9f3f4f1761b77d31eb94f119c1ec57af48957614))
+* send email to a distribution list, contact group and to their members ([cc29b76](https://github.com/zextras/carbonio-contacts-ui/commit/cc29b76c7a724fe1d82f288e13624fc9bfbca40f))
+* show member list if isOwner is true ([#187](https://github.com/zextras/carbonio-contacts-ui/issues/187)) ([7637c81](https://github.com/zextras/carbonio-contacts-ui/commit/7637c81ffb62f39944886298c23e99ff6027625d))
+
 ### [1.8.1](https://github.com/zextras/carbonio-contacts-ui/compare/v1.8.0...v1.8.1) (2024-01-19)
 
 ## [1.8.0](https://github.com/zextras/carbonio-contacts-ui/compare/v1.7.0...v1.8.0) (2024-01-12)

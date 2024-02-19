@@ -5,7 +5,8 @@
         "delete_permanently": "Kalıcı olarak sil",
         "search": "Ara",
         "share_folder": "Klasörü paylaş",
-        "send_msg": "E-posta gönder"
+        "send_msg": "E-posta gönder",
+        "edit_distribution_list": "Dağıtım Listesini Düzenle"
     },
     "folder": {
         "modal": {
@@ -199,7 +200,12 @@
         "contact_created_in_folder": "Bu kişi \"{{ name }}\" klasöründe oluşturulacak",
         "destination_address_book": "Hedef Adres Defteri",
         "include_shared_folders": "Paylaşılan adres defterlerini dahil et",
-        "autocomplete": "Otomatik tamamla"
+        "autocomplete": "Otomatik tamamla",
+        "discard": "vazgeç",
+        "newContactGroup": "Yeni kişi grubu",
+        "show_more": "daha fazla göster",
+        "select_all_addresses": "Adresi seç",
+        "select_all_addresses_plural": "Tüm {{count}} adresleri seç"
     },
     "job": {
         "company": "Firma",
@@ -228,7 +234,13 @@
     },
     "modal": {
         "address_book_name": "Adres defteri adı",
-        "destination": "Hedef klasör"
+        "destination": "Hedef klasör",
+        "close": {
+            "tooltip": "Kapat"
+        },
+        "edit_distribution_list": {
+            "title": "\"{{displayName}}\" düzenle"
+        }
     },
     "name": {
         "first_name": "Ad",
@@ -275,7 +287,12 @@
         "share_revoke": "Paylaşım erişimi iptal edildi",
         "share_updated": "Erişim hakları güncellendi",
         "tag_removed": "\"{{tag}}\" etiketi kaldırıldı",
-        "tag_applied": "\"{{tag}}\" etiketi uygulandı"
+        "tag_applied": "\"{{tag}}\" etiketi uygulandı",
+        "edit_distribution_list": {
+            "save": {
+                "success": "\"{{displayName}}\" dağıtım listesi düzenlemeleri başarıyla kaydedildi"
+            }
+        }
     },
     "title": {
         "advanced_filters": "Gelişmiş Filtreler"
@@ -331,5 +348,77 @@
     },
     "search": {
         "shared_folders_note": "Paylaşılan adres defterlerini aramalara dahil edin."
-    }
+    },
+    "board": {
+        "label": {
+            "description": "Açıklama"
+        },
+        "newContactGroup": {
+            "addresses": {
+                "label": "Adresler"
+            },
+            "input": {
+                "contact_input": {
+                    "error": {
+                        "address_already_present": "Adres zaten var",
+                        "address_already_present_plural": "Adresler zaten var",
+                        "invalid_address": "Geçersiz Adres",
+                        "invalid_address_plural": "Geçersiz Adresler",
+                        "invalid_already_present_addresses": "Geçersiz ve zaten var olan adresler"
+                    },
+                    "placeholder": "Bir adres yazın, gruba eklemek için \"+\" ya tıklayın",
+                    "title": "Adres Listesi"
+                },
+                "name_input": {
+                    "error": {
+                        "max_length": "İzin verilen maksimum uzunluk 256 karakterdir",
+                        "required": "Grup adı gereklidir, devam etmek için bir ad girin"
+                    },
+                    "name": {
+                        "label": "Grup adı*"
+                    }
+                }
+            },
+            "name": "Yeni Grup",
+            "snackbar": {
+                "contact_group_created": "Kişi grubu başarıyla oluşturuldu"
+            },
+            "title": "Yeni Grup"
+        }
+    },
+    "edit_dl_component": {
+        "error": {
+            "duplicated_address": "Adres zaten var",
+            "duplicated_address_plural": "Adres zaten var",
+            "invalid_address": "Geçersiz Adres",
+            "invalid_address_plural": "Geçersiz Adresler",
+            "invalid_and_duplicated_addresses": "Geçersiz ve zaten var olan adresler"
+        },
+        "label": {
+            "dl_email": "Dağıtım listesi",
+            "hint": "Belirli bir üyenin adını arayarak bu listeyi filtreleyebilir veya Dağıtım Listesi'ni düzenleyerek yenilerini ekleyebilirsiniz.",
+            "members_total": "Üye listesi {{total}}"
+        },
+        "placeholder": {
+            "add_members": "Bir adres yazın, dağıtım listesine eklemek için '+' işaretine tıklayın",
+            "filter_member": "Adresi filtrele"
+        }
+    },
+    "members_list_item_component": {
+        "button": {
+            "remove": "kaldır"
+        }
+    },
+    "secondaryBar": {
+        "contextualMenu": {
+            "new_contact_group_creation_action": "Yeni Kişiler Grubu"
+        }
+    },
+    "contacts": {
+        "importAction": {
+            "modalTitle": "Kişileri içe aktar",
+            "modalButton": "İÇE AKTAR"
+        }
+    },
+    "expand_distribution_list": "Adres listesini genişlet"
 }
