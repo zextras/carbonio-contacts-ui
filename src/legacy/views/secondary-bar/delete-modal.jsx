@@ -3,14 +3,16 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+import React, { useCallback } from 'react';
+
 import { Container, CustomModal, Text } from '@zextras/carbonio-design-system';
 import { FOLDERS, report } from '@zextras/carbonio-shell-ui';
-import React, { useCallback } from 'react';
+
+import { ModalHeader } from './commons/modal-header';
+import { useAppSelector } from '../../hooks/redux';
 import { folderAction } from '../../store/actions/folder-action';
 import { selectFolder } from '../../store/selectors/folders';
 import ModalFooter from '../contact-actions/commons/modal-footer';
-import { ModalHeader } from './commons/modal-header';
-import { useAppSelector } from '../../hooks/redux';
 
 export const DeleteModal = ({
 	currentFolder,
@@ -108,7 +110,7 @@ export const DeleteModal = ({
 		}
 
 		setModal('');
-	}, [createSnackbar, currentFolder, dispatch, setModal, t, trashFolder.label]);
+	}, [createSnackbar, currentFolder, dispatch, setModal, t, trashFolder?.label]);
 
 	const onClose = useCallback(() => setModal(''), [setModal]);
 

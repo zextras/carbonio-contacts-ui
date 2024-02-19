@@ -95,8 +95,10 @@ export type SoapContact = {
 	tn: string;
 	_attrs: {
 		type?: string;
+		displayName?: string;
 		firstName?: string;
 		fullName?: string;
+		givenName?: string;
 		lastName?: string;
 		jobTitle?: string;
 		middleName?: string;

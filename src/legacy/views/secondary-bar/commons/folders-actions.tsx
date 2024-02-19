@@ -3,29 +3,36 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
+
+import { CreateModalFn, CreateSnackbarFn } from '@zextras/carbonio-design-system';
 import { FOLDERS } from '@zextras/carbonio-shell-ui';
-import { FolderActionsType } from '../../../types/folder';
-import { getFolder } from '../../../store/actions/get-folder';
-import { SharesInfoModal } from '../shares-info-modal';
+import { TFunction } from 'i18next';
+
+import { FolderAction } from '../../../../carbonio-ui-commons/types/actions';
 import { folderAction } from '../../../store/actions/folder-action';
-import { StoreProvider } from '../../../store/redux';
+import { getFolder } from '../../../store/actions/get-folder';
+import { AppDispatch, StoreProvider } from '../../../store/redux';
+import { ContactsFolder } from '../../../types/contact';
+import { FolderActionsType } from '../../../types/folder';
+import { importContacts } from '../parts/import-contacts/import-contacts';
+import { SharesInfoModal } from '../shares-info-modal';
 
 export const actionsRetriever = (
-	folder,
-	setAction,
-	setCurrentFolder,
-	t,
-	dispatch,
-	createModal,
-	createSnackbar,
-	trashFolder
-) => [
+	folder: ContactsFolder,
+	setAction: (action: string) => void,
+	setCurrentFolder: (folder: ContactsFolder) => void,
+	t: TFunction,
+	dispatch: AppDispatch,
+	createModal: CreateModalFn,
+	createSnackbar: CreateSnackbarFn,
+	trashFolder: ContactsFolder
+): Array<FolderAction> => [
 	{
 		id: FolderActionsType.NEW,
 		icon: 'AddressBookOutline',
 		label: t('label.new_address_book', 'New address book'),
-		onClick: () => {
+		onClick: (): void => {
 			setAction(FolderActionsType.NEW);
 			setCurrentFolder(folder);
 		}
@@ -34,7 +41,7 @@ export const actionsRetriever = (
 		id: FolderActionsType.MOVE,
 		icon: 'MoveOutline',
 		label: t('folder.action.move', 'Move'),
-		onClick: () => {
+		onClick: (): void => {
 			setAction(FolderActionsType.MOVE);
 			setCurrentFolder(folder);
 		}
@@ -43,7 +50,7 @@ export const actionsRetriever = (
 		id: FolderActionsType.SHARE,
 		icon: 'ShareOutline',
 		label: t('folder.share_folder', 'Share address book'),
-		onClick: () => {
+		onClick: (): void => {
 			setAction(FolderActionsType.SHARE);
 			setCurrentFolder(folder);
 		}
@@ -56,7 +63,7 @@ export const actionsRetriever = (
 				? t('folder.action.empty.trash', 'Empty trash')
 				: t('folder.action.empty.folder', 'Empty address book'),
 		disabled: folder.id === FOLDERS.TRASH ? false : !folder.itemsCount,
-		onClick: () => {
+		onClick: (): void => {
 			setAction(FolderActionsType.EMPTY);
 			setCurrentFolder(folder);
 		}
@@ -65,7 +72,7 @@ export const actionsRetriever = (
 		id: FolderActionsType.EDIT,
 		icon: 'Edit2Outline',
 		label: t('folder.action.edit', 'Edit address book'),
-		onClick: () => {
+		onClick: (): void => {
 			setAction(FolderActionsType.EDIT);
 			setCurrentFolder(folder);
 		}
@@ -77,7 +84,7 @@ export const actionsRetriever = (
 			folder?.path?.includes?.(`/${trashFolder?.label}/`) && folder?.id !== FOLDERS.TRASH
 				? t('folder.action.delete_permanently', 'Delete address book permanently')
 				: t('folder.action.delete', 'Delete address book'),
-		onClick: () => {
+		onClick: (): void => {
 			setAction(FolderActionsType.DELETE);
 			setCurrentFolder(folder);
 		}
@@ -86,7 +93,7 @@ export const actionsRetriever = (
 		id: FolderActionsType.REMOVE_FROM_LIST,
 		icon: 'CloseOutline',
 		label: t('share.remove_from_this_list', 'Remove from this list'),
-		onClick: (e) => {
+		onClick: (e: SyntheticEvent): void => {
 			if (e) {
 				e.stopPropagation();
 
@@ -119,7 +126,7 @@ export const actionsRetriever = (
 		id: FolderActionsType.SHARE_INFO,
 		icon: 'InfoOutline',
 		label: t('share.share_info', "Shared address book's info"),
-		onClick: (e) => {
+		onClick: (e: SyntheticEvent): void => {
 			if (e) {
 				e.stopPropagation();
 			}
@@ -131,7 +138,7 @@ export const actionsRetriever = (
 							children: (
 								<StoreProvider>
 									<SharesInfoModal
-										onClose={() => {
+										onClose={(): void => {
 											closeModal();
 										}}
 										folder={res.payload}
@@ -142,6 +149,21 @@ export const actionsRetriever = (
 						true
 					);
 				}
+			});
+		}
+	},
+	{
+		id: FolderActionsType.IMPORT_CONTACTS,
+		icon: 'UploadOutline',
+		label: t('label.import_address_book', 'Import csv file'),
+		onClick: (): void => {
+			setCurrentFolder(folder);
+			importContacts({
+				folderId: folder.id,
+				folderName: folder.label,
+				createModal,
+				createSnackbar,
+				t
 			});
 		}
 	}

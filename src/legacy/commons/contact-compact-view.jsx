@@ -3,6 +3,8 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+import React, { useMemo } from 'react';
+
 import {
 	Avatar,
 	ButtonOld as Button,
@@ -13,8 +15,8 @@ import {
 	Text
 } from '@zextras/carbonio-design-system';
 import { trim } from 'lodash';
-import React, { useMemo } from 'react';
 import styled from 'styled-components';
+
 import { useDisplayName } from '../hooks/use-display-name';
 
 const AvatarMobile = styled(Avatar)`
@@ -73,9 +75,9 @@ export const CompactView = ({ contact, toggleOpen, open }) => {
 							</Text>
 							<Text size="small" weight="bold" color="secondary">
 								{trim(
-									`${contact.jobTitle && `${contact.jobTitle}, `} ${
-										contact.department && `${contact.department}, `
-									} ${contact.company && `${contact.company}, `}`,
+									`${contact?.jobTitle && `${contact.jobTitle}, `} ${
+										(contact?.department ?? '') && `${contact.department}, `
+									} ${(contact?.company ?? '') && `${contact.company}, `}`,
 									', '
 								)}
 							</Text>

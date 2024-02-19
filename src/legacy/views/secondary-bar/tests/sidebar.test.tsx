@@ -49,6 +49,7 @@ describe('Sidebar', () => {
 		${FOLDERS_DESCRIPTORS.contacts}     | ${ACTIONS_DESCRIPTORS.folders.emptyTrash}        | ${DISPLAY_ASSERTION.notDisplay}
 		${FOLDERS_DESCRIPTORS.contacts}     | ${ACTIONS_DESCRIPTORS.folders.deletePermanently} | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.contacts}     | ${ACTIONS_DESCRIPTORS.folders.removeShare}       | ${DISPLAY_ASSERTION.notDisplay}
+		${FOLDERS_DESCRIPTORS.contacts}     | ${ACTIONS_DESCRIPTORS.folders.importContacts}    | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.autoContacts} | ${ACTIONS_DESCRIPTORS.folders.new}               | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.autoContacts} | ${ACTIONS_DESCRIPTORS.folders.move}              | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.autoContacts} | ${ACTIONS_DESCRIPTORS.folders.delete}            | ${DISPLAY_ASSERTION.display}
@@ -59,6 +60,7 @@ describe('Sidebar', () => {
 		${FOLDERS_DESCRIPTORS.autoContacts} | ${ACTIONS_DESCRIPTORS.folders.emptyTrash}        | ${DISPLAY_ASSERTION.notDisplay}
 		${FOLDERS_DESCRIPTORS.autoContacts} | ${ACTIONS_DESCRIPTORS.folders.deletePermanently} | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.autoContacts} | ${ACTIONS_DESCRIPTORS.folders.removeShare}       | ${DISPLAY_ASSERTION.notDisplay}
+		${FOLDERS_DESCRIPTORS.autoContacts} | ${ACTIONS_DESCRIPTORS.folders.importContacts}    | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.folders.new}               | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.folders.move}              | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.folders.delete}            | ${DISPLAY_ASSERTION.display}
@@ -69,6 +71,7 @@ describe('Sidebar', () => {
 		${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.folders.emptyTrash}        | ${DISPLAY_ASSERTION.notDisplay}
 		${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.folders.deletePermanently} | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.folders.removeShare}       | ${DISPLAY_ASSERTION.notDisplay}
+		${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.folders.importContacts}    | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.trash}        | ${ACTIONS_DESCRIPTORS.folders.new}               | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.trash}        | ${ACTIONS_DESCRIPTORS.folders.move}              | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.trash}        | ${ACTIONS_DESCRIPTORS.folders.delete}            | ${DISPLAY_ASSERTION.display}
@@ -79,6 +82,7 @@ describe('Sidebar', () => {
 		${FOLDERS_DESCRIPTORS.trash}        | ${ACTIONS_DESCRIPTORS.folders.emptyTrash}        | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.trash}        | ${ACTIONS_DESCRIPTORS.folders.deletePermanently} | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.trash}        | ${ACTIONS_DESCRIPTORS.folders.removeShare}       | ${DISPLAY_ASSERTION.notDisplay}
+		${FOLDERS_DESCRIPTORS.trash}        | ${ACTIONS_DESCRIPTORS.folders.importContacts}    | ${DISPLAY_ASSERTION.notDisplay}
 	`(
 		`should $assertion.desc the action $action.desc for a contact in the "$folder.desc" folder`,
 		async ({
@@ -122,4 +126,36 @@ describe('Sidebar', () => {
 			}
 		}
 	);
+	it('should open a modal when the importContacts dropdown action is clicked', async () => {
+		const contact = buildContact();
+		const folder = FOLDERS_DESCRIPTORS.contacts;
+		const state = generateState({
+			folders: [
+				{
+					descriptor: folder,
+					contacts: [contact]
+				},
+				// FIXME there should be at least another folder beside the trash otherwise the folder sorting algorithm breaks
+				{
+					descriptor: {
+						id: faker.string.uuid(),
+						desc: faker.word.noun()
+					},
+					contacts: []
+				}
+			]
+		});
+		const store = generateStore(state);
+		const { user } = setupTest(<Sidebar expanded />, { store });
+
+		const folderItem = screen.getByText(folder.desc);
+		await act(() => user.rightClick(folderItem));
+		const dropdown = await screen.findByTestId('dropdown-popper-list');
+
+		const importContactsAction = within(dropdown).queryByText(
+			ACTIONS_DESCRIPTORS.folders.importContacts.desc
+		);
+		expect(importContactsAction).toBeVisible();
+		if (importContactsAction) await act(() => user.click(importContactsAction));
+	});
 });
