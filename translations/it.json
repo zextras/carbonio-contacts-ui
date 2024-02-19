@@ -421,5 +421,11 @@
         "button": {
             "remove": "rimuovi"
         }
+    },
+    "contacts": {
+        "importAction": {
+            "modalTitle": "Importa contatti",
+            "modalButton": "IMPORTA"
+        }
     }
 }
