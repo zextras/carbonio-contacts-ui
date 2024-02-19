@@ -65,15 +65,15 @@
                 "folder": "Opróżnij książkę adresową"
             },
             "move": "Przenieś",
-            "moved": "Książka adresowa została przeniesiona pomyślnie"
+            "moved": "Książka adresowa została przeniesiona"
         },
         "share_folder": "Udostępnij książkę adresową",
         "snackbar": {
             "address_book_moved_to_trash": "Książka adresowa została przeniesiona do kosza",
             "address_book_permanently_deleted": "Książka adresowa została trwale usunięta",
-            "folder_empty": "Książka adresowa została opróżniona pomyślnie",
+            "folder_empty": "Książka adresowa została opróżniona",
             "folder_new": "Nowa książka adresowa została stworzona",
-            "trash_empty": "Kosz został opróżniony pomyślnie"
+            "trash_empty": "Kosz został opróżniony"
         },
         "type": "Folder kontakty"
     },
@@ -219,7 +219,7 @@
         "viewer": "Wyświetlający",
         "workflow": "Organizacja Pracy",
         "write": "Pisanie",
-        "share_removed_succesfully": "Udostępnienie zostało usunięte pomyślnie",
+        "share_removed_succesfully": "Udostępnienie zostało usunięte",
         "add": "Dodaj",
         "admin": "Administrator",
         "administer": "Zarządzaj",
@@ -237,14 +237,14 @@
         "remove_from_this_list": "Usuń z tej listy",
         "role": "Rola",
         "send_notification": "Wyślij powiadomienie o tym udostępnieniu",
-        "share_added_succesfully": "Udostępnienie zostało dodane pomyślnie",
+        "share_added_succesfully": "Udostępnienie zostało dodane",
         "share_info": "Informacje o udostępnionej książce adresowej"
     },
     "snackbar": {
         "share_resend": "Zaproszenie do udostępnienia zostało wysłane ponownie",
         "share_revoke": "Dostęp do udostępniania został odebrany",
-        "folder_edited": "Książka adresowa została zedytowana pomyślnie",
-        "folder_shared": "Książka adresowa została udostępniona pomyślnie",
+        "folder_edited": "Książka adresowa została zedytowana",
+        "folder_shared": "Książka adresowa została udostępniona",
         "share_updated": "Uprawnienia dostępu zostały zaktualizowane",
         "tag_removed": "Etykieta \"{{tag}}\" została zdjęta",
         "tag_applied": "Etykieta \"{{tag}}\" została zastosowana",
@@ -424,5 +424,11 @@
             "new_contact_group_creation_action": "Nowa grupa kontaktów"
         }
     },
-    "expand_distribution_list": "Rozwiń listę adresów"
+    "expand_distribution_list": "Rozwiń listę adresów",
+    "contacts": {
+        "importAction": {
+            "modalTitle": "Importuj kontakty",
+            "modalButton": "IMPORTUJ"
+        }
+    }
 }

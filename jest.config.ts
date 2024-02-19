@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { Config } from 'jest';
+import type { Config } from 'jest';
 
 import { defaultConfig } from './src/carbonio-ui-commons/test/jest-config';
 
@@ -19,7 +19,12 @@ const config: Config = {
 			'<rootDir>/__mocks__/fileMock.js',
 		'\\.(css|less)$': '<rootDir>/__mocks__/fileMock.js'
 	},
-	collectCoverage: true
+	collectCoverage: true,
+	collectCoverageFrom: [
+		...(defaultConfig.collectCoverageFrom ?? []),
+		'!**/(tests|test)/**/*', // exclude test folders
+		'!**/.eslintrc.js' // exclude eslint config of common
+	]
 };
 
 export default config;

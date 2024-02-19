@@ -12,12 +12,10 @@ import { ChipAction } from '@zextras/carbonio-design-system';
 import { ContactInputIntegrationWrapper } from './contact-input-integration-wrapper';
 import { mockedAccount } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
 import { screen, setupTest, within } from '../../carbonio-ui-commons/test/test-setup';
-import { JEST_MOCKED_ERROR, TESTID_SELECTORS, TIMERS } from '../../constants/tests';
-import { DistributionList } from '../../model/distribution-list';
-import {
-	registerFullAutocompleteHandler,
-	registerGetDistributionListHandler
-} from '../../tests/msw-handlers';
+import { TESTID_SELECTORS } from '../../constants/tests';
+import { registerFullAutocompleteHandler } from '../../tests/msw-handlers/full-autocomplete';
+import { registerGetDistributionListHandler } from '../../tests/msw-handlers/get-distribution-list';
+import { generateDistributionList } from '../../tests/utils';
 
 const contactChipItem = {
 	email: faker.internet.email()
@@ -53,11 +51,12 @@ const editInvalidChipAction: ChipAction = expect.objectContaining<Partial<ChipAc
 	type: 'button'
 });
 
-const distributionList = {
+const distributionList = generateDistributionList({
 	email: distributionListChipItem.email,
 	displayName: 'dl 1',
-	owners: [{ id: mockedAccount.id, name: mockedAccount.name }]
-} satisfies Partial<DistributionList>;
+	owners: [{ id: mockedAccount.id, name: mockedAccount.name }],
+	isOwner: true
+});
 
 describe('Contact input integration wrapper', () => {
 	describe('actions', () => {
@@ -137,15 +136,12 @@ describe('Contact input integration wrapper', () => {
 
 		describe('on simple contact', () => {
 			it('should show custom action if value is set from outside and contain the action', async () => {
-				registerGetDistributionListHandler(contactChipItem);
+				registerGetDistributionListHandler(generateDistributionList(contactChipItem));
 				setupTest(
 					<ContactInputIntegrationWrapper
 						defaultValue={[
 							{
 								...contactChipItem,
-								// FIXME: remove ts-ignore when contact-input types are fixed
-								// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-								// @ts-ignore
 								actions: [customAction]
 							}
 						]}
@@ -168,9 +164,6 @@ describe('Contact input integration wrapper', () => {
 						defaultValue={[
 							{
 								...distributionListChipItem,
-								// FIXME: remove ts-ignore when contact-input types are fixed
-								// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-								// @ts-ignore
 								actions: [customAction]
 							}
 						]}
@@ -191,9 +184,6 @@ describe('Contact input integration wrapper', () => {
 						defaultValue={[
 							{
 								...distributionListChipItem,
-								// FIXME: remove ts-ignore when contact-input types are fixed
-								// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-								// @ts-ignore
 								actions: [customAction]
 							}
 						]}
@@ -207,128 +197,27 @@ describe('Contact input integration wrapper', () => {
 				).toBeVisible();
 			});
 
-			describe('Editing DL', () => {
-				it("doesn't show the edit icon if the contact isn't a DL", () => {
-					const handler = registerGetDistributionListHandler(distributionList);
+			it('should not show the edit DL action', async () => {
+				const handler = registerGetDistributionListHandler(distributionList);
 
-					setupTest(
-						<ContactInputIntegrationWrapper
-							// FIXME: remove ts-ignore when contact-input types are fixed
-							// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-							// @ts-ignore
-							defaultValue={[contactChipItem]}
-							extraAccountsIds={[]}
-						/>
-					);
+				setupTest(
+					<ContactInputIntegrationWrapper
+						defaultValue={[distributionListChipItem]}
+						extraAccountsIds={[]}
+					/>
+				);
 
-					const editButton = screen.queryByRoleWithIcon('button', {
-						icon: TESTID_SELECTORS.icons.editDL
-					});
-					expect(editButton).not.toBeInTheDocument();
-					expect(handler).not.toHaveBeenCalled();
-				});
-
-				it('should not show the edit icon if the contact is a DL but the current user is not the DL owner', async () => {
-					const handler = registerGetDistributionListHandler({
-						...distributionList,
-						owners: [{ id: faker.string.uuid(), name: faker.person.fullName() }]
-					});
-
-					setupTest(
-						<ContactInputIntegrationWrapper
-							// FIXME: remove ts-ignore when contact-input types are fixed
-							// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-							// @ts-ignore
-							defaultValue={[distributionListChipItem]}
-							extraAccountsIds={[]}
-						/>
-					);
-
-					await waitFor(() => expect(handler).toHaveBeenCalled());
-					expect(
-						screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.editDL })
-					).not.toBeInTheDocument();
-				});
-
-				it('should show the edit icon if the contact is a DL and the current user is the DL owner', async () => {
-					const handler = registerGetDistributionListHandler(distributionList);
-
-					setupTest(
-						<ContactInputIntegrationWrapper
-							// FIXME: remove ts-ignore when contact-input types are fixed
-							// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-							// @ts-ignore
-							defaultValue={[distributionListChipItem]}
-							extraAccountsIds={[]}
-						/>
-					);
-
-					await waitFor(() => expect(handler).toHaveBeenCalled());
-					expect(
-						await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.editDL })
-					).toBeVisible();
-				});
-
-				it('if the user clicks on the edit icon the DL title is displayed inside a modal', async () => {
-					const handler = registerGetDistributionListHandler(distributionList);
-
-					const { user } = setupTest(
-						<ContactInputIntegrationWrapper
-							// FIXME: remove ts-ignore when contact-input types are fixed
-							// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-							// @ts-ignore
-							defaultValue={[distributionListChipItem]}
-							extraAccountsIds={[]}
-						/>
-					);
-
-					await waitFor(() => expect(handler).toHaveBeenCalled());
-					const editButton = await screen.findByRoleWithIcon('button', {
-						icon: TESTID_SELECTORS.icons.editDL
-					});
-					await user.click(editButton);
-					await screen.findByText(`Edit "${distributionList.displayName}"`);
-					act(() => {
-						jest.advanceTimersByTime(TIMERS.modal.delayOpen);
-					});
-					expect(
-						within(screen.getByTestId(TESTID_SELECTORS.modal)).getByText(
-							`Edit "${distributionList.displayName}"`
-						)
-					).toBeVisible();
-				});
-
-				it('should not show the edit action if the distribution list cannot be retrieved', async () => {
-					const handler = registerGetDistributionListHandler(distributionList, JEST_MOCKED_ERROR);
-
-					setupTest(
-						<ContactInputIntegrationWrapper
-							// FIXME: remove ts-ignore when contact-input types are fixed
-							// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-							// @ts-ignore
-							defaultValue={[distributionListChipItem]}
-							extraAccountsIds={[]}
-						/>
-					);
-
-					await waitFor(() => expect(handler).toHaveBeenCalled());
-					expect(
-						screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.editDL })
-					).not.toBeInTheDocument();
-				});
+				await waitFor(() => expect(handler).toHaveBeenCalled());
+				expect(
+					screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.editDL })
+				).not.toBeInTheDocument();
 			});
 		});
 
 		describe('on invalid contact', () => {
 			it('should show remove action on value set from outside', () => {
 				setupTest(
-					<ContactInputIntegrationWrapper
-						// FIXME: remove ts-ignore when contact-input types are fixed
-						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-						// @ts-ignore
-						defaultValue={[invalidChipItem]}
-						extraAccountsIds={[]}
-					/>
+					<ContactInputIntegrationWrapper defaultValue={[invalidChipItem]} extraAccountsIds={[]} />
 				);
 				expect(
 					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.close })
@@ -337,13 +226,7 @@ describe('Contact input integration wrapper', () => {
 
 			it('should not show edit action if invalid contact is set from outside', () => {
 				setupTest(
-					<ContactInputIntegrationWrapper
-						// FIXME: remove ts-ignore when contact-input types are fixed
-						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-						// @ts-ignore
-						defaultValue={[invalidChipItem]}
-						extraAccountsIds={[]}
-					/>
+					<ContactInputIntegrationWrapper defaultValue={[invalidChipItem]} extraAccountsIds={[]} />
 				);
 				expect(
 					screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.editChip })

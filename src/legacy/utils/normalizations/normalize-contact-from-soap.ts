@@ -14,6 +14,7 @@ import {
 	isNil,
 	filter
 } from 'lodash';
+
 import {
 	Contact,
 	ContactAddress,
@@ -142,8 +143,9 @@ export function normalizeContactsFromSoap(contact: SoapContact[]): Contact[] | u
 						address: normalizeContactAddresses(c),
 						company: c._attrs?.company ?? '',
 						department: c._attrs?.department ?? '',
+						displayName: c._attrs?.displayName ?? '',
 						email: normalizeContactMails(c),
-						firstName: c._attrs?.firstName ?? '',
+						firstName: c._attrs?.firstName ?? c._attrs?.givenName ?? '',
 						middleName: c._attrs?.middleName ?? '',
 						lastName: c._attrs?.lastName ?? '',
 						nickName: c._attrs?.nickname ?? '',
@@ -182,8 +184,9 @@ export function normalizeSyncContactsFromSoap(
 								address: c._attrs ? normalizeContactAddresses(c) : undefined,
 								company: c._attrs?.company,
 								department: c._attrs?.department,
+								displayName: c._attrs?.displayName,
 								email: c._attrs ? normalizeContactMails(c) : undefined,
-								firstName: c._attrs?.firstName,
+								firstName: c._attrs?.firstName || c._attrs?.givenName,
 								middleName: c._attrs?.middleName,
 								lastName: c._attrs?.lastName,
 								nickName: c._attrs?.nickname,

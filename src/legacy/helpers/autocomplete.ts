@@ -6,7 +6,7 @@
 
 import { forEach } from 'lodash';
 
-import { FullAutocompleteResponse } from '../types/contact';
+import type { FullAutocompleteResponse, Match } from '../types/contact';
 
 export function parseFullAutocompleteXML(xmlString: string): FullAutocompleteResponse {
 	const parser = new DOMParser();
@@ -22,7 +22,7 @@ export function parseFullAutocompleteXML(xmlString: string): FullAutocompleteRes
 
 	const matchElements = xmlDoc.documentElement.getElementsByTagName('match');
 	forEach(matchElements, (matchElement) => {
-		const match = {
+		const match: Match = {
 			first: matchElement.getAttribute('first') ?? undefined,
 			last: matchElement.getAttribute('last') ?? undefined,
 			fileas: matchElement.getAttribute('fileas') ?? undefined,

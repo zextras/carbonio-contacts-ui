@@ -6,11 +6,12 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
 
-export const getFolder = createAsyncThunk('folders/search_folder', async (): Promise<any> => {
-	const res = await soapFetch('GetFolder', {
-		_jsns: 'urn:zimbraMail',
-		folder: {},
-		tr: true
-	});
-	return res;
-});
+export const getFolder = createAsyncThunk(
+	'folders/search_folder',
+	async (folderId: string): Promise<any> =>
+		soapFetch('GetFolder', {
+			_jsns: 'urn:zimbraMail',
+			folder: folderId ?? {},
+			tr: true
+		})
+);

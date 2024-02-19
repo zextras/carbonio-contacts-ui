@@ -4,17 +4,19 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React from 'react';
-import { compact, isEmpty } from 'lodash';
+
 import { Text } from '@zextras/carbonio-design-system';
 import { getAction, FOLDERS } from '@zextras/carbonio-shell-ui';
-import { FolderActionsType } from '../types/folder';
-import { contactAction } from '../store/actions/contact-action';
-import MoveModal from '../views/contact-actions/move-modal';
+import { compact, isEmpty } from 'lodash';
+
 import { applyTag, applyMultiTag, createAndApplyTag } from './tag-actions';
+import { contactAction } from '../store/actions/contact-action';
 
 // eslint-disable-next-line import/extensions
-import ModalFooter from '../views/contact-actions/commons/modal-footer.tsx';
 import { StoreProvider } from '../store/redux';
+import { FolderActionsType } from '../types/folder';
+import ModalFooter from '../views/contact-actions/commons/modal-footer';
+import MoveModal from '../views/contact-actions/move-modal';
 
 export function mailToContact(contact, t) {
 	const [mailTo, available] = getAction('contact-list', 'mail-to', [contact]);

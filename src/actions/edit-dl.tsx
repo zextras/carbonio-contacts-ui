@@ -3,63 +3,50 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
-import { useModal } from '@zextras/carbonio-design-system';
+import { addBoard, getBoardById, reopenBoards, setCurrentBoard } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
-import { DefaultTheme } from 'styled-components';
 
-import { EditDLControllerComponent } from '../components/edit-dl-controller';
-import { ACTION_IDS } from '../constants';
+import { UIAction } from './types';
+import { ACTION_IDS, EDIT_DL_BOARD_ID } from '../constants';
 import { DistributionList } from '../model/distribution-list';
-
-export type UIAction<ExecArg, CanExecArg> = {
-	id: string;
-	label: string;
-	icon: keyof DefaultTheme['icons'];
-	execute: (arg: ExecArg) => void;
-	canExecute: (arg: CanExecArg) => boolean;
-};
+import { EditDLBoardContext } from '../views/board/edit-dl-board';
 
 export type EditDLAction = UIAction<
-	Pick<DistributionList, 'displayName' | 'email'>,
+	Pick<DistributionList, 'email' | 'displayName' | 'id'>,
 	Pick<DistributionList, 'isOwner'>
 >;
 
 export const useActionEditDL = (): EditDLAction => {
 	const [t] = useTranslation();
-	const createModal = useModal();
 
-	const execute = useCallback<EditDLAction['execute']>(
-		({ email, displayName = email }) => {
-			const closeModal = createModal(
-				{
-					size: 'small',
-					onClose: () => {
-						closeModal();
-					},
-					children: (
-						<EditDLControllerComponent
-							email={email}
-							displayName={displayName}
-							onClose={(): void => closeModal()}
-							onSave={(): void => closeModal()}
-						/>
-					)
-				},
-				true
-			);
-		},
-		[createModal]
-	);
+	const execute = useCallback<EditDLAction['execute']>((distributionList) => {
+		if (distributionList !== undefined) {
+			const boardId = `${EDIT_DL_BOARD_ID}-${distributionList.id}`;
+			const board = getBoardById(boardId);
+			if (board) {
+				setCurrentBoard(board.id);
+				reopenBoards();
+			} else {
+				addBoard<EditDLBoardContext>({
+					context: { id: distributionList.id },
+					icon: 'DistributionListOutline',
+					title: distributionList.displayName || distributionList.email,
+					id: boardId,
+					url: EDIT_DL_BOARD_ID
+				});
+			}
+		}
+	}, []);
 
-	const canExecute = useCallback<EditDLAction['canExecute']>(({ isOwner }) => isOwner, []);
+	const canExecute = useCallback<EditDLAction['canExecute']>((dl) => dl?.isOwner === true, []);
 
 	return useMemo(
 		() => ({
 			id: ACTION_IDS.editDL,
-			label: t('action.edit_distribution_list', 'Edit distribution list'),
-			icon: 'Settings2Outline',
+			label: t('action.edit_distribution_list', 'Edit'),
+			icon: 'Edit2Outline',
 			execute,
 			canExecute
 		}),

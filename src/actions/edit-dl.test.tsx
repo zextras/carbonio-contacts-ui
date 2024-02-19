@@ -4,112 +4,87 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { faker } from '@faker-js/faker';
-import { act, waitForElementToBeRemoved } from '@testing-library/react';
+import * as shell from '@zextras/carbonio-shell-ui';
 import { times } from 'lodash';
 
-import { UIAction, useActionEditDL } from './edit-dl';
-import { screen, setupHook } from '../carbonio-ui-commons/test/test-setup';
-import { TESTID_SELECTORS, TIMERS } from '../constants/tests';
-import {
-	registerDistributionListActionHandler,
-	registerGetDistributionListMembersHandler
-} from '../tests/msw-handlers';
-import { getDLContactInput } from '../tests/utils';
+import { useActionEditDL } from './edit-dl';
+import { UIAction } from './types';
+import { setupHook } from '../carbonio-ui-commons/test/test-setup';
+import { EDIT_DL_BOARD_ID } from '../constants';
+import { generateDistributionList } from '../tests/utils';
 
 describe('useActionEditDL', () => {
 	it('should return an object with the specific data', () => {
 		const { result } = setupHook(useActionEditDL);
 		expect(result.current).toEqual<UIAction<unknown, unknown>>(
 			expect.objectContaining({
-				icon: 'Settings2Outline',
-				label: 'Edit distribution list',
+				icon: 'Edit2Outline',
+				label: 'Edit',
 				id: 'dl-edit-action'
 			})
 		);
 	});
 
-	it('should return an execute field which opens a UI with the dl info and members', async () => {
+	it('should return an execute field which opens a board with the dl info', async () => {
+		const addBoardFn = jest.spyOn(shell, 'addBoard');
+
+		const members = times(10, () => faker.internet.email());
+		const dl = generateDistributionList({
+			members: { members, total: members.length, more: false }
+		});
 		const { result } = setupHook(useActionEditDL);
 		const action = result.current;
-		const dlEmail = 'dl-mail@domain.org';
-		const dlDisplayName = 'Custom distribution list';
-		const members = times(10, () => faker.internet.email());
-		registerGetDistributionListMembersHandler(members);
-		act(() => {
-			action.execute({ email: dlEmail, displayName: dlDisplayName });
-		});
+		action.execute(dl);
 
-		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+		expect(addBoardFn).toHaveBeenCalledWith<Parameters<typeof shell.addBoard>>({
+			title: dl.displayName,
+			icon: 'DistributionListOutline',
+			context: { id: dl.id },
+			id: `${EDIT_DL_BOARD_ID}-${dl.id}`,
+			url: expect.anything()
 		});
-
-		expect(await screen.findByText(dlEmail)).toBeVisible();
-		expect(screen.getByText(`Edit "${dlDisplayName}"`)).toBeVisible();
-		expect(screen.getAllByTestId(TESTID_SELECTORS.membersListItem)).toHaveLength(members.length);
 	});
 
 	it('should show the email in the title if the dl has no display name', async () => {
+		const addBoardFn = jest.spyOn(shell, 'addBoard');
+
+		const dl = generateDistributionList({ displayName: undefined });
 		const { result } = setupHook(useActionEditDL);
 		const action = result.current;
-		const dlEmail = 'dl-mail@domain.org';
-		const members = times(10, () => faker.internet.email());
-		registerGetDistributionListMembersHandler(members);
-		act(() => {
-			action.execute({ email: dlEmail });
-		});
+		action.execute(dl);
 
-		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+		expect(addBoardFn).toHaveBeenCalledWith<Parameters<typeof shell.addBoard>>({
+			title: dl.email,
+			icon: 'DistributionListOutline',
+			context: { id: dl.id },
+			id: `${EDIT_DL_BOARD_ID}-${dl.id}`,
+			url: expect.anything()
 		});
-
-		expect(await screen.findByText(dlEmail)).toBeVisible();
-		expect(screen.getByText(`Edit "${dlEmail}"`)).toBeVisible();
 	});
 
-	it('should close the edit view on save', async () => {
-		const { result, user } = setupHook(useActionEditDL);
+	it('should not open a new board, but reopen the existing tab, if the user is already editing the distribution list', async () => {
+		const addBoardFn = jest.spyOn(shell, 'addBoard');
+		const dl = generateDistributionList();
+		const boardId = `${EDIT_DL_BOARD_ID}-${dl.id}`;
+		jest.spyOn(shell, 'getBoardById').mockReturnValue({
+			id: boardId,
+			url: EDIT_DL_BOARD_ID,
+			app: '',
+			icon: '',
+			title: ''
+		});
+		const setCurrentBoardFn = jest.spyOn(shell, 'setCurrentBoard');
+		const reopenBoardsFn = jest.spyOn(shell, 'reopenBoards');
+
+		const { result } = setupHook(useActionEditDL);
 		const action = result.current;
-		const dlEmail = 'dl-mail@domain.org';
-		const dlDisplayName = 'Custom distribution list';
-		const newMember = faker.internet.email();
-		registerGetDistributionListMembersHandler([]);
-		registerDistributionListActionHandler([newMember], []);
-		act(() => {
-			action.execute({ email: dlEmail, displayName: dlDisplayName });
-		});
+		action.execute(dl);
 
-		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
-		});
-
-		expect(await screen.findByText(dlEmail)).toBeVisible();
-		const contactInput = getDLContactInput();
-		await act(async () => {
-			await user.type(contactInput.textbox, `${newMember},`);
-		});
-		await user.click(contactInput.addMembersIcon);
-		await screen.findByTestId(TESTID_SELECTORS.membersListItem);
-		await user.click(screen.getByRole('button', { name: /save/i }));
-		await waitForElementToBeRemoved(screen.queryByText(dlEmail));
-		expect(screen.queryByText(dlDisplayName)).not.toBeInTheDocument();
-	});
-
-	it('should close the edit view on cancel', async () => {
-		const { result, user } = setupHook(useActionEditDL);
-		const action = result.current;
-		const dlEmail = 'dl-mail@domain.org';
-		const dlDisplayName = 'Custom distribution list';
-		registerGetDistributionListMembersHandler([]);
-		act(() => {
-			action.execute({ email: dlEmail, displayName: dlDisplayName });
-		});
-
-		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
-		});
-
-		expect(await screen.findByText(dlEmail)).toBeVisible();
-		await user.click(screen.getByRole('button', { name: /cancel/i }));
-		expect(screen.queryByText(dlDisplayName)).not.toBeInTheDocument();
+		expect(addBoardFn).not.toHaveBeenCalled();
+		expect(setCurrentBoardFn).toHaveBeenCalledTimes(1);
+		expect(setCurrentBoardFn).toHaveBeenCalledWith<Parameters<typeof shell.setCurrentBoard>>(
+			boardId
+		);
+		expect(reopenBoardsFn).toHaveBeenCalledTimes(1);
 	});
 });

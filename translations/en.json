@@ -1,14 +1,27 @@
 {
     "action": {
+        "contactGroup": {
+            "delete": "Delete"
+        },
+        "copy": "Copy",
+        "delete": "Delete",
         "delete_permanently": "Delete Permanently",
-        "edit_distribution_list": "Edit distribution list",
+        "edit": "Edit",
+        "edit_distribution_list": "Edit",
         "goto_folder": "Go to folder",
+        "mail": "Send e-mail",
         "reset_filters": "Reset Filters",
         "search": "Search",
         "send_msg": "Send e-mail",
         "share_folder": "Share folder"
     },
     "board": {
+        "editContactGroup": {
+            "snackbar": {
+                "contact_group_edited": "Group successfully updated",
+                "error": "Something went wrong saving the edits, try again"
+            }
+        },
         "label": {
             "description": "Description"
         },
@@ -45,6 +58,16 @@
             "title": "New Group"
         }
     },
+    "contactGroupDisplayer": {
+        "label": {
+            "members_total": "Addresses: {{count}}"
+        }
+    },
+    "contactGroupList": {
+        "addressCount": "{{count}} address",
+        "addressCount_plural": "{{count}} addresses",
+        "emptyList": "No contact groups have been created yet"
+    },
     "contact_restored": "Contact restored",
     "displayer": {
         "description2": "Click the “NEW” button to start creating a new one.",
@@ -54,6 +77,21 @@
         "description6": "Use the “Edit” mode to add any personal note to a contact.",
         "description7": "Create a group of contacts by clicking the “NEW” button.",
         "description8": "Select a contact or a group of contacts to send shared emails.",
+        "distribution_list": {
+            "empty_displayer": "Select a distribution list or contact the Admin to have one.",
+            "label": {
+                "description": "Description",
+                "filter_hint": "You can filter this list by looking for specific member’s name.",
+                "manager_total": "Manager list {{total}}",
+                "member_total": "Member list {{total}}"
+            },
+            "member_not_visible": "You don't have the permissions to see the members of this distribution list. For more information, ask to the administrator.",
+            "no_details": "There are no additional details for this distribution list. For more information, ask to the administrator.",
+            "no_details_owner": "There are no additional details for this distribution list. Edit the distribution list to add them or ask to the administrator.",
+            "placeholder": {
+                "filter_member": "Filter an address"
+            }
+        },
         "list_title1": "It looks like there are no contacts yet",
         "list_title2": "The trash is empty",
         "search_description1": "Or select “Advanced Filters” to refine your search.",
@@ -76,6 +114,16 @@
         "title8": "Send shared e-mail",
         "title9": "Click the trash icon to delete a contact."
     },
+    "distribution_list": {
+        "label": {
+            "empty_message": "There are no distribution lists yet."
+        },
+        "tabs": {
+            "details": "Details",
+            "managers": "Manager list",
+            "members": "Member list"
+        }
+    },
     "edit_dl_component": {
         "error": {
             "duplicated_address": "Address already present",
@@ -83,6 +131,17 @@
             "invalid_address": "Invalid address",
             "invalid_address_plural": "Invalid addresses",
             "invalid_and_duplicated_addresses": "Invalid and already present addresses"
+        },
+        "input": {
+            "description": {
+                "label": "Description"
+            },
+            "name": {
+                "error": {
+                    "max_length": "Maximum length allowed is 256 characters"
+                },
+                "label": "Distribution List name"
+            }
         },
         "label": {
             "dl_email": "Distribution list",
@@ -94,10 +153,16 @@
             "filter_member": "Filter an address"
         }
     },
+    "emptyDisplayer": {
+        "contactGroup": {
+            "hint": "Click the “NEW” button to create a new contacts group."
+        }
+    },
     "expand_distribution_list": "Expand address list",
     "folder": {
         "action": {
             "delete": "Delete address book",
+            "deleteContactGroup": "Delete \"{{contactGroupTitle}}\"",
             "delete_permanently": "Delete address book permanently",
             "edit": "Edit address book",
             "empty": {
@@ -179,6 +244,17 @@
         "root": "Root",
         "trash": "Trash"
     },
+    "import_contacts": {
+        "modal": {
+            "confirm": "Import",
+            "description": "The contacts inside the chosen {{fileName}} file will be imported inside the selected address book “{{folderName}}” folder.",
+            "title": "Import contacts"
+        },
+        "snackbar": {
+            "import_contacts_success": "{{count}} contact imported and added to the selected address book",
+            "import_contacts_success_plural": "{{count}} contacts imported and added to the selected address book"
+        }
+    },
     "job": {
         "company": "Company",
         "department": "Department",
@@ -208,6 +284,7 @@
         "edit": "Edit",
         "edit_access": "Edit access",
         "edit_access_name": "Edit {{name}}'s access",
+        "edit_contacts": "Edit contacts",
         "edit_email": "Edit E-mail",
         "edit_folder_properties": "Edit {{name}}'s properties",
         "edit_invalid_email": "E-mail is invalid, click to edit it",
@@ -216,7 +293,13 @@
         "email": "E-mail",
         "empty": "Empty",
         "error_try_again": "Something went wrong, please try again",
+        "errors": {
+            "upload_failed_generic": "Upload failed for the file \"{{filename}}\""
+        },
+        "export_address_book": "Export csv file",
         "folder_name": "Folder name",
+        "groups_app_name": "Contact Groups and Distribution Lists",
+        "import_address_book": "Import csv file",
         "include_shared_folders": "Include shared address books",
         "move": "Move",
         "newContactGroup": "New contact group",
@@ -255,6 +338,7 @@
         "tags": "Tags",
         "type": "Type",
         "undo": "Undo",
+        "update": "Update",
         "website": "Website",
         "website_plural": "Websites"
     },
@@ -294,8 +378,19 @@
     },
     "modal": {
         "address_book_name": "Address book name",
+        "cancel": "cancel",
         "close": {
             "tooltip": "Close"
+        },
+        "delete": {
+            "button": {
+                "confirm": "delete"
+            },
+            "contactGroup": {
+                "body1": "Are you sure to delete the selected contact group?",
+                "body2": "If you delete it will be lost forever.",
+                "header": "Delete \"{{contactGroupName}}\""
+            }
         },
         "destination": "Destination folder",
         "edit_distribution_list": {
@@ -316,7 +411,11 @@
     "secondaryBar": {
         "contextualMenu": {
             "new_contact_group_creation_action": "New Contact Group"
-        }
+        },
+        "distributionLists": "Distribution Lists",
+        "distributionListsManager": "Manager",
+        "distributionListsMember": "Member",
+        "myContactGroups": "My Contact Groups"
     },
     "section": {
         "field": {
@@ -387,13 +486,21 @@
         "write": "Write"
     },
     "snackbar": {
+        "delete_contact_group": {
+            "confirm": {
+                "success": "Contact group successfully deleted"
+            }
+        },
         "edit_distribution_list": {
             "save": {
                 "success": "\"{{displayName}}\" distribution list edits saved successfully"
             }
         },
+        "email_copied_to_clipboard": "Email copied to clipboard.",
         "folder_edited": "Address book edited successfully",
         "folder_shared": "Address book shared",
+        "import_contacts_success": "{{number}} contacts imported and added to the selected address book",
+        "import_contacts_success_plural": "",
         "share_resend": "Share invite resent",
         "share_revoke": "Share access revoked",
         "share_updated": "Access rights updated",
@@ -415,9 +522,10 @@
         "other": "other",
         "work": "work"
     },
-    "secondaryBar": {
-        "contextualMenu": {
-            "new_contact_group_creation_action": "New Contact Group"
+    "contacts": {
+        "importAction": {
+            "modalTitle": "Import contacts",
+            "modalButton": "IMPORT"
         }
     }
 }

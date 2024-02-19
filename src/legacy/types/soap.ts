@@ -3,6 +3,8 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+import type { NameSpace } from '@zextras/carbonio-shell-ui';
+
 export type IFolderView =
 	| 'search folder'
 	| 'tag'
@@ -93,8 +95,10 @@ export type SoapContact = {
 	tn: string;
 	_attrs: {
 		type?: string;
+		displayName?: string;
 		firstName?: string;
 		fullName?: string;
+		givenName?: string;
 		lastName?: string;
 		jobTitle?: string;
 		middleName?: string;
@@ -120,7 +124,20 @@ export type SoapContact = {
 			filename: string;
 		};
 	};
+	m?: Array<{
+		type: ContactGroupMemberType;
+		value: string;
+		cn?: Array<SoapContact & { memberOf?: string }>;
+	}>;
 };
+
+type ContactGroupMemberType =
+	/** reference to another contact */
+	| 'C'
+	/** reference to a GAL entry */
+	| 'G'
+	/** inlined member (member name and email address is embeded in the contact group) */
+	| 'I';
 
 export type SyncResponseContactFolder = ISoapSyncFolderObj & {
 	cn: Array<{
@@ -176,6 +193,18 @@ type FolderActionMove = {
 type FolderActionDelete = {
 	op: 'delete';
 	id: string;
+};
+
+export type GetFolderActionRequest = {
+	folder: {
+		l: string;
+	};
+	_jsns: string;
+};
+
+export type GetFolderActionResponse = {
+	folder: Array<ISoapFolderObj>;
+	_jsns: string;
 };
 
 export type FolderActionRequest = {
@@ -264,11 +293,18 @@ export type BatchResponse = {
 
 export type GetContactRequest = {
 	_jsns: 'urn:zimbraMail';
-	cn: Array<{
+	cn?: Array<{
 		id: string;
 	}>;
 };
 
+export type GetContactsRequest = {
+	_jsns: NameSpace;
+	cn: {
+		id: string;
+	};
+	derefGroupMember?: boolean;
+};
 export type GetContactsResponse = {
-	cn: Array<SoapContact>;
+	cn?: Array<SoapContact>;
 };
