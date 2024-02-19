@@ -95,7 +95,8 @@ export const dropdownActions = (
 					(action) =>
 						action.id !== FolderActionsType.REMOVE_FROM_LIST &&
 						action.id !== FolderActionsType.SHARE_INFO &&
-						action.id !== FolderActionsType.IMPORT_CONTACTS
+						action.id !== FolderActionsType.IMPORT_CONTACTS &&
+						action.id !== FolderActionsType.EXPORT_CONTACTS
 				),
 				(action) => (action.id === FolderActionsType.EMPTY ? action : { ...action, disabled: true })
 			);
