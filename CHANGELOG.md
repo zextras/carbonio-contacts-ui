@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.10.0](https://github.com/zextras/carbonio-contacts-ui/compare/v1.9.0...v1.10.0) (2024-02-23)
+
+
+### Features
+
+* change icon in primary bar for contacts group and distribution lists ([15bb915](https://github.com/zextras/carbonio-contacts-ui/commit/15bb91516817dcfa7da510b75e05bae544b4531d))
+* change primary bar icon for Contact groups and Distribution Lists ([9eec85a](https://github.com/zextras/carbonio-contacts-ui/commit/9eec85a08c943c7723091c792134dfcd164306cc))
+
 ## [1.9.0](https://github.com/zextras/carbonio-contacts-ui/compare/v1.8.1...v1.9.0) (2024-02-19)
 
 
