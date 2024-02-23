@@ -176,7 +176,7 @@ const App = (): React.JSX.Element => {
 			position: 310,
 			visible: true,
 			label: t('label.groups_app_name', 'Contact Groups and Distribution Lists'),
-			primaryBar: 'ContactsModOutline',
+			primaryBar: 'ListOutline',
 			secondaryBar: SecondaryBarView,
 			appView: AppViewV2
 		});
