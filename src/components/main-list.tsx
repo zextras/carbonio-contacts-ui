@@ -50,8 +50,7 @@ export const MainList = ({
 					data-testid="main-list"
 					background={'gray6'}
 					onListBottom={onListBottom}
-					// TODO uncomment when CDS-205 is available
-					// intersectionObserverInitOptions={{ threshold: 0.5 }}
+					intersectionObserverInitOptions={{ threshold: 0.5 }}
 				>
 					{children}
 				</ListV2>
