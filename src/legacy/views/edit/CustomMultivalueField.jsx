@@ -13,7 +13,7 @@ import {
 	Row,
 	Select
 } from '@zextras/carbonio-design-system';
-import { filter, find, map, omit, reduce, set } from 'lodash';
+import { filter, find, map, omit, omitBy, reduce, set } from 'lodash';
 
 import { op } from './form-reducer';
 import FormSection from './form-section';
@@ -106,15 +106,31 @@ export const CustomMultivalueField = ({
 		});
 	}, [dispatch, emptyValue, generateNewTypedId, generateNewUntypedId, name, types, value]);
 
+	const isLastElement = (mulObj) => {
+		let count = 0;
+		Object.keys(mulObj).forEach((prop) => {
+			if (!mulObj[prop].isRemove) {
+				count += 1;
+			}
+		});
+		return count === 0;
+	};
 	const removeValue = useCallback(
 		(index) => {
+			const newValue = { ...value };
+			const obj = newValue[index];
+			const updatedObj = { isRemove: 'true' };
+			Object.keys(obj).forEach((prop) => {
+				prop === 'type' ? (updatedObj.type = obj.type) : (updatedObj[prop] = '');
+			});
+			newValue[index] = updatedObj;
 			dispatch({
 				type: op.setRowInput,
-				payload: { ...omit(value, [index]) },
+				payload: newValue,
 				name
 			});
 		},
-		[dispatch, value, name]
+		[dispatch, name, value]
 	);
 
 	const updateValue = useCallback(
@@ -147,14 +163,15 @@ export const CustomMultivalueField = ({
 	);
 
 	useEffect(() => {
-		if (Object.values(value).length === 0) {
+		if (Object.values(value).length === 0 || isLastElement(value)) {
 			addValue();
 		}
 	}, [addValue, value]);
+	const filteredValue = omitBy(value, (ele) => ele.isRemove);
 
 	return (
 		<FormSection label={label}>
-			{map(Object.entries(value), ([id, item], index) => (
+			{map(Object.entries(filteredValue), ([id, item], index) => (
 				<ContactEditorRow wrap={wrap ? 'wrap' : 'nowrap'} key={`${label}${id}`}>
 					{map(subFields, (subField, subIndex) => (
 						<Padding
@@ -202,7 +219,7 @@ export const CustomMultivalueField = ({
 							width="5.5rem"
 							style={{ minWidth: '5.5rem' }}
 						>
-							{index >= Object.entries(value).length - 1 ? (
+							{index >= Object.entries(filteredValue).length - 1 ? (
 								<>
 									<Padding right="small">
 										<IconButton
