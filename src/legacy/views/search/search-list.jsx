@@ -86,7 +86,7 @@ const SearchList = ({
 									count: filterCount,
 									defaultValue: '{{count}} Advanced Filter',
 									defaultValue_plural: '"{{count}} Advanced Filters'
-							  })
+								})
 					}
 					icon="Options2Outline"
 				/>

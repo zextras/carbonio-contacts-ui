@@ -116,11 +116,11 @@ export const DistributionListDisplayer = ({
 												? t(
 														'displayer.distribution_list.no_details_owner',
 														'There are no additional details for this distribution list. Edit the distribution list to add them or ask to the administrator.'
-												  )
+													)
 												: t(
 														'displayer.distribution_list.no_details',
 														'There are no additional details for this distribution list. For more information, ask to the administrator.'
-												  )}
+													)}
 										</Text>
 									</Row>
 								)}

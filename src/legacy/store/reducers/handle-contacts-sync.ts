@@ -49,13 +49,13 @@ export function handleModifiedContactsSyncReducer(
 									...acc,
 									[key]: reject(v, ['id', updated.id]),
 									[updated.parent]: [...(state.contacts?.[updated.parent] ?? []), updated]
-							  }
+								}
 							: {
 									...acc,
 									[updated.parent]: map(state.contacts[updated.parent], (item) =>
 										item.id === updated.id ? updated : item
 									)
-							  };
+								};
 					}
 
 					return { ...acc, [key]: uniqBy([...(acc[key] ?? []), ...v], 'id') };

@@ -124,13 +124,13 @@ export const NewModal = ({
 									items: nest(items, item.id, level + 1),
 									background: 'highlight', // todo: fix with right color
 									level
-							  }
+								}
 							: {
 									...item,
 									items: nest(items, item.id, level + 1),
 									divider: true,
 									level
-							  };
+								};
 					const splittedFolder = split(item.path, '/');
 					const folderLabel = splittedFolder[1];
 					const open =

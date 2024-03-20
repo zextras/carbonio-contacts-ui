@@ -35,7 +35,7 @@ export function normalizeContactPhonesToSoapOp(phones: ContactPhoneMap): any {
 				: {
 						...acc,
 						[k]: v.number
-				  },
+					},
 		{}
 	);
 }
@@ -49,7 +49,7 @@ export function normalizeContactUrlsToSoapOp(urls: ContactUrlMap): any {
 				: {
 						...acc,
 						[k]: v.url
-				  },
+					},
 		{}
 	);
 }
@@ -74,7 +74,7 @@ export function normalizeContactAddressesToSoapOp(addresses: ContactAddressMap):
 						: {
 								...acc2,
 								[getKey(k, v, k2)]: v2
-						  },
+							},
 				{}
 			)
 		}),

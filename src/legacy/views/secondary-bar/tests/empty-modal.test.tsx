@@ -5,7 +5,7 @@
  */
 
 import { act } from '@testing-library/react';
-import { rest } from 'msw';
+import { http, HttpResponse } from 'msw';
 
 import { getSetupServer } from '../../../../carbonio-ui-commons/test/jest-setup';
 import { folderAction } from '../../../store/actions/folder-action';
@@ -21,14 +21,21 @@ describe('Empty modal', () => {
 		const folderActionInterceptor = new Promise<FolderActionRequest>((resolve, reject) => {
 			// Register a handler for the REST call
 			getSetupServer().use(
-				rest.post('/service/soap/FolderActionRequest', async (req, res, ctx) => {
-					if (!req) {
+				http.post<
+					never,
+					{
+						Body: {
+							FolderActionRequest: FolderActionRequest;
+						};
+					}
+				>('/service/soap/FolderActionRequest', async ({ request }) => {
+					if (!request) {
 						reject(new Error('Empty request'));
 					}
-					const action = (await req.json()).Body.FolderActionRequest;
+					const action = (await request.json())?.Body.FolderActionRequest;
 					resolve(action);
 
-					return res(ctx.json({}));
+					return HttpResponse.json({});
 				})
 			);
 		});

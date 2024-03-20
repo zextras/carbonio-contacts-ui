@@ -193,7 +193,7 @@ export const TagsDropdownItem = ({
 							: t('snackbar.tag_applied', {
 									tag: tag.name,
 									defaultValue: '"{{tag}}" tag applied'
-							  }),
+								}),
 						autoHideTimeout: 3000
 					});
 				} else {
@@ -299,7 +299,7 @@ export const MultiSelectTagsDropdownItem = ({
 							: t('snackbar.tag_applied', {
 									tag: tag.name,
 									defaultValue: '"{{tag}}" tag applied'
-							  }),
+								}),
 						autoHideTimeout: 3000
 					});
 				} else {

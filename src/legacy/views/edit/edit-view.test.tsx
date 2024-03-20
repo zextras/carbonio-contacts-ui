@@ -95,7 +95,7 @@ describe('Edit view', () => {
 		await user.type(inputName, newName);
 		await user.click(saveButton);
 		await screen.findByText(/new contact created/i);
-		expect(handler.mock.lastCall?.[0].body).toEqual(
+		expect(await handler.mock.lastCall?.[0].request.json()).toEqual(
 			expect.objectContaining({
 				Body: {
 					CreateContactRequest: expect.objectContaining<Partial<CreateContactRequest>>({
@@ -118,7 +118,7 @@ describe('Edit view', () => {
 		await user.click(saveButton);
 		await screen.findByText(/new contact created/i);
 		// by default the selected folder is 7
-		expect(handler.mock.lastCall?.[0].body).toEqual(
+		expect(await handler.mock.lastCall?.[0].request.json()).toEqual(
 			expect.objectContaining({
 				Body: {
 					CreateContactRequest: expect.objectContaining<Partial<CreateContactRequest>>({

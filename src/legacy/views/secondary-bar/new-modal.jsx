@@ -41,13 +41,13 @@ export const NewModal = ({
 									items: nest(items, item.id, level + 1),
 									background: 'highlight', // todo: fix with right color
 									level
-							  }
+								}
 							: {
 									...item,
 									label: getFolderTranslatedName(t, item.id, item.label),
 									items: nest(items, item.id, level + 1),
 									level
-							  };
+								};
 
 					if (folder.level > 1) {
 						return {

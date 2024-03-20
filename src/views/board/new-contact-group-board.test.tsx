@@ -10,7 +10,7 @@ import { faker } from '@faker-js/faker';
 import 'jest-styled-components';
 import { act, waitFor, within } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
-import { rest } from 'msw';
+import { http, HttpResponse } from 'msw';
 
 import { getContactInput } from './common-contact-group-board.test';
 import NewContactGroupBoard from './new-contact-group-board';
@@ -77,14 +77,12 @@ describe('New contact group board', () => {
 			const closeBoard = jest.fn();
 			spyUseBoardHooks(undefined, closeBoard);
 			getSetupServer().use(
-				rest.post('/service/soap/CreateContactRequest', async (req, res, ctx) =>
-					res(
-						ctx.json({
-							Body: {
-								CreateContactResponse: { cn: [{ id: '', _attrs: {} }] }
-							}
-						})
-					)
+				http.post('/service/soap/CreateContactRequest', async () =>
+					HttpResponse.json({
+						Body: {
+							CreateContactResponse: { cn: [{ id: '', _attrs: {} }] }
+						}
+					})
 				)
 			);
 
@@ -103,14 +101,12 @@ describe('New contact group board', () => {
 
 		it('should show success snackbar when save button is clicked and the request is done successfully', async () => {
 			getSetupServer().use(
-				rest.post('/service/soap/CreateContactRequest', async (req, res, ctx) =>
-					res(
-						ctx.json({
-							Body: {
-								CreateContactResponse: { cn: [{ id: '', _attrs: {} }] }
-							}
-						})
-					)
+				http.post('/service/soap/CreateContactRequest', async () =>
+					HttpResponse.json({
+						Body: {
+							CreateContactResponse: { cn: [{ id: '', _attrs: {} }] }
+						}
+					})
 				)
 			);
 
@@ -129,10 +125,9 @@ describe('New contact group board', () => {
 
 		it('should show error snackbar when create contact fails', async () => {
 			getSetupServer().use(
-				rest.post('/service/soap/CreateContactRequest', async (req, res, ctx) =>
-					res(
-						ctx.status(500),
-						ctx.json({
+				http.post('/service/soap/CreateContactRequest', async () =>
+					HttpResponse.json(
+						{
 							Body: {
 								Fault: {
 									Reason: { Text: 'invalid request: contact must have fields' },
@@ -143,7 +138,10 @@ describe('New contact group board', () => {
 									}
 								}
 							}
-						})
+						},
+						{
+							status: 500
+						}
 					)
 				)
 			);
@@ -165,10 +163,9 @@ describe('New contact group board', () => {
 			const closeBoard = jest.fn();
 			spyUseBoardHooks(undefined, closeBoard);
 			getSetupServer().use(
-				rest.post('/service/soap/CreateContactRequest', async (req, res, ctx) =>
-					res(
-						ctx.status(500),
-						ctx.json({
+				http.post('/service/soap/CreateContactRequest', async () =>
+					HttpResponse.json(
+						{
 							Body: {
 								Fault: {
 									Reason: { Text: 'invalid request: contact must have fields' },
@@ -179,7 +176,10 @@ describe('New contact group board', () => {
 									}
 								}
 							}
-						})
+						},
+						{
+							status: 500
+						}
 					)
 				)
 			);
@@ -200,10 +200,9 @@ describe('New contact group board', () => {
 
 		it('should not reset the fields when create contact fails', async () => {
 			getSetupServer().use(
-				rest.post('/service/soap/CreateContactRequest', async (req, res, ctx) =>
-					res(
-						ctx.status(500),
-						ctx.json({
+				http.post('/service/soap/CreateContactRequest', async () =>
+					HttpResponse.json(
+						{
 							Body: {
 								Fault: {
 									Reason: { Text: 'invalid request: contact must have fields' },
@@ -214,7 +213,10 @@ describe('New contact group board', () => {
 									}
 								}
 							}
-						})
+						},
+						{
+							status: 500
+						}
 					)
 				)
 			);
@@ -252,14 +254,12 @@ describe('New contact group board', () => {
 
 		it('should not use unconfirmed mails (valid chips in contactInput) in createContact request', async () => {
 			getSetupServer().use(
-				rest.post('/service/soap/CreateContactRequest', async (req, res, ctx) =>
-					res(
-						ctx.json({
-							Body: {
-								CreateContactResponse: { cn: [{ id: '', _attrs: {} }] }
-							}
-						})
-					)
+				http.post('/service/soap/CreateContactRequest', async () =>
+					HttpResponse.json({
+						Body: {
+							CreateContactResponse: { cn: [{ id: '', _attrs: {} }] }
+						}
+					})
 				)
 			);
 
@@ -296,14 +296,12 @@ describe('New contact group board', () => {
 
 		it('should use inserted name in createContact request', async () => {
 			getSetupServer().use(
-				rest.post('/service/soap/CreateContactRequest', async (req, res, ctx) =>
-					res(
-						ctx.json({
-							Body: {
-								CreateContactResponse: { cn: [{ id: '', _attrs: {} }] }
-							}
-						})
-					)
+				http.post('/service/soap/CreateContactRequest', async () =>
+					HttpResponse.json({
+						Body: {
+							CreateContactResponse: { cn: [{ id: '', _attrs: {} }] }
+						}
+					})
 				)
 			);
 			const newName = faker.string.alpha(10);

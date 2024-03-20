@@ -33,7 +33,7 @@ const ShareRevokeModal = ({ folder, onClose, grant, createSnackbar, goBack }) =>
 						folder,
 						accounts
 					})
-			  ).then(() => {
+				).then(() => {
 					dispatch(folderAction({ folder, zid: grant.zid, op: '!grant' })).then((res) => {
 						if (res.type.includes('fulfilled')) {
 							createSnackbar({
@@ -47,7 +47,7 @@ const ShareRevokeModal = ({ folder, onClose, grant, createSnackbar, goBack }) =>
 						}
 						goBack();
 					});
-			  })
+				})
 			: dispatch(folderAction({ folder, zid: grant.zid, op: '!grant' })).then((res) => {
 					if (res.type.includes('fulfilled')) {
 						createSnackbar({
@@ -60,7 +60,7 @@ const ShareRevokeModal = ({ folder, onClose, grant, createSnackbar, goBack }) =>
 						});
 					}
 					goBack();
-			  });
+				});
 	}, [
 		accounts,
 		dispatch,

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { SoapResponse } from '@zextras/carbonio-shell-ui';
-import { ResponseResolver, rest, RestContext, RestRequest } from 'msw';
+import { http, HttpResponse, HttpResponseResolver } from 'msw';
 
 import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
 import {
@@ -23,9 +23,9 @@ export const createFindContactGroupsResponse = (
 	more,
 	_jsns: 'urn:zimbraMail'
 });
-type FindContactGroupsHandler = ResponseResolver<
-	RestRequest<{ Body: { SearchRequest: FindContactGroupsRequest } }>,
-	RestContext,
+type FindContactGroupsHandler = HttpResponseResolver<
+	never,
+	{ Body: { SearchRequest: FindContactGroupsRequest } },
 	SoapResponse<FindContactGroupsResponse>
 >;
 export const registerFindContactGroupsHandler = (
@@ -37,27 +37,23 @@ export const registerFindContactGroupsHandler = (
 	const handler = jest.fn<
 		ReturnType<FindContactGroupsHandler>,
 		Parameters<FindContactGroupsHandler>
-	>(async (req, res, ctx) => {
-		const reqBody = await req.json<{
-			Body: { SearchRequest: FindContactGroupsRequest };
-		}>();
+	>(async ({ request }) => {
+		const reqBody = await request.json();
 		const { offset } = reqBody.Body.SearchRequest;
 
 		const match = args.find((value) => value.offset === offset);
 
-		return res(
-			ctx.json(
-				buildSoapResponse<FindContactGroupsResponse>({
-					SearchResponse:
-						match?.findContactGroupsResponse ?? createFindContactGroupsResponse([createCnItem()])
-				})
-			)
+		return HttpResponse.json(
+			buildSoapResponse<FindContactGroupsResponse>({
+				SearchResponse:
+					match?.findContactGroupsResponse ?? createFindContactGroupsResponse([createCnItem()])
+			})
 		);
 	});
 	getSetupServer().use(
-		rest.post<
-			{ Body: { SearchRequest: FindContactGroupsRequest } },
+		http.post<
 			never,
+			{ Body: { SearchRequest: FindContactGroupsRequest } },
 			SoapResponse<FindContactGroupsResponse>
 		>('/service/soap/SearchRequest', handler)
 	);

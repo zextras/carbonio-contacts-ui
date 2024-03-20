@@ -20,7 +20,7 @@ export const useDisabled = ({
 						if (newQuery.length === 0 && currentQuery.length === 0) return true;
 						if (newQuery.length !== currentQuery.length) return false;
 						return newQuery[0].value === currentQuery[0].value;
-				  }),
+					}),
 		[isSharedFolderIncluded, isSharedFolderIncludedTobe, query, queryToBe]
 	);
 
