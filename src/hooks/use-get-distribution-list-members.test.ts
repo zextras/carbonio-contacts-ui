@@ -195,6 +195,7 @@ describe('Use get distribution list members hook', () => {
 		rerender([dl.email, { skip: true, limit: firstPage.length }]);
 		rerender([dl.email, { skip: false, limit: firstPage.length }]);
 		await waitFor(() =>
+			// TODO check why only this test need to use the request clone
 			expect(handler.mock.lastCall?.[0].request.clone().json()).resolves.toEqual(
 				expect.objectContaining({
 					Body: expect.objectContaining({
