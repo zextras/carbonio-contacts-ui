@@ -72,6 +72,8 @@ export type ContactsFolder = {
 	sharedWith: any;
 	owner?: string;
 	perm: any;
+	zid?: string;
+	rid?: number;
 };
 
 export type Contact = {
