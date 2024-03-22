@@ -18,6 +18,7 @@ export function searchContactsRejected(state: ContactsSlice): void {
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function searchContactsFullFilled(state: any, { meta, payload }: any): void {
+	console.log(payload);
 	const contacts = normalizeContactsFromSoap(payload);
 	if (state.contacts) {
 		if (payload) {

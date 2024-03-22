@@ -26,7 +26,7 @@ export const EmptyModal = ({ currentFolder, openModal, setModal, dispatch, t, cr
 					autoHideTimeout: 3000,
 					hideButton: true
 				});
-				dispatch(searchContacts(currentFolder.id));
+				dispatch(searchContacts({folderId:currentFolder.id}));
 			} else {
 				createSnackbar({
 					key: `empty`,

@@ -12,6 +12,26 @@ import { ContactsSlice, FoldersSlice } from '../types/store';
 
 const folderIdRegex = /^(.+:)*(\d+)$/;
 
+const FOLDERID_REGEX = /^([^:]+(?=:))*:?(\d+)$/;
+
+type FolderIdType = { zid: string | null; id: string | null };
+
+export const getFolderIdParts = (folderId: string): FolderIdType => {
+	const result: FolderIdType = { zid: null, id: null };
+
+	if (!folderId || !folderId.match(FOLDERID_REGEX)) {
+			return result;
+	}
+
+	const parts = FOLDERID_REGEX.exec(folderId);
+	if (!parts) {
+			return result;
+	}
+
+	[, result.zid = null, result.id = null] = parts;
+	return result;
+};
+
 export function extractFolders(accordions: ContactsFolder[]): ContactsFolder[] {
 	return reduce(
 		accordions,

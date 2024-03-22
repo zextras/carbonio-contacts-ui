@@ -55,7 +55,7 @@ export default function FolderPanel(): ReactElement {
 
 	useEffect(() => {
 		if (!folderStatus) {
-			dispatch(searchContacts(folderId));
+			dispatch(searchContacts({folderId:folderId}));
 		}
 	}, [dispatch, folderId, folderStatus]);
 

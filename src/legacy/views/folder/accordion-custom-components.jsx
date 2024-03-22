@@ -289,7 +289,7 @@ export const CustomAccordion = (
 			(e) => {
 				e.stopPropagation();
 				if (folderStatus) {
-					dispatch(searchContacts(folder.id));
+					dispatch(searchContacts({folderId:folder.id}));
 				}
 				setCurrentFolder(folder);
 			},
