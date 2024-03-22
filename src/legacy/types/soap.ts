@@ -56,6 +56,8 @@ export type ISoapFolderObj = {
 	acl?: Record<string, Array<Acl>> | any;
 	perm: any;
 	broken?: boolean;
+	zid?: string;
+	rid?: number;
 };
 
 export type ISoapSyncFolderObj = {

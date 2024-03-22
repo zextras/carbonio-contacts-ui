@@ -16,6 +16,8 @@ import { selectFolderStatus } from '../../store/selectors/contacts';
 import { ItemAvatar } from '../app/folder-panel/item-avatar';
 import { RowInfo } from '../app/folder-panel/item-content';
 import ListItemActionWrapper from '../folder/list-item-action-wrapper';
+import { selectFolders } from '../../store/selectors/folders';
+import { getFolderIdParts } from '../../utils/helpers';
 
 const getChipLabel = (item) => {
 	if (item.firstName ?? item.middleName ?? item.lastName) {
@@ -25,15 +27,30 @@ const getChipLabel = (item) => {
 };
 const SearchListItem = ({ item, selected, selecting, toggle, active }) => {
 	const dispatch = useDispatch();
+	const folders = useAppSelector(selectFolders);
 	const folderId = item.parent;
-	const folderStatus = useAppSelector((state) => selectFolderStatus(state, folderId));
+
+	const isRemoteFolder = /^.*:\d+$/;
+	const folderParts = getFolderIdParts(folderId);
+	let realFolderId = folderId;
+
+	if (isRemoteFolder.test(folderId)) {
+		for(var x in folders){
+			if (folders[x]?.zid == folderParts.zid && folders[x]?.rid == folderParts.id ) {
+				realFolderId=folders[x].id;
+				break;
+			}
+		}
+	}
+
+	const folderStatus = useAppSelector((state) => selectFolderStatus(state, realFolderId));
 
 	const _onClick = useCallback(() => {
 		if (!folderStatus) {
-			dispatch(searchContacts(folderId));
+			dispatch(searchContacts({folderId: realFolderId, itemId: item.id}));
 		}
-		pushHistory(`/folder/${item.parent}/contacts/${item.id}`);
-	}, [dispatch, folderId, folderStatus, item]);
+		pushHistory(`/folder/${realFolderId}/contacts/${item.id}`);
+	}, [dispatch, realFolderId, folderStatus, item]);
 
 	const label = useMemo(() => getChipLabel(item), [item]);
 	const secondaryRow = useMemo(
@@ -70,7 +87,7 @@ const SearchListItem = ({ item, selected, selecting, toggle, active }) => {
 						selected={selected}
 						selecting={selecting}
 						toggle={toggle}
-						folderId={folderId}
+						folderId={realFolderId}
 						isSearch
 					/>
 					<Padding horizontal="extrasmall" />

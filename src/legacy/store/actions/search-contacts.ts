@@ -6,7 +6,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
 
-export const searchContacts = createAsyncThunk('contacts/searchContacts', async (id: string) => {
+export const searchContacts = createAsyncThunk('contacts/searchContacts', async ({folderId,itemId}: {folderId: string, itemId?: string}) => {
+	let query = `inid:"${folderId}"`;
+	if (itemId !== undefined) {
+		query = `inid:"${folderId}" item:"${itemId}"`;
+	}
 	const { cn } = (await soapFetch('Search', {
 		_jsns: 'urn:zimbraMail',
 		limit: '500',
@@ -14,7 +18,7 @@ export const searchContacts = createAsyncThunk('contacts/searchContacts', async 
 		sortBy: 'nameAsc',
 		types: 'contact',
 		query: {
-			_content: `inid:"${id}"`
+			_content: `${query}`
 		}
 	})) as { cn: any };
 

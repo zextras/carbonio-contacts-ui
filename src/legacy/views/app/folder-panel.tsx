@@ -54,7 +54,7 @@ export default function FolderPanel(): ReactElement {
 	const selectedContacts = filter(contacts, (contact) => ids.indexOf(contact.id) !== -1);
 
 	useEffect(() => {
-		dispatch(searchContacts(folderId));
+		dispatch(searchContacts({folderId:folderId}));
 	}, [dispatch, folderId]);
 
 	return (
