@@ -13,7 +13,7 @@ export const searchContacts = createAsyncThunk('contacts/searchContacts', async 
 	}
 	const { cn } = (await soapFetch('Search', {
 		_jsns: 'urn:zimbraMail',
-		limit: '500',
+		limit: '999',
 		offset: 0,
 		sortBy: 'nameAsc',
 		types: 'contact',

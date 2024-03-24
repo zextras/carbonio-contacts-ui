@@ -19,7 +19,6 @@ export function searchContactsRejected(state: ContactsSlice): void {
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function searchContactsFullFilled(state: any, { meta, payload }: any): void {
-	console.log(payload);
 	const contacts = normalizeContactsFromSoap(payload);
 	if (state.contacts) {
 		if (payload) {
@@ -27,8 +26,10 @@ export function searchContactsFullFilled(state: any, { meta, payload }: any): vo
 				state,
 				map(contacts, (item) => item.id)
 			);
-			if (contacts) {
-				addContactsToStore(state, contacts, meta.arg);
+			if (contacts && typeof meta.arg === 'object') {
+				addContactsToStore(state, contacts, meta.arg.folderId);
+			} else if (contacts) {
+				addContactsToStore(state, contacts);
 			}
 		} else {
 			state.contacts[meta.arg] = [];
