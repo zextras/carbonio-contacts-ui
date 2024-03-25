@@ -3,12 +3,14 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 
 import { Container, List, Padding, Text } from '@zextras/carbonio-design-system';
 import { reduce, find, map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import { useAppDispatch } from '../../../hooks/redux';
+import { searchContacts } from '../../../store/actions/search-contacts';
 import styled from 'styled-components';
 
 import ContactListItem from './contact-list-item';
@@ -43,12 +45,23 @@ const DragItems = ({ contacts, draggedIds }) => {
 	);
 };
 
-export const ContactsList = ({ folderId, selected, contacts, toggle }) => {
+export const ContactsList = ({ numContacts, folderId, selected, contacts, toggle }) => {
 	const [t] = useTranslation();
 	const { itemId } = useParams();
 	const [isDragging, setIsDragging] = useState(false);
 	const [draggedIds, setDraggedIds] = useState();
 	const dragImageRef = useRef(null);
+	const dispatch = useAppDispatch();
+	const contactsLoad = contacts.length;
+
+	const canLoadMore = useMemo(
+		() => contactsLoad+1 < numContacts,
+		[contactsLoad,numContacts]
+	);
+
+	const loadMore = useCallback(() => {
+		dispatch(searchContacts({folderId:folderId,offset:contactsLoad+1}));
+	}, [dispatch,folderId,contactsLoad]);
 
 	const listMessages = useMemo(
 		() => [
@@ -88,6 +101,7 @@ export const ContactsList = ({ folderId, selected, contacts, toggle }) => {
 				</Container>
 			) : (
 				<List
+					onListBottom={canLoadMore ? loadMore : undefined}
 					data-testid="ContactsListToScrollContainer"
 					selected={selected}
 					background="gray6"
