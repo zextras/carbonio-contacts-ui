@@ -62,7 +62,7 @@ export const SharesInfoModal = ({ onClose, folder }) => {
 			<ShareInfoRow
 				icon="InfoOutline"
 				label={`${t('share.shared_item', 'Shared Item')}`}
-				text={folder.name}
+				text={folder.label}
 			/>
 			<ShareInfoRow
 				icon="PersonOutline"
@@ -78,7 +78,7 @@ export const SharesInfoModal = ({ onClose, folder }) => {
 			<ShareInfoRow
 				icon="PeopleOutline"
 				label={`${t('label.contacts', 'Contacts')}`}
-				text={folder.n}
+				text={folder.itemsCount}
 			/>
 			<ShareInfoRow
 				icon="UnlockOutline"

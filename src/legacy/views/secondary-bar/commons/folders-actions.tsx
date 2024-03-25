@@ -131,26 +131,21 @@ export const actionsRetriever = (
 			if (e) {
 				e.stopPropagation();
 			}
-			setCurrentFolder(folder);
-			dispatch(getFolder(folder.id)).then((res) => {
-				if (res.type.includes('fulfilled')) {
-					const closeModal = createModal(
-						{
-							children: (
-								<StoreProvider>
-									<SharesInfoModal
-										onClose={(): void => {
-											closeModal();
-										}}
-										folder={res.payload}
-									/>
-								</StoreProvider>
-							)
-						},
-						true
-					);
-				}
-			});
+			const closeModal = createModal(
+				{
+					children: (
+						<StoreProvider>
+							<SharesInfoModal
+								onClose={(): void => {
+									closeModal();
+								}}
+								folder={folder}
+							/>
+						</StoreProvider>
+					)
+				},
+				true
+			);
 		}
 	},
 	{
