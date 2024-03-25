@@ -34,8 +34,10 @@ export default function FolderPanel(): ReactElement {
 	const folder = useFolder(folderId);
 	const { setCount } = useAppContext<UseAppContextType>();
 	const { selected, isSelecting, toggle, deselectAll } = useSelection(folderId, setCount);
+	console.log(folder);
 
 	const contacts = useAppSelector((state) => selectAllContactsInFolder(state, folderId));
+
 	const sortedContacts = useMemo(
 		() =>
 			orderBy(
@@ -89,6 +91,7 @@ export default function FolderPanel(): ReactElement {
 						<Breadcrumbs folderPath={folder?.absFolderPath} itemsCount={folder?.n} />
 					)}
 					<ContactsList
+						numContacts={folder?.n}
 						folderId={folderId}
 						contacts={sortedContacts}
 						selected={selected}
