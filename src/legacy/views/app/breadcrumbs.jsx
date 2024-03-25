@@ -47,7 +47,7 @@ export function Breadcrumbs({ folderPath, itemsCount }) {
 					</Row>
 					<Row mainAlignment="flex-end" padding={{ all: 'small', right: 'medium' }}>
 						<Text size="extrasmall" data-testid="BreadcrumbCount">
-							{itemsCount > 100 ? '100+' : itemsCount}
+							{itemsCount > 99 ? ("100+") : (itemsCount) }
 						</Text>
 					</Row>
 				</Row>
