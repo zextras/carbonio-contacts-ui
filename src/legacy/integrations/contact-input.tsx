@@ -250,7 +250,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 										],
 										[]
 									)
-							  ]
+								]
 							: acc,
 					[]
 				)

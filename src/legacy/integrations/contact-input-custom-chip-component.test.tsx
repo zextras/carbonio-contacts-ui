@@ -8,6 +8,7 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import { act, waitFor } from '@testing-library/react';
 import { times } from 'lodash';
+import { HttpResponse } from 'msw';
 
 import { ContactInputCustomChipComponent } from './contact-input-custom-chip-component';
 import { mockedAccount } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
@@ -17,10 +18,7 @@ import { NAMESPACES } from '../../constants/api';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
 import { TESTID_SELECTORS, TIMERS } from '../../constants/tests';
 import { DistributionList } from '../../model/distribution-list';
-import {
-	GetDistributionListMembersRequest,
-	GetDistributionListMembersResponse
-} from '../../network/api/get-distribution-list-members';
+import { GetDistributionListMembersResponse } from '../../network/api/get-distribution-list-members';
 import { useDistributionListsStore } from '../../store/distribution-lists';
 import { registerGetDistributionListHandler } from '../../tests/msw-handlers/get-distribution-list';
 import { registerGetDistributionListMembersHandler } from '../../tests/msw-handlers/get-distribution-list-members';
@@ -378,26 +376,20 @@ describe('Contact input custom chip component', () => {
 			const firstResponse = { dlm: firstPage, total: 6, more: true };
 			const secondResponse = { dlm: secondPage, total: 6, more: false };
 
-			getMembersHandler.mockImplementation(async (req, res, ctx) => {
+			getMembersHandler.mockImplementation(async ({ request }) => {
 				const {
 					Body: {
 						GetDistributionListMembersRequest: { offset }
 					}
-				} = await req.json<{
-					Body: {
-						GetDistributionListMembersRequest: GetDistributionListMembersRequest;
-					};
-				}>();
+				} = await request.json();
 				const response = offset === undefined || offset === 0 ? firstResponse : secondResponse;
-				return res(
-					ctx.json(
-						buildSoapResponse<GetDistributionListMembersResponse>({
-							GetDistributionListMembersResponse: {
-								_jsns: NAMESPACES.account,
-								...response
-							}
-						})
-					)
+				return HttpResponse.json(
+					buildSoapResponse<GetDistributionListMembersResponse>({
+						GetDistributionListMembersResponse: {
+							_jsns: NAMESPACES.account,
+							...response
+						}
+					})
 				);
 			});
 
@@ -470,29 +462,25 @@ describe('Contact input custom chip component', () => {
 			const getMembersHandler = registerGetDistributionListMembersHandler();
 			const firstResponse = { dlm: dlm.map((m) => ({ _content: m })), total: 6, more: true };
 			const secondResponse = { dlm: dlm2.map((m) => ({ _content: m })), total: 6, more: false };
-			getMembersHandler.mockImplementation(async (req, res, ctx) => {
+			getMembersHandler.mockImplementation(async ({ request }) => {
 				const {
 					Body: {
 						GetDistributionListMembersRequest: { offset }
 					}
-				} = await req.json<{
-					Body: { GetDistributionListMembersRequest: GetDistributionListMembersRequest };
-				}>();
+				} = await request.json();
 				let response: Omit<GetDistributionListMembersResponse, '_jsns'>;
 				if (offset === undefined || offset === 0) {
 					response = firstResponse;
 				} else {
 					response = secondResponse;
 				}
-				return res(
-					ctx.json(
-						buildSoapResponse<GetDistributionListMembersResponse>({
-							GetDistributionListMembersResponse: {
-								_jsns: NAMESPACES.account,
-								...response
-							}
-						})
-					)
+				return HttpResponse.json(
+					buildSoapResponse<GetDistributionListMembersResponse>({
+						GetDistributionListMembersResponse: {
+							_jsns: NAMESPACES.account,
+							...response
+						}
+					})
 				);
 			});
 

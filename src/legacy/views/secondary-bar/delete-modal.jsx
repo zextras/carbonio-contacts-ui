@@ -137,11 +137,11 @@ export const DeleteModal = ({
 							? t(
 									'folder.modal.delete.body.message2',
 									'Do you want to delete permanently the selected address book? If you delete it, the related content will be permanently removed and the address book will no longer be recoverable.'
-							  )
+								)
 							: t(
 									'folder.modal.delete.body.message1',
 									'Do you want to delete the selected address book? If you delete it, the related content will be permanently removed and the address book will no longer be recoverable.'
-							  )}
+								)}
 					</Text>
 					<ModalFooter
 						onConfirm={onConfirm}

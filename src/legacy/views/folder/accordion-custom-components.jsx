@@ -119,7 +119,7 @@ export const dropdownActions = (
 							}
 							return action;
 						}
-				  )
+					)
 				: map(
 						filter(
 							actions,
@@ -144,7 +144,7 @@ export const dropdownActions = (
 							}
 							return action;
 						}
-				  );
+					);
 	}
 };
 
@@ -414,6 +414,6 @@ export const setCustomComponent = (
 					dispatch,
 					createModal,
 					createSnackbar
-			  )
+				)
 			: []
 	}));

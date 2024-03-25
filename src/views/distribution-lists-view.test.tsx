@@ -10,6 +10,7 @@ import { faker } from '@faker-js/faker';
 import { waitFor } from '@testing-library/react';
 import { ErrorSoapResponse } from '@zextras/carbonio-shell-ui';
 import { times } from 'lodash';
+import { HttpResponse } from 'msw';
 import { Link, Route } from 'react-router-dom';
 
 import { DistributionListsView } from './distribution-lists-view';
@@ -24,18 +25,9 @@ import {
 	TESTID_SELECTORS
 } from '../constants/tests';
 import { DistributionList } from '../model/distribution-list';
-import {
-	GetAccountDistributionListsRequest,
-	GetAccountDistributionListsResponse
-} from '../network/api/get-account-distribution-lists';
-import {
-	GetDistributionListRequest,
-	GetDistributionListResponse
-} from '../network/api/get-distribution-list';
-import {
-	GetDistributionListMembersRequest,
-	GetDistributionListMembersResponse
-} from '../network/api/get-distribution-list-members';
+import { GetAccountDistributionListsResponse } from '../network/api/get-account-distribution-lists';
+import { GetDistributionListResponse } from '../network/api/get-distribution-list';
+import { GetDistributionListMembersResponse } from '../network/api/get-distribution-list-members';
 import { registerGetAccountDistributionListsHandler } from '../tests/msw-handlers/get-account-distribution-lists';
 import {
 	buildGetDistributionListResponse,
@@ -94,14 +86,12 @@ describe('Distribution Lists View', () => {
 		const memberList = generateDistributionLists(1, { isMember: true, isOwner: false });
 		const managerList = generateDistributionLists(1, { isOwner: true, isMember: false });
 		const getAccountDLHandler = registerGetAccountDistributionListsHandler([]);
-		getAccountDLHandler.mockImplementationOnce(async (req, res, ctx) => {
+		getAccountDLHandler.mockImplementationOnce(async ({ request }) => {
 			const {
 				Body: {
 					GetAccountDistributionListsRequest: { ownerOf, memberOf }
 				}
-			} = await req.json<{
-				Body: { GetAccountDistributionListsRequest: GetAccountDistributionListsRequest };
-			}>();
+			} = await request.json();
 			const resData: DistributionList[] = [];
 			if (ownerOf) {
 				resData.push(...managerList);
@@ -110,21 +100,19 @@ describe('Distribution Lists View', () => {
 				resData.push(...memberList);
 			}
 
-			return res(
-				ctx.json(
-					buildSoapResponse<GetAccountDistributionListsResponse>({
-						GetAccountDistributionListsResponse: {
-							_jsns: NAMESPACES.account,
-							dl: resData.map((item) => ({
-								id: item.id,
-								name: item.email,
-								d: item.displayName,
-								isOwner: item.isOwner,
-								isMember: item.isMember
-							}))
-						}
-					})
-				)
+			return HttpResponse.json(
+				buildSoapResponse<GetAccountDistributionListsResponse>({
+					GetAccountDistributionListsResponse: {
+						_jsns: NAMESPACES.account,
+						dl: resData.map((item) => ({
+							id: item.id,
+							name: item.email,
+							d: item.displayName,
+							isOwner: item.isOwner,
+							isMember: item.isMember
+						}))
+					}
+				})
 			);
 		});
 
@@ -248,16 +236,14 @@ describe('Distribution Lists View', () => {
 			const dl2 = generateDistributionList({ isMember: true });
 			registerGetAccountDistributionListsHandler([dl1, dl2]);
 			const getDLHandler = registerGetDistributionListHandler(dl1);
-			getDLHandler.mockImplementation(async (req, res, ctx) => {
+			getDLHandler.mockImplementation(async ({ request }) => {
 				const {
 					Body: {
 						GetDistributionListRequest: {
 							dl: { _content }
 						}
 					}
-				} = await req.json<{
-					Body: { GetDistributionListRequest: GetDistributionListRequest };
-				}>();
+				} = await request.json();
 				let resData: DistributionList | undefined;
 				if (_content === dl1.id || _content === dl1.email) {
 					resData = dl1;
@@ -267,15 +253,13 @@ describe('Distribution Lists View', () => {
 				}
 
 				if (resData === undefined) {
-					return res(ctx.json(buildSoapError('DL not found')));
+					return HttpResponse.json(buildSoapError('DL not found'));
 				}
 
-				return res(
-					ctx.json(
-						buildSoapResponse<GetDistributionListResponse>({
-							GetDistributionListResponse: buildGetDistributionListResponse(resData)
-						})
-					)
+				return HttpResponse.json(
+					buildSoapResponse<GetDistributionListResponse>({
+						GetDistributionListResponse: buildGetDistributionListResponse(resData)
+					})
 				);
 			});
 
@@ -283,7 +267,7 @@ describe('Distribution Lists View', () => {
 			const dl2Members = times(10, () => faker.internet.email());
 
 			const getMembersHandler = registerGetDistributionListMembersHandler();
-			getMembersHandler.mockImplementation(async (req, res, ctx) => {
+			getMembersHandler.mockImplementation(async ({ request }) => {
 				const {
 					Body: {
 						GetDistributionListMembersRequest: {
@@ -291,17 +275,11 @@ describe('Distribution Lists View', () => {
 							offset
 						}
 					}
-				} = await req.json<{
-					Body: {
-						GetDistributionListMembersRequest: GetDistributionListMembersRequest;
-					};
-				}>();
+				} = await request.json();
 
 				if (_content === dl2.email && offset !== 0) {
-					return res(
-						ctx.json(
-							buildSoapError('Received offset greater than 0 while loading first page of dl2')
-						)
+					return HttpResponse.json(
+						buildSoapError('Received offset greater than 0 while loading first page of dl2')
 					);
 				}
 				let data: Array<string> | undefined;
@@ -312,21 +290,19 @@ describe('Distribution Lists View', () => {
 					data = dl2Members;
 				}
 				if (data === undefined) {
-					return res(
-						ctx.json<ErrorSoapResponse>(buildSoapError('DL not found while loading members'))
+					return HttpResponse.json<ErrorSoapResponse>(
+						buildSoapError('DL not found while loading members')
 					);
 				}
-				return res(
-					ctx.json(
-						buildSoapResponse<GetDistributionListMembersResponse>({
-							GetDistributionListMembersResponse: {
-								_jsns: NAMESPACES.account,
-								dlm: data.map((item) => ({ _content: item })),
-								more: false,
-								total: data.length
-							}
-						})
-					)
+				return HttpResponse.json(
+					buildSoapResponse<GetDistributionListMembersResponse>({
+						GetDistributionListMembersResponse: {
+							_jsns: NAMESPACES.account,
+							dlm: data.map((item) => ({ _content: item })),
+							more: false,
+							total: data.length
+						}
+					})
 				);
 			});
 
@@ -359,24 +335,20 @@ describe('Distribution Lists View', () => {
 			const dl1 = generateDistributionList({ isMember: true, description: 'description 1' });
 			const dl2 = generateDistributionList({ isMember: true, description: 'description 2' });
 			registerGetAccountDistributionListsHandler([dl1, dl2]);
-			registerGetDistributionListHandler(dl1).mockImplementation(async (req, res, ctx) => {
+			registerGetDistributionListHandler(dl1).mockImplementation(async ({ request }) => {
 				const {
 					Body: {
 						GetDistributionListRequest: {
 							dl: { _content }
 						}
 					}
-				} = await req.json<{
-					Body: { GetDistributionListRequest: GetDistributionListRequest };
-				}>();
+				} = await request.json();
 
 				const response = _content === dl1.id || _content === dl1.email ? dl1 : dl2;
-				return res(
-					ctx.json(
-						buildSoapResponse({
-							GetDistributionListResponse: buildGetDistributionListResponse(response)
-						})
-					)
+				return HttpResponse.json(
+					buildSoapResponse({
+						GetDistributionListResponse: buildGetDistributionListResponse(response)
+					})
 				);
 			});
 

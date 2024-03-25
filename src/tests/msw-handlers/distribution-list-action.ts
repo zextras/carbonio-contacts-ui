@@ -5,7 +5,7 @@
  */
 import { SoapFault, SuccessSoapResponse } from '@zextras/carbonio-shell-ui';
 import { map, size } from 'lodash';
-import { ResponseResolver, rest, RestContext, RestRequest } from 'msw';
+import { http, HttpResponse, HttpResponseResolver } from 'msw';
 
 import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
 import { NAMESPACES } from '../../constants/api';
@@ -16,9 +16,9 @@ import {
 } from '../../network/api/distribution-list-action';
 import { buildSoapResponse } from '../utils';
 
-type DistributionListActionHandlerResponseResolver = ResponseResolver<
-	RestRequest<{ Body: { BatchRequest: BatchDistributionListActionRequest } }, never>,
-	RestContext,
+type DistributionListActionHandlerResponseResolver = HttpResponseResolver<
+	never,
+	{ Body: { BatchRequest: BatchDistributionListActionRequest } },
 	SuccessSoapResponse<BatchDistributionListActionResponse>
 >;
 
@@ -37,7 +37,7 @@ export const registerDistributionListActionHandler = (
 	const handler = jest.fn<
 		ReturnType<DistributionListActionHandlerResponseResolver>,
 		Parameters<DistributionListActionHandlerResponseResolver>
-	>(async (req, res, ctx) => {
+	>(async () => {
 		const responses: Array<DistributionListActionResponse> = [];
 		if (size(data.membersToAdd) > 0) {
 			responses.push({
@@ -68,21 +68,19 @@ export const registerDistributionListActionHandler = (
 								Detail: { Error: { Detail: error, Code: '' } }
 							})
 						)
-				  }
+					}
 				: {};
 
-		return res(
-			ctx.json(
-				buildSoapResponse<BatchDistributionListActionResponse>({
-					BatchResponse: {
-						_jsns: NAMESPACES.generic,
-						...actionResponse,
-						...fault
-					}
-				})
-			)
+		return HttpResponse.json(
+			buildSoapResponse<BatchDistributionListActionResponse>({
+				BatchResponse: {
+					_jsns: NAMESPACES.generic,
+					...actionResponse,
+					...fault
+				}
+			})
 		);
 	});
-	getSetupServer().use(rest.post('/service/soap/BatchRequest', handler));
+	getSetupServer().use(http.post('/service/soap/BatchRequest', handler));
 	return handler;
 };

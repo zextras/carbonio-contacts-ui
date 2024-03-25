@@ -116,11 +116,11 @@ export function removeContactsFromStore(
 				? {
 						...acc,
 						[k]: filter(v, (contact) => !some(idsToDelete, (id) => id === contact.id))
-				  }
+					}
 				: {
 						...acc,
 						[k]: filter(v, (contact) => (contact.id ? contact : false))
-				  },
+					},
 		{}
 	);
 }

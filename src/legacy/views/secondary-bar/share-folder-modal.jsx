@@ -58,7 +58,7 @@ const ShareFolderModal = ({
 				? `${t('label.edit_access_name', {
 						name: userNameCapitalise,
 						defaultValue: "Edit {{name}}'s access"
-				  })} `
+					})} `
 				: `${t('label.share', 'Share')} ${folder?.label}`,
 		[t, folder, editMode, userNameCapitalise]
 	);

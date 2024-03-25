@@ -34,14 +34,14 @@ export const extractFolders = (accordion, acc = {}) =>
 							...acc2,
 							[folder.id]: normalizeFolder(folder),
 							...extractFolders(folder.folder, acc2)
-					  }
+						}
 					: { ...acc2, ...extractFolders(folder.folder, acc2) };
 			}
 			return (folder.view === 'message' && folder.id !== '14') || folder.id === '3'
 				? {
 						...acc2,
 						[folder.id]: normalizeFolder(folder)
-				  }
+					}
 				: acc2;
 		},
 		acc

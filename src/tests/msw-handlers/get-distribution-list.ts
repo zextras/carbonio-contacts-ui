@@ -5,7 +5,7 @@
  */
 import { SoapResponse } from '@zextras/carbonio-shell-ui';
 import { map } from 'lodash';
-import { ResponseResolver, rest, RestContext, RestRequest } from 'msw';
+import { http, HttpResponse, HttpResponseResolver } from 'msw';
 
 import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
 import { NAMESPACES } from '../../constants/api';
@@ -16,9 +16,9 @@ import {
 } from '../../network/api/get-distribution-list';
 import { buildSoapError, buildSoapResponse } from '../utils';
 
-type GetDistributionListHandler = ResponseResolver<
-	RestRequest<{ Body: { GetDistributionListRequest: GetDistributionListRequest } }>,
-	RestContext,
+type GetDistributionListHandler = HttpResponseResolver<
+	never,
+	{ Body: { GetDistributionListRequest: GetDistributionListRequest } },
 	SoapResponse<GetDistributionListResponse>
 >;
 
@@ -49,23 +49,21 @@ export const registerGetDistributionListHandler = (
 	const handler = jest.fn<
 		ReturnType<GetDistributionListHandler>,
 		Parameters<GetDistributionListHandler>
-	>((req, res, ctx) => {
+	>(() => {
 		if (error) {
-			return res(ctx.json(buildSoapError(error)));
+			return HttpResponse.json(buildSoapError(error));
 		}
 
-		return res(
-			ctx.json(
-				buildSoapResponse<GetDistributionListResponse>({
-					GetDistributionListResponse: buildGetDistributionListResponse(dl)
-				})
-			)
+		return HttpResponse.json(
+			buildSoapResponse<GetDistributionListResponse>({
+				GetDistributionListResponse: buildGetDistributionListResponse(dl)
+			})
 		);
 	});
 	getSetupServer().use(
-		rest.post<
-			{ Body: { GetDistributionListRequest: GetDistributionListRequest } },
+		http.post<
 			never,
+			{ Body: { GetDistributionListRequest: GetDistributionListRequest } },
 			SoapResponse<GetDistributionListResponse>
 		>('/service/soap/GetDistributionListRequest', handler)
 	);

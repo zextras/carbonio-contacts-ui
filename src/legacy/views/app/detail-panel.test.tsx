@@ -7,7 +7,7 @@
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
-import { rest } from 'msw';
+import { http, HttpResponse } from 'msw';
 
 import DetailPanel from './detail-panel';
 import { getSetupServer } from '../../../carbonio-ui-commons/test/jest-setup';
@@ -55,30 +55,28 @@ describe('Detail panel', () => {
 			}
 		};
 		getSetupServer().use(
-			rest.post('/service/soap/ModifyContactRequest', async (req, res, ctx) =>
-				res(
-					ctx.json({
-						Body: {
-							ModifyContactResponse: {
-								cn: [
-									{
-										d: 1706529220000,
-										f: '',
-										fileAsStr: oldName,
-										i4uid: contactId,
-										id: contactId,
-										l: folderId,
-										meta: [{}],
-										rev: 5000,
-										t: '',
-										tn: '',
-										_attrs: { firstName: newName }
-									}
-								]
-							}
+			http.post('/service/soap/ModifyContactRequest', async () =>
+				HttpResponse.json({
+					Body: {
+						ModifyContactResponse: {
+							cn: [
+								{
+									d: 1706529220000,
+									f: '',
+									fileAsStr: oldName,
+									i4uid: contactId,
+									id: contactId,
+									l: folderId,
+									meta: [{}],
+									rev: 5000,
+									t: '',
+									tn: '',
+									_attrs: { firstName: newName }
+								}
+							]
 						}
-					})
-				)
+					}
+				})
 			)
 		);
 		const store = generateStore(preloadedState);
@@ -138,8 +136,8 @@ describe('Detail panel', () => {
 			}
 		};
 		getSetupServer().use(
-			rest.post('/service/soap/ModifyContactRequest', async (req, res, ctx) =>
-				res(ctx.status(500), ctx.json(buildSoapError(JEST_MOCKED_ERROR)))
+			http.post('/service/soap/ModifyContactRequest', async () =>
+				HttpResponse.json(buildSoapError(JEST_MOCKED_ERROR), { status: 500 })
 			)
 		);
 		const store = generateStore(preloadedState);

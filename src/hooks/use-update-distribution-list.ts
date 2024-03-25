@@ -59,7 +59,7 @@ export const useUpdateDistributionList = (
 									members: members.members,
 									total: members.total,
 									more: initialDistributionList.members?.more ?? false
-							  }
+								}
 							: initialDistributionList.members,
 						canRequireMembers: true
 					});

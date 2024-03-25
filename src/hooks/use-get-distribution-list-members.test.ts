@@ -7,14 +7,12 @@
 import { faker } from '@faker-js/faker';
 import { act, waitFor } from '@testing-library/react';
 import { times } from 'lodash';
+import { HttpResponse } from 'msw';
 
 import { useGetDistributionListMembers } from './use-get-distribution-list-members';
 import { setupHook } from '../carbonio-ui-commons/test/test-setup';
 import { NAMESPACES } from '../constants/api';
-import {
-	GetDistributionListMembersRequest,
-	GetDistributionListMembersResponse
-} from '../network/api/get-distribution-list-members';
+import { GetDistributionListMembersResponse } from '../network/api/get-distribution-list-members';
 import { useDistributionListsStore } from '../store/distribution-lists';
 import { registerGetDistributionListMembersHandler } from '../tests/msw-handlers/get-distribution-list-members';
 import {
@@ -68,26 +66,22 @@ describe('Use get distribution list members hook', () => {
 		const secondPage = times(faker.number.int({ min: 1, max: 5 }), () => faker.internet.email());
 		const dl = generateDistributionList({ members: undefined });
 		const handler = registerGetDistributionListMembersHandler([]).mockImplementation(
-			async (req, res, ctx) => {
+			async ({ request }) => {
 				const {
 					Body: {
 						GetDistributionListMembersRequest: { offset }
 					}
-				} = await req.json<{
-					Body: { GetDistributionListMembersRequest: GetDistributionListMembersRequest };
-				}>();
+				} = await request.json();
 				const result = offset === 0 ? firstPage : secondPage;
-				return res(
-					ctx.json(
-						buildSoapResponse<GetDistributionListMembersResponse>({
-							GetDistributionListMembersResponse: {
-								_jsns: NAMESPACES.account,
-								dlm: result.map((member) => ({ _content: member })),
-								more: offset === 0,
-								total: firstPage.length + secondPage.length
-							}
-						})
-					)
+				return HttpResponse.json(
+					buildSoapResponse<GetDistributionListMembersResponse>({
+						GetDistributionListMembersResponse: {
+							_jsns: NAMESPACES.account,
+							dlm: result.map((member) => ({ _content: member })),
+							more: offset === 0,
+							total: firstPage.length + secondPage.length
+						}
+					})
 				);
 			}
 		);
@@ -175,9 +169,16 @@ describe('Use get distribution list members hook', () => {
 		act(() => {
 			result.current.findMore();
 		});
+
 		await waitFor(() =>
-			expect(handler.mock.lastCall?.[0].body.Body.GetDistributionListMembersRequest.offset).toEqual(
-				members.length
+			expect(handler.mock.lastCall?.[0].request.json()).resolves.toEqual(
+				expect.objectContaining({
+					Body: expect.objectContaining({
+						GetDistributionListMembersRequest: expect.objectContaining({
+							offset: members.length
+						})
+					})
+				})
 			)
 		);
 	});
@@ -194,8 +195,13 @@ describe('Use get distribution list members hook', () => {
 		rerender([dl.email, { skip: true, limit: firstPage.length }]);
 		rerender([dl.email, { skip: false, limit: firstPage.length }]);
 		await waitFor(() =>
-			expect(handler.mock.lastCall?.[0].body.Body.GetDistributionListMembersRequest.offset).toEqual(
-				0
+			// TODO check why only this test need to use the request clone
+			expect(handler.mock.lastCall?.[0].request.clone().json()).resolves.toEqual(
+				expect.objectContaining({
+					Body: expect.objectContaining({
+						GetDistributionListMembersRequest: expect.objectContaining({ offset: 0 })
+					})
+				})
 			)
 		);
 		await waitFor(() => expect(result.current.members).toStrictEqual(firstPage));
@@ -203,8 +209,12 @@ describe('Use get distribution list members hook', () => {
 			result.current.findMore();
 		});
 		await waitFor(() =>
-			expect(handler.mock.lastCall?.[0].body.Body.GetDistributionListMembersRequest.offset).toEqual(
-				firstPage.length
+			expect(handler.mock.lastCall?.[0].request.json()).resolves.toEqual(
+				expect.objectContaining({
+					Body: expect.objectContaining({
+						GetDistributionListMembersRequest: expect.objectContaining({ offset: firstPage.length })
+					})
+				})
 			)
 		);
 		await waitFor(() =>

@@ -213,7 +213,7 @@ describe('EditDLControllerComponent', () => {
 				await user.click(button);
 				await screen.findByTestId(TESTID_SELECTORS.snackbar);
 				expect(handler).toHaveBeenCalledTimes(1);
-				expect(await handler.mock.lastCall?.[0].json()).toEqual(
+				expect(await handler.mock.lastCall?.[0].request.json()).toEqual(
 					expect.objectContaining<{
 						Body: { BatchRequest: BatchDistributionListActionRequest };
 					}>({

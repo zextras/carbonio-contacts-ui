@@ -6,6 +6,7 @@
 import '@testing-library/jest-dom';
 import { configure } from '@testing-library/react';
 import failOnConsole from 'jest-fail-on-console';
+import fetchMock from 'jest-fetch-mock';
 
 import {
 	defaultAfterAllTests,
@@ -30,6 +31,7 @@ failOnConsole({
 
 beforeAll(() => {
 	defaultBeforeAllTests();
+	fetchMock.doMock();
 });
 
 beforeEach(() => {

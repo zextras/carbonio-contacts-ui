@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { SoapResponse } from '@zextras/carbonio-shell-ui';
-import { ResponseResolver, rest, RestContext, RestRequest } from 'msw';
+import { HttpResponseResolver, http, HttpResponse } from 'msw';
 
 import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
 import { NAMESPACES } from '../../constants/api';
@@ -31,25 +31,23 @@ const createAutocompleteResponse = (match: Array<Match>): string => {
 		${matchString}
 		</FullAutocompleteResponse>`;
 };
-type FullAutoCompleteHandler = ResponseResolver<
-	RestRequest<{ Body: { FullAutocompleteRequest: FullAutocompleteResponse } }>,
-	RestContext,
+type FullAutoCompleteHandler = HttpResponseResolver<
+	never,
+	{ Body: { FullAutocompleteRequest: FullAutocompleteResponse } },
 	SoapResponse<string>
 >;
 export const registerFullAutocompleteHandler = (
 	results: Array<Match>
 ): jest.Mock<ReturnType<FullAutoCompleteHandler>, Parameters<FullAutoCompleteHandler>> => {
 	const handler = jest.fn<ReturnType<FullAutoCompleteHandler>, Parameters<FullAutoCompleteHandler>>(
-		(req, res, ctx) =>
-			res(
-				ctx.json(
-					buildSoapResponse<string>({
-						FullAutocompleteResponse: createAutocompleteResponse(results)
-					})
-				)
+		() =>
+			HttpResponse.json(
+				buildSoapResponse<string>({
+					FullAutocompleteResponse: createAutocompleteResponse(results)
+				})
 			)
 	);
-	getSetupServer().use(rest.post('/service/soap/FullAutocompleteRequest', handler));
+	getSetupServer().use(http.post('/service/soap/FullAutocompleteRequest', handler));
 
 	return handler;
 };

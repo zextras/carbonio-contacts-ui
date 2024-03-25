@@ -9,6 +9,7 @@ import { faker } from '@faker-js/faker';
 import { act, waitFor } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { EventEmitter } from 'events';
+import { HttpResponse } from 'msw';
 import { Route } from 'react-router-dom';
 
 import EditDLBoard, { EditDLBoardContext } from './edit-dl-board';
@@ -166,14 +167,12 @@ describe('Edit DL board', () => {
 			useDistributionListsStore.getState().setDistributionLists([dl]);
 			const emitter = new EventEmitter();
 			const EMITTER_RESOLVE = 'resolve';
-			registerGetDistributionListMembersHandler().mockImplementation(async (req, res, ctx) => {
+			registerGetDistributionListMembersHandler().mockImplementation(async () => {
 				await delayUntil(emitter, EMITTER_RESOLVE);
-				return res(
-					ctx.json(
-						buildSoapResponse<GetDistributionListMembersResponse>({
-							GetDistributionListMembersResponse: buildGetDistributionListMembersResponse([member])
-						})
-					)
+				return HttpResponse.json(
+					buildSoapResponse<GetDistributionListMembersResponse>({
+						GetDistributionListMembersResponse: buildGetDistributionListMembersResponse([member])
+					})
 				);
 			});
 			spyUseBoard(dl);
@@ -202,17 +201,15 @@ describe('Edit DL board', () => {
 			useDistributionListsStore.getState().setDistributionLists([dl]);
 			const emitter = new EventEmitter();
 			const EMITTER_RESOLVE = 'resolve';
-			registerGetDistributionListHandler(dl).mockImplementation(async (req, res, ctx) => {
+			registerGetDistributionListHandler(dl).mockImplementation(async () => {
 				await delayUntil(emitter, EMITTER_RESOLVE);
-				return res(
-					ctx.json(
-						buildSoapResponse<GetDistributionListResponse>({
-							GetDistributionListResponse: buildGetDistributionListResponse({
-								...dl,
-								owners: [{ id: faker.string.uuid(), name: owner }]
-							})
+				return HttpResponse.json(
+					buildSoapResponse<GetDistributionListResponse>({
+						GetDistributionListResponse: buildGetDistributionListResponse({
+							...dl,
+							owners: [{ id: faker.string.uuid(), name: owner }]
 						})
-					)
+					})
 				);
 			});
 			spyUseBoard(dl);

@@ -80,11 +80,7 @@ describe('share-folder-properties', () => {
 			_jsns: 'urn:zimbraMail'
 		};
 
-		createAPIInterceptor<GetFolderActionRequest, GetFolderActionResponse>(
-			'GetFolder',
-			undefined,
-			response
-		);
+		createAPIInterceptor<GetFolderActionRequest, GetFolderActionResponse>('GetFolder', response);
 
 		setupTest(<ShareFolderProperties folder={currentFolder} setActiveModal={setActiveModal} />, {
 			store

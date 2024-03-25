@@ -162,7 +162,7 @@ export function normalizeContactsFromSoap(contact: SoapContact[]): Contact[] | u
 					return r;
 				},
 				[] as Contact[]
-		  );
+			);
 }
 
 export function normalizeSyncContactsFromSoap(
@@ -206,5 +206,5 @@ export function normalizeSyncContactsFromSoap(
 					return r;
 				},
 				[] as Array<Partial<Contact>>
-		  );
+			);
 }
