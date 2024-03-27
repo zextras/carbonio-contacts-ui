@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React, { useCallback, useState, useMemo } from 'react';
+
 import {
 	Container,
 	IconButton,
@@ -15,11 +16,13 @@ import {
 	Dropdown,
 	Padding,
 	Icon,
-	Tooltip
+	Tooltip,
+	Link
 } from '@zextras/carbonio-design-system';
-import { useTranslation } from 'react-i18next';
-import { every, includes, isEmpty, reduce } from 'lodash';
 import { FOLDERS, runSearch, useTags, ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-shell-ui';
+import { every, includes, isEmpty, map, reduce } from 'lodash';
+import { useTranslation } from 'react-i18next';
+
 import { CompactView } from '../../commons/contact-compact-view';
 import { useTagExist } from '../../ui-actions/tag-actions';
 
@@ -48,6 +51,7 @@ function ContactPreviewRow({ children, width }) {
 			mainAlignment="space-between"
 			width={width || 'fill'}
 			wrap="nowrap"
+			crossAlignment="flex-start"
 			padding={{ horizontal: 'small', vertical: 'small' }}
 		>
 			{children}
@@ -237,17 +241,11 @@ function ContactPreviewContent({ contact, onEdit, onDelete, onMail, onMove }) {
 		setOpen(!open);
 	}, [setOpen, open]);
 	const [t] = useTranslation();
-	// const addressRowData = useMemo(
-	// 	() =>
-	// 		map(contact.address, (addr) => ({
-	// 			type: addr.type,
-	// 			address: `${addr.street} - ${addr.city} (${addr.postalCode}), ${addr.country}, ${addr.state}`,
-	// 		})),
-	// 	[contact]
-	// );
+
 	const mailData = useMemo(() => Object.values(contact.email), [contact]);
-	// const urlData = useMemo(() => Object.values(contact.URL), [contact]);
+	const urlData = useMemo(() => Object.values(contact.URL), [contact]);
 	const phoneData = useMemo(() => Object.values(contact.phone), [contact]);
+	const addressData = useMemo(() => Object.values(contact.address), [contact]);
 
 	const tagsFromStore = useTags();
 	const triggerSearch = useCallback(
@@ -339,12 +337,14 @@ function ContactPreviewContent({ contact, onEdit, onDelete, onMail, onMove }) {
 		() => tagsFromStore[contact?.tags?.[0]]?.name,
 		[contact?.tags, tagsFromStore]
 	);
+
 	return (
 		<Row
 			data-testid="PreviewPanel"
 			padding={{ all: 'extrasmall' }}
 			width="100%"
 			mainAlignment="baseline"
+			style={{ overflowY: 'auto' }}
 		>
 			<Responsive mode="desktop" target={window.top}>
 				<Container
@@ -418,36 +418,131 @@ function ContactPreviewContent({ contact, onEdit, onDelete, onMail, onMove }) {
 						style={{ overflowY: 'auto' }}
 					>
 						<ContactPreviewRow>
-							<ContactField field={contact.namePrefix} label={t('name.prefix', 'Prefix')} />
-							<ContactField field={contact.firstName} label={t('name.first_name', 'First Name')} />
-							<ContactField
-								field={contact.middleName}
-								label={t('name.middle_name', 'Middle Name')}
-							/>
-							<ContactField field={contact.lastName} label={t('name.last_name', 'Last Name')} />
-							<ContactField field={contact.nameSuffix} label={t('name.suffix', 'Suffix')} />
+							{contact.namePrefix && (
+								<ContactField field={contact.namePrefix} label={t('name.prefix', 'Prefix')} />
+							)}
+							{contact.firstName && (
+								<ContactField
+									field={contact.firstName}
+									label={t('name.first_name', 'First Name')}
+								/>
+							)}
+							{contact.middleName && (
+								<ContactField
+									field={contact.middleName}
+									label={t('name.middle_name', 'Middle Name')}
+								/>
+							)}
+							{contact.lastName && (
+								<ContactField field={contact.lastName} label={t('name.last_name', 'Last Name')} />
+							)}
+							{contact.nameSuffix && (
+								<ContactField field={contact.nameSuffix} label={t('name.suffix', 'Suffix')} />
+							)}
 						</ContactPreviewRow>
 
 						<ContactPreviewRow>
-							<ContactMultiValueField type="phone_number" values={phoneData} showIcon />
-							<ContactMultiValueField
-								type="mail"
-								values={mailData}
-								defaultType="email"
-								showIcon={false}
-							/>
+							{phoneData.length > 0 && (
+								<ContactMultiValueField type="phone_number" values={phoneData} showIcon />
+							)}
+							{mailData.length > 0 && (
+								<ContactMultiValueField
+									type="mail"
+									values={mailData}
+									defaultType="email"
+									showIcon={false}
+								/>
+							)}
 						</ContactPreviewRow>
 
 						<ContactPreviewRow>
-							<ContactField field={contact.jobTitle} label={t('job.title', 'Job Role')} />
-							<ContactField field={contact.department} label={t('job.department', 'Department')} />
-							<ContactField field={contact.company} label={t('job.company', 'Company')} />
+							{contact.jobTitle && (
+								<ContactField field={contact.jobTitle} label={t('job.title', 'Job Role')} />
+							)}
+							{contact.department && (
+								<ContactField
+									field={contact.department}
+									label={t('job.department', 'Department')}
+								/>
+							)}
+							{contact.company && (
+								<ContactField field={contact.company} label={t('job.company', 'Company')} />
+							)}
 						</ContactPreviewRow>
-						<ContactPreviewRow></ContactPreviewRow>
+						{contact.notes && <ContactPreviewRow></ContactPreviewRow>}
+						{contact.notes && (
+							<ContactPreviewRow>
+								<ContactField
+									field={contact.notes}
+									label={t('label.notes', 'Notes')}
+									width="fill"
+								/>
+							</ContactPreviewRow>
+						)}
+						{addressData.length > 0 && (
+							<Row width="fill" mainAlignment="flex-start" padding={{ top: 'large' }}>
+								<Text color="secondary" overflow="break-word" style={{ paddingLeft: '1rem' }}>
+									{t('section.title.address', 'Address')}
+								</Text>
+								{map(addressData, (address, index) => (
+									<ContactPreviewRow crossAlignment="flex-start" key={index}>
+										{address.type && (
+											<ContactField field={address.type} label={t('label.type', 'Type')} />
+										)}
+										{address.street && (
+											<ContactField
+												field={address.street}
+												label={t('section.field.street', 'Street')}
+											/>
+										)}
+										{address.city && (
+											<ContactField field={address.city} label={t('section.field.city', 'City')} />
+										)}
+										{address.postalCode && (
+											<ContactField
+												field={address.postalCode}
+												label={t('section.field.postalCode', 'PostalCode')}
+											/>
+										)}
+										{address.country && (
+											<ContactField
+												field={address.country}
+												label={t('section.field.country', 'Country')}
+											/>
+										)}
+										{address.state && (
+											<ContactField
+												field={address.state}
+												label={t('section.field.state', 'State')}
+											/>
+										)}
+									</ContactPreviewRow>
+								))}
+							</Row>
+						)}
 
-						<ContactPreviewRow>
-							<ContactField field={contact.notes} label={t('label.notes', 'Notes')} width="fill" />
-						</ContactPreviewRow>
+						{urlData.length > 0 && (
+							<Row width="fill" mainAlignment="flex-start" padding={{ top: 'large' }}>
+								<Text color="secondary" overflow="break-word" style={{ paddingLeft: '1rem' }}>
+									{t('label.website', 'Website')}
+								</Text>
+								{map(urlData, ({ url }, index) => {
+									const finalUrl = url.match('^(\\w+:)?\\/\\/.+$') ? url : `https://${url}`;
+									return (
+										<ContactPreviewRow crossAlignment="flex-start" key={index}>
+											<Link
+												style={{ paddingLeft: '0.5rem' }}
+												underlined
+												href={finalUrl}
+												target="_blank"
+											>
+												{url}
+											</Link>
+										</ContactPreviewRow>
+									);
+								})}
+							</Row>
+						)}
 					</Container>
 				</Collapse>
 			</Responsive>
@@ -457,7 +552,6 @@ function ContactPreviewContent({ contact, onEdit, onDelete, onMail, onMove }) {
 					background="gray6"
 					height="fit"
 					padding={{ all: 'medium' }}
-					// data-testid='PreviewPanel'
 				>
 					<Container>
 						<CompactView contact={contact} open={open} toggleOpen={toggleOpen} />
