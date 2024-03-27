@@ -338,15 +338,6 @@ function ContactPreviewContent({ contact, onEdit, onDelete, onMail, onMove }) {
 		[contact?.tags, tagsFromStore]
 	);
 
-	const openURLInNewTab = (url) => {
-		// Add the protocol if it's missing
-		let urlWithProtocol = url;
-		if (!urlWithProtocol.startsWith('http://') && !urlWithProtocol.startsWith('https://')) {
-			urlWithProtocol = `https://${urlWithProtocol}`;
-		}
-		window.open(urlWithProtocol, '_blank');
-	};
-
 	return (
 		<Row
 			data-testid="PreviewPanel"
@@ -535,19 +526,21 @@ function ContactPreviewContent({ contact, onEdit, onDelete, onMail, onMove }) {
 								<Text color="secondary" overflow="break-word" style={{ paddingLeft: '1rem' }}>
 									{t('label.website', 'Website')}
 								</Text>
-								{map(urlData, (url, index) => (
-									<ContactPreviewRow crossAlignment="flex-start" key={index}>
-										<Link
-											style={{ paddingLeft: '0.5rem' }}
-											underlined
-											onClick={() => {
-												openURLInNewTab(url.url);
-											}}
-										>
-											{url.url}
-										</Link>
-									</ContactPreviewRow>
-								))}
+								{map(urlData, ({ url }, index) => {
+									const finalUrl = url.match('^(\\w+:)?\\/\\/.+$') ? url : `https://${url}`;
+									return (
+										<ContactPreviewRow crossAlignment="flex-start" key={index}>
+											<Link
+												style={{ paddingLeft: '0.5rem' }}
+												underlined
+												href={finalUrl}
+												target="_blank"
+											>
+												{url}
+											</Link>
+										</ContactPreviewRow>
+									);
+								})}
 							</Row>
 						)}
 					</Container>
