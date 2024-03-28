@@ -4,16 +4,18 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+
+import { nanoid } from '@reduxjs/toolkit';
 import { Container, Input, Row, Text } from '@zextras/carbonio-design-system';
 import { FOLDERS } from '@zextras/carbonio-shell-ui';
 import { filter, map, size, split } from 'lodash';
-import { nanoid } from '@reduxjs/toolkit';
+
 import ModalFooter from './commons/modal-footer';
-import { ModalHeader } from '../secondary-bar/commons/modal-header';
-import { createFolder } from '../../store/actions/create-folder';
 import { contactAction } from '../../store/actions/contact-action';
-import FolderItem from '../secondary-bar/commons/folder-item';
+import { createFolder } from '../../store/actions/create-folder';
 import { getFolderTranslatedName } from '../../utils/helpers';
+import FolderItem from '../secondary-bar/commons/folder-item';
+import { ModalHeader } from '../secondary-bar/commons/modal-header';
 
 export const NewModal = ({
 	folders,

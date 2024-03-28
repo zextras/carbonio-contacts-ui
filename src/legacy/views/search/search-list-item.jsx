@@ -3,11 +3,13 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+import React, { useCallback, useMemo } from 'react';
+
 import { Container, Padding, Row, Text, Tooltip } from '@zextras/carbonio-design-system';
 import { ZIMBRA_STANDARD_COLORS, pushHistory, useTags } from '@zextras/carbonio-shell-ui';
 import { includes, reduce, trim } from 'lodash';
-import React, { useCallback, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
+
 import { useAppSelector } from '../../hooks/redux';
 import { searchContacts } from '../../store/actions/search-contacts';
 import { selectFolderStatus } from '../../store/selectors/contacts';

@@ -4,12 +4,14 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React, { useEffect, useMemo, useState } from 'react';
-import { useRouteMatch, Switch, Route } from 'react-router-dom';
+
 import { Container, Padding, Text } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
-import ContactPreviewPanel from '../preview/contact-preview-panel';
-import ContactEditPanel from '../edit/contact-edit-panel';
+import { useRouteMatch, Switch, Route } from 'react-router-dom';
+
 import { EmptyFieldMessages, EmptyListMessages } from './utils';
+import ContactEditPanel from '../edit/contact-edit-panel';
+import ContactPreviewPanel from '../preview/contact-preview-panel';
 
 const generateRandomNumber = () => Math.floor(Math.random() * 3);
 const SearchPanel = ({ searchResults, query, width }) => {

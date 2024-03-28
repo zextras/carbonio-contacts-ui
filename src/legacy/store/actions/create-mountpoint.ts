@@ -9,8 +9,8 @@ import { map } from 'lodash';
 
 export const createMountpoint = createAsyncThunk(
 	'folders/get folder',
-	async (links: any): Promise<any> => {
-		const res = await soapFetch('Batch', {
+	async (links: any): Promise<any> =>
+		soapFetch('Batch', {
 			CreateMountpointRequest: map(links, (link) => ({
 				link: {
 					l: 1,
@@ -22,7 +22,5 @@ export const createMountpoint = createAsyncThunk(
 				_jsns: 'urn:zimbraMail'
 			})),
 			_jsns: 'urn:zimbra'
-		});
-		return res;
-	}
+		})
 );

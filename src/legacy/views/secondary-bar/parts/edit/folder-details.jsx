@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React from 'react';
+
 import { Container, Row, Padding, Text, Divider } from '@zextras/carbonio-design-system';
 
 function bytesToSize(bytes) {

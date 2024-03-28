@@ -5,6 +5,7 @@
  */
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
+
 import { ContactsFolder } from '../../types/contact';
 
 export const createFolder = createAsyncThunk(

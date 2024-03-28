@@ -22,7 +22,7 @@ export const contactAction = createAsyncThunk(
 	}) => {
 		const ids = contactsIDs.join(',');
 
-		const res = await soapFetch('ContactAction', {
+		return soapFetch('ContactAction', {
 			_jsns: 'urn:zimbraMail',
 			action: omitBy(
 				{
@@ -34,6 +34,5 @@ export const contactAction = createAsyncThunk(
 				isNil
 			)
 		});
-		return res;
 	}
 );

@@ -75,7 +75,7 @@ export function normalizeContactAddressesToSoapOp(addresses: ContactAddressMap):
 							: {
 									...acc2,
 									[getKey(k, v, k2)]: v2
-							  };
+								};
 					}
 					return {};
 				},

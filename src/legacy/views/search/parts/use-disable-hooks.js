@@ -3,8 +3,9 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { isEqualWith } from 'lodash';
 import { useMemo } from 'react';
+
+import { isEqualWith } from 'lodash';
 
 export const useDisabled = ({
 	queryToBe,

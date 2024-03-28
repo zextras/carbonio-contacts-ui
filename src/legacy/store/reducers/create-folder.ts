@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { cloneDeep } from 'lodash';
+
 import { FoldersSlice } from '../../types/store';
 import { addFoldersToStore, removeFoldersFromStore } from '../../utils/helpers';
 

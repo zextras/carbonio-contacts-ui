@@ -3,8 +3,9 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { ButtonOldProps, ContainerProps } from '@zextras/carbonio-design-system';
 import { SyntheticEvent } from 'react';
+
+import { ButtonOldProps, ContainerProps } from '@zextras/carbonio-design-system';
 
 export type ModalFooterProps = {
 	mainAlignment?: ContainerProps['mainAlignment'];

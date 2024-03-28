@@ -3,9 +3,11 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { Text, Row, Tooltip, Container, Padding, Icon } from '@zextras/carbonio-design-system';
 import React, { useMemo } from 'react';
+
+import { Text, Row, Tooltip, Container, Padding, Icon } from '@zextras/carbonio-design-system';
 import { trim } from 'lodash';
+
 import { useDisplayName } from '../../../hooks/use-display-name';
 import { useTagExist } from '../../../ui-actions/tag-actions';
 

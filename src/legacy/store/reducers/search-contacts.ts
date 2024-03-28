@@ -4,9 +4,10 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { map } from 'lodash';
+
 import { ContactsSlice } from '../../types/store';
-import { normalizeContactsFromSoap } from '../../utils/normalizations/normalize-contact-from-soap';
 import { addContactsToStore, removeContactsFromStore } from '../../utils/helpers';
+import { normalizeContactsFromSoap } from '../../utils/normalizations/normalize-contact-from-soap';
 
 export function searchContactsPending(state: ContactsSlice): void {
 	state.status.pendingActions = true;

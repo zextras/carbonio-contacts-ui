@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React, { FC, ReactElement, useCallback, useMemo } from 'react';
-import { Container, ChipInput } from '@zextras/carbonio-design-system';
 
-import { filter } from 'lodash';
+import { Container, ChipInput } from '@zextras/carbonio-design-system';
 import { ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-shell-ui';
+import { filter } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 type ComponentProps = {
