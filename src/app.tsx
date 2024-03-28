@@ -36,6 +36,8 @@ import { EditViewProps } from './legacy/types/views/edit-view';
 import { SidebarProps } from './legacy/types/views/sidebar';
 import SidebarItems from './legacy/views/secondary-bar/sidebar';
 import { SyncDataHandler } from './legacy/views/secondary-bar/sync-data-handler';
+import { useFoldersController } from "./carbonio-ui-commons/hooks/use-folders-controller";
+import { FOLDER_VIEW } from "./carbonio-ui-commons/constants";
 
 const LazyAppView = lazy(
 	() => import(/* webpackChunkName: "contacts-view" */ './legacy/views/app-view')
@@ -258,6 +260,8 @@ const App = (): React.JSX.Element => {
 			}
 		);
 	}, [navigateTo, t]);
+
+	useFoldersController(FOLDER_VIEW.contact);
 
 	return (
 		<StoreProvider>
