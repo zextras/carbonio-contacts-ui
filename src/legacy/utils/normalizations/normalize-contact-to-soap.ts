@@ -68,13 +68,17 @@ export function normalizeContactAddressesToSoapOp(addresses: ContactAddressMap):
 			...acc,
 			...reduce(
 				v,
-				(acc2, v2, k2) =>
-					k2 === 'type'
-						? acc2
-						: {
-								...acc2,
-								[getKey(k, v, k2)]: v2
-							},
+				(acc2, v2, k2) => {
+					if (k2 !== 'isRemove') {
+						return k2 === 'type'
+							? acc2
+							: {
+									...acc2,
+									[getKey(k, v, k2)]: v2
+							  };
+					}
+					return {};
+				},
 				{}
 			)
 		}),
