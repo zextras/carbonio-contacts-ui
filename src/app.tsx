@@ -21,6 +21,8 @@ import {
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
+import { FOLDER_VIEW } from './carbonio-ui-commons/constants';
+import { useFoldersController } from './carbonio-ui-commons/hooks/use-folders-controller';
 import {
 	CONTACTS_APP_ID,
 	CONTACTS_ROUTE,
@@ -36,8 +38,6 @@ import { EditViewProps } from './legacy/types/views/edit-view';
 import { SidebarProps } from './legacy/types/views/sidebar';
 import SidebarItems from './legacy/views/secondary-bar/sidebar';
 import { SyncDataHandler } from './legacy/views/secondary-bar/sync-data-handler';
-import { useFoldersController } from "./carbonio-ui-commons/hooks/use-folders-controller";
-import { FOLDER_VIEW } from "./carbonio-ui-commons/constants";
 
 const LazyAppView = lazy(
 	() => import(/* webpackChunkName: "contacts-view" */ './legacy/views/app-view')
