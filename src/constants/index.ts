@@ -64,3 +64,7 @@ export const DL_TABS = {
 	members: 'dl-members-tab',
 	managers: 'dl-managers-tab'
 } as const;
+
+export const LOCAL_STORAGES = {
+	EXPANDED_ADDRESSBOOKS: 'open_address_books'
+};
