@@ -62,7 +62,7 @@ export const findContactGroups = (
 						title: value._attrs.fullName ?? '',
 						members:
 							value.m?.filter((value) => value.type === 'I').map((value) => value.value) ?? []
-				  }))
+					}))
 				: [];
 			return { contactGroups, hasMore: res.Body.SearchResponse.more };
 		});

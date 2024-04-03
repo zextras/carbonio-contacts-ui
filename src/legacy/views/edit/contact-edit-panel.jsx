@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React, { useCallback } from 'react';
-import { replaceHistory } from '@zextras/carbonio-shell-ui';
+
 import {
 	Container,
 	Divider,
@@ -14,8 +14,10 @@ import {
 	Row,
 	Text
 } from '@zextras/carbonio-design-system';
+import { replaceHistory } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+
 import EditView from './edit-view';
 
 function ContactEditHeader({ editPanelId, folderId }) {

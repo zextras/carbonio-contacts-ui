@@ -5,8 +5,6 @@
  */
 // import { renderHook } from '@testing-library/react-hooks';
 
-import { useDisplayName } from './use-display-name';
-
 const contacts = {
 	empty: {
 		firstName: '',

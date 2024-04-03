@@ -158,7 +158,7 @@ export default function EditView({ panel }) {
 			contact?.nameSuffix
 				? `${contact?.namePrefix ?? ''} ${contact?.firstName ?? ''} ${contact?.middleName ?? ''} ${
 						contact?.nickName ?? ''
-				  } ${contact?.lastName ?? ''} ${contact?.nameSuffix ?? ''}`
+					} ${contact?.lastName ?? ''} ${contact?.nameSuffix ?? ''}`
 				: t('label.new_contact', 'New contact'),
 		[
 			contact?.firstName,

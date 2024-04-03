@@ -26,7 +26,7 @@ describe('Distribution list action', () => {
 		const handler = registerDistributionListActionHandler({});
 		const dlEmail = 'dl-mail@domain.net';
 		await distributionListAction({ email: dlEmail, membersToRemove });
-		expect(await handler.mock.lastCall?.[0].json()).toEqual(
+		expect(await handler.mock.lastCall?.[0].request.json()).toEqual(
 			expect.objectContaining<{
 				Body: { BatchRequest: BatchDistributionListActionRequest };
 			}>({
@@ -58,7 +58,7 @@ describe('Distribution list action', () => {
 		const handler = registerDistributionListActionHandler({ membersToAdd });
 		const dlEmail = 'dl-mail@domain.net';
 		await distributionListAction({ email: dlEmail, membersToAdd });
-		expect(await handler.mock.lastCall?.[0].json()).toEqual(
+		expect(await handler.mock.lastCall?.[0].request.json()).toEqual(
 			expect.objectContaining<{
 				Body: { BatchRequest: BatchDistributionListActionRequest };
 			}>({
@@ -90,7 +90,7 @@ describe('Distribution list action', () => {
 		const handler = registerDistributionListActionHandler(dlData);
 		const dlEmail = 'dl-mail@domain.net';
 		await distributionListAction({ email: dlEmail, ...dlData });
-		expect(await handler.mock.lastCall?.[0].json()).toEqual(
+		expect(await handler.mock.lastCall?.[0].request.json()).toEqual(
 			expect.objectContaining<{
 				Body: { BatchRequest: BatchDistributionListActionRequest };
 			}>({
@@ -122,7 +122,7 @@ describe('Distribution list action', () => {
 		const handler = registerDistributionListActionHandler(dlData);
 		const dlEmail = 'dl-mail@domain.net';
 		await distributionListAction({ email: dlEmail, ...dlData });
-		expect(await handler.mock.lastCall?.[0].json()).toEqual(
+		expect(await handler.mock.lastCall?.[0].request.json()).toEqual(
 			expect.objectContaining<{
 				Body: { BatchRequest: BatchDistributionListActionRequest };
 			}>({
@@ -154,7 +154,7 @@ describe('Distribution list action', () => {
 		const handler = registerDistributionListActionHandler(dlData);
 		const dlEmail = 'dl-mail@domain.net';
 		await distributionListAction({ email: dlEmail, ...dlData });
-		expect(await handler.mock.lastCall?.[0].json()).toEqual(
+		expect(await handler.mock.lastCall?.[0].request.json()).toEqual(
 			expect.objectContaining<{
 				Body: { BatchRequest: BatchDistributionListActionRequest };
 			}>({
@@ -196,7 +196,7 @@ describe('Distribution list action', () => {
 		const handler = registerDistributionListActionHandler(dlData);
 		const dlEmail = 'dl-mail@domain.net';
 		await distributionListAction({ email: dlEmail, ...dlData });
-		expect(await handler.mock.lastCall?.[0].json()).toEqual(
+		expect(await handler.mock.lastCall?.[0].request.json()).toEqual(
 			expect.objectContaining<{
 				Body: { BatchRequest: BatchDistributionListActionRequest };
 			}>({

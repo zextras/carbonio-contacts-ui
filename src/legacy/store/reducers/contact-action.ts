@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { cloneDeep, map } from 'lodash';
+
 import {
 	addContactsToStore,
 	findContactsInStore,

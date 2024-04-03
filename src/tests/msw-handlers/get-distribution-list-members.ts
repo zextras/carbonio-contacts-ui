@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { SoapResponse } from '@zextras/carbonio-shell-ui';
-import { ResponseResolver, rest, RestContext, RestRequest } from 'msw';
+import { HttpResponse, HttpResponseResolver, http } from 'msw';
 
 import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
 import { NAMESPACES } from '../../constants/api';
@@ -14,9 +14,9 @@ import {
 } from '../../network/api/get-distribution-list-members';
 import { buildSoapError, buildSoapResponse } from '../utils';
 
-type GetDistributionListMembersHandler = ResponseResolver<
-	RestRequest<{ Body: { GetDistributionListMembersRequest: GetDistributionListMembersRequest } }>,
-	RestContext,
+type GetDistributionListMembersHandler = HttpResponseResolver<
+	never,
+	{ Body: { GetDistributionListMembersRequest: GetDistributionListMembersRequest } },
 	SoapResponse<GetDistributionListMembersResponse>
 >;
 
@@ -46,37 +46,33 @@ export const registerGetDistributionListMembersHandler = (
 	const handler = jest.fn<
 		ReturnType<GetDistributionListMembersHandler>,
 		Parameters<GetDistributionListMembersHandler>
-	>(async (req, res, ctx) => {
+	>(async ({ request }) => {
 		if (error) {
-			return res(ctx.json(buildSoapError(error)));
+			return HttpResponse.json(buildSoapError(error));
 		}
 
 		const {
 			Body: {
 				GetDistributionListMembersRequest: { limit, offset }
 			}
-		} = await req.json<{
-			Body: { GetDistributionListMembersRequest: GetDistributionListMembersRequest };
-		}>();
+		} = await request.clone().json();
 
-		return res(
-			ctx.json(
-				buildSoapResponse<GetDistributionListMembersResponse>({
-					GetDistributionListMembersResponse: buildGetDistributionListMembersResponse(
-						members,
-						limit,
-						more,
-						offset
-					)
-				})
-			)
+		return HttpResponse.json(
+			buildSoapResponse<GetDistributionListMembersResponse>({
+				GetDistributionListMembersResponse: buildGetDistributionListMembersResponse(
+					members,
+					limit,
+					more,
+					offset
+				)
+			})
 		);
 	});
 
 	getSetupServer().use(
-		rest.post<
-			{ Body: { GetDistributionListMembersRequest: GetDistributionListMembersRequest } },
+		http.post<
 			never,
+			{ Body: { GetDistributionListMembersRequest: GetDistributionListMembersRequest } },
 			SoapResponse<GetDistributionListMembersResponse>
 		>('/service/soap/GetDistributionListMembersRequest', handler)
 	);

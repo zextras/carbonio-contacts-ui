@@ -7,7 +7,9 @@
 /* eslint-disable import/extensions */
 
 import React, { FC, ReactElement } from 'react';
+
 import { Container, ButtonOld as Button, Padding, Divider } from '@zextras/carbonio-design-system';
+
 import { ModalFooterProps } from '../../../types/commons';
 
 const ModalFooter: FC<ModalFooterProps> = ({

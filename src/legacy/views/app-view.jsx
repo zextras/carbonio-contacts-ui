@@ -9,12 +9,12 @@ import { Container } from '@zextras/carbonio-design-system';
 import { setAppContext, Spinner } from '@zextras/carbonio-shell-ui';
 import { Redirect, Switch, Route, useRouteMatch } from 'react-router-dom';
 
-const LazyFolderView = lazy(() =>
-	import(/* webpackChunkName: "folder-view" */ './app/folder-panel')
+const LazyFolderView = lazy(
+	() => import(/* webpackChunkName: "folder-view" */ './app/folder-panel')
 );
 
-const LazyDetailPanel = lazy(() =>
-	import(/* webpackChunkName: "folder-panel-view" */ './app/detail-panel')
+const LazyDetailPanel = lazy(
+	() => import(/* webpackChunkName: "folder-panel-view" */ './app/detail-panel')
 );
 
 const AppView = () => {

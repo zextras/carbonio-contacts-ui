@@ -20,7 +20,7 @@ describe('GetShareInfo', () => {
 				Reason: { Text: faker.word.sample() }
 			}
 		};
-		createAPIInterceptor('GetShareInfo', undefined, response);
+		createAPIInterceptor('GetShareInfo', response);
 		expect(async () => {
 			await getShareInfo();
 		}).rejects.toThrow();
@@ -52,7 +52,7 @@ describe('GetShareInfo', () => {
 			],
 			_jsns: NAMESPACES.account
 		};
-		createAPIInterceptor('GetShareInfo', undefined, response);
+		createAPIInterceptor('GetShareInfo', response);
 		const shares = await getShareInfo();
 		expect(shares).toEqual([
 			expect.objectContaining({
@@ -96,14 +96,14 @@ describe('GetShareInfo', () => {
 					ownerId: faker.string.uuid(),
 					rights: 'r',
 					view
-				} satisfies GetShareInfoResponse['share'][number])
+				}) satisfies GetShareInfoResponse['share'][number]
 		);
 
 		const response: GetShareInfoResponse = {
 			share: [contactShare, ...otherShares],
 			_jsns: NAMESPACES.account
 		};
-		createAPIInterceptor('GetShareInfo', undefined, response);
+		createAPIInterceptor('GetShareInfo', response);
 		const shares = await getShareInfo();
 		expect(shares).toHaveLength(1);
 		expect(shares?.[0]).toEqual(

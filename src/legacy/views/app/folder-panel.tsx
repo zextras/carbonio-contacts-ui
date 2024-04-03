@@ -3,21 +3,22 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+import React, { ReactElement, useEffect, useMemo } from 'react';
+
 import { Container } from '@zextras/carbonio-design-system';
 import { useAppContext } from '@zextras/carbonio-shell-ui';
 import { filter, orderBy } from 'lodash';
-import React, { ReactElement, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
+
+import { Breadcrumbs } from './breadcrumbs';
+import { ContactsList } from './folder-panel/contacts-list';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { useSelection } from '../../hooks/useSelection';
 import { searchContacts } from '../../store/actions/search-contacts';
 import { selectAllContactsInFolder, selectFolderStatus } from '../../store/selectors/contacts';
 import { selectFolder } from '../../store/selectors/folders';
-import { State } from '../../types/store';
 import { ActionsContextProvider } from '../../ui-actions/actions-context';
 import { SelectPanelActions } from '../folder/select-panel-actions';
-import { Breadcrumbs } from './breadcrumbs';
-import { ContactsList } from './folder-panel/contacts-list';
 
 type RouteParams = {
 	folderId: string;

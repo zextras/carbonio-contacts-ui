@@ -5,13 +5,14 @@
  */
 import { FOLDERS } from '@zextras/carbonio-shell-ui';
 import { filter } from 'lodash';
+
 import { FoldersSlice } from '../../types/store';
-import { extractFolders, normalizeFolders } from '../../utils/normalizations/normalize-folders';
 import {
 	addFoldersToStore,
 	applyFoldersChangesToStore,
 	removeFoldersFromStore
 } from '../../utils/helpers';
+import { extractFolders, normalizeFolders } from '../../utils/normalizations/normalize-folders';
 
 export function handleFolderSyncReducer(state: FoldersSlice, { payload }: { payload: any }): void {
 	const { created, modified, deleted } = payload;

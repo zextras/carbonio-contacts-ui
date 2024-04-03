@@ -9,6 +9,7 @@ import { act } from '@testing-library/react';
 
 import { DLDetailsInfo } from './dl-details-info';
 import { screen, setupTest, within } from '../carbonio-ui-commons/test/test-setup';
+import * as clipboard from '../carbonio-ui-commons/utils/clipboard';
 import { TESTID_SELECTORS } from '../constants/tests';
 import { generateDistributionList } from '../tests/utils';
 
@@ -36,6 +37,9 @@ describe('Distribution list details', () => {
 	});
 
 	it('should allow the user to copy the email', async () => {
+		const copyToClipboard = jest
+			.spyOn(clipboard, 'copyToClipboard')
+			.mockImplementation(() => Promise.resolve());
 		const dl = generateDistributionList();
 		const { user } = setupTest(<DLDetailsInfo email={dl.email} displayName={dl.displayName} />);
 		const copyAction = screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.copy });
@@ -44,6 +48,6 @@ describe('Distribution list details', () => {
 			await user.click(copyAction);
 		});
 		expect(await screen.findByText(/Email copied to clipboard/i)).toBeVisible();
-		expect(await window.navigator.clipboard.readText()).toEqual(dl.email);
+		expect(copyToClipboard).toHaveBeenCalledWith(dl.email);
 	});
 });

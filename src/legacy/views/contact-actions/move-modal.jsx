@@ -3,20 +3,22 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+import React, { useCallback, useMemo, useState } from 'react';
+
 import { Container, Input, Text } from '@zextras/carbonio-design-system';
 import { FOLDERS, replaceHistory } from '@zextras/carbonio-shell-ui';
 import { filter, find, isEmpty, reduce, startsWith } from 'lodash';
-import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
+
+import ModalFooter from './commons/modal-footer';
+import { NewModal } from './new-modal';
+import { useAppSelector } from '../../hooks/redux';
 import { contactAction } from '../../store/actions/contact-action';
 import { selectFolders } from '../../store/selectors/folders';
 import { getFolderTranslatedName } from '../../utils/helpers';
 import FolderItem from '../secondary-bar/commons/folder-item';
 import { ModalHeader } from '../secondary-bar/commons/modal-header';
-import ModalFooter from './commons/modal-footer';
-import { NewModal } from './new-modal';
-import { useAppSelector } from '../../hooks/redux';
 
 export default function MoveModal({
 	onClose,

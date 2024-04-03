@@ -8,6 +8,7 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import { BooleanString } from '@zextras/carbonio-shell-ui';
 import { times } from 'lodash';
+import { HttpResponse } from 'msw';
 
 import { DLDisplayerController } from './dl-displayer-controller';
 import { screen, setupTest } from '../carbonio-ui-commons/test/test-setup';
@@ -63,10 +64,10 @@ describe('Distribution List Displayer Controller', () => {
 			async (hideParam) => {
 				const members = times(10, () => faker.internet.email());
 				const dl = generateDistributionList({});
-				registerGetDistributionListHandler(dl).mockImplementation((req, res, ctx) => {
+				registerGetDistributionListHandler(dl).mockImplementation(() => {
 					const response = buildGetDistributionListResponse(dl);
 					response.dl[0]._attrs = { ...response.dl[0]._attrs, zimbraHideInGal: hideParam };
-					return res(ctx.json(buildSoapResponse({ GetDistributionListResponse: response })));
+					return HttpResponse.json(buildSoapResponse({ GetDistributionListResponse: response }));
 				});
 				registerGetDistributionListMembersHandler(members);
 				const { user } = setupTest(<DLDisplayerController id={dl.id} />);
@@ -81,11 +82,11 @@ describe('Distribution List Displayer Controller', () => {
 		it('should render member list if the user is the owner even if the zimbraHideInGal is "TRUE"', async () => {
 			const members = times(10, () => faker.internet.email());
 			const dl = generateDistributionList({ isOwner: true });
-			registerGetDistributionListHandler(dl).mockImplementation((req, res, ctx) => {
+			registerGetDistributionListHandler(dl).mockImplementation(() => {
 				const response = buildGetDistributionListResponse(dl);
 				response.dl[0]._attrs = { ...response.dl[0]._attrs, zimbraHideInGal: 'TRUE' };
 				response.dl[0].isOwner = true;
-				return res(ctx.json(buildSoapResponse({ GetDistributionListResponse: response })));
+				return HttpResponse.json(buildSoapResponse({ GetDistributionListResponse: response }));
 			});
 			registerGetDistributionListMembersHandler(members);
 			const { user } = setupTest(<DLDisplayerController id={dl.id} />);
@@ -101,11 +102,11 @@ describe('Distribution List Displayer Controller', () => {
 			async (isOwner) => {
 				const members = times(10, () => faker.internet.email());
 				const dl = generateDistributionList({ isOwner });
-				registerGetDistributionListHandler(dl).mockImplementation((req, res, ctx) => {
+				registerGetDistributionListHandler(dl).mockImplementation(() => {
 					const response = buildGetDistributionListResponse(dl);
 					response.dl[0]._attrs = { ...response.dl[0]._attrs, zimbraHideInGal: 'TRUE' };
 					response.dl[0].isOwner = isOwner;
-					return res(ctx.json(buildSoapResponse({ GetDistributionListResponse: response })));
+					return HttpResponse.json(buildSoapResponse({ GetDistributionListResponse: response }));
 				});
 				registerGetDistributionListMembersHandler(members);
 				const { user } = setupTest(<DLDisplayerController id={dl.id} />);

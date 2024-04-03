@@ -4,8 +4,10 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React, { useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
+
 import { Container, Icon, Padding, Row, Text } from '@zextras/carbonio-design-system';
+import { useTranslation } from 'react-i18next';
+
 import { ModalHeader } from './commons/modal-header';
 import { findLabel, ShareCalendarRoleOptions } from './commons/utils';
 

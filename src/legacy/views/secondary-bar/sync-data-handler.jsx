@@ -3,9 +3,12 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+import { useEffect, useState } from 'react';
+
 import { useNotify, useRefresh } from '@zextras/carbonio-shell-ui';
 import { forEach, isEmpty, sortBy } from 'lodash';
-import { useEffect, useState } from 'react';
+
+import { useAppDispatch } from '../../hooks/redux';
 import {
 	handleCreatedContactsSync,
 	handleDeletedContactsSync,
@@ -13,7 +16,6 @@ import {
 } from '../../store/slices/contacts-slice';
 import { handleFoldersSync, handleRefresh } from '../../store/slices/folders-slice';
 import { normalizeSyncContactsFromSoap } from '../../utils/normalizations/normalize-contact-from-soap';
-import { useAppDispatch } from '../../hooks/redux';
 
 export const SyncDataHandler = () => {
 	const notifyList = useNotify();

@@ -7,7 +7,6 @@ import { waitFor } from '@testing-library/react';
 
 import { useFindDistributionLists } from './use-find-distribution-lists';
 import { setupHook } from '../carbonio-ui-commons/test/test-setup';
-import { GetAccountDistributionListsRequest } from '../network/api/get-account-distribution-lists';
 import { registerGetAccountDistributionListsHandler } from '../tests/msw-handlers/get-account-distribution-lists';
 import { generateDistributionList } from '../tests/utils';
 
@@ -50,12 +49,14 @@ describe('Use find distribution lists hook', () => {
 			initialProps: [{ memberOf: true, ownerOf: false }]
 		});
 		await waitFor(() => expect(result.current).toHaveLength(1));
-		// TODO: cannot read from json right now
-		//  because json is already read inside the handler and throws an error
-		// 	"Failed to execute "json" on "IsomorphicRequest": body buffer already read"
-		expect(handler.mock.lastCall?.[0].body.Body.GetAccountDistributionListsRequest).toEqual(
-			expect.objectContaining<Partial<GetAccountDistributionListsRequest>>({
-				ownerOf: true
+
+		expect(await handler.mock.lastCall?.[0].request.json()).toEqual(
+			expect.objectContaining({
+				Body: expect.objectContaining({
+					GetAccountDistributionListsRequest: expect.objectContaining({
+						ownerOf: true
+					})
+				})
 			})
 		);
 	});
