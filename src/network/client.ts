@@ -6,6 +6,7 @@
 
 import { deleteContactAction } from './api/contact-action';
 import { createContactGroup } from './api/create-contact-group';
+import { createMountpoints } from './api/create-mountpoints';
 import { distributionListAction } from './api/distribution-list-action';
 import { findContactGroups } from './api/find-contact-groups';
 import { getAccountDistributionLists } from './api/get-account-distribution-lists';
@@ -23,5 +24,6 @@ export const client = {
 	deleteContactAction,
 	getAccountDistributionLists,
 	modifyContactGroup,
-	getShareInfo
+	getShareInfo,
+	createMountpoints
 };
