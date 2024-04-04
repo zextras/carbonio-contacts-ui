@@ -6,6 +6,7 @@
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
+import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 import { times } from 'lodash';
 
 import { SharesModal } from './shares-modal';
@@ -61,9 +62,21 @@ describe('SharesModal', () => {
 		).toBeVisible();
 	});
 
+	it('should render an error snackbar if the GetShareInfo API will return an error', async () => {
+		createAPIInterceptor<GetShareInfoRequest, ErrorSoapBodyResponse>('GetShareInfo', {
+			Fault: {
+				Detail: { Error: { Code: 'error-code', Detail: 'error-detail' } },
+				Reason: { Text: 'everything is broken' }
+			}
+		});
+
+		const onClose = jest.fn();
+		setupTest(<SharesModal onClose={onClose} />, {});
+		expect(await screen.findByText(/something went wrong/i)).toBeVisible();
+	});
+
 	it('should render a list of users that shares some addressbooks', async () => {
 		// Create a list of the shares from different users
-
 		const responseShares = times(
 			5,
 			(index) =>
@@ -72,29 +85,32 @@ describe('SharesModal', () => {
 					folderPath: `/${faker.word.noun(1)}`,
 					folderUuid: faker.string.uuid(),
 					granteeType: 'grp',
-					ownerEmail: faker.internet.email(),
+					ownerEmail: `user-${index}@${faker.internet.domainName()}`,
 					ownerId: faker.string.uuid(),
-					ownerName: faker.person.fullName(),
+					ownerName: `user-${index}`,
 					rights: 'r',
 					view: 'contact'
-				} satisfies GetShareInfoResponse['share'][number])
+				}) satisfies GetShareInfoResponse['share'][number]
 		);
 
+		// Create an API interceptor that returns the list of shares
 		createAPIInterceptor<GetShareInfoRequest, GetShareInfoResponse>('GetShareInfo', {
 			share: responseShares,
 			_jsns: NAMESPACES.account
 		});
 
+		// Instantiate the modal
 		const onClose = jest.fn();
 		setupTest(<SharesModal onClose={onClose} />, {});
 		expect(screen.getByTestId(TESTID_SELECTORS.sharesUsersListItem)).toBeInTheDocument();
 
-		// Create an API interceptor that returns the list of shares
-
-		// Instantiate the modal
-
 		// Check that the modal is displaying the list, with an item for every user
 		expect(await screen.findAllByTestId(TESTID_SELECTORS.sharesUsersListItem)).toHaveLength(5);
+		responseShares.forEach((share) => {
+			expect(
+				screen.getByText(`${share.ownerEmail}'s shared address books`, { exact: false })
+			).toBeVisible();
+		});
 	});
 
 	it.todo('should render a list of users whose name matching with filter content');

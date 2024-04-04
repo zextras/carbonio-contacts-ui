@@ -3,10 +3,22 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { FC, useCallback } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 
-import { Icon, Input, ModalFooter, ModalHeader, Row, Text } from '@zextras/carbonio-design-system';
+import {
+	Icon,
+	Input,
+	ModalFooter,
+	ModalHeader,
+	Row,
+	Text,
+	useSnackbar
+} from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
+
+import { TIMEOUTS } from '../../constants';
+import { ShareInfo } from '../../model/share-info';
+import { client } from '../../network/client';
 
 export type SharesModalProps = {
 	onClose: () => void;
@@ -60,6 +72,27 @@ export const SharesModal: FC<SharesModalProps> = ({ onClose }) => {
 	// const [data, setData] = useState();
 	// const dispatch = useAppDispatch();
 	const [t] = useTranslation();
+	const createSnackbar = useSnackbar();
+	const [sharesInfo, setSharesInfo] = useState<Array<ShareInfo>>([]);
+
+	// Fetch the list of the shares
+	useEffect(() => {
+		client
+			.getShareInfo()
+			.then((shares) => {
+				setSharesInfo(shares ?? []);
+			})
+			.catch(() => {
+				createSnackbar({
+					key: `getShareInfo-error-${new Date().toDateString()}`,
+					replace: true,
+					type: 'error',
+					label: t('label.error_try_again', 'Something went wrong, please try again'),
+					autoHideTimeout: TIMEOUTS.snackbar,
+					hideButton: true
+				});
+			});
+	}, [createSnackbar, t]);
 
 	const onConfirm = useCallback(() => {}, []);
 	// const translatedFolders = useMemo(() => translateFoldersNames(t, folders), [t, folders]);

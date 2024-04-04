@@ -69,3 +69,7 @@ export const DL_TABS = {
 export const LOCAL_STORAGES = {
 	EXPANDED_ADDRESSBOOKS: 'open_address_books'
 };
+
+export const TIMEOUTS = {
+	snackbar: 3000
+};
