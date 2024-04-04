@@ -5,7 +5,7 @@
  */
 import React, { FC, useCallback } from 'react';
 
-import { ModalFooter, ModalHeader } from '@zextras/carbonio-design-system';
+import { Icon, Input, ModalFooter, ModalHeader, Row, Text } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
 export type SharesModalProps = {
@@ -138,25 +138,25 @@ export const SharesModal: FC<SharesModalProps> = ({ onClose }) => {
 				showCloseIcon
 				onClose={onClose}
 			/>
-
-			{/* <Row padding={{ top: 'large', bottom: 'small' }} width="fill" mainAlignment="flex-start"> */}
-			{/*	<Text> */}
-			{/*		{t( */}
-			{/*			'share.find_shares_label', */}
-			{/*			'Select which address book you want to see in contact’s tree' */}
-			{/*		)} */}
-			{/*	</Text> */}
-			{/* </Row> */}
-			{/* <Row padding={{ top: 'small', bottom: 'large' }} width="fill"> */}
-			{/*	<Input */}
-			{/*		label={t('share.filter_user', 'Find users')} */}
-			{/*		backgroundColor="gray5" */}
-			{/*		CustomIcon={({ hasFocus }) => ( */}
-			{/*			<Icon icon="FunnelOutline" size="large" color={hasFocus ? 'primary' : 'text'} /> */}
-			{/*		)} */}
-			{/*		onChange={filterResults} */}
-			{/*	/> */}
-			{/* </Row> */}
+			<Row padding={{ top: 'large', bottom: 'small' }} width="fill" mainAlignment="flex-start">
+				<Text>
+					{t(
+						'share.find_shares_label',
+						'Select which address book you want to see in contact’s tree'
+					)}
+				</Text>
+			</Row>
+			<Row padding={{ top: 'small', bottom: 'large' }} width="fill">
+				<Input
+					data-testid={'find-users-filter-input'}
+					label={t('share.filter_user', 'Find users')}
+					backgroundColor="gray5"
+					CustomIcon={({ hasFocus }): React.JSX.Element => (
+						<Icon icon="FunnelOutline" size="large" color={hasFocus ? 'primary' : 'text'} />
+					)}
+					// onChange={filterResults}
+				/>
+			</Row>
 			{/* <ContainerEl orientation="vertical" mainAlignment="flex-start" maxHeight="40vh"> */}
 			{/*	<Accordion items={nestedData} background="gray6" /> */}
 			{/* </ContainerEl> */}

@@ -32,7 +32,7 @@ describe('createMountpoints', () => {
 
 	it('should call the API passing the correct static params', async () => {
 		const shares: Array<ShareInfo & { mountpointName: string }> = times(3, () => ({
-			folderId: `${faker.string.uuid()}:${faker.number.int({ min: 2 })}`,
+			folderId: `${faker.string.uuid()}:${faker.number.int({ min: 7 })}`,
 			folderPath: `/${faker.word.noun(1)}`,
 			folderUuid: faker.string.uuid(),
 			granteeType: 'grp',

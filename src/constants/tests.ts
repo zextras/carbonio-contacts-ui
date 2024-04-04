@@ -176,7 +176,8 @@ export const TESTID_SELECTORS = {
 		edit: 'icon: EditOutline',
 		displayerIcon: 'icon: PeopleOutline',
 		exitSelection: 'icon: ArrowBack',
-		moreOptions: 'icon: MoreVertical'
+		moreOptions: 'icon: MoreVertical',
+		findUsers: 'icon: FunnelOutline'
 	},
 	avatar: 'avatar',
 	modal: 'modal',
@@ -199,7 +200,9 @@ export const TESTID_SELECTORS = {
 	locationDisplay: 'location-display',
 	infoContainer: 'info-container',
 	shimmedListItem: 'shimmed-list-item',
-	editDLComponent: 'edit-dl-component'
+	editDLComponent: 'edit-dl-component',
+	findUsersFilterInput: 'find-users-filter-input',
+	sharesUsersListItem: 'shares-users-list-item'
 };
 
 export const PALETTE = {
