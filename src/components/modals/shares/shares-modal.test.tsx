@@ -10,11 +10,11 @@ import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 import { times } from 'lodash';
 
 import { SharesModal } from './shares-modal';
-import { createAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { screen, setupTest, within } from '../../carbonio-ui-commons/test/test-setup';
-import { NAMESPACES } from '../../constants/api';
-import { TESTID_SELECTORS } from '../../constants/tests';
-import { GetShareInfoRequest, GetShareInfoResponse } from '../../network/api/get-share-info';
+import { createAPIInterceptor } from '../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
+import { screen, setupTest, within } from '../../../carbonio-ui-commons/test/test-setup';
+import { NAMESPACES } from '../../../constants/api';
+import { TESTID_SELECTORS } from '../../../constants/tests';
+import { GetShareInfoRequest, GetShareInfoResponse } from '../../../network/api/get-share-info';
 
 describe('SharesModal', () => {
 	it('should render the modal with the specific title', () => {

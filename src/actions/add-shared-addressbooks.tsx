@@ -8,8 +8,8 @@ import React, { useCallback, useMemo } from 'react';
 import { useModal } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
-import { SharesModal } from './modals/shares-modal';
 import { UIAction } from './types';
+import { SharesModal } from '../components/modals/shares/shares-modal';
 import { ACTION_IDS } from '../constants';
 import { StoreProvider } from '../legacy/store/redux';
 

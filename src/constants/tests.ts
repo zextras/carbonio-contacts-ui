@@ -170,6 +170,7 @@ export const TESTID_SELECTORS = {
 		close: 'icon: Close',
 		closeDisplayer: 'icon: CloseOutline',
 		accordionExpandAction: 'icon: ChevronDown',
+		accordionCollapseAction: 'icon: ChevronUp',
 		sendEmail: 'icon: EmailOutline',
 		distributionList: 'icon: DistributionListOutline',
 		copy: 'icon: Copy',
@@ -177,7 +178,10 @@ export const TESTID_SELECTORS = {
 		displayerIcon: 'icon: PeopleOutline',
 		exitSelection: 'icon: ArrowBack',
 		moreOptions: 'icon: MoreVertical',
-		findUsers: 'icon: FunnelOutline'
+		findUsers: 'icon: FunnelOutline',
+		unckeckedCheckbox: 'icon: Square',
+		checkedCheckbox: 'icon: CheckmarkSquare',
+		sharesUser: 'icon: PersonOutline'
 	},
 	avatar: 'avatar',
 	modal: 'modal',

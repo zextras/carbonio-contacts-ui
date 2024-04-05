@@ -16,9 +16,9 @@ import {
 } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
-import { TIMEOUTS } from '../../constants';
-import { ShareInfo } from '../../model/share-info';
-import { client } from '../../network/client';
+import { TIMEOUTS } from '../../../constants';
+import { ShareInfo } from '../../../model/share-info';
+import { client } from '../../../network/client';
 
 export type SharesModalProps = {
 	onClose: () => void;
