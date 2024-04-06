@@ -25,7 +25,6 @@ describe('UsersSharesListItem', () => {
 		setupTest(
 			<UsersSharesListItem
 				shares={shares}
-				ownerId={faker.string.uuid()}
 				ownerName={faker.person.fullName()}
 				onDeselect={jest.fn()}
 				onSelect={jest.fn()}
@@ -41,7 +40,6 @@ describe('UsersSharesListItem', () => {
 		setupTest(
 			<UsersSharesListItem
 				shares={shares}
-				ownerId={faker.string.uuid()}
 				ownerName={ownerName}
 				onDeselect={jest.fn()}
 				onSelect={jest.fn()}
@@ -56,7 +54,6 @@ describe('UsersSharesListItem', () => {
 		setupTest(
 			<UsersSharesListItem
 				shares={shares}
-				ownerId={faker.string.uuid()}
 				ownerName={faker.person.fullName()}
 				onDeselect={jest.fn()}
 				onSelect={jest.fn()}
@@ -75,14 +72,13 @@ describe('UsersSharesListItem', () => {
 		setupTest(
 			<UsersSharesListItem
 				shares={shares}
-				ownerId={faker.string.uuid()}
 				ownerName={ownerName}
 				onDeselect={jest.fn()}
 				onSelect={jest.fn()}
 			/>
 		);
 		makeListItemsVisible();
-		expect(screen.getAllByTestId('checkbox')).toHaveLength(sharesCount);
+		expect(screen.getAllByTestId(TESTID_SELECTORS.checkbox)).toHaveLength(sharesCount);
 	});
 
 	it('should call the onSelected callback, passing the selected share, when the user select a share from the list', async () => {
@@ -102,7 +98,6 @@ describe('UsersSharesListItem', () => {
 		const { user } = setupTest(
 			<UsersSharesListItem
 				shares={shares}
-				ownerId={faker.string.uuid()}
 				ownerName={ownerName}
 				onSelect={onSelected}
 				onDeselect={onDeselected}
@@ -136,7 +131,6 @@ describe('UsersSharesListItem', () => {
 		const { user } = setupTest(
 			<UsersSharesListItem
 				shares={shares}
-				ownerId={faker.string.uuid()}
 				ownerName={ownerName}
 				onSelect={onSelected}
 				onDeselect={onDeselected}

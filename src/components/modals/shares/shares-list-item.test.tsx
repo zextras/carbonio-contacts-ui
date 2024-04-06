@@ -17,7 +17,7 @@ describe('SharesListItem', () => {
 	it('should display an uncheck checkbox', () => {
 		const share = buildShareInfo();
 		setupTest(<SharesListItem share={share} onSelect={jest.fn()} onDeselect={jest.fn()} />);
-		expect(screen.getByTestId('checkbox')).toBeVisible();
+		expect(screen.getByTestId(TESTID_SELECTORS.checkbox)).toBeVisible();
 		expect(screen.getByTestId(TESTID_SELECTORS.icons.unckeckedCheckbox)).toBeVisible();
 	});
 
@@ -35,7 +35,7 @@ describe('SharesListItem', () => {
 		const { user } = setupTest(
 			<SharesListItem share={share} onSelect={onSelect} onDeselect={onDeselect} />
 		);
-		await act(() => user.click(screen.getByTestId('checkbox')));
+		await act(() => user.click(screen.getByTestId(TESTID_SELECTORS.checkbox)));
 		expect(onSelect).toHaveBeenCalledWith(share);
 		// FIXME checkbox is always firing an onChange event at the first render
 		// expect(onDeselect).not.toHaveBeenCalled();
@@ -48,8 +48,8 @@ describe('SharesListItem', () => {
 		const { user } = setupTest(
 			<SharesListItem share={share} onSelect={onSelect} onDeselect={onDeselect} />
 		);
-		await act(() => user.click(screen.getByTestId('checkbox')));
-		await act(() => user.click(screen.getByTestId('checkbox')));
+		await act(() => user.click(screen.getByTestId(TESTID_SELECTORS.checkbox)));
+		await act(() => user.click(screen.getByTestId(TESTID_SELECTORS.checkbox)));
 		expect(onDeselect).toHaveBeenCalledWith(share);
 		expect(onSelect).toHaveBeenCalledTimes(1);
 	});

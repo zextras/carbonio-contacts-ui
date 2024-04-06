@@ -22,7 +22,6 @@ import { ShareInfo } from '../../../model/share-info';
 
 export type UsersSharesListItemProps = {
 	shares: Array<ShareInfo>;
-	ownerId: string;
 	ownerName: string;
 	onSelect: (share: ShareInfo) => void;
 	onDeselect: (share: ShareInfo) => void;
@@ -30,7 +29,6 @@ export type UsersSharesListItemProps = {
 
 export const UsersSharesListItem: FC<UsersSharesListItemProps> = ({
 	shares,
-	ownerId,
 	ownerName,
 	onDeselect,
 	onSelect
@@ -52,7 +50,7 @@ export const UsersSharesListItem: FC<UsersSharesListItemProps> = ({
 	}, []);
 
 	return (
-		<Row key={ownerId} padding={'small'}>
+		<Row padding={'small'} data-testid={'shares-users-list-item'}>
 			<Row>
 				<Icon icon={'PersonOutline'} />
 				<TextWithTooltip>{label}</TextWithTooltip>

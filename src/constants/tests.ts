@@ -206,7 +206,8 @@ export const TESTID_SELECTORS = {
 	shimmedListItem: 'shimmed-list-item',
 	editDLComponent: 'edit-dl-component',
 	findUsersFilterInput: 'find-users-filter-input',
-	sharesUsersListItem: 'shares-users-list-item'
+	sharesUsersListItem: 'shares-users-list-item',
+	checkbox: 'checkbox'
 };
 
 export const PALETTE = {
