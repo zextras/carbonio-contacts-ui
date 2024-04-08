@@ -3,9 +3,10 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
+	Container,
 	Icon,
 	Input,
 	ModalFooter,
@@ -14,9 +15,13 @@ import {
 	Text,
 	useSnackbar
 } from '@zextras/carbonio-design-system';
+import { last } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
+import { UsersSharesList } from './users-shares-list';
+import { getFolderIdParts } from '../../../carbonio-ui-commons/helpers/folders';
 import { TIMEOUTS } from '../../../constants';
+import { getFolderTranslatedName } from '../../../legacy/utils/helpers';
 import { ShareInfo } from '../../../model/share-info';
 import { client } from '../../../network/client';
 
@@ -74,6 +79,7 @@ export const SharesModal: FC<SharesModalProps> = ({ onClose }) => {
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
 	const [sharesInfo, setSharesInfo] = useState<Array<ShareInfo>>([]);
+	const [selectedShares, setSelectedShares] = useState<Array<ShareInfo>>([]);
 
 	// Fetch the list of the shares
 	useEffect(() => {
@@ -94,7 +100,50 @@ export const SharesModal: FC<SharesModalProps> = ({ onClose }) => {
 			});
 	}, [createSnackbar, t]);
 
-	const onConfirm = useCallback(() => {}, []);
+	const onSharesSelection = useCallback((selection: Array<ShareInfo>) => {
+		setSelectedShares([...selection]);
+	}, []);
+
+	const onConfirm = useCallback(() => {
+		// TODO this is taken from the UsersSharesListItem component: consider to move it into a function/hook
+		const labeledShares = selectedShares.map((share) => {
+			const baseName = last(share.folderPath.split('/')) ?? '';
+			const folderId = getFolderIdParts(share.folderId).id ?? '';
+			const shareLocalizedBaseName = getFolderTranslatedName(t, folderId, baseName);
+			return {
+				...share,
+				mountpointName: t('share.link_name', {
+					shareName: shareLocalizedBaseName,
+					ownerName: share.ownerName,
+					defaultValue: '{{shareName}} of {{ownerName}}'
+				})
+			};
+		});
+
+		client
+			.createMountpoints(labeledShares)
+			.then(() => {
+				createSnackbar({
+					key: `share`,
+					replace: true,
+					type: 'info',
+					hideButton: true,
+					label: t('share.share_added_succesfully', 'Shared added successfully'),
+					autoHideTimeout: TIMEOUTS.snackbar
+				});
+				onClose();
+			})
+			.catch(() => {
+				createSnackbar({
+					key: `share`,
+					replace: true,
+					type: 'error',
+					hideButton: true,
+					label: t('label.error_try_again', 'Something went wrong, please try again'),
+					autoHideTimeout: TIMEOUTS.snackbar
+				});
+			});
+	}, [createSnackbar, onClose, selectedShares, t]);
 	// const translatedFolders = useMemo(() => translateFoldersNames(t, folders), [t, folders]);
 	//
 	// const onConfirm = useCallback(() => {
@@ -164,6 +213,11 @@ export const SharesModal: FC<SharesModalProps> = ({ onClose }) => {
 	// 	[filteredFolders]
 	// );
 
+	const isAddButtonDisabled = useMemo<boolean>(
+		() => selectedShares.length === 0,
+		[selectedShares.length]
+	);
+
 	return (
 		<>
 			<ModalHeader
@@ -190,14 +244,13 @@ export const SharesModal: FC<SharesModalProps> = ({ onClose }) => {
 					// onChange={filterResults}
 				/>
 			</Row>
-			{/* <ContainerEl orientation="vertical" mainAlignment="flex-start" maxHeight="40vh"> */}
-			{/*	<Accordion items={nestedData} background="gray6" /> */}
-			{/* </ContainerEl> */}
+			<Container orientation="vertical" mainAlignment="flex-start" maxHeight="40vh">
+				<UsersSharesList shares={sharesInfo} onSelectionChange={onSharesSelection} />
+			</Container>
 			<ModalFooter
 				onConfirm={onConfirm}
 				confirmLabel={t('share.add', 'Add')}
-				// disabled={links?.length <= 0}
-				// t={t}
+				confirmDisabled={isAddButtonDisabled}
 			/>
 		</>
 	);
