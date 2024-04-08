@@ -47,32 +47,66 @@ describe('UsersSharesList', () => {
 		);
 
 		setupTest(<UsersSharesList shares={shares} onSelectionChange={jest.fn()} />);
+
+		// Call 2 times the makeListItemVisible because of the nested lists
 		makeListItemsVisible();
+		makeListItemsVisible();
+
 		expect(screen.getAllByTestId(TESTID_SELECTORS.sharesUsersListItem)).toHaveLength(1);
 		expect(screen.getAllByTestId(TESTID_SELECTORS.checkbox)).toHaveLength(shares.length);
 	});
 
 	it('should call the onSelectionChange callback, passing all the selected shares, when the user select shares from different owners in the list', async () => {
-		const owners = faker.helpers.uniqueArray(faker.person.fullName, 10);
+		const owners = faker.helpers.uniqueArray(faker.person.fullName, 2);
 
-		const shares = owners.reduce<Array<ShareInfo>>(
-			(result, ownerName): Array<ShareInfo> =>
-				times(faker.number.int({ min: 1, max: 10 }), () => buildShareInfo({ ownerName })),
-			[]
-		);
+		const shares = [
+			buildShareInfo({ ownerName: owners[0] }),
+			buildShareInfo({ ownerName: owners[1] })
+		];
 
 		const onSelectionChange = jest.fn();
 		const { user } = setupTest(
 			<UsersSharesList shares={shares} onSelectionChange={onSelectionChange} />
 		);
+
+		// Call 2 times the makeListItemVisible because of the nested lists
 		makeListItemsVisible();
+		makeListItemsVisible();
+
 		const checkboxes = screen.getAllByTestId(TESTID_SELECTORS.checkbox);
-		checkboxes.forEach((checkbox) => act(() => user.click(checkbox)));
+		act(() => jest.advanceTimersByTime(1000));
+		await act(async () => user.click(checkboxes[0]));
+		await act(async () => user.click(checkboxes[1]));
 
 		expect(onSelectionChange).toHaveBeenCalledWith(expect.arrayContaining(shares));
 	});
 
-	it.todo(
-		'should call the onSelectionChange callback, passing an empty array, if the user deselect all the shares previously selected from different owners'
-	);
+	it('should call the onSelectionChange callback, passing an empty array, if the user deselect all the shares previously selected from different owners', async () => {
+		const owners = faker.helpers.uniqueArray(faker.person.fullName, 2);
+
+		const shares = [
+			buildShareInfo({ ownerName: owners[0] }),
+			buildShareInfo({ ownerName: owners[1] })
+		];
+
+		const onSelectionChange = jest.fn();
+		const { user } = setupTest(
+			<UsersSharesList shares={shares} onSelectionChange={onSelectionChange} />
+		);
+
+		// Call 2 times the makeListItemVisible because of the nested lists
+		makeListItemsVisible();
+		makeListItemsVisible();
+
+		const checkboxes = screen.getAllByTestId(TESTID_SELECTORS.checkbox);
+		act(() => jest.advanceTimersByTime(1000));
+		await act(async () => user.click(checkboxes[0]));
+		await act(async () => user.click(checkboxes[1]));
+
+		// Trigger deselection
+		await act(async () => user.click(checkboxes[0]));
+		await act(async () => user.click(checkboxes[1]));
+
+		expect(onSelectionChange).toHaveBeenLastCalledWith([]);
+	});
 });
