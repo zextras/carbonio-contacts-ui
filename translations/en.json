@@ -1,5 +1,6 @@
 {
     "action": {
+        "add_shared_addressbooks": "Add shares",
         "contactGroup": {
             "delete": "Delete"
         },
@@ -303,6 +304,7 @@
             "upload_failed_generic": "Upload failed for the file \"{{filename}}\""
         },
         "export_address_book": "Export csv file",
+        "find_shares": "Find shares",
         "folder_name": "Folder name",
         "groups_app_name": "Contact Groups and Distribution Lists",
         "import_address_book": "Import csv file",
@@ -464,6 +466,7 @@
         "find_shares": "Find Shares",
         "find_shares_label": "Select which address book you want to see in contact’s tree",
         "insert": "Insert",
+        "link_name": "{{shareName}} of {{ownerName}}",
         "manager": "Manager",
         "none": "None",
         "options": {
@@ -519,6 +522,9 @@
     "tooltip": {
         "address_book_sharing_status": "Shared with {{count}} person",
         "address_book_sharing_status_plural": "Shared with {{count}} people",
+        "folder_linked_status": "Linked to me",
+        "folder_sharing_status": "Shared with {{count}} people",
+        "folder_sharing_status_plural": "",
         "resend": "Send e-mail notification about this share",
         "revoke": "Revoke access"
     },

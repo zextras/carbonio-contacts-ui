@@ -54,7 +54,7 @@ export const UsersSharesList: FC<UsersSharesListProps> = ({ shares, onSelectionC
 					{(visible: boolean): React.JSX.Element =>
 						visible ? (
 							<UsersSharesListItem
-								shares={shares}
+								shares={sharesGroups[ownerName]}
 								ownerName={ownerName}
 								onSelect={onSelect}
 								onDeselect={onDeselect}
