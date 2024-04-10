@@ -21,6 +21,8 @@ import {
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
+import { FOLDER_VIEW } from './carbonio-ui-commons/constants';
+import { useFoldersController } from './carbonio-ui-commons/hooks/use-folders-controller';
 import {
 	CONTACTS_APP_ID,
 	CONTACTS_ROUTE,
@@ -258,6 +260,8 @@ const App = (): React.JSX.Element => {
 			}
 		);
 	}, [navigateTo, t]);
+
+	useFoldersController(FOLDER_VIEW.contact);
 
 	return (
 		<StoreProvider>
