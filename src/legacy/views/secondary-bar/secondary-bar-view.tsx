@@ -165,9 +165,11 @@ const SecondaryBarView: FC<SecondaryBarComponentProps> = ({ expanded = false }) 
 	const { path } = useRouteMatch();
 
 	const roots = useRootsArray();
+	// TODO Remove when IRIS-5083 will be implemented
+	const filteredRoots = roots.filter((root) => root.id === FOLDERS.USER_ROOT);
 	const folders = useMemo(
-		() => sortFolders({ children: roots, sortFunction: getSortCriteria }),
-		[roots]
+		() => sortFolders({ children: filteredRoots, sortFunction: getSortCriteria }),
+		[filteredRoots]
 	);
 
 	const accordionsWithFindShare = useMemo(() => {
