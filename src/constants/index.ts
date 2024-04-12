@@ -16,7 +16,13 @@ export const ACTION_IDS = {
 	deleteCG: 'cg-delete-action',
 	editCG: 'cg-edit-action',
 	copyToClipboard: 'copy-to-clipboard-action',
-	addSharedAddressbooks: 'shares-add-action'
+	addSharedAddressBooks: 'shares-add-action',
+	trashAddressBooks: 'trash-address-book-action',
+	deleteAddressBooks: 'delete-address-book-action',
+	newAddressBooks: 'new-address-book-action',
+	editAddressBooks: 'edit-address-book-action',
+	emptyAddressBooks: 'empty-address-book-action',
+	removeAddressBooksLink: 'remove-address-book-link-action'
 } as const;
 
 export const NEW_CONTACT_GROUP_BOARD_ID = 'new-contact-group-board';

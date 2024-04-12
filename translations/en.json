@@ -1,6 +1,6 @@
 {
     "action": {
-        "add_shared_addressbooks": "Add shares",
+        "add_shared_address_books": "Add shares",
         "contactGroup": {
             "delete": "Delete"
         },

@@ -6,14 +6,14 @@
 
 import { act } from 'react-dom/test-utils';
 
-import { useActionAddSharedAddressbooks } from './add-shared-addressbooks';
+import { useActionAddSharedAddressBooks } from './add-shared-address-books';
 import { UIAction } from './types';
 import { screen, setupHook } from '../carbonio-ui-commons/test/test-setup';
 import { TIMERS } from '../constants/tests';
 
-describe('useActionAddSharedAddressbooks', () => {
+describe('useActionAddSharedAddressBooks', () => {
 	it('should return an object with the specific data', () => {
-		const { result } = setupHook(useActionAddSharedAddressbooks);
+		const { result } = setupHook(useActionAddSharedAddressBooks);
 		expect(result.current).toEqual<UIAction<unknown, unknown>>(
 			expect.objectContaining({
 				icon: expect.anything(),
@@ -24,13 +24,13 @@ describe('useActionAddSharedAddressbooks', () => {
 	});
 
 	it('should return an canExecute field which is a function that returns always true', () => {
-		const { result } = setupHook(useActionAddSharedAddressbooks);
+		const { result } = setupHook(useActionAddSharedAddressBooks);
 		const action = result.current;
 		expect(action.canExecute()).toBeTruthy();
 	});
 
 	it('should return an execute field which opens a modal with a specific title', () => {
-		const { result } = setupHook(useActionAddSharedAddressbooks);
+		const { result } = setupHook(useActionAddSharedAddressBooks);
 		const action = result.current;
 		act(() => {
 			action.execute();

@@ -13,13 +13,13 @@ import { SharesModal } from '../components/modals/shares/shares-modal';
 import { ACTION_IDS } from '../constants';
 import { StoreProvider } from '../legacy/store/redux';
 
-export type AddSharedAddressbooksAction = UIAction<never, never>;
+export type AddSharedAddressBooksAction = UIAction<never, never>;
 
-export const useActionAddSharedAddressbooks = (): AddSharedAddressbooksAction => {
+export const useActionAddSharedAddressBooks = (): AddSharedAddressBooksAction => {
 	const [t] = useTranslation();
 	const createModal = useModal();
 
-	const execute = useCallback<AddSharedAddressbooksAction['execute']>(() => {
+	const execute = useCallback<AddSharedAddressBooksAction['execute']>(() => {
 		const closeModal = createModal(
 			{
 				children: (
@@ -32,12 +32,12 @@ export const useActionAddSharedAddressbooks = (): AddSharedAddressbooksAction =>
 		);
 	}, [createModal]);
 
-	const canExecute = useCallback<AddSharedAddressbooksAction['canExecute']>(() => true, []);
+	const canExecute = useCallback<AddSharedAddressBooksAction['canExecute']>(() => true, []);
 
 	return useMemo(
 		() => ({
-			id: ACTION_IDS.addSharedAddressbooks,
-			label: t('action.add_shared_addressbooks', 'Add shares'),
+			id: ACTION_IDS.addSharedAddressBooks,
+			label: t('action.add_shared_address_books', 'Add shares'),
 			icon: '',
 			execute,
 			canExecute

@@ -27,7 +27,7 @@ import { useTranslation } from 'react-i18next';
 import { Route, Switch, useParams, useRouteMatch } from 'react-router-dom';
 
 import AccordionCustomComponent from './accordion-custom-component';
-import { useActionAddSharedAddressbooks } from '../../../actions/add-shared-addressbooks';
+import { useActionAddSharedAddressBooks } from '../../../actions/add-shared-address-books';
 import { SidebarAccordionMui } from '../../../carbonio-ui-commons/components/sidebar/sidebar-accordion-mui';
 import { getFolderIdParts } from '../../../carbonio-ui-commons/helpers/folders';
 import { useRootsArray } from '../../../carbonio-ui-commons/store/zustand/folder';
@@ -43,7 +43,7 @@ import { getFolderTranslatedName } from '../../utils/helpers';
  */
 const AddSharesButton = (): React.JSX.Element => {
 	const [t] = useTranslation();
-	const addSharesAction = useActionAddSharedAddressbooks();
+	const addSharesAction = useActionAddSharedAddressBooks();
 
 	const isEnabled = useMemo(() => addSharesAction.canExecute(), [addSharesAction]);
 
