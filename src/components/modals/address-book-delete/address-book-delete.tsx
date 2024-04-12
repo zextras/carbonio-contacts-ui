@@ -3,7 +3,10 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
+
+import { ModalBody, ModalFooter, ModalHeader, Text } from '@zextras/carbonio-design-system';
+import { useTranslation } from 'react-i18next';
 
 import { Folder } from '../../../carbonio-ui-commons/types/folder';
 
@@ -15,7 +18,29 @@ export type AddressBookDeleteModalProps = {
 export const AddressBookDeleteModal = ({
 	addressBook,
 	onClose
-}: AddressBookDeleteModalProps): React.JSX.Element => (
+}: AddressBookDeleteModalProps): React.JSX.Element => {
+	const [t] = useTranslation();
+	const modalTitle = useMemo(
+		() =>
+			t('folder.modal.delete.title', {
+				addressBookName: addressBook.name,
+				defaultValue: 'Delete {{addressBookName}}'
+			}),
+		[addressBook.name, t]
+	);
+
+	const confirmButtonLabel = useMemo(() => t('label.delete', 'Delete'), [t]);
+
+	const confirmationText = useMemo(
+		() =>
+			t(
+				'folder.modal.delete.body.message2',
+				'Do you want to delete permanently the selected address book? If you delete it, the related content will be permanently removed and the address book will no longer be recoverable.'
+			),
+		[]
+	);
+
+	const onConfirm = useCallback(() => {}, []);
 	// const trashFolder = useAppSelector((state) => selectFolder(state, FOLDERS.TRASH));
 	//
 	// const onConfirm = useCallback(() => {
@@ -150,5 +175,13 @@ export const AddressBookDeleteModal = ({
 	// 	<></>
 	// );
 
-	<></>
-);
+	return (
+		<>
+			<ModalHeader title={modalTitle} onClose={onClose} />
+			<ModalBody>
+				<Text overflow="break-word">{confirmationText}</Text>
+			</ModalBody>
+			<ModalFooter onConfirm={onConfirm} confirmLabel={confirmButtonLabel} confirmColor={'error'} />
+		</>
+	);
+};

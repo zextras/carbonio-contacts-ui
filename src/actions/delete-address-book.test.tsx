@@ -9,6 +9,7 @@ import { act } from 'react-dom/test-utils';
 
 import { useActionDeleteAddressBook } from './delete-address-book';
 import { UIAction } from './types';
+import { FOLDER_VIEW } from '../carbonio-ui-commons/constants';
 import { FOLDERS } from '../carbonio-ui-commons/test/mocks/carbonio-shell-ui-constants';
 import { generateFolder } from '../carbonio-ui-commons/test/mocks/folders/folders-generator';
 import { screen, setupHook } from '../carbonio-ui-commons/test/test-setup';
@@ -30,7 +31,8 @@ describe('useActionDeleteAddressBooks', () => {
 		it('should return true if the address book is directly inside the Trash folder', () => {
 			const addressBook = generateFolder({
 				l: FOLDERS.TRASH,
-				absFolderPath: '/Trash/trashed stuff'
+				absFolderPath: '/Trash/trashed stuff',
+				view: FOLDER_VIEW.contact
 			});
 			const { result } = setupHook(useActionDeleteAddressBook);
 			const action = result.current;
@@ -40,7 +42,8 @@ describe('useActionDeleteAddressBooks', () => {
 		it('should return true if the address book is nested inside the Trash folder', () => {
 			const addressBook = generateFolder({
 				l: '10203',
-				absFolderPath: '/Trash/parent/nested trashed stuff'
+				absFolderPath: '/Trash/parent/nested trashed stuff',
+				view: FOLDER_VIEW.contact
 			});
 			const { result } = setupHook(useActionDeleteAddressBook);
 			const action = result.current;
@@ -51,31 +54,32 @@ describe('useActionDeleteAddressBooks', () => {
 			const name = faker.word.noun();
 			const addressBook = generateFolder({
 				name,
-				absFolderPath: `/parent/${name}`
+				absFolderPath: `/parent/${name}`,
+				view: FOLDER_VIEW.contact
 			});
 			const { result } = setupHook(useActionDeleteAddressBook);
 			const action = result.current;
 			expect(action.canExecute(addressBook)).toBeFalsy();
 		});
 
-		it.todo('should return false if the address book is a system one', () => {
-			const { result } = setupHook(useActionDeleteAddressBook);
-			const action = result.current;
-			expect(action.canExecute()).toBeFalsy();
-		});
+		it.todo('should return false if the address book is a system one');
 	});
 
 	it('should return an execute field which opens a modal with a specific title', () => {
+		const addressBook = generateFolder({
+			view: FOLDER_VIEW.contact
+		});
+
 		const { result } = setupHook(useActionDeleteAddressBook);
 		const action = result.current;
 		act(() => {
-			action.execute();
+			action.execute(addressBook);
 		});
 
 		act(() => {
 			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 
-		expect(screen.getByText('Delete')).toBeVisible();
+		expect(screen.getByText(`Delete ${addressBook.name}`)).toBeVisible();
 	});
 });
