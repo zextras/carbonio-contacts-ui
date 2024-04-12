@@ -8,7 +8,7 @@ import React, { useEffect, useState } from 'react';
 import {
 	Accordion,
 	AccordionItem,
-	ButtonOld as Button,
+	Button,
 	Container,
 	Icon,
 	Row,
@@ -58,7 +58,6 @@ const SharesItem = ({ item }) => (
 			type="outlined"
 			label={item.label}
 			color="primary"
-			size="fill"
 			onClick={(ev) => {
 				ev.stopPropagation();
 				client.getShareInfo().then((shares) => {

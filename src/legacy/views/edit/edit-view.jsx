@@ -6,7 +6,7 @@
 import React, { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
 
 import {
-	ButtonOld as Button,
+	Button,
 	Container,
 	Input,
 	Padding,

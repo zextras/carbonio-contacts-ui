@@ -10,7 +10,7 @@ import {
 	IconButton,
 	Row,
 	Responsive,
-	ButtonOld as Button,
+	Button,
 	Text,
 	Collapse,
 	Dropdown,
