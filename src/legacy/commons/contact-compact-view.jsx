@@ -7,7 +7,7 @@ import React, { useMemo } from 'react';
 
 import {
 	Avatar,
-	ButtonOld as Button,
+	Button,
 	Drag,
 	IconButton,
 	Responsive,

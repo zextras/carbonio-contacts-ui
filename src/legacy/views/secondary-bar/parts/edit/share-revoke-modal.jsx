@@ -3,17 +3,19 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+import React, { useCallback, useMemo, useState } from 'react';
+
 import { Checkbox, Container, Input, Row, Text } from '@zextras/carbonio-design-system';
 import { useUserAccounts } from '@zextras/carbonio-shell-ui';
-import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { GranteeInfo } from './share-folder-properties';
+import { useAppDispatch } from '../../../../hooks/redux';
 import { folderAction } from '../../../../store/actions/folder-action';
 import { sendShareNotification } from '../../../../store/actions/send-share-notification';
 import ModalFooter from '../../commons/modal-footer';
 import { ModalHeader } from '../../commons/modal-header';
 import { ShareFolderRoleOptions } from '../../commons/utils';
-import { GranteeInfo } from './share-folder-properties';
-import { useAppDispatch } from '../../../../hooks/redux';
 
 const ShareRevokeModal = ({ folder, onClose, grant, createSnackbar, goBack }) => {
 	const [t] = useTranslation();
@@ -33,7 +35,7 @@ const ShareRevokeModal = ({ folder, onClose, grant, createSnackbar, goBack }) =>
 						folder,
 						accounts
 					})
-			  ).then(() => {
+				).then(() => {
 					dispatch(folderAction({ folder, zid: grant.zid, op: '!grant' })).then((res) => {
 						if (res.type.includes('fulfilled')) {
 							createSnackbar({
@@ -47,7 +49,7 @@ const ShareRevokeModal = ({ folder, onClose, grant, createSnackbar, goBack }) =>
 						}
 						goBack();
 					});
-			  })
+				})
 			: dispatch(folderAction({ folder, zid: grant.zid, op: '!grant' })).then((res) => {
 					if (res.type.includes('fulfilled')) {
 						createSnackbar({
@@ -60,7 +62,7 @@ const ShareRevokeModal = ({ folder, onClose, grant, createSnackbar, goBack }) =>
 						});
 					}
 					goBack();
-			  });
+				});
 	}, [
 		accounts,
 		dispatch,

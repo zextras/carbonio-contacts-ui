@@ -4,8 +4,9 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React, { useMemo } from 'react';
-import { AppLink, ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-shell-ui';
+
 import { IconButton, Padding, Row, Tooltip } from '@zextras/carbonio-design-system';
+import { AppLink, ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-shell-ui';
 import { noop } from 'lodash';
 
 const folderIconName = {

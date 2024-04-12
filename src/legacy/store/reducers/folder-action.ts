@@ -5,6 +5,7 @@
  */
 import { FOLDERS } from '@zextras/carbonio-shell-ui';
 import { cloneDeep, filter, find, reject, split } from 'lodash';
+
 import { FoldersSlice } from '../../types/store';
 import { applyFoldersChangesToStore, removeFoldersFromStore } from '../../utils/helpers';
 

@@ -3,11 +3,13 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { testUtils, replaceHistory } from '@zextras/carbonio-shell-ui';
 import React from 'react';
+
+import { testUtils, replaceHistory } from '@zextras/carbonio-shell-ui';
+
 // import { screen } from '@testing-library/react';
-import reducers from '../../store/reducers/reducers';
 import ContactPreviewPanel from './contact-preview-panel';
+import reducers from '../../store/reducers/reducers';
 
 describe.skip('Preview Panel', () => {
 	test('Render preview', async () => {

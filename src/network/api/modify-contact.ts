@@ -79,7 +79,7 @@ export const modifyContactGroup = ({
 				{ n: 'fullName', _content: name },
 				{ n: 'fileAs', _content: `8:${name}` },
 				{ n: 'nickname', _content: name }
-		  ]
+			]
 		: undefined;
 	return modifyContact({ id, addedMembers, removedMembers, attributes }).then(
 		(res: ModifyContactResponse) => ({

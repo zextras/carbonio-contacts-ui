@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { forEach, findIndex } from 'lodash';
+
 import { FoldersSlice } from '../../types/store';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types

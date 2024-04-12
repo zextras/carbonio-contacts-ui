@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { SoapResponse } from '@zextras/carbonio-shell-ui';
-import { ResponseResolver, rest, RestContext, RestRequest } from 'msw';
+import { http, HttpResponse, HttpResponseResolver } from 'msw';
 
 import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
 import { NAMESPACES } from '../../constants/api';
@@ -15,9 +15,9 @@ import type {
 } from '../../network/api/get-account-distribution-lists';
 import { buildSoapError, buildSoapResponse } from '../utils';
 
-type GetAccountDistributionListsHandler = ResponseResolver<
-	RestRequest<{ Body: { GetAccountDistributionListsRequest: GetAccountDistributionListsRequest } }>,
-	RestContext,
+type GetAccountDistributionListsHandler = HttpResponseResolver<
+	never,
+	{ Body: { GetAccountDistributionListsRequest: GetAccountDistributionListsRequest } },
 	SoapResponse<GetAccountDistributionListsResponse>
 >;
 
@@ -31,13 +31,11 @@ export const registerGetAccountDistributionListsHandler = (
 	const handler = jest.fn<
 		ReturnType<GetAccountDistributionListsHandler>,
 		Parameters<GetAccountDistributionListsHandler>
-	>(async (req, res, ctx) => {
+	>(async ({ request }) => {
 		if (error) {
-			return res(ctx.json(buildSoapError(error)));
+			return HttpResponse.json(buildSoapError(error));
 		}
-		const reqBody = await req.json<{
-			Body: { GetAccountDistributionListsRequest: GetAccountDistributionListsRequest };
-		}>();
+		const reqBody = await request.clone().json();
 		const { ownerOf, memberOf, attrs } = reqBody.Body.GetAccountDistributionListsRequest;
 
 		const dlArray = items.reduce<NonNullable<GetAccountDistributionListsResponse['dl']>>(
@@ -58,22 +56,20 @@ export const registerGetAccountDistributionListsHandler = (
 			},
 			[]
 		);
-		return res(
-			ctx.json(
-				buildSoapResponse<GetAccountDistributionListsResponse>({
-					GetAccountDistributionListsResponse: {
-						dl: dlArray.length > 0 ? dlArray : undefined,
-						_jsns: NAMESPACES.account
-					}
-				})
-			)
+		return HttpResponse.json(
+			buildSoapResponse<GetAccountDistributionListsResponse>({
+				GetAccountDistributionListsResponse: {
+					dl: dlArray.length > 0 ? dlArray : undefined,
+					_jsns: NAMESPACES.account
+				}
+			})
 		);
 	});
 
 	getSetupServer().use(
-		rest.post<
-			{ Body: { GetAccountDistributionListsRequest: GetAccountDistributionListsRequest } },
+		http.post<
 			never,
+			{ Body: { GetAccountDistributionListsRequest: GetAccountDistributionListsRequest } },
 			SoapResponse<GetAccountDistributionListsResponse>
 		>('/service/soap/GetAccountDistributionListsRequest', handler)
 	);

@@ -65,7 +65,8 @@
                 "folder": "Opróżnij książkę adresową"
             },
             "move": "Przenieś",
-            "moved": "Książka adresowa została przeniesiona"
+            "moved": "Książka adresowa została przeniesiona",
+            "deleteContactGroup": "Usuń \"{{contactGroupTitle}}\""
         },
         "share_folder": "Udostępnij książkę adresową",
         "snackbar": {
@@ -75,7 +76,7 @@
             "folder_new": "Nowa książka adresowa została stworzona",
             "trash_empty": "Kosz został opróżniony"
         },
-        "type": "Folder kontakty"
+        "type": "Folder kontaktów"
     },
     "label": {
         "discard_changes": "ODRZUĆ ZMIANY",
@@ -152,7 +153,15 @@
         "select_all_addresses_0": "Wybierz adres",
         "select_all_addresses_1": "Wybierz wszystkie {{count}} adresy",
         "select_all_addresses_2": "Wybierz wszystkie {{count}} adresów",
-        "show_more": "pokaż więcej"
+        "show_more": "pokaż więcej",
+        "import_address_book": "Importuj plik csv",
+        "update": "Zaktualizuj",
+        "edit_contacts": "Edytuj kontakty",
+        "errors": {
+            "upload_failed_generic": "Przesyłanie pliku {{filename}} się nie powiodło"
+        },
+        "export_address_book": "Eksportuj plik csv",
+        "groups_app_name": "Grupy kontaktów i listy dystrybucyjne"
     },
     "displayer": {
         "search_description1": "Lub wybierz \"Zaawansowane filtry\", aby udoskonalić wyniki wyszukiwania.",
@@ -182,7 +191,22 @@
         "title9": "Kliknij ikonkę kosza, aby usunąć kontakt.",
         "description2": "Kliknij przycisk \"NOWY\" aby stworzyć nowy kontakt.",
         "description5": "Odkryj wszystkie sposoby, którymi możesz komunikować się z innymi użytkownikami.",
-        "search_description3": "Sprawdź poprawność pisowni oraz ustawienia filtrów lub spróbuj wpisać inne słowo kluczowe."
+        "search_description3": "Sprawdź poprawność pisowni oraz ustawienia filtrów lub spróbuj wpisać inne słowo kluczowe.",
+        "distribution_list": {
+            "empty_displayer": "Wybierz listę dystrybucyjną lub skontaktuj się z administratorem, aby ją mieć.",
+            "no_details_owner": "Nie ma dodatkowych szczegółów dla tej listy dystrybucyjnej. Aby je dodać, edytuj listę dystrybucyjną lub skontaktuj się z administratorem.",
+            "member_not_visible": "Nie masz uprawnień, aby zobaczyć członków tej listy dystrybucyjnej. Aby uzyskać więcej informacji, skontaktuj się z administratorem.",
+            "label": {
+                "description": "Opis",
+                "filter_hint": "Możesz filtrować tę listę szukając konkretnego członka.",
+                "manager_total": "Lista managerów {{total}}",
+                "member_total": "Lista członków {{total}}"
+            },
+            "no_details": "Nie ma dodatkowych szczegółów dla tej listy dystrybucyjnej. Aby uzyskać więcej informacji, skontaktuj się z administratorem.",
+            "placeholder": {
+                "filter_member": "Wyszukaj adres"
+            }
+        }
     },
     "action": {
         "search": "Wyszukaj",
@@ -191,7 +215,14 @@
         "goto_folder": "Idź do folderu",
         "reset_filters": "Zresetuj filtry",
         "send_msg": "Wyślij e-maila",
-        "edit_distribution_list": "Edytuj listę dystrybucyjną"
+        "edit_distribution_list": "Edytuj",
+        "contactGroup": {
+            "delete": "Usuń"
+        },
+        "copy": "Skopiuj",
+        "delete": "Usuń",
+        "edit": "Edytuj",
+        "mail": "Wyślij e-maila"
     },
     "message": {
         "snackbar": {
@@ -252,7 +283,16 @@
             "save": {
                 "success": "Zmiany listy dystrybucyjnej \"{{displayName}}\" zostały zapisane"
             }
-        }
+        },
+        "delete_contact_group": {
+            "confirm": {
+                "success": "Grupa kontaktów została usunięta"
+            }
+        },
+        "import_contacts_success_0": "{{number}} kontakt został zaimportowany i dodany do wybranej książki adresowej",
+        "import_contacts_success_1": "{{number}} kontakty zostały zaimportowane i dodane do wybranej książki adresowej",
+        "import_contacts_success_2": "{{number}} kontaktów zostało zaimportowanych i dodanych do wybranej książki adresowej",
+        "email_copied_to_clipboard": "E-mail został skopiowany do schowka."
     },
     "tooltip": {
         "revoke": "Odbierz dostęp",
@@ -305,7 +345,18 @@
         },
         "edit_distribution_list": {
             "title": "Edytuj \"{{displayName}}\""
-        }
+        },
+        "delete": {
+            "contactGroup": {
+                "body1": "Czy na pewno chcesz usunąć wybraną grupę kontaktów?",
+                "body2": "Jeśli ją usuniesz, zostanie ona usunięta na zawsze.",
+                "header": "Usuń {{contactGroupName}}"
+            },
+            "button": {
+                "confirm": "usuń"
+            }
+        },
+        "cancel": "anuluj"
     },
     "name": {
         "first_name": "Imię",
@@ -392,6 +443,12 @@
                 "contact_group_created": "Grupa kontaktów została stworzona"
             },
             "title": "Nowa grupa"
+        },
+        "editContactGroup": {
+            "snackbar": {
+                "contact_group_edited": "Grupa została zaktualizowana",
+                "error": "Coś poszło nie tak przy zapisywaniu zmian, spróbuj ponownie"
+            }
         }
     },
     "edit_dl_component": {
@@ -412,6 +469,17 @@
         "placeholder": {
             "add_members": "Wprowadź adres i kliknij na \"+\", aby dodać do listy dystrybucyjnej",
             "filter_member": "Wyszukaj adres"
+        },
+        "input": {
+            "name": {
+                "label": "Nazwa listy dystrybucyjnej",
+                "error": {
+                    "max_length": "Max. dozwolona długość to 256 znaków"
+                }
+            },
+            "description": {
+                "label": "Opis"
+            }
         }
     },
     "members_list_item_component": {
@@ -422,13 +490,55 @@
     "secondaryBar": {
         "contextualMenu": {
             "new_contact_group_creation_action": "Nowa grupa kontaktów"
-        }
+        },
+        "distributionLists": "Listy dystrybucyjne",
+        "distributionListsManager": "Manager",
+        "distributionListsMember": "Członek",
+        "myContactGroups": "Moje grupy kontaktów"
     },
     "expand_distribution_list": "Rozwiń listę adresów",
     "contacts": {
         "importAction": {
             "modalTitle": "Importuj kontakty",
             "modalButton": "IMPORTUJ"
+        }
+    },
+    "import_contacts": {
+        "modal": {
+            "confirm": "Importuj",
+            "description": "Kontakty w wybranym pliku {{fileName}} zostaną zaimportowane do folderu {{folderName}} wybranej książki adresowej.",
+            "title": "Importuj kontakty"
+        },
+        "snackbar": {
+            "import_contacts_success_0": "{{count}} kontakt został zaimportowany i dodany do wybranej książki adresowej",
+            "import_contacts_success_1": "{{count}} kontakty zostały zaimportowane i dodane do wybranej książki adresowej",
+            "import_contacts_success_2": "{{count}} kontaktów zostało zaimportowanych i dodanych do wybranej książki adresowej"
+        }
+    },
+    "contactGroupDisplayer": {
+        "label": {
+            "members_total": "Adresy: {{count}}"
+        }
+    },
+    "contactGroupList": {
+        "addressCount_0": "{{count}} adres",
+        "addressCount_1": "{{count}} adresy",
+        "addressCount_2": "{{count}} adresów",
+        "emptyList": "Nie stworzono jeszcze żadnych grup kontaktów"
+    },
+    "distribution_list": {
+        "label": {
+            "empty_message": "Nie ma jeszcze żadnych list dystrybucyjnych."
+        },
+        "tabs": {
+            "details": "Szczegóły",
+            "managers": "Lista managerów",
+            "members": "Lista członków"
+        }
+    },
+    "emptyDisplayer": {
+        "contactGroup": {
+            "hint": "Kliknij na przycisk \"NOWY\", aby stworzyć nową grupę kontaktów."
         }
     }
 }

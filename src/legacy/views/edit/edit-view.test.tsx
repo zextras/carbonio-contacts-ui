@@ -95,7 +95,7 @@ describe('Edit view', () => {
 		await user.type(inputName, newName);
 		await user.click(saveButton);
 		await screen.findByText(/new contact created/i);
-		expect(handler.mock.lastCall?.[0].body).toEqual(
+		expect(await handler.mock.lastCall?.[0].request.json()).toEqual(
 			expect.objectContaining({
 				Body: {
 					CreateContactRequest: expect.objectContaining<Partial<CreateContactRequest>>({
@@ -118,7 +118,7 @@ describe('Edit view', () => {
 		await user.click(saveButton);
 		await screen.findByText(/new contact created/i);
 		// by default the selected folder is 7
-		expect(handler.mock.lastCall?.[0].body).toEqual(
+		expect(await handler.mock.lastCall?.[0].request.json()).toEqual(
 			expect.objectContaining({
 				Body: {
 					CreateContactRequest: expect.objectContaining<Partial<CreateContactRequest>>({
@@ -127,5 +127,26 @@ describe('Edit view', () => {
 				}
 			})
 		);
+	});
+
+	it('should save button enabled once after change anything in editing a contact', async () => {
+		const store = generateStore();
+		const folderId = faker.string.uuid();
+		const contactId = faker.string.uuid();
+		const { user } = setupTest(
+			<Route path={`/folder/:folderId/edit/:editId`}>
+				<EditView />
+			</Route>,
+			{ store, initialEntries: [`/folder/${folderId}/edit/${contactId}`] }
+		);
+		const saveButton = screen.getByRole('button', { name: /save/i });
+		expect(saveButton).toBeVisible();
+		expect(saveButton).toBeDisabled();
+
+		const newName = faker.person.firstName();
+		const inputName = screen.getByRole('textbox', { name: /first name/i });
+		expect(inputName).toBeVisible();
+		await user.type(inputName, newName);
+		expect(saveButton).toBeEnabled();
 	});
 });

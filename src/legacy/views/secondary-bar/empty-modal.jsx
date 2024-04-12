@@ -4,12 +4,14 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React, { useCallback } from 'react';
+
 import { Text, Container, CustomModal } from '@zextras/carbonio-design-system';
 import { FOLDERS } from '@zextras/carbonio-shell-ui';
-import ModalFooter from '../contact-actions/commons/modal-footer';
-import { folderAction } from '../../store/actions/folder-action';
+
 import { ModalHeader } from './commons/modal-header';
+import { folderAction } from '../../store/actions/folder-action';
 import { searchContacts } from '../../store/actions/search-contacts';
+import ModalFooter from '../contact-actions/commons/modal-footer';
 
 export const EmptyModal = ({ currentFolder, openModal, setModal, dispatch, t, createSnackbar }) => {
 	const onConfirm = useCallback(() => {

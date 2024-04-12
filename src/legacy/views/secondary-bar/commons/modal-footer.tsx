@@ -7,13 +7,9 @@
 /* eslint-disable import/extensions */
 
 import React, { FC, ReactElement } from 'react';
-import {
-	Container,
-	ButtonOld as Button,
-	Padding,
-	Divider,
-	Tooltip
-} from '@zextras/carbonio-design-system';
+
+import { Container, Button, Padding, Divider, Tooltip } from '@zextras/carbonio-design-system';
+
 import { ModalFooterProps } from '../../../types/commons';
 
 const ModalFooter: FC<ModalFooterProps> = ({
@@ -31,7 +27,7 @@ const ModalFooter: FC<ModalFooterProps> = ({
 	secondarybackground,
 	color = 'primary',
 	secondaryColor = 'secondary',
-	size = 'fit',
+	size = 'small',
 	showDivider = true,
 	tooltip,
 	secondaryTooltip

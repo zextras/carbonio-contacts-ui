@@ -25,7 +25,7 @@ export function mailToContact(contact, t) {
 				...mailTo,
 				label: t('action.send_msg', 'Send e-mail'),
 				disabled: isEmpty(contact?.email)
-		  }
+			}
 		: undefined;
 }
 export function deletePermanently({ ids, t, dispatch, createSnackbar, createModal, deselectAll }) {

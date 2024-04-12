@@ -4,14 +4,16 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React, { useCallback, useMemo, useState } from 'react';
+
 import { Input, Text, Container, CustomModal, Padding } from '@zextras/carbonio-design-system';
-import { filter, startsWith, reduce, isEmpty } from 'lodash';
 import { replaceHistory, FOLDERS } from '@zextras/carbonio-shell-ui';
+import { filter, startsWith, reduce, isEmpty } from 'lodash';
+
 import FolderItem from './commons/folder-item';
-import { folderAction } from '../../store/actions/folder-action';
-import ModalFooter from '../contact-actions/commons/modal-footer';
 import { ModalHeader } from './commons/modal-header';
+import { folderAction } from '../../store/actions/folder-action';
 import { getFolderTranslatedName } from '../../utils/helpers';
+import ModalFooter from '../contact-actions/commons/modal-footer';
 
 export const MoveModal = ({
 	folders,

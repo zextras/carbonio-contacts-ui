@@ -4,8 +4,9 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { combineReducers } from '@reduxjs/toolkit';
-import { folderSliceReducer } from '../slices/folders-slice';
+
 import { contactSliceReducer } from '../slices/contacts-slice';
+import { folderSliceReducer } from '../slices/folders-slice';
 
 export const storeReducers = combineReducers({
 	folders: folderSliceReducer,

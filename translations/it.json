@@ -116,7 +116,15 @@
         "select_all_addresses_2": "Seleziona tutti i {{count}} indirizzi",
         "show_more": "mostra di più",
         "discard": "eliminare",
-        "newContactGroup": "Nuovo gruppo contatti"
+        "newContactGroup": "Nuovo gruppo contatti",
+        "errors": {
+            "upload_failed_generic": "Caricamento non riuscito per il file \"{{filename}}\""
+        },
+        "edit_contacts": "Modifica dei contatti",
+        "export_address_book": "Esporta il file CSV",
+        "groups_app_name": "Gruppi di contatti e liste di distribuzione",
+        "import_address_book": "Importa file CSV",
+        "update": "Aggiorna"
     },
     "job": {
         "title": "Ruolo",
@@ -133,7 +141,8 @@
             "delete_permanently": "Elimina rubrica definitivamente",
             "delete": "Elimina rubrica",
             "move": "Sposta",
-            "moved": "Rubrica spostata correttamente"
+            "moved": "Rubrica spostata correttamente",
+            "deleteContactGroup": "Elimina \"{{contactGroupTitle}}\""
         },
         "modal": {
             "edit": {
@@ -208,7 +217,14 @@
         "reset_filters": "Ripristina Filtri",
         "search": "Cerca",
         "share_folder": "Condividi cartella",
-        "edit_distribution_list": "Modifica distribution list"
+        "edit_distribution_list": "Modifica",
+        "contactGroup": {
+            "delete": "Elimina"
+        },
+        "copy": "Copia",
+        "delete": "Elimina",
+        "edit": "Modifica",
+        "mail": "Invia e-mail"
     },
     "settings": {
         "contacts": {
@@ -291,7 +307,16 @@
             "save": {
                 "success": "Modifiche alla distribution list \"{{displayName}}\" salvate correttamente"
             }
-        }
+        },
+        "delete_contact_group": {
+            "confirm": {
+                "success": "Gruppo di contatti eliminato con successo"
+            }
+        },
+        "email_copied_to_clipboard": "Email copiata negli appunti.",
+        "import_contacts_success_0": "{{number}} contatto importato e aggiunti alla rubrica selezionata",
+        "import_contacts_success_1": "{{number}} contatti importati e aggiunti alla rubrica selezionata",
+        "import_contacts_success_2": "{{number}} contatti importati e aggiunti alla rubrica selezionata"
     },
     "modal": {
         "address_book_name": "Nome rubrica",
@@ -301,7 +326,18 @@
         },
         "edit_distribution_list": {
             "title": "Modifica \"{{displayName}}\""
-        }
+        },
+        "delete": {
+            "contactGroup": {
+                "body1": "Sei sicuro di voler eliminare il gruppo di contatti selezionato?",
+                "header": "Elimina \"{{contactGroupName}}\"",
+                "body2": "Se lo elimini, andrà perso per sempre."
+            },
+            "button": {
+                "confirm": "elimina"
+            }
+        },
+        "cancel": "annulla"
     },
     "title": {
         "advanced_filters": "Filtri Avanzati"
@@ -340,7 +376,22 @@
         "search_description1": "O seleziona \"Filtri Avanzati\" per rifinire la tua ricerca.",
         "search_title2": "Nessun risultato per la tua ricerca",
         "search_title3": "Nessun risultato per la tua ricerca.",
-        "search_title4": "Seleziona uno o più risultati per completare delle azioni o visualizzare i dettagli."
+        "search_title4": "Seleziona uno o più risultati per completare delle azioni o visualizzare i dettagli.",
+        "distribution_list": {
+            "no_details_owner": "Non sono disponibili ulteriori dettagli per questa lista di distribuzione. Modificare la lista di distribuzione per aggiungerli o contattare l'amministratore.",
+            "empty_displayer": "Selezionare una lista di distribuzione o contattare l'Amministratore per averne una.",
+            "member_not_visible": "Non si dispone delle autorizzazioni per visualizzare i membri di questa lista di distribuzione. Per maggiori informazioni, contattare l'amministratore.",
+            "label": {
+                "description": "Descrizione",
+                "filter_hint": "È possibile filtrare questo elenco cercando il nome di un membro specifico.",
+                "manager_total": "Elenco dei gestori {{total}}",
+                "member_total": "Elenco membri {{total}}"
+            },
+            "no_details": "Non sono disponibili ulteriori dettagli per questa lista di distribuzione. Per maggiori informazioni, contattare l'amministratore.",
+            "placeholder": {
+                "filter_member": "Filtra un indirizzo"
+            }
+        }
     },
     "contact_restored": "Contatto ripristinato",
     "folders": {
@@ -356,7 +407,11 @@
     "secondaryBar": {
         "contextualMenu": {
             "new_contact_group_creation_action": "Nuovo gruppo di contatti"
-        }
+        },
+        "distributionLists": "Liste di distribuzione",
+        "distributionListsManager": "Gestore",
+        "distributionListsMember": "Partecipante",
+        "myContactGroups": "I miei gruppi di contatti"
     },
     "board": {
         "label": {
@@ -395,6 +450,12 @@
                 "contact_group_created": "Gruppo di contatti creato correttamente"
             },
             "title": "Nuovo gruppo"
+        },
+        "editContactGroup": {
+            "snackbar": {
+                "contact_group_edited": "Il Gruppo è stato aggiornato con successo",
+                "error": "Qualcosa è andato storto salvando le modifiche, riprova"
+            }
         }
     },
     "edit_dl_component": {
@@ -415,6 +476,17 @@
         "placeholder": {
             "filter_member": "Filtra un indirizzo",
             "add_members": "Digita un indirizzo, clicca '+' per aggiungerlo alla distribution list"
+        },
+        "input": {
+            "description": {
+                "label": "Descrizione"
+            },
+            "name": {
+                "error": {
+                    "max_length": "Il numero massimo di caratteri consentiti è 256"
+                },
+                "label": "Nome della lista di distribuzione"
+            }
         }
     },
     "members_list_item_component": {
@@ -427,5 +499,43 @@
             "modalTitle": "Importa contatti",
             "modalButton": "IMPORTA"
         }
+    },
+    "distribution_list": {
+        "label": {
+            "empty_message": "Non ci sono ancora liste di distribuzione."
+        },
+        "tabs": {
+            "details": "Dettagli",
+            "managers": "Lista dei gestori",
+            "members": "Elenco dei membri"
+        }
+    },
+    "emptyDisplayer": {
+        "contactGroup": {
+            "hint": "Clicca sul pulsante \"NUOVO\" per creare un nuovo gruppo di contatti."
+        }
+    },
+    "import_contacts": {
+        "modal": {
+            "description": "I contatti all'interno del file {{fileName}} scelto verranno importati all'interno della cartella \"{{folderName}}\" della rubrica selezionata.",
+            "confirm": "Importa",
+            "title": "Importa i contatti"
+        },
+        "snackbar": {
+            "import_contacts_success_0": "{{count}} contatto importato e aggiunto alla rubrica selezionata",
+            "import_contacts_success_1": "{{count}} contatti importati e aggiunti alla rubrica selezionata",
+            "import_contacts_success_2": "{{count}} contatti importati e aggiunti alla rubrica selezionata"
+        }
+    },
+    "contactGroupDisplayer": {
+        "label": {
+            "members_total": "Indirizzi: {{count}}"
+        }
+    },
+    "contactGroupList": {
+        "addressCount_0": "{{count}} indirizzo",
+        "addressCount_1": "{{count}} indirizzi",
+        "addressCount_2": "{{count}} indirizzi",
+        "emptyList": "Non è stato ancora creato alcun gruppo di contatti"
     }
 }

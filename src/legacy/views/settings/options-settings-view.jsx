@@ -4,7 +4,9 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React from 'react';
+
 import { Container, FormSubSection, Checkbox } from '@zextras/carbonio-design-system';
+
 import Heading from './components/settings-heading';
 
 export default function OptionsSettingsView({ t, settingsObj, updateSettings }) {

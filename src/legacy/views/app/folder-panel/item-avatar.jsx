@@ -3,8 +3,9 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { Avatar, Container, Tooltip } from '@zextras/carbonio-design-system';
 import React, { useCallback, useMemo } from 'react';
+
+import { Avatar, Container, Tooltip } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
@@ -32,7 +33,7 @@ export const ItemAvatar = ({ item, selected, selecting, toggle, isSearch = false
 				? t(
 						'label.search_activate_selection_mode',
 						'Selection mode isn’t available yet on search results'
-				  )
+					)
 				: t('label.activate_selection_mode', 'Activate selection mode'),
 		[t, isSearch]
 	);

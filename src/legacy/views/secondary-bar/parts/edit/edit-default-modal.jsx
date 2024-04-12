@@ -193,11 +193,11 @@ const EditDefaultModal = ({ currentFolder, accordions, setModal, dispatch, setAc
 									? {
 											label: defaultSelection.label,
 											value: defaultSelection.id
-									  }
+										}
 									: {
 											label: 'Root',
 											value: '1'
-									  }
+										}
 							}
 							disablePortal
 						/>
