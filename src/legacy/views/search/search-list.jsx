@@ -5,13 +5,7 @@
  */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import {
-	ButtonOld as Button,
-	Container,
-	List,
-	Padding,
-	Text
-} from '@zextras/carbonio-design-system';
+import { Button, Container, List, Padding, Text } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';

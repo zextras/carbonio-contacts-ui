@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.10.1](https://github.com/zextras/carbonio-contacts-ui/compare/v1.10.0...v1.10.1) (2024-04-12)
+
+
+### Bug Fixes
+
+* increase threshold to avoid to trigger onListBottom when scrollIntoView occurs ([94c3edf](https://github.com/zextras/carbonio-contacts-ui/commit/94c3edf5e544d27c536ddace9bb23a8ed1db9c1f)), closes [#209](https://github.com/zextras/carbonio-contacts-ui/issues/209)
+* missing contact information in contact details ([3b51127](https://github.com/zextras/carbonio-contacts-ui/commit/3b5112780025db3042f40784c0ed949b7e0ff7b2))
+* user is not able to empty some contact fields ([64b0459](https://github.com/zextras/carbonio-contacts-ui/commit/64b0459817514db2ade593b7a7c7745c225604d3))
+
 ## [1.10.0](https://github.com/zextras/carbonio-contacts-ui/compare/v1.9.0...v1.10.0) (2024-02-23)
 
 

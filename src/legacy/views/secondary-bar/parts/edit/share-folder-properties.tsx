@@ -6,7 +6,7 @@
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 import {
-	ButtonOld as Button,
+	Button,
 	Chip,
 	Container,
 	Padding,
@@ -113,7 +113,7 @@ const Actions = ({
 			maxWidth="fit"
 		>
 			<Tooltip label={t('label.edit_access', 'Edit access')} placement="top">
-				<Button type="outlined" label={t('label.edit')} onClick={onEdit} isSmall />
+				<Button type="outlined" label={t('label.edit')} onClick={onEdit} size={'small'} />
 			</Tooltip>
 			<Padding horizontal="extrasmall" />
 			<Tooltip label={t('tooltip.revoke', 'Revoke access')} placement="top">
@@ -122,7 +122,7 @@ const Actions = ({
 					label={t('label.revoke', 'Revoke')}
 					color="error"
 					onClick={onRevoke}
-					isSmall
+					size={'small'}
 				/>
 			</Tooltip>
 			<Padding horizontal="extrasmall" />
@@ -131,7 +131,12 @@ const Actions = ({
 				placement="top"
 				maxWidth="18.75rem"
 			>
-				<Button type="outlined" label={t('label.resend', 'Resend')} onClick={onResend} isSmall />
+				<Button
+					type="outlined"
+					label={t('label.resend', 'Resend')}
+					onClick={onResend}
+					size={'small'}
+				/>
 			</Tooltip>
 		</Container>
 	);
