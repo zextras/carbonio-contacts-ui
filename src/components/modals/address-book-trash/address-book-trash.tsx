@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Folder } from '../../../carbonio-ui-commons/types/folder';
 import { TIMEOUTS } from '../../../constants';
-import { client } from '../../../network/client';
+import { apiClient } from '../../../network/client';
 
 export type AddressBookTrashModalProps = {
 	addressBook: Folder;
@@ -55,7 +55,7 @@ export const AddressBookTrashModal = ({
 			return;
 		}
 
-		client
+		apiClient
 			.moveFolder(addressBook.id, addressBook.l)
 			.then(() => {
 				createSnackbar({
@@ -80,7 +80,7 @@ export const AddressBookTrashModal = ({
 	}, [addressBook.id, addressBook.parent, createSnackbar, t]);
 
 	const onConfirm = useCallback(() => {
-		client
+		apiClient
 			.trashFolder(addressBook.id)
 			.then(() => {
 				createSnackbar({

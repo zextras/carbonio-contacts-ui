@@ -16,7 +16,7 @@ import EditContactGroupBoard from './edit-contact-group-board';
 import { setupTest, screen } from '../../carbonio-ui-commons/test/test-setup';
 import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../constants';
 import { JEST_MOCKED_ERROR, PALETTE, TESTID_SELECTORS } from '../../constants/tests';
-import { client } from '../../network/client';
+import { apiClient } from '../../network/client';
 import { useContactGroupStore } from '../../store/contact-groups';
 import { buildContactGroup } from '../../tests/model-builder';
 import { registerModifyContactGroupHandler } from '../../tests/msw-handlers/modify-contact-group';
@@ -182,7 +182,7 @@ describe('Edit contact group board', () => {
 			registerModifyContactGroupHandler(
 				createCnItem(contactGroup.title, undefined, contactGroup.id)
 			);
-			const modifyContactGroupSpy = jest.spyOn(client, 'modifyContactGroup');
+			const modifyContactGroupSpy = jest.spyOn(apiClient, 'modifyContactGroup');
 			const newEmail1 = faker.internet.email();
 			const newEmail2 = faker.internet.email();
 			const { user } = setupTest(<EditContactGroupBoard />);
@@ -220,7 +220,7 @@ describe('Edit contact group board', () => {
 				createCnItem(contactGroup.title, undefined, contactGroup.id)
 			);
 			const newName = faker.string.alpha(10);
-			const modifyContactGroupSpy = jest.spyOn(client, 'modifyContactGroup');
+			const modifyContactGroupSpy = jest.spyOn(apiClient, 'modifyContactGroup');
 			const { user } = setupTest(<EditContactGroupBoard />);
 			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
 			await user.clear(nameInput);

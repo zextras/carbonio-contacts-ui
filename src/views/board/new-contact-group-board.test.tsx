@@ -18,7 +18,7 @@ import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
 import { setupTest, screen } from '../../carbonio-ui-commons/test/test-setup';
 import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../constants';
 import { PALETTE, TESTID_SELECTORS } from '../../constants/tests';
-import { client } from '../../network/client';
+import { apiClient } from '../../network/client';
 import { spyUseBoardHooks } from '../../tests/utils';
 
 function spyUseBoard(navigateTo?: jest.Mock): void {
@@ -263,7 +263,7 @@ describe('New contact group board', () => {
 				)
 			);
 
-			const createContactGroupSpy = jest.spyOn(client, 'createContactGroup');
+			const createContactGroupSpy = jest.spyOn(apiClient, 'createContactGroup');
 			const newEmail1 = faker.internet.email();
 			const newEmail2 = faker.internet.email();
 			const { user } = setupTest(<NewContactGroupBoard />);
@@ -305,7 +305,7 @@ describe('New contact group board', () => {
 				)
 			);
 			const newName = faker.string.alpha(10);
-			const createContactGroupSpy = jest.spyOn(client, 'createContactGroup');
+			const createContactGroupSpy = jest.spyOn(apiClient, 'createContactGroup');
 			const { user } = setupTest(<NewContactGroupBoard />);
 			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
 			await user.clear(nameInput);

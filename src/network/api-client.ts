@@ -9,6 +9,7 @@ import { createContactGroup } from './api/create-contact-group';
 import { createMountpoints } from './api/create-mountpoints';
 import { deleteFolder } from './api/delete-folder';
 import { distributionListAction } from './api/distribution-list-action';
+import { emptyFolder } from './api/empty-folder';
 import { findContactGroups } from './api/find-contact-groups';
 import { getAccountDistributionLists } from './api/get-account-distribution-lists';
 import { getDistributionList } from './api/get-distribution-list';
@@ -18,7 +19,7 @@ import { modifyContactGroup } from './api/modify-contact';
 import { moveFolder } from './api/move-folder';
 import { trashFolder } from './api/trash-folder';
 
-export const client = {
+export const apiClient = {
 	createContactGroup,
 	distributionListAction,
 	getDistributionList,
@@ -31,5 +32,6 @@ export const client = {
 	createMountpoints,
 	deleteFolder,
 	trashFolder,
-	moveFolder
+	moveFolder,
+	emptyFolder
 };

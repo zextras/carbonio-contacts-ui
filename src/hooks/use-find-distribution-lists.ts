@@ -10,7 +10,7 @@ import { filter } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { DistributionList } from '../model/distribution-list';
-import { client } from '../network/client';
+import { apiClient } from '../network/client';
 import { useDistributionListsStore } from '../store/distribution-lists';
 
 export const useFindDistributionLists = ({
@@ -34,7 +34,7 @@ export const useFindDistributionLists = ({
 		// to ask all distribution lists of the account to have both the isOwner and isMember info,
 		// perform the request only once, and then filter the results based on the requested filter.
 		if (shouldLoadData) {
-			client
+			apiClient
 				.getAccountDistributionLists({ ownerOf: true, memberOf: true })
 				.then((response) => {
 					setDistributionLists(response);

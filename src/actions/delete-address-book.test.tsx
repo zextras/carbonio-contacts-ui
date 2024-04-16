@@ -71,6 +71,21 @@ describe('useActionDeleteAddressBooks', () => {
 			const action = result.current;
 			expect(action.canExecute(addressBook)).toBeFalsy();
 		});
+
+		it('should return false if the address book is a linked one', () => {
+			const name = faker.word.noun();
+			const folderId = `${faker.string.uuid()}:${faker.number.int({ min: 101 })}`;
+			const addressBook = generateFolder({
+				name,
+				id: folderId,
+				absFolderPath: '/Trash/trashed stuff of someone else',
+				isLink: true,
+				view: FOLDER_VIEW.contact
+			});
+			const { result } = setupHook(useActionDeleteAddressBook);
+			const action = result.current;
+			expect(action.canExecute(addressBook)).toBeFalsy();
+		});
 	});
 
 	it('should return an execute field which opens a modal with a specific title', () => {

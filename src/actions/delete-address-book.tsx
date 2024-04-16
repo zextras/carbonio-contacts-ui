@@ -51,6 +51,10 @@ export const useActionDeleteAddressBook = (): DeleteAddressBookAction => {
 				return false;
 			}
 
+			if (addressBook.isLink) {
+				return false;
+			}
+
 			return isNestedInTrash(addressBook);
 		},
 		[]

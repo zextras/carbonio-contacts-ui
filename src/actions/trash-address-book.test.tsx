@@ -71,6 +71,20 @@ describe('useActionTrashAddressBooks', () => {
 			const action = result.current;
 			expect(action.canExecute(addressBook)).toBeFalsy();
 		});
+
+		it('should return false if the address book is a linked one', () => {
+			const name = faker.word.noun();
+			const folderId = `${faker.string.uuid()}:${faker.number.int({ min: 101 })}`;
+			const addressBook = generateFolder({
+				name,
+				id: folderId,
+				isLink: true,
+				view: FOLDER_VIEW.contact
+			});
+			const { result } = setupHook(useActionTrashAddressBook);
+			const action = result.current;
+			expect(action.canExecute(addressBook)).toBeFalsy();
+		});
 	});
 
 	it('should return an execute field which opens a modal with a specific title', () => {

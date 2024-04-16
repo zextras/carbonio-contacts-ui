@@ -12,17 +12,16 @@ import { UIAction } from './types';
 import { isSystemFolder } from '../carbonio-ui-commons/helpers/folders';
 import { isNestedInTrash } from '../carbonio-ui-commons/store/zustand/folder/utils';
 import { Folder } from '../carbonio-ui-commons/types/folder';
-import { AddressBookTrashModal } from '../components/modals/address-book-trash/address-book-trash';
 import { ACTION_IDS } from '../constants';
 import { StoreProvider } from '../legacy/store/redux';
 
-export type TrashAddressBookAction = UIAction<Folder, Folder>;
+export type EmptyAddressBookAction = UIAction<Folder, Folder>;
 
-export const useActionTrashAddressBook = (): TrashAddressBookAction => {
+export const useActionEmptyAddressBook = (): EmptyAddressBookAction => {
 	const [t] = useTranslation();
 	const createModal = useModal();
 
-	const execute = useCallback<TrashAddressBookAction['execute']>(
+	const execute = useCallback<EmptyAddressBookAction['execute']>(
 		(addressBook) => {
 			if (!addressBook) {
 				return;
@@ -31,7 +30,7 @@ export const useActionTrashAddressBook = (): TrashAddressBookAction => {
 				{
 					children: (
 						<StoreProvider>
-							<AddressBookTrashModal addressBook={addressBook} onClose={() => closeModal()} />
+							<AddressBookEmptyModal addressBook={addressBook} onClose={() => closeModal()} />
 						</StoreProvider>
 					)
 				},
@@ -41,7 +40,7 @@ export const useActionTrashAddressBook = (): TrashAddressBookAction => {
 		[createModal]
 	);
 
-	const canExecute = useCallback<TrashAddressBookAction['canExecute']>(
+	const canExecute = useCallback<EmptyAddressBookAction['canExecute']>(
 		(addressBook?: Folder): boolean => {
 			if (!addressBook) {
 				return false;
@@ -55,16 +54,16 @@ export const useActionTrashAddressBook = (): TrashAddressBookAction => {
 				return false;
 			}
 
-			return !isNestedInTrash(addressBook);
+			return isNestedInTrash(addressBook);
 		},
 		[]
 	);
 
 	return useMemo(
 		() => ({
-			id: ACTION_IDS.trashAddressBook,
-			label: t('folder.action.delete', 'Delete address book'),
-			icon: 'Trash2Outline',
+			id: ACTION_IDS.emptyAddressBook,
+			label: t('folder.action.empty', 'Empty address book'),
+			icon: 'EmptyFolderOutline',
 			execute,
 			canExecute
 		}),

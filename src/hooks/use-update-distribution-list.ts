@@ -10,7 +10,7 @@ import { difference } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { DistributionList } from '../model/distribution-list';
-import { client } from '../network/client';
+import { apiClient } from '../network/client';
 import { useDistributionListsStore } from '../store/distribution-lists';
 
 type DistributionListActionFn = (data: {
@@ -47,7 +47,7 @@ export const useUpdateDistributionList = (
 				initialDistributionList.members?.members ?? [],
 				members?.members ?? []
 			);
-			return client
+			return apiClient
 				.distributionListAction({ email, membersToAdd, membersToRemove, displayName, description })
 				.then(() => {
 					upsertDistributionList({

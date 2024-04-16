@@ -24,7 +24,7 @@ import { getFolderIdParts } from '../../../carbonio-ui-commons/helpers/folders';
 import { TIMEOUTS } from '../../../constants';
 import { getFolderTranslatedName } from '../../../legacy/utils/helpers';
 import { ShareInfo } from '../../../model/share-info';
-import { client } from '../../../network/client';
+import { apiClient } from '../../../network/client';
 
 export type SharesModalProps = {
 	onClose: () => void;
@@ -39,7 +39,7 @@ export const SharesModal: FC<SharesModalProps> = ({ onClose }) => {
 
 	// Fetch the list of the shares
 	useEffect(() => {
-		client
+		apiClient
 			.getShareInfo()
 			.then((shares) => {
 				setSharesInfo(shares ?? []);
@@ -90,7 +90,7 @@ export const SharesModal: FC<SharesModalProps> = ({ onClose }) => {
 			};
 		});
 
-		client
+		apiClient
 			.createMountpoints(labeledShares)
 			.then(() => {
 				createSnackbar({

@@ -10,7 +10,7 @@ import { some } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { DistributionList } from '../model/distribution-list';
-import { client } from '../network/client';
+import { apiClient } from '../network/client';
 import { StoredDistributionList, useDistributionListsStore } from '../store/distribution-lists';
 import { OptionalPropertyOf } from '../types/utils';
 
@@ -54,7 +54,7 @@ export const useGetDistributionList = (
 	useEffect(() => {
 		if (shouldLoadData && !skip) {
 			setLoading(true);
-			client
+			apiClient
 				.getDistributionList({ id, email })
 				.then((dl) => {
 					if (dl) {

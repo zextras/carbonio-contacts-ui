@@ -27,7 +27,7 @@ import { MoveModal } from './move-modal';
 import { NewModal } from './new-modal';
 import ShareFolderModal from './share-folder-modal';
 import { SharesModal } from './shares-modal';
-import { client } from '../../../network/client';
+import { apiClient } from '../../../network/client';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import useGetTagsAccordion from '../../hooks/use-get-tags-accordions';
 import { StoreProvider } from '../../store/redux';
@@ -61,7 +61,7 @@ const SharesItem = ({ item }) => (
 			size="fill"
 			onClick={(ev) => {
 				ev.stopPropagation();
-				client.getShareInfo().then((shares) => {
+				apiClient.getShareInfo().then((shares) => {
 					const closeModal = item.context.createModal(
 						{
 							children: (
