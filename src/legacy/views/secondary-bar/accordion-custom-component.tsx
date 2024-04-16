@@ -13,7 +13,6 @@ import {
 	Drag,
 	Drop,
 	Dropdown,
-	DropdownProps,
 	Icon,
 	Padding,
 	Row,
@@ -32,6 +31,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { useAddressBookContextualMenuItems } from './commons/use-address-book-contextual-menu-items';
 import { getFolderIdParts } from '../../../carbonio-ui-commons/helpers/folders';
 import { Folder } from '../../../carbonio-ui-commons/types/folder';
 import { useAppDispatch } from '../../hooks/redux';
@@ -274,8 +274,7 @@ const AccordionCustomComponent: FC<{ item: Folder }> = ({ item }) => {
 		[item, accountName, t, textProps]
 	);
 
-	// const dropdownItems = useFolderActions(item);
-	const dropdownItems: DropdownProps['items'] = [];
+	const dropdownItems = useAddressBookContextualMenuItems(item);
 
 	const statusIcon = useMemo(() => {
 		const RowWithIcon = (icon: string, color: string, tooltipText: string): React.JSX.Element => (

@@ -18,15 +18,15 @@ import { Folder } from '../../../carbonio-ui-commons/types/folder';
 import { TIMEOUTS } from '../../../constants';
 import { client } from '../../../network/client';
 
-export type AddressBookDeleteModalProps = {
+export type AddressBookTrashModalProps = {
 	addressBook: Folder;
 	onClose: () => void;
 };
 
-export const AddressBookDeleteModal = ({
+export const AddressBookTrashModal = ({
 	addressBook,
 	onClose
-}: AddressBookDeleteModalProps): React.JSX.Element => {
+}: AddressBookTrashModalProps): React.JSX.Element => {
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
 
@@ -44,26 +44,54 @@ export const AddressBookDeleteModal = ({
 	const confirmationText = useMemo(
 		() =>
 			t(
-				'folder.modal.delete.body.message2',
-				'Do you want to delete permanently the selected address book? If you delete it, the related content will be permanently removed and the address book will no longer be recoverable.'
+				'folder.modal.delete.body.message1',
+				'Do you want to delete the selected address book? If you delete it, the related content will be permanently removed and the address book will no longer be recoverable.'
 			),
 		[t]
 	);
 
+	const onRestore = useCallback(() => {
+		if (!addressBook.l) {
+			return;
+		}
+
+		client
+			.moveFolder(addressBook.id, addressBook.l)
+			.then(() => {
+				createSnackbar({
+					key: `restore-folder-success`,
+					replace: true,
+					type: 'success',
+					label: t('label.address_book_restored', 'Address book restored'),
+					autoHideTimeout: TIMEOUTS.defaultSnackbar,
+					hideButton: true
+				});
+			})
+			.catch(() => {
+				createSnackbar({
+					key: `restore-folder-error`,
+					replace: true,
+					type: 'error',
+					label: t('label.error_try_again', 'Something went wrong, please try again'),
+					autoHideTimeout: TIMEOUTS.defaultSnackbar,
+					hideButton: true
+				});
+			});
+	}, [addressBook.id, addressBook.parent, createSnackbar, t]);
+
 	const onConfirm = useCallback(() => {
 		client
-			.deleteFolder(addressBook.id)
+			.trashFolder(addressBook.id)
 			.then(() => {
 				createSnackbar({
 					key: `delete-folder-success`,
 					replace: true,
 					type: 'info',
-					label: t(
-						'folder.snackbar.address_book_permanently_deleted',
-						'Address book permanently deleted'
-					),
-					autoHideTimeout: TIMEOUTS.defaultSnackbar,
-					hideButton: true
+					label: t('folder.snackbar.address_book_moved_to_trash', 'Address book moved to trash'),
+					autoHideTimeout: TIMEOUTS.trashAddressBook,
+					hideButton: false,
+					actionLabel: t('label.undo', 'Undo'),
+					onActionClick: onRestore
 				});
 				onClose();
 			})

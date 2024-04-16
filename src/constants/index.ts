@@ -17,12 +17,12 @@ export const ACTION_IDS = {
 	editCG: 'cg-edit-action',
 	copyToClipboard: 'copy-to-clipboard-action',
 	addSharedAddressBooks: 'shares-add-action',
-	trashAddressBooks: 'trash-address-book-action',
-	deleteAddressBooks: 'delete-address-book-action',
-	newAddressBooks: 'new-address-book-action',
-	editAddressBooks: 'edit-address-book-action',
-	emptyAddressBooks: 'empty-address-book-action',
-	removeAddressBooksLink: 'remove-address-book-link-action'
+	trashAddressBook: 'trash-address-book-action',
+	deleteAddressBook: 'delete-address-book-action',
+	newAddressBook: 'new-address-book-action',
+	editAddressBook: 'edit-address-book-action',
+	emptyAddressBook: 'empty-address-book-action',
+	removeAddressBookLink: 'remove-address-book-link-action'
 } as const;
 
 export const NEW_CONTACT_GROUP_BOARD_ID = 'new-contact-group-board';
@@ -77,5 +77,6 @@ export const LOCAL_STORAGES = {
 };
 
 export const TIMEOUTS = {
-	snackbar: 3000
+	defaultSnackbar: 3000,
+	trashAddressBook: 5000
 };

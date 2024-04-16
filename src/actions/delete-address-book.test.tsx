@@ -62,7 +62,15 @@ describe('useActionDeleteAddressBooks', () => {
 			expect(action.canExecute(addressBook)).toBeFalsy();
 		});
 
-		it.todo('should return false if the address book is a system one');
+		it('should return false if the address book is a system one', () => {
+			const addressBook = generateFolder({
+				id: FOLDERS.CONTACTS,
+				view: FOLDER_VIEW.contact
+			});
+			const { result } = setupHook(useActionDeleteAddressBook);
+			const action = result.current;
+			expect(action.canExecute(addressBook)).toBeFalsy();
+		});
 	});
 
 	it('should return an execute field which opens a modal with a specific title', () => {

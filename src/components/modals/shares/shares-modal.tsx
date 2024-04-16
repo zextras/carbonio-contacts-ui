@@ -50,7 +50,7 @@ export const SharesModal: FC<SharesModalProps> = ({ onClose }) => {
 					replace: true,
 					type: 'error',
 					label: t('label.error_try_again', 'Something went wrong, please try again'),
-					autoHideTimeout: TIMEOUTS.snackbar,
+					autoHideTimeout: TIMEOUTS.defaultSnackbar,
 					hideButton: true
 				});
 			});
@@ -99,7 +99,7 @@ export const SharesModal: FC<SharesModalProps> = ({ onClose }) => {
 					type: 'info',
 					hideButton: true,
 					label: t('share.share_added_succesfully', 'Shared added successfully'),
-					autoHideTimeout: TIMEOUTS.snackbar
+					autoHideTimeout: TIMEOUTS.defaultSnackbar
 				});
 				onClose();
 			})
@@ -110,7 +110,7 @@ export const SharesModal: FC<SharesModalProps> = ({ onClose }) => {
 					type: 'error',
 					hideButton: true,
 					label: t('label.error_try_again', 'Something went wrong, please try again'),
-					autoHideTimeout: TIMEOUTS.snackbar
+					autoHideTimeout: TIMEOUTS.defaultSnackbar
 				});
 			});
 	}, [createSnackbar, onClose, selectedShares, t]);

@@ -9,19 +9,19 @@ import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 
-import { AddressBookDeleteModal } from './address-book-delete';
+import { AddressBookTrashModal } from './address-book-trash';
 import { FOLDER_VIEW } from '../../../carbonio-ui-commons/constants';
 import { generateFolder } from '../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
 import { createAPIInterceptor } from '../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { screen, setupTest } from '../../../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../../../constants/tests';
 
-describe('AddressBookDeleteModal', () => {
+describe('AddressBookTrashModal', () => {
 	it('should render a modal with a specific title', () => {
 		const addressBook = generateFolder({
 			view: FOLDER_VIEW.contact
 		});
-		setupTest(<AddressBookDeleteModal addressBook={addressBook} onClose={jest.fn()} />);
+		setupTest(<AddressBookTrashModal addressBook={addressBook} onClose={jest.fn()} />);
 		expect(screen.getByText(`Delete ${addressBook.name}`)).toBeVisible();
 	});
 
@@ -29,7 +29,7 @@ describe('AddressBookDeleteModal', () => {
 		const addressBook = generateFolder({
 			view: FOLDER_VIEW.contact
 		});
-		setupTest(<AddressBookDeleteModal addressBook={addressBook} onClose={jest.fn()} />);
+		setupTest(<AddressBookTrashModal addressBook={addressBook} onClose={jest.fn()} />);
 		expect(
 			screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.close })
 		).toBeVisible();
@@ -41,7 +41,7 @@ describe('AddressBookDeleteModal', () => {
 		});
 		const onClose = jest.fn();
 		const { user } = setupTest(
-			<AddressBookDeleteModal addressBook={addressBook} onClose={onClose} />
+			<AddressBookTrashModal addressBook={addressBook} onClose={onClose} />
 		);
 		const button = screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.close });
 		await user.click(button);
@@ -52,9 +52,9 @@ describe('AddressBookDeleteModal', () => {
 		const addressBook = generateFolder({
 			view: FOLDER_VIEW.contact
 		});
-		setupTest(<AddressBookDeleteModal addressBook={addressBook} onClose={jest.fn()} />);
+		setupTest(<AddressBookTrashModal addressBook={addressBook} onClose={jest.fn()} />);
 		expect(
-			screen.getByText('Do you want to delete permanently the selected address book', {
+			screen.getByText('Do you want to delete the selected address book?', {
 				exact: false
 			})
 		).toBeVisible();
@@ -64,7 +64,7 @@ describe('AddressBookDeleteModal', () => {
 		const addressBook = generateFolder({
 			view: FOLDER_VIEW.contact
 		});
-		setupTest(<AddressBookDeleteModal addressBook={addressBook} onClose={jest.fn()} />);
+		setupTest(<AddressBookTrashModal addressBook={addressBook} onClose={jest.fn()} />);
 		const button = screen.getByRole('button', { name: 'Delete' });
 		expect(button).toBeEnabled();
 		// FIXME
@@ -77,7 +77,7 @@ describe('AddressBookDeleteModal', () => {
 			view: FOLDER_VIEW.contact
 		});
 		const { user } = setupTest(
-			<AddressBookDeleteModal addressBook={addressBook} onClose={jest.fn()} />
+			<AddressBookTrashModal addressBook={addressBook} onClose={jest.fn()} />
 		);
 		const button = screen.getByRole('button', { name: 'Delete' });
 		await act(() => user.click(button));
@@ -85,7 +85,7 @@ describe('AddressBookDeleteModal', () => {
 			expect.objectContaining({
 				action: {
 					id: addressBook.id,
-					op: 'delete'
+					op: 'trash'
 				}
 			})
 		);
@@ -97,11 +97,11 @@ describe('AddressBookDeleteModal', () => {
 			view: FOLDER_VIEW.contact
 		});
 		const { user } = setupTest(
-			<AddressBookDeleteModal addressBook={addressBook} onClose={jest.fn()} />
+			<AddressBookTrashModal addressBook={addressBook} onClose={jest.fn()} />
 		);
 		const button = screen.getByRole('button', { name: 'Delete' });
 		await act(() => user.click(button));
-		expect(await screen.findByText('Address book permanently deleted')).toBeVisible();
+		expect(await screen.findByText('Address book moved to trash')).toBeVisible();
 	});
 
 	it('should close the modal after a successful result from the API', async () => {
@@ -111,7 +111,7 @@ describe('AddressBookDeleteModal', () => {
 			view: FOLDER_VIEW.contact
 		});
 		const { user } = setupTest(
-			<AddressBookDeleteModal addressBook={addressBook} onClose={onClose} />
+			<AddressBookTrashModal addressBook={addressBook} onClose={onClose} />
 		);
 		const button = screen.getByRole('button', { name: 'Delete' });
 		await act(() => user.click(button));
@@ -130,7 +130,7 @@ describe('AddressBookDeleteModal', () => {
 			view: FOLDER_VIEW.contact
 		});
 		const { user } = setupTest(
-			<AddressBookDeleteModal addressBook={addressBook} onClose={jest.fn()} />
+			<AddressBookTrashModal addressBook={addressBook} onClose={jest.fn()} />
 		);
 		const button = screen.getByRole('button', { name: 'Delete' });
 		await act(() => user.click(button));
@@ -150,10 +150,57 @@ describe('AddressBookDeleteModal', () => {
 			view: FOLDER_VIEW.contact
 		});
 		const { user } = setupTest(
-			<AddressBookDeleteModal addressBook={addressBook} onClose={onClose} />
+			<AddressBookTrashModal addressBook={addressBook} onClose={onClose} />
 		);
 		const button = screen.getByRole('button', { name: 'Delete' });
 		await act(() => user.click(button));
 		expect(onClose).not.toHaveBeenCalled();
+	});
+
+	it('should call the API to restore the folder position if the user clicks on the "undo" button on the snackbar', async () => {
+		createAPIInterceptor('FolderAction');
+		const addressBook = generateFolder({
+			l: faker.string.uuid(),
+			view: FOLDER_VIEW.contact
+		});
+		const { user } = setupTest(
+			<AddressBookTrashModal addressBook={addressBook} onClose={jest.fn()} />
+		);
+		await act(() => user.click(screen.getByRole('button', { name: 'Delete' })));
+		const button = await screen.findByRole('button', { name: 'Undo' });
+
+		const restoreApiInterceptor = createAPIInterceptor('FolderAction');
+		await act(() => user.click(button));
+		await expect(restoreApiInterceptor).resolves.toEqual(
+			expect.objectContaining({
+				action: {
+					id: addressBook.id,
+					op: 'move',
+					l: addressBook.l
+				}
+			})
+		);
+	});
+
+	it('should show an error snackbar after receiving a failure result from the restore API', async () => {
+		const response: ErrorSoapBodyResponse = {
+			Fault: {
+				Detail: { Error: { Code: faker.string.uuid(), Detail: faker.word.preposition() } },
+				Reason: { Text: faker.word.sample() }
+			}
+		};
+		createAPIInterceptor('FolderAction');
+		const addressBook = generateFolder({
+			view: FOLDER_VIEW.contact
+		});
+		const { user } = setupTest(
+			<AddressBookTrashModal addressBook={addressBook} onClose={jest.fn()} />
+		);
+		await act(() => user.click(screen.getByRole('button', { name: 'Delete' })));
+		const button = await screen.findByRole('button', { name: 'Undo' });
+
+		createAPIInterceptor('FolderAction', response);
+		await act(() => user.click(button));
+		expect(await screen.findByText('Something went wrong, please try again')).toBeVisible();
 	});
 });
