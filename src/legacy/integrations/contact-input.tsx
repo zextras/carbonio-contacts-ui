@@ -37,10 +37,14 @@ import styled, { type DefaultTheme } from 'styled-components';
 
 import { ContactInputCustomChipComponent } from './contact-input-custom-chip-component';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
-import { parseFullAutocompleteXML } from '../helpers/autocomplete';
 import { useAppSelector } from '../hooks/redux';
 import { StoreProvider } from '../store/redux';
-import type { Contact, FullAutocompleteRequest, Match } from '../types/contact';
+import type {
+	Contact,
+	FullAutocompleteRequest,
+	FullAutocompleteResponse,
+	Match
+} from '../types/contact';
 import type {
 	ContactChipAction,
 	ContactInputChipDisplayName,
@@ -166,7 +170,7 @@ export type ContactInputProps = Pick<
 	onChange?: ContactInputOnChange;
 	defaultValue: Array<ContactInputItem>;
 	dragAndDropEnabled?: boolean;
-	extraAccountsIds?: Array<string>;
+	orderedAccountIds?: Array<string>;
 	chipDisplayName?: ContactInputChipDisplayName;
 	contactActions?: Array<ContactChipAction>;
 };
@@ -178,7 +182,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	background = 'gray5',
 	dragAndDropEnabled = false,
 	chipDisplayName = CHIP_DISPLAY_NAME_VALUES.label,
-	extraAccountsIds = [],
+	orderedAccountIds = [],
 	contactActions,
 	inputRef: propsInputRef = null,
 	...rest
@@ -354,9 +358,9 @@ const ContactInputCore: FC<ContactInputProps> = ({
 								}))
 							);
 						}
-						soapFetch<FullAutocompleteRequest, string>('FullAutocomplete', {
-							...(extraAccountsIds?.length > 0 && {
-								extraAccountId: extraAccountsIds.map((id) => ({ _content: id }))
+						soapFetch<FullAutocompleteRequest, FullAutocompleteResponse>('FullAutocomplete', {
+							...(orderedAccountIds?.length > 0 && {
+								orderedAccountIds: orderedAccountIds.map((id) => ({ _content: id }))
 							}),
 							AutoCompleteRequest: {
 								name: textContent,
@@ -364,15 +368,14 @@ const ContactInputCore: FC<ContactInputProps> = ({
 							},
 							_jsns: 'urn:zimbraMail'
 						})
-							.then((autoCompleteResult) => {
-								const results = parseFullAutocompleteXML(autoCompleteResult);
-								return map<Match, Match>(results.match, (m) => ({
+							.then((autoCompleteResult) =>
+								map<Match, Match>(autoCompleteResult.match, (m) => ({
 									...m,
 									email: isContactGroup(m)
 										? undefined
 										: emailRegex.exec(m.email ?? '')?.[0]?.slice(1, -1)
-								}));
-							})
+								}))
+							)
 							.then((remoteResults) => {
 								const normRemoteResults = reduce<Match, ContactInputItem[]>(
 									remoteResults,
@@ -444,11 +447,11 @@ const ContactInputCore: FC<ContactInputProps> = ({
 			allContacts,
 			defaults,
 			editChip,
-			extraAccountsIds,
 			inputRef,
 			isValidEmail,
 			onChange,
 			options,
+			orderedAccountIds,
 			t
 		]
 	);

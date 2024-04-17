@@ -18,7 +18,7 @@ import { Match } from '../types/contact';
 describe('Contact input', () => {
 	it('should render a textbox', async () => {
 		const placeholder = faker.string.alpha();
-		setupTest(<ContactInput defaultValue={[]} placeholder={placeholder} extraAccountsIds={[]} />);
+		setupTest(<ContactInput defaultValue={[]} placeholder={placeholder} orderedAccountIds={[]} />);
 		expect(screen.getByRole('textbox', { name: placeholder })).toBeVisible();
 	});
 
@@ -30,7 +30,7 @@ describe('Contact input', () => {
 		} satisfies Match;
 		registerFullAutocompleteHandler([contact]);
 
-		const { user } = setupTest(<ContactInput defaultValue={[]} extraAccountsIds={[]} />);
+		const { user } = setupTest(<ContactInput defaultValue={[]} orderedAccountIds={[]} />);
 
 		const input = screen.getByRole('textbox');
 		await user.type(input, contact.email);
@@ -50,7 +50,7 @@ describe('Contact input', () => {
 		} satisfies Match;
 		registerFullAutocompleteHandler([contact]);
 
-		const { user } = setupTest(<ContactInput defaultValue={[]} extraAccountsIds={[]} />);
+		const { user } = setupTest(<ContactInput defaultValue={[]} orderedAccountIds={[]} />);
 
 		const input = screen.getByRole('textbox');
 		await user.type(input, contact.first);
@@ -69,7 +69,7 @@ describe('Contact input', () => {
 		} satisfies Match;
 		registerFullAutocompleteHandler([contact]);
 
-		const { user } = setupTest(<ContactInput defaultValue={[]} extraAccountsIds={[]} />);
+		const { user } = setupTest(<ContactInput defaultValue={[]} orderedAccountIds={[]} />);
 
 		const input = screen.getByRole('textbox');
 		await user.type(input, contact.first);
@@ -89,7 +89,7 @@ describe('Contact input', () => {
 		};
 		const onChange = jest.fn();
 		const { user } = setupTest(
-			<ContactInput defaultValue={[]} placeholder={''} extraAccountsIds={[]} onChange={onChange} />
+			<ContactInput defaultValue={[]} placeholder={''} orderedAccountIds={[]} onChange={onChange} />
 		);
 
 		await user.type(screen.getByRole('textbox'), contact.email);
