@@ -22,7 +22,11 @@ export const ACTION_IDS = {
 	newAddressBook: 'new-address-book-action',
 	editAddressBook: 'edit-address-book-action',
 	emptyAddressBook: 'empty-address-book-action',
-	removeAddressBookLink: 'remove-address-book-link-action'
+	emptyTrash: 'empty-trash-action',
+	removeAddressBookLink: 'remove-address-book-link-action',
+	exportAddressBook: 'export-address-book-action',
+	importContacts: 'import-contacts-action',
+	showShareInfo: 'show-share-info-action'
 } as const;
 
 export const NEW_CONTACT_GROUP_BOARD_ID = 'new-contact-group-board';

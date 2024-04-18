@@ -9,7 +9,7 @@ import { useSnackbar } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
 import { DistributionListMembersPage } from '../model/distribution-list';
-import { apiClient } from '../network/client';
+import { apiClient } from '../network/api-client';
 import { StoredDistributionList, useDistributionListsStore } from '../store/distribution-lists';
 
 type UseGetDistributionListMembersReturnType = Partial<DistributionListMembersPage> & {

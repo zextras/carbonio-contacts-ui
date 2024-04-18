@@ -16,13 +16,13 @@ import { AddressBookEmptyModal } from '../components/modals/address-book-empty/a
 import { ACTION_IDS } from '../constants';
 import { StoreProvider } from '../legacy/store/redux';
 
-export type EmptyAddressBookAction = UIAction<Folder, Folder>;
+export type EmptyTrashAction = UIAction<Folder, Folder>;
 
-export const useActionEmptyAddressBook = (): EmptyAddressBookAction => {
+export const useActionEmptyTrash = (): EmptyTrashAction => {
 	const [t] = useTranslation();
 	const createModal = useModal();
 
-	const canExecute = useCallback<EmptyAddressBookAction['canExecute']>(
+	const canExecute = useCallback<EmptyTrashAction['canExecute']>(
 		(addressBook?: Folder): boolean => {
 			if (!addressBook) {
 				return false;
@@ -32,11 +32,11 @@ export const useActionEmptyAddressBook = (): EmptyAddressBookAction => {
 				return false;
 			}
 
-			if (isTrash(addressBook.id)) {
+			if (addressBook.isLink) {
 				return false;
 			}
 
-			if (addressBook.isLink) {
+			if (!isTrash(addressBook.id)) {
 				return false;
 			}
 
@@ -49,7 +49,7 @@ export const useActionEmptyAddressBook = (): EmptyAddressBookAction => {
 		[]
 	);
 
-	const execute = useCallback<EmptyAddressBookAction['execute']>(
+	const execute = useCallback<EmptyTrashAction['execute']>(
 		(addressBook) => {
 			if (!canExecute(addressBook)) {
 				return;
@@ -74,9 +74,9 @@ export const useActionEmptyAddressBook = (): EmptyAddressBookAction => {
 
 	return useMemo(
 		() => ({
-			id: ACTION_IDS.emptyAddressBook,
-			label: t('folder.action.empty.folder', 'Empty address book'),
-			icon: 'EmptyFolderOutline',
+			id: ACTION_IDS.emptyTrash,
+			label: t('folder.action.empty.trash', 'Empty trash'),
+			icon: 'DeletePermanentlyOutline',
 			execute,
 			canExecute
 		}),

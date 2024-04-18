@@ -27,7 +27,7 @@ import { MoveModal } from './move-modal';
 import { NewModal } from './new-modal';
 import ShareFolderModal from './share-folder-modal';
 import { SharesModal } from './shares-modal';
-import { apiClient } from '../../../network/client';
+import { apiClient } from '../../../network/api-client';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import useGetTagsAccordion from '../../hooks/use-get-tags-accordions';
 import { StoreProvider } from '../../store/redux';

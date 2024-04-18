@@ -202,7 +202,8 @@
                 "message1": "Do you want to empty the selected address book?",
                 "message2": "All the related contacts will be permanently deleted and it won't be possible to recover them.",
                 "message3": "Do you want to empty the trash?",
-                "message4": "Its content will be permanently deleted and it won't be possible to recover it."
+                "message4": "Its content will be permanently deleted and it won't be possible to recover it.",
+                "title": "Empty {{addressBookName}}"
             },
             "footer": {
                 "go_back": "Go back"

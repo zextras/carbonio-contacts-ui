@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next';
 import CommonContactGroupBoard, { isContactGroupNameInvalid } from './common-contact-group-board';
 import { useGetContactGroup } from '../../hooks/use-get-contact-group';
 import { ContactGroup } from '../../model/contact-group';
-import { apiClient } from '../../network/client';
+import { apiClient } from '../../network/api-client';
 import { useContactGroupStore } from '../../store/contact-groups';
 
 const InnerEditContactGroupBoard = ({

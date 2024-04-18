@@ -11,6 +11,7 @@ import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 
 import { AddressBookEmptyModal } from './address-book-empty';
 import { FOLDER_VIEW } from '../../../carbonio-ui-commons/constants';
+import { FOLDERS } from '../../../carbonio-ui-commons/test/mocks/carbonio-shell-ui-constants';
 import { generateFolder } from '../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
 import { createAPIInterceptor } from '../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { screen, setupTest } from '../../../carbonio-ui-commons/test/test-setup';
@@ -48,50 +49,84 @@ describe('AddressBookEmptyModal', () => {
 		expect(onClose).toHaveBeenCalledTimes(1);
 	});
 
-	it('should display a confirmation text', () => {
+	it('should display a specific confirmation text if the address book is the Trash', () => {
 		const addressBook = generateFolder({
+			id: FOLDERS.TRASH,
+			name: 'Trash',
+			absFolderPath: '/Trash',
 			view: FOLDER_VIEW.contact
 		});
 		setupTest(<AddressBookEmptyModal addressBook={addressBook} onClose={jest.fn()} />);
 		expect(
-			screen.getByText('Do you want to delete permanently the selected address book', {
+			screen.getByText('Do you want to empty the trash?', {
 				exact: false
 			})
 		).toBeVisible();
 	});
 
-	it('should display a "delete" button, enabled and with a red background', () => {
+	it("should display a specific confirmation text if the address book isn't the Trash", () => {
 		const addressBook = generateFolder({
 			view: FOLDER_VIEW.contact
 		});
 		setupTest(<AddressBookEmptyModal addressBook={addressBook} onClose={jest.fn()} />);
-		const button = screen.getByRole('button', { name: 'Delete' });
+		expect(
+			screen.getByText('Do you want to empty the selected address book?', {
+				exact: false
+			})
+		).toBeVisible();
+	});
+
+	it('should display a "empty" button, enabled and with a red background', () => {
+		const addressBook = generateFolder({
+			view: FOLDER_VIEW.contact
+		});
+		setupTest(<AddressBookEmptyModal addressBook={addressBook} onClose={jest.fn()} />);
+		const button = screen.getByRole('button', { name: 'Empty' });
 		expect(button).toBeEnabled();
 		// FIXME
 		// expect(button).toHaveStyleRule('backgroundColor', PALETTE.error.regular);
 	});
 
-	it('should call the API with the proper parameters if the user clicks on the "delete" button', async () => {
+	it('should call the API with the proper parameters if the user clicks on the "empty" button', async () => {
 		const apiInterceptor = createAPIInterceptor('FolderAction');
 		const addressBook = generateFolder({
+			id: FOLDERS.TRASH,
+			name: 'Trash',
+			absFolderPath: '/Trash',
 			view: FOLDER_VIEW.contact
 		});
 		const { user } = setupTest(
 			<AddressBookEmptyModal addressBook={addressBook} onClose={jest.fn()} />
 		);
-		const button = screen.getByRole('button', { name: 'Delete' });
+		const button = screen.getByRole('button', { name: 'Empty' });
 		await act(() => user.click(button));
 		await expect(apiInterceptor).resolves.toEqual(
 			expect.objectContaining({
 				action: {
 					id: addressBook.id,
-					op: 'delete'
+					op: 'empty'
 				}
 			})
 		);
 	});
 
-	it('should show a success snackbar after receiving a successful result from the API', async () => {
+	it('should show a success snackbar after receiving a successful result from the API for the Trash address book', async () => {
+		createAPIInterceptor('FolderAction');
+		const addressBook = generateFolder({
+			id: FOLDERS.TRASH,
+			name: 'Trash',
+			absFolderPath: '/Trash',
+			view: FOLDER_VIEW.contact
+		});
+		const { user } = setupTest(
+			<AddressBookEmptyModal addressBook={addressBook} onClose={jest.fn()} />
+		);
+		const button = screen.getByRole('button', { name: 'Empty' });
+		await act(() => user.click(button));
+		expect(await screen.findByText('Trash folder emptied successfully')).toBeVisible();
+	});
+
+	it('should show a success snackbar after receiving a successful result from the API for a non-Trash address book', async () => {
 		createAPIInterceptor('FolderAction');
 		const addressBook = generateFolder({
 			view: FOLDER_VIEW.contact
@@ -99,9 +134,9 @@ describe('AddressBookEmptyModal', () => {
 		const { user } = setupTest(
 			<AddressBookEmptyModal addressBook={addressBook} onClose={jest.fn()} />
 		);
-		const button = screen.getByRole('button', { name: 'Delete' });
+		const button = screen.getByRole('button', { name: 'Empty' });
 		await act(() => user.click(button));
-		expect(await screen.findByText('Address book permanently deleted')).toBeVisible();
+		expect(await screen.findByText('Address book emptied successfully')).toBeVisible();
 	});
 
 	it('should close the modal after a successful result from the API', async () => {
@@ -113,7 +148,7 @@ describe('AddressBookEmptyModal', () => {
 		const { user } = setupTest(
 			<AddressBookEmptyModal addressBook={addressBook} onClose={onClose} />
 		);
-		const button = screen.getByRole('button', { name: 'Delete' });
+		const button = screen.getByRole('button', { name: 'Empty' });
 		await act(() => user.click(button));
 		expect(onClose).toHaveBeenCalledTimes(1);
 	});
@@ -132,7 +167,7 @@ describe('AddressBookEmptyModal', () => {
 		const { user } = setupTest(
 			<AddressBookEmptyModal addressBook={addressBook} onClose={jest.fn()} />
 		);
-		const button = screen.getByRole('button', { name: 'Delete' });
+		const button = screen.getByRole('button', { name: 'Empty' });
 		await act(() => user.click(button));
 		expect(await screen.findByText('Something went wrong, please try again')).toBeVisible();
 	});
@@ -152,7 +187,7 @@ describe('AddressBookEmptyModal', () => {
 		const { user } = setupTest(
 			<AddressBookEmptyModal addressBook={addressBook} onClose={onClose} />
 		);
-		const button = screen.getByRole('button', { name: 'Delete' });
+		const button = screen.getByRole('button', { name: 'Empty' });
 		await act(() => user.click(button));
 		expect(onClose).not.toHaveBeenCalled();
 	});

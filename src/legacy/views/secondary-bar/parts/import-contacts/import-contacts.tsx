@@ -11,15 +11,15 @@ import axios from 'axios';
 import { TFunction } from 'i18next';
 import { v4 as uuid } from 'uuid';
 
+import { ContactsImportModal } from '../../../../../components/modals/contacts-import-modal';
+import { importContacts } from '../../../../../network/api/import-contacts';
 import { buildArrayFromFileList, encodeNonAsciiAndQuotesToDecimal } from '../../../../helpers/file';
-import { importAddressBook } from '../../../../store/actions/import-address-book';
 import { StoreProvider } from '../../../../store/redux';
 import {
 	ImportAddressBookResponse,
 	UploadAttachmentOptions,
 	UploadAttachmentResult
 } from '../../../../types/import-address-book';
-import { ImportContactsModal } from '../../import-contacts-modal';
 
 function parse(str: string): Array<Array<{ aid: string }>> {
 	// eslint-disable-next-line no-new-func
@@ -37,7 +37,7 @@ function onUploadComplete({
 	createSnackbar: CreateSnackbarFn;
 	t: TFunction;
 }): void {
-	importAddressBook({ aid: attachmentId, folderId }).then((res: ImportAddressBookResponse) => {
+	importContacts({ aid: attachmentId, folderId }).then((res: ImportAddressBookResponse) => {
 		const count = res.cn[0].n;
 		if (!('Fault' in res)) {
 			createSnackbar({
@@ -166,7 +166,7 @@ function inputElementOnchange({
 			{
 				children: (
 					<StoreProvider>
-						<ImportContactsModal
+						<ContactsImportModal
 							closeCallback={(): void => {
 								closeModal();
 							}}

@@ -24,7 +24,7 @@ import { getFolderIdParts } from '../../../carbonio-ui-commons/helpers/folders';
 import { TIMEOUTS } from '../../../constants';
 import { getFolderTranslatedName } from '../../../legacy/utils/helpers';
 import { ShareInfo } from '../../../model/share-info';
-import { apiClient } from '../../../network/client';
+import { apiClient } from '../../../network/api-client';
 
 export type SharesModalProps = {
 	onClose: () => void;

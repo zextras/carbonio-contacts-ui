@@ -14,54 +14,71 @@ import {
 } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
+import { isTrash } from '../../../carbonio-ui-commons/helpers/folders';
 import { Folder } from '../../../carbonio-ui-commons/types/folder';
 import { TIMEOUTS } from '../../../constants';
-import { apiClient } from '../../../network/client';
+import { apiClient } from '../../../network/api-client';
 
-export type AddressBookDeleteModalProps = {
+export type AddressBookEmptyModalProps = {
 	addressBook: Folder;
 	onClose: () => void;
 };
 
-export const AddressBookDeleteModal = ({
+export const AddressBookEmptyModal = ({
 	addressBook,
 	onClose
-}: AddressBookDeleteModalProps): React.JSX.Element => {
+}: AddressBookEmptyModalProps): React.JSX.Element => {
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
+	const isTrashFolder = useMemo(() => isTrash(addressBook.id), [addressBook.id]);
 
 	const modalTitle = useMemo(
 		() =>
-			t('folder.modal.delete.title', {
+			t('folder.modal.empty.title', {
 				addressBookName: addressBook.name,
-				defaultValue: 'Delete {{addressBookName}}'
+				defaultValue: 'Empty {{addressBookName}}'
 			}),
 		[addressBook.name, t]
 	);
 
-	const confirmButtonLabel = useMemo(() => t('label.delete', 'Delete'), [t]);
+	const confirmButtonLabel = useMemo(() => t('label.empty', 'Empty'), [t]);
 
-	const confirmationText = useMemo(
+	const confirmationTextComponent = useMemo(
 		() =>
-			t(
-				'folder.modal.delete.body.message2',
-				'Do you want to delete permanently the selected address book? If you delete it, the related content will be permanently removed and the address book will no longer be recoverable.'
+			isTrashFolder ? (
+				<Text overflow="break-word">
+					{t('folder.modal.empty.message3', 'Do you want to empty the trash?')}
+					<br />
+					{t(
+						'folder.modal.empty.message4',
+						`Its content will be permanently deleted and it won't be possible to recover it.`
+					)}
+				</Text>
+			) : (
+				<Text overflow="break-word">
+					{t('folder.modal.empty.message1', 'Do you want to empty the selected address book?')}
+					<br />
+					{t(
+						'folder.modal.empty.message2',
+						`All the related contacts will be permanently deleted and it won't be possible to recover them.`
+					)}
+				</Text>
 			),
-		[t]
+		[isTrashFolder, t]
 	);
 
 	const onConfirm = useCallback(() => {
+		const successLabel = isTrashFolder
+			? t('folder.snackbar.trash_empty', 'Trash folder emptied successfully')
+			: t('folder.snackbar.folder_empty', 'Address book emptied successfully');
 		apiClient
-			.deleteFolder(addressBook.id)
+			.emptyFolder(addressBook.id)
 			.then(() => {
 				createSnackbar({
-					key: `delete-folder-success`,
+					key: `Empty-folder-success`,
 					replace: true,
 					type: 'info',
-					label: t(
-						'folder.snackbar.address_book_permanently_deleted',
-						'Address book permanently deleted'
-					),
+					label: successLabel,
 					autoHideTimeout: TIMEOUTS.defaultSnackbar,
 					hideButton: true
 				});
@@ -69,7 +86,7 @@ export const AddressBookDeleteModal = ({
 			})
 			.catch(() =>
 				createSnackbar({
-					key: `delete-folder-error`,
+					key: `empty-folder-error`,
 					replace: true,
 					type: 'error',
 					label: t('label.error_try_again', 'Something went wrong, please try again'),
@@ -77,14 +94,12 @@ export const AddressBookDeleteModal = ({
 					hideButton: true
 				})
 			);
-	}, [addressBook.id, createSnackbar, onClose, t]);
+	}, [addressBook.id, createSnackbar, isTrashFolder, onClose, t]);
 
 	return (
 		<>
 			<ModalHeader title={modalTitle} onClose={onClose} showCloseIcon />
-			<ModalBody>
-				<Text overflow="break-word">{confirmationText}</Text>
-			</ModalBody>
+			<ModalBody>{confirmationTextComponent}</ModalBody>
 			<ModalFooter onConfirm={onConfirm} confirmLabel={confirmButtonLabel} confirmColor={'error'} />
 		</>
 	);

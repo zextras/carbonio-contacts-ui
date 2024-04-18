@@ -3,26 +3,26 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-
 import { faker } from '@faker-js/faker';
+import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 import { act } from 'react-dom/test-utils';
 
-import { useActionEmptyAddressBook } from './empty-address-book';
+import { useActionExportAddressBook } from './export-address-book';
 import { UIAction } from './types';
 import { FOLDER_VIEW } from '../carbonio-ui-commons/constants';
 import { FOLDERS } from '../carbonio-ui-commons/test/mocks/carbonio-shell-ui-constants';
 import { generateFolder } from '../carbonio-ui-commons/test/mocks/folders/folders-generator';
+import { createAPIInterceptor } from '../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { screen, setupHook } from '../carbonio-ui-commons/test/test-setup';
-import { TIMERS } from '../constants/tests';
 
-describe('useActionEmptyAddressBook', () => {
+describe('useActionExportAddressBook', () => {
 	it('should return an object with the specific data', () => {
-		const { result } = setupHook(useActionEmptyAddressBook);
+		const { result } = setupHook(useActionExportAddressBook);
 		expect(result.current).toEqual<UIAction<unknown, unknown>>(
 			expect.objectContaining({
-				icon: 'EmptyFolderOutline',
-				label: 'Empty address book',
-				id: 'empty-address-book-action'
+				icon: 'DownloadOutline',
+				label: 'Export csv file',
+				id: 'export-address-book-action'
 			})
 		);
 	});
@@ -36,7 +36,7 @@ describe('useActionEmptyAddressBook', () => {
 				n: faker.number.int({ min: 1 }),
 				view: FOLDER_VIEW.contact
 			});
-			const { result } = setupHook(useActionEmptyAddressBook);
+			const { result } = setupHook(useActionExportAddressBook);
 			const action = result.current;
 			expect(action.canExecute(addressBook)).toBeFalsy();
 		});
@@ -48,7 +48,7 @@ describe('useActionEmptyAddressBook', () => {
 				n: faker.number.int({ min: 1 }),
 				view: FOLDER_VIEW.contact
 			});
-			const { result } = setupHook(useActionEmptyAddressBook);
+			const { result } = setupHook(useActionExportAddressBook);
 			const action = result.current;
 			expect(action.canExecute(addressBook)).toBeFalsy();
 		});
@@ -60,7 +60,7 @@ describe('useActionEmptyAddressBook', () => {
 				n: faker.number.int({ min: 1 }),
 				view: FOLDER_VIEW.contact
 			});
-			const { result } = setupHook(useActionEmptyAddressBook);
+			const { result } = setupHook(useActionExportAddressBook);
 			const action = result.current;
 			expect(action.canExecute(addressBook)).toBeFalsy();
 		});
@@ -73,7 +73,7 @@ describe('useActionEmptyAddressBook', () => {
 				n: faker.number.int({ min: 1 }),
 				view: FOLDER_VIEW.contact
 			});
-			const { result } = setupHook(useActionEmptyAddressBook);
+			const { result } = setupHook(useActionExportAddressBook);
 			const action = result.current;
 			expect(action.canExecute(addressBook)).toBeTruthy();
 		});
@@ -88,7 +88,7 @@ describe('useActionEmptyAddressBook', () => {
 				n: faker.number.int({ min: 1 }),
 				view: FOLDER_VIEW.contact
 			});
-			const { result } = setupHook(useActionEmptyAddressBook);
+			const { result } = setupHook(useActionExportAddressBook);
 			const action = result.current;
 			expect(action.canExecute(addressBook)).toBeFalsy();
 		});
@@ -98,7 +98,7 @@ describe('useActionEmptyAddressBook', () => {
 				n: 0,
 				view: FOLDER_VIEW.contact
 			});
-			const { result } = setupHook(useActionEmptyAddressBook);
+			const { result } = setupHook(useActionExportAddressBook);
 			const action = result.current;
 			expect(action.canExecute(addressBook)).toBeFalsy();
 		});
@@ -108,49 +108,70 @@ describe('useActionEmptyAddressBook', () => {
 				n: faker.number.int({ min: 1 }),
 				view: FOLDER_VIEW.contact
 			});
-			const { result } = setupHook(useActionEmptyAddressBook);
+			const { result } = setupHook(useActionExportAddressBook);
 			const action = result.current;
 			expect(action.canExecute(addressBook)).toBeTruthy();
 		});
 	});
 
-	it('should return an execute field which opens a modal with a specific title', () => {
-		const addressBook = generateFolder({
-			n: faker.number.int({ min: 1 }),
-			view: FOLDER_VIEW.contact
+	describe('Execute', () => {
+		it('should call the ExportContacts API', async () => {
+			const addressBook = generateFolder({
+				n: faker.number.int({ min: 1 }),
+				view: FOLDER_VIEW.contact
+			});
+
+			const apiInterceptor = createAPIInterceptor('ExportContacts');
+
+			const { result } = setupHook(useActionExportAddressBook);
+			const action = result.current;
+			await act(async () => {
+				action.execute(addressBook);
+			});
+
+			await expect(apiInterceptor).resolves.toBeDefined();
 		});
 
-		const { result } = setupHook(useActionEmptyAddressBook);
-		const action = result.current;
-		act(() => {
-			action.execute(addressBook);
+		it('should display an error snackbar if the API returns an error', async () => {
+			const response: ErrorSoapBodyResponse = {
+				Fault: {
+					Detail: { Error: { Code: faker.string.uuid(), Detail: faker.word.preposition() } },
+					Reason: { Text: faker.word.sample() }
+				}
+			};
+
+			const addressBook = generateFolder({
+				n: faker.number.int({ min: 1 }),
+				view: FOLDER_VIEW.contact
+			});
+
+			createAPIInterceptor<never, ErrorSoapBodyResponse>('ExportContacts', response);
+
+			const { result } = setupHook(useActionExportAddressBook);
+			const action = result.current;
+			act(() => {
+				action.execute(addressBook);
+			});
+
+			expect(await screen.findByText('Something went wrong, please try again')).toBeVisible();
 		});
 
-		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
-		});
+		it('should not call the ExportContacts API if the action cannot be executed', () => {
+			const addressBook = generateFolder({
+				n: 0,
+				view: FOLDER_VIEW.contact
+			});
 
-		expect(screen.getByText(`Empty ${addressBook.name}`)).toBeVisible();
-	});
+			const callFlag = jest.fn();
+			createAPIInterceptor('ExportContacts').then(() => callFlag());
 
-	it('should return an execute field which not opens a modal with a specific title if the action cannot be executed', () => {
-		const addressBook = generateFolder({
-			id: FOLDERS.TRASH,
-			name: 'Trash',
-			absFolderPath: '/Trash',
-			n: faker.number.int({ min: 1 }),
-			view: FOLDER_VIEW.contact
-		});
-		const { result } = setupHook(useActionEmptyAddressBook);
-		const action = result.current;
-		act(() => {
-			action.execute(addressBook);
-		});
+			const { result } = setupHook(useActionExportAddressBook);
+			const action = result.current;
+			act(() => {
+				action.execute(addressBook);
+			});
 
-		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+			expect(callFlag).not.toHaveBeenCalled();
 		});
-
-		expect(screen.queryByText(`Empty ${addressBook.name}`)).not.toBeInTheDocument();
 	});
 });

@@ -6,9 +6,9 @@
 
 import React from 'react';
 
-import { screen, setupTest } from '../../../../carbonio-ui-commons/test/test-setup';
-import { generateStore } from '../../../tests/generators/store';
-import { ImportContactsModal } from '../import-contacts-modal';
+import { ContactsImportModal } from './contacts-import-modal';
+import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
+import { generateStore } from '../../legacy/tests/generators/store';
 /**
  * Test the import contacts modal
  */
@@ -27,7 +27,7 @@ describe('Import contacts modal', () => {
 		const store = generateStore();
 		const expectedTitle = 'Import contacts';
 		const expectedBodyText = `The contacts contained within the specified ${defaultProps.fileName} file will be imported into "${defaultProps.folderName}" folder`;
-		setupTest(<ImportContactsModal {...defaultProps} />, { store });
+		setupTest(<ContactsImportModal {...defaultProps} />, { store });
 		expect(screen.getByText(expectedTitle)).toBeVisible();
 		expect(screen.getByText(expectedBodyText)).toBeVisible();
 		const confirmButton = screen.getByRole('button', {
@@ -40,7 +40,7 @@ describe('Import contacts modal', () => {
 
 	it('calls confirmCallback when the confirm button is pressed', async () => {
 		const store = generateStore();
-		const { user } = setupTest(<ImportContactsModal {...defaultProps} />, { store });
+		const { user } = setupTest(<ContactsImportModal {...defaultProps} />, { store });
 		const confirmButton = screen.getByRole('button', {
 			name: confirmButtonLabel
 		});
@@ -50,7 +50,7 @@ describe('Import contacts modal', () => {
 
 	it('calls the closeCallback when the close modal button is pressed', async () => {
 		const store = generateStore();
-		const { user } = setupTest(<ImportContactsModal {...defaultProps} />, { store });
+		const { user } = setupTest(<ContactsImportModal {...defaultProps} />, { store });
 
 		const closeButton = screen.getByRoleWithIcon('button', { icon: closeIconRegex });
 		await user.click(closeButton);

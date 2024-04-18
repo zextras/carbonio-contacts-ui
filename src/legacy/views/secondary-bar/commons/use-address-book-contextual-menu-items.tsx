@@ -9,6 +9,9 @@ import { useMemo } from 'react';
 import { Action } from '@zextras/carbonio-design-system';
 
 import { useActionDeleteAddressBook } from '../../../../actions/delete-address-book';
+import { useActionEmptyAddressBook } from '../../../../actions/empty-address-book';
+import { useActionEmptyTrash } from '../../../../actions/empty-trash';
+import { useActionExportAddressBook } from '../../../../actions/export-address-book';
 import { useActionTrashAddressBook } from '../../../../actions/trash-address-book';
 import { UIAction } from '../../../../actions/types';
 import { Folder } from '../../../../carbonio-ui-commons/types/folder';
@@ -27,6 +30,9 @@ const generateMenuAction = (uiAction: UIAction<Folder, never>, addressBook: Fold
 export const useAddressBookContextualMenuItems = (addressBook: Folder): Array<Action> => {
 	const deleteAction = useActionDeleteAddressBook();
 	const trashAction = useActionTrashAddressBook();
+	const emptyAddressBookAction = useActionEmptyAddressBook();
+	const emptyTrashAction = useActionEmptyTrash();
+	const exportAction = useActionExportAddressBook();
 
 	return useMemo(() => {
 		const result: Array<Action> = [];
@@ -35,7 +41,20 @@ export const useAddressBookContextualMenuItems = (addressBook: Folder): Array<Ac
 			result.push(generateMenuAction(deleteAction, addressBook));
 		trashAction.canExecute(addressBook) &&
 			result.push(generateMenuAction(trashAction, addressBook));
+		emptyAddressBookAction.canExecute(addressBook) &&
+			result.push(generateMenuAction(emptyAddressBookAction, addressBook));
+		emptyTrashAction.canExecute(addressBook) &&
+			result.push(generateMenuAction(emptyTrashAction, addressBook));
+		exportAction.canExecute(addressBook) &&
+			result.push(generateMenuAction(exportAction, addressBook));
 
 		return result;
-	}, [addressBook, deleteAction, trashAction]);
+	}, [
+		addressBook,
+		deleteAction,
+		emptyAddressBookAction,
+		emptyTrashAction,
+		exportAction,
+		trashAction
+	]);
 };

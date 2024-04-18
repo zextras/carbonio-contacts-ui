@@ -105,4 +105,23 @@ describe('useActionDeleteAddressBooks', () => {
 
 		expect(screen.getByText(`Delete ${addressBook.name}`)).toBeVisible();
 	});
+
+	it('should not open the modal if the action cannot be executed', () => {
+		const addressBook = generateFolder({
+			id: FOLDERS.CONTACTS,
+			view: FOLDER_VIEW.contact
+		});
+		const { result } = setupHook(useActionDeleteAddressBook);
+		const action = result.current;
+
+		act(() => {
+			action.execute(addressBook);
+		});
+
+		act(() => {
+			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+		});
+
+		expect(screen.queryByText(`Delete ${addressBook.name}`)).not.toBeVisible();
+	});
 });

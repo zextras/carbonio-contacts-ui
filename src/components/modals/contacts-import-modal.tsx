@@ -8,10 +8,7 @@ import React, { useCallback, useMemo } from 'react';
 import { Container, Text } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
-import ModalFooter from './commons/modal-footer';
-import { ModalHeader } from './commons/modal-header';
-
-export const ImportContactsModal = ({
+export const ContactsImportModal = ({
 	closeCallback,
 	confirmCallback,
 	fileName,

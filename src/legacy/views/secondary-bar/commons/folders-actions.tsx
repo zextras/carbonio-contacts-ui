@@ -10,11 +10,11 @@ import { ErrorSoapBodyResponse, FOLDERS } from '@zextras/carbonio-shell-ui';
 import { TFunction } from 'i18next';
 
 import { FolderAction } from '../../../../carbonio-ui-commons/types/actions';
-import { exportContacts } from '../../../store/actions/export-address-book';
+import { exportContacts, ExportContactsResponse } from '../../../../network/api/export-contacts';
 import { folderAction } from '../../../store/actions/folder-action';
 import { getFolder } from '../../../store/actions/get-folder';
 import { AppDispatch, StoreProvider } from '../../../store/redux';
-import { ContactsFolder, ExportContactsResponse } from '../../../types/contact';
+import { ContactsFolder } from '../../../types/contact';
 import { FolderActionsType } from '../../../types/folder';
 import { importContacts } from '../parts/import-contacts/import-contacts';
 import { SharesInfoModal } from '../shares-info-modal';

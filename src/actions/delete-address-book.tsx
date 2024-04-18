@@ -22,25 +22,6 @@ export const useActionDeleteAddressBook = (): DeleteAddressBookAction => {
 	const [t] = useTranslation();
 	const createModal = useModal();
 
-	const execute = useCallback<DeleteAddressBookAction['execute']>(
-		(addressBook) => {
-			if (!addressBook) {
-				return;
-			}
-			const closeModal = createModal(
-				{
-					children: (
-						<StoreProvider>
-							<AddressBookDeleteModal addressBook={addressBook} onClose={() => closeModal()} />
-						</StoreProvider>
-					)
-				},
-				true
-			);
-		},
-		[createModal]
-	);
-
 	const canExecute = useCallback<DeleteAddressBookAction['canExecute']>(
 		(addressBook?: Folder): boolean => {
 			if (!addressBook) {
@@ -58,6 +39,29 @@ export const useActionDeleteAddressBook = (): DeleteAddressBookAction => {
 			return isNestedInTrash(addressBook);
 		},
 		[]
+	);
+
+	const execute = useCallback<DeleteAddressBookAction['execute']>(
+		(addressBook) => {
+			if (!canExecute(addressBook)) {
+				return;
+			}
+
+			if (!addressBook) {
+				return;
+			}
+			const closeModal = createModal(
+				{
+					children: (
+						<StoreProvider>
+							<AddressBookDeleteModal addressBook={addressBook} onClose={() => closeModal()} />
+						</StoreProvider>
+					)
+				},
+				true
+			);
+		},
+		[createModal]
 	);
 
 	return useMemo(

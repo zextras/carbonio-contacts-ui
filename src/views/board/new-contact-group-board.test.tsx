@@ -18,7 +18,7 @@ import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
 import { setupTest, screen } from '../../carbonio-ui-commons/test/test-setup';
 import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../constants';
 import { PALETTE, TESTID_SELECTORS } from '../../constants/tests';
-import { apiClient } from '../../network/client';
+import { apiClient } from '../../network/api-client';
 import { spyUseBoardHooks } from '../../tests/utils';
 
 function spyUseBoard(navigateTo?: jest.Mock): void {

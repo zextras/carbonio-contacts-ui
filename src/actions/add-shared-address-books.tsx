@@ -19,6 +19,8 @@ export const useActionAddSharedAddressBooks = (): AddSharedAddressBooksAction =>
 	const [t] = useTranslation();
 	const createModal = useModal();
 
+	const canExecute = useCallback<AddSharedAddressBooksAction['canExecute']>(() => true, []);
+
 	const execute = useCallback<AddSharedAddressBooksAction['execute']>(() => {
 		const closeModal = createModal(
 			{
@@ -31,8 +33,6 @@ export const useActionAddSharedAddressBooks = (): AddSharedAddressBooksAction =>
 			true
 		);
 	}, [createModal]);
-
-	const canExecute = useCallback<AddSharedAddressBooksAction['canExecute']>(() => true, []);
 
 	return useMemo(
 		() => ({

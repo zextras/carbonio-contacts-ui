@@ -177,15 +177,3 @@ export type FullAutocompleteRequest = {
 	};
 	_jsns: NameSpace;
 };
-
-export type ExportContactsRequest = {
-	folderId: string;
-};
-
-export type ExportContactsResponse = {
-	content: [
-		{
-			_content: string;
-		}
-	];
-};

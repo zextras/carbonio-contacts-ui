@@ -16,7 +16,7 @@ import EditContactGroupBoard from './edit-contact-group-board';
 import { setupTest, screen } from '../../carbonio-ui-commons/test/test-setup';
 import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../constants';
 import { JEST_MOCKED_ERROR, PALETTE, TESTID_SELECTORS } from '../../constants/tests';
-import { apiClient } from '../../network/client';
+import { apiClient } from '../../network/api-client';
 import { useContactGroupStore } from '../../store/contact-groups';
 import { buildContactGroup } from '../../tests/model-builder';
 import { registerModifyContactGroupHandler } from '../../tests/msw-handlers/modify-contact-group';
