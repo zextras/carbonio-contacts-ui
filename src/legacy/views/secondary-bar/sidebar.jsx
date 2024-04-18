@@ -58,6 +58,7 @@ const SharesItem = ({ item }) => (
 			type="outlined"
 			label={item.label}
 			color="primary"
+			width={'fill'}
 			onClick={(ev) => {
 				ev.stopPropagation();
 				client.getShareInfo().then((shares) => {
