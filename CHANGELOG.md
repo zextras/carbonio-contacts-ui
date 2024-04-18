@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.10.2](https://github.com/zextras/carbonio-contacts-ui/compare/v1.10.1...v1.10.2) (2024-04-18)
+
+
+### Bug Fixes
+
+* avoid search view crash [#217](https://github.com/zextras/carbonio-contacts-ui/issues/217) ([f2d173c](https://github.com/zextras/carbonio-contacts-ui/commit/f2d173c3839cfdc95133cd16a15b046c36d3038d))
+* restore 'find shares' button size ([be092c1](https://github.com/zextras/carbonio-contacts-ui/commit/be092c19a076d0b8f00ffa303dc81d0c2b7e3092))
+
 ### [1.10.1](https://github.com/zextras/carbonio-contacts-ui/compare/v1.10.0...v1.10.1) (2024-04-12)
 
 
