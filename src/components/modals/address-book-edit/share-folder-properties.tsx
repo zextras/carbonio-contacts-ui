@@ -20,16 +20,16 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { Context } from './edit-context';
-import { Grant } from '../../../../../carbonio-ui-commons/types/folder';
-import { useAppDispatch } from '../../../../hooks/redux';
-import { sendShareNotification } from '../../../../store/actions/send-share-notification';
+import { Grant } from '../../../carbonio-ui-commons/types/folder';
+import { useAppDispatch } from '../../../legacy/hooks/redux';
+import { sendShareNotification } from '../../../legacy/store/actions/send-share-notification';
 import {
 	ActionProps,
 	GranteeInfoProps,
 	GranteeProps,
 	ShareFolderPropertiesProps
-} from '../../../../types/contact';
-import { GetFolderActionRequest, GetFolderActionResponse } from '../../../../types/soap';
+} from '../../../legacy/types/contact';
+import { GetFolderActionRequest, GetFolderActionResponse } from '../../../legacy/types/soap';
 import { ShareFolderRoleOptions, findLabel } from '../../commons/utils';
 
 const HoverChip = styled(Chip)<{ hovered?: boolean }>`

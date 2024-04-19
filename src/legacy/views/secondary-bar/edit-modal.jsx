@@ -8,10 +8,10 @@ import React, { useCallback, useState } from 'react';
 import { Container, CustomModal, useSnackbar } from '@zextras/carbonio-design-system';
 import { t } from '@zextras/carbonio-shell-ui';
 
-import { Context } from './parts/edit/edit-context';
-import EditDefaultModal from './parts/edit/edit-default-modal';
-import ShareRevokeModal from './parts/edit/share-revoke-modal';
-import ShareFolderModal from './share-folder-modal';
+import { Context } from '../../../components/modals/address-book-edit/edit-context';
+import EditDefaultModal from '../../../components/modals/address-book-edit/edit-default-modal';
+import ShareFolderModal from '../../../components/modals/address-book-edit/share-folder-modal';
+import ShareRevokeModal from '../../../components/modals/address-book-edit/share-revoke-modal';
 
 export const EditModal = ({ currentFolder, accordions, openModal, setModal, dispatch }) => {
 	const createSnackbar = useSnackbar();

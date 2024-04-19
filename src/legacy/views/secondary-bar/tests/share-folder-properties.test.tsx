@@ -10,10 +10,10 @@ import { screen } from '@testing-library/react';
 
 import { createAPIInterceptor } from '../../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { setupTest } from '../../../../carbonio-ui-commons/test/test-setup';
+import { ShareFolderProperties } from '../../../../components/modals/address-book-edit/share-folder-properties';
 import { generateStore } from '../../../tests/generators/store';
 import { ContactsFolder } from '../../../types/contact';
 import { GetFolderActionRequest, GetFolderActionResponse } from '../../../types/soap';
-import { ShareFolderProperties } from '../parts/edit/share-folder-properties';
 
 describe('share-folder-properties', () => {
 	test('getFolderRequest will call and grantee will set as per response', async () => {

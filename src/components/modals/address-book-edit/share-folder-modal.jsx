@@ -18,13 +18,17 @@ import {
 import { useIntegratedComponent, useUserAccounts } from '@zextras/carbonio-shell-ui';
 import { map, replace, split } from 'lodash';
 
-import ModalFooter from './commons/modal-footer';
-import { ModalHeader } from './commons/modal-header';
-import { findLabel, ShareFolderRoleOptions, ShareFolderWithOptions } from './commons/utils';
-import { GranteeInfo } from './parts/edit/share-folder-properties';
-import { capitalise } from './utils';
-import { sendShareNotification } from '../../store/actions/send-share-notification';
-import { shareFolder } from '../../store/actions/share-folder';
+import { GranteeInfo } from './share-folder-properties';
+import { sendShareNotification } from '../../../legacy/store/actions/send-share-notification';
+import { shareFolder } from '../../../legacy/store/actions/share-folder';
+import ModalFooter from '../../../legacy/views/secondary-bar/commons/modal-footer';
+import { ModalHeader } from '../../../legacy/views/secondary-bar/commons/modal-header';
+import {
+	findLabel,
+	ShareFolderRoleOptions,
+	ShareFolderWithOptions
+} from '../../../legacy/views/secondary-bar/commons/utils';
+import { capitalise } from '../../../legacy/views/secondary-bar/utils';
 
 const ShareFolderModal = ({
 	goBack,

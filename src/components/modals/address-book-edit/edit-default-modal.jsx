@@ -19,11 +19,11 @@ import { isEmpty, reduce, filter, first } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { ShareFolderProperties } from './share-folder-properties';
-import ColorSelect from '../../../../commons/ColorSelect';
-import { folderAction } from '../../../../store/actions/folder-action';
-import { extractFolders } from '../../../../utils/helpers';
-import ModalFooter from '../../commons/modal-footer';
-import { ModalHeader } from '../../commons/modal-header';
+import ColorSelect from '../../../legacy/commons/ColorSelect';
+import { folderAction } from '../../../legacy/store/actions/folder-action';
+import { extractFolders } from '../../../legacy/utils/helpers';
+import ModalFooter from '../../../legacy/views/secondary-bar/commons/modal-footer';
+import { ModalHeader } from '../../../legacy/views/secondary-bar/commons/modal-header';
 
 const EditDefaultModal = ({ currentFolder, accordions, setModal, dispatch, setActiveModal }) => {
 	const createSnackbar = useSnackbar();

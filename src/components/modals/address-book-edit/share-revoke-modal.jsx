@@ -10,12 +10,12 @@ import { useUserAccounts } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
 import { GranteeInfo } from './share-folder-properties';
-import { useAppDispatch } from '../../../../hooks/redux';
-import { folderAction } from '../../../../store/actions/folder-action';
-import { sendShareNotification } from '../../../../store/actions/send-share-notification';
-import ModalFooter from '../../commons/modal-footer';
-import { ModalHeader } from '../../commons/modal-header';
-import { ShareFolderRoleOptions } from '../../commons/utils';
+import { useAppDispatch } from '../../../legacy/hooks/redux';
+import { folderAction } from '../../../legacy/store/actions/folder-action';
+import { sendShareNotification } from '../../../legacy/store/actions/send-share-notification';
+import ModalFooter from '../../../legacy/views/secondary-bar/commons/modal-footer';
+import { ModalHeader } from '../../../legacy/views/secondary-bar/commons/modal-header';
+import { ShareFolderRoleOptions } from '../../../legacy/views/secondary-bar/commons/utils';
 
 const ShareRevokeModal = ({ folder, onClose, grant, createSnackbar, goBack }) => {
 	const [t] = useTranslation();
