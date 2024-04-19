@@ -10,7 +10,7 @@ import { act, waitFor, waitForElementToBeRemoved } from '@testing-library/react'
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 import { times } from 'lodash';
 
-import { SharesModal } from './shares-modal';
+import { SharedAddressBooksAddModal } from './shared-address-books-add-modal';
 import { createAPIInterceptor } from '../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import {
 	makeListItemsVisible,
@@ -54,7 +54,7 @@ describe('SharesModal', () => {
 	it('should render the modal with the specific title', async () => {
 		registerDefaultGetShareInfoHandler(buildSharesInfo());
 		const onClose = jest.fn();
-		setupTest(<SharesModal onClose={onClose} />, {});
+		setupTest(<SharedAddressBooksAddModal onClose={onClose} />, {});
 
 		expect(screen.getByText('Find Contact Shares')).toBeVisible();
 		await act(async () => Promise.resolve());
@@ -63,7 +63,7 @@ describe('SharesModal', () => {
 	it('should render a close icon button on the header', async () => {
 		registerDefaultGetShareInfoHandler(buildSharesInfo());
 		const onClose = jest.fn();
-		setupTest(<SharesModal onClose={onClose} />, {});
+		setupTest(<SharedAddressBooksAddModal onClose={onClose} />, {});
 
 		expect(
 			screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.close })
@@ -75,7 +75,7 @@ describe('SharesModal', () => {
 	it('should render a filter field with a placeholder text and an icon', async () => {
 		registerDefaultGetShareInfoHandler(buildSharesInfo());
 		const onClose = jest.fn();
-		setupTest(<SharesModal onClose={onClose} />, {});
+		setupTest(<SharedAddressBooksAddModal onClose={onClose} />, {});
 
 		const placeholder = 'Find users';
 		const filterInput = screen.getByTestId(TESTID_SELECTORS.findUsersFilterInput);
@@ -89,7 +89,7 @@ describe('SharesModal', () => {
 	it('should render a hint description', async () => {
 		registerDefaultGetShareInfoHandler(buildSharesInfo());
 		const onClose = jest.fn();
-		setupTest(<SharesModal onClose={onClose} />, {});
+		setupTest(<SharedAddressBooksAddModal onClose={onClose} />, {});
 		expect(
 			screen.getByText('Select which address book you want to see in contact’s tree')
 		).toBeVisible();
@@ -102,7 +102,7 @@ describe('SharesModal', () => {
 
 		// Instantiate the modal
 		const onClose = jest.fn();
-		setupTest(<SharesModal onClose={onClose} />, {});
+		setupTest(<SharedAddressBooksAddModal onClose={onClose} />, {});
 
 		await act(async () => Promise.resolve());
 		makeListItemsVisible();
@@ -124,7 +124,7 @@ describe('SharesModal', () => {
 		});
 
 		const onClose = jest.fn();
-		setupTest(<SharesModal onClose={onClose} />, {});
+		setupTest(<SharedAddressBooksAddModal onClose={onClose} />, {});
 		expect(await screen.findByText(/something went wrong/i)).toBeVisible();
 		await waitForElementToBeRemoved(screen.queryByText(/something went wrong/i), {
 			timeout: 10000
@@ -154,7 +154,7 @@ describe('SharesModal', () => {
 
 		// Instantiate the modal
 		const onClose = jest.fn();
-		const { user } = setupTest(<SharesModal onClose={onClose} />, {});
+		const { user } = setupTest(<SharedAddressBooksAddModal onClose={onClose} />, {});
 
 		await act(async () => Promise.resolve());
 		makeListItemsVisible();
@@ -193,7 +193,7 @@ describe('SharesModal', () => {
 
 		// Instantiate the modal
 		const onClose = jest.fn();
-		const { user } = setupTest(<SharesModal onClose={onClose} />, {});
+		const { user } = setupTest(<SharedAddressBooksAddModal onClose={onClose} />, {});
 
 		await act(async () => Promise.resolve());
 		makeListItemsVisible();
@@ -221,7 +221,7 @@ describe('SharesModal', () => {
 		it('should render a button to add the selected shares', async () => {
 			registerDefaultGetShareInfoHandler(buildSharesInfo());
 			const onClose = jest.fn();
-			setupTest(<SharesModal onClose={onClose} />, {});
+			setupTest(<SharedAddressBooksAddModal onClose={onClose} />, {});
 
 			const button = await screen.findByRole('button', { name: 'Add' });
 			expect(button).toBeVisible();
@@ -230,7 +230,7 @@ describe('SharesModal', () => {
 		it('should be disabled when the modal opens', async () => {
 			registerDefaultGetShareInfoHandler(buildSharesInfo());
 			const onClose = jest.fn();
-			setupTest(<SharesModal onClose={onClose} />, {});
+			setupTest(<SharedAddressBooksAddModal onClose={onClose} />, {});
 
 			const button = await screen.findByRole('button', { name: 'Add' });
 			expect(button).toBeDisabled();
@@ -242,7 +242,7 @@ describe('SharesModal', () => {
 
 			// Instantiate the modal
 			const onClose = jest.fn();
-			const { user } = setupTest(<SharesModal onClose={onClose} />, {});
+			const { user } = setupTest(<SharedAddressBooksAddModal onClose={onClose} />, {});
 
 			await act(async () => Promise.resolve());
 			makeListItemsVisible();
@@ -261,7 +261,7 @@ describe('SharesModal', () => {
 
 			// Instantiate the modal
 			const onClose = jest.fn();
-			const { user } = setupTest(<SharesModal onClose={onClose} />, {});
+			const { user } = setupTest(<SharedAddressBooksAddModal onClose={onClose} />, {});
 
 			await act(async () => Promise.resolve());
 			makeListItemsVisible();
@@ -288,7 +288,7 @@ describe('SharesModal', () => {
 			);
 
 			// Instantiate the modal
-			const { user } = setupTest(<SharesModal onClose={jest.fn()} />, {});
+			const { user } = setupTest(<SharedAddressBooksAddModal onClose={jest.fn()} />, {});
 
 			await act(async () => Promise.resolve());
 			makeListItemsVisible();
@@ -311,7 +311,7 @@ describe('SharesModal', () => {
 
 			const onClose = jest.fn();
 			// Instantiate the modal
-			const { user } = setupTest(<SharesModal onClose={onClose} />, {});
+			const { user } = setupTest(<SharedAddressBooksAddModal onClose={onClose} />, {});
 
 			await act(async () => Promise.resolve());
 			makeListItemsVisible();
@@ -332,7 +332,7 @@ describe('SharesModal', () => {
 			createAPIInterceptor<CreateMountpointsRequest, never>('Batch');
 
 			const onClose = jest.fn();
-			const { user } = setupTest(<SharesModal onClose={onClose} />, {});
+			const { user } = setupTest(<SharedAddressBooksAddModal onClose={onClose} />, {});
 
 			await act(async () => Promise.resolve());
 			makeListItemsVisible();
@@ -361,7 +361,7 @@ describe('SharesModal', () => {
 			});
 
 			const onClose = jest.fn();
-			const { user } = setupTest(<SharesModal onClose={onClose} />, {});
+			const { user } = setupTest(<SharedAddressBooksAddModal onClose={onClose} />, {});
 
 			await act(async () => Promise.resolve());
 			makeListItemsVisible();

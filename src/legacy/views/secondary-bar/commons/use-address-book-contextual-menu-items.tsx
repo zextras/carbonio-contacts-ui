@@ -12,6 +12,9 @@ import { useActionDeleteAddressBook } from '../../../../actions/delete-address-b
 import { useActionEmptyAddressBook } from '../../../../actions/empty-address-book';
 import { useActionEmptyTrash } from '../../../../actions/empty-trash';
 import { useActionExportAddressBook } from '../../../../actions/export-address-book';
+import { useActionImportContacts } from '../../../../actions/import-contacts';
+import { useActionRemoveAddressBookLink } from '../../../../actions/remove-address-book-link';
+import { useActionShowShareInfo } from '../../../../actions/show-share-info';
 import { useActionTrashAddressBook } from '../../../../actions/trash-address-book';
 import { UIAction } from '../../../../actions/types';
 import { Folder } from '../../../../carbonio-ui-commons/types/folder';
@@ -33,6 +36,9 @@ export const useAddressBookContextualMenuItems = (addressBook: Folder): Array<Ac
 	const emptyAddressBookAction = useActionEmptyAddressBook();
 	const emptyTrashAction = useActionEmptyTrash();
 	const exportAction = useActionExportAddressBook();
+	const importAction = useActionImportContacts();
+	const shareInfoAction = useActionShowShareInfo();
+	const removeLinkAction = useActionRemoveAddressBookLink();
 
 	return useMemo(() => {
 		const result: Array<Action> = [];
@@ -47,6 +53,12 @@ export const useAddressBookContextualMenuItems = (addressBook: Folder): Array<Ac
 			result.push(generateMenuAction(emptyTrashAction, addressBook));
 		exportAction.canExecute(addressBook) &&
 			result.push(generateMenuAction(exportAction, addressBook));
+		importAction.canExecute(addressBook) &&
+			result.push(generateMenuAction(importAction, addressBook));
+		shareInfoAction.canExecute(addressBook) &&
+			result.push(generateMenuAction(shareInfoAction, addressBook));
+		removeLinkAction.canExecute(addressBook) &&
+			result.push(generateMenuAction(removeLinkAction, addressBook));
 
 		return result;
 	}, [
@@ -55,6 +67,9 @@ export const useAddressBookContextualMenuItems = (addressBook: Folder): Array<Ac
 		emptyAddressBookAction,
 		emptyTrashAction,
 		exportAction,
+		importAction,
+		removeLinkAction,
+		shareInfoAction,
 		trashAction
 	]);
 };

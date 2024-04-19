@@ -9,7 +9,7 @@ import { useModal } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
 import { UIAction } from './types';
-import { SharesModal } from '../components/modals/shares/shares-modal';
+import { SharedAddressBooksAddModal } from '../components/modals/shared-address-books-add/shared-address-books-add-modal';
 import { ACTION_IDS } from '../constants';
 import { StoreProvider } from '../legacy/store/redux';
 
@@ -26,7 +26,7 @@ export const useActionAddSharedAddressBooks = (): AddSharedAddressBooksAction =>
 			{
 				children: (
 					<StoreProvider>
-						<SharesModal onClose={() => closeModal()} />
+						<SharedAddressBooksAddModal onClose={() => closeModal()} />
 					</StoreProvider>
 				)
 			},

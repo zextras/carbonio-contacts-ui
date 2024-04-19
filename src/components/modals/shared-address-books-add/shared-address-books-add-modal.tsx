@@ -30,7 +30,7 @@ export type SharesModalProps = {
 	onClose: () => void;
 };
 
-export const SharesModal: FC<SharesModalProps> = ({ onClose }) => {
+export const SharedAddressBooksAddModal: FC<SharesModalProps> = ({ onClose }) => {
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
 	const [sharesInfo, setSharesInfo] = useState<Array<ShareInfo>>([]);

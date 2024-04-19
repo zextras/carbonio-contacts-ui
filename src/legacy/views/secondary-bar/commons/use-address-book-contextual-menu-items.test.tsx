@@ -9,6 +9,9 @@ import { generateFolder } from '../../../../carbonio-ui-commons/test/mocks/folde
 import { setupHook } from '../../../../carbonio-ui-commons/test/test-setup';
 import { ACTION_IDS } from '../../../../constants';
 
+/*
+ * TODO change the direction of the tests: switch to a table of folder-action combinations
+ */
 describe('useAddressBookContextualMenuItems', () => {
 	describe('Non-system address book', () => {
 		it('should return 2 action', () => {

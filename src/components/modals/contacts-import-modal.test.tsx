@@ -6,54 +6,115 @@
 
 import React from 'react';
 
-import { ContactsImportModal } from './contacts-import-modal';
+import { faker } from '@faker-js/faker';
+import { act } from '@testing-library/react';
+
+import { ContactsImportModal, ContactsImportModalProps } from './contacts-import-modal';
+import { FOLDER_VIEW } from '../../carbonio-ui-commons/constants';
+import { generateFolder } from '../../carbonio-ui-commons/test/mocks/folders/folders-generator';
+import { createAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
+import { createFakeFile } from '../../carbonio-ui-commons/test/mocks/utils/file';
 import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
-import { generateStore } from '../../legacy/tests/generators/store';
+import { NAMESPACES } from '../../constants/api';
+import { TESTID_SELECTORS } from '../../constants/tests';
+import { ImportContactsRequest, ImportContactsResponse } from '../../network/api/import-contacts';
+import { UploadResponseFileInfo } from '../../network/api/upload';
+import { registerUploadHandler } from '../../tests/msw-handlers/upload';
 /**
  * Test the import contacts modal
  */
 
-const defaultProps = {
-	confirmCallback: jest.fn(),
-	closeCallback: jest.fn(),
-	fileName: 'testFile.csv',
-	folderName: 'Test Folder'
-};
 const confirmButtonLabel = 'Import';
 const closeIconRegex = /icon: CloseOutline/i;
 
 describe('Import contacts modal', () => {
+	const defaultProps: ContactsImportModalProps = {
+		closeCallback: jest.fn(),
+		file: createFakeFile({ name: 'testFile.csv' }),
+		addressBook: generateFolder({
+			n: 15,
+			view: FOLDER_VIEW.contact
+		})
+	};
+
 	it('the component renders all parts', async () => {
-		const store = generateStore();
 		const expectedTitle = 'Import contacts';
-		const expectedBodyText = `The contacts contained within the specified ${defaultProps.fileName} file will be imported into "${defaultProps.folderName}" folder`;
-		setupTest(<ContactsImportModal {...defaultProps} />, { store });
+		const expectedBodyText = `The contacts contained within the specified ${defaultProps.file.name} file will be imported into "${defaultProps.addressBook.name}" folder`;
+		setupTest(<ContactsImportModal {...defaultProps} />);
 		expect(screen.getByText(expectedTitle)).toBeVisible();
 		expect(screen.getByText(expectedBodyText)).toBeVisible();
 		const confirmButton = screen.getByRole('button', {
 			name: confirmButtonLabel
 		});
-		const closeButton = screen.getByRoleWithIcon('button', { icon: closeIconRegex });
+		const closeButton = screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.close });
 		expect(confirmButton).toBeEnabled();
 		expect(closeButton).toBeEnabled();
 	});
 
-	it('calls confirmCallback when the confirm button is pressed', async () => {
-		const store = generateStore();
-		const { user } = setupTest(<ContactsImportModal {...defaultProps} />, { store });
+	it('calls ImportContact API when the confirm button is pressed', async () => {
+		const fileInfo: UploadResponseFileInfo[2][number] = {
+			aid: faker.string.uuid(),
+			filename: faker.system.fileName(),
+			ct: faker.system.mimeType(),
+			s: faker.number.int()
+		};
+
+		// Register handler for the file upload API
+		const uploadResponse = `200, "null", [${JSON.stringify(fileInfo)}]`;
+		registerUploadHandler(uploadResponse);
+
+		// Register handler for import contacts API
+		const apiInterceptor = createAPIInterceptor<ImportContactsRequest>('ImportContacts');
+		const { user } = setupTest(<ContactsImportModal {...defaultProps} />);
 		const confirmButton = screen.getByRole('button', {
 			name: confirmButtonLabel
 		});
-		await user.click(confirmButton);
-		expect(defaultProps.confirmCallback).toHaveBeenCalled();
+		await act(async () => user.click(confirmButton));
+		const importParams = await apiInterceptor;
+		expect(importParams).toEqual(expect.objectContaining({ content: { aid: fileInfo.aid } }));
 	});
 
 	it('calls the closeCallback when the close modal button is pressed', async () => {
-		const store = generateStore();
-		const { user } = setupTest(<ContactsImportModal {...defaultProps} />, { store });
+		const fileInfo: UploadResponseFileInfo[2][number] = {
+			aid: faker.string.uuid(),
+			filename: faker.system.fileName(),
+			ct: faker.system.mimeType(),
+			s: faker.number.int()
+		};
 
-		const closeButton = screen.getByRoleWithIcon('button', { icon: closeIconRegex });
-		await user.click(closeButton);
-		expect(defaultProps.closeCallback).toHaveBeenCalled();
+		// Register handler for the file upload API
+		const uploadResponse = `200, "null", [${JSON.stringify(fileInfo)}]`;
+		registerUploadHandler(uploadResponse);
+
+		// Register handler for import contacts API
+		const importResponse: ImportContactsResponse = {
+			cn: [
+				{
+					n: 1,
+					ids: '8374'
+				}
+			],
+			_jsns: NAMESPACES.mail
+		};
+		createAPIInterceptor<ImportContactsRequest, ImportContactsResponse>(
+			'ImportContacts',
+			importResponse
+		);
+
+		const onClose = jest.fn();
+		const { user } = setupTest(<ContactsImportModal {...defaultProps} closeCallback={onClose} />);
+		const confirmButton = screen.getByRole('button', {
+			name: confirmButtonLabel
+		});
+		await act(async () => user.click(confirmButton));
+		expect(onClose).toHaveBeenCalled();
 	});
+
+	it.todo(
+		'should display a success snackbar with the number of imported contacts if the import succeeded'
+	);
+
+	it.todo('should display an error snackbar if the upload fails');
+
+	it.todo('should display an error snackbar if the import fails');
 });

@@ -20,6 +20,7 @@ import { importContacts } from './api/import-contacts';
 import { modifyContactGroup } from './api/modify-contact';
 import { moveFolder } from './api/move-folder';
 import { trashFolder } from './api/trash-folder';
+import { upload } from './api/upload';
 
 export const apiClient = {
 	createContactGroup,
@@ -37,5 +38,6 @@ export const apiClient = {
 	moveFolder,
 	emptyFolder,
 	exportContacts,
-	importContacts
+	importContacts,
+	upload
 };
