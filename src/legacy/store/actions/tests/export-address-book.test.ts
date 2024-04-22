@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { createAPIInterceptor } from '../../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
+import { createSoapAPIInterceptor } from '../../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { ExportContactsRequest } from '../../../types/contact';
 import { exportContacts } from '../export-address-book';
 
@@ -19,7 +19,7 @@ describe('exportAddressBook', () => {
 			l: 'testFolderId'
 		};
 
-		const interceptor = createAPIInterceptor<ExportContactsRequest>('ExportContacts');
+		const interceptor = createSoapAPIInterceptor<ExportContactsRequest>('ExportContacts');
 		exportContacts(request);
 		const apiRequest = await interceptor;
 		expect(apiRequest).toEqual(expectedRequest);
