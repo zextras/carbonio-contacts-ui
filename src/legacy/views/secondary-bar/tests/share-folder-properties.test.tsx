@@ -8,7 +8,7 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import { screen } from '@testing-library/react';
 
-import { createAPIInterceptor } from '../../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
+import { createSoapAPIInterceptor } from '../../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { setupTest } from '../../../../carbonio-ui-commons/test/test-setup';
 import { generateStore } from '../../../tests/generators/store';
 import { ContactsFolder } from '../../../types/contact';
@@ -80,7 +80,10 @@ describe('share-folder-properties', () => {
 			_jsns: 'urn:zimbraMail'
 		};
 
-		createAPIInterceptor<GetFolderActionRequest, GetFolderActionResponse>('GetFolder', response);
+		createSoapAPIInterceptor<GetFolderActionRequest, GetFolderActionResponse>(
+			'GetFolder',
+			response
+		);
 
 		setupTest(<ShareFolderProperties folder={currentFolder} setActiveModal={setActiveModal} />, {
 			store
