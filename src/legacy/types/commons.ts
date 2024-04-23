@@ -5,7 +5,7 @@
  */
 import { SyntheticEvent } from 'react';
 
-import { ButtonOldProps, ContainerProps } from '@zextras/carbonio-design-system';
+import { ButtonProps, ContainerProps } from '@zextras/carbonio-design-system';
 
 export type ModalFooterProps = {
 	mainAlignment?: ContainerProps['mainAlignment'];
@@ -21,9 +21,9 @@ export type ModalFooterProps = {
 	secondarybackground?: ContainerProps['background'];
 	color?: string | undefined;
 	secondaryColor?: string | undefined;
-	size?: ButtonOldProps['size'];
-	primaryBtnType?: ButtonOldProps['type'];
-	secondaryBtnType?: ButtonOldProps['type'];
+	size?: ButtonProps['size'];
+	primaryBtnType?: ButtonProps['type'];
+	secondaryBtnType?: ButtonProps['type'];
 	divider?: boolean;
 	verticalPadding?: string;
 	secondaryVerticalPadding?: string;

@@ -12,17 +12,18 @@ import { Context } from './edit-context';
 import EditDefaultModal from './edit-default-modal';
 import ShareFolderModal from './share-folder-modal';
 import ShareRevokeModal from './share-revoke-modal';
-import { Folder } from '../../../carbonio-ui-commons/types/folder';
+import { useFolder } from '../../../carbonio-ui-commons/store/zustand/folder';
 
 export type AddressBookEditModalProps = {
-	addressBook: Folder;
+	addressBookId: string;
 	onClose: () => void;
 };
 
 export const AddressBookEditModal = ({
-	addressBook,
+	addressBookId,
 	onClose
 }: AddressBookEditModalProps): React.JSX.Element => {
+	const addressBook = useFolder(addressBookId);
 	const createSnackbar = useSnackbar();
 	const [activeModal, setActiveModal] = useState('default');
 	const [activeGrant, setActiveGrant] = useState({});

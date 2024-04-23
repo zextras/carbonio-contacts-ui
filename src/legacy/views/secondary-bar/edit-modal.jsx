@@ -8,8 +8,8 @@ import React, { useCallback, useState } from 'react';
 import { Container, CustomModal, useSnackbar } from '@zextras/carbonio-design-system';
 import { t } from '@zextras/carbonio-shell-ui';
 
+import AddressBookEditGeneral from '../../../components/modals/address-book-edit/address-book-edit-general';
 import { Context } from '../../../components/modals/address-book-edit/edit-context';
-import EditDefaultModal from '../../../components/modals/address-book-edit/edit-default-modal';
 import ShareFolderModal from '../../../components/modals/address-book-edit/share-folder-modal';
 import ShareRevokeModal from '../../../components/modals/address-book-edit/share-revoke-modal';
 
@@ -33,7 +33,7 @@ export const EditModal = ({ currentFolder, accordions, openModal, setModal, disp
 					height="fit"
 				>
 					{activeModal === 'default' && (
-						<EditDefaultModal
+						<AddressBookEditGeneral
 							currentFolder={currentFolder}
 							setModal={setModal}
 							dispatch={dispatch}

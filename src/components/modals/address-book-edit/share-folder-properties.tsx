@@ -3,39 +3,62 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useContext, useMemo, useState } from 'react';
 
 import {
-	ButtonOld as Button,
+	Button,
 	Chip,
 	Container,
 	Padding,
+	SelectItem,
 	Text,
 	Tooltip,
 	useSnackbar
 } from '@zextras/carbonio-design-system';
-import { ErrorSoapBodyResponse, soapFetch, useUserAccounts } from '@zextras/carbonio-shell-ui';
+import { useUserAccounts } from '@zextras/carbonio-shell-ui';
 import { map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { Context } from './edit-context';
+import { getShareFolderRoleOptions, findLabel } from './utils';
+import { useFolder } from '../../../carbonio-ui-commons/store/zustand/folder';
 import { Grant } from '../../../carbonio-ui-commons/types/folder';
 import { useAppDispatch } from '../../../legacy/hooks/redux';
 import { sendShareNotification } from '../../../legacy/store/actions/send-share-notification';
-import {
-	ActionProps,
-	GranteeInfoProps,
-	GranteeProps,
-	ShareFolderPropertiesProps
-} from '../../../legacy/types/contact';
-import { GetFolderActionRequest, GetFolderActionResponse } from '../../../legacy/types/soap';
-import { ShareFolderRoleOptions, findLabel } from '../../commons/utils';
+import { ContactsFolder } from '../../../legacy/types/contact';
 
 const HoverChip = styled(Chip)<{ hovered?: boolean }>`
 	background-color: ${({ theme, hovered }): string =>
 		hovered ? theme.palette.gray3.hover : theme.palette.gray3.regular};
 `;
+
+type GranteeInfoProps = {
+	grant: Grant;
+	shareFolderRoleOptions: Array<SelectItem>;
+	hovered?: boolean;
+};
+
+type ActionProps = {
+	folder: ContactsFolder;
+	grant: Grant;
+	setActiveModal: (arg: string) => void;
+	onMouseLeave: () => void;
+	onMouseEnter: () => void;
+};
+
+export type GranteeProps = {
+	grant: Grant;
+	folder: ContactsFolder;
+	onMouseLeave?: () => void;
+	onMouseEnter?: () => void;
+	setActiveModal: (modal: string) => void;
+	shareFolderRoleOptions: Array<SelectItem>;
+};
+
+export type ShareFolderPropertiesProps = {
+	addressBookId: string;
+};
 
 export const GranteeInfo = ({
 	grant,
@@ -113,7 +136,7 @@ const Actions = ({
 			maxWidth="fit"
 		>
 			<Tooltip label={t('label.edit_access', 'Edit access')} placement="top">
-				<Button type="outlined" label={t('label.edit')} onClick={onEdit} isSmall />
+				<Button type="outlined" label={t('label.edit')} onClick={onEdit} size={'small'} />
 			</Tooltip>
 			<Padding horizontal="extrasmall" />
 			<Tooltip label={t('tooltip.revoke', 'Revoke access')} placement="top">
@@ -122,7 +145,7 @@ const Actions = ({
 					label={t('label.revoke', 'Revoke')}
 					color="error"
 					onClick={onRevoke}
-					isSmall
+					size={'small'}
 				/>
 			</Tooltip>
 			<Padding horizontal="extrasmall" />
@@ -131,7 +154,12 @@ const Actions = ({
 				placement="top"
 				maxWidth="18.75rem"
 			>
-				<Button type="outlined" label={t('label.resend', 'Resend')} onClick={onResend} isSmall />
+				<Button
+					type="outlined"
+					label={t('label.resend', 'Resend')}
+					onClick={onResend}
+					size={'small'}
+				/>
 			</Tooltip>
 		</Container>
 	);
@@ -169,44 +197,13 @@ const Grantee = ({
 };
 
 export const ShareFolderProperties = ({
-	folder,
-	setActiveModal
+	addressBookId
 }: ShareFolderPropertiesProps): React.JSX.Element => {
-	const createSnackbar = useSnackbar();
 	const [t] = useTranslation();
-	const [grant, setGrant] = useState<Array<Grant> | undefined>();
-	const shareFolderRoleOptions = useMemo(
-		() => ShareFolderRoleOptions(t, grant?.[0]?.perm?.includes('p')),
-		[t, grant]
-	);
+	const addressBook = useFolder(addressBookId);
 
-	useEffect(() => {
-		soapFetch<GetFolderActionRequest, GetFolderActionResponse | ErrorSoapBodyResponse>(
-			'GetFolder',
-			{
-				_jsns: 'urn:zimbraMail',
-				folder: { l: folder.id }
-			}
-		)
-			.then((response): void => {
-				if ('Fault' in response) {
-					throw new Error(response.Fault.Reason.Text, { cause: response.Fault });
-				}
-				if (response && response?.folder) {
-					setGrant(response.folder[0].acl.grant);
-				}
-			})
-			.catch(() => {
-				createSnackbar({
-					key: new Date().toDateString(),
-					replace: true,
-					type: 'error',
-					label: t('label.error_try_again', 'Something went wrong, please try again'),
-					autoHideTimeout: 3000,
-					hideButton: true
-				});
-			});
-	}, [createSnackbar, folder, folder.id, t]);
+	const shareFolderRoleOptions = useMemo(() => getShareFolderRoleOptions(t), [t]);
+
 	return (
 		<Container mainAlignment="center" crossAlignment="flex-start" height="fit">
 			<Padding vertical="small" />

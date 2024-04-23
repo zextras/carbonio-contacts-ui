@@ -6,7 +6,14 @@
         "search": "Ara",
         "share_folder": "Klasörü paylaş",
         "send_msg": "E-posta gönder",
-        "edit_distribution_list": "Dağıtım Listesini Düzenle"
+        "edit_distribution_list": "Düzenle",
+        "contactGroup": {
+            "delete": "Sil"
+        },
+        "copy": "Kopyala",
+        "delete": "Sil",
+        "edit": "Düzenle",
+        "mail": "E-posta gönder"
     },
     "folder": {
         "modal": {
@@ -338,7 +345,18 @@
         "title9": "Kişiyi silmek için çöp kutusu simgesine tıklayın.",
         "search_title4": "Detayları görüntülemek veya işlem yapmak için bir veya daha fazla sonuç seçin.",
         "title2": "Tüm çalışmalarınızı kişileriniz ile paylaşın.",
-        "title7": "İş arkadaşlarınız ile bağlantılı kalın"
+        "title7": "İş arkadaşlarınız ile bağlantılı kalın",
+        "distribution_list": {
+            "label": {
+                "filter_hint": "Belirli bir üyenin adını arayarak bu listeyi filtreleyebilirsiniz.",
+                "description": "Açıklama",
+                "manager_total": "Yönetici listesi {{total}}",
+                "member_total": "Üye listesi {{total}}"
+            },
+            "no_details": "Bu dağıtım listesi için ek detay bulunmuyor. Daha fazla bilgi için sistem yöneticinizle görüşün.",
+            "empty_displayer": "Bir dağıtım listesi seçin veya oluşturmak için Yönetici ile iletişime geçin.",
+            "member_not_visible": "Bu dağıtım listesinin üyelerini görme izniniz yok. Daha fazla bilgi için sistem yöneticinizle görüşün."
+        }
     },
     "folders": {
         "trash": "Çöp Kutusu",
@@ -384,6 +402,12 @@
                 "contact_group_created": "Kişi grubu başarıyla oluşturuldu"
             },
             "title": "Yeni Grup"
+        },
+        "editContactGroup": {
+            "snackbar": {
+                "contact_group_edited": "Grup başarıyla güncellendi",
+                "error": "Düzenlemeleri kaydederken bir şeyler ters gitti, tekrar deneyin"
+            }
         }
     },
     "edit_dl_component": {
@@ -420,5 +444,15 @@
             "modalButton": "İÇE AKTAR"
         }
     },
-    "expand_distribution_list": "Adres listesini genişlet"
+    "expand_distribution_list": "Adres listesini genişlet",
+    "contactGroupList": {
+        "addressCount": "{{count}} adres",
+        "addressCount_plural": "{{count}} adres",
+        "emptyList": "Henüz hiçbir kişi grubu oluşturulmadı"
+    },
+    "contactGroupDisplayer": {
+        "label": {
+            "members_total": "Adresler: {{count}}"
+        }
+    }
 }

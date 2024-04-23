@@ -19,7 +19,9 @@ import { getShareInfo } from './api/get-share-info';
 import { importContacts } from './api/import-contacts';
 import { modifyContactGroup } from './api/modify-contact';
 import { moveFolder } from './api/move-folder';
+import { sendShareNotification } from './api/send-share-notification';
 import { trashFolder } from './api/trash-folder';
+import { updateFolder } from './api/update-folder';
 import { upload } from './api/upload';
 
 export const apiClient = {
@@ -39,5 +41,7 @@ export const apiClient = {
 	emptyFolder,
 	exportContacts,
 	importContacts,
-	upload
+	upload,
+	sendShareNotification,
+	updateFolder
 };

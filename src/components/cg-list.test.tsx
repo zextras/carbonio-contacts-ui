@@ -21,12 +21,12 @@ describe('Contact groups list', () => {
 	test('Show list items if the list is not empty', async () => {
 		const contactGroups = [
 			{
-				id: faker.string.alpha(),
+				id: faker.string.uuid(),
 				title: 'hello',
 				members: []
 			},
 			{
-				id: faker.string.alpha(),
+				id: faker.string.uuid(),
 				title: 'test',
 				members: []
 			}

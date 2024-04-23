@@ -17,32 +17,37 @@ import {
 } from '@zextras/carbonio-design-system';
 import { useIntegratedComponent, useUserAccounts } from '@zextras/carbonio-shell-ui';
 import { map, replace, split } from 'lodash';
+import { useTranslation } from 'react-i18next';
 
 import { GranteeInfo } from './share-folder-properties';
+import { findLabel, getShareFolderRoleOptions, getShareFolderWithOptions } from './utils';
+import { Folder } from '../../../carbonio-ui-commons/types/folder';
 import { sendShareNotification } from '../../../legacy/store/actions/send-share-notification';
 import { shareFolder } from '../../../legacy/store/actions/share-folder';
 import ModalFooter from '../../../legacy/views/secondary-bar/commons/modal-footer';
 import { ModalHeader } from '../../../legacy/views/secondary-bar/commons/modal-header';
-import {
-	findLabel,
-	ShareFolderRoleOptions,
-	ShareFolderWithOptions
-} from '../../../legacy/views/secondary-bar/commons/utils';
 import { capitalise } from '../../../legacy/views/secondary-bar/utils';
+
+export type ShareFolderModalProps = {
+	goBack: () => void;
+	setModal: (unknown: any) => void;
+	folder: Folder;
+	editMode: boolean;
+	activeGrant: unknown;
+};
 
 const ShareFolderModal = ({
 	goBack,
 	setModal,
-	dispatch,
-	t,
-	createSnackbar,
 	folder,
 	editMode = false,
 	activeGrant
-}) => {
+}: ShareFolderModalProps): React.JSX.Element => {
 	const [ContactInput, integrationAvailable] = useIntegratedComponent('contact-input');
-	const shareFolderWithOptions = useMemo(() => ShareFolderWithOptions(t), [t]);
-	const shareFolderRoleOptions = useMemo(() => ShareFolderRoleOptions(t), [t]);
+	const [t] = useTranslation();
+
+	const shareFolderWithOptions = useMemo(() => getShareFolderWithOptions(t), [t]);
+	const shareFolderRoleOptions = useMemo(() => getShareFolderRoleOptions(t), [t]);
 	const [sendNotification, setSendNotification] = useState(true);
 	const [standardMessage, setStandardMessage] = useState('');
 	const [contacts, setContacts] = useState([]);

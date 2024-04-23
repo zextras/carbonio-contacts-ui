@@ -6,7 +6,14 @@
         "share_folder": "Partager le dossier",
         "reset_filters": "Réinitialiser les filtres",
         "send_msg": "Envoyer un email",
-        "edit_distribution_list": "Modifier la liste de distribution"
+        "edit_distribution_list": "Modifier",
+        "contactGroup": {
+            "delete": "Supprimer"
+        },
+        "copy": "Copier",
+        "delete": "Supprimer",
+        "edit": "Modifier",
+        "mail": "Envoyer un email"
     },
     "displayer": {
         "list_title2": "La corbeille est vide",
@@ -36,7 +43,22 @@
         "title6": "Personnalisez un contact",
         "title7": "Restez en contact avec vos collègues",
         "title8": "Envoyer l'email partagé",
-        "title9": "Cliquez sur l'icône de la corbeille pour supprimer un contact."
+        "title9": "Cliquez sur l'icône de la corbeille pour supprimer un contact.",
+        "distribution_list": {
+            "label": {
+                "member_total": "Liste des membres {{total}}",
+                "description": "Description",
+                "filter_hint": "Vous pouvez filtrer cette liste en recherchant le nom d'un membre spécifique.",
+                "manager_total": "Liste des gestionnaires {{total}}"
+            },
+            "member_not_visible": "Vous n'avez pas les permissions pour voir les membres de cette liste de distribution. Pour plus d'informations, demandez à l'administrateur.",
+            "empty_displayer": "Sélectionnez une liste de distribution ou contactez l'administrateur pour en obtenir une.",
+            "no_details": "Il n'y a pas de détails supplémentaires pour cette liste de distribution. Pour plus d'informations, adressez-vous à l'administrateur.",
+            "no_details_owner": "Il n'y a pas de détails supplémentaires pour cette liste de distribution. Modifiez la liste de distribution pour les ajouter ou demandez à l'administrateur.",
+            "placeholder": {
+                "filter_member": "Filtrer une adresse"
+            }
+        }
     },
     "folder": {
         "action": {
@@ -48,7 +70,8 @@
                 "folder": "Vider le carnet d'adresses",
                 "trash": "Vider la corbeille"
             },
-            "moved": "Carnet d'adresses déplacé avec succès"
+            "moved": "Carnet d'adresses déplacé avec succès",
+            "deleteContactGroup": "Supprimer \"{{contactGroupTitle}}\""
         },
         "modal": {
             "footer": {
@@ -191,7 +214,15 @@
         "select_all_addresses_2": "Sélectionner les {{count}} adresses",
         "show_more": "plus de détail",
         "discard": "Annuler",
-        "newContactGroup": "Nouveau groupe de contact"
+        "newContactGroup": "Nouveau groupe de contact",
+        "edit_contacts": "Modifier les contacts",
+        "errors": {
+            "upload_failed_generic": "Le téléversement a échoué pour le fichier \"{{filename}}\""
+        },
+        "export_address_book": "Exporter en fichier csv",
+        "groups_app_name": "Groupes de contact et Listes de distribution",
+        "import_address_book": "Importer un fichier csv",
+        "update": "Mettre à jour"
     },
     "name": {
         "nickName": "Surnom",
@@ -268,7 +299,16 @@
             "save": {
                 "success": "Les modification à la liste de distribution \"{{displayName}}\" ont été enregistrés avec succès"
             }
-        }
+        },
+        "delete_contact_group": {
+            "confirm": {
+                "success": "Le groupe de contact a été supprimé avec succès"
+            }
+        },
+        "import_contacts_success_0": "{{number}} contact importé et ajouté dans le carnet d'adresse sélectionné",
+        "import_contacts_success_1": "{{number}} contacts importés et ajoutés dans le carnet d'adresse sélectionné",
+        "import_contacts_success_2": "{{number}} contacts importés et ajoutés dans le carnet d'adresse sélectionné",
+        "email_copied_to_clipboard": "Email copié dans le presse papier."
     },
     "title": {
         "advanced_filters": "Filtres avancés"
@@ -324,7 +364,18 @@
         },
         "edit_distribution_list": {
             "title": "Modifier \"{{displayName}}\""
-        }
+        },
+        "delete": {
+            "contactGroup": {
+                "body1": "Êtes-vous sûr de souhaiter supprimer le groupe de contact sélectionné ?",
+                "body2": "Si vous le supprimez, il le sera de manière définitive.",
+                "header": "Supprimer \"{{contactGroupName}}\""
+            },
+            "button": {
+                "confirm": "supprimer"
+            }
+        },
+        "cancel": "annuler"
     },
     "select": {
         "default": "Sélectionner un type"
@@ -358,7 +409,11 @@
     "secondaryBar": {
         "contextualMenu": {
             "new_contact_group_creation_action": "Nouveau groupe de contact"
-        }
+        },
+        "distributionLists": "Listes de distribution",
+        "distributionListsManager": "Gestionnaire",
+        "distributionListsMember": "Membre",
+        "myContactGroups": "Mes groupes de contacts"
     },
     "expand_distribution_list": "Élargir la liste d'adresses",
     "board": {
@@ -398,6 +453,12 @@
             "snackbar": {
                 "contact_group_created": "Le groupe de contact a été créé avec succès"
             }
+        },
+        "editContactGroup": {
+            "snackbar": {
+                "contact_group_edited": "Le groupe a été mis à jour avec succès",
+                "error": "Quelque chose s'est mal passé lors de l'enregistrement des modifications, merci de recommencer"
+            }
         }
     },
     "edit_dl_component": {
@@ -418,6 +479,17 @@
         "placeholder": {
             "add_members": "Tapez une adresse, cliquez sur \"+\" pour l'ajouter à la liste de distribution",
             "filter_member": "Filtrer une adresse"
+        },
+        "input": {
+            "description": {
+                "label": "Description"
+            },
+            "name": {
+                "error": {
+                    "max_length": "La taille maximum allouée est de 256 caractères"
+                },
+                "label": "Nom de la liste de distribution"
+            }
         }
     },
     "members_list_item_component": {
@@ -429,6 +501,44 @@
         "importAction": {
             "modalTitle": "Importer des contacts",
             "modalButton": "IMPORTER"
+        }
+    },
+    "contactGroupList": {
+        "emptyList": "Aucun groupe de contact n'a encore été créé",
+        "addressCount_0": "{{count}} adresse",
+        "addressCount_1": "{{count}} adresses",
+        "addressCount_2": "{{count}} adresses"
+    },
+    "distribution_list": {
+        "label": {
+            "empty_message": "Il n'y a pas encore de liste de distribution."
+        },
+        "tabs": {
+            "details": "Détails",
+            "managers": "Liste des gestionnaires",
+            "members": "Liste des membres"
+        }
+    },
+    "emptyDisplayer": {
+        "contactGroup": {
+            "hint": "Cliquer sur le bouton \"NOUVEAU\" pour créer un nouveau groupe de contact."
+        }
+    },
+    "import_contacts": {
+        "modal": {
+            "confirm": "Importer",
+            "description": "Les contacts contenus dans le fichier {{fileName}} sélectionné seront importés dans le dossier \"{{folderName}}\" du carnet d'adresses sélectionné.",
+            "title": "Importer des contacts"
+        },
+        "snackbar": {
+            "import_contacts_success_0": "{{count}} contact importé et ajouté au carnet d'adresses sélectionné",
+            "import_contacts_success_1": "{{count}} contacts importés et ajoutés au carnet d'adresses sélectionné",
+            "import_contacts_success_2": "{{count}} contacts importés et ajoutés au carnet d'adresses sélectionné"
+        }
+    },
+    "contactGroupDisplayer": {
+        "label": {
+            "members_total": "Adresses : {{count}}"
         }
     }
 }
