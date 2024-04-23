@@ -7,7 +7,7 @@
 import { faker } from '@faker-js/faker';
 import { act } from 'react-dom/test-utils';
 
-import { useActionEditAddressBooks } from './edit-address-book';
+import { useActionEditAddressBook } from './edit-address-book';
 import { UIAction } from './types';
 import { FOLDER_VIEW } from '../carbonio-ui-commons/constants';
 import { FOLDERS } from '../carbonio-ui-commons/test/mocks/carbonio-shell-ui-constants';
@@ -15,9 +15,9 @@ import { generateFolder } from '../carbonio-ui-commons/test/mocks/folders/folder
 import { screen, setupHook } from '../carbonio-ui-commons/test/test-setup';
 import { TIMERS } from '../constants/tests';
 
-describe('useActionEditAddressBooks', () => {
+describe('useActionEditAddressBook', () => {
 	it('should return an object with the specific data', () => {
-		const { result } = setupHook(useActionEditAddressBooks);
+		const { result } = setupHook(useActionEditAddressBook);
 		expect(result.current).toEqual<UIAction<unknown, unknown>>(
 			expect.objectContaining({
 				icon: 'Edit2Outline',
@@ -34,7 +34,7 @@ describe('useActionEditAddressBooks', () => {
 				absFolderPath: '/Trash/trashed stuff',
 				view: FOLDER_VIEW.contact
 			});
-			const { result } = setupHook(useActionEditAddressBooks);
+			const { result } = setupHook(useActionEditAddressBook);
 			const action = result.current;
 			expect(action.canExecute(addressBook)).toBeFalsy();
 		});
@@ -45,7 +45,7 @@ describe('useActionEditAddressBooks', () => {
 				absFolderPath: '/Trash/parent/nested trashed stuff',
 				view: FOLDER_VIEW.contact
 			});
-			const { result } = setupHook(useActionEditAddressBooks);
+			const { result } = setupHook(useActionEditAddressBook);
 			const action = result.current;
 			expect(action.canExecute(addressBook)).toBeFalsy();
 		});
@@ -57,7 +57,7 @@ describe('useActionEditAddressBooks', () => {
 				absFolderPath: `/parent/${name}`,
 				view: FOLDER_VIEW.contact
 			});
-			const { result } = setupHook(useActionEditAddressBooks);
+			const { result } = setupHook(useActionEditAddressBook);
 			const action = result.current;
 			expect(action.canExecute(addressBook)).toBeTruthy();
 		});
@@ -67,7 +67,7 @@ describe('useActionEditAddressBooks', () => {
 				id: FOLDERS.CONTACTS,
 				view: FOLDER_VIEW.contact
 			});
-			const { result } = setupHook(useActionEditAddressBooks);
+			const { result } = setupHook(useActionEditAddressBook);
 			const action = result.current;
 			expect(action.canExecute(addressBook)).toBeTruthy();
 		});
@@ -82,7 +82,7 @@ describe('useActionEditAddressBooks', () => {
 				isLink: true,
 				view: FOLDER_VIEW.contact
 			});
-			const { result } = setupHook(useActionEditAddressBooks);
+			const { result } = setupHook(useActionEditAddressBook);
 			const action = result.current;
 			expect(action.canExecute(addressBook)).toBeTruthy();
 		});
@@ -94,7 +94,7 @@ describe('useActionEditAddressBooks', () => {
 				view: FOLDER_VIEW.contact
 			});
 
-			const { result } = setupHook(useActionEditAddressBooks);
+			const { result } = setupHook(useActionEditAddressBook);
 			const action = result.current;
 			act(() => {
 				action.execute(addressBook);
@@ -112,7 +112,7 @@ describe('useActionEditAddressBooks', () => {
 				id: FOLDERS.TRASH,
 				view: FOLDER_VIEW.contact
 			});
-			const { result } = setupHook(useActionEditAddressBooks);
+			const { result } = setupHook(useActionEditAddressBook);
 			const action = result.current;
 
 			act(() => {

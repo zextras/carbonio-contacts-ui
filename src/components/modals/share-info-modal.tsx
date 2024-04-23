@@ -8,12 +8,9 @@ import React, { useMemo } from 'react';
 import { Container, Icon, ModalBody, Row, Text } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
+import { findLabel, getShareFolderRoleOptions } from './shares-utils';
 import { Folder } from '../../carbonio-ui-commons/types/folder';
 import { ModalHeader } from '../../legacy/views/secondary-bar/commons/modal-header';
-import {
-	findLabel,
-	ShareCalendarRoleOptions
-} from '../../legacy/views/secondary-bar/commons/utils';
 
 const ShareInfoRow = ({
 	icon,
@@ -52,7 +49,7 @@ export const ShareInfoModal = ({
 	addressBook
 }: ShareInfoModalProps): React.JSX.Element => {
 	const [t] = useTranslation();
-	const roleOptions = useMemo(() => ShareCalendarRoleOptions(t), [t]);
+	const roleOptions = useMemo(() => getShareFolderRoleOptions(t), [t]);
 
 	const role = useMemo(
 		() => findLabel(roleOptions, addressBook.perm || ''),

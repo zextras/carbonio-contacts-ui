@@ -12,54 +12,49 @@ import {
 	Text,
 	Checkbox,
 	Row,
-	ChipInput,
-	Padding
+	Padding,
+	useSnackbar
 } from '@zextras/carbonio-design-system';
-import { useIntegratedComponent, useUserAccounts } from '@zextras/carbonio-shell-ui';
-import { map, replace, split } from 'lodash';
+import { useUserAccount } from '@zextras/carbonio-shell-ui';
+import { replace, split } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { GranteeInfo } from './share-folder-properties';
-import { findLabel, getShareFolderRoleOptions, getShareFolderWithOptions } from './utils';
-import { Folder } from '../../../carbonio-ui-commons/types/folder';
-import { sendShareNotification } from '../../../legacy/store/actions/send-share-notification';
-import { shareFolder } from '../../../legacy/store/actions/share-folder';
+import { useFolder } from '../../../carbonio-ui-commons/store/zustand/folder';
+import { Grant } from '../../../carbonio-ui-commons/types/folder';
+import { TIMEOUTS } from '../../../constants';
+import { ContactInput } from '../../../legacy/integrations/contact-input';
 import ModalFooter from '../../../legacy/views/secondary-bar/commons/modal-footer';
 import { ModalHeader } from '../../../legacy/views/secondary-bar/commons/modal-header';
 import { capitalise } from '../../../legacy/views/secondary-bar/utils';
+import { apiClient } from '../../../network/api-client';
+import { findLabel, getShareFolderRoleOptions } from '../shares-utils';
 
 export type ShareFolderModalProps = {
-	goBack: () => void;
-	setModal: (unknown: any) => void;
-	folder: Folder;
-	editMode: boolean;
-	activeGrant: unknown;
+	onClose: () => void;
+	addressBookId: string;
+	editMode?: boolean;
+	activeGrant: Grant;
 };
 
 const ShareFolderModal = ({
-	goBack,
-	setModal,
-	folder,
+	onClose,
+	addressBookId,
 	editMode = false,
 	activeGrant
 }: ShareFolderModalProps): React.JSX.Element => {
-	const [ContactInput, integrationAvailable] = useIntegratedComponent('contact-input');
 	const [t] = useTranslation();
 
-	const shareFolderWithOptions = useMemo(() => getShareFolderWithOptions(t), [t]);
 	const shareFolderRoleOptions = useMemo(() => getShareFolderRoleOptions(t), [t]);
 	const [sendNotification, setSendNotification] = useState(true);
 	const [standardMessage, setStandardMessage] = useState('');
-	const [contacts, setContacts] = useState([]);
-	const [shareWithUserType, setshareWithUserType] = useState('usr');
+	const [contacts, setContacts] = useState<Array<{ email: string }>>([]);
 	const [shareWithUserRole, setshareWithUserRole] = useState(editMode ? activeGrant.perm : 'r');
 	const userName = useMemo(() => replace(split(activeGrant?.d, '@')?.[0], '.', ' '), [activeGrant]);
 	const userNameCapitalise = useMemo(() => capitalise(userName), [userName]);
-
-	const accounts = useUserAccounts();
-	const onClose = useCallback(() => {
-		setModal('');
-	}, [setModal]);
+	const account = useUserAccount();
+	const addressBook = useFolder(addressBookId);
+	const createSnackbar = useSnackbar();
 
 	const title = useMemo(
 		() =>
@@ -68,91 +63,66 @@ const ShareFolderModal = ({
 						name: userNameCapitalise,
 						defaultValue: "Edit {{name}}'s access"
 					})} `
-				: `${t('label.share', 'Share')} ${folder?.label}`,
-		[t, folder, editMode, userNameCapitalise]
+				: `${t('label.share', 'Share')} ${addressBook?.name}`,
+		[t, addressBook, editMode, userNameCapitalise]
 	);
-
-	const onShareWithChange = useCallback((shareWith) => {
-		setshareWithUserType(shareWith);
-	}, []);
 
 	const onShareRoleChange = useCallback((shareRole) => {
 		setshareWithUserRole(shareRole);
 	}, []);
 
 	const onConfirm = useCallback(() => {
-		dispatch(
-			shareFolder({
-				standardMessage,
-				contacts: editMode ? [{ email: activeGrant.d }] : contacts,
-				shareWithUserType,
-				shareWithUserRole,
-				folder,
-				accounts
+		const addresses = editMode ? [activeGrant?.d ?? ''] : contacts.map((contact) => contact.email);
+		apiClient
+			.shareFolder({
+				addresses,
+				role: shareWithUserRole,
+				folderId: addressBookId,
+				accountName: account.displayName
 			})
-		).then((res) => {
-			if (res.type.includes('fulfilled')) {
-				if (res.payload?.response?.Body?.BatchResponse?.Fault) {
-					createSnackbar({
-						key: `share-${folder.id}`,
-						replace: true,
-						hideButton: true,
-						type: 'warning',
-						label: res.payload?.response?.Body?.BatchResponse?.Fault?.[0]?.Reason?.Text,
-						autoHideTimeout: 3000
+			.then(() => {
+				createSnackbar({
+					key: `share-${addressBookId}-address-book-success`,
+					replace: true,
+					hideButton: true,
+					type: 'info',
+					label: editMode
+						? t('snackbar.share_updated', 'Access rights updated')
+						: t('snackbar.folder_shared', 'Address book shared'),
+					autoHideTimeout: TIMEOUTS.defaultSnackbar
+				});
+
+				sendNotification &&
+					apiClient.sendShareNotification({
+						accountName: account.name,
+						folderId: addressBookId,
+						addresses,
+						message: standardMessage
 					});
-				} else {
-					createSnackbar({
-						key: `share-${folder.id}`,
-						replace: true,
-						hideButton: true,
-						type: 'info',
-						label: editMode
-							? t('snackbar.share_updated', 'Access rights updated')
-							: t('snackbar.folder_shared', 'Address book shared'),
-						autoHideTimeout: 3000
-					});
-					sendNotification &&
-						dispatch(
-							sendShareNotification({
-								sendNotification,
-								standardMessage,
-								contacts: editMode ? [{ email: activeGrant.d }] : contacts,
-								shareWithUserType,
-								shareWithUserRole,
-								folder,
-								accounts
-							})
-						).then((res2) => {
-							if (!res2.type.includes('fulfilled')) {
-								createSnackbar({
-									key: `share-${folder.id}`,
-									replace: true,
-									type: 'error',
-									hideButton: true,
-									label: t('label.error_try_again', 'Something went wrong, please try again'),
-									autoHideTimeout: 3000
-								});
-							}
-						});
-				}
-			}
-		});
-		setModal('');
+			})
+			.catch((err) => {
+				const message = err ?? t('label.error_try_again', 'Something went wrong, please try again');
+				createSnackbar({
+					key: `share-${addressBookId}-address-book-error`,
+					replace: true,
+					type: 'error',
+					hideButton: true,
+					label: message,
+					autoHideTimeout: TIMEOUTS.defaultSnackbar
+				});
+			});
 	}, [
-		setModal,
-		dispatch,
-		accounts,
-		activeGrant,
+		account.displayName,
+		account.name,
+		activeGrant?.d,
+		addressBookId,
 		contacts,
 		createSnackbar,
-		shareWithUserRole,
-		shareWithUserType,
-		standardMessage,
-		t,
 		editMode,
-		folder,
-		sendNotification
+		sendNotification,
+		shareWithUserRole,
+		standardMessage,
+		t
 	]);
 
 	const disableEdit = useMemo(
@@ -169,52 +139,30 @@ const ShareFolderModal = ({
 		>
 			<ModalHeader title={title} onClose={onClose} />
 			<Padding top="small" />
-			{!editMode && (
-				<Container height="fit">
-					<Select
-						items={shareFolderWithOptions}
-						background="gray5"
-						label={t('label.share_with', 'Share with')}
-						onChange={onShareWithChange}
-						defaultSelection={{
-							value: 'usr',
-							label: findLabel(shareFolderWithOptions, 'usr')
-						}}
-					/>
-				</Container>
-			)}
 			{editMode ? (
 				<Container
 					orientation="horizontal"
 					mainAlignment="flex-end"
 					padding={{ bottom: 'large', top: 'large' }}
 				>
-					<GranteeInfo grant={activeGrant} shareFolderRoleOptions={shareFolderRoleOptions} />
+					<GranteeInfo grant={activeGrant} />
 				</Container>
 			) : (
 				<Container height="fit" padding={{ vertical: 'small' }}>
-					{integrationAvailable ? (
-						<ContactInput
-							placeholder={t('share.recipients_address', 'Recipients’ e-mail addresses')}
-							onChange={(ev) => {
-								setContacts(ev);
-							}}
-							defaultValue={contacts}
-						/>
-					) : (
-						// FIXME: this ChipInput is using props that don't exist
-						<ChipInput
-							backgroundColor="gray5"
-							placeholder={t('share.recipients_address', 'Recipients’ e-mail addresses')}
-							onChange={(ev) => {
-								setContacts(map(ev, (contact) => ({ email: contact.address })));
-							}}
-							valueKey="address"
-							getChipLabel={(participant) =>
-								participant.fullName ?? participant.name ?? participant.address
-							}
-						/>
-					)}
+					<ContactInput
+						placeholder={t('share.recipients_address', 'Recipients’ e-mail addresses')}
+						onChange={(ev) => {
+							// TODO complete me!!!!
+							// const normalizedContacts = ev.reduce<Array<{ email: string }>>(
+							// 	(result, contact) => {
+							//
+							// 	},
+							// 	[]
+							// );
+							// setContacts();
+						}}
+						defaultValue={contacts}
+					/>
 				</Container>
 			)}
 
@@ -283,7 +231,7 @@ const ShareFolderModal = ({
 				}
 				onConfirm={onConfirm}
 				disabled={editMode ? disableEdit : contacts.length < 1}
-				secondaryAction={goBack}
+				secondaryAction={onClose}
 				secondaryLabel={t('folder.modal.footer.go_back', 'Go back')}
 			/>
 		</Container>

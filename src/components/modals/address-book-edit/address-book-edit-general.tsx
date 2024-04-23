@@ -24,37 +24,38 @@ import {
 	ColorSelectProps
 } from '../../../carbonio-ui-commons/components/select/color-select';
 import { isSystemFolder } from '../../../carbonio-ui-commons/helpers/folders';
-import { Folder } from '../../../carbonio-ui-commons/types/folder';
+import { useFolder } from '../../../carbonio-ui-commons/store/zustand/folder';
 import { TIMEOUTS } from '../../../constants';
 import { apiClient } from '../../../network/api-client';
 
 export type AddressBookEditGeneralModalProps = {
-	addressBook: Folder;
+	addressBookId: string;
 	onAddShare: () => void;
 	onClose: () => void;
 };
 
-const AddressBookEditGeneralModal = ({
-	addressBook,
+export const AddressBookEditGeneralModal = ({
+	addressBookId,
 	onAddShare,
 	onClose
 }: AddressBookEditGeneralModalProps): React.JSX.Element => {
+	const addressBook = useFolder(addressBookId);
 	const createSnackbar = useSnackbar();
 	const [t] = useTranslation();
-	const [addressBookName, setAddressBookName] = useState(addressBook.name);
-	const [addressBookColor, setAddressBookColor] = useState(addressBook.color);
+	const [addressBookName, setAddressBookName] = useState(addressBook?.name ?? '');
+	const [addressBookColor, setAddressBookColor] = useState(addressBook?.color ?? 0);
 
 	const modalTitle = useMemo(
 		() =>
 			t('label.edit_folder_properties', {
-				name: addressBook.name,
+				name: addressBook?.name,
 				defaultValue: "Edit {{name}}'s properties"
 			}),
-		[t]
+		[addressBook?.name, t]
 	);
 
 	const confirmButtonDisabled = useMemo(
-		() => addressBook.name === addressBookName && addressBook.color === addressBookColor,
+		() => addressBook?.name === addressBookName && addressBook?.color === addressBookColor,
 		[addressBook, addressBookName, addressBookColor]
 	);
 
@@ -63,7 +64,7 @@ const AddressBookEditGeneralModal = ({
 	const onConfirm = useCallback(() => {
 		apiClient
 			.updateFolder({
-				folderId: addressBook.id,
+				folderId: addressBookId,
 				name: addressBookName,
 				color: addressBookColor
 			})
@@ -88,7 +89,7 @@ const AddressBookEditGeneralModal = ({
 					autoHideTimeout: TIMEOUTS.defaultSnackbar
 				});
 			});
-	}, [addressBook.id, addressBookName, addressBookColor, createSnackbar, t, close]);
+	}, [addressBookId, addressBookName, addressBookColor, createSnackbar, t, close]);
 
 	const onAddressBookInputChange = useCallback((e) => setAddressBookName(e.target.value), []);
 
@@ -98,11 +99,11 @@ const AddressBookEditGeneralModal = ({
 	);
 
 	const showShared = useMemo(
-		() => addressBook.acl?.grant && addressBook.acl?.grant.length > 0,
-		[addressBook.acl?.grant]
+		() => addressBook?.acl?.grant && addressBook.acl?.grant.length > 0,
+		[addressBook?.acl?.grant]
 	);
 
-	const addressBookInputDisabled = useMemo(() => isSystemFolder(addressBook.id), [addressBook.id]);
+	const addressBookInputDisabled = useMemo(() => isSystemFolder(addressBookId), [addressBookId]);
 	return (
 		<>
 			<Container
@@ -179,7 +180,7 @@ const AddressBookEditGeneralModal = ({
 						>
 							<Row takeAvailableSpace mainAlignment="flex-start">
 								<Text size="medium" overflow="break-word">
-									{addressBook.n}
+									{addressBook?.n}
 								</Text>
 							</Row>
 						</Row>
@@ -188,14 +189,7 @@ const AddressBookEditGeneralModal = ({
 				<Divider />
 				<Padding vertical="small" />
 
-				{showShared && (
-					<ShareFolderProperties
-						address={addressBook}
-						setCurrentFolder={() => null}
-						setModal={setModal}
-						setActiveModal={setActiveModal}
-					/>
-				)}
+				{showShared && <ShareFolderProperties addressBookId={addressBookId} />}
 
 				<ModalFooter
 					onConfirm={onConfirm}
@@ -209,5 +203,3 @@ const AddressBookEditGeneralModal = ({
 		</>
 	);
 };
-
-export default AddressBookEditGeneral;

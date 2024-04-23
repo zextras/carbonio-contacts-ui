@@ -3,16 +3,14 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
-import { Container, CustomModal, useSnackbar } from '@zextras/carbonio-design-system';
-import { t } from '@zextras/carbonio-shell-ui';
+import { Container, CustomModal } from '@zextras/carbonio-design-system';
 
-import { Context } from './edit-context';
-import EditDefaultModal from './edit-default-modal';
+import { AddressBookEditGeneralModal } from './address-book-edit-general';
 import ShareFolderModal from './share-folder-modal';
 import ShareRevokeModal from './share-revoke-modal';
-import { useFolder } from '../../../carbonio-ui-commons/store/zustand/folder';
+import { Grant } from '../../../carbonio-ui-commons/types/folder';
 
 export type AddressBookEditModalProps = {
 	addressBookId: string;
@@ -23,77 +21,117 @@ export const AddressBookEditModal = ({
 	addressBookId,
 	onClose
 }: AddressBookEditModalProps): React.JSX.Element => {
-	const addressBook = useFolder(addressBookId);
-	const createSnackbar = useSnackbar();
-	const [activeModal, setActiveModal] = useState('default');
-	const [activeGrant, setActiveGrant] = useState({});
+	// const createSnackbar = useSnackbar();
+	// const [activeModal, setActiveModal] = useState<
+	// 	'default' | 'editShare' | 'revokeShare' | 'addShare'
+	// >('default');
+	// const [activeGrant, setActiveGrant] = useState({});
+
+	const [activeModal, setActiveModal] = useState<React.JSX.Element>();
+
+	const onEditShareModal = useCallback(
+		(grant: Grant) => {
+			const modal = (
+				<ShareFolderModal
+					activeGrant={grant}
+					onClose={showGeneralModal}
+					addressBookId={addressBookId}
+					editMode
+				/>
+			);
+			setActiveModal(modal);
+		},
+		[addressBookId, showGeneralModal]
+	);
+
+	const showAddShareModal = useCallback((): void => {
+		const grant: Grant = {
+			perm: 'r',
+			gt: 'usr'
+		};
+		const modal = (
+			<ShareFolderModal
+				onClose={showGeneralModal}
+				addressBookId={addressBookId}
+				activeGrant={grant}
+			/>
+		);
+		setActiveModal(modal);
+	}, [addressBookId, showGeneralModal]);
+
+	const showRevokeShareModal = useCallback(
+		(grant) => {
+			const modal = (
+				<ShareRevokeModal addressBookId={addressBookId} onClose={showGeneralModal} grant={grant} />
+			);
+			setActiveModal(modal);
+		},
+		[addressBookId, showGeneralModal]
+	);
+
+	const showGeneralModal = useCallback((): void => {
+		const modal = (
+			<AddressBookEditGeneralModal
+				addressBookId={addressBookId}
+				onAddShare={showAddShareModal}
+				onClose={showGeneralModal}
+			/>
+		);
+		setActiveModal(modal);
+	}, [addressBookId, showAddShareModal]);
 
 	return (
 		<>
-			<CustomModal open={openModal} onClose={onClose} maxHeight="90vh" size="medium">
-				<Context.Provider
-					value={{ activeModal, setActiveModal, activeGrant, setActiveGrant, onClose }}
+			<CustomModal onClose={onClose} maxHeight="90vh" size="medium">
+				<Container
+					padding={{ all: 'medium' }}
+					mainAlignment="center"
+					crossAlignment="flex-start"
+					height="fit"
 				>
-					<Container
-						padding={{ all: 'medium' }}
-						mainAlignment="center"
-						crossAlignment="flex-start"
-						height="fit"
-					>
-						{activeModal === 'default' && (
-							<EditDefaultModal
-								currentFolder={currentFolder}
-								setModal={setModal}
-								dispatch={dispatch}
-								setActiveModal={setActiveModal}
-								accordions={accordions}
-							/>
-						)}
+					{activeModal}
 
-						{activeModal === 'edit' && (
-							<ShareFolderModal
-								openModal
-								title="edit"
-								activeGrant={activeGrant}
-								goBack={() => setActiveModal('default')}
-								folder={currentFolder}
-								folders={[]}
-								setModal={setModal}
-								dispatch={dispatch}
-								allFolders={[]}
-								t={t}
-								editMode
-								setActiveModal={setActiveModal}
-								createSnackbar={createSnackbar}
-							/>
-						)}
+					{/* {activeModal === 'default' && ( */}
+					{/*	<AddressBookEditGeneralModal */}
+					{/*		addressBookId={addressBookId} */}
+					{/*	/> */}
+					{/* )} */}
 
-						{activeModal === 'revoke' && (
-							<ShareRevokeModal
-								folder={currentFolder}
-								goBack={() => setActiveModal('default')}
-								onClose={() => setModal('')}
-								grant={activeGrant || currentFolder?.acl?.grant[0]}
-								createSnackbar={createSnackbar}
-							/>
-						)}
+					{/* {activeModal === 'editShare' && ( */}
+					{/*	<ShareFolderModal */}
+					{/*		title="edit" */}
+					{/*		activeGrant={activeGrant} */}
+					{/*		goBack={showGeneralModal} */}
+					{/*		addressBookId={addressBookId} */}
+					{/*		editMode */}
+					{/*	/> */}
+					{/* )} */}
 
-						{activeModal === 'share' && (
-							<ShareFolderModal
-								openModal
-								title="edit"
-								activeGrant={activeGrant}
-								goBack={() => setActiveModal('default')}
-								folder={currentFolder}
-								setModal={setModal}
-								dispatch={dispatch}
-								t={t}
-								setActiveModal={setActiveModal}
-								createSnackbar={createSnackbar}
-							/>
-						)}
-					</Container>
-				</Context.Provider>
+					{/* {activeModal === 'revokeShare' && ( */}
+					{/*	<ShareRevokeModal */}
+					{/*		addressBookId={addressBookId} */}
+					{/*		goBack={() => setActiveModal('default')} */}
+					{/*		onClose={showGeneralModal} */}
+					{/*		grant={activeGrant || currentFolder?.acl?.grant[0]} */}
+					{/*		createSnackbar={createSnackbar} */}
+					{/*	/> */}
+					{/* )} */}
+
+					{/* {activeModal === 'share' && ( */}
+					{/*	<ShareFolderModal */}
+					{/*		openModal */}
+					{/*		title="edit" */}
+					{/*		activeGrant={activeGrant} */}
+					{/*		goBack={() => setActiveModal('default')} */}
+					{/*		folder={currentFolder} */}
+					{/*		setModal={setModal} */}
+					{/*		dispatch={dispatch} */}
+					{/*		t={t} */}
+					{/*		setActiveModal={setActiveModal} */}
+					{/*		createSnackbar={createSnackbar} */}
+					{/*	/> */}
+					{/* )} */}
+				</Container>
 			</CustomModal>
 		</>
 	);

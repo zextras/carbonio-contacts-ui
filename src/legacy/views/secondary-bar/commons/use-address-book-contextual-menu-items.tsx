@@ -9,6 +9,7 @@ import { useMemo } from 'react';
 import { Action } from '@zextras/carbonio-design-system';
 
 import { useActionDeleteAddressBook } from '../../../../actions/delete-address-book';
+import { useActionEditAddressBook } from '../../../../actions/edit-address-book';
 import { useActionEmptyAddressBook } from '../../../../actions/empty-address-book';
 import { useActionEmptyTrash } from '../../../../actions/empty-trash';
 import { useActionExportAddressBook } from '../../../../actions/export-address-book';
@@ -31,6 +32,7 @@ const generateMenuAction = (uiAction: UIAction<Folder, never>, addressBook: Fold
 	}) satisfies Action;
 
 export const useAddressBookContextualMenuItems = (addressBook: Folder): Array<Action> => {
+	const editAction = useActionEditAddressBook();
 	const deleteAction = useActionDeleteAddressBook();
 	const trashAction = useActionTrashAddressBook();
 	const emptyAddressBookAction = useActionEmptyAddressBook();
@@ -43,6 +45,7 @@ export const useAddressBookContextualMenuItems = (addressBook: Folder): Array<Ac
 	return useMemo(() => {
 		const result: Array<Action> = [];
 
+		editAction.canExecute(addressBook) && result.push(generateMenuAction(editAction, addressBook));
 		deleteAction.canExecute(addressBook) &&
 			result.push(generateMenuAction(deleteAction, addressBook));
 		trashAction.canExecute(addressBook) &&

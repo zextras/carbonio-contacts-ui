@@ -20,6 +20,7 @@ import { importContacts } from './api/import-contacts';
 import { modifyContactGroup } from './api/modify-contact';
 import { moveFolder } from './api/move-folder';
 import { sendShareNotification } from './api/send-share-notification';
+import { shareFolder } from './api/share-folder';
 import { trashFolder } from './api/trash-folder';
 import { updateFolder } from './api/update-folder';
 import { upload } from './api/upload';
@@ -42,6 +43,7 @@ export const apiClient = {
 	exportContacts,
 	importContacts,
 	upload,
+	shareFolder,
 	sendShareNotification,
 	updateFolder
 };

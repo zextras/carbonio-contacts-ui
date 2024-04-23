@@ -3,68 +3,60 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback, useContext, useMemo, useState } from 'react';
+import React, { useCallback, useContext, useMemo } from 'react';
 
 import {
 	Button,
 	Chip,
 	Container,
+	getColor,
 	Padding,
-	SelectItem,
 	Text,
 	Tooltip,
 	useSnackbar
 } from '@zextras/carbonio-design-system';
-import { useUserAccounts } from '@zextras/carbonio-shell-ui';
+import { useUserAccount } from '@zextras/carbonio-shell-ui';
 import { map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { Context } from './edit-context';
-import { getShareFolderRoleOptions, findLabel } from './utils';
 import { useFolder } from '../../../carbonio-ui-commons/store/zustand/folder';
 import { Grant } from '../../../carbonio-ui-commons/types/folder';
-import { useAppDispatch } from '../../../legacy/hooks/redux';
-import { sendShareNotification } from '../../../legacy/store/actions/send-share-notification';
-import { ContactsFolder } from '../../../legacy/types/contact';
+import { TIMEOUTS } from '../../../constants';
+import { apiClient } from '../../../network/api-client';
+import { getShareFolderRoleOptions, findLabel } from '../shares-utils';
 
-const HoverChip = styled(Chip)<{ hovered?: boolean }>`
-	background-color: ${({ theme, hovered }): string =>
-		hovered ? theme.palette.gray3.hover : theme.palette.gray3.regular};
+const HoverChip = styled(Chip)`
+	&:hover {
+		background-color: ${({ theme, background }): string => getColor(`${background}.hover`, theme)};
+	}
 `;
 
 type GranteeInfoProps = {
 	grant: Grant;
-	shareFolderRoleOptions: Array<SelectItem>;
-	hovered?: boolean;
 };
 
 type ActionProps = {
-	folder: ContactsFolder;
+	addressBookId: string;
 	grant: Grant;
 	setActiveModal: (arg: string) => void;
-	onMouseLeave: () => void;
-	onMouseEnter: () => void;
 };
 
 export type GranteeProps = {
 	grant: Grant;
-	folder: ContactsFolder;
-	onMouseLeave?: () => void;
-	onMouseEnter?: () => void;
+	addressBookId: string;
 	setActiveModal: (modal: string) => void;
-	shareFolderRoleOptions: Array<SelectItem>;
 };
 
 export type ShareFolderPropertiesProps = {
 	addressBookId: string;
 };
 
-export const GranteeInfo = ({
-	grant,
-	shareFolderRoleOptions,
-	hovered
-}: GranteeInfoProps): React.JSX.Element => {
+export const GranteeInfo = ({ grant }: GranteeInfoProps): React.JSX.Element => {
+	const [t] = useTranslation();
+	const shareFolderRoleOptions = useMemo(() => getShareFolderRoleOptions(t), [t]);
+
 	const role = useMemo(
 		() => findLabel(shareFolderRoleOptions, grant.perm || ''),
 		[shareFolderRoleOptions, grant.perm]
@@ -78,63 +70,63 @@ export const GranteeInfo = ({
 	return (
 		<Container crossAlignment="flex-start">
 			<Text>
-				<HoverChip label={label} hovered={hovered} />
+				<HoverChip label={label} />
 			</Text>
 		</Container>
 	);
 };
 
-const Actions = ({
-	folder,
-	grant,
-	setActiveModal,
-	onMouseLeave,
-	onMouseEnter
-}: ActionProps): React.JSX.Element => {
+const Actions = ({ addressBookId, grant, setActiveModal }: ActionProps): React.JSX.Element => {
 	const [t] = useTranslation();
-	const accounts = useUserAccounts();
+	const account = useUserAccount();
 	const createSnackbar = useSnackbar();
 	const { setActiveGrant } = useContext(Context);
-	const dispatch = useAppDispatch();
+
 	const onRevoke = useCallback(() => {
 		setActiveGrant?.(grant);
 		setActiveModal('revoke');
 	}, [setActiveModal, setActiveGrant, grant]);
 
 	const onResend = useCallback(() => {
-		dispatch(
-			sendShareNotification({
-				standardMessage: '',
-				contacts: [{ email: grant.d }],
-				folder,
-				accounts
+		if (!grant.d) {
+			return;
+		}
+
+		apiClient
+			.sendShareNotification({
+				accountName: account.name,
+				folderId: addressBookId,
+				addresses: [grant.d]
 			})
-		).then((res) => {
-			if (res.type.includes('fulfilled')) {
+			.then((res) => {
 				createSnackbar({
-					key: `resend-${folder.id}`,
+					key: `resend-${addressBookId}-share-notification-success`,
 					replace: true,
 					type: 'info',
 					label: t('snackbar.share_resend', 'Share invite resent'),
-					autoHideTimeout: 2000,
+					autoHideTimeout: TIMEOUTS.defaultSnackbar,
 					hideButton: true
 				});
-			}
-		});
-	}, [accounts, dispatch, folder, t, grant.d, createSnackbar]);
+			})
+			.catch(() => {
+				createSnackbar({
+					key: `resend-${addressBookId}-share-notification-error`,
+					replace: true,
+					type: 'error',
+					label: t('label.error_try_again', 'Something went wrong, please try again'),
+					autoHideTimeout: TIMEOUTS.defaultSnackbar,
+					hideButton: true
+				});
+			});
+	}, [account, addressBookId, t, grant.d, createSnackbar]);
+
 	const onEdit = useCallback(() => {
 		setActiveGrant?.(grant);
 		setActiveModal('edit');
 	}, [setActiveModal, setActiveGrant, grant]);
 
 	return (
-		<Container
-			orientation="horizontal"
-			mainAlignment="flex-end"
-			onMouseEnter={onMouseEnter}
-			onMouseLeave={onMouseLeave}
-			maxWidth="fit"
-		>
+		<Container orientation="horizontal" mainAlignment="flex-end" maxWidth="fit">
 			<Tooltip label={t('label.edit_access', 'Edit access')} placement="top">
 				<Button type="outlined" label={t('label.edit')} onClick={onEdit} size={'small'} />
 			</Tooltip>
@@ -165,36 +157,12 @@ const Actions = ({
 	);
 };
 
-const Grantee = ({
-	grant,
-	folder,
-	setActiveModal,
-	shareFolderRoleOptions
-}: GranteeProps): React.JSX.Element => {
-	const [hovered, setHovered] = useState(false);
-	const onMouseEnter = useCallback(() => {
-		setHovered(true);
-	}, []);
-	const onMouseLeave = useCallback(() => {
-		setHovered(false);
-	}, []);
-	return (
-		<Container orientation="horizontal" mainAlignment="flex-end" padding={{ bottom: 'small' }}>
-			<GranteeInfo
-				grant={grant}
-				shareFolderRoleOptions={shareFolderRoleOptions}
-				hovered={hovered}
-			/>
-			<Actions
-				folder={folder}
-				onMouseLeave={onMouseLeave}
-				onMouseEnter={onMouseEnter}
-				grant={grant}
-				setActiveModal={setActiveModal}
-			/>
-		</Container>
-	);
-};
+const Grantee = ({ grant, addressBookId, setActiveModal }: GranteeProps): React.JSX.Element => (
+	<Container orientation="horizontal" mainAlignment="flex-end" padding={{ bottom: 'small' }}>
+		<GranteeInfo grant={grant} />
+		<Actions addressBookId={addressBookId} grant={grant} setActiveModal={setActiveModal} />
+	</Container>
+);
 
 export const ShareFolderProperties = ({
 	addressBookId
@@ -202,21 +170,15 @@ export const ShareFolderProperties = ({
 	const [t] = useTranslation();
 	const addressBook = useFolder(addressBookId);
 
-	const shareFolderRoleOptions = useMemo(() => getShareFolderRoleOptions(t), [t]);
+	const grants = addressBook?.acl?.grant ?? [];
 
 	return (
 		<Container mainAlignment="center" crossAlignment="flex-start" height="fit">
 			<Padding vertical="small" />
 			<Text weight="bold">{t('label.shares_folder_edit', 'Sharing of this address book')}</Text>
 			<Padding vertical="small" />
-			{map(grant, (item) => (
-				<Grantee
-					key={item.zid}
-					grant={item}
-					folder={folder}
-					setActiveModal={setActiveModal}
-					shareFolderRoleOptions={shareFolderRoleOptions}
-				/>
+			{map(grants, (grant) => (
+				<Grantee key={grant.zid} grant={grant} addressBookId={addressBookId} />
 			))}
 
 			<Padding bottom="medium" />
