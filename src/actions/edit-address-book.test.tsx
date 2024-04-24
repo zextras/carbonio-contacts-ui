@@ -78,7 +78,6 @@ describe('useActionEditAddressBook', () => {
 			const addressBook = generateFolder({
 				name,
 				id: folderId,
-				absFolderPath: '/Trash/trashed stuff of someone else',
 				isLink: true,
 				view: FOLDER_VIEW.contact
 			});

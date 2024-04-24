@@ -13,7 +13,9 @@ import {
 	Checkbox,
 	Row,
 	Padding,
-	useSnackbar
+	useSnackbar,
+	ModalFooter,
+	ModalHeader
 } from '@zextras/carbonio-design-system';
 import { useUserAccount } from '@zextras/carbonio-shell-ui';
 import { replace, split } from 'lodash';
@@ -24,8 +26,6 @@ import { useFolder } from '../../../carbonio-ui-commons/store/zustand/folder';
 import { Grant } from '../../../carbonio-ui-commons/types/folder';
 import { TIMEOUTS } from '../../../constants';
 import { ContactInput } from '../../../legacy/integrations/contact-input';
-import ModalFooter from '../../../legacy/views/secondary-bar/commons/modal-footer';
-import { ModalHeader } from '../../../legacy/views/secondary-bar/commons/modal-header';
 import { capitalise } from '../../../legacy/views/secondary-bar/utils';
 import { apiClient } from '../../../network/api-client';
 import { findLabel, getShareFolderRoleOptions } from '../shares-utils';
@@ -37,7 +37,7 @@ export type ShareFolderModalProps = {
 	activeGrant: Grant;
 };
 
-const ShareFolderModal = ({
+export const ShareFolderModal = ({
 	onClose,
 	addressBookId,
 	editMode = false,
@@ -77,8 +77,7 @@ const ShareFolderModal = ({
 			.shareFolder({
 				addresses,
 				role: shareWithUserRole,
-				folderId: addressBookId,
-				accountName: account.displayName
+				folderId: addressBookId
 			})
 			.then(() => {
 				createSnackbar({
@@ -99,26 +98,28 @@ const ShareFolderModal = ({
 						addresses,
 						message: standardMessage
 					});
+
+				onClose();
 			})
 			.catch((err) => {
-				const message = err ?? t('label.error_try_again', 'Something went wrong, please try again');
+				// const message = err ?? t('label.error_try_again', 'Something went wrong, please try again');
 				createSnackbar({
 					key: `share-${addressBookId}-address-book-error`,
 					replace: true,
 					type: 'error',
 					hideButton: true,
-					label: message,
+					label: t('label.error_try_again', 'Something went wrong, please try again'),
 					autoHideTimeout: TIMEOUTS.defaultSnackbar
 				});
 			});
 	}, [
-		account.displayName,
 		account.name,
 		activeGrant?.d,
 		addressBookId,
 		contacts,
 		createSnackbar,
 		editMode,
+		onClose,
 		sendNotification,
 		shareWithUserRole,
 		standardMessage,
@@ -137,7 +138,7 @@ const ShareFolderModal = ({
 			crossAlignment="flex-start"
 			height="fit"
 		>
-			<ModalHeader title={title} onClose={onClose} />
+			<ModalHeader title={title} onClose={onClose} showCloseIcon />
 			<Padding top="small" />
 			{editMode ? (
 				<Container
@@ -152,14 +153,13 @@ const ShareFolderModal = ({
 					<ContactInput
 						placeholder={t('share.recipients_address', 'Recipients’ e-mail addresses')}
 						onChange={(ev) => {
-							// TODO complete me!!!!
-							// const normalizedContacts = ev.reduce<Array<{ email: string }>>(
-							// 	(result, contact) => {
-							//
-							// 	},
-							// 	[]
-							// );
-							// setContacts();
+							const normalizedContacts = ev.reduce<Array<{ email: string }>>((result, contact) => {
+								if (contact.email) {
+									result.push({ email: contact.email });
+								}
+								return result;
+							}, []);
+							setContacts(normalizedContacts);
 						}}
 						defaultValue={contacts}
 					/>
@@ -224,18 +224,16 @@ const ShareFolderModal = ({
 				</Row>
 			</Container>
 			<ModalFooter
-				label={
+				confirmLabel={
 					editMode
 						? t('label.edit_access', 'Edit access')
 						: t('action.share_folder', 'Share folder')
 				}
 				onConfirm={onConfirm}
-				disabled={editMode ? disableEdit : contacts.length < 1}
-				secondaryAction={onClose}
-				secondaryLabel={t('folder.modal.footer.go_back', 'Go back')}
+				confirmDisabled={editMode ? disableEdit : contacts.length < 1}
+				onSecondaryAction={onClose}
+				secondaryActionLabel={t('folder.modal.footer.go_back', 'Go back')}
 			/>
 		</Container>
 	);
 };
-
-export default ShareFolderModal;

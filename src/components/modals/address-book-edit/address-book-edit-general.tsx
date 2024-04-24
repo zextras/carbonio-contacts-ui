@@ -25,18 +25,23 @@ import {
 } from '../../../carbonio-ui-commons/components/select/color-select';
 import { isSystemFolder } from '../../../carbonio-ui-commons/helpers/folders';
 import { useFolder } from '../../../carbonio-ui-commons/store/zustand/folder';
+import { Grant } from '../../../carbonio-ui-commons/types/folder';
 import { TIMEOUTS } from '../../../constants';
 import { apiClient } from '../../../network/api-client';
 
 export type AddressBookEditGeneralModalProps = {
 	addressBookId: string;
 	onAddShare: () => void;
+	onEditShare: (grant: Grant) => void;
+	onRevokeShare: (grant: Grant) => void;
 	onClose: () => void;
 };
 
 export const AddressBookEditGeneralModal = ({
 	addressBookId,
 	onAddShare,
+	onEditShare,
+	onRevokeShare,
 	onClose
 }: AddressBookEditGeneralModalProps): React.JSX.Element => {
 	const addressBook = useFolder(addressBookId);
@@ -59,7 +64,7 @@ export const AddressBookEditGeneralModal = ({
 		[addressBook, addressBookName, addressBookColor]
 	);
 
-	const close = useCallback(() => onClose, [onClose]);
+	const close = useCallback(() => onClose(), [onClose]);
 
 	const onConfirm = useCallback(() => {
 		apiClient
@@ -189,7 +194,13 @@ export const AddressBookEditGeneralModal = ({
 				<Divider />
 				<Padding vertical="small" />
 
-				{showShared && <ShareFolderProperties addressBookId={addressBookId} />}
+				{showShared && (
+					<ShareFolderProperties
+						addressBookId={addressBookId}
+						onEdit={onEditShare}
+						onRevoke={onRevokeShare}
+					/>
+				)}
 
 				<ModalFooter
 					onConfirm={onConfirm}

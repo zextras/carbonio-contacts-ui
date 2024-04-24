@@ -3,53 +3,56 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { map } from 'lodash';
+import { SoapFault, soapFetch } from '@zextras/carbonio-shell-ui';
+import { isArray } from 'lodash';
+
+import { FolderActionRequest, FolderActionResponse } from './folder-action';
+import { GenericSoapPayload } from './types';
+import { NAMESPACES } from '../../constants/api';
+
+export interface BatchShareFolderRequest extends GenericSoapPayload<typeof NAMESPACES.generic> {
+	FolderActionRequest: Array<FolderActionRequest>;
+}
+
+export interface BatchShareFolderResponse extends GenericSoapPayload<typeof NAMESPACES.generic> {
+	FolderActionResponse?: Array<FolderActionResponse>;
+	Fault?: SoapFault | Array<SoapFault>;
+}
 
 export type ShareFolderParams = {
 	addresses: Array<string>;
 	role: string;
 	folderId: string;
-	accountName: string;
 };
 
-export const shareFolder = async ({
-	addresses,
-	folderId,
-	role,
-	accountName
-}: ShareFolderParams): Promise<void> => {
-	const requestsBody = `<BatchRequest xmlns="urn:zimbra" onerror="stop">
-        ${map(
-					addresses,
-					(
-						address,
-						key
-					) => `<FolderActionRequest xmlns="urn:zimbraMail" requestId="${key}"><action op="grant" id="${folderId}">
-        <grant gt="usr" inh="1" d="${address}" perm="${role}" pw=""/></action></FolderActionRequest>`
-				).join('')}    
-        </BatchRequest>`;
-
-	const res = await fetch('/service/soap/BatchRequest', {
-		method: 'POST',
-		headers: {
-			'content-type': 'application/soap+xml'
+export const shareFolder = ({ addresses, folderId, role }: ShareFolderParams): Promise<void> => {
+	const actionRequests: Array<FolderActionRequest> = addresses.map((address, key) => ({
+		action: {
+			id: folderId,
+			op: 'grant',
+			grant: {
+				gt: 'usr',
+				d: address,
+				perm: role
+			}
 		},
-		body: `<?xml version="1.0" encoding="utf-8"?>
-			<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope">
-				<soap:Header>
-					<context xmlns="urn:zimbra">
-						<account by="name">${accountName}</account>
-						<format type="js"/>
-					</context>
-				</soap:Header>
-				<soap:Body>
-					${requestsBody}				
-				</soap:Body>
-			</soap:Envelope>
-		`
+		_jsns: NAMESPACES.mail
+	}));
+
+	return soapFetch<BatchShareFolderRequest, BatchShareFolderResponse>('Batch', {
+		FolderActionRequest: actionRequests,
+		_jsns: NAMESPACES.generic
+	}).then((response) => {
+		if ('Fault' in response) {
+			if (isArray(response.Fault)) {
+				throw new Error(response.Fault?.map((fault) => fault.Reason.Text).join(',\n'), {
+					cause: response.Fault
+				});
+			}
+
+			throw new Error(response.Fault?.Reason.Text, {
+				cause: response.Fault
+			});
+		}
 	});
-	const response = await res.json();
-	if (response.Body.BatchResponse.Fault) {
-		throw new Error(response.Body.BatchResponse.Fault[0].Reason.Text);
-	}
 };
