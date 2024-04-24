@@ -527,11 +527,5 @@
         "mobile": "mobile",
         "other": "other",
         "work": "work"
-    },
-    "contacts": {
-        "importAction": {
-            "modalTitle": "Import contacts",
-            "modalButton": "IMPORT"
-        }
     }
 }

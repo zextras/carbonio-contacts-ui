@@ -20,7 +20,7 @@ import { map, replace, split } from 'lodash';
 
 import ModalFooter from './commons/modal-footer';
 import { ModalHeader } from './commons/modal-header';
-import { findLabel, ShareFolderRoleOptions, ShareFolderWithOptions } from './commons/utils';
+import { findLabel, ShareFolderRoleOptions } from './commons/utils';
 import { GranteeInfo } from './parts/edit/share-folder-properties';
 import { capitalise } from './utils';
 import { sendShareNotification } from '../../store/actions/send-share-notification';
@@ -37,12 +37,10 @@ const ShareFolderModal = ({
 	activeGrant
 }) => {
 	const [ContactInput, integrationAvailable] = useIntegratedComponent('contact-input');
-	const shareFolderWithOptions = useMemo(() => ShareFolderWithOptions(t), [t]);
 	const shareFolderRoleOptions = useMemo(() => ShareFolderRoleOptions(t), [t]);
 	const [sendNotification, setSendNotification] = useState(true);
 	const [standardMessage, setStandardMessage] = useState('');
 	const [contacts, setContacts] = useState([]);
-	const [shareWithUserType, setshareWithUserType] = useState('usr');
 	const [shareWithUserRole, setshareWithUserRole] = useState(editMode ? activeGrant.perm : 'r');
 	const userName = useMemo(() => replace(split(activeGrant?.d, '@')?.[0], '.', ' '), [activeGrant]);
 	const userNameCapitalise = useMemo(() => capitalise(userName), [userName]);
@@ -63,10 +61,6 @@ const ShareFolderModal = ({
 		[t, folder, editMode, userNameCapitalise]
 	);
 
-	const onShareWithChange = useCallback((shareWith) => {
-		setshareWithUserType(shareWith);
-	}, []);
-
 	const onShareRoleChange = useCallback((shareRole) => {
 		setshareWithUserRole(shareRole);
 	}, []);
@@ -76,7 +70,6 @@ const ShareFolderModal = ({
 			shareFolder({
 				standardMessage,
 				contacts: editMode ? [{ email: activeGrant.d }] : contacts,
-				shareWithUserType,
 				shareWithUserRole,
 				folder,
 				accounts
@@ -109,7 +102,6 @@ const ShareFolderModal = ({
 								sendNotification,
 								standardMessage,
 								contacts: editMode ? [{ email: activeGrant.d }] : contacts,
-								shareWithUserType,
 								shareWithUserRole,
 								folder,
 								accounts
@@ -138,7 +130,6 @@ const ShareFolderModal = ({
 		contacts,
 		createSnackbar,
 		shareWithUserRole,
-		shareWithUserType,
 		standardMessage,
 		t,
 		editMode,
@@ -160,20 +151,6 @@ const ShareFolderModal = ({
 		>
 			<ModalHeader title={title} onClose={onClose} />
 			<Padding top="small" />
-			{!editMode && (
-				<Container height="fit">
-					<Select
-						items={shareFolderWithOptions}
-						background="gray5"
-						label={t('label.share_with', 'Share with')}
-						onChange={onShareWithChange}
-						defaultSelection={{
-							value: 'usr',
-							label: findLabel(shareFolderWithOptions, 'usr')
-						}}
-					/>
-				</Container>
-			)}
 			{editMode ? (
 				<Container
 					orientation="horizontal"
