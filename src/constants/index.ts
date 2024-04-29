@@ -19,7 +19,7 @@ export const ACTION_IDS = {
 	addSharedAddressBooks: 'shares-add-action',
 	trashAddressBook: 'trash-address-book-action',
 	deleteAddressBook: 'delete-address-book-action',
-	newAddressBook: 'new-address-book-action',
+	createAddressBook: 'create-address-book-action',
 	editAddressBook: 'edit-address-book-action',
 	emptyAddressBook: 'empty-address-book-action',
 	emptyTrash: 'empty-trash-action',

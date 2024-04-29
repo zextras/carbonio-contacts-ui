@@ -22,18 +22,18 @@ import {
 	SecondaryBarComponentProps,
 	ZIMBRA_STANDARD_COLORS
 } from '@zextras/carbonio-shell-ui';
-import { map, noop, sortBy } from 'lodash';
+import { map, noop } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { Route, Switch, useParams, useRouteMatch } from 'react-router-dom';
 
 import AccordionCustomComponent from './accordion-custom-component';
 import { useActionAddSharedAddressBooks } from '../../../actions/add-shared-address-books';
 import { SidebarAccordionMui } from '../../../carbonio-ui-commons/components/sidebar/sidebar-accordion-mui';
-import { getFolderIdParts } from '../../../carbonio-ui-commons/helpers/folders';
 import { useRootsArray } from '../../../carbonio-ui-commons/store/zustand/folder';
 import { themeMui } from '../../../carbonio-ui-commons/theme/theme-mui';
 import { Folder } from '../../../carbonio-ui-commons/types/folder';
 import { LOCAL_STORAGES } from '../../../constants';
+import { sortFolders } from '../../../helpers/folders';
 import useGetTagsAccordion from '../../hooks/use-get-tags-accordions';
 import { getFolderTranslatedName } from '../../utils/helpers';
 
@@ -120,45 +120,6 @@ export const CollapsedSideBarItems = ({ folder }: { folder: Folder }): React.JSX
 	);
 };
 
-export const getSortCriteria = (folder: Folder): string => {
-	const { id } = getFolderIdParts(folder.id);
-
-	if (folder.isLink) {
-		return `5000-${folder.name.toLowerCase()}`;
-	}
-
-	switch (id) {
-		case FOLDERS.CONTACTS:
-			return `1000`;
-		case FOLDERS.AUTO_CONTACTS:
-			return `2000`;
-		case FOLDERS.TRASH:
-			return `4000`;
-		default:
-			return `3000-${folder.name.toLowerCase()}`;
-	}
-};
-
-/**
- * recursively sort the children of a folder according to a given sort function
- * @param children
- * @param sortFunction
- * @returns the sorted children
- */
-export const sortFolders = ({
-	children,
-	sortFunction
-}: {
-	children: Folder[];
-	sortFunction: (folder: Folder) => string;
-}): Folder[] => {
-	const childrenSorted = sortBy(children, sortFunction);
-	return childrenSorted.map((folder) => ({
-		...folder,
-		children: sortFolders({ children: folder.children, sortFunction })
-	}));
-};
-
 const SecondaryBarView: FC<SecondaryBarComponentProps> = ({ expanded = false }) => {
 	const { folderId: selectedFolderId } = useParams<{ folderId: string }>();
 	const tagsAccordionItems = useGetTagsAccordion();
@@ -167,10 +128,7 @@ const SecondaryBarView: FC<SecondaryBarComponentProps> = ({ expanded = false }) 
 	const roots = useRootsArray();
 	// TODO Remove when IRIS-5083 will be implemented
 	const filteredRoots = roots.filter((root) => root.id === FOLDERS.USER_ROOT);
-	const folders = useMemo(
-		() => sortFolders({ children: filteredRoots, sortFunction: getSortCriteria }),
-		[filteredRoots]
-	);
+	const folders = useMemo(() => sortFolders(filteredRoots), [filteredRoots]);
 
 	const accordionsWithFindShare = useMemo(() => {
 		if (!folders?.[0]?.children.find((folder: Folder) => folder.id === 'find_shares')) {

@@ -6,6 +6,7 @@
 
 import { deleteContactAction } from './api/contact-action';
 import { createContactGroup } from './api/create-contact-group';
+import { createFolder } from './api/create-folder';
 import { createMountpoints } from './api/create-mountpoints';
 import { deleteFolder } from './api/delete-folder';
 import { distributionListAction } from './api/distribution-list-action';
@@ -47,5 +48,6 @@ export const apiClient = {
 	shareFolder,
 	revokeFolderGrant,
 	sendShareNotification,
-	updateFolder
+	updateFolder,
+	createFolder
 };

@@ -9,26 +9,29 @@ import { useModal } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
 import { UIAction } from './types';
-import { isSystemFolder } from '../carbonio-ui-commons/helpers/folders';
+import { isTrash } from '../carbonio-ui-commons/helpers/folders';
 import { isNestedInTrash } from '../carbonio-ui-commons/store/zustand/folder/utils';
 import { Folder } from '../carbonio-ui-commons/types/folder';
-import { AddressBookDeleteModal } from '../components/modals/address-book-delete/address-book-delete';
+import { AddressBookCreateModal } from '../components/modals/address-book-create';
 import { ACTION_IDS } from '../constants';
-import { StoreProvider } from '../legacy/store/redux';
 
-export type DeleteAddressBookAction = UIAction<Folder, Folder>;
+export type CreateAddressBookAction = UIAction<Folder | undefined, Folder | undefined>;
 
-export const useActionDeleteAddressBook = (): DeleteAddressBookAction => {
+export const useActionCreateAddressBook = (): CreateAddressBookAction => {
 	const [t] = useTranslation();
 	const createModal = useModal();
 
-	const canExecute = useCallback<DeleteAddressBookAction['canExecute']>(
+	const canExecute = useCallback<CreateAddressBookAction['canExecute']>(
 		(addressBook?: Folder): boolean => {
 			if (!addressBook) {
+				return true;
+			}
+
+			if (isNestedInTrash(addressBook)) {
 				return false;
 			}
 
-			if (isSystemFolder(addressBook.id)) {
+			if (isTrash(addressBook.id)) {
 				return false;
 			}
 
@@ -36,26 +39,24 @@ export const useActionDeleteAddressBook = (): DeleteAddressBookAction => {
 				return false;
 			}
 
-			return isNestedInTrash(addressBook);
+			return true;
 		},
 		[]
 	);
 
-	const execute = useCallback<DeleteAddressBookAction['execute']>(
+	const execute = useCallback<CreateAddressBookAction['execute']>(
 		(addressBook) => {
 			if (!canExecute(addressBook)) {
 				return;
 			}
 
-			if (!addressBook) {
-				return;
-			}
 			const closeModal = createModal(
 				{
 					children: (
-						<StoreProvider>
-							<AddressBookDeleteModal addressBook={addressBook} onClose={() => closeModal()} />
-						</StoreProvider>
+						<AddressBookCreateModal
+							defaultParentId={addressBook?.id}
+							onClose={() => closeModal()}
+						/>
 					)
 				},
 				true
@@ -66,9 +67,9 @@ export const useActionDeleteAddressBook = (): DeleteAddressBookAction => {
 
 	return useMemo(
 		() => ({
-			id: ACTION_IDS.deleteAddressBook,
-			label: t('folder.action.delete_permanently', 'Delete address book permanently'),
-			icon: 'Trash2Outline',
+			id: ACTION_IDS.createAddressBook,
+			label: t('label.new_address_book', 'New address book'),
+			icon: 'AddressBookOutline',
 			execute,
 			canExecute
 		}),

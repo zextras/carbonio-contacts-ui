@@ -306,6 +306,7 @@
             "upload_failed_generic": "Upload failed for the file \"{{filename}}\""
         },
         "export_address_book": "Export csv file",
+        "filter_folders": "Filter folders",
         "find_shares": "Find shares",
         "folder_name": "Folder name",
         "groups_app_name": "Contact Groups and Distribution Lists",
@@ -316,6 +317,7 @@
         "new_address_book": "New address Book",
         "new_contact": "New contact",
         "new_contact_created": "New contact created",
+        "new_folder": "New Folder",
         "new_tag": "New Tag",
         "no_data": "No Data",
         "no_name": "No Name",

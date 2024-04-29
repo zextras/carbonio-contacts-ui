@@ -24,16 +24,15 @@ import {
 	FOLDERS,
 	ROOT_NAME,
 	useUserAccount,
-	useUserSettings,
-	ZIMBRA_STANDARD_COLORS
+	useUserSettings
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { useAddressBookContextualMenuItems } from './commons/use-address-book-contextual-menu-items';
-import { getFolderIdParts } from '../../../carbonio-ui-commons/helpers/folders';
 import { Folder } from '../../../carbonio-ui-commons/types/folder';
+import { getFolderIconColor, getFolderIconName } from '../../../helpers/folders';
 import { useAppDispatch } from '../../hooks/redux';
 import { getFolderTranslatedName } from '../../utils/helpers';
 
@@ -61,34 +60,6 @@ const DropDenyOverlayContainer = styled(Container)<ContainerProps & { folder: Fo
 	border: 0.25rem solid #d5e3f6;
 	opacity: 0.4;
 `;
-
-// TODO move in a separate module
-const getFolderIconName = (folder: Folder): string | null => {
-	if (folder.id === 'shares' || folder.isLink) {
-		return 'SharedAddressBookOutline';
-	}
-
-	const { id } = getFolderIdParts(folder.id);
-
-	if (id === FOLDERS.USER_ROOT) {
-		return null;
-	}
-
-	switch (id) {
-		case FOLDERS.CONTACTS:
-			return 'PersonOutline';
-		case FOLDERS.AUTO_CONTACTS:
-			return 'EmailOutline';
-		case FOLDERS.TRASH:
-			return 'Trash2Outline';
-		default:
-			return 'FolderOutline';
-	}
-};
-
-// TODO move in a separate module
-const getFolderIconColor = (folder: Folder): string =>
-	folder.color ? ZIMBRA_STANDARD_COLORS[folder.color].hex : ZIMBRA_STANDARD_COLORS[0].hex;
 
 const AccordionCustomComponent: FC<{ item: Folder }> = ({ item }) => {
 	const [t] = useTranslation();
