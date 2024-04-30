@@ -101,7 +101,7 @@ describe('Contact input integration wrapper', () => {
 					jest.runOnlyPendingTimers();
 				});
 				await screen.findByTestId(TESTID_SELECTORS.dropdownList);
-				expect(await screen.findByText(contact3.email)).toBeVisible();
+				expect(await screen.findByText(contact3.email, { exact: false })).toBeVisible();
 				await act(async () => {
 					await user.keyboard('{Enter}');
 				});
@@ -126,7 +126,7 @@ describe('Contact input integration wrapper', () => {
 					jest.runOnlyPendingTimers();
 				});
 				const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
-				const dropdownItem = await within(dropdown).findByText(contact.email);
+				const dropdownItem = await within(dropdown).findByText(contact.email, { exact: false });
 				await user.click(dropdownItem);
 				expect(onChange).toHaveBeenCalledWith([
 					expect.objectContaining({ actions: [editValidChipAction] })

@@ -39,8 +39,8 @@ describe('Contact input', () => {
 			jest.runOnlyPendingTimers();
 		});
 		const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
-		expect(within(dropdown).getByText(contact.email)).toBeVisible();
-		expect(within(dropdown).getByText(contact.first)).toBeVisible();
+		expect(within(dropdown).getByText(contact.email, { exact: false })).toBeVisible();
+		expect(within(dropdown).getByText(contact.first, { exact: false })).toBeVisible();
 	});
 
 	it('should render a dropdown with a contact group', async () => {

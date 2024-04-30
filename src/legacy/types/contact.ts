@@ -129,7 +129,7 @@ export type Match = {
 };
 
 export type FullAutocompleteResponse = {
-	canBeCached: string | null;
+	canBeCached: boolean;
 	match?: Match[];
 	_jsns?: string;
 };
@@ -168,7 +168,7 @@ export type ShareFolderPropertiesProps = {
 };
 
 export type FullAutocompleteRequest = {
-	orderedAccountIds?: Array<{ _content: string }>;
+	orderedAccountIds?: string;
 	AutoCompleteRequest: {
 		name: string;
 		includeGal: 0 | 1;

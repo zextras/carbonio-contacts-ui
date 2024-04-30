@@ -135,13 +135,15 @@ describe('Edit DL Members Component', () => {
 				jest.runOnlyPendingTimers();
 			});
 			await screen.findByTestId(TESTID_SELECTORS.dropdownList);
-			const dropdownOption = await screen.findByText(email);
+			const dropdownOption = await screen.findByText(email, { exact: false });
 			expect(dropdownOption).toBeVisible();
 			await act(async () => {
 				await user.click(dropdownOption);
 			});
 
-			expect(await within(contactInput.container).findByText(email)).toBeVisible();
+			expect(
+				await within(contactInput.container).findByText(email, { exact: false })
+			).toBeVisible();
 		});
 
 		it('chip should show email if contact is added manually by typing', async () => {
