@@ -15,6 +15,7 @@ import { useActionEmptyAddressBook } from '../../../../actions/empty-address-boo
 import { useActionEmptyTrash } from '../../../../actions/empty-trash';
 import { useActionExportAddressBook } from '../../../../actions/export-address-book';
 import { useActionImportContacts } from '../../../../actions/import-contacts';
+import { useActionMoveAddressBook } from '../../../../actions/move-address-book';
 import { useActionRemoveAddressBookLink } from '../../../../actions/remove-address-book-link';
 import { useActionShowShareInfo } from '../../../../actions/show-share-info';
 import { useActionTrashAddressBook } from '../../../../actions/trash-address-book';
@@ -34,6 +35,7 @@ const generateMenuAction = (uiAction: UIAction<Folder, never>, addressBook: Fold
 
 export const useAddressBookContextualMenuItems = (addressBook: Folder): Array<Action> => {
 	const createAction = useActionCreateAddressBook();
+	const moveAction = useActionMoveAddressBook();
 	const editAction = useActionEditAddressBook();
 	const deleteAction = useActionDeleteAddressBook();
 	const trashAction = useActionTrashAddressBook();
@@ -49,15 +51,16 @@ export const useAddressBookContextualMenuItems = (addressBook: Folder): Array<Ac
 
 		createAction.canExecute(addressBook) &&
 			result.push(generateMenuAction(createAction, addressBook));
+		moveAction.canExecute(addressBook) && result.push(generateMenuAction(moveAction, addressBook));
+		emptyAddressBookAction.canExecute(addressBook) &&
+			result.push(generateMenuAction(emptyAddressBookAction, addressBook));
+		emptyTrashAction.canExecute(addressBook) &&
+			result.push(generateMenuAction(emptyTrashAction, addressBook));
 		editAction.canExecute(addressBook) && result.push(generateMenuAction(editAction, addressBook));
 		deleteAction.canExecute(addressBook) &&
 			result.push(generateMenuAction(deleteAction, addressBook));
 		trashAction.canExecute(addressBook) &&
 			result.push(generateMenuAction(trashAction, addressBook));
-		emptyAddressBookAction.canExecute(addressBook) &&
-			result.push(generateMenuAction(emptyAddressBookAction, addressBook));
-		emptyTrashAction.canExecute(addressBook) &&
-			result.push(generateMenuAction(emptyTrashAction, addressBook));
 		exportAction.canExecute(addressBook) &&
 			result.push(generateMenuAction(exportAction, addressBook));
 		importAction.canExecute(addressBook) &&

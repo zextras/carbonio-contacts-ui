@@ -45,7 +45,7 @@ export const useActionDeleteCG = (): DeleteCGAction => {
 				onConfirm: () => {
 					closeModal();
 					apiClient
-						.deleteContactAction([contactGroup.id])
+						.deleteContact([contactGroup.id])
 						.then(() => {
 							const boardId = `${EDIT_CONTACT_GROUP_BOARD_ID}-${contactGroup.id}`;
 							const board = getBoardById(boardId);

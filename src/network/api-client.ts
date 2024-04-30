@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { deleteContactAction } from './api/contact-action';
 import { createContactGroup } from './api/create-contact-group';
 import { createFolder } from './api/create-folder';
 import { createMountpoints } from './api/create-mountpoints';
+import { deleteContact } from './api/delete-contact';
 import { deleteFolder } from './api/delete-folder';
 import { distributionListAction } from './api/distribution-list-action';
 import { emptyFolder } from './api/empty-folder';
@@ -19,6 +19,7 @@ import { getDistributionListMembers } from './api/get-distribution-list-members'
 import { getShareInfo } from './api/get-share-info';
 import { importContacts } from './api/import-contacts';
 import { modifyContactGroup } from './api/modify-contact';
+import { moveContact } from './api/move-contact';
 import { moveFolder } from './api/move-folder';
 import { revokeFolderGrant } from './api/revoke-folder-grant';
 import { sendShareNotification } from './api/send-share-notification';
@@ -33,7 +34,8 @@ export const apiClient = {
 	getDistributionList,
 	getDistributionListMembers,
 	findContactGroups,
-	deleteContactAction,
+	deleteContact,
+	moveContact,
 	getAccountDistributionLists,
 	modifyContactGroup,
 	getShareInfo,

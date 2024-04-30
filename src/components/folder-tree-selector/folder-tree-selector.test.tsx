@@ -292,5 +292,22 @@ describe('Folder selector', () => {
 				screen.queryByTestId(`folder-accordion-item-${trashedFolder.id}`)
 			).not.toBeInTheDocument();
 		});
+
+		test("doesn't display the Contacts folder if it has been added to the exclusions list", () => {
+			populateFoldersStore();
+			const props: FolderTreeSelectorProps = {
+				allowFolderCreation: false,
+				allowRootSelection: false,
+				showSharedAccounts: false,
+				showTrashFolder: false,
+				excludeIds: [FOLDERS.CONTACTS],
+				onFolderSelected: jest.fn()
+			};
+			setupTest(<FolderTreeSelector {...props} />);
+			makeListItemsVisible();
+			expect(
+				screen.queryByTestId(`folder-accordion-item-${FOLDERS.CONTACTS}`)
+			).not.toBeInTheDocument();
+		});
 	});
 });

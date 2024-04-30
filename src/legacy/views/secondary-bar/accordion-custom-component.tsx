@@ -19,19 +19,16 @@ import {
 	Tooltip,
 	useSnackbar
 } from '@zextras/carbonio-design-system';
-import {
-	AppLink,
-	FOLDERS,
-	ROOT_NAME,
-	useUserAccount,
-	useUserSettings
-} from '@zextras/carbonio-shell-ui';
+import { AppLink, FOLDERS, ROOT_NAME, useUserAccount } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { useAddressBookContextualMenuItems } from './commons/use-address-book-contextual-menu-items';
+import { useActionMoveAddressBook } from '../../../actions/move-address-book';
+import { useActionMoveContact } from '../../../actions/move-contact';
 import { Folder } from '../../../carbonio-ui-commons/types/folder';
+import { DragEnterAction, OnDropActionProps } from '../../../carbonio-ui-commons/types/sidebar';
 import { getFolderIconColor, getFolderIconName } from '../../../helpers/folders';
 import { useAppDispatch } from '../../hooks/redux';
 import { getFolderTranslatedName } from '../../utils/helpers';
@@ -66,146 +63,141 @@ const AccordionCustomComponent: FC<{ item: Folder }> = ({ item }) => {
 	const accountName = useUserAccount().name;
 	const dispatch = useAppDispatch();
 	const { folderId } = useParams<{ folderId: string }>();
-	const { prefs } = useUserSettings();
 	const createSnackbar = useSnackbar();
+	const moveContactAction = useActionMoveContact();
+	const moveAddressBookAction = useActionMoveAddressBook();
 
-	// const onDragEnterAction = useCallback(
-	// 	(data: OnDropActionProps): DragEnterAction => {
-	// 		if (data.type === 'conversation' || data.type === 'message') {
-	// 			if (
-	// 				data.data.parentFolderId === item.id || // same folder not allowed
-	// 				(data.data.parentFolderId === FOLDERS.INBOX && [5, 6].includes(Number(item.id))) || // from inbox not allowed in draft and sent
-	// 				(data.data.parentFolderId === FOLDERS.DRAFTS && ![3].includes(Number(item.id))) || // from draft only allowed in Trash
-	// 				(item.id === FOLDERS.DRAFTS && data.data.parentFolderId !== FOLDERS.TRASH) || // only from Trash can move in Draft
-	// 				(item.isLink && item.perm?.indexOf('w') === -1) || // only if shared folder have write permission
-	// 				item.id === FOLDERS.USER_ROOT ||
-	// 				(item.isLink && item.oname === ROOT_NAME)
-	// 			) {
-	// 				return { success: false };
-	// 			}
-	// 		}
-	// 		if (data.type === 'folder') {
-	// 			if (
-	// 				item.id === data.data.id || // same folder not allowed
-	// 				item.isLink || //  shared folder not allowed
-	// 				[FOLDERS.DRAFTS, FOLDERS.SPAM].includes(item.id) // cannot be moved inside Draft and Spam
-	// 			)
-	// 				return { success: false };
-	// 		}
-	// 		return undefined;
-	// 	},
-	// 	[item]
-	// );
-	//
-	// const onDropAction = (data: OnDropActionProps): void => {
-	// 	const dragEnterResponse = onDragEnterAction(data);
-	// 	if (dragEnterResponse && dragEnterResponse?.success === false) return;
-	// 	let convMsgsIds = [data.data.id];
-	// 	if (
-	// 		data.type !== 'folder' &&
-	// 		data.data?.selectedIDs?.length &&
-	// 		data.data?.selectedIDs.includes(data.data.id)
-	// 	) {
-	// 		convMsgsIds = data.data?.selectedIDs;
-	// 	}
-	//
-	// 	if (data.type === 'folder') {
-	// 		folderAction({ folder: data.data, l: item.id || FOLDERS.USER_ROOT, op: 'move' }).then(
-	// 			(res) => {
-	// 				if (!('Fault' in res)) {
-	// 					createSnackbar({
-	// 						key: `move`,
-	// 						replace: true,
-	// 						type: 'success',
-	// 						label: t('messages.snackbar.folder_moved', 'Folder successfully moved'),
-	// 						autoHideTimeout: 3000
-	// 					});
-	// 				} else {
-	// 					createSnackbar({
-	// 						key: `move`,
-	// 						replace: true,
-	// 						type: 'error',
-	// 						label: t('label.error_try_again', 'Something went wrong, please try again.'),
-	// 						autoHideTimeout: 3000
-	// 					});
-	// 				}
-	// 			}
-	// 		);
-	// 	} else if ('messages' in data.data) {
-	// 		dispatch(
-	// 			convAction({
-	// 				operation: `move`,
-	// 				ids: convMsgsIds,
-	// 				parent: item.id
-	// 			})
-	// 		).then((res) => {
-	// 			if (res.type.includes('fulfilled')) {
-	// 				replaceHistory(`/folder/${folderId}`);
-	// 				data.data.deselectAll && data.data.deselectAll();
-	// 				createSnackbar({
-	// 					key: `edit`,
-	// 					replace: true,
-	// 					type: 'info',
-	// 					label: t('messages.snackbar.conversation_move', 'Conversation successfully moved'),
-	// 					autoHideTimeout: 3000,
-	// 					actionLabel: t('action.goto_folder', 'GO TO FOLDER'),
-	// 					onActionClick: () => {
-	// 						replaceHistory(`/folder/${item.id}`);
-	// 					}
-	// 				});
-	// 			} else {
-	// 				createSnackbar({
-	// 					key: `edit`,
-	// 					replace: true,
-	// 					type: 'error',
-	// 					label: t('label.error_try_again', 'Something went wrong, please try again'),
-	// 					autoHideTimeout: 3000,
-	// 					hideButton: true
-	// 				});
-	// 			}
-	// 		});
-	// 	} else {
-	// 		dispatch(
-	// 			msgAction({
-	// 				operation: `move`,
-	// 				ids: convMsgsIds,
-	// 				parent: item.id
-	// 			})
-	// 		).then((res) => {
-	// 			if (res.type.includes('fulfilled')) {
-	// 				data.data.deselectAll && data.data.deselectAll();
-	// 				createSnackbar({
-	// 					key: `edit`,
-	// 					replace: true,
-	// 					type: 'info',
-	// 					label: t('messages.snackbar.message_move', 'Message successfully moved'),
-	// 					autoHideTimeout: 3000,
-	// 					actionLabel: t('action.goto_folder', 'GO TO FOLDER'),
-	// 					onActionClick: () => {
-	// 						replaceHistory(`/folder/${item.id}`);
-	// 					}
-	// 				});
-	// 			} else {
-	// 				createSnackbar({
-	// 					key: `edit`,
-	// 					replace: true,
-	// 					type: 'error',
-	// 					label: t('label.error_try_again', 'Something went wrong, please try again'),
-	// 					autoHideTimeout: 3000,
-	// 					hideButton: true
-	// 				});
-	// 			}
-	// 		});
-	// 	}
-	// };
-
-	const dragFolderDisable = useMemo(
-		() =>
-			[FOLDERS.INBOX, FOLDERS.TRASH, FOLDERS.SPAM, FOLDERS.SENT, FOLDERS.DRAFTS].includes(
-				item.id
-			) || item.isLink, // Default folders and shared folders not allowed to drag
-		[item.id, item.isLink]
+	const onDragEnterAction = useCallback(
+		(data: OnDropActionProps): DragEnterAction => {
+			if (data.type === 'contact') {
+				if (
+					data.data.parentFolderId === item.id || // same folder not allowed
+					(data.data.parentFolderId === FOLDERS.INBOX && [5, 6].includes(Number(item.id))) || // from inbox not allowed in draft and sent
+					(data.data.parentFolderId === FOLDERS.DRAFTS && ![3].includes(Number(item.id))) || // from draft only allowed in Trash
+					(item.id === FOLDERS.DRAFTS && data.data.parentFolderId !== FOLDERS.TRASH) || // only from Trash can move in Draft
+					(item.isLink && item.perm?.indexOf('w') === -1) || // only if shared folder have write permission
+					item.id === FOLDERS.USER_ROOT ||
+					(item.isLink && item.oname === ROOT_NAME)
+				) {
+					return { success: false };
+				}
+			}
+			if (data.type === 'folder') {
+				if (
+					item.id === data.data.id || // same folder not allowed
+					item.isLink || //  shared folder not allowed
+					[FOLDERS.DRAFTS, FOLDERS.SPAM].includes(item.id) // cannot be moved inside Draft and Spam
+				)
+					return { success: false };
+			}
+			return undefined;
+		},
+		[item]
 	);
+
+	const onDropAction = (data: OnDropActionProps): void => {
+		const dragEnterResponse = onDragEnterAction(data);
+		if (dragEnterResponse && dragEnterResponse?.success === false) return;
+		let convMsgsIds = [data.data.id];
+		if (
+			data.type !== 'folder' &&
+			data.data?.selectedIDs?.length &&
+			data.data?.selectedIDs.includes(data.data.id)
+		) {
+			convMsgsIds = data.data?.selectedIDs;
+		}
+
+		if (data.type === 'folder') {
+			folderAction({ folder: data.data, l: item.id || FOLDERS.USER_ROOT, op: 'move' }).then(
+				(res) => {
+					if (!('Fault' in res)) {
+						createSnackbar({
+							key: `move`,
+							replace: true,
+							type: 'success',
+							label: t('messages.snackbar.folder_moved', 'Folder successfully moved'),
+							autoHideTimeout: 3000
+						});
+					} else {
+						createSnackbar({
+							key: `move`,
+							replace: true,
+							type: 'error',
+							label: t('label.error_try_again', 'Something went wrong, please try again.'),
+							autoHideTimeout: 3000
+						});
+					}
+				}
+			);
+		} else if ('messages' in data.data) {
+			dispatch(
+				convAction({
+					operation: `move`,
+					ids: convMsgsIds,
+					parent: item.id
+				})
+			).then((res) => {
+				if (res.type.includes('fulfilled')) {
+					replaceHistory(`/folder/${folderId}`);
+					data.data.deselectAll && data.data.deselectAll();
+					createSnackbar({
+						key: `edit`,
+						replace: true,
+						type: 'info',
+						label: t('messages.snackbar.conversation_move', 'Conversation successfully moved'),
+						autoHideTimeout: 3000,
+						actionLabel: t('action.goto_folder', 'GO TO FOLDER'),
+						onActionClick: () => {
+							replaceHistory(`/folder/${item.id}`);
+						}
+					});
+				} else {
+					createSnackbar({
+						key: `edit`,
+						replace: true,
+						type: 'error',
+						label: t('label.error_try_again', 'Something went wrong, please try again'),
+						autoHideTimeout: 3000,
+						hideButton: true
+					});
+				}
+			});
+		} else {
+			dispatch(
+				msgAction({
+					operation: `move`,
+					ids: convMsgsIds,
+					parent: item.id
+				})
+			).then((res) => {
+				if (res.type.includes('fulfilled')) {
+					data.data.deselectAll && data.data.deselectAll();
+					createSnackbar({
+						key: `edit`,
+						replace: true,
+						type: 'info',
+						label: t('messages.snackbar.message_move', 'Message successfully moved'),
+						autoHideTimeout: 3000,
+						actionLabel: t('action.goto_folder', 'GO TO FOLDER'),
+						onActionClick: () => {
+							replaceHistory(`/folder/${item.id}`);
+						}
+					});
+				} else {
+					createSnackbar({
+						key: `edit`,
+						replace: true,
+						type: 'error',
+						label: t('label.error_try_again', 'Something went wrong, please try again'),
+						autoHideTimeout: 3000,
+						hideButton: true
+					});
+				}
+			});
+		}
+	};
+
+	const dragFolderDisable = useMemo(() => false, []);
 
 	const onClick = useCallback((): void => {}, []);
 

@@ -60,8 +60,9 @@ export const AddressBookCreateModal = ({
 		() =>
 			newAddressBookName === undefined ||
 			newAddressBookName.trim().length === 0 ||
-			parentAddressBook === undefined,
-		[newAddressBookName, parentAddressBook]
+			parentAddressBook === undefined ||
+			addressBookAlreadyExists,
+		[addressBookAlreadyExists, newAddressBookName, parentAddressBook]
 	);
 
 	const onAddressBookNameChanged = useCallback<NonNullable<InputProps['onChange']>>(
@@ -109,7 +110,12 @@ export const AddressBookCreateModal = ({
 		<>
 			<ModalHeader title={modalTitle} onClose={onClose} showCloseIcon />
 			<ModalBody>
-				<Container gap={'0.5rem'} mainAlignment="center" crossAlignment="flex-start" height="fit">
+				<Container
+					gap={'0.5rem'}
+					mainAlignment={'flex-start'}
+					crossAlignment={'flex-start'}
+					height={'fit'}
+				>
 					<Input
 						label={addressBookNameFieldLabel}
 						backgroundColor={'gray5'}

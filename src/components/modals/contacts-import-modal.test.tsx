@@ -25,7 +25,6 @@ import { registerUploadHandler } from '../../tests/msw-handlers/upload';
  */
 
 const confirmButtonLabel = 'Import';
-const closeIconRegex = /icon: CloseOutline/i;
 
 describe('Import contacts modal', () => {
 	const defaultProps: ContactsImportModalProps = {

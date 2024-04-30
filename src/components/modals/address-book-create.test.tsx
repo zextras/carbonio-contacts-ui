@@ -260,7 +260,7 @@ describe('AddressBookCreateModal', () => {
 			expect(onClose).toHaveBeenCalled();
 		});
 
-		it('should display a success snackbar if the API returns error', async () => {
+		it('should display an error snackbar if the API returns error', async () => {
 			populateFoldersStore();
 			const parentAddressBookId = FOLDERS.CONTACTS;
 			const addressBookName = faker.word.noun(3);

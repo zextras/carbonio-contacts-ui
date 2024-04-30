@@ -20,13 +20,15 @@ export const ACTION_IDS = {
 	trashAddressBook: 'trash-address-book-action',
 	deleteAddressBook: 'delete-address-book-action',
 	createAddressBook: 'create-address-book-action',
+	moveAddressBook: 'move-address-book-action',
 	editAddressBook: 'edit-address-book-action',
 	emptyAddressBook: 'empty-address-book-action',
 	emptyTrash: 'empty-trash-action',
 	removeAddressBookLink: 'remove-address-book-link-action',
 	exportAddressBook: 'export-address-book-action',
 	importContacts: 'import-contacts-action',
-	showShareInfo: 'show-share-info-action'
+	showShareInfo: 'show-share-info-action',
+	moveContact: 'move-contact-action'
 } as const;
 
 export const NEW_CONTACT_GROUP_BOARD_ID = 'new-contact-group-board';

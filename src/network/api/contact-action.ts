@@ -24,6 +24,7 @@ export interface ContactActionRequest extends GenericSoapPayload<typeof NAMESPAC
 	action: {
 		op: ContactActionOperation;
 		id: string;
+		l?: string;
 	};
 }
 
@@ -31,15 +32,27 @@ export interface ContactActionResponse extends GenericSoapPayload<typeof NAMESPA
 	action: {
 		op: ContactActionOperation;
 		id: string;
+		l?: string;
 	};
 }
 
-export const contactAction = (
-	operation: ContactActionOperation,
-	ids: string[]
-): Promise<ContactActionResponse> => {
+export type ContactActionParams = {
+	contactsIds: Array<string>;
+	operation: ContactActionOperation;
+	folderId?: string;
+};
+
+export const contactAction = ({
+	contactsIds,
+	operation,
+	folderId
+}: ContactActionParams): Promise<ContactActionResponse> => {
 	const actionRequests: ContactActionRequest = {
-		action: { op: operation, id: ids.join(',') },
+		action: {
+			op: operation,
+			id: contactsIds.join(','),
+			...(folderId !== undefined && { l: folderId })
+		},
 		_jsns: NAMESPACES.mail
 	};
 
@@ -53,7 +66,3 @@ export const contactAction = (
 		return response;
 	});
 };
-
-export function deleteContactAction(ids: string[]): Promise<ContactActionResponse> {
-	return contactAction(CONTACT_ACTION_OPERATION.delete, ids);
-}

@@ -34,6 +34,7 @@ export type FolderTreeSelectorProps = {
 	showLinkedFolders?: boolean;
 	allowRootSelection: boolean;
 	allowFolderCreation: boolean;
+	excludeIds?: Array<string>;
 };
 
 const flattenFolders = (
@@ -42,6 +43,7 @@ const flattenFolders = (
 	options?: {
 		showTrashFolder?: boolean;
 		showLinkedFolders?: boolean;
+		excludeIds?: Array<string>;
 	}
 ): Array<Folder> => {
 	const result: Array<Folder> = [];
@@ -53,6 +55,10 @@ const flattenFolders = (
 		}
 
 		if (options?.showLinkedFolders === false && folder.isLink === true) {
+			return;
+		}
+
+		if (options?.excludeIds && options?.excludeIds.includes(folder.id)) {
 			return;
 		}
 
@@ -73,6 +79,7 @@ const flattenRootsFolders = (
 	options?: {
 		showTrashFolder?: boolean;
 		showLinkedFolders?: boolean;
+		excludeIds?: Array<string>;
 	}
 ): Array<Folder> =>
 	roots.map((root) => ({
@@ -121,7 +128,8 @@ export const FolderTreeSelector = ({
 	allowFolderCreation,
 	showTrashFolder,
 	showSharedAccounts,
-	showLinkedFolders
+	showLinkedFolders,
+	excludeIds
 }: FolderTreeSelectorProps): React.JSX.Element => {
 	const [t] = useTranslation();
 	const [inputValue, setInputValue] = useState('');
@@ -136,9 +144,10 @@ export const FolderTreeSelector = ({
 		() =>
 			flattenRootsFolders(t, filteredAccountsRoots, {
 				showTrashFolder,
-				showLinkedFolders
+				showLinkedFolders,
+				excludeIds
 			}),
-		[filteredAccountsRoots, showTrashFolder, t]
+		[excludeIds, filteredAccountsRoots, showLinkedFolders, showTrashFolder, t]
 	);
 
 	const filteredRoots = filterRoots(flattenRoots, inputValue);
