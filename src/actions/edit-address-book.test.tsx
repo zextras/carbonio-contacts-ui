@@ -12,6 +12,7 @@ import { UIAction } from './types';
 import { FOLDER_VIEW } from '../carbonio-ui-commons/constants';
 import { FOLDERS } from '../carbonio-ui-commons/test/mocks/carbonio-shell-ui-constants';
 import { generateFolder } from '../carbonio-ui-commons/test/mocks/folders/folders-generator';
+import { populateFoldersStore } from '../carbonio-ui-commons/test/mocks/store/folders';
 import { screen, setupHook } from '../carbonio-ui-commons/test/test-setup';
 import { TIMERS } from '../constants/tests';
 
@@ -92,6 +93,8 @@ describe('useActionEditAddressBook', () => {
 			const addressBook = generateFolder({
 				view: FOLDER_VIEW.contact
 			});
+
+			populateFoldersStore({ customFolders: [addressBook] });
 
 			const { result } = setupHook(useActionEditAddressBook);
 			const action = result.current;

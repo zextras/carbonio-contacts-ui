@@ -20,7 +20,7 @@ describe('useActionShareInfo', () => {
 			expect.objectContaining({
 				icon: 'InfoOutline',
 				label: "Shared address book's info",
-				id: 'share-info-action'
+				id: 'show-share-info-action'
 			})
 		);
 	});

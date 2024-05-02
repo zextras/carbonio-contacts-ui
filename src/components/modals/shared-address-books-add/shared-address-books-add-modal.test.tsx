@@ -205,15 +205,7 @@ describe('SharesModal', () => {
 		await waitFor(() =>
 			expect(screen.getAllByTestId(TESTID_SELECTORS.sharesUsersListItem)).toHaveLength(1)
 		);
-		// await act(async () => {
-		// 	await user.clear(filterInputTextBox);
-		// });
 
-		screen.logTestingPlaygroundURL();
-		// await waitFor(() =>
-		// 	expect(screen.getAllByTestId(TESTID_SELECTORS.sharesUsersListItem)).toHaveLength(3)
-		// );
-		// expect(screen.getAllByTestId(TESTID_SELECTORS.sharesUsersListItem)).toHaveLength(3);
 		await act(async () => Promise.resolve());
 	});
 

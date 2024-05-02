@@ -39,12 +39,14 @@ describe('importAddressBook', () => {
 	});
 
 	it('should return the normalized response of the API response if successful', async () => {
-		const ids = faker.helpers.multiple(faker.number.int, { count: { min: 1, max: 99999 } });
-		const response = {
+		const ids = faker.helpers
+			.multiple(faker.number.int, { count: { min: 1, max: 99 } })
+			.map((id) => `${id}`);
+		const soapResponse = {
 			cn: [
 				{
 					n: ids.length,
-					ids: ids.map((id) => `${id}`).join(',')
+					ids: ids.join(',')
 				}
 			],
 			_jsns: NAMESPACES.mail
@@ -52,9 +54,15 @@ describe('importAddressBook', () => {
 
 		createSoapAPIInterceptor<ImportContactsRequest, ImportContactsResponse>(
 			'ImportContacts',
-			response
+			soapResponse
 		);
-		await expect(importContacts(importParams)).resolves.toEqual(response);
+
+		const apiResponse: ImportContactsResult = {
+			contactsCount: ids.length,
+			contactsIds: ids
+		};
+
+		await expect(importContacts(importParams)).resolves.toEqual(apiResponse);
 	});
 
 	it('should return a default normalized response if the API responds with an empty result', async () => {

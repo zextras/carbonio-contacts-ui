@@ -12,6 +12,7 @@ import { UIAction } from './types';
 import { FOLDER_VIEW } from '../carbonio-ui-commons/constants';
 import { FOLDERS } from '../carbonio-ui-commons/test/mocks/carbonio-shell-ui-constants';
 import { generateFolder } from '../carbonio-ui-commons/test/mocks/folders/folders-generator';
+import { populateFoldersStore } from '../carbonio-ui-commons/test/mocks/store/folders';
 import { screen, setupHook } from '../carbonio-ui-commons/test/test-setup';
 import { TIMERS } from '../constants/tests';
 
@@ -90,8 +91,12 @@ describe('useActionDeleteAddressBooks', () => {
 
 	it('should return an execute field which opens a modal with a specific title', () => {
 		const addressBook = generateFolder({
+			l: FOLDERS.TRASH,
+			name: 'trashed',
+			absFolderPath: '/Trash/trashed',
 			view: FOLDER_VIEW.contact
 		});
+		populateFoldersStore({ customFolders: [addressBook] });
 
 		const { result } = setupHook(useActionDeleteAddressBook);
 		const action = result.current;
@@ -111,6 +116,8 @@ describe('useActionDeleteAddressBooks', () => {
 			id: FOLDERS.CONTACTS,
 			view: FOLDER_VIEW.contact
 		});
+		populateFoldersStore({ customFolders: [addressBook] });
+
 		const { result } = setupHook(useActionDeleteAddressBook);
 		const action = result.current;
 
@@ -122,6 +129,6 @@ describe('useActionDeleteAddressBooks', () => {
 			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 
-		expect(screen.queryByText(`Delete ${addressBook.name}`)).not.toBeVisible();
+		expect(screen.queryByText(`Delete ${addressBook.name}`)).not.toBeInTheDocument();
 	});
 });
