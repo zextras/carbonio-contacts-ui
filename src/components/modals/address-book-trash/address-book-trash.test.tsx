@@ -12,7 +12,7 @@ import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 import { AddressBookTrashModal } from './address-book-trash';
 import { FOLDER_VIEW } from '../../../carbonio-ui-commons/constants';
 import { generateFolder } from '../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
-import { createAPIInterceptor } from '../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
+import { createSoapAPIInterceptor } from '../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { screen, setupTest } from '../../../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../../../constants/tests';
 
@@ -72,7 +72,7 @@ describe('AddressBookTrashModal', () => {
 	});
 
 	it('should call the API with the proper parameters if the user clicks on the "delete" button', async () => {
-		const apiInterceptor = createAPIInterceptor('FolderAction');
+		const apiInterceptor = createSoapAPIInterceptor('FolderAction');
 		const addressBook = generateFolder({
 			view: FOLDER_VIEW.contact
 		});
@@ -92,7 +92,7 @@ describe('AddressBookTrashModal', () => {
 	});
 
 	it('should show a success snackbar after receiving a successful result from the API', async () => {
-		createAPIInterceptor('FolderAction');
+		createSoapAPIInterceptor('FolderAction');
 		const addressBook = generateFolder({
 			view: FOLDER_VIEW.contact
 		});
@@ -105,7 +105,7 @@ describe('AddressBookTrashModal', () => {
 	});
 
 	it('should close the modal after a successful result from the API', async () => {
-		createAPIInterceptor('FolderAction');
+		createSoapAPIInterceptor('FolderAction');
 		const onClose = jest.fn();
 		const addressBook = generateFolder({
 			view: FOLDER_VIEW.contact
@@ -125,7 +125,7 @@ describe('AddressBookTrashModal', () => {
 				Reason: { Text: faker.word.sample() }
 			}
 		};
-		createAPIInterceptor('FolderAction', response);
+		createSoapAPIInterceptor('FolderAction', response);
 		const addressBook = generateFolder({
 			view: FOLDER_VIEW.contact
 		});
@@ -144,7 +144,7 @@ describe('AddressBookTrashModal', () => {
 				Reason: { Text: faker.word.sample() }
 			}
 		};
-		createAPIInterceptor('FolderAction', response);
+		createSoapAPIInterceptor('FolderAction', response);
 		const onClose = jest.fn();
 		const addressBook = generateFolder({
 			view: FOLDER_VIEW.contact
@@ -158,7 +158,7 @@ describe('AddressBookTrashModal', () => {
 	});
 
 	it('should call the API to restore the folder position if the user clicks on the "undo" button on the snackbar', async () => {
-		createAPIInterceptor('FolderAction');
+		createSoapAPIInterceptor('FolderAction');
 		const addressBook = generateFolder({
 			l: faker.string.uuid(),
 			view: FOLDER_VIEW.contact
@@ -169,7 +169,7 @@ describe('AddressBookTrashModal', () => {
 		await act(() => user.click(screen.getByRole('button', { name: 'Delete' })));
 		const button = await screen.findByRole('button', { name: 'Undo' });
 
-		const restoreApiInterceptor = createAPIInterceptor('FolderAction');
+		const restoreApiInterceptor = createSoapAPIInterceptor('FolderAction');
 		await act(() => user.click(button));
 		await expect(restoreApiInterceptor).resolves.toEqual(
 			expect.objectContaining({
@@ -189,7 +189,7 @@ describe('AddressBookTrashModal', () => {
 				Reason: { Text: faker.word.sample() }
 			}
 		};
-		createAPIInterceptor('FolderAction');
+		createSoapAPIInterceptor('FolderAction');
 		const addressBook = generateFolder({
 			view: FOLDER_VIEW.contact
 		});
@@ -199,7 +199,7 @@ describe('AddressBookTrashModal', () => {
 		await act(() => user.click(screen.getByRole('button', { name: 'Delete' })));
 		const button = await screen.findByRole('button', { name: 'Undo' });
 
-		createAPIInterceptor('FolderAction', response);
+		createSoapAPIInterceptor('FolderAction', response);
 		await act(() => user.click(button));
 		expect(await screen.findByText('Something went wrong, please try again')).toBeVisible();
 	});

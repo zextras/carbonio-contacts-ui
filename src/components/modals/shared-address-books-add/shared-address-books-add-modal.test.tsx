@@ -11,7 +11,7 @@ import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 import { times } from 'lodash';
 
 import { SharedAddressBooksAddModal } from './shared-address-books-add-modal';
-import { createAPIInterceptor } from '../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
+import { createSoapAPIInterceptor } from '../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import {
 	makeListItemsVisible,
 	screen,
@@ -44,7 +44,7 @@ const buildSharesInfo = ({
 
 const registerDefaultGetShareInfoHandler = (sharesInfo: GetShareInfoResponse['share']): void => {
 	// Create an API interceptor that returns the list of shares
-	createAPIInterceptor<GetShareInfoRequest, GetShareInfoResponse>('GetShareInfo', {
+	createSoapAPIInterceptor<GetShareInfoRequest, GetShareInfoResponse>('GetShareInfo', {
 		share: sharesInfo,
 		_jsns: NAMESPACES.account
 	});
@@ -116,7 +116,7 @@ describe('SharesModal', () => {
 	});
 
 	it('should render an error snackbar if the GetShareInfo API will return an error', async () => {
-		createAPIInterceptor<GetShareInfoRequest, ErrorSoapBodyResponse>('GetShareInfo', {
+		createSoapAPIInterceptor<GetShareInfoRequest, ErrorSoapBodyResponse>('GetShareInfo', {
 			Fault: {
 				Detail: { Error: { Code: 'error-code', Detail: 'error-detail' } },
 				Reason: { Text: 'everything is broken!' }
@@ -283,9 +283,10 @@ describe('SharesModal', () => {
 
 		it('should call the createMountpoint API if the user click the "add" button', async () => {
 			registerDefaultGetShareInfoHandler(buildSharesInfo());
-			const createMountpointsInterceptor = createAPIInterceptor<CreateMountpointsRequest, never>(
-				'Batch'
-			);
+			const createMountpointsInterceptor = createSoapAPIInterceptor<
+				CreateMountpointsRequest,
+				never
+			>('Batch');
 
 			// Instantiate the modal
 			const { user } = setupTest(<SharedAddressBooksAddModal onClose={jest.fn()} />, {});
@@ -307,7 +308,7 @@ describe('SharesModal', () => {
 			const responseShares = buildSharesInfo();
 			registerDefaultGetShareInfoHandler(responseShares);
 
-			createAPIInterceptor<CreateMountpointsRequest, never>('Batch');
+			createSoapAPIInterceptor<CreateMountpointsRequest, never>('Batch');
 
 			const onClose = jest.fn();
 			// Instantiate the modal
@@ -329,7 +330,7 @@ describe('SharesModal', () => {
 			const responseShares = buildSharesInfo();
 			registerDefaultGetShareInfoHandler(responseShares);
 
-			createAPIInterceptor<CreateMountpointsRequest, never>('Batch');
+			createSoapAPIInterceptor<CreateMountpointsRequest, never>('Batch');
 
 			const onClose = jest.fn();
 			const { user } = setupTest(<SharedAddressBooksAddModal onClose={onClose} />, {});
@@ -353,7 +354,7 @@ describe('SharesModal', () => {
 			const responseShares = buildSharesInfo();
 			registerDefaultGetShareInfoHandler(responseShares);
 
-			createAPIInterceptor<CreateMountpointsRequest, ErrorSoapBodyResponse>('Batch', {
+			createSoapAPIInterceptor<CreateMountpointsRequest, ErrorSoapBodyResponse>('Batch', {
 				Fault: {
 					Detail: { Error: { Code: 'error-code', Detail: 'error-detail' } },
 					Reason: { Text: 'everything is broken!' }

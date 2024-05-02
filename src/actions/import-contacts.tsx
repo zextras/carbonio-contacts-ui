@@ -72,27 +72,23 @@ export const useActionImportContacts = (): ImportContactsAction => {
 				return;
 			}
 
-			requestFileSelection()
-				.then((file): void => {
-					const closeModal = createModal(
-						{
-							maxHeight: '90vh',
-							children: (
-								<StoreProvider>
-									<ContactsImportModal
-										addressBook={addressBook}
-										file={file}
-										closeCallback={() => closeModal()}
-									/>
-								</StoreProvider>
-							)
-						},
-						true
-					);
-				})
-				.catch(() => {
-					console.log('selection canceled');
-				});
+			requestFileSelection().then((file): void => {
+				const closeModal = createModal(
+					{
+						maxHeight: '90vh',
+						children: (
+							<StoreProvider>
+								<ContactsImportModal
+									addressBook={addressBook}
+									file={file}
+									closeCallback={() => closeModal()}
+								/>
+							</StoreProvider>
+						)
+					},
+					true
+				);
+			});
 		},
 		[canExecute, createModal]
 	);

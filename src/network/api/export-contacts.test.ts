@@ -7,7 +7,7 @@ import { faker } from '@faker-js/faker';
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 
 import { exportContacts, ExportContactsRequest, ExportContactsResponse } from './export-contacts';
-import { createAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
+import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { NAMESPACES } from '../../constants/api';
 
 describe('exportContacts', () => {
@@ -20,7 +20,7 @@ describe('exportContacts', () => {
 			l: folderId
 		};
 
-		const interceptor = createAPIInterceptor<ExportContactsRequest>('ExportContacts');
+		const interceptor = createSoapAPIInterceptor<ExportContactsRequest>('ExportContacts');
 		exportContacts(folderId);
 		const apiRequest = await interceptor;
 		expect(apiRequest).toEqual(expectedRequest);
@@ -37,7 +37,10 @@ describe('exportContacts', () => {
 			_jsns: NAMESPACES.mail
 		};
 
-		createAPIInterceptor<ExportContactsRequest, ExportContactsResponse>('ExportContacts', response);
+		createSoapAPIInterceptor<ExportContactsRequest, ExportContactsResponse>(
+			'ExportContacts',
+			response
+		);
 		await expect(exportContacts(faker.string.uuid())).resolves.toEqual(content);
 	});
 
@@ -48,7 +51,10 @@ describe('exportContacts', () => {
 				Reason: { Text: faker.word.sample() }
 			}
 		};
-		createAPIInterceptor<ExportContactsRequest, ErrorSoapBodyResponse>('ExportContacts', response);
+		createSoapAPIInterceptor<ExportContactsRequest, ErrorSoapBodyResponse>(
+			'ExportContacts',
+			response
+		);
 		expect(async () => {
 			await exportContacts(faker.string.uuid());
 		}).rejects.toThrow();

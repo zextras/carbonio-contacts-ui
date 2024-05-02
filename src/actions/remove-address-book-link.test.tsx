@@ -12,7 +12,7 @@ import { useActionRemoveAddressBookLink } from './remove-address-book-link';
 import { UIAction } from './types';
 import { FOLDER_VIEW } from '../carbonio-ui-commons/constants';
 import { generateFolder } from '../carbonio-ui-commons/test/mocks/folders/folders-generator';
-import { createAPIInterceptor } from '../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
+import { createSoapAPIInterceptor } from '../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { screen, setupHook } from '../carbonio-ui-commons/test/test-setup';
 import { FolderActionRequest } from '../network/api/folder-action';
 
@@ -63,7 +63,7 @@ describe('useActionRemoveAddressBookLink', () => {
 			});
 
 			const spy = jest.fn();
-			createAPIInterceptor<FolderActionRequest>('FolderAction').then(spy);
+			createSoapAPIInterceptor<FolderActionRequest>('FolderAction').then(spy);
 
 			const { result } = setupHook(useActionRemoveAddressBookLink);
 			const action = result.current;
@@ -80,7 +80,7 @@ describe('useActionRemoveAddressBookLink', () => {
 				view: FOLDER_VIEW.contact
 			});
 
-			const apiInterceptor = createAPIInterceptor<FolderActionRequest>('FolderAction');
+			const apiInterceptor = createSoapAPIInterceptor<FolderActionRequest>('FolderAction');
 
 			const { result } = setupHook(useActionRemoveAddressBookLink);
 			const action = result.current;
@@ -106,7 +106,7 @@ describe('useActionRemoveAddressBookLink', () => {
 				view: FOLDER_VIEW.contact
 			});
 
-			createAPIInterceptor<FolderActionRequest>('FolderAction');
+			createSoapAPIInterceptor<FolderActionRequest>('FolderAction');
 
 			const { result } = setupHook(useActionRemoveAddressBookLink);
 			const action = result.current;
@@ -130,7 +130,10 @@ describe('useActionRemoveAddressBookLink', () => {
 				}
 			};
 
-			createAPIInterceptor<FolderActionRequest, ErrorSoapBodyResponse>('FolderAction', apiResponse);
+			createSoapAPIInterceptor<FolderActionRequest, ErrorSoapBodyResponse>(
+				'FolderAction',
+				apiResponse
+			);
 
 			const { result } = setupHook(useActionRemoveAddressBookLink);
 			const action = result.current;

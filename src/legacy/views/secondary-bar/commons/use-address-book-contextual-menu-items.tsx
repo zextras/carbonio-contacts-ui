@@ -84,6 +84,7 @@ export const useAddressBookContextualMenuItems = (addressBook: Folder): Array<Ac
 		emptyTrashAction,
 		exportAction,
 		importAction,
+		moveAction,
 		removeLinkAction,
 		shareInfoAction,
 		trashAction

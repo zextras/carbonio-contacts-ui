@@ -13,7 +13,7 @@ import {
 	ImportContactsResponse,
 	ImportContactsResult
 } from './import-contacts';
-import { createAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
+import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { NAMESPACES } from '../../constants/api';
 
 describe('importAddressBook', () => {
@@ -32,7 +32,7 @@ describe('importAddressBook', () => {
 			l: 'testFolderId'
 		};
 
-		const interceptor = createAPIInterceptor<ImportContactsRequest>('ImportContacts');
+		const interceptor = createSoapAPIInterceptor<ImportContactsRequest>('ImportContacts');
 		importContacts(importParams);
 		const apiRequest = await interceptor;
 		expect(apiRequest).toEqual(expectedRequest);
@@ -50,7 +50,10 @@ describe('importAddressBook', () => {
 			_jsns: NAMESPACES.mail
 		};
 
-		createAPIInterceptor<ImportContactsRequest, ImportContactsResponse>('ImportContacts', response);
+		createSoapAPIInterceptor<ImportContactsRequest, ImportContactsResponse>(
+			'ImportContacts',
+			response
+		);
 		await expect(importContacts(importParams)).resolves.toEqual(response);
 	});
 
@@ -64,7 +67,10 @@ describe('importAddressBook', () => {
 			_jsns: NAMESPACES.mail
 		};
 
-		createAPIInterceptor<ImportContactsRequest, ImportContactsResponse>('ImportContacts', response);
+		createSoapAPIInterceptor<ImportContactsRequest, ImportContactsResponse>(
+			'ImportContacts',
+			response
+		);
 		await expect(importContacts(importParams)).resolves.toEqual(result);
 	});
 
@@ -75,7 +81,10 @@ describe('importAddressBook', () => {
 				Reason: { Text: faker.word.sample() }
 			}
 		};
-		createAPIInterceptor<ImportContactsRequest, ErrorSoapBodyResponse>('ImportContacts', response);
+		createSoapAPIInterceptor<ImportContactsRequest, ErrorSoapBodyResponse>(
+			'ImportContacts',
+			response
+		);
 		expect(async () => {
 			await importContacts(importParams);
 		}).rejects.toThrow();

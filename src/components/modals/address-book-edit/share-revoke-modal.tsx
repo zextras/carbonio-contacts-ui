@@ -52,7 +52,7 @@ export const ShareRevokeModal = ({
 						message: standardMessage,
 						addresses: [grant.d ?? ''],
 						folderId: addressBookId,
-						account: account.name
+						accountName: account.name
 					});
 			})
 			.then(() => {
@@ -82,6 +82,7 @@ export const ShareRevokeModal = ({
 		createSnackbar,
 		grant.d,
 		grant.zid,
+		onClose,
 		sendNotification,
 		standardMessage,
 		t

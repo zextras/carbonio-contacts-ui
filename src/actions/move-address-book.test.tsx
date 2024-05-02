@@ -16,7 +16,7 @@ import { getFolder, getFoldersArray } from '../carbonio-ui-commons/store/zustand
 import { FOLDERS_DESCRIPTORS } from '../carbonio-ui-commons/test/constants';
 import { FOLDERS } from '../carbonio-ui-commons/test/mocks/carbonio-shell-ui-constants';
 import { generateFolder } from '../carbonio-ui-commons/test/mocks/folders/folders-generator';
-import { createAPIInterceptor } from '../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
+import { createSoapAPIInterceptor } from '../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { populateFoldersStore } from '../carbonio-ui-commons/test/mocks/store/folders';
 import { getMocksContext } from '../carbonio-ui-commons/test/mocks/utils/mocks-context';
 import {
@@ -227,7 +227,7 @@ describe('useActionMoveAddressBook', () => {
 		});
 
 		it('should call the FolderAction API to move the folder if the parent address book is set and is valid', async () => {
-			const apiInterceptor = createAPIInterceptor<FolderActionRequest, never>('FolderAction');
+			const apiInterceptor = createSoapAPIInterceptor<FolderActionRequest, never>('FolderAction');
 
 			populateFoldersStore();
 			const newParentAddressBook = getFolder(FOLDERS.USER_ROOT);
@@ -252,7 +252,7 @@ describe('useActionMoveAddressBook', () => {
 
 		it('should call the FolderAction API with the proper parameters', async () => {
 			populateFoldersStore();
-			const apiInterceptor = createAPIInterceptor<FolderActionRequest, FolderActionResponse>(
+			const apiInterceptor = createSoapAPIInterceptor<FolderActionRequest, FolderActionResponse>(
 				'FolderAction'
 			);
 			const addressBook = getFoldersArray().find(
@@ -292,7 +292,7 @@ describe('useActionMoveAddressBook', () => {
 
 		it('should call the FolderAction API with the proper parameters if the parent address book is selected through the modal', async () => {
 			populateFoldersStore();
-			const apiInterceptor = createAPIInterceptor<FolderActionRequest, FolderActionResponse>(
+			const apiInterceptor = createSoapAPIInterceptor<FolderActionRequest, FolderActionResponse>(
 				'FolderAction'
 			);
 			const addressBook = getFoldersArray().find(
@@ -332,7 +332,7 @@ describe('useActionMoveAddressBook', () => {
 
 		it('should call the FolderAction API with the proper parameters if the parent address book is set as parameter', async () => {
 			populateFoldersStore();
-			const apiInterceptor = createAPIInterceptor<FolderActionRequest, FolderActionResponse>(
+			const apiInterceptor = createSoapAPIInterceptor<FolderActionRequest, FolderActionResponse>(
 				'FolderAction'
 			);
 			const addressBook = getFoldersArray().find(
@@ -378,7 +378,7 @@ describe('useActionMoveAddressBook', () => {
 				_jsns: NAMESPACES.mail
 			};
 
-			createAPIInterceptor<FolderActionRequest, FolderActionResponse>('FolderAction', response);
+			createSoapAPIInterceptor<FolderActionRequest, FolderActionResponse>('FolderAction', response);
 
 			const { result } = setupHook(useActionMoveAddressBook);
 			const action = result.current;
@@ -406,7 +406,7 @@ describe('useActionMoveAddressBook', () => {
 				_jsns: NAMESPACES.mail
 			};
 
-			createAPIInterceptor<FolderActionRequest, FolderActionResponse>('FolderAction', response);
+			createSoapAPIInterceptor<FolderActionRequest, FolderActionResponse>('FolderAction', response);
 			const { user, result } = setupHook(useActionMoveAddressBook);
 			const action = result.current;
 			await act(async () => {
@@ -442,7 +442,10 @@ describe('useActionMoveAddressBook', () => {
 				}
 			};
 
-			createAPIInterceptor<FolderActionRequest, ErrorSoapBodyResponse>('FolderAction', response);
+			createSoapAPIInterceptor<FolderActionRequest, ErrorSoapBodyResponse>(
+				'FolderAction',
+				response
+			);
 			const { user, result } = setupHook(useActionMoveAddressBook);
 			const action = result.current;
 			await act(async () => {
@@ -478,7 +481,10 @@ describe('useActionMoveAddressBook', () => {
 				}
 			};
 
-			createAPIInterceptor<FolderActionRequest, ErrorSoapBodyResponse>('FolderAction', response);
+			createSoapAPIInterceptor<FolderActionRequest, ErrorSoapBodyResponse>(
+				'FolderAction',
+				response
+			);
 			const onClose = jest.fn();
 			const { user } = setupTest(
 				<AddressBookMoveModal addressBookId={addressBook.id} onMove={jest.fn()} onClose={onClose} />

@@ -13,7 +13,7 @@ import { AddressBookEmptyModal } from './address-book-empty';
 import { FOLDER_VIEW } from '../../../carbonio-ui-commons/constants';
 import { FOLDERS } from '../../../carbonio-ui-commons/test/mocks/carbonio-shell-ui-constants';
 import { generateFolder } from '../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
-import { createAPIInterceptor } from '../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
+import { createSoapAPIInterceptor } from '../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { screen, setupTest } from '../../../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../../../constants/tests';
 
@@ -88,7 +88,7 @@ describe('AddressBookEmptyModal', () => {
 	});
 
 	it('should call the API with the proper parameters if the user clicks on the "empty" button', async () => {
-		const apiInterceptor = createAPIInterceptor('FolderAction');
+		const apiInterceptor = createSoapAPIInterceptor('FolderAction');
 		const addressBook = generateFolder({
 			id: FOLDERS.TRASH,
 			name: 'Trash',
@@ -111,7 +111,7 @@ describe('AddressBookEmptyModal', () => {
 	});
 
 	it('should show a success snackbar after receiving a successful result from the API for the Trash address book', async () => {
-		createAPIInterceptor('FolderAction');
+		createSoapAPIInterceptor('FolderAction');
 		const addressBook = generateFolder({
 			id: FOLDERS.TRASH,
 			name: 'Trash',
@@ -127,7 +127,7 @@ describe('AddressBookEmptyModal', () => {
 	});
 
 	it('should show a success snackbar after receiving a successful result from the API for a non-Trash address book', async () => {
-		createAPIInterceptor('FolderAction');
+		createSoapAPIInterceptor('FolderAction');
 		const addressBook = generateFolder({
 			view: FOLDER_VIEW.contact
 		});
@@ -140,7 +140,7 @@ describe('AddressBookEmptyModal', () => {
 	});
 
 	it('should close the modal after a successful result from the API', async () => {
-		createAPIInterceptor('FolderAction');
+		createSoapAPIInterceptor('FolderAction');
 		const onClose = jest.fn();
 		const addressBook = generateFolder({
 			view: FOLDER_VIEW.contact
@@ -160,7 +160,7 @@ describe('AddressBookEmptyModal', () => {
 				Reason: { Text: faker.word.sample() }
 			}
 		};
-		createAPIInterceptor('FolderAction', response);
+		createSoapAPIInterceptor('FolderAction', response);
 		const addressBook = generateFolder({
 			view: FOLDER_VIEW.contact
 		});
@@ -179,7 +179,7 @@ describe('AddressBookEmptyModal', () => {
 				Reason: { Text: faker.word.sample() }
 			}
 		};
-		createAPIInterceptor('FolderAction', response);
+		createSoapAPIInterceptor('FolderAction', response);
 		const onClose = jest.fn();
 		const addressBook = generateFolder({
 			view: FOLDER_VIEW.contact

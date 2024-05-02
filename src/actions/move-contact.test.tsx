@@ -13,7 +13,7 @@ import { useActionMoveContact } from './move-contact';
 import { UIAction } from './types';
 import { getFolder, getFoldersArray } from '../carbonio-ui-commons/store/zustand/folder';
 import { FOLDERS } from '../carbonio-ui-commons/test/mocks/carbonio-shell-ui-constants';
-import { createAPIInterceptor } from '../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
+import { createSoapAPIInterceptor } from '../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { populateFoldersStore } from '../carbonio-ui-commons/test/mocks/store/folders';
 import { setupHook, screen } from '../carbonio-ui-commons/test/test-setup';
 import { NAMESPACES } from '../constants/api';
@@ -97,7 +97,9 @@ describe('useActionMoveContact', () => {
 			it('should call the FolderAction API with the proper parameters', async () => {
 				populateFoldersStore();
 				const newParentAddressBook = getFolder(FOLDERS.USER_ROOT);
-				const apiInterceptor = createAPIInterceptor<ContactActionRequest, never>('ContactAction');
+				const apiInterceptor = createSoapAPIInterceptor<ContactActionRequest, never>(
+					'ContactAction'
+				);
 				const contact = buildContact();
 				const { result } = setupHook(useActionMoveContact);
 				const action = result.current;
@@ -125,7 +127,7 @@ describe('useActionMoveContact', () => {
 					_jsns: NAMESPACES.mail
 				};
 
-				createAPIInterceptor<ContactActionRequest, ContactActionResponse>(
+				createSoapAPIInterceptor<ContactActionRequest, ContactActionResponse>(
 					'ContactAction',
 					response
 				);
@@ -151,7 +153,7 @@ describe('useActionMoveContact', () => {
 					}
 				};
 
-				createAPIInterceptor<ContactActionRequest, ErrorSoapBodyResponse>(
+				createSoapAPIInterceptor<ContactActionRequest, ErrorSoapBodyResponse>(
 					'ContactAction',
 					response
 				);

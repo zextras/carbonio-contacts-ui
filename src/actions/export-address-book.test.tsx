@@ -12,7 +12,7 @@ import { UIAction } from './types';
 import { FOLDER_VIEW } from '../carbonio-ui-commons/constants';
 import { FOLDERS } from '../carbonio-ui-commons/test/mocks/carbonio-shell-ui-constants';
 import { generateFolder } from '../carbonio-ui-commons/test/mocks/folders/folders-generator';
-import { createAPIInterceptor } from '../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
+import { createSoapAPIInterceptor } from '../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { screen, setupHook } from '../carbonio-ui-commons/test/test-setup';
 
 describe('useActionExportAddressBook', () => {
@@ -121,7 +121,7 @@ describe('useActionExportAddressBook', () => {
 				view: FOLDER_VIEW.contact
 			});
 
-			const apiInterceptor = createAPIInterceptor('ExportContacts');
+			const apiInterceptor = createSoapAPIInterceptor('ExportContacts');
 
 			const { result } = setupHook(useActionExportAddressBook);
 			const action = result.current;
@@ -145,7 +145,7 @@ describe('useActionExportAddressBook', () => {
 				view: FOLDER_VIEW.contact
 			});
 
-			createAPIInterceptor<never, ErrorSoapBodyResponse>('ExportContacts', response);
+			createSoapAPIInterceptor<never, ErrorSoapBodyResponse>('ExportContacts', response);
 
 			const { result } = setupHook(useActionExportAddressBook);
 			const action = result.current;
@@ -163,7 +163,7 @@ describe('useActionExportAddressBook', () => {
 			});
 
 			const callFlag = jest.fn();
-			createAPIInterceptor('ExportContacts').then(() => callFlag());
+			createSoapAPIInterceptor('ExportContacts').then(() => callFlag());
 
 			const { result } = setupHook(useActionExportAddressBook);
 			const action = result.current;

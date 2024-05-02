@@ -12,7 +12,7 @@ import { act } from '@testing-library/react';
 import { ContactsImportModal, ContactsImportModalProps } from './contacts-import-modal';
 import { FOLDER_VIEW } from '../../carbonio-ui-commons/constants';
 import { generateFolder } from '../../carbonio-ui-commons/test/mocks/folders/folders-generator';
-import { createAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
+import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { createFakeFile } from '../../carbonio-ui-commons/test/mocks/utils/file';
 import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { NAMESPACES } from '../../constants/api';
@@ -63,7 +63,7 @@ describe('Import contacts modal', () => {
 		registerUploadHandler(uploadResponse);
 
 		// Register handler for import contacts API
-		const apiInterceptor = createAPIInterceptor<ImportContactsRequest>('ImportContacts');
+		const apiInterceptor = createSoapAPIInterceptor<ImportContactsRequest>('ImportContacts');
 		const { user } = setupTest(<ContactsImportModal {...defaultProps} />);
 		const confirmButton = screen.getByRole('button', {
 			name: confirmButtonLabel
@@ -95,7 +95,7 @@ describe('Import contacts modal', () => {
 			],
 			_jsns: NAMESPACES.mail
 		};
-		createAPIInterceptor<ImportContactsRequest, ImportContactsResponse>(
+		createSoapAPIInterceptor<ImportContactsRequest, ImportContactsResponse>(
 			'ImportContacts',
 			importResponse
 		);

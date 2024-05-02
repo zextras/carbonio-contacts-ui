@@ -7,12 +7,12 @@ import { faker } from '@faker-js/faker';
 
 import { FolderActionRequest } from './folder-action';
 import { moveContact } from './move-contact';
-import { createAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
+import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { NAMESPACES } from '../../constants/api';
 
 describe('Move contact', () => {
 	it('should call the API with the proper fields', () => {
-		const apiInterceptor = createAPIInterceptor<FolderActionRequest>('ContactAction');
+		const apiInterceptor = createSoapAPIInterceptor<FolderActionRequest>('ContactAction');
 		const contactsIds = ['32', '42', '77'];
 		const folderId = faker.string.uuid();
 		moveContact(contactsIds, folderId);

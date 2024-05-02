@@ -13,7 +13,7 @@ import { AddressBookCreateModal } from './address-book-create';
 import { isTrashed } from '../../carbonio-ui-commons/helpers/folders';
 import { getFoldersArray, getRootsArray } from '../../carbonio-ui-commons/store/zustand/folder';
 import { FOLDERS } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui-constants';
-import { createAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
+import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { populateFoldersStore } from '../../carbonio-ui-commons/test/mocks/store/folders';
 import { makeListItemsVisible, screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { NAMESPACES } from '../../constants/api';
@@ -188,7 +188,7 @@ describe('AddressBookCreateModal', () => {
 
 		it('should call the CreateFolder API with the proper parameters', async () => {
 			populateFoldersStore();
-			const apiInterceptor = createAPIInterceptor('CreateFolder');
+			const apiInterceptor = createSoapAPIInterceptor('CreateFolder');
 			const parentAddressBookId = FOLDERS.CONTACTS;
 			const addressBookName = faker.word.noun(3);
 			const { user } = setupTest(
@@ -211,7 +211,7 @@ describe('AddressBookCreateModal', () => {
 			populateFoldersStore();
 			const parentAddressBookId = FOLDERS.CONTACTS;
 			const addressBookName = faker.word.noun(3);
-			createAPIInterceptor<CreateFolderRequest, CreateFolderResponse>('CreateFolder', {
+			createSoapAPIInterceptor<CreateFolderRequest, CreateFolderResponse>('CreateFolder', {
 				folder: {
 					view: 'contact',
 					id: faker.number.int({ min: 100 }).toString(),
@@ -237,7 +237,7 @@ describe('AddressBookCreateModal', () => {
 			populateFoldersStore();
 			const parentAddressBookId = FOLDERS.CONTACTS;
 			const addressBookName = faker.word.noun(3);
-			createAPIInterceptor<CreateFolderRequest, CreateFolderResponse>('CreateFolder', {
+			createSoapAPIInterceptor<CreateFolderRequest, CreateFolderResponse>('CreateFolder', {
 				folder: {
 					view: 'contact',
 					id: faker.number.int({ min: 100 }).toString(),
@@ -270,7 +270,10 @@ describe('AddressBookCreateModal', () => {
 					Reason: { Text: faker.word.sample() }
 				}
 			};
-			createAPIInterceptor<CreateFolderRequest, ErrorSoapBodyResponse>('CreateFolder', response);
+			createSoapAPIInterceptor<CreateFolderRequest, ErrorSoapBodyResponse>(
+				'CreateFolder',
+				response
+			);
 			const onClose = jest.fn();
 			const { user } = setupTest(
 				<AddressBookCreateModal defaultParentId={parentAddressBookId} onClose={onClose} />
@@ -291,7 +294,10 @@ describe('AddressBookCreateModal', () => {
 					Reason: { Text: faker.word.sample() }
 				}
 			};
-			createAPIInterceptor<CreateFolderRequest, ErrorSoapBodyResponse>('CreateFolder', response);
+			createSoapAPIInterceptor<CreateFolderRequest, ErrorSoapBodyResponse>(
+				'CreateFolder',
+				response
+			);
 			const onClose = jest.fn();
 			const { user } = setupTest(
 				<AddressBookCreateModal defaultParentId={parentAddressBookId} onClose={onClose} />

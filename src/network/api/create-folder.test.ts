@@ -9,7 +9,7 @@ import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 
 import { createFolder, CreateFolderParams } from './create-folder';
 import { FOLDERS } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui-constants';
-import { createAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
+import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { NAMESPACES } from '../../constants/api';
 
 describe('Create folder', () => {
@@ -20,14 +20,14 @@ describe('Create folder', () => {
 				Reason: { Text: faker.word.sample() }
 			}
 		};
-		createAPIInterceptor('CreateFolder', response);
+		createSoapAPIInterceptor('CreateFolder', response);
 		expect(async () => {
 			await createFolder({ parentFolderId: FOLDERS.CONTACTS, name: faker.word.noun() });
 		}).rejects.toThrow();
 	});
 
 	it('should set the proper fields in the request', () => {
-		const apiInterceptor = createAPIInterceptor('CreateFolder');
+		const apiInterceptor = createSoapAPIInterceptor('CreateFolder');
 		const params: CreateFolderParams = {
 			parentFolderId: faker.string.uuid(),
 			name: faker.word.words(2)

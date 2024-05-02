@@ -6,12 +6,12 @@
 import { faker } from '@faker-js/faker';
 
 import { updateFolder, UpdateFolderParams } from './update-folder';
-import { createAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
+import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { NAMESPACES } from '../../constants/api';
 
 describe('updateFolder', () => {
 	it('should call the API with the proper fields', () => {
-		const apiInterceptor = createAPIInterceptor('FolderAction');
+		const apiInterceptor = createSoapAPIInterceptor('FolderAction');
 		const params: UpdateFolderParams = {
 			folderId: faker.string.uuid(),
 			name: faker.word.words(1),

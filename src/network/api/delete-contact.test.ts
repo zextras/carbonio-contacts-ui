@@ -6,12 +6,12 @@
 
 import { deleteContact } from './delete-contact';
 import { FolderActionRequest } from './folder-action';
-import { createAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
+import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { NAMESPACES } from '../../constants/api';
 
 describe('Delete contact', () => {
 	it('should call the API with the proper fields', () => {
-		const apiInterceptor = createAPIInterceptor<FolderActionRequest>('ContactAction');
+		const apiInterceptor = createSoapAPIInterceptor<FolderActionRequest>('ContactAction');
 		const contactsIds = ['32', '42', '77'];
 		deleteContact(contactsIds);
 		expect(apiInterceptor).resolves.toEqual({

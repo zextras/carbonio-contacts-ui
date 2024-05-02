@@ -12,7 +12,7 @@ import {
 	CreateMountpointsRequest,
 	CreateMountpointsResponse
 } from './create-mountpoints';
-import { createAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
+import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { NAMESPACES } from '../../constants/api';
 import { ShareInfo } from '../../model/share-info';
 
@@ -24,7 +24,7 @@ describe('createMountpoints', () => {
 				Reason: { Text: faker.word.sample() }
 			}
 		};
-		createAPIInterceptor('Batch', response);
+		createSoapAPIInterceptor('Batch', response);
 		expect(async () => {
 			await createMountpoints([]);
 		}).rejects.toThrow();
@@ -42,9 +42,10 @@ describe('createMountpoints', () => {
 			rights: 'r',
 			mountpointName: faker.word.noun(1)
 		}));
-		const interceptor = createAPIInterceptor<CreateMountpointsRequest, CreateMountpointsResponse>(
-			'Batch'
-		);
+		const interceptor = createSoapAPIInterceptor<
+			CreateMountpointsRequest,
+			CreateMountpointsResponse
+		>('Batch');
 		await createMountpoints(shares);
 		const request = await interceptor;
 		expect(request.CreateMountpointRequest).toBeDefined();
