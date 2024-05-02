@@ -6,8 +6,9 @@
 
 import React, { FC, useCallback, useRef } from 'react';
 
-import { ListItem, ListV2 } from '@zextras/carbonio-design-system';
+import { Container, ListItem, ListV2 } from '@zextras/carbonio-design-system';
 import { groupBy } from 'lodash';
+import styled from 'styled-components';
 
 import { UsersSharesListItem } from './users-shares-list-item';
 import { ShareInfo } from '../../../model/share-info';
@@ -16,6 +17,11 @@ export type UsersSharesListProps = {
 	shares: Array<ShareInfo>;
 	onSelectionChange: (selected: Array<ShareInfo>) => void;
 };
+
+const CustomListItem = styled(ListItem)`
+	&:hover {
+		background-color: ${({ theme, active }): string => theme.palette.transparent.regular}
+`;
 
 export const UsersSharesList: FC<UsersSharesListProps> = ({ shares, onSelectionChange }) => {
 	// Group shares by owner's name
@@ -48,23 +54,25 @@ export const UsersSharesList: FC<UsersSharesListProps> = ({ shares, onSelectionC
 	);
 
 	return (
-		<ListV2>
-			{ownerNames.map((ownerName, index) => (
-				<ListItem key={index}>
-					{(visible: boolean): React.JSX.Element =>
-						visible ? (
-							<UsersSharesListItem
-								shares={sharesGroups[ownerName]}
-								ownerName={ownerName}
-								onSelect={onSelect}
-								onDeselect={onDeselect}
-							/>
-						) : (
-							<></>
-						)
-					}
-				</ListItem>
-			))}
-		</ListV2>
+		<Container mainAlignment={'flex-start'}>
+			<ListV2>
+				{ownerNames.map((ownerName, index) => (
+					<CustomListItem key={index}>
+						{(visible: boolean): React.JSX.Element =>
+							visible ? (
+								<UsersSharesListItem
+									shares={sharesGroups[ownerName]}
+									ownerName={ownerName}
+									onSelect={onSelect}
+									onDeselect={onDeselect}
+								/>
+							) : (
+								<></>
+							)
+						}
+					</CustomListItem>
+				))}
+			</ListV2>
+		</Container>
 	);
 };

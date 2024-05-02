@@ -38,8 +38,13 @@ export const SharesListItem: FC<SharesListItemProps> = ({ share, onSelect, onDes
 	);
 
 	return (
-		<Row>
-			<Checkbox label={shareName} onChange={onSelectionChange} defaultChecked={false} />
+		<Row padding={'small'} mainAlignment={'flex-start'}>
+			<Checkbox
+				iconColor={'primary'}
+				label={shareName}
+				onChange={onSelectionChange}
+				defaultChecked={false}
+			/>
 		</Row>
 	);
 };

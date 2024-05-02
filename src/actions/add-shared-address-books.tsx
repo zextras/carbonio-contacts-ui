@@ -24,6 +24,7 @@ export const useActionAddSharedAddressBooks = (): AddSharedAddressBooksAction =>
 	const execute = useCallback<AddSharedAddressBooksAction['execute']>(() => {
 		const closeModal = createModal(
 			{
+				maxHeight: '90vh',
 				children: (
 					<StoreProvider>
 						<SharedAddressBooksAddModal onClose={() => closeModal()} />

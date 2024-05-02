@@ -96,6 +96,7 @@ export const useActionMoveAddressBook = (): MoveAddressBookAction => {
 			} else {
 				const closeModal = createModal(
 					{
+						maxHeight: '90vh',
 						children: (
 							<AddressBookMoveModal
 								addressBookId={addressBook.id}

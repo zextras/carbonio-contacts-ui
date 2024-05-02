@@ -60,6 +60,7 @@ export const useActionEmptyAddressBook = (): EmptyAddressBookAction => {
 			}
 			const closeModal = createModal(
 				{
+					maxHeight: '90vh',
 					children: (
 						<StoreProvider>
 							<AddressBookEmptyModal addressBook={addressBook} onClose={() => closeModal()} />

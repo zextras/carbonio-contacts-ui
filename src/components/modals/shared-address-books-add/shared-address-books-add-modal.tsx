@@ -6,7 +6,6 @@
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
-	Container,
 	Icon,
 	Input,
 	InputProps,
@@ -25,6 +24,7 @@ import { TIMEOUTS } from '../../../constants';
 import { getFolderTranslatedName } from '../../../legacy/utils/helpers';
 import { ShareInfo } from '../../../model/share-info';
 import { apiClient } from '../../../network/api-client';
+import { ScrollableContainer } from '../../styled-components';
 
 export type SharesModalProps = {
 	onClose: () => void;
@@ -147,9 +147,9 @@ export const SharedAddressBooksAddModal: FC<SharesModalProps> = ({ onClose }) =>
 					onChange={onOwnerNameFilterChange}
 				/>
 			</Row>
-			<Container orientation="vertical" mainAlignment="flex-start" maxHeight="40vh">
+			<ScrollableContainer orientation="vertical" mainAlignment="flex-start" minHeight={'6rem'}>
 				<UsersSharesList shares={filteredSharedInfo} onSelectionChange={onSharesSelection} />
-			</Container>
+			</ScrollableContainer>
 			<ModalFooter
 				onConfirm={onConfirm}
 				confirmLabel={t('share.add', 'Add')}

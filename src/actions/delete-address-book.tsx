@@ -52,6 +52,7 @@ export const useActionDeleteAddressBook = (): DeleteAddressBookAction => {
 			}
 			const closeModal = createModal(
 				{
+					maxHeight: '90vh',
 					children: (
 						<StoreProvider>
 							<AddressBookDeleteModal addressBook={addressBook} onClose={() => closeModal()} />

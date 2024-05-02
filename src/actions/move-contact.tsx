@@ -24,9 +24,8 @@ export const useActionMoveContact = (): MoveContactAction => {
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
 
-	// TODO implement redux dispatch
 	const move = useCallback(
-		(contactsIds: Array<string>, parentAddressBookId: string) =>
+		(contactsIds: Array<string>, parentAddressBookId: string): void => {
 			apiClient
 				.moveContact(contactsIds, parentAddressBookId)
 				.then(() => {
@@ -50,7 +49,8 @@ export const useActionMoveContact = (): MoveContactAction => {
 						hideButton: true
 					});
 					return false;
-				}),
+				});
+		},
 		[createSnackbar, t]
 	);
 

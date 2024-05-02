@@ -8,6 +8,7 @@ import React, { FC, useCallback, useMemo, useState } from 'react';
 
 import {
 	Collapse,
+	Container,
 	Icon,
 	IconButton,
 	ListItem,
@@ -50,13 +51,28 @@ export const UsersSharesListItem: FC<UsersSharesListItemProps> = ({
 	}, []);
 
 	return (
-		<Row padding={'small'} data-testid={'shares-users-list-item'}>
-			<Row>
-				<Icon icon={'PersonOutline'} />
-				<TextWithTooltip>{label}</TextWithTooltip>
+		<Container crossAlignment={'flex-start'} padding={{ top: 'extrasmall', horizontal: 'small' }}>
+			<Row
+				width={'fill'}
+				mainAlignment={'space-between'}
+				gap={'0.5rem'}
+				wrap={'nowrap'}
+				data-testid={'shares-users-list-item'}
+			>
+				<Row wrap={'nowrap'} gap={'0.5rem'} flexShrink={1} minWidth={'1rem'}>
+					<Icon icon={'PersonOutline'} />
+					<Row flexShrink={1} minWidth={'1rem'}>
+						<TextWithTooltip>{label}</TextWithTooltip>
+					</Row>
+				</Row>
+				<IconButton
+					size={'large'}
+					icon={expanded ? 'ChevronUp' : 'ChevronDown'}
+					onClick={onChevronClick}
+					minWidth={'fit-content'}
+				/>
 			</Row>
-			<IconButton icon={expanded ? 'ChevronUp' : 'ChevronDown'} onClick={onChevronClick} />
-			<Collapse open={expanded}>
+			<Collapse open={expanded} crossSize="100%" orientation="vertical">
 				<ListV2>
 					{shares.map((share) => (
 						<ListItem key={share.folderUuid}>
@@ -71,6 +87,6 @@ export const UsersSharesListItem: FC<UsersSharesListItemProps> = ({
 					))}
 				</ListV2>
 			</Collapse>
-		</Row>
+		</Container>
 	);
 };

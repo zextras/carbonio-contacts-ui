@@ -29,6 +29,7 @@ export const useActionTrashAddressBook = (): TrashAddressBookAction => {
 			}
 			const closeModal = createModal(
 				{
+					maxHeight: '90vh',
 					children: (
 						<StoreProvider>
 							<AddressBookTrashModal addressBook={addressBook} onClose={() => closeModal()} />

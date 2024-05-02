@@ -22,14 +22,17 @@ import { useActionTrashAddressBook } from '../../../../actions/trash-address-boo
 import { UIAction } from '../../../../actions/types';
 import { Folder } from '../../../../carbonio-ui-commons/types/folder';
 
-const generateMenuAction = (uiAction: UIAction<Folder, never>, addressBook: Folder): Action =>
+const generateMenuAction = <T extends UIAction<EP, never>, EP>(
+	uiAction: T,
+	executionParams: EP
+): Action =>
 	({
 		id: uiAction.id,
 		icon: uiAction.icon,
 		label: uiAction.label,
 		onClick: (e): void => {
 			e.stopPropagation();
-			uiAction.execute(addressBook);
+			uiAction.execute(executionParams);
 		}
 	}) satisfies Action;
 
@@ -51,7 +54,8 @@ export const useAddressBookContextualMenuItems = (addressBook: Folder): Array<Ac
 
 		createAction.canExecute(addressBook) &&
 			result.push(generateMenuAction(createAction, addressBook));
-		moveAction.canExecute(addressBook) && result.push(generateMenuAction(moveAction, addressBook));
+		moveAction.canExecute({ addressBook }) &&
+			result.push(generateMenuAction(moveAction, { addressBook }));
 		emptyAddressBookAction.canExecute(addressBook) &&
 			result.push(generateMenuAction(emptyAddressBookAction, addressBook));
 		emptyTrashAction.canExecute(addressBook) &&

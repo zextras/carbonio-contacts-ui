@@ -76,6 +76,7 @@ export const useActionImportContacts = (): ImportContactsAction => {
 				.then((file): void => {
 					const closeModal = createModal(
 						{
+							maxHeight: '90vh',
 							children: (
 								<StoreProvider>
 									<ContactsImportModal

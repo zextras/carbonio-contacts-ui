@@ -52,6 +52,7 @@ export const useActionCreateAddressBook = (): CreateAddressBookAction => {
 
 			const closeModal = createModal(
 				{
+					maxHeight: '90vh',
 					children: (
 						<AddressBookCreateModal
 							defaultParentId={addressBook?.id}
