@@ -7,34 +7,34 @@ import { SoapResponse } from '@zextras/carbonio-shell-ui';
 import { HttpResponseResolver, http, HttpResponse } from 'msw';
 
 import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
-import { NAMESPACES } from '../../constants/api';
 import { FullAutocompleteResponse, Match } from '../../legacy/types/contact';
 import { buildSoapResponse } from '../utils';
 
-const createAutocompleteResponse = (match: Array<Match>): string => {
+const createAutocompleteResponse = (match: Array<Match>): FullAutocompleteResponse => {
 	const matchString = match.map((item) => {
 		const full = item.full ?? [item.first ?? '', item.last ?? ''].join(' ');
-		const filledMatch: Partial<Record<keyof Match, string>> = {
+		const filledMatch: Match = {
 			first: item.first ?? '',
 			last: item.last ?? '',
 			full,
 			email: `&quot;${full}&quot; &lt;${item.email ?? ''}&gt;`,
-			isGroup: item.isGroup ? '1' : '0',
+			isGroup: item.isGroup,
 			type: item.type ?? '',
 			fileas: item.fileas ?? `8:${full}`,
 			ranking: item.ranking ?? ''
 		};
-		return `<match last="${filledMatch.last}" fileas="${filledMatch.fileas}" ranking="${filledMatch.ranking}" type="${filledMatch.type}" isGroup="${filledMatch.isGroup}" email="${filledMatch.email}" first="${filledMatch.first}" full="${full}" />`;
+		return filledMatch;
 	});
-
-	return `<FullAutocompleteResponse canBeCached='0' xmlns='${NAMESPACES.mail}'>
-		${matchString}
-		</FullAutocompleteResponse>`;
+	return {
+		_jsns: 'urn:zimbraMail',
+		canBeCached: false,
+		match: matchString
+	};
 };
 type FullAutoCompleteHandler = HttpResponseResolver<
 	never,
 	{ Body: { FullAutocompleteRequest: FullAutocompleteResponse } },
-	SoapResponse<string>
+	SoapResponse<FullAutocompleteResponse>
 >;
 export const registerFullAutocompleteHandler = (
 	results: Array<Match>
@@ -42,7 +42,7 @@ export const registerFullAutocompleteHandler = (
 	const handler = jest.fn<ReturnType<FullAutoCompleteHandler>, Parameters<FullAutoCompleteHandler>>(
 		() =>
 			HttpResponse.json(
-				buildSoapResponse<string>({
+				buildSoapResponse<FullAutocompleteResponse>({
 					FullAutocompleteResponse: createAutocompleteResponse(results)
 				})
 			)

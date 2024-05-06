@@ -70,7 +70,7 @@ describe('Contact input integration wrapper', () => {
 				const { user } = setupTest(
 					<ContactInputIntegrationWrapper
 						defaultValue={[]}
-						extraAccountsIds={[]}
+						orderedAccountIds={[]}
 						onChange={onChange}
 					/>
 				);
@@ -92,7 +92,7 @@ describe('Contact input integration wrapper', () => {
 				const { user } = setupTest(
 					<ContactInputIntegrationWrapper
 						defaultValue={[]}
-						extraAccountsIds={[]}
+						orderedAccountIds={[]}
 						onChange={onChange}
 					/>
 				);
@@ -101,7 +101,7 @@ describe('Contact input integration wrapper', () => {
 					jest.runOnlyPendingTimers();
 				});
 				await screen.findByTestId(TESTID_SELECTORS.dropdownList);
-				expect(await screen.findByText(contact3.email)).toBeVisible();
+				expect(await screen.findByText(contact3.email, { exact: false })).toBeVisible();
 				await act(async () => {
 					await user.keyboard('{Enter}');
 				});
@@ -117,7 +117,7 @@ describe('Contact input integration wrapper', () => {
 				const { user } = setupTest(
 					<ContactInputIntegrationWrapper
 						defaultValue={[]}
-						extraAccountsIds={[]}
+						orderedAccountIds={[]}
 						onChange={onChange}
 					/>
 				);
@@ -126,7 +126,7 @@ describe('Contact input integration wrapper', () => {
 					jest.runOnlyPendingTimers();
 				});
 				const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
-				const dropdownItem = await within(dropdown).findByText(contact.email);
+				const dropdownItem = await within(dropdown).findByText(contact.email, { exact: false });
 				await user.click(dropdownItem);
 				expect(onChange).toHaveBeenCalledWith([
 					expect.objectContaining({ actions: [editValidChipAction] })
@@ -145,7 +145,7 @@ describe('Contact input integration wrapper', () => {
 								actions: [customAction]
 							}
 						]}
-						extraAccountsIds={[]}
+						orderedAccountIds={[]}
 					/>
 				);
 
@@ -167,7 +167,7 @@ describe('Contact input integration wrapper', () => {
 								actions: [customAction]
 							}
 						]}
-						extraAccountsIds={[]}
+						orderedAccountIds={[]}
 					/>
 				);
 
@@ -187,7 +187,7 @@ describe('Contact input integration wrapper', () => {
 								actions: [customAction]
 							}
 						]}
-						extraAccountsIds={[]}
+						orderedAccountIds={[]}
 					/>
 				);
 
@@ -203,7 +203,7 @@ describe('Contact input integration wrapper', () => {
 				setupTest(
 					<ContactInputIntegrationWrapper
 						defaultValue={[distributionListChipItem]}
-						extraAccountsIds={[]}
+						orderedAccountIds={[]}
 					/>
 				);
 
@@ -217,7 +217,7 @@ describe('Contact input integration wrapper', () => {
 		describe('on invalid contact', () => {
 			it('should show remove action on value set from outside', () => {
 				setupTest(
-					<ContactInputIntegrationWrapper defaultValue={[invalidChipItem]} extraAccountsIds={[]} />
+					<ContactInputIntegrationWrapper defaultValue={[invalidChipItem]} orderedAccountIds={[]} />
 				);
 				expect(
 					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.close })
@@ -226,7 +226,7 @@ describe('Contact input integration wrapper', () => {
 
 			it('should not show edit action if invalid contact is set from outside', () => {
 				setupTest(
-					<ContactInputIntegrationWrapper defaultValue={[invalidChipItem]} extraAccountsIds={[]} />
+					<ContactInputIntegrationWrapper defaultValue={[invalidChipItem]} orderedAccountIds={[]} />
 				);
 				expect(
 					screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.editChip })
@@ -238,7 +238,7 @@ describe('Contact input integration wrapper', () => {
 				const { user } = setupTest(
 					<ContactInputIntegrationWrapper
 						defaultValue={[]}
-						extraAccountsIds={[]}
+						orderedAccountIds={[]}
 						onChange={onChange}
 					/>
 				);
@@ -256,7 +256,7 @@ describe('Contact input integration wrapper', () => {
 				const { user } = setupTest(
 					<ContactInputIntegrationWrapper
 						defaultValue={[]}
-						extraAccountsIds={[]}
+						orderedAccountIds={[]}
 						onChange={onChange}
 					/>
 				);
