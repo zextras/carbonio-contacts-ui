@@ -9,7 +9,6 @@ import React, { FC, useCallback, useMemo, useState } from 'react';
 import {
 	Collapse,
 	Container,
-	Icon,
 	IconButton,
 	ListItem,
 	ListV2,
@@ -20,6 +19,7 @@ import { useTranslation } from 'react-i18next';
 
 import { SharesListItem } from './shares-list-item';
 import { ShareInfo } from '../../../model/share-info';
+import { HoverRow } from '../../styled-components';
 
 export type UsersSharesListItemProps = {
 	shares: Array<ShareInfo>;
@@ -51,8 +51,9 @@ export const UsersSharesListItem: FC<UsersSharesListItemProps> = ({
 	}, []);
 
 	return (
-		<Container crossAlignment={'flex-start'} padding={{ top: 'extrasmall', horizontal: 'small' }}>
-			<Row
+		<Container crossAlignment={'flex-start'} padding={{ top: 'extrasmall' }}>
+			<HoverRow
+				padding={'small'}
 				width={'fill'}
 				mainAlignment={'space-between'}
 				gap={'0.5rem'}
@@ -60,18 +61,17 @@ export const UsersSharesListItem: FC<UsersSharesListItemProps> = ({
 				data-testid={'shares-users-list-item'}
 			>
 				<Row wrap={'nowrap'} gap={'0.5rem'} flexShrink={1} minWidth={'1rem'}>
-					<Icon icon={'PersonOutline'} />
-					<Row flexShrink={1} minWidth={'1rem'}>
-						<TextWithTooltip>{label}</TextWithTooltip>
-					</Row>
+					<TextWithTooltip>{label}</TextWithTooltip>
 				</Row>
 				<IconButton
-					size={'large'}
 					icon={expanded ? 'ChevronUp' : 'ChevronDown'}
 					onClick={onChevronClick}
-					minWidth={'fit-content'}
+					customSize={{
+						iconSize: 'large',
+						paddingSize: 0
+					}}
 				/>
-			</Row>
+			</HoverRow>
 			<Collapse open={expanded} crossSize="100%" orientation="vertical">
 				<ListV2>
 					{shares.map((share) => (

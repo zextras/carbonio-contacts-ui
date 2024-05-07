@@ -18,7 +18,8 @@ describe('emptyFolder', () => {
 		expect(apiInterceptor).resolves.toEqual({
 			action: {
 				id: folderId,
-				op: 'empty'
+				op: 'empty',
+				recursive: true
 			},
 			_jsns: NAMESPACES.mail
 		});

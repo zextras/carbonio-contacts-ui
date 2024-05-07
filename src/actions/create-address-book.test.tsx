@@ -73,13 +73,13 @@ describe('useActionCreateAddressBook', () => {
 			expect(action.canExecute(addressBook)).toBeTruthy();
 		});
 
-		it('should return false if the parent address book is a linked one', () => {
+		it('should return false if the parent address book has no subfolder creation permission', () => {
 			const name = faker.word.noun();
 			const folderId = `${faker.string.uuid()}:${faker.number.int({ min: 101 })}`;
 			const addressBook = generateFolder({
 				name,
 				id: folderId,
-				isLink: true,
+				perm: 'r',
 				view: FOLDER_VIEW.contact
 			});
 			const { result } = setupHook(useActionCreateAddressBook);
@@ -87,7 +87,21 @@ describe('useActionCreateAddressBook', () => {
 			expect(action.canExecute(addressBook)).toBeFalsy();
 		});
 
-		it('should return true if the parent address book is not Trash or trashed and is not a link', () => {
+		it('should return true if the parent address book has subfolder creation permission', () => {
+			const name = faker.word.noun();
+			const folderId = `${faker.string.uuid()}:${faker.number.int({ min: 101 })}`;
+			const addressBook = generateFolder({
+				name,
+				id: folderId,
+				perm: 'rc',
+				view: FOLDER_VIEW.contact
+			});
+			const { result } = setupHook(useActionCreateAddressBook);
+			const action = result.current;
+			expect(action.canExecute(addressBook)).toBeTruthy();
+		});
+
+		it('should return true if the parent address book is not Trash or trashed', () => {
 			const addressBook = generateFolder({
 				view: FOLDER_VIEW.contact
 			});

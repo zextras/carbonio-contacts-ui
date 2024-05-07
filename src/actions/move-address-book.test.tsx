@@ -95,8 +95,23 @@ describe('useActionMoveAddressBook', () => {
 			expect(action.canExecute({ addressBook })).toBeFalsy();
 		});
 
-		it('should return true if the address book is not a system one and is not a link', () => {
+		it('should return false if the user has no write permission for the address book', () => {
+			const name = faker.word.noun();
+			const folderId = `${faker.string.uuid()}:${faker.number.int({ min: 101 })}`;
 			const addressBook = generateFolder({
+				name,
+				id: folderId,
+				perm: 'r',
+				view: FOLDER_VIEW.contact
+			});
+			const { result } = setupHook(useActionMoveAddressBook);
+			const action = result.current;
+			expect(action.canExecute({ addressBook })).toBeFalsy();
+		});
+
+		it('should return true if the address book is not a system one and the user has write permission', () => {
+			const addressBook = generateFolder({
+				perm: 'xw',
 				view: FOLDER_VIEW.contact
 			});
 			const { result } = setupHook(useActionMoveAddressBook);

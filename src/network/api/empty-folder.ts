@@ -6,4 +6,4 @@
 import { folderAction } from './folder-action';
 
 export const emptyFolder = (folderId: string): Promise<void> =>
-	folderAction({ folderId, operation: 'empty' });
+	folderAction({ folderId, operation: 'empty', recursive: true });

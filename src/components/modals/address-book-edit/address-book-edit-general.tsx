@@ -23,7 +23,7 @@ import {
 	ColorSelect,
 	ColorSelectProps
 } from '../../../carbonio-ui-commons/components/select/color-select';
-import { isSystemFolder } from '../../../carbonio-ui-commons/helpers/folders';
+import { isAdministerAllowed, isSystemFolder } from '../../../carbonio-ui-commons/helpers/folders';
 import { useFolder } from '../../../carbonio-ui-commons/store/zustand/folder';
 import { Grant } from '../../../carbonio-ui-commons/types/folder';
 import { TIMEOUTS } from '../../../constants';
@@ -62,6 +62,11 @@ export const AddressBookEditGeneralModal = ({
 	const confirmButtonDisabled = useMemo(
 		() => addressBook?.name === addressBookName && addressBook?.color === addressBookColor,
 		[addressBook, addressBookName, addressBookColor]
+	);
+
+	const addShareDisabled = useMemo(
+		() => !addressBook || !isAdministerAllowed(addressBook),
+		[addressBook]
 	);
 
 	const close = useCallback(() => onClose(), [onClose]);
@@ -118,6 +123,7 @@ export const AddressBookEditGeneralModal = ({
 				height="fit"
 			>
 				<ModalHeader onClose={onClose} title={modalTitle} showCloseIcon />
+				<Divider />
 
 				<Container
 					orientation="horizontal"
@@ -191,22 +197,27 @@ export const AddressBookEditGeneralModal = ({
 						</Row>
 					</Container>
 				</Container>
-				<Divider />
-				<Padding vertical="small" />
 
 				{showShared && (
-					<ShareFolderProperties
-						addressBookId={addressBookId}
-						onEdit={onEditShare}
-						onRevoke={onRevokeShare}
-					/>
+					<>
+						<Divider />
+						<Padding vertical="small" />
+						<ShareFolderProperties
+							addressBookId={addressBookId}
+							onEdit={onEditShare}
+							onRevoke={onRevokeShare}
+						/>
+					</>
 				)}
+
+				<Divider />
 
 				<ModalFooter
 					onConfirm={onConfirm}
 					confirmLabel={t('label.edit', 'Edit')}
 					onSecondaryAction={onAddShare}
 					secondaryActionLabel={t('label.add_share', 'Add Share')}
+					secondaryActionDisabled={addShareDisabled}
 					confirmDisabled={confirmButtonDisabled}
 					confirmColor="primary"
 				/>

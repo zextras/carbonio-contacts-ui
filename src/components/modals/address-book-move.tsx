@@ -5,7 +5,13 @@
  */
 import React, { useCallback, useMemo, useState } from 'react';
 
-import { Container, ModalBody, ModalFooter, ModalHeader } from '@zextras/carbonio-design-system';
+import {
+	Container,
+	Divider,
+	ModalBody,
+	ModalFooter,
+	ModalHeader
+} from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
 import { useFolder } from '../../carbonio-ui-commons/store/zustand/folder/hooks';
@@ -50,6 +56,7 @@ export const AddressBookMoveModal = ({
 	return (
 		<>
 			<ModalHeader title={modalTitle} onClose={onClose} showCloseIcon />
+			<Divider />
 			<ModalBody>
 				<Container
 					gap={'0.5rem'}
@@ -68,6 +75,7 @@ export const AddressBookMoveModal = ({
 					/>
 				</Container>
 			</ModalBody>
+			<Divider />
 			<ModalFooter
 				confirmLabel={confirmLabel}
 				confirmDisabled={confirmDisabled}

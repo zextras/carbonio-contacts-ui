@@ -7,6 +7,7 @@ import React, { useCallback, useMemo } from 'react';
 
 import {
 	Container,
+	Divider,
 	ModalBody,
 	ModalFooter,
 	ModalHeader,
@@ -110,6 +111,7 @@ export const ContactsImportModal = ({
 			height="fit"
 		>
 			<ModalHeader title={title} onClose={onClose} showCloseIcon />
+			<Divider />
 			<ModalBody>
 				<Text overflow="break-word" size="medium">
 					{t('import_contacts.modal.description', {
@@ -119,6 +121,7 @@ export const ContactsImportModal = ({
 					})}
 				</Text>
 			</ModalBody>
+			<Divider />
 			<ModalFooter confirmLabel={confirmLabel} onConfirm={onConfirm} />
 		</Container>
 	);

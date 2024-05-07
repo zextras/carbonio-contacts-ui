@@ -6,6 +6,7 @@
 import React, { useCallback, useMemo } from 'react';
 
 import {
+	Divider,
 	ModalBody,
 	ModalFooter,
 	ModalHeader,
@@ -82,9 +83,11 @@ export const AddressBookDeleteModal = ({
 	return (
 		<>
 			<ModalHeader title={modalTitle} onClose={onClose} showCloseIcon />
+			<Divider />
 			<ModalBody>
 				<Text overflow="break-word">{confirmationText}</Text>
 			</ModalBody>
+			<Divider />
 			<ModalFooter onConfirm={onConfirm} confirmLabel={confirmButtonLabel} confirmColor={'error'} />
 		</>
 	);

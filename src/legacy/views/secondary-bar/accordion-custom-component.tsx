@@ -147,6 +147,10 @@ const AccordionCustomComponent: FC<{ item: Folder }> = ({ item: folder }) => {
 			</Padding>
 		);
 
+		if (folder.isLink) {
+			const tooltipText = t('tooltip.folder_linked_status', 'Linked to me');
+			return RowWithIcon('Linked', 'linked', tooltipText);
+		}
 		if (folder.acl?.grant) {
 			const tooltipText = t('tooltip.folder_sharing_status', {
 				count: folder.acl.grant.length,
@@ -154,10 +158,6 @@ const AccordionCustomComponent: FC<{ item: Folder }> = ({ item: folder }) => {
 				defaultValue: 'Shared with {{count}} people'
 			});
 			return RowWithIcon('Shared', 'shared', tooltipText);
-		}
-		if (folder.isLink) {
-			const tooltipText = t('tooltip.folder_linked_status', 'Linked to me');
-			return RowWithIcon('Linked', 'linked', tooltipText);
 		}
 		return '';
 	}, [folder.acl?.grant, folder.isLink, t]);

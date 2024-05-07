@@ -7,6 +7,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 
 import {
 	Container,
+	Divider,
 	Input,
 	InputProps,
 	ModalBody,
@@ -109,6 +110,7 @@ export const AddressBookCreateModal = ({
 	return (
 		<>
 			<ModalHeader title={modalTitle} onClose={onClose} showCloseIcon />
+			<Divider />
 			<ModalBody>
 				<Container
 					gap={'0.5rem'}
@@ -128,12 +130,13 @@ export const AddressBookCreateModal = ({
 						onFolderSelected={onParentAddressBookSelected}
 						showSharedAccounts={false}
 						showTrashFolder={false}
-						showLinkedFolders={false}
+						showLinkedFolders
 						allowRootSelection
 						allowFolderCreation={false}
 					/>
 				</Container>
 			</ModalBody>
+			<Divider />
 			<ModalFooter
 				confirmLabel={confirmLabel}
 				confirmDisabled={confirmDisabled}

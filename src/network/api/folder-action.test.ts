@@ -41,7 +41,6 @@ describe('Folder action', () => {
 			action: {
 				id: params.folderId,
 				op: params.operation,
-				recursive: params.recursive,
 				l: params.parentId,
 				zid: params.granteeId,
 				name: params.name,

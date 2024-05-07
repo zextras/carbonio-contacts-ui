@@ -48,20 +48,6 @@ describe('UsersSharesListItem', () => {
 		expect(screen.getByText(`${ownerName}'s shared address books`)).toBeVisible();
 	});
 
-	it('should display an icon', () => {
-		const shares = [buildShareInfo()];
-
-		setupTest(
-			<UsersSharesListItem
-				shares={shares}
-				ownerName={faker.person.fullName()}
-				onDeselect={jest.fn()}
-				onSelect={jest.fn()}
-			/>
-		);
-		expect(screen.getByTestId(TESTID_SELECTORS.icons.sharesUser));
-	});
-
 	it("should display the user's shares as children of the accordion", () => {
 		const ownerName = faker.person.fullName();
 		const ownerEmail = faker.internet.email();

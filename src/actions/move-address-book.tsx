@@ -64,7 +64,7 @@ export const useActionMoveAddressBook = (): MoveAddressBookAction => {
 				return false;
 			}
 
-			if (addressBook.isLink) {
+			if (!isWriteAllowed(addressBook)) {
 				return false;
 			}
 
@@ -73,6 +73,10 @@ export const useActionMoveAddressBook = (): MoveAddressBookAction => {
 			}
 
 			if (newParentAddressBook?.id === addressBook.l) {
+				return false;
+			}
+
+			if (addressBook.isLink) {
 				return false;
 			}
 

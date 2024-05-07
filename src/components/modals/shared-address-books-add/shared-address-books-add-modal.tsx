@@ -6,6 +6,7 @@
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
+	Divider,
 	Icon,
 	Input,
 	InputProps,
@@ -127,6 +128,7 @@ export const SharedAddressBooksAddModal: FC<SharesModalProps> = ({ onClose }) =>
 				showCloseIcon
 				onClose={onClose}
 			/>
+			<Divider />
 			<Row padding={{ top: 'large', bottom: 'small' }} width="fill" mainAlignment="flex-start">
 				<Text>
 					{t(
@@ -150,6 +152,7 @@ export const SharedAddressBooksAddModal: FC<SharesModalProps> = ({ onClose }) =>
 			<ScrollableContainer orientation="vertical" mainAlignment="flex-start" minHeight={'6rem'}>
 				<UsersSharesList shares={filteredSharedInfo} onSelectionChange={onSharesSelection} />
 			</ScrollableContainer>
+			<Divider />
 			<ModalFooter
 				onConfirm={onConfirm}
 				confirmLabel={t('share.add', 'Add')}

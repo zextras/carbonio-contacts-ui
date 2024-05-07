@@ -6,6 +6,7 @@
 import React, { useCallback, useMemo } from 'react';
 
 import {
+	Divider,
 	ModalBody,
 	ModalFooter,
 	ModalHeader,
@@ -99,7 +100,9 @@ export const AddressBookEmptyModal = ({
 	return (
 		<>
 			<ModalHeader title={modalTitle} onClose={onClose} showCloseIcon />
+			<Divider />
 			<ModalBody>{confirmationTextComponent}</ModalBody>
+			<Divider />
 			<ModalFooter onConfirm={onConfirm} confirmLabel={confirmButtonLabel} confirmColor={'error'} />
 		</>
 	);
