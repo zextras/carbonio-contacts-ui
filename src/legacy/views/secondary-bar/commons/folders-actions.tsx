@@ -48,15 +48,6 @@ export const actionsRetriever = (
 		}
 	},
 	{
-		id: FolderActionsType.SHARE,
-		icon: 'ShareOutline',
-		label: t('folder.share_folder', 'Share address book'),
-		onClick: (): void => {
-			setAction(FolderActionsType.SHARE);
-			setCurrentFolder(folder);
-		}
-	},
-	{
 		id: FolderActionsType.EMPTY,
 		icon: folder.id === FOLDERS.TRASH ? 'DeletePermanentlyOutline' : 'EmptyFolderOutline',
 		label:

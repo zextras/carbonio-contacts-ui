@@ -97,11 +97,6 @@ export const FOLDER_ACTIONS_DESCRIPTORS = {
 		desc: 'Move',
 		icon: 'MoveOutline'
 	},
-	share: {
-		id: 'share',
-		desc: 'Share address book',
-		icon: 'ShareOutline'
-	},
 	empty: {
 		id: 'empty',
 		desc: 'Empty address book',
