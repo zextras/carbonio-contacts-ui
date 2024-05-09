@@ -44,7 +44,6 @@ describe('Sidebar', () => {
 		${FOLDERS_DESCRIPTORS.contacts}     | ${ACTIONS_DESCRIPTORS.folders.delete}            | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.contacts}     | ${ACTIONS_DESCRIPTORS.folders.edit}              | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.contacts}     | ${ACTIONS_DESCRIPTORS.folders.empty}             | ${DISPLAY_ASSERTION.display}
-		${FOLDERS_DESCRIPTORS.contacts}     | ${ACTIONS_DESCRIPTORS.folders.share}             | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.contacts}     | ${ACTIONS_DESCRIPTORS.folders.shareInfo}         | ${DISPLAY_ASSERTION.notDisplay}
 		${FOLDERS_DESCRIPTORS.contacts}     | ${ACTIONS_DESCRIPTORS.folders.emptyTrash}        | ${DISPLAY_ASSERTION.notDisplay}
 		${FOLDERS_DESCRIPTORS.contacts}     | ${ACTIONS_DESCRIPTORS.folders.deletePermanently} | ${DISPLAY_ASSERTION.display}
@@ -56,7 +55,6 @@ describe('Sidebar', () => {
 		${FOLDERS_DESCRIPTORS.autoContacts} | ${ACTIONS_DESCRIPTORS.folders.delete}            | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.autoContacts} | ${ACTIONS_DESCRIPTORS.folders.edit}              | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.autoContacts} | ${ACTIONS_DESCRIPTORS.folders.empty}             | ${DISPLAY_ASSERTION.display}
-		${FOLDERS_DESCRIPTORS.autoContacts} | ${ACTIONS_DESCRIPTORS.folders.share}             | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.autoContacts} | ${ACTIONS_DESCRIPTORS.folders.shareInfo}         | ${DISPLAY_ASSERTION.notDisplay}
 		${FOLDERS_DESCRIPTORS.autoContacts} | ${ACTIONS_DESCRIPTORS.folders.emptyTrash}        | ${DISPLAY_ASSERTION.notDisplay}
 		${FOLDERS_DESCRIPTORS.autoContacts} | ${ACTIONS_DESCRIPTORS.folders.deletePermanently} | ${DISPLAY_ASSERTION.display}
@@ -68,7 +66,6 @@ describe('Sidebar', () => {
 		${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.folders.delete}            | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.folders.edit}              | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.folders.empty}             | ${DISPLAY_ASSERTION.display}
-		${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.folders.share}             | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.folders.shareInfo}         | ${DISPLAY_ASSERTION.notDisplay}
 		${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.folders.emptyTrash}        | ${DISPLAY_ASSERTION.notDisplay}
 		${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.folders.deletePermanently} | ${DISPLAY_ASSERTION.display}
@@ -80,7 +77,6 @@ describe('Sidebar', () => {
 		${FOLDERS_DESCRIPTORS.trash}        | ${ACTIONS_DESCRIPTORS.folders.delete}            | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.trash}        | ${ACTIONS_DESCRIPTORS.folders.edit}              | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.trash}        | ${ACTIONS_DESCRIPTORS.folders.empty}             | ${DISPLAY_ASSERTION.notDisplay}
-		${FOLDERS_DESCRIPTORS.trash}        | ${ACTIONS_DESCRIPTORS.folders.share}             | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.trash}        | ${ACTIONS_DESCRIPTORS.folders.shareInfo}         | ${DISPLAY_ASSERTION.notDisplay}
 		${FOLDERS_DESCRIPTORS.trash}        | ${ACTIONS_DESCRIPTORS.folders.emptyTrash}        | ${DISPLAY_ASSERTION.display}
 		${FOLDERS_DESCRIPTORS.trash}        | ${ACTIONS_DESCRIPTORS.folders.deletePermanently} | ${DISPLAY_ASSERTION.display}

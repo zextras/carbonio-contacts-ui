@@ -5,7 +5,6 @@
  */
 import React, { useCallback, useEffect, useRef, useState, ReactElement, FC, useMemo } from 'react';
 
-import { createSelector } from '@reduxjs/toolkit';
 import {
 	Avatar,
 	ChipInput,
@@ -18,40 +17,23 @@ import {
 	useCombinedRefs
 } from '@zextras/carbonio-design-system';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
-import {
-	filter,
-	find,
-	findIndex,
-	map,
-	reduce,
-	some,
-	startsWith,
-	trim,
-	forEach,
-	reject,
-	uniqBy,
-	noop
-} from 'lodash';
+import { filter, find, map, trim, forEach, reject, uniqBy, noop } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled, { type DefaultTheme } from 'styled-components';
 
 import { ContactInputCustomChipComponent } from './contact-input-custom-chip-component';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
-import { parseFullAutocompleteXML } from '../helpers/autocomplete';
-import { useAppSelector } from '../hooks/redux';
 import { StoreProvider } from '../store/redux';
-import type { Contact, FullAutocompleteRequest, Match } from '../types/contact';
+import type { FullAutocompleteRequest, FullAutocompleteResponse, Match } from '../types/contact';
 import type {
 	ContactChipAction,
 	ContactInputChipDisplayName,
-	ContactInputContact,
 	ContactInputGroup,
 	ContactInputItem,
 	ContactInputOnChange,
 	ContactInputValue
 } from '../types/integrations';
 import type { GetContactsRequest, GetContactsResponse } from '../types/soap';
-import type { State } from '../types/store';
 
 const emailRegex = /[^\s@]+@[^\s@]+\.[^\s@]+/;
 
@@ -166,7 +148,7 @@ export type ContactInputProps = Pick<
 	onChange?: ContactInputOnChange;
 	defaultValue: Array<ContactInputItem>;
 	dragAndDropEnabled?: boolean;
-	extraAccountsIds?: Array<string>;
+	orderedAccountIds?: Array<string>;
 	chipDisplayName?: ContactInputChipDisplayName;
 	contactActions?: Array<ContactChipAction>;
 };
@@ -178,7 +160,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	background = 'gray5',
 	dragAndDropEnabled = false,
 	chipDisplayName = CHIP_DISPLAY_NAME_VALUES.label,
-	extraAccountsIds = [],
+	orderedAccountIds = [],
 	contactActions,
 	inputRef: propsInputRef = null,
 	...rest
@@ -226,35 +208,6 @@ const ContactInputCore: FC<ContactInputProps> = ({
 			onDragStart: buildDragStartHandler(chip)
 		}),
 		[buildDragStartHandler]
-	);
-
-	const allContacts = useAppSelector(
-		createSelector(
-			(state: State) => state.contacts.contacts,
-			(contacts) =>
-				reduce<typeof contacts, ContactInputContact[]>(
-					contacts,
-					(acc, folderContacts) =>
-						folderContacts
-							? [
-									...acc,
-									...reduce<Contact, ContactInputContact[]>(
-										folderContacts,
-										(acc2, contact) => [
-											...acc2,
-											...map(contact.email, (email) => ({
-												...contact,
-												email: email.mail,
-												picture: contact.image
-											}))
-										],
-										[]
-									)
-								]
-							: acc,
-					[]
-				)
-		)
 	);
 
 	const isValidEmail = useCallback((email) => emailRegex.test(email), []);
@@ -329,109 +282,57 @@ const ContactInputCore: FC<ContactInputProps> = ({
 						customComponent: <Loader />
 					}
 				]);
-				// FIXME: Why this promise? There is nothing async in here
-				new Promise<ContactInputContact[]>((resolve, promiseReject) => {
-					// FIXME: Why this try? This code should not throw exceptions
-					try {
-						resolve(
-							filter(allContacts, (c) =>
-								some([c.firstName, c.lastName, c.company, c.email], (field) =>
-									startsWith(field?.toString().toLowerCase().trim(), textContent.toLowerCase())
-								)
-							)
-						);
-					} catch (err: any) {
-						promiseReject(new Error(err));
-					}
+				soapFetch<FullAutocompleteRequest, FullAutocompleteResponse>('FullAutocomplete', {
+					...(orderedAccountIds?.length > 0 && {
+						orderedAccountIds: orderedAccountIds.toString()
+					}),
+					AutoCompleteRequest: {
+						name: textContent,
+						includeGal: 1
+					},
+					_jsns: 'urn:zimbraMail'
 				})
-					.then((localResults) => {
-						if (localResults.length > 0) {
-							setOptions(
-								localResults.map((localContact, index) => ({
-									id: `default-id-${index}`,
-									...localContact,
-									label: getChipLabel(localContact)
-								}))
-							);
-						}
-						soapFetch<FullAutocompleteRequest, string>('FullAutocomplete', {
-							...(extraAccountsIds?.length > 0 && {
-								extraAccountId: extraAccountsIds.map((id) => ({ _content: id }))
-							}),
-							AutoCompleteRequest: {
-								name: textContent,
-								includeGal: 1
-							},
-							_jsns: 'urn:zimbraMail'
-						})
-							.then((autoCompleteResult) => {
-								const results = parseFullAutocompleteXML(autoCompleteResult);
-								return map<Match, Match>(results.match, (m) => ({
-									...m,
-									email: isContactGroup(m)
-										? undefined
-										: emailRegex.exec(m.email ?? '')?.[0]?.slice(1, -1)
-								}));
-							})
-							.then((remoteResults) => {
-								const normRemoteResults = reduce<Match, ContactInputItem[]>(
-									remoteResults,
-									(acc, result) => {
-										const localIndex = findIndex(acc, ['email', result.email]);
-										if (localIndex >= 0) {
-											return acc;
-										}
-										return [
-											...acc,
-											{
-												email: result.email,
-												firstName: result.first,
-												lastName: result.last,
-												company: result.company,
-												fullName: result.full,
-												display: result.display,
-												isGroup: result.isGroup,
-												id: result.id,
-												l: result.l,
-												exp: result.exp
-											}
-										];
-									},
-									localResults
-								);
-								setOptions(
-									map(
-										filter(normRemoteResults, (c) =>
-											some(
-												[c.firstName, c.lastName, c.company, c.email, c.fullName, c.display],
-												(field) =>
-													typeof field === 'string' &&
-													startsWith(field.toLowerCase().trim(), textContent.toLowerCase())
-											)
-										),
-										(contact) => ({
-											label: contact?.label ?? getChipLabel(contact),
-											value: {
-												id: `${contact.id} ${contact.email}`,
-												email: contact?.email,
-												firstName: contact?.firstName,
-												lastName: contact?.lastName,
-												company: contact?.company,
-												fullName: contact?.fullName,
-												display: contact?.display,
-												isGroup: contact?.isGroup,
-												groupId: contact?.id,
-												label: contact?.label ?? getChipLabel(contact)
-											},
-											customComponent: <Hint contact={contact} />,
-											id: `${contact.id} ${contact.email}`
-										})
-									)
-								);
-							})
-							.catch(() => {
-								setOptions([]);
-							});
+					.then((autoCompleteResult) =>
+						map<Match, Match>(autoCompleteResult.match, (m) => ({
+							...m,
+							email: isContactGroup(m)
+								? undefined
+								: emailRegex.exec(m.email ?? '')?.[0]?.slice(1, -1)
+						}))
+					)
+					.then((remoteResults) => {
+						const normRemoteResults = map(remoteResults, (result) => ({
+							email: result.email,
+							firstName: result.first,
+							lastName: result.last,
+							company: result.company,
+							fullName: result.full,
+							display: result.display,
+							isGroup: result.isGroup,
+							id: result.id,
+							l: result.l,
+							exp: result.exp,
+							label: getChipLabel(result)
+						}));
+						setOptions(
+							map(normRemoteResults, (contact) => ({
+								label: contact?.label ?? getChipLabel(contact),
+								value: {
+									id: `${contact.id} ${contact.email}`,
+									email: contact?.email,
+									firstName: contact?.firstName,
+									lastName: contact?.lastName,
+									company: contact?.company,
+									fullName: contact?.fullName,
+									display: contact?.display,
+									isGroup: contact?.isGroup,
+									groupId: contact?.id,
+									label: contact?.label ?? getChipLabel(contact)
+								},
+								customComponent: <Hint contact={contact} />,
+								id: `${contact.id} ${contact.email}`
+							}))
+						);
 					})
 					.catch(() => {
 						setOptions([]);
@@ -440,17 +341,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 				setOptions([]);
 			}
 		},
-		[
-			allContacts,
-			defaults,
-			editChip,
-			extraAccountsIds,
-			inputRef,
-			isValidEmail,
-			onChange,
-			options,
-			t
-		]
+		[defaults, editChip, inputRef, isValidEmail, onChange, options, orderedAccountIds, t]
 	);
 
 	useEffect(() => {
