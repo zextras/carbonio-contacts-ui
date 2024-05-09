@@ -81,7 +81,8 @@
             "delete_permanently": "Adres defterini kalıcı olarak sil",
             "edit": "Adres defterini düzenle",
             "move": "Taşı",
-            "moved": "Adres defteri başarıyla taşındı"
+            "moved": "Adres defteri başarıyla taşındı",
+            "deleteContactGroup": "\"{{contactGroupTitle}}\" sil"
         },
         "share_folder": "Adres defterini paylaş",
         "snackbar": {
@@ -355,7 +356,11 @@
             },
             "no_details": "Bu dağıtım listesi için ek detay bulunmuyor. Daha fazla bilgi için sistem yöneticinizle görüşün.",
             "empty_displayer": "Bir dağıtım listesi seçin veya oluşturmak için Yönetici ile iletişime geçin.",
-            "member_not_visible": "Bu dağıtım listesinin üyelerini görme izniniz yok. Daha fazla bilgi için sistem yöneticinizle görüşün."
+            "member_not_visible": "Bu dağıtım listesinin üyelerini görme izniniz yok. Daha fazla bilgi için sistem yöneticinizle görüşün.",
+            "no_details_owner": "Bu dağıtım listesi için ek ayrıntı yok. Eklemek için dağıtım listesini düzenleyin veya sistem yöneticinizle görüşün.",
+            "placeholder": {
+                "filter_member": "Adresi filtrele"
+            }
         }
     },
     "folders": {
@@ -426,6 +431,17 @@
         "placeholder": {
             "add_members": "Bir adres yazın, dağıtım listesine eklemek için '+' işaretine tıklayın",
             "filter_member": "Adresi filtrele"
+        },
+        "input": {
+            "description": {
+                "label": "Tanım"
+            },
+            "name": {
+                "error": {
+                    "max_length": "İzin verilen maksimum uzunluk 256 karakterdir"
+                },
+                "label": "Dağıtım Listesi adı"
+            }
         }
     },
     "members_list_item_component": {
@@ -453,6 +469,21 @@
     "contactGroupDisplayer": {
         "label": {
             "members_total": "Adresler: {{count}}"
+        }
+    },
+    "distribution_list": {
+        "label": {
+            "empty_message": "Henüz dağıtım listesi yok."
+        },
+        "tabs": {
+            "details": "Detaylar",
+            "managers": "Yönetici listesi",
+            "members": "Üye listesi"
+        }
+    },
+    "emptyDisplayer": {
+        "contactGroup": {
+            "hint": "Yeni bir kişi grubu oluşturmak için \"YENİ\" düğmesine tıklayın."
         }
     }
 }
