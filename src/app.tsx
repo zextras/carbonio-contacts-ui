@@ -5,7 +5,7 @@
  */
 import React, { lazy, Suspense, useEffect } from 'react';
 
-import { ModalManager } from '@zextras/carbonio-design-system';
+import { ModalManager, useSnackbar } from '@zextras/carbonio-design-system';
 import {
 	ACTION_TYPES,
 	addBoard,
@@ -15,6 +15,7 @@ import {
 	addSettingsView,
 	registerActions,
 	registerComponents,
+	registerFunctions,
 	SearchViewProps,
 	SecondaryBarComponentProps,
 	Spinner
@@ -33,6 +34,7 @@ import {
 } from './constants';
 import { useNavigation } from './hooks/useNavigation';
 import { ContactInputIntegrationWrapper } from './legacy/integrations/contact-input-integration-wrapper';
+import createContactIntegration from './legacy/integrations/create-contact';
 import { StoreProvider } from './legacy/store/redux';
 import { EditViewProps } from './legacy/types/views/edit-view';
 import { SidebarProps } from './legacy/types/views/sidebar';
@@ -162,6 +164,7 @@ const SidebarView = (props: SidebarProps): React.JSX.Element => (
 const App = (): React.JSX.Element => {
 	const [t] = useTranslation();
 	const { navigateTo } = useNavigation();
+	const createSnackbar = useSnackbar();
 
 	useEffect(() => {
 		addRoute({
@@ -259,7 +262,14 @@ const App = (): React.JSX.Element => {
 				})
 			}
 		);
-	}, [navigateTo, t]);
+		registerFunctions({
+			id: 'create_contact_from_vcard',
+			// TOFIX-SHELL: fix the function type definition
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+			// @ts-ignore
+			fn: createContactIntegration(createSnackbar, t)
+		});
+	}, [createSnackbar, navigateTo, t]);
 
 	useFoldersController(FOLDER_VIEW.contact);
 

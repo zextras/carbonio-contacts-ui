@@ -5,6 +5,7 @@
  */
 
 import { deleteContactAction } from './api/contact-action';
+import { createContactFromVcard } from './api/create-contact';
 import { createContactGroup } from './api/create-contact-group';
 import { distributionListAction } from './api/distribution-list-action';
 import { findContactGroups } from './api/find-contact-groups';
@@ -23,5 +24,6 @@ export const client = {
 	deleteContactAction,
 	getAccountDistributionLists,
 	modifyContactGroup,
-	getShareInfo
+	getShareInfo,
+	createContactFromVcard
 };
