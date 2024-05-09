@@ -108,7 +108,7 @@ describe('AddressBookCreateModal', () => {
 			).not.toBeInTheDocument();
 		});
 
-		it('should not display the linked folders', () => {
+		it('should also display the linked folders', () => {
 			populateFoldersStore();
 			const linkedFolder = getFoldersArray().find(
 				(folder) => folder.view === 'contact' && folder.isLink
@@ -119,9 +119,7 @@ describe('AddressBookCreateModal', () => {
 
 			setupTest(<AddressBookCreateModal onClose={jest.fn()} />);
 			makeListItemsVisible();
-			expect(
-				screen.queryByTestId(`folder-accordion-item-${linkedFolder.id}`)
-			).not.toBeInTheDocument();
+			expect(screen.queryByTestId(`folder-accordion-item-${linkedFolder.id}`)).toBeVisible();
 		});
 
 		it.todo('should select the given parent address book');

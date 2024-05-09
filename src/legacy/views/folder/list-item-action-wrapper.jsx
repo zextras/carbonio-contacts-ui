@@ -24,6 +24,15 @@ const HoverBarContainer = styled(Container)`
 	}
 `;
 
+const CustomHoverRow = styled(HoverRow)`
+	&:hover {
+		background: ${({ theme }) => theme.palette.gray6.hover};
+		& ${HoverBarContainer} {
+			display: flex;
+		}
+	}
+`;
+
 const ListItemActionWrapper = ({ children, current, onClick, contact }) => {
 	const { getContextActions, getHoverActions } = useContext(ActionsContext);
 
@@ -31,7 +40,7 @@ const ListItemActionWrapper = ({ children, current, onClick, contact }) => {
 	const dropdownActions = useMemo(() => getContextActions(contact), [contact, getContextActions]);
 	return (
 		<Dropdown contextMenu items={dropdownActions} display="block" style={{ width: '100%' }}>
-			<HoverRow
+			<CustomHoverRow
 				orientation="horizontal"
 				mainAlignment="flex-start"
 				crossAlignment="unset"
@@ -60,7 +69,7 @@ const ListItemActionWrapper = ({ children, current, onClick, contact }) => {
 						</Tooltip>
 					))}
 				</HoverBarContainer>
-			</HoverRow>
+			</CustomHoverRow>
 		</Dropdown>
 	);
 };

@@ -30,7 +30,6 @@ describe('Folder action', () => {
 		const params = {
 			folderId: faker.string.uuid(),
 			operation: 'delete' as FolderActionOperation,
-			recursive: false,
 			parentId: faker.string.uuid(),
 			granteeId: faker.string.uuid(),
 			name: faker.word.words(2),

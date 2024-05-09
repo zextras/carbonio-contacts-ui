@@ -104,7 +104,8 @@ describe('AddressBookEmptyModal', () => {
 			expect.objectContaining({
 				action: {
 					id: addressBook.id,
-					op: 'empty'
+					op: 'empty',
+					recursive: true
 				}
 			})
 		);
