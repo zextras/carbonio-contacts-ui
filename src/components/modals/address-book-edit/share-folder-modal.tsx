@@ -28,7 +28,7 @@ import { TIMEOUTS } from '../../../constants';
 import { ContactInput } from '../../../legacy/integrations/contact-input';
 import { capitalise } from '../../../legacy/views/secondary-bar/utils';
 import { apiClient } from '../../../network/api-client';
-import { findLabel, getShareFolderRoleOptions } from '../shares-utils';
+import { getRoleDescription, getShareFolderRoleOptions } from '../shares-utils';
 
 export type ShareFolderModalProps = {
 	onClose: () => void;
@@ -131,6 +131,15 @@ export const ShareFolderModal = ({
 		[activeGrant?.perm, shareWithUserRole]
 	);
 
+	const selectedRole = useMemo(() => {
+		const value = editMode ? activeGrant?.perm : 'r';
+		const label = getRoleDescription(editMode ? activeGrant?.perm : 'r', t);
+		return {
+			value,
+			label
+		};
+	}, [activeGrant?.perm, editMode, t]);
+
 	return (
 		<Container
 			padding={{ all: 'medium' }}
@@ -172,10 +181,7 @@ export const ShareFolderModal = ({
 					background="gray5"
 					label={t('share.role', 'Role')}
 					onChange={onShareRoleChange}
-					defaultSelection={{
-						value: editMode ? activeGrant?.perm : 'r',
-						label: findLabel(shareFolderRoleOptions, editMode ? activeGrant?.perm : 'r')
-					}}
+					defaultSelection={selectedRole}
 				/>
 			</Container>
 			<Container

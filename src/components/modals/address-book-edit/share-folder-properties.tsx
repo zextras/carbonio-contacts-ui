@@ -22,7 +22,7 @@ import { useFolder } from '../../../carbonio-ui-commons/store/zustand/folder';
 import { Grant } from '../../../carbonio-ui-commons/types/folder';
 import { TIMEOUTS } from '../../../constants';
 import { apiClient } from '../../../network/api-client';
-import { getShareFolderRoleOptions, findLabel } from '../shares-utils';
+import { getRoleDescription } from '../shares-utils';
 
 type GranteeInfoProps = {
 	grant: Grant;
@@ -50,12 +50,8 @@ export type ShareFolderPropertiesProps = {
 
 export const GranteeInfo = ({ grant }: GranteeInfoProps): React.JSX.Element => {
 	const [t] = useTranslation();
-	const shareFolderRoleOptions = useMemo(() => getShareFolderRoleOptions(t), [t]);
 
-	const role = useMemo(
-		() => findLabel(shareFolderRoleOptions, grant.perm || ''),
-		[shareFolderRoleOptions, grant.perm]
-	);
+	const role = useMemo(() => getRoleDescription(grant.perm || '', t), [grant.perm, t]);
 
 	const label = useMemo(() => {
 		const composeLabel = (name?: string): string => `${name} - ${role}`;

@@ -5,21 +5,46 @@
  */
 import { SelectItem } from '@zextras/carbonio-design-system';
 import { TFunction } from 'i18next';
-import { filter } from 'lodash';
+import { find } from 'lodash';
 
-export const getShareFolderRoleOptions = (t: TFunction): Array<SelectItem> => [
-	{ label: t('share.none', 'None'), value: '' },
-	{ label: t('share.viewer', 'Viewer'), value: 'r' },
-	{
-		label: t('share.admin', 'Admin'),
-		value: 'rwidxa'
+const ROLES = {
+	none: {
+		name: 'None',
+		key: 'share.none',
+		flags: '',
+		regex: '^$'
 	},
-	{
-		label: t('share.manager', 'Manager'),
-		value: 'rwidx'
+	viewer: {
+		name: 'Viewer',
+		key: 'share.viewer',
+		flags: 'r',
+		regex: `^r$`
+	},
+	admin: {
+		name: 'Admin',
+		key: 'share.admin',
+		flags: 'rwidxa',
+		regex: `^rwidxa[c]?$`
+	},
+	manager: {
+		name: 'Manager',
+		key: 'share.manager',
+		flags: 'rwidx',
+		regex: `^rwidx[c]?$`
 	}
-];
+};
 
-// TODO the permissions check is weak
-export const findLabel = (list: Array<SelectItem>, value: string): string =>
-	filter(list, (item) => value.includes(item.value))[0].label;
+export const getShareFolderRoleOptions = (t: TFunction): Array<SelectItem> =>
+	Object.values(ROLES).map((role) => ({
+		label: t(role.key, role.name),
+		value: role.flags
+	}));
+
+export const getRoleDescription = (permissionsFlags: string, t: TFunction): string => {
+	let role = find(ROLES, (role): boolean => permissionsFlags.match(role.regex) !== null);
+	if (!role) {
+		role = ROLES.none;
+	}
+
+	return t(role.key, role.name);
+};

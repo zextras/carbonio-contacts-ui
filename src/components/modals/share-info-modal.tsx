@@ -16,7 +16,7 @@ import {
 } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
-import { findLabel, getShareFolderRoleOptions } from './shares-utils';
+import { getRoleDescription, getShareFolderRoleOptions } from './shares-utils';
 import { Folder } from '../../carbonio-ui-commons/types/folder';
 
 const ShareInfoRow = ({
@@ -58,10 +58,7 @@ export const ShareInfoModal = ({
 	const [t] = useTranslation();
 	const roleOptions = useMemo(() => getShareFolderRoleOptions(t), [t]);
 
-	const role = useMemo(
-		() => findLabel(roleOptions, addressBook.perm ?? ''),
-		[roleOptions, addressBook.perm]
-	);
+	const role = useMemo(() => getRoleDescription(addressBook.perm ?? '', t), [addressBook.perm, t]);
 	const text = (/r/.test(addressBook.perm || '') ? `${t('share.read', 'Read')}` : '')
 		.concat(/w/.test(addressBook.perm || '') ? `, ${t('share.write', 'Write')}` : '')
 		.concat(/i/.test(addressBook.perm || '') ? `, ${t('share.insert', 'Insert')}` : '')
