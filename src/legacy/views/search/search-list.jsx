@@ -74,7 +74,7 @@ const SearchList = ({
 				<Button
 					onClick={() => setShowAdvanceFilters(true)}
 					type={filterCount > 0 ? 'default' : 'outlined'}
-					size="fill"
+					width={'fill'}
 					label={
 						filterCount === 0
 							? t('title.advanced_filters', 'Advanced Filters')
