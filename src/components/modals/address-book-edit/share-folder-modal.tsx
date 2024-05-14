@@ -15,7 +15,8 @@ import {
 	Padding,
 	useSnackbar,
 	ModalFooter,
-	ModalHeader
+	ModalHeader,
+	Divider
 } from '@zextras/carbonio-design-system';
 import { useUserAccount } from '@zextras/carbonio-shell-ui';
 import { replace, split } from 'lodash';
@@ -148,6 +149,7 @@ export const ShareFolderModal = ({
 			height="fit"
 		>
 			<ModalHeader title={title} onClose={onClose} showCloseIcon />
+			<Divider />
 			<Padding top="small" />
 			{editMode ? (
 				<Container
@@ -229,6 +231,7 @@ export const ShareFolderModal = ({
 					</Text>
 				</Row>
 			</Container>
+			<Divider />
 			<ModalFooter
 				confirmLabel={
 					editMode
