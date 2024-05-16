@@ -127,15 +127,13 @@ export type Match = {
 };
 
 export type FullAutocompleteResponse = {
+	canBeCached: boolean;
 	match?: Match[];
-	_attributes: {
-		canBeCached: string | null;
-		xmlns: string | null;
-	};
+	_jsns?: string;
 };
 
 export type FullAutocompleteRequest = {
-	extraAccountId?: Array<{ _content: string }>;
+	orderedAccountIds?: string;
 	AutoCompleteRequest: {
 		name: string;
 		includeGal: 0 | 1;

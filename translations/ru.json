@@ -65,7 +65,8 @@
             "move": "Переместить",
             "edit": "Редактировать адресную книгу",
             "delete": "Удалить адресную книгу",
-            "moved": "Адресная книга успешно перемещена"
+            "moved": "Адресная книга успешно перемещена",
+            "deleteContactGroup": "Удалить\" {{contactGroupTitle}}\""
         },
         "snackbar": {
             "folder_empty": "Адресная книга успешно очищена",
@@ -182,7 +183,16 @@
         "select_all_addresses_1": "Выбрать {{count}} адреса",
         "select_all_addresses_2": "Выбрать {{count}} адресов",
         "show_more": "показать детали",
-        "newContactGroup": "Новая группа контактов"
+        "newContactGroup": "Новая группа контактов",
+        "edit_contacts": "Редактировать контакты",
+        "update": "Обновить",
+        "errors": {
+            "upload_failed_generic": "Не удалось загрузить файл «{{filename}}»"
+        },
+        "discard": "отменить",
+        "export_address_book": "Экспортировать CSV-файл",
+        "groups_app_name": "Группы контактов и списки рассылки",
+        "import_address_book": "Импортировать CSV-файл"
     },
     "job": {
         "title": "Должность",
@@ -290,14 +300,45 @@
         "share_updated": "Права доступа обновлены",
         "share_resend": "Уведомление о доступе отправлено повторно",
         "tag_removed": "Тег \"{{tag}}\" удален",
-        "tag_applied": "Тег \"{{tag}}\" применен"
+        "tag_applied": "Тег \"{{tag}}\" применен",
+        "email_copied_to_clipboard": "Письмо скопировано в буфер обмена.",
+        "edit_distribution_list": {
+            "save": {
+                "success": "Изменения списка рассылки \"{{displayName}}\" успешно сохранены"
+            }
+        },
+        "delete_contact_group": {
+            "confirm": {
+                "success": "Группа контактов успешно удалена"
+            }
+        },
+        "import_contacts_success_0": "{{number}} контакт импортирован и добавлен в выбранную адресную книгу",
+        "import_contacts_success_1": "{{number}} контакта импортированы и добавлены в выбранную адресную книгу",
+        "import_contacts_success_2": "{{number}} контактов импортированы и добавлены в выбранную адресную книгу"
     },
     "title": {
         "advanced_filters": "Расширенные фильтры"
     },
     "modal": {
         "address_book_name": "Название адресной книги",
-        "destination": "Папка назначения"
+        "destination": "Папка назначения",
+        "cancel": "отменить",
+        "delete": {
+            "button": {
+                "confirm": "удалить"
+            },
+            "contactGroup": {
+                "body1": "Вы уверены, что хотите удалить выбранную группу контактов?",
+                "body2": "Если удалить, то он будет потерян навсегда.",
+                "header": "Удалить \"{{contactGroupName}}\""
+            }
+        },
+        "close": {
+            "tooltip": "Закрыть"
+        },
+        "edit_distribution_list": {
+            "title": "Редактировать \"{{displayName}}\""
+        }
     },
     "tooltip": {
         "resend": "Отправить уведомление об этой публикации",
@@ -363,7 +404,11 @@
     "secondaryBar": {
         "contextualMenu": {
             "new_contact_group_creation_action": "Новая группа контактов"
-        }
+        },
+        "distributionLists": "Списки рассылок",
+        "distributionListsManager": "Менеджер",
+        "distributionListsMember": "Участник",
+        "myContactGroups": "Мои группы контактов"
     },
     "expand_distribution_list": "Развернуть список адресов",
     "board": {
@@ -386,7 +431,7 @@
                         "address_already_present_0": "Адрес уже присутствует",
                         "address_already_present_1": "Адреса уже присутствуют",
                         "address_already_present_2": "Адреса уже присутствуют",
-                        "invalid_already_present_addresses": "Неверные и уже существующие адреса.",
+                        "invalid_already_present_addresses": "Неверные и уже существующие адреса",
                         "invalid_address_0": "Неверный адрес",
                         "invalid_address_1": "Неверные адреса",
                         "invalid_address_2": "Неверных адресов"
@@ -427,7 +472,8 @@
             "members_total": "Список участников {{total}}"
         },
         "placeholder": {
-            "add_members": "Введите адрес и нажмите «+», чтобы добавить его в список рассылки."
+            "add_members": "Введите адрес и нажмите «+», чтобы добавить его в список рассылки.",
+            "filter_member": "Сортировать по адресу"
         },
         "input": {
             "description": {
@@ -466,6 +512,28 @@
             "details": "Детали",
             "managers": "Список менеджеров",
             "members": "Список участников"
+        }
+    },
+    "emptyDisplayer": {
+        "contactGroup": {
+            "hint": "Нажмите кнопку «СОЗДАТЬ», чтобы создать новую группу контактов."
+        }
+    },
+    "import_contacts": {
+        "modal": {
+            "confirm": "Импортировать",
+            "title": "Импортировать контакты",
+            "description": "Контакты внутри выбранного файла {{fileName}} будут импортированы в папку выбранной адресной книги «{{folderName}}»."
+        },
+        "snackbar": {
+            "import_contacts_success_0": "{{count}} контакт импортирован и добавлен в выбранную адресную книгу",
+            "import_contacts_success_1": "{{count}} контакта импортированы и добавлены в выбранную адресную книгу",
+            "import_contacts_success_2": "{{count}} контактов импортированы и добавлены в выбранную адресную книгу"
+        }
+    },
+    "members_list_item_component": {
+        "button": {
+            "remove": "удалить"
         }
     }
 }
