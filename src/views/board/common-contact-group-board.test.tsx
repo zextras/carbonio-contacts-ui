@@ -304,7 +304,7 @@ describe('Common contact group board', () => {
 				});
 				await screen.findByTestId(TESTID_SELECTORS.dropdownList);
 
-				const dropdownOption = await screen.findByText(email);
+				const dropdownOption = await screen.findByText(email, { exact: false });
 				expect(dropdownOption).toBeVisible();
 				await user.click(dropdownOption);
 				expect(

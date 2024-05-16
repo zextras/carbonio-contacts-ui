@@ -5,7 +5,15 @@
         "goto_folder": "Ir para a pasta",
         "reset_filters": "Redefinir filtros",
         "send_msg": "Enviar e-mail",
-        "share_folder": "Compartilhar pasta"
+        "share_folder": "Compartilhar pasta",
+        "edit_distribution_list": "Editar",
+        "contactGroup": {
+            "delete": "Excluir"
+        },
+        "copy": "Copiar",
+        "delete": "Excluir",
+        "edit": "Editar",
+        "mail": "Enviar e-mail"
     },
     "folder": {
         "modal": {
@@ -73,7 +81,8 @@
                 "trash": "Esvaziar lixeira"
             },
             "move": "Mover",
-            "moved": "Agenda de contatos movida com sucesso"
+            "moved": "Agenda de contatos movida com sucesso",
+            "deleteContactGroup": "Excluir \"{{contactGroupTitle}}\""
         },
         "share_folder": "Compartilhar agenda",
         "snackbar": {
@@ -159,7 +168,21 @@
         "contact_created_in_folder": "Esse contato será criado na pasta \"{{name}}\"",
         "destination_address_book": "Agenda de contatos de destino",
         "include_shared_folders": "Incluir agenda de contatos compartilhada",
-        "autocomplete": "Autocompletar"
+        "autocomplete": "Autocompletar",
+        "edit_contacts": "Editar contatos",
+        "errors": {
+            "upload_failed_generic": "Erro no upload do arquivo \"{{filename}}\""
+        },
+        "export_address_book": "Exportar arquivo csv",
+        "groups_app_name": "Grupos de Contatos e Listas de Distribuição",
+        "import_address_book": "Importar arquivo csv",
+        "newContactGroup": "Novo grupo de contatos",
+        "select_all_addresses_0": "Selecionar endereço",
+        "select_all_addresses_1": "Selecionar todos os {{count}} endereços",
+        "select_all_addresses_2": "Selecionar todos os {{count}} endereços",
+        "update": "Atualizar",
+        "discard": "descartar",
+        "show_more": "mostrar mais"
     },
     "share": {
         "add": "Adicionar",
@@ -255,7 +278,24 @@
     },
     "modal": {
         "address_book_name": "Nome da agenda de contatos",
-        "destination": "Pasta de destino"
+        "destination": "Pasta de destino",
+        "cancel": "cancelar",
+        "close": {
+            "tooltip": "Fechar"
+        },
+        "delete": {
+            "contactGroup": {
+                "body1": "Tem certeza que deseja excluir o grupo de contatos selecionado?",
+                "body2": "Ao excluí-lo, ele se perderá para sempre.",
+                "header": "Excluir \"{{contactGroupName}}\""
+            },
+            "button": {
+                "confirm": "excluir"
+            }
+        },
+        "edit_distribution_list": {
+            "title": "Editar \"{{displayName}}\""
+        }
     },
     "select": {
         "default": "Selecionar tipo"
@@ -278,7 +318,21 @@
         "share_revoke": "Acesso compartilhado revogado",
         "share_updated": "Direitos de acesso atualizadas",
         "tag_removed": "Marcador \"{{tag}}\" removido",
-        "tag_applied": "Marcador \"{{tag}}\" aplicado"
+        "tag_applied": "Marcador \"{{tag}}\" aplicado",
+        "delete_contact_group": {
+            "confirm": {
+                "success": "Grupo de contatos excluído com sucesso"
+            }
+        },
+        "edit_distribution_list": {
+            "save": {
+                "success": "Edições da lista de distribuição \"{{displayName}}\" salvas com sucesso"
+            }
+        },
+        "email_copied_to_clipboard": "E-mail copiado para área de transferência.",
+        "import_contacts_success_0": "{{number}} contato importado e adicionado ao catálogo de endereços selecionado",
+        "import_contacts_success_1": "{{number}} contatos importados e adicionados ao catálogo de endereços selecionado",
+        "import_contacts_success_2": "{{number}} contatos importados e adicionados ao catálogo de endereços selecionado"
     },
     "tooltip": {
         "revoke": "Revogar acesso",
@@ -324,7 +378,22 @@
         "search_description1": "Ou selecione \"Filtros avançados\" para refinar sua busca.",
         "search_list_title1": "Parece que não há resultados. Continue buscando!",
         "search_title4": "Selecione um ou mais resultados para realizar ações ou exibir os detalhes.",
-        "title7": "Mantenha contato com seus colegas"
+        "title7": "Mantenha contato com seus colegas",
+        "distribution_list": {
+            "empty_displayer": "Selecione uma lista de distribuição ou fale com o Administrador para ter uma.",
+            "label": {
+                "filter_hint": "Você pode filtrar essa lista procurando o nome de um membro específico.",
+                "manager_total": "Lista de gerentes {{total}}",
+                "member_total": "Lista de membros {{total}}",
+                "description": "Descrição"
+            },
+            "member_not_visible": "Você não tem permissão para ver os membros desta lista de distribuição. Para mais informações, fale com o administrador.",
+            "no_details_owner": "Não há detalhes adicionais para esta lista de distribuição. Edite a lista de distribuição para adicionar ou fale com o administrador.",
+            "placeholder": {
+                "filter_member": "Filtrar um endereço"
+            },
+            "no_details": "Não há detalhes adicionais para esta lista de distribuição. Para mais informações, fale com o administrador."
+        }
     },
     "contact_restored": "Contato restaurado",
     "folders": {
@@ -335,5 +404,140 @@
     },
     "search": {
         "shared_folders_note": "Incluir agenda de contatos compartilhada nas buscas."
+    },
+    "contactGroupList": {
+        "addressCount_0": "{{count}} endereço",
+        "addressCount_1": "{{count}} endereços",
+        "addressCount_2": "{{count}} endereços",
+        "emptyList": "Nenhum grupo de contatos foi criado ainda"
+    },
+    "distribution_list": {
+        "label": {
+            "empty_message": "Ainda não existem listas de distribuição."
+        },
+        "tabs": {
+            "details": "Detalhes",
+            "managers": "Lista de gerentes",
+            "members": "Lista de membros"
+        }
+    },
+    "edit_dl_component": {
+        "error": {
+            "duplicated_address_0": "Endereço já existente",
+            "duplicated_address_1": "Endereços já existentes",
+            "duplicated_address_2": "Endereços já existentes",
+            "invalid_address_0": "Endereço inválido",
+            "invalid_address_1": "Endereços inválidos",
+            "invalid_address_2": "Endereços inválidos",
+            "invalid_and_duplicated_addresses": "Endereços inválidos e já existentes"
+        },
+        "input": {
+            "description": {
+                "label": "Descrição"
+            },
+            "name": {
+                "error": {
+                    "max_length": "O tamanho máximo permitido é de 256 caracteres"
+                },
+                "label": "Nome da Lista de Distribuição"
+            }
+        },
+        "label": {
+            "members_total": "Lista de membros {{total}}",
+            "dl_email": "Lista de Distribuição",
+            "hint": "Você pode filtrar essa lista procurando o nome de um membro específico ou adicionar novos nomes editando a Lista de Distribuição."
+        },
+        "placeholder": {
+            "filter_member": "Filtrar um endereço",
+            "add_members": "Digite um endereço, clique em '+' para adicionar à lista de distribuição"
+        }
+    },
+    "emptyDisplayer": {
+        "contactGroup": {
+            "hint": "Clique no botão \"NOVO\" para criar um novo grupo de contatos."
+        }
+    },
+    "import_contacts": {
+        "modal": {
+            "confirm": "Importar",
+            "title": "Importar contatos",
+            "description": "Os contatos dentro do arquivo {{fileName}} escolhido serão importados para a pasta \"{{folderName}}\" do catálogo de endereços selecionado."
+        },
+        "snackbar": {
+            "import_contacts_success_0": "{{count}} contato importado e adicionado ao catálogo de endereços selecionado",
+            "import_contacts_success_1": "{{count}} contatos importados e adicionados ao catálogo de endereços selecionado",
+            "import_contacts_success_2": "{{count}} contatos importados e adicionados ao catálogo de endereços selecionado"
+        }
+    },
+    "members_list_item_component": {
+        "button": {
+            "remove": "remover"
+        }
+    },
+    "secondaryBar": {
+        "distributionLists": "Listas de Distribuição",
+        "distributionListsManager": "Gerente",
+        "distributionListsMember": "Membro",
+        "myContactGroups": "Meus Grupos de Contatos",
+        "contextualMenu": {
+            "new_contact_group_creation_action": "Novo Grupo de Contatos"
+        }
+    },
+    "board": {
+        "newContactGroup": {
+            "input": {
+                "contact_input": {
+                    "error": {
+                        "invalid_address_0": "Endereço inválido",
+                        "invalid_address_1": "Endereços inválidos",
+                        "invalid_address_2": "Endereços inválidos",
+                        "invalid_already_present_addresses": "Endereços inválidos e já existentes",
+                        "address_already_present_0": "Endereço já existente",
+                        "address_already_present_1": "Endereços já existentes",
+                        "address_already_present_2": "Endereços já existentes"
+                    },
+                    "placeholder": "Digite um endereço e clique em \"+\" para adicioná-lo ao grupo",
+                    "title": "Lista de endereços"
+                },
+                "name_input": {
+                    "name": {
+                        "label": "Nome do grupo*"
+                    },
+                    "error": {
+                        "max_length": "O tamanho máximo permitido é de 256 caracteres",
+                        "required": "O nome do grupo é obrigatório, digite um nome para prosseguir"
+                    }
+                }
+            },
+            "addresses": {
+                "label": "Endereços"
+            },
+            "name": "Novo Grupo",
+            "snackbar": {
+                "contact_group_created": "Grupo de contatos criado com sucesso"
+            },
+            "title": "Novo Grupo"
+        },
+        "label": {
+            "description": "Descrição"
+        },
+        "editContactGroup": {
+            "snackbar": {
+                "contact_group_edited": "Grupo adicionado com sucesso",
+                "error": "Algo deu errado ao salvar as edições. Tente novamente"
+            }
+        }
+    },
+    "contacts": {
+        "importAction": {
+            "modalButton": "IMPORTAR",
+            "modalTitle": "Importar contatos"
+        }
+    },
+    "expand_distribution_list": "Expandir lista de endereços",
+    "contactGroupDisplayer": {
+        "label": {
+            "members_total": "Endereços: {{count}}"
+        }
     }
 }
