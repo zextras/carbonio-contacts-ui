@@ -8,7 +8,6 @@ import React from 'react';
 import { screen } from '@testing-library/react';
 
 import { FolderTreeSelector, FolderTreeSelectorProps } from './folder-tree-selector';
-import { FOLDERS } from '../../../../carbonio-ui-commons/test/mocks/carbonio-shell-ui-constants';
 import { FOLDER_VIEW } from '../../carbonio-ui-commons/constants';
 import {
 	getFolderOwnerAccountName,
@@ -21,6 +20,7 @@ import {
 	getFoldersArrayByRoot,
 	getRootsMap
 } from '../../carbonio-ui-commons/store/zustand/folder';
+import { FOLDERS } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui-constants';
 import { populateFoldersStore } from '../../carbonio-ui-commons/test/mocks/store/folders';
 import { makeListItemsVisible, setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { isEmailedContacts } from '../../helpers/folders';

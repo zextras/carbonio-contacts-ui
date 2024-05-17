@@ -7,4 +7,6 @@ import { BoardViewComponentProps } from '@zextras/carbonio-shell-ui/types/apps';
 
 export type EditViewProps = BoardViewComponentProps & {
 	panel?: boolean;
+	editPanelId?: string;
+	folderId?: string;
 };
