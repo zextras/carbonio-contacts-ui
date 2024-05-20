@@ -13,6 +13,7 @@ import { useDispatch } from 'react-redux';
 
 import ModalFooter from './commons/modal-footer';
 import { NewModal } from './new-modal';
+import { isRoot, isTrash } from '../../../carbonio-ui-commons/helpers/folders';
 import { useAppSelector } from '../../hooks/redux';
 import { contactAction } from '../../store/actions/contact-action';
 import { selectFolders } from '../../store/selectors/folders';
@@ -52,13 +53,12 @@ export default function MoveModal({
 			).then((res) => {
 				if (res.type.includes('fulfilled')) {
 					createSnackbar({
-						key: folderId === FOLDERS.TRASH ? 'restore' : 'move',
+						key: isTrash(folderId) ? 'restore' : 'move',
 						replace: true,
 						type: 'info',
-						label:
-							folderId === FOLDERS.TRASH
-								? t('messages.snackbar.contact_restored', 'Contact restored')
-								: t('messages.snackbar.contact_moved', 'Contact moved'),
+						label: isTrash(folderId)
+							? t('messages.snackbar.contact_restored', 'Contact restored')
+							: t('messages.snackbar.contact_moved', 'Contact moved'),
 						autoHideTimeout: 3000,
 						actionLabel: t('action.goto_folder', 'Go to folder'),
 						onActionClick: () => {
@@ -136,7 +136,7 @@ export default function MoveModal({
 				level: '0',
 				open: true,
 				items: nestFilteredFolders(folders, FOLDERS.USER_ROOT, filterFromInput),
-				background: folderDestination.id === FOLDERS.USER_ROOT ? 'highlight' : undefined,
+				background: isRoot(folderDestination.id) ? 'highlight' : undefined,
 				onClick: () => setFolderDestination({ id: FOLDERS.CONTACTS })
 			}
 		],
@@ -172,7 +172,7 @@ export default function MoveModal({
 				>
 					<ModalHeader
 						title={`${
-							folderId === FOLDERS.TRASH ? t('label.restore', 'Restore') : t('label.move', 'Move')
+							isTrash(folderId) ? t('label.restore', 'Restore') : t('label.move', 'Move')
 						} ${contact.firstName} ${contact.lastName}'s contact`}
 						onClose={onClose}
 					/>
@@ -213,9 +213,7 @@ export default function MoveModal({
 							secondaryBtnType="outlined"
 							secondaryColor="primary"
 							secondaryLabel={t('label.new_address_book', 'New address Book')}
-							label={
-								folderId === FOLDERS.TRASH ? t('label.restore', 'Restore') : t('label.move', 'Move')
-							}
+							label={isTrash(folderId) ? t('label.restore', 'Restore') : t('label.move', 'Move')}
 							disabled={!folderDestination.id || folderDestination.id === folderId}
 							t={t}
 						/>

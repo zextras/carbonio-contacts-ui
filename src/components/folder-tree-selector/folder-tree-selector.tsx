@@ -6,7 +6,6 @@
 import React, { ChangeEvent, useMemo, useState } from 'react';
 
 import { Button, Container, Input, Padding } from '@zextras/carbonio-design-system';
-import { FOLDERS } from '@zextras/carbonio-shell-ui';
 import { TFunction } from 'i18next';
 import { filter, startsWith } from 'lodash';
 import { useTranslation } from 'react-i18next';
@@ -136,7 +135,7 @@ export const FolderTreeSelector = ({
 	const selectedFolder = useFolder(selectedFolderId ?? '');
 	const roots = useRootsArray();
 	const filteredAccountsRoots = useMemo<Array<Folder>>(
-		() => (showSharedAccounts ? roots : roots.filter((root) => root.id === FOLDERS.USER_ROOT)),
+		() => (showSharedAccounts ? roots : roots.filter((root) => isRoot(root.id))),
 		[roots, showSharedAccounts]
 	);
 

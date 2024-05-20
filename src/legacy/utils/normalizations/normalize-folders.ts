@@ -3,9 +3,9 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { FOLDERS } from '@zextras/carbonio-shell-ui';
 import { isNil, map, omitBy, reduce } from 'lodash';
 
+import { isTrash } from '../../../carbonio-ui-commons/helpers/folders';
 import { ContactsFolder } from '../../types/contact';
 import { ISoapFolderObj } from '../../types/soap';
 
@@ -13,7 +13,7 @@ export const extractFolders = (accordions: ISoapFolderObj[]): ISoapFolderObj[] =
 	reduce(
 		accordions,
 		(acc, v) => {
-			if ((v && v.view === 'contact') || v.id === FOLDERS.TRASH) {
+			if ((v && v.view === 'contact') || isTrash(v.id)) {
 				if (v.folder && v.folder.length) {
 					return [...acc, v, ...extractFolders(v.folder)];
 				}

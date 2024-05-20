@@ -19,13 +19,14 @@ import {
 	Row,
 	Tooltip
 } from '@zextras/carbonio-design-system';
-import { AppLink, FOLDERS, ROOT_NAME, useUserAccount } from '@zextras/carbonio-shell-ui';
+import { AppLink, ROOT_NAME, useUserAccount } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { useAddressBookContextualMenuItems } from './commons/use-address-book-contextual-menu-items';
 import { useActionMoveAddressBook } from '../../../actions/move-address-book';
 import { useActionMoveContact } from '../../../actions/move-contact';
+import { isRoot } from '../../../carbonio-ui-commons/helpers/folders';
 import { Folder } from '../../../carbonio-ui-commons/types/folder';
 import { DragEnterAction, OnDropActionProps } from '../../../carbonio-ui-commons/types/sidebar';
 import { getFolderIconColor, getFolderIconName } from '../../../helpers/folders';
@@ -122,10 +123,9 @@ const AccordionCustomComponent: FC<{ item: Folder }> = ({ item: folder }) => {
 	const accordionItem = useMemo(
 		() => ({
 			...folder,
-			label:
-				folder.id === FOLDERS.USER_ROOT
-					? accountName
-					: getFolderTranslatedName(t, folder.id, folder.name) ?? '',
+			label: isRoot(folder.id)
+				? accountName
+				: getFolderTranslatedName(t, folder.id, folder.name) ?? '',
 			icon: getFolderIconName(folder) ?? undefined,
 			iconColor: getFolderIconColor(folder) ?? '',
 			to: `/folder/${folder.id}`,
@@ -167,7 +167,7 @@ const AccordionCustomComponent: FC<{ item: Folder }> = ({ item: folder }) => {
 		return null;
 	}
 
-	return folder.id === FOLDERS.USER_ROOT || (folder.isLink && folder.oname === ROOT_NAME) ? (
+	return isRoot(folder.id) || (folder.isLink && folder.oname === ROOT_NAME) ? (
 		<FittedRow>
 			<Padding left="small">
 				<Avatar label={accordionItem.label} colorLabel={accordionItem.iconColor} size="medium" />

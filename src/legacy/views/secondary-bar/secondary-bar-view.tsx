@@ -29,6 +29,7 @@ import { Route, Switch, useParams, useRouteMatch } from 'react-router-dom';
 import AccordionCustomComponent from './accordion-custom-component';
 import { useActionAddSharedAddressBooks } from '../../../actions/add-shared-address-books';
 import { SidebarAccordionMui } from '../../../carbonio-ui-commons/components/sidebar/sidebar-accordion-mui';
+import { isRoot } from '../../../carbonio-ui-commons/helpers/folders';
 import { useRootsArray } from '../../../carbonio-ui-commons/store/zustand/folder';
 import { themeMui } from '../../../carbonio-ui-commons/theme/theme-mui';
 import { Folder } from '../../../carbonio-ui-commons/types/folder';
@@ -127,7 +128,7 @@ const SecondaryBarView: FC<SecondaryBarComponentProps> = ({ expanded = false }) 
 
 	const roots = useRootsArray();
 	// TODO Remove when IRIS-5083 will be implemented
-	const filteredRoots = roots.filter((root) => root.id === FOLDERS.USER_ROOT);
+	const filteredRoots = roots.filter((root) => isRoot(root.id));
 	const folders = useMemo(() => sortFolders(filteredRoots), [filteredRoots]);
 
 	const accordionsWithFindShare = useMemo(() => {

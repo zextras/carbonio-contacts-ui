@@ -14,6 +14,7 @@ import { useHistory, useLocation, useParams } from 'react-router-dom';
 
 import ContactPreviewContent from './contact-preview-content';
 import ContactPreviewHeader from './contact-preview-header';
+import { isTrash } from '../../../carbonio-ui-commons/helpers/folders';
 import { useAppSelector } from '../../hooks/redux';
 import { useDisplayName } from '../../hooks/use-display-name';
 import { contactAction } from '../../store/actions/contact-action';
@@ -81,8 +82,8 @@ export default function ContactPreviewPanel() {
 			contactAction({
 				contactsIDs: [contact.id],
 				originID: contact.parent,
-				destinationID: contact.parent === FOLDERS.TRASH ? undefined : FOLDERS.TRASH,
-				op: contact.parent === FOLDERS.TRASH ? 'delete' : 'move'
+				destinationID: isTrash(contact.parent) ? undefined : FOLDERS.TRASH,
+				op: isTrash(contact.parent) ? 'delete' : 'move'
 			})
 		).then((res) => {
 			if (res.type.includes('fulfilled')) {
@@ -91,12 +92,11 @@ export default function ContactPreviewPanel() {
 					key: `trash`,
 					replace: true,
 					type: 'info',
-					label:
-						contact.parent === FOLDERS.TRASH
-							? t('messages.snackbar.contact_deleted_permanently', 'Contact permanently deleted')
-							: t('messages.snackbar.contact_moved_to_trash', 'Contact moved to trash'),
-					autoHideTimeout: contact.parent === FOLDERS.TRASH ? 3000 : 5000,
-					hideButton: contact.parent === FOLDERS.TRASH,
+					label: isTrash(contact.parent)
+						? t('messages.snackbar.contact_deleted_permanently', 'Contact permanently deleted')
+						: t('messages.snackbar.contact_moved_to_trash', 'Contact moved to trash'),
+					autoHideTimeout: isTrash(contact.parent) ? 3000 : 5000,
+					hideButton: isTrash(contact.parent),
 					actionLabel: 'Undo',
 					onActionClick: () => restoreContact()
 				});

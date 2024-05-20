@@ -6,6 +6,7 @@
 import { FOLDERS } from '@zextras/carbonio-shell-ui';
 import { cloneDeep, filter, find, reject, split } from 'lodash';
 
+import { isTrash } from '../../../carbonio-ui-commons/helpers/folders';
 import { FoldersSlice } from '../../types/store';
 import { applyFoldersChangesToStore, removeFoldersFromStore } from '../../utils/helpers';
 
@@ -49,7 +50,7 @@ export function folderActionPending(state: any, { meta }: any): void {
 					state.folders,
 					(item) =>
 						split(item.path, '/')[0] === find(state.folders, ['id', FOLDERS.TRASH]).label &&
-						item.id !== FOLDERS.TRASH
+						!isTrash(item.id)
 				);
 				break;
 			default:

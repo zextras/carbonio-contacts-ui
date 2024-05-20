@@ -7,7 +7,7 @@
 import { FOLDERS, ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-shell-ui';
 import { sortBy } from 'lodash';
 
-import { getFolderIdParts, isA } from '../carbonio-ui-commons/helpers/folders';
+import { getFolderIdParts, isA, isRoot } from '../carbonio-ui-commons/helpers/folders';
 import type { Folder } from '../carbonio-ui-commons/types/folder';
 
 /**
@@ -66,7 +66,7 @@ export const getFolderIconName = (folder: Folder): string | null => {
 
 	const { id } = getFolderIdParts(folder.id);
 
-	if (id === FOLDERS.USER_ROOT) {
+	if (id && isRoot(id)) {
 		return null;
 	}
 

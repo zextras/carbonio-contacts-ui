@@ -3,9 +3,9 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { FOLDERS } from '@zextras/carbonio-shell-ui';
 import { filter } from 'lodash';
 
+import { isTrash } from '../../../carbonio-ui-commons/helpers/folders';
 import { FoldersSlice } from '../../types/store';
 import {
 	addFoldersToStore,
@@ -33,8 +33,8 @@ export function handleFolderSyncReducer(state: FoldersSlice, { payload }: { payl
 
 export function handleRefreshReducer(state: FoldersSlice, { payload }: { payload: any }): void {
 	const folders = [
-		...filter(payload?.folder?.[0]?.folder, (f) => f.view === 'contact' || f.id === FOLDERS.TRASH),
-		...filter(payload?.folder?.[0]?.link, (f) => f.view === 'contact' || f.id === FOLDERS.TRASH)
+		...filter(payload?.folder?.[0]?.folder, (f) => f.view === 'contact' || isTrash(f.id)),
+		...filter(payload?.folder?.[0]?.link, (f) => f.view === 'contact' || isTrash(f.id))
 	];
 	const extracted = extractFolders(folders);
 	const normalized = normalizeFolders(extracted);

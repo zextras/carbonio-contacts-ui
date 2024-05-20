@@ -11,6 +11,7 @@ import { FOLDERS } from '@zextras/carbonio-shell-ui';
 import { filter, map, size, split } from 'lodash';
 
 import ModalFooter from './commons/modal-footer';
+import { isRoot, isTrash } from '../../../carbonio-ui-commons/helpers/folders';
 import { contactAction } from '../../store/actions/contact-action';
 import { createFolder } from '../../store/actions/create-folder';
 import { getFolderTranslatedName } from '../../utils/helpers';
@@ -116,7 +117,7 @@ export const NewModal = ({
 	const nest = useCallback(
 		(items, id, level = 0) =>
 			map(
-				filter(items, (item) => item.parent === id && item.id !== FOLDERS.TRASH),
+				filter(items, (item) => item.parent === id && !isTrash(item.id)),
 				(item) => {
 					const folder =
 						folderDestination?.id === item.id
@@ -169,7 +170,7 @@ export const NewModal = ({
 			open: true,
 			parent: '0',
 			divider: true,
-			background: folderDestination?.id === FOLDERS.USER_ROOT ? 'highlight' : undefined // todo: fix with right color
+			background: isRoot(folderDestination?.id) ? 'highlight' : undefined // todo: fix with right color
 		}),
 		[folderDestination?.id, t]
 	);
@@ -236,7 +237,7 @@ export const NewModal = ({
 						secondaryAction={goBack}
 						secondaryLabel={t('folder.modal.footer.go_back', 'Go back')}
 						label={
-							folderId === FOLDERS.TRASH
+							isTrash(folderId)
 								? t('folder.modal.restore.create_footer', 'Create and Restore')
 								: t('folder.modal.new.create_footer', 'Create and Move')
 						}

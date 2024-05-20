@@ -10,6 +10,7 @@ import { getAction, FOLDERS } from '@zextras/carbonio-shell-ui';
 import { compact, isEmpty } from 'lodash';
 
 import { applyTag, applyMultiTag, createAndApplyTag } from './tag-actions';
+import { isTrash } from '../../carbonio-ui-commons/helpers/folders';
 import { contactAction } from '../store/actions/contact-action';
 
 // eslint-disable-next-line import/extensions
@@ -133,8 +134,8 @@ export function moveToTrash({ ids, t, dispatch, parent, createSnackbar, deselect
 	};
 
 	return {
-		id: parent === FOLDERS.TRASH ? 'deletePermanently' : 'delete',
-		icon: parent === FOLDERS.TRASH ? 'DeletePermanentlyOutline' : 'Trash2Outline',
+		id: isTrash(parent) ? 'deletePermanently' : 'delete',
+		icon: isTrash(parent) ? 'DeletePermanentlyOutline' : 'Trash2Outline',
 		label: t('label.delete', 'Delete'),
 		onClick: (ev) => {
 			if (ev) ev.preventDefault();
@@ -143,8 +144,8 @@ export function moveToTrash({ ids, t, dispatch, parent, createSnackbar, deselect
 				contactAction({
 					contactsIDs: ids,
 					originID: parent,
-					destinationID: parent === FOLDERS.TRASH ? undefined : FOLDERS.TRASH,
-					op: parent === FOLDERS.TRASH ? FolderActionsType.DELETE : FolderActionsType.MOVE
+					destinationID: isTrash(parent) ? undefined : FOLDERS.TRASH,
+					op: isTrash(parent) ? FolderActionsType.DELETE : FolderActionsType.MOVE
 				})
 			).then((res) => {
 				deselectAll && deselectAll();
@@ -176,10 +177,9 @@ export function moveToTrash({ ids, t, dispatch, parent, createSnackbar, deselect
 
 export function moveContact(contact, folderId, t, dispatch, parent, createModal, createSnackbar) {
 	return {
-		id: contact.parent === FOLDERS.TRASH ? 'restore' : 'move',
-		icon: contact.parent === FOLDERS.TRASH ? 'RestoreOutline' : 'MoveOutline',
-		label:
-			contact.parent === FOLDERS.TRASH ? t('label.restore', 'Restore') : t('label.move', 'Move'),
+		id: isTrash(contact.parent) ? 'restore' : 'move',
+		icon: isTrash(contact.parent) ? 'RestoreOutline' : 'MoveOutline',
+		label: isTrash(contact.parent) ? t('label.restore', 'Restore') : t('label.move', 'Move'),
 		onClick: (ev) => {
 			if (ev) ev.preventDefault();
 			const closeModal = createModal(

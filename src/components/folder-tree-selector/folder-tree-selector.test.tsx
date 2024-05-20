@@ -11,6 +11,7 @@ import { FolderTreeSelector, FolderTreeSelectorProps } from './folder-tree-selec
 import { FOLDER_VIEW } from '../../carbonio-ui-commons/constants';
 import {
 	getFolderOwnerAccountName,
+	isRoot,
 	isTrash,
 	isTrashed
 } from '../../carbonio-ui-commons/helpers/folders';
@@ -220,7 +221,7 @@ describe('Folder selector', () => {
 
 			// Cycle through all the roots, except for the primary account root
 			Object.keys(roots)
-				.filter((rootId) => rootId !== FOLDERS.USER_ROOT)
+				.filter((rootId) => !isRoot(rootId))
 				.forEach((rootId) => {
 					const ownerAccountName = getFolderOwnerAccountName(rootId, roots);
 					expect(screen.queryByText(ownerAccountName)).not.toBeInTheDocument();
