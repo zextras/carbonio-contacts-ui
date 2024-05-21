@@ -11,6 +11,8 @@ export const getItem = (itemId: string): Promise<string> => {
 	const init: RequestInit = {
 		method: 'get'
 	};
-	const url = `/service/home/~/?${new URLSearchParams(params).toString()}`;
+	const relativeUrl = `/service/home/~/?${new URLSearchParams(params).toString()}`;
+	const absoluteUrl = new URL(relativeUrl, 'http://localhost/').toString();
+	const url = process.env.NODE_ENV === 'test' ? absoluteUrl : relativeUrl;
 	return fetch(url, init).then((response) => response.text());
 };

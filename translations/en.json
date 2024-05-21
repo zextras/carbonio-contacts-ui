@@ -166,6 +166,11 @@
         }
     },
     "expand_distribution_list": "Expand address list",
+    "export_contact": {
+        "snackbar": {
+            "success": "vCard file exported successfully"
+        }
+    },
     "folder": {
         "action": {
             "delete": "Delete address book",
@@ -384,9 +389,6 @@
             "contact_moved": "Contact moved",
             "contact_moved_to_trash": "Contact moved to trash",
             "contact_restored": "Contact restored",
-            "conversation_move": "Conversation successfully moved",
-            "folder_moved": "Folder successfully moved",
-            "message_move": "Message successfully moved",
             "tag_created": "Tag {{name}} successfully created",
             "tag_deleted": "{{name}} Tag deleted successfully",
             "tag_not_updated": "Something went wrong, tag not updated. Please try again.",

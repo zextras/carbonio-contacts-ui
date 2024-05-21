@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 
 import { UIAction } from './types';
 import { ACTION_IDS, TIMEOUTS } from '../constants';
+import { redirectToBlob } from '../helpers/download';
 import { getDisplayName } from '../legacy/hooks/use-display-name';
 import { Contact } from '../legacy/types/contact';
 import { apiClient } from '../network/api-client';
@@ -18,16 +19,6 @@ const FILENAME_EXTENSION = 'vcf';
 const MIME_TYPE = 'text/vcard';
 
 export type ExportContactAction = UIAction<Contact, Contact>;
-
-const redirectToBlob = (content: string, fileName: string): void => {
-	const blob = new Blob([content], { type: MIME_TYPE });
-	const url = window.URL.createObjectURL(blob);
-	const a = document.createElement('a');
-	a.href = url;
-	a.download = fileName;
-	a.click();
-	window.URL.revokeObjectURL(url);
-};
 
 export const useActionExportContact = (): ExportContactAction => {
 	const [t] = useTranslation();
@@ -59,9 +50,17 @@ export const useActionExportContact = (): ExportContactAction => {
 			apiClient
 				.getItem(contact.id)
 				.then((content) => {
-					redirectToBlob(content, fileName);
+					redirectToBlob(content, fileName, MIME_TYPE);
+					createSnackbar({
+						key: 'export-contact-success',
+						replace: true,
+						type: 'info',
+						label: t('export_contact.snackbar.success', 'vCard file exported successfully'),
+						autoHideTimeout: TIMEOUTS.defaultSnackbar,
+						hideButton: true
+					});
 				})
-				.catch(() => {
+				.catch((err) => {
 					createSnackbar({
 						key: 'export-contact-error',
 						replace: true,

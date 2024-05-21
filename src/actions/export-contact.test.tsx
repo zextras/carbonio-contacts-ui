@@ -79,5 +79,19 @@ describe('useActionExportContact', () => {
 
 			expect(await screen.findByText('Something went wrong, please try again')).toBeVisible();
 		});
+
+		it('should display a success snackbar if the API returns without errors', async () => {
+			registerGetItemHandler({ response: 'something' });
+
+			const { result } = setupHook(useActionExportContact);
+			const action = result.current;
+			const contact = buildContact();
+
+			await act(async () => {
+				action.execute(contact);
+			});
+
+			expect(await screen.findByText('vCard file exported successfully')).toBeVisible();
+		});
 	});
 });
