@@ -19,7 +19,7 @@ import {
 	Row,
 	Tooltip
 } from '@zextras/carbonio-design-system';
-import { AppLink, ROOT_NAME, useUserAccount } from '@zextras/carbonio-shell-ui';
+import { AppLink, FOLDERS, ROOT_NAME, useUserAccount } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
@@ -123,9 +123,10 @@ const AccordionCustomComponent: FC<{ item: Folder }> = ({ item: folder }) => {
 	const accordionItem = useMemo(
 		() => ({
 			...folder,
-			label: isRoot(folder.id)
-				? accountName
-				: getFolderTranslatedName(t, folder.id, folder.name) ?? '',
+			label:
+				folder.id === FOLDERS.USER_ROOT
+					? accountName
+					: getFolderTranslatedName(t, folder.id, folder.name) ?? '',
 			icon: getFolderIconName(folder) ?? undefined,
 			iconColor: getFolderIconColor(folder) ?? '',
 			to: `/folder/${folder.id}`,

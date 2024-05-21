@@ -60,12 +60,7 @@ export const sortFolders = (
 };
 
 export const getFolderIconName = (folder: Folder): string | null => {
-	if (folder.id === 'shares' || folder.isLink) {
-		return 'SharedAddressBookOutline';
-	}
-
 	const { id } = getFolderIdParts(folder.id);
-
 	if (id && isRoot(id)) {
 		return null;
 	}
