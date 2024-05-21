@@ -7,7 +7,7 @@ import React from 'react';
 
 import { act } from '@testing-library/react';
 
-import { AddressBookMoveModal } from './address-book-move';
+import { ContactMoveModal } from './contact-move';
 import { isTrashed } from '../../carbonio-ui-commons/helpers/folders';
 import { getFoldersArray, getRootsArray } from '../../carbonio-ui-commons/store/zustand/folder';
 import { FOLDERS } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui-constants';
@@ -20,50 +20,33 @@ import {
 	within
 } from '../../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../../constants/tests';
+import { buildContact } from '../../tests/model-builder';
 
-describe('AddressBookMoveModal', () => {
+describe('ContactMoveModal', () => {
 	const mocksContext = getMocksContext();
 	const primaryAccountEmail = mocksContext.identities.primary.identity.email;
 
 	it('should display a modal with a specific title', () => {
-		const addressBook = getFoldersArray().find(
-			(folder) => folder.view === 'contact' && folder.l === FOLDERS.CONTACTS
-		);
-		if (!addressBook) {
-			return;
-		}
-
-		setupTest(
-			<AddressBookMoveModal addressBookId={addressBook.id} onMove={jest.fn()} onClose={jest.fn()} />
-		);
-		expect(screen.getByText(`Move ${addressBook.name}`)).toBeVisible();
+		const contact = buildContact();
+		setupTest(<ContactMoveModal contactId={contact.id} onMove={jest.fn()} onClose={jest.fn()} />);
+		expect(
+			screen.getByText(`Move ${contact.firstName} ${contact.lastName}'s contact`)
+		).toBeVisible();
 	});
 
 	it('should display a close icon', () => {
-		const addressBook = getFoldersArray().find(
-			(folder) => folder.view === 'contact' && folder.l === FOLDERS.CONTACTS
-		);
-		if (!addressBook) {
-			return;
-		}
-		setupTest(
-			<AddressBookMoveModal addressBookId={addressBook.id} onMove={jest.fn()} onClose={jest.fn()} />
-		);
+		const contact = buildContact();
+		setupTest(<ContactMoveModal contactId={contact.id} onMove={jest.fn()} onClose={jest.fn()} />);
 		expect(
 			screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.close })
 		).toBeVisible();
 	});
 
 	it('should call the onClose callback when the user clicks the close icon', async () => {
-		const addressBook = getFoldersArray().find(
-			(folder) => folder.view === 'contact' && folder.l === FOLDERS.CONTACTS
-		);
-		if (!addressBook) {
-			return;
-		}
+		const contact = buildContact();
 		const onClose = jest.fn();
 		const { user } = setupTest(
-			<AddressBookMoveModal addressBookId={addressBook.id} onMove={jest.fn()} onClose={onClose} />
+			<ContactMoveModal contactId={contact.id} onMove={jest.fn()} onClose={jest.fn()} />
 		);
 		const button = screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.close });
 		await user.click(button);
@@ -73,37 +56,15 @@ describe('AddressBookMoveModal', () => {
 	describe('Parent address book selector', () => {
 		it('should display the primary account root', () => {
 			populateFoldersStore();
-			const addressBook = getFoldersArray().find(
-				(folder) => folder.view === 'contact' && folder.l === FOLDERS.CONTACTS
-			);
-			if (!addressBook) {
-				return;
-			}
-			setupTest(
-				<AddressBookMoveModal
-					addressBookId={addressBook.id}
-					onMove={jest.fn()}
-					onClose={jest.fn()}
-				/>
-			);
+			const contact = buildContact();
+			setupTest(<ContactMoveModal contactId={contact.id} onMove={jest.fn()} onClose={jest.fn()} />);
 			expect(screen.getByTestId(`folder-accordion-root-1`)).toBeVisible();
 		});
 
 		it('should display the shared accounts roots', () => {
 			populateFoldersStore();
-			const addressBook = getFoldersArray().find(
-				(folder) => folder.view === 'contact' && folder.l === FOLDERS.CONTACTS
-			);
-			if (!addressBook) {
-				return;
-			}
-			setupTest(
-				<AddressBookMoveModal
-					addressBookId={addressBook.id}
-					onMove={jest.fn()}
-					onClose={jest.fn()}
-				/>
-			);
+			const contact = buildContact();
+			setupTest(<ContactMoveModal contactId={contact.id} onMove={jest.fn()} onClose={jest.fn()} />);
 			getRootsArray().forEach((root) => {
 				expect(screen.getByTestId(`folder-accordion-root-${root.id}`)).toBeVisible();
 			});

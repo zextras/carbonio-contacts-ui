@@ -12,7 +12,12 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { FlatFoldersAccordion } from './flat-folders-accordion';
-import { isRoot, isTrash, isTrashed } from '../../carbonio-ui-commons/helpers/folders';
+import {
+	isDefaultAccountRoot,
+	isRoot,
+	isTrash,
+	isTrashed
+} from '../../carbonio-ui-commons/helpers/folders';
 import { useFolder, useRootsArray } from '../../carbonio-ui-commons/store/zustand/folder';
 import { Folder } from '../../carbonio-ui-commons/types/folder';
 import { sortFolders } from '../../helpers/folders';
@@ -134,10 +139,14 @@ export const FolderTreeSelector = ({
 	const [inputValue, setInputValue] = useState('');
 	const selectedFolder = useFolder(selectedFolderId ?? '');
 	const roots = useRootsArray();
+	const filteredAccountsRoots = useMemo<Array<Folder>>(
+		() => (showSharedAccounts ? roots : roots.filter((root) => isDefaultAccountRoot(root.id))),
+		[roots, showSharedAccounts]
+	);
 
 	const flattenRoots = useMemo(
 		() =>
-			flattenRootsFolders(t, roots, {
+			flattenRootsFolders(t, filteredAccountsRoots, {
 				showTrashFolder,
 				showLinkedFolders,
 				excludeIds

@@ -66,7 +66,7 @@ export const AddressBookMoveModal = ({
 				>
 					<FolderTreeSelector
 						onFolderSelected={onParentAddressBookSelected}
-						showSharedAccounts
+						showSharedAccounts={false}
 						showTrashFolder={false}
 						showLinkedFolders={false}
 						excludeIds={addressBook?.parent ? [addressBook?.parent] : []}

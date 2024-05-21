@@ -128,7 +128,7 @@ export const AddressBookCreateModal = ({
 					<FolderTreeSelector
 						selectedFolderId={parentAddressBook?.id}
 						onFolderSelected={onParentAddressBookSelected}
-						showSharedAccounts={false}
+						showSharedAccounts
 						showTrashFolder={false}
 						showLinkedFolders
 						allowRootSelection
