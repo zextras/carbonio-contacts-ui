@@ -134,19 +134,15 @@ export const FolderTreeSelector = ({
 	const [inputValue, setInputValue] = useState('');
 	const selectedFolder = useFolder(selectedFolderId ?? '');
 	const roots = useRootsArray();
-	const filteredAccountsRoots = useMemo<Array<Folder>>(
-		() => (showSharedAccounts ? roots : roots.filter((root) => isRoot(root.id))),
-		[roots, showSharedAccounts]
-	);
 
 	const flattenRoots = useMemo(
 		() =>
-			flattenRootsFolders(t, filteredAccountsRoots, {
+			flattenRootsFolders(t, roots, {
 				showTrashFolder,
 				showLinkedFolders,
 				excludeIds
 			}),
-		[excludeIds, filteredAccountsRoots, showLinkedFolders, showTrashFolder, t]
+		[excludeIds, roots, showLinkedFolders, showTrashFolder, t]
 	);
 
 	const filteredRoots = filterRoots(flattenRoots, inputValue);

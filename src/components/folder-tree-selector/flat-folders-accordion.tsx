@@ -27,7 +27,7 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { StaticBreadcrumbs } from '../../carbonio-ui-commons/components/breadcrumbs/static-breadcrumbs';
-import { isRoot } from '../../carbonio-ui-commons/helpers/folders';
+import { isDefaultAccountRoot, isRoot } from '../../carbonio-ui-commons/helpers/folders';
 import { Folder } from '../../carbonio-ui-commons/types/folder';
 import { getFolderIconColor, getFolderIconName } from '../../helpers/folders';
 import { getFolderTranslatedName } from '../../legacy/utils/helpers';
@@ -173,7 +173,7 @@ const FlatFoldersAccordionRoot: FC<FlatFoldersAccordionRootProps> = ({
 	const [open, setOpen] = useState(isOpen);
 	const account = useUserAccount();
 
-	const rootLabel = isRoot(folder.id) ? account.name : folder.name;
+	const rootLabel = isDefaultAccountRoot(folder.id) ? account.name : folder.name;
 	const toggleOpen = useCallback(
 		(e: KeyboardEvent | React.SyntheticEvent) => {
 			e.stopPropagation();
