@@ -8,9 +8,9 @@ import React, { useCallback, useMemo, useState } from 'react';
 import {
 	Container,
 	Divider,
-	ModalBody,
 	ModalFooter,
-	ModalHeader
+	ModalHeader,
+	Padding
 } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
@@ -57,7 +57,7 @@ export const AddressBookMoveModal = ({
 		<>
 			<ModalHeader title={modalTitle} onClose={onClose} showCloseIcon />
 			<Divider />
-			<ModalBody>
+			<Padding vertical={'medium'}>
 				<Container
 					gap={'0.5rem'}
 					mainAlignment={'flex-start'}
@@ -74,7 +74,7 @@ export const AddressBookMoveModal = ({
 						allowFolderCreation={false}
 					/>
 				</Container>
-			</ModalBody>
+			</Padding>
 			<Divider />
 			<ModalFooter
 				confirmLabel={confirmLabel}

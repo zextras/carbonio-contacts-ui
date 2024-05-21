@@ -5,7 +5,7 @@
  */
 import React, { ChangeEvent, useMemo, useState } from 'react';
 
-import { Button, Container, Input, Padding } from '@zextras/carbonio-design-system';
+import { Button, Container, Input } from '@zextras/carbonio-design-system';
 import { TFunction } from 'i18next';
 import { filter, startsWith } from 'lodash';
 import { useTranslation } from 'react-i18next';
@@ -157,8 +157,8 @@ export const FolderTreeSelector = ({
 				value={inputValue}
 				onChange={(e: ChangeEvent<HTMLInputElement>): void => setInputValue(e.target.value)}
 			/>
-			<Padding vertical="medium" />
 			<ScrollableContainer
+				height={'auto'}
 				orientation="vertical"
 				mainAlignment="flex-start"
 				minHeight="30vh"
