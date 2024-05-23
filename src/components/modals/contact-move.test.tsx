@@ -9,7 +9,7 @@ import { act } from '@testing-library/react';
 import { times } from 'lodash';
 
 import { ContactMoveModal } from './contact-move';
-import { isTrashed } from '../../carbonio-ui-commons/helpers/folders';
+import { isLink, isTrashed } from '../../carbonio-ui-commons/helpers/folders';
 import { getFoldersArray, getRootsArray } from '../../carbonio-ui-commons/store/zustand/folder';
 import { FOLDERS } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui-constants';
 import { populateFoldersStore } from '../../carbonio-ui-commons/test/mocks/store/folders';
@@ -104,7 +104,7 @@ describe('ContactMoveModal', () => {
 			const contacts = [buildContact()];
 
 			const linkedFolder = getFoldersArray().find(
-				(folder) => folder.view === 'contact' && folder.isLink
+				(folder) => folder.view === 'contact' && isLink(folder)
 			);
 			if (!linkedFolder) {
 				return;

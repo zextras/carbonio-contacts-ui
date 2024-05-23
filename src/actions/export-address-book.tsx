@@ -9,7 +9,7 @@ import { useSnackbar } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
 import { UIAction } from './types';
-import { isTrash } from '../carbonio-ui-commons/helpers/folders';
+import { isLink, isTrash } from '../carbonio-ui-commons/helpers/folders';
 import { isNestedInTrash } from '../carbonio-ui-commons/store/zustand/folder/utils';
 import { Folder } from '../carbonio-ui-commons/types/folder';
 import { ACTION_IDS, TIMEOUTS } from '../constants';
@@ -37,7 +37,7 @@ export const useActionExportAddressBook = (): ExportAddressBookAction => {
 				return false;
 			}
 
-			if (addressBook.isLink) {
+			if (isLink(addressBook)) {
 				return false;
 			}
 

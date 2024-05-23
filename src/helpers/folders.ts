@@ -7,7 +7,7 @@
 import { FOLDERS, ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-shell-ui';
 import { sortBy } from 'lodash';
 
-import { getFolderIdParts, isA, isRoot } from '../carbonio-ui-commons/helpers/folders';
+import { getFolderIdParts, isA, isLink, isRoot } from '../carbonio-ui-commons/helpers/folders';
 import type { Folder } from '../carbonio-ui-commons/types/folder';
 
 /**
@@ -26,7 +26,7 @@ export const isEmailedContacts = (folderId: string): boolean =>
 export const getSortCriteria = (folder: Folder): string => {
 	const { id } = getFolderIdParts(folder.id);
 
-	if (folder.isLink) {
+	if (isLink(folder)) {
 		return `5000-${folder.name.toLowerCase()}`;
 	}
 

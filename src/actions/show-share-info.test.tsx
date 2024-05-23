@@ -38,7 +38,7 @@ describe('useActionShareInfo', () => {
 
 		it('should return true if the address book is a linked one', () => {
 			const name = faker.word.noun();
-			const folderId = `${faker.string.uuid()}:${faker.number.int({ min: 101 })}`;
+			const folderId = `${faker.number.int({ min: 101 })}`;
 			const addressBook = generateFolder({
 				name,
 				id: folderId,

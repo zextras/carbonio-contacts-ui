@@ -9,7 +9,7 @@ import { useModal } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
 import { UIAction } from './types';
-import { isSystemFolder } from '../carbonio-ui-commons/helpers/folders';
+import { isLink, isSystemFolder } from '../carbonio-ui-commons/helpers/folders';
 import { isNestedInTrash } from '../carbonio-ui-commons/store/zustand/folder/utils';
 import { Folder } from '../carbonio-ui-commons/types/folder';
 import { AddressBookTrashModal } from '../components/modals/address-book-trash/address-book-trash';
@@ -52,7 +52,7 @@ export const useActionTrashAddressBook = (): TrashAddressBookAction => {
 				return false;
 			}
 
-			if (addressBook.isLink) {
+			if (isLink(addressBook)) {
 				return false;
 			}
 

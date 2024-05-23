@@ -29,6 +29,7 @@ import { Route, Switch, useParams, useRouteMatch } from 'react-router-dom';
 import AccordionCustomComponent from './accordion-custom-component';
 import { useActionAddSharedAddressBooks } from '../../../actions/add-shared-address-books';
 import { SidebarAccordionMui } from '../../../carbonio-ui-commons/components/sidebar/sidebar-accordion-mui';
+import { isLink } from '../../../carbonio-ui-commons/helpers/folders';
 import { useRootsArray } from '../../../carbonio-ui-commons/store/zustand/folder';
 import { themeMui } from '../../../carbonio-ui-commons/theme/theme-mui';
 import { Folder } from '../../../carbonio-ui-commons/types/folder';
@@ -84,7 +85,7 @@ export const CollapsedSideBarItems = ({ folder }: { folder: Folder }): React.JSX
 		if (Object.keys(folderIconName).includes(folder.id)) {
 			return folderIconName[Number(folder.id)];
 		}
-		if (folder.id === 'shares' || folder.isLink) {
+		if (folder.id === 'shares' || isLink(folder)) {
 			return 'Share';
 		}
 		return 'Folder';

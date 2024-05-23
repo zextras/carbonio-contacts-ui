@@ -14,6 +14,7 @@ import styled from 'styled-components';
 import { FlatFoldersAccordion } from './flat-folders-accordion';
 import {
 	isDefaultAccountRoot,
+	isLink,
 	isRoot,
 	isTrash,
 	isTrashed
@@ -58,7 +59,7 @@ const flattenFolders = (
 			return;
 		}
 
-		if (options?.showLinkedFolders === false && folder.isLink === true) {
+		if (options?.showLinkedFolders === false && isLink(folder)) {
 			return;
 		}
 

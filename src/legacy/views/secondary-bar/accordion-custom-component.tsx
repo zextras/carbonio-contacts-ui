@@ -26,7 +26,7 @@ import styled from 'styled-components';
 import { useAddressBookContextualMenuItems } from './commons/use-address-book-contextual-menu-items';
 import { useActionMoveAddressBook } from '../../../actions/move-address-book';
 import { useActionMoveContact } from '../../../actions/move-contact';
-import { isRoot } from '../../../carbonio-ui-commons/helpers/folders';
+import { isLink, isRoot } from '../../../carbonio-ui-commons/helpers/folders';
 import { Folder } from '../../../carbonio-ui-commons/types/folder';
 import { DragEnterAction, OnDropActionProps } from '../../../carbonio-ui-commons/types/sidebar';
 import { getFolderIconColor, getFolderIconName } from '../../../helpers/folders';
@@ -148,7 +148,7 @@ const AccordionCustomComponent: FC<{ item: Folder }> = ({ item: folder }) => {
 			</Padding>
 		);
 
-		if (folder.isLink) {
+		if (isLink(folder)) {
 			const tooltipText = t('tooltip.folder_linked_status', 'Linked to me');
 			return RowWithIcon('Linked', 'linked', tooltipText);
 		}
@@ -161,7 +161,7 @@ const AccordionCustomComponent: FC<{ item: Folder }> = ({ item: folder }) => {
 			return RowWithIcon('Shared', 'shared', tooltipText);
 		}
 		return '';
-	}, [folder.acl?.grant, folder.isLink, t]);
+	}, [folder, t]);
 
 	// hide folders where a share was provided and subsequently removed
 	if (folder.isLink && folder.broken) {

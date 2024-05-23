@@ -9,7 +9,7 @@ import { useModal } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
 import { UIAction } from './types';
-import { isTrash } from '../carbonio-ui-commons/helpers/folders';
+import { isLink, isTrash } from '../carbonio-ui-commons/helpers/folders';
 import { isNestedInTrash } from '../carbonio-ui-commons/store/zustand/folder/utils';
 import { Folder } from '../carbonio-ui-commons/types/folder';
 import { AddressBookEmptyModal } from '../components/modals/address-book-empty/address-book-empty';
@@ -32,7 +32,7 @@ export const useActionEmptyTrash = (): EmptyTrashAction => {
 				return false;
 			}
 
-			if (addressBook.isLink) {
+			if (isLink(addressBook)) {
 				return false;
 			}
 
