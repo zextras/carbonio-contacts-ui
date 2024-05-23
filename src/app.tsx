@@ -13,6 +13,7 @@ import {
 	addRoute,
 	addSearchView,
 	addSettingsView,
+	AnyFunction,
 	registerActions,
 	registerComponents,
 	registerFunctions,
@@ -264,10 +265,7 @@ const App = (): React.JSX.Element => {
 		);
 		registerFunctions({
 			id: 'create_contact_from_vcard',
-			// TOFIX-SHELL: fix the function type definition
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
-			fn: createContactIntegration(createSnackbar, t)
+			fn: createContactIntegration(createSnackbar, t) as AnyFunction
 		});
 	}, [createSnackbar, navigateTo, t]);
 
