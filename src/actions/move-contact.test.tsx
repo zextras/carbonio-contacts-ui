@@ -15,9 +15,15 @@ import { getFolder, getFoldersArray } from '../carbonio-ui-commons/store/zustand
 import { FOLDERS } from '../carbonio-ui-commons/test/mocks/carbonio-shell-ui-constants';
 import { createSoapAPIInterceptor } from '../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { populateFoldersStore } from '../carbonio-ui-commons/test/mocks/store/folders';
-import { setupHook, screen } from '../carbonio-ui-commons/test/test-setup';
+import {
+	setupHook,
+	screen,
+	makeListItemsVisible,
+	within
+} from '../carbonio-ui-commons/test/test-setup';
 import { NAMESPACES } from '../constants/api';
-import { FOLDERS_DESCRIPTORS } from '../constants/tests';
+import { FOLDERS_DESCRIPTORS, TIMERS } from '../constants/tests';
+import { Contact } from '../legacy/types/contact';
 import { ContactActionRequest } from '../legacy/types/soap';
 import { ContactActionResponse } from '../network/api/contact-action';
 import { buildContact } from '../tests/model-builder';
@@ -86,21 +92,80 @@ describe('useActionMoveContact', () => {
 
 	describe('Execute', () => {
 		describe('Execute without setting a destination address book', () => {
-			it.todo('should call open a modal with a specific title');
+			it('should call open a modal with a specific title', () => {
+				populateFoldersStore();
+				const newParentAddressBook = getFolder(FOLDERS.CONTACTS);
+				const contacts = times(10, () => buildContact({ parent: newParentAddressBook?.id }));
 
-			it.todo("shouldn't open a modal if the action cannot be executed");
+				const { result } = setupHook(useActionMoveContact);
+				const action = result.current;
+				act(() => {
+					action.execute({ contacts });
+				});
 
-			it.todo('should call the FolderAction API with the proper parameters');
-		});
+				act(() => {
+					jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+				});
 
-		describe.skip('Execute setting a destination address book', () => {
+				expect(screen.getByText(`Move ${contacts.length} contacts`)).toBeVisible();
+			});
+
+			it("shouldn't open a modal if the action cannot be executed", () => {
+				populateFoldersStore();
+				const contacts: Array<Contact> = [];
+				const { result } = setupHook(useActionMoveContact);
+				const action = result.current;
+				act(() => {
+					action.execute({ contacts });
+				});
+
+				act(() => {
+					jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+				});
+
+				expect(screen.queryByRole('button', { name: 'Move' })).not.toBeInTheDocument();
+			});
+
 			it('should call the FolderAction API with the proper parameters', async () => {
 				populateFoldersStore();
-				const newParentAddressBook = getFolder(FOLDERS.USER_ROOT);
 				const apiInterceptor = createSoapAPIInterceptor<ContactActionRequest, never>(
 					'ContactAction'
 				);
-				const contact = buildContact();
+				const contact = buildContact({ parent: FOLDERS.AUTO_CONTACTS });
+				const { user, result } = setupHook(useActionMoveContact);
+				const action = result.current;
+				await act(async () => {
+					action.execute({ contacts: [contact] });
+				});
+
+				act(() => {
+					jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+				});
+
+				const moveButton = screen.getByRole('button', { name: 'Move' });
+				makeListItemsVisible();
+				const newParentListItem = within(screen.getByTestId('folder-accordion-item-7')).getByText(
+					'Contacts'
+				);
+				await act(async () => user.click(newParentListItem));
+				await act(async () => user.click(moveButton));
+
+				await expect(apiInterceptor).resolves.toEqual(
+					expect.objectContaining({
+						action: expect.objectContaining({ op: 'move', id: contact.id, l: FOLDERS.USER_ROOT })
+					})
+				);
+			});
+		});
+
+		describe('Execute with a given destination address book', () => {
+			it('should call the FolderAction API with the proper parameters', async () => {
+				populateFoldersStore();
+				const newParentAddressBook = getFolder(FOLDERS.AUTO_CONTACTS);
+				const apiInterceptor = createSoapAPIInterceptor<ContactActionRequest, never>(
+					'ContactAction'
+				);
+				const contact = buildContact({ parent: FOLDERS.CONTACTS });
 				const { result } = setupHook(useActionMoveContact);
 				const action = result.current;
 				await act(async () => {
@@ -109,7 +174,11 @@ describe('useActionMoveContact', () => {
 
 				await expect(apiInterceptor).resolves.toEqual(
 					expect.objectContaining({
-						action: expect.objectContaining({ op: 'move', id: contact.id, l: FOLDERS.USER_ROOT })
+						action: expect.objectContaining({
+							op: 'move',
+							id: contact.id,
+							l: FOLDERS.AUTO_CONTACTS
+						})
 					})
 				);
 			});
@@ -138,7 +207,7 @@ describe('useActionMoveContact', () => {
 					action.execute({ contacts: [contact], newParentAddressBook });
 				});
 
-				expect(screen.getByText('Address book moved successfully')).toBeVisible();
+				expect(screen.getByText('Contact moved')).toBeVisible();
 			});
 
 			it('should display an error snackbar if the API returns error', async () => {

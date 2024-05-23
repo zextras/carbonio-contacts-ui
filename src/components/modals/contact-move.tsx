@@ -14,36 +14,46 @@ import {
 } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
-import { useFolder } from '../../carbonio-ui-commons/store/zustand/folder/hooks';
 import { Folder } from '../../carbonio-ui-commons/types/folder';
+import { Contact } from '../../legacy/types/contact';
 import { FolderTreeSelector } from '../folder-tree-selector/folder-tree-selector';
 
-export type AddressBookMoveModalProps = {
-	addressBookId: string;
+export type ContactMoveModalProps = {
+	contacts: Array<Contact>;
 	onClose: () => void;
 	onMove: (parentAddressBookId: string) => void;
 };
 
-export const AddressBookMoveModal = ({
-	addressBookId,
+export const ContactMoveModal = ({
+	contacts,
 	onClose,
 	onMove
-}: AddressBookMoveModalProps): React.JSX.Element => {
+}: ContactMoveModalProps): React.JSX.Element => {
 	const [t] = useTranslation();
-	const addressBook = useFolder(addressBookId);
 	const [parentAddressBook, setParentAddressBook] = useState<Folder | undefined>();
 
 	const modalTitle = useMemo(
 		() =>
-			t('folder.modal.move.title', {
-				addressBookName: addressBook?.name,
-				defaultValue: 'Move {{addressBookName}}'
-			}),
-		[addressBook?.name, t]
+			contacts.length === 1
+				? t('concat.modal.move_single.title', {
+						contactDesc: `${contacts[0].firstName} ${contacts[0].lastName}`,
+						defaultValue: "Move {{contactDesc}}'s contact"
+					})
+				: t('concat.modal.move_multiple.title', {
+						count: contacts.length,
+						defaultValue: 'Move {{count}} contacts'
+					}),
+		[contacts, t]
 	);
 	const confirmLabel = useMemo(() => t('label.move', 'Move'), [t]);
 
 	const confirmDisabled = useMemo(() => parentAddressBook === undefined, [parentAddressBook]);
+
+	// Exclude an address book if all the contacts belong to it
+	const excludedAddressBooksIds = useMemo<Array<string>>(() => {
+		const currentAddressBooksId = new Set<string>(contacts.map((contact) => contact.parent));
+		return currentAddressBooksId.size > 1 ? [] : Array.from(currentAddressBooksId.values());
+	}, [contacts]);
 
 	const onConfirm = useCallback(() => {
 		parentAddressBook && onMove(parentAddressBook.id);
@@ -66,11 +76,11 @@ export const AddressBookMoveModal = ({
 				>
 					<FolderTreeSelector
 						onFolderSelected={onParentAddressBookSelected}
-						showSharedAccounts={false}
+						showSharedAccounts
 						showTrashFolder={false}
-						showLinkedFolders={false}
-						excludeIds={addressBook?.parent ? [addressBook?.parent] : []}
-						allowRootSelection
+						showLinkedFolders
+						excludeIds={excludedAddressBooksIds}
+						allowRootSelection={false}
 						allowFolderCreation={false}
 					/>
 				</Container>

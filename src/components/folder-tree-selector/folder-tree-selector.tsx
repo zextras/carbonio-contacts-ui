@@ -62,15 +62,14 @@ const flattenFolders = (
 			return;
 		}
 
-		if (options?.excludeIds && options?.excludeIds.includes(folder.id)) {
-			return;
+		if (!options?.excludeIds || !options?.excludeIds.includes(folder.id)) {
+			result.push({
+				...folder,
+				name: getFolderTranslatedName(t, folder.id, folder.name),
+				children: []
+			});
 		}
 
-		result.push({
-			...folder,
-			name: getFolderTranslatedName(t, folder.id, folder.name),
-			children: []
-		});
 		folder.children && result.push(...flattenFolders(t, folder.children, options));
 	});
 
@@ -151,7 +150,7 @@ export const FolderTreeSelector = ({
 				showLinkedFolders,
 				excludeIds
 			}),
-		[excludeIds, roots, showLinkedFolders, showTrashFolder, t]
+		[excludeIds, filteredAccountsRoots, showLinkedFolders, showTrashFolder, t]
 	);
 
 	const filteredRoots = filterRoots(flattenRoots, inputValue);

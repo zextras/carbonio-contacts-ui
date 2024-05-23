@@ -3,14 +3,15 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
-import { useSnackbar } from '@zextras/carbonio-design-system';
+import { useModal, useSnackbar } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
 import { UIAction } from './types';
 import { isRoot, isWriteAllowed } from '../carbonio-ui-commons/helpers/folders';
 import { Folder } from '../carbonio-ui-commons/types/folder';
+import { ContactMoveModal } from '../components/modals/contact-move';
 import { ACTION_IDS, TIMEOUTS } from '../constants';
 import { Contact } from '../legacy/types/contact';
 import { apiClient } from '../network/api-client';
@@ -23,9 +24,10 @@ export type MoveContactAction = UIAction<
 export const useActionMoveContact = (): MoveContactAction => {
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
+	const createModal = useModal();
 
 	const move = useCallback(
-		(contactsIds: Array<string>, parentAddressBookId: string): void => {
+		(contactsIds: Array<string>, parentAddressBookId: string): Promise<boolean> =>
 			apiClient
 				.moveContact(contactsIds, parentAddressBookId)
 				.then(() => {
@@ -49,29 +51,32 @@ export const useActionMoveContact = (): MoveContactAction => {
 						hideButton: true
 					});
 					return false;
-				});
-		},
+				}),
 		[createSnackbar, t]
 	);
 
 	const canExecute = useCallback<MoveContactAction['canExecute']>(
 		({ contacts, newParentAddressBook } = {}): boolean => {
-			if (!contacts || contacts.length === 0 || newParentAddressBook === undefined) {
+			if (!contacts || contacts.length === 0) {
 				return false;
 			}
 
-			// Return false if all the given contacts already belong to the destination address book
-			const parentsIds = contacts.map((contact) => contact.parent);
-			if (!parentsIds.some((parentId) => parentId !== newParentAddressBook.id)) {
-				return false;
-			}
+			// Additional checks if the destination folder is given
+			if (newParentAddressBook) {
+				// Return false if all the given contacts already belong to the destination address book
+				const parentsIds = contacts.map((contact) => contact.parent);
 
-			if (!isWriteAllowed(newParentAddressBook)) {
-				return false;
-			}
+				if (!parentsIds.some((parentId) => parentId !== newParentAddressBook.id)) {
+					return false;
+				}
 
-			if (isRoot(newParentAddressBook.id)) {
-				return false;
+				if (!isWriteAllowed(newParentAddressBook)) {
+					return false;
+				}
+
+				if (isRoot(newParentAddressBook.id)) {
+					return false;
+				}
 			}
 
 			return true;
@@ -81,7 +86,7 @@ export const useActionMoveContact = (): MoveContactAction => {
 
 	const execute = useCallback<MoveContactAction['execute']>(
 		({ contacts, newParentAddressBook } = {}) => {
-			if (!contacts || contacts.length === 0 || newParentAddressBook === undefined) {
+			if (!contacts || contacts.length === 0) {
 				return;
 			}
 
@@ -93,27 +98,24 @@ export const useActionMoveContact = (): MoveContactAction => {
 
 			if (newParentAddressBook) {
 				move(contactsIds, newParentAddressBook.id);
+			} else {
+				const closeModal = createModal(
+					{
+						children: (
+							<ContactMoveModal
+								contacts={contacts}
+								onMove={(parentAddressBookId) => {
+									move(contactsIds, parentAddressBookId).then((success) => success && closeModal());
+								}}
+								onClose={() => closeModal()}
+							/>
+						)
+					},
+					true
+				);
 			}
-			// else {
-			// 	const closeModal = createModal(
-			// 		{
-			// 			children: (
-			// 				<AddressBookMoveModal
-			// 					addressBookId={addressBook.id}
-			// 					onMove={(parentAddressBookId) => {
-			// 						move(addressBook.id, parentAddressBookId).then(
-			// 							(success) => success && closeModal()
-			// 						);
-			// 					}}
-			// 					onClose={() => closeModal()}
-			// 				/>
-			// 			)
-			// 		},
-			// 		true
-			// 	);
-			// }
 		},
-		[canExecute, move]
+		[canExecute, createModal, move]
 	);
 
 	return useMemo(
