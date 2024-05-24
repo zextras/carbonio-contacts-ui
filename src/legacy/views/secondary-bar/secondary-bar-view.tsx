@@ -26,7 +26,7 @@ import { map, noop } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { Route, Switch, useParams, useRouteMatch } from 'react-router-dom';
 
-import AccordionCustomComponent from './accordion-custom-component';
+import { AccordionCustomComponent } from './accordion-custom-component';
 import { useActionAddSharedAddressBooks } from '../../../actions/add-shared-address-books';
 import { SidebarAccordionMui } from '../../../carbonio-ui-commons/components/sidebar/sidebar-accordion-mui';
 import { useRootsArray } from '../../../carbonio-ui-commons/store/zustand/folder';

@@ -59,6 +59,17 @@
             "title": "New Group"
         }
     },
+    "concat": {
+        "modal": {
+            "move_multiple": {
+                "title": "Move {{count}} contacts",
+                "title_plural": ""
+            },
+            "move_single": {
+                "title": "Move {{contactDesc}}'s contact"
+            }
+        }
+    },
     "contactGroupDisplayer": {
         "label": {
             "members_total": "Addresses: {{count}}"
@@ -166,6 +177,11 @@
         }
     },
     "expand_distribution_list": "Expand address list",
+    "export_contact": {
+        "snackbar": {
+            "success": "vCard file exported successfully"
+        }
+    },
     "folder": {
         "action": {
             "delete": "Delete address book",
