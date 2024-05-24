@@ -9,7 +9,12 @@ import { useModal, useSnackbar } from '@zextras/carbonio-design-system';
 import { replaceHistory, useTags } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
-import { contextActions, hoverActions, primaryActions, secondaryActions } from './contact-actions';
+import {
+	useContextActions,
+	useHoverActions,
+	primaryActions,
+	secondaryActions
+} from './contact-actions';
 import { useAppDispatch } from '../hooks/redux';
 import { Contact } from '../types/contact';
 
@@ -30,17 +35,16 @@ type ActionObj = {
 
 type ActionList = Array<ActionObj>;
 
-type GetActionsFunction = (item: any) => ActionList;
+type SingleContactActionsProvider = (item: Contact) => ActionList;
+type MultipleContactsActionsProvider = () => ActionList;
 
 export const ActionsContext = createContext<{
-	getContextActions: GetActionsFunction;
-	getHoverActions: GetActionsFunction;
-	getPrimaryActions: GetActionsFunction;
-	getSecondaryActions: GetActionsFunction;
+	getContextActions: SingleContactActionsProvider;
+	getHoverActions: SingleContactActionsProvider;
+	getPrimaryActions: MultipleContactsActionsProvider;
+	getSecondaryActions: MultipleContactsActionsProvider;
 }>({
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	getContextActions: () => [],
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	getHoverActions: () => [],
 	getPrimaryActions: () => [],
 	getSecondaryActions: () => []
@@ -59,6 +63,9 @@ export const ActionsContextProvider: FC<ACPProps & { selectedContacts: Contact[]
 	const createSnackbar = useSnackbar();
 	const createModal = useModal();
 	const tags = useTags();
+	const contextActions = useContextActions(folderId);
+	const hoverActions = useHoverActions(folderId);
+
 	const [
 		contextActionsCallback,
 		hoverActionsCallback,
@@ -66,25 +73,8 @@ export const ActionsContextProvider: FC<ACPProps & { selectedContacts: Contact[]
 		secondaryActionsCallback
 	] = useMemo(
 		() => [
-			contextActions({
-				folderId,
-				t,
-				dispatch,
-				replaceHistory,
-				createSnackbar,
-				createModal,
-				selectedIds,
-				tags
-			}),
-			hoverActions({
-				folderId,
-				t,
-				dispatch,
-				replaceHistory,
-				createSnackbar,
-				createModal,
-				selectedIds
-			}),
+			contextActions,
+			hoverActions,
 			primaryActions({
 				folderId,
 				t,
@@ -110,39 +100,39 @@ export const ActionsContextProvider: FC<ACPProps & { selectedContacts: Contact[]
 			})
 		],
 		[
+			contextActions,
+			hoverActions,
 			folderId,
 			t,
 			dispatch,
 			createSnackbar,
 			createModal,
 			selectedIds,
-			tags,
 			deselectAll,
-			selectedContacts,
-			ids
+			tags,
+			ids,
+			selectedContacts
 		]
 	);
 
-	const getContextActions = useCallback<GetActionsFunction>(
+	const getContextActions = useCallback<SingleContactActionsProvider>(
 		(item: Contact): ActionList => contextActionsCallback(item),
 		[contextActionsCallback]
 	);
-	const getHoverActions = useCallback<GetActionsFunction>(
+	const getHoverActions = useCallback<SingleContactActionsProvider>(
 		(item: Contact): ActionList => hoverActionsCallback(item),
 		[hoverActionsCallback]
 	);
-	const getPrimaryActions = useCallback<GetActionsFunction>(
+	const getPrimaryActions = useCallback<MultipleContactsActionsProvider>(
 		(): ActionList => primaryActionsCallback(),
 		[primaryActionsCallback]
 	);
-	const getSecondaryActions = useCallback<GetActionsFunction>(
+	const getSecondaryActions = useCallback<MultipleContactsActionsProvider>(
 		(): ActionList => secondaryActionsCallback(),
 		[secondaryActionsCallback]
 	);
 
 	return (
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
 		<ActionsContext.Provider
 			value={{ getContextActions, getHoverActions, getPrimaryActions, getSecondaryActions }}
 		>

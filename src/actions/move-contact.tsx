@@ -16,12 +16,12 @@ import { ACTION_IDS, TIMEOUTS } from '../constants';
 import { Contact } from '../legacy/types/contact';
 import { apiClient } from '../network/api-client';
 
-export type MoveContactAction = UIAction<
+export type MoveContactsAction = UIAction<
 	{ contacts?: Array<Contact>; newParentAddressBook?: Folder },
 	{ contacts?: Array<Contact>; newParentAddressBook?: Folder }
 >;
 
-export const useActionMoveContact = (): MoveContactAction => {
+export const useActionMoveContacts = (): MoveContactsAction => {
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
 	const createModal = useModal();
@@ -55,7 +55,7 @@ export const useActionMoveContact = (): MoveContactAction => {
 		[createSnackbar, t]
 	);
 
-	const canExecute = useCallback<MoveContactAction['canExecute']>(
+	const canExecute = useCallback<MoveContactsAction['canExecute']>(
 		({ contacts, newParentAddressBook } = {}): boolean => {
 			if (!contacts || contacts.length === 0) {
 				return false;
@@ -84,7 +84,7 @@ export const useActionMoveContact = (): MoveContactAction => {
 		[]
 	);
 
-	const execute = useCallback<MoveContactAction['execute']>(
+	const execute = useCallback<MoveContactsAction['execute']>(
 		({ contacts, newParentAddressBook } = {}) => {
 			if (!contacts || contacts.length === 0) {
 				return;

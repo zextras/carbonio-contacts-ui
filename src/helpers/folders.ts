@@ -24,7 +24,11 @@ export const isEmailedContacts = (folderId: string): boolean =>
 	isA(folderId, FOLDERS.AUTO_CONTACTS);
 
 export const getSortCriteria = (folder: Folder): string => {
-	const { id } = getFolderIdParts(folder.id);
+	const { id, zid } = getFolderIdParts(folder.id);
+
+	if (isRoot(folder.id)) {
+		return zid === null ? `0100` : `0500-${folder.name.toLowerCase()}`;
+	}
 
 	if (isLink(folder)) {
 		return `5000-${folder.name.toLowerCase()}`;

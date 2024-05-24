@@ -177,6 +177,11 @@
         }
     },
     "expand_distribution_list": "Expand address list",
+    "export_contact": {
+        "snackbar": {
+            "success": "vCard file exported successfully"
+        }
+    },
     "folder": {
         "action": {
             "delete": "Delete address book",
@@ -318,6 +323,7 @@
             "upload_failed_generic": "Upload failed for the file \"{{filename}}\""
         },
         "export_address_book": "Export csv file",
+        "export_contact": "Export vCard file",
         "filter_folders": "Filter folders",
         "find_shares": "Find shares",
         "folder_name": "Folder name",

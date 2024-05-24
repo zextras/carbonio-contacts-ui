@@ -9,7 +9,7 @@ import { act } from '@testing-library/react';
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 import { times } from 'lodash';
 
-import { useActionMoveContact } from './move-contact';
+import { useActionMoveContacts } from './move-contact';
 import { UIAction } from './types';
 import { isLink } from '../carbonio-ui-commons/helpers/folders';
 import { getFolder, getFoldersArray } from '../carbonio-ui-commons/store/zustand/folder';
@@ -29,9 +29,9 @@ import { ContactActionRequest } from '../legacy/types/soap';
 import { ContactActionResponse } from '../network/api/contact-action';
 import { buildContact } from '../tests/model-builder';
 
-describe('useActionMoveContact', () => {
+describe('useActionMoveContacts', () => {
 	it('should return an object with the specific data', () => {
-		const { result } = setupHook(useActionMoveContact);
+		const { result } = setupHook(useActionMoveContacts);
 		expect(result.current).toEqual<UIAction<unknown, unknown>>(
 			expect.objectContaining({
 				icon: 'MoveOutline',
@@ -50,7 +50,7 @@ describe('useActionMoveContact', () => {
 			${FOLDERS_DESCRIPTORS.userDefined}
 		`(`should return true if the destination address book is $folder.desc`, ({ folder }) => {
 			const contacts = [buildContact({ parent: 'unknown-12345' })];
-			const { result } = setupHook(useActionMoveContact);
+			const { result } = setupHook(useActionMoveContacts);
 			const action = result.current;
 			expect(action.canExecute({ contacts, newParentAddressBook: folder })).toBeTruthy();
 		});
@@ -64,7 +64,7 @@ describe('useActionMoveContact', () => {
 				return;
 			}
 			const contacts = [buildContact()];
-			const { result } = setupHook(useActionMoveContact);
+			const { result } = setupHook(useActionMoveContacts);
 			const action = result.current;
 			expect(action.canExecute({ contacts, newParentAddressBook: linkedFolder })).toBeTruthy();
 		});
@@ -74,7 +74,7 @@ describe('useActionMoveContact', () => {
 			const newParentAddressBook = getFolder(FOLDERS.CONTACTS);
 			const contacts = times(10, () => buildContact({ parent: newParentAddressBook?.id }));
 
-			const { result } = setupHook(useActionMoveContact);
+			const { result } = setupHook(useActionMoveContacts);
 			const action = result.current;
 			expect(action.canExecute({ contacts, newParentAddressBook })).toBeFalsy();
 		});
@@ -85,7 +85,7 @@ describe('useActionMoveContact', () => {
 			const contacts = times(10, () => buildContact({ parent: newParentAddressBook?.id }));
 			contacts[4].parent = FOLDERS.AUTO_CONTACTS;
 
-			const { result } = setupHook(useActionMoveContact);
+			const { result } = setupHook(useActionMoveContacts);
 			const action = result.current;
 			expect(action.canExecute({ contacts, newParentAddressBook })).toBeTruthy();
 		});
@@ -98,7 +98,7 @@ describe('useActionMoveContact', () => {
 				const newParentAddressBook = getFolder(FOLDERS.CONTACTS);
 				const contacts = times(10, () => buildContact({ parent: newParentAddressBook?.id }));
 
-				const { result } = setupHook(useActionMoveContact);
+				const { result } = setupHook(useActionMoveContacts);
 				const action = result.current;
 				act(() => {
 					action.execute({ contacts });
@@ -114,7 +114,7 @@ describe('useActionMoveContact', () => {
 			it("shouldn't open a modal if the action cannot be executed", () => {
 				populateFoldersStore();
 				const contacts: Array<Contact> = [];
-				const { result } = setupHook(useActionMoveContact);
+				const { result } = setupHook(useActionMoveContacts);
 				const action = result.current;
 				act(() => {
 					action.execute({ contacts });
@@ -134,7 +134,7 @@ describe('useActionMoveContact', () => {
 					'ContactAction'
 				);
 				const contact = buildContact({ parent: FOLDERS.AUTO_CONTACTS });
-				const { user, result } = setupHook(useActionMoveContact);
+				const { user, result } = setupHook(useActionMoveContacts);
 				const action = result.current;
 				await act(async () => {
 					action.execute({ contacts: [contact] });
@@ -168,7 +168,7 @@ describe('useActionMoveContact', () => {
 					'ContactAction'
 				);
 				const contact = buildContact({ parent: FOLDERS.CONTACTS });
-				const { result } = setupHook(useActionMoveContact);
+				const { result } = setupHook(useActionMoveContacts);
 				const action = result.current;
 				await act(async () => {
 					action.execute({ contacts: [contact], newParentAddressBook });
@@ -203,7 +203,7 @@ describe('useActionMoveContact', () => {
 					response
 				);
 
-				const { result } = setupHook(useActionMoveContact);
+				const { result } = setupHook(useActionMoveContacts);
 				const action = result.current;
 				await act(async () => {
 					action.execute({ contacts: [contact], newParentAddressBook });
@@ -229,7 +229,7 @@ describe('useActionMoveContact', () => {
 					response
 				);
 
-				const { result } = setupHook(useActionMoveContact);
+				const { result } = setupHook(useActionMoveContacts);
 				const action = result.current;
 				await act(async () => {
 					action.execute({ contacts: [contact], newParentAddressBook });

@@ -5,12 +5,16 @@
  */
 import React from 'react';
 
-import { Text } from '@zextras/carbonio-design-system';
-import { getAction, FOLDERS } from '@zextras/carbonio-shell-ui';
+import { Text, useModal, useSnackbar } from '@zextras/carbonio-design-system';
+import { getAction, FOLDERS, useTags, replaceHistory } from '@zextras/carbonio-shell-ui';
 import { compact, isEmpty } from 'lodash';
+import { useTranslation } from 'react-i18next';
 
 import { applyTag, applyMultiTag, createAndApplyTag } from './tag-actions';
+import { useActionExportContact } from '../../actions/export-contact';
+import { useActionMoveContacts } from '../../actions/move-contact';
 import { isTrash } from '../../carbonio-ui-commons/helpers/folders';
+import { useAppDispatch } from '../hooks/redux';
 import { contactAction } from '../store/actions/contact-action';
 
 // eslint-disable-next-line import/extensions
@@ -18,6 +22,18 @@ import { StoreProvider } from '../store/redux';
 import { FolderActionsType } from '../types/folder';
 import ModalFooter from '../views/contact-actions/commons/modal-footer';
 import MoveModal from '../views/contact-actions/move-modal';
+
+const generateClickableAction = (action, params) => ({
+	id: action.id,
+	icon: action.icon,
+	label: action.label,
+	onClick: (ev) => {
+		if (ev) {
+			ev.preventDefault();
+		}
+		action.execute(params);
+	}
+});
 
 export function mailToContact(contact, t) {
 	const [mailTo, available] = getAction('contact-list', 'mail-to', [contact]);
@@ -203,19 +219,21 @@ export function moveContact(contact, folderId, t, dispatch, parent, createModal,
 	};
 }
 
-export const contextActions = ({
-	folderId,
-	t,
-	dispatch,
-	replaceHistory,
-	createSnackbar,
-	createModal,
-	tags
-}) => {
+export const useContextActions = (folderId) => {
+	const [t] = useTranslation();
+	const dispatch = useAppDispatch();
+	const createSnackbar = useSnackbar();
+	const createModal = useModal();
+	const tags = useTags();
+	const exportAction = useActionExportContact();
+	const moveAction = useActionMoveContacts();
+
 	switch (folderId) {
 		case FOLDERS.TRASH:
 			return (contact) => [
-				moveContact(contact, folderId, t, dispatch, contact.parent, createModal, createSnackbar),
+				...(moveAction.canExecute({ contacts: [contact] })
+					? [generateClickableAction(moveAction, { contacts: [contact] })]
+					: []),
 				deletePermanently({
 					ids: [contact.id],
 					t,
@@ -223,6 +241,7 @@ export const contextActions = ({
 					createSnackbar,
 					createModal
 				}),
+				...(exportAction.canExecute() ? [generateClickableAction(exportAction, contact)] : []),
 				applyTag({ contact, tags, t, context: { createAndApplyTag, createModal } })
 			];
 
@@ -238,24 +257,29 @@ export const contextActions = ({
 						replaceHistory
 					}),
 					mailToContact(contact, t),
-					moveContact(contact, folderId, t, dispatch, contact.parent, createModal, createSnackbar),
+					...(moveAction.canExecute({ contacts: [contact] })
+						? [generateClickableAction(moveAction, { contacts: [contact] })]
+						: []),
+					...(exportAction.canExecute(contact)
+						? [generateClickableAction(exportAction, contact)]
+						: []),
 					applyTag({ contact, tags, t, context: { createAndApplyTag, createModal } })
 				]);
 	}
 };
 
-export const hoverActions = ({
-	folderId,
-	t,
-	dispatch,
-	replaceHistory,
-	createSnackbar,
-	createModal
-}) => {
+export const useHoverActions = (folderId) => {
+	const [t] = useTranslation();
+	const dispatch = useAppDispatch();
+	const createSnackbar = useSnackbar();
+	const createModal = useModal();
+	const moveAction = useActionMoveContacts();
 	switch (folderId) {
 		case FOLDERS.TRASH:
 			return (contact) => [
-				moveContact(contact, folderId, t, dispatch, contact.parent, createModal, createSnackbar),
+				...(moveAction.canExecute({ contacts: [contact] })
+					? [generateClickableAction(moveAction, { contacts: [contact] })]
+					: []),
 				deletePermanently({
 					ids: [contact.id],
 					t,
@@ -277,7 +301,9 @@ export const hoverActions = ({
 						replaceHistory
 					}),
 					mailToContact(contact, t),
-					moveContact(contact, folderId, t, dispatch, contact.parent, createModal, createSnackbar)
+					...(moveAction.canExecute({ contacts: [contact] })
+						? [generateClickableAction(moveAction, { contacts: [contact] })]
+						: [])
 				]);
 	}
 };
