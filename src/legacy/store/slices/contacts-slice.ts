@@ -10,6 +10,7 @@ import { contactAction } from '../actions/contact-action';
 import { createContact } from '../actions/create-contact';
 import { folderAction } from '../actions/folder-action';
 import { modifyContact } from '../actions/modify-contact';
+import { moveContactsStoreAction } from '../actions/move-contacts-store-action';
 import { searchContacts } from '../actions/search-contacts';
 import {
 	contactActionFulFilled,
@@ -32,6 +33,7 @@ import {
 	modifyContactPending,
 	modifyContactRejected
 } from '../reducers/modify-contact';
+import { moveContactsPending, moveContactsRejected } from '../reducers/move-contact';
 import {
 	searchContactsFullFilled,
 	searchContactsPending,
@@ -66,6 +68,14 @@ export const contactsSlice = createSlice({
 		builder.addCase(contactAction.pending, contactActionPending);
 		builder.addCase(contactAction.fulfilled, contactActionFulFilled);
 		builder.addCase(contactAction.rejected, contactActionRejected);
+
+		builder.addCase(moveContactsStoreAction.pending, moveContactsPending);
+		builder.addCase(moveContactsStoreAction.rejected, moveContactsRejected);
+
+		// builder.addCase(deleteContact.pending, deleteContactPending);
+		// builder.addCase(deleteContact.fulfilled, deleteContactFulFilled);
+		// builder.addCase(deleteContact.rejected, deleteContactRejected);
+
 		builder.addCase(folderAction.pending, folderActionPending);
 		builder.addCase(folderAction.rejected, folderActionRejected);
 	}

@@ -13,6 +13,7 @@ import { isRoot, isWriteAllowed } from '../carbonio-ui-commons/helpers/folders';
 import { Folder } from '../carbonio-ui-commons/types/folder';
 import { ContactMoveModal } from '../components/modals/contact-move';
 import { ACTION_IDS, TIMEOUTS } from '../constants';
+import { useAppDispatch } from '../legacy/hooks/redux';
 import { Contact } from '../legacy/types/contact';
 import { apiClient } from '../network/api-client';
 
@@ -25,6 +26,7 @@ export const useActionMoveContacts = (): MoveContactsAction => {
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
 	const createModal = useModal();
+	const dispatch = useAppDispatch();
 
 	const move = useCallback(
 		(contactsIds: Array<string>, parentAddressBookId: string): Promise<boolean> =>
@@ -54,6 +56,26 @@ export const useActionMoveContacts = (): MoveContactsAction => {
 				}),
 		[createSnackbar, t]
 	);
+
+	const moveAndUpdateContactsStore = useCallback(
+		(contactsIds: Array<string>, parentAddressBookId: string) => {
+			dispatch(funzionecreatadallacreateasyncthunk({ params }));
+		},
+		[]
+	);
+	// 	() =>
+	// 		createAsyncThunk(
+	// 			'contacts/contactAction',
+	// 			({
+	// 				contactsIds,
+	// 				parentAddressBookId
+	// 			}: {
+	// 				contactsIds: Array<string>;
+	// 				parentAddressBookId: string;
+	// 			}): Promise<boolean> => move(contactsIds, parentAddressBookId)
+	// 		),
+	// 	[move]
+	// );
 
 	const canExecute = useCallback<MoveContactsAction['canExecute']>(
 		({ contacts, newParentAddressBook } = {}): boolean => {
