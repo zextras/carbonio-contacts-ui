@@ -57,12 +57,12 @@ export const useActionMoveContacts = (): MoveContactsAction => {
 		[createSnackbar, t]
 	);
 
-	const moveAndUpdateContactsStore = useCallback(
-		(contactsIds: Array<string>, parentAddressBookId: string) => {
-			dispatch(funzionecreatadallacreateasyncthunk({ params }));
-		},
-		[]
-	);
+	// const moveAndUpdateContactsStore = useCallback(
+	// 	(contactsIds: Array<string>, parentAddressBookId: string) => {
+	// 		dispatch(funzionecreatadallacreateasyncthunk({ params }));
+	// 	},
+	// 	[]
+	// );
 	// 	() =>
 	// 		createAsyncThunk(
 	// 			'contacts/contactAction',
