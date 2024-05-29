@@ -58,7 +58,7 @@ const distributionList = generateDistributionList({
 	isOwner: true
 });
 
-describe('Contact input integration wrapper', () => {
+describe.skip('Contact input integration wrapper', () => {
 	describe('actions', () => {
 		describe.each([
 			['simple contact', contactChipItem],

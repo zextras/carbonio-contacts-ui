@@ -9,7 +9,7 @@ import { map } from 'lodash';
 
 import { getShareInfo, GetShareInfoResponse } from './get-share-info';
 import { FOLDER_VIEW } from '../../carbonio-ui-commons/constants';
-import { createAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
+import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { NAMESPACES } from '../../constants/api';
 
 describe('GetShareInfo', () => {
@@ -20,14 +20,14 @@ describe('GetShareInfo', () => {
 				Reason: { Text: faker.word.sample() }
 			}
 		};
-		createAPIInterceptor('GetShareInfo', response);
+		createSoapAPIInterceptor('GetShareInfo', response);
 		expect(async () => {
 			await getShareInfo();
 		}).rejects.toThrow();
 	});
 
 	it('should call the API passing the correct static params', async () => {
-		const interceptor = createAPIInterceptor('GetShareInfo');
+		const interceptor = createSoapAPIInterceptor('GetShareInfo');
 		getShareInfo();
 		const request = await interceptor;
 		expect(request).toEqual({
@@ -52,7 +52,7 @@ describe('GetShareInfo', () => {
 			],
 			_jsns: NAMESPACES.account
 		};
-		createAPIInterceptor('GetShareInfo', response);
+		createSoapAPIInterceptor('GetShareInfo', response);
 		const shares = await getShareInfo();
 		expect(shares).toEqual([
 			expect.objectContaining({
@@ -103,7 +103,7 @@ describe('GetShareInfo', () => {
 			share: [contactShare, ...otherShares],
 			_jsns: NAMESPACES.account
 		};
-		createAPIInterceptor('GetShareInfo', response);
+		createSoapAPIInterceptor('GetShareInfo', response);
 		const shares = await getShareInfo();
 		expect(shares).toHaveLength(1);
 		expect(shares?.[0]).toEqual(

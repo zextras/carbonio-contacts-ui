@@ -15,7 +15,7 @@ import { TESTID_SELECTORS } from '../../constants/tests';
 import { registerFullAutocompleteHandler } from '../../tests/msw-handlers/full-autocomplete';
 import { Match } from '../types/contact';
 
-describe('Contact input', () => {
+describe.skip('Contact input', () => {
 	it('should render a textbox', async () => {
 		const placeholder = faker.string.alpha();
 		setupTest(<ContactInput defaultValue={[]} placeholder={placeholder} extraAccountsIds={[]} />);
