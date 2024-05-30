@@ -9,9 +9,9 @@ import { act } from '@testing-library/react';
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 import { times } from 'lodash';
 
-import { useActionMoveContacts } from './move-contact';
+import { useActionRestoreContacts } from './restore-contacts';
 import { UIAction } from './types';
-import { isLink } from '../carbonio-ui-commons/helpers/folders';
+import { getFolderIdParts } from '../carbonio-ui-commons/helpers/folders';
 import { getFolder, getFoldersArray } from '../carbonio-ui-commons/store/zustand/folder';
 import { FOLDERS } from '../carbonio-ui-commons/test/mocks/carbonio-shell-ui-constants';
 import { createSoapAPIInterceptor } from '../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
@@ -29,14 +29,14 @@ import { ContactActionRequest } from '../legacy/types/soap';
 import { ContactActionResponse } from '../network/api/contact-action';
 import { buildContact } from '../tests/model-builder';
 
-describe('useActionMoveContacts', () => {
+describe('useActionRestoreContacts', () => {
 	it('should return an object with the specific data', () => {
-		const { result } = setupHook(useActionMoveContacts);
+		const { result } = setupHook(useActionRestoreContacts);
 		expect(result.current).toEqual<UIAction<unknown, unknown>>(
 			expect.objectContaining({
-				icon: 'MoveOutline',
-				label: 'Move',
-				id: 'move-contact-action'
+				icon: 'RestoreOutline',
+				label: 'Restore',
+				id: 'restore-contact-action'
 			})
 		);
 	});
@@ -46,27 +46,44 @@ describe('useActionMoveContacts', () => {
 			folder
 			${FOLDERS_DESCRIPTORS.contacts}
 			${FOLDERS_DESCRIPTORS.autoContacts}
-			${FOLDERS_DESCRIPTORS.trash}
 			${FOLDERS_DESCRIPTORS.userDefined}
-		`(`should return true if the destination address book is $folder.desc`, ({ folder }) => {
-			const contacts = [buildContact({ parent: 'unknown-12345' })];
-			const { result } = setupHook(useActionMoveContacts);
+			${FOLDERS_DESCRIPTORS.sharedContacts}
+		`(`should return false if the contact is inside $folder.desc`, ({ folder }) => {
+			const contacts = [buildContact({ parent: folder.id })];
+			const { result } = setupHook(useActionRestoreContacts);
 			const action = result.current;
-			expect(action.canExecute({ contacts, newParentAddressBook: folder })).toBeTruthy();
+			expect(action.canExecute({ contacts })).toBeFalsy();
 		});
 
-		it('should return true if the address book is a linked one', () => {
-			populateFoldersStore();
-			const linkedFolder = getFoldersArray().find(
-				(folder) => folder.view === 'contact' && isLink(folder)
-			);
-			if (!linkedFolder) {
-				return;
-			}
-			const contacts = [buildContact()];
-			const { result } = setupHook(useActionMoveContacts);
+		it('should return true if the contact is inside the trash', () => {
+			const contacts = [buildContact({ parent: FOLDERS_DESCRIPTORS.trash.id })];
+			const { result } = setupHook(useActionRestoreContacts);
 			const action = result.current;
-			expect(action.canExecute({ contacts, newParentAddressBook: linkedFolder })).toBeTruthy();
+			expect(action.canExecute({ contacts })).toBeTruthy();
+		});
+
+		it('should return true if the contact is nested inside the trash', () => {
+			populateFoldersStore();
+			const trashedFolder = getFoldersArray().find(
+				(folder) =>
+					folder.view === 'contact' &&
+					folder.absFolderPath?.startsWith('/Trash') &&
+					getFolderIdParts(folder.id).id === FOLDERS.TRASH
+			);
+			if (!trashedFolder) {
+				throw new Error('Cannot find a trashed addressbook');
+			}
+			const contacts = [buildContact({ parent: trashedFolder.id })];
+			const { result } = setupHook(useActionRestoreContacts);
+			const action = result.current;
+			expect(action.canExecute({ contacts })).toBeTruthy();
+		});
+
+		it('should return false if one of the contacts is not inside the trash', () => {
+			const contacts = [buildContact({ parent: folder.id })];
+			const { result } = setupHook(useActionRestoreContacts);
+			const action = result.current;
+			expect(action.canExecute({ contacts })).toBeFalsy();
 		});
 
 		it('should return false if all contacts already belong to the destination address book', () => {

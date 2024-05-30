@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next';
 
 import { applyTag, applyMultiTag, createAndApplyTag } from './tag-actions';
 import { useActionExportContact } from '../../actions/export-contact';
-import { useActionMoveContacts } from '../../actions/move-contact';
+import { useActionMoveContacts } from '../../actions/move-contacts';
 import { isTrash } from '../../carbonio-ui-commons/helpers/folders';
 import { useAppDispatch } from '../hooks/redux';
 import { contactAction } from '../store/actions/contact-action';

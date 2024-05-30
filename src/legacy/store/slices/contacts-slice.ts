@@ -66,14 +66,6 @@ export const contactsSlice = createSlice({
 		builder.addCase(contactAction.pending, contactActionPending);
 		builder.addCase(contactAction.fulfilled, contactActionFulFilled);
 		builder.addCase(contactAction.rejected, contactActionRejected);
-
-		// builder.addCase(moveContactsStoreAction.pending, moveContactsPending);
-		// builder.addCase(moveContactsStoreAction.rejected, moveContactsRejected);
-
-		// builder.addCase(deleteContact.pending, deleteContactPending);
-		// builder.addCase(deleteContact.fulfilled, deleteContactFulFilled);
-		// builder.addCase(deleteContact.rejected, deleteContactRejected);
-
 		builder.addCase(folderAction.pending, folderActionPending);
 		builder.addCase(folderAction.rejected, folderActionRejected);
 	}

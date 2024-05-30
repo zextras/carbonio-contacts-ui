@@ -37,6 +37,14 @@ export const FOLDERS_DESCRIPTORS = {
 	userDefined: {
 		id: '1234567',
 		desc: 'user defined'
+	},
+	sharedContacts: {
+		id: 'uniqueIdOfSomeOtherUser:7',
+		desc: 'shared contacts'
+	},
+	sharedUserDefined: {
+		id: 'uniqueIdOfSomeOtherUser:1234567',
+		desc: 'shared user defined'
 	}
 };
 

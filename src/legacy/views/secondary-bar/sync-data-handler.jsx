@@ -43,8 +43,8 @@ export const SyncDataHandler = () => {
 							const norm = normalizeSyncContactsFromSoap(notify.modified.cn);
 							dispatch(handleModifiedContactsSync(norm));
 						}
-						if (notify.deleted?.id) {
-							dispatch(handleDeletedContactsSync(notify.deleted?.id));
+						if (notify.deleted?.length > 0) {
+							dispatch(handleDeletedContactsSync(notify.deleted));
 						}
 						if (
 							notify.deleted?.length > 0 ||
