@@ -56,7 +56,7 @@ export default function ContactEditPanel() {
 		<>
 			<ContactEditHeader editPanelId={editId} folderId={folderId} />
 			<Container height="fit" style={{ maxHeight: '100%', overflowY: 'auto' }}>
-				<EditView panel editPanelId={editId} folderId={folderId} />
+				<EditView panel />
 			</Container>
 		</>
 	);
