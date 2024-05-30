@@ -12,11 +12,11 @@ import { useParams } from 'react-router-dom';
 
 import { Breadcrumbs } from './breadcrumbs';
 import { ContactsList } from './folder-panel/contacts-list';
+import { useFolder } from '../../../carbonio-ui-commons/store/zustand/folder';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { useSelection } from '../../hooks/useSelection';
 import { searchContacts } from '../../store/actions/search-contacts';
-import { selectAllContactsInFolder, selectFolderStatus } from '../../store/selectors/contacts';
-import { selectFolder } from '../../store/selectors/folders';
+import { selectAllContactsInFolder } from '../../store/selectors/contacts';
 import { ActionsContextProvider } from '../../ui-actions/actions-context';
 import { SelectPanelActions } from '../folder/select-panel-actions';
 
@@ -31,8 +31,7 @@ type UseAppContextType = {
 export default function FolderPanel(): ReactElement {
 	const { folderId } = useParams<RouteParams>();
 	const dispatch = useAppDispatch();
-	const folder = useAppSelector((state) => selectFolder(state, folderId));
-	const folderStatus = useAppSelector((state) => selectFolderStatus(state, folderId));
+	const folder = useFolder(folderId);
 	const { setCount } = useAppContext<UseAppContextType>();
 	const { selected, isSelecting, toggle, deselectAll } = useSelection(folderId, setCount);
 
@@ -55,10 +54,8 @@ export default function FolderPanel(): ReactElement {
 	const selectedContacts = filter(contacts, (contact) => ids.indexOf(contact.id) !== -1);
 
 	useEffect(() => {
-		if (!folderStatus) {
-			dispatch(searchContacts(folderId));
-		}
-	}, [dispatch, folderId, folderStatus]);
+		dispatch(searchContacts(folderId));
+	}, [dispatch, folderId]);
 
 	return (
 		<ActionsContextProvider
@@ -89,7 +86,7 @@ export default function FolderPanel(): ReactElement {
 							selectedIDs={selected}
 						/>
 					) : (
-						<Breadcrumbs folderPath={folder?.path} itemsCount={folder?.itemsCount} />
+						<Breadcrumbs folderPath={folder?.absFolderPath} itemsCount={folder?.n} />
 					)}
 					<ContactsList
 						folderId={folderId}
