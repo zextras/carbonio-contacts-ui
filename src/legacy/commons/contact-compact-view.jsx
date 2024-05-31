@@ -147,7 +147,7 @@ export const CompactView = ({ contact, toggleOpen, open }) => {
 						label={open ? 'Show Less Information' : 'Show More Information'}
 						backgroundColor={open ? 'secondary' : 'primary'}
 						onClick={toggleOpen}
-						width={'fill'}
+						width="fill"
 					/>
 				)}
 			</Responsive>

@@ -5,9 +5,10 @@
  */
 import React, { useContext, useMemo } from 'react';
 
-import { Container, Tooltip, Dropdown, IconButton, Row } from '@zextras/carbonio-design-system';
+import { Container, Tooltip, Dropdown, IconButton } from '@zextras/carbonio-design-system';
 import styled from 'styled-components';
 
+import { HoverRow } from '../../../components/styled-components';
 import { ActionsContext } from '../../ui-actions/actions-context';
 
 const HoverBarContainer = styled(Container)`
@@ -23,11 +24,7 @@ const HoverBarContainer = styled(Container)`
 	}
 `;
 
-const HoverRow = styled(Row)`
-	position: relative;
-	cursor: pointer;
-	background: ${({ current, theme }) => theme.palette[current ? 'highlight' : 'gray6']?.regular};
-
+const CustomHoverRow = styled(HoverRow)`
 	&:hover {
 		background: ${({ theme }) => theme.palette.gray6.hover};
 		& ${HoverBarContainer} {
@@ -43,7 +40,7 @@ const ListItemActionWrapper = ({ children, current, onClick, contact }) => {
 	const dropdownActions = useMemo(() => getContextActions(contact), [contact, getContextActions]);
 	return (
 		<Dropdown contextMenu items={dropdownActions} display="block" style={{ width: '100%' }}>
-			<HoverRow
+			<CustomHoverRow
 				orientation="horizontal"
 				mainAlignment="flex-start"
 				crossAlignment="unset"
@@ -72,7 +69,7 @@ const ListItemActionWrapper = ({ children, current, onClick, contact }) => {
 						</Tooltip>
 					))}
 				</HoverBarContainer>
-			</HoverRow>
+			</CustomHoverRow>
 		</Dropdown>
 	);
 };

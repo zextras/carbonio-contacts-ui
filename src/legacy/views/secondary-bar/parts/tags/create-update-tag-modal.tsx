@@ -11,7 +11,10 @@ import { changeTagColor, createTag, renameTag } from '@zextras/carbonio-shell-ui
 import { useTranslation } from 'react-i18next';
 
 import { ItemType } from './types';
-import ColorSelect from '../../../../commons/ColorSelect';
+import {
+	ColorSelect,
+	ColorSelectProps
+} from '../../../../../carbonio-ui-commons/components/select/color-select';
 import { useAppDispatch } from '../../../../hooks/redux';
 import { contactAction } from '../../../../store/actions/contact-action';
 import { Contact } from '../../../../types/contact';
@@ -44,7 +47,10 @@ const CreateUpdateTagModal: FC<ComponentProps> = ({
 		[editMode, t, tag?.name]
 	);
 	const label = useMemo(() => t('label.tag_name', 'Tag name'), [t]);
-	const handleColorChange = useCallback((c: number) => setColor(c), []);
+	const handleColorChange = useCallback<ColorSelectProps['onChange']>(
+		(c) => setColor(Number(c)),
+		[]
+	);
 	const handleNameChange = useCallback((ev) => setName(ev.target.value), []);
 
 	const showMaxLengthWarning = useMemo(() => name.length >= 128, [name]);
@@ -185,7 +191,6 @@ const CreateUpdateTagModal: FC<ComponentProps> = ({
 			<Padding top="small" />
 			<ColorSelect
 				onChange={handleColorChange}
-				t={t}
 				label={t('label.select_color', 'Select Color')}
 				defaultColor={color}
 			/>

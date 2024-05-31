@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 
 import CommonContactGroupBoard, { isContactGroupNameInvalid } from './common-contact-group-board';
 import { ROUTES_INTERNAL_PARAMS } from '../../constants';
-import { client } from '../../network/client';
+import { apiClient } from '../../network/api-client';
 import { useContactGroupStore } from '../../store/contact-groups';
 
 const NewContactGroupBoard = (): React.JSX.Element => {
@@ -26,7 +26,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 	const [memberListEmails, setMemberListEmails] = useState<string[]>([]);
 
 	const onSave = useCallback(() => {
-		client
+		apiClient
 			.createContactGroup(nameValue, memberListEmails)
 			.then((contactGroup) => {
 				if (window.location.pathname.includes(ROUTES_INTERNAL_PARAMS.route.contactGroups)) {

@@ -93,7 +93,7 @@ const useGetTagsAccordion = (): TagsAccordionItems => {
 			label: t('label.tags', 'Tags'),
 			active: false,
 			open: false,
-			onClick: (e: Event): void => {
+			onClick: (e): void => {
 				e.stopPropagation();
 			},
 			CustomComponent: TagLabel,

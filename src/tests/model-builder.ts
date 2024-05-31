@@ -15,6 +15,7 @@ import {
 	ContactUrlType
 } from '../legacy/types/contact';
 import { ContactGroup } from '../model/contact-group';
+import { ShareInfo } from '../model/share-info';
 
 export const buildContactGroup = ({
 	title = faker.company.name(),
@@ -105,4 +106,24 @@ export const buildContact = ({
 	namePrefix,
 	URL,
 	fileAsStr: fileAsStr || `8:${firstName} ${lastName}`
+});
+
+export const buildShareInfo = ({
+	folderId = `${faker.string.uuid()}:${faker.number.int({ min: 2 })}`,
+	folderPath = `/${faker.word.noun(1)}`,
+	folderUuid = faker.string.uuid(),
+	granteeType = 'grp',
+	ownerEmail = faker.internet.email(),
+	ownerId = faker.string.uuid(),
+	ownerName = faker.person.fullName(),
+	rights = 'r'
+}: Partial<ShareInfo> = {}): ShareInfo => ({
+	folderId,
+	folderPath,
+	folderUuid,
+	granteeType,
+	ownerEmail,
+	ownerId,
+	ownerName,
+	rights
 });

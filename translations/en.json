@@ -59,6 +59,17 @@
             "title": "New Group"
         }
     },
+    "concat": {
+        "modal": {
+            "move_multiple": {
+                "title": "Move {{count}} contacts",
+                "title_plural": ""
+            },
+            "move_single": {
+                "title": "Move {{contactDesc}}'s contact"
+            }
+        }
+    },
     "contactGroupDisplayer": {
         "label": {
             "members_total": "Addresses: {{count}}"
@@ -166,6 +177,11 @@
         }
     },
     "expand_distribution_list": "Expand address list",
+    "export_contact": {
+        "snackbar": {
+            "success": "vCard file exported successfully"
+        }
+    },
     "folder": {
         "action": {
             "delete": "Delete address book",
@@ -307,6 +323,7 @@
             "upload_failed_generic": "Upload failed for the file \"{{filename}}\""
         },
         "export_address_book": "Export csv file",
+        "export_contact": "Export vCard file",
         "filter_folders": "Filter folders",
         "find_shares": "Find shares",
         "folder_name": "Folder name",
