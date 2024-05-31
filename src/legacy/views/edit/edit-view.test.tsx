@@ -6,6 +6,7 @@
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
+import { act } from '@testing-library/react';
 import { Route } from 'react-router-dom';
 
 import EditView from './edit-view';
@@ -106,6 +107,16 @@ describe('Edit view', () => {
 		);
 	});
 
+	it('should call the onTitleChanged callback if the title is changed', async () => {
+		const firstName = faker.person.firstName();
+		const store = generateStore();
+		const onTitleChanged = jest.fn();
+		const { user } = setupTest(<EditView onTitleChanged={onTitleChanged} />, { store });
+		const inputName = await screen.findByRole('textbox', { name: /first name/i });
+		await act(async () => user.type(inputName, firstName));
+		expect(onTitleChanged).toHaveBeenCalled();
+	});
+
 	it('should create the new contact in the contact folder (parent 7) by default', async () => {
 		const handler = registerCreateContactHandler();
 		const store = generateStore();
@@ -127,6 +138,21 @@ describe('Edit view', () => {
 				}
 			})
 		);
+	});
+
+	it('should call the onClose callback if the contacts is successfully saved', async () => {
+		registerCreateContactHandler();
+		const store = generateStore();
+		const onClose = jest.fn();
+		const { user } = setupTest(<EditView onClose={onClose} />, { store });
+		const newName = faker.person.firstName();
+		const inputName = screen.getByRole('textbox', { name: /first name/i });
+		const saveButton = screen.getByRole('button', { name: /save/i });
+		expect(inputName).toBeVisible();
+		await user.type(inputName, newName);
+		await user.click(saveButton);
+		await screen.findByText(/new contact created/i);
+		expect(onClose).toHaveBeenCalled();
 	});
 
 	it('should save button enabled once after change anything in editing a contact', async () => {

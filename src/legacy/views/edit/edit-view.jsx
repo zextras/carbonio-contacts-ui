@@ -19,8 +19,7 @@ import {
 	FOLDERS,
 	ZIMBRA_STANDARD_COLORS,
 	useReplaceHistoryCallback,
-	report,
-	useBoardHooks
+	report
 } from '@zextras/carbonio-shell-ui';
 import { filter, find, map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
@@ -77,12 +76,11 @@ const CustomStringField = ({ name, label, value, dispatch, autoFocus = false }) 
 	</Container>
 );
 
-export default function EditView({ panel }) {
+export default function EditView({ panel, onClose, onTitleChanged }) {
 	const { folderId, editId } = useParams();
 	const storeDispatch = useDispatch();
 	const existingContact = useAppSelector((state) => selectContact(state, folderId, editId));
 	const [contact, dispatch] = useReducer(reducer);
-	const boardUtilities = useBoardHooks();
 	const [compareToContact, setCompareToContact] = useState(existingContact);
 	const [selectFolderId, setSelectFolderId] = useState(FOLDERS.CONTACTS);
 	const keys = Object.keys(existingContact ?? {});
@@ -173,9 +171,9 @@ export default function EditView({ panel }) {
 
 	useEffect(() => {
 		if (!panel) {
-			boardUtilities?.updateBoard({ title });
+			onTitleChanged && onTitleChanged(title);
 		}
-	}, [panel, title, boardUtilities]);
+	}, [onTitleChanged, panel, title]);
 
 	const replaceHistory = useReplaceHistoryCallback();
 
@@ -187,7 +185,7 @@ export default function EditView({ panel }) {
 					if (panel && !res.error) {
 						replaceHistory(`/folder/${folderId}/contacts/${res.payload[0].id}`);
 					} else if (res.type.includes('fulfilled')) {
-						boardUtilities?.closeBoard();
+						onClose && onClose();
 						createSnackbar({
 							key: `edit`,
 							replace: true,
@@ -214,11 +212,11 @@ export default function EditView({ panel }) {
 				.catch(report);
 		}
 	}, [
-		boardUtilities,
 		contact,
 		createSnackbar,
 		existingContact,
 		folderId,
+		onClose,
 		panel,
 		replaceHistory,
 		storeDispatch,
