@@ -23,7 +23,7 @@ export const generateState = ({
 		descriptor: (typeof FOLDERS_DESCRIPTORS)[keyof typeof FOLDERS_DESCRIPTORS];
 		contacts: Array<Contact>;
 	}>;
-}): Partial<State> => {
+} = {}): Partial<State> => {
 	const state: Partial<State> = {
 		folders: {
 			status: 'complete',

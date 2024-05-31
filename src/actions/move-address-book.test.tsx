@@ -12,7 +12,7 @@ import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 import { useActionMoveAddressBook } from './move-address-book';
 import { UIAction } from './types';
 import { FOLDER_VIEW } from '../carbonio-ui-commons/constants';
-import { getFolder, getFoldersArray } from '../carbonio-ui-commons/store/zustand/folder';
+import { getFolder } from '../carbonio-ui-commons/store/zustand/folder';
 import { FOLDERS_DESCRIPTORS } from '../carbonio-ui-commons/test/constants';
 import { FOLDERS } from '../carbonio-ui-commons/test/mocks/carbonio-shell-ui-constants';
 import { generateFolder } from '../carbonio-ui-commons/test/mocks/folders/folders-generator';
@@ -30,6 +30,7 @@ import { AddressBookMoveModal } from '../components/modals/address-book-move';
 import { NAMESPACES } from '../constants/api';
 import { TIMERS } from '../constants/tests';
 import { FolderActionRequest, FolderActionResponse } from '../network/api/folder-action';
+import { getFoldersArray } from '../tests/utils';
 
 describe('useActionMoveAddressBook', () => {
 	it('should return an object with the specific data', () => {
