@@ -6,9 +6,9 @@
 import React from 'react';
 
 import { screen } from '@testing-library/react';
+import { FOLDERS } from '@zextras/carbonio-shell-ui';
 
 import { FolderTreeSelector, FolderTreeSelectorProps } from './folder-tree-selector';
-import { FOLDERS } from '../../../../carbonio-ui-commons/test/mocks/carbonio-shell-ui-constants';
 import { FOLDER_VIEW } from '../../carbonio-ui-commons/constants';
 import {
 	getFolderOwnerAccountName,
