@@ -7,7 +7,7 @@
 import { CreateSnackbarFn } from '@zextras/carbonio-design-system';
 import { TFunction } from 'i18next';
 
-import { client } from '../../network/client';
+import { apiClient } from '../../network/api-client';
 
 type CreateContactContextType = {
 	messageId: string;
@@ -17,7 +17,7 @@ type CreateContactContextType = {
 const createContactIntegration =
 	(createSnackbar: CreateSnackbarFn, t: TFunction) =>
 	(context: CreateContactContextType): void => {
-		client
+		apiClient
 			.createContactFromVcard(context.messageId, context.part)
 			.then(() => {
 				createSnackbar({

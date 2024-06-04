@@ -1,5 +1,6 @@
 {
     "action": {
+        "add_shared_address_books": "Add shares",
         "contactGroup": {
             "delete": "Delete"
         },
@@ -56,6 +57,17 @@
                 "contact_group_created": "Contact group successfully created"
             },
             "title": "New Group"
+        }
+    },
+    "concat": {
+        "modal": {
+            "move_multiple": {
+                "title": "Move {{count}} contacts",
+                "title_plural": ""
+            },
+            "move_single": {
+                "title": "Move {{contactDesc}}'s contact"
+            }
         }
     },
     "contactGroupDisplayer": {
@@ -165,6 +177,11 @@
         }
     },
     "expand_distribution_list": "Expand address list",
+    "export_contact": {
+        "snackbar": {
+            "success": "vCard file exported successfully"
+        }
+    },
     "folder": {
         "action": {
             "delete": "Delete address book",
@@ -183,7 +200,8 @@
                 "body": {
                     "message1": "Do you want to delete the selected address book? If you delete it, the related content will be permanently removed and the address book will no longer be recoverable.",
                     "message2": "Do you want to delete permanently the selected address book? If you delete it, the related content will be permanently removed and the address book will no longer be recoverable."
-                }
+                },
+                "title": "Delete {{addressBookName}}"
             },
             "edit": {
                 "body": {
@@ -200,7 +218,8 @@
                 "message1": "Do you want to empty the selected address book?",
                 "message2": "All the related contacts will be permanently deleted and it won't be possible to recover them.",
                 "message3": "Do you want to empty the trash?",
-                "message4": "Its content will be permanently deleted and it won't be possible to recover it."
+                "message4": "Its content will be permanently deleted and it won't be possible to recover it.",
+                "title": "Empty {{addressBookName}}"
             },
             "footer": {
                 "go_back": "Go back"
@@ -215,7 +234,8 @@
                 },
                 "input": {
                     "filter": "Filter address book"
-                }
+                },
+                "title": "Move {{addressBookName}}"
             },
             "new": {
                 "body": {
@@ -303,6 +323,9 @@
             "upload_failed_generic": "Upload failed for the file \"{{filename}}\""
         },
         "export_address_book": "Export csv file",
+        "export_contact": "Export vCard file",
+        "filter_folders": "Filter folders",
+        "find_shares": "Find shares",
         "folder_name": "Folder name",
         "groups_app_name": "Contact Groups and Distribution Lists",
         "import_address_book": "Import csv file",
@@ -312,6 +335,7 @@
         "new_address_book": "New address Book",
         "new_contact": "New contact",
         "new_contact_created": "New contact created",
+        "new_folder": "New Folder",
         "new_tag": "New Tag",
         "no_data": "No Data",
         "no_name": "No Name",
@@ -376,6 +400,9 @@
             "contact_moved": "Contact moved",
             "contact_moved_to_trash": "Contact moved to trash",
             "contact_restored": "Contact restored",
+            "conversation_move": "Conversation successfully moved",
+            "folder_moved": "Folder successfully moved",
+            "message_move": "Message successfully moved",
             "tag_created": "Tag {{name}} successfully created",
             "tag_deleted": "{{name}} Tag deleted successfully",
             "tag_not_updated": "Something went wrong, tag not updated. Please try again.",
@@ -464,6 +491,7 @@
         "find_shares": "Find Shares",
         "find_shares_label": "Select which address book you want to see in contact’s tree",
         "insert": "Insert",
+        "link_name": "{{shareName}} of {{ownerName}}",
         "manager": "Manager",
         "none": "None",
         "options": {
@@ -519,6 +547,9 @@
     "tooltip": {
         "address_book_sharing_status": "Shared with {{count}} person",
         "address_book_sharing_status_plural": "Shared with {{count}} people",
+        "folder_linked_status": "Linked to me",
+        "folder_sharing_status": "Shared with {{count}} people",
+        "folder_sharing_status_plural": "",
         "resend": "Send e-mail notification about this share",
         "revoke": "Revoke access"
     },

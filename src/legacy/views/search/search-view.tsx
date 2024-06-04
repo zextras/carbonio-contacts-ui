@@ -14,6 +14,7 @@ import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import AdvancedFilterModal from './advance-filter-modal';
 import SearchList from './search-list';
 import SearchPanel from './search-panel';
+import { useUpdateView } from '../../../carbonio-ui-commons/hooks/use-update-view';
 import { useAppSelector } from '../../hooks/redux';
 import { selectFolders } from '../../store/selectors/folders';
 import { Contact } from '../../types/contact';
@@ -29,6 +30,7 @@ type SearchResults = {
 
 const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 	const [query, updateQuery] = useQuery();
+	useUpdateView();
 
 	const [searchResults, setSearchResults] = useState<SearchResults>({
 		contacts: [],

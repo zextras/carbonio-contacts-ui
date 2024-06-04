@@ -15,7 +15,7 @@ import { ACTION_IDS, EDIT_CONTACT_GROUP_BOARD_ID, ROUTES_INTERNAL_PARAMS } from 
 import { useActiveContactGroup } from '../hooks/useActiveContactGroup';
 import { useNavigation } from '../hooks/useNavigation';
 import { ContactGroup } from '../model/contact-group';
-import { client } from '../network/client';
+import { apiClient } from '../network/api-client';
 import { useContactGroupStore } from '../store/contact-groups';
 
 export type DeleteCGAction = UIAction<ContactGroup, never>;
@@ -44,8 +44,8 @@ export const useActionDeleteCG = (): DeleteCGAction => {
 				confirmColor: 'error',
 				onConfirm: () => {
 					closeModal();
-					client
-						.deleteContactAction([contactGroup.id])
+					apiClient
+						.deleteContact([contactGroup.id])
 						.then(() => {
 							const boardId = `${EDIT_CONTACT_GROUP_BOARD_ID}-${contactGroup.id}`;
 							const board = getBoardById(boardId);

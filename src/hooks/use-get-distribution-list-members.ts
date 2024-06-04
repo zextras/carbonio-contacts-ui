@@ -9,7 +9,7 @@ import { useSnackbar } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
 import { DistributionListMembersPage } from '../model/distribution-list';
-import { client } from '../network/client';
+import { apiClient } from '../network/api-client';
 import { StoredDistributionList, useDistributionListsStore } from '../store/distribution-lists';
 
 type UseGetDistributionListMembersReturnType = Partial<DistributionListMembersPage> & {
@@ -83,7 +83,7 @@ export const useGetDistributionListMembers = (
 		(offset: number, limit?: number): Promise<DistributionListMembersPage | undefined> => {
 			if (email) {
 				setLoading(true);
-				return client
+				return apiClient
 					.getDistributionListMembers(email, { offset, limit })
 					.then((newMembersPage) => {
 						updateDistributionListMembersPage(newMembersPage, offset);
