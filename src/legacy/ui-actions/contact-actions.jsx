@@ -21,7 +21,6 @@ import { contactAction } from '../store/actions/contact-action';
 import { StoreProvider } from '../store/redux';
 import { FolderActionsType } from '../types/folder';
 import ModalFooter from '../views/contact-actions/commons/modal-footer';
-import MoveModal from '../views/contact-actions/move-modal';
 
 const generateClickableAction = (action, params) => ({
 	id: action.id,
@@ -187,34 +186,6 @@ export function moveToTrash({ ids, t, dispatch, parent, createSnackbar, deselect
 					});
 				}
 			});
-		}
-	};
-}
-
-export function moveContact(contact, folderId, t, dispatch, parent, createModal, createSnackbar) {
-	return {
-		id: isTrash(contact.parent) ? 'restore' : 'move',
-		icon: isTrash(contact.parent) ? 'RestoreOutline' : 'MoveOutline',
-		label: isTrash(contact.parent) ? t('label.restore', 'Restore') : t('label.move', 'Move'),
-		onClick: (ev) => {
-			if (ev) ev.preventDefault();
-			const closeModal = createModal(
-				{
-					children: (
-						<StoreProvider>
-							<MoveModal
-								contact={contact}
-								onClose={() => closeModal()}
-								contactId={contact.id}
-								originID={contact.parent}
-								folderId={folderId}
-								createSnackbar={createSnackbar}
-							/>
-						</StoreProvider>
-					)
-				},
-				true
-			);
 		}
 	};
 }

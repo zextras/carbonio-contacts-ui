@@ -14,13 +14,12 @@ import { useHistory, useLocation, useParams } from 'react-router-dom';
 
 import ContactPreviewContent from './contact-preview-content';
 import ContactPreviewHeader from './contact-preview-header';
+import { useActionMoveContacts } from '../../../actions/move-contacts';
 import { isTrash } from '../../../carbonio-ui-commons/helpers/folders';
 import { useAppSelector } from '../../hooks/redux';
 import { useDisplayName } from '../../hooks/use-display-name';
 import { contactAction } from '../../store/actions/contact-action';
-import { StoreProvider } from '../../store/redux';
 import { selectContact } from '../../store/selectors/contacts';
-import MoveModal from '../contact-actions/move-modal';
 
 export default function ContactPreviewPanel() {
 	const [t] = useTranslation();
@@ -33,6 +32,7 @@ export default function ContactPreviewPanel() {
 	const contact = useAppSelector((state) => selectContact(state, folderId, contactInternalId));
 	const createSnackbar = useSnackbar();
 	const createModal = useModal();
+	const contactsMoveAction = useActionMoveContacts();
 
 	const onEdit = useCallback(
 		() => replaceHistory(`/folder/${folderId}/edit/${contactInternalId}`),
@@ -122,32 +122,9 @@ export default function ContactPreviewPanel() {
 		}
 	}, [contact]);
 
-	const onMove = useCallback(
-		(ev) => {
-			if (ev) ev.preventDefault();
-
-			const closeModal = createModal(
-				{
-					children: (
-						<StoreProvider>
-							<MoveModal
-								contact={contact}
-								// open={showModal}
-								onClose={() => closeModal()}
-								contactId={contact.id}
-								originID={contact.parent}
-								folderId={folderId}
-								//	setShowModal={setShowModal}
-								createSnackbar={createSnackbar}
-							/>
-						</StoreProvider>
-					)
-				},
-				true
-			);
-		},
-		[contact, createModal, createSnackbar, folderId]
-	);
+	const onMove = useCallback(() => {
+		contactsMoveAction.execute({ contacts: [contact] });
+	}, [contact, contactsMoveAction]);
 
 	const displayName = useDisplayName(contact);
 

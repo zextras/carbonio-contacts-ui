@@ -120,7 +120,7 @@ export const useActionMoveContacts = (): MoveContactsAction => {
 
 	return useMemo(
 		() => ({
-			id: ACTION_IDS.moveContact,
+			id: ACTION_IDS.res,
 			label: t('label.move', 'Move'),
 			icon: 'MoveOutline',
 			execute,
