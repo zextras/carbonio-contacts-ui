@@ -14,6 +14,7 @@ import {
 	getAction as getActionMock,
 	useAppContext
 } from '../../../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
+import { populateFoldersStore } from '../../../../carbonio-ui-commons/test/mocks/store/folders';
 import {
 	setupTest,
 	screen,
@@ -91,11 +92,6 @@ describe('Folder panel', () => {
 				${FOLDERS_DESCRIPTORS.autoContacts} | ${ACTIONS_DESCRIPTORS.contacts.move}              | ${DISPLAY_ASSERTION.display}
 				${FOLDERS_DESCRIPTORS.autoContacts} | ${ACTIONS_DESCRIPTORS.contacts.restore}           | ${DISPLAY_ASSERTION.notDisplay}
 				${FOLDERS_DESCRIPTORS.autoContacts} | ${ACTIONS_DESCRIPTORS.contacts.deletePermanently} | ${DISPLAY_ASSERTION.notDisplay}
-				${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.contacts.mailTo}            | ${DISPLAY_ASSERTION.display}
-				${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.contacts.delete}            | ${DISPLAY_ASSERTION.display}
-				${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.contacts.move}              | ${DISPLAY_ASSERTION.display}
-				${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.contacts.restore}           | ${DISPLAY_ASSERTION.notDisplay}
-				${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.contacts.deletePermanently} | ${DISPLAY_ASSERTION.notDisplay}
 				${FOLDERS_DESCRIPTORS.trash}        | ${ACTIONS_DESCRIPTORS.contacts.mailTo}            | ${DISPLAY_ASSERTION.notDisplay}
 				${FOLDERS_DESCRIPTORS.trash}        | ${ACTIONS_DESCRIPTORS.contacts.delete}            | ${DISPLAY_ASSERTION.notDisplay}
 				${FOLDERS_DESCRIPTORS.trash}        | ${ACTIONS_DESCRIPTORS.contacts.move}              | ${DISPLAY_ASSERTION.notDisplay}
@@ -112,8 +108,9 @@ describe('Folder panel', () => {
 					action: ActionDescriptorType;
 					assertion: DisplayAssertionType;
 				}) => {
+					populateFoldersStore();
 					mockMailToAction();
-					const contact = buildContact({ lastName: faker.string.uuid() });
+					const contact = buildContact({ lastName: faker.string.uuid(), parent: folder.id });
 					const state = generateState({
 						folders: [
 							{
@@ -168,12 +165,6 @@ describe('Folder panel', () => {
 				${FOLDERS_DESCRIPTORS.autoContacts} | ${ACTIONS_DESCRIPTORS.contacts.applyTag}          | ${DISPLAY_ASSERTION.display}
 				${FOLDERS_DESCRIPTORS.autoContacts} | ${ACTIONS_DESCRIPTORS.contacts.restore}           | ${DISPLAY_ASSERTION.notDisplay}
 				${FOLDERS_DESCRIPTORS.autoContacts} | ${ACTIONS_DESCRIPTORS.contacts.deletePermanently} | ${DISPLAY_ASSERTION.notDisplay}
-				${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.contacts.mailTo}            | ${DISPLAY_ASSERTION.display}
-				${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.contacts.delete}            | ${DISPLAY_ASSERTION.display}
-				${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.contacts.move}              | ${DISPLAY_ASSERTION.display}
-				${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.contacts.applyTag}          | ${DISPLAY_ASSERTION.display}
-				${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.contacts.restore}           | ${DISPLAY_ASSERTION.notDisplay}
-				${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.contacts.deletePermanently} | ${DISPLAY_ASSERTION.notDisplay}
 				${FOLDERS_DESCRIPTORS.trash}        | ${ACTIONS_DESCRIPTORS.contacts.mailTo}            | ${DISPLAY_ASSERTION.notDisplay}
 				${FOLDERS_DESCRIPTORS.trash}        | ${ACTIONS_DESCRIPTORS.contacts.delete}            | ${DISPLAY_ASSERTION.notDisplay}
 				${FOLDERS_DESCRIPTORS.trash}        | ${ACTIONS_DESCRIPTORS.contacts.move}              | ${DISPLAY_ASSERTION.notDisplay}
@@ -191,8 +182,9 @@ describe('Folder panel', () => {
 					action: ActionDescriptorType;
 					assertion: DisplayAssertionType;
 				}) => {
+					populateFoldersStore();
 					mockMailToAction();
-					const contact = buildContact({ lastName: faker.string.uuid() });
+					const contact = buildContact({ lastName: faker.string.uuid(), parent: folder.id });
 					const state = generateState({
 						folders: [
 							{

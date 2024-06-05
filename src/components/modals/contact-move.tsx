@@ -19,12 +19,14 @@ import { Contact } from '../../legacy/types/contact';
 import { FolderTreeSelector } from '../folder-tree-selector/folder-tree-selector';
 
 export type ContactMoveModalProps = {
+	mode?: 'move' | 'restore';
 	contacts: Array<Contact>;
 	onClose: () => void;
 	onMove: (parentAddressBookId: string) => void;
 };
 
 export const ContactMoveModal = ({
+	mode = 'move',
 	contacts,
 	onClose,
 	onMove
@@ -32,20 +34,34 @@ export const ContactMoveModal = ({
 	const [t] = useTranslation();
 	const [parentAddressBook, setParentAddressBook] = useState<Folder | undefined>();
 
-	const modalTitle = useMemo(
-		() =>
-			contacts.length === 1
-				? t('concat.modal.move_single.title', {
+	const modalTitle = useMemo(() => {
+		if (mode === 'restore') {
+			return contacts.length === 1
+				? t('contact.modal.restore_single.title', {
 						contactDesc: `${contacts[0].firstName} ${contacts[0].lastName}`,
-						defaultValue: "Move {{contactDesc}}'s contact"
+						defaultValue: "Restore {{contactDesc}}'s contact"
 					})
-				: t('concat.modal.move_multiple.title', {
+				: t('contact.modal.restore_multiple.title', {
 						count: contacts.length,
-						defaultValue: 'Move {{count}} contacts'
-					}),
-		[contacts, t]
+						defaultValue: 'Restore {{count}} contacts'
+					});
+		}
+
+		return contacts.length === 1
+			? t('contact.modal.move_single.title', {
+					contactDesc: `${contacts[0].firstName} ${contacts[0].lastName}`,
+					defaultValue: "Move {{contactDesc}}'s contact"
+				})
+			: t('contact.modal.move_multiple.title', {
+					count: contacts.length,
+					defaultValue: 'Move {{count}} contacts'
+				});
+	}, [contacts, mode, t]);
+
+	const confirmLabel = useMemo(
+		() => (mode === 'restore' ? t('label.restore', 'Restore') : t('label.move', 'Move')),
+		[mode, t]
 	);
-	const confirmLabel = useMemo(() => t('label.move', 'Move'), [t]);
 
 	const confirmDisabled = useMemo(() => parentAddressBook === undefined, [parentAddressBook]);
 

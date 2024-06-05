@@ -23,18 +23,64 @@ import { TESTID_SELECTORS } from '../../constants/tests';
 import { buildContact } from '../../tests/model-builder';
 
 describe('ContactMoveModal', () => {
-	it('should display a modal with a specific title for a single contact', () => {
-		const contact = buildContact();
-		setupTest(<ContactMoveModal contacts={[contact]} onMove={jest.fn()} onClose={jest.fn()} />);
-		expect(
-			screen.getByText(`Move ${contact.firstName} ${contact.lastName}'s contact`)
-		).toBeVisible();
+	describe('Move mode', () => {
+		it('should display a modal with a specific title for a single contact', () => {
+			const contact = buildContact();
+			setupTest(
+				<ContactMoveModal
+					mode={'move'}
+					contacts={[contact]}
+					onMove={jest.fn()}
+					onClose={jest.fn()}
+				/>
+			);
+			expect(
+				screen.getByText(`Move ${contact.firstName} ${contact.lastName}'s contact`)
+			).toBeVisible();
+		});
+
+		it('should display a modal with a specific title for multiple contacts', () => {
+			const contacts = times(10, () => buildContact());
+			setupTest(
+				<ContactMoveModal
+					mode={'move'}
+					contacts={contacts}
+					onMove={jest.fn()}
+					onClose={jest.fn()}
+				/>
+			);
+			expect(screen.getByText(`Move ${contacts.length} contacts`)).toBeVisible();
+		});
 	});
 
-	it('should display a modal with a specific title for multiple contacts', () => {
-		const contacts = times(10, () => buildContact());
-		setupTest(<ContactMoveModal contacts={contacts} onMove={jest.fn()} onClose={jest.fn()} />);
-		expect(screen.getByText(`Move ${contacts.length} contacts`)).toBeVisible();
+	describe('Restore mode', () => {
+		it('should display a modal with a specific title for a single contact', () => {
+			const contact = buildContact();
+			setupTest(
+				<ContactMoveModal
+					mode={'restore'}
+					contacts={[contact]}
+					onMove={jest.fn()}
+					onClose={jest.fn()}
+				/>
+			);
+			expect(
+				screen.getByText(`Restore ${contact.firstName} ${contact.lastName}'s contact`)
+			).toBeVisible();
+		});
+
+		it('should display a modal with a specific title for multiple contacts', () => {
+			const contacts = times(10, () => buildContact());
+			setupTest(
+				<ContactMoveModal
+					mode={'restore'}
+					contacts={contacts}
+					onMove={jest.fn()}
+					onClose={jest.fn()}
+				/>
+			);
+			expect(screen.getByText(`Restore ${contacts.length} contacts`)).toBeVisible();
+		});
 	});
 
 	it('should display a close icon', () => {
@@ -156,18 +202,64 @@ describe('ContactMoveModal', () => {
 	});
 
 	describe('Confirm button', () => {
-		it('should contain the "Move" label', () => {
-			populateFoldersStore();
-			const contacts = [buildContact()];
-			setupTest(<ContactMoveModal contacts={contacts} onMove={jest.fn()} onClose={jest.fn()} />);
-			expect(screen.getByRole('button', { name: 'Move' })).toBeVisible();
+		describe('Move mode', () => {
+			it('should contain the "Move" label', () => {
+				populateFoldersStore();
+				const contacts = [buildContact()];
+				setupTest(
+					<ContactMoveModal
+						mode={'move'}
+						contacts={contacts}
+						onMove={jest.fn()}
+						onClose={jest.fn()}
+					/>
+				);
+				expect(screen.getByRole('button', { name: 'Move' })).toBeVisible();
+			});
+
+			it('should be initially disabled ', () => {
+				populateFoldersStore();
+				const contacts = [buildContact()];
+				setupTest(
+					<ContactMoveModal
+						mode={'move'}
+						contacts={contacts}
+						onMove={jest.fn()}
+						onClose={jest.fn()}
+					/>
+				);
+				expect(screen.getByRole('button', { name: 'Move' })).toBeDisabled();
+			});
 		});
 
-		it('should be initially disabled ', () => {
-			populateFoldersStore();
-			const contacts = [buildContact()];
-			setupTest(<ContactMoveModal contacts={contacts} onMove={jest.fn()} onClose={jest.fn()} />);
-			expect(screen.getByRole('button', { name: 'Move' })).toBeDisabled();
+		describe('Restore mode', () => {
+			it('should contain the "Restore" label', () => {
+				populateFoldersStore();
+				const contacts = [buildContact()];
+				setupTest(
+					<ContactMoveModal
+						mode={'restore'}
+						contacts={contacts}
+						onMove={jest.fn()}
+						onClose={jest.fn()}
+					/>
+				);
+				expect(screen.getByRole('button', { name: 'Restore' })).toBeVisible();
+			});
+
+			it('should be initially disabled ', () => {
+				populateFoldersStore();
+				const contacts = [buildContact()];
+				setupTest(
+					<ContactMoveModal
+						mode={'restore'}
+						contacts={contacts}
+						onMove={jest.fn()}
+						onClose={jest.fn()}
+					/>
+				);
+				expect(screen.getByRole('button', { name: 'Restore' })).toBeDisabled();
+			});
 		});
 
 		// FIXME find why the accordion item is not clickable

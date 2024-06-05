@@ -6,10 +6,12 @@
 import React, { useCallback, useMemo } from 'react';
 
 import { useModal, useSnackbar } from '@zextras/carbonio-design-system';
+import { every } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { UIAction } from './types';
-import { isRoot, isWriteAllowed } from '../carbonio-ui-commons/helpers/folders';
+import { isRoot, isTrashed, isWriteAllowed } from '../carbonio-ui-commons/helpers/folders';
+import { getFolder } from '../carbonio-ui-commons/store/zustand/folder';
 import { Folder } from '../carbonio-ui-commons/types/folder';
 import { ContactMoveModal } from '../components/modals/contact-move';
 import { ACTION_IDS, TIMEOUTS } from '../constants';
@@ -79,7 +81,16 @@ export const useActionMoveContacts = (): MoveContactsAction => {
 				}
 			}
 
-			return true;
+			const parentAddressBooks = contacts.reduce<Array<Folder>>((result, contact) => {
+				const folder = getFolder(contact.parent);
+				if (folder) {
+					result.push(folder);
+				}
+
+				return result;
+			}, []);
+
+			return !every(parentAddressBooks, (addressBook) => isTrashed({ folder: addressBook }));
 		},
 		[]
 	);
@@ -120,7 +131,7 @@ export const useActionMoveContacts = (): MoveContactsAction => {
 
 	return useMemo(
 		() => ({
-			id: ACTION_IDS.moveContact,
+			id: ACTION_IDS.moveContacts,
 			label: t('label.move', 'Move'),
 			icon: 'MoveOutline',
 			execute,

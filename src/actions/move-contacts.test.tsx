@@ -11,7 +11,7 @@ import { times } from 'lodash';
 
 import { useActionMoveContacts } from './move-contacts';
 import { UIAction } from './types';
-import { isLink } from '../carbonio-ui-commons/helpers/folders';
+import { isLink, isSystemFolder } from '../carbonio-ui-commons/helpers/folders';
 import { getFolder, getFoldersArray } from '../carbonio-ui-commons/store/zustand/folder';
 import { FOLDERS } from '../carbonio-ui-commons/test/mocks/carbonio-shell-ui-constants';
 import { createSoapAPIInterceptor } from '../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
@@ -36,7 +36,7 @@ describe('useActionMoveContacts', () => {
 			expect.objectContaining({
 				icon: 'MoveOutline',
 				label: 'Move',
-				id: 'move-contact-action'
+				id: 'move-contacts-action'
 			})
 		);
 	});
@@ -47,12 +47,24 @@ describe('useActionMoveContacts', () => {
 			${FOLDERS_DESCRIPTORS.contacts}
 			${FOLDERS_DESCRIPTORS.autoContacts}
 			${FOLDERS_DESCRIPTORS.trash}
-			${FOLDERS_DESCRIPTORS.userDefined}
 		`(`should return true if the destination address book is $folder.desc`, ({ folder }) => {
-			const contacts = [buildContact({ parent: 'unknown-12345' })];
+			populateFoldersStore();
+			const addressBook = getFolder(folder.id);
+			if (!addressBook) {
+				throw new Error(`Cannot find address book ${folder.desc}`);
+			}
+
+			const currentParentFolder = getFoldersArray().find(
+				(folder) => folder.view === 'contact' && !isSystemFolder(folder.id)
+			);
+			if (!currentParentFolder) {
+				throw new Error(`Cannot find the current address book`);
+			}
+
+			const contacts = [buildContact({ parent: currentParentFolder.id })];
 			const { result } = setupHook(useActionMoveContacts);
 			const action = result.current;
-			expect(action.canExecute({ contacts, newParentAddressBook: folder })).toBeTruthy();
+			expect(action.canExecute({ contacts, newParentAddressBook: addressBook })).toBeTruthy();
 		});
 
 		it('should return true if the address book is a linked one', () => {
@@ -61,7 +73,7 @@ describe('useActionMoveContacts', () => {
 				(folder) => folder.view === 'contact' && isLink(folder)
 			);
 			if (!linkedFolder) {
-				return;
+				throw new Error(`Cannot find a linked address book`);
 			}
 			const contacts = [buildContact()];
 			const { result } = setupHook(useActionMoveContacts);

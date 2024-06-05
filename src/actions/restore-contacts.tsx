@@ -6,123 +6,106 @@
 import React, { useCallback, useMemo } from 'react';
 
 import { useModal, useSnackbar } from '@zextras/carbonio-design-system';
+import { every } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { UIAction } from './types';
-import { isRoot, isWriteAllowed } from '../carbonio-ui-commons/helpers/folders';
+import { isTrashed } from '../carbonio-ui-commons/helpers/folders';
+import { getFolder } from '../carbonio-ui-commons/store/zustand/folder';
 import { Folder } from '../carbonio-ui-commons/types/folder';
 import { ContactMoveModal } from '../components/modals/contact-move';
 import { ACTION_IDS, TIMEOUTS } from '../constants';
 import { Contact } from '../legacy/types/contact';
 import { apiClient } from '../network/api-client';
 
-export type MoveContactsAction = UIAction<
-	{ contacts?: Array<Contact>; newParentAddressBook?: Folder },
-	{ contacts?: Array<Contact>; newParentAddressBook?: Folder }
+export type RestoreContactsAction = UIAction<
+	{ contacts?: Array<Contact> },
+	{ contacts?: Array<Contact> }
 >;
 
-export const useActionMoveContacts = (): MoveContactsAction => {
+export const useActionRestoreContacts = (): RestoreContactsAction => {
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
 	const createModal = useModal();
 
-	const move = useCallback(
-		(contactsIds: Array<string>, parentAddressBookId: string): Promise<boolean> =>
-			apiClient
-				.moveContact(contactsIds, parentAddressBookId)
-				.then(() => {
-					createSnackbar({
-						key: `move-contact-success`,
-						replace: true,
-						type: 'success',
-						label: t('messages.snackbar.contact_moved', 'Contact moved'),
-						autoHideTimeout: TIMEOUTS.defaultSnackbar,
-						hideButton: true
-					});
-					return true;
-				})
-				.catch(() => {
-					createSnackbar({
-						key: `move-contact-error`,
-						replace: true,
-						type: 'error',
-						label: t('label.error_try_again', 'Something went wrong, please try again'),
-						autoHideTimeout: TIMEOUTS.defaultSnackbar,
-						hideButton: true
-					});
-					return false;
-				}),
-		[createSnackbar, t]
-	);
-
-	const canExecute = useCallback<MoveContactsAction['canExecute']>(
-		({ contacts, newParentAddressBook } = {}): boolean => {
+	const canExecute = useCallback<RestoreContactsAction['canExecute']>(
+		({ contacts } = {}): boolean => {
 			if (!contacts || contacts.length === 0) {
 				return false;
 			}
 
-			// Additional checks if the destination folder is given
-			if (newParentAddressBook) {
-				// Return false if all the given contacts already belong to the destination address book
-				const parentsIds = contacts.map((contact) => contact.parent);
-
-				if (!parentsIds.some((parentId) => parentId !== newParentAddressBook.id)) {
-					return false;
+			const parentAddressBooks = contacts.reduce<Array<Folder>>((result, contact) => {
+				const folder = getFolder(contact.parent);
+				if (folder) {
+					result.push(folder);
 				}
 
-				if (!isWriteAllowed(newParentAddressBook)) {
-					return false;
-				}
+				return result;
+			}, []);
 
-				if (isRoot(newParentAddressBook.id)) {
-					return false;
-				}
-			}
-
-			return true;
+			return every(parentAddressBooks, (addressBook) => isTrashed({ folder: addressBook }));
 		},
 		[]
 	);
 
-	const execute = useCallback<MoveContactsAction['execute']>(
-		({ contacts, newParentAddressBook } = {}) => {
+	const execute = useCallback<RestoreContactsAction['execute']>(
+		({ contacts } = {}) => {
 			if (!contacts || contacts.length === 0) {
 				return;
 			}
 
-			if (!canExecute({ contacts, newParentAddressBook })) {
+			if (!canExecute({ contacts })) {
 				return;
 			}
 
 			const contactsIds = contacts.map((contact) => contact.id);
 
-			if (newParentAddressBook) {
-				move(contactsIds, newParentAddressBook.id);
-			} else {
-				const closeModal = createModal(
-					{
-						children: (
-							<ContactMoveModal
-								contacts={contacts}
-								onMove={(parentAddressBookId) => {
-									move(contactsIds, parentAddressBookId).then((success) => success && closeModal());
-								}}
-								onClose={() => closeModal()}
-							/>
-						)
-					},
-					true
-				);
-			}
+			const closeModal = createModal(
+				{
+					children: (
+						<ContactMoveModal
+							mode={'restore'}
+							contacts={contacts}
+							onMove={(parentAddressBookId) =>
+								apiClient
+									.moveContact(contactsIds, parentAddressBookId)
+									.then(() => {
+										createSnackbar({
+											key: `restore-contacts-success`,
+											replace: true,
+											type: 'success',
+											label: t('messages.snackbar.contact_restored', 'Contacts restored'),
+											autoHideTimeout: TIMEOUTS.defaultSnackbar,
+											hideButton: true
+										});
+										closeModal();
+									})
+									.catch(() => {
+										createSnackbar({
+											key: `restore-contacts-error`,
+											replace: true,
+											type: 'error',
+											label: t('label.error_try_again', 'Something went wrong, please try again'),
+											autoHideTimeout: TIMEOUTS.defaultSnackbar,
+											hideButton: true
+										});
+									})
+							}
+							onClose={() => closeModal()}
+						/>
+					)
+				},
+				true
+			);
 		},
-		[canExecute, createModal, move]
+		[canExecute, createModal, createSnackbar, t]
 	);
 
 	return useMemo(
 		() => ({
-			id: ACTION_IDS.res,
-			label: t('label.move', 'Move'),
-			icon: 'MoveOutline',
+			id: ACTION_IDS.restoreContacts,
+			label: t('label.restore', 'Restore'),
+			icon: 'RestoreOutline',
 			execute,
 			canExecute
 		}),

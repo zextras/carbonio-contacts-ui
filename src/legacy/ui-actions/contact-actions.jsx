@@ -5,7 +5,7 @@
  */
 import React from 'react';
 
-import { Text, useModal, useSnackbar } from '@zextras/carbonio-design-system';
+import { ModalFooter, Text, useModal, useSnackbar } from '@zextras/carbonio-design-system';
 import { getAction, FOLDERS, useTags, replaceHistory } from '@zextras/carbonio-shell-ui';
 import { compact, isEmpty } from 'lodash';
 import { useTranslation } from 'react-i18next';
@@ -13,14 +13,12 @@ import { useTranslation } from 'react-i18next';
 import { applyTag, applyMultiTag, createAndApplyTag } from './tag-actions';
 import { useActionExportContact } from '../../actions/export-contact';
 import { useActionMoveContacts } from '../../actions/move-contacts';
+import { useActionRestoreContacts } from '../../actions/restore-contacts';
 import { isTrash } from '../../carbonio-ui-commons/helpers/folders';
 import { useAppDispatch } from '../hooks/redux';
 import { contactAction } from '../store/actions/contact-action';
-
-// eslint-disable-next-line import/extensions
 import { StoreProvider } from '../store/redux';
 import { FolderActionsType } from '../types/folder';
-import ModalFooter from '../views/contact-actions/commons/modal-footer';
 
 const generateClickableAction = (action, params) => ({
 	id: action.id,
@@ -198,12 +196,13 @@ export const useContextActions = (folderId) => {
 	const tags = useTags();
 	const exportAction = useActionExportContact();
 	const moveAction = useActionMoveContacts();
+	const restoreAction = useActionRestoreContacts();
 
 	switch (folderId) {
 		case FOLDERS.TRASH:
 			return (contact) => [
-				...(moveAction.canExecute({ contacts: [contact] })
-					? [generateClickableAction(moveAction, { contacts: [contact] })]
+				...(restoreAction.canExecute({ contacts: [contact] })
+					? [generateClickableAction(restoreAction, { contacts: [contact] })]
 					: []),
 				deletePermanently({
 					ids: [contact.id],
@@ -245,11 +244,13 @@ export const useHoverActions = (folderId) => {
 	const createSnackbar = useSnackbar();
 	const createModal = useModal();
 	const moveAction = useActionMoveContacts();
+	const restoreAction = useActionRestoreContacts();
+
 	switch (folderId) {
 		case FOLDERS.TRASH:
 			return (contact) => [
-				...(moveAction.canExecute({ contacts: [contact] })
-					? [generateClickableAction(moveAction, { contacts: [contact] })]
+				...(restoreAction.canExecute({ contacts: [contact] })
+					? [generateClickableAction(restoreAction, { contacts: [contact] })]
 					: []),
 				deletePermanently({
 					ids: [contact.id],
