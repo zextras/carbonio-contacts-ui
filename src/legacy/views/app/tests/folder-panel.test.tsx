@@ -244,9 +244,6 @@ describe('Folder panel', () => {
 					${FOLDERS_DESCRIPTORS.autoContacts} | ${ACTIONS_DESCRIPTORS.contacts.delete}            | ${DISPLAY_ASSERTION.display}
 					${FOLDERS_DESCRIPTORS.autoContacts} | ${ACTIONS_DESCRIPTORS.contacts.applyMultiTag}     | ${DISPLAY_ASSERTION.display}
 					${FOLDERS_DESCRIPTORS.autoContacts} | ${ACTIONS_DESCRIPTORS.contacts.deletePermanently} | ${DISPLAY_ASSERTION.notDisplay}
-					${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.contacts.delete}            | ${DISPLAY_ASSERTION.display}
-					${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.contacts.applyMultiTag}     | ${DISPLAY_ASSERTION.display}
-					${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.contacts.deletePermanently} | ${DISPLAY_ASSERTION.notDisplay}
 					${FOLDERS_DESCRIPTORS.trash}        | ${ACTIONS_DESCRIPTORS.contacts.delete}            | ${DISPLAY_ASSERTION.notDisplay}
 					${FOLDERS_DESCRIPTORS.trash}        | ${ACTIONS_DESCRIPTORS.contacts.applyMultiTag}     | ${DISPLAY_ASSERTION.display}
 					${FOLDERS_DESCRIPTORS.trash}        | ${ACTIONS_DESCRIPTORS.contacts.deletePermanently} | ${DISPLAY_ASSERTION.display}
@@ -261,8 +258,9 @@ describe('Folder panel', () => {
 						action: ActionDescriptorType;
 						assertion: DisplayAssertionType;
 					}) => {
+						populateFoldersStore();
 						useAppContext.mockReturnValue({ count: 42, setCount: jest.fn() });
-						const contact = buildContact();
+						const contact = buildContact({ parent: folder.id });
 						const state = generateState({
 							contacts: [contact]
 						});

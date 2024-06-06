@@ -70,6 +70,24 @@
             }
         }
     },
+    "contact": {
+        "modal": {
+            "move_multiple": {
+                "title": "Move {{count}} contacts",
+                "title_plural": ""
+            },
+            "move_single": {
+                "title": "Move {{contactDesc}}'s contact"
+            },
+            "restore_multiple": {
+                "title": "Restore {{count}} contacts",
+                "title_plural": ""
+            },
+            "restore_single": {
+                "title": "Restore {{contactDesc}}'s contact"
+            }
+        }
+    },
     "contactGroupDisplayer": {
         "label": {
             "members_total": "Addresses: {{count}}"
