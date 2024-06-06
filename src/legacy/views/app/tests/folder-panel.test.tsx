@@ -57,12 +57,7 @@ describe('Folder panel', () => {
 		const folder = FOLDERS_DESCRIPTORS.contacts;
 		const contact = buildContact({ lastName: faker.string.uuid() });
 		const state = generateState({
-			folders: [
-				{
-					descriptor: folder,
-					contacts: [contact]
-				}
-			]
+			contacts: [contact]
 		});
 		const store = generateStore(state);
 		setupTest(
@@ -112,12 +107,7 @@ describe('Folder panel', () => {
 					mockMailToAction();
 					const contact = buildContact({ lastName: faker.string.uuid(), parent: folder.id });
 					const state = generateState({
-						folders: [
-							{
-								descriptor: folder,
-								contacts: [contact]
-							}
-						]
+						contacts: [contact]
 					});
 					const store = generateStore(state);
 					const { user } = setupTest(
@@ -186,12 +176,7 @@ describe('Folder panel', () => {
 					mockMailToAction();
 					const contact = buildContact({ lastName: faker.string.uuid(), parent: folder.id });
 					const state = generateState({
-						folders: [
-							{
-								descriptor: folder,
-								contacts: [contact]
-							}
-						]
+						contacts: [contact]
 					});
 					const store = generateStore(state);
 					const { user } = setupTest(
@@ -225,12 +210,7 @@ describe('Folder panel', () => {
 				const folder = FOLDERS_DESCRIPTORS.contacts;
 				const contacts = [buildContact(), buildContact()];
 				const state = generateState({
-					folders: [
-						{
-							descriptor: folder,
-							contacts
-						}
-					]
+					contacts
 				});
 				const store = generateStore(state);
 				const { user } = setupTest(
@@ -284,12 +264,7 @@ describe('Folder panel', () => {
 						useAppContext.mockReturnValue({ count: 42, setCount: jest.fn() });
 						const contact = buildContact();
 						const state = generateState({
-							folders: [
-								{
-									descriptor: folder,
-									contacts: [contact]
-								}
-							]
+							contacts: [contact]
 						});
 						const store = generateStore(state);
 						const { user } = setupTest(

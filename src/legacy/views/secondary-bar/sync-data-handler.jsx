@@ -14,7 +14,6 @@ import {
 	handleDeletedContactsSync,
 	handleModifiedContactsSync
 } from '../../store/slices/contacts-slice';
-import { handleFoldersSync, handleRefresh } from '../../store/slices/folders-slice';
 import { normalizeSyncContactsFromSoap } from '../../utils/normalizations/normalize-contact-from-soap';
 
 export const SyncDataHandler = () => {
@@ -26,7 +25,6 @@ export const SyncDataHandler = () => {
 
 	useEffect(() => {
 		if (!isEmpty(refresh) && !initialized) {
-			dispatch(handleRefresh(refresh));
 			setInitialized(true);
 		}
 	}, [dispatch, initialized, refresh]);
@@ -45,15 +43,6 @@ export const SyncDataHandler = () => {
 						}
 						if (notify.deleted?.length > 0) {
 							dispatch(handleDeletedContactsSync(notify.deleted));
-						}
-						if (
-							notify.deleted?.length > 0 ||
-							notify.modified?.folder ||
-							notify.created?.folder ||
-							notify.modified?.link ||
-							notify.created?.link
-						) {
-							dispatch(handleFoldersSync(notify));
 						}
 
 						setSeq(notify.seq);
