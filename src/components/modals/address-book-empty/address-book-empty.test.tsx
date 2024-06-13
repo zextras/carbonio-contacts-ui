@@ -105,7 +105,8 @@ describe('AddressBookEmptyModal', () => {
 				action: {
 					id: addressBook.id,
 					op: 'empty',
-					recursive: true
+					recursive: true,
+					type: 'contacts'
 				}
 			})
 		);

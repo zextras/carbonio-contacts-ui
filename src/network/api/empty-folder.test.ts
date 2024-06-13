@@ -19,7 +19,8 @@ describe('emptyFolder', () => {
 			action: {
 				id: folderId,
 				op: 'empty',
-				recursive: true
+				recursive: true,
+				type: 'contacts'
 			},
 			_jsns: NAMESPACES.mail
 		});
