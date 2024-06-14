@@ -34,7 +34,6 @@ import {
 import { useNavigation } from './hooks/useNavigation';
 import { ContactInputIntegrationWrapper } from './legacy/integrations/contact-input-integration-wrapper';
 import { StoreProvider } from './legacy/store/redux';
-import { EditViewProps } from './legacy/types/views/edit-view';
 import { SyncDataHandler } from './legacy/views/secondary-bar/sync-data-handler';
 
 const LazyAppView = lazy(
@@ -61,7 +60,7 @@ const LazySearchView = lazy(
 );
 
 const LazyBoardView = lazy(
-	() => import(/* webpackChunkName: "edit-view" */ './legacy/views/edit/edit-view')
+	() => import(/* webpackChunkName: "edit-view" */ './legacy/views/edit/edit-view-board-wrapper')
 );
 
 const LazyNewContactGroupBoardView = lazy(
@@ -102,11 +101,11 @@ const AppViewV2 = (): React.JSX.Element => (
 	</Suspense>
 );
 
-const BoardView = (props: EditViewProps): React.JSX.Element => (
+const BoardView = (): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
 		<StoreProvider>
 			<ModalManager>
-				<LazyBoardView {...props} />
+				<LazyBoardView />
 			</ModalManager>
 		</StoreProvider>
 	</Suspense>

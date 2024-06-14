@@ -59,17 +59,6 @@
             "title": "New Group"
         }
     },
-    "concat": {
-        "modal": {
-            "move_multiple": {
-                "title": "Move {{count}} contacts",
-                "title_plural": ""
-            },
-            "move_single": {
-                "title": "Move {{contactDesc}}'s contact"
-            }
-        }
-    },
     "contact": {
         "modal": {
             "move_multiple": {

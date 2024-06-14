@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 
 import { differenceObject } from './components/utils';
 import OptionsSettingsView from './options-settings-view';
+import { useUpdateView } from '../../../carbonio-ui-commons/hooks/use-update-view';
 
 export default function ContactSettingsView() {
 	const [t] = useTranslation();
@@ -18,6 +19,7 @@ export default function ContactSettingsView() {
 	const [settingsObj, setSettingsObj] = useState({ ...settings });
 	const [updatedSettings, setUpdatedSettings] = useState({});
 	const createSnackbar = useSnackbar();
+	useUpdateView();
 
 	const onClose = useCallback(() => {
 		setSettingsObj({ ...settings });

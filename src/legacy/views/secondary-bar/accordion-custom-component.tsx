@@ -38,7 +38,7 @@ const FittedRow = styled(Row)`
 	height: 3rem;
 `;
 
-export const DropOverlayContainer = styled(Container)<ContainerProps & { folder: Folder }>`
+const DropOverlayContainer = styled(Container)<ContainerProps & { folder: Folder }>`
 	position: absolute;
 	width: calc(15.5rem - ${(props): number => props.folder.depth - 2}rem);
 	height: 100%;
@@ -58,7 +58,7 @@ const DropDenyOverlayContainer = styled(Container)<ContainerProps & { folder: Fo
 	opacity: 0.4;
 `;
 
-const AccordionCustomComponent: FC<{ item: Folder }> = ({ item: folder }) => {
+export const AccordionCustomComponent: FC<{ item: Folder }> = ({ item: folder }) => {
 	const [t] = useTranslation();
 	const accountName = useUserAccount().name;
 	const moveContactAction = useActionMoveContacts();
@@ -233,5 +233,3 @@ const AccordionCustomComponent: FC<{ item: Folder }> = ({ item: folder }) => {
 		</Row>
 	);
 };
-
-export default AccordionCustomComponent;
