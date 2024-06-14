@@ -100,8 +100,8 @@ const DistributionListChip = ({
 
 	const selectAllItemLabel = t('label.select_all_addresses', {
 		count: total,
-		defaultValue: `Select address`,
-		defaultValue_plural: `Select all {{count}} addresses`
+		defaultValue_one: `Select address`,
+		defaultValue_other: `Select all {{count}} addresses`
 	});
 
 	const memberDropdownItems = useMemo(

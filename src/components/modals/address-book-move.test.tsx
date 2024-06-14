@@ -8,8 +8,8 @@ import React from 'react';
 import { act } from '@testing-library/react';
 
 import { AddressBookMoveModal } from './address-book-move';
-import { isTrashed } from '../../carbonio-ui-commons/helpers/folders';
-import { getFoldersArray, getRootsArray } from '../../carbonio-ui-commons/store/zustand/folder';
+import { isLink, isTrashed } from '../../carbonio-ui-commons/helpers/folders';
+import { getRootsArray } from '../../carbonio-ui-commons/store/zustand/folder';
 import { FOLDERS } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui-constants';
 import { populateFoldersStore } from '../../carbonio-ui-commons/test/mocks/store/folders';
 import { getMocksContext } from '../../carbonio-ui-commons/test/mocks/utils/mocks-context';
@@ -20,6 +20,7 @@ import {
 	within
 } from '../../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../../constants/tests';
+import { getFoldersArray } from '../../tests/utils';
 
 describe('AddressBookMoveModal', () => {
 	const mocksContext = getMocksContext();
@@ -89,9 +90,8 @@ describe('AddressBookMoveModal', () => {
 			expect(screen.getByTestId(`folder-accordion-root-1`)).toBeVisible();
 		});
 
-		// TODO Enable it when the whole list of accounts will be handled
-		it.skip('should display the shared accounts roots', () => {
-			populateFoldersStore();
+		it('should display the shared accounts roots', () => {
+			populateFoldersStore({ view: 'contact' });
 			const addressBook = getFoldersArray().find(
 				(folder) => folder.view === 'contact' && folder.l === FOLDERS.CONTACTS
 			);
@@ -105,6 +105,7 @@ describe('AddressBookMoveModal', () => {
 					onClose={jest.fn()}
 				/>
 			);
+
 			getRootsArray().forEach((root) => {
 				expect(screen.getByTestId(`folder-accordion-root-${root.id}`)).toBeVisible();
 			});
@@ -157,7 +158,7 @@ describe('AddressBookMoveModal', () => {
 			).not.toBeInTheDocument();
 		});
 
-		it('should not display the linked folders', () => {
+		it('should display the linked folders', () => {
 			populateFoldersStore();
 			const addressBook = getFoldersArray().find(
 				(folder) => folder.view === 'contact' && folder.l === FOLDERS.CONTACTS
@@ -166,10 +167,10 @@ describe('AddressBookMoveModal', () => {
 				return;
 			}
 			const linkedFolder = getFoldersArray().find(
-				(folder) => folder.view === 'contact' && folder.isLink
+				(folder) => folder.view === 'contact' && isLink(folder)
 			);
 			if (!linkedFolder) {
-				return;
+				throw new Error('Not linked folder available for the test');
 			}
 
 			setupTest(
@@ -180,9 +181,7 @@ describe('AddressBookMoveModal', () => {
 				/>
 			);
 			makeListItemsVisible();
-			expect(
-				screen.queryByTestId(`folder-accordion-item-${linkedFolder.id}`)
-			).not.toBeInTheDocument();
+			expect(screen.getByTestId(`folder-accordion-item-${linkedFolder.id}`)).toBeVisible();
 		});
 
 		it('should not display the current parent folders', () => {

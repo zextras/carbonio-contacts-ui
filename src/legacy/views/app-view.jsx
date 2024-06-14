@@ -9,6 +9,8 @@ import { Container } from '@zextras/carbonio-design-system';
 import { setAppContext, Spinner } from '@zextras/carbonio-shell-ui';
 import { Redirect, Switch, Route, useRouteMatch } from 'react-router-dom';
 
+import { useUpdateView } from '../../carbonio-ui-commons/hooks/use-update-view';
+
 const LazyFolderView = lazy(
 	() => import(/* webpackChunkName: "folder-view" */ './app/folder-panel')
 );
@@ -20,6 +22,7 @@ const LazyDetailPanel = lazy(
 const AppView = () => {
 	const { path } = useRouteMatch();
 	const [count, setCount] = useState(0);
+	useUpdateView();
 
 	useEffect(() => {
 		setAppContext({ count, setCount });

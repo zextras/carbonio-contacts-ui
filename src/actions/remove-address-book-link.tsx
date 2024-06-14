@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ShowShareInfoAction } from './show-share-info';
 import { UIAction } from './types';
+import { isLink } from '../carbonio-ui-commons/helpers/folders';
 import { Folder } from '../carbonio-ui-commons/types/folder';
 import { ACTION_IDS, TIMEOUTS } from '../constants';
 import { apiClient } from '../network/api-client';
@@ -26,7 +27,7 @@ export const useActionRemoveAddressBookLink = (): RemoveAddressBookLinkAction =>
 				return false;
 			}
 
-			return addressBook.isLink;
+			return isLink(addressBook);
 		},
 		[]
 	);

@@ -25,7 +25,8 @@ import styled from 'styled-components';
 
 import { useAddressBookContextualMenuItems } from './commons/use-address-book-contextual-menu-items';
 import { useActionMoveAddressBook } from '../../../actions/move-address-book';
-import { useActionMoveContact } from '../../../actions/move-contact';
+import { useActionMoveContacts } from '../../../actions/move-contacts';
+import { isLink, isRoot } from '../../../carbonio-ui-commons/helpers/folders';
 import { Folder } from '../../../carbonio-ui-commons/types/folder';
 import { DragEnterAction, OnDropActionProps } from '../../../carbonio-ui-commons/types/sidebar';
 import { getFolderIconColor, getFolderIconName } from '../../../helpers/folders';
@@ -37,7 +38,7 @@ const FittedRow = styled(Row)`
 	height: 3rem;
 `;
 
-export const DropOverlayContainer = styled(Container)<ContainerProps & { folder: Folder }>`
+const DropOverlayContainer = styled(Container)<ContainerProps & { folder: Folder }>`
 	position: absolute;
 	width: calc(15.5rem - ${(props): number => props.folder.depth - 2}rem);
 	height: 100%;
@@ -57,10 +58,10 @@ const DropDenyOverlayContainer = styled(Container)<ContainerProps & { folder: Fo
 	opacity: 0.4;
 `;
 
-const AccordionCustomComponent: FC<{ item: Folder }> = ({ item: folder }) => {
+export const AccordionCustomComponent: FC<{ item: Folder }> = ({ item: folder }) => {
 	const [t] = useTranslation();
 	const accountName = useUserAccount().name;
-	const moveContactAction = useActionMoveContact();
+	const moveContactAction = useActionMoveContacts();
 	const moveAddressBookAction = useActionMoveAddressBook();
 
 	const onDragEnterAction = useCallback(
@@ -147,7 +148,7 @@ const AccordionCustomComponent: FC<{ item: Folder }> = ({ item: folder }) => {
 			</Padding>
 		);
 
-		if (folder.isLink) {
+		if (isLink(folder)) {
 			const tooltipText = t('tooltip.folder_linked_status', 'Linked to me');
 			return RowWithIcon('Linked', 'linked', tooltipText);
 		}
@@ -160,14 +161,14 @@ const AccordionCustomComponent: FC<{ item: Folder }> = ({ item: folder }) => {
 			return RowWithIcon('Shared', 'shared', tooltipText);
 		}
 		return '';
-	}, [folder.acl?.grant, folder.isLink, t]);
+	}, [folder, t]);
 
 	// hide folders where a share was provided and subsequently removed
 	if (folder.isLink && folder.broken) {
 		return null;
 	}
 
-	return folder.id === FOLDERS.USER_ROOT || (folder.isLink && folder.oname === ROOT_NAME) ? (
+	return isRoot(folder.id) || (folder.isLink && folder.oname === ROOT_NAME) ? (
 		<FittedRow>
 			<Padding left="small">
 				<Avatar label={accordionItem.label} colorLabel={accordionItem.iconColor} size="medium" />
@@ -232,5 +233,3 @@ const AccordionCustomComponent: FC<{ item: Folder }> = ({ item: folder }) => {
 		</Row>
 	);
 };
-
-export default AccordionCustomComponent;

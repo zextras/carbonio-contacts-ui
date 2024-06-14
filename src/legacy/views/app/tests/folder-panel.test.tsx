@@ -14,6 +14,7 @@ import {
 	getAction as getActionMock,
 	useAppContext
 } from '../../../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
+import { populateFoldersStore } from '../../../../carbonio-ui-commons/test/mocks/store/folders';
 import {
 	setupTest,
 	screen,
@@ -56,12 +57,7 @@ describe('Folder panel', () => {
 		const folder = FOLDERS_DESCRIPTORS.contacts;
 		const contact = buildContact({ lastName: faker.string.uuid() });
 		const state = generateState({
-			folders: [
-				{
-					descriptor: folder,
-					contacts: [contact]
-				}
-			]
+			contacts: [contact]
 		});
 		const store = generateStore(state);
 		setupTest(
@@ -91,11 +87,6 @@ describe('Folder panel', () => {
 				${FOLDERS_DESCRIPTORS.autoContacts} | ${ACTIONS_DESCRIPTORS.contacts.move}              | ${DISPLAY_ASSERTION.display}
 				${FOLDERS_DESCRIPTORS.autoContacts} | ${ACTIONS_DESCRIPTORS.contacts.restore}           | ${DISPLAY_ASSERTION.notDisplay}
 				${FOLDERS_DESCRIPTORS.autoContacts} | ${ACTIONS_DESCRIPTORS.contacts.deletePermanently} | ${DISPLAY_ASSERTION.notDisplay}
-				${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.contacts.mailTo}            | ${DISPLAY_ASSERTION.display}
-				${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.contacts.delete}            | ${DISPLAY_ASSERTION.display}
-				${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.contacts.move}              | ${DISPLAY_ASSERTION.display}
-				${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.contacts.restore}           | ${DISPLAY_ASSERTION.notDisplay}
-				${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.contacts.deletePermanently} | ${DISPLAY_ASSERTION.notDisplay}
 				${FOLDERS_DESCRIPTORS.trash}        | ${ACTIONS_DESCRIPTORS.contacts.mailTo}            | ${DISPLAY_ASSERTION.notDisplay}
 				${FOLDERS_DESCRIPTORS.trash}        | ${ACTIONS_DESCRIPTORS.contacts.delete}            | ${DISPLAY_ASSERTION.notDisplay}
 				${FOLDERS_DESCRIPTORS.trash}        | ${ACTIONS_DESCRIPTORS.contacts.move}              | ${DISPLAY_ASSERTION.notDisplay}
@@ -112,15 +103,11 @@ describe('Folder panel', () => {
 					action: ActionDescriptorType;
 					assertion: DisplayAssertionType;
 				}) => {
+					populateFoldersStore();
 					mockMailToAction();
-					const contact = buildContact({ lastName: faker.string.uuid() });
+					const contact = buildContact({ lastName: faker.string.uuid(), parent: folder.id });
 					const state = generateState({
-						folders: [
-							{
-								descriptor: folder,
-								contacts: [contact]
-							}
-						]
+						contacts: [contact]
 					});
 					const store = generateStore(state);
 					const { user } = setupTest(
@@ -168,12 +155,6 @@ describe('Folder panel', () => {
 				${FOLDERS_DESCRIPTORS.autoContacts} | ${ACTIONS_DESCRIPTORS.contacts.applyTag}          | ${DISPLAY_ASSERTION.display}
 				${FOLDERS_DESCRIPTORS.autoContacts} | ${ACTIONS_DESCRIPTORS.contacts.restore}           | ${DISPLAY_ASSERTION.notDisplay}
 				${FOLDERS_DESCRIPTORS.autoContacts} | ${ACTIONS_DESCRIPTORS.contacts.deletePermanently} | ${DISPLAY_ASSERTION.notDisplay}
-				${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.contacts.mailTo}            | ${DISPLAY_ASSERTION.display}
-				${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.contacts.delete}            | ${DISPLAY_ASSERTION.display}
-				${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.contacts.move}              | ${DISPLAY_ASSERTION.display}
-				${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.contacts.applyTag}          | ${DISPLAY_ASSERTION.display}
-				${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.contacts.restore}           | ${DISPLAY_ASSERTION.notDisplay}
-				${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.contacts.deletePermanently} | ${DISPLAY_ASSERTION.notDisplay}
 				${FOLDERS_DESCRIPTORS.trash}        | ${ACTIONS_DESCRIPTORS.contacts.mailTo}            | ${DISPLAY_ASSERTION.notDisplay}
 				${FOLDERS_DESCRIPTORS.trash}        | ${ACTIONS_DESCRIPTORS.contacts.delete}            | ${DISPLAY_ASSERTION.notDisplay}
 				${FOLDERS_DESCRIPTORS.trash}        | ${ACTIONS_DESCRIPTORS.contacts.move}              | ${DISPLAY_ASSERTION.notDisplay}
@@ -191,15 +172,11 @@ describe('Folder panel', () => {
 					action: ActionDescriptorType;
 					assertion: DisplayAssertionType;
 				}) => {
+					populateFoldersStore();
 					mockMailToAction();
-					const contact = buildContact({ lastName: faker.string.uuid() });
+					const contact = buildContact({ lastName: faker.string.uuid(), parent: folder.id });
 					const state = generateState({
-						folders: [
-							{
-								descriptor: folder,
-								contacts: [contact]
-							}
-						]
+						contacts: [contact]
 					});
 					const store = generateStore(state);
 					const { user } = setupTest(
@@ -233,12 +210,7 @@ describe('Folder panel', () => {
 				const folder = FOLDERS_DESCRIPTORS.contacts;
 				const contacts = [buildContact(), buildContact()];
 				const state = generateState({
-					folders: [
-						{
-							descriptor: folder,
-							contacts
-						}
-					]
+					contacts
 				});
 				const store = generateStore(state);
 				const { user } = setupTest(
@@ -272,9 +244,6 @@ describe('Folder panel', () => {
 					${FOLDERS_DESCRIPTORS.autoContacts} | ${ACTIONS_DESCRIPTORS.contacts.delete}            | ${DISPLAY_ASSERTION.display}
 					${FOLDERS_DESCRIPTORS.autoContacts} | ${ACTIONS_DESCRIPTORS.contacts.applyMultiTag}     | ${DISPLAY_ASSERTION.display}
 					${FOLDERS_DESCRIPTORS.autoContacts} | ${ACTIONS_DESCRIPTORS.contacts.deletePermanently} | ${DISPLAY_ASSERTION.notDisplay}
-					${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.contacts.delete}            | ${DISPLAY_ASSERTION.display}
-					${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.contacts.applyMultiTag}     | ${DISPLAY_ASSERTION.display}
-					${FOLDERS_DESCRIPTORS.userDefined}  | ${ACTIONS_DESCRIPTORS.contacts.deletePermanently} | ${DISPLAY_ASSERTION.notDisplay}
 					${FOLDERS_DESCRIPTORS.trash}        | ${ACTIONS_DESCRIPTORS.contacts.delete}            | ${DISPLAY_ASSERTION.notDisplay}
 					${FOLDERS_DESCRIPTORS.trash}        | ${ACTIONS_DESCRIPTORS.contacts.applyMultiTag}     | ${DISPLAY_ASSERTION.display}
 					${FOLDERS_DESCRIPTORS.trash}        | ${ACTIONS_DESCRIPTORS.contacts.deletePermanently} | ${DISPLAY_ASSERTION.display}
@@ -289,15 +258,11 @@ describe('Folder panel', () => {
 						action: ActionDescriptorType;
 						assertion: DisplayAssertionType;
 					}) => {
+						populateFoldersStore();
 						useAppContext.mockReturnValue({ count: 42, setCount: jest.fn() });
-						const contact = buildContact();
+						const contact = buildContact({ parent: folder.id });
 						const state = generateState({
-							folders: [
-								{
-									descriptor: folder,
-									contacts: [contact]
-								}
-							]
+							contacts: [contact]
 						});
 						const store = generateStore(state);
 						const { user } = setupTest(

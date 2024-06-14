@@ -15,6 +15,7 @@ import AdvancedFilterModal from './advance-filter-modal';
 import SearchList from './search-list';
 import SearchPanel from './search-panel';
 import { isTrash } from '../../../carbonio-ui-commons/helpers/folders';
+import { useUpdateView } from '../../../carbonio-ui-commons/hooks/use-update-view';
 import { useFoldersMap } from '../../../carbonio-ui-commons/store/zustand/folder';
 import { Folder } from '../../../carbonio-ui-commons/types/folder';
 import { usePrefs } from '../../../carbonio-ui-commons/utils/use-prefs';
@@ -31,6 +32,7 @@ type SearchResults = {
 
 const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 	const [query, updateQuery] = useQuery();
+	useUpdateView();
 
 	const [searchResults, setSearchResults] = useState<SearchResults>({
 		contacts: [],

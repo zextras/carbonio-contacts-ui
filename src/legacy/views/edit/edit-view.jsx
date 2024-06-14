@@ -19,8 +19,7 @@ import {
 	FOLDERS,
 	ZIMBRA_STANDARD_COLORS,
 	useReplaceHistoryCallback,
-	report,
-	useBoardHooks
+	report
 } from '@zextras/carbonio-shell-ui';
 import { filter, find, map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
@@ -37,12 +36,13 @@ import {
 	isSharedAccountFolder,
 	isTrash
 } from '../../../carbonio-ui-commons/helpers/folders';
-import { useFoldersArray } from '../../../carbonio-ui-commons/store/zustand/folder';
+import { useFoldersMap } from '../../../carbonio-ui-commons/store/zustand/folder';
 import { CompactView } from '../../commons/contact-compact-view';
 import { useAppSelector } from '../../hooks/redux';
 import { createContact } from '../../store/actions/create-contact';
 import { modifyContact } from '../../store/actions/modify-contact';
 import { selectContact } from '../../store/selectors/contacts';
+import { getFolderTranslatedName } from '../../utils/helpers';
 import { differenceObject } from '../settings/components/utils';
 
 const ItalicText = styled(Text)`
@@ -83,12 +83,11 @@ const CustomStringField = ({ name, label, value, dispatch, autoFocus = false }) 
 	</Container>
 );
 
-export default function EditView({ panel }) {
+export default function EditView({ panel, onClose, onTitleChanged }) {
 	const { folderId, editId } = useParams();
 	const storeDispatch = useDispatch();
 	const existingContact = useAppSelector((state) => selectContact(state, folderId, editId));
 	const [contact, dispatch] = useReducer(reducer);
-	const boardUtilities = useBoardHooks();
 	const [compareToContact, setCompareToContact] = useState(existingContact);
 	const [selectFolderId, setSelectFolderId] = useState(FOLDERS.CONTACTS);
 	const keys = Object.keys(existingContact ?? {});
@@ -121,13 +120,11 @@ export default function EditView({ panel }) {
 		return differenceObject(compareToContact, updatedContact);
 	}, [compareToContact, contact]);
 
-	const folders = useFoldersArray();
+	const folders = useFoldersMap();
 
 	const selectedFolderName = useMemo(() => {
 		const selectedFolder = find(folders, ['id', selectFolderId]);
-		return selectFolderId === FOLDERS.CONTACTS
-			? t('folders.contacts', 'Contacts')
-			: selectedFolder.name;
+		return getFolderTranslatedName(t, selectFolderId, selectedFolder.name);
 	}, [folders, selectFolderId, t]);
 	const folderWithWritePerm = useMemo(
 		() =>
@@ -185,9 +182,9 @@ export default function EditView({ panel }) {
 
 	useEffect(() => {
 		if (!panel) {
-			boardUtilities?.updateBoard({ title });
+			onTitleChanged && onTitleChanged(title);
 		}
-	}, [panel, title, boardUtilities]);
+	}, [onTitleChanged, panel, title]);
 
 	const replaceHistory = useReplaceHistoryCallback();
 
@@ -199,7 +196,7 @@ export default function EditView({ panel }) {
 					if (panel && !res.error) {
 						replaceHistory(`/folder/${folderId}/contacts/${res.payload[0].id}`);
 					} else if (res.type.includes('fulfilled')) {
-						boardUtilities?.closeBoard();
+						onClose && onClose();
 						createSnackbar({
 							key: `edit`,
 							replace: true,
@@ -226,11 +223,11 @@ export default function EditView({ panel }) {
 				.catch(report);
 		}
 	}, [
-		boardUtilities,
 		contact,
 		createSnackbar,
 		existingContact,
 		folderId,
+		onClose,
 		panel,
 		replaceHistory,
 		storeDispatch,

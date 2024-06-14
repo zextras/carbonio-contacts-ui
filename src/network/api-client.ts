@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
+import { createContactFromVcard } from './api/create-contact';
 import { createContactGroup } from './api/create-contact-group';
 import { createFolder } from './api/create-folder';
 import { createMountpoints } from './api/create-mountpoints';
@@ -16,6 +17,7 @@ import { findContactGroups } from './api/find-contact-groups';
 import { getAccountDistributionLists } from './api/get-account-distribution-lists';
 import { getDistributionList } from './api/get-distribution-list';
 import { getDistributionListMembers } from './api/get-distribution-list-members';
+import { getItem } from './api/get-item';
 import { getShareInfo } from './api/get-share-info';
 import { importContacts } from './api/import-contacts';
 import { modifyContactGroup } from './api/modify-contact';
@@ -51,5 +53,7 @@ export const apiClient = {
 	revokeFolderGrant,
 	sendShareNotification,
 	updateFolder,
-	createFolder
+	createFolder,
+	getItem,
+	createContactFromVcard
 };

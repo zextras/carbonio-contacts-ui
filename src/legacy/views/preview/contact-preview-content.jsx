@@ -19,10 +19,11 @@ import {
 	Tooltip,
 	Link
 } from '@zextras/carbonio-design-system';
-import { FOLDERS, runSearch, useTags, ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-shell-ui';
+import { runSearch, useTags, ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-shell-ui';
 import { every, includes, isEmpty, map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
+import { isTrash } from '../../../carbonio-ui-commons/helpers/folders';
 import { CompactView } from '../../commons/contact-compact-view';
 import { useTagExist } from '../../ui-actions/tag-actions';
 
@@ -160,8 +161,8 @@ function ContactMultiValueField({ type, values, width, defaultType, showIcon }) 
 					'url',
 					t('label.website', {
 						count: values.length,
-						defaultValue: 'website',
-						defaultValue_plural: 'websites'
+						defaultValue_one: 'website',
+						defaultValue_other: 'websites'
 					})
 				];
 			case 'address':
@@ -169,8 +170,8 @@ function ContactMultiValueField({ type, values, width, defaultType, showIcon }) 
 					'address',
 					t('section.title.address', {
 						count: values.length,
-						defaultValue: 'address',
-						defaultValue_plural: 'addresses'
+						defaultValue_one: 'address',
+						defaultValue_other: 'addresses'
 					})
 				];
 			default:
@@ -360,7 +361,7 @@ function ContactPreviewContent({ contact, onEdit, onDelete, onMail, onMove }) {
 						mainAlignment="flex-end"
 						padding={{ horizontal: 'extrasmall' }}
 					>
-						{contact.parent !== FOLDERS.TRASH && (
+						{!isTrash(contact.parent) && (
 							<IconButton
 								icon="MailModOutline"
 								onClick={onMail}
@@ -396,11 +397,11 @@ function ContactPreviewContent({ contact, onEdit, onDelete, onMail, onMove }) {
 						)}
 						<IconButton icon="Trash2Outline" onClick={onDelete} />
 						<IconButton
-							icon={contact.parent === FOLDERS.TRASH ? 'RestoreOutline' : 'MoveOutline'}
+							icon={isTrash(contact.parent) ? 'RestoreOutline' : 'MoveOutline'}
 							onClick={onMove}
 						/>
 						<Padding right="small" />
-						{contact.parent !== FOLDERS.TRASH && (
+						{!isTrash(contact.parent) && (
 							<Button icon="EditOutline" label={t('label.edit')} onClick={onEdit} />
 						)}
 					</Row>

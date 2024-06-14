@@ -15,16 +15,5 @@ module.exports = {
 		'@babel/preset-react',
 		'@babel/preset-typescript'
 	],
-	plugins: [
-		'babel-plugin-styled-components',
-		[
-			'i18next-extract',
-			{
-				outputPath: 'translations/{{ns}}.json',
-				defaultNS: 'en',
-				jsonSpace: 4,
-				defaultContexts: []
-			}
-		]
-	]
+	plugins: ['babel-plugin-styled-components']
 };

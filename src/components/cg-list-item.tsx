@@ -79,8 +79,8 @@ export const CGListItem = React.memo<CGListItemProps>(
 										<Text overflow="ellipsis" size="small" color={'gray1'}>
 											{t('contactGroupList.addressCount', {
 												count: members.length,
-												defaultValue: '{{count}} address',
-												defaultValue_plural: `{{count}} addresses`
+												defaultValue_one: '{{count}} address',
+												defaultValue_other: `{{count}} addresses`
 											})}
 										</Text>
 									</Container>

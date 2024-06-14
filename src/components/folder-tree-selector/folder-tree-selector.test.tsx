@@ -11,12 +11,12 @@ import { FolderTreeSelector, FolderTreeSelectorProps } from './folder-tree-selec
 import { FOLDER_VIEW } from '../../carbonio-ui-commons/constants';
 import {
 	getFolderOwnerAccountName,
+	isRoot,
 	isTrash,
 	isTrashed
 } from '../../carbonio-ui-commons/helpers/folders';
 import {
 	getFolder,
-	getFoldersArray,
 	getFoldersArrayByRoot,
 	getRootsMap
 } from '../../carbonio-ui-commons/store/zustand/folder';
@@ -24,6 +24,7 @@ import { FOLDERS } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui-
 import { populateFoldersStore } from '../../carbonio-ui-commons/test/mocks/store/folders';
 import { makeListItemsVisible, setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { isEmailedContacts } from '../../helpers/folders';
+import { getFoldersArray } from '../../tests/utils';
 
 describe('Folder selector', () => {
 	test('The selector is visible', () => {
@@ -220,7 +221,7 @@ describe('Folder selector', () => {
 
 			// Cycle through all the roots, except for the primary account root
 			Object.keys(roots)
-				.filter((rootId) => rootId !== FOLDERS.USER_ROOT)
+				.filter((rootId) => !isRoot(rootId))
 				.forEach((rootId) => {
 					const ownerAccountName = getFolderOwnerAccountName(rootId, roots);
 					expect(screen.queryByText(ownerAccountName)).not.toBeInTheDocument();

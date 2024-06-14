@@ -10,9 +10,9 @@ import {
 	Divider,
 	Input,
 	InputProps,
-	ModalBody,
 	ModalFooter,
 	ModalHeader,
+	Padding,
 	useSnackbar
 } from '@zextras/carbonio-design-system';
 import { FOLDERS } from '@zextras/carbonio-shell-ui';
@@ -111,7 +111,7 @@ export const AddressBookCreateModal = ({
 		<>
 			<ModalHeader title={modalTitle} onClose={onClose} showCloseIcon />
 			<Divider />
-			<ModalBody>
+			<Padding vertical={'medium'}>
 				<Container
 					gap={'0.5rem'}
 					mainAlignment={'flex-start'}
@@ -128,14 +128,14 @@ export const AddressBookCreateModal = ({
 					<FolderTreeSelector
 						selectedFolderId={parentAddressBook?.id}
 						onFolderSelected={onParentAddressBookSelected}
-						showSharedAccounts={false}
+						showSharedAccounts
 						showTrashFolder={false}
 						showLinkedFolders
 						allowRootSelection
 						allowFolderCreation={false}
 					/>
 				</Container>
-			</ModalBody>
+			</Padding>
 			<Divider />
 			<ModalFooter
 				confirmLabel={confirmLabel}

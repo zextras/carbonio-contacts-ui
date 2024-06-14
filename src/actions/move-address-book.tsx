@@ -9,7 +9,7 @@ import { useModal, useSnackbar } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
 import { UIAction } from './types';
-import { isSystemFolder, isWriteAllowed } from '../carbonio-ui-commons/helpers/folders';
+import { isLink, isSystemFolder, isWriteAllowed } from '../carbonio-ui-commons/helpers/folders';
 import { Folder } from '../carbonio-ui-commons/types/folder';
 import { AddressBookMoveModal } from '../components/modals/address-book-move';
 import { ACTION_IDS, TIMEOUTS } from '../constants';
@@ -76,7 +76,7 @@ export const useActionMoveAddressBook = (): MoveAddressBookAction => {
 				return false;
 			}
 
-			if (addressBook.isLink) {
+			if (isLink(addressBook)) {
 				return false;
 			}
 

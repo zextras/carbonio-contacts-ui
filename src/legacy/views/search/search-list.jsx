@@ -80,8 +80,8 @@ const SearchList = ({
 							? t('title.advanced_filters', 'Advanced Filters')
 							: t('label.advanced_filter', {
 									count: filterCount,
-									defaultValue: '{{count}} Advanced Filter',
-									defaultValue_plural: '"{{count}} Advanced Filters'
+									defaultValue_one: '{{count}} Advanced Filter',
+									defaultValue_other: '"{{count}} Advanced Filters'
 								})
 					}
 					icon="Options2Outline"
