@@ -43,7 +43,7 @@ const normalizeResponse = (
 	return map(
 		shares,
 		(share): ShareInfo => ({
-			folderId: share.folderId,
+			folderId: `${share.folderId}`, // Temporary workaround for IRIS-5125
 			folderPath: share.folderPath,
 			folderUuid: share.folderUuid,
 			granteeType: share.granteeType,

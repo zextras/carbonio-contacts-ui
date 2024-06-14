@@ -5,7 +5,7 @@
  */
 import React, { lazy, Suspense, useEffect } from 'react';
 
-import { ModalManager } from '@zextras/carbonio-design-system';
+import { ModalManager, useSnackbar } from '@zextras/carbonio-design-system';
 import {
 	ACTION_TYPES,
 	addBoard,
@@ -13,8 +13,10 @@ import {
 	addRoute,
 	addSearchView,
 	addSettingsView,
+	AnyFunction,
 	registerActions,
 	registerComponents,
+	registerFunctions,
 	SearchViewProps,
 	SecondaryBarComponentProps,
 	Spinner
@@ -33,9 +35,8 @@ import {
 } from './constants';
 import { useNavigation } from './hooks/useNavigation';
 import { ContactInputIntegrationWrapper } from './legacy/integrations/contact-input-integration-wrapper';
+import createContactIntegration from './legacy/integrations/create-contact';
 import { StoreProvider } from './legacy/store/redux';
-import { SidebarProps } from './legacy/types/views/sidebar';
-import SidebarItems from './legacy/views/secondary-bar/sidebar';
 import { SyncDataHandler } from './legacy/views/secondary-bar/sync-data-handler';
 
 const LazyAppView = lazy(
@@ -44,6 +45,13 @@ const LazyAppView = lazy(
 const LazySecondaryBarView = lazy(
 	() => import(/* webpackChunkName: "secondaryBarView" */ './views/SecondaryBarView')
 );
+const LazyLegacySecondaryBarView = lazy(
+	() =>
+		import(
+			/* webpackChunkName: "legacySecondaryBarView" */ './legacy/views/secondary-bar/secondary-bar-view'
+		)
+);
+
 const LazyGroupsAppView = lazy(
 	() => import(/* webpackChunkName: "groupsAppView" */ './views/GroupsAppView')
 );
@@ -148,11 +156,11 @@ const SearchView = (props: SearchViewProps): React.JSX.Element => (
 	</Suspense>
 );
 
-const SidebarView = (props: SidebarProps): React.JSX.Element => (
+const LegacySecondaryBarView = (props: SecondaryBarComponentProps): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
 		<StoreProvider>
 			<ModalManager>
-				<SidebarItems {...props} />
+				<LazyLegacySecondaryBarView {...props} />
 			</ModalManager>
 		</StoreProvider>
 	</Suspense>
@@ -161,6 +169,7 @@ const SidebarView = (props: SidebarProps): React.JSX.Element => (
 const App = (): React.JSX.Element => {
 	const [t] = useTranslation();
 	const { navigateTo } = useNavigation();
+	const createSnackbar = useSnackbar();
 
 	useEffect(() => {
 		addRoute({
@@ -169,7 +178,7 @@ const App = (): React.JSX.Element => {
 			visible: true,
 			label: t('label.app_name', 'Contacts'),
 			primaryBar: 'ContactsModOutline',
-			secondaryBar: SidebarView,
+			secondaryBar: LegacySecondaryBarView,
 			appView: AppView
 		});
 		addRoute({
@@ -258,7 +267,11 @@ const App = (): React.JSX.Element => {
 				})
 			}
 		);
-	}, [navigateTo, t]);
+		registerFunctions({
+			id: 'create_contact_from_vcard',
+			fn: createContactIntegration(createSnackbar, t) as AnyFunction
+		});
+	}, [createSnackbar, navigateTo, t]);
 
 	useFoldersController(FOLDER_VIEW.contact);
 
