@@ -53,8 +53,8 @@ export function deletePermanently({ ids, t, dispatch, createSnackbar, createModa
 			const closeModal = createModal({
 				title: t('messages.modal.delete.sure_delete_contact', {
 					count: ids.length,
-					defaultValue: 'Are you sure to permanently delete this contact?',
-					defaultValue_plural: 'Are you sure to permanently delete the selected contacts?'
+					defaultValue_one: 'Are you sure to permanently delete this contact?',
+					defaultValue_other: 'Are you sure to permanently delete the selected contacts?'
 				}),
 				customFooter: (
 					<ModalFooter

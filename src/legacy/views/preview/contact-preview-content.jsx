@@ -160,8 +160,8 @@ function ContactMultiValueField({ type, values, width, defaultType, showIcon }) 
 					'url',
 					t('label.website', {
 						count: values.length,
-						defaultValue: 'website',
-						defaultValue_plural: 'websites'
+						defaultValue_one: 'website',
+						defaultValue_other: 'websites'
 					})
 				];
 			case 'address':
@@ -169,8 +169,8 @@ function ContactMultiValueField({ type, values, width, defaultType, showIcon }) 
 					'address',
 					t('section.title.address', {
 						count: values.length,
-						defaultValue: 'address',
-						defaultValue_plural: 'addresses'
+						defaultValue_one: 'address',
+						defaultValue_other: 'addresses'
 					})
 				];
 			default:

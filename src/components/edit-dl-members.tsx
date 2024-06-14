@@ -142,16 +142,16 @@ export const EditDLMembersComponent = ({
 		if (invalid >= 1 && duplicated === 0) {
 			return t('edit_dl_component.error.invalid_address', {
 				count: invalid,
-				defaultValue: 'Invalid address',
-				defaultValue_plural: 'Invalid addresses'
+				defaultValue_one: 'Invalid address',
+				defaultValue_other: 'Invalid addresses'
 			});
 		}
 
 		if (invalid === 0 && duplicated >= 1) {
 			return t('edit_dl_component.error.duplicated_address', {
 				count: duplicated,
-				defaultValue: 'Address already present',
-				defaultValue_plural: 'Addresses already present'
+				defaultValue_one: 'Address already present',
+				defaultValue_other: 'Addresses already present'
 			});
 		}
 
