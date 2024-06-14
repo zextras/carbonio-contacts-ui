@@ -9,7 +9,7 @@ import { act } from '@testing-library/react';
 
 import { AddressBookMoveModal } from './address-book-move';
 import { isLink, isTrashed } from '../../carbonio-ui-commons/helpers/folders';
-import { getFoldersArray, getRootsArray } from '../../carbonio-ui-commons/store/zustand/folder';
+import { getRootsArray } from '../../carbonio-ui-commons/store/zustand/folder';
 import { FOLDERS } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui-constants';
 import { populateFoldersStore } from '../../carbonio-ui-commons/test/mocks/store/folders';
 import { getMocksContext } from '../../carbonio-ui-commons/test/mocks/utils/mocks-context';
@@ -20,6 +20,7 @@ import {
 	within
 } from '../../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../../constants/tests';
+import { getFoldersArray } from '../../tests/utils';
 
 describe('AddressBookMoveModal', () => {
 	const mocksContext = getMocksContext();

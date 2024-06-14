@@ -9,7 +9,9 @@ import { ErrorSoapResponse, SuccessSoapResponse } from '@zextras/carbonio-shell-
 import { EventEmitter } from 'events';
 import { times } from 'lodash';
 
+import { getFoldersMap } from '../carbonio-ui-commons/store/zustand/folder';
 import { screen, within } from '../carbonio-ui-commons/test/test-setup';
+import { Folder } from '../carbonio-ui-commons/types/folder';
 import { TESTID_SELECTORS } from '../constants/tests';
 import { DistributionList, DistributionListMembersPage } from '../model/distribution-list';
 import { CnItem } from '../network/api/types';
@@ -133,3 +135,5 @@ export function spyUseBoardHooks(updateBoardFn?: jest.Mock, closeBoardFn?: jest.
 		closeBoard: closeBoardFn ?? jest.fn()
 	});
 }
+
+export const getFoldersArray = (): Array<Folder> => Object.values(getFoldersMap());

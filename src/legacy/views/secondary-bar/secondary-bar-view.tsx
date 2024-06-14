@@ -78,7 +78,7 @@ const folderIconName: Record<number, string> = {
  * Item component for the collapsed secondary bar
  * @param folder
  */
-export const CollapsedSideBarItems = ({ folder }: { folder: Folder }): React.JSX.Element => {
+const CollapsedSideBarItems = ({ folder }: { folder: Folder }): React.JSX.Element => {
 	const [t] = useTranslation();
 
 	const folderIcon = useMemo(() => {
