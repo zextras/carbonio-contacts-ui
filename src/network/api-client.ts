@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
+import { createContactFromVcard } from './api/create-contact';
 import { createContactGroup } from './api/create-contact-group';
 import { createFolder } from './api/create-folder';
 import { createMountpoints } from './api/create-mountpoints';
@@ -53,5 +54,6 @@ export const apiClient = {
 	sendShareNotification,
 	updateFolder,
 	createFolder,
-	getItem
+	getItem,
+	createContactFromVcard
 };

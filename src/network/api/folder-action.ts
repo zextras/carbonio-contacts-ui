@@ -43,6 +43,7 @@ export interface FolderActionRequest extends GenericSoapPayload<typeof NAMESPACE
 		recursive?: boolean;
 		color?: number;
 		zid?: string;
+		type?: string;
 	};
 }
 
@@ -66,6 +67,7 @@ export type FolderActionParams = {
 	granteeId?: string;
 	name?: string;
 	color?: number;
+	type?: string;
 };
 
 /**
@@ -84,7 +86,8 @@ export const folderAction = (params: FolderActionParams): Promise<void> => {
 			...(params.recursive !== undefined && { recursive: params.recursive }),
 			...(params.name !== undefined && { name: params.name }),
 			...(params.color !== undefined && { color: params.color }),
-			...(params.granteeId !== undefined && { zid: params.granteeId })
+			...(params.granteeId !== undefined && { zid: params.granteeId }),
+			...(params.type !== undefined && { type: params.type })
 		},
 		_jsns: NAMESPACES.mail
 	};
