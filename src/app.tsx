@@ -5,7 +5,7 @@
  */
 import React, { lazy, Suspense, useEffect } from 'react';
 
-import { ModalManager } from '@zextras/carbonio-design-system';
+import { ModalManager, useSnackbar } from '@zextras/carbonio-design-system';
 import {
 	ACTION_TYPES,
 	addBoard,
@@ -13,8 +13,10 @@ import {
 	addRoute,
 	addSearchView,
 	addSettingsView,
+	AnyFunction,
 	registerActions,
 	registerComponents,
+	registerFunctions,
 	SearchViewProps,
 	SecondaryBarComponentProps,
 	Spinner
@@ -33,6 +35,7 @@ import {
 } from './constants';
 import { useNavigation } from './hooks/useNavigation';
 import { ContactInputIntegrationWrapper } from './legacy/integrations/contact-input-integration-wrapper';
+import createContactIntegration from './legacy/integrations/create-contact';
 import { StoreProvider } from './legacy/store/redux';
 import { SyncDataHandler } from './legacy/views/secondary-bar/sync-data-handler';
 
@@ -166,6 +169,7 @@ const LegacySecondaryBarView = (props: SecondaryBarComponentProps): React.JSX.El
 const App = (): React.JSX.Element => {
 	const [t] = useTranslation();
 	const { navigateTo } = useNavigation();
+	const createSnackbar = useSnackbar();
 
 	useEffect(() => {
 		addRoute({
@@ -263,7 +267,11 @@ const App = (): React.JSX.Element => {
 				})
 			}
 		);
-	}, [navigateTo, t]);
+		registerFunctions({
+			id: 'create_contact_from_vcard',
+			fn: createContactIntegration(createSnackbar, t) as AnyFunction
+		});
+	}, [createSnackbar, navigateTo, t]);
 
 	useFoldersController(FOLDER_VIEW.contact);
 
