@@ -16,6 +16,7 @@ import {
 	getFailOnConsoleDefaultConfig
 } from './src/carbonio-ui-commons/test/jest-setup';
 import { JEST_MOCKED_ERROR } from './src/constants/tests';
+import * as downloadModule from './src/helpers/download';
 
 configure({
 	asyncUtilTimeout: 2000
@@ -32,6 +33,7 @@ failOnConsole({
 beforeAll(() => {
 	defaultBeforeAllTests();
 	fetchMock.doMock();
+	jest.spyOn(downloadModule, 'redirectToBlob').mockImplementation(() => {});
 });
 
 beforeEach(() => {

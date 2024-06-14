@@ -28,7 +28,8 @@ export const ACTION_IDS = {
 	exportAddressBook: 'export-address-book-action',
 	importContacts: 'import-contacts-action',
 	showShareInfo: 'show-share-info-action',
-	moveContact: 'move-contact-action'
+	moveContact: 'move-contact-action',
+	exportContact: 'export-contact-action'
 } as const;
 
 export const NEW_CONTACT_GROUP_BOARD_ID = 'new-contact-group-board';

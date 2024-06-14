@@ -11,7 +11,7 @@ import { times } from 'lodash';
 
 import { getFoldersMap } from '../carbonio-ui-commons/store/zustand/folder';
 import { screen, within } from '../carbonio-ui-commons/test/test-setup';
-import { Folder } from '../carbonio-ui-commons/types';
+import { Folder } from '../carbonio-ui-commons/types/folder';
 import { TESTID_SELECTORS } from '../constants/tests';
 import { DistributionList, DistributionListMembersPage } from '../model/distribution-list';
 import { CnItem } from '../network/api/types';
