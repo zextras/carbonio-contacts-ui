@@ -5,23 +5,22 @@
  */
 import React from 'react';
 
-import { Text, useModal, useSnackbar } from '@zextras/carbonio-design-system';
+import { ModalFooter, Text, useModal, useSnackbar } from '@zextras/carbonio-design-system';
 import { getAction, FOLDERS, useTags, replaceHistory } from '@zextras/carbonio-shell-ui';
 import { compact, isEmpty } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { applyTag, applyMultiTag, createAndApplyTag } from './tag-actions';
 import { useActionExportContact } from '../../actions/export-contact';
+import { useActionMoveContacts } from '../../actions/move-contacts';
+import { useActionRestoreContacts } from '../../actions/restore-contacts';
+import { isTrash } from '../../carbonio-ui-commons/helpers/folders';
 import { useAppDispatch } from '../hooks/redux';
 import { contactAction } from '../store/actions/contact-action';
-
-// eslint-disable-next-line import/extensions
 import { StoreProvider } from '../store/redux';
 import { FolderActionsType } from '../types/folder';
-import ModalFooter from '../views/contact-actions/commons/modal-footer';
-import MoveModal from '../views/contact-actions/move-modal';
 
-const generateClickableAction = (action, contact) => ({
+const generateClickableAction = (action, params) => ({
 	id: action.id,
 	icon: action.icon,
 	label: action.label,
@@ -29,7 +28,7 @@ const generateClickableAction = (action, contact) => ({
 		if (ev) {
 			ev.preventDefault();
 		}
-		action.execute(contact);
+		action.execute(params);
 	}
 });
 
@@ -148,8 +147,8 @@ export function moveToTrash({ ids, t, dispatch, parent, createSnackbar, deselect
 	};
 
 	return {
-		id: parent === FOLDERS.TRASH ? 'deletePermanently' : 'delete',
-		icon: parent === FOLDERS.TRASH ? 'DeletePermanentlyOutline' : 'Trash2Outline',
+		id: isTrash(parent) ? 'deletePermanently' : 'delete',
+		icon: isTrash(parent) ? 'DeletePermanentlyOutline' : 'Trash2Outline',
 		label: t('label.delete', 'Delete'),
 		onClick: (ev) => {
 			if (ev) ev.preventDefault();
@@ -158,8 +157,8 @@ export function moveToTrash({ ids, t, dispatch, parent, createSnackbar, deselect
 				contactAction({
 					contactsIDs: ids,
 					originID: parent,
-					destinationID: parent === FOLDERS.TRASH ? undefined : FOLDERS.TRASH,
-					op: parent === FOLDERS.TRASH ? FolderActionsType.DELETE : FolderActionsType.MOVE
+					destinationID: isTrash(parent) ? undefined : FOLDERS.TRASH,
+					op: isTrash(parent) ? FolderActionsType.DELETE : FolderActionsType.MOVE
 				})
 			).then((res) => {
 				deselectAll && deselectAll();
@@ -189,35 +188,6 @@ export function moveToTrash({ ids, t, dispatch, parent, createSnackbar, deselect
 	};
 }
 
-export function moveContact(contact, folderId, t, dispatch, parent, createModal, createSnackbar) {
-	return {
-		id: contact.parent === FOLDERS.TRASH ? 'restore' : 'move',
-		icon: contact.parent === FOLDERS.TRASH ? 'RestoreOutline' : 'MoveOutline',
-		label:
-			contact.parent === FOLDERS.TRASH ? t('label.restore', 'Restore') : t('label.move', 'Move'),
-		onClick: (ev) => {
-			if (ev) ev.preventDefault();
-			const closeModal = createModal(
-				{
-					children: (
-						<StoreProvider>
-							<MoveModal
-								contact={contact}
-								onClose={() => closeModal()}
-								contactId={contact.id}
-								originID={contact.parent}
-								folderId={folderId}
-								createSnackbar={createSnackbar}
-							/>
-						</StoreProvider>
-					)
-				},
-				true
-			);
-		}
-	};
-}
-
 export const useContextActions = (folderId) => {
 	const [t] = useTranslation();
 	const dispatch = useAppDispatch();
@@ -225,11 +195,15 @@ export const useContextActions = (folderId) => {
 	const createModal = useModal();
 	const tags = useTags();
 	const exportAction = useActionExportContact();
+	const moveAction = useActionMoveContacts();
+	const restoreAction = useActionRestoreContacts();
 
 	switch (folderId) {
 		case FOLDERS.TRASH:
 			return (contact) => [
-				moveContact(contact, folderId, t, dispatch, contact.parent, createModal, createSnackbar),
+				...(restoreAction.canExecute({ contacts: [contact] })
+					? [generateClickableAction(restoreAction, { contacts: [contact] })]
+					: []),
 				deletePermanently({
 					ids: [contact.id],
 					t,
@@ -253,7 +227,9 @@ export const useContextActions = (folderId) => {
 						replaceHistory
 					}),
 					mailToContact(contact, t),
-					moveContact(contact, folderId, t, dispatch, contact.parent, createModal, createSnackbar),
+					...(moveAction.canExecute({ contacts: [contact] })
+						? [generateClickableAction(moveAction, { contacts: [contact] })]
+						: []),
 					...(exportAction.canExecute(contact)
 						? [generateClickableAction(exportAction, contact)]
 						: []),
@@ -262,18 +238,20 @@ export const useContextActions = (folderId) => {
 	}
 };
 
-export const hoverActions = ({
-	folderId,
-	t,
-	dispatch,
-	replaceHistory,
-	createSnackbar,
-	createModal
-}) => {
+export const useHoverActions = (folderId) => {
+	const [t] = useTranslation();
+	const dispatch = useAppDispatch();
+	const createSnackbar = useSnackbar();
+	const createModal = useModal();
+	const moveAction = useActionMoveContacts();
+	const restoreAction = useActionRestoreContacts();
+
 	switch (folderId) {
 		case FOLDERS.TRASH:
 			return (contact) => [
-				moveContact(contact, folderId, t, dispatch, contact.parent, createModal, createSnackbar),
+				...(restoreAction.canExecute({ contacts: [contact] })
+					? [generateClickableAction(restoreAction, { contacts: [contact] })]
+					: []),
 				deletePermanently({
 					ids: [contact.id],
 					t,
@@ -295,7 +273,9 @@ export const hoverActions = ({
 						replaceHistory
 					}),
 					mailToContact(contact, t),
-					moveContact(contact, folderId, t, dispatch, contact.parent, createModal, createSnackbar)
+					...(moveAction.canExecute({ contacts: [contact] })
+						? [generateClickableAction(moveAction, { contacts: [contact] })]
+						: [])
 				]);
 	}
 };

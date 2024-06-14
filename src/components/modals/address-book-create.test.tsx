@@ -10,7 +10,7 @@ import { act, waitFor } from '@testing-library/react';
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 
 import { AddressBookCreateModal } from './address-book-create';
-import { isTrashed } from '../../carbonio-ui-commons/helpers/folders';
+import { isLink, isTrashed } from '../../carbonio-ui-commons/helpers/folders';
 import { getRootsArray } from '../../carbonio-ui-commons/store/zustand/folder';
 import { FOLDERS } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui-constants';
 import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
@@ -112,7 +112,7 @@ describe('AddressBookCreateModal', () => {
 		it('should also display the linked folders', () => {
 			populateFoldersStore();
 			const linkedFolder = getFoldersArray().find(
-				(folder) => folder.view === 'contact' && folder.isLink
+				(folder) => folder.view === 'contact' && isLink(folder)
 			);
 			if (!linkedFolder) {
 				return;

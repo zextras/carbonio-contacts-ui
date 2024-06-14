@@ -7,7 +7,7 @@
 import { FOLDERS, ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-shell-ui';
 import { sortBy } from 'lodash';
 
-import { getFolderIdParts, isA } from '../carbonio-ui-commons/helpers/folders';
+import { getFolderIdParts, isA, isLink, isRoot } from '../carbonio-ui-commons/helpers/folders';
 import type { Folder } from '../carbonio-ui-commons/types/folder';
 
 /**
@@ -24,9 +24,13 @@ export const isEmailedContacts = (folderId: string): boolean =>
 	isA(folderId, FOLDERS.AUTO_CONTACTS);
 
 export const getSortCriteria = (folder: Folder): string => {
-	const { id } = getFolderIdParts(folder.id);
+	const { id, zid } = getFolderIdParts(folder.id);
 
-	if (folder.isLink) {
+	if (isRoot(folder.id)) {
+		return zid === null ? `0100` : `0500-${folder.name.toLowerCase()}`;
+	}
+
+	if (isLink(folder)) {
 		return `5000-${folder.name.toLowerCase()}`;
 	}
 
@@ -60,13 +64,8 @@ export const sortFolders = (
 };
 
 export const getFolderIconName = (folder: Folder): string | null => {
-	if (folder.id === 'shares' || folder.isLink) {
-		return 'SharedAddressBookOutline';
-	}
-
 	const { id } = getFolderIdParts(folder.id);
-
-	if (id === FOLDERS.USER_ROOT) {
+	if (id && isRoot(id)) {
 		return null;
 	}
 

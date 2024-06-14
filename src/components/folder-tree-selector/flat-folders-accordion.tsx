@@ -21,13 +21,13 @@ import {
 	Text,
 	Tooltip
 } from '@zextras/carbonio-design-system';
-import { FOLDERS, useUserAccount } from '@zextras/carbonio-shell-ui';
+import { useUserAccount } from '@zextras/carbonio-shell-ui';
 import { noop } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { StaticBreadcrumbs } from '../../carbonio-ui-commons/components/breadcrumbs/static-breadcrumbs';
-import { isRoot } from '../../carbonio-ui-commons/helpers/folders';
+import { isDefaultAccountRoot, isRoot } from '../../carbonio-ui-commons/helpers/folders';
 import { Folder } from '../../carbonio-ui-commons/types/folder';
 import { getFolderIconColor, getFolderIconName } from '../../helpers/folders';
 import { getFolderTranslatedName } from '../../legacy/utils/helpers';
@@ -173,7 +173,7 @@ const FlatFoldersAccordionRoot: FC<FlatFoldersAccordionRootProps> = ({
 	const [open, setOpen] = useState(isOpen);
 	const account = useUserAccount();
 
-	const rootLabel = folder.id === FOLDERS.USER_ROOT ? account.name : folder.name;
+	const rootLabel = isDefaultAccountRoot(folder.id) ? account.name : folder.name;
 	const toggleOpen = useCallback(
 		(e: KeyboardEvent | React.SyntheticEvent) => {
 			e.stopPropagation();

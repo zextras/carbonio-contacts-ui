@@ -159,9 +159,6 @@ export const getFolderTranslatedName = (
 	const id = folderIdRegex.exec(folderId ?? '')?.[2];
 	let translationKey;
 	switch (id) {
-		case FOLDERS.USER_ROOT:
-			translationKey = 'root';
-			break;
 		case FOLDERS.CONTACTS:
 			translationKey = 'contacts';
 			break;

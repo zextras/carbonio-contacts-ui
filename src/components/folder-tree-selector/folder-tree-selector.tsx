@@ -5,15 +5,20 @@
  */
 import React, { ChangeEvent, useMemo, useState } from 'react';
 
-import { Button, Container, Input, Padding } from '@zextras/carbonio-design-system';
-import { FOLDERS } from '@zextras/carbonio-shell-ui';
+import { Button, Container, Input } from '@zextras/carbonio-design-system';
 import { TFunction } from 'i18next';
 import { filter, startsWith } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { FlatFoldersAccordion } from './flat-folders-accordion';
-import { isRoot, isTrash, isTrashed } from '../../carbonio-ui-commons/helpers/folders';
+import {
+	isDefaultAccountRoot,
+	isLink,
+	isRoot,
+	isTrash,
+	isTrashed
+} from '../../carbonio-ui-commons/helpers/folders';
 import { useFolder, useRootsArray } from '../../carbonio-ui-commons/store/zustand/folder';
 import { Folder } from '../../carbonio-ui-commons/types/folder';
 import { sortFolders } from '../../helpers/folders';
@@ -54,19 +59,18 @@ const flattenFolders = (
 			return;
 		}
 
-		if (options?.showLinkedFolders === false && folder.isLink === true) {
+		if (options?.showLinkedFolders === false && isLink(folder)) {
 			return;
 		}
 
-		if (options?.excludeIds && options?.excludeIds.includes(folder.id)) {
-			return;
+		if (!options?.excludeIds || !options?.excludeIds.includes(folder.id)) {
+			result.push({
+				...folder,
+				name: getFolderTranslatedName(t, folder.id, folder.name),
+				children: []
+			});
 		}
 
-		result.push({
-			...folder,
-			name: getFolderTranslatedName(t, folder.id, folder.name),
-			children: []
-		});
 		folder.children && result.push(...flattenFolders(t, folder.children, options));
 	});
 
@@ -136,7 +140,7 @@ export const FolderTreeSelector = ({
 	const selectedFolder = useFolder(selectedFolderId ?? '');
 	const roots = useRootsArray();
 	const filteredAccountsRoots = useMemo<Array<Folder>>(
-		() => (showSharedAccounts ? roots : roots.filter((root) => root.id === FOLDERS.USER_ROOT)),
+		() => (showSharedAccounts ? roots : roots.filter((root) => isDefaultAccountRoot(root.id))),
 		[roots, showSharedAccounts]
 	);
 
@@ -162,8 +166,8 @@ export const FolderTreeSelector = ({
 				value={inputValue}
 				onChange={(e: ChangeEvent<HTMLInputElement>): void => setInputValue(e.target.value)}
 			/>
-			<Padding vertical="medium" />
 			<ScrollableContainer
+				height={'auto'}
 				orientation="vertical"
 				mainAlignment="flex-start"
 				minHeight="30vh"

@@ -30,12 +30,14 @@ import styled from 'styled-components';
 import { ContactEditorRow, CustomMultivalueField } from './CustomMultivalueField';
 import reducer, { op } from './form-reducer';
 import { FoldersSelector } from '../../../carbonio-ui-commons/components/select/folders-selector';
+import { getFolderIdParts, isRoot, isTrash } from '../../../carbonio-ui-commons/helpers/folders';
+import { useFoldersMap } from '../../../carbonio-ui-commons/store/zustand/folder';
 import { CompactView } from '../../commons/contact-compact-view';
 import { useAppSelector } from '../../hooks/redux';
 import { createContact } from '../../store/actions/create-contact';
 import { modifyContact } from '../../store/actions/modify-contact';
 import { selectContact } from '../../store/selectors/contacts';
-import { selectFolders } from '../../store/selectors/folders';
+import { getFolderTranslatedName } from '../../utils/helpers';
 import { differenceObject } from '../settings/components/utils';
 
 const ItalicText = styled(Text)`
@@ -113,27 +115,30 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 		return differenceObject(compareToContact, updatedContact);
 	}, [compareToContact, contact]);
 
-	const folders = useAppSelector(selectFolders);
+	const folders = useFoldersMap();
+
 	const selectedFolderName = useMemo(() => {
 		const selectedFolder = find(folders, ['id', selectFolderId]);
-		return selectFolderId === FOLDERS.CONTACTS
-			? t('folders.contacts', 'Contacts')
-			: selectedFolder.label;
+		return getFolderTranslatedName(t, selectFolderId, selectedFolder.name);
 	}, [folders, selectFolderId, t]);
 	const folderWithWritePerm = useMemo(
 		() =>
 			filter(
 				folders,
 				(folder) =>
-					(folder.id !== FOLDERS.TRASH && !folder.isShared) ||
-					(folder.perm && folder.perm.indexOf('w') !== -1)
+					!isTrash(folder.id) &&
+					!isRoot(folder.id) &&
+					(!folder.isLink || (folder.perm && folder.perm.indexOf('w') !== -1))
 			),
 		[folders]
 	);
 	const allFolders = useMemo(
 		() =>
 			map(folderWithWritePerm, (item) => ({
-				label: item.id === FOLDERS.CONTACTS ? t('folders.contacts', 'Contacts') : item.label,
+				label:
+					getFolderIdParts(item.id).id === FOLDERS.CONTACTS
+						? t('folders.contacts', 'Contacts')
+						: item.name,
 				value: item.id,
 				color: ZIMBRA_STANDARD_COLORS[item.color || 0].hex
 			})),

@@ -14,9 +14,11 @@ import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import AdvancedFilterModal from './advance-filter-modal';
 import SearchList from './search-list';
 import SearchPanel from './search-panel';
+import { isTrash } from '../../../carbonio-ui-commons/helpers/folders';
+import { useFoldersMap } from '../../../carbonio-ui-commons/store/zustand/folder';
+import { Folder } from '../../../carbonio-ui-commons/types/folder';
+import { usePrefs } from '../../../carbonio-ui-commons/utils/use-prefs';
 import { useUpdateView } from '../../../carbonio-ui-commons/hooks/use-update-view';
-import { useAppSelector } from '../../hooks/redux';
-import { selectFolders } from '../../store/selectors/folders';
 import { Contact } from '../../types/contact';
 import { normalizeContactsFromSoap } from '../../utils/normalizations/normalize-contact-from-soap';
 
@@ -44,21 +46,32 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 	const [t] = useTranslation();
 	const [filterCount, setFilterCount] = useState(0);
 	const [showAdvanceFilters, setShowAdvanceFilters] = useState(false);
-	const [isSharedFolderIncluded, setIsSharedFolderIncluded] = useState(true);
-	const folders = useAppSelector(selectFolders);
+	const { zimbraPrefIncludeTrashInSearch, zimbraPrefIncludeSharedItemsInSearch } = usePrefs();
+	const [includeTrash, includeSharedFolders] = useMemo(
+		() => [
+			zimbraPrefIncludeTrashInSearch === 'TRUE',
+			zimbraPrefIncludeSharedItemsInSearch === 'TRUE'
+		],
+		[zimbraPrefIncludeTrashInSearch, zimbraPrefIncludeSharedItemsInSearch]
+	);
+	const [isSharedFolderIncluded, setIsSharedFolderIncluded] = useState(includeSharedFolders);
+	const folders = useFoldersMap();
 	const searchInFolders = useMemo(
 		() =>
 			reduce(
 				folders,
-				(acc: string[], v, k) => {
-					if (v.isShared || v.perm) {
-						acc.push(v.id);
+				(acc: Array<string>, folder: Folder, folderId: string) => {
+					if (includeTrash && isTrash(folderId)) {
+						acc.push(folderId);
+					}
+					if (folder.perm && !isTrash(folderId)) {
+						acc.push(folderId);
 					}
 					return acc;
 				},
 				[]
 			),
-		[folders]
+		[folders, includeTrash]
 	);
 
 	const foldersToSearchInQuery = useMemo(

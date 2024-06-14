@@ -9,6 +9,7 @@ import { useModal } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
 import { UIAction } from './types';
+import { isLink } from '../carbonio-ui-commons/helpers/folders';
 import { Folder } from '../carbonio-ui-commons/types/folder';
 import { ShareInfoModal } from '../components/modals/share-info-modal';
 import { ACTION_IDS } from '../constants';
@@ -26,7 +27,7 @@ export const useActionShowShareInfo = (): ShowShareInfoAction => {
 				return false;
 			}
 
-			return addressBook.isLink;
+			return isLink(addressBook);
 		},
 		[]
 	);

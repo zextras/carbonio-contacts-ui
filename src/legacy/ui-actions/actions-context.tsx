@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 
 import {
 	useContextActions,
-	hoverActions,
+	useHoverActions,
 	primaryActions,
 	secondaryActions
 } from './contact-actions';
@@ -63,7 +63,8 @@ export const ActionsContextProvider: FC<ACPProps & { selectedContacts: Contact[]
 	const createSnackbar = useSnackbar();
 	const createModal = useModal();
 	const tags = useTags();
-	const contextAction = useContextActions(folderId);
+	const contextActions = useContextActions(folderId);
+	const hoverActions = useHoverActions(folderId);
 
 	const [
 		contextActionsCallback,
@@ -72,16 +73,8 @@ export const ActionsContextProvider: FC<ACPProps & { selectedContacts: Contact[]
 		secondaryActionsCallback
 	] = useMemo(
 		() => [
-			contextAction,
-			hoverActions({
-				folderId,
-				t,
-				dispatch,
-				replaceHistory,
-				createSnackbar,
-				createModal,
-				selectedIds
-			}),
+			contextActions,
+			hoverActions,
 			primaryActions({
 				folderId,
 				t,
@@ -107,7 +100,8 @@ export const ActionsContextProvider: FC<ACPProps & { selectedContacts: Contact[]
 			})
 		],
 		[
-			contextAction,
+			contextActions,
+			hoverActions,
 			folderId,
 			t,
 			dispatch,

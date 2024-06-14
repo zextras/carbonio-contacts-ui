@@ -6,12 +6,12 @@
 import React from 'react';
 
 import { screen } from '@testing-library/react';
-import { FOLDERS } from '@zextras/carbonio-shell-ui';
 
 import { FolderTreeSelector, FolderTreeSelectorProps } from './folder-tree-selector';
 import { FOLDER_VIEW } from '../../carbonio-ui-commons/constants';
 import {
 	getFolderOwnerAccountName,
+	isRoot,
 	isTrash,
 	isTrashed
 } from '../../carbonio-ui-commons/helpers/folders';
@@ -20,6 +20,7 @@ import {
 	getFoldersArrayByRoot,
 	getRootsMap
 } from '../../carbonio-ui-commons/store/zustand/folder';
+import { FOLDERS } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui-constants';
 import { populateFoldersStore } from '../../carbonio-ui-commons/test/mocks/store/folders';
 import { makeListItemsVisible, setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { isEmailedContacts } from '../../helpers/folders';
@@ -220,7 +221,7 @@ describe('Folder selector', () => {
 
 			// Cycle through all the roots, except for the primary account root
 			Object.keys(roots)
-				.filter((rootId) => rootId !== FOLDERS.USER_ROOT)
+				.filter((rootId) => !isRoot(rootId))
 				.forEach((rootId) => {
 					const ownerAccountName = getFolderOwnerAccountName(rootId, roots);
 					expect(screen.queryByText(ownerAccountName)).not.toBeInTheDocument();
