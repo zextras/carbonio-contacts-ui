@@ -11,7 +11,7 @@ import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 
 import { AddressBookCreateModal } from './address-book-create';
 import { isTrashed } from '../../carbonio-ui-commons/helpers/folders';
-import { getFoldersArray, getRootsArray } from '../../carbonio-ui-commons/store/zustand/folder';
+import { getRootsArray } from '../../carbonio-ui-commons/store/zustand/folder';
 import { FOLDERS } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui-constants';
 import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { populateFoldersStore } from '../../carbonio-ui-commons/test/mocks/store/folders';
@@ -19,6 +19,7 @@ import { makeListItemsVisible, screen, setupTest } from '../../carbonio-ui-commo
 import { NAMESPACES } from '../../constants/api';
 import { TESTID_SELECTORS } from '../../constants/tests';
 import { CreateFolderRequest, CreateFolderResponse } from '../../network/api/create-folder';
+import { getFoldersArray } from '../../tests/utils';
 
 describe('AddressBookCreateModal', () => {
 	it('should display a modal with a specific title', () => {
