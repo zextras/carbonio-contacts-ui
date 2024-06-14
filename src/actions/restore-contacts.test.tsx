@@ -10,13 +10,13 @@ import { times } from 'lodash';
 import { useActionRestoreContacts } from './restore-contacts';
 import { UIAction } from './types';
 import { getFolderIdParts } from '../carbonio-ui-commons/helpers/folders';
-import { getFoldersArray } from '../carbonio-ui-commons/store/zustand/folder';
 import { FOLDERS } from '../carbonio-ui-commons/test/mocks/carbonio-shell-ui-constants';
 import { populateFoldersStore } from '../carbonio-ui-commons/test/mocks/store/folders';
 import { setupHook, screen } from '../carbonio-ui-commons/test/test-setup';
 import { FOLDERS_DESCRIPTORS, TIMERS } from '../constants/tests';
 import { Contact } from '../legacy/types/contact';
 import { buildContact } from '../tests/model-builder';
+import { getFoldersArray } from '../tests/utils';
 
 describe('useActionRestoreContacts', () => {
 	it('should return an object with the specific data', () => {

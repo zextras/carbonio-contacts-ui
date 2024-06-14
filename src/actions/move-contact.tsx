@@ -118,7 +118,7 @@ export const useActionMoveContact = (): MoveContactAction => {
 
 	return useMemo(
 		() => ({
-			id: ACTION_IDS.moveContact,
+			id: ACTION_IDS.moveContacts,
 			label: t('label.move', 'Move'),
 			icon: 'MoveOutline',
 			execute,

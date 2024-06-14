@@ -10,7 +10,7 @@ import { times } from 'lodash';
 
 import { ContactMoveModal } from './contact-move';
 import { isLink, isTrashed } from '../../carbonio-ui-commons/helpers/folders';
-import { getFoldersArray, getRootsArray } from '../../carbonio-ui-commons/store/zustand/folder';
+import { getRootsArray } from '../../carbonio-ui-commons/store/zustand/folder';
 import { FOLDERS } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui-constants';
 import { populateFoldersStore } from '../../carbonio-ui-commons/test/mocks/store/folders';
 import {
@@ -21,6 +21,7 @@ import {
 } from '../../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../../constants/tests';
 import { buildContact } from '../../tests/model-builder';
+import { getFoldersArray } from '../../tests/utils';
 
 describe('ContactMoveModal', () => {
 	describe('Move mode', () => {
