@@ -76,6 +76,7 @@ describe('Edit view', () => {
 	});
 
 	it('should call the onTitleChanged callback if the title is changed', async () => {
+		populateFoldersStore();
 		const firstName = faker.person.firstName();
 		const store = generateStore();
 		const onTitleChanged = jest.fn();
@@ -110,6 +111,7 @@ describe('Edit view', () => {
 	});
 
 	it('should call the onClose callback if the contacts is successfully saved', async () => {
+		populateFoldersStore();
 		registerCreateContactHandler();
 		const store = generateStore();
 		const onClose = jest.fn();

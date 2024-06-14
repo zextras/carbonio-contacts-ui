@@ -30,7 +30,7 @@ describe('useActionMoveContact', () => {
 			expect.objectContaining({
 				icon: 'MoveOutline',
 				label: 'Move',
-				id: 'move-contact-action'
+				id: 'move-contacts-action'
 			})
 		);
 	});

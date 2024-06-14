@@ -9,12 +9,14 @@ import { faker } from '@faker-js/faker';
 
 import EditViewBoardWrapper from './edit-view-board-wrapper';
 import { useBoardHooks } from '../../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
+import { populateFoldersStore } from '../../../carbonio-ui-commons/test/mocks/store/folders';
 import { screen, setupTest } from '../../../carbonio-ui-commons/test/test-setup';
 import { generateStore } from '../../tests/generators/store';
 import { registerCreateContactHandler } from '../../tests/msw/create-contact';
 
 describe('EditViewBoardWrapper', () => {
 	it('should display the editor', () => {
+		populateFoldersStore();
 		const store = generateStore();
 		useBoardHooks.mockReturnValue({ updateBoard: jest.fn(), closeBoard: jest.fn() });
 		setupTest(<EditViewBoardWrapper />, { store });
@@ -22,6 +24,7 @@ describe('EditViewBoardWrapper', () => {
 	});
 
 	it('should update the board title if the user changes the title of the editor', () => {
+		populateFoldersStore();
 		const store = generateStore();
 		const updateBoard = jest.fn();
 		const closeBoard = jest.fn();
@@ -31,6 +34,7 @@ describe('EditViewBoardWrapper', () => {
 	});
 
 	it('should close the board if the user successfully saves the contact', async () => {
+		populateFoldersStore();
 		registerCreateContactHandler();
 		const store = generateStore();
 		const updateBoard = jest.fn();

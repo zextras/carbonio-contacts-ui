@@ -31,7 +31,7 @@ import { ContactEditorRow, CustomMultivalueField } from './CustomMultivalueField
 import reducer, { op } from './form-reducer';
 import { FoldersSelector } from '../../../carbonio-ui-commons/components/select/folders-selector';
 import { getFolderIdParts, isRoot, isTrash } from '../../../carbonio-ui-commons/helpers/folders';
-import { useFoldersArray } from '../../../carbonio-ui-commons/store/zustand/folder';
+import { useFoldersMap } from '../../../carbonio-ui-commons/store/zustand/folder';
 import { CompactView } from '../../commons/contact-compact-view';
 import { useAppSelector } from '../../hooks/redux';
 import { createContact } from '../../store/actions/create-contact';
@@ -115,7 +115,7 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 		return differenceObject(compareToContact, updatedContact);
 	}, [compareToContact, contact]);
 
-	const folders = useFoldersArray();
+	const folders = useFoldersMap();
 
 	const selectedFolderName = useMemo(() => {
 		const selectedFolder = find(folders, ['id', selectFolderId]);
