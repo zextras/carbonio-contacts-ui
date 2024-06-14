@@ -30,7 +30,12 @@ import styled from 'styled-components';
 import { ContactEditorRow, CustomMultivalueField } from './CustomMultivalueField';
 import reducer, { op } from './form-reducer';
 import { FoldersSelector } from '../../../carbonio-ui-commons/components/select/folders-selector';
-import { getFolderIdParts, isRoot, isTrash } from '../../../carbonio-ui-commons/helpers/folders';
+import {
+	getFolderIdParts,
+	isRoot,
+	isSharedAccountFolder,
+	isTrash
+} from '../../../carbonio-ui-commons/helpers/folders';
 import { useFoldersMap } from '../../../carbonio-ui-commons/store/zustand/folder';
 import { CompactView } from '../../commons/contact-compact-view';
 import { useAppSelector } from '../../hooks/redux';
@@ -128,6 +133,7 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 				(folder) =>
 					!isTrash(folder.id) &&
 					!isRoot(folder.id) &&
+					!isSharedAccountFolder(folder.id) &&
 					(!folder.isLink || (folder.perm && folder.perm.indexOf('w') !== -1))
 			),
 		[folders]

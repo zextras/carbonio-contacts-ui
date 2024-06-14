@@ -15,10 +15,10 @@ import AdvancedFilterModal from './advance-filter-modal';
 import SearchList from './search-list';
 import SearchPanel from './search-panel';
 import { isTrash } from '../../../carbonio-ui-commons/helpers/folders';
+import { useUpdateView } from '../../../carbonio-ui-commons/hooks/use-update-view';
 import { useFoldersMap } from '../../../carbonio-ui-commons/store/zustand/folder';
 import { Folder } from '../../../carbonio-ui-commons/types/folder';
 import { usePrefs } from '../../../carbonio-ui-commons/utils/use-prefs';
-import { useUpdateView } from '../../../carbonio-ui-commons/hooks/use-update-view';
 import { Contact } from '../../types/contact';
 import { normalizeContactsFromSoap } from '../../utils/normalizations/normalize-contact-from-soap';
 
