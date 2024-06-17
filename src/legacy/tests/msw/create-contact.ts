@@ -5,22 +5,21 @@
  */
 
 import { faker } from '@faker-js/faker';
-import { SoapResponse } from '@zextras/carbonio-shell-ui';
+import { JSNS, SoapResponse } from '@zextras/carbonio-shell-ui';
 import { http, HttpResponse, HttpResponseResolver } from 'msw';
 
 import { getSetupServer } from '../../../carbonio-ui-commons/test/jest-setup';
-import { NAMESPACES } from '../../../constants/api';
 import { GenericSoapPayload } from '../../../network/api/types';
 import { buildSoapError, buildSoapResponse } from '../../../tests/utils';
 
-interface CreateContactRequest extends GenericSoapPayload<typeof NAMESPACES.mail> {
+interface CreateContactRequest extends GenericSoapPayload<typeof JSNS.mail> {
 	cn: {
 		l: string;
 		a: string;
 	};
 }
 
-interface CreateContactResponse extends GenericSoapPayload<typeof NAMESPACES.mail> {
+interface CreateContactResponse extends GenericSoapPayload<typeof JSNS.mail> {
 	cn: [
 		{
 			l: string;

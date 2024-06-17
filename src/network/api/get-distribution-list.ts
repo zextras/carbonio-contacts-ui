@@ -3,14 +3,13 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { BooleanString, ErrorSoapBodyResponse, soapFetch } from '@zextras/carbonio-shell-ui';
+import { BooleanString, ErrorSoapBodyResponse, JSNS, soapFetch } from '@zextras/carbonio-shell-ui';
 import { filter, first, flatMap } from 'lodash';
 
 import { GenericSoapPayload } from './types';
-import { NAMESPACES } from '../../constants/api';
 import { DistributionList, DistributionListOwner } from '../../model/distribution-list';
 
-export interface GetDistributionListRequest extends GenericSoapPayload<typeof NAMESPACES.account> {
+export interface GetDistributionListRequest extends GenericSoapPayload<typeof JSNS.account> {
 	dl: {
 		by: 'name' | 'id';
 		_content: string;
@@ -18,7 +17,7 @@ export interface GetDistributionListRequest extends GenericSoapPayload<typeof NA
 	needOwners?: boolean;
 }
 
-export interface GetDistributionListResponse extends GenericSoapPayload<typeof NAMESPACES.account> {
+export type GetDistributionListResponse = GenericSoapPayload<typeof JSNS.account> & {
 	dl: Array<{
 		id: string;
 		name: string;
@@ -31,7 +30,7 @@ export interface GetDistributionListResponse extends GenericSoapPayload<typeof N
 			zimbraHideInGal?: BooleanString;
 		};
 	}>;
-}
+};
 
 const normalizeOwners = (
 	response: GetDistributionListResponse['dl'][number]['owners']
@@ -80,7 +79,7 @@ export const getDistributionList = ({
 	return soapFetch<GetDistributionListRequest, GetDistributionListResponse | ErrorSoapBodyResponse>(
 		'GetDistributionList',
 		{
-			_jsns: NAMESPACES.account,
+			_jsns: JSNS.account,
 			dl: request,
 			needOwners: true
 		}

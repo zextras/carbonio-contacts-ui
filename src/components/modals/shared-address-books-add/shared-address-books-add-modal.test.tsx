@@ -18,7 +18,6 @@ import {
 	setupTest,
 	within
 } from '../../../carbonio-ui-commons/test/test-setup';
-import { NAMESPACES } from '../../../constants/api';
 import { TESTID_SELECTORS } from '../../../constants/tests';
 import { CreateMountpointsRequest } from '../../../network/api/create-mountpoints';
 import { GetShareInfoRequest, GetShareInfoResponse } from '../../../network/api/get-share-info';
@@ -46,7 +45,7 @@ const registerDefaultGetShareInfoHandler = (sharesInfo: GetShareInfoResponse['sh
 	// Create an API interceptor that returns the list of shares
 	createSoapAPIInterceptor<GetShareInfoRequest, GetShareInfoResponse>('GetShareInfo', {
 		share: sharesInfo,
-		_jsns: NAMESPACES.account
+		_jsns: JSNS.account
 	});
 };
 

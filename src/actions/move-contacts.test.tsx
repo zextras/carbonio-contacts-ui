@@ -6,7 +6,7 @@
 
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
-import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
+import { ErrorSoapBodyResponse, JSNS } from '@zextras/carbonio-shell-ui';
 import { times } from 'lodash';
 
 import { useActionMoveContacts } from './move-contacts';
@@ -22,7 +22,6 @@ import {
 	makeListItemsVisible,
 	within
 } from '../carbonio-ui-commons/test/test-setup';
-import { NAMESPACES } from '../constants/api';
 import { FOLDERS_DESCRIPTORS, TIMERS } from '../constants/tests';
 import { Contact } from '../legacy/types/contact';
 import { ContactActionRequest } from '../legacy/types/soap';
@@ -208,7 +207,7 @@ describe('useActionMoveContacts', () => {
 						id: contact.id,
 						op: 'move'
 					},
-					_jsns: NAMESPACES.mail
+					_jsns: JSNS.mail
 				};
 
 				createSoapAPIInterceptor<ContactActionRequest, ContactActionResponse>(

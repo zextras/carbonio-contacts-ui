@@ -13,7 +13,6 @@ import {
 	CreateMountpointsResponse
 } from './create-mountpoints';
 import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { NAMESPACES } from '../../constants/api';
 import { ShareInfo } from '../../model/share-info';
 
 describe('createMountpoints', () => {
@@ -59,7 +58,7 @@ describe('createMountpoints', () => {
 						view: 'contact',
 						zid: share.ownerId
 					}),
-					_jsns: NAMESPACES.mail
+					_jsns: 'urn:zimbraMail'
 				})
 			);
 		});

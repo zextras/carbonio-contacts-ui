@@ -3,11 +3,10 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { SoapResponse } from '@zextras/carbonio-shell-ui';
+import { JSNS, SoapResponse } from '@zextras/carbonio-shell-ui';
 import { http, HttpResponse, HttpResponseResolver } from 'msw';
 
 import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
-import { NAMESPACES } from '../../constants/api';
 import { DistributionList } from '../../model/distribution-list';
 import type {
 	GetAccountDistributionListsRequest,
@@ -60,7 +59,7 @@ export const registerGetAccountDistributionListsHandler = (
 			buildSoapResponse<GetAccountDistributionListsResponse>({
 				GetAccountDistributionListsResponse: {
 					dl: dlArray.length > 0 ? dlArray : undefined,
-					_jsns: NAMESPACES.account
+					_jsns: JSNS.account
 				}
 			})
 		);

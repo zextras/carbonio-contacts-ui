@@ -3,15 +3,14 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { ErrorSoapBodyResponse, FOLDERS, soapFetch } from '@zextras/carbonio-shell-ui';
+import { ErrorSoapBodyResponse, FOLDERS, JSNS, soapFetch } from '@zextras/carbonio-shell-ui';
 import { map } from 'lodash';
 
 import { GenericSoapPayload } from './types';
 import { SoapLink } from '../../carbonio-ui-commons/types/folder';
-import { NAMESPACES } from '../../constants/api';
 import { ShareInfo } from '../../model/share-info';
 
-export interface CreateMountpointsRequest extends GenericSoapPayload<typeof NAMESPACES.generic> {
+export type CreateMountpointsRequest = GenericSoapPayload<typeof JSNS.all> & {
 	CreateMountpointRequest: Array<{
 		link: {
 			l: string;
@@ -20,13 +19,13 @@ export interface CreateMountpointsRequest extends GenericSoapPayload<typeof NAME
 			view: 'contact';
 			zid: string;
 		};
-		_jsns: typeof NAMESPACES.mail;
+		_jsns: string;
 	}>;
-}
+};
 
-export interface CreateMountpointsResponse extends GenericSoapPayload<typeof NAMESPACES.generic> {
-	CreateMountpointResponse: Array<{ link: Array<SoapLink & { _jsns: typeof NAMESPACES.mail }> }>;
-}
+export type CreateMountpointsResponse = GenericSoapPayload<typeof JSNS.all> & {
+	CreateMountpointResponse: Array<{ link: Array<SoapLink & { _jsns: typeof JSNS.mail }> }>;
+};
 
 /**
  * Call the API to create mountpoints for the given shares.
@@ -47,9 +46,9 @@ export const createMountpoints = (
 				view: 'contact',
 				zid: share.ownerId
 			},
-			_jsns: NAMESPACES.mail
+			_jsns: 'urn:zimbraMail'
 		})),
-		_jsns: NAMESPACES.generic
+		_jsns: JSNS.all
 	}).then((response) => {
 		if ('Fault' in response) {
 			throw new Error(response.Fault.Reason.Text, { cause: response.Fault });

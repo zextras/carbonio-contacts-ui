@@ -4,10 +4,9 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { ErrorSoapBodyResponse, soapFetch } from '@zextras/carbonio-shell-ui';
+import { ErrorSoapBodyResponse, JSNS, soapFetch } from '@zextras/carbonio-shell-ui';
 
 import { GenericSoapPayload } from './types';
-import { NAMESPACES } from '../../constants/api';
 
 export type FolderActionOperation =
 	| 'read'
@@ -34,7 +33,7 @@ export type FolderActionOperation =
 	| '!disableactivesync'
 	| 'webofflinesyncdays';
 
-export interface FolderActionRequest extends GenericSoapPayload<typeof NAMESPACES.mail> {
+export interface FolderActionRequest extends GenericSoapPayload<typeof JSNS.mail> {
 	action: {
 		id: string;
 		op: FolderActionOperation;
@@ -47,7 +46,7 @@ export interface FolderActionRequest extends GenericSoapPayload<typeof NAMESPACE
 	};
 }
 
-export interface FolderActionResponse extends GenericSoapPayload<typeof NAMESPACES.mail> {
+export type FolderActionResponse = GenericSoapPayload<typeof JSNS.mail> & {
 	action: {
 		zid?: string; // Grantee ID
 		d?: string; // Display name
@@ -57,7 +56,7 @@ export interface FolderActionResponse extends GenericSoapPayload<typeof NAMESPAC
 		nei?: string; // Comma-separated list of non-existent ids (if requested)
 		nci?: string; // Comma-separated list of newly created ids (if requested)
 	};
-}
+};
 
 export type FolderActionParams = {
 	folderId: string;
@@ -89,7 +88,7 @@ export const folderAction = (params: FolderActionParams): Promise<void> => {
 			...(params.granteeId !== undefined && { zid: params.granteeId }),
 			...(params.type !== undefined && { type: params.type })
 		},
-		_jsns: NAMESPACES.mail
+		_jsns: JSNS.mail
 	};
 	return soapFetch<FolderActionRequest, FolderActionResponse | ErrorSoapBodyResponse>(
 		'FolderAction',

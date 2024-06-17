@@ -7,7 +7,7 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
-import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
+import { ErrorSoapBodyResponse, JSNS } from '@zextras/carbonio-shell-ui';
 
 import { useActionMoveAddressBook } from './move-address-book';
 import { UIAction } from './types';
@@ -27,7 +27,6 @@ import {
 	within
 } from '../carbonio-ui-commons/test/test-setup';
 import { AddressBookMoveModal } from '../components/modals/address-book-move';
-import { NAMESPACES } from '../constants/api';
 import { TIMERS } from '../constants/tests';
 import { FolderActionRequest, FolderActionResponse } from '../network/api/folder-action';
 import { getFoldersArray } from '../tests/utils';
@@ -391,7 +390,7 @@ describe('useActionMoveAddressBook', () => {
 					id: addressBook.id,
 					op: 'move'
 				},
-				_jsns: NAMESPACES.mail
+				_jsns: JSNS.mail
 			};
 
 			createSoapAPIInterceptor<FolderActionRequest, FolderActionResponse>('FolderAction', response);
@@ -419,7 +418,7 @@ describe('useActionMoveAddressBook', () => {
 					id: addressBook.id,
 					op: 'move'
 				},
-				_jsns: NAMESPACES.mail
+				_jsns: JSNS.mail
 			};
 
 			createSoapAPIInterceptor<FolderActionRequest, FolderActionResponse>('FolderAction', response);

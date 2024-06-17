@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
+import { ErrorSoapBodyResponse, SoapBody } from '@zextras/carbonio-shell-ui';
+
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: T[SubKey] };
 export type MakeRequired<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
 
@@ -22,3 +24,6 @@ export type OptionalPropertyOf<T extends object> = Exclude<
 	}[keyof T],
 	undefined
 >;
+
+export type SoapFault = ErrorSoapBodyResponse['Fault'];
+export type NameSpace = SoapBody['_jsns'];

@@ -16,7 +16,6 @@ import { FOLDERS } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui-
 import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { populateFoldersStore } from '../../carbonio-ui-commons/test/mocks/store/folders';
 import { makeListItemsVisible, screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
-import { NAMESPACES } from '../../constants/api';
 import { TESTID_SELECTORS } from '../../constants/tests';
 import { CreateFolderRequest, CreateFolderResponse } from '../../network/api/create-folder';
 import { getFoldersArray } from '../../tests/utils';
@@ -221,7 +220,7 @@ describe('AddressBookCreateModal', () => {
 					recursive: false,
 					deletable: true
 				},
-				_jsns: NAMESPACES.mail
+				_jsns: JSNS.mail
 			});
 			const { user } = setupTest(
 				<AddressBookCreateModal defaultParentId={parentAddressBookId} onClose={jest.fn()} />
@@ -247,7 +246,7 @@ describe('AddressBookCreateModal', () => {
 					recursive: false,
 					deletable: true
 				},
-				_jsns: NAMESPACES.mail
+				_jsns: JSNS.mail
 			});
 			const onClose = jest.fn();
 			const { user } = setupTest(

@@ -15,7 +15,6 @@ import { generateFolder } from '../../carbonio-ui-commons/test/mocks/folders/fol
 import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { createFakeFile } from '../../carbonio-ui-commons/test/mocks/utils/file';
 import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
-import { NAMESPACES } from '../../constants/api';
 import { TESTID_SELECTORS } from '../../constants/tests';
 import { ImportContactsRequest, ImportContactsResponse } from '../../network/api/import-contacts';
 import { UploadResponseFileInfo } from '../../network/api/upload';
@@ -93,7 +92,7 @@ describe('Import contacts modal', () => {
 					ids: '8374'
 				}
 			],
-			_jsns: NAMESPACES.mail
+			_jsns: JSNS.mail
 		};
 		createSoapAPIInterceptor<ImportContactsRequest, ImportContactsResponse>(
 			'ImportContacts',

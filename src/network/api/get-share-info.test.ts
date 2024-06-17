@@ -4,13 +4,12 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { faker } from '@faker-js/faker';
-import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
+import { ErrorSoapBodyResponse, JSNS } from '@zextras/carbonio-shell-ui';
 import { map } from 'lodash';
 
 import { getShareInfo, GetShareInfoResponse } from './get-share-info';
 import { FOLDER_VIEW } from '../../carbonio-ui-commons/constants';
 import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { NAMESPACES } from '../../constants/api';
 
 describe('GetShareInfo', () => {
 	it('should raise an exception if the response contains a Fault', () => {
@@ -32,7 +31,7 @@ describe('GetShareInfo', () => {
 		const request = await interceptor;
 		expect(request).toEqual({
 			includeSelf: 0,
-			_jsns: NAMESPACES.account
+			_jsns: JSNS.account
 		});
 	});
 
@@ -50,7 +49,7 @@ describe('GetShareInfo', () => {
 					view: FOLDER_VIEW.contact
 				}
 			],
-			_jsns: NAMESPACES.account
+			_jsns: JSNS.account
 		};
 		createSoapAPIInterceptor('GetShareInfo', response);
 		const shares = await getShareInfo();
@@ -101,7 +100,7 @@ describe('GetShareInfo', () => {
 
 		const response: GetShareInfoResponse = {
 			share: [contactShare, ...otherShares],
-			_jsns: NAMESPACES.account
+			_jsns: JSNS.account
 		};
 		createSoapAPIInterceptor('GetShareInfo', response);
 		const shares = await getShareInfo();

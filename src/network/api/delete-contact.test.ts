@@ -4,10 +4,11 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
+import { JSNS } from '@zextras/carbonio-shell-ui';
+
 import { deleteContact } from './delete-contact';
 import { FolderActionRequest } from './folder-action';
 import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { NAMESPACES } from '../../constants/api';
 
 describe('Delete contact', () => {
 	it('should call the API with the proper fields', () => {
@@ -19,7 +20,7 @@ describe('Delete contact', () => {
 				id: contactsIds.join(','),
 				op: 'delete'
 			},
-			_jsns: NAMESPACES.mail
+			_jsns: JSNS.mail
 		});
 	});
 });

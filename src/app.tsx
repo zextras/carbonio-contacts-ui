@@ -13,7 +13,6 @@ import {
 	addRoute,
 	addSearchView,
 	addSettingsView,
-	AnyFunction,
 	registerActions,
 	registerComponents,
 	registerFunctions,
@@ -269,7 +268,7 @@ const App = (): React.JSX.Element => {
 		);
 		registerFunctions({
 			id: 'create_contact_from_vcard',
-			fn: createContactIntegration(createSnackbar, t) as AnyFunction
+			fn: createContactIntegration(createSnackbar, t)
 		});
 	}, [createSnackbar, navigateTo, t]);
 

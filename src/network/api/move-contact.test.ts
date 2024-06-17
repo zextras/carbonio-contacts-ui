@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { faker } from '@faker-js/faker';
+import { JSNS } from '@zextras/carbonio-shell-ui';
 
 import { FolderActionRequest } from './folder-action';
 import { moveContact } from './move-contact';
 import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { NAMESPACES } from '../../constants/api';
 
 describe('Move contact', () => {
 	it('should call the API with the proper fields', () => {
@@ -22,7 +22,7 @@ describe('Move contact', () => {
 				op: 'move',
 				l: folderId
 			},
-			_jsns: NAMESPACES.mail
+			_jsns: JSNS.mail
 		});
 	});
 });
