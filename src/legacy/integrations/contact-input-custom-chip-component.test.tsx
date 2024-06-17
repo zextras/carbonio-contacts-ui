@@ -7,6 +7,7 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { act, waitFor } from '@testing-library/react';
+import { JSNS } from '@zextras/carbonio-shell-ui';
 import { times } from 'lodash';
 import { HttpResponse } from 'msw';
 

@@ -8,7 +8,7 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { waitFor } from '@testing-library/react';
-import { ErrorSoapResponse } from '@zextras/carbonio-shell-ui';
+import { ErrorSoapResponse, JSNS } from '@zextras/carbonio-shell-ui';
 import { times } from 'lodash';
 import { HttpResponse } from 'msw';
 import { Link, Route } from 'react-router-dom';

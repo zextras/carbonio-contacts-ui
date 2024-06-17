@@ -7,7 +7,7 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { act, waitFor, waitForElementToBeRemoved } from '@testing-library/react';
-import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
+import { ErrorSoapBodyResponse, JSNS } from '@zextras/carbonio-shell-ui';
 import { times } from 'lodash';
 
 import { SharedAddressBooksAddModal } from './shared-address-books-add-modal';

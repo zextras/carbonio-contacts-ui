@@ -8,6 +8,7 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
+import { JSNS } from '@zextras/carbonio-shell-ui';
 
 import { ContactsImportModal, ContactsImportModalProps } from './contacts-import-modal';
 import { FOLDER_VIEW } from '../../carbonio-ui-commons/constants';

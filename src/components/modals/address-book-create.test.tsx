@@ -7,7 +7,7 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { act, waitFor } from '@testing-library/react';
-import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
+import { ErrorSoapBodyResponse, JSNS } from '@zextras/carbonio-shell-ui';
 
 import { AddressBookCreateModal } from './address-book-create';
 import { isLink, isTrashed } from '../../carbonio-ui-commons/helpers/folders';
