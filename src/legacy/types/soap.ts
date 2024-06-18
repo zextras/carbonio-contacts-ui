@@ -3,7 +3,8 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import type { NameSpace } from '@zextras/carbonio-shell-ui';
+
+import { NameSpace } from '../../types/utils';
 
 export type IFolderView =
 	| 'search folder'

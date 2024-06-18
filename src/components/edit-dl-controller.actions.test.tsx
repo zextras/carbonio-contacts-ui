@@ -7,10 +7,10 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { act, waitFor } from '@testing-library/react';
+import { JSNS } from '@zextras/carbonio-shell-ui';
 
 import { EditDLControllerComponent, EditDLControllerComponentProps } from './edit-dl-controller';
 import { screen, setupTest, within } from '../carbonio-ui-commons/test/test-setup';
-import { NAMESPACES } from '../constants/api';
 import { JEST_MOCKED_ERROR, TESTID_SELECTORS } from '../constants/tests';
 import { DistributionList } from '../model/distribution-list';
 import {
@@ -219,7 +219,7 @@ describe('EditDLControllerComponent', () => {
 					}>({
 						Body: {
 							BatchRequest: {
-								_jsns: NAMESPACES.generic,
+								_jsns: JSNS.all,
 								DistributionListActionRequest: [
 									expect.objectContaining<Partial<DistributionListActionRequest>>({
 										action: {

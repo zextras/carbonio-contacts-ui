@@ -201,15 +201,15 @@ const CommonContactGroupBoard = ({
 		if (invalid > 0 && duplicated === 0) {
 			return t('board.newContactGroup.input.contact_input.error.invalid_address', {
 				count: invalid,
-				defaultValue: 'Invalid address',
-				defaultValue_plural: 'Invalid addresses'
+				defaultValue_one: 'Invalid address',
+				defaultValue_other: 'Invalid addresses'
 			});
 		}
 		if (duplicated > 0 && invalid === 0) {
 			return t('board.newContactGroup.input.contact_input.error.address_already_present', {
 				count: duplicated,
-				defaultValue: 'Address already present',
-				defaultValue_plural: 'Addresses already present'
+				defaultValue_one: 'Address already present',
+				defaultValue_other: 'Addresses already present'
 			});
 		}
 		return undefined;

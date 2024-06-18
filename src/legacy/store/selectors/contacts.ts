@@ -20,7 +20,7 @@ export function selectAllContactsInFolder({ contacts }: State, id: string): Cont
 
 export function selectContact(
 	{ contacts }: State,
-	folderId: number,
+	folderId: string,
 	id: string
 ): Contact | undefined {
 	return find(contacts?.contacts?.[folderId], ['id', id]);

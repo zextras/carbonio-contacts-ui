@@ -3,10 +3,9 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { ErrorSoapBodyResponse, soapFetch } from '@zextras/carbonio-shell-ui';
+import { ErrorSoapBodyResponse, JSNS, soapFetch } from '@zextras/carbonio-shell-ui';
 
 import { GenericSoapPayload } from './types';
-import { NAMESPACES } from '../../constants/api';
 
 export const CONTACT_ACTION_OPERATION = {
 	move: 'move',
@@ -20,27 +19,40 @@ export const CONTACT_ACTION_OPERATION = {
 type ContactActionOperation =
 	(typeof CONTACT_ACTION_OPERATION)[keyof typeof CONTACT_ACTION_OPERATION];
 
-export interface ContactActionRequest extends GenericSoapPayload<typeof NAMESPACES.mail> {
+export interface ContactActionRequest extends GenericSoapPayload<typeof JSNS.mail> {
 	action: {
 		op: ContactActionOperation;
 		id: string;
+		l?: string;
 	};
 }
 
-export interface ContactActionResponse extends GenericSoapPayload<typeof NAMESPACES.mail> {
+export type ContactActionResponse = GenericSoapPayload<typeof JSNS.mail> & {
 	action: {
 		op: ContactActionOperation;
 		id: string;
+		l?: string;
 	};
-}
+};
 
-export const contactAction = (
-	operation: ContactActionOperation,
-	ids: string[]
-): Promise<ContactActionResponse> => {
+export type ContactActionParams = {
+	contactsIds: Array<string>;
+	operation: ContactActionOperation;
+	folderId?: string;
+};
+
+export const contactAction = ({
+	contactsIds,
+	operation,
+	folderId
+}: ContactActionParams): Promise<ContactActionResponse> => {
 	const actionRequests: ContactActionRequest = {
-		action: { op: operation, id: ids.join(',') },
-		_jsns: NAMESPACES.mail
+		action: {
+			op: operation,
+			id: contactsIds.join(','),
+			...(folderId !== undefined && { l: folderId })
+		},
+		_jsns: JSNS.mail
 	};
 
 	return soapFetch<ContactActionRequest, ContactActionResponse | ErrorSoapBodyResponse>(
@@ -53,7 +65,3 @@ export const contactAction = (
 		return response;
 	});
 };
-
-export function deleteContactAction(ids: string[]): Promise<ContactActionResponse> {
-	return contactAction(CONTACT_ACTION_OPERATION.delete, ids);
-}

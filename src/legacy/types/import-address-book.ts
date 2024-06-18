@@ -36,12 +36,3 @@ export type UploadAttachmentResult = {
 	uploadId: string;
 	abortController: AbortController;
 };
-
-export type ImportAddressBookResponse = {
-	cn: [{ n: number; ids: string }];
-};
-
-export type ImportAddressBookRequest = {
-	folderId: string;
-	aid: string;
-};

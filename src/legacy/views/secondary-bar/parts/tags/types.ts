@@ -6,9 +6,11 @@
 
 import { ComponentType } from 'react';
 
+import { AccordionItemType } from '@zextras/carbonio-design-system';
+
 export type ItemType = {
 	CustomComponent: ComponentType<any>;
-	item: any;
+	item: AccordionItemType;
 	active: boolean;
 	color: number;
 	divider: boolean;
@@ -26,6 +28,6 @@ export type TagsAccordionItems = {
 	divider?: true;
 	active: false;
 	open: boolean;
-	onClick: (e: Event) => void;
+	onClick: AccordionItemType['onClick'];
 	CustomComponent: ComponentType<any>;
 };

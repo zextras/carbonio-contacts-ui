@@ -3,15 +3,14 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { ErrorSoapBodyResponse, soapFetch } from '@zextras/carbonio-shell-ui';
+import { ErrorSoapBodyResponse, JSNS, soapFetch } from '@zextras/carbonio-shell-ui';
 
 import { CnItem, GenericSoapPayload } from './types';
-import { NAMESPACES } from '../../constants/api';
 import { ContactGroup } from '../../model/contact-group';
 
 export type ModifyContactAttribute = { n: 'fullName' | 'nickname' | 'fileAs'; _content: string };
 
-export interface ModifyContactRequest extends GenericSoapPayload<typeof NAMESPACES.mail> {
+export interface ModifyContactRequest extends GenericSoapPayload<typeof JSNS.mail> {
 	cn: {
 		id: string;
 		m?: Array<{ type: 'I'; value: string; op: '+' | '-' }>;
@@ -19,9 +18,9 @@ export interface ModifyContactRequest extends GenericSoapPayload<typeof NAMESPAC
 	};
 }
 
-export interface ModifyContactResponse extends GenericSoapPayload<typeof NAMESPACES.mail> {
+export type ModifyContactResponse = GenericSoapPayload<typeof JSNS.mail> & {
 	cn: Array<CnItem>;
-}
+};
 
 export const modifyContact = ({
 	id,
@@ -49,7 +48,7 @@ export const modifyContact = ({
 					: undefined,
 			a: attributes
 		},
-		_jsns: NAMESPACES.mail
+		_jsns: JSNS.mail
 	};
 
 	return soapFetch<ModifyContactRequest, ModifyContactResponse | ErrorSoapBodyResponse>(

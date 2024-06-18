@@ -3,11 +3,10 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { BooleanString, ErrorSoapBodyResponse, soapFetch } from '@zextras/carbonio-shell-ui';
+import { BooleanString, ErrorSoapBodyResponse, JSNS, soapFetch } from '@zextras/carbonio-shell-ui';
 import { map } from 'lodash';
 
 import { GenericSoapPayload } from './types';
-import { NAMESPACES } from '../../constants/api';
 import { DistributionList } from '../../model/distribution-list';
 
 type Attributes = {
@@ -16,14 +15,13 @@ type Attributes = {
 };
 
 export interface GetAccountDistributionListsRequest
-	extends GenericSoapPayload<typeof NAMESPACES.account> {
+	extends GenericSoapPayload<typeof JSNS.account> {
 	ownerOf?: boolean;
 	memberOf?: 'none' | 'all' | 'directOnly';
 	attrs?: string;
 }
 
-export interface GetAccountDistributionListsResponse
-	extends GenericSoapPayload<typeof NAMESPACES.account> {
+export type GetAccountDistributionListsResponse = GenericSoapPayload<typeof JSNS.account> & {
 	dl?: Array<{
 		id: string;
 		name: string;
@@ -33,7 +31,7 @@ export interface GetAccountDistributionListsResponse
 		d?: string;
 		_attrs?: Attributes;
 	}>;
-}
+};
 
 const normalizeResponse = (
 	response: GetAccountDistributionListsResponse
@@ -56,7 +54,7 @@ export const getAccountDistributionLists = (options: {
 		GetAccountDistributionListsRequest,
 		GetAccountDistributionListsResponse | ErrorSoapBodyResponse
 	>('GetAccountDistributionLists', {
-		_jsns: NAMESPACES.account,
+		_jsns: JSNS.account,
 		ownerOf: options.ownerOf,
 		memberOf: options.memberOf ? 'all' : 'none',
 		attrs: 'description,zimbraHideInGal'

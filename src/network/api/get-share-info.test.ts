@@ -4,13 +4,12 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { faker } from '@faker-js/faker';
-import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
+import { ErrorSoapBodyResponse, JSNS } from '@zextras/carbonio-shell-ui';
 import { map } from 'lodash';
 
 import { getShareInfo, GetShareInfoResponse } from './get-share-info';
 import { FOLDER_VIEW } from '../../carbonio-ui-commons/constants';
-import { createAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { NAMESPACES } from '../../constants/api';
+import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 
 describe('GetShareInfo', () => {
 	it('should raise an exception if the response contains a Fault', () => {
@@ -20,19 +19,19 @@ describe('GetShareInfo', () => {
 				Reason: { Text: faker.word.sample() }
 			}
 		};
-		createAPIInterceptor('GetShareInfo', response);
+		createSoapAPIInterceptor('GetShareInfo', response);
 		expect(async () => {
 			await getShareInfo();
 		}).rejects.toThrow();
 	});
 
 	it('should call the API passing the correct static params', async () => {
-		const interceptor = createAPIInterceptor('GetShareInfo');
+		const interceptor = createSoapAPIInterceptor('GetShareInfo');
 		getShareInfo();
 		const request = await interceptor;
 		expect(request).toEqual({
 			includeSelf: 0,
-			_jsns: NAMESPACES.account
+			_jsns: JSNS.account
 		});
 	});
 
@@ -50,9 +49,9 @@ describe('GetShareInfo', () => {
 					view: FOLDER_VIEW.contact
 				}
 			],
-			_jsns: NAMESPACES.account
+			_jsns: JSNS.account
 		};
-		createAPIInterceptor('GetShareInfo', response);
+		createSoapAPIInterceptor('GetShareInfo', response);
 		const shares = await getShareInfo();
 		expect(shares).toEqual([
 			expect.objectContaining({
@@ -101,9 +100,9 @@ describe('GetShareInfo', () => {
 
 		const response: GetShareInfoResponse = {
 			share: [contactShare, ...otherShares],
-			_jsns: NAMESPACES.account
+			_jsns: JSNS.account
 		};
-		createAPIInterceptor('GetShareInfo', response);
+		createSoapAPIInterceptor('GetShareInfo', response);
 		const shares = await getShareInfo();
 		expect(shares).toHaveLength(1);
 		expect(shares?.[0]).toEqual(

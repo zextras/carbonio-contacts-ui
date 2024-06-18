@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next';
 import CommonContactGroupBoard, { isContactGroupNameInvalid } from './common-contact-group-board';
 import { useGetContactGroup } from '../../hooks/use-get-contact-group';
 import { ContactGroup } from '../../model/contact-group';
-import { client } from '../../network/client';
+import { apiClient } from '../../network/api-client';
 import { useContactGroupStore } from '../../store/contact-groups';
 
 const InnerEditContactGroupBoard = ({
@@ -31,7 +31,7 @@ const InnerEditContactGroupBoard = ({
 		const addedMembers = difference(memberListEmails, contactGroup.members);
 		const removedMembers = difference(contactGroup.members, memberListEmails);
 
-		client
+		apiClient
 			.modifyContactGroup({
 				id: contactGroup.id,
 				addedMembers: addedMembers.length > 0 ? addedMembers : undefined,

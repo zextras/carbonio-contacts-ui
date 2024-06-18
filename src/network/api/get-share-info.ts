@@ -3,19 +3,18 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { ErrorSoapBodyResponse, soapFetch } from '@zextras/carbonio-shell-ui';
+import { ErrorSoapBodyResponse, JSNS, soapFetch } from '@zextras/carbonio-shell-ui';
 import { filter, isEqual, map, uniqWith } from 'lodash';
 
 import { GenericSoapPayload } from './types';
 import { FolderView } from '../../carbonio-ui-commons/types/folder';
-import { NAMESPACES } from '../../constants/api';
 import { ShareInfo } from '../../model/share-info';
 
-export interface GetShareInfoRequest extends GenericSoapPayload<typeof NAMESPACES.account> {
+export interface GetShareInfoRequest extends GenericSoapPayload<typeof JSNS.account> {
 	includeSelf?: 0 | 1;
 }
 
-export interface GetShareInfoResponse extends GenericSoapPayload<typeof NAMESPACES.account> {
+export type GetShareInfoResponse = GenericSoapPayload<typeof JSNS.account> & {
 	share: Array<{
 		folderId: string;
 		folderPath: string;
@@ -27,7 +26,7 @@ export interface GetShareInfoResponse extends GenericSoapPayload<typeof NAMESPAC
 		rights: string;
 		view: FolderView;
 	}>;
-}
+};
 
 const normalizeResponse = (
 	response: GetShareInfoResponse | undefined
@@ -43,7 +42,7 @@ const normalizeResponse = (
 	return map(
 		shares,
 		(share): ShareInfo => ({
-			folderId: share.folderId,
+			folderId: `${share.folderId}`, // Temporary workaround for IRIS-5125
 			folderPath: share.folderPath,
 			folderUuid: share.folderUuid,
 			granteeType: share.granteeType,
@@ -58,7 +57,7 @@ const normalizeResponse = (
 export const getShareInfo = (): Promise<Array<ShareInfo> | undefined> =>
 	soapFetch<GetShareInfoRequest, GetShareInfoResponse | ErrorSoapBodyResponse>('GetShareInfo', {
 		includeSelf: 0,
-		_jsns: NAMESPACES.account
+		_jsns: JSNS.account
 	}).then((response) => {
 		if ('Fault' in response) {
 			throw new Error(response.Fault.Reason.Text, { cause: response.Fault });

@@ -8,7 +8,7 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { waitFor } from '@testing-library/react';
-import { ErrorSoapResponse } from '@zextras/carbonio-shell-ui';
+import { ErrorSoapResponse, JSNS } from '@zextras/carbonio-shell-ui';
 import { times } from 'lodash';
 import { HttpResponse } from 'msw';
 import { Link, Route } from 'react-router-dom';
@@ -17,7 +17,6 @@ import { DistributionListsView } from './distribution-lists-view';
 import GroupsAppView from './GroupsAppView';
 import { screen, setupTest, within } from '../carbonio-ui-commons/test/test-setup';
 import { ROUTES, ROUTES_INTERNAL_PARAMS } from '../constants';
-import { NAMESPACES } from '../constants/api';
 import {
 	EMPTY_DISPLAYER_HINT,
 	EMPTY_DISTRIBUTION_LIST_HINT,
@@ -103,7 +102,7 @@ describe('Distribution Lists View', () => {
 			return HttpResponse.json(
 				buildSoapResponse<GetAccountDistributionListsResponse>({
 					GetAccountDistributionListsResponse: {
-						_jsns: NAMESPACES.account,
+						_jsns: JSNS.account,
 						dl: resData.map((item) => ({
 							id: item.id,
 							name: item.email,
@@ -297,7 +296,7 @@ describe('Distribution Lists View', () => {
 				return HttpResponse.json(
 					buildSoapResponse<GetDistributionListMembersResponse>({
 						GetDistributionListMembersResponse: {
-							_jsns: NAMESPACES.account,
+							_jsns: JSNS.account,
 							dlm: data.map((item) => ({ _content: item })),
 							more: false,
 							total: data.length

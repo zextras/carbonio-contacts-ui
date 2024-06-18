@@ -15,6 +15,16 @@ import {
 } from '@zextras/carbonio-design-system';
 import styled, { css, type DefaultTheme, type SimpleInterpolation } from 'styled-components';
 
+export const HoverRow = styled(Row)`
+	position: relative;
+	cursor: pointer;
+	background: ${({ theme }): SimpleInterpolation => theme.palette.transparent.regular};
+
+	&:hover {
+		background: ${({ theme }): SimpleInterpolation => theme.palette.transparent.hover};
+	}
+`;
+
 export const HoverContainer = styled(Row)``;
 
 export const HoverBarContainer = styled(Row)`

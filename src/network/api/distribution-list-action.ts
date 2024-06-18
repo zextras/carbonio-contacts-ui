@@ -3,10 +3,10 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { SoapFault, soapFetch } from '@zextras/carbonio-shell-ui';
+import { JSNS, soapFetch } from '@zextras/carbonio-shell-ui';
 
 import { GenericSoapPayload } from './types';
-import { NAMESPACES } from '../../constants/api';
+import { SoapFault } from '../../types/utils';
 
 export type DistributionListActionOperationMembers = 'addMembers' | 'removeMembers';
 export type DistributionListActionOperationModify = 'modify';
@@ -27,8 +27,7 @@ type MappedAttributes = NonNullable<
 
 type AttributesArray = Array<MappedAttributes>;
 
-export interface DistributionListActionRequest
-	extends GenericSoapPayload<typeof NAMESPACES.account> {
+export interface DistributionListActionRequest extends GenericSoapPayload<typeof JSNS.account> {
 	dl: {
 		by: 'name';
 		_content: string;
@@ -46,18 +45,16 @@ export interface DistributionListActionRequest
 		  };
 }
 
-export type DistributionListActionResponse = GenericSoapPayload<typeof NAMESPACES.account>;
+export type DistributionListActionResponse = GenericSoapPayload<typeof JSNS.account>;
 
-export interface BatchDistributionListActionRequest
-	extends GenericSoapPayload<typeof NAMESPACES.generic> {
+export type BatchDistributionListActionRequest = GenericSoapPayload<typeof JSNS.all> & {
 	DistributionListActionRequest: Array<DistributionListActionRequest>;
-}
+};
 
-export interface BatchDistributionListActionResponse
-	extends GenericSoapPayload<typeof NAMESPACES.generic> {
+export type BatchDistributionListActionResponse = GenericSoapPayload<typeof JSNS.all> & {
 	DistributionListActionResponse?: Array<DistributionListActionResponse>;
 	Fault?: Array<SoapFault>;
-}
+};
 
 export const distributionListAction = ({
 	email,
@@ -92,7 +89,7 @@ export const distributionListAction = ({
 				op: 'modify',
 				a: attributes
 			},
-			_jsns: NAMESPACES.account,
+			_jsns: JSNS.account,
 			requestId: 'modify'
 		});
 	}
@@ -107,7 +104,7 @@ export const distributionListAction = ({
 				op: 'addMembers',
 				dlm: membersToAdd.map((member) => ({ _content: member }))
 			},
-			_jsns: NAMESPACES.account,
+			_jsns: JSNS.account,
 			requestId: 'addMembers'
 		});
 	}
@@ -122,7 +119,7 @@ export const distributionListAction = ({
 				op: 'removeMembers',
 				dlm: membersToRemove.map((member) => ({ _content: member }))
 			},
-			_jsns: NAMESPACES.account,
+			_jsns: JSNS.account,
 			requestId: 'removeMembers'
 		});
 	}
@@ -135,7 +132,7 @@ export const distributionListAction = ({
 		'Batch',
 		{
 			DistributionListActionRequest: actionRequests,
-			_jsns: NAMESPACES.generic
+			_jsns: JSNS.all
 		}
 	).then((response) => {
 		if ('Fault' in response) {

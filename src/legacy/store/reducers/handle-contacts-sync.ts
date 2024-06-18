@@ -68,7 +68,7 @@ export function handleModifiedContactsSyncReducer(
 
 export function handleDeletedContactsSyncReducer(
 	state: ContactsSlice,
-	{ payload }: { payload: string }
+	{ payload }: { payload: Array<string> }
 ): void {
-	removeContactsFromStore(state, payload.split(','));
+	removeContactsFromStore(state, payload);
 }

@@ -15,7 +15,23 @@ export const ACTION_IDS = {
 	sendEmailCG: 'cg-send-email-action',
 	deleteCG: 'cg-delete-action',
 	editCG: 'cg-edit-action',
-	copyToClipboard: 'copy-to-clipboard-action'
+	copyToClipboard: 'copy-to-clipboard-action',
+	addSharedAddressBooks: 'shares-add-action',
+	trashAddressBook: 'trash-address-book-action',
+	deleteAddressBook: 'delete-address-book-action',
+	createAddressBook: 'create-address-book-action',
+	moveAddressBook: 'move-address-book-action',
+	editAddressBook: 'edit-address-book-action',
+	emptyAddressBook: 'empty-address-book-action',
+	emptyTrash: 'empty-trash-action',
+	removeAddressBookLink: 'remove-address-book-link-action',
+	exportAddressBook: 'export-address-book-action',
+	importContacts: 'import-contacts-action',
+	showShareInfo: 'show-share-info-action',
+	moveContacts: 'move-contacts-action',
+	restoreContacts: 'restore-contacts-action',
+	trashContacts: 'trash-contacts-action',
+	exportContact: 'export-contact-action'
 } as const;
 
 export const NEW_CONTACT_GROUP_BOARD_ID = 'new-contact-group-board';
@@ -64,3 +80,12 @@ export const DL_TABS = {
 	members: 'dl-members-tab',
 	managers: 'dl-managers-tab'
 } as const;
+
+export const LOCAL_STORAGES = {
+	EXPANDED_ADDRESSBOOKS: 'open_address_books'
+};
+
+export const TIMEOUTS = {
+	defaultSnackbar: 3000,
+	trashAddressBook: 5000
+};

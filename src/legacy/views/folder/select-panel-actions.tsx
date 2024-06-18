@@ -21,14 +21,8 @@ interface SelectPanelActionsProps {
 const SelectPanelActions: FC<SelectPanelActionsProps> = ({ deselectAll }): ReactElement => {
 	const { getPrimaryActions, getSecondaryActions } = useContext(ActionsContext);
 
-	const primaryActions = useMemo(
-		() => getPrimaryActions(deselectAll),
-		[deselectAll, getPrimaryActions]
-	);
-	const secondaryActions = useMemo(
-		() => getSecondaryActions(deselectAll),
-		[deselectAll, getSecondaryActions]
-	);
+	const primaryActions = useMemo(() => getPrimaryActions(), [getPrimaryActions]);
+	const secondaryActions = useMemo(() => getSecondaryActions(), [getSecondaryActions]);
 
 	return (
 		<>

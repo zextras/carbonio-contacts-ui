@@ -4,9 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import type { NameSpace } from '@zextras/carbonio-shell-ui';
-
-import { Grant } from '../../carbonio-ui-commons/types/folder';
+import { NameSpace } from '../../types/utils';
 
 export enum ContactPhoneType {
 	MOBILE = 'mobile',
@@ -129,63 +127,16 @@ export type Match = {
 };
 
 export type FullAutocompleteResponse = {
+	canBeCached: boolean;
 	match?: Match[];
-	_attributes: {
-		canBeCached: string | null;
-		xmlns: string | null;
-	};
-};
-
-export type ShareFolderRoleOptions = {
-	label: string;
-	value: string;
-};
-
-export type GranteeInfoProps = {
-	grant: Grant;
-	shareFolderRoleOptions: ShareFolderRoleOptions;
-	hovered?: boolean;
-};
-
-export type ActionProps = {
-	folder: ContactsFolder;
-	grant: Grant;
-	setActiveModal: (arg: string) => void;
-	onMouseLeave: () => void;
-	onMouseEnter: () => void;
-};
-
-export type GranteeProps = {
-	grant: Grant;
-	folder: ContactsFolder;
-	onMouseLeave?: () => void;
-	onMouseEnter?: () => void;
-	setActiveModal: (modal: string) => void;
-	shareFolderRoleOptions: ShareFolderRoleOptions;
-};
-
-export type ShareFolderPropertiesProps = {
-	folder: ContactsFolder;
-	setActiveModal: (modal: string) => void;
+	_jsns?: string;
 };
 
 export type FullAutocompleteRequest = {
-	extraAccountId?: Array<{ _content: string }>;
+	orderedAccountIds?: string;
 	AutoCompleteRequest: {
 		name: string;
 		includeGal: 0 | 1;
 	};
 	_jsns: NameSpace;
-};
-
-export type ExportContactsRequest = {
-	folderId: string;
-};
-
-export type ExportContactsResponse = {
-	content: [
-		{
-			_content: string;
-		}
-	];
 };

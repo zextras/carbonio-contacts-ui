@@ -3,11 +3,10 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { SoapResponse } from '@zextras/carbonio-shell-ui';
+import { JSNS, SoapResponse } from '@zextras/carbonio-shell-ui';
 import { HttpResponseResolver, http, HttpResponse } from 'msw';
 
 import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
-import { NAMESPACES } from '../../constants/api';
 import {
 	CONTACT_ACTION_OPERATION,
 	ContactActionRequest,
@@ -33,7 +32,7 @@ export const registerDeleteContactHandler = (
 				buildSoapResponse<ContactActionResponse>({
 					ContactActionResponse: {
 						action: { id, op: CONTACT_ACTION_OPERATION.delete },
-						_jsns: NAMESPACES.mail
+						_jsns: JSNS.mail
 					}
 				})
 			);

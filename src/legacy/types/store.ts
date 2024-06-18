@@ -25,7 +25,6 @@ export type FoldersSlice = {
 };
 
 export type State = {
-	folders: FoldersSlice;
 	contacts: ContactsSlice;
 };
 
