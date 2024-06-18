@@ -3,12 +3,13 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+import { JSNS } from '@zextras/carbonio-shell-ui';
+
 import { CnItem, GenericSoapPayload } from './types';
 import { FIND_CONTACT_GROUP_LIMIT } from '../../constants';
-import { NAMESPACES } from '../../constants/api';
 import { ContactGroup } from '../../model/contact-group';
 
-export interface FindContactGroupsRequest extends GenericSoapPayload<typeof NAMESPACES.mail> {
+export interface FindContactGroupsRequest extends GenericSoapPayload<typeof JSNS.mail> {
 	limit: number;
 	offset: number;
 	sortBy: string;
@@ -16,7 +17,7 @@ export interface FindContactGroupsRequest extends GenericSoapPayload<typeof NAME
 	query: string;
 }
 
-export interface FindContactGroupsResponse extends GenericSoapPayload<typeof NAMESPACES.mail> {
+export interface FindContactGroupsResponse extends GenericSoapPayload<typeof JSNS.mail> {
 	cn?: Array<CnItem>;
 	sortBy: string;
 	offset: number;

@@ -3,17 +3,17 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { SoapFault, SuccessSoapResponse } from '@zextras/carbonio-shell-ui';
+import { JSNS, SuccessSoapResponse } from '@zextras/carbonio-shell-ui';
 import { map, size } from 'lodash';
 import { http, HttpResponse, HttpResponseResolver } from 'msw';
 
 import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
-import { NAMESPACES } from '../../constants/api';
 import {
 	BatchDistributionListActionRequest,
 	BatchDistributionListActionResponse,
 	DistributionListActionResponse
 } from '../../network/api/distribution-list-action';
+import { SoapFault } from '../../types/utils';
 import { buildSoapResponse } from '../utils';
 
 type DistributionListActionHandlerResponseResolver = HttpResponseResolver<
@@ -41,17 +41,17 @@ export const registerDistributionListActionHandler = (
 		const responses: Array<DistributionListActionResponse> = [];
 		if (size(data.membersToAdd) > 0) {
 			responses.push({
-				_jsns: NAMESPACES.account
+				_jsns: JSNS.account
 			});
 		}
 		if (size(data.membersToRemove) > 0) {
 			responses.push({
-				_jsns: NAMESPACES.account
+				_jsns: JSNS.account
 			});
 		}
 		if (data.displayName !== undefined || data.description !== undefined) {
 			responses.push({
-				_jsns: NAMESPACES.account
+				_jsns: JSNS.account
 			});
 		}
 
@@ -74,7 +74,7 @@ export const registerDistributionListActionHandler = (
 		return HttpResponse.json(
 			buildSoapResponse<BatchDistributionListActionResponse>({
 				BatchResponse: {
-					_jsns: NAMESPACES.generic,
+					_jsns: JSNS.all,
 					...actionResponse,
 					...fault
 				}

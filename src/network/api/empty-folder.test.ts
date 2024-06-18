@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { faker } from '@faker-js/faker';
+import { JSNS } from '@zextras/carbonio-shell-ui';
 
 import { emptyFolder } from './empty-folder';
 import { FolderActionRequest } from './folder-action';
 import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { NAMESPACES } from '../../constants/api';
 
 describe('emptyFolder', () => {
 	it('should call the API with the proper fields', () => {
@@ -22,7 +22,7 @@ describe('emptyFolder', () => {
 				recursive: true,
 				type: 'contacts'
 			},
-			_jsns: NAMESPACES.mail
+			_jsns: JSNS.mail
 		});
 	});
 });

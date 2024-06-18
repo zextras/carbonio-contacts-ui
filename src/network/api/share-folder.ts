@@ -3,21 +3,21 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { SoapFault, soapFetch } from '@zextras/carbonio-shell-ui';
+import { JSNS, soapFetch } from '@zextras/carbonio-shell-ui';
 import { isArray } from 'lodash';
 
 import { FolderActionRequest, FolderActionResponse } from './folder-action';
 import { GenericSoapPayload } from './types';
-import { NAMESPACES } from '../../constants/api';
+import { SoapFault } from '../../types/utils';
 
-export interface BatchShareFolderRequest extends GenericSoapPayload<typeof NAMESPACES.generic> {
+export interface BatchShareFolderRequest extends GenericSoapPayload<typeof JSNS.all> {
 	FolderActionRequest: Array<FolderActionRequest>;
 }
 
-export interface BatchShareFolderResponse extends GenericSoapPayload<typeof NAMESPACES.generic> {
+export type BatchShareFolderResponse = GenericSoapPayload<typeof JSNS.all> & {
 	FolderActionResponse?: Array<FolderActionResponse>;
 	Fault?: SoapFault | Array<SoapFault>;
-}
+};
 
 export type ShareFolderParams = {
 	addresses: Array<string>;
@@ -36,12 +36,12 @@ export const shareFolder = ({ addresses, folderId, role }: ShareFolderParams): P
 				perm: role
 			}
 		},
-		_jsns: NAMESPACES.mail
+		_jsns: JSNS.mail
 	}));
 
 	return soapFetch<BatchShareFolderRequest, BatchShareFolderResponse>('Batch', {
 		FolderActionRequest: actionRequests,
-		_jsns: NAMESPACES.generic
+		_jsns: JSNS.all
 	}).then((response) => {
 		if ('Fault' in response) {
 			if (isArray(response.Fault)) {

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { faker } from '@faker-js/faker';
-import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
+import { ErrorSoapBodyResponse, JSNS } from '@zextras/carbonio-shell-ui';
 
 import {
 	importContacts,
@@ -14,7 +14,6 @@ import {
 	ImportContactsResult
 } from './import-contacts';
 import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { NAMESPACES } from '../../constants/api';
 
 describe('importAddressBook', () => {
 	const folderId = 'testFolderId';
@@ -23,7 +22,7 @@ describe('importAddressBook', () => {
 
 	it('api is called with the correct parameters', async () => {
 		const expectedRequest = {
-			_jsns: 'urn:zimbraMail',
+			_jsns: JSNS.mail,
 			content: {
 				aid: 'testAid'
 			},
@@ -49,7 +48,7 @@ describe('importAddressBook', () => {
 					ids: ids.join(',')
 				}
 			],
-			_jsns: NAMESPACES.mail
+			_jsns: JSNS.mail
 		};
 
 		createSoapAPIInterceptor<ImportContactsRequest, ImportContactsResponse>(
@@ -72,7 +71,7 @@ describe('importAddressBook', () => {
 		};
 		const response = {
 			cn: [],
-			_jsns: NAMESPACES.mail
+			_jsns: JSNS.mail
 		};
 
 		createSoapAPIInterceptor<ImportContactsRequest, ImportContactsResponse>(

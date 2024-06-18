@@ -5,12 +5,11 @@
  */
 
 import { faker } from '@faker-js/faker';
-import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
+import { ErrorSoapBodyResponse, JSNS } from '@zextras/carbonio-shell-ui';
 
 import { createFolder, CreateFolderParams } from './create-folder';
 import { FOLDERS } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui-constants';
 import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { NAMESPACES } from '../../constants/api';
 
 describe('Create folder', () => {
 	it('should raise an exception if the response contains a Fault', () => {
@@ -39,7 +38,7 @@ describe('Create folder', () => {
 				l: params.parentFolderId,
 				name: params.name
 			},
-			_jsns: NAMESPACES.mail
+			_jsns: JSNS.mail
 		});
 	});
 });

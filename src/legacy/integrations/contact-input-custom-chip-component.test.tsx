@@ -7,6 +7,7 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { act, waitFor } from '@testing-library/react';
+import { JSNS } from '@zextras/carbonio-shell-ui';
 import { times } from 'lodash';
 import { HttpResponse } from 'msw';
 
@@ -14,7 +15,6 @@ import { ContactInputCustomChipComponent } from './contact-input-custom-chip-com
 import { mockedAccount } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
 import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { DL_MEMBERS_LOAD_LIMIT } from '../../constants';
-import { NAMESPACES } from '../../constants/api';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
 import { TESTID_SELECTORS, TIMERS } from '../../constants/tests';
 import { DistributionList } from '../../model/distribution-list';
@@ -386,7 +386,7 @@ describe('Contact input custom chip component', () => {
 				return HttpResponse.json(
 					buildSoapResponse<GetDistributionListMembersResponse>({
 						GetDistributionListMembersResponse: {
-							_jsns: NAMESPACES.account,
+							_jsns: JSNS.account,
 							...response
 						}
 					})
@@ -477,7 +477,7 @@ describe('Contact input custom chip component', () => {
 				return HttpResponse.json(
 					buildSoapResponse<GetDistributionListMembersResponse>({
 						GetDistributionListMembersResponse: {
-							_jsns: NAMESPACES.account,
+							_jsns: JSNS.account,
 							...response
 						}
 					})

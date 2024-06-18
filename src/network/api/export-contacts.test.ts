@@ -4,11 +4,10 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { faker } from '@faker-js/faker';
-import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
+import { ErrorSoapBodyResponse, JSNS } from '@zextras/carbonio-shell-ui';
 
 import { exportContacts, ExportContactsRequest, ExportContactsResponse } from './export-contacts';
 import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { NAMESPACES } from '../../constants/api';
 
 describe('exportContacts', () => {
 	it('should call the export contacts API with the correct parameters', async () => {
@@ -34,7 +33,7 @@ describe('exportContacts', () => {
 					_content: content
 				}
 			],
-			_jsns: NAMESPACES.mail
+			_jsns: JSNS.mail
 		};
 
 		createSoapAPIInterceptor<ExportContactsRequest, ExportContactsResponse>(

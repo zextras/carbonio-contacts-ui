@@ -6,12 +6,12 @@
 
 import { faker } from '@faker-js/faker';
 import { act, waitFor } from '@testing-library/react';
+import { JSNS } from '@zextras/carbonio-shell-ui';
 import { times } from 'lodash';
 import { HttpResponse } from 'msw';
 
 import { useGetDistributionListMembers } from './use-get-distribution-list-members';
 import { setupHook } from '../carbonio-ui-commons/test/test-setup';
-import { NAMESPACES } from '../constants/api';
 import { GetDistributionListMembersResponse } from '../network/api/get-distribution-list-members';
 import { useDistributionListsStore } from '../store/distribution-lists';
 import { registerGetDistributionListMembersHandler } from '../tests/msw-handlers/get-distribution-list-members';
@@ -76,7 +76,7 @@ describe('Use get distribution list members hook', () => {
 				return HttpResponse.json(
 					buildSoapResponse<GetDistributionListMembersResponse>({
 						GetDistributionListMembersResponse: {
-							_jsns: NAMESPACES.account,
+							_jsns: JSNS.account,
 							dlm: result.map((member) => ({ _content: member })),
 							more: offset === 0,
 							total: firstPage.length + secondPage.length

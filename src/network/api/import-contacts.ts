@@ -4,21 +4,20 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { ErrorSoapBodyResponse, soapFetch } from '@zextras/carbonio-shell-ui';
+import { ErrorSoapBodyResponse, JSNS, soapFetch } from '@zextras/carbonio-shell-ui';
 
 import { GenericSoapPayload } from './types';
-import { NAMESPACES } from '../../constants/api';
 
-export interface ImportContactsRequest extends GenericSoapPayload<typeof NAMESPACES.mail> {
+export interface ImportContactsRequest extends GenericSoapPayload<typeof JSNS.mail> {
 	ct: 'csv';
 	csvfmt: 'thunderbird-csv';
 	l: string;
 	content: { aid: string };
 }
 
-export interface ImportContactsResponse extends GenericSoapPayload<typeof NAMESPACES.mail> {
+export type ImportContactsResponse = GenericSoapPayload<typeof JSNS.mail> & {
 	cn: Array<{ n?: number; ids: string }>;
-}
+};
 
 export type ImportContactsParams = {
 	folderId: string;
@@ -42,7 +41,7 @@ export const importContacts = async ({
 	soapFetch<ImportContactsRequest, ImportContactsResponse | ErrorSoapBodyResponse>(
 		'ImportContacts',
 		{
-			_jsns: NAMESPACES.mail,
+			_jsns: JSNS.mail,
 			ct: 'csv',
 			csvfmt: 'thunderbird-csv',
 			l: folderId,
