@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.11.0](https://github.com/zextras/carbonio-contacts-ui/compare/v1.10.3...v1.11.0) (2024-06-18)
+
+
+### Features
+
+* download a contact as vCard file ([427c4bd](https://github.com/zextras/carbonio-contacts-ui/commit/427c4bd156718402f4ac2c16695ec2188a66ab1d))
+* implement a new secondary bar using the commons component ([#221](https://github.com/zextras/carbonio-contacts-ui/issues/221)) ([3d85ae0](https://github.com/zextras/carbonio-contacts-ui/commit/3d85ae0222de1334339eb5dcc20d331c478b190c))
+* integrated function added to import contact from vcard ([58bee7b](https://github.com/zextras/carbonio-contacts-ui/commit/58bee7b2b14416fe8a409641625c13de06c45e0c))
+* remove the 'Share address book' option from the contextual menu ([#219](https://github.com/zextras/carbonio-contacts-ui/issues/219)) ([733b50b](https://github.com/zextras/carbonio-contacts-ui/commit/733b50b6fd503603c812d4a7f2701008c8f7e0c1))
+
+
+### Bug Fixes
+
+* add dividers between the header, body and footer in the share creation/edit modal ([041afaa](https://github.com/zextras/carbonio-contacts-ui/commit/041afaa5d86319d72ef7327ae4fd4659d6cddf5f))
+* avoid editor crash when editing an existing contact ([#226](https://github.com/zextras/carbonio-contacts-ui/issues/226)) ([373bcd0](https://github.com/zextras/carbonio-contacts-ui/commit/373bcd0a76dd697cd4b35b6e07c5304d105fc1df))
+* fixed the tests ([df2626c](https://github.com/zextras/carbonio-contacts-ui/commit/df2626cd5639cbc18b14c345128165480838f962))
+* optional attribute type added in folder action request for empty operation ([1e05294](https://github.com/zextras/carbonio-contacts-ui/commit/1e05294c5121796178a1ba8bb2035bd424917f52))
+* remove useless sharing user type selector from the 'add share' modal ([#220](https://github.com/zextras/carbonio-contacts-ui/issues/220)) ([d44c020](https://github.com/zextras/carbonio-contacts-ui/commit/d44c0209c027eb062afd63fdd042760f407cce7e))
+* role selector in the share edit modal ([9e18360](https://github.com/zextras/carbonio-contacts-ui/commit/9e18360784269fc3d7e0f493eee85382bba36df6))
+* show snackbar when file is exported ([25e995f](https://github.com/zextras/carbonio-contacts-ui/commit/25e995f3396f0d0c84c46bbe7b55ed954bdd4f72))
+* show snackbar when file is exported ([bb09cbb](https://github.com/zextras/carbonio-contacts-ui/commit/bb09cbb7b13039581ce0cfba681221c68d7fd2a9))
+
 ### [1.10.3](https://github.com/zextras/carbonio-contacts-ui/compare/v1.10.2...v1.10.3) (2024-05-09)
 
 ### [1.10.2](https://github.com/zextras/carbonio-contacts-ui/compare/v1.10.1...v1.10.2) (2024-04-18)
