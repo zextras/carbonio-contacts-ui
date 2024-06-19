@@ -1,6 +1,6 @@
 {
 	"name": "carbonio-contacts-ui",
-	"version": "1.10.3",
+	"version": "1.11.0",
 	"description": "Contacts module",
 	"main": "src/app.tsx",
 	"engines": {
@@ -45,7 +45,7 @@
 		"@types/react-router-dom": "^5.3.3",
 		"@types/styled-components": "^5.1.34",
 		"@zextras/carbonio-ui-configs": "^1.0.0",
-		"@zextras/carbonio-ui-sdk": "^1.7.2",
+		"@zextras/carbonio-ui-sdk": "^1.7.4",
 		"babel-jest": "^29.7.0",
 		"babel-plugin-styled-components": "^2.0.7",
 		"babel-plugin-transform-import-meta": "^2.2.1",
