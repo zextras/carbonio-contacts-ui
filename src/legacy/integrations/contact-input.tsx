@@ -392,25 +392,22 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	const onAdd = useCallback(
 		(valueToAdd) => {
 			if (typeof valueToAdd === 'string') {
-				const id = Date.now().toString();
+        const parsedEmail = emailParser().parseEmail(valueToAdd);
 				const chip: ContactInputItem = {
-					email: valueToAdd,
-					id,
-					label: valueToAdd,
-					error: !isValidEmail(valueToAdd),
+					...parsedEmail,
 					actions: [
 						{
 							id: 'action1',
-							label: isValidEmail(valueToAdd)
+							label: !parsedEmail.error
 								? t('label.edit_email', 'Edit E-mail')
 								: t('label.edit_invalid_email', 'E-mail is invalid, click to edit it'),
 							icon: 'EditOutline',
 							type: 'button',
-							onClick: () => editChip(valueToAdd, id)
+							onClick: () => editChip(valueToAdd, parsedEmail.id)
 						}
 					]
 				};
-				if (!isValidEmail(valueToAdd)) {
+				if (parsedEmail.error) {
 					chip.avatarIcon = 'AlertCircleOutline';
 				}
 				return chip;
@@ -506,19 +503,6 @@ const ContactInputCore: FC<ContactInputProps> = ({
 		[buildDraggableChip, defaults, inputRef, onChange, resetDraggedChip]
 	);
 
-	const onPaste: ClipboardEventHandler<HTMLDivElement> = (e) => {
-		const pastedData = e.clipboardData?.getData('Text') || '';
-		const pastedRecipients = emailParser().parseMultipleEmails(pastedData);
-		if (pastedRecipients.length > 0) {
-			const existingRecipients = new Set(defaults.map((recipient) => recipient.email));
-			const updatedEmails = pastedRecipients
-				.filter((email) => !existingRecipients.has(email))
-				.map((contact) => ({ email: contact, label: contact }));
-
-			setDefaults([...defaults, ...updatedEmails]);
-		}
-	};
-
 	return (
 		<Container width="100%" onDrop={onDrop} height="100%">
 			<ChipInput
@@ -534,6 +518,8 @@ const ContactInputCore: FC<ContactInputProps> = ({
 				background={background}
 				onAdd={onAdd}
 				requireUniqueChips
+				createChipOnPaste
+				pasteSeparators={[',', ';', '\n']}
 				separators={[
 					{ code: 'NumpadEnter', ctrlKey: false },
 					{ key: ',', ctrlKey: false },
@@ -543,7 +529,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 				onDragEnter={dragAndDropEnabled ? onDragEnter : noop}
 				onDragOver={dragAndDropEnabled ? onDragEnter : noop}
 				onDragEnd={dragAndDropEnabled ? onDragEnd : noop}
-				onPaste={onPaste}
+				// onPaste={onPaste}
 				{...rest}
 			/>
 		</Container>

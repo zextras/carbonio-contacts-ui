@@ -4,18 +4,16 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-
-type EmailParser = { parseMultipleEmails: (input: string) => string[] };
+type ParsedEmail = { id: string; email: string; label: string; error: boolean };
+type EmailParser = {
+	parseEmail: (input: string) => ParsedEmail;
+};
 export function emailParser(): EmailParser {
 	return {
-		parseMultipleEmails: (input: string): string[] =>
-			input
-				.split(',')
-				.flatMap((partialSplit) => partialSplit.split(/;|\n/))
-				.map((email) => email.trim())
-				.filter((email) => email !== '')
-				.map(clean)
-				.filter(isValid)
+		parseEmail: (input: string): ParsedEmail => {
+			const email = clean(input.trim());
+			return { id: email, error: !isValid(email), label: email, email };
+		}
 	};
 
 	function clean(email: string): string {
