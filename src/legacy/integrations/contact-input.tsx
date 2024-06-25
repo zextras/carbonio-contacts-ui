@@ -112,6 +112,13 @@ const SkeletonTile = styled.div<SkeletonTileProps>`
 	border-radius: ${({ radius }): string => radius ?? '0.125rem'};
 	background: ${({ theme }): string => theme.palette.gray2.regular};
 `;
+
+const CustomChipInput = styled(ChipInput)`
+	input {
+		width: 100%;
+	}
+`;
+
 const Loader = (): ReactElement => (
 	<Container
 		orientation="horizontal"
@@ -292,9 +299,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 					.then((autoCompleteResult) =>
 						map<Match, Match>(autoCompleteResult.match, (m) => ({
 							...m,
-							email: isContactGroup(m)
-								? undefined
-								: parseEmail(m.email ?? '')
+							email: isContactGroup(m) ? undefined : parseEmail(m.email ?? '')
 						}))
 					)
 					.then((remoteResults) => {
@@ -338,7 +343,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 				setOptions([]);
 			}
 		},
-		[defaults, editChip, inputRef, isValidEmail, onChange, options, orderedAccountIds, t]
+		[defaults, editChip, inputRef, onChange, options, orderedAccountIds, t]
 	);
 
 	useEffect(() => {
@@ -372,7 +377,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 				});
 			});
 		}
-	}, [buildDragStartHandler, defaults, isValidEmail, onChange]);
+	}, [buildDragStartHandler, defaults, onChange]);
 
 	const contactInputValue = useMemo(() => uniqBy(defaults, 'email'), [defaults]);
 
@@ -380,13 +385,13 @@ const ContactInputCore: FC<ContactInputProps> = ({
 		(valueToAdd) => {
 			if (typeof valueToAdd === 'string') {
 				const parsedEmail = parseEmail(valueToAdd);
-        const isAValidEmail = isValidEmail(parsedEmail);
-        const id = parsedEmail;
+				const isAValidEmail = isValidEmail(parsedEmail);
+				const id = parsedEmail;
 				const chip: ContactInputItem = {
-          id: id,
-          email: parsedEmail,
-          label: parsedEmail,
-          error: !isAValidEmail,
+					id,
+					email: parsedEmail,
+					label: parsedEmail,
+					error: !isAValidEmail,
 					actions: [
 						{
 							id: 'action1',
@@ -420,7 +425,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 				]
 			};
 		},
-		[editChip, isValidEmail, t]
+		[editChip, t]
 	);
 
 	const ChipComponent = useCallback(
@@ -497,7 +502,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 
 	return (
 		<Container width="100%" onDrop={onDrop} height="100%">
-			<ChipInput
+			<CustomChipInput
 				data-testid={'contact-input'}
 				disableOptions
 				placeholder={placeholder}
@@ -521,6 +526,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 				onDragEnter={dragAndDropEnabled ? onDragEnter : noop}
 				onDragOver={dragAndDropEnabled ? onDragEnter : noop}
 				onDragEnd={dragAndDropEnabled ? onDragEnd : noop}
+				className="carbonio-bypass-context-menu"
 				{...rest}
 			/>
 		</Container>
