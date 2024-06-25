@@ -3,7 +3,16 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback, useEffect, useRef, useState, ReactElement, FC, useMemo } from 'react';
+import React, {
+	useCallback,
+	useEffect,
+	useRef,
+	useState,
+	ReactElement,
+	FC,
+	useMemo,
+	ClipboardEventHandler
+} from 'react';
 
 import {
 	Avatar,
@@ -34,6 +43,7 @@ import type {
 	ContactInputValue
 } from '../types/integrations';
 import type { GetContactsRequest, GetContactsResponse } from '../types/soap';
+import { emailParser } from './email-parser';
 
 const emailRegex = /[^\s@]+@[^\s@]+\.[^\s@]+/;
 
@@ -496,6 +506,19 @@ const ContactInputCore: FC<ContactInputProps> = ({
 		[buildDraggableChip, defaults, inputRef, onChange, resetDraggedChip]
 	);
 
+	const onPaste: ClipboardEventHandler<HTMLDivElement> = (e) => {
+		const pastedData = e.clipboardData?.getData('Text') || '';
+		const pastedRecipients = emailParser().parseMultipleEmails(pastedData);
+		if (pastedRecipients.length > 0) {
+			const existingRecipients = new Set(defaults.map((recipient) => recipient.email));
+			const updatedEmails = pastedRecipients
+				.filter((email) => !existingRecipients.has(email))
+				.map((contact) => ({ email: contact, label: contact }));
+
+			setDefaults([...defaults, ...updatedEmails]);
+		}
+	};
+
 	return (
 		<Container width="100%" onDrop={onDrop} height="100%">
 			<ChipInput
@@ -511,16 +534,16 @@ const ContactInputCore: FC<ContactInputProps> = ({
 				background={background}
 				onAdd={onAdd}
 				requireUniqueChips
-				createChipOnPaste
-				pasteSeparators={[',', ' ', ';', '\n']}
 				separators={[
 					{ code: 'NumpadEnter', ctrlKey: false },
-					{ key: ',', ctrlKey: false }
+					{ key: ',', ctrlKey: false },
+					{ key: ';', ctrlKey: false }
 				]}
 				ChipComponent={ChipComponent}
 				onDragEnter={dragAndDropEnabled ? onDragEnter : noop}
 				onDragOver={dragAndDropEnabled ? onDragEnter : noop}
 				onDragEnd={dragAndDropEnabled ? onDragEnd : noop}
+				onPaste={onPaste}
 				{...rest}
 			/>
 		</Container>
