@@ -1,73 +1,59 @@
 /* eslint-disable sonarjs/no-duplicate-string */
-import { emailParser } from './email-parser';
+import { isValidEmail, parseEmail } from './email-parser';
 
 /*
  * SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-describe('mail-parser can parse', () => {
-	it('empty string is invalid', () => {
-		const parsed = emailParser().parseEmail('');
-		expect(parsed).toStrictEqual({
-			id: '',
-			error: true,
-			label: '',
-			email: ''
+describe('email-parser', () => {
+	describe('isValidEmail', () => {
+		it('undefined is not valid', () => {
+			expect(isValidEmail(undefined)).toBe(false);
+		});
+		it('empty email is not valid', () => {
+			expect(isValidEmail('')).toBe(false);
+		});
+
+		it('simple text is not valid', () => {
+			expect(isValidEmail('invalid')).toBe(false);
+		});
+
+		it('email with invalid domain is not valid', () => {
+			expect(isValidEmail('other@invalid')).toBe(false);
+		});
+
+		it('email with special character is not valid', () => {
+			expect(isValidEmail('other@inv?al.id')).toBe(false);
+		});
+
+		it('email with invalid format is not valid', () => {
+			expect(isValidEmail('@invalid.it')).toBe(false);
+		});
+
+		it('valid email is valid', () => {
+			expect(isValidEmail('e@mail.it')).toBe(true);
 		});
 	});
 
-	it('valid email', () => {
-		const parsed = emailParser().parseEmail('dan@email.it');
-		expect(parsed).toStrictEqual({
-			id: 'dan@email.it',
-			error: false,
-			label: 'dan@email.it',
-			email: 'dan@email.it'
+	describe('parseEmail', () => {
+		it('empty string is empty', () => {
+			expect(parseEmail('')).toStrictEqual('');
 		});
-	});
-
-	it('valid email with name', () => {
-		const parsed = emailParser().parseEmail('"Daniele" <daniele@email.it>');
-		expect(parsed).toStrictEqual({
-			id: 'daniele@email.it',
-			error: false,
-			label: 'daniele@email.it',
-			email: 'daniele@email.it'
+		it('clean Email in extended format with name', () => {
+			expect(parseEmail('"Name" <email@domain.it>')).toBe('email@domain.it');
 		});
-	});
-
-	it('invalid string has error flag', () => {
-		const parser = emailParser().parseEmail;
-		expect(parser('invalid')).toStrictEqual({
-			id: 'invalid',
-			error: true,
-			label: 'invalid',
-			email: 'invalid'
+		it('clean Email already ok', () => {
+			expect(parseEmail('another@domain.it')).toBe('another@domain.it');
 		});
-		expect(parser('other@invalid')).toStrictEqual({
-			id: 'other@invalid',
-			error: true,
-			label: 'other@invalid',
-			email: 'other@invalid'
+		it('clean Email surrounded with <>', () => {
+			expect(parseEmail('<other@domain.it>')).toBe('other@domain.it');
 		});
-		expect(parser('@invalid.it')).toStrictEqual({
-			id: '@invalid.it',
-			error: true,
-			label: '@invalid.it',
-			email: '@invalid.it'
+		it('clean Email trimming spaces', () => {
+			expect(parseEmail(' a@domain.it ')).toBe('a@domain.it');
 		});
-		expect(parser('"Invalid" <invalid>')).toStrictEqual({
-			id: 'invalid',
-			error: true,
-			label: 'invalid',
-			email: 'invalid'
-		});
-		expect(parser('"Another" <another@invalid>')).toStrictEqual({
-			id: 'another@invalid',
-			error: true,
-			label: 'another@invalid',
-			email: 'another@invalid'
+		it('do not clean, but trim an invalid email', () => {
+			expect(parseEmail('invalidEmail ')).toBe('invalidEmail');
 		});
 	});
 });

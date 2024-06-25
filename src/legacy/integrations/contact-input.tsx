@@ -22,7 +22,7 @@ import { useTranslation } from 'react-i18next';
 import styled, { type DefaultTheme } from 'styled-components';
 
 import { ContactInputCustomChipComponent } from './contact-input-custom-chip-component';
-import { emailParser } from './email-parser';
+import { parseEmail, isValidEmail } from './email-parser';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
 import { StoreProvider } from '../store/redux';
 import type { FullAutocompleteRequest, FullAutocompleteResponse, Match } from '../types/contact';
@@ -35,8 +35,6 @@ import type {
 	ContactInputValue
 } from '../types/integrations';
 import type { GetContactsRequest, GetContactsResponse } from '../types/soap';
-
-const emailRegex = /[^\s@]+@[^\s@]+\.[^\s@]+/;
 
 function isContactGroup(contact: {
 	isGroup?: boolean;
@@ -211,8 +209,6 @@ const ContactInputCore: FC<ContactInputProps> = ({
 		[buildDragStartHandler]
 	);
 
-	const isValidEmail = useCallback((email) => emailRegex.test(email), []);
-
 	const editChip = useCallback(
 		(text, id) => {
 			setIdToRemove(id);
@@ -298,7 +294,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 							...m,
 							email: isContactGroup(m)
 								? undefined
-								: emailRegex.exec(m.email ?? '')?.[0]?.slice(1, -1)
+								: parseEmail(m.email ?? '')
 						}))
 					)
 					.then((remoteResults) => {
@@ -383,22 +379,27 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	const onAdd = useCallback(
 		(valueToAdd) => {
 			if (typeof valueToAdd === 'string') {
-				const parsedEmail = emailParser().parseEmail(valueToAdd);
+				const parsedEmail = parseEmail(valueToAdd);
+        const isAValidEmail = isValidEmail(parsedEmail);
+        const id = parsedEmail;
 				const chip: ContactInputItem = {
-					...parsedEmail,
+          id: id,
+          email: parsedEmail,
+          label: parsedEmail,
+          error: !isAValidEmail,
 					actions: [
 						{
 							id: 'action1',
-							label: !parsedEmail.error
+							label: isAValidEmail
 								? t('label.edit_email', 'Edit E-mail')
 								: t('label.edit_invalid_email', 'E-mail is invalid, click to edit it'),
 							icon: 'EditOutline',
 							type: 'button',
-							onClick: () => editChip(valueToAdd, parsedEmail.id)
+							onClick: () => editChip(valueToAdd, id)
 						}
 					]
 				};
-				if (parsedEmail.error) {
+				if (!isAValidEmail) {
 					chip.avatarIcon = 'AlertCircleOutline';
 				}
 				return chip;
