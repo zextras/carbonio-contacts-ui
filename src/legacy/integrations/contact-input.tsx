@@ -3,16 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, {
-	useCallback,
-	useEffect,
-	useRef,
-	useState,
-	ReactElement,
-	FC,
-	useMemo,
-	ClipboardEventHandler
-} from 'react';
+import React, { useCallback, useEffect, useRef, useState, ReactElement, FC, useMemo } from 'react';
 
 import {
 	Avatar,
@@ -31,6 +22,7 @@ import { useTranslation } from 'react-i18next';
 import styled, { type DefaultTheme } from 'styled-components';
 
 import { ContactInputCustomChipComponent } from './contact-input-custom-chip-component';
+import { emailParser } from './email-parser';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
 import { StoreProvider } from '../store/redux';
 import type { FullAutocompleteRequest, FullAutocompleteResponse, Match } from '../types/contact';
@@ -43,7 +35,6 @@ import type {
 	ContactInputValue
 } from '../types/integrations';
 import type { GetContactsRequest, GetContactsResponse } from '../types/soap';
-import { emailParser } from './email-parser';
 
 const emailRegex = /[^\s@]+@[^\s@]+\.[^\s@]+/;
 
@@ -392,7 +383,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	const onAdd = useCallback(
 		(valueToAdd) => {
 			if (typeof valueToAdd === 'string') {
-        const parsedEmail = emailParser().parseEmail(valueToAdd);
+				const parsedEmail = emailParser().parseEmail(valueToAdd);
 				const chip: ContactInputItem = {
 					...parsedEmail,
 					actions: [
@@ -529,7 +520,6 @@ const ContactInputCore: FC<ContactInputProps> = ({
 				onDragEnter={dragAndDropEnabled ? onDragEnter : noop}
 				onDragOver={dragAndDropEnabled ? onDragEnter : noop}
 				onDragEnd={dragAndDropEnabled ? onDragEnd : noop}
-				// onPaste={onPaste}
 				{...rest}
 			/>
 		</Container>
