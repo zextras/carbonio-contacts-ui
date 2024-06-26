@@ -519,6 +519,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 				createChipOnPaste
 				pasteSeparators={[',', ';', '\n']}
 				separators={[
+					{ code: 'Enter', ctrlKey: false },
 					{ code: 'NumpadEnter', ctrlKey: false },
 					{ key: ',', ctrlKey: false },
 					{ key: ';', ctrlKey: false }
