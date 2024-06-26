@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 /*
  * SPDX-FileCopyrightText: 2021 Zextras <https://www.zextras.com>
  *
@@ -22,8 +23,8 @@ import { useTranslation } from 'react-i18next';
 import styled, { type DefaultTheme } from 'styled-components';
 
 import { ContactInputCustomChipComponent } from './contact-input-custom-chip-component';
+import { isValidEmail, parseEmail } from '../../carbonio-ui-commons/helpers/email-parser';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
-import { parseEmail, isValidEmail } from '../../helpers/email-parser';
 import { StoreProvider } from '../store/redux';
 import type { FullAutocompleteRequest, FullAutocompleteResponse, Match } from '../types/contact';
 import type {
@@ -299,7 +300,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 					.then((autoCompleteResult) =>
 						map<Match, Match>(autoCompleteResult.match, (m) => ({
 							...m,
-							email: isContactGroup(m) ? undefined : parseEmail(m.email ?? '')
+							email: isContactGroup(m) ? undefined : tryToParseEmail(m.email)
 						}))
 					)
 					.then((remoteResults) => {
@@ -384,7 +385,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	const onAdd = useCallback(
 		(valueToAdd) => {
 			if (typeof valueToAdd === 'string') {
-				const parsedEmail = parseEmail(valueToAdd);
+				const parsedEmail = tryToParseEmail(valueToAdd);
 				const isAValidEmail = isValidEmail(parsedEmail);
 				const id = parsedEmail;
 				const chip: ContactInputItem = {
@@ -538,3 +539,8 @@ export const ContactInput = (props: ContactInputProps): ReactElement => (
 		<ContactInputCore {...props} />
 	</StoreProvider>
 );
+
+function tryToParseEmail(input: string | undefined): string {
+	const inputOrDefault = input ?? '';
+	return parseEmail(inputOrDefault) ?? inputOrDefault.trim();
+}
