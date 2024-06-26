@@ -22,8 +22,8 @@ import { useTranslation } from 'react-i18next';
 import styled, { type DefaultTheme } from 'styled-components';
 
 import { ContactInputCustomChipComponent } from './contact-input-custom-chip-component';
-import { parseEmail, isValidEmail } from './email-parser';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
+import { parseEmail, isValidEmail } from '../../helpers/email-parser';
 import { StoreProvider } from '../store/redux';
 import type { FullAutocompleteRequest, FullAutocompleteResponse, Match } from '../types/contact';
 import type {
