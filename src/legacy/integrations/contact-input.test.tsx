@@ -7,13 +7,14 @@
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
-import { act, within } from '@testing-library/react';
+import { act, waitFor, within } from '@testing-library/react';
 
 import { ContactInput } from './contact-input';
 import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../../constants/tests';
 import { registerFullAutocompleteHandler } from '../../tests/msw-handlers/full-autocomplete';
-import { Match } from '../types/contact';
+import { ContactInputItem, ContactInputOnChange, ContactInputValue } from '../types/integrations';
+import { isArray } from 'lodash';
 
 describe('Contact input', () => {
 	it('should render a textbox', async () => {
@@ -27,7 +28,7 @@ describe('Contact input', () => {
 			email: faker.internet.email(),
 			first: faker.person.firstName(),
 			isGroup: false
-		} satisfies Match;
+		};
 		registerFullAutocompleteHandler([contact]);
 
 		const { user } = setupTest(<ContactInput defaultValue={[]} orderedAccountIds={[]} />);
@@ -47,7 +48,7 @@ describe('Contact input', () => {
 		const contact = {
 			first: faker.person.firstName(),
 			isGroup: true
-		} satisfies Match;
+		};
 		registerFullAutocompleteHandler([contact]);
 
 		const { user } = setupTest(<ContactInput defaultValue={[]} orderedAccountIds={[]} />);
@@ -66,7 +67,7 @@ describe('Contact input', () => {
 		const contact = {
 			first: faker.person.firstName(),
 			isGroup: true
-		} satisfies Match;
+		};
 		registerFullAutocompleteHandler([contact]);
 
 		const { user } = setupTest(<ContactInput defaultValue={[]} orderedAccountIds={[]} />);
@@ -104,5 +105,36 @@ describe('Contact input', () => {
 				error: false
 			})
 		]);
+	});
+
+	it('should render chips correctly if user paste a string', async () => {
+		let defaultValue: ContactInputItem[] = [];
+		const onChange: ContactInputOnChange = (value) => {
+			const values = Array.isArray(value) ? value : [value];
+			defaultValue = [...defaultValue, ...values];
+		};
+
+		const exampleString =
+			'”luca” <luca@comain.loc>, “another luca” <another@domain.loc> daniele@email.it "Valid" <a@valid.email>; "Another" <another@valid.it>; "Alessio" <alessio@email.it>; "INVALID" <invalid>';
+
+		const { user } = setupTest(
+			<ContactInput
+				defaultValue={defaultValue}
+				placeholder={''}
+				orderedAccountIds={[]}
+				onChange={onChange}
+			/>
+		);
+
+		await user.click(screen.getByRole('textbox'));
+		await user.paste(exampleString);
+
+		screen.logTestingPlaygroundURL();
+
+		await waitFor(() => {
+			expect(screen.getByText('another@domain.loc')).toBeInTheDocument();
+		});
+
+		expect(test).toBeInTheDocument();
 	});
 });
