@@ -1,20 +1,20 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 /*
  * SPDX-FileCopyrightText: 2023 Zextras <https://www.zextras.com>
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import React from 'react';
+import React, { ReactElement, useState } from 'react';
 
 import { faker } from '@faker-js/faker';
 import { act, waitFor, within } from '@testing-library/react';
 
 import { ContactInput } from './contact-input';
-import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
+import { UserEvent, screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../../constants/tests';
 import { registerFullAutocompleteHandler } from '../../tests/msw-handlers/full-autocomplete';
 import { ContactInputItem, ContactInputOnChange, ContactInputValue } from '../types/integrations';
-import { isArray } from 'lodash';
 
 describe('Contact input', () => {
 	it('should render a textbox', async () => {
@@ -107,34 +107,52 @@ describe('Contact input', () => {
 		]);
 	});
 
-	it('should render chips correctly if user paste a string', async () => {
-		let defaultValue: ContactInputItem[] = [];
-		const onChange: ContactInputOnChange = (value) => {
-			const values = Array.isArray(value) ? value : [value];
-			defaultValue = [...defaultValue, ...values];
-		};
+	it('render single email on ContactInput', async () => {
+		const email: ContactInputItem = { email: 'alice@domain.loc' };
 
-		const exampleString =
-			'”luca” <luca@comain.loc>, “another luca” <another@domain.loc> daniele@email.it "Valid" <a@valid.email>; "Another" <another@valid.it>; "Alessio" <alessio@email.it>; "INVALID" <invalid>';
-
-		const { user } = setupTest(
-			<ContactInput
-				defaultValue={defaultValue}
-				placeholder={''}
-				orderedAccountIds={[]}
-				onChange={onChange}
-			/>
-		);
-
-		await user.click(screen.getByRole('textbox'));
-		await user.paste(exampleString);
-
-		screen.logTestingPlaygroundURL();
+		setupTest(<ContactInput defaultValue={[email]} />);
 
 		await waitFor(() => {
-			expect(screen.getByText('another@domain.loc')).toBeInTheDocument();
+			expect(screen.getByText('alice@domain.loc')).toBeInTheDocument();
 		});
+	});
 
-		expect(test).toBeInTheDocument();
+	it('paste a simple email', async () => {
+		const { user } = setupTest(<TestableContactInput />);
+
+		paste(user, screen.getByRole('textbox'), 'bruno@domain.loc');
+
+		expect(await screen.findByText('bruno@domain.loc')).toBeInTheDocument();
+	});
+
+	it('paste a complex string with multiple emails', async () => {
+		const complexText =
+			'dan@email.it\n"Invalid"\n<a@valid.email>;\n"Another" <another@valid.it>;\n"not valid" <not@valid>';
+		const { user } = setupTest(<TestableContactInput />);
+
+		paste(user, screen.getByRole('textbox'), complexText);
+
+		expect(await screen.findByText('dan@email.it')).toBeInTheDocument();
+		expect(await screen.findByText('a@valid.email')).toBeInTheDocument();
+		expect(await screen.findByText('another@valid.it')).toBeInTheDocument();
+		expect(screen.queryByText('Invalid')).not.toBeInTheDocument();
+		expect(screen.queryByText('not@valid')).not.toBeInTheDocument();
 	});
 });
+
+function TestableContactInput(): ReactElement {
+	const [defaultValue, setDefaultValue] = useState<ContactInputValue>([]);
+
+	const onChange: ContactInputOnChange = (value) => {
+		setDefaultValue([...defaultValue, ...value]);
+	};
+
+	return <ContactInput defaultValue={defaultValue} onChange={onChange} />;
+}
+
+async function paste(user: UserEvent, element: HTMLElement, text: string): Promise<void> {
+	await user.click(element);
+	await user.paste({
+		getData: () => text
+	} as unknown as DataTransfer);
+}
