@@ -29,6 +29,7 @@ describe('Contact input', () => {
 			first: faker.person.firstName(),
 			isGroup: false
 		};
+		const expectedContactChip = `&quot;${contact.first} &quot; &lt;${contact.email}&gt;`;
 		registerFullAutocompleteHandler([contact]);
 
 		const { user } = setupTest(<ContactInput defaultValue={[]} orderedAccountIds={[]} />);
@@ -40,8 +41,8 @@ describe('Contact input', () => {
 			jest.runOnlyPendingTimers();
 		});
 		const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
-		expect(within(dropdown).getByText(contact.email, { exact: false })).toBeVisible();
-		expect(within(dropdown).getByText(contact.first, { exact: false })).toBeVisible();
+
+		expect(within(dropdown).getByText(expectedContactChip)).toBeVisible();
 	});
 
 	it('should render a dropdown with a contact group', async () => {
@@ -55,10 +56,10 @@ describe('Contact input', () => {
 
 		const input = screen.getByRole('textbox');
 		await user.type(input, contact.first);
-		act(() => {
-			// run timers of dropdown
-			jest.runOnlyPendingTimers();
-		});
+		// act(() => {
+		// 	// run timers of dropdown
+		// 	jest.runOnlyPendingTimers();
+		// });
 		const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
 		expect(within(dropdown).getByText(contact.first)).toBeVisible();
 	});
@@ -120,7 +121,7 @@ describe('Contact input', () => {
 	it('paste a simple email', async () => {
 		const { user } = setupTest(<TestableContactInput />);
 
-		paste(user, screen.getByRole('textbox'), 'bruno@domain.loc');
+		await paste(user, screen.getByRole('textbox'), 'bruno@domain.loc');
 
 		expect(await screen.findByText('bruno@domain.loc')).toBeInTheDocument();
 	});
@@ -130,7 +131,7 @@ describe('Contact input', () => {
 			'dan@email.it\n"Invalid"\n<a@valid.email>;\n"Another" <another@valid.it>;\n"not valid" <not@valid>';
 		const { user } = setupTest(<TestableContactInput />);
 
-		paste(user, screen.getByRole('textbox'), complexText);
+		await paste(user, screen.getByRole('textbox'), complexText);
 
 		expect(await screen.findByText('dan@email.it')).toBeInTheDocument();
 		expect(await screen.findByText('a@valid.email')).toBeInTheDocument();
