@@ -5,17 +5,7 @@
  */
 import React, { ComponentType, createContext, FC, useCallback, useMemo } from 'react';
 
-import { useModal, useSnackbar } from '@zextras/carbonio-design-system';
-import { replaceHistory, useTags } from '@zextras/carbonio-shell-ui';
-import { useTranslation } from 'react-i18next';
-
-import {
-	useContextActions,
-	useHoverActions,
-	primaryActions,
-	secondaryActions
-} from './contact-actions';
-import { useAppDispatch } from '../hooks/redux';
+import { useContextActions, useHoverActions, useSecondaryActions } from './contact-actions';
 import { Contact } from '../types/contact';
 
 type ACPProps = {
@@ -41,12 +31,10 @@ type MultipleContactsActionsProvider = () => ActionList;
 export const ActionsContext = createContext<{
 	getContextActions: SingleContactActionsProvider;
 	getHoverActions: SingleContactActionsProvider;
-	getPrimaryActions: MultipleContactsActionsProvider;
 	getSecondaryActions: MultipleContactsActionsProvider;
 }>({
 	getContextActions: () => [],
 	getHoverActions: () => [],
-	getPrimaryActions: () => [],
 	getSecondaryActions: () => []
 });
 
@@ -57,62 +45,13 @@ export const ActionsContextProvider: FC<ACPProps & { selectedContacts: Contact[]
 	deselectAll,
 	selectedContacts
 }) => {
-	const [t] = useTranslation();
 	const ids = useMemo(() => Object.keys(selectedIds ?? []), [selectedIds]);
-	const dispatch = useAppDispatch();
-	const createSnackbar = useSnackbar();
-	const createModal = useModal();
-	const tags = useTags();
 	const contextActions = useContextActions(folderId);
 	const hoverActions = useHoverActions(folderId);
-
-	const [
-		contextActionsCallback,
-		hoverActionsCallback,
-		primaryActionsCallback,
-		secondaryActionsCallback
-	] = useMemo(
-		() => [
-			contextActions,
-			hoverActions,
-			primaryActions({
-				folderId,
-				t,
-				dispatch,
-				replaceHistory,
-				createSnackbar,
-				createModal,
-				selectedIds,
-				deselectAll
-			}),
-			secondaryActions({
-				folderId,
-				t,
-				dispatch,
-				replaceHistory,
-				createSnackbar,
-				createModal,
-				selectedIds,
-				deselectAll,
-				tags,
-				ids,
-				selectedContacts
-			})
-		],
-		[
-			contextActions,
-			hoverActions,
-			folderId,
-			t,
-			dispatch,
-			createSnackbar,
-			createModal,
-			selectedIds,
-			deselectAll,
-			tags,
-			ids,
-			selectedContacts
-		]
+	const secondaryActions = useSecondaryActions({ folderId, deselectAll, selectedContacts, ids });
+	const [contextActionsCallback, hoverActionsCallback, secondaryActionsCallback] = useMemo(
+		() => [contextActions, hoverActions, secondaryActions],
+		[contextActions, hoverActions, secondaryActions]
 	);
 
 	const getContextActions = useCallback<SingleContactActionsProvider>(
@@ -123,19 +62,13 @@ export const ActionsContextProvider: FC<ACPProps & { selectedContacts: Contact[]
 		(item: Contact): ActionList => hoverActionsCallback(item),
 		[hoverActionsCallback]
 	);
-	const getPrimaryActions = useCallback<MultipleContactsActionsProvider>(
-		(): ActionList => primaryActionsCallback(),
-		[primaryActionsCallback]
-	);
 	const getSecondaryActions = useCallback<MultipleContactsActionsProvider>(
 		(): ActionList => secondaryActionsCallback(),
 		[secondaryActionsCallback]
 	);
 
 	return (
-		<ActionsContext.Provider
-			value={{ getContextActions, getHoverActions, getPrimaryActions, getSecondaryActions }}
-		>
+		<ActionsContext.Provider value={{ getContextActions, getHoverActions, getSecondaryActions }}>
 			{children}
 		</ActionsContext.Provider>
 	);

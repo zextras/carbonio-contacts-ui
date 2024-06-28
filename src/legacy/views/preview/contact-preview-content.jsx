@@ -395,11 +395,25 @@ function ContactPreviewContent({ contact, onEdit, onDelete, onMail, onMove }) {
 								</Padding>
 							</Dropdown>
 						)}
-						<IconButton icon="Trash2Outline" onClick={onDelete} />
-						<IconButton
-							icon={isTrash(contact.parent) ? 'RestoreOutline' : 'MoveOutline'}
-							onClick={onMove}
-						/>
+						<Tooltip
+							label={
+								isTrash(contact.parent) ? t('label.restore', 'Restore') : t('label.move', 'Move')
+							}
+						>
+							<IconButton
+								icon={isTrash(contact.parent) ? 'RestoreOutline' : 'MoveOutline'}
+								onClick={onMove}
+							/>
+						</Tooltip>
+						<Tooltip
+							label={
+								isTrash(contact.parent)
+									? t('folder.action.delete_permanently', 'Delete contacts permanently')
+									: t('label.delete', 'Delete')
+							}
+						>
+							<IconButton icon="Trash2Outline" onClick={onDelete} />
+						</Tooltip>
 						<Padding right="small" />
 						{!isTrash(contact.parent) && (
 							<Button icon="EditOutline" label={t('label.edit')} onClick={onEdit} />

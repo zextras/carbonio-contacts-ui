@@ -31,6 +31,7 @@ export const ACTION_IDS = {
 	moveContacts: 'move-contacts-action',
 	restoreContacts: 'restore-contacts-action',
 	trashContacts: 'trash-contacts-action',
+	deleteContacts: 'delete-contacts-action',
 	exportContact: 'export-contact-action'
 } as const;
 
