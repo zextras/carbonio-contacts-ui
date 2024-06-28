@@ -60,7 +60,7 @@ export const useActionDeleteContacts = (): ActionDeleteContacts => {
 		() => ({
 			id: ACTION_IDS.deleteContacts,
 			label: t('folder.action.delete_permanently', 'Delete contacts permanently'),
-			icon: 'Trash2Outline',
+			icon: 'DeletePermanentlyOutline',
 			execute,
 			canExecute
 		}),

@@ -20,7 +20,7 @@ describe("Delete-contacts' actions", () => {
 		const { result } = setupHook(useActionDeleteContacts);
 		expect(result.current).toEqual<UIAction<unknown, unknown>>(
 			expect.objectContaining({
-				icon: 'Trash2Outline',
+				icon: 'DeletePermanentlyOutline',
 				label: 'Delete contacts permanently',
 				id: 'delete-contacts-action'
 			})
