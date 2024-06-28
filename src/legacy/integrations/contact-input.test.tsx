@@ -56,10 +56,10 @@ describe('Contact input', () => {
 
 		const input = screen.getByRole('textbox');
 		await user.type(input, contact.first);
-		// act(() => {
-		// 	// run timers of dropdown
-		// 	jest.runOnlyPendingTimers();
-		// });
+		act(() => {
+			// run timers of dropdown
+			jest.runOnlyPendingTimers();
+		});
 		const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
 		expect(within(dropdown).getByText(contact.first)).toBeVisible();
 	});
@@ -153,7 +153,9 @@ function TestableContactInput(): ReactElement {
 
 async function paste(user: UserEvent, element: HTMLElement, text: string): Promise<void> {
 	await user.click(element);
-	await user.paste({
-		getData: () => text
-	} as unknown as DataTransfer);
+	await act(async () => {
+		await user.paste({
+			getData: () => text
+		} as unknown as DataTransfer);
+	});
 }
