@@ -17,7 +17,7 @@ import { Contact } from '../legacy/types/contact';
 import { buildContact } from '../tests/model-builder';
 
 describe("Trash-contacts' actions", () => {
-	it('should return true if the object response is corectally initialized', () => {
+	it('should return true if the object response is correctly initialized', () => {
 		const { result } = setupHook(useActionTrashContacts);
 		expect(result.current).toEqual<UIAction<unknown, unknown>>(
 			expect.objectContaining({

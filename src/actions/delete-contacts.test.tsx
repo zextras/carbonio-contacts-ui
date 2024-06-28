@@ -16,7 +16,7 @@ import { Contact } from '../legacy/types/contact';
 import { buildContact } from '../tests/model-builder';
 
 describe("Delete-contacts' actions", () => {
-	it('should return true if the object response is corectally initialized', () => {
+	it('should return true if the object response is correctly initialized', () => {
 		const { result } = setupHook(useActionDeleteContacts);
 		expect(result.current).toEqual<UIAction<unknown, unknown>>(
 			expect.objectContaining({

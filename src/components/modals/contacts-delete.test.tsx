@@ -17,13 +17,13 @@ import { Contact } from '../../legacy/types/contact';
 import { buildContact } from '../../tests/model-builder';
 
 describe('ContactsDeleteModal', () => {
-	it('should render a modal with a specific title', () => {
+	it('should render a modal with a specific title for single contact', () => {
 		const arrayContacts: Array<Contact> = [buildContact()];
 		setupTest(<ContactsDeleteModal contacts={arrayContacts} onClose={jest.fn()} />);
 		expect(screen.getByText('Are you sure to permanently delete this contact?')).toBeVisible();
 	});
 
-	it('should render a modal with a specific title', () => {
+	it('should render a modal with a specific title for multiple contacts', () => {
 		const arrayContacts: Array<Contact> = [buildContact(), buildContact()];
 		setupTest(<ContactsDeleteModal contacts={arrayContacts} onClose={jest.fn()} />);
 		expect(
