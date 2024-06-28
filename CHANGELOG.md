@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.11.1](https://github.com/zextras/carbonio-contacts-ui/compare/v1.11.0...v1.11.1) (2024-06-26)
+
+
+### Bug Fixes
+
+* button label missing when permanently deleting contact ([916284f](https://github.com/zextras/carbonio-contacts-ui/commit/916284fa122bee8a284de95f962c0f9318084cdb))
+
 ## [1.11.0](https://github.com/zextras/carbonio-contacts-ui/compare/v1.10.3...v1.11.0) (2024-06-18)
 
 

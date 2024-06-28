@@ -5,7 +5,7 @@
  */
 import React from 'react';
 
-import { ModalFooter, Text, useModal } from '@zextras/carbonio-design-system';
+import { Text, useModal } from '@zextras/carbonio-design-system';
 import { getAction, FOLDERS, useTags } from '@zextras/carbonio-shell-ui';
 import { compact, isEmpty } from 'lodash';
 import { useTranslation } from 'react-i18next';
@@ -56,49 +56,42 @@ export function deletePermanently({ ids, t, dispatch, createSnackbar, createModa
 					defaultValue_one: 'Are you sure to permanently delete this contact?',
 					defaultValue_other: 'Are you sure to permanently delete the selected contacts?'
 				}),
-				customFooter: (
-					<ModalFooter
-						onConfirm={() => {
-							closeModal();
-							dispatch(
-								contactAction({
-									contactsIDs: ids,
-									originID: FOLDERS.TRASH,
-									destinationID: undefined,
-									op: FolderActionsType.DELETE
-								})
-							).then((res) => {
-								deselectAll && deselectAll();
-								if (res.type.includes('fulfilled')) {
-									createSnackbar({
-										key: `edit`,
-										replace: true,
-										type: 'success',
-										label: t(
-											'messages.snackbar.contact_deleted_permanently',
-											'Contact permanently deleted'
-										),
-										autoHideTimeout: 3000,
-										hideButton: true
-									});
-								} else {
-									createSnackbar({
-										key: `edit`,
-										replace: true,
-										type: 'error',
-										label: t('label.error_try_again', 'Something went wrong, please try again'),
-										autoHideTimeout: 3000
-									});
-								}
+				confirmLabel: t('action.delete_permanently', 'Delete Permanently'),
+				confirmColor: 'error',
+				onConfirm: () => {
+					closeModal();
+					dispatch(
+						contactAction({
+							contactsIDs: ids,
+							originID: FOLDERS.TRASH,
+							destinationID: undefined,
+							op: FolderActionsType.DELETE
+						})
+					).then((res) => {
+						deselectAll && deselectAll();
+						if (res.type.includes('fulfilled')) {
+							createSnackbar({
+								key: `edit`,
+								replace: true,
+								type: 'success',
+								label: t(
+									'messages.snackbar.contact_deleted_permanently',
+									'Contact permanently deleted'
+								),
+								autoHideTimeout: 3000,
+								hideButton: true
 							});
-						}}
-						background="error"
-						label={t('action.delete_permanently', 'Delete Permanently')}
-						t={t}
-						divider={false}
-						verticalPadding="none"
-					/>
-				),
+						} else {
+							createSnackbar({
+								key: `edit`,
+								replace: true,
+								type: 'error',
+								label: t('label.error_try_again', 'Something went wrong, please try again'),
+								autoHideTimeout: 3000
+							});
+						}
+					});
+				},
 				onClose: () => closeModal(),
 				showCloseIcon: true,
 				children: (
