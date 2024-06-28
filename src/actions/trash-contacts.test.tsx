@@ -8,7 +8,7 @@ import { faker } from '@faker-js/faker';
 import { ErrorSoapBodyResponse, FOLDERS } from '@zextras/carbonio-shell-ui';
 import { act } from 'react-dom/test-utils';
 
-import { useActionTrashContact } from './trash-contacts';
+import { useActionTrashContacts } from './trash-contacts';
 import { UIAction } from './types';
 import { createSoapAPIInterceptor } from '../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { populateFoldersStore } from '../carbonio-ui-commons/test/mocks/store/folders';
@@ -18,11 +18,11 @@ import { buildContact } from '../tests/model-builder';
 
 describe("Trash-contacts' actions", () => {
 	it('should return true if the object response is corectally initialized', () => {
-		const { result } = setupHook(useActionTrashContact);
+		const { result } = setupHook(useActionTrashContacts);
 		expect(result.current).toEqual<UIAction<unknown, unknown>>(
 			expect.objectContaining({
 				icon: 'Trash2Outline',
-				label: 'Delete contacts permanently',
+				label: 'Delete',
 				id: 'trash-contacts-action'
 			})
 		);
@@ -33,7 +33,7 @@ describe('canExecute actions', () => {
 	it('should return false if canExecute has TRASH as parent', () => {
 		populateFoldersStore();
 		const cont: Contact[] = [buildContact({ parent: FOLDERS.TRASH })];
-		const { result } = setupHook(useActionTrashContact);
+		const { result } = setupHook(useActionTrashContacts);
 		const action = result.current;
 		expect(action.canExecute(cont)).toBeFalsy();
 	});
@@ -41,7 +41,7 @@ describe('canExecute actions', () => {
 	it("should return true if canExecute hasn't a correct parent as prop", () => {
 		populateFoldersStore();
 		const cont: Contact[] = [buildContact({ parent: FOLDERS.CONTACTS })];
-		const { result } = setupHook(useActionTrashContact);
+		const { result } = setupHook(useActionTrashContacts);
 		const action = result.current;
 		expect(action.canExecute(cont)).toBeTruthy();
 	});
@@ -50,9 +50,9 @@ describe('canExecute actions', () => {
 describe('execute actions', () => {
 	it('returns true if the label has a correct value', async () => {
 		populateFoldersStore();
-		const { result } = setupHook(useActionTrashContact);
+		const { result } = setupHook(useActionTrashContacts);
 		const action = result.current;
-		expect(action.label).toBe('Delete contacts permanently');
+		expect(action.label).toBe('Delete');
 	});
 });
 describe('apiClientactions', () => {
@@ -61,7 +61,7 @@ describe('apiClientactions', () => {
 		populateFoldersStore();
 		const arrayContacts: Array<Contact> = [buildContact()];
 
-		const { result } = setupHook(useActionTrashContact);
+		const { result } = setupHook(useActionTrashContacts);
 		const action = result.current;
 		act(() => {
 			action.execute(arrayContacts);
@@ -81,7 +81,7 @@ describe('apiClientactions', () => {
 		createSoapAPIInterceptor('ContactAction', response);
 		const arrayContacts: Array<Contact> = [buildContact({ parent: FOLDERS.CONTACTS })];
 
-		const { result } = setupHook(useActionTrashContact);
+		const { result } = setupHook(useActionTrashContacts);
 		const action = result.current;
 		act(() => {
 			action.execute(arrayContacts);
@@ -98,7 +98,7 @@ describe('apiClientactions', () => {
 		createSoapAPIInterceptor('ContactAction');
 		const arrayContacts: Array<Contact> = [buildContact()];
 
-		const { result, user } = setupHook(useActionTrashContact);
+		const { result, user } = setupHook(useActionTrashContacts);
 		const action = result.current;
 		act(() => {
 			action.execute(arrayContacts);
@@ -132,7 +132,7 @@ describe('apiClientactions', () => {
 		createSoapAPIInterceptor('ContactAction');
 		const arrayContacts: Array<Contact> = [buildContact({ parent: FOLDERS.CONTACTS })];
 
-		const { result, user } = setupHook(useActionTrashContact);
+		const { result, user } = setupHook(useActionTrashContacts);
 		const action = result.current;
 		act(() => {
 			action.execute(arrayContacts);

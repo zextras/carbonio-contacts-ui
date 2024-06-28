@@ -18,12 +18,12 @@ import { ACTION_IDS } from '../constants';
 import { StoreProvider } from '../legacy/store/redux';
 import { Contact } from '../legacy/types/contact';
 
-export type ActionDeleteContact = UIAction<Array<Contact>, Array<Contact>>;
-export const useActionDeleteContact = (): ActionDeleteContact => {
+export type ActionDeleteContacts = UIAction<Array<Contact>, Array<Contact>>;
+export const useActionDeleteContacts = (): ActionDeleteContacts => {
 	const [t] = useTranslation();
 	const createModal = useModal();
 
-	const canExecute = useCallback<ActionDeleteContact['canExecute']>((contacts): boolean => {
+	const canExecute = useCallback<ActionDeleteContacts['canExecute']>((contacts): boolean => {
 		if (!contacts || contacts.length === 0) return false;
 		const parentContacts = contacts.reduce<Array<Folder>>((result, contact) => {
 			const folder = getFolder(contact.parent);
@@ -37,7 +37,7 @@ export const useActionDeleteContact = (): ActionDeleteContact => {
 		return every(parentContacts, (cont) => isTrashed({ folder: cont }));
 	}, []);
 
-	const execute = useCallback<ActionDeleteContact['execute']>(
+	const execute = useCallback<ActionDeleteContacts['execute']>(
 		(contacts) => {
 			if (!contacts) return;
 			if (!canExecute(contacts)) return;

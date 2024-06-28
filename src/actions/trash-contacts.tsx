@@ -17,12 +17,12 @@ import { ACTION_IDS, TIMEOUTS } from '../constants';
 import { Contact } from '../legacy/types/contact';
 import { apiClient } from '../network/api-client';
 
-export type ActionTrashContact = UIAction<Array<Contact>, Array<Contact>>;
-export const useActionTrashContact = (): ActionTrashContact => {
+export type ActionTrashContacts = UIAction<Array<Contact>, Array<Contact>>;
+export const useActionTrashContacts = (): ActionTrashContacts => {
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
 
-	const canExecute = useCallback<ActionTrashContact['canExecute']>((contacts): boolean => {
+	const canExecute = useCallback<ActionTrashContacts['canExecute']>((contacts): boolean => {
 		if (!contacts || contacts.length === 0) return false;
 		const parentContacts = contacts.reduce<Array<Folder>>((result, contact) => {
 			const folder = getFolder(contact.parent);
@@ -67,7 +67,7 @@ export const useActionTrashContact = (): ActionTrashContact => {
 		[createSnackbar, t]
 	);
 
-	const execute = useCallback<ActionTrashContact['execute']>(
+	const execute = useCallback<ActionTrashContacts['execute']>(
 		(contacts) => {
 			if (!contacts) return;
 			if (!canExecute(contacts)) return;
@@ -103,7 +103,7 @@ export const useActionTrashContact = (): ActionTrashContact => {
 	return useMemo(
 		() => ({
 			id: ACTION_IDS.trashContacts,
-			label: t('folder.action.delete_permanently', 'Delete contacts permanently'),
+			label: t('label.delete', 'Delete'),
 			icon: 'Trash2Outline',
 			execute,
 			canExecute
