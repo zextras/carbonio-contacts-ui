@@ -18,7 +18,7 @@ import {
 	useCombinedRefs
 } from '@zextras/carbonio-design-system';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
-import { filter, find, map, trim, forEach, reject, uniqBy, noop } from 'lodash';
+import { filter, find, map, trim, forEach, reject, uniqBy, noop, unescape } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled, { type DefaultTheme } from 'styled-components';
 
@@ -542,6 +542,6 @@ export const ContactInput = (props: ContactInputProps): ReactElement => (
 );
 
 function tryToParseEmail(input: string | undefined): string {
-	const inputOrDefault = input ?? '';
+	const inputOrDefault = unescape(input ?? '');
 	return parseEmail(inputOrDefault) ?? inputOrDefault.trim();
 }
