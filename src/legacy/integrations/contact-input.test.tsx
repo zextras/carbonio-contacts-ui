@@ -29,7 +29,6 @@ describe('Contact input', () => {
 			first: faker.person.firstName(),
 			isGroup: false
 		};
-		const expectedContactChip = `&quot;${contact.first} &quot; &lt;${contact.email}&gt;`;
 		registerFullAutocompleteHandler([contact]);
 
 		const { user } = setupTest(<ContactInput defaultValue={[]} orderedAccountIds={[]} />);
@@ -42,7 +41,8 @@ describe('Contact input', () => {
 		});
 		const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
 
-		expect(within(dropdown).getByText(expectedContactChip)).toBeVisible();
+		expect(within(dropdown).getByText(contact.first)).toBeVisible();
+		expect(within(dropdown).getByText(contact.email)).toBeVisible();
 	});
 
 	it('should render a dropdown with a contact group', async () => {
