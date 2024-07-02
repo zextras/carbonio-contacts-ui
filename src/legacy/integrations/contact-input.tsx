@@ -11,6 +11,7 @@ import {
 	Container,
 	Row,
 	Text,
+	Dropdown,
 	type ChipItem,
 	type ChipInputProps,
 	type DropdownItem,
@@ -111,12 +112,6 @@ const SkeletonTile = styled.div<SkeletonTileProps>`
 	min-height: ${({ height }): string => height ?? '1rem'};
 	border-radius: ${({ radius }): string => radius ?? '0.125rem'};
 	background: ${({ theme }): string => theme.palette.gray2.regular};
-`;
-
-const CustomChipInput = styled(ChipInput)`
-	input {
-		width: 100%;
-	}
 `;
 
 const Loader = (): ReactElement => (
@@ -505,36 +500,56 @@ const ContactInputCore: FC<ContactInputProps> = ({
 		[buildDraggableChip, defaults, inputRef, onChange, resetDraggedChip]
 	);
 
+	const pasteDropdownItem: DropdownItem = {
+		id: 'paste',
+		label: 'paste',
+		onClick: async () => {
+			const pastedText = await navigator.clipboard.readText();
+			const dataTransfer = new DataTransfer();
+			dataTransfer.setData('text/plain', pastedText);
+
+			const pasteEvent = new ClipboardEvent('paste', {
+				clipboardData: dataTransfer,
+				bubbles: true,
+				cancelable: true
+			});
+
+			inputRef?.current?.dispatchEvent(pasteEvent);
+		}
+	};
+
 	return (
 		<Container width="100%" onDrop={onDrop} height="100%">
-			<CustomChipInput
-				data-testid={'contact-input'}
-				disableOptions
-				placeholder={placeholder}
-				confirmChipOnBlur
-				inputRef={inputRef}
-				onInputType={onInputType}
-				onChange={onChange}
-				options={options}
-				value={contactInputValue}
-				background={background}
-				onAdd={onAdd}
-				requireUniqueChips
-				createChipOnPaste
-				pasteSeparators={[',', ';', '\n']}
-				separators={[
-					{ code: 'Enter', ctrlKey: false },
-					{ code: 'NumpadEnter', ctrlKey: false },
-					{ key: ',', ctrlKey: false },
-					{ key: ';', ctrlKey: false }
-				]}
-				ChipComponent={ChipComponent}
-				onDragEnter={dragAndDropEnabled ? onDragEnter : noop}
-				onDragOver={dragAndDropEnabled ? onDragEnter : noop}
-				onDragEnd={dragAndDropEnabled ? onDragEnd : noop}
-				className="carbonio-bypass-context-menu"
-				{...rest}
-			/>
+			<Dropdown display="block" items={[pasteDropdownItem]} contextMenu>
+				<ChipInput
+					data-testid={'contact-input'}
+					disableOptions
+					placeholder={placeholder}
+					confirmChipOnBlur
+					inputRef={inputRef}
+					onInputType={onInputType}
+					onChange={onChange}
+					options={options}
+					value={contactInputValue}
+					background={background}
+					onAdd={onAdd}
+					requireUniqueChips
+					createChipOnPaste
+					pasteSeparators={[',', ';', '\n']}
+					separators={[
+						{ code: 'Enter', ctrlKey: false },
+						{ code: 'NumpadEnter', ctrlKey: false },
+						{ key: ',', ctrlKey: false },
+						{ key: ';', ctrlKey: false }
+					]}
+					ChipComponent={ChipComponent}
+					onDragEnter={dragAndDropEnabled ? onDragEnter : noop}
+					onDragOver={dragAndDropEnabled ? onDragEnter : noop}
+					onDragEnd={dragAndDropEnabled ? onDragEnd : noop}
+					className="carbonio-bypass-context-menu"
+					{...rest}
+				/>
+			</Dropdown>
 		</Container>
 	);
 };
