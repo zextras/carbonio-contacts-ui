@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-use-before-define */
 /*
  * SPDX-FileCopyrightText: 2021 Zextras <https://www.zextras.com>
  *
@@ -140,6 +139,11 @@ const Loader = (): ReactElement => (
 		</Container>
 	</Container>
 );
+
+function tryToParseEmail(input: string | undefined): string {
+	const inputOrDefault = unescape(input ?? '');
+	return parseEmail(inputOrDefault) ?? inputOrDefault.trim();
+}
 
 export type ContactInputProps = Pick<
 	ChipInputProps,
@@ -540,8 +544,3 @@ export const ContactInput = (props: ContactInputProps): ReactElement => (
 		<ContactInputCore {...props} />
 	</StoreProvider>
 );
-
-function tryToParseEmail(input: string | undefined): string {
-	const inputOrDefault = unescape(input ?? '');
-	return parseEmail(inputOrDefault) ?? inputOrDefault.trim();
-}
