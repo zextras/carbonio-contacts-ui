@@ -136,8 +136,9 @@ describe('Contact input', () => {
 		expect(await screen.findByText('dan@email.it')).toBeInTheDocument();
 		expect(await screen.findByText('a@valid.email')).toBeInTheDocument();
 		expect(await screen.findByText('another@valid.it')).toBeInTheDocument();
-		expect(screen.queryByText('Invalid')).not.toBeInTheDocument();
-		expect(screen.queryByText('not@valid')).not.toBeInTheDocument();
+		expect(await screen.findByText('"Invalid"')).toBeInTheDocument();
+		expect(await screen.findByText('"not valid" <not@valid>')).toBeInTheDocument();
+		expect(await screen.findAllByTestId('icon: AlertCircleOutline')).toHaveLength(2);
 	});
 });
 
