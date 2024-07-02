@@ -3,7 +3,16 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback, useEffect, useRef, useState, ReactElement, FC, useMemo } from 'react';
+import React, {
+	useCallback,
+	useEffect,
+	useRef,
+	useState,
+	ReactElement,
+	FC,
+	useMemo,
+	ReactText
+} from 'react';
 
 import {
 	Avatar,
@@ -50,6 +59,24 @@ function isContactGroup(contact: {
 		false
 	);
 }
+
+const pasteDropdownItem = (input: HTMLInputElement | null): DropdownItem => ({
+	id: 'paste',
+	label: 'paste',
+	onClick: async (): Promise<void> => {
+		const pastedText = await navigator.clipboard.readText();
+		const dataTransfer = new DataTransfer();
+		dataTransfer.setData('text/plain', pastedText);
+
+		const pasteEvent = new ClipboardEvent('paste', {
+			clipboardData: dataTransfer,
+			bubbles: true,
+			cancelable: true
+		});
+
+		input?.dispatchEvent(pasteEvent);
+	}
+});
 
 const getChipLabel = (
 	contact: Pick<
@@ -500,27 +527,9 @@ const ContactInputCore: FC<ContactInputProps> = ({
 		[buildDraggableChip, defaults, inputRef, onChange, resetDraggedChip]
 	);
 
-	const pasteDropdownItem: DropdownItem = {
-		id: 'paste',
-		label: 'paste',
-		onClick: async () => {
-			const pastedText = await navigator.clipboard.readText();
-			const dataTransfer = new DataTransfer();
-			dataTransfer.setData('text/plain', pastedText);
-
-			const pasteEvent = new ClipboardEvent('paste', {
-				clipboardData: dataTransfer,
-				bubbles: true,
-				cancelable: true
-			});
-
-			inputRef?.current?.dispatchEvent(pasteEvent);
-		}
-	};
-
 	return (
 		<Container width="100%" onDrop={onDrop} height="100%">
-			<Dropdown display="block" items={[pasteDropdownItem]} contextMenu>
+			<Dropdown display="block" items={[pasteDropdownItem(inputRef.current)]} contextMenu>
 				<ChipInput
 					data-testid={'contact-input'}
 					disableOptions
