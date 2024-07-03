@@ -47,7 +47,10 @@ describe('Edit contact group board', () => {
 				const { user } = setupTest(<EditContactGroupBoard />);
 				await user.clear(screen.getByRole('textbox', { name: 'Group name*' }));
 				expect(
-					screen.getByRoleWithIcon('button', { name: /SAVE/i, icon: TESTID_SELECTORS.icons.save })
+					await screen.findByRoleWithIcon('button', {
+						name: /SAVE/i,
+						icon: TESTID_SELECTORS.icons.save
+					})
 				).toBeDisabled();
 			});
 
@@ -57,7 +60,10 @@ describe('Edit contact group board', () => {
 				await user.clear(nameInput);
 				await user.type(nameInput, '   ');
 				expect(
-					screen.getByRoleWithIcon('button', { name: /SAVE/i, icon: TESTID_SELECTORS.icons.save })
+					await screen.findByRoleWithIcon('button', {
+						name: /SAVE/i,
+						icon: TESTID_SELECTORS.icons.save
+					})
 				).toBeDisabled();
 			});
 
@@ -68,7 +74,10 @@ describe('Edit contact group board', () => {
 				await user.clear(nameInput);
 				await user.type(nameInput, newName);
 				expect(
-					screen.getByRoleWithIcon('button', { name: /SAVE/i, icon: TESTID_SELECTORS.icons.save })
+					await screen.findByRoleWithIcon('button', {
+						name: /SAVE/i,
+						icon: TESTID_SELECTORS.icons.save
+					})
 				).toBeDisabled();
 			});
 		});
@@ -87,7 +96,7 @@ describe('Edit contact group board', () => {
 			});
 			await user.click(saveButton);
 			await waitFor(() => expect(handler).toHaveBeenCalledTimes(1));
-			expect(screen.getByText(newName)).toBeVisible();
+			expect(await screen.findByText(newName)).toBeVisible();
 		});
 
 		it('should show success snackbar when save button is clicked and the request is done successfully', async () => {
@@ -141,7 +150,7 @@ describe('Edit contact group board', () => {
 			await user.click(saveButton);
 			await screen.findByText('Something went wrong saving the edits, try again');
 			expect(closeBoard).not.toHaveBeenCalled();
-			expect(screen.getByText(newName)).toBeVisible();
+			expect(await screen.findByText(newName)).toBeVisible();
 		});
 
 		it('should not reset the fields when modify contact fails', async () => {
@@ -171,7 +180,7 @@ describe('Edit contact group board', () => {
 			});
 			await user.click(saveButton);
 			await screen.findByText('Something went wrong saving the edits, try again');
-			expect(screen.getByText(newName)).toBeVisible();
+			expect(await screen.findByText(newName)).toBeVisible();
 			const memberList = await screen.findByTestId(TESTID_SELECTORS.membersList);
 			expect(within(memberList).getByText(newEmail1)).toBeVisible();
 			const chipInput = screen.getByTestId(TESTID_SELECTORS.cgContactInput);
@@ -235,7 +244,9 @@ describe('Edit contact group board', () => {
 			});
 			await screen.findByText('Group successfully updated');
 
-			expect(modifyContactGroupSpy).toBeCalledWith(expect.objectContaining({ name: newName }));
+			expect(modifyContactGroupSpy).toHaveBeenCalledWith(
+				expect.objectContaining({ name: newName })
+			);
 		});
 	});
 
@@ -275,7 +286,7 @@ describe('Edit contact group board', () => {
 			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
 			await user.clear(nameInput);
 			await user.type(nameInput, newName);
-			expect(screen.getByText(newName)).toBeVisible();
+			expect(await screen.findByText(newName)).toBeVisible();
 		});
 
 		it('should update board title', async () => {
@@ -304,7 +315,7 @@ describe('Edit contact group board', () => {
 				screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
 			);
 			await screen.findByTestId(TESTID_SELECTORS.membersList);
-			expect(screen.getByText('Addresses: 1')).toBeVisible();
+			expect(await screen.findByText('Addresses: 1')).toBeVisible();
 		});
 
 		describe('Plus button and contact input', () => {
@@ -326,7 +337,7 @@ describe('Edit contact group board', () => {
 					await user.type(contactInput, ',');
 				});
 				expect(
-					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
+					await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
 				).toBeDisabled();
 			});
 		});
@@ -344,7 +355,7 @@ describe('Edit contact group board', () => {
 					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
 				);
 				const memberList = await screen.findByTestId(TESTID_SELECTORS.membersList);
-				expect(within(memberList).getByText(email)).toBeVisible();
+				expect(await within(memberList).findByText(email)).toBeVisible();
 			});
 
 			it('should add the valid email on the list and maintain also the previous list item', async () => {
@@ -360,7 +371,7 @@ describe('Edit contact group board', () => {
 					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
 				);
 				const memberList = await screen.findByTestId(TESTID_SELECTORS.membersList);
-				expect(within(memberList).getByText(email)).toBeVisible();
+				expect(await within(memberList).findByText(email)).toBeVisible();
 
 				await user.type(contactInput, email2);
 				await act(async () => {
@@ -369,7 +380,7 @@ describe('Edit contact group board', () => {
 				await user.click(
 					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
 				);
-				expect(within(memberList).getByText(email2)).toBeVisible();
+				expect(await within(memberList).findByText(email2)).toBeVisible();
 				expect(within(memberList).getByText(email)).toBeVisible();
 			});
 
@@ -415,7 +426,7 @@ describe('Edit contact group board', () => {
 				expect(
 					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
 				).toBeDisabled();
-				expect(screen.getByText(errorMessage)).toBeVisible();
+				expect(await screen.findByText(errorMessage)).toBeVisible();
 				await user.click(
 					screen.getByRoleWithIcon('button', {
 						icon: TESTID_SELECTORS.icons.trash,
@@ -423,7 +434,7 @@ describe('Edit contact group board', () => {
 					})
 				);
 				expect(
-					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
+					await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
 				).toBeEnabled();
 				expect(screen.queryByText(errorMessage)).not.toBeInTheDocument();
 			});
@@ -448,7 +459,7 @@ describe('Edit contact group board', () => {
 				});
 
 				const chipInput = screen.getByTestId(TESTID_SELECTORS.cgContactInput);
-				expect(within(chipInput).getByText(invalidMail1)).toBeVisible();
+				expect(await within(chipInput).findByText(invalidMail1)).toBeVisible();
 				expect(within(chipInput).getByText(invalidMail2)).toBeVisible();
 				expect(within(chipInput).getByText(newEmail)).toBeVisible();
 				await act(async () => {
@@ -456,12 +467,12 @@ describe('Edit contact group board', () => {
 						screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
 					);
 				});
-				expect(within(chipInput).queryByText(newEmail)).not.toBeInTheDocument();
-				expect(within(chipInput).getByText(invalidMail1)).toBeVisible();
+				expect(await within(chipInput).findByText(invalidMail1)).toBeVisible();
 				expect(within(chipInput).getByText(invalidMail2)).toBeVisible();
+				expect(within(chipInput).queryByText(newEmail)).not.toBeInTheDocument();
 
 				expect(
-					within(screen.getByTestId(TESTID_SELECTORS.membersList)).getByText(newEmail)
+					await within(await screen.findByTestId(TESTID_SELECTORS.membersList)).findByText(newEmail)
 				).toBeVisible();
 			});
 
@@ -494,15 +505,12 @@ describe('Edit contact group board', () => {
 						screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
 					);
 				});
+				expect(await within(chipInput).findByText(email1)).toBeVisible();
 				expect(within(chipInput).queryByText(email2)).not.toBeInTheDocument();
-				expect(within(chipInput).getByText(email1)).toBeVisible();
 
-				expect(
-					within(screen.getByTestId(TESTID_SELECTORS.membersList)).getByText(email1)
-				).toBeVisible();
-				expect(
-					within(screen.getByTestId(TESTID_SELECTORS.membersList)).getByText(email2)
-				).toBeVisible();
+				const membersListEl = await screen.findByTestId(TESTID_SELECTORS.membersList);
+				expect(await within(membersListEl).findByText(email1)).toBeVisible();
+				expect(within(membersListEl).getByText(email2)).toBeVisible();
 			});
 		});
 
@@ -524,8 +532,9 @@ describe('Edit contact group board', () => {
 				await act(async () => {
 					await user.type(contactInput, ',');
 				});
-				expect(screen.getByText(errorMessage)).toBeVisible();
-				expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
+				const errorEl = await screen.findByText(errorMessage);
+				expect(errorEl).toBeVisible();
+				expect(errorEl).toHaveStyleRule('color', PALETTE.error.regular);
 				await user.type(contactInput, faker.internet.email());
 				await act(async () => {
 					await user.type(contactInput, ',');
@@ -553,7 +562,7 @@ describe('Edit contact group board', () => {
 				});
 
 				expect(
-					within(screen.getByTestId(TESTID_SELECTORS.contactInputChip)).getByTestId(
+					await within(await screen.findByTestId(TESTID_SELECTORS.contactInputChip)).findByTestId(
 						TESTID_SELECTORS.icons.duplicatedMember
 					)
 				).toBeVisible();
@@ -597,9 +606,9 @@ describe('Edit contact group board', () => {
 				await act(async () => {
 					await user.type(contactInput, ',');
 				});
-
-				expect(screen.getByText(errorMessage)).toBeVisible();
-				expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
+				const errorEl = await screen.findByText(errorMessage);
+				expect(errorEl).toBeVisible();
+				expect(errorEl).toHaveStyleRule('color', PALETTE.error.regular);
 				await user.type(contactInput, faker.internet.email());
 				await act(async () => {
 					await user.type(contactInput, ',');
@@ -632,8 +641,9 @@ describe('Edit contact group board', () => {
 					await user.type(contactInput, ',');
 				});
 
-				expect(screen.getByText(errorMessage)).toBeVisible();
-				expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
+				const errorEl = await screen.findByText(errorMessage);
+				expect(errorEl).toBeVisible();
+				expect(errorEl).toHaveStyleRule('color', PALETTE.error.regular);
 				await user.type(contactInput, faker.internet.email());
 				await act(async () => {
 					await user.type(contactInput, ',');

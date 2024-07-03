@@ -8,7 +8,7 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import 'jest-styled-components';
-import { act, within } from '@testing-library/react';
+import { act, waitFor, within } from '@testing-library/react';
 import { first, forEach, last, noop } from 'lodash';
 
 import CommonContactGroupBoard, {
@@ -54,9 +54,9 @@ beforeEach(() => {
 
 describe('Common contact group board', () => {
 	describe('Default visualization', () => {
-		it('should show fields for group name and addresses list', () => {
+		it('should show fields for group name and addresses list', async () => {
 			setupTest(<CommonContactGroupBoard {...buildProps()} />);
-			expect(screen.getByRole('textbox', { name: 'Group name*' })).toBeVisible();
+			expect(await screen.findByRole('textbox', { name: 'Group name*' })).toBeVisible();
 			expect(screen.getByText('Addresses list')).toBeVisible();
 			expect(getContactInput()).toBeVisible();
 			expect(screen.getByText(`Type an address, click ‘+’ to add to the group`)).toHaveStyleRule(
@@ -65,24 +65,26 @@ describe('Common contact group board', () => {
 			);
 		});
 
-		it('should render discard and save buttons', () => {
+		it('should render discard and save buttons', async () => {
 			setupTest(<CommonContactGroupBoard {...buildProps()} />);
-			expect(screen.getByRole('button', { name: /DISCARD/i })).toBeVisible();
+			expect(await screen.findByRole('button', { name: /DISCARD/i })).toBeVisible();
 			expect(
 				screen.getByRoleWithIcon('button', { name: /SAVE/i, icon: TESTID_SELECTORS.icons.save })
 			).toBeVisible();
 		});
 
-		it('should render the avatar icon, name and the number of addresses', () => {
+		it('should render the avatar icon, name and the number of addresses', async () => {
 			setupTest(<CommonContactGroupBoard {...buildProps({ nameValue: contactGroup.title })} />);
-			expect(screen.getByTestId(TESTID_SELECTORS.icons.contactGroup)).toBeVisible();
+			expect(await screen.findByTestId(TESTID_SELECTORS.icons.contactGroup)).toBeVisible();
 			expect(screen.getByText(contactGroup.title)).toBeVisible();
 			expect(screen.getByText('Addresses: 0')).toBeVisible();
 		});
 
-		it('should render New Group string by default in the name input', () => {
+		it('should render New Group string by default in the name input', async () => {
 			setupTest(<CommonContactGroupBoard {...buildProps({ nameValue: contactGroup.title })} />);
-			expect(screen.getByRole('textbox', { name: 'Group name*' })).toHaveValue(contactGroup.title);
+			expect(await screen.findByRole('textbox', { name: 'Group name*' })).toHaveValue(
+				contactGroup.title
+			);
 		});
 	});
 
@@ -91,14 +93,20 @@ describe('Common contact group board', () => {
 			it('should disable the save button when isOnSaveDisabled prop is true', async () => {
 				setupTest(<CommonContactGroupBoard {...buildProps({ isOnSaveDisabled: true })} />);
 				expect(
-					screen.getByRoleWithIcon('button', { name: /SAVE/i, icon: TESTID_SELECTORS.icons.save })
+					await screen.findByRoleWithIcon('button', {
+						name: /SAVE/i,
+						icon: TESTID_SELECTORS.icons.save
+					})
 				).toBeDisabled();
 			});
 
 			it('should enable the save button when isOnSaveDisabled prop is false', async () => {
 				setupTest(<CommonContactGroupBoard {...buildProps({ isOnSaveDisabled: false })} />);
 				expect(
-					screen.getByRoleWithIcon('button', { name: /SAVE/i, icon: TESTID_SELECTORS.icons.save })
+					await screen.findByRoleWithIcon('button', {
+						name: /SAVE/i,
+						icon: TESTID_SELECTORS.icons.save
+					})
 				).toBeEnabled();
 			});
 		});
@@ -204,20 +212,22 @@ describe('Common contact group board', () => {
 			it('should show the error message in red when the name input length is 0', async () => {
 				const errorMessage = 'Group name is required, enter a name to proceed';
 				setupTest(<CommonContactGroupBoard {...buildProps()} />);
-				expect(screen.getByText(errorMessage)).toBeVisible();
+				expect(await screen.findByText(errorMessage)).toBeVisible();
 				expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
 			});
 
 			it('should show the error message when the name input contains only space characters', async () => {
 				setupTest(<CommonContactGroupBoard {...buildProps({ nameValue: '   ' })} />);
-				expect(screen.getByText('Group name is required, enter a name to proceed')).toBeVisible();
+				expect(
+					await screen.findByText('Group name is required, enter a name to proceed')
+				).toBeVisible();
 			});
 
 			it('should show the error message in red when the name input length is greater than 256', async () => {
 				const errorMessage = 'Maximum length allowed is 256 characters';
 				const newName = faker.string.alphanumeric(CONTACT_GROUP_NAME_MAX_LENGTH + 1);
 				setupTest(<CommonContactGroupBoard {...buildProps({ nameValue: newName })} />);
-				expect(screen.getByText(errorMessage)).toBeVisible();
+				expect(await screen.findByText(errorMessage)).toBeVisible();
 				expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
 			});
 		});
@@ -235,7 +245,7 @@ describe('Common contact group board', () => {
 					await user.type(contactInput, ',');
 				});
 				expect(
-					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
+					await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
 				).toBeEnabled();
 			});
 
@@ -253,14 +263,14 @@ describe('Common contact group board', () => {
 					await user.type(contactInput, ',');
 				});
 				expect(
-					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
+					await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
 				).toBeEnabled();
 			});
 
 			it('should disable the plus button when there are no chips in the contact input', async () => {
 				setupTest(<CommonContactGroupBoard {...buildProps()} />);
 				expect(
-					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
+					await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
 				).toBeDisabled();
 			});
 
@@ -273,7 +283,7 @@ describe('Common contact group board', () => {
 					await user.type(contactInput, ',');
 				});
 				expect(
-					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
+					await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
 				).toBeDisabled();
 			});
 
@@ -288,7 +298,7 @@ describe('Common contact group board', () => {
 					await user.type(contactInput, ',');
 				});
 				expect(
-					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
+					await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
 				).toBeDisabled();
 			});
 
@@ -307,9 +317,11 @@ describe('Common contact group board', () => {
 				const dropdownOption = await screen.findByText(email, { exact: false });
 				expect(dropdownOption).toBeVisible();
 				await user.click(dropdownOption);
-				expect(
-					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
-				).toBeEnabled();
+				await waitFor(async () => {
+					expect(
+						await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
+					).toBeEnabled();
+				});
 			});
 		});
 
@@ -318,7 +330,7 @@ describe('Common contact group board', () => {
 				const email = faker.internet.email();
 				setupTest(<CommonContactGroupBoard {...buildProps({ memberListEmails: [email] })} />);
 				const memberList = await screen.findByTestId(TESTID_SELECTORS.membersList);
-				const avatar = within(memberList).getByTestId(TESTID_SELECTORS.avatar);
+				const avatar = await within(memberList).findByTestId(TESTID_SELECTORS.avatar);
 				expect(avatar).toBeVisible();
 				expect(avatar).toHaveTextContent(`${first(email)}${last(email)}`.toUpperCase());
 				expect(
@@ -386,7 +398,7 @@ describe('Common contact group board', () => {
 				});
 
 				const chipInput = screen.getByTestId(TESTID_SELECTORS.cgContactInput);
-				expect(within(chipInput).getByText(invalidMail1)).toBeVisible();
+				expect(await within(chipInput).findByText(invalidMail1)).toBeVisible();
 				expect(within(chipInput).getByText(invalidMail2)).toBeVisible();
 				expect(within(chipInput).getByText(newEmail)).toBeVisible();
 				await act(async () => {
@@ -394,9 +406,9 @@ describe('Common contact group board', () => {
 						screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
 					);
 				});
-				expect(within(chipInput).queryByText(newEmail)).not.toBeInTheDocument();
-				expect(within(chipInput).getByText(invalidMail1)).toBeVisible();
+				expect(await within(chipInput).findByText(invalidMail1)).toBeVisible();
 				expect(within(chipInput).getByText(invalidMail2)).toBeVisible();
+				expect(within(chipInput).queryByText(newEmail)).not.toBeInTheDocument();
 			});
 
 			it('should remove valid chip and maintain duplicated ones in the contact input', async () => {
@@ -420,8 +432,8 @@ describe('Common contact group board', () => {
 						screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
 					);
 				});
+				expect(await within(chipInput).findByText(email1)).toBeVisible();
 				expect(within(chipInput).queryByText(email2)).not.toBeInTheDocument();
-				expect(within(chipInput).getByText(email1)).toBeVisible();
 			});
 		});
 
@@ -436,7 +448,7 @@ describe('Common contact group board', () => {
 				await act(async () => {
 					await user.type(contactInput, ',');
 				});
-				expect(screen.getByText(errorMessage)).toBeVisible();
+				expect(await screen.findByText(errorMessage)).toBeVisible();
 				expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
 				await user.type(contactInput, validMail);
 				await act(async () => {
@@ -460,7 +472,7 @@ describe('Common contact group board', () => {
 				await act(async () => {
 					await user.type(contactInput, ',');
 				});
-				expect(screen.getByText(errorMessage)).toBeVisible();
+				expect(await screen.findByText(errorMessage)).toBeVisible();
 				expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
 				await user.type(contactInput, validMail);
 				await act(async () => {
@@ -481,7 +493,7 @@ describe('Common contact group board', () => {
 				await act(async () => {
 					await user.type(contactInput, ',');
 				});
-				expect(screen.getByText(errorMessage)).toBeVisible();
+				expect(await screen.findByText(errorMessage)).toBeVisible();
 				expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
 				await user.type(contactInput, faker.internet.email());
 				await act(async () => {
@@ -511,7 +523,7 @@ describe('Common contact group board', () => {
 					await user.type(contactInput, ',');
 				});
 
-				expect(screen.getByText(errorMessage)).toBeVisible();
+				expect(await screen.findByText(errorMessage)).toBeVisible();
 				expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
 				await user.type(contactInput, faker.internet.email());
 				await act(async () => {
@@ -539,7 +551,7 @@ describe('Common contact group board', () => {
 					await user.type(contactInput, ',');
 				});
 
-				expect(screen.getByText(errorMessage)).toBeVisible();
+				expect(await screen.findByText(errorMessage)).toBeVisible();
 				expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
 				await user.type(contactInput, faker.internet.email());
 				await act(async () => {
