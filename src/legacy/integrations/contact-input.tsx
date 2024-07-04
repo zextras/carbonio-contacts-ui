@@ -384,6 +384,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 
 	const onAdd = useCallback(
 		(valueToAdd) => {
+			setIdToRemove('');
 			if (typeof valueToAdd === 'string') {
 				const id = valueToAdd;
 				const parsedEmail = tryToParseEmail(valueToAdd);

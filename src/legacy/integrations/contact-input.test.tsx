@@ -8,7 +8,7 @@
 import React, { ReactElement, useState } from 'react';
 
 import { faker } from '@faker-js/faker';
-import { act, waitFor, within } from '@testing-library/react';
+import { act, fireEvent, waitFor, within } from '@testing-library/react';
 
 import { ContactInput } from './contact-input';
 import { UserEvent, screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
@@ -159,6 +159,27 @@ describe('Contact input', () => {
 		expect(await screen.findByText('another@valid.it')).toBeInTheDocument();
 		expect(screen.queryByText('"Invalid"')).not.toBeInTheDocument();
 		expect(screen.getByRole('textbox')).toHaveValue('"Invalid"');
+	});
+
+	it('edit a mail from a pasted list of emails and focus out should keep the edited chip', async () => {
+		const complexText = 'dan@email.it\n"Invalid"\n<a@valid.email>;\n"Another" <another@valid.it>';
+		const { user } = setupTest(<TestableContactInput />);
+
+		await paste(user, screen.getByRole('textbox'), complexText);
+
+		const invalidChip = getChipWithText('"Invalid"');
+		const invalidChipEditButton = within(invalidChip).getAllByRole('button')[0];
+
+		await act(async () => {
+			await user.click(invalidChipEditButton);
+		});
+
+		fireEvent.focusOut(screen.getByRole('textbox'));
+
+		expect(await screen.findByText('dan@email.it')).toBeInTheDocument();
+		expect(await screen.findByText('a@valid.email')).toBeInTheDocument();
+		expect(await screen.findByText('another@valid.it')).toBeInTheDocument();
+		expect(await screen.findByText('"Invalid"')).toBeInTheDocument();
 	});
 
 	it('open custom contextmenu with a right click', async () => {
