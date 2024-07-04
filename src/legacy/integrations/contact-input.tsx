@@ -230,6 +230,36 @@ const ContactInputCore: FC<ContactInputProps> = ({
 		[inputRef]
 	);
 
+	const createChip = useCallback(
+		(valueToAdd: string): ContactInputItem => {
+			const id = valueToAdd;
+			const parsedEmail = tryToParseEmail(valueToAdd);
+			const isAValidEmail = isValidEmail(parsedEmail);
+			const chip: ContactInputItem = {
+				id,
+				email: parsedEmail,
+				label: parsedEmail,
+				error: !isAValidEmail,
+				actions: [
+					{
+						id: 'action1',
+						label: isAValidEmail
+							? t('label.edit_email', 'Edit E-mail')
+							: t('label.edit_invalid_email', 'E-mail is invalid, click to edit it'),
+						icon: 'EditOutline',
+						type: 'button',
+						onClick: () => editChip(valueToAdd, id)
+					}
+				]
+			};
+			if (!isAValidEmail) {
+				chip.avatarIcon = 'AlertCircleOutline';
+			}
+			return chip;
+		},
+		[editChip, t]
+	);
+
 	const onInputType = useCallback<NonNullable<ChipInputProps['onInputType']>>(
 		({ key, textContent }) => {
 			if (key === 'Enter') {
@@ -251,26 +281,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 					return;
 				}
 				const valueToAdd = inputRef.current?.innerText.replaceAll('\n', '');
-				const id = Date.now().toString();
-				const chip: ContactInputItem = {
-					id,
-					label: valueToAdd,
-					error: !isValidEmail(valueToAdd),
-					actions: [
-						{
-							id: 'action1',
-							label: isValidEmail(valueToAdd)
-								? t('label.edit_email', 'Edit E-mail')
-								: t('label.edit_invalid_email', 'E-mail is invalid, click to edit it'),
-							icon: 'EditOutline',
-							type: 'button',
-							onClick: () => editChip(valueToAdd, id)
-						}
-					]
-				};
-				if (!isValidEmail(valueToAdd)) {
-					chip.avatarIcon = 'AlertCircleOutline';
-				}
+				const chip = createChip(valueToAdd ?? '');
 				if (valueToAdd !== '') {
 					onChange?.([...defaults, { ...chip }]);
 				}
@@ -344,7 +355,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 				setOptions([]);
 			}
 		},
-		[defaults, editChip, inputRef, onChange, options, orderedAccountIds, t]
+		[createChip, defaults, inputRef, onChange, options, orderedAccountIds]
 	);
 
 	useEffect(() => {
@@ -386,30 +397,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 		(valueToAdd) => {
 			setIdToRemove('');
 			if (typeof valueToAdd === 'string') {
-				const id = valueToAdd;
-				const parsedEmail = tryToParseEmail(valueToAdd);
-				const isAValidEmail = isValidEmail(parsedEmail);
-				const chip: ContactInputItem = {
-					id,
-					email: parsedEmail,
-					label: parsedEmail,
-					error: !isAValidEmail,
-					actions: [
-						{
-							id: 'action1',
-							label: isAValidEmail
-								? t('label.edit_email', 'Edit E-mail')
-								: t('label.edit_invalid_email', 'E-mail is invalid, click to edit it'),
-							icon: 'EditOutline',
-							type: 'button',
-							onClick: () => editChip(valueToAdd, id)
-						}
-					]
-				};
-				if (!isAValidEmail) {
-					chip.avatarIcon = 'AlertCircleOutline';
-				}
-				return chip;
+				return createChip(valueToAdd);
 			}
 			return {
 				...valueToAdd,
@@ -427,7 +415,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 				]
 			};
 		},
-		[editChip, t]
+		[createChip, editChip, t]
 	);
 
 	const ChipComponent = useCallback(
