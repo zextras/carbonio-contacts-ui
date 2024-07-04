@@ -385,7 +385,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	const onAdd = useCallback(
 		(valueToAdd) => {
 			if (typeof valueToAdd === 'string') {
-				const id = Date.now().toString();
+				const id = valueToAdd;
 				const parsedEmail = tryToParseEmail(valueToAdd);
 				const isAValidEmail = isValidEmail(parsedEmail);
 				const chip: ContactInputItem = {

@@ -141,6 +141,26 @@ describe('Contact input', () => {
 		expect(await screen.findAllByTestId('icon: AlertCircleOutline')).toHaveLength(2);
 	});
 
+	it('edit a mail from a pasted list of emails should edit only the selected one and keep the others', async () => {
+		const complexText = 'dan@email.it\n"Invalid"\n<a@valid.email>;\n"Another" <another@valid.it>';
+		const { user } = setupTest(<TestableContactInput />);
+
+		await paste(user, screen.getByRole('textbox'), complexText);
+
+		const invalidChip = getChipWithText('"Invalid"');
+		const invalidChipEditButton = within(invalidChip).getAllByRole('button')[0];
+
+		await act(async () => {
+			await user.click(invalidChipEditButton);
+		});
+
+		expect(await screen.findByText('dan@email.it')).toBeInTheDocument();
+		expect(await screen.findByText('a@valid.email')).toBeInTheDocument();
+		expect(await screen.findByText('another@valid.it')).toBeInTheDocument();
+		expect(screen.queryByText('"Invalid"')).not.toBeInTheDocument();
+		expect(screen.getByRole('textbox')).toHaveValue('"Invalid"');
+	});
+
 	it('open custom contextmenu with a right click', async () => {
 		const { user } = setupTest(<TestableContactInput />);
 
@@ -168,4 +188,11 @@ async function paste(user: UserEvent, element: HTMLElement, text: string): Promi
 			getData: () => text
 		} as unknown as DataTransfer);
 	});
+}
+
+function getChipWithText(text: string): HTMLElement {
+	const chips = screen.queryAllByTestId('default-chip');
+	const invalidChip = chips.find((chip) => within(chip).queryByText(text, { exact: false }));
+	if (!invalidChip) throw new Error(`Chip not found with text: ${text}`);
+	return invalidChip;
 }
