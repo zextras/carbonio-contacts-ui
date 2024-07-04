@@ -1,18 +1,10 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 /*
  * SPDX-FileCopyrightText: 2021 Zextras <https://www.zextras.com>
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, {
-	useCallback,
-	useEffect,
-	useRef,
-	useState,
-	ReactElement,
-	FC,
-	useMemo,
-	ReactText
-} from 'react';
+import React, { useCallback, useEffect, useRef, useState, ReactElement, FC, useMemo } from 'react';
 
 import {
 	Avatar,
@@ -20,11 +12,11 @@ import {
 	Container,
 	Row,
 	Text,
-	Dropdown,
 	type ChipItem,
 	type ChipInputProps,
 	type DropdownItem,
-	useCombinedRefs
+	useCombinedRefs,
+	Dropdown
 } from '@zextras/carbonio-design-system';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
 import { filter, find, map, trim, forEach, reject, uniqBy, noop, unescape } from 'lodash';
@@ -59,24 +51,6 @@ function isContactGroup(contact: {
 		false
 	);
 }
-
-const pasteDropdownItem = (input: HTMLInputElement | null): DropdownItem => ({
-	id: 'paste',
-	label: 'paste',
-	onClick: async (): Promise<void> => {
-		const pastedText = await navigator.clipboard.readText();
-		const dataTransfer = new DataTransfer();
-		dataTransfer.setData('text/plain', pastedText);
-
-		const pasteEvent = new ClipboardEvent('paste', {
-			clipboardData: dataTransfer,
-			bubbles: true,
-			cancelable: true
-		});
-
-		input?.dispatchEvent(pasteEvent);
-	}
-});
 
 const getChipLabel = (
 	contact: Pick<
@@ -529,7 +503,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 
 	return (
 		<Container width="100%" onDrop={onDrop} height="100%">
-			<Dropdown display="block" items={[pasteDropdownItem(inputRef.current)]} contextMenu>
+			<PasteContextMenu elementReceivingPaste={inputRef.current}>
 				<ChipInput
 					data-testid={'contact-input'}
 					disableOptions
@@ -555,10 +529,9 @@ const ContactInputCore: FC<ContactInputProps> = ({
 					onDragEnter={dragAndDropEnabled ? onDragEnter : noop}
 					onDragOver={dragAndDropEnabled ? onDragEnter : noop}
 					onDragEnd={dragAndDropEnabled ? onDragEnd : noop}
-					className="carbonio-bypass-context-menu"
 					{...rest}
 				/>
-			</Dropdown>
+			</PasteContextMenu>
 		</Container>
 	);
 };
@@ -568,3 +541,38 @@ export const ContactInput = (props: ContactInputProps): ReactElement => (
 		<ContactInputCore {...props} />
 	</StoreProvider>
 );
+
+type PasteContextMenuProps = {
+	elementReceivingPaste: HTMLInputElement | null;
+	children: ReactElement;
+};
+
+function PasteContextMenu({
+	elementReceivingPaste,
+	children
+}: PasteContextMenuProps): ReactElement {
+	const { t } = useTranslation();
+
+	const pasteDropdownItem = {
+		id: 'paste',
+		label: t('label.paste', 'Paste'),
+		onClick: async (): Promise<void> => {
+			const dataTransfer = new DataTransfer();
+			dataTransfer.setData('text/plain', await navigator.clipboard.readText());
+
+			elementReceivingPaste?.dispatchEvent(
+				new ClipboardEvent('paste', {
+					clipboardData: dataTransfer,
+					bubbles: true,
+					cancelable: true
+				})
+			);
+		}
+	};
+
+	return (
+		<Dropdown display="block" items={[pasteDropdownItem]} contextMenu>
+			{children}
+		</Dropdown>
+	);
+}

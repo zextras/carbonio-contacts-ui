@@ -140,6 +140,15 @@ describe('Contact input', () => {
 		expect(await screen.findByText('"not valid" <not@valid>')).toBeInTheDocument();
 		expect(await screen.findAllByTestId('icon: AlertCircleOutline')).toHaveLength(2);
 	});
+
+	it('open custom contextmenu with a right click', async () => {
+		const { user } = setupTest(<TestableContactInput />);
+
+		await user.rightClick(screen.getByTestId('contact-input'));
+
+		expect(await screen.findByText('Paste')).toBeInTheDocument();
+		// we can't test the clipboard paste through context menu because it's not supported by jsdom
+	});
 });
 
 function TestableContactInput(): ReactElement {
