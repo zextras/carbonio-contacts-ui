@@ -532,8 +532,8 @@ export const ContactInput = (props: ContactInputProps): ReactElement => (
 );
 
 type PasteContextMenuProps = {
-	elementReceivingPaste: HTMLInputElement | null;
-	children: ReactElement;
+	readonly elementReceivingPaste: HTMLInputElement | null;
+	readonly children: ReactElement;
 };
 
 function PasteContextMenu({
