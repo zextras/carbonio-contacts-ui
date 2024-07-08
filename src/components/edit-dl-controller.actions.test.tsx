@@ -417,7 +417,7 @@ describe('EditDLControllerComponent', () => {
 				);
 				await user.click(screen.getByRole('button', { name: /discard/i }));
 				expect(await screen.findByText('Member list 1')).toBeVisible();
-				const validEmail = 'a@a.a';
+				const validEmail = 'valid@email.com';
 				const contactInput = getDLContactInput();
 				await act(async () => {
 					await user.type(contactInput.textbox, `${validEmail},`);
