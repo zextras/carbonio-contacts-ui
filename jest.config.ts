@@ -22,6 +22,7 @@ const config: Config = {
 	collectCoverageFrom: [
 		...(defaultConfig.collectCoverageFrom ?? []),
 		'!**/(tests|test)/**/*', // exclude test folders
+		'!**/*.test.{js,ts}(x)?', // exclude test files not in test folders
 		'!**/.eslintrc.js' // exclude eslint config of common
 	],
 	coverageReporters: ['lcov', 'html']
