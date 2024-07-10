@@ -41,7 +41,7 @@ describe('useActionEditDL', () => {
 			icon: 'DistributionListOutline',
 			context: { id: dl.id },
 			id: `${EDIT_DL_BOARD_ID}-${dl.id}`,
-			url: expect.anything()
+			boardViewId: expect.anything()
 		});
 	});
 
@@ -58,7 +58,7 @@ describe('useActionEditDL', () => {
 			icon: 'DistributionListOutline',
 			context: { id: dl.id },
 			id: `${EDIT_DL_BOARD_ID}-${dl.id}`,
-			url: expect.anything()
+			boardViewId: expect.anything()
 		});
 	});
 
@@ -68,7 +68,7 @@ describe('useActionEditDL', () => {
 		const boardId = `${EDIT_DL_BOARD_ID}-${dl.id}`;
 		jest.spyOn(shell, 'getBoardById').mockReturnValue({
 			id: boardId,
-			url: EDIT_DL_BOARD_ID,
+			boardViewId: EDIT_DL_BOARD_ID,
 			app: '',
 			icon: '',
 			title: ''

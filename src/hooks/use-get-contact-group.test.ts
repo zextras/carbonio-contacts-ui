@@ -16,7 +16,7 @@ function spyUseBoard(contactGroupId?: string): void {
 	jest.spyOn(shell, 'useBoard').mockReturnValue({
 		context: { contactGroupId },
 		id: '',
-		url: '',
+		boardViewId: '',
 		app: '',
 		icon: '',
 		title: ''

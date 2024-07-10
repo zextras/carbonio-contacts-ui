@@ -43,7 +43,7 @@ const spyUseBoard = (dl: DistributionList | undefined): void => {
 	jest.spyOn(shell, 'useBoard').mockReturnValue({
 		context: dl ? ({ id: dl.id } satisfies EditDLBoardContext) : undefined,
 		id: '',
-		url: '',
+		boardViewId: '',
 		app: '',
 		icon: '',
 		title: ''
