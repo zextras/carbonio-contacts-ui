@@ -110,7 +110,8 @@ describe('ContactsDeleteModal', () => {
 	it('should show an error snackbar after receiving a failure result from the API', async () => {
 		const response: ErrorSoapBodyResponse = {
 			Fault: {
-				Detail: { Error: { Code: faker.string.uuid(), Detail: faker.word.preposition() } },
+				Code: { Value: faker.string.uuid() },
+				Detail: { Error: { Code: faker.string.uuid(), Trace: faker.word.preposition() } },
 				Reason: { Text: faker.word.sample() }
 			}
 		};
@@ -127,7 +128,8 @@ describe('ContactsDeleteModal', () => {
 	it("shouldn't close the modal after a failure result from the API", async () => {
 		const response: ErrorSoapBodyResponse = {
 			Fault: {
-				Detail: { Error: { Code: faker.string.uuid(), Detail: faker.word.preposition() } },
+				Code: { Value: faker.string.uuid() },
+				Detail: { Error: { Code: faker.string.uuid(), Trace: faker.word.preposition() } },
 				Reason: { Text: faker.word.sample() }
 			}
 		};
