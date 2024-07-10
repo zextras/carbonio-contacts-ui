@@ -80,7 +80,7 @@ describe('App', () => {
 		const addBoardView = jest.spyOn(shell, 'addBoardView');
 		setupTest(<App />);
 		expect(addBoardView).toHaveBeenCalledWith<Parameters<typeof shell.addBoardView>>({
-			route: 'contacts',
+			id: 'contact-board',
 			component: expect.anything()
 		});
 	});
@@ -90,7 +90,6 @@ describe('App', () => {
 		setupTest(<App />);
 		expect(addBoardView).toHaveBeenCalledWith<Parameters<typeof shell.addBoardView>>({
 			id: 'new-contact-group-board',
-			route: 'new-contact-group-board',
 			component: expect.anything()
 		});
 	});
@@ -100,7 +99,6 @@ describe('App', () => {
 		setupTest(<App />);
 		expect(addBoardView).toHaveBeenCalledWith<Parameters<typeof shell.addBoardView>>({
 			id: 'edit-contact-group-board',
-			route: 'edit-contact-group-board',
 			component: expect.anything()
 		});
 	});
@@ -110,7 +108,6 @@ describe('App', () => {
 		setupTest(<App />);
 		expect(addBoardView).toHaveBeenCalledWith<Parameters<typeof shell.addBoardView>>({
 			id: 'edit-dl-board',
-			route: 'edit-dl-board',
 			component: expect.anything()
 		});
 	});
