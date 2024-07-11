@@ -13,3 +13,4 @@
 /.vscode
 zextras-carbonio-*.tgz
 .DS_Store
+.tool-versions

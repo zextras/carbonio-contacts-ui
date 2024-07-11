@@ -35,6 +35,7 @@ export const ACTION_IDS = {
 	exportContact: 'export-contact-action'
 } as const;
 
+export const CONTACT_BOARD_ID = 'contact-board';
 export const NEW_CONTACT_GROUP_BOARD_ID = 'new-contact-group-board';
 export const EDIT_CONTACT_GROUP_BOARD_ID = 'edit-contact-group-board';
 export const EDIT_DL_BOARD_ID = 'edit-dl-board';

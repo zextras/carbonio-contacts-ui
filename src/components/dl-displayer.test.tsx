@@ -105,7 +105,7 @@ describe('Distribution List displayer', () => {
 				await user.click(await screen.findByRole('button', { name: 'Edit' }));
 				expect(addBoardFn).toHaveBeenCalledWith(
 					expect.objectContaining<Partial<Parameters<typeof shell.addBoard>[0]>>({
-						url: EDIT_DL_BOARD_ID,
+						boardViewId: EDIT_DL_BOARD_ID,
 						id: `${EDIT_DL_BOARD_ID}-${dl.id}`,
 						context: { id: dl.id }
 					})

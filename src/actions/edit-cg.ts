@@ -31,7 +31,7 @@ export const useActionEditCG = (): EditActionCG => {
 		} else {
 			addBoard({
 				id: `${EDIT_CONTACT_GROUP_BOARD_ID}-${contactGroup.id}`,
-				url: EDIT_CONTACT_GROUP_BOARD_ID,
+				boardViewId: EDIT_CONTACT_GROUP_BOARD_ID,
 				title: contactGroup.title,
 				context: { contactGroupId: contactGroup.id }
 			});

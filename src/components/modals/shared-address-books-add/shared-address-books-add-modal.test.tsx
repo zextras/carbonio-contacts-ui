@@ -117,8 +117,9 @@ describe('SharesModal', () => {
 	it('should render an error snackbar if the GetShareInfo API will return an error', async () => {
 		createSoapAPIInterceptor<GetShareInfoRequest, ErrorSoapBodyResponse>('GetShareInfo', {
 			Fault: {
-				Detail: { Error: { Code: 'error-code', Detail: 'error-detail' } },
-				Reason: { Text: 'everything is broken!' }
+				Code: { Value: faker.string.uuid() },
+				Detail: { Error: { Code: faker.string.uuid(), Trace: faker.word.preposition() } },
+				Reason: { Text: faker.word.sample() }
 			}
 		});
 
@@ -347,8 +348,9 @@ describe('SharesModal', () => {
 
 			createSoapAPIInterceptor<CreateMountpointsRequest, ErrorSoapBodyResponse>('Batch', {
 				Fault: {
-					Detail: { Error: { Code: 'error-code', Detail: 'error-detail' } },
-					Reason: { Text: 'everything is broken!' }
+					Code: { Value: faker.string.uuid() },
+					Detail: { Error: { Code: faker.string.uuid(), Trace: faker.word.preposition() } },
+					Reason: { Text: faker.word.sample() }
 				}
 			});
 
