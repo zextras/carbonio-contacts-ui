@@ -6,6 +6,7 @@
 import React, { FC, ReactElement, useCallback } from 'react';
 
 import { Container, ChipInput, ChipProps } from '@zextras/carbonio-design-system';
+import { useTranslation } from 'react-i18next';
 
 import { Query } from '../search-types';
 
@@ -30,6 +31,7 @@ type ComponentProps = {
 };
 const KeywordRow: FC<ComponentProps> = ({ compProps }): ReactElement => {
 	const { otherKeywords, setOtherKeywords, query } = compProps;
+	const [t] = useTranslation();
 	const keywordChipOnAdd = useCallback(
 		(label) => ({
 			label,
@@ -48,7 +50,7 @@ const KeywordRow: FC<ComponentProps> = ({ compProps }): ReactElement => {
 	return (
 		<Container padding={{ bottom: 'small', top: 'medium' }}>
 			<ChipInput
-				placeholder="Keyword"
+				placeholder={t('label.keyword', 'Keyword')}
 				background="gray5"
 				value={otherKeywords}
 				onChange={onChange}
