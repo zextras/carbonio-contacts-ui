@@ -9,6 +9,7 @@ import * as shell from '@zextras/carbonio-shell-ui';
 
 import App from './app';
 import { setupTest } from './carbonio-ui-commons/test/test-setup';
+import { CONTACT_BOARD_ID } from './constants';
 import { ContactInputProps } from './legacy/integrations/contact-input';
 import { ContactInputIntegrationWrapper } from './legacy/integrations/contact-input-integration-wrapper';
 
@@ -80,7 +81,7 @@ describe('App', () => {
 		const addBoardView = jest.spyOn(shell, 'addBoardView');
 		setupTest(<App />);
 		expect(addBoardView).toHaveBeenCalledWith<Parameters<typeof shell.addBoardView>>({
-			id: 'contact-board',
+			id: CONTACT_BOARD_ID,
 			component: expect.anything()
 		});
 	});
