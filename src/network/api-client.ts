@@ -26,6 +26,7 @@ import { moveFolder } from './api/move-folder';
 import { revokeFolderGrant } from './api/revoke-folder-grant';
 import { sendShareNotification } from './api/send-share-notification';
 import { shareFolder } from './api/share-folder';
+import { trashContacts } from './api/trash-contacts';
 import { trashFolder } from './api/trash-folder';
 import { updateFolder } from './api/update-folder';
 import { upload } from './api/upload';
@@ -55,5 +56,6 @@ export const apiClient = {
 	updateFolder,
 	createFolder,
 	getItem,
-	createContactFromVcard
+	createContactFromVcard,
+	trashContacts
 };

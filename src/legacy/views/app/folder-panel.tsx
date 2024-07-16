@@ -79,12 +79,7 @@ export default function FolderPanel(): ReactElement {
 			>
 				<Container mainAlignment="flex-start" borderRadius="none" height="calc(100% - 4rem)">
 					{isSelecting ? (
-						<SelectPanelActions
-							folderId={folderId}
-							dispatch={dispatch}
-							deselectAll={deselectAll}
-							selectedIDs={selected}
-						/>
+						<SelectPanelActions deselectAll={deselectAll} />
 					) : (
 						<Breadcrumbs folderPath={folder?.absFolderPath} itemsCount={folder?.n} />
 					)}

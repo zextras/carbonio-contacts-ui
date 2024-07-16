@@ -64,8 +64,9 @@ export const registerDistributionListActionHandler = (
 						Fault: map(
 							errors,
 							(error): SoapFault => ({
+								Code: { Value: '' },
 								Reason: { Text: error },
-								Detail: { Error: { Detail: error, Code: '' } }
+								Detail: { Error: { Trace: error, Code: '' } }
 							})
 						)
 					}

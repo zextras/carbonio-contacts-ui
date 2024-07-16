@@ -34,7 +34,7 @@ export const useActionEditDL = (): EditDLAction => {
 					icon: 'DistributionListOutline',
 					title: distributionList.displayName || distributionList.email,
 					id: boardId,
-					url: EDIT_DL_BOARD_ID
+					boardViewId: EDIT_DL_BOARD_ID
 				});
 			}
 		}

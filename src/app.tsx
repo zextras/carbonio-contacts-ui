@@ -30,7 +30,8 @@ import {
 	NEW_CONTACT_GROUP_BOARD_ID,
 	GROUPS_ROUTE,
 	EDIT_CONTACT_GROUP_BOARD_ID,
-	EDIT_DL_BOARD_ID
+	EDIT_DL_BOARD_ID,
+	CONTACT_BOARD_ID
 } from './constants';
 import { useNavigation } from './hooks/useNavigation';
 import { ContactInputIntegrationWrapper } from './legacy/integrations/contact-input-integration-wrapper';
@@ -200,22 +201,19 @@ const App = (): React.JSX.Element => {
 			component: SearchView
 		});
 		addBoardView({
-			route: CONTACTS_ROUTE,
+			id: CONTACT_BOARD_ID,
 			component: BoardView
 		});
 		addBoardView({
 			id: NEW_CONTACT_GROUP_BOARD_ID,
-			route: NEW_CONTACT_GROUP_BOARD_ID,
 			component: NewContactGroupBoardView
 		});
 		addBoardView({
 			id: EDIT_CONTACT_GROUP_BOARD_ID,
-			route: EDIT_CONTACT_GROUP_BOARD_ID,
 			component: EditContactGroupBoardView
 		});
 		addBoardView({
 			id: EDIT_DL_BOARD_ID,
-			route: EDIT_DL_BOARD_ID,
 			component: EditDLBoardView
 		});
 	}, [t]);
@@ -235,7 +233,7 @@ const App = (): React.JSX.Element => {
 					onClick: (ev): void => {
 						ev?.preventDefault?.();
 						addBoard({
-							url: `${CONTACTS_ROUTE}/new`,
+							boardViewId: CONTACT_BOARD_ID,
 							title: t('label.new_contact', 'New Contact')
 						});
 					},
@@ -255,7 +253,7 @@ const App = (): React.JSX.Element => {
 					icon: 'PeopleOutline',
 					onClick: (): void => {
 						addBoard({
-							url: NEW_CONTACT_GROUP_BOARD_ID,
+							boardViewId: NEW_CONTACT_GROUP_BOARD_ID,
 							title: t('board.newContactGroup.title', 'New Group'),
 							context: { navigateTo }
 						});

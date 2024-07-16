@@ -14,7 +14,8 @@ describe('Folder action', () => {
 	it('should raise an exception if the response contains a Fault', () => {
 		const response: ErrorSoapBodyResponse = {
 			Fault: {
-				Detail: { Error: { Code: faker.string.uuid(), Detail: faker.word.preposition() } },
+				Code: { Value: faker.string.uuid() },
+				Detail: { Error: { Code: faker.string.uuid(), Trace: faker.word.preposition() } },
 				Reason: { Text: faker.word.sample() }
 			}
 		};
