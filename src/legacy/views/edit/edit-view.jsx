@@ -404,12 +404,12 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 				/>
 				<CustomMultivalueField
 					name="URL"
-					label={t('label.website')}
+					label={t('label.website', 'Website')}
 					typeLabel={t('select.default', 'Select type')}
 					typeField="type"
 					types={defaultTypes}
 					subFields={['url']}
-					fieldLabels={[t('label.website', 'Website')]}
+					fieldLabels={[t('section.field.website', 'Website URL')]}
 					value={contact.URL}
 					dispatch={dispatch}
 				/>
