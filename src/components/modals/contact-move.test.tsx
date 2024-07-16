@@ -9,9 +9,9 @@ import { act } from '@testing-library/react';
 import { times } from 'lodash';
 
 import { ContactMoveModal } from './contact-move';
+import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
 import { isLink, isTrashed } from '../../carbonio-ui-commons/helpers/folders';
 import { getRootsArray } from '../../carbonio-ui-commons/store/zustand/folder';
-import { FOLDERS } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui-constants';
 import { populateFoldersStore } from '../../carbonio-ui-commons/test/mocks/store/folders';
 import {
 	makeListItemsVisible,

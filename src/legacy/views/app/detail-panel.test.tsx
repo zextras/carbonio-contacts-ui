@@ -10,8 +10,8 @@ import { faker } from '@faker-js/faker';
 import { http, HttpResponse } from 'msw';
 
 import DetailPanel from './detail-panel';
+import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { getSetupServer } from '../../../carbonio-ui-commons/test/jest-setup';
-import { FOLDERS } from '../../../carbonio-ui-commons/test/mocks/carbonio-shell-ui-constants';
 import { populateFoldersStore } from '../../../carbonio-ui-commons/test/mocks/store/folders';
 import { screen, setupTest } from '../../../carbonio-ui-commons/test/test-setup';
 import { JEST_MOCKED_ERROR, TESTID_SELECTORS } from '../../../constants/tests';

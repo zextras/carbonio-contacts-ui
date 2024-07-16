@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { isContacts, isEmailedContacts } from './folders';
-import { FOLDERS } from '../carbonio-ui-commons/test/mocks/carbonio-shell-ui-constants';
+import { FOLDERS } from '../carbonio-ui-commons/constants/folders';
 
 describe('Folders helpers', () => {
 	describe('isContacts', () => {

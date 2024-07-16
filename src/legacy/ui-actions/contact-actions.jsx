@@ -5,7 +5,7 @@
  */
 
 import { useModal } from '@zextras/carbonio-design-system';
-import { getAction, FOLDERS, useTags } from '@zextras/carbonio-shell-ui';
+import { getAction, useTags } from '@zextras/carbonio-shell-ui';
 import { compact, isEmpty } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
@@ -15,6 +15,7 @@ import { useActionExportContact } from '../../actions/export-contact';
 import { useActionMoveContacts } from '../../actions/move-contacts';
 import { useActionRestoreContacts } from '../../actions/restore-contacts';
 import { useActionTrashContacts } from '../../actions/trash-contacts';
+import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
 import { getFolderIdParts } from '../../carbonio-ui-commons/helpers/folders';
 
 const generateClickableAction = (action, params) => ({

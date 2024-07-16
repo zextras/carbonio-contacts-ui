@@ -3,10 +3,11 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { ErrorSoapBodyResponse, FOLDERS, JSNS, soapFetch } from '@zextras/carbonio-shell-ui';
+import { ErrorSoapBodyResponse, JSNS, soapFetch } from '@zextras/carbonio-shell-ui';
 import { map } from 'lodash';
 
 import { GenericSoapPayload } from './types';
+import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
 import { SoapLink } from '../../carbonio-ui-commons/types/folder';
 import { ShareInfo } from '../../model/share-info';
 

@@ -6,7 +6,7 @@
 import React, { useCallback } from 'react';
 
 import { Divider } from '@zextras/carbonio-design-system';
-import { FOLDERS, getAction, replaceHistory } from '@zextras/carbonio-shell-ui';
+import { getAction, replaceHistory } from '@zextras/carbonio-shell-ui';
 import { head, includes, split } from 'lodash';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 
@@ -15,6 +15,7 @@ import ContactPreviewHeader from './contact-preview-header';
 import { useActionDeleteContacts } from '../../../actions/delete-contacts';
 import { useActionMoveContacts } from '../../../actions/move-contacts';
 import { useActionTrashContacts } from '../../../actions/trash-contacts';
+import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { getFolderIdParts } from '../../../carbonio-ui-commons/helpers/folders';
 import { useAppSelector } from '../../hooks/redux';
 import { useDisplayName } from '../../hooks/use-display-name';

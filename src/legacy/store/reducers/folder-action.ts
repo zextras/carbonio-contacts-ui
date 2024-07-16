@@ -3,9 +3,9 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { FOLDERS } from '@zextras/carbonio-shell-ui';
 import { cloneDeep, filter, find, reject, split } from 'lodash';
 
+import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { isTrash } from '../../../carbonio-ui-commons/helpers/folders';
 import { FoldersSlice } from '../../types/store';
 import { applyFoldersChangesToStore, removeFoldersFromStore } from '../../utils/helpers';
