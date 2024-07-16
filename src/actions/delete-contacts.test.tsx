@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { FOLDERS } from '@zextras/carbonio-shell-ui';
 import { act } from 'react-dom/test-utils';
 
 import { useActionDeleteContacts } from './delete-contacts';
 import { UIAction } from './types';
+import { FOLDERS } from '../carbonio-ui-commons/constants/folders';
 import { populateFoldersStore } from '../carbonio-ui-commons/test/mocks/store/folders';
 import { screen, setupHook } from '../carbonio-ui-commons/test/test-setup';
 import { TIMERS } from '../constants/tests';

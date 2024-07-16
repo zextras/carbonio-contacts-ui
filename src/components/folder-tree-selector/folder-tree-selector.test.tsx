@@ -20,11 +20,11 @@ import {
 	getFoldersArrayByRoot,
 	getRootsMap
 } from '../../carbonio-ui-commons/store/zustand/folder';
-import { FOLDERS } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui-constants';
 import { populateFoldersStore } from '../../carbonio-ui-commons/test/mocks/store/folders';
 import { makeListItemsVisible, setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { isEmailedContacts } from '../../helpers/folders';
 import { getFoldersArray } from '../../tests/utils';
+import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
 
 describe('Folder selector', () => {
 	test('The selector is visible', () => {

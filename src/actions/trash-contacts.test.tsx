@@ -5,11 +5,12 @@
  */
 
 import { faker } from '@faker-js/faker';
-import { ErrorSoapBodyResponse, FOLDERS } from '@zextras/carbonio-shell-ui';
+import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 import { act } from 'react-dom/test-utils';
 
 import { useActionTrashContacts } from './trash-contacts';
 import { UIAction } from './types';
+import { FOLDERS } from '../carbonio-ui-commons/constants/folders';
 import { createSoapAPIInterceptor } from '../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { populateFoldersStore } from '../carbonio-ui-commons/test/mocks/store/folders';
 import { screen, setupHook } from '../carbonio-ui-commons/test/test-setup';

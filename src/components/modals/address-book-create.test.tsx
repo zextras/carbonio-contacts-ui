@@ -10,9 +10,9 @@ import { act, waitFor } from '@testing-library/react';
 import { ErrorSoapBodyResponse, JSNS } from '@zextras/carbonio-shell-ui';
 
 import { AddressBookCreateModal } from './address-book-create';
+import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
 import { isLink, isTrashed } from '../../carbonio-ui-commons/helpers/folders';
 import { getRootsArray } from '../../carbonio-ui-commons/store/zustand/folder';
-import { FOLDERS } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui-constants';
 import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { populateFoldersStore } from '../../carbonio-ui-commons/test/mocks/store/folders';
 import { makeListItemsVisible, screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';

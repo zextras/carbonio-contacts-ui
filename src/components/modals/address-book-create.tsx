@@ -15,10 +15,10 @@ import {
 	Padding,
 	useSnackbar
 } from '@zextras/carbonio-design-system';
-import { FOLDERS } from '@zextras/carbonio-shell-ui';
 import { filter } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
+import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
 import { useFolder } from '../../carbonio-ui-commons/store/zustand/folder/hooks';
 import { Folder } from '../../carbonio-ui-commons/types/folder';
 import { TIMEOUTS } from '../../constants';

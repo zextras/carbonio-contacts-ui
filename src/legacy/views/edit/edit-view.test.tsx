@@ -10,7 +10,7 @@ import { act } from '@testing-library/react';
 import { Route } from 'react-router-dom';
 
 import EditView from './edit-view';
-import { FOLDERS } from '../../../carbonio-ui-commons/test/mocks/carbonio-shell-ui-constants';
+import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { generateFolder } from '../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
 import { populateFoldersStore } from '../../../carbonio-ui-commons/test/mocks/store/folders';
 import { screen, setupTest } from '../../../carbonio-ui-commons/test/test-setup';

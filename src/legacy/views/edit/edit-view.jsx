@@ -16,7 +16,6 @@ import {
 	useSnackbar
 } from '@zextras/carbonio-design-system';
 import {
-	FOLDERS,
 	ZIMBRA_STANDARD_COLORS,
 	useReplaceHistoryCallback,
 	report
@@ -30,6 +29,7 @@ import styled from 'styled-components';
 import { ContactEditorRow, CustomMultivalueField } from './CustomMultivalueField';
 import reducer, { op } from './form-reducer';
 import { FoldersSelector } from '../../../carbonio-ui-commons/components/select/folders-selector';
+import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import {
 	getFolderIdParts,
 	isRoot,

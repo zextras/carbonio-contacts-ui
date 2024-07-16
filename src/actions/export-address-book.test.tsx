@@ -10,7 +10,7 @@ import { act } from 'react-dom/test-utils';
 import { useActionExportAddressBook } from './export-address-book';
 import { UIAction } from './types';
 import { FOLDER_VIEW } from '../carbonio-ui-commons/constants';
-import { FOLDERS } from '../carbonio-ui-commons/test/mocks/carbonio-shell-ui-constants';
+import { FOLDERS } from '../carbonio-ui-commons/constants/folders';
 import { generateFolder } from '../carbonio-ui-commons/test/mocks/folders/folders-generator';
 import { createSoapAPIInterceptor } from '../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { screen, setupHook } from '../carbonio-ui-commons/test/test-setup';
