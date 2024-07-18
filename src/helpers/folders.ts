@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-shell-ui';
 import { sortBy } from 'lodash';
 
 import { FOLDERS } from '../carbonio-ui-commons/constants/folders';
+import { ZIMBRA_STANDARD_COLORS } from '../carbonio-ui-commons/constants/utils';
 import { getFolderIdParts, isA, isLink, isRoot } from '../carbonio-ui-commons/helpers/folders';
 import type { Folder } from '../carbonio-ui-commons/types/folder';
 
