@@ -15,10 +15,11 @@ import {
 	Tooltip,
 	useModal
 } from '@zextras/carbonio-design-system';
-import { useTags, ZIMBRA_STANDARD_COLORS, runSearch, QueryChip } from '@zextras/carbonio-shell-ui';
+import { useTags, runSearch, QueryChip } from '@zextras/carbonio-shell-ui';
 import { reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
+import { ZIMBRA_STANDARD_COLORS } from '../../carbonio-ui-commons/constants/utils';
 import { createTag, useGetTagsActions } from '../ui-actions/tag-actions';
 import { ItemType, TagsAccordionItems } from '../views/secondary-bar/parts/tags/types';
 

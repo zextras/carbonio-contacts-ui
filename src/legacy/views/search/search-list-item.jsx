@@ -6,10 +6,11 @@
 import React, { useCallback, useMemo } from 'react';
 
 import { Container, Padding, Row, Text, Tooltip } from '@zextras/carbonio-design-system';
-import { ZIMBRA_STANDARD_COLORS, pushHistory, useTags } from '@zextras/carbonio-shell-ui';
+import { pushHistory, useTags } from '@zextras/carbonio-shell-ui';
 import { includes, reduce, trim } from 'lodash';
 import { useDispatch } from 'react-redux';
 
+import { ZIMBRA_STANDARD_COLORS } from '../../../carbonio-ui-commons/constants/utils';
 import { useAppSelector } from '../../hooks/redux';
 import { searchContacts } from '../../store/actions/search-contacts';
 import { selectFolderStatus } from '../../store/selectors/contacts';

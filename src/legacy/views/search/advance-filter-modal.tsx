@@ -13,7 +13,7 @@ import {
 	Padding,
 	Icon
 } from '@zextras/carbonio-design-system';
-import { getTags, SearchViewProps, ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-shell-ui';
+import { getTags, SearchViewProps } from '@zextras/carbonio-shell-ui';
 import { TFunction } from 'i18next';
 import { concat, filter, map } from 'lodash';
 
@@ -22,6 +22,7 @@ import TagRow from './parts/tag-row';
 import ToggleFilters from './parts/toggle-filters';
 import { useDisabled, useSecondaryDisabled } from './parts/use-disable-hooks';
 import type { Query } from './search-types';
+import { ZIMBRA_STANDARD_COLORS } from '../../../carbonio-ui-commons/constants/utils';
 import ModalFooter from '../secondary-bar/commons/modal-footer';
 import { ModalHeader } from '../secondary-bar/commons/modal-header';
 

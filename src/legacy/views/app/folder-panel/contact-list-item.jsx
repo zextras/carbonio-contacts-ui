@@ -6,11 +6,12 @@
 import React, { useCallback, useMemo } from 'react';
 
 import { Container, Drag } from '@zextras/carbonio-design-system';
-import { replaceHistory, useTags, ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-shell-ui';
+import { replaceHistory, useTags } from '@zextras/carbonio-shell-ui';
 import { includes, reduce } from 'lodash';
 
 import { ItemAvatar } from './item-avatar';
 import { ItemContent } from './item-content';
+import { ZIMBRA_STANDARD_COLORS } from '../../../../carbonio-ui-commons/constants/utils';
 import ListItemActionWrapper from '../../folder/list-item-action-wrapper';
 
 export default function ContactListItem({
