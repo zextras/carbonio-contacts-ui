@@ -18,7 +18,8 @@ import {
 	registerFunctions,
 	SearchViewProps,
 	SecondaryBarComponentProps,
-	Spinner
+	Spinner,
+	upsertApp
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
@@ -172,11 +173,12 @@ const App = (): React.JSX.Element => {
 	const createSnackbar = useSnackbar();
 
 	useEffect(() => {
+		const appLabel = t('label.app_name', 'Contacts');
 		addRoute({
 			route: CONTACTS_ROUTE,
 			position: 300,
 			visible: true,
-			label: t('label.app_name', 'Contacts'),
+			label: appLabel,
 			primaryBar: 'ContactsModOutline',
 			secondaryBar: LegacySecondaryBarView,
 			appView: AppView
@@ -189,6 +191,11 @@ const App = (): React.JSX.Element => {
 			primaryBar: 'ListOutline',
 			secondaryBar: SecondaryBarView,
 			appView: AppViewV2
+		});
+		upsertApp({
+			name: CONTACTS_APP_ID,
+			display: appLabel,
+			description: t('label.app_description', 'Contacts module')
 		});
 		addSettingsView({
 			route: CONTACTS_ROUTE,
