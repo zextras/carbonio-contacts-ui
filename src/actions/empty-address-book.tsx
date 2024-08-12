@@ -20,7 +20,7 @@ export type EmptyAddressBookAction = UIAction<Folder, Folder>;
 
 export const useActionEmptyAddressBook = (): EmptyAddressBookAction => {
 	const [t] = useTranslation();
-	const createModal = useModal();
+	const { createModal, closeModal } = useModal();
 
 	const canExecute = useCallback<EmptyAddressBookAction['canExecute']>(
 		(addressBook?: Folder): boolean => {
@@ -58,19 +58,24 @@ export const useActionEmptyAddressBook = (): EmptyAddressBookAction => {
 			if (!addressBook) {
 				return;
 			}
-			const closeModal = createModal(
+			const modalId = 'empty-address-book';
+			createModal(
 				{
+					id: modalId,
 					maxHeight: '90vh',
 					children: (
 						<StoreProvider>
-							<AddressBookEmptyModal addressBook={addressBook} onClose={() => closeModal()} />
+							<AddressBookEmptyModal
+								addressBook={addressBook}
+								onClose={(): void => closeModal(modalId)}
+							/>
 						</StoreProvider>
 					)
 				},
 				true
 			);
 		},
-		[canExecute, createModal]
+		[canExecute, closeModal, createModal]
 	);
 
 	return useMemo(
