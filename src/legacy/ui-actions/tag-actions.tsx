@@ -84,7 +84,7 @@ export const createAndApplyTag = ({
 		);
 	}
 });
-export const createTag = ({ t, createModal }: TagsActionsParams): TagsActions => ({
+export const createTag = ({ t, createModal, closeModal }: TagsActionsParams): TagsActions => ({
 	id: TagsActionsType.NEW,
 	icon: 'TagOutline',
 	label: t('label.create_tag', 'Create Tag'),
@@ -92,13 +92,13 @@ export const createTag = ({ t, createModal }: TagsActionsParams): TagsActions =>
 		if (e) {
 			e.stopPropagation();
 		}
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
-		const closeModal = createModal(
+		const modalId = 'create-tag';
+		createModal?.(
 			{
+				id: modalId,
 				children: (
 					<StoreProvider>
-						<CreateUpdateTagModal onClose={(): void => closeModal()} />
+						<CreateUpdateTagModal onClose={(): void => closeModal?.(modalId)} />
 					</StoreProvider>
 				)
 			},
@@ -107,7 +107,7 @@ export const createTag = ({ t, createModal }: TagsActionsParams): TagsActions =>
 	}
 });
 
-export const editTag = ({ t, createModal, tag }: TagsActionsParams): TagsActions => ({
+export const editTag = ({ t, createModal, closeModal, tag }: TagsActionsParams): TagsActions => ({
 	id: TagsActionsType.EDIT,
 	icon: 'Edit2Outline',
 	label: t('label.edit_tag', 'Edit Tag'),
@@ -115,13 +115,13 @@ export const editTag = ({ t, createModal, tag }: TagsActionsParams): TagsActions
 		if (e) {
 			e.stopPropagation();
 		}
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
-		const closeModal = createModal(
+		const modalId = 'edit-tag';
+		createModal?.(
 			{
+				id: modalId,
 				children: (
 					<StoreProvider>
-						<CreateUpdateTagModal onClose={(): void => closeModal()} tag={tag} editMode />
+						<CreateUpdateTagModal onClose={(): void => closeModal?.(modalId)} tag={tag} editMode />
 					</StoreProvider>
 				)
 			},
@@ -130,7 +130,7 @@ export const editTag = ({ t, createModal, tag }: TagsActionsParams): TagsActions
 	}
 });
 
-export const deleteTag = ({ t, createModal, tag }: TagsActionsParams): TagsActions => ({
+export const deleteTag = ({ t, createModal, closeModal, tag }: TagsActionsParams): TagsActions => ({
 	id: TagsActionsType.DELETE,
 	icon: 'Untag',
 	label: t('label.delete_tag', 'Delete Tag'),
@@ -138,13 +138,13 @@ export const deleteTag = ({ t, createModal, tag }: TagsActionsParams): TagsActio
 		if (e) {
 			e.stopPropagation();
 		}
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
-		const closeModal = createModal(
+		const modalId = 'delete-tag';
+		createModal?.(
 			{
+				id: modalId,
 				children: (
 					<StoreProvider>
-						<DeleteTagModal onClose={(): void => closeModal()} tag={tag} />
+						<DeleteTagModal onClose={(): void => closeModal?.(modalId)} tag={tag} />
 					</StoreProvider>
 				)
 			},
@@ -476,15 +476,15 @@ export const applyTag = ({
 };
 
 export const useGetTagsActions = ({ tag, t }: TagsActionsParams): Array<TagsActions> => {
-	const createModal = useModal();
+	const { createModal, closeModal } = useModal();
 	const createSnackbar = useSnackbar();
 	return useMemo(
 		() => [
-			createTag({ t, createModal }),
-			editTag({ t, createModal, tag }),
-			deleteTag({ t, tag, createSnackbar, createModal })
+			createTag({ t, createModal, closeModal }),
+			editTag({ t, createModal, closeModal, tag }),
+			deleteTag({ t, tag, createSnackbar, createModal, closeModal })
 		],
-		[createModal, createSnackbar, t, tag]
+		[closeModal, createModal, createSnackbar, t, tag]
 	);
 };
 

@@ -71,11 +71,16 @@ const CustomComp: FC<ItemProps> = (props) => {
 };
 
 export const TagLabel: FC<ItemType> = (props) => {
-	const createModal = useModal();
+	const { createModal, closeModal } = useModal();
 	const [t] = useTranslation();
 	const alteredProps = { ...props, color: `$props.color` };
 	return (
-		<Dropdown contextMenu display="block" width="fit" items={[createTag({ t, createModal })]}>
+		<Dropdown
+			contextMenu
+			display="block"
+			width="fit"
+			items={[createTag({ t, createModal, closeModal })]}
+		>
 			<Row mainAlignment="flex-start" padding={{ horizontal: 'small' }} takeAvailableSpace>
 				<Icon size="large" icon="TagsMoreOutline" />
 				<AccordionItem {...alteredProps} />
