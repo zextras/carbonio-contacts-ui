@@ -45,7 +45,7 @@ export type ReturnType = {
 
 export type TagsFromStoreType = Record<string, Tag>;
 
-export type ArgumentType = {
+export type TagsActionsParams = {
 	t: TFunction;
 	createModal?: (...args: any) => () => void;
 	createSnackbar?: (...args: any) => void;
@@ -83,7 +83,7 @@ export const createAndApplyTag = ({
 		);
 	}
 });
-export const createTag = ({ t, createModal }: ArgumentType): ReturnType => ({
+export const createTag = ({ t, createModal }: TagsActionsParams): ReturnType => ({
 	id: TagsActionsType.NEW,
 	icon: 'TagOutline',
 	label: t('label.create_tag', 'Create Tag'),
@@ -106,7 +106,7 @@ export const createTag = ({ t, createModal }: ArgumentType): ReturnType => ({
 	}
 });
 
-export const editTag = ({ t, createModal, tag }: ArgumentType): ReturnType => ({
+export const editTag = ({ t, createModal, tag }: TagsActionsParams): ReturnType => ({
 	id: TagsActionsType.EDIT,
 	icon: 'Edit2Outline',
 	label: t('label.edit_tag', 'Edit Tag'),
@@ -129,7 +129,7 @@ export const editTag = ({ t, createModal, tag }: ArgumentType): ReturnType => ({
 	}
 });
 
-export const deleteTag = ({ t, createModal, tag }: ArgumentType): ReturnType => ({
+export const deleteTag = ({ t, createModal, tag }: TagsActionsParams): ReturnType => ({
 	id: TagsActionsType.DELETE,
 	icon: 'Untag',
 	label: t('label.delete_tag', 'Delete Tag'),
@@ -474,7 +474,7 @@ export const applyTag = ({
 	};
 };
 
-export const useGetTagsActions = ({ tag, t }: ArgumentType): Array<ReturnType> => {
+export const useGetTagsActions = ({ tag, t }: TagsActionsParams): Array<ReturnType> => {
 	const createModal = useModal();
 	const createSnackbar = useSnackbar();
 	return useMemo(
