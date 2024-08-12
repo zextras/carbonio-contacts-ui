@@ -19,7 +19,7 @@ export type ShowShareInfoAction = UIAction<Folder, Folder>;
 
 export const useActionShowShareInfo = (): ShowShareInfoAction => {
 	const [t] = useTranslation();
-	const createModal = useModal();
+	const { createModal, closeModal } = useModal();
 
 	const canExecute = useCallback<ShowShareInfoAction['canExecute']>(
 		(addressBook?: Folder): boolean => {
@@ -42,19 +42,21 @@ export const useActionShowShareInfo = (): ShowShareInfoAction => {
 				return;
 			}
 
-			const closeModal = createModal(
+			const modalId = 'show-share-info';
+			createModal(
 				{
+					id: modalId,
 					maxHeight: '90vh',
 					children: (
 						<StoreProvider>
-							<ShareInfoModal addressBook={addressBook} onClose={() => closeModal()} />
+							<ShareInfoModal addressBook={addressBook} onClose={(): void => closeModal(modalId)} />
 						</StoreProvider>
 					)
 				},
 				true
 			);
 		},
-		[canExecute, createModal]
+		[canExecute, closeModal, createModal]
 	);
 
 	return useMemo(
