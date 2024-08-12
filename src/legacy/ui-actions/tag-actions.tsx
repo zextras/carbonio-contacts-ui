@@ -47,8 +47,9 @@ export type TagsFromStoreType = Record<string, Tag>;
 
 export type TagsActionsParams = {
 	t: TFunction;
-	createModal?: (...args: any) => () => void;
-	createSnackbar?: (...args: any) => void;
+	createModal?: ReturnType<typeof useModal>['createModal'];
+	closeModal?: ReturnType<typeof useModal>['closeModal'];
+	createSnackbar?: ReturnType<typeof useSnackbar>;
 	items?: TagsActions;
 	tag?: ItemType;
 };
