@@ -20,7 +20,7 @@ export type DeleteAddressBookAction = UIAction<Folder, Folder>;
 
 export const useActionDeleteAddressBook = (): DeleteAddressBookAction => {
 	const [t] = useTranslation();
-	const createModal = useModal();
+	const { createModal, closeModal } = useModal();
 
 	const canExecute = useCallback<DeleteAddressBookAction['canExecute']>(
 		(addressBook?: Folder): boolean => {
@@ -50,19 +50,25 @@ export const useActionDeleteAddressBook = (): DeleteAddressBookAction => {
 			if (!addressBook) {
 				return;
 			}
-			const closeModal = createModal(
+
+			const modalId = 'delete-address-book';
+			createModal(
 				{
+					id: modalId,
 					maxHeight: '90vh',
 					children: (
 						<StoreProvider>
-							<AddressBookDeleteModal addressBook={addressBook} onClose={() => closeModal()} />
+							<AddressBookDeleteModal
+								addressBook={addressBook}
+								onClose={(): void => closeModal(modalId)}
+							/>
 						</StoreProvider>
 					)
 				},
 				true
 			);
 		},
-		[canExecute, createModal]
+		[canExecute, closeModal, createModal]
 	);
 
 	return useMemo(
