@@ -55,11 +55,7 @@ const CustomComp: FC<ItemProps> = (props) => {
 	return (
 		<Dropdown contextMenu items={actions} display="block" width="fit" onClick={triggerSearch}>
 			<Row mainAlignment="flex-start" height="fit" padding={{ left: 'large' }} takeAvailableSpace>
-				<Icon
-					size="large"
-					icon="Tag"
-					customColor={ZIMBRA_STANDARD_COLORS[props?.item?.color ?? 0].hex}
-				/>
+				<Icon size="large" icon="Tag" color={ZIMBRA_STANDARD_COLORS[props?.item?.color ?? 0].hex} />
 
 				<Padding right="large" />
 				<Tooltip label={props?.item?.name} placement="right" maxWidth="100%">
