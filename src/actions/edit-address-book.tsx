@@ -20,7 +20,7 @@ export type EditAddressBookAction = UIAction<Folder, Folder>;
 
 export const useActionEditAddressBook = (): EditAddressBookAction => {
 	const [t] = useTranslation();
-	const createModal = useModal();
+	const { createModal, closeModal } = useModal();
 
 	const canExecute = useCallback<EditAddressBookAction['canExecute']>(
 		(addressBook?: Folder): boolean => {
@@ -50,19 +50,24 @@ export const useActionEditAddressBook = (): EditAddressBookAction => {
 			if (!addressBook) {
 				return;
 			}
-			const closeModal = createModal(
+			const modalId = 'edit-address-book';
+			createModal(
 				{
+					id: modalId,
 					maxHeight: '90vh',
 					children: (
 						<StoreProvider>
-							<AddressBookEditModal addressBookId={addressBook.id} onClose={() => closeModal()} />
+							<AddressBookEditModal
+								addressBookId={addressBook.id}
+								onClose={(): void => closeModal(modalId)}
+							/>
 						</StoreProvider>
 					)
 				},
 				true
 			);
 		},
-		[canExecute, createModal]
+		[canExecute, closeModal, createModal]
 	);
 
 	return useMemo(
