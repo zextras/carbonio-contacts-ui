@@ -19,7 +19,7 @@ export type CreateAddressBookAction = UIAction<Folder | undefined, Folder | unde
 
 export const useActionCreateAddressBook = (): CreateAddressBookAction => {
 	const [t] = useTranslation();
-	const createModal = useModal();
+	const { createModal, closeModal } = useModal();
 
 	const canExecute = useCallback<CreateAddressBookAction['canExecute']>(
 		(addressBook?: Folder): boolean => {
@@ -50,20 +50,22 @@ export const useActionCreateAddressBook = (): CreateAddressBookAction => {
 				return;
 			}
 
-			const closeModal = createModal(
+			const modalId = 'create-address-book';
+			createModal(
 				{
+					id: modalId,
 					maxHeight: '90vh',
 					children: (
 						<AddressBookCreateModal
 							defaultParentId={addressBook?.id}
-							onClose={() => closeModal()}
+							onClose={(): void => closeModal(modalId)}
 						/>
 					)
 				},
 				true
 			);
 		},
-		[canExecute, createModal]
+		[canExecute, closeModal, createModal]
 	);
 
 	return useMemo(
