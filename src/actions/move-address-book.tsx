@@ -106,7 +106,7 @@ export const useActionMoveAddressBook = (): MoveAddressBookAction => {
 						children: (
 							<AddressBookMoveModal
 								addressBookId={addressBook.id}
-								onMove={(parentAddressBookId) => {
+								onMove={(parentAddressBookId): void => {
 									move(addressBook.id, parentAddressBookId).then(
 										(success) => success && closeModal(modalId)
 									);
