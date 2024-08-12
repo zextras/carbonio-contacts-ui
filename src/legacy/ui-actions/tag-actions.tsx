@@ -52,17 +52,15 @@ export type TagsActionsParams = {
 	createSnackbar?: ReturnType<typeof useSnackbar>;
 	items?: TagsActions;
 	tag?: ItemType;
+	contact?: Contact;
 };
 
 export const createAndApplyTag = ({
 	t,
-	context,
-	contact
-}: {
-	t: TFunction;
-	context: any;
-	contact: Contact;
-}): TagsActions => ({
+	contact,
+	createModal,
+	closeModal
+}: TagsActionsParams): TagsActions => ({
 	id: TagsActionsType.NEW,
 	icon: 'TagOutline',
 	label: t('label.create_tag', 'Create Tag'),
@@ -70,13 +68,14 @@ export const createAndApplyTag = ({
 		if (e) {
 			e.stopPropagation();
 		}
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
-		const closeModal = context.createModal(
+
+		const modalId = 'create-and-apply-tag';
+		createModal?.(
 			{
+				id: modalId,
 				children: (
 					<StoreProvider>
-						<CreateUpdateTagModal onClose={(): void => closeModal()} contact={contact} />
+						<CreateUpdateTagModal onClose={(): void => closeModal?.(modalId)} contact={contact} />
 					</StoreProvider>
 				)
 			},
@@ -408,12 +407,14 @@ export const applyTag = ({
 	t,
 	contact,
 	tags,
-	context
+	createModal,
+	closeModal
 }: {
 	t: TFunction;
 	contact: any;
 	tags: TagsFromStoreType;
-	context?: any;
+	createModal: ReturnType<typeof useModal>['createModal'];
+	closeModal: ReturnType<typeof useModal>['closeModal'];
 }): {
 	id: string;
 	items: ItemType[];
@@ -447,7 +448,9 @@ export const applyTag = ({
 				type="outlined"
 				width="fill"
 				size="small"
-				onClick={(): void => context.createAndApplyTag({ t, context, contact }).onClick()}
+				onClick={(ev): void => {
+					createAndApplyTag({ t, contact, createModal, closeModal }).onClick?.(ev);
+				}}
 			/>
 		)
 	};
