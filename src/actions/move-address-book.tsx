@@ -22,7 +22,7 @@ export type MoveAddressBookAction = UIAction<
 
 export const useActionMoveAddressBook = (): MoveAddressBookAction => {
 	const [t] = useTranslation();
-	const createModal = useModal();
+	const { createModal, closeModal } = useModal();
 	const createSnackbar = useSnackbar();
 
 	const move = useCallback(
@@ -98,18 +98,20 @@ export const useActionMoveAddressBook = (): MoveAddressBookAction => {
 			if (newParentAddressBook) {
 				move(addressBook.id, newParentAddressBook.id);
 			} else {
-				const closeModal = createModal(
+				const modalId = 'move-address-book';
+				createModal(
 					{
+						id: modalId,
 						maxHeight: '90vh',
 						children: (
 							<AddressBookMoveModal
 								addressBookId={addressBook.id}
 								onMove={(parentAddressBookId) => {
 									move(addressBook.id, parentAddressBookId).then(
-										(success) => success && closeModal()
+										(success) => success && closeModal(modalId)
 									);
 								}}
-								onClose={() => closeModal()}
+								onClose={(): void => closeModal(modalId)}
 							/>
 						)
 					},
@@ -117,7 +119,7 @@ export const useActionMoveAddressBook = (): MoveAddressBookAction => {
 				);
 			}
 		},
-		[canExecute, createModal, move]
+		[canExecute, closeModal, createModal, move]
 	);
 
 	return useMemo(
