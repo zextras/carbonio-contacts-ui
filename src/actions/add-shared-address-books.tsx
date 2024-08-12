@@ -22,7 +22,7 @@ export const useActionAddSharedAddressBooks = (): AddSharedAddressBooksAction =>
 	const canExecute = useCallback<AddSharedAddressBooksAction['canExecute']>(() => true, []);
 
 	const execute = useCallback<AddSharedAddressBooksAction['execute']>(() => {
-		const modalId = ACTION_IDS.addSharedAddressBooks;
+		const modalId = 'add-shared-address-books';
 		createModal(
 			{
 				id: modalId,
