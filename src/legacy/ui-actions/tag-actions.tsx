@@ -30,7 +30,7 @@ import CreateUpdateTagModal from '../views/secondary-bar/parts/tags/create-updat
 import DeleteTagModal from '../views/secondary-bar/parts/tags/delete-tag-modal';
 import { ItemType } from '../views/secondary-bar/parts/tags/types';
 
-export type ReturnType = {
+export type TagsActions = {
 	id: string;
 	icon: string;
 	label: string;
@@ -49,7 +49,7 @@ export type TagsActionsParams = {
 	t: TFunction;
 	createModal?: (...args: any) => () => void;
 	createSnackbar?: (...args: any) => void;
-	items?: ReturnType;
+	items?: TagsActions;
 	tag?: ItemType;
 };
 
@@ -61,7 +61,7 @@ export const createAndApplyTag = ({
 	t: TFunction;
 	context: any;
 	contact: Contact;
-}): ReturnType => ({
+}): TagsActions => ({
 	id: TagsActionsType.NEW,
 	icon: 'TagOutline',
 	label: t('label.create_tag', 'Create Tag'),
@@ -83,7 +83,7 @@ export const createAndApplyTag = ({
 		);
 	}
 });
-export const createTag = ({ t, createModal }: TagsActionsParams): ReturnType => ({
+export const createTag = ({ t, createModal }: TagsActionsParams): TagsActions => ({
 	id: TagsActionsType.NEW,
 	icon: 'TagOutline',
 	label: t('label.create_tag', 'Create Tag'),
@@ -106,7 +106,7 @@ export const createTag = ({ t, createModal }: TagsActionsParams): ReturnType => 
 	}
 });
 
-export const editTag = ({ t, createModal, tag }: TagsActionsParams): ReturnType => ({
+export const editTag = ({ t, createModal, tag }: TagsActionsParams): TagsActions => ({
 	id: TagsActionsType.EDIT,
 	icon: 'Edit2Outline',
 	label: t('label.edit_tag', 'Edit Tag'),
@@ -129,7 +129,7 @@ export const editTag = ({ t, createModal, tag }: TagsActionsParams): ReturnType 
 	}
 });
 
-export const deleteTag = ({ t, createModal, tag }: TagsActionsParams): ReturnType => ({
+export const deleteTag = ({ t, createModal, tag }: TagsActionsParams): TagsActions => ({
 	id: TagsActionsType.DELETE,
 	icon: 'Untag',
 	label: t('label.delete_tag', 'Delete Tag'),
@@ -474,7 +474,7 @@ export const applyTag = ({
 	};
 };
 
-export const useGetTagsActions = ({ tag, t }: TagsActionsParams): Array<ReturnType> => {
+export const useGetTagsActions = ({ tag, t }: TagsActionsParams): Array<TagsActions> => {
 	const createModal = useModal();
 	const createSnackbar = useSnackbar();
 	return useMemo(
