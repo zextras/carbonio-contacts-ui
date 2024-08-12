@@ -20,26 +20,31 @@ export type TrashAddressBookAction = UIAction<Folder, Folder>;
 
 export const useActionTrashAddressBook = (): TrashAddressBookAction => {
 	const [t] = useTranslation();
-	const createModal = useModal();
+	const { createModal, closeModal } = useModal();
 
 	const execute = useCallback<TrashAddressBookAction['execute']>(
 		(addressBook) => {
 			if (!addressBook) {
 				return;
 			}
-			const closeModal = createModal(
+			const modalId = 'trash-address-book';
+			createModal(
 				{
+					id: modalId,
 					maxHeight: '90vh',
 					children: (
 						<StoreProvider>
-							<AddressBookTrashModal addressBook={addressBook} onClose={() => closeModal()} />
+							<AddressBookTrashModal
+								addressBook={addressBook}
+								onClose={(): void => closeModal(modalId)}
+							/>
 						</StoreProvider>
 					)
 				},
 				true
 			);
 		},
-		[createModal]
+		[closeModal, createModal]
 	);
 
 	const canExecute = useCallback<TrashAddressBookAction['canExecute']>(
