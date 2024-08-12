@@ -17,23 +17,25 @@ export type AddSharedAddressBooksAction = UIAction<never, never>;
 
 export const useActionAddSharedAddressBooks = (): AddSharedAddressBooksAction => {
 	const [t] = useTranslation();
-	const createModal = useModal();
+	const { createModal, closeModal } = useModal();
 
 	const canExecute = useCallback<AddSharedAddressBooksAction['canExecute']>(() => true, []);
 
 	const execute = useCallback<AddSharedAddressBooksAction['execute']>(() => {
-		const closeModal = createModal(
+		const modalId = ACTION_IDS.addSharedAddressBooks;
+		createModal(
 			{
+				id: modalId,
 				maxHeight: '90vh',
 				children: (
 					<StoreProvider>
-						<SharedAddressBooksAddModal onClose={() => closeModal()} />
+						<SharedAddressBooksAddModal onClose={(): void => closeModal(modalId)} />
 					</StoreProvider>
 				)
 			},
 			true
 		);
-	}, [createModal]);
+	}, [closeModal, createModal]);
 
 	return useMemo(
 		() => ({
