@@ -22,7 +22,7 @@ export type DeleteCGAction = UIAction<ContactGroup, never>;
 
 export const useActionDeleteCG = (): DeleteCGAction => {
 	const [t] = useTranslation();
-	const createModal = useModal();
+	const { createModal, closeModal } = useModal();
 	const createSnackbar = useSnackbar();
 	const { removeContactGroup } = useContactGroupStore();
 	const { navigateTo } = useNavigation();
@@ -36,14 +36,16 @@ export const useActionDeleteCG = (): DeleteCGAction => {
 				return;
 			}
 
-			const closeModal = createModal({
+			const modalId = 'delete-cg';
+			createModal({
+				id: modalId,
 				title: t('modal.delete.contactGroup.header', 'Delete "{{contactGroupName}}"', {
 					contactGroupName: contactGroup.title
 				}),
 				confirmLabel: t('modal.delete.button.confirm', 'delete'),
 				confirmColor: 'error',
 				onConfirm: () => {
-					closeModal();
+					closeModal(modalId);
 					apiClient
 						.deleteContact([contactGroup.id])
 						.then(() => {
@@ -78,7 +80,7 @@ export const useActionDeleteCG = (): DeleteCGAction => {
 				},
 				showCloseIcon: true,
 				onClose: () => {
-					closeModal();
+					closeModal(modalId);
 				},
 				children: (
 					<Container padding={{ vertical: 'medium' }} crossAlignment={'flex-start'}>
@@ -95,7 +97,15 @@ export const useActionDeleteCG = (): DeleteCGAction => {
 				)
 			});
 		},
-		[activeContactGroup?.id, createModal, createSnackbar, navigateTo, removeContactGroup, t]
+		[
+			activeContactGroup?.id,
+			closeModal,
+			createModal,
+			createSnackbar,
+			navigateTo,
+			removeContactGroup,
+			t
+		]
 	);
 
 	return useMemo(

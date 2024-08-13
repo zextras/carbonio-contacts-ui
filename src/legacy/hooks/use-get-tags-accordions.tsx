@@ -55,11 +55,7 @@ const CustomComp: FC<ItemProps> = (props) => {
 	return (
 		<Dropdown contextMenu items={actions} display="block" width="fit" onClick={triggerSearch}>
 			<Row mainAlignment="flex-start" height="fit" padding={{ left: 'large' }} takeAvailableSpace>
-				<Icon
-					size="large"
-					icon="Tag"
-					customColor={ZIMBRA_STANDARD_COLORS[props?.item?.color ?? 0].hex}
-				/>
+				<Icon size="large" icon="Tag" color={ZIMBRA_STANDARD_COLORS[props?.item?.color ?? 0].hex} />
 
 				<Padding right="large" />
 				<Tooltip label={props?.item?.name} placement="right" maxWidth="100%">
@@ -71,11 +67,16 @@ const CustomComp: FC<ItemProps> = (props) => {
 };
 
 export const TagLabel: FC<ItemType> = (props) => {
-	const createModal = useModal();
+	const { createModal, closeModal } = useModal();
 	const [t] = useTranslation();
 	const alteredProps = { ...props, color: `$props.color` };
 	return (
-		<Dropdown contextMenu display="block" width="fit" items={[createTag({ t, createModal })]}>
+		<Dropdown
+			contextMenu
+			display="block"
+			width="fit"
+			items={[createTag({ t, createModal, closeModal })]}
+		>
 			<Row mainAlignment="flex-start" padding={{ horizontal: 'small' }} takeAvailableSpace>
 				<Icon size="large" icon="TagsMoreOutline" />
 				<AccordionItem {...alteredProps} />

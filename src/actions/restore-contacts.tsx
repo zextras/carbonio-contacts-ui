@@ -26,7 +26,7 @@ export type RestoreContactsAction = UIAction<
 export const useActionRestoreContacts = (): RestoreContactsAction => {
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
-	const createModal = useModal();
+	const { createModal, closeModal } = useModal();
 
 	const canExecute = useCallback<RestoreContactsAction['canExecute']>(
 		({ contacts } = {}): boolean => {
@@ -60,16 +60,18 @@ export const useActionRestoreContacts = (): RestoreContactsAction => {
 
 			const contactsIds = contacts.map((contact) => contact.id);
 
-			const closeModal = createModal(
+			const modalId = 'restore-contacts';
+			createModal(
 				{
+					id: modalId,
 					children: (
 						<ContactMoveModal
 							mode={'restore'}
 							contacts={contacts}
-							onMove={(parentAddressBookId) =>
+							onMove={(parentAddressBookId): Promise<void> =>
 								apiClient
 									.moveContact(contactsIds, parentAddressBookId)
-									.then(() => {
+									.then((): void => {
 										createSnackbar({
 											key: `restore-contacts-success`,
 											replace: true,
@@ -78,7 +80,7 @@ export const useActionRestoreContacts = (): RestoreContactsAction => {
 											autoHideTimeout: TIMEOUTS.defaultSnackbar,
 											hideButton: true
 										});
-										closeModal();
+										closeModal(modalId);
 									})
 									.catch(() => {
 										createSnackbar({
@@ -91,14 +93,14 @@ export const useActionRestoreContacts = (): RestoreContactsAction => {
 										});
 									})
 							}
-							onClose={() => closeModal()}
+							onClose={(): void => closeModal(modalId)}
 						/>
 					)
 				},
 				true
 			);
 		},
-		[canExecute, createModal, createSnackbar, t]
+		[canExecute, closeModal, createModal, createSnackbar, t]
 	);
 
 	return useMemo(

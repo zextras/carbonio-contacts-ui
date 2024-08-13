@@ -9,7 +9,7 @@ import { getAction, useTags } from '@zextras/carbonio-shell-ui';
 import { compact, isEmpty } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { applyTag, applyMultiTag, createAndApplyTag } from './tag-actions';
+import { applyTag, applyMultiTag } from './tag-actions';
 import { useActionDeleteContacts } from '../../actions/delete-contacts';
 import { useActionExportContact } from '../../actions/export-contact';
 import { useActionMoveContacts } from '../../actions/move-contacts';
@@ -43,7 +43,7 @@ export function mailToContact(contact, t) {
 
 export const useContextActions = (folderId) => {
 	const [t] = useTranslation();
-	const createModal = useModal();
+	const { createModal, closeModal } = useModal();
 	const tags = useTags();
 	const exportAction = useActionExportContact();
 	const moveAction = useActionMoveContacts();
@@ -60,7 +60,7 @@ export const useContextActions = (folderId) => {
 				? [generateClickableAction(deleteAction, [contact])]
 				: []),
 			...(exportAction.canExecute() ? [generateClickableAction(exportAction, contact)] : []),
-			applyTag({ contact, tags, t, context: { createAndApplyTag, createModal } })
+			applyTag({ contact, tags, t, createModal, closeModal })
 		];
 	}
 	return (contact) =>
@@ -74,7 +74,7 @@ export const useContextActions = (folderId) => {
 				? [generateClickableAction(moveAction, { contacts: [contact] })]
 				: []),
 			...(exportAction.canExecute(contact) ? [generateClickableAction(exportAction, contact)] : []),
-			applyTag({ contact, tags, t, context: { createAndApplyTag, createModal } })
+			applyTag({ contact, tags, t, createModal, closeModal })
 		]);
 };
 

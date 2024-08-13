@@ -21,7 +21,7 @@ import { Contact } from '../legacy/types/contact';
 export type ActionDeleteContacts = UIAction<Array<Contact>, Array<Contact>>;
 export const useActionDeleteContacts = (): ActionDeleteContacts => {
 	const [t] = useTranslation();
-	const createModal = useModal();
+	const { createModal, closeModal } = useModal();
 
 	const canExecute = useCallback<ActionDeleteContacts['canExecute']>((contacts): boolean => {
 		if (!contacts || contacts.length === 0) return false;
@@ -41,19 +41,21 @@ export const useActionDeleteContacts = (): ActionDeleteContacts => {
 		(contacts) => {
 			if (!contacts) return;
 			if (!canExecute(contacts)) return;
-			const closeModal = createModal(
+			const modalId = 'delete-contacts';
+			createModal(
 				{
+					id: modalId,
 					maxHeight: '90vh',
 					children: (
 						<StoreProvider>
-							<ContactsDeleteModal contacts={contacts} onClose={(): void => closeModal()} />
+							<ContactsDeleteModal contacts={contacts} onClose={(): void => closeModal(modalId)} />
 						</StoreProvider>
 					)
 				},
 				true
 			);
 		},
-		[canExecute, createModal]
+		[canExecute, closeModal, createModal]
 	);
 
 	return useMemo(
