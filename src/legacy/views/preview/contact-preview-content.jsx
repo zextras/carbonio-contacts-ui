@@ -373,8 +373,9 @@ function ContactPreviewContent({ contact, onEdit, onDelete, onMail, onMove }) {
 						{showTagIcon && (
 							<Padding left="small">
 								<Tooltip label={singleTagLabel} disabled={showMultiTagIcon}>
-									<IconButton
+									<Button
 										data-testid="TagIcon"
+										type="ghost"
 										size="large"
 										onClick={onTagClick}
 										icon={tagIcon}
@@ -409,7 +410,7 @@ function ContactPreviewContent({ contact, onEdit, onDelete, onMail, onMove }) {
 						<Tooltip
 							label={
 								isTrash(contact.parent)
-									? t('folder.action.delete_permanently', 'Delete contacts permanently')
+									? t('action.delete_contact_permanently', 'Delete contact permanently')
 									: t('label.delete', 'Delete')
 							}
 						>
