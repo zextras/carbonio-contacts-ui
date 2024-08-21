@@ -61,7 +61,7 @@ export const useActionDeleteContacts = (): ActionDeleteContacts => {
 	return useMemo(
 		() => ({
 			id: ACTION_IDS.deleteContacts,
-			label: t('action.delete_contact_permanently', 'Delete contact permanently'),
+			label: t('tooltip.list_trash.deletePermanently', 'Delete contact permanently'),
 			icon: 'DeletePermanentlyOutline',
 			execute,
 			canExecute

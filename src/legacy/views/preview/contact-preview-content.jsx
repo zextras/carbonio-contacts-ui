@@ -410,7 +410,7 @@ function ContactPreviewContent({ contact, onEdit, onDelete, onMail, onMove }) {
 						<Tooltip
 							label={
 								isTrash(contact.parent)
-									? t('action.delete_contact_permanently', 'Delete contact permanently')
+									? t('tooltip.list_trash.deletePermanently', 'Delete contact permanently')
 									: t('label.delete', 'Delete')
 							}
 						>
