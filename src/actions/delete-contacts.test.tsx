@@ -21,7 +21,7 @@ describe("Delete-contacts' actions", () => {
 		expect(result.current).toEqual<UIAction<unknown, unknown>>(
 			expect.objectContaining({
 				icon: 'DeletePermanentlyOutline',
-				label: 'Delete contacts permanently',
+				label: 'Delete contact permanently',
 				id: 'delete-contacts-action'
 			})
 		);
@@ -65,6 +65,6 @@ describe('execute actions', () => {
 		populateFoldersStore();
 		const { result } = setupHook(useActionDeleteContacts);
 		const action = result.current;
-		expect(action.label).toBe('Delete contacts permanently');
+		expect(action.label).toBe('Delete contact permanently');
 	});
 });

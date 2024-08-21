@@ -17,7 +17,7 @@ const HoverBarContainer = styled(Container)`
 	display: none;
 	position: absolute;
 	background: linear-gradient(to right, transparent, ${({ theme }) => theme.palette.gray6.hover});
-	height: 45%;
+	height: 55%;
 	& > * {
 		margin-top: ${({ theme }) => theme.sizes.padding.small};
 		margin-right: ${({ theme }) => theme.sizes.padding.small};
