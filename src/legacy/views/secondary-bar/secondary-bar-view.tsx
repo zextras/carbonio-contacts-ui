@@ -16,12 +16,7 @@ import {
 	Row,
 	Tooltip
 } from '@zextras/carbonio-design-system';
-import {
-	AppLink,
-	FOLDERS,
-	SecondaryBarComponentProps,
-	ZIMBRA_STANDARD_COLORS
-} from '@zextras/carbonio-shell-ui';
+import { AppLink, SecondaryBarComponentProps } from '@zextras/carbonio-shell-ui';
 import { map, noop } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { Route, Switch, useParams, useRouteMatch } from 'react-router-dom';
@@ -29,6 +24,8 @@ import { Route, Switch, useParams, useRouteMatch } from 'react-router-dom';
 import { AccordionCustomComponent } from './accordion-custom-component';
 import { useActionAddSharedAddressBooks } from '../../../actions/add-shared-address-books';
 import { SidebarAccordionMui } from '../../../carbonio-ui-commons/components/sidebar/sidebar-accordion-mui';
+import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
+import { ZIMBRA_STANDARD_COLORS } from '../../../carbonio-ui-commons/constants/utils';
 import { isLink } from '../../../carbonio-ui-commons/helpers/folders';
 import { useRootsArray } from '../../../carbonio-ui-commons/store/zustand/folder';
 import { themeMui } from '../../../carbonio-ui-commons/theme/theme-mui';

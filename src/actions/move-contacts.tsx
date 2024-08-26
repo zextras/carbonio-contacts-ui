@@ -26,7 +26,7 @@ export type MoveContactsAction = UIAction<
 export const useActionMoveContacts = (): MoveContactsAction => {
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
-	const createModal = useModal();
+	const { createModal, closeModal } = useModal();
 
 	const move = useCallback(
 		(contactsIds: Array<string>, parentAddressBookId: string): Promise<boolean> =>
@@ -110,15 +110,19 @@ export const useActionMoveContacts = (): MoveContactsAction => {
 			if (newParentAddressBook) {
 				move(contactsIds, newParentAddressBook.id);
 			} else {
-				const closeModal = createModal(
+				const modalId = 'move-contacts';
+				createModal(
 					{
+						id: modalId,
 						children: (
 							<ContactMoveModal
 								contacts={contacts}
-								onMove={(parentAddressBookId) => {
-									move(contactsIds, parentAddressBookId).then((success) => success && closeModal());
+								onMove={(parentAddressBookId): void => {
+									move(contactsIds, parentAddressBookId).then(
+										(success) => success && closeModal(modalId)
+									);
 								}}
-								onClose={() => closeModal()}
+								onClose={(): void => closeModal(modalId)}
 							/>
 						)
 					},
@@ -126,7 +130,7 @@ export const useActionMoveContacts = (): MoveContactsAction => {
 				);
 			}
 		},
-		[canExecute, createModal, move]
+		[canExecute, closeModal, createModal, move]
 	);
 
 	return useMemo(

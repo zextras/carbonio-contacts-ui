@@ -25,7 +25,7 @@ function spyUseBoard(navigateTo?: jest.Mock): void {
 	jest.spyOn(shell, 'useBoard').mockReturnValue({
 		context: { navigateTo: navigateTo ?? jest.fn() },
 		id: '',
-		url: '',
+		boardViewId: '',
 		app: '',
 		icon: '',
 		title: ''

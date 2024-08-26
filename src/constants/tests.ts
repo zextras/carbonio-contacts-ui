@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { FOLDERS } from '@zextras/carbonio-shell-ui';
+import { FOLDERS } from '../carbonio-ui-commons/constants/folders';
 
 type TypeOfEnumeration<T> = T[keyof T];
 
@@ -64,7 +64,7 @@ export const CONTACT_ACTIONS_DESCRIPTORS = {
 	},
 	deletePermanently: {
 		id: 'deletePermanently',
-		desc: 'Delete Permanently',
+		desc: 'Delete contact permanently',
 		icon: 'DeletePermanentlyOutline'
 	},
 	delete: {

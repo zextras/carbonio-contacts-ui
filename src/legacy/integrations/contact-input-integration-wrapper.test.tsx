@@ -27,7 +27,8 @@ const distributionListChipItem = {
 };
 
 const invalidChipItem = {
-	email: 'asd'
+	email: 'asd',
+	first: 'firstName'
 };
 
 const customAction: ChipAction = {
@@ -252,7 +253,7 @@ describe('Contact input integration wrapper', () => {
 
 			it('should set edit action on invalid chip to create when chip is created by clicking on a dropdown option', async () => {
 				const onChange = jest.fn();
-				registerFullAutocompleteHandler([{ ...invalidChipItem, first: invalidChipItem.email }]);
+				registerFullAutocompleteHandler([invalidChipItem]);
 				const { user } = setupTest(
 					<ContactInputIntegrationWrapper
 						defaultValue={[]}
@@ -260,7 +261,7 @@ describe('Contact input integration wrapper', () => {
 						onChange={onChange}
 					/>
 				);
-				await user.type(screen.getByRole('textbox'), `${invalidChipItem.email[0]}`);
+				await user.type(screen.getByRole('textbox'), invalidChipItem.email[0]);
 				act(() => {
 					jest.runOnlyPendingTimers();
 				});

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { faker } from '@faker-js/faker';
-import { ErrorSoapBodyResponse, FOLDERS } from '@zextras/carbonio-shell-ui';
+import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 import { times } from 'lodash';
 
 import {
@@ -12,6 +12,7 @@ import {
 	CreateMountpointsRequest,
 	CreateMountpointsResponse
 } from './create-mountpoints';
+import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
 import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { ShareInfo } from '../../model/share-info';
 
@@ -19,7 +20,8 @@ describe('createMountpoints', () => {
 	it('should raise an exception if the response contains a Fault', () => {
 		const response: ErrorSoapBodyResponse = {
 			Fault: {
-				Detail: { Error: { Code: faker.string.uuid(), Detail: faker.word.preposition() } },
+				Code: { Value: faker.string.uuid() },
+				Detail: { Error: { Code: faker.string.uuid(), Trace: faker.word.preposition() } },
 				Reason: { Text: faker.word.sample() }
 			}
 		};

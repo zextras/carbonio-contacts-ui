@@ -37,7 +37,7 @@ export const requestFileSelection = (): Promise<File> =>
 
 export const useActionImportContacts = (): ImportContactsAction => {
 	const [t] = useTranslation();
-	const createModal = useModal();
+	const { createModal, closeModal } = useModal();
 
 	const canExecute = useCallback<ImportContactsAction['canExecute']>(
 		(addressBook?: Folder): boolean => {
@@ -72,16 +72,18 @@ export const useActionImportContacts = (): ImportContactsAction => {
 				return;
 			}
 
+			const modalId = 'import-contacts';
 			requestFileSelection().then((file): void => {
-				const closeModal = createModal(
+				createModal(
 					{
+						id: modalId,
 						maxHeight: '90vh',
 						children: (
 							<StoreProvider>
 								<ContactsImportModal
 									addressBook={addressBook}
 									file={file}
-									closeCallback={() => closeModal()}
+									closeCallback={(): void => closeModal(modalId)}
 								/>
 							</StoreProvider>
 						)
@@ -90,7 +92,7 @@ export const useActionImportContacts = (): ImportContactsAction => {
 				);
 			});
 		},
-		[canExecute, createModal]
+		[canExecute, closeModal, createModal]
 	);
 
 	return useMemo(

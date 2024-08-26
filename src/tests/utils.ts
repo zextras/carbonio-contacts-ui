@@ -50,13 +50,14 @@ export const buildSoapError = (error: string): ErrorSoapResponse => ({
 	},
 	Body: {
 		Fault: {
+			Code: { Value: error },
 			Reason: {
 				Text: error
 			},
 			Detail: {
 				Error: {
 					Code: error,
-					Detail: error
+					Trace: error
 				}
 			}
 		}

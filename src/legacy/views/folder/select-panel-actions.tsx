@@ -5,23 +5,18 @@
  */
 import React, { useMemo, useContext, ReactElement, FC, SyntheticEvent } from 'react';
 
-import { Dispatch } from '@reduxjs/toolkit';
 import { Container, Dropdown, IconButton, Padding, Divider } from '@zextras/carbonio-design-system';
 import { map, noop } from 'lodash';
 
 import { ActionsContext } from '../../ui-actions/actions-context';
 
 interface SelectPanelActionsProps {
-	dispatch?: Dispatch<any>;
 	deselectAll?: (e: SyntheticEvent) => void;
-	folderId?: string;
-	selectedIDs?: { [key: string]: boolean };
 }
 
 const SelectPanelActions: FC<SelectPanelActionsProps> = ({ deselectAll }): ReactElement => {
-	const { getPrimaryActions, getSecondaryActions } = useContext(ActionsContext);
+	const { getSecondaryActions } = useContext(ActionsContext);
 
-	const primaryActions = useMemo(() => getPrimaryActions(), [getPrimaryActions]);
 	const secondaryActions = useMemo(() => getSecondaryActions(), [getSecondaryActions]);
 
 	return (
@@ -42,22 +37,6 @@ const SelectPanelActions: FC<SelectPanelActionsProps> = ({ deselectAll }): React
 					/>
 					{/* Uncomment this line to show the `Select all` Button */}
 					{/* <Button type='ghost' label='Select all' color='primary' /> */}
-				</Container>
-				<Container background="gray5" orientation="horizontal" mainAlignment="flex-end">
-					{map(primaryActions, (action) => (
-						<Padding left="extralarge" key={action.label}>
-							<IconButton
-								data-testid={`primary-action-button-${action.label}`}
-								icon={action.icon}
-								color="primary"
-								onClick={(ev: React.SyntheticEvent<HTMLElement> | KeyboardEvent): void => {
-									if (ev) ev.preventDefault();
-									action.onClick(ev);
-								}}
-								size="large"
-							/>
-						</Padding>
-					))}
 				</Container>
 				<Padding left="extrasmall">
 					<Dropdown

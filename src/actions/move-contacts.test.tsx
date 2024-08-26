@@ -11,9 +11,9 @@ import { times } from 'lodash';
 
 import { useActionMoveContacts } from './move-contacts';
 import { UIAction } from './types';
+import { FOLDERS } from '../carbonio-ui-commons/constants/folders';
 import { isLink, isSystemFolder } from '../carbonio-ui-commons/helpers/folders';
 import { getFolder } from '../carbonio-ui-commons/store/zustand/folder';
-import { FOLDERS } from '../carbonio-ui-commons/test/mocks/carbonio-shell-ui-constants';
 import { createSoapAPIInterceptor } from '../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { populateFoldersStore } from '../carbonio-ui-commons/test/mocks/store/folders';
 import {
@@ -231,7 +231,8 @@ describe('useActionMoveContacts', () => {
 
 				const response: ErrorSoapBodyResponse = {
 					Fault: {
-						Detail: { Error: { Code: faker.string.uuid(), Detail: faker.word.preposition() } },
+						Code: { Value: faker.string.uuid() },
+						Detail: { Error: { Code: faker.string.uuid(), Trace: faker.word.preposition() } },
 						Reason: { Text: faker.word.sample() }
 					}
 				};

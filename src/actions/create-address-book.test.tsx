@@ -9,7 +9,7 @@ import { act } from '@testing-library/react';
 import { useActionCreateAddressBook } from './create-address-book';
 import { UIAction } from './types';
 import { FOLDER_VIEW } from '../carbonio-ui-commons/constants';
-import { FOLDERS } from '../carbonio-ui-commons/test/mocks/carbonio-shell-ui-constants';
+import { FOLDERS } from '../carbonio-ui-commons/constants/folders';
 import { generateFolder } from '../carbonio-ui-commons/test/mocks/folders/folders-generator';
 import { setupHook, screen } from '../carbonio-ui-commons/test/test-setup';
 import { TIMERS } from '../constants/tests';

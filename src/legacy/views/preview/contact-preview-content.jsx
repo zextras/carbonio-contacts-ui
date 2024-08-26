@@ -19,10 +19,11 @@ import {
 	Tooltip,
 	Link
 } from '@zextras/carbonio-design-system';
-import { runSearch, useTags, ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-shell-ui';
+import { runSearch, useTags } from '@zextras/carbonio-shell-ui';
 import { every, includes, isEmpty, map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
+import { ZIMBRA_STANDARD_COLORS } from '../../../carbonio-ui-commons/constants/utils';
 import { isTrash } from '../../../carbonio-ui-commons/helpers/folders';
 import { CompactView } from '../../commons/contact-compact-view';
 import { useTagExist } from '../../ui-actions/tag-actions';
@@ -372,8 +373,9 @@ function ContactPreviewContent({ contact, onEdit, onDelete, onMail, onMove }) {
 						{showTagIcon && (
 							<Padding left="small">
 								<Tooltip label={singleTagLabel} disabled={showMultiTagIcon}>
-									<IconButton
+									<Button
 										data-testid="TagIcon"
+										type="ghost"
 										size="large"
 										onClick={onTagClick}
 										icon={tagIcon}
@@ -395,11 +397,25 @@ function ContactPreviewContent({ contact, onEdit, onDelete, onMail, onMove }) {
 								</Padding>
 							</Dropdown>
 						)}
-						<IconButton icon="Trash2Outline" onClick={onDelete} />
-						<IconButton
-							icon={isTrash(contact.parent) ? 'RestoreOutline' : 'MoveOutline'}
-							onClick={onMove}
-						/>
+						<Tooltip
+							label={
+								isTrash(contact.parent) ? t('label.restore', 'Restore') : t('label.move', 'Move')
+							}
+						>
+							<IconButton
+								icon={isTrash(contact.parent) ? 'RestoreOutline' : 'MoveOutline'}
+								onClick={onMove}
+							/>
+						</Tooltip>
+						<Tooltip
+							label={
+								isTrash(contact.parent)
+									? t('tooltip.list_trash.deletePermanently', 'Delete contact permanently')
+									: t('label.delete', 'Delete')
+							}
+						>
+							<IconButton icon="Trash2Outline" onClick={onDelete} />
+						</Tooltip>
 						<Padding right="small" />
 						{!isTrash(contact.parent) && (
 							<Button icon="EditOutline" label={t('label.edit')} onClick={onEdit} />

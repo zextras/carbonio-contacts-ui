@@ -3,10 +3,11 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { Folder, FOLDERS } from '@zextras/carbonio-shell-ui';
+import { Folder } from '@zextras/carbonio-shell-ui';
 import type { TFunction } from 'i18next';
 import { cloneDeep, filter, find, forEach, map, merge, reduce, reject, some } from 'lodash';
 
+import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
 import { Contact, ContactsFolder } from '../types/contact';
 import { ContactsSlice, FoldersSlice } from '../types/store';
 

@@ -15,12 +15,7 @@ import {
 	Tooltip,
 	useSnackbar
 } from '@zextras/carbonio-design-system';
-import {
-	FOLDERS,
-	ZIMBRA_STANDARD_COLORS,
-	useReplaceHistoryCallback,
-	report
-} from '@zextras/carbonio-shell-ui';
+import { useReplaceHistoryCallback, report } from '@zextras/carbonio-shell-ui';
 import { filter, find, map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
@@ -30,6 +25,8 @@ import styled from 'styled-components';
 import { ContactEditorRow, CustomMultivalueField } from './CustomMultivalueField';
 import reducer, { op } from './form-reducer';
 import { FoldersSelector } from '../../../carbonio-ui-commons/components/select/folders-selector';
+import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
+import { ZIMBRA_STANDARD_COLORS } from '../../../carbonio-ui-commons/constants/utils';
 import {
 	getFolderIdParts,
 	isRoot,

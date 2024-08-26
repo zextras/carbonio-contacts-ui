@@ -15,10 +15,11 @@ import {
 	Tooltip,
 	useModal
 } from '@zextras/carbonio-design-system';
-import { useTags, ZIMBRA_STANDARD_COLORS, runSearch, QueryChip } from '@zextras/carbonio-shell-ui';
+import { useTags, runSearch, QueryChip } from '@zextras/carbonio-shell-ui';
 import { reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
+import { ZIMBRA_STANDARD_COLORS } from '../../carbonio-ui-commons/constants/utils';
 import { createTag, useGetTagsActions } from '../ui-actions/tag-actions';
 import { ItemType, TagsAccordionItems } from '../views/secondary-bar/parts/tags/types';
 
@@ -54,11 +55,7 @@ const CustomComp: FC<ItemProps> = (props) => {
 	return (
 		<Dropdown contextMenu items={actions} display="block" width="fit" onClick={triggerSearch}>
 			<Row mainAlignment="flex-start" height="fit" padding={{ left: 'large' }} takeAvailableSpace>
-				<Icon
-					size="large"
-					icon="Tag"
-					customColor={ZIMBRA_STANDARD_COLORS[props?.item?.color ?? 0].hex}
-				/>
+				<Icon size="large" icon="Tag" color={ZIMBRA_STANDARD_COLORS[props?.item?.color ?? 0].hex} />
 
 				<Padding right="large" />
 				<Tooltip label={props?.item?.name} placement="right" maxWidth="100%">
@@ -70,11 +67,16 @@ const CustomComp: FC<ItemProps> = (props) => {
 };
 
 export const TagLabel: FC<ItemType> = (props) => {
-	const createModal = useModal();
+	const { createModal, closeModal } = useModal();
 	const [t] = useTranslation();
 	const alteredProps = { ...props, color: `$props.color` };
 	return (
-		<Dropdown contextMenu display="block" width="fit" items={[createTag({ t, createModal })]}>
+		<Dropdown
+			contextMenu
+			display="block"
+			width="fit"
+			items={[createTag({ t, createModal, closeModal })]}
+		>
 			<Row mainAlignment="flex-start" padding={{ horizontal: 'small' }} takeAvailableSpace>
 				<Icon size="large" icon="TagsMoreOutline" />
 				<AccordionItem {...alteredProps} />

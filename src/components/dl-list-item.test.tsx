@@ -146,7 +146,7 @@ describe('DL list item', () => {
 					);
 					expect(addBoardFn).toHaveBeenCalledWith(
 						expect.objectContaining<Partial<Parameters<typeof shell.addBoard>[0]>>({
-							url: EDIT_DL_BOARD_ID,
+							boardViewId: EDIT_DL_BOARD_ID,
 							context: { id: dl.id }
 						})
 					);
@@ -177,7 +177,7 @@ describe('DL list item', () => {
 					await user.click(await screen.findByText('Edit'));
 					expect(addBoardFn).toHaveBeenCalledWith(
 						expect.objectContaining<Partial<Parameters<typeof shell.addBoard>[0]>>({
-							url: EDIT_DL_BOARD_ID,
+							boardViewId: EDIT_DL_BOARD_ID,
 							context: { id: dl.id }
 						})
 					);

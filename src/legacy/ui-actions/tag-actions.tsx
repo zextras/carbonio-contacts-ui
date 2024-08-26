@@ -15,17 +15,12 @@ import {
 	useModal,
 	useSnackbar
 } from '@zextras/carbonio-design-system';
-import {
-	ZIMBRA_STANDARD_COLORS,
-	replaceHistory,
-	useTags,
-	Tag,
-	Tags
-} from '@zextras/carbonio-shell-ui';
+import { replaceHistory, useTags, Tag, Tags } from '@zextras/carbonio-shell-ui';
 import { TFunction } from 'i18next';
 import { every, find, includes, map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
+import { ZIMBRA_STANDARD_COLORS } from '../../carbonio-ui-commons/constants/utils';
 import { useAppDispatch } from '../hooks/redux';
 import { contactAction } from '../store/actions/contact-action';
 import { StoreProvider } from '../store/redux';
@@ -35,7 +30,7 @@ import CreateUpdateTagModal from '../views/secondary-bar/parts/tags/create-updat
 import DeleteTagModal from '../views/secondary-bar/parts/tags/delete-tag-modal';
 import { ItemType } from '../views/secondary-bar/parts/tags/types';
 
-export type ReturnType = {
+export type TagsActions = {
 	id: string;
 	icon: string;
 	label: string;
@@ -50,23 +45,22 @@ export type ReturnType = {
 
 export type TagsFromStoreType = Record<string, Tag>;
 
-export type ArgumentType = {
+export type TagsActionsParams = {
 	t: TFunction;
-	createModal?: (...args: any) => () => void;
-	createSnackbar?: (...args: any) => void;
-	items?: ReturnType;
+	createModal?: ReturnType<typeof useModal>['createModal'];
+	closeModal?: ReturnType<typeof useModal>['closeModal'];
+	createSnackbar?: ReturnType<typeof useSnackbar>;
+	items?: TagsActions;
 	tag?: ItemType;
+	contact?: Contact;
 };
 
 export const createAndApplyTag = ({
 	t,
-	context,
-	contact
-}: {
-	t: TFunction;
-	context: any;
-	contact: Contact;
-}): ReturnType => ({
+	contact,
+	createModal,
+	closeModal
+}: TagsActionsParams): TagsActions => ({
 	id: TagsActionsType.NEW,
 	icon: 'TagOutline',
 	label: t('label.create_tag', 'Create Tag'),
@@ -74,13 +68,14 @@ export const createAndApplyTag = ({
 		if (e) {
 			e.stopPropagation();
 		}
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
-		const closeModal = context.createModal(
+
+		const modalId = 'create-and-apply-tag';
+		createModal?.(
 			{
+				id: modalId,
 				children: (
 					<StoreProvider>
-						<CreateUpdateTagModal onClose={(): void => closeModal()} contact={contact} />
+						<CreateUpdateTagModal onClose={(): void => closeModal?.(modalId)} contact={contact} />
 					</StoreProvider>
 				)
 			},
@@ -88,7 +83,7 @@ export const createAndApplyTag = ({
 		);
 	}
 });
-export const createTag = ({ t, createModal }: ArgumentType): ReturnType => ({
+export const createTag = ({ t, createModal, closeModal }: TagsActionsParams): TagsActions => ({
 	id: TagsActionsType.NEW,
 	icon: 'TagOutline',
 	label: t('label.create_tag', 'Create Tag'),
@@ -96,13 +91,13 @@ export const createTag = ({ t, createModal }: ArgumentType): ReturnType => ({
 		if (e) {
 			e.stopPropagation();
 		}
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
-		const closeModal = createModal(
+		const modalId = 'create-tag';
+		createModal?.(
 			{
+				id: modalId,
 				children: (
 					<StoreProvider>
-						<CreateUpdateTagModal onClose={(): void => closeModal()} />
+						<CreateUpdateTagModal onClose={(): void => closeModal?.(modalId)} />
 					</StoreProvider>
 				)
 			},
@@ -111,7 +106,7 @@ export const createTag = ({ t, createModal }: ArgumentType): ReturnType => ({
 	}
 });
 
-export const editTag = ({ t, createModal, tag }: ArgumentType): ReturnType => ({
+export const editTag = ({ t, createModal, closeModal, tag }: TagsActionsParams): TagsActions => ({
 	id: TagsActionsType.EDIT,
 	icon: 'Edit2Outline',
 	label: t('label.edit_tag', 'Edit Tag'),
@@ -119,13 +114,13 @@ export const editTag = ({ t, createModal, tag }: ArgumentType): ReturnType => ({
 		if (e) {
 			e.stopPropagation();
 		}
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
-		const closeModal = createModal(
+		const modalId = 'edit-tag';
+		createModal?.(
 			{
+				id: modalId,
 				children: (
 					<StoreProvider>
-						<CreateUpdateTagModal onClose={(): void => closeModal()} tag={tag} editMode />
+						<CreateUpdateTagModal onClose={(): void => closeModal?.(modalId)} tag={tag} editMode />
 					</StoreProvider>
 				)
 			},
@@ -134,7 +129,7 @@ export const editTag = ({ t, createModal, tag }: ArgumentType): ReturnType => ({
 	}
 });
 
-export const deleteTag = ({ t, createModal, tag }: ArgumentType): ReturnType => ({
+export const deleteTag = ({ t, createModal, closeModal, tag }: TagsActionsParams): TagsActions => ({
 	id: TagsActionsType.DELETE,
 	icon: 'Untag',
 	label: t('label.delete_tag', 'Delete Tag'),
@@ -142,13 +137,13 @@ export const deleteTag = ({ t, createModal, tag }: ArgumentType): ReturnType => 
 		if (e) {
 			e.stopPropagation();
 		}
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
-		const closeModal = createModal(
+		const modalId = 'delete-tag';
+		createModal?.(
 			{
+				id: modalId,
 				children: (
 					<StoreProvider>
-						<DeleteTagModal onClose={(): void => closeModal()} tag={tag} />
+						<DeleteTagModal onClose={(): void => closeModal?.(modalId)} tag={tag} />
 					</StoreProvider>
 				)
 			},
@@ -412,12 +407,14 @@ export const applyTag = ({
 	t,
 	contact,
 	tags,
-	context
+	createModal,
+	closeModal
 }: {
 	t: TFunction;
 	contact: any;
 	tags: TagsFromStoreType;
-	context?: any;
+	createModal: ReturnType<typeof useModal>['createModal'];
+	closeModal: ReturnType<typeof useModal>['closeModal'];
 }): {
 	id: string;
 	items: ItemType[];
@@ -451,7 +448,9 @@ export const applyTag = ({
 				type="outlined"
 				width="fill"
 				size="small"
-				onClick={(): void => context.createAndApplyTag({ t, context, contact }).onClick()}
+				onClick={(ev): void => {
+					createAndApplyTag({ t, contact, createModal, closeModal }).onClick?.(ev);
+				}}
 			/>
 		)
 	};
@@ -479,16 +478,16 @@ export const applyTag = ({
 	};
 };
 
-export const useGetTagsActions = ({ tag, t }: ArgumentType): Array<ReturnType> => {
-	const createModal = useModal();
+export const useGetTagsActions = ({ tag, t }: TagsActionsParams): Array<TagsActions> => {
+	const { createModal, closeModal } = useModal();
 	const createSnackbar = useSnackbar();
 	return useMemo(
 		() => [
-			createTag({ t, createModal }),
-			editTag({ t, createModal, tag }),
-			deleteTag({ t, tag, createSnackbar, createModal })
+			createTag({ t, createModal, closeModal }),
+			editTag({ t, createModal, closeModal, tag }),
+			deleteTag({ t, tag, createSnackbar, createModal, closeModal })
 		],
-		[createModal, createSnackbar, t, tag]
+		[closeModal, createModal, createSnackbar, t, tag]
 	);
 };
 

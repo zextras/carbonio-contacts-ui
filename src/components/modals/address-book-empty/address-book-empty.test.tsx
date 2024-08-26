@@ -11,7 +11,7 @@ import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 
 import { AddressBookEmptyModal } from './address-book-empty';
 import { FOLDER_VIEW } from '../../../carbonio-ui-commons/constants';
-import { FOLDERS } from '../../../carbonio-ui-commons/test/mocks/carbonio-shell-ui-constants';
+import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { generateFolder } from '../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
 import { createSoapAPIInterceptor } from '../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { screen, setupTest } from '../../../carbonio-ui-commons/test/test-setup';
@@ -158,7 +158,8 @@ describe('AddressBookEmptyModal', () => {
 	it('should show an error snackbar after receiving a failure result from the API', async () => {
 		const response: ErrorSoapBodyResponse = {
 			Fault: {
-				Detail: { Error: { Code: faker.string.uuid(), Detail: faker.word.preposition() } },
+				Code: { Value: faker.string.uuid() },
+				Detail: { Error: { Code: faker.string.uuid(), Trace: faker.word.preposition() } },
 				Reason: { Text: faker.word.sample() }
 			}
 		};
@@ -177,7 +178,8 @@ describe('AddressBookEmptyModal', () => {
 	it("shouldn't close the modal after a failure result from the API", async () => {
 		const response: ErrorSoapBodyResponse = {
 			Fault: {
-				Detail: { Error: { Code: faker.string.uuid(), Detail: faker.word.preposition() } },
+				Code: { Value: faker.string.uuid() },
+				Detail: { Error: { Code: faker.string.uuid(), Trace: faker.word.preposition() } },
 				Reason: { Text: faker.word.sample() }
 			}
 		};
