@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.12.0](https://github.com/zextras/carbonio-contacts-ui/compare/v1.11.2...v1.12.0) (2024-08-26)
+
+
+### Features
+
+* add confirmation modal when permanently delete contacts ([#239](https://github.com/zextras/carbonio-contacts-ui/issues/239)) ([47b7d49](https://github.com/zextras/carbonio-contacts-ui/commit/47b7d49bc35c377309cb16552755769efca15bbb))
+* added enter separator to contact input ([d76000b](https://github.com/zextras/carbonio-contacts-ui/commit/d76000ba2c247846b0836641ad5c3da6a91e8cee))
+* updated addBoard, addBoardView and SoapFault apis to latest shell BC ([#241](https://github.com/zextras/carbonio-contacts-ui/issues/241)) ([205b294](https://github.com/zextras/carbonio-contacts-ui/commit/205b294805505a085efb927bd73bc6aed06efdf3))
+* WIP: extract a mail parser to parse correctly the email to add ([7e233f7](https://github.com/zextras/carbonio-contacts-ui/commit/7e233f74b1aad0014435836fd6cba7f7b2d958b1))
+
+
+### Bug Fixes
+
+* contact input test fix ([e46b32f](https://github.com/zextras/carbonio-contacts-ui/commit/e46b32f694b9a07f117c1961395f53acbd6b3e20))
+* contact input tests ([6c53fa0](https://github.com/zextras/carbonio-contacts-ui/commit/6c53fa065f7acc678f3efb55eff9eeb3379efbfe))
+* contact-input related tests fix ([10b0685](https://github.com/zextras/carbonio-contacts-ui/commit/10b0685f9969afc28399b018e79fcd8dc1877025))
+* edit behaviour on paste, now it doesnt delete random chips on edit ([52ff221](https://github.com/zextras/carbonio-contacts-ui/commit/52ff22133eda4d8a0e8a8e0fe5e8c470ec6a331c))
+* fixed shell-ui version ([501de57](https://github.com/zextras/carbonio-contacts-ui/commit/501de57997645ec30d58d8f65f8b6ea83c075d3a))
+* flaky tests ([7824078](https://github.com/zextras/carbonio-contacts-ui/commit/7824078ec030a9d07598285d187580a6abc6f3d8))
+* focus out during contact-input chip edit should keep the chip ([87a49fa](https://github.com/zextras/carbonio-contacts-ui/commit/87a49facbd2a483a9aa56c87e990999e3c904afa))
+* handle the urlencoded characters coming from the APIs ([e18b861](https://github.com/zextras/carbonio-contacts-ui/commit/e18b8610e94b36cdfe87c483823360d58f5ffd7d))
+* if we delete contact permanently, we see delete address book button ([#250](https://github.com/zextras/carbonio-contacts-ui/issues/250)) ([ff4878c](https://github.com/zextras/carbonio-contacts-ui/commit/ff4878c7b6b2028f97951706197a6739335529f6))
+* moved styled comp for contact input ([bba59e0](https://github.com/zextras/carbonio-contacts-ui/commit/bba59e01944e6121d0962ef000bf6aff7c00d130))
+* readonly PasteContextMenuProps ([e198c7e](https://github.com/zextras/carbonio-contacts-ui/commit/e198c7e464f524b2f3692852fb52fccef1fd024e))
+* remove unused onPaste ([6aff7b9](https://github.com/zextras/carbonio-contacts-ui/commit/6aff7b9d9e1bdf4b462f862d8d4133b15f3a5d64))
+* use an agnostic id for the contacts ([6a40eeb](https://github.com/zextras/carbonio-contacts-ui/commit/6a40eeb847ebc081149388eae1962964f470276c))
+
 ### [1.11.2](https://github.com/zextras/carbonio-contacts-ui/compare/v1.11.1...v1.11.2) (2024-07-11)
 
 
