@@ -8,6 +8,8 @@ import { useEffect, useState } from 'react';
 import { useNotify, useRefresh } from '@zextras/carbonio-shell-ui';
 import { forEach, isEmpty, sortBy } from 'lodash';
 
+import { useFolderStore } from '../../../carbonio-ui-commons/store/zustand/folder';
+import { folderWorker } from '../../../carbonio-ui-commons/worker';
 import { useAppDispatch } from '../../hooks/redux';
 import {
 	handleCreatedContactsSync,
@@ -34,6 +36,23 @@ export const SyncDataHandler = () => {
 			if (notifyList.length > 0) {
 				forEach(sortBy(notifyList, 'seq'), (notify) => {
 					if (!isEmpty(notify) && notify.seq > seq) {
+						if (seq > 1 && notify.seq === 1) {
+							const isNotifyRelatedToFolders =
+								!isEmpty(notifyList) &&
+								(notify?.created?.folder ||
+									notify?.modified?.folder ||
+									notify.deleted ||
+									notify?.created?.link ||
+									notify?.modified?.link);
+
+							if (isNotifyRelatedToFolders) {
+								folderWorker.postMessage({
+									op: 'notify',
+									notify,
+									state: useFolderStore.getState().folders
+								});
+							}
+						}
 						if (notify.created?.cn) {
 							dispatch(handleCreatedContactsSync(normalizeSyncContactsFromSoap(notify.created.cn)));
 						}
