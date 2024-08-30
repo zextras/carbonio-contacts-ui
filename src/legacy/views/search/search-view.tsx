@@ -102,7 +102,7 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 					({ cn, more, offset, sortBy }): SearchResults => ({
 						query: queryStr,
 						contacts: [
-							...(reset ? [] : searchResults.contacts ?? []),
+							...(reset ? [] : (searchResults.contacts ?? [])),
 							...(normalizeContactsFromSoap(cn) ?? [])
 						],
 						more,
