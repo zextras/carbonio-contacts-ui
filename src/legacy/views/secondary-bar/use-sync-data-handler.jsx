@@ -18,7 +18,7 @@ import {
 } from '../../store/slices/contacts-slice';
 import { normalizeSyncContactsFromSoap } from '../../utils/normalizations/normalize-contact-from-soap';
 
-function syncFolders(seq, notifyList, notify, worker, store) {
+function handleFoldersNotify(seq, notifyList, notify, worker, store) {
 	const isNotifyRelatedToFolders =
 		!isEmpty(notifyList) &&
 		(notify?.created?.folder ||
@@ -44,7 +44,7 @@ export const useSyncDataHandler = () => {
 		if (notifyList.length <= 0) return;
 		forEach(sortBy(notifyList, 'seq'), (notify) => {
 			if (!isEmpty(notify) && notify.seq > seq) {
-				syncFolders(seq, notifyList, notify, folderWorker, useFolderStore);
+				handleFoldersNotify(seq, notifyList, notify, folderWorker, useFolderStore);
 
 				if (notify.created?.cn) {
 					dispatch(handleCreatedContactsSync(normalizeSyncContactsFromSoap(notify.created.cn)));
