@@ -18,6 +18,24 @@ import {
 } from '../../store/slices/contacts-slice';
 import { normalizeSyncContactsFromSoap } from '../../utils/normalizations/normalize-contact-from-soap';
 
+function handleFoldersNotify(notifyList, notify, worker, store) {
+	const isNotifyRelatedToFolders =
+		!isEmpty(notifyList) &&
+		(notify?.created?.folder ||
+			notify?.modified?.folder ||
+			notify.deleted ||
+			notify?.created?.link ||
+			notify?.modified?.link);
+
+	if (isNotifyRelatedToFolders) {
+		worker.postMessage({
+			op: 'notify',
+			notify,
+			state: store.getState().folders
+		});
+	}
+}
+
 export const SyncDataHandler = () => {
 	const notifyList = useNotify();
 	const [seq, setSeq] = useState(-1);
@@ -37,21 +55,7 @@ export const SyncDataHandler = () => {
 				forEach(sortBy(notifyList, 'seq'), (notify) => {
 					if (!isEmpty(notify) && notify.seq > seq) {
 						if (seq > 1 && notify.seq === 1) {
-							const isNotifyRelatedToFolders =
-								!isEmpty(notifyList) &&
-								(notify?.created?.folder ||
-									notify?.modified?.folder ||
-									notify.deleted ||
-									notify?.created?.link ||
-									notify?.modified?.link);
-
-							if (isNotifyRelatedToFolders) {
-								folderWorker.postMessage({
-									op: 'notify',
-									notify,
-									state: useFolderStore.getState().folders
-								});
-							}
+							handleFoldersNotify(notifyList, notify, folderWorker, useFolderStore);
 						}
 						if (notify.created?.cn) {
 							dispatch(handleCreatedContactsSync(normalizeSyncContactsFromSoap(notify.created.cn)));
