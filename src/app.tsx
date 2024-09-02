@@ -22,8 +22,6 @@ import {
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
-import { FOLDER_VIEW } from './carbonio-ui-commons/constants';
-import { useInitializeFolders } from './carbonio-ui-commons/hooks/use-initialize-folders';
 import {
 	CONTACTS_APP_ID,
 	CONTACTS_ROUTE,
@@ -269,8 +267,6 @@ const App = (): React.JSX.Element => {
 			fn: createContactIntegration(createSnackbar, t)
 		});
 	}, [createSnackbar, navigateTo, t]);
-
-	useInitializeFolders(FOLDER_VIEW.contact);
 
 	return (
 		<StoreProvider>
