@@ -34,7 +34,6 @@ import { Folder } from '../../../carbonio-ui-commons/types/folder';
 import { LOCAL_STORAGES } from '../../../constants';
 import { sortFolders } from '../../../helpers/folders';
 import useGetTagsAccordion from '../../hooks/use-get-tags-accordions';
-import { StoreProvider } from '../../store/redux';
 import { getFolderTranslatedName } from '../../utils/helpers';
 
 /**
@@ -121,7 +120,7 @@ const CollapsedSideBarItems = ({ folder }: { folder: Folder }): React.JSX.Elemen
 };
 
 const SecondaryBarView: FC<SecondaryBarComponentProps> = ({ expanded = false }) => {
-	useInitializeFolders({ view: FOLDER_VIEW.contact, StoreProvider });
+	useInitializeFolders(FOLDER_VIEW.contact);
 	const { folderId: selectedFolderId } = useParams<{ folderId: string }>();
 	const tagsAccordionItems = useGetTagsAccordion();
 	const { path } = useRouteMatch();
