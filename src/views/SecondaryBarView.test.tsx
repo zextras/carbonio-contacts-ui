@@ -9,8 +9,8 @@ import React from 'react';
 import 'jest-styled-components';
 
 import SecondaryBarView from './SecondaryBarView';
-import { screen, setupTest, within } from '../carbonio-ui-commons/test/test-setup';
-import { TESTID_SELECTORS } from '../constants/tests';
+import {screen, setupTest, within} from '../carbonio-ui-commons/test/test-setup';
+import {TESTID_SELECTORS} from '../constants/tests';
 
 // function spyUseNavigation(navigateTo: jest.Mock): void {
 // 	jest.spyOn(useNavigationHook, 'useNavigation').mockReturnValue({
@@ -19,9 +19,9 @@ import { TESTID_SELECTORS } from '../constants/tests';
 // }
 
 describe('SecondaryBar', () => {
-	it('should show contact groups entry', () => {
+	it('should not show contact groups entry', () => {
 		setupTest(<SecondaryBarView expanded />);
-		expect(screen.getByText('My Contact Groups')).toBeVisible();
+		expect(screen.queryByText('My Contact Groups')).not.toBeInTheDocument();
 	});
 
 	// TODO: click on secondary bar throws an error on pointer-events,

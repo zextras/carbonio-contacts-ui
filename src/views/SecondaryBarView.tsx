@@ -65,16 +65,6 @@ const SecondaryBarView = ({ expanded }: { expanded: boolean }): React.JSX.Elemen
 				open: true,
 				items: [
 					{
-						id: 'id2',
-						icon: 'PeopleOutline',
-						label: t('secondaryBar.myContactGroups', 'My Contact Groups'),
-						onClick: (ev): void => {
-							ev.stopPropagation();
-							navigateTo(ROUTES_INTERNAL_PARAMS.route.contactGroups);
-						},
-						active: pathname.includes(ROUTES_INTERNAL_PARAMS.route.contactGroups)
-					},
-					{
 						id: 'distribution-lists',
 						icon: 'DistributionListOutline',
 						label: t('secondaryBar.distributionLists', 'Distribution Lists'),
