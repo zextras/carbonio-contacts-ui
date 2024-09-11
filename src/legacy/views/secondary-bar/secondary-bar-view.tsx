@@ -3,121 +3,28 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { FC, useCallback, useMemo } from 'react';
+import React, { FC, useMemo } from 'react';
 
 import { ThemeProvider } from '@mui/material';
-import {
-	Accordion,
-	Button,
-	Container,
-	Divider,
-	IconButton,
-	Padding,
-	Row,
-	Tooltip
-} from '@zextras/carbonio-design-system';
-import { AppLink, SecondaryBarComponentProps } from '@zextras/carbonio-shell-ui';
-import { map, noop } from 'lodash';
-import { useTranslation } from 'react-i18next';
+import { Accordion, Divider } from '@zextras/carbonio-design-system';
+import { SecondaryBarComponentProps } from '@zextras/carbonio-shell-ui';
 import { Route, Switch, useParams, useRouteMatch } from 'react-router-dom';
 
-import { AccordionCustomComponent } from './accordion-custom-component';
-import { useActionAddSharedAddressBooks } from '../../../actions/add-shared-address-books';
-import { SidebarAccordionMui } from '../../../carbonio-ui-commons/components/sidebar/sidebar-accordion-mui';
+import { CollapsedSideBarItems } from './collapsed-sidebar-folders';
+import { SidebarAccordionMui } from './sidebar-accordion';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
-import { FOLDER_VIEW, ZIMBRA_STANDARD_COLORS } from '../../../carbonio-ui-commons/constants/utils';
-import { isLink } from '../../../carbonio-ui-commons/helpers/folders';
+import { FOLDER_VIEW } from '../../../carbonio-ui-commons/constants/utils';
 import { useInitializeFolders } from '../../../carbonio-ui-commons/hooks/use-initialize-folders';
 import { useRootsArray } from '../../../carbonio-ui-commons/store/zustand/folder';
 import { themeMui } from '../../../carbonio-ui-commons/theme/theme-mui';
-import { Folder } from '../../../carbonio-ui-commons/types/folder';
 import { LOCAL_STORAGES } from '../../../constants';
 import { sortFolders } from '../../../helpers/folders';
 import useGetTagsAccordion from '../../hooks/use-get-tags-accordions';
-import { getFolderTranslatedName } from '../../utils/helpers';
-
-/**
- * Component for trigger the browsing and selection of
- * address books shared by other users
- */
-const AddSharesButton = (): React.JSX.Element => {
-	const [t] = useTranslation();
-	const addSharesAction = useActionAddSharedAddressBooks();
-
-	const isEnabled = useMemo(() => addSharesAction.canExecute(), [addSharesAction]);
-
-	const label = useMemo(() => t('label.find_shares', 'Find shares'), [t]);
-
-	const onClick = useCallback(() => {
-		addSharesAction.execute();
-	}, [addSharesAction]);
-
-	return (
-		<Container padding={{ horizontal: 'medium', vertical: 'small' }} key="button-find-shares">
-			<Button
-				type="outlined"
-				label={label}
-				width="fill"
-				color="primary"
-				onClick={onClick}
-				disabled={!isEnabled}
-			/>
-		</Container>
-	);
-};
-
-const folderIconName: Record<number, string> = {
-	7: 'PersonOutline',
-	13: 'EmailOutline',
-	3: 'Trash2Outline'
-};
 
 /**
  * Item component for the collapsed secondary bar
  * @param folder
  */
-const CollapsedSideBarItems = ({ folder }: { folder: Folder }): React.JSX.Element => {
-	const [t] = useTranslation();
-
-	const folderIcon = useMemo(() => {
-		if (Object.keys(folderIconName).includes(folder.id)) {
-			return folderIconName[Number(folder.id)];
-		}
-		if (folder.id === 'shares' || isLink(folder)) {
-			return 'Share';
-		}
-		return 'Folder';
-	}, [folder]);
-
-	const folderIconColor = useMemo(
-		() => (folder.color ? ZIMBRA_STANDARD_COLORS[folder.color].hex : ZIMBRA_STANDARD_COLORS[0].hex),
-		[folder]
-	);
-
-	const folderIconTooltip = useMemo(
-		() => getFolderTranslatedName(t, folder.id, folder.name),
-		[folder.id, folder.name, t]
-	);
-
-	return (
-		<>
-			<AppLink to={`/folder/${folder.id}`} style={{ width: '100%', textDecoration: 'none' }}>
-				<Row mainAlignment="flex-start" height={'fit'}>
-					<Tooltip placement="right" label={folderIconTooltip}>
-						<Padding all="extrasmall">
-							<IconButton
-								customSize={{ iconSize: 'large', paddingSize: 'small' }}
-								icon={folderIcon}
-								iconColor={folderIconColor}
-								onClick={noop}
-							/>
-						</Padding>
-					</Tooltip>
-				</Row>
-			</AppLink>
-		</>
-	);
-};
 
 const SecondaryBarView: FC<SecondaryBarComponentProps> = ({ expanded = false }) => {
 	useInitializeFolders(FOLDER_VIEW.contact);
@@ -128,18 +35,6 @@ const SecondaryBarView: FC<SecondaryBarComponentProps> = ({ expanded = false }) 
 	const roots = useRootsArray();
 	const folders = useMemo(() => sortFolders(roots), [roots]);
 
-	const accordionsWithFindShare = useMemo(() => {
-		if (!folders?.[0]?.children.find((folder: Folder) => folder.id === 'find_shares')) {
-			folders[0]?.children?.push({
-				id: 'find_shares',
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
-				disableHover: true
-			});
-		}
-		return map(folders, (item) => ({ ...item, background: 'gray4' }));
-	}, [folders]);
-
 	return (
 		<>
 			<ThemeProvider theme={themeMui}>
@@ -147,11 +42,9 @@ const SecondaryBarView: FC<SecondaryBarComponentProps> = ({ expanded = false }) 
 					<Switch>
 						<Route path={`${path}/folder/:folderId/:type?/:itemId?`}>
 							<SidebarAccordionMui
-								accordions={accordionsWithFindShare}
-								folderId={selectedFolderId}
+								folders={folders}
+								selectedFolderId={selectedFolderId}
 								localStorageName={LOCAL_STORAGES.EXPANDED_ADDRESSBOOKS}
-								AccordionCustomComponent={AccordionCustomComponent}
-								buttonFindShares={<AddSharesButton />}
 								initialExpanded={[FOLDERS.USER_ROOT]}
 							/>
 
