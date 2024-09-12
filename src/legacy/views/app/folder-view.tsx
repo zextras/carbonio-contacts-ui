@@ -22,7 +22,7 @@ const FolderView = (): React.JSX.Element => {
 		<>
 			<Switch>
 				<Route path={`${trimmedPath}/:folderId/:type?/:itemId?`}>
-					<Container width="40%">
+					<Container width="40%" borderColor={{ right: 'gray3' }}>
 						<Suspense fallback={<Spinner />}>
 							<FolderPanel />
 						</Suspense>

@@ -6,8 +6,7 @@
 
 import React from 'react';
 
-import { Container, Icon, Padding } from '@zextras/carbonio-design-system';
-import styled from 'styled-components';
+import { Container, Padding } from '@zextras/carbonio-design-system';
 
 import { Text } from './Text';
 
@@ -16,10 +15,7 @@ type EmptyDisplayerProps = {
 	description: string;
 };
 
-export const EmptyDisplayer = ({
-	title,
-	description
-}: EmptyDisplayerProps): React.JSX.Element => (
+export const EmptyDisplayer = ({ title, description }: EmptyDisplayerProps): React.JSX.Element => (
 	<Container>
 		<Padding all="medium">
 			<Text color="gray1" overflow="break-word" weight="bold" size="large" centered>

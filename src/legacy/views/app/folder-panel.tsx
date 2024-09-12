@@ -77,7 +77,7 @@ export const FolderPanel = (): ReactElement => {
 					maxHeight: '100%'
 				}}
 			>
-				<Container mainAlignment="flex-start" borderRadius="none" height="calc(100% - 4rem)">
+				<Container mainAlignment="flex-start" borderRadius="none">
 					{isSelecting ? (
 						<SelectPanelActions deselectAll={deselectAll} />
 					) : (
@@ -87,7 +87,6 @@ export const FolderPanel = (): ReactElement => {
 						folderId={folderId}
 						contacts={sortedContacts}
 						selected={selected}
-						setCount={setCount}
 						toggle={toggle}
 					/>
 				</Container>
