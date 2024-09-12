@@ -40,7 +40,7 @@ const SecondaryBarView: FC<SecondaryBarComponentProps> = ({ expanded = false }) 
 			<ThemeProvider theme={themeMui}>
 				{expanded ? (
 					<Switch>
-						<Route path={`${path}/folder/:folderId/:type?/:itemId?`}>
+						<Route path={[`${path}/folder/:folderId/:type?/:itemId?`, `${path}/contact-groups`]}>
 							<SidebarAccordionMui
 								folders={folders}
 								selectedFolderId={selectedFolderId}

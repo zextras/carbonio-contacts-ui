@@ -28,7 +28,7 @@ type UseAppContextType = {
 	setCount: (count: number) => void;
 };
 
-export default function FolderPanel(): ReactElement {
+export const FolderPanel = (): ReactElement => {
 	const { folderId } = useParams<RouteParams>();
 	const dispatch = useAppDispatch();
 	const folder = useFolder(folderId);
@@ -94,4 +94,4 @@ export default function FolderPanel(): ReactElement {
 			</Container>
 		</ActionsContextProvider>
 	);
-}
+};

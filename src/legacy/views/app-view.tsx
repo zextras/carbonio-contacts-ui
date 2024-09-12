@@ -12,14 +12,14 @@ import { Redirect, Switch, Route, useRouteMatch } from 'react-router-dom';
 import { useUpdateView } from '../../carbonio-ui-commons/hooks/use-update-view';
 
 const LazyFolderView = lazy(
-	() => import(/* webpackChunkName: "folder-view" */ './app/folder-panel')
+	() => import(/* webpackChunkName: "folder-panel-view" */ './app/folder-view')
 );
 
-const LazyDetailPanel = lazy(
-	() => import(/* webpackChunkName: "folder-panel-view" */ './app/detail-panel')
+const LazyContactGroups = lazy(
+	() => import(/* webpackChunkName: "folder-panel-view" */ '../../views/cg-view')
 );
 
-const AppView = () => {
+const AppView = (): React.JSX.Element => {
 	const { path } = useRouteMatch();
 	const [count, setCount] = useState(0);
 	useUpdateView();
@@ -30,19 +30,19 @@ const AppView = () => {
 
 	return (
 		<Container orientation="horizontal" mainAlignment="flex-start">
-			<Container width="40%">
-				<Switch>
-					<Route path={`${path}/folder/:folderId/:type?/:itemId?`}>
-						<Suspense fallback={<Spinner />}>
-							<LazyFolderView />
-						</Suspense>
-					</Route>
-					<Redirect strict from={path} to={`${path}/folder/7`} />
-				</Switch>
-			</Container>
-			<Suspense fallback={<Spinner />}>
-				<LazyDetailPanel />
-			</Suspense>
+			<Switch>
+				<Route path={`${path}/contact-groups`}>
+					<Suspense fallback={<Spinner />}>
+						<LazyContactGroups />
+					</Suspense>
+				</Route>
+				<Route path={`${path}/folder/`}>
+					<Suspense fallback={<Spinner />}>
+						<LazyFolderView />
+					</Suspense>
+				</Route>
+				<Redirect strict from={path} to={`${path}/folder/7`} />
+			</Switch>
 		</Container>
 	);
 };

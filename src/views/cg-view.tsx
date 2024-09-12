@@ -13,7 +13,7 @@ import { CGList } from '../components/cg-list';
 import { DISPLAYER_WIDTH } from '../constants';
 import { useFindContactGroups } from '../hooks/useFindContactGroups';
 
-export const CGView = (): React.JSX.Element => {
+const CGView = (): React.JSX.Element => {
 	const { contactGroups, hasMore, findMore } = useFindContactGroups();
 
 	return (
@@ -37,3 +37,5 @@ export const CGView = (): React.JSX.Element => {
 		</Container>
 	);
 };
+
+export default CGView;
