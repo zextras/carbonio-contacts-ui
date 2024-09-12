@@ -15,21 +15,21 @@ import styled from 'styled-components';
 import { theme } from '../../../carbonio-ui-commons/theme/theme-mui';
 import { ROUTES_INTERNAL_PARAMS } from '../../../constants';
 import { useNavigation } from '../../../hooks/useNavigation';
+const StyledText = styled(Text)`
+		min-width: 0;
+		flex-basis: 0;
+		flex-grow: 1;
+	`;
 
 export const ContactGroup = (): React.JSX.Element => {
 	const [t] = useTranslation();
 	const { navigateTo } = useNavigation();
-	const { pathname } = useLocation();
 	const onContactGroupClick = (ev: KeyboardEvent | React.SyntheticEvent): void => {
 		ev.stopPropagation();
 		navigateTo(ROUTES_INTERNAL_PARAMS.route.contactGroups);
 	};
 
-	const StyledText = styled(Text)`
-		min-width: 0;
-		flex-basis: 0;
-		flex-grow: 1;
-	`;
+
 	const label = t('secondaryBar.contactGroups', 'Contact Groups');
 	return (
 		<Accordion
