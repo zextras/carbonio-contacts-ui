@@ -17,15 +17,18 @@ type EmptyDisplayerProps = {
 	description: string;
 };
 
-
 const CustomIcon = styled(Icon)`
 	width: 2rem;
 	height: 2rem;
 `;
 
-export const EmptyDisplayer = ({ title, description, icon }: EmptyDisplayerProps): React.JSX.Element => (
+export const EmptyDisplayer = ({
+	title,
+	description,
+	icon
+}: EmptyDisplayerProps): React.JSX.Element => (
 	<Container>
-		{icon && <CustomIcon icon={icon} color={'secondary'} /> }
+		{icon && <CustomIcon icon={icon} color={'secondary'} />}
 		<Padding all="medium">
 			<Text color="gray1" overflow="break-word" weight="bold" size="large" centered>
 				{title}

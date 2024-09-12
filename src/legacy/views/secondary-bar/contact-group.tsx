@@ -6,25 +6,25 @@
 
 import React from 'react';
 
-import {Accordion, AccordionSummary} from '@mui/material';
-import {Container, Icon, Padding, Text} from '@zextras/carbonio-design-system';
-import {useTranslation} from 'react-i18next';
+import { Accordion, AccordionSummary } from '@mui/material';
+import { Container, Icon, Padding, Text } from '@zextras/carbonio-design-system';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import {theme} from '../../../carbonio-ui-commons/theme/theme-mui';
-import {replaceHistory} from "@zextras/carbonio-shell-ui";
+import { theme } from '../../../carbonio-ui-commons/theme/theme-mui';
+import { replaceHistory } from '@zextras/carbonio-shell-ui';
 
 const StyledText = styled(Text)`
-		min-width: 0;
-		flex-basis: 0;
-		flex-grow: 1;
-	`;
+	min-width: 0;
+	flex-basis: 0;
+	flex-grow: 1;
+`;
 
 export const ContactGroup = (): React.JSX.Element => {
 	const [t] = useTranslation();
 	const onContactGroupClick = (ev: KeyboardEvent | React.SyntheticEvent): void => {
 		ev.stopPropagation();
-		replaceHistory('contact-groups')
+		replaceHistory('contact-groups');
 	};
 
 	const label = t('secondaryBar.contactGroups', 'Contact Groups');
