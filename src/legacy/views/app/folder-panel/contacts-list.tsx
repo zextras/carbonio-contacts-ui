@@ -5,13 +5,15 @@
  */
 import React, { useMemo, useRef, useState } from 'react';
 
-import { Container, List, Padding, Text } from '@zextras/carbonio-design-system';
+import { List } from '@zextras/carbonio-design-system';
 import { reduce, find, map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import ContactListItem from './contact-list-item';
+import { EmptyListPanel } from './empty-list-panel';
+import { Contact } from '../../../types/contact';
 
 const DragImageContainer = styled.div`
 	position: absolute;
@@ -21,7 +23,13 @@ const DragImageContainer = styled.div`
 	width: 35vw;
 `;
 
-const DragItems = ({ contacts, draggedIds }) => {
+const DragItems = ({
+	contacts,
+	draggedIds
+}: {
+	contacts: Array<Contact>;
+	draggedIds: Record<string, unknown>;
+}): React.JSX.Element => {
 	const items = reduce(
 		draggedIds,
 		(acc, v, k) => {
@@ -31,7 +39,7 @@ const DragItems = ({ contacts, draggedIds }) => {
 			}
 			return acc;
 		},
-		[]
+		[] as Record<string, unknown>[]
 	);
 
 	return (
@@ -42,12 +50,22 @@ const DragItems = ({ contacts, draggedIds }) => {
 		</>
 	);
 };
-
-export const ContactsList = ({ folderId, selected, contacts, toggle }) => {
+type ContactsListProps = {
+	folderId: string;
+	selected: Record<string, unknown>;
+	contacts: Array<Contact>;
+	toggle: boolean;
+};
+export const ContactsList = ({
+	folderId,
+	selected,
+	contacts,
+	toggle
+}: ContactsListProps): React.JSX.Element => {
 	const [t] = useTranslation();
-	const { itemId } = useParams();
+	const { itemId } = useParams<{ itemId: string }>();
 	const [isDragging, setIsDragging] = useState(false);
-	const [draggedIds, setDraggedIds] = useState();
+	const [draggedIds, setDraggedIds] = useState({});
 	const dragImageRef = useRef(null);
 
 	const listMessages = useMemo(
@@ -74,18 +92,10 @@ export const ContactsList = ({ folderId, selected, contacts, toggle }) => {
 	return (
 		<>
 			{contacts?.length === 0 ? (
-				<Container data-testid="ContactsListToScrollContainer">
-					<Padding top="medium">
-						<Text
-							color="gray1"
-							overflow="break-word"
-							size="small"
-							style={{ whiteSpace: 'pre-line', textAlign: 'center', paddingTop: '2rem' }}
-						>
-							{displayerTitle}
-						</Text>
-					</Padding>
-				</Container>
+				<EmptyListPanel
+					data-testid="ContactsListToScrollContainer"
+					emptyListTitle={displayerTitle}
+				/>
 			) : (
 				<List
 					data-testid="ContactsListToScrollContainer"
