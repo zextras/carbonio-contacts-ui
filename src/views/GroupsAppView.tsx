@@ -10,7 +10,7 @@ import { ModalManager, ThemeProvider } from '@zextras/carbonio-design-system';
 import { trimEnd } from 'lodash';
 import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
 
-import { CGView } from './cg-view';
+import CGView from './cg-view';
 import { DistributionListsView } from './distribution-lists-view';
 import { RouteParams, ROUTES, ROUTES_INTERNAL_PARAMS } from '../constants';
 
