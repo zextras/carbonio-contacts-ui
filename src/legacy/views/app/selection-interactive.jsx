@@ -12,7 +12,6 @@ import { useParams } from 'react-router-dom';
 import { useAppSelector } from '../../hooks/redux';
 import { selectAllContactsInFolder } from '../../store/selectors/contacts';
 
-const generateRandomNumber = () => Math.floor(Math.random() * 4);
 export default function SelectionInteractive() {
 	const [t] = useTranslation();
 	const { folderId } = useParams();
