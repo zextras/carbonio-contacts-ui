@@ -40,7 +40,6 @@ export const CGDisplayerController = (): React.JSX.Element => {
 						'Click the “NEW” button to create a new contacts group.'
 					)}
 					title={t('displayer.title3', 'Stay in touch with your colleagues.')}
-					icon={'PeopleOutline'}
 				/>
 			)}
 		</Container>

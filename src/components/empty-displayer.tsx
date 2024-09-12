@@ -12,23 +12,15 @@ import styled from 'styled-components';
 import { Text } from './Text';
 
 type EmptyDisplayerProps = {
-	icon: string;
 	title: string;
 	description: string;
 };
 
-const CustomIcon = styled(Icon)`
-	width: 2rem;
-	height: 2rem;
-`;
-
 export const EmptyDisplayer = ({
-	icon,
 	title,
 	description
 }: EmptyDisplayerProps): React.JSX.Element => (
 	<Container>
-		<CustomIcon icon={icon} color={'secondary'} />
 		<Padding all="medium">
 			<Text color="gray1" overflow="break-word" weight="bold" size="large" centered>
 				{title}
