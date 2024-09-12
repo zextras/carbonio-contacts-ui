@@ -14,6 +14,10 @@ import { MainList } from './main-list';
 import { StyledListItem } from './styled-components';
 import { useActiveItem } from '../hooks/useActiveItem';
 import { ContactGroup } from '../model/contact-group';
+import {LIST_WIDTH} from "../constants";
+import {Container, Divider, ListV2, Row} from "@zextras/carbonio-design-system";
+import {Text} from "./Text";
+import {Navbar} from "./sidebar/item-list/navbar";
 
 export type CGListProps = {
 	contactGroups: Array<ContactGroup>;
@@ -47,11 +51,31 @@ export const CGList = ({ contactGroups, onListBottom }: CGListProps): React.JSX.
 	);
 
 	return (
-		<MainList
-			emptyMessage={t('contactGroupList.emptyList', 'No contact groups have been created yet')}
-			onListBottom={onListBottom}
-		>
-			{items}
-		</MainList>
+			<Container
+					width={LIST_WIDTH}
+					mainAlignment="flex-start"
+					crossAlignment="unset"
+					borderRadius="none"
+					background={'gray6'}
+					borderColor={{ right: 'gray3' }}
+			>
+				<Navbar name={`/ ${t('secondaryBar.contactGroups', 'Contact Groups')}`} itemsCount={items.length}/>
+				<Container minHeight={0} maxHeight={'100%'}>
+					{items && items.length > 0 ? (
+							<ListV2
+									data-testid="main-list"
+									background={'gray6'}
+									onListBottom={onListBottom}
+									intersectionObserverInitOptions={{ threshold: 0.5 }}
+							>
+								{items}
+							</ListV2>
+					) : (
+							<Text size={'small'} weight={'regular'} overflow={'break-word'} color={'secondary'} centered>
+								{t('contactGroupList.emptyList', 'No contact groups have been created yet')}
+							</Text>
+					)}
+				</Container>
+			</Container>
 	);
 };
