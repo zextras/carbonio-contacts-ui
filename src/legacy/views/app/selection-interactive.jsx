@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 
 import { Container, Padding, Text } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
@@ -31,79 +31,29 @@ export default function SelectionInteractive() {
 		[t]
 	);
 	const emptyListMessage = useMemo(
-		() => [
-			{
-				title: t(`displayer.title1`, 'Create a new contact by clicking the “NEW” button.'),
-				description: ''
-			},
-			{
-				title: t(`displayer.title2`, 'Share all your works with your contacts.'),
-				description: t(
-					`displayer.description2`,
-					'Click the “NEW” button to start creating a new one.'
-				)
-			},
-			{
-				title: t(`displayer.title3`, 'Stay in touch with your colleagues.'),
-				description: t(
-					`displayer.description3`,
-					'Click the “NEW” button to create a new group of contacts.'
-				)
-			},
-			{
-				title: t(`displayer.title4`, 'Customize your contacts by adding personal notes'),
-				description: t(`displayer.description4`, 'Create a new one by clicking the “NEW” button.')
-			}
-		],
+		() => ({
+			title: t(`displayer.title1`, 'Create a new contact by clicking the “NEW” button.'),
+			description: ''
+		}),
 		[t]
 	);
 	const emptyFieldMessage = useMemo(
-		() => [
-			{
-				title: t(`displayer.title5`, 'Select a contact'),
-				description: t(
-					`displayer.description5`,
-					'Discover all the ways you can connect with other users.'
-				)
-			},
-			{
-				title: t(`displayer.title6`, 'Customize a contact'),
-				description: t(
-					`displayer.description6`,
-					'Use the “Edit” mode to add any personal note to a contact.'
-				)
-			},
-			{
-				title: t(`displayer.title7`, 'Stay in touch with your colleagues'),
-				description: t(
-					`displayer.description7`,
-					'Create a group of contacts by clicking the “NEW” button.'
-				)
-			},
-			{
-				title: t(`displayer.title8`, 'Sharing is caring'),
-				description: t(
-					`displayer.description8`,
-					'Select a contact or a group of contacts to send shared emails.'
-				)
-			}
-		],
+		() => ({
+			title: t(`displayer.title5`, 'Select a contact'),
+			description: t(
+				`displayer.description5`,
+				'Discover all the ways you can connect with other users.'
+			)
+		}),
 		[t]
 	);
-	const [randomIndex, setRandomIndex] = useState(0);
-	useEffect(() => {
-		const random = generateRandomNumber();
-		setRandomIndex(random);
-	}, [folderId]);
 
 	const displayerMessage = useMemo(() => {
 		if (folderId === '3') {
 			return contacts?.length > 0 ? trashMessages[1] : trashMessages[0];
 		}
-		return contacts && contacts.length > 0
-			? emptyListMessage[randomIndex]
-			: emptyFieldMessage[randomIndex];
-	}, [contacts, emptyListMessage, emptyFieldMessage, randomIndex, folderId, trashMessages]);
+		return contacts?.length > 0 ? emptyListMessage : emptyFieldMessage;
+	}, [contacts, emptyListMessage, emptyFieldMessage, folderId, trashMessages]);
 	const displayerTitle = displayerMessage ? displayerMessage.title : '';
 	const displayerDescription = displayerMessage ? displayerMessage.description : '';
 	return (
