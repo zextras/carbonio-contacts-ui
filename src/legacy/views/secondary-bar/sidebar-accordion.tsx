@@ -53,7 +53,7 @@ export const SidebarAccordionMui: FC<SidebarAccordionProps> = ({
 	return (
 		<Container ref={sidebarRef} disableGutters>
 			{folders.map((folder) => (
-				<div key="accordion-div-${folder.id}">
+				<div key={`accordion-div-${folder.id}`}>
 					<Accordion
 						disableGutters
 						slotProps={{ transition: { unmountOnExit: true } }}
@@ -94,11 +94,11 @@ export const SidebarAccordionMui: FC<SidebarAccordionProps> = ({
 								<SidebarAccordionMui
 									folders={folder.children}
 									selectedFolderId={selectedFolderId}
-									key="accordion-mui-${folder.id}}"
+									key={`accordion-mui-${folder.id}`}
 									localStorageName={localStorageName}
 									initialExpanded={initialExpanded}
 								/>
-								{isRoot(folder.id) && <FindSharesButton key="find-shares-btn-${folder.id}}" />}
+								{isRoot(folder.id) && <FindSharesButton key={`find-shares-btn-${folder.id}`} />}
 							</AccordionDetails>
 						)}
 					</Accordion>
