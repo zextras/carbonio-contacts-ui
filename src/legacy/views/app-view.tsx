@@ -36,13 +36,9 @@ const AppView = (): React.JSX.Element => {
 						<LazyContactGroups />
 					</Suspense>
 				</Route>
-				<Route path={`${path}/folder/`}>
-					<Suspense fallback={<Spinner />}>
-						<LazyFolderView />
-					</Suspense>
-				</Route>
 				<Redirect strict from={path} to={`${path}/folder/7`} />
 			</Switch>
+			<LazyFolderView />
 		</Container>
 	);
 };
