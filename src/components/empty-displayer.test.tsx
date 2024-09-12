@@ -14,10 +14,12 @@ describe('Empty Displayer', () => {
 	it('should render empty displayer messages', () => {
 		setupTest(
 			<EmptyDisplayer
+				icon={'DistributionListOutline'}
 				title={EMPTY_DISPLAYER_HINT}
 				description={'description'}
 			/>
 		);
+		expect(screen.getByTestId(TESTID_SELECTORS.icons.distributionList)).toBeVisible();
 		expect(screen.getByText(EMPTY_DISPLAYER_HINT)).toBeVisible();
 		expect(screen.getByText('description')).toBeVisible();
 	});
