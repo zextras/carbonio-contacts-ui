@@ -6,15 +6,14 @@
 
 import React from 'react';
 
-import { Accordion, AccordionSummary } from '@mui/material';
-import { Container, Icon, Padding, Text } from '@zextras/carbonio-design-system';
-import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
+import {Accordion, AccordionSummary} from '@mui/material';
+import {Container, Icon, Padding, Text} from '@zextras/carbonio-design-system';
+import {useTranslation} from 'react-i18next';
 import styled from 'styled-components';
 
-import { theme } from '../../../carbonio-ui-commons/theme/theme-mui';
-import { ROUTES_INTERNAL_PARAMS } from '../../../constants';
-import { useNavigation } from '../../../hooks/useNavigation';
+import {theme} from '../../../carbonio-ui-commons/theme/theme-mui';
+import {replaceHistory} from "@zextras/carbonio-shell-ui";
+
 const StyledText = styled(Text)`
 		min-width: 0;
 		flex-basis: 0;
@@ -23,12 +22,10 @@ const StyledText = styled(Text)`
 
 export const ContactGroup = (): React.JSX.Element => {
 	const [t] = useTranslation();
-	const { navigateTo } = useNavigation();
 	const onContactGroupClick = (ev: KeyboardEvent | React.SyntheticEvent): void => {
 		ev.stopPropagation();
-		navigateTo(ROUTES_INTERNAL_PARAMS.route.contactGroups);
+		replaceHistory('contact-groups')
 	};
-
 
 	const label = t('secondaryBar.contactGroups', 'Contact Groups');
 	return (
@@ -55,6 +52,7 @@ export const ContactGroup = (): React.JSX.Element => {
 					height="2.5rem"
 					style={{ minWidth: 0, flexBasis: 0, flexGrow: 1 }}
 					key={'contact-group-id'}
+					data-testid={'contact-group-id'}
 					onClick={onContactGroupClick}
 				>
 					<Padding horizontal="small">
