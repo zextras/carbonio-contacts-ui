@@ -3,12 +3,14 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { Route, Switch, useRouteMatch } from 'react-router-dom';
-import { Container } from '@zextras/carbonio-design-system';
 import React, { Suspense, useMemo } from 'react';
+
+import { Container } from '@zextras/carbonio-design-system';
 import { Spinner } from '@zextras/carbonio-shell-ui';
-import { FolderPanel } from './folder-panel';
 import { trimEnd } from 'lodash';
+import { Route, Switch, useRouteMatch } from 'react-router-dom';
+
+import { FolderPanel } from './folder-panel';
 
 export const FolderListPanel = (): React.JSX.Element => {
 	const { path } = useRouteMatch();

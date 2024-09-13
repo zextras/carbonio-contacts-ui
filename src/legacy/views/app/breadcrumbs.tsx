@@ -10,7 +10,13 @@ import { useTranslation } from 'react-i18next';
 
 import { getFolderTranslatedNameByName } from '../../utils/helpers';
 
-export function Breadcrumbs({ folderPath, itemsCount }) {
+export const Breadcrumbs = ({
+	folderPath,
+	itemsCount
+}: {
+	folderPath: string;
+	itemsCount: number;
+}): React.JSX.Element => {
 	const [t] = useTranslation();
 	const label = useMemo(
 		() =>
@@ -55,4 +61,4 @@ export function Breadcrumbs({ folderPath, itemsCount }) {
 			<Divider />
 		</>
 	);
-}
+};

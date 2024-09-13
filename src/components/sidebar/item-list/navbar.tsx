@@ -7,12 +7,12 @@ import React from 'react';
 
 import { Container, Divider, Row, Text } from '@zextras/carbonio-design-system';
 
-type BreadcrumbProps = {
+type NavbarProps = {
 	name: string;
 	itemsCount: number;
 };
 
-export const Navbar = ({ name, itemsCount }: BreadcrumbProps): React.JSX.Element => (
+export const Navbar = ({ name, itemsCount }: NavbarProps): React.JSX.Element => (
 	<>
 		<Container
 			background="gray5"

@@ -81,7 +81,7 @@ export const FolderPanel = (): ReactElement => {
 					{isSelecting ? (
 						<SelectPanelActions deselectAll={deselectAll} />
 					) : (
-						<Breadcrumbs folderPath={folder?.absFolderPath} itemsCount={folder?.n} />
+						<Breadcrumbs folderPath={folder?.absFolderPath ?? ''} itemsCount={folder?.n ?? 0} />
 					)}
 					<ContactsList
 						folderId={folderId}
