@@ -4,9 +4,10 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import { Container, ListV2 } from '@zextras/carbonio-design-system';
+import { replaceHistory } from '@zextras/carbonio-shell-ui';
 import { map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
@@ -25,7 +26,11 @@ export type CGListProps = {
 
 export const CGList = ({ contactGroups, onListBottom }: CGListProps): React.JSX.Element => {
 	const [t] = useTranslation();
-	const { activeItem, setActive } = useActiveItem();
+	const { activeItem } = useActiveItem();
+
+	const onClick = useCallback((id: string) => {
+		replaceHistory(`/contact-groups/${id}`);
+	}, []);
 
 	const items = useMemo(
 		() =>
@@ -40,13 +45,13 @@ export const CGList = ({ contactGroups, onListBottom }: CGListProps): React.JSX.
 							visible={visible}
 							title={contactGroup.title}
 							id={contactGroup.id}
-							onClick={setActive}
+							onClick={onClick}
 							members={contactGroup.members}
 						/>
 					)}
 				</StyledListItem>
 			)),
-		[activeItem, contactGroups, setActive]
+		[activeItem, contactGroups, onClick]
 	);
 
 	return (

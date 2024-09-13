@@ -31,7 +31,7 @@ const AppView = (): React.JSX.Element => {
 	return (
 		<Container orientation="horizontal" mainAlignment="flex-start">
 			<Switch>
-				<Route path={`${path}/contact-groups`}>
+				<Route path={`${path}/contact-groups/:id?`}>
 					<Suspense fallback={<Spinner />}>
 						<LazyContactGroups />
 					</Suspense>
