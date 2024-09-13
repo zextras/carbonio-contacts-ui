@@ -10,7 +10,7 @@ import { within } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { Link, Route } from 'react-router-dom';
 
-import CGView from './cg-view';
+import { CGView } from './cg-view';
 import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { ROUTES, ROUTES_INTERNAL_PARAMS } from '../../constants';
 import {
@@ -36,7 +36,13 @@ describe('Contact Group View', () => {
 			]),
 			offset: 0
 		});
-		setupTest(<CGView />);
+		setupTest(
+			<Route path={`${ROUTES.contactGroups}`}>
+				<CGView />
+			</Route>,
+
+			{ initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}`] }
+		);
 
 		expect(await screen.findByText(contactGroupName)).toBeVisible();
 		const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
@@ -50,7 +56,13 @@ describe('Contact Group View', () => {
 			findContactGroupsResponse: createFindContactGroupsResponse([createCnItem(contactGroupName)]),
 			offset: 0
 		});
-		setupTest(<CGView />);
+		setupTest(
+			<Route path={`${ROUTES.contactGroups}`}>
+				<CGView />
+			</Route>,
+
+			{ initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}`] }
+		);
 
 		expect(await screen.findByText(contactGroupName)).toBeVisible();
 		expect(screen.getByText('0 addresses')).toBeVisible();
@@ -66,7 +78,13 @@ describe('Contact Group View', () => {
 			]),
 			offset: 0
 		});
-		setupTest(<CGView />);
+		setupTest(
+			<Route path={`${ROUTES.contactGroups}`}>
+				<CGView />
+			</Route>,
+
+			{ initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}`] }
+		);
 
 		expect(await screen.findByText(contactGroupName)).toBeVisible();
 		const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
@@ -80,7 +98,14 @@ describe('Contact Group View', () => {
 			offset: 0
 		});
 
-		setupTest(<CGView />);
+		setupTest(
+			<Route path={`${ROUTES.contactGroups}`}>
+				<CGView />
+			</Route>,
+
+			{ initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}`] }
+		);
+
 		expect(await screen.findByText(EMPTY_LIST_HINT)).toBeVisible();
 	});
 
@@ -97,7 +122,7 @@ describe('Contact Group View', () => {
 				offset: 0
 			});
 			const { user } = setupTest(
-				<Route path={`${ROUTES.mainRoute}${ROUTES.contactGroups}`}>
+				<Route path={`${ROUTES.contactGroups}`}>
 					<CGView />
 				</Route>,
 				{ initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}`] }
@@ -126,7 +151,12 @@ describe('Contact Group View', () => {
 				]),
 				offset: 0
 			});
-			const { user } = setupTest(<CGView />);
+			const { user } = setupTest(
+				<Route path={`${ROUTES.contactGroups}`}>
+					<CGView />
+				</Route>,
+				{ initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}`] }
+			);
 
 			await screen.findAllByText(contactGroupName);
 			const action = screen.getByTestId(TESTID_SELECTORS.icons.sendEmail);
@@ -147,7 +177,13 @@ describe('Contact Group View', () => {
 				]),
 				offset: 0
 			});
-			setupTest(<CGView />);
+			setupTest(
+				<Route path={`${ROUTES.contactGroups}`}>
+					<CGView />
+				</Route>,
+
+				{ initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}`] }
+			);
 
 			await screen.findAllByText(contactGroupName);
 			expect(screen.queryByTestId(TESTID_SELECTORS.icons.sendEmail)).not.toBeInTheDocument();
@@ -164,7 +200,12 @@ describe('Contact Group View', () => {
 				]),
 				offset: 0
 			});
-			const { user } = setupTest(<CGView />);
+			const { user } = setupTest(
+				<Route path={`${ROUTES.contactGroups}`}>
+					<CGView />
+				</Route>,
+				{ initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}`] }
+			);
 
 			await screen.findByText(contactGroupName);
 			const listItem = await screen.findByTestId(TESTID_SELECTORS.listItemContent);
@@ -192,7 +233,12 @@ describe('Contact Group View', () => {
 			});
 			registerDeleteContactHandler(cnItem1.id);
 
-			const { user } = setupTest(<CGView />);
+			const { user } = setupTest(
+				<Route path={`${ROUTES.contactGroups}`}>
+					<CGView />
+				</Route>,
+				{ initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}`] }
+			);
 
 			await screen.findByText(cnItem1.fileAsStr);
 
@@ -227,7 +273,12 @@ describe('Contact Group View', () => {
 			});
 			registerDeleteContactHandler(cnItem1.id, JEST_MOCKED_ERROR);
 
-			const { user } = setupTest(<CGView />);
+			const { user } = setupTest(
+				<Route path={`${ROUTES.contactGroups}`}>
+					<CGView />
+				</Route>,
+				{ initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}`] }
+			);
 
 			await screen.findByText(cnItem1.fileAsStr);
 
@@ -259,7 +310,13 @@ describe('Contact Group View', () => {
 				findContactGroupsResponse: createFindContactGroupsResponse([]),
 				offset: 0
 			});
-			setupTest(<CGView />);
+			setupTest(
+				<Route path={`${ROUTES.contactGroups}`}>
+					<CGView />
+				</Route>,
+
+				{ initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}`] }
+			);
 
 			expect(await screen.findByText(EMPTY_DISPLAYER_HINT)).toBeVisible();
 		});
@@ -273,7 +330,7 @@ describe('Contact Group View', () => {
 				offset: 0
 			});
 			const { user } = setupTest(
-				<Route path={`${ROUTES.mainRoute}${ROUTES.contactGroups}`}>
+				<Route path={`${ROUTES.contactGroups}`}>
 					<CGView />
 				</Route>,
 				{ initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}`] }
@@ -293,7 +350,7 @@ describe('Contact Group View', () => {
 				offset: 0
 			});
 			const { user } = setupTest(
-				<Route path={`${ROUTES.mainRoute}${ROUTES.contactGroups}`}>
+				<Route path={`${ROUTES.contactGroups}`}>
 					<CGView />
 				</Route>,
 				{ initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}`] }
