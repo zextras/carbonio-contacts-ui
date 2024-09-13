@@ -37,8 +37,8 @@ import createContactIntegration from './legacy/integrations/create-contact';
 import { StoreProvider } from './legacy/store/redux';
 import { SyncDataHandler } from './legacy/views/secondary-bar/sync-data-handler';
 
-const LazyAppView = lazy(
-	() => import(/* webpackChunkName: "contacts-view" */ './legacy/views/app-view')
+const LazyContactsView = lazy(
+	() => import(/* webpackChunkName: "contacts-view" */ './legacy/views/contacts-view')
 );
 const LazySecondaryBarView = lazy(
 	() =>
@@ -51,8 +51,11 @@ const LazyLegacySecondaryBarView = lazy(
 		)
 );
 
-const LazyGroupsAppView = lazy(
-	() => import(/* webpackChunkName: "groupsAppView" */ './views/contact-groups/GroupsAppView')
+const LazyDistributionListAppView = lazy(
+	() =>
+		import(
+			/* webpackChunkName: "groupsAppView" */ './views/distribution-list/DistributionListAppView'
+		)
 );
 const LazySettingsView = lazy(
 	() => import(/* webpackChunkName: "settings-view" */ './legacy/views/settings/settings-view')
@@ -79,11 +82,11 @@ const LazyEditDLBoardView = lazy(
 	() => import(/* webpackChunkName: "edit-dl-view" */ './views/board/edit-dl-board')
 );
 
-const AppView = (): React.JSX.Element => (
+const ContactsAppView = (): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
 		<StoreProvider>
 			<ModalManager>
-				<LazyAppView />
+				<LazyContactsView />
 			</ModalManager>
 		</StoreProvider>
 	</Suspense>
@@ -97,9 +100,9 @@ const SecondaryBarView = (props: SecondaryBarComponentProps): React.JSX.Element 
 	</Suspense>
 );
 
-const AppViewV2 = (): React.JSX.Element => (
+const DistributionListAppView = (): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
-		<LazyGroupsAppView />
+		<LazyDistributionListAppView />
 	</Suspense>
 );
 
@@ -178,7 +181,7 @@ const App = (): React.JSX.Element => {
 			label: t('label.app_name', 'Contacts'),
 			primaryBar: 'ContactsModOutline',
 			secondaryBar: LegacySecondaryBarView,
-			appView: AppView
+			appView: ContactsAppView
 		});
 		addRoute({
 			route: GROUPS_ROUTE,
@@ -187,7 +190,7 @@ const App = (): React.JSX.Element => {
 			label: t('label.groups_app_name', 'Contact Groups and Distribution Lists'),
 			primaryBar: 'ListOutline',
 			secondaryBar: SecondaryBarView,
-			appView: AppViewV2
+			appView: DistributionListAppView
 		});
 		addSettingsView({
 			route: CONTACTS_ROUTE,

@@ -10,9 +10,8 @@ import { ModalManager, ThemeProvider } from '@zextras/carbonio-design-system';
 import { trimEnd } from 'lodash';
 import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
 
-import CGView from './cg-view';
+import { DistributionListsView } from './distribution-lists-view';
 import { RouteParams, ROUTES, ROUTES_INTERNAL_PARAMS } from '../../constants';
-import { DistributionListsView } from '../distribution-list/distribution-lists-view';
 
 const AppView = (): React.JSX.Element => {
 	const { path, params, url } = useRouteMatch<RouteParams>();
@@ -22,9 +21,6 @@ const AppView = (): React.JSX.Element => {
 	const routes = useMemo(
 		() => (
 			<Switch>
-				{params.route === ROUTES_INTERNAL_PARAMS.route.contactGroups && (
-					<Route path={`${trimmedPath}${ROUTES.contactGroups}`} component={CGView} />
-				)}
 				{params.route === ROUTES_INTERNAL_PARAMS.route.distributionLists && (
 					<Route path={`${trimmedPath}${ROUTES.distributionLists}`}>
 						{({ match }): React.JSX.Element =>

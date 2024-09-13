@@ -19,7 +19,7 @@ const LazyContactGroups = lazy(
 	() => import(/* webpackChunkName: "folder-panel-view" */ '../../views/contact-groups/cg-view')
 );
 
-const AppView = (): React.JSX.Element => {
+const ContactsView = (): React.JSX.Element => {
 	const { path } = useRouteMatch();
 	const [count, setCount] = useState(0);
 	useUpdateView();
@@ -43,4 +43,4 @@ const AppView = (): React.JSX.Element => {
 	);
 };
 
-export default AppView;
+export default ContactsView;
