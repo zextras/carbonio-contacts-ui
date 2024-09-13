@@ -8,11 +8,9 @@ import React from 'react';
 import { DetailPanel } from './detail-panel';
 import { FolderListPanel } from './folder-list-panel';
 
-const FolderView = (): React.JSX.Element => (
+export const FolderView = (): React.JSX.Element => (
 	<>
 		<FolderListPanel />
 		<DetailPanel />
 	</>
 );
-
-export default FolderView;

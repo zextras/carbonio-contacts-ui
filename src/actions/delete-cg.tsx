@@ -6,7 +6,7 @@
 import React, { useCallback, useMemo } from 'react';
 
 import { Container, useModal, useSnackbar } from '@zextras/carbonio-design-system';
-import { closeBoard, getBoardById, replaceHistory } from '@zextras/carbonio-shell-ui';
+import { closeBoard, getBoardById, useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
 import { UIAction } from './types';
@@ -21,6 +21,7 @@ export type DeleteCGAction = UIAction<ContactGroup, never>;
 
 export const useActionDeleteCG = (): DeleteCGAction => {
 	const [t] = useTranslation();
+	const replaceHistory = useReplaceHistoryCallback();
 	const { createModal, closeModal } = useModal();
 	const createSnackbar = useSnackbar();
 	const { removeContactGroup } = useContactGroupStore();

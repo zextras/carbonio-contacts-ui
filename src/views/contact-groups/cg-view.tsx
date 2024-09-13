@@ -7,35 +7,37 @@
 import React from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
+import { Route, useRouteMatch } from 'react-router-dom';
 
 import { CGDisplayerController } from '../../components/cg-displayer-controller';
 import { CGList } from '../../components/cg-list';
 import { DISPLAYER_WIDTH } from '../../constants';
 import { useFindContactGroups } from '../../hooks/useFindContactGroups';
 
-const CGView = (): React.JSX.Element => {
+export const CGView = (): React.JSX.Element => {
 	const { contactGroups, hasMore, findMore } = useFindContactGroups();
+	const { path } = useRouteMatch();
 
 	return (
-		<Container
-			orientation="row"
-			crossAlignment="flex-start"
-			mainAlignment="flex-start"
-			background="gray5"
-			borderRadius="none"
-		>
-			<CGList contactGroups={contactGroups} onListBottom={hasMore ? findMore : undefined} />
+		<Route path={`${path}/contact-groups/:id?`}>
 			<Container
-				width={DISPLAYER_WIDTH}
-				mainAlignment="flex-start"
+				orientation="row"
 				crossAlignment="flex-start"
+				mainAlignment="flex-start"
+				background="gray5"
 				borderRadius="none"
-				maxHeight={'100%'}
 			>
-				<CGDisplayerController />
+				<CGList contactGroups={contactGroups} onListBottom={hasMore ? findMore : undefined} />
+				<Container
+					width={DISPLAYER_WIDTH}
+					mainAlignment="flex-start"
+					crossAlignment="flex-start"
+					borderRadius="none"
+					maxHeight={'100%'}
+				>
+					<CGDisplayerController />
+				</Container>
 			</Container>
-		</Container>
+		</Route>
 	);
 };
-
-export default CGView;

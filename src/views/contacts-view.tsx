@@ -3,21 +3,15 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { Suspense, lazy, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
-import { setAppContext, Spinner } from '@zextras/carbonio-shell-ui';
-import { Switch, Route, useRouteMatch } from 'react-router-dom';
+import { setAppContext } from '@zextras/carbonio-shell-ui';
+import { Redirect, Route, useRouteMatch } from 'react-router-dom';
 
+import { CGView } from './contact-groups/cg-view';
 import { useUpdateView } from '../carbonio-ui-commons/hooks/use-update-view';
-
-const LazyFolderView = lazy(
-	() => import(/* webpackChunkName: "folder-panel-view" */ '../legacy/views/app/folder-view')
-);
-
-const LazyContactGroups = lazy(
-	() => import(/* webpackChunkName: "folder-panel-view" */ './contact-groups/cg-view')
-);
+import { FolderView } from '../legacy/views/app/folder-view';
 
 const ContactsView = (): React.JSX.Element => {
 	const { path } = useRouteMatch();
@@ -30,14 +24,11 @@ const ContactsView = (): React.JSX.Element => {
 
 	return (
 		<Container orientation="horizontal" mainAlignment="flex-start">
-			<Switch>
-				<Route path={`${path}/contact-groups/:id?`}>
-					<Suspense fallback={<Spinner />}>
-						<LazyContactGroups />
-					</Suspense>
-				</Route>
-			</Switch>
-			<LazyFolderView />
+			<Route path={path}>
+				<CGView />
+				<FolderView />
+				<Redirect strict from={path} to={`${path}/folder/7`} />
+			</Route>
 		</Container>
 	);
 };
