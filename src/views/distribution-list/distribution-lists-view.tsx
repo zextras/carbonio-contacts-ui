@@ -10,13 +10,13 @@ import { Container } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { DLDisplayerController } from '../components/dl-displayer-controller';
-import { DLListItem } from '../components/dl-list-item';
-import { MainList } from '../components/main-list';
-import { StyledListItem } from '../components/styled-components';
-import { DISPLAYER_WIDTH, RouteParams, ROUTES_INTERNAL_PARAMS } from '../constants';
-import { useFindDistributionLists } from '../hooks/use-find-distribution-lists';
-import { useActiveItem } from '../hooks/useActiveItem';
+import { DLDisplayerController } from '../../components/dl-displayer-controller';
+import { DLListItem } from '../../components/dl-list-item';
+import { MainList } from '../../components/main-list';
+import { StyledListItem } from '../../components/styled-components';
+import { DISPLAYER_WIDTH, RouteParams, ROUTES_INTERNAL_PARAMS } from '../../constants';
+import { useFindDistributionLists } from '../../hooks/use-find-distribution-lists';
+import { useActiveItem } from '../../hooks/useActiveItem';
 
 export const DistributionListsView = (): React.JSX.Element => {
 	const [t] = useTranslation();

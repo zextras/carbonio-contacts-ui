@@ -8,13 +8,13 @@ import React from 'react';
 import { waitFor } from '@testing-library/react';
 
 import CGView from './cg-view';
-import { screen, setupTest, triggerLoadMore } from '../carbonio-ui-commons/test/test-setup';
-import { FIND_CONTACT_GROUP_LIMIT } from '../constants';
+import { screen, setupTest, triggerLoadMore } from '../../carbonio-ui-commons/test/test-setup';
+import { FIND_CONTACT_GROUP_LIMIT } from '../../constants';
 import {
 	createFindContactGroupsResponse,
 	registerFindContactGroupsHandler
-} from '../tests/msw-handlers/find-contact-groups';
-import { createCnItem } from '../tests/utils';
+} from '../../tests/msw-handlers/find-contact-groups';
+import { createCnItem } from '../../tests/utils';
 
 describe('Contact Group View pagination', () => {
 	it('should load the second page only when bottom element becomes visible', async () => {

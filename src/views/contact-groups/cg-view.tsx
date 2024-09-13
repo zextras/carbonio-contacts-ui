@@ -8,10 +8,10 @@ import React from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
 
-import { CGDisplayerController } from '../components/cg-displayer-controller';
-import { CGList } from '../components/cg-list';
-import { DISPLAYER_WIDTH } from '../constants';
-import { useFindContactGroups } from '../hooks/useFindContactGroups';
+import { CGDisplayerController } from '../../components/cg-displayer-controller';
+import { CGList } from '../../components/cg-list';
+import { DISPLAYER_WIDTH } from '../../constants';
+import { useFindContactGroups } from '../../hooks/useFindContactGroups';
 
 const CGView = (): React.JSX.Element => {
 	const { contactGroups, hasMore, findMore } = useFindContactGroups();

@@ -14,31 +14,31 @@ import { HttpResponse } from 'msw';
 import { Link, Route } from 'react-router-dom';
 
 import { DistributionListsView } from './distribution-lists-view';
-import GroupsAppView from './GroupsAppView';
-import { screen, setupTest, within } from '../carbonio-ui-commons/test/test-setup';
-import { ROUTES, ROUTES_INTERNAL_PARAMS } from '../constants';
+import { screen, setupTest, within } from '../../carbonio-ui-commons/test/test-setup';
+import { ROUTES, ROUTES_INTERNAL_PARAMS } from '../../constants';
 import {
 	EMPTY_DISPLAYER_HINT,
 	EMPTY_DISTRIBUTION_LIST_HINT,
 	JEST_MOCKED_ERROR,
 	TESTID_SELECTORS
-} from '../constants/tests';
-import { DistributionList } from '../model/distribution-list';
-import { GetAccountDistributionListsResponse } from '../network/api/get-account-distribution-lists';
-import { GetDistributionListResponse } from '../network/api/get-distribution-list';
-import { GetDistributionListMembersResponse } from '../network/api/get-distribution-list-members';
-import { registerGetAccountDistributionListsHandler } from '../tests/msw-handlers/get-account-distribution-lists';
+} from '../../constants/tests';
+import { DistributionList } from '../../model/distribution-list';
+import { GetAccountDistributionListsResponse } from '../../network/api/get-account-distribution-lists';
+import { GetDistributionListResponse } from '../../network/api/get-distribution-list';
+import { GetDistributionListMembersResponse } from '../../network/api/get-distribution-list-members';
+import { registerGetAccountDistributionListsHandler } from '../../tests/msw-handlers/get-account-distribution-lists';
 import {
 	buildGetDistributionListResponse,
 	registerGetDistributionListHandler
-} from '../tests/msw-handlers/get-distribution-list';
-import { registerGetDistributionListMembersHandler } from '../tests/msw-handlers/get-distribution-list-members';
+} from '../../tests/msw-handlers/get-distribution-list';
+import { registerGetDistributionListMembersHandler } from '../../tests/msw-handlers/get-distribution-list-members';
 import {
 	buildSoapError,
 	buildSoapResponse,
 	generateDistributionList,
 	generateDistributionLists
-} from '../tests/utils';
+} from '../../tests/utils';
+import GroupsAppView from '../contact-groups/GroupsAppView';
 
 describe('Distribution Lists View', () => {
 	it('should show the list of distribution lists', async () => {

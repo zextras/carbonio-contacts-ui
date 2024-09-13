@@ -16,7 +16,7 @@ const LazyFolderView = lazy(
 );
 
 const LazyContactGroups = lazy(
-	() => import(/* webpackChunkName: "folder-panel-view" */ '../../views/cg-view')
+	() => import(/* webpackChunkName: "folder-panel-view" */ '../../views/contact-groups/cg-view')
 );
 
 const AppView = (): React.JSX.Element => {

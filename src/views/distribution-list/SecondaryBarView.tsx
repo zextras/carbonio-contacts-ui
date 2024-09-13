@@ -22,8 +22,8 @@ import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { ROUTES_INTERNAL_PARAMS } from '../constants';
-import { useNavigation } from '../hooks/useNavigation';
+import { ROUTES_INTERNAL_PARAMS } from '../../constants';
+import { useNavigation } from '../../hooks/useNavigation';
 
 const StyledText = styled(Text)`
 	min-width: 0;

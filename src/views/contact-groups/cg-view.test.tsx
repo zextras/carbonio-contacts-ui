@@ -11,21 +11,21 @@ import * as shell from '@zextras/carbonio-shell-ui';
 import { Link, Route } from 'react-router-dom';
 
 import CGView from './cg-view';
-import { screen, setupTest } from '../carbonio-ui-commons/test/test-setup';
-import { ROUTES, ROUTES_INTERNAL_PARAMS } from '../constants';
+import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
+import { ROUTES, ROUTES_INTERNAL_PARAMS } from '../../constants';
 import {
 	EMPTY_DISPLAYER_HINT,
 	EMPTY_LIST_HINT,
 	JEST_MOCKED_ERROR,
 	TESTID_SELECTORS
-} from '../constants/tests';
-import { LocationDisplay } from '../tests/location-display';
-import { registerDeleteContactHandler } from '../tests/msw-handlers/delete-contact';
+} from '../../constants/tests';
+import { LocationDisplay } from '../../tests/location-display';
+import { registerDeleteContactHandler } from '../../tests/msw-handlers/delete-contact';
 import {
 	createFindContactGroupsResponse,
 	registerFindContactGroupsHandler
-} from '../tests/msw-handlers/find-contact-groups';
-import { createCnItem } from '../tests/utils';
+} from '../../tests/msw-handlers/find-contact-groups';
+import { createCnItem } from '../../tests/utils';
 
 describe('Contact Group View', () => {
 	it('should render the avatar, the name and the number of the members (case 1+ addresses string) of a contact group', async () => {

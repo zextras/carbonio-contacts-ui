@@ -9,14 +9,14 @@ import { faker } from '@faker-js/faker';
 import { waitFor } from '@testing-library/react';
 
 import GroupsAppView from './GroupsAppView';
-import { screen, setupTest } from '../carbonio-ui-commons/test/test-setup';
-import { ROUTES_INTERNAL_PARAMS } from '../constants';
+import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
+import { ROUTES_INTERNAL_PARAMS } from '../../constants';
 import {
 	createFindContactGroupsResponse,
 	registerFindContactGroupsHandler
-} from '../tests/msw-handlers/find-contact-groups';
-import { registerGetAccountDistributionListsHandler } from '../tests/msw-handlers/get-account-distribution-lists';
-import { createCnItem, generateDistributionList } from '../tests/utils';
+} from '../../tests/msw-handlers/find-contact-groups';
+import { registerGetAccountDistributionListsHandler } from '../../tests/msw-handlers/get-account-distribution-lists';
+import { createCnItem, generateDistributionList } from '../../tests/utils';
 
 describe('App view', () => {
 	it.each([/* '/' */ '/groups'])('should render groups on %s', async () => {
