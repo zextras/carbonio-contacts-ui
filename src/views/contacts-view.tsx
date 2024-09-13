@@ -7,7 +7,7 @@ import React, { Suspense, lazy, useState, useEffect } from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
 import { setAppContext, Spinner } from '@zextras/carbonio-shell-ui';
-import { Redirect, Switch, Route, useRouteMatch } from 'react-router-dom';
+import { Switch, Route, useRouteMatch } from 'react-router-dom';
 
 import { useUpdateView } from '../carbonio-ui-commons/hooks/use-update-view';
 
@@ -36,7 +36,6 @@ const ContactsView = (): React.JSX.Element => {
 						<LazyContactGroups />
 					</Suspense>
 				</Route>
-				<Redirect strict from={path} to={`${path}/folder/7`} />
 			</Switch>
 			<LazyFolderView />
 		</Container>
