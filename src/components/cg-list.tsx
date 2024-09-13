@@ -7,7 +7,7 @@
 import React, { useCallback, useMemo } from 'react';
 
 import { Container, ListV2 } from '@zextras/carbonio-design-system';
-import { replaceHistory } from '@zextras/carbonio-shell-ui';
+import { useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
 import { map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
@@ -27,10 +27,14 @@ export type CGListProps = {
 export const CGList = ({ contactGroups, onListBottom }: CGListProps): React.JSX.Element => {
 	const [t] = useTranslation();
 	const { activeItem } = useActiveItem();
+	const replaceHistory = useReplaceHistoryCallback();
 
-	const onClick = useCallback((id: string) => {
-		replaceHistory(`/contact-groups/${id}`);
-	}, []);
+	const onClick = useCallback(
+		(id: string) => {
+			replaceHistory(`/contact-groups/${id}`);
+		},
+		[replaceHistory]
+	);
 
 	const items = useMemo(
 		() =>

@@ -4,10 +4,12 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React from 'react';
+
 import { act, screen } from '@testing-library/react';
+import * as shellUi from '@zextras/carbonio-shell-ui';
+
 import { setupTest } from '../../../../carbonio-ui-commons/test/test-setup';
 import { ContactGroup } from '../contact-group';
-import * as shellUi from '@zextras/carbonio-shell-ui';
 
 describe('Contact Group Sidebar Item', () => {
 	it('should redirect to /contacts/contact-groups when clicking on it', async () => {
