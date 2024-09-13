@@ -6,14 +6,13 @@
 import React, { useCallback, useMemo } from 'react';
 
 import { Container, useModal, useSnackbar } from '@zextras/carbonio-design-system';
-import { closeBoard, getBoardById } from '@zextras/carbonio-shell-ui';
+import { closeBoard, getBoardById, replaceHistory } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
 import { UIAction } from './types';
 import { Text } from '../components/Text';
 import { ACTION_IDS, EDIT_CONTACT_GROUP_BOARD_ID, ROUTES_INTERNAL_PARAMS } from '../constants';
 import { useActiveContactGroup } from '../hooks/useActiveContactGroup';
-import { useNavigation } from '../hooks/useNavigation';
 import { ContactGroup } from '../model/contact-group';
 import { apiClient } from '../network/api-client';
 import { useContactGroupStore } from '../store/contact-groups';
@@ -25,7 +24,6 @@ export const useActionDeleteCG = (): DeleteCGAction => {
 	const { createModal, closeModal } = useModal();
 	const createSnackbar = useSnackbar();
 	const { removeContactGroup } = useContactGroupStore();
-	const { navigateTo } = useNavigation();
 	const activeContactGroup = useActiveContactGroup();
 
 	const canExecute = useCallback<DeleteCGAction['canExecute']>(() => true, []);
@@ -55,7 +53,7 @@ export const useActionDeleteCG = (): DeleteCGAction => {
 								closeBoard(boardId);
 							}
 							if (activeContactGroup?.id === contactGroup.id) {
-								navigateTo(ROUTES_INTERNAL_PARAMS.route.contactGroups, { replace: true });
+								replaceHistory(ROUTES_INTERNAL_PARAMS.route.contactGroups);
 							}
 							removeContactGroup(contactGroup.id);
 							createSnackbar({
@@ -97,15 +95,7 @@ export const useActionDeleteCG = (): DeleteCGAction => {
 				)
 			});
 		},
-		[
-			activeContactGroup?.id,
-			closeModal,
-			createModal,
-			createSnackbar,
-			navigateTo,
-			removeContactGroup,
-			t
-		]
+		[activeContactGroup?.id, closeModal, createModal, createSnackbar, removeContactGroup, t]
 	);
 
 	return useMemo(
