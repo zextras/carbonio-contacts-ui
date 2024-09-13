@@ -9,14 +9,14 @@ import { Container } from '@zextras/carbonio-design-system';
 import { setAppContext, Spinner } from '@zextras/carbonio-shell-ui';
 import { Redirect, Switch, Route, useRouteMatch } from 'react-router-dom';
 
-import { useUpdateView } from '../../carbonio-ui-commons/hooks/use-update-view';
+import { useUpdateView } from '../carbonio-ui-commons/hooks/use-update-view';
 
 const LazyFolderView = lazy(
-	() => import(/* webpackChunkName: "folder-panel-view" */ '../../legacy/views/app/folder-view')
+	() => import(/* webpackChunkName: "folder-panel-view" */ '../legacy/views/app/folder-view')
 );
 
 const LazyContactGroups = lazy(
-	() => import(/* webpackChunkName: "folder-panel-view" */ '../contact-groups/cg-view')
+	() => import(/* webpackChunkName: "folder-panel-view" */ './contact-groups/cg-view')
 );
 
 const ContactsView = (): React.JSX.Element => {

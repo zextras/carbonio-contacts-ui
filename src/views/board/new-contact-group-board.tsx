@@ -6,7 +6,7 @@
 import React, { useCallback, useState } from 'react';
 
 import { useSnackbar } from '@zextras/carbonio-design-system';
-import { useBoard, useBoardHooks } from '@zextras/carbonio-shell-ui';
+import { replaceHistory, useBoardHooks } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
 import CommonContactGroupBoard, { isContactGroupNameInvalid } from './common-contact-group-board';
@@ -18,7 +18,6 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 	const [t] = useTranslation();
 	const { closeBoard } = useBoardHooks();
 	const createSnackbar = useSnackbar();
-	const { context } = useBoard<{ navigateTo: (id: string) => void }>();
 
 	const initialName = t('board.newContactGroup.name', 'New Group');
 	const [nameValue, setNameValue] = useState(initialName);
@@ -35,7 +34,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 					if (element) {
 						element.scrollIntoView({ block: 'end' });
 					}
-					context?.navigateTo(`${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${contactGroup.id}`);
+					replaceHistory(`${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${contactGroup.id}`);
 				} else {
 					useContactGroupStore.getState().reset();
 				}
@@ -57,7 +56,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 					label: t('label.error_try_again', 'Something went wrong, please try again')
 				});
 			});
-	}, [nameValue, memberListEmails, createSnackbar, t, closeBoard, context]);
+	}, [nameValue, memberListEmails, createSnackbar, t, closeBoard]);
 
 	return (
 		<CommonContactGroupBoard

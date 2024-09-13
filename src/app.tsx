@@ -30,51 +30,53 @@ import {
 	EDIT_CONTACT_GROUP_BOARD_ID,
 	EDIT_DL_BOARD_ID,
 	CONTACT_BOARD_ID
-} from '../../constants';
-import { useNavigation } from '../../hooks/useNavigation';
-import { ContactInputIntegrationWrapper } from '../../legacy/integrations/contact-input-integration-wrapper';
-import createContactIntegration from '../../legacy/integrations/create-contact';
-import { StoreProvider } from '../../legacy/store/redux';
-import { SyncDataHandler } from '../../legacy/views/secondary-bar/sync-data-handler';
+} from './constants';
+import { useNavigation } from './hooks/useNavigation';
+import { ContactInputIntegrationWrapper } from './legacy/integrations/contact-input-integration-wrapper';
+import createContactIntegration from './legacy/integrations/create-contact';
+import { StoreProvider } from './legacy/store/redux';
+import { SyncDataHandler } from './legacy/views/secondary-bar/sync-data-handler';
 
 const LazyContactsView = lazy(
-	() => import(/* webpackChunkName: "contacts-view" */ './contacts-view')
+	() => import(/* webpackChunkName: "contacts-view" */ './views/contacts-view')
 );
 const LazySecondaryBarView = lazy(
-	() => import(/* webpackChunkName: "secondaryBarView" */ '../distribution-list/SecondaryBarView')
+	() =>
+		import(/* webpackChunkName: "secondaryBarView" */ './views/distribution-list/SecondaryBarView')
 );
 const LazyLegacySecondaryBarView = lazy(
 	() =>
 		import(
-			/* webpackChunkName: "legacySecondaryBarView" */ '../../legacy/views/secondary-bar/secondary-bar-view'
+			/* webpackChunkName: "legacySecondaryBarView" */ './legacy/views/secondary-bar/secondary-bar-view'
 		)
 );
 
 const LazyDistributionListAppView = lazy(
-	() => import(/* webpackChunkName: "groupsAppView" */ './distribution-list-view')
+	() => import(/* webpackChunkName: "groupsAppView" */ './views/distribution-list-view')
 );
 const LazySettingsView = lazy(
-	() => import(/* webpackChunkName: "settings-view" */ '../../legacy/views/settings/settings-view')
+	() => import(/* webpackChunkName: "settings-view" */ './legacy/views/settings/settings-view')
 );
 const LazySearchView = lazy(
-	() => import(/* webpackChunkName: "search-view" */ '../../legacy/views/search/search-view')
+	() => import(/* webpackChunkName: "search-view" */ './legacy/views/search/search-view')
 );
 
 const LazyBoardView = lazy(
-	() =>
-		import(/* webpackChunkName: "edit-view" */ '../../legacy/views/edit/edit-view-board-wrapper')
+	() => import(/* webpackChunkName: "edit-view" */ './legacy/views/edit/edit-view-board-wrapper')
 );
 
 const LazyNewContactGroupBoardView = lazy(
-	() => import(/* webpackChunkName: "newContactGroupView" */ '../board/new-contact-group-board')
+	() =>
+		import(/* webpackChunkName: "newContactGroupView" */ './views/board/new-contact-group-board')
 );
 
 const LazyEditContactGroupBoardView = lazy(
-	() => import(/* webpackChunkName: "editContactGroupView" */ '../board/edit-contact-group-board')
+	() =>
+		import(/* webpackChunkName: "editContactGroupView" */ './views/board/edit-contact-group-board')
 );
 
 const LazyEditDLBoardView = lazy(
-	() => import(/* webpackChunkName: "edit-dl-view" */ '../board/edit-dl-board')
+	() => import(/* webpackChunkName: "edit-dl-view" */ './views/board/edit-dl-board')
 );
 
 const ContactsAppView = (): React.JSX.Element => (
@@ -251,8 +253,7 @@ const App = (): React.JSX.Element => {
 					onClick: (): void => {
 						addBoard({
 							boardViewId: NEW_CONTACT_GROUP_BOARD_ID,
-							title: t('board.newContactGroup.title', 'New Group'),
-							context: { navigateTo }
+							title: t('board.newContactGroup.title', 'New Group')
 						});
 					},
 					disabled: false,

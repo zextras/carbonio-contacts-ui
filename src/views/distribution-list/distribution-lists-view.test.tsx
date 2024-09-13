@@ -38,7 +38,7 @@ import {
 	generateDistributionList,
 	generateDistributionLists
 } from '../../tests/utils';
-import GroupsAppView from '../app/distribution-list-view';
+import GroupsAppView from '../distribution-list-view';
 
 describe('Distribution Lists View', () => {
 	it('should show the list of distribution lists', async () => {
