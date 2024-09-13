@@ -8,10 +8,10 @@ import React from 'react';
 import * as shell from '@zextras/carbonio-shell-ui';
 
 import App from './app';
-import { setupTest } from './carbonio-ui-commons/test/test-setup';
-import { CONTACT_BOARD_ID } from './constants';
-import { ContactInputProps } from './legacy/integrations/contact-input';
-import { ContactInputIntegrationWrapper } from './legacy/integrations/contact-input-integration-wrapper';
+import { setupTest } from '../../carbonio-ui-commons/test/test-setup';
+import { CONTACT_BOARD_ID } from '../../constants';
+import { ContactInputProps } from '../../legacy/integrations/contact-input';
+import { ContactInputIntegrationWrapper } from '../../legacy/integrations/contact-input-integration-wrapper';
 
 describe('App', () => {
 	it('should register a "contacts" route accessible from the primary bar with specific position, name and icon', () => {

@@ -14,7 +14,6 @@ import { HttpResponse } from 'msw';
 import { Link, Route } from 'react-router-dom';
 
 import { DistributionListsView } from './distribution-lists-view';
-import GroupsAppView from './DistributionListAppView';
 import { screen, setupTest, within } from '../../carbonio-ui-commons/test/test-setup';
 import { ROUTES, ROUTES_INTERNAL_PARAMS } from '../../constants';
 import {
@@ -39,6 +38,7 @@ import {
 	generateDistributionList,
 	generateDistributionLists
 } from '../../tests/utils';
+import GroupsAppView from '../app/distribution-list-view';
 
 describe('Distribution Lists View', () => {
 	it('should show the list of distribution lists', async () => {

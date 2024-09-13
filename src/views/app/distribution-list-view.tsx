@@ -10,8 +10,8 @@ import { ModalManager, ThemeProvider } from '@zextras/carbonio-design-system';
 import { trimEnd } from 'lodash';
 import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
 
-import { DistributionListsView } from './distribution-lists-view';
 import { RouteParams, ROUTES, ROUTES_INTERNAL_PARAMS } from '../../constants';
+import { DistributionListsView } from '../distribution-list/distribution-lists-view';
 
 const AppView = (): React.JSX.Element => {
 	const { path, params, url } = useRouteMatch<RouteParams>();

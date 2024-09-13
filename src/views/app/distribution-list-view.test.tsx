@@ -8,7 +8,7 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import { waitFor } from '@testing-library/react';
 
-import GroupsAppView from './DistributionListAppView';
+import GroupsAppView from './distribution-list-view';
 import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { ROUTES_INTERNAL_PARAMS } from '../../constants';
 import {
