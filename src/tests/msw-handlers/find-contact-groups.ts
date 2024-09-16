@@ -8,15 +8,15 @@ import { http, HttpResponse, HttpResponseResolver } from 'msw';
 
 import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
 import {
-	FindContactGroupsRequest,
-	FindContactGroupsResponse
+	FindContactGroupsSoapApiRequest,
+	FindContactGroupsSoapApiResponse
 } from '../../network/api/find-contact-groups';
 import { buildSoapResponse, createCnItem } from '../utils';
 
 export const createFindContactGroupsResponse = (
-	cn: FindContactGroupsResponse['cn'],
+	cn: FindContactGroupsSoapApiResponse['cn'],
 	more = false
-): FindContactGroupsResponse => ({
+): FindContactGroupsSoapApiResponse => ({
 	sortBy: 'nameAsc',
 	offset: 0,
 	cn,
@@ -25,13 +25,13 @@ export const createFindContactGroupsResponse = (
 });
 type FindContactGroupsHandler = HttpResponseResolver<
 	never,
-	{ Body: { SearchRequest: FindContactGroupsRequest } },
-	SoapResponse<FindContactGroupsResponse>
+	{ Body: { SearchRequest: FindContactGroupsSoapApiRequest } },
+	SoapResponse<FindContactGroupsSoapApiResponse>
 >;
 export const registerFindContactGroupsHandler = (
 	...args: Array<{
 		offset: number;
-		findContactGroupsResponse: FindContactGroupsResponse;
+		findContactGroupsResponse: FindContactGroupsSoapApiResponse;
 	}>
 ): jest.Mock<ReturnType<FindContactGroupsHandler>, Parameters<FindContactGroupsHandler>> => {
 	const handler = jest.fn<
@@ -44,7 +44,7 @@ export const registerFindContactGroupsHandler = (
 		const match = args.find((value) => value.offset === offset);
 
 		return HttpResponse.json(
-			buildSoapResponse<FindContactGroupsResponse>({
+			buildSoapResponse<FindContactGroupsSoapApiResponse>({
 				SearchResponse:
 					match?.findContactGroupsResponse ?? createFindContactGroupsResponse([createCnItem()])
 			})
@@ -53,8 +53,8 @@ export const registerFindContactGroupsHandler = (
 	getSetupServer().use(
 		http.post<
 			never,
-			{ Body: { SearchRequest: FindContactGroupsRequest } },
-			SoapResponse<FindContactGroupsResponse>
+			{ Body: { SearchRequest: FindContactGroupsSoapApiRequest } },
+			SoapResponse<FindContactGroupsSoapApiResponse>
 		>('/service/soap/SearchRequest', handler)
 	);
 

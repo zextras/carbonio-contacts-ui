@@ -9,7 +9,7 @@ import { CnItem, GenericSoapPayload } from './types';
 import { FIND_CONTACT_GROUP_LIMIT } from '../../constants';
 import { ContactGroup } from '../../model/contact-group';
 
-export interface FindContactGroupsRequest extends GenericSoapPayload<typeof JSNS.mail> {
+export interface FindContactGroupsSoapApiRequest extends GenericSoapPayload<typeof JSNS.mail> {
 	limit: number;
 	offset: number;
 	sortBy: string;
@@ -17,17 +17,21 @@ export interface FindContactGroupsRequest extends GenericSoapPayload<typeof JSNS
 	query: string;
 }
 
-export interface FindContactGroupsResponse extends GenericSoapPayload<typeof JSNS.mail> {
+export interface FindContactGroupsSoapApiResponse extends GenericSoapPayload<typeof JSNS.mail> {
 	cn?: Array<CnItem>;
 	sortBy: string;
 	offset: number;
 	more: boolean;
 }
 
-export const findContactGroups = (
-	offset = 0
-): Promise<{ contactGroups: Array<ContactGroup>; hasMore: boolean }> =>
-	fetch(`/service/soap/SearchRequest`, {
+type FindContactGroupsResponse = Promise<{ contactGroups: Array<ContactGroup>; hasMore: boolean }>;
+
+function findContactGroupsSoapApi(offset: number, accountId?: string): Promise<Response> {
+	let query = '#type:group in:contacts';
+	if (accountId) {
+		query = `${query} accountId:${accountId}`;
+	}
+	return fetch(`/service/soap/SearchRequest`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
@@ -40,7 +44,7 @@ export const findContactGroups = (
 					offset,
 					sortBy: 'nameAsc',
 					types: 'contact',
-					query: '#type:group in:contacts'
+					query
 				}
 			},
 			Header: {
@@ -49,14 +53,18 @@ export const findContactGroups = (
 				}
 			}
 		})
-	})
+	});
+}
+
+function handlefindContactGroups(apiResponse: Promise<Response>): FindContactGroupsResponse {
+	return apiResponse
 		.then((response) => {
 			if (response.ok) {
 				return response.json();
 			}
 			throw new Error('Something went wrong');
 		})
-		.then((res: { Body: { SearchResponse: FindContactGroupsResponse } }) => {
+		.then((res: { Body: { SearchResponse: FindContactGroupsSoapApiResponse } }) => {
 			const contactGroups = res.Body.SearchResponse.cn
 				? res.Body.SearchResponse.cn.map((value) => ({
 						id: value.id,
@@ -67,3 +75,13 @@ export const findContactGroups = (
 				: [];
 			return { contactGroups, hasMore: res.Body.SearchResponse.more };
 		});
+}
+
+export const findContactGroups = (offset = 0): FindContactGroupsResponse =>
+	handlefindContactGroups(findContactGroupsSoapApi(offset));
+
+export const findUserContactGroups = (
+	accountId: string,
+	offset: number
+): FindContactGroupsResponse =>
+	handlefindContactGroups(findContactGroupsSoapApi(offset, accountId));
