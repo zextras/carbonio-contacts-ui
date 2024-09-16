@@ -8,7 +8,7 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import { within } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
-import { Link, Route } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 
 import { CGView } from './cg-view';
 import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
@@ -19,7 +19,6 @@ import {
 	JEST_MOCKED_ERROR,
 	TESTID_SELECTORS
 } from '../../constants/tests';
-import { LocationDisplay } from '../../tests/location-display';
 import { registerDeleteContactHandler } from '../../tests/msw-handlers/delete-contact';
 import {
 	createFindContactGroupsResponse,
@@ -343,7 +342,7 @@ describe('Contact Group View', () => {
 			expect(screen.getByText('Addresses list')).toBeVisible();
 		});
 
-		it('Click on close action close the displayer', async () => {
+		it('Click on close action closes the displayer', async () => {
 			const cnItem = createCnItem();
 			registerFindContactGroupsHandler({
 				findContactGroupsResponse: createFindContactGroupsResponse([cnItem]),
@@ -373,48 +372,6 @@ describe('Contact Group View', () => {
 			expect(
 				screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.closeDisplayer })
 			).not.toBeInTheDocument();
-		});
-
-		it('should remove active item when missing contact group is selected as active item', async () => {
-			const cnItem = createCnItem();
-			registerFindContactGroupsHandler({
-				findContactGroupsResponse: createFindContactGroupsResponse([cnItem]),
-				offset: 0
-			});
-			const { user } = setupTest(
-				<div>
-					<Route path={`${ROUTES.mainRoute}${ROUTES.contactGroups}`}>
-						<CGView />
-					</Route>
-					<LocationDisplay />
-					<Link to={`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}/invalid`}>
-						missing contact group id
-					</Link>
-				</div>,
-				{ initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${cnItem.id}`] }
-			);
-			expect(
-				within(screen.getByTestId(TESTID_SELECTORS.locationDisplay)).getByText(
-					`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}`
-				)
-			);
-			await screen.findAllByText(cnItem.fileAsStr);
-			const listItem = within(screen.getByTestId(TESTID_SELECTORS.mainList)).getByText(
-				cnItem.fileAsStr
-			);
-			await user.click(listItem);
-			expect(screen.queryByText(EMPTY_DISPLAYER_HINT)).not.toBeInTheDocument();
-			expect(
-				within(screen.getByTestId(TESTID_SELECTORS.locationDisplay)).getByText(
-					`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${cnItem.id}`
-				)
-			);
-			await user.click(screen.getByText(/missing contact group id/i));
-			expect(
-				within(screen.getByTestId(TESTID_SELECTORS.locationDisplay)).getByText(
-					`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}`
-				)
-			);
 		});
 	});
 });

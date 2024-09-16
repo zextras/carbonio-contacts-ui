@@ -3,13 +3,15 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
+import { useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
 
 import { CGDisplayerDetails } from './cg-displayer-details';
 import { DisplayerActionsHeader } from './displayer-actions-header';
 import { DisplayerHeader } from './displayer-header';
+import { ROUTES_INTERNAL_PARAMS } from '../constants';
 import { useContactGroupActions } from '../hooks/use-contact-group-actions';
 import { ContactGroup } from '../model/contact-group';
 
@@ -19,9 +21,18 @@ interface ContactGroupDisplayerProps {
 
 export const CGDisplayer = ({ contactGroup }: ContactGroupDisplayerProps): React.JSX.Element => {
 	const actions = useContactGroupActions(contactGroup);
+	const replaceHistory = useReplaceHistoryCallback();
+	const closeDisplayer = useCallback((): void => {
+		replaceHistory(ROUTES_INTERNAL_PARAMS.route.contactGroups);
+	}, [replaceHistory]);
+
 	return (
 		<Container background={'gray5'} mainAlignment={'flex-start'} padding={{ bottom: '3rem' }}>
-			<DisplayerHeader title={contactGroup.title} icon={'PeopleOutline'} />
+			<DisplayerHeader
+				title={contactGroup.title}
+				icon={'PeopleOutline'}
+				closeDisplayer={closeDisplayer}
+			/>
 			<Container
 				padding={{ horizontal: '1rem' }}
 				mainAlignment={'flex-start'}
