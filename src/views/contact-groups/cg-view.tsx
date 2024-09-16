@@ -4,9 +4,10 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
+import { trimEnd } from 'lodash';
 import { Route, useRouteMatch } from 'react-router-dom';
 
 import { CGDisplayerController } from '../../components/cg-displayer-controller';
@@ -17,9 +18,10 @@ import { useFindContactGroups } from '../../hooks/useFindContactGroups';
 export const CGView = (): React.JSX.Element => {
 	const { contactGroups, hasMore, findMore } = useFindContactGroups();
 	const { path } = useRouteMatch();
+	const trimmedPath = useMemo(() => trimEnd(path, '/'), [path]);
 
 	return (
-		<Route path={`${path}/contact-groups/:id?`}>
+		<Route path={`${trimmedPath}/contact-groups/:id?`}>
 			<Container
 				orientation="row"
 				crossAlignment="flex-start"
