@@ -124,6 +124,7 @@ describe('Distribution List Displayer Controller', () => {
 	});
 
 	it('should show an error snackbar if there is a network error while loading the details', async () => {
+		jest.spyOn(console, 'warn').mockImplementation(jest.fn());
 		const dl = generateDistributionList();
 		registerGetDistributionListHandler(dl, JEST_MOCKED_ERROR);
 		setupTest(<DLDisplayerController id={dl.id} />);
