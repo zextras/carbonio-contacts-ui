@@ -27,9 +27,11 @@ export interface FindContactGroupsSoapApiResponse extends GenericSoapPayload<typ
 type FindContactGroupsResponse = Promise<{ contactGroups: Array<ContactGroup>; hasMore: boolean }>;
 
 function findContactGroupsSoapApi(offset: number, accountId?: string): Promise<Response> {
-	let query = '#type:group in:contacts';
+	let query = '#type:group';
 	if (accountId) {
-		query = `${query} accountId:${accountId}`;
+		query = `${query} inid:${accountId}:7`;
+	} else {
+		query = `${query} inid:7`;
 	}
 	return fetch(`/service/soap/SearchRequest`, {
 		method: 'POST',

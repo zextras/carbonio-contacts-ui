@@ -15,6 +15,6 @@ describe('Find Contact Groups API', () => {
 
 		const request = await interceptor;
 
-		expect(request.query).toBe('#type:group in:contacts accountId:123');
+		expect(request.query).toBe('#type:group inid:123:7');
 	});
 });
