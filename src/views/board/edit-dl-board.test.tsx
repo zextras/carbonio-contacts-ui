@@ -125,6 +125,7 @@ describe('Edit DL board', () => {
 	});
 
 	it('should show an error snackbar when members cannot be loaded', async () => {
+		jest.spyOn(console, 'warn').mockImplementation(jest.fn());
 		const dl = generateDistributionList({
 			isOwner: true,
 			isMember: true,
