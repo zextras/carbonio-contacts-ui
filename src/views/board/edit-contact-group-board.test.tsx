@@ -108,6 +108,7 @@ describe('Edit contact group board', () => {
 		});
 
 		it('should show error snackbar when modify contact fails', async () => {
+			jest.spyOn(console, 'warn').mockImplementation(jest.fn());
 			registerModifyContactGroupHandler(undefined, JEST_MOCKED_ERROR);
 			const newName = faker.string.alpha(10);
 			const { user } = setupTest(<EditContactGroupBoard />);
@@ -125,6 +126,7 @@ describe('Edit contact group board', () => {
 		});
 
 		it('should not close the board when modify contact fails', async () => {
+			jest.spyOn(console, 'warn').mockImplementation(jest.fn());
 			const closeBoard = jest.fn();
 			spyUseBoardHooks(undefined, closeBoard);
 			registerModifyContactGroupHandler(undefined, JEST_MOCKED_ERROR);
@@ -145,6 +147,7 @@ describe('Edit contact group board', () => {
 		});
 
 		it('should not reset the fields when modify contact fails', async () => {
+			jest.spyOn(console, 'warn').mockImplementation(jest.fn());
 			registerModifyContactGroupHandler(undefined, JEST_MOCKED_ERROR);
 			const newEmail1 = faker.internet.email();
 			const newEmail2 = faker.internet.email();
