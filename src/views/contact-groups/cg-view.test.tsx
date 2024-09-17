@@ -27,71 +27,158 @@ import {
 import { createCnItem } from '../../tests/utils';
 
 describe('Contact Group View', () => {
-	it('should render the avatar, the name and the number of the members (case 1+ addresses string) of a contact group', async () => {
-		const contactGroupName = faker.company.name();
-		registerFindContactGroupsHandler({
-			findContactGroupsResponse: createFindContactGroupsResponse([
-				createCnItem(contactGroupName, [faker.internet.email(), faker.internet.email()])
-			]),
-			offset: 0
-		});
-		setupTest(<CGView />, { initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}`] });
+	describe('main account', () => {
+		it('should render the avatar, the name and the number of the members (case 1+ addresses string) of a contact group', async () => {
+			const contactGroupName = faker.company.name();
+			registerFindContactGroupsHandler({
+				findContactGroupsResponse: createFindContactGroupsResponse([
+					createCnItem(contactGroupName, [faker.internet.email(), faker.internet.email()])
+				]),
+				offset: 0
+			});
+			setupTest(<CGView />, { initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}`] });
 
-		expect(await screen.findByText(contactGroupName)).toBeVisible();
-		const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
-		expect(within(listItemContent).getByTestId(TESTID_SELECTORS.icons.contactGroup)).toBeVisible();
-		expect(screen.getByText('2 addresses')).toBeVisible();
-	});
-
-	it('should render the avatar, the name and the number of the members (case 0 addresses string) of a contact group', async () => {
-		const contactGroupName = faker.company.name();
-		registerFindContactGroupsHandler({
-			findContactGroupsResponse: createFindContactGroupsResponse([createCnItem(contactGroupName)]),
-			offset: 0
-		});
-		setupTest(<CGView />, { initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}`] });
-
-		expect(await screen.findByText(contactGroupName)).toBeVisible();
-		expect(screen.getByText('0 addresses')).toBeVisible();
-		const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
-		expect(within(listItemContent).getByTestId(TESTID_SELECTORS.icons.contactGroup)).toBeVisible();
-	});
-
-	it('should render the avatar, the name and the number of the members (case 1 address string) of a contact group', async () => {
-		const contactGroupName = faker.company.name();
-		registerFindContactGroupsHandler({
-			findContactGroupsResponse: createFindContactGroupsResponse([
-				createCnItem(contactGroupName, [faker.internet.email()])
-			]),
-			offset: 0
-		});
-		setupTest(
-			<CGView />,
-
-			{ initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}`] }
-		);
-
-		expect(await screen.findByText(contactGroupName)).toBeVisible();
-		const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
-		expect(within(listItemContent).getByTestId(TESTID_SELECTORS.icons.contactGroup)).toBeVisible();
-		expect(screen.getByText('1 address')).toBeVisible();
-	});
-
-	it('should show the empty list message if there is no contact group', async () => {
-		registerFindContactGroupsHandler({
-			findContactGroupsResponse: createFindContactGroupsResponse([]),
-			offset: 0
+			expect(await screen.findByText(contactGroupName)).toBeVisible();
+			const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
+			expect(
+				within(listItemContent).getByTestId(TESTID_SELECTORS.icons.contactGroup)
+			).toBeVisible();
+			expect(screen.getByText('2 addresses')).toBeVisible();
 		});
 
-		setupTest(
-			<CGView />,
+		it('should render the avatar, the name and the number of the members (case 0 addresses string) of a contact group', async () => {
+			const contactGroupName = faker.company.name();
+			registerFindContactGroupsHandler({
+				findContactGroupsResponse: createFindContactGroupsResponse([
+					createCnItem(contactGroupName)
+				]),
+				offset: 0
+			});
+			setupTest(<CGView />, { initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}`] });
 
-			{ initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}`] }
-		);
+			expect(await screen.findByText(contactGroupName)).toBeVisible();
+			expect(screen.getByText('0 addresses')).toBeVisible();
+			const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
+			expect(
+				within(listItemContent).getByTestId(TESTID_SELECTORS.icons.contactGroup)
+			).toBeVisible();
+		});
 
-		expect(await screen.findByText(EMPTY_LIST_HINT)).toBeVisible();
+		it('should render the avatar, the name and the number of the members (case 1 address string) of a contact group', async () => {
+			const contactGroupName = faker.company.name();
+			registerFindContactGroupsHandler({
+				findContactGroupsResponse: createFindContactGroupsResponse([
+					createCnItem(contactGroupName, [faker.internet.email()])
+				]),
+				offset: 0
+			});
+			setupTest(
+				<CGView />,
+
+				{ initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}`] }
+			);
+
+			expect(await screen.findByText(contactGroupName)).toBeVisible();
+			const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
+			expect(
+				within(listItemContent).getByTestId(TESTID_SELECTORS.icons.contactGroup)
+			).toBeVisible();
+			expect(screen.getByText('1 address')).toBeVisible();
+		});
+
+		it('should show the empty list message if there is no contact group', async () => {
+			registerFindContactGroupsHandler({
+				findContactGroupsResponse: createFindContactGroupsResponse([]),
+				offset: 0
+			});
+
+			setupTest(
+				<CGView />,
+
+				{ initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}`] }
+			);
+
+			expect(await screen.findByText(EMPTY_LIST_HINT)).toBeVisible();
+		});
 	});
+	describe('sharedAccount', () => {
+		it('should render the avatar, the name and the number of the members (case 1+ addresses string) of a contact group', async () => {
+			const contactGroupName = faker.company.name();
+			registerFindContactGroupsHandler({
+				findContactGroupsResponse: createFindContactGroupsResponse([
+					createCnItem(contactGroupName, [faker.internet.email(), faker.internet.email()])
+				]),
+				offset: 0
+			});
+			setupTest(<CGView />, {
+				initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}`]
+			});
 
+			expect(await screen.findByText(contactGroupName)).toBeVisible();
+			const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
+			expect(
+				within(listItemContent).getByTestId(TESTID_SELECTORS.icons.contactGroup)
+			).toBeVisible();
+			expect(screen.getByText('2 addresses')).toBeVisible();
+		});
+
+		it('should render the avatar, the name and the number of the members (case 0 addresses string) of a contact group', async () => {
+			const contactGroupName = faker.company.name();
+			registerFindContactGroupsHandler({
+				findContactGroupsResponse: createFindContactGroupsResponse([
+					createCnItem(contactGroupName)
+				]),
+				offset: 0
+			});
+			setupTest(<CGView />, {
+				initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}`]
+			});
+
+			expect(await screen.findByText(contactGroupName)).toBeVisible();
+			expect(screen.getByText('0 addresses')).toBeVisible();
+			const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
+			expect(
+				within(listItemContent).getByTestId(TESTID_SELECTORS.icons.contactGroup)
+			).toBeVisible();
+		});
+
+		it('should render the avatar, the name and the number of the members (case 1 address string) of a contact group', async () => {
+			const contactGroupName = faker.company.name();
+			registerFindContactGroupsHandler({
+				findContactGroupsResponse: createFindContactGroupsResponse([
+					createCnItem(contactGroupName, [faker.internet.email()])
+				]),
+				offset: 0
+			});
+			setupTest(
+				<CGView />,
+
+				{ initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}`] }
+			);
+
+			expect(await screen.findByText(contactGroupName)).toBeVisible();
+			const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
+			expect(
+				within(listItemContent).getByTestId(TESTID_SELECTORS.icons.contactGroup)
+			).toBeVisible();
+			expect(screen.getByText('1 address')).toBeVisible();
+		});
+
+		it('should show the empty list message if there is no contact group', async () => {
+			registerFindContactGroupsHandler({
+				findContactGroupsResponse: createFindContactGroupsResponse([]),
+				offset: 0
+			});
+
+			setupTest(
+				<CGView />,
+
+				{ initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}`] }
+			);
+
+			expect(await screen.findByText(EMPTY_LIST_HINT)).toBeVisible();
+		});
+	});
 	describe('Send mail action', () => {
 		it('should open the mail board (ContactGroupDisplayerController trigger)', async () => {
 			const openMailComposer = jest.fn();

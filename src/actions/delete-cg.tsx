@@ -96,7 +96,15 @@ export const useActionDeleteCG = (): DeleteCGAction => {
 				)
 			});
 		},
-		[activeContactGroup?.id, closeModal, createModal, createSnackbar, removeContactGroup, t]
+		[
+			activeContactGroup?.id,
+			closeModal,
+			createModal,
+			createSnackbar,
+			removeContactGroup,
+			replaceHistory,
+			t
+		]
 	);
 
 	return useMemo(

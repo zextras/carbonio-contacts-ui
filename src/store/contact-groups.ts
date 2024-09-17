@@ -3,11 +3,13 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+/* eslint-disable no-param-reassign */
 
+import produce from 'immer';
 import { differenceBy, findIndex } from 'lodash';
 import { create } from 'zustand';
 
-import { ContactGroup } from '../model/contact-group';
+import { ContactGroup, SharedContactGroup } from '../model/contact-group';
 
 export function compareContactGroupName(nameA: string, nameB: string): number {
 	const nameALow = nameA.toLowerCase();
@@ -24,11 +26,16 @@ export function compareContactGroupName(nameA: string, nameB: string): number {
 type State = {
 	orderedContactGroups: Array<ContactGroup>;
 	unorderedContactGroups: Array<ContactGroup>;
+	sharedContactGroups: Record<string, Record<string, SharedContactGroup>>;
 	offset: number;
 };
 
 export type ContactGroupStoreActions = {
 	addContactGroups: (newContactGroups: Array<ContactGroup>) => void;
+	populateSharedContactGroupsByAccountId: (
+		accountId: string,
+		newContactGroups: Array<SharedContactGroup>
+	) => void;
 	addContactGroupInSortedPosition: (newContactGroup: ContactGroup) => void;
 	updateContactGroup: (contactGroup: ContactGroup) => void;
 	setOffset: (offset: number) => void;
@@ -37,6 +44,7 @@ export type ContactGroupStoreActions = {
 };
 
 export const initialState: State = {
+	sharedContactGroups: {},
 	orderedContactGroups: [],
 	unorderedContactGroups: [],
 	offset: 0
@@ -74,6 +82,23 @@ export const useContactGroupStore = create<State & ContactGroupStoreActions>()((
 	reset: (): void => {
 		set(initialState);
 	},
+	populateSharedContactGroupsByAccountId: (
+		accountId: string,
+		contactGroups: Array<SharedContactGroup>
+	): void => {
+		set(
+			produce(({ sharedContactGroups }: State) => {
+				sharedContactGroups[accountId] = contactGroups.reduce(
+					(acc, contactGroup) => {
+						acc[contactGroup.id] = contactGroup;
+						return acc;
+					},
+					{} as Record<string, SharedContactGroup>
+				);
+			})
+		);
+	},
+
 	updateContactGroup: (contactGroup): void => {
 		const { orderedContactGroups, unorderedContactGroups, offset } = get();
 		const idxToRemove = orderedContactGroups.findIndex((item) => item.id === contactGroup.id);
