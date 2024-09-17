@@ -52,6 +52,13 @@ const mockMailToAction = (): void => {
 	});
 };
 
+beforeEach(() => {
+	// disable the console.warn raised by the missing search interceptor
+	// it's not needed for these tests, and creating the interceptor would be too complex
+	// as every case would need to be handled
+	jest.spyOn(console, 'warn').mockImplementation(jest.fn());
+});
+
 describe('Folder panel', () => {
 	it('should render the component', () => {
 		const folder = FOLDERS_DESCRIPTORS.contacts;
