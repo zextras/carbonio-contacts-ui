@@ -8,6 +8,8 @@ import { act } from 'react-dom/test-utils';
 
 import { useActionAddSharedAddressBooks } from './add-shared-address-books';
 import { UIAction } from './types';
+import { createSoapAPIInterceptor } from '../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
+import { handleGetShareInfoRequest } from '../carbonio-ui-commons/test/mocks/network/msw/handle-get-share-info';
 import { screen, setupHook } from '../carbonio-ui-commons/test/test-setup';
 import { TIMERS } from '../constants/tests';
 
@@ -29,14 +31,15 @@ describe('useActionAddSharedAddressBooks', () => {
 		expect(action.canExecute()).toBeTruthy();
 	});
 
-	it('should return an execute field which opens a modal with a specific title', () => {
+	it('should return an execute field which opens a modal with a specific title', async () => {
+		createSoapAPIInterceptor('GetShareInfo', handleGetShareInfoRequest);
 		const { result } = setupHook(useActionAddSharedAddressBooks);
 		const action = result.current;
-		act(() => {
+		await act(async () => {
 			action.execute();
 		});
 
-		act(() => {
+		await act(async () => {
 			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 
