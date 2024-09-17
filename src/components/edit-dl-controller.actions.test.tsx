@@ -265,6 +265,7 @@ describe('EditDLControllerComponent', () => {
 			});
 
 			it('should cause a error snackbar to appear when then API return an error result', async () => {
+				jest.spyOn(console, 'error').mockImplementation(jest.fn());
 				const members = [faker.internet.email()];
 				const dl = generateDistributionList({
 					members: generateDistributionListMembersPage(members)
