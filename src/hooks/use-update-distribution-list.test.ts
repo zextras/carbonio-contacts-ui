@@ -23,6 +23,7 @@ describe('Use update distribution list hook', () => {
 	});
 
 	it('should show an error snackbar if there is an error', async () => {
+		jest.spyOn(console, 'error').mockImplementation(jest.fn());
 		const dl = generateDistributionList();
 		registerDistributionListActionHandler({}, [JEST_MOCKED_ERROR]);
 		const { result } = setupHook(useUpdateDistributionList, { initialProps: [dl] });
