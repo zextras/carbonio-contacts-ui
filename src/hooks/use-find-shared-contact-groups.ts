@@ -6,7 +6,7 @@
 import { useCallback, useEffect } from 'react';
 
 import { SharedContactGroup } from '../model/contact-group';
-import { findSharedContactGroups } from '../network/api/find-contact-groups';
+import { findContactGroups } from '../network/api/find-contact-groups';
 import { useContactGroupStore } from '../store/contact-groups';
 
 type UseFindSharedContactGroupsReturnType = {
@@ -18,7 +18,7 @@ export const useFindSharedContactGroups = (
 ): UseFindSharedContactGroupsReturnType => {
 	const findCallback = useCallback(() => {
 		if (!accountId) return;
-		findSharedContactGroups(accountId, 0).then((result) => {
+		findContactGroups(0, accountId).then((result) => {
 			const sharedContactGroups = result.contactGroups.map((cg) => ({ ...cg, accountId }));
 			useContactGroupStore
 				.getState()

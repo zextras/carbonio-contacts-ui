@@ -25,39 +25,6 @@ export interface FindContactGroupsSoapApiResponse extends GenericSoapPayload<typ
 }
 
 type FindContactGroupsResponse = Promise<{ contactGroups: Array<ContactGroup>; hasMore: boolean }>;
-
-function findContactGroupsSoapApi(offset: number, accountId?: string): Promise<Response> {
-	let query = '#type:group';
-	if (accountId) {
-		query = `${query} inid:"${accountId}:7"`;
-	} else {
-		query = `${query} inid:7`;
-	}
-	return fetch(`/service/soap/SearchRequest`, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify({
-			Body: {
-				SearchRequest: {
-					_jsns: 'urn:zimbraMail',
-					limit: FIND_CONTACT_GROUP_LIMIT,
-					offset,
-					sortBy: 'nameAsc',
-					types: 'contact',
-					query
-				}
-			},
-			Header: {
-				context: {
-					_jsns: 'urn:zimbra'
-				}
-			}
-		})
-	});
-}
-
 function handleFindContactGroups(apiResponse: Promise<Response>): FindContactGroupsResponse {
 	return apiResponse
 		.then((response) => {
@@ -79,11 +46,39 @@ function handleFindContactGroups(apiResponse: Promise<Response>): FindContactGro
 		});
 }
 
-export const findContactGroups = (offset = 0, accountId = undefined): FindContactGroupsResponse =>
-	handleFindContactGroups(findContactGroupsSoapApi(offset, accountId));
-
-export const findSharedContactGroups = (
-	accountId: string,
-	offset: number
-): FindContactGroupsResponse =>
-	handleFindContactGroups(findContactGroupsSoapApi(offset, accountId));
+export const findContactGroups = (
+	offset: number,
+	accountId?: string
+): FindContactGroupsResponse => {
+	let query = '#type:group';
+	if (accountId) {
+		query = `${query} inid:"${accountId}:7"`;
+	} else {
+		query = `${query} inid:7`;
+	}
+	return handleFindContactGroups(
+		fetch(`/service/soap/SearchRequest`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				Body: {
+					SearchRequest: {
+						_jsns: 'urn:zimbraMail',
+						limit: FIND_CONTACT_GROUP_LIMIT,
+						offset,
+						sortBy: 'nameAsc',
+						types: 'contact',
+						query
+					}
+				},
+				Header: {
+					context: {
+						_jsns: 'urn:zimbra'
+					}
+				}
+			})
+		})
+	);
+};
