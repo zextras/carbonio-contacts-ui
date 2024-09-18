@@ -18,7 +18,7 @@ export const CGView = (): React.JSX.Element => {
 	const { path } = useRouteMatch();
 	const trimmedPath = useMemo(() => trimEnd(path, '/'), [path]);
 	return (
-		<Route path={`${trimmedPath}/contact-groups/:accountId?`}>
+		<Route path={`${trimmedPath}/contact-groups/:?id`}>
 			<Container
 				orientation="row"
 				crossAlignment="flex-start"
