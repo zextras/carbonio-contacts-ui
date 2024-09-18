@@ -7,16 +7,15 @@
 import React from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
-import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 
 import { CGDisplayer } from './cg-displayer';
-import { EmptyDisplayer } from './empty-displayer';
-import { useActiveContactGroup } from '../hooks/useActiveContactGroup';
+import { CGDisplayerShared } from './cg-displayer-shared';
+import { getFolderIdParts } from '../carbonio-ui-commons/helpers/folders';
 
 export const CGDisplayerController = (): React.JSX.Element => {
-	const contactGroup = useActiveContactGroup();
-
-	const [t] = useTranslation();
+	const { id: contactGroupId } = useParams<{ id: string }>();
+	const { zid: accountId } = getFolderIdParts(contactGroupId);
 
 	return (
 		<Container
@@ -25,15 +24,7 @@ export const CGDisplayerController = (): React.JSX.Element => {
 			crossAlignment="flex-start"
 			data-testid="displayer"
 		>
-			{(contactGroup && <CGDisplayer contactGroup={contactGroup} />) || (
-				<EmptyDisplayer
-					description={t(
-						'emptyDisplayer.contactGroup.hint',
-						'Click the “NEW” button to create a new contacts group.'
-					)}
-					title={t('displayer.title3', 'Stay in touch with your colleagues.')}
-				/>
-			)}
+			{accountId ? <CGDisplayerShared accountId={accountId} /> : <CGDisplayer />}
 		</Container>
 	);
 };
