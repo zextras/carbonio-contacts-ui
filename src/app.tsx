@@ -22,6 +22,8 @@ import {
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
+import { FOLDER_VIEW } from './carbonio-ui-commons/constants';
+import { useInitializeFolders } from './carbonio-ui-commons/hooks/use-initialize-folders';
 import {
 	CONTACTS_APP_ID,
 	CONTACTS_ROUTE,
@@ -168,6 +170,8 @@ const App = (): React.JSX.Element => {
 	const [t] = useTranslation();
 	const { navigateTo } = useNavigation();
 	const createSnackbar = useSnackbar();
+
+	useInitializeFolders(FOLDER_VIEW.contact);
 
 	useEffect(() => {
 		addRoute({

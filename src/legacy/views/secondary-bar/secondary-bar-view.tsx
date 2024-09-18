@@ -25,9 +25,8 @@ import { AccordionCustomComponent } from './accordion-custom-component';
 import { useActionAddSharedAddressBooks } from '../../../actions/add-shared-address-books';
 import { SidebarAccordionMui } from '../../../carbonio-ui-commons/components/sidebar/sidebar-accordion-mui';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
-import { FOLDER_VIEW, ZIMBRA_STANDARD_COLORS } from '../../../carbonio-ui-commons/constants/utils';
+import { ZIMBRA_STANDARD_COLORS } from '../../../carbonio-ui-commons/constants/utils';
 import { isLink } from '../../../carbonio-ui-commons/helpers/folders';
-import { useInitializeFolders } from '../../../carbonio-ui-commons/hooks/use-initialize-folders';
 import { useRootsArray } from '../../../carbonio-ui-commons/store/zustand/folder';
 import { themeMui } from '../../../carbonio-ui-commons/theme/theme-mui';
 import { Folder } from '../../../carbonio-ui-commons/types/folder';
@@ -120,7 +119,6 @@ const CollapsedSideBarItems = ({ folder }: { folder: Folder }): React.JSX.Elemen
 };
 
 const SecondaryBarView: FC<SecondaryBarComponentProps> = ({ expanded = false }) => {
-	useInitializeFolders(FOLDER_VIEW.contact);
 	const { folderId: selectedFolderId } = useParams<{ folderId: string }>();
 	const tagsAccordionItems = useGetTagsAccordion();
 	const { path } = useRouteMatch();
