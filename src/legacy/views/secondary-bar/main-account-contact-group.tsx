@@ -9,6 +9,7 @@ import React, { useCallback } from 'react';
 import { useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
 
 import { ContactGroupComponent } from './contact-group-component';
+import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { ROUTES_INTERNAL_PARAMS } from '../../../constants';
 
 export const MainAccountContactGroup = (): React.JSX.Element => {
@@ -16,7 +17,7 @@ export const MainAccountContactGroup = (): React.JSX.Element => {
 	const onClick = useCallback(
 		(ev: React.SyntheticEvent | KeyboardEvent) => {
 			ev.preventDefault();
-			replaceHistory(ROUTES_INTERNAL_PARAMS.route.contactGroups);
+			replaceHistory(`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${FOLDERS.CONTACTS}`);
 		},
 		[replaceHistory]
 	);

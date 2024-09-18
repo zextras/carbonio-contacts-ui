@@ -8,13 +8,13 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 
-import { CGList } from './cg-list';
+import { ContactGroupListMainAccount } from './contact-group-list-main-account';
 import { screen, setupTest } from '../carbonio-ui-commons/test/test-setup';
 import { EMPTY_LIST_HINT } from '../constants/tests';
 
 describe('Contact groups list', () => {
 	test('Show a placeholder when the list is empty', async () => {
-		setupTest(<CGList contactGroups={[]} />);
+		setupTest(<ContactGroupListMainAccount />);
 		expect(await screen.findByText(EMPTY_LIST_HINT)).toBeVisible();
 	});
 
@@ -31,7 +31,7 @@ describe('Contact groups list', () => {
 				members: []
 			}
 		];
-		setupTest(<CGList contactGroups={contactGroups} />);
+		setupTest(<ContactGroupListMainAccount />);
 		expect(screen.getByText('hello')).toBeVisible();
 		expect(screen.getByText('test')).toBeVisible();
 	});

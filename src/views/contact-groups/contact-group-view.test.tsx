@@ -10,7 +10,7 @@ import { within } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { Route } from 'react-router-dom';
 
-import { CGView } from './cg-view';
+import { CGView } from './contact-groups-view';
 import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { ROUTES, ROUTES_INTERNAL_PARAMS } from '../../constants';
 import {

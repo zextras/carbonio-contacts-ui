@@ -18,16 +18,16 @@ import { useActiveItem } from '../hooks/useActiveItem';
 import { EmptyListPanel } from '../legacy/views/app/folder-panel/empty-list-panel';
 import { ContactGroup } from '../model/contact-group';
 
-type CgListComponentProps = {
+type ContactGroupListComponentProps = {
 	onContactGroupClick: (contactGroupId: string) => void;
 	contactGroups: Array<ContactGroup>;
 	onListBottom: () => void;
 };
-export const CgListComponent = ({
+export const ContactGroupListComponent = ({
 	onContactGroupClick,
 	contactGroups,
 	onListBottom
-}: CgListComponentProps): React.JSX.Element => {
+}: ContactGroupListComponentProps): React.JSX.Element => {
 	const [t] = useTranslation();
 	const { activeItem } = useActiveItem();
 

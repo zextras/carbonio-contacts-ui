@@ -9,7 +9,7 @@ import { Container } from '@zextras/carbonio-design-system';
 import { setAppContext } from '@zextras/carbonio-shell-ui';
 import { Redirect, Route, useRouteMatch } from 'react-router-dom';
 
-import { CGView } from './contact-groups/cg-view';
+import { CGView } from './contact-groups/contact-groups-view';
 import { useUpdateView } from '../carbonio-ui-commons/hooks/use-update-view';
 import { FolderView } from '../legacy/views/app/folder-view';
 

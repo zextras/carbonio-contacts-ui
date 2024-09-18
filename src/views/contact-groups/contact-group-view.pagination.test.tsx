@@ -7,7 +7,7 @@ import React from 'react';
 
 import { waitFor } from '@testing-library/react';
 
-import { CGView } from './cg-view';
+import { CGView } from './contact-groups-view';
 import { screen, setupTest, triggerLoadMore } from '../../carbonio-ui-commons/test/test-setup';
 import { FIND_CONTACT_GROUP_LIMIT } from '../../constants';
 import { CnItem } from '../../network/api/types';

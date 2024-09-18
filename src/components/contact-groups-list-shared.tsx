@@ -9,10 +9,10 @@ import { useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
 import { noop } from 'lodash';
 import { useParams } from 'react-router-dom';
 
-import { CgListComponent } from './cg-list-component';
+import { ContactGroupListComponent } from './contact-group-list-component';
 import { useFindSharedContactGroups } from '../hooks/use-find-shared-contact-groups';
 
-export const CGListShared = (): React.JSX.Element => {
+export const ContactGroupListShared = (): React.JSX.Element => {
 	const { accountId } = useParams<{ accountId: string }>();
 	const { sharedContactGroups } = useFindSharedContactGroups(accountId);
 
@@ -25,10 +25,10 @@ export const CGListShared = (): React.JSX.Element => {
 		[accountId, replaceHistory]
 	);
 	return (
-		<CgListComponent
+		<ContactGroupListComponent
 			onContactGroupClick={onClick}
 			contactGroups={sharedContactGroups}
 			onListBottom={noop}
-		></CgListComponent>
+		></ContactGroupListComponent>
 	);
 };
