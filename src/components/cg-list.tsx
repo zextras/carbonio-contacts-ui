@@ -9,6 +9,7 @@ import React, { useCallback } from 'react';
 import { useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
 
 import { CgListComponent } from './cg-list-component';
+import { ROUTES_INTERNAL_PARAMS } from '../constants';
 import { useFindContactGroups } from '../hooks/useFindContactGroups';
 
 export const CGList = (): React.JSX.Element => {
@@ -18,7 +19,7 @@ export const CGList = (): React.JSX.Element => {
 	const onListBottom = useCallback(() => (hasMore ? findMore : undefined), [hasMore, findMore]);
 	const onClick = useCallback(
 		(id: string) => {
-			replaceHistory(`/contact-groups/${id}`);
+			replaceHistory(`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${id}`);
 		},
 		[replaceHistory]
 	);
