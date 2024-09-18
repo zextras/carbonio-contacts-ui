@@ -13,15 +13,12 @@ import { Route, useRouteMatch } from 'react-router-dom';
 import { CGDisplayerController } from '../../components/cg-displayer-controller';
 import { CGList } from '../../components/cg-list';
 import { DISPLAYER_WIDTH } from '../../constants';
-import { useFindContactGroups } from '../../hooks/useFindContactGroups';
 
 export const CGView = (): React.JSX.Element => {
-	const { contactGroups, hasMore, findMore } = useFindContactGroups();
 	const { path } = useRouteMatch();
 	const trimmedPath = useMemo(() => trimEnd(path, '/'), [path]);
-
 	return (
-		<Route path={`${trimmedPath}/contact-groups/:id?`}>
+		<Route path={`${trimmedPath}/contact-groups/:accountId?`}>
 			<Container
 				orientation="row"
 				crossAlignment="flex-start"
@@ -29,7 +26,7 @@ export const CGView = (): React.JSX.Element => {
 				background="gray5"
 				borderRadius="none"
 			>
-				<CGList contactGroups={contactGroups} onListBottom={hasMore ? findMore : undefined} />
+				<CGList />
 				<Container
 					width={DISPLAYER_WIDTH}
 					mainAlignment="flex-start"

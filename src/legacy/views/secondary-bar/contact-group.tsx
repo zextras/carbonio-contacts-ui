@@ -12,7 +12,6 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { theme } from '../../../carbonio-ui-commons/theme/theme-mui';
-import { replaceHistory } from '@zextras/carbonio-shell-ui';
 
 const StyledText = styled(Text)`
 	min-width: 0;
@@ -20,13 +19,12 @@ const StyledText = styled(Text)`
 	flex-grow: 1;
 `;
 
-export const ContactGroup = (): React.JSX.Element => {
+export const ContactGroup = ({
+	onClick
+}: {
+	onClick: (ev: KeyboardEvent | React.SyntheticEvent) => void;
+}): React.JSX.Element => {
 	const [t] = useTranslation();
-	const onContactGroupClick = (ev: KeyboardEvent | React.SyntheticEvent): void => {
-		ev.stopPropagation();
-		replaceHistory('contact-groups');
-	};
-
 	const label = t('secondaryBar.contactGroups', 'Contact Groups');
 	return (
 		<Accordion
@@ -53,7 +51,7 @@ export const ContactGroup = (): React.JSX.Element => {
 					style={{ minWidth: 0, flexBasis: 0, flexGrow: 1 }}
 					key={'contact-group-id'}
 					data-testid={'contact-group-id'}
-					onClick={onContactGroupClick}
+					onClick={onClick}
 				>
 					<Padding horizontal="small">
 						<Icon size="large" icon={'PeopleOutline'} />

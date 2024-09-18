@@ -10,24 +10,27 @@ import { Container, ListV2 } from '@zextras/carbonio-design-system';
 import { useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
 import { map } from 'lodash';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 
 import { CGListItem } from './cg-list-item';
 import { Navbar } from './sidebar/item-list/navbar';
 import { StyledListItem } from './styled-components';
 import { LIST_WIDTH } from '../constants';
+import { useFindSharedContactGroups } from '../hooks/use-find-shared-contact-groups';
 import { useActiveItem } from '../hooks/useActiveItem';
+import { useFindContactGroups } from '../hooks/useFindContactGroups';
 import { EmptyListPanel } from '../legacy/views/app/folder-panel/empty-list-panel';
-import { ContactGroup } from '../model/contact-group';
 
-export type CGListProps = {
-	contactGroups: Array<ContactGroup>;
-	onListBottom?: () => void;
-};
-
-export const CGList = ({ contactGroups, onListBottom }: CGListProps): React.JSX.Element => {
+export const CGList = (): React.JSX.Element => {
+	const { accountId } = useParams<{ accountId: string }>();
 	const [t] = useTranslation();
 	const { activeItem } = useActiveItem();
+	const { contactGroups: mainAccountContactGroups, hasMore, findMore } = useFindContactGroups();
+
 	const replaceHistory = useReplaceHistoryCallback();
+	const { sharedContactGroups } = useFindSharedContactGroups(accountId);
+	const contactGroups = accountId ? sharedContactGroups : mainAccountContactGroups;
+	const onListBottom = useCallback(() => (hasMore ? findMore : undefined), [hasMore, findMore]);
 
 	const onClick = useCallback(
 		(id: string) => {

@@ -11,10 +11,11 @@ import { Accordion, AccordionDetails, AccordionSummary, Container } from '@mui/m
 import { useLocalStorage } from '@zextras/carbonio-shell-ui';
 
 import { AccordionCustomComponent } from './accordion-custom-component';
-import { ContactGroup } from './contact-group';
 import { FindSharesButton } from './find-shares-button';
+import { MainAccountContactGroup } from './main-account-contact-group';
+import { SharedAccountContactGroup } from './shared-account-contact-group';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
-import { isRoot } from '../../../carbonio-ui-commons/helpers/folders';
+import { getFolderIdParts, isRoot } from '../../../carbonio-ui-commons/helpers/folders';
 import { theme } from '../../../carbonio-ui-commons/theme/theme-mui';
 import { Folder } from '../../../carbonio-ui-commons/types';
 import type { SidebarAccordionProps } from '../../types/sidebar';
@@ -52,59 +53,70 @@ export const SidebarAccordionMui: FC<SidebarAccordionProps> = ({
 	);
 	return (
 		<Container ref={sidebarRef} disableGutters>
-			{folders.map((folder) => (
-				<div key={`accordion-div-${folder.id}`}>
-					<Accordion
-						disableGutters
-						slotProps={{ transition: { unmountOnExit: true } }}
-						expanded={openIds.includes(folder.id)}
-					>
-						<AccordionSummary
-							expandIcon={
-								folder?.children &&
-								folder.children.length > 0 && (
-									<ExpandMoreIcon
-										color="primary"
-										onClick={(e): void => {
-											e.preventDefault();
-											onClick({ folder, expanded: !openIds.includes(folder.id) });
-										}}
-									/>
-								)
-							}
-							aria-controls="panel1a-content"
-							id={folder.id}
-							sx={{
-								backgroundColor:
-									folder.id === selectedFolderId
-										? theme.palette.highlight.hover
-										: theme.palette.gray5.regular,
-								'&:hover': {
+			{folders.map((folder) => {
+				const { id: folderId, zid: accountId } = getFolderIdParts(folder.id);
+
+				return (
+					<div key={`accordion-div-${folder.id}`}>
+						<Accordion
+							disableGutters
+							slotProps={{ transition: { unmountOnExit: true } }}
+							expanded={openIds.includes(folder.id)}
+						>
+							<AccordionSummary
+								expandIcon={
+									folder?.children &&
+									folder.children.length > 0 && (
+										<ExpandMoreIcon
+											color="primary"
+											onClick={(e): void => {
+												e.preventDefault();
+												onClick({ folder, expanded: !openIds.includes(folder.id) });
+											}}
+										/>
+									)
+								}
+								aria-controls="panel1a-content"
+								id={folder.id}
+								sx={{
 									backgroundColor:
 										folder.id === selectedFolderId
-											? theme.palette.highlight.active
-											: theme.palette.gray5.hover
-								}
-							}}
-						>
-							<AccordionCustomComponent item={folder} />
-						</AccordionSummary>
-						{folder?.children && folder.children.length > 0 && (
-							<AccordionDetails>
-								<SidebarAccordionMui
-									folders={folder.children}
-									selectedFolderId={selectedFolderId}
-									key={`accordion-mui-${folder.id}`}
-									localStorageName={localStorageName}
-									initialExpanded={initialExpanded}
-								/>
-								{isRoot(folder.id) && <FindSharesButton key={`find-shares-btn-${folder.id}`} />}
-							</AccordionDetails>
-						)}
-					</Accordion>
-					{folder.id === FOLDERS.CONTACTS && <ContactGroup />}
-				</div>
-			))}
+											? theme.palette.highlight.hover
+											: theme.palette.gray5.regular,
+									'&:hover': {
+										backgroundColor:
+											folder.id === selectedFolderId
+												? theme.palette.highlight.active
+												: theme.palette.gray5.hover
+									}
+								}}
+							>
+								<AccordionCustomComponent item={folder} />
+							</AccordionSummary>
+							{folder?.children && folder.children.length > 0 && (
+								<AccordionDetails>
+									<SidebarAccordionMui
+										folders={folder.children}
+										selectedFolderId={selectedFolderId}
+										key={`accordion-mui-${folder.id}`}
+										localStorageName={localStorageName}
+										initialExpanded={initialExpanded}
+									/>
+									{isRoot(folder.id) && !accountId && (
+										<FindSharesButton key={`find-shares-btn-${folder.id}`} />
+									)}
+								</AccordionDetails>
+							)}
+						</Accordion>
+						{folderId === FOLDERS.CONTACTS &&
+							(accountId ? (
+								<SharedAccountContactGroup accountId={accountId} />
+							) : (
+								<MainAccountContactGroup />
+							))}
+					</div>
+				);
+			})}
 		</Container>
 	);
 };

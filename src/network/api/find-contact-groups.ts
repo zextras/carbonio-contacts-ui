@@ -29,7 +29,7 @@ type FindContactGroupsResponse = Promise<{ contactGroups: Array<ContactGroup>; h
 function findContactGroupsSoapApi(offset: number, accountId?: string): Promise<Response> {
 	let query = '#type:group';
 	if (accountId) {
-		query = `${query} inid:${accountId}:7`;
+		query = `${query} inid:"${accountId}:7"`;
 	} else {
 		query = `${query} inid:7`;
 	}
@@ -58,7 +58,7 @@ function findContactGroupsSoapApi(offset: number, accountId?: string): Promise<R
 	});
 }
 
-function handlefindContactGroups(apiResponse: Promise<Response>): FindContactGroupsResponse {
+function handleFindContactGroups(apiResponse: Promise<Response>): FindContactGroupsResponse {
 	return apiResponse
 		.then((response) => {
 			if (response.ok) {
@@ -79,11 +79,11 @@ function handlefindContactGroups(apiResponse: Promise<Response>): FindContactGro
 		});
 }
 
-export const findContactGroups = (offset = 0): FindContactGroupsResponse =>
-	handlefindContactGroups(findContactGroupsSoapApi(offset));
+export const findContactGroups = (offset = 0, accountId = undefined): FindContactGroupsResponse =>
+	handleFindContactGroups(findContactGroupsSoapApi(offset, accountId));
 
-export const findUserContactGroups = (
+export const findSharedContactGroups = (
 	accountId: string,
 	offset: number
 ): FindContactGroupsResponse =>
-	handlefindContactGroups(findContactGroupsSoapApi(offset, accountId));
+	handleFindContactGroups(findContactGroupsSoapApi(offset, accountId));
