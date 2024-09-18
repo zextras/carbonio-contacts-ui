@@ -19,7 +19,7 @@ const StyledText = styled(Text)`
 	flex-grow: 1;
 `;
 
-export const ContactGroup = ({
+export const ContactGroupComponent = ({
 	onClick
 }: {
 	onClick: (ev: KeyboardEvent | React.SyntheticEvent) => void;

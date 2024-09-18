@@ -8,7 +8,7 @@ import React, { useCallback } from 'react';
 
 import { useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
 
-import { ContactGroup } from './contact-group';
+import { ContactGroupComponent } from './contact-group-component';
 import { ROUTES_INTERNAL_PARAMS } from '../../../constants';
 
 export const MainAccountContactGroup = (): React.JSX.Element => {
@@ -20,5 +20,5 @@ export const MainAccountContactGroup = (): React.JSX.Element => {
 		},
 		[replaceHistory]
 	);
-	return <ContactGroup onClick={onClick} />;
+	return <ContactGroupComponent onClick={onClick} />;
 };
