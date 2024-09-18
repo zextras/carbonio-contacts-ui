@@ -22,8 +22,9 @@ interface ContactGroupDisplayerProps {
 export const CGDisplayer = ({ contactGroup }: ContactGroupDisplayerProps): React.JSX.Element => {
 	const actions = useContactGroupActions(contactGroup);
 	const replaceHistory = useReplaceHistoryCallback();
+	// FIXME: we cannot redirect to the same url for shared contact groups
 	const closeDisplayer = useCallback((): void => {
-		replaceHistory(ROUTES_INTERNAL_PARAMS.route.contactGroups);
+		replaceHistory(`${ROUTES_INTERNAL_PARAMS.route.contactGroups}/7`);
 	}, [replaceHistory]);
 
 	return (
