@@ -7,7 +7,7 @@
 import * as shell from '@zextras/carbonio-shell-ui';
 import { first, times } from 'lodash';
 
-import { useGetContactGroup } from './use-get-contact-group';
+import { useGetContactGroupFromBoardId } from './use-get-contact-group-from-board-id';
 import { setupHook } from '../carbonio-ui-commons/test/test-setup';
 import { compareContactGroupName, useContactGroupStore } from '../store/contact-groups';
 import { buildContactGroup } from '../tests/model-builder';
@@ -31,7 +31,7 @@ describe('Use get contact group hook', () => {
 
 		const firstCg = first(list);
 		spyUseBoard(firstCg?.id);
-		const { result } = setupHook(useGetContactGroup);
+		const { result } = setupHook(useGetContactGroupFromBoardId);
 
 		expect(result.current).toEqual(firstCg);
 	});
@@ -44,7 +44,7 @@ describe('Use get contact group hook', () => {
 		useContactGroupStore.getState().addContactGroups(list);
 		useContactGroupStore.getState().addContactGroupInSortedPosition(last);
 		spyUseBoard(last.id);
-		const { result } = setupHook(useGetContactGroup);
+		const { result } = setupHook(useGetContactGroupFromBoardId);
 
 		expect(result.current).toEqual(last);
 	});
@@ -53,7 +53,7 @@ describe('Use get contact group hook', () => {
 		const contactGroup = buildContactGroup();
 
 		spyUseBoard(contactGroup.id);
-		const { result } = setupHook(useGetContactGroup);
+		const { result } = setupHook(useGetContactGroupFromBoardId);
 
 		expect(result.current).toBeUndefined();
 	});

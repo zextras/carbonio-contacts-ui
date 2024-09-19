@@ -25,9 +25,9 @@ export const ContactGroupDisplayerController = (): React.JSX.Element => {
 			data-testid="displayer"
 		>
 			{accountId ? (
-				<ContactGroupDisplayerShared accountId={accountId} />
+				<ContactGroupDisplayerShared accountId={accountId} contactGroupId={contactGroupId} />
 			) : (
-				<ContactGroupDisplayer />
+				<ContactGroupDisplayer contactGroupId={contactGroupId} />
 			)}
 		</Container>
 	);

@@ -10,7 +10,7 @@ import { getFolderIdParts } from '../carbonio-ui-commons/helpers/folders';
 import { ContactGroup } from '../model/contact-group';
 import { useContactGroupStore } from '../store/contact-groups';
 
-export const useGetContactGroup = (): ContactGroup | undefined => {
+export const useGetContactGroupFromBoardId = (): ContactGroup | undefined => {
 	const { context } = useBoard<{ contactGroupId: string }>();
 
 	const contactGroupId = context?.contactGroupId;

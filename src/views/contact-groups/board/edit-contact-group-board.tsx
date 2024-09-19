@@ -9,7 +9,7 @@ import { useSnackbar } from '@zextras/carbonio-design-system';
 import { difference, xor } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { useGetContactGroup } from '../../../hooks/use-get-contact-group';
+import { useGetContactGroupFromBoardId } from '../../../hooks/use-get-contact-group-from-board-id';
 import { ContactGroup } from '../../../model/contact-group';
 import { apiClient } from '../../../network/api-client';
 import { useContactGroupStore } from '../../../store/contact-groups';
@@ -94,7 +94,7 @@ const InnerEditContactGroupBoard = ({
 };
 
 const EditContactGroupBoard = (): React.JSX.Element | null => {
-	const contactGroup = useGetContactGroup();
+	const contactGroup = useGetContactGroupFromBoardId();
 	return contactGroup ? <InnerEditContactGroupBoard contactGroup={contactGroup} /> : null;
 };
 

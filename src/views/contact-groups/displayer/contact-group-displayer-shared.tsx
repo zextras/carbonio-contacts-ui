@@ -9,17 +9,18 @@ import { useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
 
 import { ContactGroupDisplayerComponent } from './contact-group-displayer-component';
 import { ROUTES_INTERNAL_PARAMS } from '../../../constants';
-import { useActiveContactGroup } from '../../../hooks/useActiveContactGroup';
+import { useGetSharedAccountContactGroup } from '../../../hooks/useGetContactGroup';
 
 interface ContactGroupSharedDisplayerProps {
 	accountId: string;
+	contactGroupId: string;
 }
 
 export const ContactGroupDisplayerShared = ({
-	accountId
+	accountId,
+	contactGroupId
 }: ContactGroupSharedDisplayerProps): React.JSX.Element => {
-	// TODO: consider making a different hook, e.g.: useActiveSharedContactGroup
-	const contactGroup = useActiveContactGroup();
+	const contactGroup = useGetSharedAccountContactGroup(accountId, contactGroupId);
 	const replaceHistory = useReplaceHistoryCallback();
 	const closeDisplayer = useCallback((): void => {
 		replaceHistory(`${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${accountId}`);
