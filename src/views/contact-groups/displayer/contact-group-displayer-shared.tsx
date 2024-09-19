@@ -7,7 +7,8 @@ import React, { useCallback } from 'react';
 
 import { useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
 
-import { ContactGroupDisplayerComponent } from './contact-group-displayer-component';
+import { ContactGroupDisplayerWithActions } from './contact-group-displayer-with-actions';
+import { ContactGroupEmptyDisplayer } from './contact-group-empty-displayer';
 import { ROUTES_INTERNAL_PARAMS } from '../../../constants';
 import { useGetSharedAccountContactGroup } from '../../../hooks/useGetContactGroup';
 
@@ -27,9 +28,15 @@ export const ContactGroupDisplayerShared = ({
 	}, [accountId, replaceHistory]);
 
 	return (
-		<ContactGroupDisplayerComponent
-			onCloseDisplayer={closeDisplayer}
-			contactGroup={contactGroup}
-		></ContactGroupDisplayerComponent>
+		<>
+			{contactGroup ? (
+				<ContactGroupDisplayerWithActions
+					contactGroup={contactGroup}
+					onCloseDisplayer={closeDisplayer}
+				></ContactGroupDisplayerWithActions>
+			) : (
+				<ContactGroupEmptyDisplayer />
+			)}
+		</>
 	);
 };
