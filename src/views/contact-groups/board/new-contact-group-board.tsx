@@ -9,10 +9,12 @@ import { useSnackbar } from '@zextras/carbonio-design-system';
 import { replaceHistory, useBoardHooks } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
-import CommonContactGroupBoard, { isContactGroupNameInvalid } from './common-contact-group-board';
-import { ROUTES_INTERNAL_PARAMS } from '../../constants';
-import { apiClient } from '../../network/api-client';
-import { useContactGroupStore } from '../../store/contact-groups';
+import { ROUTES_INTERNAL_PARAMS } from '../../../constants';
+import { apiClient } from '../../../network/api-client';
+import { useContactGroupStore } from '../../../store/contact-groups';
+import CommonContactGroupBoard, {
+	isContactGroupNameInvalid
+} from '../../board/common-contact-group-board';
 
 const NewContactGroupBoard = (): React.JSX.Element => {
 	const [t] = useTranslation();
