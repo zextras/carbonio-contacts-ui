@@ -10,7 +10,7 @@ import { noop } from 'lodash';
 import { useParams } from 'react-router-dom';
 
 import { ContactGroupListComponent } from './contact-group-list-component';
-import { useFindSharedContactGroups } from '../hooks/use-find-shared-contact-groups';
+import { useFindSharedContactGroups } from '../../../hooks/use-find-shared-contact-groups';
 
 export const ContactGroupListShared = (): React.JSX.Element => {
 	const { accountId } = useParams<{ accountId: string }>();

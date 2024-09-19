@@ -8,16 +8,16 @@ import React, { useMemo } from 'react';
 import { Container, Divider, ListV2, Row } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
-import { MemberDisplayerListItemComponent } from './member-displayer-list-item';
-import { CustomIconAvatar } from './styled-components';
-import { Text } from './Text';
-import { ContactGroup } from '../model/contact-group';
+import { MemberDisplayerListItemComponent } from '../../../components/member-displayer-list-item';
+import { CustomIconAvatar } from '../../../components/styled-components';
+import { Text } from '../../../components/Text';
+import { ContactGroup } from '../../../model/contact-group';
 
 export type CGDisplayerDetailsProps = {
 	contactGroup: ContactGroup;
 };
 
-export const CGDisplayerDetails = ({
+export const ContactGroupDisplayerDetails = ({
 	contactGroup
 }: CGDisplayerDetailsProps): React.JSX.Element => {
 	const [t] = useTranslation();

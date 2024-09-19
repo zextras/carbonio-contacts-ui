@@ -12,7 +12,7 @@ import { ContactGroupComponent } from './contact-group-component';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { ROUTES_INTERNAL_PARAMS } from '../../../constants';
 
-export const MainAccountContactGroup = (): React.JSX.Element => {
+export const ContactGroupMainAccount = (): React.JSX.Element => {
 	const replaceHistory = useReplaceHistoryCallback();
 	const onClick = useCallback(
 		(ev: React.SyntheticEvent | KeyboardEvent) => {

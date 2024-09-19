@@ -10,13 +10,13 @@ import { Container } from '@zextras/carbonio-design-system';
 import { trimEnd } from 'lodash';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 
+import { ContactGroupDisplayerController } from './displayer/contact-group-displayer-controller';
+import { ContactGroupListMainAccount } from './list/contact-group-list-main-account';
+import { ContactGroupListShared } from './list/contact-groups-list-shared';
 import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
-import { CGDisplayerController } from '../../components/cg-displayer-controller';
-import { ContactGroupListMainAccount } from '../../components/contact-group-list-main-account';
-import { ContactGroupListShared } from '../../components/contact-groups-list-shared';
 import { DISPLAYER_WIDTH } from '../../constants';
 
-export const CGView = (): React.JSX.Element => {
+export const ContactGroupView = (): React.JSX.Element => {
 	const { path } = useRouteMatch();
 	const trimmedPath = useMemo(() => trimEnd(path, '/'), [path]);
 	return (
@@ -38,7 +38,7 @@ export const CGView = (): React.JSX.Element => {
 						borderRadius="none"
 						maxHeight={'100%'}
 					>
-						<CGDisplayerController />
+						<ContactGroupDisplayerController />
 					</Container>
 				</Container>
 			</Route>
@@ -59,7 +59,7 @@ export const CGView = (): React.JSX.Element => {
 						borderRadius="none"
 						maxHeight={'100%'}
 					>
-						<CGDisplayerController />
+						<ContactGroupDisplayerController />
 					</Container>
 				</Container>
 			</Route>

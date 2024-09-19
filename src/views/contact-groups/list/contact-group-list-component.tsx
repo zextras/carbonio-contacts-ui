@@ -10,13 +10,13 @@ import { Container, ListV2 } from '@zextras/carbonio-design-system';
 import { map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { CGListItem } from './cg-list-item';
-import { Navbar } from './sidebar/item-list/navbar';
-import { StyledListItem } from './styled-components';
-import { LIST_WIDTH } from '../constants';
-import { useActiveItem } from '../hooks/useActiveItem';
-import { EmptyListPanel } from '../legacy/views/app/folder-panel/empty-list-panel';
-import { ContactGroup } from '../model/contact-group';
+import { ContactGroupListItem } from './contact-group-list-item';
+import { Navbar } from '../../../components/sidebar/item-list/navbar';
+import { StyledListItem } from '../../../components/styled-components';
+import { LIST_WIDTH } from '../../../constants';
+import { useActiveItem } from '../../../hooks/useActiveItem';
+import { EmptyListPanel } from '../../../legacy/views/app/folder-panel/empty-list-panel';
+import { ContactGroup } from '../../../model/contact-group';
 
 type ContactGroupListComponentProps = {
 	onContactGroupClick: (contactGroupId: string) => void;
@@ -40,7 +40,7 @@ export const ContactGroupListComponent = ({
 					data-testid={'list-item'}
 				>
 					{(visible): React.JSX.Element => (
-						<CGListItem
+						<ContactGroupListItem
 							visible={visible}
 							title={contactGroup.title}
 							id={contactGroup.id}

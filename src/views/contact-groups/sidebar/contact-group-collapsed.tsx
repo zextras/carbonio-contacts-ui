@@ -13,7 +13,7 @@ import { useLocation } from 'react-router-dom';
 import { ROUTES_INTERNAL_PARAMS } from '../../../constants';
 import { useNavigation } from '../../../hooks/useNavigation';
 
-export const CollapsedContactGroup = (): React.JSX.Element => {
+export const ContactGroupCollapsed = (): React.JSX.Element => {
 	const [t] = useTranslation();
 	const { navigateTo } = useNavigation();
 	const { pathname } = useLocation();

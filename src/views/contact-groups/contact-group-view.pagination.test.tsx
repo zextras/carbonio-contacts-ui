@@ -7,7 +7,7 @@ import React from 'react';
 
 import { waitFor } from '@testing-library/react';
 
-import { CGView } from './contact-groups-view';
+import { ContactGroupView } from './contact-group-view';
 import { screen, setupTest, triggerLoadMore } from '../../carbonio-ui-commons/test/test-setup';
 import { FIND_CONTACT_GROUP_LIMIT } from '../../constants';
 import { CnItem } from '../../network/api/types';
@@ -39,7 +39,7 @@ describe('Contact Group View pagination', () => {
 		);
 
 		setupTest(
-			<CGView />,
+			<ContactGroupView />,
 
 			{ initialEntries: [`/contact-groups`] }
 		);

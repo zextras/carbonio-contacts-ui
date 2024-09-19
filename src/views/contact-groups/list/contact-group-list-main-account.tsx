@@ -9,9 +9,9 @@ import React, { useCallback } from 'react';
 import { useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
 
 import { ContactGroupListComponent } from './contact-group-list-component';
-import { FOLDERS } from '../carbonio-ui-commons/constants/folders';
-import { ROUTES_INTERNAL_PARAMS } from '../constants';
-import { useFindContactGroups } from '../hooks/useFindContactGroups';
+import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
+import { ROUTES_INTERNAL_PARAMS } from '../../../constants';
+import { useFindContactGroups } from '../../../hooks/useFindContactGroups';
 
 export const ContactGroupListMainAccount = (): React.JSX.Element => {
 	const { contactGroups: mainAccountContactGroups, hasMore, findMore } = useFindContactGroups();

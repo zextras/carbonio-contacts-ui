@@ -7,16 +7,16 @@ import React from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { CgDisplayerWithActions } from './cg-displayer-with-actions';
-import { EmptyDisplayer } from './empty-displayer';
-import { ContactGroup } from '../model/contact-group';
+import { ContactGroupDisplayerWithActions } from './contact-group-displayer-with-actions';
+import { EmptyDisplayer } from '../../../components/empty-displayer';
+import { ContactGroup } from '../../../model/contact-group';
 
 interface ContactGroupDisplayerProps {
 	onCloseDisplayer: () => void;
 	contactGroup: ContactGroup | undefined;
 }
 
-export const CGDisplayerComponent = ({
+export const ContactGroupDisplayerComponent = ({
 	onCloseDisplayer,
 	contactGroup
 }: ContactGroupDisplayerProps): React.JSX.Element => {
@@ -24,10 +24,10 @@ export const CGDisplayerComponent = ({
 	return (
 		<>
 			{contactGroup ? (
-				<CgDisplayerWithActions
+				<ContactGroupDisplayerWithActions
 					contactGroup={contactGroup}
 					onCloseDisplayer={onCloseDisplayer}
-				></CgDisplayerWithActions>
+				></ContactGroupDisplayerWithActions>
 			) : (
 				<EmptyDisplayer
 					description={t(

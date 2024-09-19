@@ -9,7 +9,7 @@ import { act, screen } from '@testing-library/react';
 import { useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
 
 import { setupTest } from '../../../../carbonio-ui-commons/test/test-setup';
-import { MainAccountContactGroup } from '../main-account-contact-group';
+import { ContactGroupMainAccount } from '../../../../views/contact-groups/sidebar/contact-group-main-account';
 
 jest.mock('@zextras/carbonio-shell-ui', () => ({
 	useReplaceHistoryCallback: jest.fn()
@@ -20,7 +20,7 @@ describe('Contact Group Sidebar Item', () => {
 		const spyReplaceHistory = jest.fn();
 		(useReplaceHistoryCallback as jest.Mock).mockImplementation(() => spyReplaceHistory);
 
-		const { user } = setupTest(<MainAccountContactGroup />);
+		const { user } = setupTest(<ContactGroupMainAccount />);
 		const contactGroupItem = screen.getByTestId('contact-group-id');
 
 		await act(async () => {

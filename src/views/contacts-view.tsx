@@ -9,7 +9,7 @@ import { Container } from '@zextras/carbonio-design-system';
 import { setAppContext } from '@zextras/carbonio-shell-ui';
 import { Redirect, Route, useRouteMatch } from 'react-router-dom';
 
-import { CGView } from './contact-groups/contact-groups-view';
+import { ContactGroupView } from './contact-groups/contact-group-view';
 import { useUpdateView } from '../carbonio-ui-commons/hooks/use-update-view';
 import { FolderView } from '../legacy/views/app/folder-view';
 
@@ -25,7 +25,7 @@ const ContactsView = (): React.JSX.Element => {
 	return (
 		<Container orientation="horizontal" mainAlignment="flex-start">
 			<Route path={path}>
-				<CGView />
+				<ContactGroupView />
 				<FolderView />
 				<Redirect strict from={path} to={`${path}/folder/7`} />
 			</Route>

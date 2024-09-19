@@ -9,12 +9,16 @@ import { Container, Row } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { ContextualMenu } from './contextual-menu';
-import { ListItemHoverBar } from './ListItemHoverBar';
-import { CustomIconAvatar, HoverContainer, ListItemContainer } from './styled-components';
-import { Text } from './Text';
-import { LIST_ITEM_HEIGHT } from '../constants';
-import { useContactGroupActions } from '../hooks/use-contact-group-actions';
+import { ContextualMenu } from '../../../components/contextual-menu';
+import { ListItemHoverBar } from '../../../components/ListItemHoverBar';
+import {
+	CustomIconAvatar,
+	HoverContainer,
+	ListItemContainer
+} from '../../../components/styled-components';
+import { Text } from '../../../components/Text';
+import { LIST_ITEM_HEIGHT } from '../../../constants';
+import { useContactGroupActions } from '../../../hooks/use-contact-group-actions';
 
 type CGListItemProps = {
 	id: string;
@@ -28,7 +32,7 @@ const ContentContainer = styled(Container)`
 	overflow: hidden;
 `;
 
-export const CGListItem = React.memo<CGListItemProps>(
+export const ContactGroupListItem = React.memo<CGListItemProps>(
 	({ onClick, visible, id, title, members }) => {
 		const [t] = useTranslation();
 		const actions = useContactGroupActions({ id, title, members });
@@ -95,4 +99,4 @@ export const CGListItem = React.memo<CGListItemProps>(
 	}
 );
 
-CGListItem.displayName = 'CgListItem';
+ContactGroupListItem.displayName = 'CgListItem';

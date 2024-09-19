@@ -9,7 +9,7 @@ import { faker } from '@faker-js/faker';
 import { within } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
 
-import { CGView } from './contact-groups-view';
+import { ContactGroupView } from './contact-group-view';
 import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { ROUTES_INTERNAL_PARAMS } from '../../constants';
 import {
@@ -26,7 +26,7 @@ import {
 import { createCnItem } from '../../tests/utils';
 
 function setupContactGroupView(): any {
-	return setupTest(<CGView />, {
+	return setupTest(<ContactGroupView />, {
 		initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}/7`]
 	});
 }

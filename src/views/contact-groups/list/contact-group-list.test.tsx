@@ -9,8 +9,8 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 
 import { ContactGroupListMainAccount } from './contact-group-list-main-account';
-import { screen, setupTest } from '../carbonio-ui-commons/test/test-setup';
-import { EMPTY_LIST_HINT } from '../constants/tests';
+import { screen, setupTest } from '../../../carbonio-ui-commons/test/test-setup';
+import { EMPTY_LIST_HINT } from '../../../constants/tests';
 
 describe('Contact groups list', () => {
 	test('Show a placeholder when the list is empty', async () => {

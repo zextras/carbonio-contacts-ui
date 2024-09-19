@@ -7,15 +7,15 @@ import React, { useCallback } from 'react';
 
 import { useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
 
-import { CGDisplayerComponent } from './cg-displayer-component';
-import { ROUTES_INTERNAL_PARAMS } from '../constants';
-import { useActiveContactGroup } from '../hooks/useActiveContactGroup';
+import { ContactGroupDisplayerComponent } from './contact-group-displayer-component';
+import { ROUTES_INTERNAL_PARAMS } from '../../../constants';
+import { useActiveContactGroup } from '../../../hooks/useActiveContactGroup';
 
 interface ContactGroupSharedDisplayerProps {
 	accountId: string;
 }
 
-export const CGDisplayerShared = ({
+export const ContactGroupDisplayerShared = ({
 	accountId
 }: ContactGroupSharedDisplayerProps): React.JSX.Element => {
 	// TODO: consider making a different hook, e.g.: useActiveSharedContactGroup
@@ -26,9 +26,9 @@ export const CGDisplayerShared = ({
 	}, [accountId, replaceHistory]);
 
 	return (
-		<CGDisplayerComponent
+		<ContactGroupDisplayerComponent
 			onCloseDisplayer={closeDisplayer}
 			contactGroup={contactGroup}
-		></CGDisplayerComponent>
+		></ContactGroupDisplayerComponent>
 	);
 };

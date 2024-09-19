@@ -9,11 +9,11 @@ import React from 'react';
 import { Container } from '@zextras/carbonio-design-system';
 import { useParams } from 'react-router-dom';
 
-import { CGDisplayer } from './cg-displayer';
-import { CGDisplayerShared } from './cg-displayer-shared';
-import { getFolderIdParts } from '../carbonio-ui-commons/helpers/folders';
+import { ContactGroupDisplayer } from './contact-group-displayer';
+import { ContactGroupDisplayerShared } from './contact-group-displayer-shared';
+import { getFolderIdParts } from '../../../carbonio-ui-commons/helpers/folders';
 
-export const CGDisplayerController = (): React.JSX.Element => {
+export const ContactGroupDisplayerController = (): React.JSX.Element => {
 	const { id: contactGroupId } = useParams<{ id: string }>();
 	const { zid: accountId } = getFolderIdParts(contactGroupId);
 
@@ -24,7 +24,11 @@ export const CGDisplayerController = (): React.JSX.Element => {
 			crossAlignment="flex-start"
 			data-testid="displayer"
 		>
-			{accountId ? <CGDisplayerShared accountId={accountId} /> : <CGDisplayer />}
+			{accountId ? (
+				<ContactGroupDisplayerShared accountId={accountId} />
+			) : (
+				<ContactGroupDisplayer />
+			)}
 		</Container>
 	);
 };

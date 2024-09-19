@@ -7,17 +7,17 @@ import React from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
 
-import { CGDisplayerDetails } from './cg-displayer-details';
-import { DisplayerActionsHeader } from './displayer-actions-header';
-import { DisplayerHeader } from './displayer-header';
-import { useContactGroupActions } from '../hooks/use-contact-group-actions';
-import { ContactGroup } from '../model/contact-group';
+import { ContactGroupDisplayerDetails } from './contact-group-displayer-details';
+import { DisplayerActionsHeader } from '../../../components/displayer-actions-header';
+import { DisplayerHeader } from '../../../components/displayer-header';
+import { useContactGroupActions } from '../../../hooks/use-contact-group-actions';
+import { ContactGroup } from '../../../model/contact-group';
 
 interface Props {
 	contactGroup: ContactGroup;
 	onCloseDisplayer: () => void;
 }
-export const CgDisplayerWithActions = ({
+export const ContactGroupDisplayerWithActions = ({
 	contactGroup,
 	onCloseDisplayer
 }: Props): React.JSX.Element => {
@@ -36,7 +36,7 @@ export const CgDisplayerWithActions = ({
 				maxHeight={'100%'}
 			>
 				<DisplayerActionsHeader actions={actions} />
-				<CGDisplayerDetails contactGroup={contactGroup} />
+				<ContactGroupDisplayerDetails contactGroup={contactGroup} />
 			</Container>
 		</Container>
 	);

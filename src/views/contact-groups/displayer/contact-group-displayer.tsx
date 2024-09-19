@@ -7,12 +7,12 @@ import React, { useCallback } from 'react';
 
 import { useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
 
-import { CGDisplayerComponent } from './cg-displayer-component';
-import { FOLDERS } from '../carbonio-ui-commons/constants/folders';
-import { ROUTES_INTERNAL_PARAMS } from '../constants';
-import { useActiveContactGroup } from '../hooks/useActiveContactGroup';
+import { ContactGroupDisplayerComponent } from './contact-group-displayer-component';
+import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
+import { ROUTES_INTERNAL_PARAMS } from '../../../constants';
+import { useActiveContactGroup } from '../../../hooks/useActiveContactGroup';
 
-export const CGDisplayer = (): React.JSX.Element => {
+export const ContactGroupDisplayer = (): React.JSX.Element => {
 	const contactGroup = useActiveContactGroup();
 	const replaceHistory = useReplaceHistoryCallback();
 	const closeDisplayer = useCallback((): void => {
@@ -20,9 +20,9 @@ export const CGDisplayer = (): React.JSX.Element => {
 	}, [replaceHistory]);
 
 	return (
-		<CGDisplayerComponent
+		<ContactGroupDisplayerComponent
 			onCloseDisplayer={closeDisplayer}
 			contactGroup={contactGroup}
-		></CGDisplayerComponent>
+		></ContactGroupDisplayerComponent>
 	);
 };

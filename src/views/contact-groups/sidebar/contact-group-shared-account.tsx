@@ -11,7 +11,7 @@ import { useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
 import { ContactGroupComponent } from './contact-group-component';
 import { ROUTES_INTERNAL_PARAMS } from '../../../constants';
 
-export const SharedAccountContactGroup = ({
+export const ContactGroupSharedAccount = ({
 	accountId
 }: {
 	accountId: string;
