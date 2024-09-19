@@ -17,7 +17,7 @@ import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../../constants';
 import { JEST_MOCKED_ERROR, PALETTE, TESTID_SELECTORS } from '../../../constants/tests';
 import { apiClient } from '../../../network/api-client';
 import { useContactGroupStore } from '../../../store/contact-groups';
-import { buildContactGroup } from '../../../tests/model-builder';
+import { buildContactGroup, buildSharedContactGroup } from '../../../tests/model-builder';
 import { registerModifyContactGroupHandler } from '../../../tests/msw-handlers/modify-contact-group';
 import { createCnItem, spyUseBoardHooks } from '../../../tests/utils';
 import { getContactInput } from '../../board/common-contact-group-board.test';
@@ -640,6 +640,41 @@ describe('Edit contact group board', () => {
 				});
 				expect(screen.queryByText(errorMessage)).not.toBeInTheDocument();
 			});
+		});
+	});
+
+	describe('shared account', () => {
+		const contactGroupId = '123-456:1';
+		it('should display contact group to edit', async () => {
+			jest.spyOn(shell, 'useBoard').mockReturnValue({
+				context: { contactGroupId },
+				id: '',
+				boardViewId: '',
+				app: '',
+				icon: '',
+				title: ''
+			});
+			const sharedContactGroup = buildSharedContactGroup({
+				title: 'Contact Group in shared account',
+				id: contactGroupId
+			});
+			useContactGroupStore
+				.getState()
+				.populateSharedContactGroupsByAccountId('123-456', [sharedContactGroup]);
+			registerModifyContactGroupHandler(
+				createCnItem(sharedContactGroup.title, undefined, sharedContactGroup.id)
+			);
+			const newName = faker.string.alpha(10);
+			const { user } = setupTest(<EditContactGroupBoard />);
+			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
+			await user.clear(nameInput);
+			await user.type(nameInput, newName);
+			const saveButton = screen.getByRoleWithIcon('button', {
+				name: /SAVE/i,
+				icon: TESTID_SELECTORS.icons.save
+			});
+			await user.click(saveButton);
+			expect(await screen.findByText('Group successfully updated')).toBeVisible();
 		});
 	});
 });

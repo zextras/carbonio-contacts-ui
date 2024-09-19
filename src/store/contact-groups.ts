@@ -9,6 +9,7 @@ import produce from 'immer';
 import { differenceBy, findIndex } from 'lodash';
 import { create } from 'zustand';
 
+import { getFolderIdParts } from '../carbonio-ui-commons/helpers/folders';
 import { ContactGroup, SharedContactGroup } from '../model/contact-group';
 
 export function compareContactGroupName(nameA: string, nameB: string): number {
@@ -104,8 +105,22 @@ export const useContactGroupStore = create<State & ContactGroupStoreActions>()((
 		return sharedContactGroups[accountId] ? Object.values(sharedContactGroups[accountId]) : [];
 	},
 	updateContactGroup: (contactGroup): void => {
+		const contactGroupId = contactGroup.id;
+		const { zid: accountId } = getFolderIdParts(contactGroupId);
+		// Bloody ugly conditional, we have to put the same if - else everywhere
+		if (accountId) {
+			set(
+				produce(({ sharedContactGroups }: State) => {
+					sharedContactGroups[accountId][contactGroupId] = {
+						...contactGroup,
+						accountId
+					};
+				})
+			);
+			return;
+		}
 		const { orderedContactGroups, unorderedContactGroups, offset } = get();
-		const idxToRemove = orderedContactGroups.findIndex((item) => item.id === contactGroup.id);
+		const idxToRemove = orderedContactGroups.findIndex((item) => item.id === contactGroupId);
 
 		const newOrderedContactGroups = [...orderedContactGroups];
 		const newUnorderedContactGroups = [...unorderedContactGroups];
@@ -121,7 +136,7 @@ export const useContactGroupStore = create<State & ContactGroupStoreActions>()((
 						: offset + newOrderedContactGroups.length - orderedContactGroups.length
 			}));
 		} else {
-			const uIdxToRemove = unorderedContactGroups.findIndex((item) => item.id === contactGroup.id);
+			const uIdxToRemove = unorderedContactGroups.findIndex((item) => item.id === contactGroupId);
 			if (uIdxToRemove >= 0) {
 				newUnorderedContactGroups.splice(uIdxToRemove, 1);
 				addToProperList(newOrderedContactGroups, newUnorderedContactGroups, contactGroup);
