@@ -11,6 +11,7 @@ import { faker } from '@faker-js/faker';
 import { ContactGroupListMainAccount } from './contact-group-list-main-account';
 import { screen, setupTest } from '../../../carbonio-ui-commons/test/test-setup';
 import { EMPTY_LIST_HINT } from '../../../constants/tests';
+import { useContactGroupStore } from '../../../store/contact-groups';
 
 describe('Contact groups list', () => {
 	test('Show a placeholder when the list is empty', async () => {
@@ -31,6 +32,7 @@ describe('Contact groups list', () => {
 				members: []
 			}
 		];
+		useContactGroupStore.setState({ orderedContactGroups: contactGroups });
 		setupTest(<ContactGroupListMainAccount />);
 		expect(screen.getByText('hello')).toBeVisible();
 		expect(screen.getByText('test')).toBeVisible();
