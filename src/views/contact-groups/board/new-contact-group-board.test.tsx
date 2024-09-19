@@ -123,6 +123,33 @@ describe('New contact group board', () => {
 			expect(await screen.findByText('Contact group successfully created')).toBeVisible();
 		});
 
+		it('should redirect to contact groups after creating successfully', async () => {
+			// TODO: mock window location as it must return the correct pathname
+			getSetupServer().use(
+				http.post('/service/soap/CreateContactRequest', async () =>
+					HttpResponse.json({
+						Body: {
+							CreateContactResponse: { cn: [{ id: '', _attrs: {} }] }
+						}
+					})
+				)
+			);
+			const spyReplaceHistory = jest.spyOn(shell, 'replaceHistory');
+
+			const newName = faker.string.alpha(10);
+			const { user } = setupTest(<NewContactGroupBoard />, {});
+			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
+			await user.clear(nameInput);
+			await user.type(nameInput, newName);
+			const saveButton = screen.getByRoleWithIcon('button', {
+				name: /SAVE/i,
+				icon: TESTID_SELECTORS.icons.save
+			});
+			await user.click(saveButton);
+			expect(await screen.findByText('Contact group successfully created')).toBeVisible();
+			expect(spyReplaceHistory).toHaveBeenCalledTimes(1);
+		});
+
 		it('should show error snackbar when create contact fails', async () => {
 			getSetupServer().use(
 				http.post('/service/soap/CreateContactRequest', async () =>
