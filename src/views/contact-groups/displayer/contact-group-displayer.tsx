@@ -7,8 +7,11 @@ import React, { useCallback } from 'react';
 
 import { useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
 
-import { ContactGroupDisplayerWithActions } from './contact-group-displayer-with-actions';
+import { ContactGroupDisplayerActionsHeader } from './contact-group-displayer-actions-header';
 import { ContactGroupEmptyDisplayer } from './contact-group-empty-displayer';
+import { useActionDeleteCG } from '../../../actions/delete-cg';
+import { useActionEditCG } from '../../../actions/edit-cg';
+import { useActionSendEmailCG } from '../../../actions/send-email-cg';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { ROUTES_INTERNAL_PARAMS } from '../../../constants';
 import { useGetMainAccountContactGroup } from '../../../hooks/useGetContactGroup';
@@ -19,17 +22,23 @@ type Props = {
 export const ContactGroupDisplayer = ({ contactGroupId }: Props): React.JSX.Element => {
 	const contactGroup = useGetMainAccountContactGroup(contactGroupId);
 	const replaceHistory = useReplaceHistoryCallback();
-	const closeDisplayer = useCallback((): void => {
+	const routeToContacts = useCallback((): void => {
 		replaceHistory(`${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${FOLDERS.CONTACTS}`);
 	}, [replaceHistory]);
+	const deleteAction = useActionDeleteCG(routeToContacts);
+	const editAction = useActionEditCG();
+	const sendAction = useActionSendEmailCG();
 
 	return (
 		<>
 			{contactGroup ? (
-				<ContactGroupDisplayerWithActions
+				<ContactGroupDisplayerActionsHeader
 					contactGroup={contactGroup}
-					onCloseDisplayer={closeDisplayer}
-				></ContactGroupDisplayerWithActions>
+					onCloseDisplayer={routeToContacts}
+					deleteAction={deleteAction}
+					editAction={editAction}
+					sendAction={sendAction}
+				></ContactGroupDisplayerActionsHeader>
 			) : (
 				<ContactGroupEmptyDisplayer />
 			)}
