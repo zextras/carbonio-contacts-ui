@@ -6,15 +6,12 @@
 import React, { useCallback, useMemo } from 'react';
 
 import { Container, useModal, useSnackbar } from '@zextras/carbonio-design-system';
-import { closeBoard, getBoardById, useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
+import { closeBoard, getBoardById } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 
 import { UIAction } from './types';
-import { FOLDERS } from '../carbonio-ui-commons/constants/folders';
-import { getFolderIdParts } from '../carbonio-ui-commons/helpers/folders';
 import { Text } from '../components/Text';
-import { ACTION_IDS, EDIT_CONTACT_GROUP_BOARD_ID, ROUTES_INTERNAL_PARAMS } from '../constants';
+import { ACTION_IDS, EDIT_CONTACT_GROUP_BOARD_ID } from '../constants';
 import { useGetContactGroupFromPath } from '../hooks/useGetContactGroupFromPath';
 import { ContactGroup } from '../model/contact-group';
 import { apiClient } from '../network/api-client';
@@ -22,12 +19,10 @@ import { useContactGroupStore } from '../store/contact-groups';
 
 export type DeleteCGAction = UIAction<ContactGroup, never>;
 
-export const useActionDeleteCG = (): DeleteCGAction => {
-	const { id } = useParams<{ id: string }>();
-	const { zid: accountId } = getFolderIdParts(id);
-	const redirectPath = `${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${accountId ?? FOLDERS.CONTACTS}/`;
+export const useActionDeleteCG = (
+	onDeleteOk?: (contactGroup: ContactGroup) => void
+): DeleteCGAction => {
 	const [t] = useTranslation();
-	const replaceHistory = useReplaceHistoryCallback();
 	const { createModal, closeModal } = useModal();
 	const createSnackbar = useSnackbar();
 	const { removeContactGroup } = useContactGroupStore();
@@ -60,7 +55,7 @@ export const useActionDeleteCG = (): DeleteCGAction => {
 								closeBoard(boardId);
 							}
 							if (activeContactGroup?.id === contactGroup.id) {
-								replaceHistory(redirectPath);
+								onDeleteOk?.(contactGroup);
 							}
 							removeContactGroup(contactGroup.id);
 							createSnackbar({
@@ -107,9 +102,8 @@ export const useActionDeleteCG = (): DeleteCGAction => {
 			closeModal,
 			createModal,
 			createSnackbar,
-			redirectPath,
+			onDeleteOk,
 			removeContactGroup,
-			replaceHistory,
 			t
 		]
 	);
