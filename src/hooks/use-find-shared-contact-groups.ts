@@ -30,9 +30,9 @@ export const useFindSharedContactGroups = (
 		findCallback();
 	}, [findCallback]);
 
-	const sharedContactGroups = useContactGroupStore
-		.getState()
-		.getSharedContactGroupsByAccountId(accountId);
+	const sharedContactGroups = useContactGroupStore((state) =>
+		state.getSharedContactGroupsByAccountId(accountId)
+	);
 
 	if (!accountId) return { sharedContactGroups: [] };
 	return { sharedContactGroups };
