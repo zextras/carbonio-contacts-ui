@@ -6,7 +6,7 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { useParams } from 'react-router-dom';
 
-import { useActiveContactGroup } from './useActiveContactGroup';
+import { useGetContactGroupFromPath } from './useGetContactGroupFromPath';
 import { useContactGroupStore } from '../store/contact-groups';
 import { buildContactGroup } from '../tests/model-builder';
 
@@ -21,7 +21,7 @@ describe('Active Contact Group', () => {
 		useContactGroupStore.getState().addContactGroups([contactGroup]);
 		(useParams as jest.Mock).mockReturnValue({ id: contactGroup.id });
 
-		const { result } = renderHook(useActiveContactGroup);
+		const { result } = renderHook(useGetContactGroupFromPath);
 
 		expect(result.current).toBe(contactGroup);
 	});
@@ -30,7 +30,7 @@ describe('Active Contact Group', () => {
 		useContactGroupStore.getState().addContactGroups([buildContactGroup({ id: '1' })]);
 		(useParams as jest.Mock).mockReturnValue({ id: '123' });
 
-		const { result } = renderHook(useActiveContactGroup);
+		const { result } = renderHook(useGetContactGroupFromPath);
 
 		expect(result.current).toBeUndefined();
 	});

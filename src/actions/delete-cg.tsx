@@ -15,7 +15,7 @@ import { FOLDERS } from '../carbonio-ui-commons/constants/folders';
 import { getFolderIdParts } from '../carbonio-ui-commons/helpers/folders';
 import { Text } from '../components/Text';
 import { ACTION_IDS, EDIT_CONTACT_GROUP_BOARD_ID, ROUTES_INTERNAL_PARAMS } from '../constants';
-import { useActiveContactGroup } from '../hooks/useActiveContactGroup';
+import { useGetContactGroupFromPath } from '../hooks/useGetContactGroupFromPath';
 import { ContactGroup } from '../model/contact-group';
 import { apiClient } from '../network/api-client';
 import { useContactGroupStore } from '../store/contact-groups';
@@ -31,7 +31,7 @@ export const useActionDeleteCG = (): DeleteCGAction => {
 	const { createModal, closeModal } = useModal();
 	const createSnackbar = useSnackbar();
 	const { removeContactGroup } = useContactGroupStore();
-	const activeContactGroup = useActiveContactGroup();
+	const activeContactGroup = useGetContactGroupFromPath();
 
 	const canExecute = useCallback<DeleteCGAction['canExecute']>(() => true, []);
 

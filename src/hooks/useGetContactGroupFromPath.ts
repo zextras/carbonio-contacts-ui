@@ -10,7 +10,7 @@ import { getFolderIdParts } from '../carbonio-ui-commons/helpers/folders';
 import { ContactGroup } from '../model/contact-group';
 import { useContactGroupStore } from '../store/contact-groups';
 
-export const useActiveContactGroup = (): ContactGroup | undefined => {
+export const useGetContactGroupFromPath = (): ContactGroup | undefined => {
 	const { id: contactGroupId } = useParams<{ id: string }>();
 
 	const { id: itemId, zid: accountId } = getFolderIdParts(contactGroupId);
