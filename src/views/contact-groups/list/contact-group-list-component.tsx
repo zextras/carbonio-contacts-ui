@@ -4,55 +4,27 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import React, { useMemo } from 'react';
+import React from 'react';
 
 import { Container, ListV2 } from '@zextras/carbonio-design-system';
-import { map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { ContactGroupListItem } from './contact-group-list-item';
 import { Navbar } from '../../../components/sidebar/item-list/navbar';
-import { StyledListItem } from '../../../components/styled-components';
 import { LIST_WIDTH } from '../../../constants';
-import { useActiveItem } from '../../../hooks/useActiveItem';
 import { EmptyListPanel } from '../../../legacy/views/app/folder-panel/empty-list-panel';
-import { ContactGroup } from '../../../model/contact-group';
 
 type ContactGroupListComponentProps = {
 	onContactGroupClick: (contactGroupId: string) => void;
-	contactGroups: Array<ContactGroup>;
 	onListBottom: () => void;
+	displayItems: () => React.JSX.Element[];
 };
 export const ContactGroupListComponent = ({
-	onContactGroupClick,
-	contactGroups,
-	onListBottom
+	onListBottom,
+	displayItems
 }: ContactGroupListComponentProps): React.JSX.Element => {
 	const [t] = useTranslation();
-	const { activeItem } = useActiveItem();
 
-	const items = useMemo(
-		() =>
-			map(contactGroups, (contactGroup) => (
-				<StyledListItem
-					key={contactGroup.id}
-					active={contactGroup.id === activeItem}
-					data-testid={'list-item'}
-				>
-					{(visible): React.JSX.Element => (
-						<ContactGroupListItem
-							visible={visible}
-							title={contactGroup.title}
-							id={contactGroup.id}
-							onClick={onContactGroupClick}
-							members={contactGroup.members}
-						/>
-					)}
-				</StyledListItem>
-			)),
-		[activeItem, contactGroups, onContactGroupClick]
-	);
-
+	const items = displayItems();
 	return (
 		<Container
 			width={LIST_WIDTH}
@@ -67,7 +39,7 @@ export const ContactGroupListComponent = ({
 				itemsCount={items.length}
 			/>
 			<Container minHeight={0} maxHeight={'100%'}>
-				{items && items.length > 0 ? (
+				{items ? (
 					<ListV2
 						data-testid="main-list"
 						background={'gray6'}

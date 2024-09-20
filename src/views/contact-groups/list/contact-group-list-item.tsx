@@ -9,6 +9,9 @@ import { Container, Row } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
+import { DeleteCGAction } from '../../../actions/delete-cg';
+import { EditActionCG } from '../../../actions/edit-cg';
+import { SendEmailActionCG } from '../../../actions/send-email-cg';
 import { ContextualMenu } from '../../../components/contextual-menu';
 import { ListItemHoverBar } from '../../../components/ListItemHoverBar';
 import {
@@ -18,14 +21,16 @@ import {
 } from '../../../components/styled-components';
 import { Text } from '../../../components/Text';
 import { LIST_ITEM_HEIGHT } from '../../../constants';
-import { useContactGroupActions } from '../../../hooks/use-contact-group-actions';
+import { useEvaluateContactGroupActions } from '../../../hooks/use-contact-group-actions';
+import { ContactGroup } from '../../../model/contact-group';
 
 type CGListItemProps = {
-	id: string;
-	title: string;
-	members: string[];
+	contactGroup: ContactGroup;
 	visible?: boolean;
 	onClick?: (id: string) => void;
+	deleteAction?: DeleteCGAction;
+	editAction?: EditActionCG;
+	sendAction?: SendEmailActionCG;
 };
 
 const ContentContainer = styled(Container)`
@@ -33,9 +38,15 @@ const ContentContainer = styled(Container)`
 `;
 
 export const ContactGroupListItem = React.memo<CGListItemProps>(
-	({ onClick, visible, id, title, members }) => {
+	({ onClick, visible, contactGroup, deleteAction, editAction, sendAction }) => {
 		const [t] = useTranslation();
-		const actions = useContactGroupActions({ id, title, members });
+		const { id, title, members } = contactGroup;
+		const actions = useEvaluateContactGroupActions(
+			contactGroup,
+			deleteAction,
+			sendAction,
+			editAction
+		);
 
 		const clickHandler = useCallback<React.MouseEventHandler<HTMLDivElement>>(() => {
 			onClick?.(id);
