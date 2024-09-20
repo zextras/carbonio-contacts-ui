@@ -18,9 +18,7 @@ describe('useContactGroupActions', () => {
 		const contactGroup = buildContactGroup({
 			members: buildMembers(faker.number.int({ min: 1, max: 100 }))
 		});
-		const { result } = setupHook(useEvaluateMainAccountContactGroupActions, {
-			initialProps: [contactGroup]
-		});
+		const { result } = setupHook(() => useEvaluateMainAccountContactGroupActions()(contactGroup));
 
 		expect(result.current).toContainEqual({
 			id: ACTION_IDS.sendEmailCG,
@@ -32,9 +30,7 @@ describe('useContactGroupActions', () => {
 
 	it('should not return send mail action when the contact group has 0 members', () => {
 		const contactGroup = buildContactGroup();
-		const { result } = setupHook(useEvaluateMainAccountContactGroupActions, {
-			initialProps: [contactGroup]
-		});
+		const { result } = setupHook(() => useEvaluateMainAccountContactGroupActions()(contactGroup));
 		expect(result.current).not.toContainEqual({
 			id: ACTION_IDS.sendEmailCG,
 			label: 'Send e-mail',
@@ -45,9 +41,7 @@ describe('useContactGroupActions', () => {
 
 	it('should return delete action', () => {
 		const contactGroup = buildContactGroup();
-		const { result } = setupHook(useEvaluateMainAccountContactGroupActions, {
-			initialProps: [contactGroup]
-		});
+		const { result } = setupHook(() => useEvaluateMainAccountContactGroupActions()(contactGroup));
 
 		expect(result.current).toContainEqual({
 			id: ACTION_IDS.deleteCG,

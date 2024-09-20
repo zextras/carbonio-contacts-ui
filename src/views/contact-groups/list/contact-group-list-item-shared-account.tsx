@@ -27,7 +27,7 @@ export const ContactGroupListItemSharedAccount = ({
 		},
 		[accountId, replaceHistory]
 	);
-	const actions = useEvaluateSharedContactGroupActions(contactGroup);
+	const actions = useEvaluateSharedContactGroupActions()(contactGroup);
 	return (
 		<ContactGroupListItem
 			visible={visible}

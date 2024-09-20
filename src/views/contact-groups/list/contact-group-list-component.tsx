@@ -37,7 +37,7 @@ export const ContactGroupListComponent = ({
 				itemsCount={children.length}
 			/>
 			<Container minHeight={0} maxHeight={'100%'}>
-				{children ? (
+				{children?.length > 0 ? (
 					<ListV2
 						data-testid="main-list"
 						background={'gray6'}

@@ -23,7 +23,7 @@ export const ContactGroupDisplayerMainAccount = ({ contactGroupId }: Props): Rea
 	const routeToContacts = useCallback((): void => {
 		replaceHistory(`${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${FOLDERS.CONTACTS}`);
 	}, [replaceHistory]);
-	const actions = useEvaluateMainAccountContactGroupActions(contactGroup);
+	const evaluateActions = useEvaluateMainAccountContactGroupActions();
 
 	return (
 		<>
@@ -31,7 +31,7 @@ export const ContactGroupDisplayerMainAccount = ({ contactGroupId }: Props): Rea
 				<ContactGroupDisplayerActionsHeader
 					contactGroup={contactGroup}
 					onCloseDisplayer={routeToContacts}
-					actions={actions}
+					actions={evaluateActions(contactGroup)}
 				/>
 			) : (
 				<ContactGroupEmptyDisplayer />

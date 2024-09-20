@@ -29,7 +29,7 @@ export const ContactGroupListItemMainAccount = ({
 		[replaceHistory]
 	);
 
-	const actions = useEvaluateMainAccountContactGroupActions(contactGroup);
+	const actions = useEvaluateMainAccountContactGroupActions()(contactGroup);
 	return (
 		<ContactGroupListItem
 			visible={visible}

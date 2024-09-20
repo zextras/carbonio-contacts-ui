@@ -27,7 +27,7 @@ export const ContactGroupDisplayerShared = ({
 	const routeToContactGroups = useCallback((): void => {
 		replaceHistory(`${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${accountId}`);
 	}, [accountId, replaceHistory]);
-	const actions = useEvaluateSharedContactGroupActions(contactGroup);
+	const evaluateActions = useEvaluateSharedContactGroupActions();
 
 	return (
 		<>
@@ -35,7 +35,7 @@ export const ContactGroupDisplayerShared = ({
 				<ContactGroupDisplayerActionsHeader
 					contactGroup={contactGroup}
 					onCloseDisplayer={routeToContactGroups}
-					actions={actions}
+					actions={evaluateActions(contactGroup)}
 				/>
 			) : (
 				<ContactGroupEmptyDisplayer />
