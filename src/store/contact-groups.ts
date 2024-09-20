@@ -93,7 +93,7 @@ export const useContactGroupStore = create<State & ContactGroupStoreActions>()((
 			produce(({ sharedContactGroups }: State) => {
 				sharedContactGroups[accountId] = contactGroups.reduce(
 					(acc, contactGroup) => {
-						acc[contactGroup.id] = contactGroup;
+						acc[contactGroup.id] = { ...contactGroup, accountId };
 						return acc;
 					},
 					{} as Record<string, SharedContactGroup>
