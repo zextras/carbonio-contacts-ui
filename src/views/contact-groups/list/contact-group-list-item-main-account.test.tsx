@@ -8,10 +8,15 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import * as shell from '@zextras/carbonio-shell-ui';
 
-import { ContactGroupListItem } from './contact-group-list-item';
+import { ContactGroupListItemMainAccount } from './contact-group-list-item-main-account';
 import { screen, setupTest } from '../../../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../../../constants/tests';
 import { buildContactGroup, buildMembers } from '../../../tests/model-builder';
+
+jest.mock('react-router-dom', () => ({
+	...jest.requireActual('react-router-dom'),
+	useParams: (): { id: string } => ({ id: '' })
+}));
 
 describe('Contact group list item', () => {
 	describe('Actions', () => {
@@ -20,17 +25,20 @@ describe('Contact group list item', () => {
 			const contactGroup = buildContactGroup({
 				members: buildMembers(faker.number.int({ min: 1, max: 100 }))
 			});
-			setupTest(<ContactGroupListItem {...contactGroup} />);
+
+			setupTest(<ContactGroupListItemMainAccount contactGroup={contactGroup} visible />);
 			expect(screen.getByTestId(TESTID_SELECTORS.icons.sendEmail)).toBeVisible();
 		});
 		it('should hide send mail action when the contact group has 0 members', () => {
 			const contactGroup = buildContactGroup();
-			setupTest(<ContactGroupListItem {...contactGroup} />);
+
+			setupTest(<ContactGroupListItemMainAccount contactGroup={contactGroup} visible />);
 			expect(screen.queryByTestId(TESTID_SELECTORS.icons.sendEmail)).not.toBeInTheDocument();
 		});
 		it('should show delete action', () => {
 			const contactGroup = buildContactGroup();
-			setupTest(<ContactGroupListItem {...contactGroup} />);
+
+			setupTest(<ContactGroupListItemMainAccount contactGroup={contactGroup} visible />);
 			expect(screen.getByTestId(TESTID_SELECTORS.icons.trash)).toBeVisible();
 		});
 	});

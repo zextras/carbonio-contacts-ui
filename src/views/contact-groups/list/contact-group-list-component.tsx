@@ -14,7 +14,6 @@ import { LIST_WIDTH } from '../../../constants';
 import { EmptyListPanel } from '../../../legacy/views/app/folder-panel/empty-list-panel';
 
 type ContactGroupListComponentProps = {
-	onContactGroupClick: (contactGroupId: string) => void;
 	onListBottom: () => void;
 	children: Array<ReactElement<ListItemProps>>;
 };

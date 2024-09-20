@@ -10,7 +10,7 @@ import { useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
 import { ContactGroupDisplayerActionsHeader } from './contact-group-displayer-actions-header';
 import { ContactGroupEmptyDisplayer } from './contact-group-empty-displayer';
 import { ROUTES_INTERNAL_PARAMS } from '../../../constants';
-import { useEvaluateMainAccountContactGroupActions } from '../../../hooks/use-contact-group-actions';
+import { useEvaluateSharedContactGroupActions } from '../../../hooks/use-contact-group-actions';
 import { useGetSharedAccountContactGroup } from '../../../hooks/useGetContactGroup';
 
 interface ContactGroupSharedDisplayerProps {
@@ -27,7 +27,7 @@ export const ContactGroupDisplayerShared = ({
 	const routeToContactGroups = useCallback((): void => {
 		replaceHistory(`${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${accountId}`);
 	}, [accountId, replaceHistory]);
-	const actions = useEvaluateMainAccountContactGroupActions(contactGroup);
+	const actions = useEvaluateSharedContactGroupActions(contactGroup);
 
 	return (
 		<>

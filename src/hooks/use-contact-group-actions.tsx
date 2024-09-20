@@ -16,7 +16,7 @@ import { useActionSendEmailCG } from '../actions/send-email-cg';
 import { ContactGroup, SharedContactGroup } from '../model/contact-group';
 
 export const useEvaluateMainAccountContactGroupActions = (
-	contactGroup?: ContactGroup
+	contactGroup: ContactGroup
 ): DSAction[] => {
 	const deleteCGAction = useActionDeleteMainAccountContactGroup();
 	const editCGAction = useActionEditCG();
@@ -60,7 +60,7 @@ export const useEvaluateMainAccountContactGroupActions = (
 };
 
 export const useEvaluateSharedContactGroupActions = (
-	contactGroup?: SharedContactGroup
+	contactGroup: SharedContactGroup
 ): DSAction[] => {
 	const deleteCGAction = useActionDeleteSharedAccountContactGroup();
 	const editCGAction = useActionEditCG();
