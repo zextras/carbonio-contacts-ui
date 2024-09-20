@@ -124,7 +124,6 @@ describe('New contact group board', () => {
 		});
 
 		it('should redirect to contact groups after creating successfully', async () => {
-			// TODO: mock window location as it must return the correct pathname
 			getSetupServer().use(
 				http.post('/service/soap/CreateContactRequest', async () =>
 					HttpResponse.json({
@@ -137,7 +136,7 @@ describe('New contact group board', () => {
 			const spyReplaceHistory = jest.spyOn(shell, 'replaceHistory');
 
 			const newName = faker.string.alpha(10);
-			const { user } = setupTest(<NewContactGroupBoard />, {});
+			const { user } = setupTest(<NewContactGroupBoard />, { initialEntries: ['/contact-groups'] });
 			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
 			await user.clear(nameInput);
 			await user.type(nameInput, newName);
