@@ -54,10 +54,8 @@ export const ContactGroupListShared = (): React.JSX.Element => {
 	);
 
 	return (
-		<ContactGroupListComponent
-			displayItems={(): React.JSX.Element[] => items}
-			onContactGroupClick={displaySharedContactGroup}
-			onListBottom={noop}
-		></ContactGroupListComponent>
+		<ContactGroupListComponent onContactGroupClick={displaySharedContactGroup} onListBottom={noop}>
+			{items}
+		</ContactGroupListComponent>
 	);
 };

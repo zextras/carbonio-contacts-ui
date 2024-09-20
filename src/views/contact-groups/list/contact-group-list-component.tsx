@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import React from 'react';
+import React, { ReactElement } from 'react';
 
-import { Container, ListV2 } from '@zextras/carbonio-design-system';
+import { Container, ListItemProps, ListV2 } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
 import { Navbar } from '../../../components/sidebar/item-list/navbar';
@@ -16,15 +16,14 @@ import { EmptyListPanel } from '../../../legacy/views/app/folder-panel/empty-lis
 type ContactGroupListComponentProps = {
 	onContactGroupClick: (contactGroupId: string) => void;
 	onListBottom: () => void;
-	displayItems: () => React.JSX.Element[];
+	children: Array<ReactElement<ListItemProps>>;
 };
 export const ContactGroupListComponent = ({
 	onListBottom,
-	displayItems
+	children
 }: ContactGroupListComponentProps): React.JSX.Element => {
 	const [t] = useTranslation();
 
-	const items = displayItems();
 	return (
 		<Container
 			width={LIST_WIDTH}
@@ -36,17 +35,17 @@ export const ContactGroupListComponent = ({
 		>
 			<Navbar
 				name={`/ ${t('secondaryBar.contactGroups', 'Contact Groups')}`}
-				itemsCount={items.length}
+				itemsCount={children.length}
 			/>
 			<Container minHeight={0} maxHeight={'100%'}>
-				{items ? (
+				{children ? (
 					<ListV2
 						data-testid="main-list"
 						background={'gray6'}
 						onListBottom={onListBottom}
 						intersectionObserverInitOptions={{ threshold: 0.5 }}
 					>
-						{items}
+						{children}
 					</ListV2>
 				) : (
 					<EmptyListPanel

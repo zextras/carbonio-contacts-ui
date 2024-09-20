@@ -56,10 +56,8 @@ export const ContactGroupListMainAccount = (): React.JSX.Element => {
 	);
 
 	return (
-		<ContactGroupListComponent
-			displayItems={(): React.JSX.Element[] => items}
-			onContactGroupClick={displayContact}
-			onListBottom={onListBottom}
-		></ContactGroupListComponent>
+		<ContactGroupListComponent onContactGroupClick={displayContact} onListBottom={onListBottom}>
+			{items}
+		</ContactGroupListComponent>
 	);
 };
