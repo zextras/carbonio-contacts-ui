@@ -25,6 +25,7 @@ export const ContactGroupDisplayer = ({ contactGroupId }: Props): React.JSX.Elem
 	const routeToContacts = useCallback((): void => {
 		replaceHistory(`${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${FOLDERS.CONTACTS}`);
 	}, [replaceHistory]);
+
 	const deleteAction = useActionDeleteCG(routeToContacts);
 	const editAction = useActionEditCG();
 	const sendAction = useActionSendEmailCG();
@@ -38,7 +39,7 @@ export const ContactGroupDisplayer = ({ contactGroupId }: Props): React.JSX.Elem
 					deleteAction={deleteAction}
 					editAction={editAction}
 					sendAction={sendAction}
-				></ContactGroupDisplayerActionsHeader>
+				/>
 			) : (
 				<ContactGroupEmptyDisplayer />
 			)}

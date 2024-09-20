@@ -42,7 +42,7 @@ export const ContactGroupDisplayerShared = ({
 					deleteAction={deleteAction}
 					editAction={editAction}
 					sendAction={sendAction}
-				></ContactGroupDisplayerActionsHeader>
+				/>
 			) : (
 				<ContactGroupEmptyDisplayer />
 			)}
