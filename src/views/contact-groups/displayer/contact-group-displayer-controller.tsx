@@ -9,7 +9,7 @@ import React from 'react';
 import { Container } from '@zextras/carbonio-design-system';
 import { useParams } from 'react-router-dom';
 
-import { ContactGroupDisplayer } from './contact-group-displayer';
+import { ContactGroupDisplayerMainAccount } from './contact-group-displayer-main-account';
 import { ContactGroupDisplayerShared } from './contact-group-displayer-shared';
 import { getFolderIdParts } from '../../../carbonio-ui-commons/helpers/folders';
 
@@ -27,7 +27,7 @@ export const ContactGroupDisplayerController = (): React.JSX.Element => {
 			{accountId ? (
 				<ContactGroupDisplayerShared accountId={accountId} contactGroupId={contactGroupId} />
 			) : (
-				<ContactGroupDisplayer contactGroupId={contactGroupId} />
+				<ContactGroupDisplayerMainAccount contactGroupId={contactGroupId} />
 			)}
 		</Container>
 	);

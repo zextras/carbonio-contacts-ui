@@ -11,12 +11,10 @@ import { map } from 'lodash';
 
 import { ContactGroupListComponent } from './contact-group-list-component';
 import { ContactGroupListItem } from './contact-group-list-item';
-import { useActionDeleteMainAccountContactGroup } from '../../../actions/delete-cg';
-import { useActionEditCG } from '../../../actions/edit-cg';
-import { useActionSendEmailCG } from '../../../actions/send-email-cg';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { StyledListItem } from '../../../components/styled-components';
 import { ROUTES_INTERNAL_PARAMS } from '../../../constants';
+import { useEvaluateMainAccountContactGroupActions } from '../../../hooks/use-contact-group-actions';
 import { useFindContactGroups } from '../../../hooks/useFindContactGroups';
 
 export const ContactGroupListMainAccount = (): React.JSX.Element => {
@@ -30,12 +28,7 @@ export const ContactGroupListMainAccount = (): React.JSX.Element => {
 		},
 		[replaceHistory]
 	);
-	const redirectToMainAccountContactGroups = useCallback(() => {
-		replaceHistory(`/contact-groups/7/`);
-	}, [replaceHistory]);
-	const deleteAction = useActionDeleteMainAccountContactGroup(redirectToMainAccountContactGroups);
-	const editAction = useActionEditCG();
-	const sendEmailActionCG = useActionSendEmailCG();
+	const actions = useEvaluateMainAccountContactGroupActions();
 	const items = useMemo(
 		() =>
 			map(mainAccountContactGroups, (contactGroup) => (
@@ -45,14 +38,12 @@ export const ContactGroupListMainAccount = (): React.JSX.Element => {
 							visible={visible}
 							contactGroup={contactGroup}
 							onClick={displayContact}
-							deleteAction={deleteAction}
-							editAction={editAction}
-							sendAction={sendEmailActionCG}
+							actions={actions}
 						/>
 					)}
 				</StyledListItem>
 			)),
-		[deleteAction, displayContact, editAction, sendEmailActionCG, mainAccountContactGroups]
+		[mainAccountContactGroups, displayContact, actions]
 	);
 
 	return (

@@ -9,10 +9,8 @@ import { useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
 
 import { ContactGroupDisplayerActionsHeader } from './contact-group-displayer-actions-header';
 import { ContactGroupEmptyDisplayer } from './contact-group-empty-displayer';
-import { useActionDeleteMainAccountContactGroup } from '../../../actions/delete-cg';
-import { useActionEditCG } from '../../../actions/edit-cg';
-import { useActionSendEmailCG } from '../../../actions/send-email-cg';
 import { ROUTES_INTERNAL_PARAMS } from '../../../constants';
+import { useEvaluateMainAccountContactGroupActions } from '../../../hooks/use-contact-group-actions';
 import { useGetSharedAccountContactGroup } from '../../../hooks/useGetContactGroup';
 
 interface ContactGroupSharedDisplayerProps {
@@ -29,9 +27,7 @@ export const ContactGroupDisplayerShared = ({
 	const routeToContactGroups = useCallback((): void => {
 		replaceHistory(`${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${accountId}`);
 	}, [accountId, replaceHistory]);
-	const deleteAction = useActionDeleteMainAccountContactGroup(routeToContactGroups);
-	const editAction = useActionEditCG();
-	const sendAction = useActionSendEmailCG();
+	const actions = useEvaluateMainAccountContactGroupActions(contactGroup);
 
 	return (
 		<>
@@ -39,9 +35,7 @@ export const ContactGroupDisplayerShared = ({
 				<ContactGroupDisplayerActionsHeader
 					contactGroup={contactGroup}
 					onCloseDisplayer={routeToContactGroups}
-					deleteAction={deleteAction}
-					editAction={editAction}
-					sendAction={sendAction}
+					actions={actions}
 				/>
 			) : (
 				<ContactGroupEmptyDisplayer />
