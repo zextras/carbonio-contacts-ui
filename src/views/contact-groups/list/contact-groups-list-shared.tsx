@@ -11,7 +11,7 @@ import { useParams } from 'react-router-dom';
 
 import { ContactGroupListComponent } from './contact-group-list-component';
 import { ContactGroupListItem } from './contact-group-list-item';
-import { useActionDeleteCG } from '../../../actions/delete-cg';
+import { useActionDeleteMainAccountContactGroup } from '../../../actions/delete-cg';
 import { useActionEditCG } from '../../../actions/edit-cg';
 import { useActionSendEmailCG } from '../../../actions/send-email-cg';
 import { StyledListItem } from '../../../components/styled-components';
@@ -31,7 +31,7 @@ export const ContactGroupListShared = (): React.JSX.Element => {
 		},
 		[accountId, replaceHistory]
 	);
-	const deleteAction = useActionDeleteCG(redirectToSharedContactGroup);
+	const deleteAction = useActionDeleteMainAccountContactGroup(redirectToSharedContactGroup);
 	const editAction = useActionEditCG();
 	const sendEmailActionCG = useActionSendEmailCG();
 	const items = useMemo(

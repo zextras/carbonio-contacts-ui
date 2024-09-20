@@ -9,7 +9,7 @@ import { useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
 
 import { ContactGroupDisplayerActionsHeader } from './contact-group-displayer-actions-header';
 import { ContactGroupEmptyDisplayer } from './contact-group-empty-displayer';
-import { useActionDeleteCG } from '../../../actions/delete-cg';
+import { useActionDeleteMainAccountContactGroup } from '../../../actions/delete-cg';
 import { useActionEditCG } from '../../../actions/edit-cg';
 import { useActionSendEmailCG } from '../../../actions/send-email-cg';
 import { ROUTES_INTERNAL_PARAMS } from '../../../constants';
@@ -29,7 +29,7 @@ export const ContactGroupDisplayerShared = ({
 	const routeToContactGroups = useCallback((): void => {
 		replaceHistory(`${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${accountId}`);
 	}, [accountId, replaceHistory]);
-	const deleteAction = useActionDeleteCG(routeToContactGroups);
+	const deleteAction = useActionDeleteMainAccountContactGroup(routeToContactGroups);
 	const editAction = useActionEditCG();
 	const sendAction = useActionSendEmailCG();
 

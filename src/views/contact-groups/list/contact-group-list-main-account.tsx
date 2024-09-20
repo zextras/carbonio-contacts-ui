@@ -11,7 +11,7 @@ import { map } from 'lodash';
 
 import { ContactGroupListComponent } from './contact-group-list-component';
 import { ContactGroupListItem } from './contact-group-list-item';
-import { useActionDeleteCG } from '../../../actions/delete-cg';
+import { useActionDeleteMainAccountContactGroup } from '../../../actions/delete-cg';
 import { useActionEditCG } from '../../../actions/edit-cg';
 import { useActionSendEmailCG } from '../../../actions/send-email-cg';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
@@ -33,7 +33,7 @@ export const ContactGroupListMainAccount = (): React.JSX.Element => {
 	const redirectToMainAccountContactGroups = useCallback(() => {
 		replaceHistory(`/contact-groups/7/`);
 	}, [replaceHistory]);
-	const deleteAction = useActionDeleteCG(redirectToMainAccountContactGroups);
+	const deleteAction = useActionDeleteMainAccountContactGroup(redirectToMainAccountContactGroups);
 	const editAction = useActionEditCG();
 	const sendEmailActionCG = useActionSendEmailCG();
 	const items = useMemo(

@@ -42,6 +42,7 @@ export type ContactGroupStoreActions = {
 	updateContactGroup: (contactGroup: ContactGroup) => void;
 	setOffset: (offset: number) => void;
 	removeContactGroup: (contactGroupId: string) => void;
+	removeSharedContactGroup: (accountId: string, contactGroupId: string) => void;
 	reset: () => void;
 };
 
@@ -198,6 +199,14 @@ export const useContactGroupStore = create<State & ContactGroupStoreActions>()((
 			}
 		}
 	},
+	removeSharedContactGroup: (accountId: string, contactGroupId: string): void => {
+		set(
+			produce(({ sharedContactGroups }: State) => {
+				delete sharedContactGroups[accountId][contactGroupId];
+			})
+		);
+	},
+
 	addContactGroupInSortedPosition: (newContactGroup: ContactGroup): void => {
 		const { orderedContactGroups, unorderedContactGroups, offset } = get();
 		const newOrderedContactGroups = [...orderedContactGroups];

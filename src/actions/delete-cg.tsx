@@ -6,27 +6,27 @@
 import React, { useCallback, useMemo } from 'react';
 
 import { Container, useModal, useSnackbar } from '@zextras/carbonio-design-system';
-import { closeBoard, getBoardById } from '@zextras/carbonio-shell-ui';
+import { closeBoard, getBoardById, useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
 import { UIAction } from './types';
+import { FOLDERS } from '../carbonio-ui-commons/constants/folders';
+import { getFolderIdParts } from '../carbonio-ui-commons/helpers/folders';
 import { Text } from '../components/Text';
-import { ACTION_IDS, EDIT_CONTACT_GROUP_BOARD_ID } from '../constants';
+import { ACTION_IDS, EDIT_CONTACT_GROUP_BOARD_ID, ROUTES_INTERNAL_PARAMS } from '../constants';
 import { useGetContactGroupFromPath } from '../hooks/useGetContactGroupFromPath';
-import { ContactGroup } from '../model/contact-group';
+import { ContactGroup, SharedContactGroup } from '../model/contact-group';
 import { apiClient } from '../network/api-client';
 import { useContactGroupStore } from '../store/contact-groups';
 
 export type DeleteCGAction = UIAction<ContactGroup, never>;
 
-export const useActionDeleteCG = (
-	onDeleteOk?: (contactGroup: ContactGroup) => void
+const useActionDeleteContactGroup = (
+	onDeleteConfirm: (contactGroup: ContactGroup | SharedContactGroup) => Promise<void>
 ): DeleteCGAction => {
 	const [t] = useTranslation();
 	const { createModal, closeModal } = useModal();
 	const createSnackbar = useSnackbar();
-	const { removeContactGroup } = useContactGroupStore();
-	const activeContactGroup = useGetContactGroupFromPath();
 
 	const canExecute = useCallback<DeleteCGAction['canExecute']>(() => true, []);
 
@@ -46,18 +46,13 @@ export const useActionDeleteCG = (
 				confirmColor: 'error',
 				onConfirm: () => {
 					closeModal(modalId);
-					apiClient
-						.deleteContact([contactGroup.id])
+					onDeleteConfirm(contactGroup)
 						.then(() => {
 							const boardId = `${EDIT_CONTACT_GROUP_BOARD_ID}-${contactGroup.id}`;
 							const board = getBoardById(boardId);
 							if (board) {
 								closeBoard(boardId);
 							}
-							if (activeContactGroup?.id === contactGroup.id) {
-								onDeleteOk?.(contactGroup);
-							}
-							removeContactGroup(contactGroup.id);
 							createSnackbar({
 								type: 'success',
 								key: `snackbar-${Date.now()}`,
@@ -97,15 +92,7 @@ export const useActionDeleteCG = (
 				)
 			});
 		},
-		[
-			activeContactGroup?.id,
-			closeModal,
-			createModal,
-			createSnackbar,
-			onDeleteOk,
-			removeContactGroup,
-			t
-		]
+		[closeModal, createModal, createSnackbar, onDeleteConfirm, t]
 	);
 
 	return useMemo(
@@ -119,4 +106,42 @@ export const useActionDeleteCG = (
 		}),
 		[openDeleteModal, canExecute, t]
 	);
+};
+
+export const useActionDeleteMainAccountContactGroup = (): DeleteCGAction => {
+	const replaceHistory = useReplaceHistoryCallback();
+	const activeContactGroup = useGetContactGroupFromPath();
+	const { removeContactGroup } = useContactGroupStore();
+	const onDeleteConfirm = useCallback(
+		async (contactGroup: ContactGroup) => {
+			apiClient.deleteContact([contactGroup.id]).then(() => {
+				if (activeContactGroup?.id === contactGroup.id) {
+					replaceHistory(`${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${FOLDERS.CONTACTS}/`);
+				}
+				removeContactGroup(contactGroup.id);
+			});
+		},
+		[activeContactGroup?.id, removeContactGroup, replaceHistory]
+	);
+	return useActionDeleteContactGroup(onDeleteConfirm);
+};
+
+export const useActionDeleteSharedAccountContactGroup = (): DeleteCGAction => {
+	const replaceHistory = useReplaceHistoryCallback();
+	const activeContactGroup = useGetContactGroupFromPath();
+	const { removeSharedContactGroup } = useContactGroupStore();
+	const onDeleteConfirm = useCallback(
+		async (contactGroup: SharedContactGroup | ContactGroup) => {
+			if (!('accountId' in contactGroup)) return;
+			const { zid: accountId } = getFolderIdParts(contactGroup.id);
+			apiClient.deleteContact([contactGroup.id]).then(() => {
+				if (activeContactGroup?.id === contactGroup.id) {
+					replaceHistory(`${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${accountId}/`);
+				}
+				removeSharedContactGroup(contactGroup.accountId, contactGroup.id);
+			});
+		},
+		[activeContactGroup?.id, removeSharedContactGroup, replaceHistory]
+	);
+	return useActionDeleteContactGroup(onDeleteConfirm);
 };
