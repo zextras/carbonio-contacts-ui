@@ -16,7 +16,7 @@ import { useFindContactGroups } from '../../../hooks/useFindContactGroups';
 export const ContactGroupListMainAccount = (): React.JSX.Element => {
 	const { contactGroups: mainAccountContactGroups, hasMore, findMore } = useFindContactGroups();
 
-	const onListBottom = useCallback(() => (hasMore ? findMore : undefined), [hasMore, findMore]);
+	const onListBottom = useCallback(() => (hasMore ? findMore() : undefined), [hasMore, findMore]);
 
 	const items = useMemo(
 		() =>

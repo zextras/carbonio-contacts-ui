@@ -8,6 +8,7 @@ import React from 'react';
 import { waitFor } from '@testing-library/react';
 
 import { ContactGroupView } from './contact-group-view';
+import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
 import { screen, setupTest, triggerLoadMore } from '../../carbonio-ui-commons/test/test-setup';
 import { FIND_CONTACT_GROUP_LIMIT } from '../../constants';
 import { CnItem } from '../../network/api/types';
@@ -41,7 +42,7 @@ describe('Contact Group View pagination', () => {
 		setupTest(
 			<ContactGroupView />,
 
-			{ initialEntries: [`/contact-groups`] }
+			{ initialEntries: [`/contact-groups/${FOLDERS.CONTACTS}`] }
 		);
 
 		expect(await screen.findByText(cnItem1.fileAsStr)).toBeVisible();
