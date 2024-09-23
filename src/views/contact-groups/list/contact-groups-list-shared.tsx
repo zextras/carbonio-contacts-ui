@@ -5,7 +5,7 @@
  */
 import React, { useMemo } from 'react';
 
-import { map, noop } from 'lodash';
+import { map } from 'lodash';
 import { useParams } from 'react-router-dom';
 
 import { ContactGroupListComponent } from './contact-group-list-component';
@@ -29,5 +29,5 @@ export const ContactGroupListShared = (): React.JSX.Element => {
 		[sharedContactGroups]
 	);
 
-	return <ContactGroupListComponent onListBottom={noop}>{items}</ContactGroupListComponent>;
+	return <ContactGroupListComponent onListBottom={onListBottom}>{items}</ContactGroupListComponent>;
 };

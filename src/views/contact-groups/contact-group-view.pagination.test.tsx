@@ -23,7 +23,7 @@ function generateNContactGroups(n: number): Array<CnItem> {
 }
 
 describe('Contact Group View pagination', () => {
-	it('should load the second page only when bottom element becomes visible', async () => {
+	it('main account list should load the second page only when bottom element becomes visible', async () => {
 		const cnItem1 = createCnItem();
 		const cnItems99 = generateNContactGroups(FIND_CONTACT_GROUP_LIMIT - 1);
 		const first100Items = [cnItem1].concat(...cnItems99);
@@ -43,6 +43,34 @@ describe('Contact Group View pagination', () => {
 			<ContactGroupView />,
 
 			{ initialEntries: [`/contact-groups/${FOLDERS.CONTACTS}`] }
+		);
+
+		expect(await screen.findByText(cnItem1.fileAsStr)).toBeVisible();
+		expect(screen.queryByText(cnItem101.fileAsStr)).not.toBeInTheDocument();
+		triggerLoadMore();
+		await waitFor(() => expect(findHandler).toHaveBeenCalledTimes(2));
+		expect(await screen.findByText(cnItem101.fileAsStr)).toBeVisible();
+	});
+	it('shared account list should load the second page only when bottom element becomes visible', async () => {
+		const cnItem1 = createCnItem();
+		const cnItems99 = generateNContactGroups(FIND_CONTACT_GROUP_LIMIT - 1);
+		const first100Items = [cnItem1].concat(...cnItems99);
+		const cnItem101 = createCnItem('cgName101');
+		const findHandler = registerFindContactGroupsHandler(
+			{
+				findContactGroupsResponse: createFindContactGroupsResponse(first100Items, true),
+				offset: 0
+			},
+			{
+				findContactGroupsResponse: createFindContactGroupsResponse([cnItem101], true),
+				offset: 100
+			}
+		);
+
+		setupTest(
+			<ContactGroupView />,
+
+			{ initialEntries: [`/contact-groups/123`] }
 		);
 
 		expect(await screen.findByText(cnItem1.fileAsStr)).toBeVisible();

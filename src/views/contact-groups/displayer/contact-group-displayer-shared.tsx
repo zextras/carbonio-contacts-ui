@@ -11,7 +11,7 @@ import { ContactGroupDisplayerActionsHeader } from './contact-group-displayer-ac
 import { ContactGroupEmptyDisplayer } from './contact-group-empty-displayer';
 import { ROUTES_INTERNAL_PARAMS } from '../../../constants';
 import { useEvaluateSharedContactGroupActions } from '../../../hooks/use-contact-group-actions';
-import { useGetSharedAccountContactGroup } from '../../../hooks/useGetContactGroup';
+import { useSharedContactGroup } from '../../../store/contact-groups';
 
 interface ContactGroupSharedDisplayerProps {
 	accountId: string;
@@ -22,7 +22,7 @@ export const ContactGroupDisplayerShared = ({
 	accountId,
 	contactGroupId
 }: ContactGroupSharedDisplayerProps): React.JSX.Element => {
-	const contactGroup = useGetSharedAccountContactGroup(accountId, contactGroupId);
+	const contactGroup = useSharedContactGroup(accountId, contactGroupId);
 	const replaceHistory = useReplaceHistoryCallback();
 	const routeToContactGroups = useCallback((): void => {
 		replaceHistory(`${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${accountId}`);

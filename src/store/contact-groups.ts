@@ -27,7 +27,10 @@ export function compareContactGroupName(nameA: string, nameB: string): number {
 type State = {
 	orderedContactGroups: Array<ContactGroup>;
 	unorderedContactGroups: Array<ContactGroup>;
-	sharedContactGroups: Record<string, Record<string, SharedContactGroup>>;
+	sharedContactGroups: Record<
+		string,
+		{ hasMore: boolean; offset: number; contactGroups: Record<string, SharedContactGroup> }
+	>;
 	offset: number;
 };
 
@@ -35,9 +38,12 @@ export type ContactGroupStoreActions = {
 	addContactGroups: (newContactGroups: Array<ContactGroup>) => void;
 	populateSharedContactGroupsByAccountId: (
 		accountId: string,
-		newContactGroups: Array<ContactGroup>
+		newContactGroups: Array<ContactGroup>,
+		offset: number,
+		more: boolean
 	) => void;
 	getSharedContactGroupsByAccountId: (accountId: string) => Array<SharedContactGroup>;
+	useSharedContactGroup: (accountId: string, contactGroupId: string) => SharedContactGroup;
 	addContactGroupInSortedPosition: (newContactGroup: ContactGroup) => void;
 	updateContactGroup: (contactGroup: ContactGroup) => void;
 	setOffset: (offset: number) => void;
@@ -87,24 +93,36 @@ export const useContactGroupStore = create<State & ContactGroupStoreActions>()((
 	},
 	populateSharedContactGroupsByAccountId: (
 		accountId: string,
-		contactGroups: Array<ContactGroup>
+		contactGroups: Array<ContactGroup>,
+		offset: number,
+		more: boolean
 	): void => {
 		set(
 			produce(({ sharedContactGroups }: State) => {
-				sharedContactGroups[accountId] = contactGroups.reduce(
+				sharedContactGroups[accountId].contactGroups = contactGroups.reduce(
 					(acc, contactGroup) => {
 						acc[contactGroup.id] = { ...contactGroup, accountId };
 						return acc;
 					},
 					{} as Record<string, SharedContactGroup>
 				);
+				sharedContactGroups[accountId].hasMore = more;
+				sharedContactGroups[accountId].offset = offset;
 			})
 		);
 	},
 	getSharedContactGroupsByAccountId: (accountId: string): Array<SharedContactGroup> => {
 		const { sharedContactGroups } = get();
-		return sharedContactGroups[accountId] ? Object.values(sharedContactGroups[accountId]) : [];
+		return sharedContactGroups[accountId].contactGroups
+			? Object.values(sharedContactGroups[accountId].contactGroups)
+			: [];
 	},
+
+	useSharedContactGroup: (accountId: string, contactGroupId: string): SharedContactGroup =>
+		useContactGroupStore(
+			(state) => state.sharedContactGroups[accountId].contactGroups[contactGroupId]
+		),
+
 	updateContactGroup: (contactGroup): void => {
 		const contactGroupId = contactGroup.id;
 		const { zid: accountId } = getFolderIdParts(contactGroupId);
@@ -112,7 +130,7 @@ export const useContactGroupStore = create<State & ContactGroupStoreActions>()((
 		if (accountId) {
 			set(
 				produce(({ sharedContactGroups }: State) => {
-					sharedContactGroups[accountId][contactGroupId] = {
+					sharedContactGroups[accountId].contactGroups[contactGroupId] = {
 						...contactGroup,
 						accountId
 					};
@@ -202,7 +220,7 @@ export const useContactGroupStore = create<State & ContactGroupStoreActions>()((
 	removeSharedContactGroup: (accountId: string, contactGroupId: string): void => {
 		set(
 			produce(({ sharedContactGroups }: State) => {
-				delete sharedContactGroups[accountId][contactGroupId];
+				delete sharedContactGroups[accountId].contactGroups[contactGroupId];
 			})
 		);
 	},
@@ -222,3 +240,17 @@ export const useContactGroupStore = create<State & ContactGroupStoreActions>()((
 		}));
 	}
 }));
+
+export const useSharedContactGroup = (
+	accountId: string,
+	contactGroupId: string
+): SharedContactGroup =>
+	useContactGroupStore(
+		(state) => state.sharedContactGroups[accountId].contactGroups[contactGroupId]
+	);
+
+export const getSharedContactGroupOffset = (accountId: string): number =>
+	useContactGroupStore.getState().sharedContactGroups[accountId].offset;
+
+export const getSharedContactGroupHasMore = (accountId: string): boolean =>
+	useContactGroupStore.getState().sharedContactGroups[accountId].hasMore;

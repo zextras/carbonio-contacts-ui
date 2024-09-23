@@ -21,7 +21,7 @@ export const useGetContactGroupFromBoardId = (): ContactGroup | undefined => {
 
 	const { zid: accountId } = getFolderIdParts(contactGroupId);
 	if (accountId) {
-		return sharedContactGroups[accountId][contactGroupId];
+		return sharedContactGroups[accountId].contactGroups[contactGroupId];
 	}
 
 	return [...contactGroups, ...unOrderedContactGroups].find(
