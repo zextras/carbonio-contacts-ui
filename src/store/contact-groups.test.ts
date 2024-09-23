@@ -15,7 +15,7 @@ import {
 	useContactGroupStore
 } from './contact-groups';
 import { SharedContactGroup } from '../model/contact-group';
-import { buildContactGroup, buildSharedContactGroup } from '../tests/model-builder';
+import { buildContactGroup } from '../tests/model-builder';
 
 const addContactGroups: ContactGroupStoreActions['addContactGroups'] = (newContactGroups) =>
 	useContactGroupStore.getState().addContactGroups(newContactGroups);
@@ -82,11 +82,11 @@ describe('Contact groups store', () => {
 	});
 	describe('addSharedContactGroup', () => {
 		it('should return a key value correspondence of the list that has been set', () => {
-			const list = times(3, () => buildSharedContactGroup());
+			const list = times(3, () => buildContactGroup());
 			useContactGroupStore.getState().populateSharedContactGroupsByAccountId('123', list);
 			const expectedResult = list.reduce(
 				(acc, contactGroup) => {
-					acc[contactGroup.id] = contactGroup;
+					acc[contactGroup.id] = { ...contactGroup, accountId: '123' };
 					return acc;
 				},
 				{} as Record<string, SharedContactGroup>

@@ -35,7 +35,7 @@ export type ContactGroupStoreActions = {
 	addContactGroups: (newContactGroups: Array<ContactGroup>) => void;
 	populateSharedContactGroupsByAccountId: (
 		accountId: string,
-		newContactGroups: Array<SharedContactGroup>
+		newContactGroups: Array<ContactGroup>
 	) => void;
 	getSharedContactGroupsByAccountId: (accountId: string) => Array<SharedContactGroup>;
 	addContactGroupInSortedPosition: (newContactGroup: ContactGroup) => void;
@@ -87,7 +87,7 @@ export const useContactGroupStore = create<State & ContactGroupStoreActions>()((
 	},
 	populateSharedContactGroupsByAccountId: (
 		accountId: string,
-		contactGroups: Array<SharedContactGroup>
+		contactGroups: Array<ContactGroup>
 	): void => {
 		set(
 			produce(({ sharedContactGroups }: State) => {

@@ -19,10 +19,9 @@ export const useFindSharedContactGroups = (
 	const findCallback = useCallback(() => {
 		if (!accountId) return;
 		findContactGroups(0, accountId).then((result) => {
-			const sharedContactGroups = result.contactGroups.map((cg) => ({ ...cg, accountId }));
 			useContactGroupStore
 				.getState()
-				.populateSharedContactGroupsByAccountId(accountId, sharedContactGroups);
+				.populateSharedContactGroupsByAccountId(accountId, result.contactGroups);
 		});
 	}, [accountId]);
 
