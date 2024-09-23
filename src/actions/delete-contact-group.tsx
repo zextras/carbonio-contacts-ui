@@ -29,17 +29,20 @@ type DeleteCGActionBase<T extends ContactGroup> = UIAction<T, never>;
 export type DeleteCGAction = DeleteCGActionBase<ContactGroup>;
 export type DeleteSharedCGAction = DeleteCGActionBase<SharedContactGroup>;
 
+type DeleteContactGroupActionRerturn = {
+	contactGroupId: string;
+};
+
 type DeleteModalProps = {
 	modalId: string;
 	modalTitle: string;
-	deleteAction: () => Promise<string>;
+	deleteAction: () => Promise<DeleteContactGroupActionRerturn>;
 };
 
 type DeleteConfirmProps<T> = {
 	modalId: string;
-	doDelete: (contactGroup: T) => Promise<string>;
+	doDelete: (contactGroup: T) => Promise<DeleteContactGroupActionRerturn>;
 };
-
 const getDeleteModal = (
 	{ modalId, modalTitle, deleteAction, onClose }: DeleteModalProps & { onClose: () => void },
 	t: TFunction,
@@ -54,8 +57,8 @@ const getDeleteModal = (
 		confirmColor: 'error',
 		onConfirm: () =>
 			deleteAction()
-				.then((contactGroupId: string) => {
-					const boardId = `${EDIT_CONTACT_GROUP_BOARD_ID}-${contactGroupId}`;
+				.then((response: DeleteContactGroupActionRerturn) => {
+					const boardId = `${EDIT_CONTACT_GROUP_BOARD_ID}-${response.contactGroupId}`;
 					const board = getBoardById(boardId);
 					if (board) {
 						closeBoard(boardId);
@@ -112,7 +115,12 @@ function useCreateDeleteModalAction<T extends ContactGroup>(): ({
 					{
 						modalId,
 						modalTitle: contactGroup.title,
-						deleteAction: () => doDelete(contactGroup),
+						deleteAction: () =>
+							doDelete(contactGroup).then((response) => {
+								closeModal(modalId);
+								return response;
+							}),
+
 						onClose: () => closeModal(modalId)
 					},
 					t,
@@ -143,7 +151,7 @@ export const useActionDeleteMainAccountContactGroup = (): DeleteCGAction => {
 					replaceHistory(`${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${FOLDERS.CONTACTS}/`);
 				}
 				removeContactGroup(contactGroup.id);
-				return contactGroup.id;
+				return { contactGroupId: contactGroup.id };
 			}),
 		[activeContactGroup?.id, removeContactGroup, replaceHistory]
 	);
@@ -167,7 +175,7 @@ export const useActionDeleteSharedAccountContactGroup = (): DeleteSharedCGAction
 					);
 				}
 				removeSharedContactGroup(contactGroup.accountId, contactGroup.id);
-				return contactGroup.id;
+				return { contactGroupId: contactGroup.id };
 			}),
 		[activeContactGroup?.id, removeSharedContactGroup, replaceHistory]
 	);

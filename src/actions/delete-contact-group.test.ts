@@ -6,7 +6,7 @@
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 
-import { useActionDeleteMainAccountContactGroup } from './delete-cg';
+import { useActionDeleteMainAccountContactGroup } from './delete-contact-group';
 import { UIAction } from './types';
 import { screen, setupHook } from '../carbonio-ui-commons/test/test-setup';
 import { JEST_MOCKED_ERROR, TESTID_SELECTORS, TIMERS } from '../constants/tests';
@@ -206,9 +206,6 @@ describe('useActionDeleteCG', () => {
 		const action = result.current;
 		act(() => {
 			action.execute(contactGroupWithMembers);
-		});
-
-		act(() => {
 			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 
@@ -217,7 +214,9 @@ describe('useActionDeleteCG', () => {
 		});
 		const titleElement = screen.getByText(`Delete "${contactGroupWithMembers.title}"`);
 
-		await user.click(button);
+		await act(async () => {
+			await user.click(button);
+		});
 		await screen.findByText('Contact group successfully deleted');
 		expect(titleElement).not.toBeInTheDocument();
 	});

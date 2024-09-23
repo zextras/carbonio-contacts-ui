@@ -9,7 +9,7 @@ import { type Action as DSAction } from '@zextras/carbonio-design-system';
 import {
 	useActionDeleteMainAccountContactGroup,
 	useActionDeleteSharedAccountContactGroup
-} from '../actions/delete-cg';
+} from '../actions/delete-contact-group';
 import { EditActionCG, useActionEditCG } from '../actions/edit-cg';
 import { SendEmailActionCG, useActionSendEmailCG } from '../actions/send-email-cg';
 import { UIAction } from '../actions/types';
