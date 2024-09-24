@@ -13,8 +13,8 @@ import { Route, Switch, useParams, useRouteMatch } from 'react-router-dom';
 import { CollapsedSideBarItems } from './collapsed-sidebar-folders';
 import { SidebarAccordionMui } from './sidebar-accordion';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
-import { FOLDER_VIEW } from '../../../carbonio-ui-commons/constants/utils';
-import { useInitializeFolders } from '../../../carbonio-ui-commons/hooks/use-initialize-folders';
+import { ZIMBRA_STANDARD_COLORS } from '../../../carbonio-ui-commons/constants/utils';
+import { isLink } from '../../../carbonio-ui-commons/helpers/folders';
 import { useRootsArray } from '../../../carbonio-ui-commons/store/zustand/folder';
 import { themeMui } from '../../../carbonio-ui-commons/theme/theme-mui';
 import { LOCAL_STORAGES } from '../../../constants';
@@ -27,7 +27,6 @@ import useGetTagsAccordion from '../../hooks/use-get-tags-accordions';
  */
 
 const SecondaryBarView: FC<SecondaryBarComponentProps> = ({ expanded = false }) => {
-	useInitializeFolders(FOLDER_VIEW.contact);
 	const { folderId: selectedFolderId } = useParams<{ folderId: string }>();
 	const tagsAccordionItems = useGetTagsAccordion();
 	const { path } = useRouteMatch();
