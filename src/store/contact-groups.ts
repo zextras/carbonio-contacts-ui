@@ -24,13 +24,16 @@ export function compareContactGroupName(nameA: string, nameB: string): number {
 	return 0;
 }
 
+type SharedAccountData = {
+	hasMore: boolean;
+	offset: number;
+	contactGroups: Record<string, SharedContactGroup>;
+};
+
 type State = {
 	orderedContactGroups: Array<ContactGroup>;
 	unorderedContactGroups: Array<ContactGroup>;
-	sharedContactGroups: Record<
-		string,
-		{ hasMore: boolean; offset: number; contactGroups: Record<string, SharedContactGroup> }
-	>;
+	sharedContactGroups: Record<string, SharedAccountData>;
 	offset: number;
 };
 
@@ -99,21 +102,32 @@ export const useContactGroupStore = create<State & ContactGroupStoreActions>()((
 	): void => {
 		set(
 			produce(({ sharedContactGroups }: State) => {
-				sharedContactGroups[accountId].contactGroups = contactGroups.reduce(
+				let newSharedContactGroups = contactGroups.reduce(
 					(acc, contactGroup) => {
 						acc[contactGroup.id] = { ...contactGroup, accountId };
 						return acc;
 					},
 					{} as Record<string, SharedContactGroup>
 				);
-				sharedContactGroups[accountId].hasMore = more;
-				sharedContactGroups[accountId].offset = offset;
+
+				if (sharedContactGroups[accountId]) {
+					newSharedContactGroups = {
+						...sharedContactGroups[accountId].contactGroups,
+						...newSharedContactGroups
+					};
+				}
+
+				sharedContactGroups[accountId] = {
+					contactGroups: newSharedContactGroups,
+					hasMore: more,
+					offset
+				};
 			})
 		);
 	},
 	getSharedContactGroupsByAccountId: (accountId: string): Array<SharedContactGroup> => {
 		const { sharedContactGroups } = get();
-		return sharedContactGroups[accountId].contactGroups
+		return sharedContactGroups[accountId]
 			? Object.values(sharedContactGroups[accountId].contactGroups)
 			: [];
 	},
@@ -249,8 +263,8 @@ export const useSharedContactGroup = (
 		(state) => state.sharedContactGroups[accountId].contactGroups[contactGroupId]
 	);
 
-export const getSharedContactGroupOffset = (accountId: string): number =>
-	useContactGroupStore.getState().sharedContactGroups[accountId].offset;
+export const useSharedAccountData = (accountId: string): SharedAccountData =>
+	useContactGroupStore((state) => state.sharedContactGroups[accountId]);
 
-export const getSharedContactGroupHasMore = (accountId: string): boolean =>
-	useContactGroupStore.getState().sharedContactGroups[accountId].hasMore;
+export const getSharedAccountData = (accountId: string): SharedAccountData | undefined =>
+	useContactGroupStore.getState().sharedContactGroups[accountId];

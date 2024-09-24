@@ -32,7 +32,8 @@ describe('Find contact groups', () => {
 		};
 		await waitFor(() => {
 			expect(result.current).toEqual({
-				sharedContactGroups: [expectedSharedContactGroup]
+				sharedContactGroups: [expectedSharedContactGroup],
+				findMore: expect.any(Function)
 			});
 		});
 	});

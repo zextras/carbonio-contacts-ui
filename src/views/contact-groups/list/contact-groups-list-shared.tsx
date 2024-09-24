@@ -15,7 +15,7 @@ import { useFindSharedContactGroups } from '../../../hooks/use-find-shared-conta
 
 export const ContactGroupListShared = (): React.JSX.Element => {
 	const { accountId } = useParams<{ accountId: string }>();
-	const { sharedContactGroups } = useFindSharedContactGroups(accountId);
+	const { sharedContactGroups, findMore } = useFindSharedContactGroups(accountId);
 
 	const items = useMemo(
 		() =>
@@ -29,5 +29,5 @@ export const ContactGroupListShared = (): React.JSX.Element => {
 		[sharedContactGroups]
 	);
 
-	return <ContactGroupListComponent onListBottom={onListBottom}>{items}</ContactGroupListComponent>;
+	return <ContactGroupListComponent onListBottom={findMore}>{items}</ContactGroupListComponent>;
 };

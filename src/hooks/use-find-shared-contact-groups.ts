@@ -3,59 +3,59 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 
+import { FIND_CONTACT_GROUP_LIMIT } from '../constants';
 import { SharedContactGroup } from '../model/contact-group';
 import { findContactGroups } from '../network/api/find-contact-groups';
-import {
-	getSharedContactGroupHasMore,
-	getSharedContactGroupOffset,
-	useContactGroupStore
-} from '../store/contact-groups';
+import { useContactGroupStore, useSharedAccountData } from '../store/contact-groups';
 
 type UseFindSharedContactGroupsReturnType = {
 	sharedContactGroups: Array<SharedContactGroup>;
-	hasMore: boolean;
 	findMore: () => void;
 };
 
 export const useFindSharedContactGroups = (
 	accountId: string
 ): UseFindSharedContactGroupsReturnType => {
-	const [hasMore, setHasMore] = useState({
-		accountId,
-		hasMore: getSharedContactGroupHasMore(accountId)
-	});
+	const sharedAccountData = useSharedAccountData(accountId);
+	const hasMore = sharedAccountData?.hasMore ?? false;
+
 	const findCallback = useCallback(() => {
 		if (!accountId) return;
-		const offset = getSharedContactGroupHasMore(accountId)
-			? getSharedContactGroupOffset(accountId)
-			: 0;
+		const offset = sharedAccountData?.offset ?? 0;
 		findContactGroups(offset, accountId).then((result) => {
 			useContactGroupStore
 				.getState()
-				.populateSharedContactGroupsByAccountId(accountId, result.contactGroups);
+				.populateSharedContactGroupsByAccountId(
+					accountId,
+					result.contactGroups,
+					offset + FIND_CONTACT_GROUP_LIMIT,
+					result.hasMore
+				);
 		});
-	}, [accountId]);
+	}, [accountId, sharedAccountData?.offset]);
+
+	const hasData = Object.keys(sharedAccountData?.contactGroups ?? {}).length > 0;
 
 	useEffect(() => {
-		if (useContactGroupStore.getState().orderedContactGroups.length > 0) {
+		if (hasData) {
 			return;
 		}
 		findCallback();
-	}, [findCallback]);
+	}, [findCallback, hasData]);
 
 	const findMore = useCallback(() => {
-		if (!hasMore.hasMore) {
+		if (!hasMore) {
 			throw new Error('No more nodes available');
 		}
 		findCallback();
-	}, [findCallback, hasMore.hasMore]);
+	}, [findCallback, hasMore]);
 
 	const sharedContactGroups = useContactGroupStore((state) =>
 		state.getSharedContactGroupsByAccountId(accountId)
 	);
 
-	if (!accountId) return { sharedContactGroups: [] };
-	return { sharedContactGroups, hasMore, findMore };
+	if (!accountId) return { sharedContactGroups: [], findMore };
+	return { sharedContactGroups, findMore };
 };

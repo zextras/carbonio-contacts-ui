@@ -660,7 +660,7 @@ describe('Edit contact group board', () => {
 			});
 			useContactGroupStore
 				.getState()
-				.populateSharedContactGroupsByAccountId('123-456', [sharedContactGroup]);
+				.populateSharedContactGroupsByAccountId('123-456', [sharedContactGroup], 0, false);
 			registerModifyContactGroupHandler(
 				createCnItem(sharedContactGroup.title, undefined, sharedContactGroup.id)
 			);

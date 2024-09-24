@@ -83,14 +83,18 @@ describe('Contact groups store', () => {
 	describe('addSharedContactGroup', () => {
 		it('should return a key value correspondence of the list that has been set', () => {
 			const list = times(3, () => buildContactGroup());
-			useContactGroupStore.getState().populateSharedContactGroupsByAccountId('123', list);
-			const expectedResult = list.reduce(
-				(acc, contactGroup) => {
-					acc[contactGroup.id] = { ...contactGroup, accountId: '123' };
-					return acc;
-				},
-				{} as Record<string, SharedContactGroup>
-			);
+			useContactGroupStore.getState().populateSharedContactGroupsByAccountId('123', list, 0, false);
+			const expectedResult = {
+				contactGroups: list.reduce(
+					(acc, contactGroup) => {
+						acc[contactGroup.id] = { ...contactGroup, accountId: '123' };
+						return acc;
+					},
+					{} as Record<string, SharedContactGroup>
+				),
+				hasMore: false,
+				offset: 0
+			};
 
 			expect(useContactGroupStore.getState().sharedContactGroups['123']).toEqual(expectedResult);
 		});
