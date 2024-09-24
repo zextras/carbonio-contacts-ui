@@ -22,7 +22,12 @@ export const ContactGroupDisplayerActionsHeader = ({
 	onCloseDisplayer,
 	actions
 }: Props): React.JSX.Element => (
-	<Container background={'gray5'} mainAlignment={'flex-start'} padding={{ bottom: '3rem' }}>
+	<Container
+		background={'gray5'}
+		mainAlignment={'flex-start'}
+		padding={{ bottom: '3rem' }}
+		data-testid={'contact-group-displayer'}
+	>
 		<DisplayerHeader
 			title={contactGroup.title}
 			icon={'PeopleOutline'}

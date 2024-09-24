@@ -8,6 +8,7 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import { within } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
+import { act } from 'react-dom/test-utils';
 
 import { ContactGroupView } from './contact-group-view';
 import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
@@ -279,7 +280,7 @@ describe('Contact Group View', () => {
 				expect(await screen.findByText(EMPTY_DISPLAYER_HINT)).toBeVisible();
 			});
 
-			it('Click on a list item open the displayer for that item', async () => {
+			it('Clicking on a list item opens the displayer for that item', async () => {
 				const contactGroupName = faker.company.name();
 				registerFindContactGroupsHandler({
 					findContactGroupsResponse: createFindContactGroupsResponse([
@@ -312,6 +313,7 @@ describe('Contact Group View', () => {
 				const closeButton = screen.getByRoleWithIcon('button', {
 					icon: TESTID_SELECTORS.icons.closeDisplayer
 				});
+				await screen.findByTestId('contact-group-displayer');
 				expect(closeButton).toBeVisible();
 				expect(closeButton).toBeEnabled();
 				await user.click(closeButton);
@@ -324,6 +326,7 @@ describe('Contact Group View', () => {
 			});
 		});
 	});
+
 	describe('sharedAccount', () => {
 		it('should render the avatar, the name and the number of the members (case 1+ addresses string) of a contact group', async () => {
 			const contactGroupName = faker.company.name();
@@ -425,6 +428,33 @@ describe('Contact Group View', () => {
 			await screen.findByText('Contact group successfully deleted');
 
 			expect(screen.queryByText(sharedContactGroup.fileAsStr)).not.toBeInTheDocument();
+		});
+
+		describe('Displayer', () => {
+			it('should display contact details when clicking on it', async () => {
+				const contactGroupName = 'My shared Contact Group';
+				const soapContactGroup = createCnItem(contactGroupName);
+				registerFindContactGroupsHandler({
+					findContactGroupsResponse: createFindContactGroupsResponse(
+						[soapContactGroup, ...[...Array(2)].map(() => createCnItem())],
+						false
+					),
+					offset: 0
+				});
+
+				const { user } = setupSharedAccountContactGroupView('123');
+
+				await screen.findByText(contactGroupName);
+				await screen.findByText(EMPTY_DISPLAYER_HINT);
+				await act(async () => {
+					await user.click(await screen.findByText(contactGroupName));
+				});
+				screen.logTestingPlaygroundURL();
+				await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.closeDisplayer });
+				expect(screen.getAllByText(contactGroupName)).toHaveLength(3);
+				expect(screen.getByText('Addresses list')).toBeVisible();
+				// await screen.findByTestId('contact-group-displayer');
+			});
 		});
 	});
 });

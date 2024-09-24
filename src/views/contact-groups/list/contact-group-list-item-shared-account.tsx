@@ -8,6 +8,7 @@ import React, { useCallback } from 'react';
 import { useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
 
 import { ContactGroupListItem } from './contact-group-list-item';
+import { ROUTES_INTERNAL_PARAMS } from '../../../constants';
 import { useEvaluateSharedContactGroupActions } from '../../../hooks/use-contact-group-actions';
 import { SharedContactGroup } from '../../../model/contact-group';
 
@@ -23,7 +24,7 @@ export const ContactGroupListItemSharedAccount = ({
 	const { accountId } = contactGroup;
 	const displaySharedContactGroup = useCallback(
 		(id: string) => {
-			replaceHistory(`/contact-groups/${accountId}/${id}`);
+			replaceHistory(`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${accountId}/${id}`);
 		},
 		[accountId, replaceHistory]
 	);

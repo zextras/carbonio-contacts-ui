@@ -21,7 +21,7 @@ export const ContactGroupListMainAccount = (): React.JSX.Element => {
 	const items = useMemo(
 		() =>
 			map(mainAccountContactGroups, (contactGroup) => (
-				<StyledListItem key={contactGroup.id} data-testid={'shared-list-item'}>
+				<StyledListItem key={contactGroup.id} data-testid={'main-account-list-item'}>
 					{(visible): React.JSX.Element => (
 						<ContactGroupListItemMainAccount visible={visible} contactGroup={contactGroup} />
 					)}
