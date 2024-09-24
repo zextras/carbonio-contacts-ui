@@ -163,7 +163,46 @@ describe('Contact Group View', () => {
 
 			expect(await screen.findByText(EMPTY_LIST_HINT)).toBeVisible();
 		});
+
+		it('should remove contact group from list when deleting from list', async () => {
+			const sharedContactGroup = createCnItem();
+			registerFindContactGroupsHandler({
+				findContactGroupsResponse: createFindContactGroupsResponse(
+					[sharedContactGroup, ...[...Array(2)].map(() => createCnItem())],
+					false
+				),
+				offset: 0
+			});
+			registerDeleteContactHandler(sharedContactGroup.id);
+			const accountId = 'accountId-123';
+
+			const { user } = setupTest(<ContactGroupView />, {
+				initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${accountId}`]
+			});
+
+			await screen.findByText(sharedContactGroup.fileAsStr);
+
+			const listElement = screen
+				.getAllByTestId(TESTID_SELECTORS.listItemContent)
+				.find((element) => element.textContent?.includes(sharedContactGroup.fileAsStr));
+
+			expect(listElement).toBeVisible();
+
+			const deleteAction = within(listElement as HTMLElement).getByTestId(
+				TESTID_SELECTORS.icons.trash
+			);
+
+			await user.click(deleteAction);
+			const button = await screen.findByRole('button', {
+				name: 'delete'
+			});
+			await user.click(button);
+			await screen.findByText('Contact group successfully deleted');
+
+			expect(screen.queryByText(sharedContactGroup.fileAsStr)).not.toBeInTheDocument();
+		});
 	});
+
 	describe('Send mail action', () => {
 		it('should open the mail board (ContactGroupDisplayerController trigger)', async () => {
 			const openMailComposer = jest.fn();
