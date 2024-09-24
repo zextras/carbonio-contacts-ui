@@ -51,6 +51,7 @@ describe('Contact Group View pagination', () => {
 		await waitFor(() => expect(findHandler).toHaveBeenCalledTimes(2));
 		expect(await screen.findByText(cnItem101.fileAsStr)).toBeVisible();
 	});
+
 	it('shared account list should load the second page only when bottom element becomes visible', async () => {
 		const cnItem1 = createCnItem();
 		const cnItems99 = generateNContactGroups(FIND_CONTACT_GROUP_LIMIT - 1);

@@ -13,6 +13,7 @@ import { useContactGroupStore, useSharedAccountData } from '../store/contact-gro
 type UseFindSharedContactGroupsReturnType = {
 	sharedContactGroups: Array<SharedContactGroup>;
 	findMore: () => void;
+	hasMore: boolean;
 };
 
 export const useFindSharedContactGroups = (
@@ -20,6 +21,9 @@ export const useFindSharedContactGroups = (
 ): UseFindSharedContactGroupsReturnType => {
 	const sharedAccountData = useSharedAccountData(accountId);
 	const hasMore = sharedAccountData?.hasMore ?? false;
+	const sharedContactGroups = useContactGroupStore
+		.getState()
+		.getSharedContactGroupsByAccountId(accountId);
 
 	const findCallback = useCallback(() => {
 		if (!accountId) return;
@@ -36,7 +40,7 @@ export const useFindSharedContactGroups = (
 		});
 	}, [accountId, sharedAccountData?.offset]);
 
-	const hasData = Object.keys(sharedAccountData?.contactGroups ?? {}).length > 0;
+	const hasData = !!sharedAccountData;
 
 	useEffect(() => {
 		if (hasData) {
@@ -52,10 +56,6 @@ export const useFindSharedContactGroups = (
 		findCallback();
 	}, [findCallback, hasMore]);
 
-	const sharedContactGroups = useContactGroupStore((state) =>
-		state.getSharedContactGroupsByAccountId(accountId)
-	);
-
-	if (!accountId) return { sharedContactGroups: [], findMore };
-	return { sharedContactGroups, findMore };
+	if (!accountId) return { sharedContactGroups: [], findMore, hasMore: false };
+	return { sharedContactGroups, findMore, hasMore };
 };
