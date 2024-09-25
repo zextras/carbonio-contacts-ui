@@ -108,27 +108,42 @@ function useCreateDeleteModalAction<T extends ContactGroup>(): ({
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
 	const { createModal, closeModal } = useModal();
+
+	const handleDelete = (
+		contactGroup: T,
+		doDelete: (contactGroup: T) => Promise<DeleteContactGroupActionReturn>,
+		modalId: string
+	): Promise<DeleteContactGroupActionReturn> =>
+		doDelete(contactGroup).then((response) => {
+			closeModal(modalId);
+			return response;
+		});
+
+	const createDeleteModal = (
+		modalId: string,
+		contactGroup: T,
+		doDelete: (contactGroup: T) => Promise<DeleteContactGroupActionReturn>
+	): void => {
+		createModal(
+			...getDeleteModal(
+				{
+					modalId,
+					modalTitle: contactGroup.title,
+					deleteAction: () => handleDelete(contactGroup, doDelete, modalId),
+					onClose: () => closeModal(modalId)
+				},
+				t,
+				createSnackbar
+			)
+		);
+	};
+
 	return ({ modalId, doDelete }): DeleteCGActionBase<T> => {
 		const execute = (contactGroup?: T): void => {
 			if (!contactGroup) return;
-			createModal(
-				...getDeleteModal(
-					{
-						modalId,
-						modalTitle: contactGroup.title,
-						deleteAction: () =>
-							doDelete(contactGroup).then((response) => {
-								closeModal(modalId);
-								return response;
-							}),
-
-						onClose: () => closeModal(modalId)
-					},
-					t,
-					createSnackbar
-				)
-			);
+			createDeleteModal(modalId, contactGroup, doDelete);
 		};
+
 		return {
 			id: ACTION_IDS.deleteCG,
 			label: t('action.contactGroup.delete', 'Delete'),
