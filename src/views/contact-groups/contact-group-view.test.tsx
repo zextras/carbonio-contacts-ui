@@ -331,136 +331,138 @@ describe('Contact Group View', () => {
 	});
 
 	describe('sharedAccount', () => {
-		it('should render the avatar, the name and the number of the members (case 1+ addresses string) of a contact group', async () => {
-			const contactGroupName = faker.company.name();
-			registerFindContactGroupsHandler({
-				findContactGroupsResponse: createFindContactGroupsResponse([
-					createCnItem(contactGroupName, [faker.internet.email(), faker.internet.email()])
-				]),
-				offset: 0
-			});
-			setupMainAccountContactGroupView();
+		describe('Contact Groups list', () => {
+			it('should render the avatar, the name and the number of the members (case 1+ addresses string) of a contact group', async () => {
+				const contactGroupName = faker.company.name();
+				registerFindContactGroupsHandler({
+					findContactGroupsResponse: createFindContactGroupsResponse([
+						createCnItem(contactGroupName, [faker.internet.email(), faker.internet.email()])
+					]),
+					offset: 0
+				});
+				setupMainAccountContactGroupView();
 
-			expect(await screen.findByText(contactGroupName)).toBeVisible();
-			const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
-			expect(
-				within(listItemContent).getByTestId(TESTID_SELECTORS.icons.contactGroup)
-			).toBeVisible();
-			expect(screen.getByText('2 addresses')).toBeVisible();
-		});
-
-		it('should render the avatar, the name and the number of the members (case 0 addresses string) of a contact group', async () => {
-			const contactGroupName = faker.company.name();
-			registerFindContactGroupsHandler({
-				findContactGroupsResponse: createFindContactGroupsResponse([
-					createCnItem(contactGroupName)
-				]),
-				offset: 0
+				expect(await screen.findByText(contactGroupName)).toBeVisible();
+				const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
+				expect(
+					within(listItemContent).getByTestId(TESTID_SELECTORS.icons.contactGroup)
+				).toBeVisible();
+				expect(screen.getByText('2 addresses')).toBeVisible();
 			});
 
-			setupSharedAccountContactGroupView('123');
+			it('should render the avatar, the name and the number of the members (case 0 addresses string) of a contact group', async () => {
+				const contactGroupName = faker.company.name();
+				registerFindContactGroupsHandler({
+					findContactGroupsResponse: createFindContactGroupsResponse([
+						createCnItem(contactGroupName)
+					]),
+					offset: 0
+				});
 
-			expect(await screen.findByText(contactGroupName)).toBeVisible();
-			expect(screen.getByText('0 addresses')).toBeVisible();
-			const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
-			expect(
-				within(listItemContent).getByTestId(TESTID_SELECTORS.icons.contactGroup)
-			).toBeVisible();
-		});
+				setupSharedAccountContactGroupView('123');
 
-		it('should render the avatar, the name and the number of the members (case 1 address string) of a contact group', async () => {
-			const contactGroupName = faker.company.name();
-			registerFindContactGroupsHandler({
-				findContactGroupsResponse: createFindContactGroupsResponse([
-					createCnItem(contactGroupName, [faker.internet.email()])
-				]),
-				offset: 0
+				expect(await screen.findByText(contactGroupName)).toBeVisible();
+				expect(screen.getByText('0 addresses')).toBeVisible();
+				const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
+				expect(
+					within(listItemContent).getByTestId(TESTID_SELECTORS.icons.contactGroup)
+				).toBeVisible();
 			});
 
-			setupSharedAccountContactGroupView('123');
+			it('should render the avatar, the name and the number of the members (case 1 address string) of a contact group', async () => {
+				const contactGroupName = faker.company.name();
+				registerFindContactGroupsHandler({
+					findContactGroupsResponse: createFindContactGroupsResponse([
+						createCnItem(contactGroupName, [faker.internet.email()])
+					]),
+					offset: 0
+				});
 
-			expect(await screen.findByText(contactGroupName)).toBeVisible();
-			const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
-			expect(
-				within(listItemContent).getByTestId(TESTID_SELECTORS.icons.contactGroup)
-			).toBeVisible();
-			expect(screen.getByText('1 address')).toBeVisible();
-		});
+				setupSharedAccountContactGroupView('123');
 
-		it('should show the empty list message if there is no contact group', async () => {
-			registerFindContactGroupsHandler({
-				findContactGroupsResponse: createFindContactGroupsResponse([]),
-				offset: 0
+				expect(await screen.findByText(contactGroupName)).toBeVisible();
+				const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
+				expect(
+					within(listItemContent).getByTestId(TESTID_SELECTORS.icons.contactGroup)
+				).toBeVisible();
+				expect(screen.getByText('1 address')).toBeVisible();
 			});
 
-			setupSharedAccountContactGroupView('123');
+			it('should show the empty list message if there is no contact group', async () => {
+				registerFindContactGroupsHandler({
+					findContactGroupsResponse: createFindContactGroupsResponse([]),
+					offset: 0
+				});
 
-			expect(await screen.findByText(EMPTY_LIST_HINT)).toBeVisible();
-		});
+				setupSharedAccountContactGroupView('123');
 
-		it('should remove contact group from list when deleting from list', async () => {
-			const sharedContactGroup = createCnItem();
-			registerFindContactGroupsHandler({
-				findContactGroupsResponse: createFindContactGroupsResponse(
-					[sharedContactGroup, ...[...Array(2)].map(() => createCnItem())],
-					false
-				),
-				offset: 0
-			});
-			registerDeleteContactHandler(sharedContactGroup.id);
-
-			const { user } = setupSharedAccountContactGroupView('accountId-123');
-
-			await screen.findByText(sharedContactGroup.fileAsStr);
-
-			const listElement = screen
-				.getAllByTestId(TESTID_SELECTORS.listItemContent)
-				.find((element) => element.textContent?.includes(sharedContactGroup.fileAsStr));
-
-			expect(listElement).toBeVisible();
-
-			const deleteAction = within(listElement as HTMLElement).getByTestId(
-				TESTID_SELECTORS.icons.trash
-			);
-
-			await user.click(deleteAction);
-			const button = await screen.findByRole('button', {
-				name: 'delete'
-			});
-			await user.click(button);
-			await screen.findByText('Contact group successfully deleted');
-
-			expect(screen.queryByText(sharedContactGroup.fileAsStr)).not.toBeInTheDocument();
-		});
-
-		it('should display list item as active after clicking on it', async () => {
-			const accountId = '123';
-			const contactGroupId = '10101010';
-			const contactGroupName = 'My shared Contact Group';
-			registerFindContactGroupsHandler({
-				findContactGroupsResponse: createFindContactGroupsResponse(
-					[
-						createCnItem(contactGroupName, [], contactGroupId),
-						...[...Array(2)].map(() => createCnItem())
-					],
-					false
-				),
-				offset: 0
+				expect(await screen.findByText(EMPTY_LIST_HINT)).toBeVisible();
 			});
 
-			const { user } = setupTest(<ContactGroupView />, {
-				initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${accountId}`]
+			it('should remove contact group from list when deleting from list', async () => {
+				const sharedContactGroup = createCnItem();
+				registerFindContactGroupsHandler({
+					findContactGroupsResponse: createFindContactGroupsResponse(
+						[sharedContactGroup, ...[...Array(2)].map(() => createCnItem())],
+						false
+					),
+					offset: 0
+				});
+				registerDeleteContactHandler(sharedContactGroup.id);
+
+				const { user } = setupSharedAccountContactGroupView('accountId-123');
+
+				await screen.findByText(sharedContactGroup.fileAsStr);
+
+				const listElement = screen
+					.getAllByTestId(TESTID_SELECTORS.listItemContent)
+					.find((element) => element.textContent?.includes(sharedContactGroup.fileAsStr));
+
+				expect(listElement).toBeVisible();
+
+				const deleteAction = within(listElement as HTMLElement).getByTestId(
+					TESTID_SELECTORS.icons.trash
+				);
+
+				await user.click(deleteAction);
+				const button = await screen.findByRole('button', {
+					name: 'delete'
+				});
+				await user.click(button);
+				await screen.findByText('Contact group successfully deleted');
+
+				expect(screen.queryByText(sharedContactGroup.fileAsStr)).not.toBeInTheDocument();
 			});
 
-			const styledListItem = await screen.findByTestId(`shared-list-item-${contactGroupId}`);
-			expect(styledListItem).toHaveStyle(STANDARD_BACKGROUND_COLOR);
-			const listItem = await within(styledListItem).findByText(contactGroupName);
-			await act(async () => {
-				await user.click(listItem);
-			});
-			await screen.findByTestId('contact-group-displayer');
-			await waitFor(async () => {
-				expect(styledListItem).toHaveStyle(ACTIVE_BACKGROUND_COLOR);
+			it('should display list item as active after clicking on it', async () => {
+				const accountId = '123';
+				const contactGroupId = '10101010';
+				const contactGroupName = 'My shared Contact Group';
+				registerFindContactGroupsHandler({
+					findContactGroupsResponse: createFindContactGroupsResponse(
+						[
+							createCnItem(contactGroupName, [], contactGroupId),
+							...[...Array(2)].map(() => createCnItem())
+						],
+						false
+					),
+					offset: 0
+				});
+
+				const { user } = setupTest(<ContactGroupView />, {
+					initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${accountId}`]
+				});
+
+				const styledListItem = await screen.findByTestId(`shared-list-item-${contactGroupId}`);
+				expect(styledListItem).toHaveStyle(STANDARD_BACKGROUND_COLOR);
+				const listItem = await within(styledListItem).findByText(contactGroupName);
+				await act(async () => {
+					await user.click(listItem);
+				});
+				await screen.findByTestId('contact-group-displayer');
+				await waitFor(async () => {
+					expect(styledListItem).toHaveStyle(ACTIVE_BACKGROUND_COLOR);
+				});
 			});
 		});
 
