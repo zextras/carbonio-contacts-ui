@@ -10,13 +10,17 @@ import { Button, Padding, Row, Tooltip } from '@zextras/carbonio-design-system';
 import { useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
 
 type CollapsedSidebarItemProps = {
+	id: string;
 	icon: string;
 	iconTooltip: string;
+	iconColor: string;
 	redirectPath: string;
 };
 export const CollapsedSideBarItem = ({
+	id,
 	icon,
 	iconTooltip,
+	iconColor = 'text',
 	redirectPath
 }: CollapsedSidebarItemProps): React.JSX.Element => {
 	const replaceHistory = useReplaceHistoryCallback();
@@ -26,14 +30,14 @@ export const CollapsedSideBarItem = ({
 	};
 
 	return (
-		<Row mainAlignment="flex-start" height={'fit'}>
+		<Row data-testid={`sidebar-collapsed-item-${id}`} mainAlignment="flex-start" height={'fit'}>
 			<Tooltip placement="right" label={iconTooltip}>
 				<Padding all="extrasmall">
 					<Button
-						icon={'PersonOutline'}
+						icon={icon}
 						onClick={onClick}
 						backgroundColor={'transparent'}
-						labelColor={'text'}
+						labelColor={iconColor}
 						size="extralarge"
 						shape="regular"
 						type="default"

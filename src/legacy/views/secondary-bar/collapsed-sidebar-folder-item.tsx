@@ -6,10 +6,9 @@
 
 import React, { useMemo } from 'react';
 
-import { IconButton, Padding, Row, Tooltip } from '@zextras/carbonio-design-system';
-import { AppLink, t } from '@zextras/carbonio-shell-ui';
-import { noop } from 'lodash';
+import { t } from '@zextras/carbonio-shell-ui';
 
+import { CollapsedSideBarItem } from './collapsed-sidebar-item';
 import { ZIMBRA_STANDARD_COLORS } from '../../../carbonio-ui-commons/constants';
 import { isLink } from '../../../carbonio-ui-commons/helpers/folders';
 import { Folder } from '../../../carbonio-ui-commons/types';
@@ -43,19 +42,12 @@ export const CollapsedSideBarFolderItem = ({ folder }: { folder: Folder }): Reac
 	);
 
 	return (
-		<AppLink to={`/folder/${folder.id}`} style={{ width: '100%', textDecoration: 'none' }}>
-			<Row mainAlignment="flex-start" height={'fit'}>
-				<Tooltip placement="right" label={folderIconTooltip}>
-					<Padding all="extrasmall">
-						<IconButton
-							customSize={{ iconSize: 'large', paddingSize: 'small' }}
-							icon={folderIcon}
-							iconColor={folderIconColor}
-							onClick={noop}
-						/>
-					</Padding>
-				</Tooltip>
-			</Row>
-		</AppLink>
+		<CollapsedSideBarItem
+			redirectPath={`/folder/${folder.id}`}
+			iconTooltip={folderIconTooltip}
+			id={folder.id}
+			icon={folderIcon}
+			iconColor={folderIconColor}
+		/>
 	);
 };

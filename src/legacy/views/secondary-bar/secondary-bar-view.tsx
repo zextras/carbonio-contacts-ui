@@ -37,19 +37,28 @@ const SecondaryBarView: FC<SecondaryBarComponentProps> = ({ expanded = false }) 
 	const collapsedItems = [] as Array<ReactElement>;
 	const iconTooltip = t('Contact Groups');
 
-	folders[0].children.forEach((folder) => {
-		collapsedItems.push(<CollapsedSideBarFolderItem key={folder.id} folder={folder} />);
-		if (folder.id === FOLDERS.CONTACTS) {
-			const redirectPath = `/${ROUTES.contactGroups}/${FOLDERS.CONTACTS}`;
+	folders.length > 0 &&
+		folders[0].children.forEach((folder) => {
 			collapsedItems.push(
-				<CollapsedSideBarItem
-					iconTooltip={iconTooltip}
-					icon={'PeopleOutline'}
-					redirectPath={redirectPath}
+				<CollapsedSideBarFolderItem
+					data-testid={`sidebar-folder-${folder.id}-collapsed`}
+					key={folder.id}
+					folder={folder}
 				/>
 			);
-		}
-	});
+			if (folder.id === FOLDERS.CONTACTS) {
+				const redirectPath = `/${ROUTES.contactGroups}/${FOLDERS.CONTACTS}`;
+				collapsedItems.push(
+					<CollapsedSideBarItem
+						id={'contact-groups'}
+						key={`sidebar-contact-group`}
+						iconTooltip={iconTooltip}
+						icon={'PeopleOutline'}
+						redirectPath={redirectPath}
+					/>
+				);
+			}
+		});
 
 	return (
 		<>
@@ -69,7 +78,7 @@ const SecondaryBarView: FC<SecondaryBarComponentProps> = ({ expanded = false }) 
 						</Route>
 					</Switch>
 				) : (
-					<div>{collapsedItems}</div>
+					<div data-testid={'sidebar-collapsed'}>{collapsedItems}</div>
 				)}
 			</ThemeProvider>
 		</>
