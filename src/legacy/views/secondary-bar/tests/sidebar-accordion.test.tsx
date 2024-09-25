@@ -103,5 +103,33 @@ describe('Sidebar Accordion', () => {
 
 			expect(screen.queryByText('Contact Groups')).not.toBeInTheDocument();
 		});
+		it('should show FindShare button only on the main account', async () => {
+			const mainAccount = generateFolder({
+				name: 'userRoot',
+				id: FOLDERS.USER_ROOT,
+				children: [
+					generateFolder({
+						parent: FOLDERS.USER_ROOT,
+						name: 'aChild',
+						id: '100',
+						children: []
+					})
+				]
+			});
+			const sharedAccount = generateFolder({ name: 'sharedAccount', id: '200', children: [] });
+			const folders: Array<Folder> = [mainAccount, sharedAccount];
+
+			setupTest(
+				<SidebarAccordionMui
+					folders={folders}
+					initialExpanded={['100', '200', FOLDERS.USER_ROOT]}
+					localStorageName={''}
+					selectedFolderId={''}
+				/>
+			);
+
+			expect(await screen.findByTestId('button-find-shares')).toBeVisible();
+			expect(screen.queryAllByTestId('button-find-shares').length).toBe(1);
+		});
 	});
 });

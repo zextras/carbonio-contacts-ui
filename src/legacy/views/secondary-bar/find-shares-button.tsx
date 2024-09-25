@@ -1,3 +1,8 @@
+/*
+ * SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only
+ */
 import React from 'react';
 
 import { Button, Container } from '@zextras/carbonio-design-system';
@@ -5,11 +10,6 @@ import { t } from '@zextras/carbonio-shell-ui';
 
 import { useActionAddSharedAddressBooks } from '../../../actions/add-shared-address-books';
 
-/*
- * SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
- *
- * SPDX-License-Identifier: AGPL-3.0-only
- */
 export const FindSharesButton = (): React.JSX.Element => {
 	const addSharesAction = useActionAddSharedAddressBooks();
 
@@ -20,7 +20,11 @@ export const FindSharesButton = (): React.JSX.Element => {
 	}
 
 	return (
-		<Container padding={{ horizontal: 'medium', vertical: 'small' }} key="button-find-shares">
+		<Container
+			padding={{ horizontal: 'medium', vertical: 'small' }}
+			key="button-find-shares"
+			data-testid="button-find-shares"
+		>
 			<Button
 				type="outlined"
 				label={label}
