@@ -17,7 +17,7 @@ import { SidebarAccordionMui } from './sidebar-accordion';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { useRootsArray } from '../../../carbonio-ui-commons/store/zustand/folder';
 import { themeMui } from '../../../carbonio-ui-commons/theme/theme-mui';
-import { LOCAL_STORAGES, ROUTES } from '../../../constants';
+import { LOCAL_STORAGES, ROUTES_INTERNAL_PARAMS } from '../../../constants';
 import { sortFolders } from '../../../helpers/folders';
 import useGetTagsAccordion from '../../hooks/use-get-tags-accordions';
 
@@ -47,7 +47,7 @@ const SecondaryBarView: FC<SecondaryBarComponentProps> = ({ expanded = false }) 
 				/>
 			);
 			if (folder.id === FOLDERS.CONTACTS) {
-				const redirectPath = `/${ROUTES.contactGroups}/${FOLDERS.CONTACTS}`;
+				const redirectPath = `${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${FOLDERS.CONTACTS}`;
 				collapsedItems.push(
 					<CollapsedSideBarItem
 						id={'contact-groups'}

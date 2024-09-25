@@ -13,8 +13,8 @@ type CollapsedSidebarItemProps = {
 	id: string;
 	icon: string;
 	iconTooltip: string;
-	iconColor: string;
 	redirectPath: string;
+	iconColor?: string;
 };
 export const CollapsedSideBarItem = ({
 	id,
