@@ -21,7 +21,7 @@ const folderIconName: Record<number, string> = {
 	3: 'Trash2Outline'
 };
 
-export const CollapsedSideBarItems = ({ folder }: { folder: Folder }): React.JSX.Element => {
+export const CollapsedSideBarFolderItem = ({ folder }: { folder: Folder }): React.JSX.Element => {
 	const folderIcon = useMemo(() => {
 		if (Object.keys(folderIconName).includes(folder.id)) {
 			return folderIconName[Number(folder.id)];
