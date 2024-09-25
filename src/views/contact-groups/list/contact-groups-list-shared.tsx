@@ -14,19 +14,23 @@ import { StyledListItem } from '../../../components/styled-components';
 import { useFindSharedContactGroups } from '../../../hooks/use-find-shared-contact-groups';
 
 export const ContactGroupListShared = (): React.JSX.Element => {
-	const { accountId } = useParams<{ accountId: string }>();
+	const { accountId, id: currentPathId } = useParams<{ accountId: string; id: string }>();
 	const { sharedContactGroups, findMore } = useFindSharedContactGroups(accountId);
 
 	const items = useMemo(
 		() =>
 			map(sharedContactGroups, (contactGroup) => (
-				<StyledListItem key={contactGroup.id} data-testid={'shared-list-item'}>
+				<StyledListItem
+					key={contactGroup.id}
+					data-testid={`shared-list-item-${contactGroup.id}`}
+					active={currentPathId === contactGroup.id}
+				>
 					{(visible): React.JSX.Element => (
 						<ContactGroupListItemSharedAccount visible={visible} contactGroup={contactGroup} />
 					)}
 				</StyledListItem>
 			)),
-		[sharedContactGroups]
+		[currentPathId, sharedContactGroups]
 	);
 
 	return <ContactGroupListComponent onListBottom={findMore}>{items}</ContactGroupListComponent>;

@@ -6,7 +6,7 @@
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
-import { within } from '@testing-library/react';
+import { waitFor, within } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { act } from 'react-dom/test-utils';
 
@@ -25,6 +25,9 @@ import {
 	registerFindContactGroupsHandler
 } from '../../tests/msw-handlers/find-contact-groups';
 import { createCnItem } from '../../tests/utils';
+
+const STANDARD_BACKGROUND_COLOR = `background: rgb(217, 217, 217)`;
+const ACTIVE_BACKGROUND_COLOR = `background: rgb(150, 184, 233)`;
 
 function setupMainAccountContactGroupView(): any {
 	return setupTest(<ContactGroupView />, {
@@ -428,6 +431,37 @@ describe('Contact Group View', () => {
 			await screen.findByText('Contact group successfully deleted');
 
 			expect(screen.queryByText(sharedContactGroup.fileAsStr)).not.toBeInTheDocument();
+		});
+
+		it('should display list item as active after clicking on it', async () => {
+			const accountId = '123';
+			const contactGroupId = '10101010';
+			const contactGroupName = 'My shared Contact Group';
+			registerFindContactGroupsHandler({
+				findContactGroupsResponse: createFindContactGroupsResponse(
+					[
+						createCnItem(contactGroupName, [], contactGroupId),
+						...[...Array(2)].map(() => createCnItem())
+					],
+					false
+				),
+				offset: 0
+			});
+
+			const { user } = setupTest(<ContactGroupView />, {
+				initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${accountId}`]
+			});
+
+			const styledListItem = await screen.findByTestId(`shared-list-item-${contactGroupId}`);
+			expect(styledListItem).toHaveStyle(STANDARD_BACKGROUND_COLOR);
+			const listItem = await within(styledListItem).findByText(contactGroupName);
+			await act(async () => {
+				await user.click(listItem);
+			});
+			await screen.findByTestId('contact-group-displayer');
+			await waitFor(async () => {
+				expect(styledListItem).toHaveStyle(ACTIVE_BACKGROUND_COLOR);
+			});
 		});
 
 		describe('Displayer', () => {
