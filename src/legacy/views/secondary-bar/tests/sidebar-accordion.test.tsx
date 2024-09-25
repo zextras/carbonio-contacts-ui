@@ -3,21 +3,24 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { setupTest } from '../../../../carbonio-ui-commons/test/test-setup';
-import { SidebarAccordionMui } from '../sidebar-accordion';
 import React from 'react';
-import { Folder } from '../../../../carbonio-ui-commons/types';
-import { generateFolder } from '../../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
+
 import { screen } from '@testing-library/react';
-import { FOLDERS } from '../../../../carbonio-ui-commons/constants/folders';
 import * as shellUi from '@zextras/carbonio-shell-ui';
 
-describe('Sidebar Accordion', () => {
-	describe('Contact Groups', () => {
-		beforeEach(() => {
-			jest.spyOn(shellUi, 'useLocalStorage').mockReturnValue([[], jest.fn()]);
-		});
+import { FOLDERS } from '../../../../carbonio-ui-commons/constants/folders';
+import { generateFolder } from '../../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
+import { setupTest } from '../../../../carbonio-ui-commons/test/test-setup';
+import { Folder } from '../../../../carbonio-ui-commons/types';
+import { SidebarAccordionMui } from '../sidebar-accordion';
 
+describe('Sidebar Accordion', () => {
+	beforeEach(() => {
+		jest.spyOn(shellUi, 'useLocalStorage').mockReturnValue([[], jest.fn()]);
+	});
+
+	const accountId = '123';
+	describe('Main account Contact Groups', () => {
 		it('should be displayed if Contacts folder is present', async () => {
 			const contactsFolder = generateFolder({
 				name: 'Contacts',
@@ -42,6 +45,48 @@ describe('Sidebar Accordion', () => {
 			const emailedContactsFolder = generateFolder({
 				name: 'Emailed Contacts',
 				id: '100',
+				children: []
+			});
+			const trashFolder = generateFolder({ name: 'Trash', id: FOLDERS.TRASH, children: [] });
+			const folders: Array<Folder> = [emailedContactsFolder, trashFolder];
+
+			setupTest(
+				<SidebarAccordionMui
+					folders={folders}
+					initialExpanded={[]}
+					localStorageName={''}
+					selectedFolderId={''}
+				/>
+			);
+
+			expect(screen.queryByText('Contact Groups')).not.toBeInTheDocument();
+		});
+	});
+	describe('Shared account Contact Groups', () => {
+		it('should be displayed if Contacts folder is present', async () => {
+			const contactsFolder = generateFolder({
+				name: 'Contacts',
+				id: `${accountId}:${FOLDERS.CONTACTS}`,
+				children: []
+			});
+			const folders: Array<Folder> = [contactsFolder];
+
+			setupTest(
+				<SidebarAccordionMui
+					folders={folders}
+					initialExpanded={[]}
+					localStorageName={''}
+					selectedFolderId={''}
+				/>
+			);
+
+			expect(await screen.findByText('Contact Groups')).toBeVisible();
+		});
+
+		it('should not be displayed if Contacts folder not present', async () => {
+			const emailedContactsFolder = generateFolder({
+				name: 'Emailed Contacts',
+				id: `${accountId}:100`,
 				children: []
 			});
 			const trashFolder = generateFolder({ name: 'Trash', id: FOLDERS.TRASH, children: [] });
