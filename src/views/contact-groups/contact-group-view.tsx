@@ -10,7 +10,8 @@ import { Container } from '@zextras/carbonio-design-system';
 import { trimEnd } from 'lodash';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 
-import { ContactGroupDisplayerController } from './displayer/contact-group-displayer-controller';
+import { ContactGroupDisplayerMainAccount } from './displayer/contact-group-displayer-main-account';
+import { ContactGroupDisplayerShared } from './displayer/contact-group-displayer-shared';
 import { ContactGroupListMainAccount } from './list/contact-group-list-main-account';
 import { ContactGroupListShared } from './list/contact-groups-list-shared';
 import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
@@ -38,7 +39,7 @@ export const ContactGroupView = (): React.JSX.Element => {
 						borderRadius="none"
 						maxHeight={'100%'}
 					>
-						<ContactGroupDisplayerController />
+						<ContactGroupDisplayerMainAccount />
 					</Container>
 				</Container>
 			</Route>
@@ -59,7 +60,7 @@ export const ContactGroupView = (): React.JSX.Element => {
 						borderRadius="none"
 						maxHeight={'100%'}
 					>
-						<ContactGroupDisplayerController />
+						<ContactGroupDisplayerShared />
 					</Container>
 				</Container>
 			</Route>

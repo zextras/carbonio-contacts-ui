@@ -6,40 +6,33 @@
 import React, { useCallback } from 'react';
 
 import { useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
+import { useParams } from 'react-router-dom';
 
-import { ContactGroupDisplayerActionsHeader } from './contact-group-displayer-actions-header';
-import { ContactGroupEmptyDisplayer } from './contact-group-empty-displayer';
+import { ContactGroupDisplayerComponent } from './contact-group-displayer-component';
 import { ROUTES_INTERNAL_PARAMS } from '../../../constants';
 import { useEvaluateSharedContactGroupActions } from '../../../hooks/use-contact-group-actions';
 import { useSharedContactGroup } from '../../../store/contact-groups';
 
-interface ContactGroupSharedDisplayerProps {
-	accountId: string;
-	contactGroupId: string;
-}
-
-export const ContactGroupDisplayerShared = ({
-	accountId,
-	contactGroupId
-}: ContactGroupSharedDisplayerProps): React.JSX.Element => {
+export const ContactGroupDisplayerShared = (): React.JSX.Element => {
+	const { id: contactGroupId, accountId } = useParams<{ id: string; accountId: string }>();
 	const contactGroup = useSharedContactGroup(accountId, contactGroupId);
 	const replaceHistory = useReplaceHistoryCallback();
 	const routeToContactGroups = useCallback((): void => {
 		replaceHistory(`${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${accountId}`);
 	}, [accountId, replaceHistory]);
 	const evaluateActions = useEvaluateSharedContactGroupActions();
+	const actionsEvaluator = useCallback(() => {
+		if (contactGroup) {
+			return evaluateActions(contactGroup);
+		}
+		return [];
+	}, [contactGroup, evaluateActions]);
 
 	return (
-		<>
-			{contactGroup ? (
-				<ContactGroupDisplayerActionsHeader
-					contactGroup={contactGroup}
-					onCloseDisplayer={routeToContactGroups}
-					actions={evaluateActions(contactGroup)}
-				/>
-			) : (
-				<ContactGroupEmptyDisplayer />
-			)}
-		</>
+		<ContactGroupDisplayerComponent
+			contactGroup={contactGroup}
+			onCloseDisplayer={routeToContactGroups}
+			actionEvaluator={actionsEvaluator}
+		/>
 	);
 };

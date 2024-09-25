@@ -8,7 +8,7 @@ import React from 'react';
 
 import { Route } from 'react-router-dom';
 
-import { ContactGroupDisplayerController } from './contact-group-displayer-controller';
+import { ContactGroupDisplayerMainAccount } from './contact-group-displayer-main-account';
 import { screen, setupTest, within } from '../../../carbonio-ui-commons/test/test-setup';
 import { ROUTES, ROUTES_INTERNAL_PARAMS } from '../../../constants';
 import { EMPTY_DISPLAYER_HINT, TESTID_SELECTORS } from '../../../constants/tests';
@@ -16,8 +16,10 @@ import { useContactGroupStore } from '../../../store/contact-groups';
 import { buildContactGroup } from '../../../tests/model-builder';
 
 describe('Displayer controller', () => {
-	it('should show suggestions if no contact group is active', async () => {
-		setupTest(<ContactGroupDisplayerController />);
+	it('should show empty displayer if no contact group is active', async () => {
+		setupTest(<ContactGroupDisplayerMainAccount />, {
+			initialEntries: ['/contact-groups/7']
+		});
 		await screen.findByText(EMPTY_DISPLAYER_HINT);
 		expect(screen.getByText(EMPTY_DISPLAYER_HINT)).toBeVisible();
 		expect(
@@ -30,10 +32,10 @@ describe('Displayer controller', () => {
 		useContactGroupStore.getState().addContactGroups([contactGroup]);
 
 		setupTest(
-			<Route path={`${ROUTES.mainRoute}${ROUTES.contactGroups}`}>
-				<ContactGroupDisplayerController />
+			<Route path={`${ROUTES.mainRoute}${ROUTES.contactGroups}/7/:id?`}>
+				<ContactGroupDisplayerMainAccount />
 			</Route>,
-			{ initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${contactGroup.id}`] }
+			{ initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}/7/${contactGroup.id}`] }
 		);
 
 		expect(

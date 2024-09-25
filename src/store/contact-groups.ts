@@ -252,9 +252,9 @@ export const useContactGroupStore = create<State & ContactGroupStoreActions>()((
 export const useSharedContactGroup = (
 	accountId: string,
 	contactGroupId: string
-): SharedContactGroup =>
+): SharedContactGroup | undefined =>
 	useContactGroupStore(
-		(state) => state.sharedContactGroups[accountId].contactGroups[contactGroupId]
+		(state) => state.sharedContactGroups[accountId]?.contactGroups?.[contactGroupId]
 	);
 
 export const useSharedAccountData = (accountId: string): SharedAccountData =>

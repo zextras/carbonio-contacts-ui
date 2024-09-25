@@ -6,36 +6,36 @@
 import React, { useCallback } from 'react';
 
 import { useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
+import { useParams } from 'react-router-dom';
 
-import { ContactGroupDisplayerActionsHeader } from './contact-group-displayer-actions-header';
-import { ContactGroupEmptyDisplayer } from './contact-group-empty-displayer';
+import { ContactGroupDisplayerComponent } from './contact-group-displayer-component';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { ROUTES_INTERNAL_PARAMS } from '../../../constants';
 import { useEvaluateMainAccountContactGroupActions } from '../../../hooks/use-contact-group-actions';
 import { useGetMainAccountContactGroup } from '../../../hooks/useGetContactGroup';
 
-type Props = {
-	contactGroupId: string;
-};
-export const ContactGroupDisplayerMainAccount = ({ contactGroupId }: Props): React.JSX.Element => {
+export const ContactGroupDisplayerMainAccount = (): React.JSX.Element => {
+	const { id: contactGroupId } = useParams<{ id: string }>();
 	const contactGroup = useGetMainAccountContactGroup(contactGroupId);
 	const replaceHistory = useReplaceHistoryCallback();
 	const routeToContacts = useCallback((): void => {
 		replaceHistory(`${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${FOLDERS.CONTACTS}`);
 	}, [replaceHistory]);
 	const evaluateActions = useEvaluateMainAccountContactGroupActions();
+	const actionsEvaluator = useCallback(() => {
+		if (contactGroup) {
+			return evaluateActions(contactGroup);
+		}
+		return [];
+	}, [contactGroup, evaluateActions]);
 
 	return (
 		<>
-			{contactGroup ? (
-				<ContactGroupDisplayerActionsHeader
-					contactGroup={contactGroup}
-					onCloseDisplayer={routeToContacts}
-					actions={evaluateActions(contactGroup)}
-				/>
-			) : (
-				<ContactGroupEmptyDisplayer />
-			)}
+			<ContactGroupDisplayerComponent
+				contactGroup={contactGroup}
+				onCloseDisplayer={routeToContacts}
+				actionEvaluator={actionsEvaluator}
+			/>
 		</>
 	);
 };

@@ -32,14 +32,11 @@ describe('Find contact groups', () => {
 			title: 'My Group'
 		};
 		await waitFor(() => {
-			expect(result.current).toEqual({
-				sharedContactGroups: [expectedSharedContactGroup],
-				findMore: expect.any(Function)
-			});
+			expect(result.current.sharedContactGroups).toEqual([expectedSharedContactGroup]);
 		});
 	});
 
-	it('should allow calling findMore if more results', async () => {
+	it('should return truthy has more if more results', async () => {
 		const contactGroup = createCnItem('My Group', [], '100');
 		registerFindContactGroupsHandler({
 			findContactGroupsResponse: createFindContactGroupsResponse([contactGroup], true),
