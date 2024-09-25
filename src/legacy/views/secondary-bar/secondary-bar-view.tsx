@@ -61,27 +61,25 @@ const SecondaryBarView: FC<SecondaryBarComponentProps> = ({ expanded = false }) 
 		});
 
 	return (
-		<>
-			<ThemeProvider theme={themeMui}>
-				{expanded ? (
-					<Switch>
-						<Route path={[`${path}/folder/:folderId/:type?/:itemId?`, `${path}/contact-groups`]}>
-							<SidebarAccordionMui
-								folders={folders}
-								selectedFolderId={selectedFolderId}
-								localStorageName={LOCAL_STORAGES.EXPANDED_ADDRESSBOOKS}
-								initialExpanded={[FOLDERS.USER_ROOT]}
-							/>
+		<ThemeProvider theme={themeMui}>
+			{expanded ? (
+				<Switch>
+					<Route path={[`${path}/folder/:folderId/:type?/:itemId?`, `${path}/contact-groups`]}>
+						<SidebarAccordionMui
+							folders={folders}
+							selectedFolderId={selectedFolderId}
+							localStorageName={LOCAL_STORAGES.EXPANDED_ADDRESSBOOKS}
+							initialExpanded={[FOLDERS.USER_ROOT]}
+						/>
 
-							<Divider />
-							<Accordion items={[tagsAccordionItems]} />
-						</Route>
-					</Switch>
-				) : (
-					<div data-testid={'sidebar-collapsed'}>{collapsedItems}</div>
-				)}
-			</ThemeProvider>
-		</>
+						<Divider />
+						<Accordion items={[tagsAccordionItems]} />
+					</Route>
+				</Switch>
+			) : (
+				<div data-testid={'sidebar-collapsed'}>{collapsedItems}</div>
+			)}
+		</ThemeProvider>
 	);
 };
 
