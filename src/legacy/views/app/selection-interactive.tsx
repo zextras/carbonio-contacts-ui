@@ -12,9 +12,9 @@ import { useParams } from 'react-router-dom';
 import { useAppSelector } from '../../hooks/redux';
 import { selectAllContactsInFolder } from '../../store/selectors/contacts';
 
-export default function SelectionInteractive() {
+export default function SelectionInteractive(): JSX.Element {
 	const [t] = useTranslation();
-	const { folderId } = useParams();
+	const { folderId } = useParams<{ folderId: string }>();
 	const contacts = useAppSelector((state) => selectAllContactsInFolder(state, folderId));
 	const trashMessages = useMemo(
 		() => [
@@ -49,9 +49,9 @@ export default function SelectionInteractive() {
 
 	const displayerMessage = useMemo(() => {
 		if (folderId === '3') {
-			return contacts?.length > 0 ? trashMessages[1] : trashMessages[0];
+			return contacts?.length && contacts.length > 0 ? trashMessages[1] : trashMessages[0];
 		}
-		return contacts?.length > 0 ? emptyListMessage : emptyFieldMessage;
+		return contacts?.length && contacts.length > 0 ? emptyListMessage : emptyFieldMessage;
 	}, [contacts, emptyListMessage, emptyFieldMessage, folderId, trashMessages]);
 	const displayerTitle = displayerMessage ? displayerMessage.title : '';
 	const displayerDescription = displayerMessage ? displayerMessage.description : '';
