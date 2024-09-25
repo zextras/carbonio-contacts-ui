@@ -30,12 +30,10 @@ export const ContactGroupDisplayerMainAccount = (): React.JSX.Element => {
 	}, [contactGroup, evaluateActions]);
 
 	return (
-		<>
-			<ContactGroupDisplayerComponent
-				contactGroup={contactGroup}
-				onCloseDisplayer={routeToContacts}
-				actionEvaluator={actionsEvaluator}
-			/>
-		</>
+		<ContactGroupDisplayerComponent
+			contactGroup={contactGroup}
+			onCloseDisplayer={routeToContacts}
+			actionEvaluator={actionsEvaluator}
+		/>
 	);
 };
