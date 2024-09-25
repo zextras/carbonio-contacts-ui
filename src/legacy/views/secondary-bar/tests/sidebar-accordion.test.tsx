@@ -7,6 +7,7 @@ import React from 'react';
 
 import { screen } from '@testing-library/react';
 import * as shellUi from '@zextras/carbonio-shell-ui';
+import * as shell from '@zextras/carbonio-shell-ui';
 
 import { FOLDERS } from '../../../../carbonio-ui-commons/constants/folders';
 import { generateFolder } from '../../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
@@ -103,7 +104,11 @@ describe('Sidebar Accordion', () => {
 
 			expect(screen.queryByText('Contact Groups')).not.toBeInTheDocument();
 		});
-		it('should show FindShare button only on the main account', async () => {
+
+		it('should show FindShare button only on the main account when expanded', async () => {
+			const sharedAccountFolderId = '200';
+			const expandedAccordions = [FOLDERS.USER_ROOT, sharedAccountFolderId];
+			jest.spyOn(shell, 'useLocalStorage').mockReturnValue([expandedAccordions, jest.fn()]);
 			const mainAccount = generateFolder({
 				name: 'userRoot',
 				id: FOLDERS.USER_ROOT,
@@ -116,20 +121,25 @@ describe('Sidebar Accordion', () => {
 					})
 				]
 			});
-			const sharedAccount = generateFolder({ name: 'sharedAccount', id: '200', children: [] });
+			const sharedAccount = generateFolder({
+				name: 'sharedAccount',
+				id: sharedAccountFolderId,
+				children: []
+			});
 			const folders: Array<Folder> = [mainAccount, sharedAccount];
 
 			setupTest(
 				<SidebarAccordionMui
 					folders={folders}
-					initialExpanded={['100', '200', FOLDERS.USER_ROOT]}
+					initialExpanded={expandedAccordions}
 					localStorageName={''}
 					selectedFolderId={''}
 				/>
 			);
 
-			expect(await screen.findByTestId('button-find-shares')).toBeVisible();
-			expect(screen.queryAllByTestId('button-find-shares').length).toBe(1);
+			const findSharesBtn = await screen.findAllByTestId('button-find-shares');
+			expect(findSharesBtn.length).toBe(1);
+			expect(findSharesBtn[0]).toBeVisible();
 		});
 	});
 });
