@@ -7,6 +7,7 @@
 import React, { useCallback, useMemo } from 'react';
 
 import { map } from 'lodash';
+import { useParams } from 'react-router-dom';
 
 import { ContactGroupListComponent } from './contact-group-list-component';
 import { ContactGroupListItemMainAccount } from './contact-group-list-item-main-account';
@@ -17,11 +18,16 @@ export const ContactGroupListMainAccount = (): React.JSX.Element => {
 	const { contactGroups: mainAccountContactGroups, hasMore, findMore } = useFindContactGroups();
 
 	const onListBottom = useCallback(() => (hasMore ? findMore() : undefined), [hasMore, findMore]);
+	const { id: currentPathId } = useParams<{ id: string }>();
 
 	const items = useMemo(
 		() =>
 			map(mainAccountContactGroups, (contactGroup) => (
-				<StyledListItem key={contactGroup.id} data-testid={'main-account-list-item'}>
+				<StyledListItem
+					key={contactGroup.id}
+					data-testid={`main-account-list-item-${contactGroup.id}`}
+					active={currentPathId === contactGroup.id}
+				>
 					{(visible): React.JSX.Element => (
 						<ContactGroupListItemMainAccount visible={visible} contactGroup={contactGroup} />
 					)}

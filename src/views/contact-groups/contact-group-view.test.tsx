@@ -198,6 +198,35 @@ describe('Contact Group View', () => {
 						recipients: [expect.objectContaining({ email: member })]
 					});
 				});
+				it('should display list item as active after clicking on it', async () => {
+					const contactGroupId = '111';
+					const contactGroupName = 'My Contact Group';
+					registerFindContactGroupsHandler({
+						findContactGroupsResponse: createFindContactGroupsResponse(
+							[
+								createCnItem(contactGroupName, [], contactGroupId),
+								...[...Array(2)].map(() => createCnItem())
+							],
+							false
+						),
+						offset: 0
+					});
+
+					const { user } = setupMainAccountContactGroupView();
+
+					const styledListItem = await screen.findByTestId(
+						`main-account-list-item-${contactGroupId}`
+					);
+					expect(styledListItem).toHaveStyle(STANDARD_BACKGROUND_COLOR);
+					const listItem = await within(styledListItem).findByText(contactGroupName);
+					await act(async () => {
+						await user.click(listItem);
+					});
+					await screen.findByTestId('contact-group-displayer');
+					await waitFor(async () => {
+						expect(styledListItem).toHaveStyle(ACTIVE_BACKGROUND_COLOR);
+					});
+				});
 			});
 
 			describe('Delete contact group action', () => {
