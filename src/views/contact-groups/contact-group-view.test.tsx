@@ -449,11 +449,10 @@ describe('Contact Group View', () => {
 				await act(async () => {
 					await user.click(await screen.findByText(contactGroupName));
 				});
-				screen.logTestingPlaygroundURL();
 				await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.closeDisplayer });
 				expect(screen.getAllByText(contactGroupName)).toHaveLength(3);
 				expect(screen.getByText('Addresses list')).toBeVisible();
-				// await screen.findByTestId('contact-group-displayer');
+				await screen.findByTestId('contact-group-displayer');
 			});
 		});
 	});
