@@ -43,232 +43,234 @@ function setupSharedAccountContactGroupView(accountId: string): any {
 
 describe('Contact Group View', () => {
 	describe('main account', () => {
-		it('should render the avatar, the name and the number of the members (case 1+ addresses string) of a contact group', async () => {
-			const contactGroupName = faker.company.name();
-			registerFindContactGroupsHandler({
-				findContactGroupsResponse: createFindContactGroupsResponse([
-					createCnItem(contactGroupName, [faker.internet.email(), faker.internet.email()])
-				]),
-				offset: 0
-			});
-			setupMainAccountContactGroupView();
-
-			expect(await screen.findByText(contactGroupName)).toBeVisible();
-			const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
-			expect(
-				within(listItemContent).getByTestId(TESTID_SELECTORS.icons.contactGroup)
-			).toBeVisible();
-			expect(screen.getByText('2 addresses')).toBeVisible();
-		});
-
-		it('should render the avatar, the name and the number of the members (case 0 addresses string) of a contact group', async () => {
-			const contactGroupName = faker.company.name();
-			registerFindContactGroupsHandler({
-				findContactGroupsResponse: createFindContactGroupsResponse([
-					createCnItem(contactGroupName)
-				]),
-				offset: 0
-			});
-			setupMainAccountContactGroupView();
-
-			expect(await screen.findByText(contactGroupName)).toBeVisible();
-			expect(screen.getByText('0 addresses')).toBeVisible();
-			const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
-			expect(
-				within(listItemContent).getByTestId(TESTID_SELECTORS.icons.contactGroup)
-			).toBeVisible();
-		});
-
-		it('should render the avatar, the name and the number of the members (case 1 address string) of a contact group', async () => {
-			const contactGroupName = faker.company.name();
-			registerFindContactGroupsHandler({
-				findContactGroupsResponse: createFindContactGroupsResponse([
-					createCnItem(contactGroupName, [faker.internet.email()])
-				]),
-				offset: 0
-			});
-			setupMainAccountContactGroupView();
-
-			expect(await screen.findByText(contactGroupName)).toBeVisible();
-			const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
-			expect(
-				within(listItemContent).getByTestId(TESTID_SELECTORS.icons.contactGroup)
-			).toBeVisible();
-			expect(screen.getByText('1 address')).toBeVisible();
-		});
-
-		it('should show the empty list message if there is no contact group', async () => {
-			registerFindContactGroupsHandler({
-				findContactGroupsResponse: createFindContactGroupsResponse([]),
-				offset: 0
-			});
-
-			setupMainAccountContactGroupView();
-
-			expect(await screen.findByText(EMPTY_LIST_HINT)).toBeVisible();
-		});
-
-		describe('Send mail action', () => {
-			it('should open the mail board (ContactGroupDisplayerController trigger)', async () => {
-				const openMailComposer = jest.fn();
-				jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
-				const contactGroupName = faker.company.name();
-				const member = faker.internet.email();
-				registerFindContactGroupsHandler({
-					findContactGroupsResponse: createFindContactGroupsResponse([
-						createCnItem(contactGroupName, [member])
-					]),
-					offset: 0
-				});
-				const { user } = setupMainAccountContactGroupView();
-
-				await screen.findByText(contactGroupName);
-				const listItem = await screen.findByTestId(TESTID_SELECTORS.listItemContent);
-				await user.click(listItem);
-				const displayer = await screen.findByTestId(TESTID_SELECTORS.displayer);
-				const action = within(displayer).getByRole('button', { name: /mail/i });
-				await user.click(action);
-				expect(openMailComposer).toHaveBeenCalledTimes(1);
-				expect(openMailComposer).toHaveBeenCalledWith({
-					recipients: [expect.objectContaining({ email: member })]
-				});
-			});
-
-			it('should open the mail board (Hover trigger)', async () => {
-				const openMailComposer = jest.fn();
-				jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
-				const contactGroupName = faker.company.name();
-				const member = faker.internet.email();
-				registerFindContactGroupsHandler({
-					findContactGroupsResponse: createFindContactGroupsResponse([
-						createCnItem(contactGroupName, [member])
-					]),
-					offset: 0
-				});
-				const { user } = setupMainAccountContactGroupView();
-
-				await screen.findAllByText(contactGroupName);
-				const action = screen.getByTestId(TESTID_SELECTORS.icons.sendEmail);
-				await user.click(action);
-				expect(openMailComposer).toHaveBeenCalledTimes(1);
-				expect(openMailComposer).toHaveBeenCalledWith({
-					recipients: [expect.objectContaining({ email: member })]
-				});
-			});
-
-			it('should hide send mail hover action when the contact group has 0 members', async () => {
-				const openMailComposer = jest.fn();
-				jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
+		describe('List', () => {
+			it('should render the avatar, the name and the number of the members (case 1+ addresses string) of a contact group', async () => {
 				const contactGroupName = faker.company.name();
 				registerFindContactGroupsHandler({
 					findContactGroupsResponse: createFindContactGroupsResponse([
-						createCnItem(contactGroupName, [])
+						createCnItem(contactGroupName, [faker.internet.email(), faker.internet.email()])
 					]),
 					offset: 0
 				});
 				setupMainAccountContactGroupView();
 
-				await screen.findAllByText(contactGroupName);
-				expect(screen.queryByTestId(TESTID_SELECTORS.icons.sendEmail)).not.toBeInTheDocument();
+				expect(await screen.findByText(contactGroupName)).toBeVisible();
+				const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
+				expect(
+					within(listItemContent).getByTestId(TESTID_SELECTORS.icons.contactGroup)
+				).toBeVisible();
+				expect(screen.getByText('2 addresses')).toBeVisible();
 			});
 
-			it('should open the mail board (Contextual menu trigger)', async () => {
-				const openMailComposer = jest.fn();
-				jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
+			it('should render the avatar, the name and the number of the members (case 0 addresses string) of a contact group', async () => {
 				const contactGroupName = faker.company.name();
-				const member = faker.internet.email();
 				registerFindContactGroupsHandler({
 					findContactGroupsResponse: createFindContactGroupsResponse([
-						createCnItem(contactGroupName, [member])
+						createCnItem(contactGroupName)
 					]),
 					offset: 0
 				});
-				const { user } = setupMainAccountContactGroupView();
+				setupMainAccountContactGroupView();
 
-				await screen.findByText(contactGroupName);
-				const listItem = await screen.findByTestId(TESTID_SELECTORS.listItemContent);
-				await user.rightClick(listItem);
-
-				const contextualMenu = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
-				const action = within(contextualMenu).getByText('Send e-mail');
-				await user.click(action);
-				expect(openMailComposer).toHaveBeenCalledTimes(1);
-				expect(openMailComposer).toHaveBeenCalledWith({
-					recipients: [expect.objectContaining({ email: member })]
-				});
-			});
-		});
-
-		describe('Delete contact group action', () => {
-			it('should remove deleted contact group when you confirm deletion and api call will success (Hover trigger)', async () => {
-				const cnItem1 = createCnItem();
-				registerFindContactGroupsHandler({
-					findContactGroupsResponse: createFindContactGroupsResponse(
-						[cnItem1, ...[...Array(2)].map(() => createCnItem())],
-						false
-					),
-					offset: 0
-				});
-				registerDeleteContactHandler(cnItem1.id);
-
-				const { user } = setupMainAccountContactGroupView();
-
-				await screen.findByText(cnItem1.fileAsStr);
-
-				const listElement = screen
-					.getAllByTestId(TESTID_SELECTORS.listItemContent)
-					.find((element) => element.textContent?.includes(cnItem1.fileAsStr));
-
-				expect(listElement).toBeVisible();
-
-				const deleteAction = within(listElement as HTMLElement).getByTestId(
-					TESTID_SELECTORS.icons.trash
-				);
-
-				await user.click(deleteAction);
-				const button = await screen.findByRole('button', {
-					name: 'delete'
-				});
-				await user.click(button);
-				await screen.findByText('Contact group successfully deleted');
-
-				expect(screen.queryByText(cnItem1.fileAsStr)).not.toBeInTheDocument();
+				expect(await screen.findByText(contactGroupName)).toBeVisible();
+				expect(screen.getByText('0 addresses')).toBeVisible();
+				const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
+				expect(
+					within(listItemContent).getByTestId(TESTID_SELECTORS.icons.contactGroup)
+				).toBeVisible();
 			});
 
-			it('should not remove deleted contact group when you confirm deletion and api call fail (Hover trigger)', async () => {
-				const cnItem1 = createCnItem();
+			it('should render the avatar, the name and the number of the members (case 1 address string) of a contact group', async () => {
+				const contactGroupName = faker.company.name();
 				registerFindContactGroupsHandler({
-					findContactGroupsResponse: createFindContactGroupsResponse(
-						[cnItem1, ...[...Array(2)].map(() => createCnItem())],
-						false
-					),
+					findContactGroupsResponse: createFindContactGroupsResponse([
+						createCnItem(contactGroupName, [faker.internet.email()])
+					]),
 					offset: 0
 				});
-				registerDeleteContactHandler(cnItem1.id, JEST_MOCKED_ERROR);
+				setupMainAccountContactGroupView();
 
-				const { user } = setupMainAccountContactGroupView();
+				expect(await screen.findByText(contactGroupName)).toBeVisible();
+				const listItemContent = screen.getByTestId(TESTID_SELECTORS.listItemContent);
+				expect(
+					within(listItemContent).getByTestId(TESTID_SELECTORS.icons.contactGroup)
+				).toBeVisible();
+				expect(screen.getByText('1 address')).toBeVisible();
+			});
 
-				await screen.findByText(cnItem1.fileAsStr);
-
-				const listElement = screen
-					.getAllByTestId(TESTID_SELECTORS.listItemContent)
-					.find((element) => element.textContent?.includes(cnItem1.fileAsStr));
-
-				expect(listElement).toBeVisible();
-
-				const deleteAction = within(listElement as HTMLElement).getByTestId(
-					TESTID_SELECTORS.icons.trash
-				);
-
-				await user.click(deleteAction);
-				const button = await screen.findByRole('button', {
-					name: 'delete'
+			it('should show the empty list message if there is no contact group', async () => {
+				registerFindContactGroupsHandler({
+					findContactGroupsResponse: createFindContactGroupsResponse([]),
+					offset: 0
 				});
-				await user.click(button);
-				await screen.findByText('Something went wrong, please try again');
 
-				expect(screen.getByText(cnItem1.fileAsStr)).toBeVisible();
-				expect(screen.getAllByTestId(TESTID_SELECTORS.listItemContent)).toHaveLength(3);
+				setupMainAccountContactGroupView();
+
+				expect(await screen.findByText(EMPTY_LIST_HINT)).toBeVisible();
+			});
+
+			describe('Send mail action', () => {
+				it('should open the mail board (ContactGroupDisplayerController trigger)', async () => {
+					const openMailComposer = jest.fn();
+					jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
+					const contactGroupName = faker.company.name();
+					const member = faker.internet.email();
+					registerFindContactGroupsHandler({
+						findContactGroupsResponse: createFindContactGroupsResponse([
+							createCnItem(contactGroupName, [member])
+						]),
+						offset: 0
+					});
+					const { user } = setupMainAccountContactGroupView();
+
+					await screen.findByText(contactGroupName);
+					const listItem = await screen.findByTestId(TESTID_SELECTORS.listItemContent);
+					await user.click(listItem);
+					const displayer = await screen.findByTestId(TESTID_SELECTORS.displayer);
+					const action = within(displayer).getByRole('button', { name: /mail/i });
+					await user.click(action);
+					expect(openMailComposer).toHaveBeenCalledTimes(1);
+					expect(openMailComposer).toHaveBeenCalledWith({
+						recipients: [expect.objectContaining({ email: member })]
+					});
+				});
+
+				it('should open the mail board (Hover trigger)', async () => {
+					const openMailComposer = jest.fn();
+					jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
+					const contactGroupName = faker.company.name();
+					const member = faker.internet.email();
+					registerFindContactGroupsHandler({
+						findContactGroupsResponse: createFindContactGroupsResponse([
+							createCnItem(contactGroupName, [member])
+						]),
+						offset: 0
+					});
+					const { user } = setupMainAccountContactGroupView();
+
+					await screen.findAllByText(contactGroupName);
+					const action = screen.getByTestId(TESTID_SELECTORS.icons.sendEmail);
+					await user.click(action);
+					expect(openMailComposer).toHaveBeenCalledTimes(1);
+					expect(openMailComposer).toHaveBeenCalledWith({
+						recipients: [expect.objectContaining({ email: member })]
+					});
+				});
+
+				it('should hide send mail hover action when the contact group has 0 members', async () => {
+					const openMailComposer = jest.fn();
+					jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
+					const contactGroupName = faker.company.name();
+					registerFindContactGroupsHandler({
+						findContactGroupsResponse: createFindContactGroupsResponse([
+							createCnItem(contactGroupName, [])
+						]),
+						offset: 0
+					});
+					setupMainAccountContactGroupView();
+
+					await screen.findAllByText(contactGroupName);
+					expect(screen.queryByTestId(TESTID_SELECTORS.icons.sendEmail)).not.toBeInTheDocument();
+				});
+
+				it('should open the mail board (Contextual menu trigger)', async () => {
+					const openMailComposer = jest.fn();
+					jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
+					const contactGroupName = faker.company.name();
+					const member = faker.internet.email();
+					registerFindContactGroupsHandler({
+						findContactGroupsResponse: createFindContactGroupsResponse([
+							createCnItem(contactGroupName, [member])
+						]),
+						offset: 0
+					});
+					const { user } = setupMainAccountContactGroupView();
+
+					await screen.findByText(contactGroupName);
+					const listItem = await screen.findByTestId(TESTID_SELECTORS.listItemContent);
+					await user.rightClick(listItem);
+
+					const contextualMenu = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
+					const action = within(contextualMenu).getByText('Send e-mail');
+					await user.click(action);
+					expect(openMailComposer).toHaveBeenCalledTimes(1);
+					expect(openMailComposer).toHaveBeenCalledWith({
+						recipients: [expect.objectContaining({ email: member })]
+					});
+				});
+			});
+
+			describe('Delete contact group action', () => {
+				it('should remove deleted contact group when you confirm deletion and api call will success (Hover trigger)', async () => {
+					const cnItem1 = createCnItem();
+					registerFindContactGroupsHandler({
+						findContactGroupsResponse: createFindContactGroupsResponse(
+							[cnItem1, ...[...Array(2)].map(() => createCnItem())],
+							false
+						),
+						offset: 0
+					});
+					registerDeleteContactHandler(cnItem1.id);
+
+					const { user } = setupMainAccountContactGroupView();
+
+					await screen.findByText(cnItem1.fileAsStr);
+
+					const listElement = screen
+						.getAllByTestId(TESTID_SELECTORS.listItemContent)
+						.find((element) => element.textContent?.includes(cnItem1.fileAsStr));
+
+					expect(listElement).toBeVisible();
+
+					const deleteAction = within(listElement as HTMLElement).getByTestId(
+						TESTID_SELECTORS.icons.trash
+					);
+
+					await user.click(deleteAction);
+					const button = await screen.findByRole('button', {
+						name: 'delete'
+					});
+					await user.click(button);
+					await screen.findByText('Contact group successfully deleted');
+
+					expect(screen.queryByText(cnItem1.fileAsStr)).not.toBeInTheDocument();
+				});
+
+				it('should not remove deleted contact group when you confirm deletion and api call fail (Hover trigger)', async () => {
+					const cnItem1 = createCnItem();
+					registerFindContactGroupsHandler({
+						findContactGroupsResponse: createFindContactGroupsResponse(
+							[cnItem1, ...[...Array(2)].map(() => createCnItem())],
+							false
+						),
+						offset: 0
+					});
+					registerDeleteContactHandler(cnItem1.id, JEST_MOCKED_ERROR);
+
+					const { user } = setupMainAccountContactGroupView();
+
+					await screen.findByText(cnItem1.fileAsStr);
+
+					const listElement = screen
+						.getAllByTestId(TESTID_SELECTORS.listItemContent)
+						.find((element) => element.textContent?.includes(cnItem1.fileAsStr));
+
+					expect(listElement).toBeVisible();
+
+					const deleteAction = within(listElement as HTMLElement).getByTestId(
+						TESTID_SELECTORS.icons.trash
+					);
+
+					await user.click(deleteAction);
+					const button = await screen.findByRole('button', {
+						name: 'delete'
+					});
+					await user.click(button);
+					await screen.findByText('Something went wrong, please try again');
+
+					expect(screen.getByText(cnItem1.fileAsStr)).toBeVisible();
+					expect(screen.getAllByTestId(TESTID_SELECTORS.listItemContent)).toHaveLength(3);
+				});
 			});
 		});
 
@@ -331,7 +333,7 @@ describe('Contact Group View', () => {
 	});
 
 	describe('sharedAccount', () => {
-		describe('Contact Groups list', () => {
+		describe('List', () => {
 			it('should render the avatar, the name and the number of the members (case 1+ addresses string) of a contact group', async () => {
 				const contactGroupName = faker.company.name();
 				registerFindContactGroupsHandler({
