@@ -33,7 +33,7 @@ export const ContactGroupListMainAccount = (): React.JSX.Element => {
 					)}
 				</StyledListItem>
 			)),
-		[mainAccountContactGroups]
+		[currentPathId, mainAccountContactGroups]
 	);
 
 	return <ContactGroupListComponent onListBottom={onListBottom}>{items}</ContactGroupListComponent>;
