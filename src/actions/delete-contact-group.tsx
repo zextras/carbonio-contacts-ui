@@ -29,19 +29,19 @@ type DeleteCGActionBase<T extends ContactGroup> = UIAction<T, never>;
 export type DeleteCGAction = DeleteCGActionBase<ContactGroup>;
 export type DeleteSharedCGAction = DeleteCGActionBase<SharedContactGroup>;
 
-type DeleteContactGroupActionRerturn = {
+type DeleteContactGroupActionReturn = {
 	contactGroupId: string;
 };
 
 type DeleteModalProps = {
 	modalId: string;
 	modalTitle: string;
-	deleteAction: () => Promise<DeleteContactGroupActionRerturn>;
+	deleteAction: () => Promise<DeleteContactGroupActionReturn>;
 };
 
 type DeleteConfirmProps<T> = {
 	modalId: string;
-	doDelete: (contactGroup: T) => Promise<DeleteContactGroupActionRerturn>;
+	doDelete: (contactGroup: T) => Promise<DeleteContactGroupActionReturn>;
 };
 const getDeleteModal = (
 	{ modalId, modalTitle, deleteAction, onClose }: DeleteModalProps & { onClose: () => void },
@@ -55,9 +55,9 @@ const getDeleteModal = (
 		}),
 		confirmLabel: t('modal.delete.button.confirm', 'delete'),
 		confirmColor: 'error',
-		onConfirm: () =>
+		onConfirm: (): void => {
 			deleteAction()
-				.then((response: DeleteContactGroupActionRerturn) => {
+				.then((response: DeleteContactGroupActionReturn) => {
 					const boardId = `${EDIT_CONTACT_GROUP_BOARD_ID}-${response.contactGroupId}`;
 					const board = getBoardById(boardId);
 					if (board) {
@@ -81,7 +81,8 @@ const getDeleteModal = (
 						hideButton: true
 					});
 					console.error(error);
-				}),
+				});
+		},
 		showCloseIcon: true,
 		onClose,
 		children: (
