@@ -6,7 +6,6 @@
 import React from 'react';
 
 import { screen } from '@testing-library/react';
-import * as shellUi from '@zextras/carbonio-shell-ui';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { act } from 'react-dom/test-utils';
 import { useHistory } from 'react-router-dom';
@@ -25,7 +24,7 @@ jest.mock('react-router-dom', () => ({
 
 describe('Sidebar Accordion', () => {
 	beforeEach(() => {
-		jest.spyOn(shellUi, 'useLocalStorage').mockReturnValue([[], jest.fn()]);
+		jest.spyOn(shell, 'useLocalStorage').mockReturnValue([[], jest.fn()]);
 	});
 
 	const accountId = '123';
@@ -178,6 +177,37 @@ describe('Sidebar Accordion', () => {
 			expect(mockReplaceHistory).toHaveBeenCalledTimes(1);
 			expect(mockReplaceHistory).toHaveBeenCalledWith(
 				`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${FOLDERS.CONTACTS}`
+			);
+		});
+
+		it('should redirect to shared account groups when clicking contact groups', async () => {
+			const contactsFolder = generateFolder({
+				name: 'Contacts',
+				id: `${accountId}:${FOLDERS.CONTACTS}`,
+				children: []
+			});
+			const folders: Array<Folder> = [contactsFolder];
+			const mockReplaceHistory = jest.fn();
+			(useHistory as jest.Mock).mockReturnValue({
+				replace: mockReplaceHistory
+			});
+
+			const { user } = setupTest(
+				<SidebarAccordionMui
+					folders={folders}
+					initialExpanded={[]}
+					localStorageName={''}
+					selectedFolderId={''}
+				/>
+			);
+
+			const contactGroups = await screen.findByText('Contact Groups');
+			await act(async () => {
+				await user.click(contactGroups);
+			});
+			expect(mockReplaceHistory).toHaveBeenCalledTimes(1);
+			expect(mockReplaceHistory).toHaveBeenCalledWith(
+				`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${accountId}`
 			);
 		});
 	});
