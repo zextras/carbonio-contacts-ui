@@ -8,12 +8,20 @@ import React from 'react';
 import { screen } from '@testing-library/react';
 import * as shellUi from '@zextras/carbonio-shell-ui';
 import * as shell from '@zextras/carbonio-shell-ui';
+import { act } from 'react-dom/test-utils';
+import { useHistory } from 'react-router-dom';
 
 import { FOLDERS } from '../../../../carbonio-ui-commons/constants/folders';
 import { generateFolder } from '../../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
 import { setupTest } from '../../../../carbonio-ui-commons/test/test-setup';
 import { Folder } from '../../../../carbonio-ui-commons/types';
+import { ROUTES_INTERNAL_PARAMS } from '../../../../constants';
 import { SidebarAccordionMui } from '../sidebar-accordion';
+
+jest.mock('react-router-dom', () => ({
+	...jest.requireActual('react-router-dom'),
+	useHistory: jest.fn()
+}));
 
 describe('Sidebar Accordion', () => {
 	beforeEach(() => {
@@ -140,6 +148,37 @@ describe('Sidebar Accordion', () => {
 			const findSharesBtn = await screen.findAllByTestId('button-find-shares');
 			expect(findSharesBtn.length).toBe(1);
 			expect(findSharesBtn[0]).toBeVisible();
+		});
+
+		it('should redirect to main account groups when clicking contact groups', async () => {
+			const contactsFolder = generateFolder({
+				name: 'Contacts',
+				id: FOLDERS.CONTACTS,
+				children: []
+			});
+			const folders: Array<Folder> = [contactsFolder];
+			const mockReplaceHistory = jest.fn();
+			(useHistory as jest.Mock).mockReturnValue({
+				replace: mockReplaceHistory
+			});
+
+			const { user } = setupTest(
+				<SidebarAccordionMui
+					folders={folders}
+					initialExpanded={[]}
+					localStorageName={''}
+					selectedFolderId={''}
+				/>
+			);
+
+			const contactGroups = await screen.findByText('Contact Groups');
+			await act(async () => {
+				await user.click(contactGroups);
+			});
+			expect(mockReplaceHistory).toHaveBeenCalledTimes(1);
+			expect(mockReplaceHistory).toHaveBeenCalledWith(
+				`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${FOLDERS.CONTACTS}`
+			);
 		});
 	});
 });
