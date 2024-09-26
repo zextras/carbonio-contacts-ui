@@ -33,7 +33,7 @@ import {
 import { buildContact } from '../../../../tests/model-builder';
 import { generateState } from '../../../../tests/state-builder';
 import { generateStore } from '../../../tests/generators/store';
-import FolderPanel from '../folder-panel';
+import { FolderPanel } from '../folder-panel';
 
 const mockMailToAction = (): void => {
 	getActionMock.mockImplementation((type, id) => {

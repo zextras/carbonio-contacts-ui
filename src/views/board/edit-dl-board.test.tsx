@@ -37,7 +37,7 @@ import {
 	getDLContactInput,
 	spyUseBoardHooks
 } from '../../tests/utils';
-import { DistributionListsView } from '../distribution-lists-view';
+import { DistributionListsView } from '../distribution-list/distribution-lists-view';
 
 const spyUseBoard = (dl: DistributionList | undefined): void => {
 	jest.spyOn(shell, 'useBoard').mockReturnValue({

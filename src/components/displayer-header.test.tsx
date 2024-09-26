@@ -6,54 +6,49 @@
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
+import { noop } from 'lodash';
 
 import { DisplayerHeader } from './displayer-header';
 import { screen, setupTest } from '../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../constants/tests';
-import * as activeItem from '../hooks/useActiveItem';
-import { UseActiveItemReturnType } from '../hooks/useActiveItem';
 
 describe('Displayer header', () => {
-	it('should display the icon for the CGs', () => {
+	it('should display the icon', () => {
 		const title = faker.word.noun();
 		const icon = 'PeopleOutline';
 		setupTest(<DisplayerHeader title={title} icon={icon} />);
 		expect(screen.getByTestId('icon: PeopleOutline')).toBeVisible();
 	});
 
-	it('should display the CG name', () => {
+	it('should display the title', () => {
 		const title = faker.word.noun();
 		const icon = 'PeopleOutline';
 		setupTest(<DisplayerHeader title={title} icon={icon} />);
 		expect(screen.getByText(title)).toBeVisible();
 	});
 
-	it('should display the close icon', () => {
+	it('should display the close icon only if closeDisplayer is defined', () => {
 		const title = faker.word.noun();
 		const icon = 'PeopleOutline';
-		setupTest(<DisplayerHeader title={title} icon={icon} />);
+		setupTest(<DisplayerHeader title={title} icon={icon} closeDisplayer={noop} />);
 		expect(
 			screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.closeDisplayer })
 		).toBeVisible();
 	});
 
 	it('should call the removeActive function of the useActiveItem hook when the user clicks on the close icon', async () => {
-		const stub: UseActiveItemReturnType = {
-			isActive: jest.fn(),
-			setActive: jest.fn(),
-			removeActive: jest.fn(),
-			activeItem: ''
-		};
-		jest.spyOn(activeItem, 'useActiveItem').mockImplementation(() => stub);
+		const spyCloseDisplayer = jest.fn();
 		const title = faker.word.noun();
 		const icon = 'PeopleOutline';
-		const { user } = setupTest(<DisplayerHeader title={title} icon={icon} />);
+		const { user } = setupTest(
+			<DisplayerHeader title={title} icon={icon} closeDisplayer={spyCloseDisplayer} />
+		);
 		const closeButton = screen.getByRoleWithIcon('button', {
 			icon: TESTID_SELECTORS.icons.closeDisplayer
 		});
 
 		await user.click(closeButton);
 
-		expect(stub.removeActive).toHaveBeenCalled();
+		expect(spyCloseDisplayer).toHaveBeenCalled();
 	});
 });

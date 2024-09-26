@@ -3,11 +3,14 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+/* eslint-disable no-param-reassign */
 
+import produce from 'immer';
 import { differenceBy, findIndex } from 'lodash';
 import { create } from 'zustand';
 
-import { ContactGroup } from '../model/contact-group';
+import { getFolderIdParts } from '../carbonio-ui-commons/helpers/folders';
+import { ContactGroup, SharedContactGroup } from '../model/contact-group';
 
 export function compareContactGroupName(nameA: string, nameB: string): number {
 	const nameALow = nameA.toLowerCase();
@@ -21,22 +24,38 @@ export function compareContactGroupName(nameA: string, nameB: string): number {
 	return 0;
 }
 
+type SharedAccountData = {
+	hasMore: boolean;
+	offset: number;
+	contactGroups: Record<string, SharedContactGroup>;
+};
+
 type State = {
 	orderedContactGroups: Array<ContactGroup>;
 	unorderedContactGroups: Array<ContactGroup>;
+	sharedContactGroups: Record<string, SharedAccountData>;
 	offset: number;
 };
 
 export type ContactGroupStoreActions = {
 	addContactGroups: (newContactGroups: Array<ContactGroup>) => void;
+	populateSharedContactGroupsByAccountId: (
+		accountId: string,
+		newContactGroups: Array<ContactGroup>,
+		offset: number,
+		more: boolean
+	) => void;
+	getSharedContactGroupsByAccountId: (accountId: string) => Array<SharedContactGroup>;
 	addContactGroupInSortedPosition: (newContactGroup: ContactGroup) => void;
 	updateContactGroup: (contactGroup: ContactGroup) => void;
 	setOffset: (offset: number) => void;
 	removeContactGroup: (contactGroupId: string) => void;
+	removeSharedContactGroup: (accountId: string, contactGroupId: string) => void;
 	reset: () => void;
 };
 
 export const initialState: State = {
+	sharedContactGroups: {},
 	orderedContactGroups: [],
 	unorderedContactGroups: [],
 	offset: 0
@@ -74,9 +93,61 @@ export const useContactGroupStore = create<State & ContactGroupStoreActions>()((
 	reset: (): void => {
 		set(initialState);
 	},
+	populateSharedContactGroupsByAccountId: (
+		accountId: string,
+		contactGroups: Array<ContactGroup>,
+		offset: number,
+		more: boolean
+	): void => {
+		set(
+			produce(({ sharedContactGroups }: State) => {
+				let newSharedContactGroups = contactGroups.reduce(
+					(acc, contactGroup) => {
+						acc[contactGroup.id] = { ...contactGroup, accountId };
+						return acc;
+					},
+					{} as Record<string, SharedContactGroup>
+				);
+
+				if (sharedContactGroups[accountId]) {
+					newSharedContactGroups = {
+						...sharedContactGroups[accountId].contactGroups,
+						...newSharedContactGroups
+					};
+				}
+
+				sharedContactGroups[accountId] = {
+					contactGroups: newSharedContactGroups,
+					hasMore: more,
+					offset
+				};
+			})
+		);
+	},
+	getSharedContactGroupsByAccountId: (accountId: string): Array<SharedContactGroup> => {
+		const { sharedContactGroups } = get();
+		return sharedContactGroups[accountId]
+			? Object.values(sharedContactGroups[accountId].contactGroups)
+			: [];
+	},
+
 	updateContactGroup: (contactGroup): void => {
+		const contactGroupId = contactGroup.id;
+		const { zid: accountId } = getFolderIdParts(contactGroupId);
+		// Bloody ugly conditional, we have to put the same if - else everywhere
+		if (accountId) {
+			set(
+				produce(({ sharedContactGroups }: State) => {
+					sharedContactGroups[accountId].contactGroups[contactGroupId] = {
+						...contactGroup,
+						accountId
+					};
+				})
+			);
+			return;
+		}
 		const { orderedContactGroups, unorderedContactGroups, offset } = get();
-		const idxToRemove = orderedContactGroups.findIndex((item) => item.id === contactGroup.id);
+		const idxToRemove = orderedContactGroups.findIndex((item) => item.id === contactGroupId);
 
 		const newOrderedContactGroups = [...orderedContactGroups];
 		const newUnorderedContactGroups = [...unorderedContactGroups];
@@ -92,7 +163,7 @@ export const useContactGroupStore = create<State & ContactGroupStoreActions>()((
 						: offset + newOrderedContactGroups.length - orderedContactGroups.length
 			}));
 		} else {
-			const uIdxToRemove = unorderedContactGroups.findIndex((item) => item.id === contactGroup.id);
+			const uIdxToRemove = unorderedContactGroups.findIndex((item) => item.id === contactGroupId);
 			if (uIdxToRemove >= 0) {
 				newUnorderedContactGroups.splice(uIdxToRemove, 1);
 				addToProperList(newOrderedContactGroups, newUnorderedContactGroups, contactGroup);
@@ -154,6 +225,14 @@ export const useContactGroupStore = create<State & ContactGroupStoreActions>()((
 			}
 		}
 	},
+	removeSharedContactGroup: (accountId: string, contactGroupId: string): void => {
+		set(
+			produce(({ sharedContactGroups }: State) => {
+				delete sharedContactGroups[accountId].contactGroups[contactGroupId];
+			})
+		);
+	},
+
 	addContactGroupInSortedPosition: (newContactGroup: ContactGroup): void => {
 		const { orderedContactGroups, unorderedContactGroups, offset } = get();
 		const newOrderedContactGroups = [...orderedContactGroups];
@@ -169,3 +248,14 @@ export const useContactGroupStore = create<State & ContactGroupStoreActions>()((
 		}));
 	}
 }));
+
+export const useSharedContactGroup = (
+	accountId: string,
+	contactGroupId: string
+): SharedContactGroup | undefined =>
+	useContactGroupStore(
+		(state) => state.sharedContactGroups[accountId]?.contactGroups?.[contactGroupId]
+	);
+
+export const useSharedAccountData = (accountId: string): SharedAccountData =>
+	useContactGroupStore((state) => state.sharedContactGroups[accountId]);

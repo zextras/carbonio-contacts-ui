@@ -39,11 +39,12 @@ import createContactIntegration from './legacy/integrations/create-contact';
 import { StoreProvider } from './legacy/store/redux';
 import { SyncDataHandler } from './legacy/views/secondary-bar/sync-data-handler';
 
-const LazyAppView = lazy(
-	() => import(/* webpackChunkName: "contacts-view" */ './legacy/views/app-view')
+const LazyContactsView = lazy(
+	() => import(/* webpackChunkName: "contacts-view" */ './views/contacts-view')
 );
 const LazySecondaryBarView = lazy(
-	() => import(/* webpackChunkName: "secondaryBarView" */ './views/SecondaryBarView')
+	() =>
+		import(/* webpackChunkName: "secondaryBarView" */ './views/distribution-list/SecondaryBarView')
 );
 const LazyLegacySecondaryBarView = lazy(
 	() =>
@@ -52,8 +53,8 @@ const LazyLegacySecondaryBarView = lazy(
 		)
 );
 
-const LazyGroupsAppView = lazy(
-	() => import(/* webpackChunkName: "groupsAppView" */ './views/GroupsAppView')
+const LazyDistributionListAppView = lazy(
+	() => import(/* webpackChunkName: "groupsAppView" */ './views/distribution-list-view')
 );
 const LazySettingsView = lazy(
 	() => import(/* webpackChunkName: "settings-view" */ './legacy/views/settings/settings-view')
@@ -68,23 +69,27 @@ const LazyBoardView = lazy(
 
 const LazyNewContactGroupBoardView = lazy(
 	() =>
-		import(/* webpackChunkName: "newContactGroupView" */ './views/board/new-contact-group-board')
+		import(
+			/* webpackChunkName: "newContactGroupView" */ './views/contact-groups/board/new-contact-group-board'
+		)
 );
 
 const LazyEditContactGroupBoardView = lazy(
 	() =>
-		import(/* webpackChunkName: "editContactGroupView" */ './views/board/edit-contact-group-board')
+		import(
+			/* webpackChunkName: "editContactGroupView" */ './views/contact-groups/board/edit-contact-group-board'
+		)
 );
 
 const LazyEditDLBoardView = lazy(
 	() => import(/* webpackChunkName: "edit-dl-view" */ './views/board/edit-dl-board')
 );
 
-const AppView = (): React.JSX.Element => (
+const ContactsAppView = (): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
 		<StoreProvider>
 			<ModalManager>
-				<LazyAppView />
+				<LazyContactsView />
 			</ModalManager>
 		</StoreProvider>
 	</Suspense>
@@ -98,9 +103,9 @@ const SecondaryBarView = (props: SecondaryBarComponentProps): React.JSX.Element 
 	</Suspense>
 );
 
-const AppViewV2 = (): React.JSX.Element => (
+const DistributionListAppView = (): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
-		<LazyGroupsAppView />
+		<LazyDistributionListAppView />
 	</Suspense>
 );
 
@@ -181,7 +186,7 @@ const App = (): React.JSX.Element => {
 			label: t('label.app_name', 'Contacts'),
 			primaryBar: 'ContactsModOutline',
 			secondaryBar: LegacySecondaryBarView,
-			appView: AppView
+			appView: ContactsAppView
 		});
 		addRoute({
 			route: GROUPS_ROUTE,
@@ -190,7 +195,7 @@ const App = (): React.JSX.Element => {
 			label: t('label.groups_app_name', 'Contact Groups and Distribution Lists'),
 			primaryBar: 'ListOutline',
 			secondaryBar: SecondaryBarView,
-			appView: AppViewV2
+			appView: DistributionListAppView
 		});
 		addSettingsView({
 			route: CONTACTS_ROUTE,
@@ -256,8 +261,7 @@ const App = (): React.JSX.Element => {
 					onClick: (): void => {
 						addBoard({
 							boardViewId: NEW_CONTACT_GROUP_BOARD_ID,
-							title: t('board.newContactGroup.title', 'New Group'),
-							context: { navigateTo }
+							title: t('board.newContactGroup.title', 'New Group')
 						});
 					},
 					disabled: false,

@@ -28,7 +28,7 @@ type UseAppContextType = {
 	setCount: (count: number) => void;
 };
 
-export default function FolderPanel(): ReactElement {
+export const FolderPanel = (): ReactElement => {
 	const { folderId } = useParams<RouteParams>();
 	const dispatch = useAppDispatch();
 	const folder = useFolder(folderId);
@@ -77,21 +77,20 @@ export default function FolderPanel(): ReactElement {
 					maxHeight: '100%'
 				}}
 			>
-				<Container mainAlignment="flex-start" borderRadius="none" height="calc(100% - 4rem)">
+				<Container mainAlignment="flex-start" borderRadius="none">
 					{isSelecting ? (
 						<SelectPanelActions deselectAll={deselectAll} />
 					) : (
-						<Breadcrumbs folderPath={folder?.absFolderPath} itemsCount={folder?.n} />
+						<Breadcrumbs folderPath={folder?.absFolderPath ?? ''} itemsCount={folder?.n ?? 0} />
 					)}
 					<ContactsList
 						folderId={folderId}
 						contacts={sortedContacts}
 						selected={selected}
-						setCount={setCount}
 						toggle={toggle}
 					/>
 				</Container>
 			</Container>
 		</ActionsContextProvider>
 	);
-}
+};

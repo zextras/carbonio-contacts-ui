@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /*
  * SPDX-FileCopyrightText: 2021 Zextras <https://www.zextras.com>
  *
@@ -13,6 +14,7 @@ import {
 	initialState,
 	useContactGroupStore
 } from './contact-groups';
+import { SharedContactGroup } from '../model/contact-group';
 import { buildContactGroup } from '../tests/model-builder';
 
 const addContactGroups: ContactGroupStoreActions['addContactGroups'] = (newContactGroups) =>
@@ -76,6 +78,25 @@ describe('Contact groups store', () => {
 			addContactGroups(page2);
 			expect(useContactGroupStore.getState().orderedContactGroups).toEqual([...page1, ...page2]);
 			expect(useContactGroupStore.getState().unorderedContactGroups).toHaveLength(1);
+		});
+	});
+	describe('addSharedContactGroup', () => {
+		it('should return a key value correspondence of the list that has been set', () => {
+			const list = times(3, () => buildContactGroup());
+			useContactGroupStore.getState().populateSharedContactGroupsByAccountId('123', list, 0, false);
+			const expectedResult = {
+				contactGroups: list.reduce(
+					(acc, contactGroup) => {
+						acc[contactGroup.id] = { ...contactGroup, accountId: '123' };
+						return acc;
+					},
+					{} as Record<string, SharedContactGroup>
+				),
+				hasMore: false,
+				offset: 0
+			};
+
+			expect(useContactGroupStore.getState().sharedContactGroups['123']).toEqual(expectedResult);
 		});
 	});
 
