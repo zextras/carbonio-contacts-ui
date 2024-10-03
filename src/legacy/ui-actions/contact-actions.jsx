@@ -35,6 +35,7 @@ export function mailToContact(contact, t) {
 	return available
 		? {
 				...mailTo,
+				onClick: mailTo.execute,
 				label: t('action.send_msg', 'Send e-mail'),
 				disabled: isEmpty(contact?.email)
 			}
