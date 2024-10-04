@@ -85,7 +85,9 @@ describe('Edit contact group board', () => {
 				name: /SAVE/i,
 				icon: TESTID_SELECTORS.icons.save
 			});
-			await user.click(saveButton);
+			await act(async () => {
+				await user.click(saveButton);
+			});
 			await waitFor(() => expect(handler).toHaveBeenCalledTimes(1));
 			expect(screen.getByText(newName)).toBeVisible();
 		});
