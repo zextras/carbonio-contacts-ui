@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { ComponentType, createContext, FC, useCallback, useMemo } from 'react';
+import React, { createContext, FC, useCallback, useMemo } from 'react';
 
 import { useContextActions, useHoverActions, useSecondaryActions } from './contact-actions';
 import { Contact } from '../types/contact';
@@ -19,7 +19,7 @@ type ActionObj = {
 	id: string;
 	label: string;
 	onClick: (e: React.SyntheticEvent<HTMLElement> | KeyboardEvent) => void;
-	customComponent: ComponentType;
+	customComponent: React.ReactNode;
 	items: Array<ActionObj>;
 	icon: string;
 };

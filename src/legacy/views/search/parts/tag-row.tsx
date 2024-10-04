@@ -23,7 +23,15 @@ const TagRow: FC<ComponentProps> = ({ compProps }): ReactElement => {
 	const { tagOptions, tag, setTag } = compProps;
 
 	const chipOnAdd = useCallback(
-		(label, preText, hasAvatar, isGeneric, isQueryFilter, avatarIcon, avatarBackground) => ({
+		(
+			label: string,
+			preText: string,
+			hasAvatar: boolean,
+			isGeneric: boolean,
+			isQueryFilter: boolean,
+			avatarIcon: string,
+			avatarBackground: string
+		) => ({
 			label: `${preText}:${label}`,
 			hasAvatar,
 			isGeneric,
@@ -37,7 +45,7 @@ const TagRow: FC<ComponentProps> = ({ compProps }): ReactElement => {
 	);
 
 	const tagChipOnAdd = useCallback(
-		(label: string | unknown): any => {
+		(label: string): any => {
 			const chipBg = filter(tagOptions, { label })[0];
 			return chipOnAdd(
 				label,

@@ -51,7 +51,10 @@ const CreateUpdateTagModal: FC<ComponentProps> = ({
 		(c) => setColor(Number(c)),
 		[]
 	);
-	const handleNameChange = useCallback((ev) => setName(ev.target.value), []);
+	const handleNameChange = useCallback(
+		(ev: React.ChangeEvent<HTMLInputElement>) => setName(ev.target.value),
+		[]
+	);
 
 	const showMaxLengthWarning = useMemo(() => name.length >= 128, [name]);
 	const showSpecialCharWarning = useMemo(() => NonSupportedCharacters.test(name), [name]);

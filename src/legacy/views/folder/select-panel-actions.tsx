@@ -5,7 +5,14 @@
  */
 import React, { useMemo, useContext, ReactElement, FC, SyntheticEvent } from 'react';
 
-import { Container, Dropdown, IconButton, Padding, Divider } from '@zextras/carbonio-design-system';
+import {
+	Container,
+	Dropdown,
+	IconButton,
+	Padding,
+	Divider,
+	DropdownItem
+} from '@zextras/carbonio-design-system';
 import { map, noop } from 'lodash';
 
 import { ActionsContext } from '../../ui-actions/actions-context';
@@ -18,6 +25,22 @@ const SelectPanelActions: FC<SelectPanelActionsProps> = ({ deselectAll }): React
 	const { getSecondaryActions } = useContext(ActionsContext);
 
 	const secondaryActions = useMemo(() => getSecondaryActions(), [getSecondaryActions]);
+	const dropDownItems = useMemo(
+		() =>
+			map(secondaryActions, (action) => ({
+				id: action.label,
+				key: action.id,
+				icon: action.icon,
+				label: action.label,
+				onClick: (ev: React.SyntheticEvent<HTMLElement> | KeyboardEvent): void => {
+					if (ev) ev.preventDefault();
+					action.onClick(ev);
+				},
+				customComponent: action.customComponent,
+				items: action.items
+			})),
+		[secondaryActions]
+	);
 
 	return (
 		<>
@@ -42,18 +65,7 @@ const SelectPanelActions: FC<SelectPanelActionsProps> = ({ deselectAll }): React
 					<Dropdown
 						placement="right-end"
 						data-testid="secondary-actions-dropdown"
-						items={map(secondaryActions, (action) => ({
-							id: action.label,
-							key: action.id,
-							icon: action.icon,
-							label: action.label,
-							onClick: (ev: React.SyntheticEvent<HTMLElement> | KeyboardEvent): void => {
-								if (ev) ev.preventDefault();
-								action.onClick(ev);
-							},
-							customComponent: action.customComponent,
-							items: action.items
-						}))}
+						items={dropDownItems as Array<DropdownItem>}
 					>
 						<IconButton
 							size="medium"

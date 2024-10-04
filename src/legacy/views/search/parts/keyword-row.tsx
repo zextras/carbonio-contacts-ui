@@ -33,7 +33,7 @@ const KeywordRow: FC<ComponentProps> = ({ compProps }): ReactElement => {
 	const { otherKeywords, setOtherKeywords, query } = compProps;
 	const [t] = useTranslation();
 	const keywordChipOnAdd = useCallback(
-		(label) => ({
+		(label: string) => ({
 			label,
 			hasAvatar: false,
 			isGeneric: true
@@ -41,7 +41,7 @@ const KeywordRow: FC<ComponentProps> = ({ compProps }): ReactElement => {
 		[]
 	);
 	const onChange = useCallback(
-		(keywords) => {
+		(keywords: KeywordState) => {
 			setOtherKeywords(keywords);
 		},
 		[setOtherKeywords]
