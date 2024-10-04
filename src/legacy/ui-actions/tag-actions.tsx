@@ -165,7 +165,7 @@ export const TagsDropdownItem = ({
 	const [checked, setChecked] = useState(includes(contact.tags, tag.id));
 	const [isHovering, setIsHovering] = useState(false);
 	const toggleCheck = useCallback(
-		(value) => {
+		(value: boolean) => {
 			setChecked((c) => !c);
 			dispatch(
 				contactAction({
@@ -269,7 +269,7 @@ export const MultiSelectTagsDropdownItem = ({
 	const [checked, setChecked] = useState(includes(tagsToShow, tag.id));
 
 	const toggleCheck = useCallback(
-		(value) => {
+		(value: boolean) => {
 			setChecked((c) => !c);
 			dispatch(
 				contactAction({

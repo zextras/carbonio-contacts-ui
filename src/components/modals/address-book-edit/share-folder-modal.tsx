@@ -16,7 +16,8 @@ import {
 	useSnackbar,
 	ModalFooter,
 	ModalHeader,
-	Divider
+	Divider,
+	SelectItem
 } from '@zextras/carbonio-design-system';
 import { useUserAccount } from '@zextras/carbonio-shell-ui';
 import { replace, split } from 'lodash';
@@ -25,6 +26,7 @@ import { useTranslation } from 'react-i18next';
 import { GranteeInfo } from './share-folder-properties';
 import { useFolder } from '../../../carbonio-ui-commons/store/zustand/folder';
 import { Grant } from '../../../carbonio-ui-commons/types/folder';
+import { OnChangeSelect } from '../../../carbonio-ui-commons/types/select';
 import { TIMEOUTS } from '../../../constants';
 import { ContactInput } from '../../../legacy/integrations/contact-input';
 import { capitalise } from '../../../legacy/views/secondary-bar/utils';
@@ -50,7 +52,9 @@ export const ShareFolderModal = ({
 	const [sendNotification, setSendNotification] = useState(true);
 	const [standardMessage, setStandardMessage] = useState('');
 	const [contacts, setContacts] = useState<Array<{ email: string }>>([]);
-	const [shareWithUserRole, setshareWithUserRole] = useState(editMode ? activeGrant.perm : 'r');
+	const [shareWithUserRole, setshareWithUserRole] = useState<string | Array<SelectItem> | null>(
+		editMode ? activeGrant.perm : 'r'
+	);
 	const userName = useMemo(() => replace(split(activeGrant?.d, '@')?.[0], '.', ' '), [activeGrant]);
 	const userNameCapitalise = useMemo(() => capitalise(userName), [userName]);
 	const account = useUserAccount();
@@ -68,16 +72,19 @@ export const ShareFolderModal = ({
 		[t, addressBook, editMode, userNameCapitalise]
 	);
 
-	const onShareRoleChange = useCallback((shareRole) => {
-		setshareWithUserRole(shareRole);
-	}, []);
+	const onShareRoleChange = useCallback<OnChangeSelect>(
+		(shareRole: string | Array<SelectItem> | null) => {
+			setshareWithUserRole(shareRole);
+		},
+		[]
+	);
 
 	const onConfirm = useCallback(() => {
 		const addresses = editMode ? [activeGrant?.d ?? ''] : contacts.map((contact) => contact.email);
 		apiClient
 			.shareFolder({
 				addresses,
-				role: shareWithUserRole,
+				role: shareWithUserRole as string,
 				folderId: addressBookId
 			})
 			.then(() => {
@@ -163,7 +170,7 @@ export const ShareFolderModal = ({
 				<Container height="fit" padding={{ vertical: 'small' }}>
 					<ContactInput
 						placeholder={t('share.recipients_address', 'Recipients’ e-mail addresses')}
-						onChange={(ev) => {
+						onChange={(ev): void => {
 							const normalizedContacts = ev.reduce<Array<{ email: string }>>((result, contact) => {
 								if (contact.email) {
 									result.push({ email: contact.email });
@@ -195,7 +202,7 @@ export const ShareFolderModal = ({
 				<Checkbox
 					value={sendNotification}
 					defaultChecked={sendNotification}
-					onClick={() => setSendNotification(!sendNotification)}
+					onClick={(): void => setSendNotification(!sendNotification)}
 					label={t('share.send_notification', 'Send notification about this share')}
 				/>
 			</Container>
@@ -204,7 +211,7 @@ export const ShareFolderModal = ({
 				<Input
 					label={t('share.standard_message', 'Add a note to standard message')}
 					value={standardMessage}
-					onChange={(ev) => {
+					onChange={(ev): void => {
 						setStandardMessage(ev.target.value);
 					}}
 					disabled={!sendNotification}
