@@ -5,14 +5,14 @@
  */
 import React from 'react';
 
-import { Container, Divider, ListV2, ListV2Props, Row } from '@zextras/carbonio-design-system';
+import { Container, Divider, List, ListProps, Row } from '@zextras/carbonio-design-system';
 
 import { Text } from './Text';
 import { LIST_WIDTH } from '../constants';
 
 type MainListProps = {
 	onListBottom?: () => void;
-	children?: ListV2Props['children'];
+	children?: ListProps['children'];
 	emptyMessage: string;
 };
 
@@ -46,14 +46,14 @@ export const MainList = ({
 		<Divider color="gray3" />
 		<Container minHeight={0} maxHeight={'100%'}>
 			{children && children.length > 0 ? (
-				<ListV2
+				<List
 					data-testid="main-list"
 					background={'gray6'}
 					onListBottom={onListBottom}
 					intersectionObserverInitOptions={{ threshold: 0.5 }}
 				>
 					{children}
-				</ListV2>
+				</List>
 			) : (
 				<Text size={'small'} weight={'bold'} overflow={'break-word'} color={'secondary'} centered>
 					{emptyMessage}

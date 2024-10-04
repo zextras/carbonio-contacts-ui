@@ -11,7 +11,7 @@ import {
 	Container,
 	IconButton,
 	ListItem,
-	ListV2,
+	List,
 	Row,
 	TextWithTooltip
 } from '@zextras/carbonio-design-system';
@@ -73,7 +73,7 @@ export const UsersSharesListItem: FC<UsersSharesListItemProps> = ({
 				/>
 			</HoverRow>
 			<Collapse open={expanded} crossSize="100%" orientation="vertical">
-				<ListV2>
+				<List>
 					{shares.map((share) => (
 						<ListItem key={share.folderUuid}>
 							{(visible: boolean): React.JSX.Element =>
@@ -85,7 +85,7 @@ export const UsersSharesListItem: FC<UsersSharesListItemProps> = ({
 							}
 						</ListItem>
 					))}
-				</ListV2>
+				</List>
 			</Collapse>
 		</Container>
 	);

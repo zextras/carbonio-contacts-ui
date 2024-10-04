@@ -27,7 +27,12 @@ import { ContactInputCustomChipComponent } from './contact-input-custom-chip-com
 import { isValidEmail, parseEmail } from '../../carbonio-ui-commons/helpers/email-parser';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
 import { StoreProvider } from '../store/redux';
-import type { FullAutocompleteRequest, FullAutocompleteResponse, Match } from '../types/contact';
+import type {
+	ContactAddressMap,
+	FullAutocompleteRequest,
+	FullAutocompleteResponse,
+	Match
+} from '../types/contact';
 import type {
 	ContactChipAction,
 	ContactInputChipDisplayName,
@@ -180,13 +185,13 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	const emptyDraggedChip = useMemo(() => ({ id: '', email: '', dragStartRef: null }), []);
 	const draggedChip = useRef<{
 		id?: string;
-		email?: string;
+		email?: string | ContactAddressMap;
 		dragStartRef: HTMLInputElement | null;
 	}>(emptyDraggedChip);
 	const isSameElement = useRef(false);
 
 	const buildDragStartHandler = useCallback(
-		(chip) => (ev: React.DragEvent) => {
+		(chip: ContactInputItem) => (ev: React.DragEvent) => {
 			ev.dataTransfer.setData('contact', JSON.stringify(chip));
 			ev.dataTransfer.dropEffect = 'move';
 			draggedChip.current = {
@@ -209,7 +214,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	}, [buildDragStartHandler, defaultValue, dragAndDropEnabled, idToRemove]);
 
 	const buildDraggableChip = useCallback(
-		(chip): ChipItem => ({
+		(chip: ContactInputItem): ChipItem => ({
 			...chip,
 			draggable: true,
 			onDragStart: buildDragStartHandler(chip)
@@ -218,7 +223,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	);
 
 	const editChip = useCallback(
-		(text, id) => {
+		(text: string, id: string) => {
 			setIdToRemove(id);
 			if (inputRef?.current) {
 				inputRef.current.value = text;
@@ -394,7 +399,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	const contactInputValue = useMemo(() => uniqBy(defaults, 'email'), [defaults]);
 
 	const onAdd = useCallback(
-		(valueToAdd) => {
+		(valueToAdd: ContactInputItem) => {
 			setIdToRemove('');
 			if (typeof valueToAdd === 'string') {
 				return createChip(valueToAdd);
@@ -410,7 +415,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 							: t('label.edit_invalid_email', 'E-mail is invalid, click to edit it'),
 						icon: 'EditOutline',
 						type: 'button',
-						onClick: () => editChip(valueToAdd.email, valueToAdd.id)
+						onClick: () => editChip(valueToAdd.email ?? '', valueToAdd.id ?? '')
 					}
 				]
 			};

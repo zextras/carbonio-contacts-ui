@@ -12,6 +12,7 @@ type ACPProps = {
 	folderId: string;
 	selectedIds: Array<string>;
 	deselectAll: () => void;
+	children: React.ReactNode;
 };
 
 type ActionObj = {
