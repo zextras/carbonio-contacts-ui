@@ -6,9 +6,8 @@
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
-import { waitFor, within } from '@testing-library/react';
+import { within } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
-import { act } from 'react-dom/test-utils';
 
 import { ContactGroupView } from './contact-group-view';
 import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
@@ -219,13 +218,9 @@ describe('Contact Group View', () => {
 					);
 					expect(styledListItem).toHaveStyle(STANDARD_BACKGROUND_COLOR);
 					const listItem = await within(styledListItem).findByText(contactGroupName);
-					await act(async () => {
-						await user.click(listItem);
-					});
+					await user.click(listItem);
 					await screen.findByTestId('contact-group-displayer');
-					await waitFor(async () => {
-						expect(styledListItem).toHaveStyle(ACTIVE_BACKGROUND_COLOR);
-					});
+					expect(styledListItem).toHaveStyle(ACTIVE_BACKGROUND_COLOR);
 				});
 			});
 
@@ -487,13 +482,9 @@ describe('Contact Group View', () => {
 				const styledListItem = await screen.findByTestId(`shared-list-item-${contactGroupId}`);
 				expect(styledListItem).toHaveStyle(STANDARD_BACKGROUND_COLOR);
 				const listItem = await within(styledListItem).findByText(contactGroupName);
-				await act(async () => {
-					await user.click(listItem);
-				});
+				await user.click(listItem);
 				await screen.findByTestId('contact-group-displayer');
-				await waitFor(async () => {
-					expect(styledListItem).toHaveStyle(ACTIVE_BACKGROUND_COLOR);
-				});
+				expect(styledListItem).toHaveStyle(ACTIVE_BACKGROUND_COLOR);
 			});
 		});
 
@@ -513,9 +504,7 @@ describe('Contact Group View', () => {
 
 				await screen.findByText(contactGroupName);
 				await screen.findByText(EMPTY_DISPLAYER_HINT);
-				await act(async () => {
-					await user.click(await screen.findByText(contactGroupName));
-				});
+				await user.click(await screen.findByText(contactGroupName));
 				await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.closeDisplayer });
 				expect(screen.getAllByText(contactGroupName)).toHaveLength(3);
 				expect(screen.getByText('Addresses list')).toBeVisible();
