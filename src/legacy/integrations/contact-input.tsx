@@ -509,7 +509,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 					options={options}
 					value={contactInputValue}
 					background={background}
-					onAdd={onAdd}
+					onAdd={onAdd as ChipInputProps['onAdd']}
 					requireUniqueChips
 					createChipOnPaste
 					pasteSeparators={[',', ';', '\n']}
