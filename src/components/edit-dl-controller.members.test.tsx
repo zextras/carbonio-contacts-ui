@@ -50,12 +50,7 @@ describe('EditDLControllerComponent', () => {
 			const emails = ['john.doe@test.com', 'invalid-email.com', 'mary.white@example.org'];
 			await user.click(screen.getByText(/member list/i));
 			await screen.findByText(/member list 0/i);
-			await act(async () => {
-				await user.type(
-					screen.getByRole('textbox', { name: /type an address/i }),
-					emails.join(',')
-				);
-			});
+			await user.type(screen.getByRole('textbox', { name: /type an address/i }), emails.join(','));
 			await user.click(
 				screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
 			);

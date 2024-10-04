@@ -5,7 +5,7 @@
  */
 
 import { faker } from '@faker-js/faker';
-import { act } from 'react-dom/test-utils';
+import { act } from '@testing-library/react';
 
 import { useActionEmptyTrash } from './empty-trash';
 import { UIAction } from './types';
