@@ -5,7 +5,6 @@
  */
 import React, { useMemo, useRef, useState } from 'react';
 
-import { List } from '@zextras/carbonio-design-system';
 import { reduce, find, map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -13,6 +12,7 @@ import styled from 'styled-components';
 
 import ContactListItem from './contact-list-item';
 import { EmptyListPanel } from './empty-list-panel';
+import { ListOld } from './list';
 import { Contact } from '../../../types/contact';
 
 const DragImageContainer = styled.div`
@@ -97,7 +97,7 @@ export const ContactsList = ({
 					emptyListTitle={displayerTitle}
 				/>
 			) : (
-				<List
+				<ListOld
 					data-testid="ContactsListToScrollContainer"
 					selected={selected}
 					background="gray6"
