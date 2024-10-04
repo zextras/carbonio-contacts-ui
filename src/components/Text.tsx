@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 import {
 	Text as DSText,
@@ -37,15 +37,15 @@ type StyledTextProps = {
 
 type TextWithOptionalTooltipProps =
 	| ({ withTooltip: true } & MakeOptional<TextWithTooltipProps, 'children'>)
-	| ({ withTooltip?: false } & TextProps);
+	| ({ withTooltip?: boolean } & TextProps);
 
 const TextWithOptionalTooltip = ({
 	withTooltip,
-	children: ReactNode = null,
+	children = null,
 	...rest
 }: TextWithOptionalTooltipProps): React.JSX.Element =>
 	withTooltip ? (
-		<TextWithTooltip {...rest}>{children}</TextWithTooltip>
+		<TextWithTooltip {...rest}>{children as ReactNode}</TextWithTooltip>
 	) : (
 		<DSText {...rest}>{children}</DSText>
 	);

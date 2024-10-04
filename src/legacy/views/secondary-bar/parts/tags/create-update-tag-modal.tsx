@@ -66,7 +66,7 @@ const CreateUpdateTagModal: FC<ComponentProps> = ({
 	const disabled = useMemo(() => name === '' || showWarning, [name, showWarning]);
 
 	const applyNewlyCreatedTag = useCallback(
-		({ id, tagName }) => {
+		({ id, tagName }: { id: string; tagName: string }) => {
 			dispatch(
 				contactAction({
 					op: 'tag',
