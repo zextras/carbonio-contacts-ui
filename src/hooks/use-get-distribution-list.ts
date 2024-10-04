@@ -66,7 +66,7 @@ export const useGetDistributionList = (
 					createSnackbar({
 						key: new Date().toDateString(),
 						replace: true,
-						type: 'error',
+						severity: 'error',
 						label: t('label.error_try_again', 'Something went wrong, please try again'),
 						autoHideTimeout: 3000,
 						hideButton: true

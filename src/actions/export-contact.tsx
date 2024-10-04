@@ -54,7 +54,7 @@ export const useActionExportContact = (): ExportContactAction => {
 					createSnackbar({
 						key: 'export-contact-success',
 						replace: true,
-						type: 'info',
+						severity: 'info',
 						label: t('export_contact.snackbar.success', 'vCard file exported successfully'),
 						autoHideTimeout: TIMEOUTS.defaultSnackbar,
 						hideButton: true
@@ -64,7 +64,7 @@ export const useActionExportContact = (): ExportContactAction => {
 					createSnackbar({
 						key: 'export-contact-error',
 						replace: true,
-						type: 'error',
+						severity: 'error',
 						label: t('label.error_try_again', 'Something went wrong, please try again'),
 						autoHideTimeout: TIMEOUTS.defaultSnackbar,
 						hideButton: true

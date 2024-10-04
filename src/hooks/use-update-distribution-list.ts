@@ -84,7 +84,7 @@ export const useUpdateDistributionList = (
 				.catch((error) => {
 					createSnackbar({
 						key: `dl-save-error-${email}`,
-						type: 'error',
+						severity: 'error',
 						label: t('label.error_try_again', 'Something went wrong, please try again'),
 						hideButton: true
 					});

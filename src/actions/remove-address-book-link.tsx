@@ -48,7 +48,7 @@ export const useActionRemoveAddressBookLink = (): RemoveAddressBookLinkAction =>
 					createSnackbar({
 						key: `remove-address-book-link-success`,
 						replace: true,
-						type: 'info',
+						severity: 'info',
 						hideButton: true,
 						label: t('share.share_removed_succesfully', 'Shared removed successfully'),
 						autoHideTimeout: TIMEOUTS.defaultSnackbar
@@ -58,7 +58,7 @@ export const useActionRemoveAddressBookLink = (): RemoveAddressBookLinkAction =>
 					createSnackbar({
 						key: `remove-address-book-link-error`,
 						replace: true,
-						type: 'error',
+						severity: 'error',
 						hideButton: true,
 						label: t('label.error_try_again', 'Something went wrong, please try again'),
 						autoHideTimeout: TIMEOUTS.defaultSnackbar

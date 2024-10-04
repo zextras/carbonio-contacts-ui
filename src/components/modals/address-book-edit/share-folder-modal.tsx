@@ -85,7 +85,7 @@ export const ShareFolderModal = ({
 					key: `share-${addressBookId}-address-book-success`,
 					replace: true,
 					hideButton: true,
-					type: 'info',
+					severity: 'info',
 					label: editMode
 						? t('snackbar.share_updated', 'Access rights updated')
 						: t('snackbar.folder_shared', 'Address book shared'),
@@ -107,7 +107,7 @@ export const ShareFolderModal = ({
 				createSnackbar({
 					key: `share-${addressBookId}-address-book-error`,
 					replace: true,
-					type: 'error',
+					severity: 'error',
 					hideButton: true,
 					label: t('label.error_try_again', 'Something went wrong, please try again'),
 					autoHideTimeout: TIMEOUTS.defaultSnackbar

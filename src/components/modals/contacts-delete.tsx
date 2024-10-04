@@ -63,7 +63,7 @@ export const ContactsDeleteModal = ({
 				createSnackbar({
 					key: `delete-contacts-success`,
 					replace: true,
-					type: 'info',
+					severity: 'info',
 					label: t('messages.snackbar.contact_deleted_permanently', 'Contact permanently deleted'),
 					autoHideTimeout: TIMEOUTS.defaultSnackbar,
 					hideButton: true
@@ -74,7 +74,7 @@ export const ContactsDeleteModal = ({
 				createSnackbar({
 					key: `delete-contacts-error`,
 					replace: true,
-					type: 'error',
+					severity: 'error',
 					label: t('label.error_try_again', 'Something went wrong, please try again'),
 					autoHideTimeout: TIMEOUTS.defaultSnackbar,
 					hideButton: true
