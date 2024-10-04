@@ -101,7 +101,10 @@ export const AddressBookEditGeneralModal = ({
 			});
 	}, [addressBookId, addressBookName, addressBookColor, createSnackbar, t, close]);
 
-	const onAddressBookInputChange = useCallback((e) => setAddressBookName(e.target.value), []);
+	const onAddressBookInputChange = useCallback(
+		(e: React.ChangeEvent<HTMLInputElement>) => setAddressBookName(e.target.value),
+		[]
+	);
 
 	const onColorChange = useCallback<ColorSelectProps['onChange']>(
 		(color) => setAddressBookColor(Number(color)),

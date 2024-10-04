@@ -41,7 +41,7 @@ type TextWithOptionalTooltipProps =
 
 const TextWithOptionalTooltip = ({
 	withTooltip,
-	children = null,
+	children: ReactNode = null,
 	...rest
 }: TextWithOptionalTooltipProps): React.JSX.Element =>
 	withTooltip ? (
