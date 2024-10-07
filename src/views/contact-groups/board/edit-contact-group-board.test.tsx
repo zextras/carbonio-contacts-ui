@@ -110,6 +110,7 @@ describe('Edit contact group board', () => {
 		});
 
 		it('should show error snackbar when modify contact fails', async () => {
+			jest.spyOn(console, 'warn').mockImplementation();
 			registerModifyContactGroupHandler(undefined, JEST_MOCKED_ERROR);
 			const newName = faker.string.alpha(10);
 			const { user } = setupTest(<EditContactGroupBoard />);
