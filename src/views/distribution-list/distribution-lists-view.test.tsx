@@ -134,6 +134,7 @@ describe('Distribution Lists View', () => {
 	});
 
 	it('should show an error snackbar if there is a network error while loading the list', async () => {
+		jest.spyOn(console, 'warn').mockImplementation();
 		registerGetAccountDistributionListsHandler([], JEST_MOCKED_ERROR);
 		setupTest(
 			<Route path={ROUTES.distributionLists}>

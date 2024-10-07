@@ -9,11 +9,15 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 
 import { ContactGroupListMainAccount } from './contact-group-list-main-account';
+import { createSoapAPIInterceptor } from '../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { screen, setupTest } from '../../../carbonio-ui-commons/test/test-setup';
 import { EMPTY_LIST_HINT } from '../../../constants/tests';
 import { useContactGroupStore } from '../../../store/contact-groups';
 
 describe('Contact groups list', () => {
+	beforeEach(() => {
+		createSoapAPIInterceptor('Search', {});
+	});
 	test('Show a placeholder when the list is empty', async () => {
 		setupTest(<ContactGroupListMainAccount />);
 		expect(await screen.findByText(EMPTY_LIST_HINT)).toBeVisible();

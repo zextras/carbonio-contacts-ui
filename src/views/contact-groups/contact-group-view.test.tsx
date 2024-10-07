@@ -261,6 +261,7 @@ describe('Contact Group View', () => {
 				});
 
 				it('should not remove deleted contact group when you confirm deletion and api call fail (Hover trigger)', async () => {
+					jest.spyOn(console, 'warn').mockImplementation();
 					const cnItem1 = createCnItem();
 					registerFindContactGroupsHandler({
 						findContactGroupsResponse: createFindContactGroupsResponse(
