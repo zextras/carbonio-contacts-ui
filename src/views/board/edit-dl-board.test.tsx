@@ -104,6 +104,7 @@ describe('Edit DL board', () => {
 	});
 
 	it('should not request members to network if they are already stored', async () => {
+		jest.spyOn(console, 'warn').mockImplementation();
 		const member = faker.internet.email();
 		const dl = generateDistributionList({
 			description: '',
