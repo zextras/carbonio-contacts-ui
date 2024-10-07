@@ -7,7 +7,7 @@
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
-import { waitFor } from '@testing-library/react';
+import { act, waitFor } from '@testing-library/react';
 import { ErrorSoapResponse, JSNS } from '@zextras/carbonio-shell-ui';
 import { times } from 'lodash';
 import { HttpResponse } from 'msw';
@@ -128,18 +128,7 @@ describe('Distribution Lists View', () => {
 		);
 		expect(await screen.findByText(memberList[0].displayName)).toBeVisible();
 		await user.click(screen.getByRole('link', { name: 'Manager' }));
-		// FIXME: for some reason, something to "slow down"
-		//  the test is needed to allow react to update the ui,
-		//  and make the following waitFor work even when run with all other tests
-		await waitFor(
-			() =>
-				new Promise((resolve) => {
-					setTimeout(resolve, 0);
-				})
-		);
-		await waitFor(() =>
-			expect(screen.queryByText(memberList[0].displayName)).not.toBeInTheDocument()
-		);
+		expect(screen.queryByText(memberList[0].displayName)).not.toBeInTheDocument();
 		expect(await screen.findByText(managerList[0].displayName)).toBeVisible();
 		expect(getAccountDLHandler).toHaveBeenCalledTimes(1);
 	});
@@ -195,8 +184,10 @@ describe('Distribution Lists View', () => {
 					]
 				}
 			);
-
-			await user.click(await screen.findByText(dl.displayName));
+			const distributionList = await screen.findByText(dl.displayName);
+			await act(async () => {
+				await user.click(distributionList);
+			});
 			await within(screen.getByTestId(TESTID_SELECTORS.displayer)).findAllByTestId(
 				TESTID_SELECTORS.icons.distributionList
 			);
@@ -318,13 +309,20 @@ describe('Distribution Lists View', () => {
 
 			await screen.findByText(dl2.displayName);
 			await screen.findByTestId(TESTID_SELECTORS.displayer);
-			await user.click(await screen.findByText(/member list/i));
+			const memberList = await screen.findByText(/member list/i);
+			await act(async () => {
+				await user.click(memberList);
+			});
 			await screen.findByText(dl1Members[0]);
-			await user.click(screen.getByText(dl2.displayName));
+			await act(async () => {
+				await user.click(screen.getByText(dl2.displayName));
+			});
 			expect(
 				await within(screen.getByTestId(TESTID_SELECTORS.displayer)).findAllByText(dl2.displayName)
 			).toHaveLength(2);
-			await user.click(screen.getByText(/member list/i));
+			await act(async () => {
+				await user.click(screen.getByText(/member list/i));
+			});
 			expect(await screen.findByText(dl2Members[0])).toBeVisible();
 			expect(screen.getByText(/member list 10/i)).toBeVisible();
 			expect(screen.queryByText(dl1Members[0])).not.toBeInTheDocument();
@@ -361,16 +359,21 @@ describe('Distribution Lists View', () => {
 					]
 				}
 			);
-
-			await user.click(await screen.findByText(dl1.displayName));
+			const dlButton = await screen.findByText(dl1.displayName);
+			await act(async () => {
+				await user.click(dlButton);
+			});
 			await screen.findByText(dl1.description as string);
 			// navigate to a different tab
-			await user.click(screen.getByText(/manager list/i));
-			await waitFor(() =>
-				expect(screen.queryByText(dl1.description as string)).not.toBeInTheDocument()
-			);
+			await act(async () => {
+				await user.click(screen.getByText(/manager list/i));
+			});
+
+			expect(screen.queryByText(dl1.description as string)).not.toBeInTheDocument();
 			// change active item
-			await user.click(screen.getByText(dl2.displayName));
+			await act(async () => {
+				await user.click(screen.getByText(dl2.displayName));
+			});
 			// description inside details tab is visible for dl2. Tab has been reset
 			expect(await screen.findByText(dl2.description as string)).toBeVisible();
 		});

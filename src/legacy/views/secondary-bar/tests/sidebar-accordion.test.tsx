@@ -5,9 +5,8 @@
  */
 import React from 'react';
 
-import { screen } from '@testing-library/react';
+import { act, screen } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
-import { act } from 'react-dom/test-utils';
 import { useHistory } from 'react-router-dom';
 
 import { FOLDERS } from '../../../../carbonio-ui-commons/constants/folders';

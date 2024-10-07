@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { faker } from '@faker-js/faker';
+import { act } from '@testing-library/react';
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
-import { act } from 'react-dom/test-utils';
 
 import { useActionExportAddressBook } from './export-address-book';
 import { UIAction } from './types';

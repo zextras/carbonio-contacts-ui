@@ -5,7 +5,7 @@
  */
 
 import { faker } from '@faker-js/faker';
-import { act } from 'react-dom/test-utils';
+import { act } from '@testing-library/react';
 
 import { useActionDeleteAddressBook } from './delete-address-book';
 import { UIAction } from './types';
