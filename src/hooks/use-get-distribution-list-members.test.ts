@@ -165,37 +165,9 @@ describe('Use get distribution list members hook', () => {
 		const { result } = setupHook(useGetDistributionListMembers, {
 			initialProps: [dl.email, { skip: false }]
 		});
-		await waitFor(() => expect(result.current.findMore).toBeDefined());
-		act(() => {
-			result.current.findMore();
-		});
+		expect(result.current.findMore).toBeDefined();
 
 		await waitFor(() =>
-			expect(handler.mock.lastCall?.[0].request.json()).resolves.toEqual(
-				expect.objectContaining({
-					Body: expect.objectContaining({
-						GetDistributionListMembersRequest: expect.objectContaining({
-							offset: members.length
-						})
-					})
-				})
-			)
-		);
-	});
-
-	it('should load data from second page if first page is loaded multiple times', async () => {
-		const firstPage = times(10, () => faker.internet.email());
-		const secondPage = times(10, () => faker.internet.email());
-		const dl = generateDistributionList({ members: undefined });
-		const handler = registerGetDistributionListMembersHandler([...firstPage, ...secondPage], true);
-		const { result, rerender } = setupHook(useGetDistributionListMembers, {
-			initialProps: [dl.email, { skip: false, limit: firstPage.length }]
-		});
-		await waitFor(() => expect(result.current.members).toStrictEqual(firstPage));
-		rerender([dl.email, { skip: true, limit: firstPage.length }]);
-		rerender([dl.email, { skip: false, limit: firstPage.length }]);
-		await waitFor(() =>
-			// TODO check why only this test need to use the request clone
 			expect(handler.mock.lastCall?.[0].request.clone().json()).resolves.toEqual(
 				expect.objectContaining({
 					Body: expect.objectContaining({
@@ -204,9 +176,48 @@ describe('Use get distribution list members hook', () => {
 				})
 			)
 		);
+
+		await act(async () => {
+			await result.current.findMore();
+		});
+
+		expect(handler.mock.lastCall?.[0].request.json()).resolves.toEqual(
+			expect.objectContaining({
+				Body: expect.objectContaining({
+					GetDistributionListMembersRequest: expect.objectContaining({
+						offset: members.length
+					})
+				})
+			})
+		);
+	});
+
+	it('should load data from second page if first page is loaded multiple times', async () => {
+		const firstPage = times(10, () => faker.internet.email());
+		const secondPage = times(10, () => faker.internet.email());
+		const dl = generateDistributionList({ members: undefined });
+		const handler = registerGetDistributionListMembersHandler([...firstPage, ...secondPage], true);
+		const { result, rerender } = await waitFor(() =>
+			setupHook(useGetDistributionListMembers, {
+				initialProps: [dl.email, { skip: false, limit: firstPage.length }]
+			})
+		);
 		await waitFor(() => expect(result.current.members).toStrictEqual(firstPage));
-		act(() => {
-			result.current.findMore();
+		rerender([dl.email, { skip: true, limit: firstPage.length }]);
+		rerender([dl.email, { skip: false, limit: firstPage.length }]);
+		await waitFor(() =>
+			expect(handler.mock.lastCall?.[0].request.clone().json()).resolves.toEqual(
+				expect.objectContaining({
+					Body: expect.objectContaining({
+						GetDistributionListMembersRequest: expect.objectContaining({ offset: 0 })
+					})
+				})
+			)
+		);
+
+		await waitFor(() => expect(result.current.members).toStrictEqual(firstPage));
+		await act(async () => {
+			await result.current.findMore();
 		});
 		await waitFor(() =>
 			expect(handler.mock.lastCall?.[0].request.json()).resolves.toEqual(
