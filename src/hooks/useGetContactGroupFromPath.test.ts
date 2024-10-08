@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook } from '@testing-library/react';
 import { useParams } from 'react-router-dom';
 
 import { useGetContactGroupFromPath } from './useGetContactGroupFromPath';

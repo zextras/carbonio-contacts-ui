@@ -35,14 +35,10 @@ describe('Contact input', () => {
 
 		const input = screen.getByRole('textbox');
 		await user.type(input, contact.email);
-		act(() => {
-			// run timers of dropdown
-			jest.runOnlyPendingTimers();
-		});
 		const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
 
-		expect(within(dropdown).getByText(contact.first)).toBeVisible();
-		expect(within(dropdown).getByText(contact.email)).toBeVisible();
+		expect(await within(dropdown).findByText(contact.first)).toBeVisible();
+		expect(await within(dropdown).findByText(contact.email)).toBeVisible();
 	});
 
 	it('should render a dropdown with a contact group', async () => {
@@ -56,12 +52,8 @@ describe('Contact input', () => {
 
 		const input = screen.getByRole('textbox');
 		await user.type(input, contact.first);
-		act(() => {
-			// run timers of dropdown
-			jest.runOnlyPendingTimers();
-		});
 		const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
-		expect(within(dropdown).getByText(contact.first)).toBeVisible();
+		expect(await within(dropdown).findByText(contact.first)).toBeVisible();
 	});
 
 	it('should render a dropdown with a contact group with an avatar', async () => {
@@ -75,12 +67,8 @@ describe('Contact input', () => {
 
 		const input = screen.getByRole('textbox');
 		await user.type(input, contact.first);
-		act(() => {
-			// run timers of dropdown
-			jest.runOnlyPendingTimers();
-		});
 		const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
-		const avatar = within(dropdown).getByTestId(TESTID_SELECTORS.avatar);
+		const avatar = await within(dropdown).findByTestId(TESTID_SELECTORS.avatar);
 		expect(within(dropdown).getByText(contact.first)).toBeVisible();
 		expect(within(avatar).queryByText('?')).not.toBeInTheDocument();
 	});

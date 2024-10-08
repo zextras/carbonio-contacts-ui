@@ -85,7 +85,9 @@ describe('Edit contact group board', () => {
 				name: /SAVE/i,
 				icon: TESTID_SELECTORS.icons.save
 			});
-			await user.click(saveButton);
+			await act(async () => {
+				await user.click(saveButton);
+			});
 			await waitFor(() => expect(handler).toHaveBeenCalledTimes(1));
 			expect(screen.getByText(newName)).toBeVisible();
 		});
@@ -108,6 +110,7 @@ describe('Edit contact group board', () => {
 		});
 
 		it('should show error snackbar when modify contact fails', async () => {
+			jest.spyOn(console, 'warn').mockImplementation();
 			registerModifyContactGroupHandler(undefined, JEST_MOCKED_ERROR);
 			const newName = faker.string.alpha(10);
 			const { user } = setupTest(<EditContactGroupBoard />);

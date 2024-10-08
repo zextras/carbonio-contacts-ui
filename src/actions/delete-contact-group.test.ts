@@ -156,6 +156,7 @@ describe('useActionDeleteCG', () => {
 	});
 
 	it('should show an error snackbar if the user clicks on the delete action button and the API call return an error', async () => {
+		jest.spyOn(console, 'warn').mockImplementation();
 		registerDeleteContactHandler(contactGroupNoMembers.id, JEST_MOCKED_ERROR);
 		const { result, user } = setupHook(useActionDeleteMainAccountContactGroup);
 		const action = result.current;

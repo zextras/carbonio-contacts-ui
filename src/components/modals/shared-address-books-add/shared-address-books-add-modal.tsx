@@ -49,7 +49,7 @@ export const SharedAddressBooksAddModal: FC<SharesModalProps> = ({ onClose }) =>
 				createSnackbar({
 					key: `getShareInfo-error-${new Date().toDateString()}`,
 					replace: true,
-					type: 'error',
+					severity: 'error',
 					label: t('label.error_try_again', 'Something went wrong, please try again'),
 					autoHideTimeout: TIMEOUTS.defaultSnackbar,
 					hideButton: true
@@ -97,7 +97,7 @@ export const SharedAddressBooksAddModal: FC<SharesModalProps> = ({ onClose }) =>
 				createSnackbar({
 					key: `share`,
 					replace: true,
-					type: 'info',
+					severity: 'info',
 					hideButton: true,
 					label: t('share.share_added_succesfully', 'Shared added successfully'),
 					autoHideTimeout: TIMEOUTS.defaultSnackbar
@@ -108,7 +108,7 @@ export const SharedAddressBooksAddModal: FC<SharesModalProps> = ({ onClose }) =>
 				createSnackbar({
 					key: `share`,
 					replace: true,
-					type: 'error',
+					severity: 'error',
 					hideButton: true,
 					label: t('label.error_try_again', 'Something went wrong, please try again'),
 					autoHideTimeout: TIMEOUTS.defaultSnackbar

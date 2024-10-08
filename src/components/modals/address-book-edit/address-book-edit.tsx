@@ -26,7 +26,7 @@ export const AddressBookEditModal = ({
 			const modal = (
 				<ShareFolderModal
 					activeGrant={grant}
-					onClose={() => setActiveSubModal(undefined)}
+					onClose={(): void => setActiveSubModal(undefined)}
 					addressBookId={addressBookId}
 					editMode
 				/>
@@ -43,7 +43,7 @@ export const AddressBookEditModal = ({
 		};
 		const modal = (
 			<ShareFolderModal
-				onClose={() => setActiveSubModal(undefined)}
+				onClose={(): void => setActiveSubModal(undefined)}
 				addressBookId={addressBookId}
 				activeGrant={grant}
 			/>
@@ -52,11 +52,11 @@ export const AddressBookEditModal = ({
 	}, [addressBookId]);
 
 	const onRevokeShare = useCallback(
-		(grant) => {
+		(grant: Grant) => {
 			const modal = (
 				<ShareRevokeModal
 					addressBookId={addressBookId}
-					onClose={() => setActiveSubModal(undefined)}
+					onClose={(): void => setActiveSubModal(undefined)}
 					grant={grant}
 				/>
 			);

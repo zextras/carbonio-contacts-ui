@@ -75,7 +75,7 @@ export const useActionRestoreContacts = (): RestoreContactsAction => {
 										createSnackbar({
 											key: `restore-contacts-success`,
 											replace: true,
-											type: 'success',
+											severity: 'success',
 											label: t('messages.snackbar.contact_restored', 'Contacts restored'),
 											autoHideTimeout: TIMEOUTS.defaultSnackbar,
 											hideButton: true
@@ -86,7 +86,7 @@ export const useActionRestoreContacts = (): RestoreContactsAction => {
 										createSnackbar({
 											key: `restore-contacts-error`,
 											replace: true,
-											type: 'error',
+											severity: 'error',
 											label: t('label.error_try_again', 'Something went wrong, please try again'),
 											autoHideTimeout: TIMEOUTS.defaultSnackbar,
 											hideButton: true

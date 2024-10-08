@@ -104,6 +104,7 @@ describe('Edit DL board', () => {
 	});
 
 	it('should not request members to network if they are already stored', async () => {
+		jest.spyOn(console, 'warn').mockImplementation();
 		const member = faker.internet.email();
 		const dl = generateDistributionList({
 			description: '',
@@ -251,7 +252,9 @@ describe('Edit DL board', () => {
 		await screen.findByText(/description/i);
 		await within(screen.getByTestId(TESTID_SELECTORS.mainList)).findByText(dl.displayName);
 		await user.type(screen.getByRole('textbox', { name: /name/i }), ' updated');
-		await user.click(screen.getByRole('button', { name: /save/i }));
+		await act(async () => {
+			await user.click(screen.getByRole('button', { name: /save/i }));
+		});
 		await screen.findAllByText(newName);
 		expect(within(screen.getByTestId(TESTID_SELECTORS.mainList)).getByText(newName)).toBeVisible();
 		expect(
@@ -292,7 +295,9 @@ describe('Edit DL board', () => {
 		await screen.findByText(/description/i);
 		await user.clear(screen.getByRole('textbox', { name: /description/i }));
 		await user.type(screen.getByRole('textbox', { name: /description/i }), newDescription);
-		await user.click(screen.getByRole('button', { name: /save/i }));
+		await act(async () => {
+			await user.click(screen.getByRole('button', { name: /save/i }));
+		});
 		await screen.findAllByText(newDescription);
 		expect(
 			within(screen.getByTestId(TESTID_SELECTORS.displayer)).getByText(newDescription)

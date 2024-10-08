@@ -6,7 +6,7 @@
 
 import React, { FC, useCallback, useRef } from 'react';
 
-import { Container, ListItem, ListV2 } from '@zextras/carbonio-design-system';
+import { Container, ListItem, List } from '@zextras/carbonio-design-system';
 import { groupBy } from 'lodash';
 import styled from 'styled-components';
 
@@ -55,7 +55,7 @@ export const UsersSharesList: FC<UsersSharesListProps> = ({ shares, onSelectionC
 
 	return (
 		<Container mainAlignment={'flex-start'}>
-			<ListV2>
+			<List>
 				{ownerNames.map((ownerName, index) => (
 					<CustomListItem key={index}>
 						{(visible: boolean): React.JSX.Element =>
@@ -72,7 +72,7 @@ export const UsersSharesList: FC<UsersSharesListProps> = ({ shares, onSelectionC
 						}
 					</CustomListItem>
 				))}
-			</ListV2>
+			</List>
 		</Container>
 	);
 };

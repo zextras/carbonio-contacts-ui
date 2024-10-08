@@ -47,7 +47,7 @@ export const useActionTrashContacts = (): ActionTrashContacts => {
 					createSnackbar({
 						key: `restore-contacts-success`,
 						replace: true,
-						type: 'success',
+						severity: 'success',
 						label: t('messages.snackbar.contact_restored', 'Contact restored'),
 						autoHideTimeout: TIMEOUTS.defaultSnackbar,
 						hideButton: true
@@ -57,7 +57,7 @@ export const useActionTrashContacts = (): ActionTrashContacts => {
 					createSnackbar({
 						key: `restore-contacts-error`,
 						replace: true,
-						type: 'error',
+						severity: 'error',
 						label: t('label.error_try_again', 'Something went wrong, please try again'),
 						autoHideTimeout: TIMEOUTS.defaultSnackbar,
 						hideButton: true
@@ -78,7 +78,7 @@ export const useActionTrashContacts = (): ActionTrashContacts => {
 					createSnackbar({
 						key: `delete-contacts-success`,
 						replace: true,
-						type: 'info',
+						severity: 'info',
 						label: t('messages.snackbar.contact_moved_to_trash', 'Contact moved to trash'),
 						autoHideTimeout: TIMEOUTS.defaultSnackbar,
 						hideButton: false,
@@ -90,7 +90,7 @@ export const useActionTrashContacts = (): ActionTrashContacts => {
 					createSnackbar({
 						key: `delete-contacts-error`,
 						replace: true,
-						type: 'error',
+						severity: 'error',
 						label: t('label.error_try_again', 'Something went wrong, please try again'),
 						autoHideTimeout: TIMEOUTS.defaultSnackbar,
 						hideButton: true

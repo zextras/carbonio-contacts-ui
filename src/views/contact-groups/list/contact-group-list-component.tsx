@@ -6,7 +6,7 @@
 
 import React, { ReactElement } from 'react';
 
-import { Container, ListItemProps, ListV2 } from '@zextras/carbonio-design-system';
+import { Container, ListItemProps, List } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
 import { Navbar } from '../../../components/sidebar/item-list/navbar';
@@ -38,14 +38,14 @@ export const ContactGroupListComponent = ({
 			/>
 			<Container minHeight={0} maxHeight={'100%'}>
 				{children?.length > 0 ? (
-					<ListV2
+					<List
 						data-testid="main-list"
 						background={'gray6'}
 						onListBottom={onListBottom}
 						intersectionObserverInitOptions={{ threshold: 0.5 }}
 					>
 						{children}
-					</ListV2>
+					</List>
 				) : (
 					<EmptyListPanel
 						emptyListTitle={t(

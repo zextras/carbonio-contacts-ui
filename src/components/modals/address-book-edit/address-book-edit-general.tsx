@@ -82,7 +82,7 @@ export const AddressBookEditGeneralModal = ({
 				createSnackbar({
 					key: `address-book-edit-success`,
 					replace: true,
-					type: 'info',
+					severity: 'info',
 					hideButton: true,
 					label: t('snackbar.folder_edited', 'Address book edited successfully'),
 					autoHideTimeout: TIMEOUTS.defaultSnackbar
@@ -93,7 +93,7 @@ export const AddressBookEditGeneralModal = ({
 				createSnackbar({
 					key: `address-book-edit-error`,
 					replace: true,
-					type: 'error',
+					severity: 'error',
 					hideButton: true,
 					label: t('label.error_try_again', 'Something went wrong, please try again'),
 					autoHideTimeout: TIMEOUTS.defaultSnackbar
@@ -101,7 +101,10 @@ export const AddressBookEditGeneralModal = ({
 			});
 	}, [addressBookId, addressBookName, addressBookColor, createSnackbar, t, close]);
 
-	const onAddressBookInputChange = useCallback((e) => setAddressBookName(e.target.value), []);
+	const onAddressBookInputChange = useCallback(
+		(e: React.ChangeEvent<HTMLInputElement>) => setAddressBookName(e.target.value),
+		[]
+	);
 
 	const onColorChange = useCallback<ColorSelectProps['onChange']>(
 		(color) => setAddressBookColor(Number(color)),

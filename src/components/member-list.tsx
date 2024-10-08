@@ -6,7 +6,7 @@
 
 import React, { useCallback, useMemo, useState } from 'react';
 
-import { Container, Input, ListV2, Text } from '@zextras/carbonio-design-system';
+import { Container, Input, List, Text } from '@zextras/carbonio-design-system';
 import { filter, map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
@@ -75,7 +75,7 @@ export const MemberList = ({
 				onChange={onSearchChange}
 			/>
 			<Container minHeight={'10rem'} mainAlignment={'flex-start'}>
-				<ListV2>{(!loading && memberItems) || loadingItems(3)}</ListV2>
+				<List>{(!loading && memberItems) || loadingItems(3)}</List>
 			</Container>
 		</Container>
 	);

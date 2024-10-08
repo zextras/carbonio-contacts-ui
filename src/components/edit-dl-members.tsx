@@ -12,7 +12,7 @@ import React, {
 	useState
 } from 'react';
 
-import { type ChipAction, Container, Input, ListV2, Row } from '@zextras/carbonio-design-system';
+import { type ChipAction, Container, Input, List, Row } from '@zextras/carbonio-design-system';
 import { reduce, uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
@@ -258,7 +258,7 @@ export const EditDLMembersComponent = ({
 				onChange={onSearchChange}
 			/>
 			<Container minHeight={'10rem'} mainAlignment={'flex-start'}>
-				<ListV2>{(!loading && memberItems) || loadingItems(3)}</ListV2>
+				<List>{(!loading && memberItems) || loadingItems(3)}</List>
 			</Container>
 		</Container>
 	);

@@ -15,7 +15,7 @@ import {
 	Icon,
 	IconButton,
 	ListItem,
-	ListV2,
+	List,
 	Padding,
 	Row,
 	Text,
@@ -230,7 +230,7 @@ const FlatFoldersAccordionRoot: FC<FlatFoldersAccordionRootProps> = ({
 				</Padding>
 			</CustomContainer>
 			<Collapse crossSize="100%" orientation="vertical" open={open} disableTransition={false}>
-				<ListV2>
+				<List>
 					{childrenFolders.map<ReactElement>((childFolder) => (
 						<CustomListItem
 							key={childFolder.id}
@@ -250,7 +250,7 @@ const FlatFoldersAccordionRoot: FC<FlatFoldersAccordionRootProps> = ({
 							}
 						</CustomListItem>
 					))}
-				</ListV2>
+				</List>
 			</Collapse>
 		</RootAccordion>
 	);
