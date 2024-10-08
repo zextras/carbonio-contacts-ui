@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import { map } from 'lodash';
 import { useParams } from 'react-router-dom';
@@ -15,8 +15,9 @@ import { useFindSharedContactGroups } from '../../../hooks/use-find-shared-conta
 
 export const ContactGroupListShared = (): React.JSX.Element => {
 	const { accountId, id: currentPathId } = useParams<{ accountId: string; id: string }>();
-	const { sharedContactGroups, findMore } = useFindSharedContactGroups(accountId);
+	const { sharedContactGroups, findMore, hasMore } = useFindSharedContactGroups(accountId);
 
+	const onListBottom = useCallback(() => (hasMore ? findMore() : undefined), [hasMore, findMore]);
 	const items = useMemo(
 		() =>
 			map(sharedContactGroups, (contactGroup) => (
@@ -33,5 +34,5 @@ export const ContactGroupListShared = (): React.JSX.Element => {
 		[currentPathId, sharedContactGroups]
 	);
 
-	return <ContactGroupListComponent onListBottom={findMore}>{items}</ContactGroupListComponent>;
+	return <ContactGroupListComponent onListBottom={onListBottom}>{items}</ContactGroupListComponent>;
 };
