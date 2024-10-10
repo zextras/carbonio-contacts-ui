@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 
 import AdvancedFilterModal from './advance-filter-modal';
-import SearchList from './search-list';
+import { SearchList } from './search-list';
 import SearchPanel from './search-panel';
 import { isTrash } from '../../../carbonio-ui-commons/helpers/folders';
 import { useUpdateView } from '../../../carbonio-ui-commons/hooks/use-update-view';
@@ -22,7 +22,7 @@ import { usePrefs } from '../../../carbonio-ui-commons/utils/use-prefs';
 import { Contact } from '../../types/contact';
 import { normalizeContactsFromSoap } from '../../utils/normalizations/normalize-contact-from-soap';
 
-type SearchResults = {
+export type SearchResults = {
 	contacts: Array<Contact>;
 	more: boolean;
 	offset: number;
@@ -143,7 +143,7 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 							<SearchList
 								searchResults={searchResults}
 								search={searchQuery}
-								query={query}
+								query={queryToString}
 								loading={loading}
 								filterCount={filterCount}
 								setShowAdvanceFilters={setShowAdvanceFilters}

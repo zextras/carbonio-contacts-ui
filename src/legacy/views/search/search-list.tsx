@@ -3,31 +3,42 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import { Button, Container, List, Padding, Text } from '@zextras/carbonio-design-system';
+import { map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import SearchListItem from './search-list-item';
+import { SearchContactListItem } from './search-contact-list-item';
+import { type SearchResults } from './search-view';
 import ShimmerList from './shimmer-list';
+import { CustomListItem } from '../../../carbonio-ui-commons/components/list/list-item';
 
 const BorderContainer = styled(Container)`
-	border-bottom: 0.0625rem solid ${({ theme }) => theme?.palette?.gray2?.regular};
-	border-right: 0.0625rem solid ${({ theme }) => theme?.palette?.gray2?.regular};
+	border-bottom: 0.0625rem solid ${({ theme }): string => theme?.palette?.gray2?.regular};
+	border-right: 0.0625rem solid ${({ theme }): string => theme?.palette?.gray2?.regular};
 `;
 
-const SearchList = ({
+type SearchListProps = {
+	searchResults: SearchResults;
+	search: (arg0: string, arg1: boolean) => void;
+	query: string;
+	loading: boolean;
+	filterCount: number;
+	setShowAdvanceFilters: (arg0: boolean) => void;
+};
+export const SearchList = ({
 	searchResults,
 	search,
 	query,
 	loading,
 	filterCount,
 	setShowAdvanceFilters
-}) => {
+}: SearchListProps): React.JSX.Element => {
 	const [t] = useTranslation();
-	const { itemId } = useParams();
+	const { itemId } = useParams<{ itemId: string }>();
 	const loadMore = useCallback(() => {
 		if (searchResults && searchResults.contacts.length > 0 && searchResults.more) {
 			search(query, false);
@@ -38,28 +49,37 @@ const SearchList = ({
 		() => !loading && searchResults && searchResults.contacts.length > 0 && searchResults.more,
 		[loading, searchResults]
 	);
-
-	const [randomListIndex, setRandomListIndex] = useState(0);
-	useEffect(() => {
-		if (randomListIndex === 0) {
-			setRandomListIndex(1);
-		} else {
-			setRandomListIndex(0);
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [searchResults?.contacts.length, query]);
 	const displayerTitle = useMemo(() => {
 		if (searchResults?.contacts.length === 0) {
-			if (randomListIndex === 0) {
-				return t(
-					'displayer.search_list_title1',
-					'It looks like there are no results. Keep searching!'
-				);
-			}
-			return t('displayer.search_list_title2', 'None of your items matches your search.');
+			t('displayer.search_list_title1', 'It looks like there are no results. Keep searching!');
 		}
 		return null;
-	}, [randomListIndex, t, searchResults?.contacts.length]);
+	}, [t, searchResults?.contacts.length]);
+
+	const listItems = useMemo(
+		() =>
+			map(searchResults.contacts, (contact) => {
+				const isActive = itemId === contact.id;
+
+				return (
+					<CustomListItem
+						selected={false}
+						active={isActive}
+						key={contact.id}
+						background={'transparent'}
+					>
+						{(visible: boolean): React.JSX.Element =>
+							visible ? (
+								<SearchContactListItem item={contact} />
+							) : (
+								<div style={{ height: '4rem' }} />
+							)
+						}
+					</CustomListItem>
+				);
+			}),
+		[itemId, searchResults.contacts]
+	);
 
 	return (
 		<Container
@@ -72,7 +92,7 @@ const SearchList = ({
 		>
 			<BorderContainer padding="small" height="fit" borderRadius="none">
 				<Button
-					onClick={() => setShowAdvanceFilters(true)}
+					onClick={(): void => setShowAdvanceFilters(true)}
 					type={filterCount > 0 ? 'default' : 'outlined'}
 					width={'fill'}
 					label={
@@ -92,12 +112,11 @@ const SearchList = ({
 				<Container>
 					<List
 						background="gray6"
-						items={searchResults?.contacts ?? []}
-						ItemComponent={SearchListItem}
 						onListBottom={canLoadMore ? loadMore : undefined}
-						active={itemId}
 						data-testid="SearchResultContactsContainer"
-					/>
+					>
+						{listItems}
+					</List>
 				</Container>
 			)}
 			{searchResults?.contacts.length === 0 && !loading && (
@@ -117,5 +136,3 @@ const SearchList = ({
 		</Container>
 	);
 };
-
-export default SearchList;
