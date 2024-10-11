@@ -129,43 +129,41 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 	const { path } = useRouteMatch();
 
 	return (
-		<>
-			<Container>
-				<ResultsHeader label={t('label.results_for', 'Results for:')} />
-				<Container
-					orientation="horizontal"
-					background="gray4"
-					style={{ overflowY: 'auto' }}
-					mainAlignment="flex-start"
-				>
-					<Switch>
-						<Route path={`${path}/:folder?/:folderId?/:type?/:itemId?`}>
-							<SearchList
-								searchResults={searchResults}
-								search={searchQuery}
-								query={queryToString}
-								loading={loading}
-								filterCount={filterCount}
-								setShowAdvanceFilters={setShowAdvanceFilters}
-							/>
-						</Route>
-					</Switch>
-					<Suspense fallback={<Spinner />}>
-						<SearchPanel searchResults={searchResults} query={query} width="75%" />
-					</Suspense>
-				</Container>
-
-				<AdvancedFilterModal
-					query={query}
-					updateQuery={updateQuery}
-					open={showAdvanceFilters}
-					isSharedFolderIncluded={isSharedFolderIncluded}
-					setIsSharedFolderIncluded={setIsSharedFolderIncluded}
-					onClose={(): void => setShowAdvanceFilters(false)}
-					t={t}
-				/>
+		<Container>
+			<ResultsHeader label={t('label.results_for', 'Results for:')} />
+			<Container
+				orientation="horizontal"
+				background="gray4"
+				style={{ overflowY: 'auto' }}
+				mainAlignment="flex-start"
+			>
+				<Switch>
+					<Route path={`${path}/:folder?/:folderId?/:type?/:itemId?`}>
+						<SearchList
+							searchResults={searchResults}
+							search={searchQuery}
+							query={queryToString}
+							loading={loading}
+							filterCount={filterCount}
+							setShowAdvanceFilters={setShowAdvanceFilters}
+						/>
+					</Route>
+				</Switch>
+				<Suspense fallback={<Spinner />}>
+					<SearchPanel searchResults={searchResults} query={query} width="75%" />
+				</Suspense>
 			</Container>
-		</>
+
+			<AdvancedFilterModal
+				query={query}
+				updateQuery={updateQuery}
+				open={showAdvanceFilters}
+				isSharedFolderIncluded={isSharedFolderIncluded}
+				setIsSharedFolderIncluded={setIsSharedFolderIncluded}
+				onClose={(): void => setShowAdvanceFilters(false)}
+				t={t}
+			/>
+		</Container>
 	);
 };
 
