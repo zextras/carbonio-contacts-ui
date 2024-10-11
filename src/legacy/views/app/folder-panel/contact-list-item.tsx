@@ -3,49 +3,48 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback, useMemo } from 'react';
+import React, { MouseEventHandler, useCallback, useMemo, DragEvent } from 'react';
 
 import { Container, Drag } from '@zextras/carbonio-design-system';
 import { replaceHistory, useTags } from '@zextras/carbonio-shell-ui';
-import { includes, reduce } from 'lodash';
 
 import { ItemAvatar } from './item-avatar';
 import { ItemContent } from './item-content';
-import { ZIMBRA_STANDARD_COLORS } from '../../../../carbonio-ui-commons/constants/utils';
+import { getTagsArray } from '../../../helpers/tags';
+import { Contact } from '../../../types/contact';
 import ListItemActionWrapper from '../../folder/list-item-action-wrapper';
 
-export default function ContactListItem({
+type ContactListitemProps = {
+	item: Contact;
+	folderId: string;
+	selecting: boolean;
+	active: boolean;
+	toggle: (arg0: string) => void;
+	setDraggedIds?: (ids: Record<string, boolean>) => void;
+	setIsDragging: (arg0: boolean) => void;
+	selectedItems: Record<string, boolean>;
+	selected: boolean;
+	dragImageRef?: React.RefObject<HTMLElement>;
+};
+
+export const ContactListItem = ({
 	item,
 	selected,
 	folderId,
 	selecting,
 	active,
 	toggle,
-	visible,
 	setDraggedIds,
-	draggedIds,
 	setIsDragging,
 	selectedItems,
 	dragImageRef
-}) {
+}: ContactListitemProps): React.JSX.Element => {
 	const ids = useMemo(() => Object.keys(selectedItems ?? []), [selectedItems]);
 	const tagsFromStore = useTags();
 
-	const tags = useMemo(
-		() =>
-			reduce(
-				tagsFromStore,
-				(acc, v) => {
-					if (includes(item.tags, v.id))
-						acc.push({ ...v, color: ZIMBRA_STANDARD_COLORS[parseInt(v.color ?? '0', 10)].hex });
-					return acc;
-				},
-				[]
-			),
-		[item.tags, tagsFromStore]
-	);
+	const tags = useMemo(() => getTagsArray(tagsFromStore, item.tags), [item.tags, tagsFromStore]);
 
-	const _onClick = useCallback(
+	const _onClick = useCallback<MouseEventHandler<HTMLDivElement>>(
 		(e) => {
 			if (!e.isDefaultPrevented()) {
 				replaceHistory(`/folder/${folderId}/contacts/${item.id}`);
@@ -53,25 +52,28 @@ export default function ContactListItem({
 		},
 		[folderId, item.id]
 	);
+
 	const dragCheck = useCallback(
-		(e, id) => {
+		(e: DragEvent, id: string) => {
 			setIsDragging(true);
-			e.dataTransfer.setDragImage(dragImageRef.current, 0, 0);
+			if (dragImageRef && dragImageRef?.current) {
+				e?.dataTransfer?.setDragImage(dragImageRef.current, 0, 0);
+			}
 			if (selectedItems[id]) {
-				setDraggedIds(selectedItems);
+				setDraggedIds?.(selectedItems);
 			} else {
-				setDraggedIds({ [id]: true });
+				setDraggedIds?.({ [id]: true });
 			}
 		},
 		[setIsDragging, dragImageRef, selectedItems, setDraggedIds]
 	);
 
-	return draggedIds?.[item?.id] || visible ? (
+	return (
 		<Drag
 			type="contact"
 			data={{ ...item, parentFolderId: folderId, selectedIDs: ids }}
 			style={{ display: 'block' }}
-			onDragStart={(e) => dragCheck(e, item.id)}
+			onDragStart={(e): void => dragCheck(e, item.id)}
 		>
 			<Container orientation="vertical" data-testid={'contact-list-item'}>
 				<Container orientation="horizontal" mainAlignment="flex-start">
@@ -88,7 +90,5 @@ export default function ContactListItem({
 				</Container>
 			</Container>
 		</Drag>
-	) : (
-		<div style={{ height: '4rem' }} />
 	);
-}
+};
