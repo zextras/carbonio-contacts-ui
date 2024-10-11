@@ -13,7 +13,7 @@ import styled from 'styled-components';
 
 import { SearchContactListItem } from './search-contact-list-item';
 import { type SearchResults } from './search-view';
-import ShimmerList from './shimmer-list';
+import { ShimmerList } from './shimmer-list';
 import { CustomListItem } from '../../../carbonio-ui-commons/components/list/list-item';
 
 const BorderContainer = styled(Container)`
@@ -123,6 +123,7 @@ export const SearchList = ({
 				<Container>
 					<Padding top="medium">
 						<Text
+							data-testid="displayer-title"
 							color="gray1"
 							overflow="break-word"
 							size="small"
