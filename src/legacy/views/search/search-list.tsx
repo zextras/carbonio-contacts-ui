@@ -13,7 +13,6 @@ import styled from 'styled-components';
 
 import { SearchContactListItem } from './search-contact-list-item';
 import { type SearchResults } from './search-view';
-import { ShimmerList } from './shimmer-list';
 import { CustomListItem } from '../../../carbonio-ui-commons/components/list/list-item';
 
 const BorderContainer = styled(Container)`
@@ -25,7 +24,6 @@ type SearchListProps = {
 	searchResults: SearchResults;
 	search: (arg0: string, arg1: boolean) => void;
 	query: string;
-	loading: boolean;
 	filterCount: number;
 	setShowAdvanceFilters: (arg0: boolean) => void;
 };
@@ -33,7 +31,6 @@ export const SearchList = ({
 	searchResults,
 	search,
 	query,
-	loading,
 	filterCount,
 	setShowAdvanceFilters
 }: SearchListProps): React.JSX.Element => {
@@ -46,8 +43,8 @@ export const SearchList = ({
 	}, [query, search, searchResults]);
 
 	const canLoadMore = useMemo(
-		() => !loading && searchResults && searchResults.contacts.length > 0 && searchResults.more,
-		[loading, searchResults]
+		() => searchResults && searchResults.contacts.length > 0 && searchResults.more,
+		[searchResults]
 	);
 	const displayerTitle = useMemo(() => {
 		if (searchResults?.contacts.length === 0) {
@@ -107,8 +104,7 @@ export const SearchList = ({
 					icon="Options2Outline"
 				/>
 			</BorderContainer>
-			{loading && <ShimmerList />}
-			{searchResults?.contacts.length > 0 && !loading && (
+			{searchResults?.contacts.length > 0 && (
 				<Container>
 					<List
 						background="gray6"
@@ -119,7 +115,7 @@ export const SearchList = ({
 					</List>
 				</Container>
 			)}
-			{searchResults?.contacts.length === 0 && !loading && (
+			{searchResults?.contacts.length === 0 && (
 				<Container>
 					<Padding top="medium">
 						<Text

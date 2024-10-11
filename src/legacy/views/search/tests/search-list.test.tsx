@@ -62,7 +62,6 @@ describe('SearchList', () => {
 				searchResults={mockSearchResults}
 				search={mockSearch}
 				query=""
-				loading={false}
 				filterCount={0}
 				setShowAdvanceFilters={mockSetShowAdvanceFilters}
 			/>,
@@ -73,28 +72,12 @@ describe('SearchList', () => {
 		expect(screen.getByText('Advanced Filters')).toBeInTheDocument();
 	});
 
-	test('renders loading shimmer list when loading is true', () => {
-		setupTest(
-			<SearchList
-				searchResults={mockSearchResults}
-				search={mockSearch}
-				query=""
-				loading
-				filterCount={0}
-				setShowAdvanceFilters={mockSetShowAdvanceFilters}
-			/>
-		);
-
-		expect(screen.getByTestId('shimmer-list')).toBeInTheDocument();
-	});
-
 	test('renders contact list items when search results have contacts', () => {
 		setupTest(
 			<SearchList
 				searchResults={mockSearchResultsWithContacts}
 				search={mockSearch}
 				query=""
-				loading={false}
 				filterCount={0}
 				setShowAdvanceFilters={mockSetShowAdvanceFilters}
 			/>
@@ -117,7 +100,6 @@ describe('SearchList', () => {
 				searchResults={mockSearchResultsWithNoContacts}
 				search={mockSearch}
 				query=""
-				loading={false}
 				filterCount={0}
 				setShowAdvanceFilters={mockSetShowAdvanceFilters}
 			/>,

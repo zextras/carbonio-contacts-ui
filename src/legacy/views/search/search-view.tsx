@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { FC, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { FC, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
 import { type SearchViewProps, soapFetch, Spinner } from '@zextras/carbonio-shell-ui';
@@ -42,7 +42,7 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 		query: ''
 	});
 
-	const [loading, setLoading] = useState(false);
+	const loading = useRef(false);
 	const [t] = useTranslation();
 	const [filterCount, setFilterCount] = useState(0);
 	const [showAdvanceFilters, setShowAdvanceFilters] = useState(false);
@@ -89,11 +89,11 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 
 	const searchQuery = useCallback(
 		(queryStr: string, reset: boolean) => {
-			setLoading(true);
+			loading.current = true;
 			soapFetch<any, any>('Search', {
 				limit: 100,
 				query: queryStr,
-				offset: reset ? 0 : searchResults.offset,
+				offset: reset ? 0 : searchResults.contacts.length,
 				sortBy: searchResults.sortBy,
 				types: 'contact',
 				_jsns: 'urn:zimbraMail'
@@ -112,15 +112,16 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 				)
 				.then((r) => {
 					setSearchResults(r);
-					setLoading(false);
+				})
+				.finally(() => {
+					loading.current = false;
 				});
 		},
-		[searchResults.contacts, searchResults.offset, searchResults.sortBy]
+		[searchResults.contacts, searchResults.sortBy]
 	);
 
 	useEffect(() => {
-		if (query && query.length > 0 && queryToString !== searchResults.query) {
-			setLoading(true);
+		if (query && query.length > 0 && queryToString !== searchResults.query && !loading.current) {
 			setFilterCount(query.length);
 			searchQuery(queryToString, true);
 		}
@@ -143,7 +144,6 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 							searchResults={searchResults}
 							search={searchQuery}
 							query={queryToString}
-							loading={loading}
 							filterCount={filterCount}
 							setShowAdvanceFilters={setShowAdvanceFilters}
 						/>

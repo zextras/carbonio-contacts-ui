@@ -3,10 +3,9 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { map } from 'lodash';
 
 import { ContactsSlice } from '../../types/store';
-import { addContactsToStore, removeContactsFromStore } from '../../utils/helpers';
+import { addContactsToStore } from '../../utils/helpers';
 import { normalizeContactsFromSoap } from '../../utils/normalizations/normalize-contact-from-soap';
 
 export function searchContactsPending(state: ContactsSlice): void {
@@ -21,14 +20,8 @@ export function searchContactsRejected(state: ContactsSlice): void {
 export function searchContactsFullFilled(state: any, { meta, payload }: any): void {
 	const contacts = normalizeContactsFromSoap(payload);
 	if (state.contacts) {
-		if (payload) {
-			removeContactsFromStore(
-				state,
-				map(contacts, (item) => item.id)
-			);
-			if (contacts) {
-				addContactsToStore(state, contacts, meta.arg);
-			}
+		if (payload && contacts) {
+			addContactsToStore(state, contacts, meta.arg);
 		} else {
 			state.contacts[meta.arg] = [];
 		}
