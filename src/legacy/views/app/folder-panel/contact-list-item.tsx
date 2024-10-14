@@ -16,14 +16,14 @@ import ListItemActionWrapper from '../../folder/list-item-action-wrapper';
 
 type ContactListitemProps = {
 	item: Contact;
-	folderId: string;
-	selecting: boolean;
-	active: boolean;
-	toggle: (arg0: string) => void;
+	folderId?: string;
+	selecting?: boolean;
+	active?: boolean;
+	toggle?: (arg0: string) => void;
 	setDraggedIds?: (ids: Record<string, boolean>) => void;
-	setIsDragging: (arg0: boolean) => void;
-	selectedItems: Record<string, boolean>;
-	selected: boolean;
+	setIsDragging?: (arg0: boolean) => void;
+	selectedItems?: Record<string, boolean>;
+	selected?: boolean;
 	dragImageRef?: React.RefObject<HTMLElement>;
 };
 
@@ -55,11 +55,11 @@ export const ContactListItem = ({
 
 	const dragCheck = useCallback(
 		(e: DragEvent, id: string) => {
-			setIsDragging(true);
+			setIsDragging?.(true);
 			if (dragImageRef && dragImageRef?.current) {
 				e?.dataTransfer?.setDragImage(dragImageRef.current, 0, 0);
 			}
-			if (selectedItems[id]) {
+			if (selectedItems?.[id]) {
 				setDraggedIds?.(selectedItems);
 			} else {
 				setDraggedIds?.({ [id]: true });

@@ -7,12 +7,13 @@ import React, { ReactElement, useCallback, useMemo, useRef, useState } from 'rea
 
 import { List } from '@zextras/carbonio-design-system';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
-import { reduce, find, map } from 'lodash';
+import { map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { ContactListItem } from './contact-list-item';
+import { DragItems } from './drag-items';
 import { EmptyListPanel } from './empty-list-panel';
 import { CustomListItem } from '../../../../carbonio-ui-commons/components/list/list-item';
 import { Contact } from '../../../types/contact';
@@ -25,33 +26,6 @@ const DragImageContainer = styled.div`
 	width: 35vw;
 `;
 
-const DragItems = ({
-	contacts,
-	draggedIds
-}: {
-	contacts: Array<Contact>;
-	draggedIds: Record<string, boolean> | undefined;
-}): React.JSX.Element => {
-	const items = reduce(
-		draggedIds,
-		(acc: Array<Contact>, v, k) => {
-			const obj = find(contacts, ['id', k]);
-			if (obj) {
-				return [...acc, obj];
-			}
-			return acc;
-		},
-		[]
-	);
-
-	return (
-		<>
-			{map(items, (item, index) => (
-				<ContactListItem item={item} key={index} draggedIds={draggedIds} />
-			))}
-		</>
-	);
-};
 type ContactsListProps = {
 	folderId: string;
 	selected: Record<string, boolean>;
