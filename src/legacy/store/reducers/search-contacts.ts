@@ -22,21 +22,20 @@ export function searchContactsFullFilled(
 	state: State['contacts'],
 	{ meta, payload }: { meta: SearchRequestAsyncThunkProps; payload: SearchResponse }
 ): void {
-	console.log('searchContactsFullFilled', { meta }, { payload });
 	const contacts = normalizeContactsFromSoap(payload?.cn);
 	if (state.contacts) {
 		if (payload && contacts) {
-			addContactsToStore(state, contacts, meta.arg);
+			addContactsToStore(state, contacts, meta.arg.folderId);
 		} else {
-			state.contacts[meta.arg] = [];
+			state.contacts[meta.arg.folderId] = [];
 		}
 		state.searchedInFolder = {
 			...state.searchedInFolder,
-			[meta.arg]: payload?.more
+			[meta.arg.folderId]: payload?.more
 				? SEARCHED_FOLDER_STATE_STATUS.hasMore
 				: SEARCHED_FOLDER_STATE_STATUS.complete
 		};
 		state.status.pendingActions = false;
-		state.status[meta.arg] = true;
+		state.status[meta.arg.folderId] = true;
 	}
 }

@@ -6,7 +6,6 @@
 import React, { ReactElement, useCallback, useMemo, useRef, useState } from 'react';
 
 import { List } from '@zextras/carbonio-design-system';
-import { soapFetch } from '@zextras/carbonio-shell-ui';
 import { map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -16,7 +15,8 @@ import { ContactListItem } from './contact-list-item';
 import { DragItems } from './drag-items';
 import { EmptyListPanel } from './empty-list-panel';
 import { CustomListItem } from '../../../../carbonio-ui-commons/components/list/list-item';
-import { useAppSelector } from '../../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
+import { searchContacts } from '../../../store/actions/search-contacts';
 import { selectFolderHasMore } from '../../../store/slices/contacts-slice';
 import { Contact } from '../../../types/contact';
 
@@ -46,6 +46,7 @@ export const ContactsList = ({
 	const [isDragging, setIsDragging] = useState(false);
 	const [draggedIds, setDraggedIds] = useState<Record<string, boolean>>();
 	const dragImageRef = useRef(null);
+	const dispatch = useAppDispatch();
 
 	const listMessages = useMemo(
 		() => [
@@ -68,20 +69,13 @@ export const ContactsList = ({
 	const search = useCallback(
 		(reset: boolean) => {
 			loading.current = true;
-			soapFetch<any, any>('Search', {
-				limit: 100,
-				query: {
-					_content: `inid:"${folderId}"`
-				},
-				offset: reset ? 0 : contacts.length,
-				sortBy,
-				types: 'contact',
-				_jsns: 'urn:zimbraMail'
-			}).finally(() => {
-				loading.current = false;
-			});
+			dispatch(searchContacts({ folderId, offset: reset ? 0 : contacts.length, sortBy })).finally(
+				() => {
+					loading.current = false;
+				}
+			);
 		},
-		[contacts.length, folderId]
+		[contacts.length, dispatch, folderId]
 	);
 
 	const loadMore = useCallback(() => {
