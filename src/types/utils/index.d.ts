@@ -6,7 +6,7 @@
 
 import { ErrorSoapBodyResponse, SoapBody } from '@zextras/carbonio-shell-ui';
 
-import { SEARCHED_FOLDER_STATE_STATUS } from '../constants';
+import { SEARCHED_FOLDER_STATE_STATUS } from '../../constants';
 
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: T[SubKey] };
 export type MakeRequired<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;

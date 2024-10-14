@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { KebabToCamelCase } from '../types/utils';
+import { type KebabToCamelCase } from '../types';
 
 export const CONTACTS_ROUTE = 'contacts';
 export const CONTACTS_APP_ID = 'carbonio-contacts-ui';

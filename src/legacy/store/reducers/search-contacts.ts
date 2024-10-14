@@ -5,6 +5,7 @@
  */
 
 import { SEARCHED_FOLDER_STATE_STATUS } from '../../../constants';
+import { SearchRequestAsyncThunkProps, SearchResponse } from '../../../types';
 import { ContactsSlice, State } from '../../types/store';
 import { addContactsToStore } from '../../utils/helpers';
 import { normalizeContactsFromSoap } from '../../utils/normalizations/normalize-contact-from-soap';
@@ -17,9 +18,12 @@ export function searchContactsRejected(state: ContactsSlice): void {
 	state.status.pendingActions = false;
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export function searchContactsFullFilled(state: State['contacts'], { meta, payload }: any): void {
-	const contacts = normalizeContactsFromSoap(payload);
+export function searchContactsFullFilled(
+	state: State['contacts'],
+	{ meta, payload }: { meta: SearchRequestAsyncThunkProps; payload: SearchResponse }
+): void {
+	console.log('searchContactsFullFilled', { meta }, { payload });
+	const contacts = normalizeContactsFromSoap(payload?.cn);
 	if (state.contacts) {
 		if (payload && contacts) {
 			addContactsToStore(state, contacts, meta.arg);
@@ -28,7 +32,7 @@ export function searchContactsFullFilled(state: State['contacts'], { meta, paylo
 		}
 		state.searchedInFolder = {
 			...state.searchedInFolder,
-			[meta.arg.folderId]: payload.hasMore
+			[meta.arg]: payload?.more
 				? SEARCHED_FOLDER_STATE_STATUS.hasMore
 				: SEARCHED_FOLDER_STATE_STATUS.complete
 		};
