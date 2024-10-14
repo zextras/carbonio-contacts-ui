@@ -11,7 +11,7 @@
 		"build": "sdk build",
 		"start": "sdk watch",
 		"deploy": "sdk deploy",
-		"freshDeploy": "sdk build && sdk deploy",
+		"dev-deploy": "sdk build && sdk deploy",
 		"test": "jest --maxWorkers=50%",
 		"test:watch": "npm run test -- --onlyChanged --watch",
 		"type-check": "tsc --noEmit",
