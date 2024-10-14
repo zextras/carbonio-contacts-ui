@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { ContactsSlice } from '../../types/store';
+import { SEARCHED_FOLDER_STATE_STATUS } from '../../../constants';
+import { ContactsSlice, State } from '../../types/store';
 import { addContactsToStore } from '../../utils/helpers';
 import { normalizeContactsFromSoap } from '../../utils/normalizations/normalize-contact-from-soap';
 
@@ -17,7 +18,7 @@ export function searchContactsRejected(state: ContactsSlice): void {
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export function searchContactsFullFilled(state: any, { meta, payload }: any): void {
+export function searchContactsFullFilled(state: State['contacts'], { meta, payload }: any): void {
 	const contacts = normalizeContactsFromSoap(payload);
 	if (state.contacts) {
 		if (payload && contacts) {
@@ -25,6 +26,12 @@ export function searchContactsFullFilled(state: any, { meta, payload }: any): vo
 		} else {
 			state.contacts[meta.arg] = [];
 		}
+		state.searchedInFolder = {
+			...state.searchedInFolder,
+			[meta.arg.folderId]: payload.hasMore
+				? SEARCHED_FOLDER_STATE_STATUS.hasMore
+				: SEARCHED_FOLDER_STATE_STATUS.complete
+		};
 		state.status.pendingActions = false;
 		state.status[meta.arg] = true;
 	}

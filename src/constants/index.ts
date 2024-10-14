@@ -91,3 +91,10 @@ export const TIMEOUTS = {
 	defaultSnackbar: 3000,
 	trashAddressBook: 5000
 };
+
+export const SEARCHED_FOLDER_STATE_STATUS = {
+	empty: 'empty',
+	pending: 'pending',
+	complete: 'complete',
+	hasMore: 'hasMore'
+} as const;

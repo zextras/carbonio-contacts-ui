@@ -5,6 +5,7 @@
  */
 import { createSlice } from '@reduxjs/toolkit';
 
+import { SEARCHED_FOLDER_STATE_STATUS } from '../../../constants';
 import { State } from '../../types/store';
 import { contactAction } from '../actions/contact-action';
 import { createContact } from '../actions/create-contact';
@@ -42,7 +43,8 @@ const initialState: State['contacts'] = {
 	status: {
 		pendingActions: false
 	},
-	contacts: {}
+	contacts: {},
+	searchedInFolder: {}
 };
 
 export const contactsSlice = createSlice({
@@ -74,3 +76,6 @@ export const contactsSlice = createSlice({
 export const { handleCreatedContactsSync, handleModifiedContactsSync, handleDeletedContactsSync } =
 	contactsSlice.actions;
 export const contactSliceReducer = contactsSlice.reducer;
+
+export const selectFolderHasMore = (state: State, id: string): boolean =>
+	state.contacts.searchedInFolder?.[id] === SEARCHED_FOLDER_STATE_STATUS.hasMore;

@@ -6,6 +6,8 @@
 
 import { ErrorSoapBodyResponse, SoapBody } from '@zextras/carbonio-shell-ui';
 
+import { SEARCHED_FOLDER_STATE_STATUS } from '../constants';
+
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: T[SubKey] };
 export type MakeRequired<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
 
@@ -24,6 +26,10 @@ export type OptionalPropertyOf<T extends object> = Exclude<
 	}[keyof T],
 	undefined
 >;
+
+type SearchedFolderStateStatusKey = keyof typeof SEARCHED_FOLDER_STATE_STATUS;
+export type SearchedFolderStateStatus =
+	(typeof SEARCHED_FOLDER_STATE_STATUS)[SearchedFolderStateStatusKey];
 
 export type SoapFault = ErrorSoapBodyResponse['Fault'];
 export type NameSpace = SoapBody['_jsns'];

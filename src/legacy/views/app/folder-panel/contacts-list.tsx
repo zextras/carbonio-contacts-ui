@@ -16,6 +16,8 @@ import { ContactListItem } from './contact-list-item';
 import { DragItems } from './drag-items';
 import { EmptyListPanel } from './empty-list-panel';
 import { CustomListItem } from '../../../../carbonio-ui-commons/components/list/list-item';
+import { useAppSelector } from '../../../hooks/redux';
+import { selectFolderHasMore } from '../../../store/slices/contacts-slice';
 import { Contact } from '../../../types/contact';
 
 const DragImageContainer = styled.div`
@@ -60,7 +62,7 @@ export const ContactsList = ({
 	);
 
 	// TODO
-	const more = false;
+	const hasMore = useAppSelector((state) => selectFolderHasMore(state, folderId));
 	const sortBy = 'nameAsc';
 
 	const search = useCallback(
@@ -83,12 +85,12 @@ export const ContactsList = ({
 	);
 
 	const loadMore = useCallback(() => {
-		if (contacts.length > 0 && more) {
+		if (contacts.length > 0 && hasMore) {
 			search(false);
 		}
-	}, [contacts.length, more, search]);
+	}, [contacts.length, hasMore, search]);
 
-	const canLoadMore = useMemo(() => contacts.length > 0 && more, [contacts.length, more]);
+	const canLoadMore = useMemo(() => contacts.length > 0 && hasMore, [contacts.length, hasMore]);
 
 	const listItems = useMemo(
 		() =>
