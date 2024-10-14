@@ -62,8 +62,8 @@ export const ContactsList = ({
 		[t]
 	);
 
-	// TODO
 	const hasMore = useAppSelector((state) => selectFolderHasMore(state, folderId));
+	// TODO: figure sorting
 	const sortBy = 'nameAsc';
 
 	const search = useCallback(
