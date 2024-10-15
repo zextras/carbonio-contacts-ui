@@ -42,7 +42,7 @@ export const useUpdateDistributionList = (
 	const createSnackbar = useSnackbar();
 
 	return useCallback<DistributionListActionFn>(
-		({ email, members, displayName, description }) => {
+		async ({ email, members, displayName, description }) => {
 			const { membersToAdd, membersToRemove } = getMembersPartition(
 				initialDistributionList.members?.members ?? [],
 				members?.members ?? []
@@ -65,7 +65,7 @@ export const useUpdateDistributionList = (
 					});
 					createSnackbar({
 						key: `dl-save-success-${email}`,
-						type: 'success',
+						severity: 'success',
 						label: t(
 							'snackbar.edit_distribution_list.save.success',
 							'"{{displayName}}" distribution list edits saved successfully',
@@ -84,7 +84,7 @@ export const useUpdateDistributionList = (
 				.catch((error) => {
 					createSnackbar({
 						key: `dl-save-error-${email}`,
-						type: 'error',
+						severity: 'error',
 						label: t('label.error_try_again', 'Something went wrong, please try again'),
 						hideButton: true
 					});

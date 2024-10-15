@@ -22,7 +22,7 @@ const createContactIntegration =
 			.then(() => {
 				createSnackbar({
 					key: new Date().toLocaleString(),
-					type: 'success',
+					severity: 'success',
 					label: t(
 						'import_contacts.snackbar.contact_import_success',
 						'Contact imported in your address book successfully.'
@@ -32,7 +32,7 @@ const createContactIntegration =
 			.catch(() => {
 				createSnackbar({
 					key: new Date().toLocaleString(),
-					type: 'error',
+					severity: 'error',
 					label: t('label.error_try_again', 'Something went wrong, please try again')
 				});
 			});

@@ -73,6 +73,10 @@ describe('Folder panel', () => {
 		expect(screen.getByText(contact.lastName, { exact: false })).toBeVisible();
 	});
 
+	// remove all warning as the search request is not intercepted
+	// and not needed for the tests
+	jest.spyOn(console, 'warn').mockImplementation();
+
 	describe('Contacts actions', () => {
 		describe('Hover actions', () => {
 			it.each`

@@ -44,7 +44,7 @@ const InnerEditContactGroupBoard = ({
 				useContactGroupStore.getState().updateContactGroup(contactGroup);
 				createSnackbar({
 					key: new Date().toLocaleString(),
-					type: 'success',
+					severity: 'success',
 					label: t(
 						'board.editContactGroup.snackbar.contact_group_edited',
 						'Group successfully updated'
@@ -54,7 +54,7 @@ const InnerEditContactGroupBoard = ({
 			.catch(() => {
 				createSnackbar({
 					key: new Date().toLocaleString(),
-					type: 'error',
+					severity: 'error',
 					label: t(
 						'board.editContactGroup.snackbar.error',
 						'Something went wrong saving the edits, try again'

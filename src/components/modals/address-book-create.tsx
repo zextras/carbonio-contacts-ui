@@ -88,7 +88,7 @@ export const AddressBookCreateModal = ({
 				createSnackbar({
 					key: `create-address-book-success`,
 					replace: true,
-					type: 'success',
+					severity: 'success',
 					label: t('folder.snackbar.folder_new', 'New address book created'),
 					autoHideTimeout: TIMEOUTS.defaultSnackbar,
 					hideButton: true
@@ -99,7 +99,7 @@ export const AddressBookCreateModal = ({
 				createSnackbar({
 					key: `create-address-book-error`,
 					replace: true,
-					type: 'error',
+					severity: 'error',
 					label: t('label.error_try_again', 'Something went wrong, please try again'),
 					autoHideTimeout: TIMEOUTS.defaultSnackbar,
 					hideButton: true

@@ -47,7 +47,7 @@ export default function ContactSettingsView() {
 				createSnackbar({
 					key: `new`,
 					replace: true,
-					type: 'info',
+					severity: 'info',
 					label: t('message.snackbar.settings_saved', 'Edits saved correctly'),
 					autoHideTimeout: 3000,
 					hideButton: true
@@ -56,7 +56,7 @@ export default function ContactSettingsView() {
 				createSnackbar({
 					key: `new`,
 					replace: true,
-					type: 'error',
+					severity: 'error',
 					label: t('label.error_try_again', 'Something went wrong, please try again'),
 					autoHideTimeout: 3000,
 					hideButton: true

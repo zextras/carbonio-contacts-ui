@@ -5,7 +5,7 @@
  */
 import React, { useMemo } from 'react';
 
-import { Container, Divider, ListV2, Row } from '@zextras/carbonio-design-system';
+import { Container, Divider, List, Row } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
 import { MemberDisplayerListItemComponent } from '../../../components/member-displayer-list-item';
@@ -62,7 +62,7 @@ export const ContactGroupDisplayerDetails = ({
 				</Text>
 			</Row>
 			<Container minHeight={'0'} mainAlignment={'flex-start'}>
-				<ListV2>{memberItems}</ListV2>
+				<List>{memberItems}</List>
 			</Container>
 		</Container>
 	);

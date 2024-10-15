@@ -64,7 +64,7 @@ const getDeleteModal = (
 						closeBoard(boardId);
 					}
 					createSnackbar({
-						type: 'success',
+						severity: 'success',
 						key: `snackbar-${Date.now()}`,
 						label: t(
 							'snackbar.delete_contact_group.confirm.success',
@@ -76,7 +76,7 @@ const getDeleteModal = (
 				.catch((error: Error) => {
 					createSnackbar({
 						key: `snackbar-${Date.now()}`,
-						type: 'error',
+						severity: 'error',
 						label: t('label.error_try_again', 'Something went wrong, please try again'),
 						hideButton: true
 					});

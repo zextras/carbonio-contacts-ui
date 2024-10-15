@@ -48,7 +48,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 
 				createSnackbar({
 					key: new Date().toLocaleString(),
-					type: 'success',
+					severity: 'success',
 					label: t(
 						'board.newContactGroup.snackbar.contact_group_created',
 						'Contact group successfully created'
@@ -59,7 +59,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 			.catch(() => {
 				createSnackbar({
 					key: new Date().toLocaleString(),
-					type: 'error',
+					severity: 'error',
 					label: t('label.error_try_again', 'Something went wrong, please try again')
 				});
 			});

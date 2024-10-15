@@ -58,7 +58,7 @@ export const AddressBookDeleteModal = ({
 				createSnackbar({
 					key: `delete-folder-success`,
 					replace: true,
-					type: 'info',
+					severity: 'info',
 					label: t(
 						'folder.snackbar.address_book_permanently_deleted',
 						'Address book permanently deleted'
@@ -72,7 +72,7 @@ export const AddressBookDeleteModal = ({
 				createSnackbar({
 					key: `delete-folder-error`,
 					replace: true,
-					type: 'error',
+					severity: 'error',
 					label: t('label.error_try_again', 'Something went wrong, please try again'),
 					autoHideTimeout: TIMEOUTS.defaultSnackbar,
 					hideButton: true

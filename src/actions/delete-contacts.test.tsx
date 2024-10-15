@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { act } from 'react-dom/test-utils';
+import { act } from '@testing-library/react';
 
 import { useActionDeleteContacts } from './delete-contacts';
 import { UIAction } from './types';

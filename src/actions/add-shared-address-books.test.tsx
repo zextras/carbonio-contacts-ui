@@ -4,14 +4,18 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { act } from 'react-dom/test-utils';
+import { act } from '@testing-library/react';
 
 import { useActionAddSharedAddressBooks } from './add-shared-address-books';
 import { UIAction } from './types';
+import { createSoapAPIInterceptor } from '../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { screen, setupHook } from '../carbonio-ui-commons/test/test-setup';
 import { TIMERS } from '../constants/tests';
 
 describe('useActionAddSharedAddressBooks', () => {
+	beforeEach(() => {
+		createSoapAPIInterceptor('getShareInfo');
+	});
 	it('should return an object with the specific data', () => {
 		const { result } = setupHook(useActionAddSharedAddressBooks);
 		expect(result.current).toEqual<UIAction<unknown, unknown>>(
