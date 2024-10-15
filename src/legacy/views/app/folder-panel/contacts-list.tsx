@@ -16,7 +16,7 @@ import { DragItems } from './drag-items';
 import { EmptyListPanel } from './empty-list-panel';
 import { CustomListItem } from '../../../../carbonio-ui-commons/components/list/list-item';
 import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
-import { searchContacts } from '../../../store/actions/search-contacts';
+import { searchContactsAsyncThunk } from '../../../store/actions/search-contacts';
 import { selectFolderHasMore } from '../../../store/slices/contacts-slice';
 import { Contact } from '../../../types/contact';
 
@@ -67,9 +67,11 @@ export const ContactsList = ({
 	const search = useCallback(
 		(reset: boolean) => {
 			loading.current = true;
-			dispatch(searchContacts({ folderId, offset: reset ? 0 : contacts.length })).finally(() => {
-				loading.current = false;
-			});
+			dispatch(searchContactsAsyncThunk({ folderId, offset: reset ? 0 : contacts.length })).finally(
+				() => {
+					loading.current = false;
+				}
+			);
 		},
 		[contacts.length, dispatch, folderId]
 	);
