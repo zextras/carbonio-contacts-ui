@@ -72,7 +72,7 @@ export const FolderPanel = (): ReactElement => {
 				mainAlignment="flex-start"
 				width="fill"
 				height="fill"
-				background="gray6"
+				background={'gray6'}
 				borderRadius="none"
 				data-testid="ContactsListContainer"
 				style={{
@@ -89,6 +89,7 @@ export const FolderPanel = (): ReactElement => {
 						folderId={folderId}
 						contacts={sortedContacts}
 						selected={selected}
+						isSelecting={isSelecting}
 						toggle={toggle}
 					/>
 				</Container>

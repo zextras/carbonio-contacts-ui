@@ -31,12 +31,14 @@ const DragImageContainer = styled.div`
 type ContactsListProps = {
 	folderId: string;
 	selected: Record<string, boolean>;
+	isSelecting: boolean;
 	contacts: Array<Contact>;
 	toggle: (id: string) => void;
 };
 export const ContactsList = ({
 	folderId,
 	selected,
+	isSelecting,
 	contacts,
 	toggle
 }: ContactsListProps): React.JSX.Element => {
@@ -92,7 +94,7 @@ export const ContactsList = ({
 				return (
 					<CustomListItem
 						key={contact.id}
-						selected={false}
+						selected={isSelected}
 						active={active}
 						background={active ? 'gray6' : 'gray5'}
 					>
@@ -102,12 +104,12 @@ export const ContactsList = ({
 									item={contact}
 									selected={isSelected}
 									folderId={folderId}
-									selecting={false}
+									selecting={isSelecting}
 									active={active}
 									toggle={toggle}
 									setDraggedIds={setDraggedIds}
 									setIsDragging={setIsDragging}
-									selectedItems={{}}
+									selectedItems={selected}
 									dragImageRef={dragImageRef}
 								/>
 							) : (
@@ -117,7 +119,7 @@ export const ContactsList = ({
 					</CustomListItem>
 				);
 			}),
-		[contacts, folderId, itemId, selected, toggle]
+		[contacts, folderId, isSelecting, itemId, selected, toggle]
 	);
 
 	const displayerMessage = useMemo(() => {
@@ -136,7 +138,7 @@ export const ContactsList = ({
 				/>
 			) : (
 				<List
-					background="gray6"
+					background={'gray6'}
 					onListBottom={canLoadMore ? loadMore : undefined}
 					data-testid="SearchResultContactsContainer"
 				>
