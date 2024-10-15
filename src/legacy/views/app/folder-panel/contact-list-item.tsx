@@ -56,7 +56,7 @@ export const ContactListItem = ({
 	const dragCheck = useCallback(
 		(e: DragEvent, id: string) => {
 			setIsDragging?.(true);
-			if (dragImageRef && dragImageRef?.current) {
+			if (dragImageRef?.current) {
 				e?.dataTransfer?.setDragImage(dragImageRef.current, 0, 0);
 			}
 			if (selectedItems?.[id]) {
