@@ -3,16 +3,16 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { FC, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { FC, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Container } from '@zextras/carbonio-design-system';
-import { type SearchViewProps, soapFetch, Spinner } from '@zextras/carbonio-shell-ui';
+import { Container, Spinner } from '@zextras/carbonio-design-system';
+import { type SearchViewProps, soapFetch } from '@zextras/carbonio-shell-ui';
 import { map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 
 import AdvancedFilterModal from './advance-filter-modal';
-import SearchList from './search-list';
+import { SearchList } from './search-list';
 import SearchPanel from './search-panel';
 import { isTrash } from '../../../carbonio-ui-commons/helpers/folders';
 import { useUpdateView } from '../../../carbonio-ui-commons/hooks/use-update-view';
@@ -22,7 +22,7 @@ import { usePrefs } from '../../../carbonio-ui-commons/utils/use-prefs';
 import { Contact } from '../../types/contact';
 import { normalizeContactsFromSoap } from '../../utils/normalizations/normalize-contact-from-soap';
 
-type SearchResults = {
+export type SearchResults = {
 	contacts: Array<Contact>;
 	more: boolean;
 	offset: number;
@@ -42,7 +42,7 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 		query: ''
 	});
 
-	const [loading, setLoading] = useState(false);
+	const loading = useRef(false);
 	const [t] = useTranslation();
 	const [filterCount, setFilterCount] = useState(0);
 	const [showAdvanceFilters, setShowAdvanceFilters] = useState(false);
@@ -89,11 +89,11 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 
 	const searchQuery = useCallback(
 		(queryStr: string, reset: boolean) => {
-			setLoading(true);
+			loading.current = true;
 			soapFetch<any, any>('Search', {
 				limit: 100,
 				query: queryStr,
-				offset: reset ? 0 : searchResults.offset,
+				offset: reset ? 0 : searchResults.contacts.length,
 				sortBy: searchResults.sortBy,
 				types: 'contact',
 				_jsns: 'urn:zimbraMail'
@@ -112,15 +112,16 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 				)
 				.then((r) => {
 					setSearchResults(r);
-					setLoading(false);
+				})
+				.finally(() => {
+					loading.current = false;
 				});
 		},
-		[searchResults.contacts, searchResults.offset, searchResults.sortBy]
+		[searchResults.contacts, searchResults.sortBy]
 	);
 
 	useEffect(() => {
-		if (query && query.length > 0 && queryToString !== searchResults.query) {
-			setLoading(true);
+		if (query && query.length > 0 && queryToString !== searchResults.query && !loading.current) {
 			setFilterCount(query.length);
 			searchQuery(queryToString, true);
 		}
@@ -129,43 +130,40 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 	const { path } = useRouteMatch();
 
 	return (
-		<>
-			<Container>
-				<ResultsHeader label={t('label.results_for', 'Results for:')} />
-				<Container
-					orientation="horizontal"
-					background="gray4"
-					style={{ overflowY: 'auto' }}
-					mainAlignment="flex-start"
-				>
-					<Switch>
-						<Route path={`${path}/:folder?/:folderId?/:type?/:itemId?`}>
-							<SearchList
-								searchResults={searchResults}
-								search={searchQuery}
-								query={query}
-								loading={loading}
-								filterCount={filterCount}
-								setShowAdvanceFilters={setShowAdvanceFilters}
-							/>
-						</Route>
-					</Switch>
-					<Suspense fallback={<Spinner />}>
-						<SearchPanel searchResults={searchResults} query={query} width="75%" />
-					</Suspense>
-				</Container>
-
-				<AdvancedFilterModal
-					query={query}
-					updateQuery={updateQuery}
-					open={showAdvanceFilters}
-					isSharedFolderIncluded={isSharedFolderIncluded}
-					setIsSharedFolderIncluded={setIsSharedFolderIncluded}
-					onClose={(): void => setShowAdvanceFilters(false)}
-					t={t}
-				/>
+		<Container>
+			<ResultsHeader label={t('label.results_for', 'Results for:')} />
+			<Container
+				orientation="horizontal"
+				background="gray4"
+				style={{ overflowY: 'auto' }}
+				mainAlignment="flex-start"
+			>
+				<Switch>
+					<Route path={`${path}/:folder?/:folderId?/:type?/:itemId?`}>
+						<SearchList
+							searchResults={searchResults}
+							search={searchQuery}
+							query={queryToString}
+							filterCount={filterCount}
+							setShowAdvanceFilters={setShowAdvanceFilters}
+						/>
+					</Route>
+				</Switch>
+				<Suspense fallback={<Spinner color="gray5" />}>
+					<SearchPanel searchResults={searchResults} query={query} width="75%" />
+				</Suspense>
 			</Container>
-		</>
+
+			<AdvancedFilterModal
+				query={query}
+				updateQuery={updateQuery}
+				open={showAdvanceFilters}
+				isSharedFolderIncluded={isSharedFolderIncluded}
+				setIsSharedFolderIncluded={setIsSharedFolderIncluded}
+				onClose={(): void => setShowAdvanceFilters(false)}
+				t={t}
+			/>
+		</Container>
 	);
 };
 

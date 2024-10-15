@@ -3,16 +3,21 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useMemo, useRef, useState } from 'react';
+import React, { ReactElement, useCallback, useMemo, useRef, useState } from 'react';
 
-import { reduce, find, map } from 'lodash';
+import { List } from '@zextras/carbonio-design-system';
+import { map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import ContactListItem from './contact-list-item';
+import { ContactListItem } from './contact-list-item';
+import { DragItems } from './drag-items';
 import { EmptyListPanel } from './empty-list-panel';
-import { ListOld } from './list';
+import { CustomListItem } from '../../../../carbonio-ui-commons/components/list/list-item';
+import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
+import { searchContactsAsyncThunk } from '../../../store/actions/search-contacts';
+import { selectFolderHasMore } from '../../../store/slices/contacts-slice';
 import { Contact } from '../../../types/contact';
 
 const DragImageContainer = styled.div`
@@ -23,50 +28,27 @@ const DragImageContainer = styled.div`
 	width: 35vw;
 `;
 
-const DragItems = ({
-	contacts,
-	draggedIds
-}: {
-	contacts: Array<Contact>;
-	draggedIds: Record<string, unknown>;
-}): React.JSX.Element => {
-	const items = reduce(
-		draggedIds,
-		(acc, v, k) => {
-			const obj = find(contacts, ['id', k]);
-			if (obj) {
-				return [...acc, obj];
-			}
-			return acc;
-		},
-		[] as Record<string, unknown>[]
-	);
-
-	return (
-		<>
-			{map(items, (item) => (
-				<ContactListItem item={item} key={item.id} draggedIds={draggedIds} />
-			))}
-		</>
-	);
-};
 type ContactsListProps = {
 	folderId: string;
-	selected: Record<string, unknown>;
+	selected: Record<string, boolean>;
+	isSelecting: boolean;
 	contacts: Array<Contact>;
-	toggle: boolean;
+	toggle: (id: string) => void;
 };
 export const ContactsList = ({
 	folderId,
 	selected,
+	isSelecting,
 	contacts,
 	toggle
 }: ContactsListProps): React.JSX.Element => {
 	const [t] = useTranslation();
+	const loading = useRef(false);
 	const { itemId } = useParams<{ itemId: string }>();
 	const [isDragging, setIsDragging] = useState(false);
-	const [draggedIds, setDraggedIds] = useState({});
+	const [draggedIds, setDraggedIds] = useState<Record<string, boolean>>();
 	const dragImageRef = useRef(null);
+	const dispatch = useAppDispatch();
 
 	const listMessages = useMemo(
 		() => [
@@ -80,6 +62,64 @@ export const ContactsList = ({
 			}
 		],
 		[t]
+	);
+
+	const hasMore = useAppSelector((state) => selectFolderHasMore(state, folderId));
+
+	const search = useCallback(
+		(reset: boolean) => {
+			loading.current = true;
+			dispatch(searchContactsAsyncThunk({ folderId, offset: reset ? 0 : contacts.length })).finally(
+				() => {
+					loading.current = false;
+				}
+			);
+		},
+		[contacts.length, dispatch, folderId]
+	);
+
+	const loadMore = useCallback(() => {
+		if (contacts.length > 0 && hasMore) {
+			search(false);
+		}
+	}, [contacts.length, hasMore, search]);
+
+	const canLoadMore = useMemo(() => contacts.length > 0 && hasMore, [contacts.length, hasMore]);
+
+	const listItems = useMemo(
+		() =>
+			map(contacts, (contact) => {
+				const isSelected = selected[contact.id];
+				const active = itemId === contact.id;
+				return (
+					<CustomListItem
+						key={contact.id}
+						selected={isSelected}
+						active={active}
+						background={active ? 'gray6' : 'gray5'}
+					>
+						{(visible: boolean): ReactElement =>
+							visible ? (
+								<ContactListItem
+									item={contact}
+									selected={isSelected}
+									folderId={folderId}
+									selecting={isSelecting}
+									active={active}
+									toggle={toggle}
+									setDraggedIds={setDraggedIds}
+									setIsDragging={setIsDragging}
+									selectedItems={selected}
+									dragImageRef={dragImageRef}
+								/>
+							) : (
+								<div style={{ height: '4rem' }} />
+							)
+						}
+					</CustomListItem>
+				);
+			}),
+		[contacts, folderId, isSelecting, itemId, selected, toggle]
 	);
 
 	const displayerMessage = useMemo(() => {
@@ -97,23 +137,13 @@ export const ContactsList = ({
 					emptyListTitle={displayerTitle}
 				/>
 			) : (
-				<ListOld
-					data-testid="ContactsListToScrollContainer"
-					selected={selected}
-					background="gray6"
-					active={itemId}
-					items={contacts}
-					itemProps={{
-						folderId,
-						toggle,
-						setDraggedIds,
-						setIsDragging,
-						draggedIds,
-						selectedItems: selected,
-						dragImageRef
-					}}
-					ItemComponent={ContactListItem}
-				/>
+				<List
+					background={'gray6'}
+					onListBottom={canLoadMore ? loadMore : undefined}
+					data-testid="SearchResultContactsContainer"
+				>
+					{listItems}
+				</List>
 			)}
 			<DragImageContainer ref={dragImageRef}>
 				{isDragging && <DragItems contacts={contacts} draggedIds={draggedIds} />}
