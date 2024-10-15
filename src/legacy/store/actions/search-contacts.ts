@@ -9,7 +9,7 @@ import { soapFetch } from '@zextras/carbonio-shell-ui';
 import { SEARCH_CONTACTS_LIMIT } from '../../../constants/api';
 import { SearchContactsRequest, SearchResponse } from '../../../types';
 
-export const searchContacts = createAsyncThunk<SearchResponse, SearchContactsRequest>(
+export const searchContactsAsyncThunk = createAsyncThunk<SearchResponse, SearchContactsRequest>(
 	'contacts/searchContacts',
 	async ({ folderId, offset = 0 }) =>
 		(await soapFetch('Search', {

@@ -15,7 +15,7 @@ import { ContactsList } from './folder-panel/contacts-list';
 import { useFolder } from '../../../carbonio-ui-commons/store/zustand/folder';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { useSelection } from '../../hooks/useSelection';
-import { searchContacts } from '../../store/actions/search-contacts';
+import { searchContactsAsyncThunk } from '../../store/actions/search-contacts';
 import { selectAllContactsInFolder, selectContactsStatus } from '../../store/selectors/contacts';
 import { ActionsContextProvider } from '../../ui-actions/actions-context';
 import { SelectPanelActions } from '../folder/select-panel-actions';
@@ -56,7 +56,7 @@ export const FolderPanel = (): ReactElement => {
 
 	useEffect(() => {
 		if (searchRequestStatus !== undefined) return;
-		dispatch(searchContacts({ folderId }));
+		dispatch(searchContactsAsyncThunk({ folderId }));
 	}, [dispatch, folderId, searchRequestStatus]);
 
 	return (
