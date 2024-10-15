@@ -14,7 +14,7 @@ import { getTagsArray } from '../../../helpers/tags';
 import { Contact } from '../../../types/contact';
 import ListItemActionWrapper from '../../folder/list-item-action-wrapper';
 
-type ContactListitemProps = {
+type ContactListItemProps = {
 	item: Contact;
 	folderId?: string;
 	selecting?: boolean;
@@ -38,7 +38,7 @@ export const ContactListItem = ({
 	setIsDragging,
 	selectedItems,
 	dragImageRef
-}: ContactListitemProps): React.JSX.Element => {
+}: ContactListItemProps): React.JSX.Element => {
 	const ids = useMemo(() => Object.keys(selectedItems ?? []), [selectedItems]);
 	const tagsFromStore = useTags();
 
