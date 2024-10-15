@@ -45,7 +45,7 @@ const mockMailToAction = (): void => {
 			id: 'mail-to',
 			label: 'Send Mail',
 			icon: 'MailModOutline',
-			onClick: jest.fn()
+			execute: jest.fn()
 		};
 
 		return [action, true];
