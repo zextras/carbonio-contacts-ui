@@ -92,8 +92,8 @@ export type SoapContact = {
 	id: string;
 	l: string;
 	rev: number;
-	t: string;
-	tn: string;
+	t?: string;
+	tn?: string;
 	_attrs: {
 		type?: string;
 		displayName?: string;
