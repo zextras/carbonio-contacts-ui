@@ -75,9 +75,9 @@ export const ContactListItem = ({
 			style={{ display: 'block' }}
 			onDragStart={(e): void => dragCheck(e, item.id)}
 		>
-			<Container orientation="vertical" data-testid={'contact-list-item'}>
+			<Container orientation="vertical" data-testid={'contact-list-item'} onClick={_onClick}>
 				<Container orientation="horizontal" mainAlignment="flex-start">
-					<ListItemActionWrapper contact={item} onClick={_onClick} current={active}>
+					<ListItemActionWrapper contact={item} current={active}>
 						<ItemAvatar
 							item={item}
 							selected={selected}
