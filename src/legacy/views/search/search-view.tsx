@@ -5,8 +5,8 @@
  */
 import React, { FC, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Container } from '@zextras/carbonio-design-system';
-import { type SearchViewProps, soapFetch, Spinner } from '@zextras/carbonio-shell-ui';
+import { Container, Spinner } from '@zextras/carbonio-design-system';
+import { type SearchViewProps, soapFetch } from '@zextras/carbonio-shell-ui';
 import { map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
@@ -149,7 +149,7 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 						/>
 					</Route>
 				</Switch>
-				<Suspense fallback={<Spinner />}>
+				<Suspense fallback={<Spinner color="gray5" />}>
 					<SearchPanel searchResults={searchResults} query={query} width="75%" />
 				</Suspense>
 			</Container>
