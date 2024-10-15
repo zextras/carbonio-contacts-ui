@@ -39,7 +39,6 @@ export type SearchResponse = {
 export type SearchContactsRequest = {
 	folderId: string;
 	offset?: number;
-	sortBy?: SortBy;
 };
 export type SearchRequestAsyncThunkProps = {
 	arg: SearchContactsRequest;

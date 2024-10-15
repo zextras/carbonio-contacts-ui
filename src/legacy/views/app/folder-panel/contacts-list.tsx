@@ -32,7 +32,7 @@ type ContactsListProps = {
 	folderId: string;
 	selected: Record<string, boolean>;
 	contacts: Array<Contact>;
-	toggle: (arg0: string) => void;
+	toggle: (id: string) => void;
 };
 export const ContactsList = ({
 	folderId,
@@ -63,17 +63,13 @@ export const ContactsList = ({
 	);
 
 	const hasMore = useAppSelector((state) => selectFolderHasMore(state, folderId));
-	// TODO: figure sorting
-	const sortBy = 'nameAsc';
 
 	const search = useCallback(
 		(reset: boolean) => {
 			loading.current = true;
-			dispatch(searchContacts({ folderId, offset: reset ? 0 : contacts.length, sortBy })).finally(
-				() => {
-					loading.current = false;
-				}
-			);
+			dispatch(searchContacts({ folderId, offset: reset ? 0 : contacts.length })).finally(() => {
+				loading.current = false;
+			});
 		},
 		[contacts.length, dispatch, folderId]
 	);

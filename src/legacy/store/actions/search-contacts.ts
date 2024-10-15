@@ -11,12 +11,12 @@ import { SearchContactsRequest, SearchResponse } from '../../../types';
 
 export const searchContacts = createAsyncThunk<SearchResponse, SearchContactsRequest>(
 	'contacts/searchContacts',
-	async ({ folderId, offset = 0, sortBy = 'nameAsc' }) =>
+	async ({ folderId, offset = 0 }) =>
 		(await soapFetch('Search', {
 			_jsns: 'urn:zimbraMail',
 			limit: SEARCH_CONTACTS_LIMIT,
 			offset,
-			sortBy,
+			sortBy: 'nameAsc',
 			types: 'contact',
 			query: {
 				_content: `inid:"${folderId}"`

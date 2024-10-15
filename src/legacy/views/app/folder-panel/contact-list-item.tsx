@@ -19,9 +19,9 @@ type ContactListitemProps = {
 	folderId?: string;
 	selecting?: boolean;
 	active?: boolean;
-	toggle?: (arg0: string) => void;
+	toggle?: (id: string) => void;
 	setDraggedIds?: (ids: Record<string, boolean>) => void;
-	setIsDragging?: (arg0: boolean) => void;
+	setIsDragging?: (id: boolean) => void;
 	selectedItems?: Record<string, boolean>;
 	selected?: boolean;
 	dragImageRef?: React.RefObject<HTMLElement>;

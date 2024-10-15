@@ -22,10 +22,10 @@ const BorderContainer = styled(Container)`
 
 type SearchListProps = {
 	searchResults: SearchResults;
-	search: (arg0: string, arg1: boolean) => void;
+	search: (folderId: string, reset: boolean) => void;
 	query: string;
 	filterCount: number;
-	setShowAdvanceFilters: (arg0: boolean) => void;
+	setShowAdvanceFilters: (show: boolean) => void;
 };
 export const SearchList = ({
 	searchResults,
