@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { ReactElement, useEffect, useMemo } from 'react';
+import React, { ReactElement, useEffect, useMemo, useRef } from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
 import { useAppContext } from '@zextras/carbonio-shell-ui';
@@ -29,6 +29,7 @@ type UseAppContextType = {
 };
 
 export const FolderPanel = (): ReactElement => {
+	const isFirstRender = useRef(true);
 	const { folderId } = useParams<RouteParams>();
 	const dispatch = useAppDispatch();
 	const folder = useFolder(folderId);
@@ -55,8 +56,12 @@ export const FolderPanel = (): ReactElement => {
 	const selectedContacts = filter(contacts, (contact) => ids.indexOf(contact.id) !== -1);
 
 	useEffect(() => {
-		if (searchRequestStatus !== undefined) return;
-		dispatch(searchContactsAsyncThunk({ folderId }));
+		if (!isFirstRender.current || searchRequestStatus !== undefined) {
+			return;
+		}
+		dispatch(searchContactsAsyncThunk({ folderId })).finally(() => {
+			isFirstRender.current = false;
+		});
 	}, [dispatch, folderId, searchRequestStatus]);
 
 	return (
