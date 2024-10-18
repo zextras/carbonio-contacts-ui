@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { FIND_CONTACT_GROUP_LIMIT } from '../constants';
 import { ContactGroup } from '../model/contact-group';
@@ -17,6 +17,7 @@ type UseFindContactGroupsReturnType = {
 };
 
 export const useFindContactGroups = (): UseFindContactGroupsReturnType => {
+	const isFirstRender = useRef(true);
 	const { addContactGroups, setOffset, orderedContactGroups, unorderedContactGroups } =
 		useContactGroupStore();
 
@@ -33,9 +34,10 @@ export const useFindContactGroups = (): UseFindContactGroupsReturnType => {
 	}, [addContactGroups, setOffset]);
 
 	useEffect(() => {
-		if (useContactGroupStore.getState().orderedContactGroups.length > 0) {
+		if (useContactGroupStore.getState().orderedContactGroups.length > 0 || !isFirstRender.current) {
 			return;
 		}
+		isFirstRender.current = false;
 		findCallback();
 	}, [findCallback]);
 
