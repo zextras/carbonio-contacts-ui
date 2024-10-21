@@ -228,7 +228,7 @@ const App = (): React.JSX.Element => {
 			route: GROUPS_ROUTE,
 			position: 310,
 			visible: true,
-			label: t('label.groups_app_name', 'Contact Groups and Distribution Lists'),
+			label: t('label.distribution_list_app_name', 'Distribution Lists'),
 			primaryBar: 'ListOutline',
 			secondaryBar: SecondaryBarView,
 			appView: DistributionListAppView

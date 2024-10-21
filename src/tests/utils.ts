@@ -13,6 +13,7 @@ import { getFoldersMap } from '../carbonio-ui-commons/store/zustand/folder';
 import { screen, within } from '../carbonio-ui-commons/test/test-setup';
 import { Folder } from '../carbonio-ui-commons/types/folder';
 import { TESTID_SELECTORS } from '../constants/tests';
+import { SoapContact } from '../legacy/types/soap';
 import { DistributionList, DistributionListMembersPage } from '../model/distribution-list';
 import { CnItem } from '../network/api/types';
 import { MakeRequired } from '../types/utils';
@@ -126,6 +127,27 @@ export const createCnItem = (
 		sf: 'bo0000000276'
 	};
 };
+
+export function createSoapContact({
+	id = faker.number.int({ min: 100 }).toString(),
+	email = faker.internet.email()
+}: {
+	id?: string;
+	email?: string;
+}): SoapContact {
+	return {
+		id,
+		l: '7',
+		d: faker.date.recent().valueOf(),
+		rev: 12974,
+		fileAsStr: faker.internet.userName(),
+		_attrs: {
+			nickname: faker.word.noun(),
+			fullName: faker.person.fullName(),
+			email
+		}
+	};
+}
 
 export function spyUseBoardHooks(updateBoardFn?: jest.Mock, closeBoardFn?: jest.Mock): void {
 	jest.spyOn(shell, 'useBoardHooks').mockReturnValue({

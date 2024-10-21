@@ -63,7 +63,7 @@ describe('App', () => {
 				route: 'groups',
 				position: 310,
 				visible: true,
-				label: 'Contact Groups and Distribution Lists',
+				label: 'Distribution Lists',
 				primaryBar: 'ListOutline'
 			})
 		);

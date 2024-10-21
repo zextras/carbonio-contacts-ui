@@ -25,7 +25,8 @@ export const generateState = ({
 					[folder]: filter(contacts, (contact) => contact.parent === folder)
 				}),
 				{}
-			)
+			),
+			searchedInFolder: {}
 		}
 	};
 

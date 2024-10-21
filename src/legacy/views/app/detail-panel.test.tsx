@@ -54,7 +54,8 @@ describe('Detail panel', () => {
 						}
 					]
 				},
-				status: {}
+				status: {},
+				searchedInFolder: {}
 			}
 		};
 		getSetupServer().use(
@@ -135,7 +136,8 @@ describe('Detail panel', () => {
 						}
 					]
 				},
-				status: {}
+				status: {},
+				searchedInFolder: {}
 			}
 		};
 		getSetupServer().use(

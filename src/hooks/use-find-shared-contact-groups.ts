@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 import { FIND_CONTACT_GROUP_LIMIT } from '../constants';
 import { SharedContactGroup } from '../model/contact-group';
@@ -19,6 +19,7 @@ type UseFindSharedContactGroupsReturnType = {
 export const useFindSharedContactGroups = (
 	accountId: string
 ): UseFindSharedContactGroupsReturnType => {
+	const isFirstRender = useRef(true);
 	const sharedAccountData = useSharedAccountData(accountId);
 	const hasMore = sharedAccountData?.hasMore ?? false;
 	const sharedContactGroups = useContactGroupStore
@@ -43,9 +44,10 @@ export const useFindSharedContactGroups = (
 	const hasData = !!sharedAccountData;
 
 	useEffect(() => {
-		if (hasData) {
+		if (hasData || !isFirstRender.current) {
 			return;
 		}
+		isFirstRender.current = false;
 		findCallback();
 	}, [findCallback, hasData]);
 
