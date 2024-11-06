@@ -31,7 +31,7 @@ export const SearchContactListItem = ({ item }: { item: Contact }): React.JSX.El
 	return (
 		<Container orientation="vertical" data-testid={'search-contact-list-item'} onClick={_onClick}>
 			<Container orientation="horizontal" mainAlignment="flex-start">
-				<ItemAvatar item={item} selected={''} selecting={false} toggle={noop} isSearch />
+				<ItemAvatar item={item} selected={false} selecting={false} toggle={noop} isSearch />
 				<ItemContent item={item} tags={tags} />
 			</Container>
 		</Container>

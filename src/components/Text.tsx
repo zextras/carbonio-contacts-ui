@@ -11,29 +11,15 @@ import {
 	TextWithTooltip,
 	type TextWithTooltipProps
 } from '@zextras/carbonio-design-system';
-import styled, { type SimpleInterpolation } from 'styled-components';
+import styled from 'styled-components';
 
 import { MakeOptional } from '../types/utils';
 
 interface TextExtendedProps {
 	width?: string;
 	centered?: boolean;
-	italic?: boolean;
 	inline?: boolean;
-	lineHeight?: number;
 }
-
-type WithDollarPrefix<S extends string> = `$${S}`;
-
-type WithoutDollarPrefix<S extends string> = S extends `$${infer WithoutDollarString}`
-	? WithoutDollarString
-	: S;
-
-type StyledTextProps = {
-	[K in WithDollarPrefix<
-		keyof Omit<TextExtendedProps, 'withTooltip'>
-	>]: TextExtendedProps[WithoutDollarPrefix<K>];
-};
 
 type TextWithOptionalTooltipProps =
 	| ({ withTooltip: true } & MakeOptional<TextWithTooltipProps, 'children'>)
@@ -50,17 +36,14 @@ const TextWithOptionalTooltip = ({
 		<DSText {...rest}>{children}</DSText>
 	);
 
-const StyledText = styled(TextWithOptionalTooltip)<StyledTextProps>`
-	width: ${({ $width }): SimpleInterpolation => $width};
-	display: ${({ $inline }): SimpleInterpolation => $inline && 'inline'};
-	font-style: ${({ $italic }): SimpleInterpolation => $italic && 'italic'};
-	text-align: ${({ $centered }): SimpleInterpolation => $centered && 'center'};
-	line-height: ${({ $lineHeight }): SimpleInterpolation => $lineHeight};
+const StyledText = styled(TextWithOptionalTooltip)<{ $width?: string; $inline?: boolean }>`
+	width: ${({ $width }): string | undefined => $width};
+	display: ${({ $inline }): string | undefined | false => $inline && 'inline'};
 `;
+
 export const Text = ({
 	width,
 	centered,
-	italic,
 	inline,
 	lineHeight = 1.5,
 	withTooltip = false,
@@ -68,10 +51,9 @@ export const Text = ({
 }: TextExtendedProps & TextWithOptionalTooltipProps): React.JSX.Element => (
 	<StyledText
 		$width={width}
-		$centered={centered}
-		$italic={italic}
 		$inline={inline}
-		$lineHeight={lineHeight}
+		textAlign={(centered && 'center') || undefined}
+		lineHeight={lineHeight}
 		withTooltip={withTooltip}
 		{...dsProps}
 	/>

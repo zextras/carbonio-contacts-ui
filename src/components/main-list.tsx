@@ -41,7 +41,6 @@ export const MainList = ({
 			data-testid="list-header"
 			flexShrink={0}
 			flexGrow={1}
-			gap="medium"
 		></Row>
 		<Divider color="gray3" />
 		<Container minHeight={0} maxHeight={'100%'}>

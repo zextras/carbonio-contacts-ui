@@ -6,6 +6,7 @@
 import React, { useCallback, useMemo } from 'react';
 
 import { Avatar, Container, Tooltip } from '@zextras/carbonio-design-system';
+import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
@@ -55,4 +56,17 @@ export const ItemAvatar = ({ item, selected, selecting, toggle, isSearch = false
 			</Tooltip>
 		</Container>
 	);
+};
+
+ItemAvatar.propTypes = {
+	item: PropTypes.shape({
+		firstName: PropTypes.string,
+		middleName: PropTypes.string,
+		lastName: PropTypes.string,
+		id: PropTypes.string
+	}),
+	selected: PropTypes.bool,
+	selecting: PropTypes.bool,
+	toggle: PropTypes.func,
+	isSearch: PropTypes.bool
 };

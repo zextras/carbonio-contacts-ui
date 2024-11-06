@@ -345,7 +345,7 @@ function ContactPreviewContent({ contact, onEdit, onDelete, onMail, onMove }) {
 			data-testid="PreviewPanel"
 			padding={{ all: 'extrasmall' }}
 			width="100%"
-			mainAlignment="baseline"
+			mainAlignment="normal"
 			style={{ overflowY: 'auto' }}
 		>
 			<Responsive mode="desktop" target={window.top}>

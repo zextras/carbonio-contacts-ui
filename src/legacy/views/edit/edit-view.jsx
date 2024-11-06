@@ -17,6 +17,7 @@ import {
 } from '@zextras/carbonio-design-system';
 import { useReplaceHistoryCallback, report } from '@zextras/carbonio-shell-ui';
 import { filter, find, map, reduce } from 'lodash';
+import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -69,7 +70,7 @@ const cleanMultivalueFields = (contact) => ({
 const CustomStringField = ({ name, label, value, dispatch, autoFocus = false }) => (
 	<Container padding={{ all: 'small' }}>
 		<Input
-			backgroundColor="gray5"
+			background="gray5"
 			inputName={name}
 			label={label}
 			defaultValue={value}
@@ -79,6 +80,14 @@ const CustomStringField = ({ name, label, value, dispatch, autoFocus = false }) 
 		/>
 	</Container>
 );
+
+CustomStringField.propTypes = {
+	name: PropTypes.string,
+	label: PropTypes.string,
+	value: PropTypes.string,
+	dispatch: PropTypes.func,
+	autoFocus: PropTypes.bool
+};
 
 export default function EditView({ panel, onClose, onTitleChanged }) {
 	const { folderId, editId } = useParams();
@@ -432,3 +441,9 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 		</Container>
 	) : null;
 }
+
+EditView.propTypes = {
+	panel: PropTypes.bool,
+	onClose: PropTypes.func,
+	onTitleChanged: PropTypes.func
+};
