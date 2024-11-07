@@ -133,12 +133,17 @@ export function addContactsToStore(
 ): void {
 	reduce(
 		contacts,
-		(acc, v) => {
-			if (!acc[sharedFolderParent ?? v.parent]) {
+		(acc, contact) => {
+			const parentKey = sharedFolderParent ?? contact.parent;
+			if (!acc[parentKey]) {
 				// eslint-disable-next-line no-param-reassign
-				acc[sharedFolderParent ?? v.parent] = [];
+				acc[parentKey] = [];
 			}
-			acc[sharedFolderParent ?? v.parent].push(v);
+
+			if (!acc[parentKey].some((existingContact) => existingContact.id === contact.id)) {
+				acc[parentKey].push(contact);
+			}
+
 			return acc;
 		},
 		state.contacts
