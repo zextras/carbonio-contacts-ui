@@ -258,6 +258,8 @@ export const ContactInputCustomChipComponent = ({
 	chipDisplayName = CHIP_DISPLAY_NAME_VALUES.label,
 	contactActions,
 	actions,
+	contactInputValue,
+	contactInputOnChange,
 	...rest
 }: ContactInputCustomChipComponentProps): ReactElement => {
 	const contact = useMemo(() => ({ email, isGroup }), [email, isGroup]);
@@ -311,6 +313,8 @@ export const ContactInputCustomChipComponent = ({
 			email={contact.email}
 			isGroup={contact.isGroup}
 			actions={chipActions}
+			contactInputOnChange={contactInputOnChange}
+			contactInputValue={contactInputValue}
 		/>
 	);
 };

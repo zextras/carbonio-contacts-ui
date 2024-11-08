@@ -32,14 +32,16 @@ const generateClickableAction = (action, params) => ({
 
 export function mailToContact(contact, t) {
 	const [mailTo, available] = getAction('contact-list', 'mail-to', [contact]);
-	return available
-		? {
-				...mailTo,
-				onClick: mailTo.execute,
-				label: t('action.send_msg', 'Send e-mail'),
-				disabled: isEmpty(contact?.email)
-			}
-		: undefined;
+	if (!available) {
+		return undefined;
+	}
+	const { execute, ...action } = mailTo;
+	return {
+		...action,
+		onClick: execute,
+		label: t('action.send_msg', 'Send e-mail'),
+		disabled: isEmpty(contact?.email)
+	};
 }
 
 export const useContextActions = (folderId) => {
