@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import React, { FC, ReactElement, useCallback, useState } from 'react';
+import React, { FC, ReactElement, useCallback, useMemo, useState } from 'react';
 
 import {
 	Avatar,
@@ -123,17 +123,21 @@ const FlatFoldersAccordionFolder: FC<FlatFoldersAccordionFolderProps> = ({
 	const [t] = useTranslation();
 	const iconName = getFolderIconName(folder);
 	const iconColor = getFolderIconColor(folder);
-	const parts = getFolderAbsPathParts(folder);
+	const parts = useMemo(() => getFolderAbsPathParts(folder), [folder]);
 
 	/*
 	 * Create the crumbs array and try to get the translations
 	 * for the first part which usually represent a system folder
 	 * for which a translated name is available
 	 */
-	const crumbs = parts.map((part, index) => ({
-		id: `${index} `,
-		label: index === 0 ? getFolderTranslatedName(t, folder.id, part) : part
-	}));
+	const crumbs = useMemo(
+		() =>
+			parts.map((part, index) => ({
+				id: `${index} `,
+				label: index === 0 ? getFolderTranslatedName(t, folder.id, part) : part
+			})),
+		[parts, t, folder.id]
+	);
 
 	const selectionHandler = useCallback(() => {
 		onFolderSelected ? onFolderSelected(folder) : noop;
