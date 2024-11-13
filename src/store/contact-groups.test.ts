@@ -79,6 +79,15 @@ describe('Contact groups store', () => {
 			expect(useContactGroupStore.getState().orderedContactGroups).toEqual([...page1, ...page2]);
 			expect(useContactGroupStore.getState().unorderedContactGroups).toHaveLength(1);
 		});
+
+		it('should prevent duplicate contact groups in orderedContactGroups', () => {
+			const initialList = times(3, () => buildContactGroup());
+			addContactGroups(initialList);
+
+			addContactGroups(initialList);
+
+			expect(useContactGroupStore.getState().orderedContactGroups).toEqual(initialList);
+		});
 	});
 	describe('addSharedContactGroup', () => {
 		it('should return a key value correspondence of the list that has been set', () => {

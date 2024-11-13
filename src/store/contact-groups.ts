@@ -184,18 +184,21 @@ export const useContactGroupStore = create<State & ContactGroupStoreActions>()((
 	addContactGroups: (contactGroups): void => {
 		const { orderedContactGroups, unorderedContactGroups } = get();
 
+		const newGroups = differenceBy(contactGroups, orderedContactGroups, (cg) => cg.id);
+
 		if (unorderedContactGroups.length > 0) {
 			const unorderedResult = differenceBy(unorderedContactGroups, contactGroups, (cg) => cg.id);
 			set(() => ({
-				orderedContactGroups: [...(orderedContactGroups ?? []), ...contactGroups],
+				orderedContactGroups: [...(orderedContactGroups ?? []), ...newGroups],
 				unorderedContactGroups: unorderedResult
 			}));
 		} else {
 			set(() => ({
-				orderedContactGroups: [...(orderedContactGroups ?? []), ...contactGroups]
+				orderedContactGroups: [...(orderedContactGroups ?? []), ...newGroups]
 			}));
 		}
 	},
+
 	removeContactGroup: (contactGroupId: string): void => {
 		const { orderedContactGroups, unorderedContactGroups, offset } = get();
 		const idx = orderedContactGroups.findIndex(
