@@ -5,8 +5,7 @@
  */
 import React, { Suspense, useMemo } from 'react';
 
-import { Container } from '@zextras/carbonio-design-system';
-import { Spinner } from '@zextras/carbonio-shell-ui';
+import { Container, Spinner } from '@zextras/carbonio-design-system';
 import { trimEnd } from 'lodash';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 
@@ -19,7 +18,7 @@ export const FolderListPanel = (): React.JSX.Element => {
 		<Switch>
 			<Route path={`${trimmedPath}/folder/:folderId/:type?/:itemId?`}>
 				<Container width="40%" borderColor={{ right: 'gray3' }}>
-					<Suspense fallback={<Spinner />}>
+					<Suspense fallback={<Spinner color={'primary'} />}>
 						<FolderPanel />
 					</Suspense>
 				</Container>
