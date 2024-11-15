@@ -5,7 +5,7 @@
  */
 import React, { lazy, Suspense, useEffect, useMemo } from 'react';
 
-import { ModalManager, useSnackbar, Spinner } from '@zextras/carbonio-design-system';
+import { ModalManager, useSnackbar } from '@zextras/carbonio-design-system';
 import {
 	ACTION_TYPES,
 	addBoard,
@@ -37,6 +37,7 @@ import { ContactInputIntegrationWrapper } from './legacy/integrations/contact-in
 import createContactIntegration from './legacy/integrations/create-contact';
 import { StoreProvider } from './legacy/store/redux';
 import { SyncDataHandler } from './legacy/views/secondary-bar/sync-data-handler';
+import {Spinner} from "./components/Spinner";
 
 const LazyContactsView = lazy(
 	() => import(/* webpackChunkName: "contacts-view" */ './views/contacts-view')
@@ -85,7 +86,7 @@ const LazyEditDLBoardView = lazy(
 );
 
 const ContactsAppView = (): React.JSX.Element => (
-	<Suspense fallback={<Spinner color={'primary'} />}>
+	<Suspense fallback={<Spinner />}>
 		<StoreProvider>
 			<ModalManager>
 				<LazyContactsView />
@@ -95,7 +96,7 @@ const ContactsAppView = (): React.JSX.Element => (
 );
 
 const SecondaryBarView = (props: SecondaryBarComponentProps): React.JSX.Element => (
-	<Suspense fallback={<Spinner color={'primary'} />}>
+	<Suspense fallback={<Spinner />}>
 		<ModalManager>
 			<LazySecondaryBarView {...props} />
 		</ModalManager>
@@ -103,13 +104,13 @@ const SecondaryBarView = (props: SecondaryBarComponentProps): React.JSX.Element 
 );
 
 const DistributionListAppView = (): React.JSX.Element => (
-	<Suspense fallback={<Spinner color={'primary'} />}>
+	<Suspense fallback={<Spinner />}>
 		<LazyDistributionListAppView />
 	</Suspense>
 );
 
 const BoardView = (): React.JSX.Element => (
-	<Suspense fallback={<Spinner color={'primary'} />}>
+	<Suspense fallback={<Spinner />}>
 		<StoreProvider>
 			<ModalManager>
 				<LazyBoardView />
@@ -119,7 +120,7 @@ const BoardView = (): React.JSX.Element => (
 );
 
 const NewContactGroupBoardView = (): React.JSX.Element => (
-	<Suspense fallback={<Spinner color={'primary'} />}>
+	<Suspense fallback={<Spinner />}>
 		<ModalManager>
 			<LazyNewContactGroupBoardView />
 		</ModalManager>
@@ -127,7 +128,7 @@ const NewContactGroupBoardView = (): React.JSX.Element => (
 );
 
 const EditContactGroupBoardView = (): React.JSX.Element => (
-	<Suspense fallback={<Spinner color={'primary'} />}>
+	<Suspense fallback={<Spinner />}>
 		<ModalManager>
 			<LazyEditContactGroupBoardView />
 		</ModalManager>
@@ -135,13 +136,13 @@ const EditContactGroupBoardView = (): React.JSX.Element => (
 );
 
 const EditDLBoardView = (): React.JSX.Element => (
-	<Suspense fallback={<Spinner color={'primary'} />}>
+	<Suspense fallback={<Spinner />}>
 		<LazyEditDLBoardView />
 	</Suspense>
 );
 
 const SettingsView = (): React.JSX.Element => (
-	<Suspense fallback={<Spinner color={'primary'} />}>
+	<Suspense fallback={<Spinner />}>
 		<StoreProvider>
 			<ModalManager>
 				<LazySettingsView />
@@ -151,7 +152,7 @@ const SettingsView = (): React.JSX.Element => (
 );
 
 const SearchView = (props: SearchViewProps): React.JSX.Element => (
-	<Suspense fallback={<Spinner color={'primary'} />}>
+	<Suspense fallback={<Spinner />}>
 		<StoreProvider>
 			<ModalManager>
 				<LazySearchView {...props} />
@@ -161,7 +162,7 @@ const SearchView = (props: SearchViewProps): React.JSX.Element => (
 );
 
 const LegacySecondaryBarView = (props: SecondaryBarComponentProps): React.JSX.Element => (
-	<Suspense fallback={<Spinner color={'primary'} />}>
+	<Suspense fallback={<Spinner />}>
 		<StoreProvider>
 			<ModalManager>
 				<LazyLegacySecondaryBarView {...props} />
