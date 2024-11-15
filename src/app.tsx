@@ -37,7 +37,7 @@ import { ContactInputIntegrationWrapper } from './legacy/integrations/contact-in
 import createContactIntegration from './legacy/integrations/create-contact';
 import { StoreProvider } from './legacy/store/redux';
 import { SyncDataHandler } from './legacy/views/secondary-bar/sync-data-handler';
-import {Spinner} from "./components/Spinner";
+import { Spinner } from "./components/Spinner";
 
 const LazyContactsView = lazy(
 	() => import(/* webpackChunkName: "contacts-view" */ './views/contacts-view')
