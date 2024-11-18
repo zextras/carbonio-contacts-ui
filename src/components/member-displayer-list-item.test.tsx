@@ -6,7 +6,6 @@
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
-import { act } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
 
 import { MemberDisplayerListItemComponent } from './member-displayer-list-item';
@@ -70,9 +69,7 @@ describe('Member displayer item', () => {
 		const email = faker.internet.email();
 		const { user } = setupTest(<MemberDisplayerListItemComponent email={email} />);
 		const button = screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.copy });
-		await act(async () => {
-			await user.click(button);
-		});
+		await user.click(button);
 		expect(copyToClipboard).toHaveBeenCalledWith(email);
 	});
 
@@ -82,9 +79,7 @@ describe('Member displayer item', () => {
 		const email = faker.internet.email();
 		const { user } = setupTest(<MemberDisplayerListItemComponent email={email} />);
 		const button = screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.copy });
-		await act(async () => {
-			await user.click(button);
-		});
+		await user.click(button);
 		const snackbar = await screen.findByTestId(TESTID_SELECTORS.snackbar);
 		expect(within(snackbar).getByText(/Email copied to clipboard\./)).toBeVisible();
 	});

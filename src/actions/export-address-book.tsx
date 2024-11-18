@@ -77,7 +77,7 @@ export const useActionExportAddressBook = (): ExportAddressBookAction => {
 					createSnackbar({
 						key: 'export-address-book-error',
 						replace: true,
-						type: 'error',
+						severity: 'error',
 						label: t('label.error_try_again', 'Something went wrong, please try again'),
 						autoHideTimeout: TIMEOUTS.defaultSnackbar,
 						hideButton: true

@@ -33,7 +33,7 @@ export const useActionMoveAddressBook = (): MoveAddressBookAction => {
 					createSnackbar({
 						key: `move-address-book-success`,
 						replace: true,
-						type: 'success',
+						severity: 'success',
 						label: t('folder.action.moved', 'Address book moved successfully'),
 						autoHideTimeout: TIMEOUTS.defaultSnackbar,
 						hideButton: true
@@ -44,7 +44,7 @@ export const useActionMoveAddressBook = (): MoveAddressBookAction => {
 					createSnackbar({
 						key: `move-address-book-error`,
 						replace: true,
-						type: 'error',
+						severity: 'error',
 						label: t('label.error_try_again', 'Something went wrong, please try again'),
 						autoHideTimeout: TIMEOUTS.defaultSnackbar,
 						hideButton: true

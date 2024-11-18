@@ -47,7 +47,7 @@ export const ContactsImportModal = ({
 			createSnackbar({
 				key: `contacts-import-upload-error`,
 				replace: true,
-				type: 'error',
+				severity: 'error',
 				label: t('label.errors.upload_failed_generic', {
 					filename: file.name,
 					defaultValue: 'Upload failed for the file "{{filename}}"'
@@ -66,7 +66,7 @@ export const ContactsImportModal = ({
 					createSnackbar({
 						key: 'contacts-import-success',
 						replace: true,
-						type: 'info',
+						severity: 'info',
 						hideButton: true,
 						label: t('import_contacts.snackbar.import_contacts_success', {
 							count: response.contactsCount,
@@ -81,7 +81,7 @@ export const ContactsImportModal = ({
 					createSnackbar({
 						key: 'contacts-import-error',
 						replace: true,
-						type: 'error',
+						severity: 'error',
 						label: t('label.error_try_again', 'Something went wrong, please try again'),
 						autoHideTimeout: TIMEOUTS.defaultSnackbar,
 						hideButton: true

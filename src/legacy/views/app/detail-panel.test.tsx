@@ -9,7 +9,7 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import { http, HttpResponse } from 'msw';
 
-import DetailPanel from './detail-panel';
+import { DetailPanel } from './detail-panel';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { getSetupServer } from '../../../carbonio-ui-commons/test/jest-setup';
 import { populateFoldersStore } from '../../../carbonio-ui-commons/test/mocks/store/folders';
@@ -54,7 +54,8 @@ describe('Detail panel', () => {
 						}
 					]
 				},
-				status: {}
+				status: {},
+				searchedInFolder: {}
 			}
 		};
 		getSetupServer().use(
@@ -135,7 +136,8 @@ describe('Detail panel', () => {
 						}
 					]
 				},
-				status: {}
+				status: {},
+				searchedInFolder: {}
 			}
 		};
 		getSetupServer().use(

@@ -44,7 +44,6 @@ export const SyncDataHandler = () => {
 						if (notify.deleted?.length > 0) {
 							dispatch(handleDeletedContactsSync(notify.deleted));
 						}
-
 						setSeq(notify.seq);
 					}
 				});

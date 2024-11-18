@@ -175,10 +175,8 @@ describe('Edit DL Members Component', () => {
 			const { user } = setupTest(<EditDLMembersComponent {...buildProps({ onAddMembers })} />);
 			const contactInput = getDLContactInput();
 			const values = ['bad', 'correct.email@domain.com', 'worst', 'supercorrect.email@domain.net'];
-			await act(async () => {
-				await user.type(contactInput.textbox, values.join(','));
-			});
 
+			await user.type(contactInput.textbox, values.join(','));
 			await user.click(contactInput.addMembersIcon);
 			expect(onAddMembers).toHaveBeenCalledWith([
 				'correct.email@domain.com',
@@ -191,10 +189,7 @@ describe('Edit DL Members Component', () => {
 			const { user } = setupTest(<EditDLMembersComponent {...buildProps({ onAddMembers })} />);
 			const contactInput = getDLContactInput();
 			const values = ['bad', 'correct.email@domain.com', 'worst', 'supercorrect.email@domain.net'];
-			await act(async () => {
-				await user.type(contactInput.textbox, values.join(','));
-			});
-
+			await user.type(contactInput.textbox, values.join(','));
 			await user.click(contactInput.addMembersIcon);
 			await waitFor(() => expect(onAddMembers).toHaveBeenCalled());
 			await waitFor(() => expect(screen.queryByText(values[1])).not.toBeInTheDocument());
@@ -209,13 +204,9 @@ describe('Edit DL Members Component', () => {
 			const { user } = setupTest(<EditDLMembersComponent {...buildProps({ members })} />);
 			const contactInput = getDLContactInput();
 			const values = ['duplicated.email@domain.com', 'correct.email@domain.net'];
-			await act(async () => {
-				await user.type(contactInput.textbox, values.join(','));
-			});
+			await user.type(contactInput.textbox, values.join(','));
 
-			await act(async () => {
-				await user.click(contactInput.addMembersIcon);
-			});
+			await user.click(contactInput.addMembersIcon);
 			await waitFor(() =>
 				expect(within(contactInput.container).queryByText(values[1])).not.toBeInTheDocument()
 			);
@@ -231,14 +222,10 @@ describe('Edit DL Members Component', () => {
 					store: generateStore()
 				});
 				const contactInput = getDLContactInput();
-				await act(async () => {
-					await user.type(contactInput.textbox, `${invalidMail},`);
-				});
+				await user.type(contactInput.textbox, `${invalidMail},`);
 				expect(screen.getByText(errorMessage)).toBeVisible();
 				expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
-				await act(async () => {
-					await user.type(contactInput.textbox, `${validMail},`);
-				});
+				await user.type(contactInput.textbox, `${validMail},`);
 				expect(screen.queryByText(errorMessage)).not.toBeInTheDocument();
 			});
 
@@ -251,14 +238,10 @@ describe('Edit DL Members Component', () => {
 					store: generateStore()
 				});
 				const contactInput = getDLContactInput();
-				await act(async () => {
-					await user.type(contactInput.textbox, `${invalidMail1},${invalidMail2},`);
-				});
+				await user.type(contactInput.textbox, `${invalidMail1},${invalidMail2},`);
 				expect(screen.getByText(errorMessage)).toBeVisible();
 				expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
-				await act(async () => {
-					await user.type(contactInput.textbox, `${validMail},`);
-				});
+				await user.type(contactInput.textbox, `${validMail},`);
 				expect(screen.queryByText(errorMessage)).not.toBeInTheDocument();
 			});
 
@@ -311,15 +294,11 @@ describe('Edit DL Members Component', () => {
 					store: generateStore()
 				});
 				const contactInput = getDLContactInput();
-				await act(async () => {
-					await user.type(contactInput.textbox, `${validMail},${validMail2},`);
-				});
+				await user.type(contactInput.textbox, `${validMail},${validMail2},`);
 
 				expect(screen.getByText(errorMessage)).toBeVisible();
 				expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
-				await act(async () => {
-					await user.type(contactInput.textbox, `${faker.internet.email()},`);
-				});
+				await user.type(contactInput.textbox, `${faker.internet.email()},`);
 
 				expect(screen.queryByText(errorMessage)).not.toBeInTheDocument();
 			});
@@ -333,15 +312,11 @@ describe('Edit DL Members Component', () => {
 					store: generateStore()
 				});
 				const contactInput = getDLContactInput();
-				await act(async () => {
-					await user.type(contactInput.textbox, `${validMail},${invalidMail},`);
-				});
+				await user.type(contactInput.textbox, `${validMail},${invalidMail},`);
 
 				expect(screen.getByText(errorMessage)).toBeVisible();
 				expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
-				await act(async () => {
-					await user.type(contactInput.textbox, `${faker.internet.email()},`);
-				});
+				await user.type(contactInput.textbox, `${faker.internet.email()},`);
 				expect(screen.queryByText(errorMessage)).not.toBeInTheDocument();
 			});
 

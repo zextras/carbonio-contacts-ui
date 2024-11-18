@@ -218,22 +218,31 @@ describe('Contact input custom chip component', () => {
 			);
 
 			await waitFor(() => expect(getDLHandler).toHaveBeenCalled());
-			await user.click(
-				await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL })
-			);
-			act(() => {
+
+			await act(async () => {
+				await user.click(
+					await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL })
+				);
+			});
+
+			await act(async () => {
 				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
 			});
-			await waitFor(() => expect(getMembersHandler).toHaveBeenCalledTimes(1));
+
+			expect(getMembersHandler).toHaveBeenCalledTimes(1);
 			await screen.findByText(user1.email);
-			await user.click(
-				await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.collapseDL })
-			);
+			await act(async () => {
+				await user.click(
+					await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.collapseDL })
+				);
+			});
 			await waitFor(() => expect(screen.queryByText(user1.email)).not.toBeInTheDocument());
-			await user.click(
-				await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL })
-			);
-			act(() => {
+			await act(async () => {
+				await user.click(
+					await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL })
+				);
+			});
+			await act(async () => {
 				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
 			});
 			await waitFor(() => expect(getMembersHandler).toHaveBeenCalledTimes(2));
@@ -572,16 +581,18 @@ describe('Contact input custom chip component', () => {
 					contactInputValue={[]}
 				/>
 			);
-			await waitFor(() => expect(getDLHandler).toHaveBeenCalled());
-			await user.click(
-				await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL })
-			);
-			act(() => {
-				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
+			const expandButton = await screen.findByRoleWithIcon('button', {
+				icon: TESTID_SELECTORS.icons.expandDL
 			});
-			await screen.findByText(members[0]);
-			await user.click(screen.getByRole('button', { name: selectAll }));
-			await screen.findByText(secondPage[0]);
+			await act(async () => {
+				await user.click(expandButton);
+			});
+
+			const selectAllButton = await screen.findByRole('button', { name: selectAll });
+			await act(async () => {
+				await user.click(selectAllButton);
+			});
+			expect(getDLHandler).toHaveBeenCalledTimes(1);
 			expect(getMembersHandler).toHaveBeenCalledTimes(1);
 		});
 

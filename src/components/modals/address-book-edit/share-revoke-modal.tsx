@@ -59,7 +59,7 @@ export const ShareRevokeModal = ({
 				createSnackbar({
 					key: `remove-share-${addressBookId}-grant-success`,
 					replace: true,
-					type: 'info',
+					severity: 'info',
 					label: t('snackbar.share_revoke', 'Share access revoked'),
 					autoHideTimeout: TIMEOUTS.defaultSnackbar,
 					hideButton: true
@@ -70,7 +70,7 @@ export const ShareRevokeModal = ({
 				createSnackbar({
 					key: `remove-share-${addressBookId}-grant-error`,
 					replace: true,
-					type: 'error',
+					severity: 'error',
 					label: t('label.error_try_again', 'Something went wrong, please try again'),
 					autoHideTimeout: TIMEOUTS.defaultSnackbar,
 					hideButton: true

@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { ReactElement, useEffect, useMemo } from 'react';
+import React, { ReactElement, useEffect, useMemo, useRef } from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
 import { useAppContext } from '@zextras/carbonio-shell-ui';
@@ -15,8 +15,8 @@ import { ContactsList } from './folder-panel/contacts-list';
 import { useFolder } from '../../../carbonio-ui-commons/store/zustand/folder';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { useSelection } from '../../hooks/useSelection';
-import { searchContacts } from '../../store/actions/search-contacts';
-import { selectAllContactsInFolder } from '../../store/selectors/contacts';
+import { searchContactsAsyncThunk } from '../../store/actions/search-contacts';
+import { selectAllContactsInFolder, selectContactsStatus } from '../../store/selectors/contacts';
 import { ActionsContextProvider } from '../../ui-actions/actions-context';
 import { SelectPanelActions } from '../folder/select-panel-actions';
 
@@ -28,7 +28,8 @@ type UseAppContextType = {
 	setCount: (count: number) => void;
 };
 
-export default function FolderPanel(): ReactElement {
+export const FolderPanel = (): ReactElement => {
+	const isFirstRender = useRef(true);
 	const { folderId } = useParams<RouteParams>();
 	const dispatch = useAppDispatch();
 	const folder = useFolder(folderId);
@@ -36,6 +37,7 @@ export default function FolderPanel(): ReactElement {
 	const { selected, isSelecting, toggle, deselectAll } = useSelection(folderId, setCount);
 
 	const contacts = useAppSelector((state) => selectAllContactsInFolder(state, folderId));
+	const searchRequestStatus = useAppSelector((state) => selectContactsStatus(state, folderId));
 	const sortedContacts = useMemo(
 		() =>
 			orderBy(
@@ -54,8 +56,13 @@ export default function FolderPanel(): ReactElement {
 	const selectedContacts = filter(contacts, (contact) => ids.indexOf(contact.id) !== -1);
 
 	useEffect(() => {
-		dispatch(searchContacts(folderId));
-	}, [dispatch, folderId]);
+		if (!isFirstRender.current || searchRequestStatus !== undefined) {
+			return;
+		}
+		dispatch(searchContactsAsyncThunk({ folderId })).finally(() => {
+			isFirstRender.current = false;
+		});
+	}, [dispatch, folderId, searchRequestStatus]);
 
 	return (
 		<ActionsContextProvider
@@ -70,28 +77,28 @@ export default function FolderPanel(): ReactElement {
 				mainAlignment="flex-start"
 				width="fill"
 				height="fill"
-				background="gray6"
+				background={'gray6'}
 				borderRadius="none"
 				data-testid="ContactsListContainer"
 				style={{
 					maxHeight: '100%'
 				}}
 			>
-				<Container mainAlignment="flex-start" borderRadius="none" height="calc(100% - 4rem)">
+				<Container mainAlignment="flex-start" borderRadius="none">
 					{isSelecting ? (
 						<SelectPanelActions deselectAll={deselectAll} />
 					) : (
-						<Breadcrumbs folderPath={folder?.absFolderPath} itemsCount={folder?.n} />
+						<Breadcrumbs folderPath={folder?.absFolderPath ?? ''} itemsCount={folder?.n ?? 0} />
 					)}
 					<ContactsList
 						folderId={folderId}
 						contacts={sortedContacts}
 						selected={selected}
-						setCount={setCount}
+						isSelecting={isSelecting}
 						toggle={toggle}
 					/>
 				</Container>
 			</Container>
 		</ActionsContextProvider>
 	);
-}
+};

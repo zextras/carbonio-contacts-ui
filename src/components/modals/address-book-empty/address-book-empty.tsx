@@ -78,7 +78,7 @@ export const AddressBookEmptyModal = ({
 				createSnackbar({
 					key: `Empty-folder-success`,
 					replace: true,
-					type: 'info',
+					severity: 'info',
 					label: successLabel,
 					autoHideTimeout: TIMEOUTS.defaultSnackbar,
 					hideButton: true
@@ -89,7 +89,7 @@ export const AddressBookEmptyModal = ({
 				createSnackbar({
 					key: `empty-folder-error`,
 					replace: true,
-					type: 'error',
+					severity: 'error',
 					label: t('label.error_try_again', 'Something went wrong, please try again'),
 					autoHideTimeout: TIMEOUTS.defaultSnackbar,
 					hideButton: true

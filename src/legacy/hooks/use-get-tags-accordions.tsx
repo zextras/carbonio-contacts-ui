@@ -13,7 +13,8 @@ import {
 	Icon,
 	Padding,
 	Tooltip,
-	useModal
+	useModal,
+	DropdownItem
 } from '@zextras/carbonio-design-system';
 import { useTags, runSearch, QueryChip } from '@zextras/carbonio-shell-ui';
 import { reduce } from 'lodash';
@@ -53,7 +54,13 @@ const CustomComp: FC<ItemProps> = (props) => {
 	);
 
 	return (
-		<Dropdown contextMenu items={actions} display="block" width="fit" onClick={triggerSearch}>
+		<Dropdown
+			contextMenu
+			items={actions as Array<DropdownItem>}
+			display="block"
+			width="fit"
+			onClick={triggerSearch}
+		>
 			<Row mainAlignment="flex-start" height="fit" padding={{ left: 'large' }} takeAvailableSpace>
 				<Icon size="large" icon="Tag" color={ZIMBRA_STANDARD_COLORS[props?.item?.color ?? 0].hex} />
 
@@ -75,7 +82,7 @@ export const TagLabel: FC<ItemType> = (props) => {
 			contextMenu
 			display="block"
 			width="fit"
-			items={[createTag({ t, createModal, closeModal })]}
+			items={[createTag({ t, createModal, closeModal })] as Array<DropdownItem>}
 		>
 			<Row mainAlignment="flex-start" padding={{ horizontal: 'small' }} takeAvailableSpace>
 				<Icon size="large" icon="TagsMoreOutline" />

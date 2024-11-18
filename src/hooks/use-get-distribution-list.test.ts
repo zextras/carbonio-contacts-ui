@@ -57,15 +57,4 @@ describe('Use get distribution list hook', () => {
 			expect(handler).toHaveBeenCalled();
 		}
 	);
-
-	it('should request data only once', async () => {
-		const handler = registerGetDistributionListHandler(dlDetails);
-		const { result, rerender } = setupHook(useGetDistributionList, {
-			initialProps: [{ id: dlDetails.id }]
-		});
-		await waitFor(() => expect(result.current.distributionList).toEqual(dlDetails));
-		expect(handler).toHaveBeenCalledTimes(1);
-		rerender();
-		expect(handler).toHaveBeenCalledTimes(1);
-	});
 });

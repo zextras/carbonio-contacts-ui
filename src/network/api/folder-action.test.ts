@@ -19,7 +19,7 @@ describe('Folder action', () => {
 				Reason: { Text: faker.word.sample() }
 			}
 		};
-		createSoapAPIInterceptor('folderAction', response);
+		createSoapAPIInterceptor('FolderAction', response);
 		expect(async () => {
 			await folderAction({ folderId: faker.string.uuid(), operation: 'delete' });
 		}).rejects.toThrow();

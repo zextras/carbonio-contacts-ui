@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import { Container, Divider, Row, TabBar } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
@@ -19,6 +19,7 @@ import { Text } from './Text';
 import { DL_TABS } from '../constants';
 import { useDLActions } from '../hooks/use-dl-actions';
 import { useDLTabs } from '../hooks/use-dl-tabs';
+import { useActiveItem } from '../hooks/useActiveItem';
 import { DistributionList } from '../model/distribution-list';
 
 interface DistributionListDisplayerProps {
@@ -36,6 +37,11 @@ export const DistributionListDisplayer = ({
 	const { items, onChange, selected } = useDLTabs();
 	const actions = useDLActions(distributionList);
 
+	const { removeActive } = useActiveItem();
+	const closeDisplayer = useCallback(() => {
+		removeActive();
+	}, [removeActive]);
+
 	return (
 		<Container
 			background={'gray5'}
@@ -47,6 +53,7 @@ export const DistributionListDisplayer = ({
 			<DisplayerHeader
 				title={(distributionList?.displayName || distributionList?.email) ?? ''}
 				icon={'DistributionListOutline'}
+				closeDisplayer={closeDisplayer}
 			/>
 			<Container
 				padding={{ horizontal: '1rem' }}

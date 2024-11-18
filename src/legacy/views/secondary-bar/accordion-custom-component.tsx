@@ -128,7 +128,7 @@ export const AccordionCustomComponent: FC<{ item: Folder }> = ({ item: folder })
 			label:
 				folder.id === FOLDERS.USER_ROOT
 					? accountName
-					: getFolderTranslatedName(t, folder.id, folder.name) ?? '',
+					: (getFolderTranslatedName(t, folder.id, folder.name) ?? ''),
 			icon: getFolderIconName(folder) ?? undefined,
 			iconColor: getFolderIconColor(folder) ?? '',
 			to: `/folder/${folder.id}`,

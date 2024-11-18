@@ -6,7 +6,7 @@
 
 import React, { useMemo } from 'react';
 
-import { Container, ListV2, Row } from '@zextras/carbonio-design-system';
+import { Container, List, Row } from '@zextras/carbonio-design-system';
 import { map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
@@ -41,7 +41,7 @@ export const ManagerList = ({ managers, loading }: ManagerListProps): React.JSX.
 				</Text>
 			</Row>
 			<Container minHeight={0} mainAlignment={'flex-start'}>
-				<ListV2>{(!loading && memberItems) || loadingItems(3)}</ListV2>
+				<List>{(!loading && memberItems) || loadingItems(3)}</List>
 			</Container>
 		</Container>
 	);

@@ -5,8 +5,8 @@
  */
 
 import { faker } from '@faker-js/faker';
+import { act } from '@testing-library/react';
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
-import { act } from 'react-dom/test-utils';
 
 import { useActionRemoveAddressBookLink } from './remove-address-book-link';
 import { UIAction } from './types';

@@ -5,12 +5,14 @@
  */
 import { Contact, ContactsFolder } from './contact';
 import { SoapContact } from './soap';
+import { SearchedFolderStateStatus } from '../../types/utils';
 
 export type ContactsSlice = {
 	status: {
 		[k: string]: boolean;
 	};
 	contacts: { [k: string]: Array<Contact> };
+	searchedInFolder: Record<string, SearchedFolderStateStatus>;
 };
 
 export type SyncSlice = {

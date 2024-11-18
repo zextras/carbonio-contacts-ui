@@ -9,3 +9,10 @@ export type ContactGroup = {
 	id: string;
 	members: Array<string>;
 };
+
+export type SharedContactGroup = {
+	title: string;
+	id: string;
+	members: Array<string>;
+	accountId: string;
+};

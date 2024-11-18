@@ -62,7 +62,7 @@ export const AddressBookTrashModal = ({
 				createSnackbar({
 					key: `restore-folder-success`,
 					replace: true,
-					type: 'success',
+					severity: 'success',
 					label: t('label.address_book_restored', 'Address book restored'),
 					autoHideTimeout: TIMEOUTS.defaultSnackbar,
 					hideButton: true
@@ -72,7 +72,7 @@ export const AddressBookTrashModal = ({
 				createSnackbar({
 					key: `restore-folder-error`,
 					replace: true,
-					type: 'error',
+					severity: 'error',
 					label: t('label.error_try_again', 'Something went wrong, please try again'),
 					autoHideTimeout: TIMEOUTS.defaultSnackbar,
 					hideButton: true
@@ -87,7 +87,7 @@ export const AddressBookTrashModal = ({
 				createSnackbar({
 					key: `delete-folder-success`,
 					replace: true,
-					type: 'info',
+					severity: 'info',
 					label: t('folder.snackbar.address_book_moved_to_trash', 'Address book moved to trash'),
 					autoHideTimeout: TIMEOUTS.trashAddressBook,
 					hideButton: false,
@@ -100,7 +100,7 @@ export const AddressBookTrashModal = ({
 				createSnackbar({
 					key: `delete-folder-error`,
 					replace: true,
-					type: 'error',
+					severity: 'error',
 					label: t('label.error_try_again', 'Something went wrong, please try again'),
 					autoHideTimeout: TIMEOUTS.defaultSnackbar,
 					hideButton: true

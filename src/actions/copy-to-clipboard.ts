@@ -24,7 +24,7 @@ export const useActionCopyToClipboard = (): CopyToClipboardAction => {
 					createSnackbar({
 						key: `clipboard-copy-success-${Date.now()}`,
 						replace: true,
-						type: 'success',
+						severity: 'success',
 						hideButton: true,
 						label: t('snackbar.email_copied_to_clipboard', 'Email copied to clipboard.')
 					});

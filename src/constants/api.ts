@@ -12,3 +12,5 @@ export const NAMESPACES = {
 	mail: 'urn:zimbraMail',
 	generic: 'urn:zimbra'
 } satisfies Record<string, NameSpace>;
+
+export const SEARCH_CONTACTS_LIMIT = 100;

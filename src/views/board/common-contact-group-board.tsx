@@ -12,9 +12,9 @@ import {
 	Input,
 	InputProps,
 	Avatar,
-	ListV2,
 	Row,
-	ChipAction
+	ChipAction,
+	List as DSList
 } from '@zextras/carbonio-design-system';
 import { useBoardHooks } from '@zextras/carbonio-shell-ui';
 import { remove, some, uniqBy } from 'lodash';
@@ -31,7 +31,7 @@ export function isContactGroupNameInvalid(nameValue: string): boolean {
 	return nameValue.trim().length === 0 || nameValue.length > CONTACT_GROUP_NAME_MAX_LENGTH;
 }
 
-const List = styled(ListV2)`
+const List = styled(DSList)`
 	min-height: 0;
 `;
 

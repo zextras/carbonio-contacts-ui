@@ -33,7 +33,7 @@ import {
 import { buildContact } from '../../../../tests/model-builder';
 import { generateState } from '../../../../tests/state-builder';
 import { generateStore } from '../../../tests/generators/store';
-import FolderPanel from '../folder-panel';
+import { FolderPanel } from '../folder-panel';
 
 const mockMailToAction = (): void => {
 	getActionMock.mockImplementation((type, id) => {
@@ -45,7 +45,7 @@ const mockMailToAction = (): void => {
 			id: 'mail-to',
 			label: 'Send Mail',
 			icon: 'MailModOutline',
-			onClick: jest.fn()
+			execute: jest.fn()
 		};
 
 		return [action, true];
@@ -72,6 +72,10 @@ describe('Folder panel', () => {
 		makeListItemsVisible();
 		expect(screen.getByText(contact.lastName, { exact: false })).toBeVisible();
 	});
+
+	// remove all warning as the search request is not intercepted
+	// and not needed for the tests
+	jest.spyOn(console, 'warn').mockImplementation();
 
 	describe('Contacts actions', () => {
 		describe('Hover actions', () => {

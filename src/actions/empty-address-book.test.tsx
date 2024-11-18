@@ -5,7 +5,7 @@
  */
 
 import { faker } from '@faker-js/faker';
-import { act } from 'react-dom/test-utils';
+import { act } from '@testing-library/react';
 
 import { useActionEmptyAddressBook } from './empty-address-book';
 import { UIAction } from './types';
@@ -125,7 +125,6 @@ describe('useActionEmptyAddressBook', () => {
 		act(() => {
 			action.execute(addressBook);
 		});
-
 		act(() => {
 			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});

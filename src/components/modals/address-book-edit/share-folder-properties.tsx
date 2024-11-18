@@ -89,7 +89,7 @@ const Actions = ({ addressBookId, grant, onEdit, onRevoke }: ActionProps): React
 				createSnackbar({
 					key: `resend-${addressBookId}-share-notification-success`,
 					replace: true,
-					type: 'info',
+					severity: 'info',
 					label: t('snackbar.share_resend', 'Share invite resent'),
 					autoHideTimeout: TIMEOUTS.defaultSnackbar,
 					hideButton: true
@@ -99,7 +99,7 @@ const Actions = ({ addressBookId, grant, onEdit, onRevoke }: ActionProps): React
 				createSnackbar({
 					key: `resend-${addressBookId}-share-notification-error`,
 					replace: true,
-					type: 'error',
+					severity: 'error',
 					label: t('label.error_try_again', 'Something went wrong, please try again'),
 					autoHideTimeout: TIMEOUTS.defaultSnackbar,
 					hideButton: true

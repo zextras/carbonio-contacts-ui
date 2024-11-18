@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { lazy, Suspense, useEffect } from 'react';
+import React, { lazy, Suspense, useEffect, useMemo } from 'react';
 
 import { ModalManager, useSnackbar } from '@zextras/carbonio-design-system';
 import {
@@ -13,6 +13,7 @@ import {
 	addRoute,
 	addSearchView,
 	addSettingsView,
+	NewAction,
 	registerActions,
 	registerComponents,
 	registerFunctions,
@@ -23,7 +24,7 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import { FOLDER_VIEW } from './carbonio-ui-commons/constants';
-import { useFoldersController } from './carbonio-ui-commons/hooks/use-folders-controller';
+import { useInitializeFolders } from './carbonio-ui-commons/hooks/use-initialize-folders';
 import {
 	CONTACTS_APP_ID,
 	CONTACTS_ROUTE,
@@ -33,17 +34,17 @@ import {
 	EDIT_DL_BOARD_ID,
 	CONTACT_BOARD_ID
 } from './constants';
-import { useNavigation } from './hooks/useNavigation';
 import { ContactInputIntegrationWrapper } from './legacy/integrations/contact-input-integration-wrapper';
 import createContactIntegration from './legacy/integrations/create-contact';
 import { StoreProvider } from './legacy/store/redux';
 import { SyncDataHandler } from './legacy/views/secondary-bar/sync-data-handler';
 
-const LazyAppView = lazy(
-	() => import(/* webpackChunkName: "contacts-view" */ './legacy/views/app-view')
+const LazyContactsView = lazy(
+	() => import(/* webpackChunkName: "contacts-view" */ './views/contacts-view')
 );
 const LazySecondaryBarView = lazy(
-	() => import(/* webpackChunkName: "secondaryBarView" */ './views/SecondaryBarView')
+	() =>
+		import(/* webpackChunkName: "secondaryBarView" */ './views/distribution-list/SecondaryBarView')
 );
 const LazyLegacySecondaryBarView = lazy(
 	() =>
@@ -52,8 +53,8 @@ const LazyLegacySecondaryBarView = lazy(
 		)
 );
 
-const LazyGroupsAppView = lazy(
-	() => import(/* webpackChunkName: "groupsAppView" */ './views/GroupsAppView')
+const LazyDistributionListAppView = lazy(
+	() => import(/* webpackChunkName: "groupsAppView" */ './views/distribution-list-view')
 );
 const LazySettingsView = lazy(
 	() => import(/* webpackChunkName: "settings-view" */ './legacy/views/settings/settings-view')
@@ -68,23 +69,27 @@ const LazyBoardView = lazy(
 
 const LazyNewContactGroupBoardView = lazy(
 	() =>
-		import(/* webpackChunkName: "newContactGroupView" */ './views/board/new-contact-group-board')
+		import(
+			/* webpackChunkName: "newContactGroupView" */ './views/contact-groups/board/new-contact-group-board'
+		)
 );
 
 const LazyEditContactGroupBoardView = lazy(
 	() =>
-		import(/* webpackChunkName: "editContactGroupView" */ './views/board/edit-contact-group-board')
+		import(
+			/* webpackChunkName: "editContactGroupView" */ './views/contact-groups/board/edit-contact-group-board'
+		)
 );
 
 const LazyEditDLBoardView = lazy(
 	() => import(/* webpackChunkName: "edit-dl-view" */ './views/board/edit-dl-board')
 );
 
-const AppView = (): React.JSX.Element => (
+const ContactsAppView = (): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
 		<StoreProvider>
 			<ModalManager>
-				<LazyAppView />
+				<LazyContactsView />
 			</ModalManager>
 		</StoreProvider>
 	</Suspense>
@@ -98,9 +103,9 @@ const SecondaryBarView = (props: SecondaryBarComponentProps): React.JSX.Element 
 	</Suspense>
 );
 
-const AppViewV2 = (): React.JSX.Element => (
+const DistributionListAppView = (): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
-		<LazyGroupsAppView />
+		<LazyDistributionListAppView />
 	</Suspense>
 );
 
@@ -168,8 +173,46 @@ const LegacySecondaryBarView = (props: SecondaryBarComponentProps): React.JSX.El
 
 const App = (): React.JSX.Element => {
 	const [t] = useTranslation();
-	const { navigateTo } = useNavigation();
 	const createSnackbar = useSnackbar();
+
+	useInitializeFolders(FOLDER_VIEW.contact);
+
+	const newContactAction = useMemo(
+		(): NewAction => ({
+			id: 'new-contact',
+			label: t('label.new_contact', 'New Contact'),
+			icon: 'ContactsModOutline',
+			execute: (ev): void => {
+				ev?.preventDefault?.();
+				addBoard({
+					boardViewId: CONTACT_BOARD_ID,
+					title: t('label.new_contact', 'New Contact')
+				});
+			},
+			disabled: false,
+			group: CONTACTS_APP_ID,
+			primary: true
+		}),
+		[t]
+	);
+
+	const newContactGroupAction = useMemo(
+		(): NewAction => ({
+			id: 'new-contact-group',
+			label: t('label.newContactGroup', 'New contact group'),
+			icon: 'PeopleOutline',
+			execute: (): void => {
+				addBoard({
+					boardViewId: NEW_CONTACT_GROUP_BOARD_ID,
+					title: t('board.newContactGroup.title', 'New Group')
+				});
+			},
+			disabled: false,
+			primary: false,
+			group: CONTACTS_APP_ID
+		}),
+		[t]
+	);
 
 	useEffect(() => {
 		addRoute({
@@ -179,16 +222,16 @@ const App = (): React.JSX.Element => {
 			label: t('label.app_name', 'Contacts'),
 			primaryBar: 'ContactsModOutline',
 			secondaryBar: LegacySecondaryBarView,
-			appView: AppView
+			appView: ContactsAppView
 		});
 		addRoute({
 			route: GROUPS_ROUTE,
 			position: 310,
 			visible: true,
-			label: t('label.groups_app_name', 'Contact Groups and Distribution Lists'),
+			label: t('label.distribution_list_app_name', 'Distribution Lists'),
 			primaryBar: 'ListOutline',
 			secondaryBar: SecondaryBarView,
-			appView: AppViewV2
+			appView: DistributionListAppView
 		});
 		addSettingsView({
 			route: CONTACTS_ROUTE,
@@ -224,53 +267,23 @@ const App = (): React.JSX.Element => {
 			component: ContactInputIntegrationWrapper
 		});
 
-		registerActions(
+		registerActions<NewAction>(
 			{
-				action: () => ({
-					id: 'new-contact',
-					label: t('label.new_contact', 'New Contact'),
-					icon: 'ContactsModOutline',
-					onClick: (ev): void => {
-						ev?.preventDefault?.();
-						addBoard({
-							boardViewId: CONTACT_BOARD_ID,
-							title: t('label.new_contact', 'New Contact')
-						});
-					},
-					disabled: false,
-					group: CONTACTS_APP_ID,
-					primary: true
-				}),
+				action: () => newContactAction,
 				id: 'new-contact',
 				type: ACTION_TYPES.NEW
 			},
 			{
 				id: 'new-contact-group',
 				type: ACTION_TYPES.NEW,
-				action: () => ({
-					id: 'new-contact-group',
-					label: t('label.newContactGroup', 'New contact group'),
-					icon: 'PeopleOutline',
-					onClick: (): void => {
-						addBoard({
-							boardViewId: NEW_CONTACT_GROUP_BOARD_ID,
-							title: t('board.newContactGroup.title', 'New Group'),
-							context: { navigateTo }
-						});
-					},
-					disabled: false,
-					primary: false,
-					group: CONTACTS_APP_ID
-				})
+				action: () => newContactGroupAction
 			}
 		);
 		registerFunctions({
 			id: 'create_contact_from_vcard',
 			fn: createContactIntegration(createSnackbar, t)
 		});
-	}, [createSnackbar, navigateTo, t]);
-
-	useFoldersController(FOLDER_VIEW.contact);
+	}, [createSnackbar, newContactAction, newContactGroupAction, t]);
 
 	return (
 		<StoreProvider>

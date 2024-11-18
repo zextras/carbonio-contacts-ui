@@ -5,8 +5,6 @@
  */
 import React from 'react';
 
-import { act } from '@testing-library/react';
-
 import { DLDetailsInfo } from './dl-details-info';
 import { screen, setupTest, within } from '../carbonio-ui-commons/test/test-setup';
 import * as clipboard from '../carbonio-ui-commons/utils/clipboard';
@@ -44,9 +42,7 @@ describe('Distribution list details', () => {
 		const { user } = setupTest(<DLDetailsInfo email={dl.email} displayName={dl.displayName} />);
 		const copyAction = screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.copy });
 		expect(copyAction).toBeVisible();
-		await act(async () => {
-			await user.click(copyAction);
-		});
+		await user.click(copyAction);
 		expect(await screen.findByText(/Email copied to clipboard/i)).toBeVisible();
 		expect(copyToClipboard).toHaveBeenCalledWith(dl.email);
 	});

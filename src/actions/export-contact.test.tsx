@@ -3,7 +3,8 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { act } from 'react-dom/test-utils';
+
+import { act } from '@testing-library/react';
 
 import { useActionExportContact } from './export-contact';
 import { UIAction } from './types';
