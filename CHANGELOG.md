@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.13.1](https://github.com/zextras/carbonio-contacts-ui/compare/v1.13.0...v1.13.1) (2024-11-20)
+
+
+### Bug Fixes
+
+* removed old sync-data-handler.jsx replaced by tsx version ([0478372](https://github.com/zextras/carbonio-contacts-ui/commit/0478372b8b7e9c18c8145c049732db0d26a28955))
+
 ## [1.13.0](https://github.com/zextras/carbonio-contacts-ui/compare/v1.12.0...v1.13.0) (2024-11-18)
 
 
