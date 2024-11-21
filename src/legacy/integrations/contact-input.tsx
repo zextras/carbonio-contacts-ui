@@ -7,24 +7,19 @@
 import React, { useCallback, useEffect, useRef, useState, ReactElement, FC, useMemo } from 'react';
 
 import {
-	Avatar,
 	ChipInput,
 	Container,
-	Row,
-	Text,
 	type ChipItem,
 	type ChipInputProps,
 	type DropdownItem,
-	useCombinedRefs,
-	Dropdown
+	useCombinedRefs
 } from '@zextras/carbonio-design-system';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
-import { filter, find, map, trim, forEach, reject, uniqBy, noop, unescape } from 'lodash';
+import { filter, find, map, forEach, reject, uniqBy, noop } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import styled, { type DefaultTheme } from 'styled-components';
 
 import { ContactInputCustomChipComponent } from './contact-input-custom-chip-component';
-import { isValidEmail, parseEmail } from '../../carbonio-ui-commons/helpers/email-parser';
+import { isValidEmail } from '../../carbonio-ui-commons/helpers/email-parser';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
 import { StoreProvider } from '../store/redux';
 import type {
@@ -33,137 +28,13 @@ import type {
 	FullAutocompleteResponse,
 	Match
 } from '../types/contact';
-import type {
-	ContactChipAction,
-	ContactInputChipDisplayName,
-	ContactInputGroup,
-	ContactInputItem,
-	ContactInputOnChange,
-	ContactInputValue
-} from '../types/integrations';
+import type { ContactInputGroup, ContactInputItem, ContactInputValue } from '../types/integrations';
 import type { GetContactsRequest, GetContactsResponse } from '../types/soap';
-
-function isContactGroup(contact: {
-	isGroup?: boolean;
-	display?: string | null;
-	email?: string;
-}): contact is ContactInputGroup {
-	return (
-		(contact?.isGroup &&
-			contact?.display !== undefined &&
-			contact?.display !== null &&
-			!contact?.email) ??
-		false
-	);
-}
-
-const getChipLabel = (
-	contact: Pick<
-		ContactInputItem,
-		'firstName' | 'middleName' | 'lastName' | 'email' | 'address' | 'display' | 'fullName' | 'name'
-	>
-): string => {
-	if (contact.firstName ?? contact.middleName ?? contact.lastName) {
-		return trim(`${contact.firstName ?? ''} ${contact.middleName ?? ''} ${contact.lastName ?? ''}`);
-	}
-
-	const email = typeof contact.email === 'string' ? contact.email : undefined;
-	const address = typeof contact.address === 'string' ? contact.address : undefined;
-
-	return contact.fullName ?? email ?? contact.name ?? address ?? contact.display ?? '';
-};
-
-const Hint = ({ contact }: { contact: ContactInputItem }): ReactElement => {
-	const label = getChipLabel(contact);
-	return (
-		<Container
-			orientation="horizontal"
-			mainAlignment="flex-start"
-			crossAlignment="center"
-			minWidth="16rem"
-			minHeight="2rem"
-		>
-			<Avatar label={label} />
-			<Container orientation="vertical" crossAlignment="flex-start" padding={{ left: 'small' }}>
-				{!isContactGroup(contact) ? (
-					<>
-						<Row takeAvailableSpace mainAlignment="flex-start">
-							<Text size="large">{label}</Text>
-						</Row>
-						<Row takeAvailableSpace mainAlignment="flex-start">
-							<Text color="secondary">{contact.email}</Text>
-						</Row>
-					</>
-				) : (
-					<Text size="large">{label}</Text>
-				)}
-			</Container>
-		</Container>
-	);
-};
-
-interface SkeletonTileProps {
-	width?: string;
-	height?: string;
-	radius?: string;
-	theme: DefaultTheme;
-}
-
-const SkeletonTile = styled.div<SkeletonTileProps>`
-	width: ${({ width }): string => width ?? '1rem'};
-	max-width: ${({ width }): string => width ?? '1rem'};
-	min-width: ${({ width }): string => width ?? '1rem'};
-	height: ${({ height }): string => height ?? '1rem'};
-	max-height: ${({ height }): string => height ?? '1rem'};
-	min-height: ${({ height }): string => height ?? '1rem'};
-	border-radius: ${({ radius }): string => radius ?? '0.125rem'};
-	background: ${({ theme }): string => theme.palette.gray2.regular};
-`;
-
-const Loader = (): ReactElement => (
-	<Container
-		orientation="horizontal"
-		mainAlignment="flex-start"
-		crossAlignment="center"
-		minWidth="16rem"
-		minHeight="2rem"
-	>
-		<SkeletonTile radius="50%" width="2rem" height="2rem" />
-		<Container orientation="vertical" crossAlignment="flex-start" padding={{ left: 'small' }}>
-			<SkeletonTile
-				radius="0.25rem"
-				width={`${Math.random() * 9.375 + 4}rem`}
-				height="0.875rem"
-				style={{ marginBottom: '0.25rem' }}
-			/>
-			<SkeletonTile radius="0.25rem" width={`${Math.random() * 9.375 + 4}rem`} height="0.75rem" />
-		</Container>
-	</Container>
-);
-
-function tryToParseEmail(input: string | undefined): string {
-	const inputOrDefault = unescape(input ?? '');
-	return parseEmail(inputOrDefault) ?? inputOrDefault.trim();
-}
-
-export type ContactInputProps = Pick<
-	ChipInputProps,
-	| 'icon'
-	| 'iconAction'
-	| 'placeholder'
-	| 'background'
-	| 'iconDisabled'
-	| 'description'
-	| 'hasError'
-	| 'inputRef'
-> & {
-	onChange?: ContactInputOnChange;
-	defaultValue: Array<ContactInputItem>;
-	dragAndDropEnabled?: boolean;
-	orderedAccountIds?: Array<string>;
-	chipDisplayName?: ContactInputChipDisplayName;
-	contactActions?: Array<ContactChipAction>;
-};
+import { Hint } from './parts/hint';
+import { Loader } from './parts/loader';
+import { PasteContextMenu } from './parts/paste-context-menu';
+import { getChipLabel, isContactGroup, tryToParseEmail } from './parts/utils';
+import { ContactInputProps } from './types';
 
 const ContactInputCore: FC<ContactInputProps> = ({
 	onChange,
@@ -535,38 +406,3 @@ export const ContactInput = (props: ContactInputProps): ReactElement => (
 		<ContactInputCore {...props} />
 	</StoreProvider>
 );
-
-type PasteContextMenuProps = {
-	readonly elementReceivingPaste: HTMLInputElement | null;
-	readonly children: ReactElement;
-};
-
-function PasteContextMenu({
-	elementReceivingPaste,
-	children
-}: PasteContextMenuProps): ReactElement {
-	const { t } = useTranslation();
-
-	const pasteDropdownItem = {
-		id: 'paste',
-		label: t('label.paste', 'Paste'),
-		onClick: async (): Promise<void> => {
-			const dataTransfer = new DataTransfer();
-			dataTransfer.setData('text/plain', await navigator.clipboard.readText());
-
-			elementReceivingPaste?.dispatchEvent(
-				new ClipboardEvent('paste', {
-					clipboardData: dataTransfer,
-					bubbles: true,
-					cancelable: true
-				})
-			);
-		}
-	};
-
-	return (
-		<Dropdown display="block" items={[pasteDropdownItem]} contextMenu>
-			{children}
-		</Dropdown>
-	);
-}

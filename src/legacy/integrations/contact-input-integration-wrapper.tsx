@@ -5,7 +5,8 @@
  */
 import React from 'react';
 
-import { ContactInput, type ContactInputProps } from './contact-input';
+import { ContactInput } from './contact-input';
+import { ContactInputProps } from './types';
 
 export type ContactInputIntegrationWrapperProps = Omit<ContactInputProps, 'contactActions'> & {
 	actions?: ContactInputProps['contactActions'];
