@@ -287,6 +287,7 @@ const App = (): React.JSX.Element => {
 
 	return (
 		<StoreProvider>
+			<InitializeTags />
 			<SyncDataHandler />
 		</StoreProvider>
 	);

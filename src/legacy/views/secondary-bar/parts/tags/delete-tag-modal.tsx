@@ -7,9 +7,9 @@
 import React, { ComponentType, FC, ReactElement, useCallback, useMemo } from 'react';
 
 import { Container, Text, useSnackbar } from '@zextras/carbonio-design-system';
-import { deleteTag } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
+import { deleteTag } from '../../../../ui-actions/tag-actions';
 import ModalFooter from '../../commons/modal-footer';
 import { ModalHeader } from '../../commons/modal-header';
 

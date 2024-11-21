@@ -7,8 +7,9 @@
 import React from 'react';
 
 import { act, screen } from '@testing-library/react';
-import { useTags, replaceHistory } from '@zextras/carbonio-shell-ui';
+import { replaceHistory } from '@zextras/carbonio-shell-ui';
 
+import { useTags } from '../../../../carbonio-ui-commons/store/zustand/tags';
 import { setupTest } from '../../../../carbonio-ui-commons/test/test-setup';
 import { getTagsArray } from '../../../helpers/tags';
 import { generateStore } from '../../../tests/generators/store';
