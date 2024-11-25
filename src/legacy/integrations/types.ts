@@ -69,20 +69,16 @@ export type DLCustomChipProps = CustomChipProps & {
 };
 
 export type NewContact = {
-	ranking: string;
-	type: 'gal';
 	isGroup: boolean;
 	email: string;
-	first: string;
-	last: string;
-	full: string;
-	company: string;
-	fileas: string;
+	first?: string;
+	last?: string;
+	middle?: string;
+	full?: string;
+	company?: string;
 };
 
 export type NewContactGroup = {
-	ranking: string;
-	type: 'contact';
 	isGroup: boolean;
 	exp: boolean;
 	id: string;
@@ -91,8 +87,6 @@ export type NewContactGroup = {
 };
 
 export type NewDistributionList = {
-	ranking: string;
-	type: 'gal';
 	isGroup: boolean;
 	email: string;
 	exp: boolean;

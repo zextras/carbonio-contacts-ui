@@ -9,9 +9,9 @@ import React, { ReactElement } from 'react';
 import { Avatar, Container, Row, Text } from '@zextras/carbonio-design-system';
 
 import { getChipLabel, isContactGroup } from './utils';
-import type { ContactInputItem } from '../../types/integrations';
+import { ContactInputItemValue, USER_TYPES } from '../../types/integrations';
 
-export const Hint = ({ contact }: { contact: ContactInputItem }): ReactElement => {
+export const Hint = ({ contact }: { contact: ContactInputItemValue }): ReactElement => {
 	const label = getChipLabel(contact);
 	return (
 		<Container
@@ -23,7 +23,7 @@ export const Hint = ({ contact }: { contact: ContactInputItem }): ReactElement =
 		>
 			<Avatar label={label} />
 			<Container orientation="vertical" crossAlignment="flex-start" padding={{ left: 'small' }}>
-				{!isContactGroup(contact) ? (
+				{contact.type !== USER_TYPES.GROUP ? (
 					<>
 						<Row takeAvailableSpace mainAlignment="flex-start">
 							<Text size="large">{label}</Text>

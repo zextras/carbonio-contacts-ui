@@ -193,7 +193,6 @@ const ContactInputCore: FC<ContactInputProps> = ({
 					.then((contactinputItems) => {
 						setOptions(
 							map(contactinputItems, (contactinputItem) => ({
-								label: contactinputItem?.label ?? getChipLabel(contactinputItem),
 								value: contactinputItem,
 								customComponent: <Hint contact={contactinputItem} />,
 								id: getContactId(contactinputItem)

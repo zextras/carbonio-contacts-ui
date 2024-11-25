@@ -19,26 +19,54 @@ export type ContactInputGroup = ContactInputItem &
 		email?: '';
 	};
 
-export type ContactInputDistributionList = ContactInputItem & { isGroup: true; email: string };
+export type ContactInputDistributionList = ChipItem<UserDistributionList>;
 
 export type ContactChipAction = Omit<ChipAction, 'onClick'> & {
 	isVisible: (chipItem: ContactInputItem | DistributionList) => boolean;
 	onClick: (chipItem: ContactInputItem | DistributionList) => void;
 };
 
-export type ContactInputItem = ChipItem &
-	ContactInputContact & {
-		address?: string | Contact['address'];
-		fullName?: string;
-		name?: string;
-		display?: string;
-		isGroup?: boolean;
-		groupId?: string;
-	};
+type USER_TYPES = {
+	GROUP: 'CONTACT_GROUP';
+	DISTRIBUTION_LIST: 'DISTRIBUTION_LIST';
+	CONTACT: 'CONTACT';
+};
+
+export const USER_TYPES: USER_TYPES = {
+	GROUP: 'CONTACT_GROUP',
+	DISTRIBUTION_LIST: 'DISTRIBUTION_LIST',
+	CONTACT: 'CONTACT'
+};
+
+type UserContactGroup = {
+	id: string;
+	display: string;
+	groupId: string;
+	type: USER_TYPES['GROUP'];
+};
+
+type UserDistributionList = {
+	id: string;
+	email: string;
+	type: USER_TYPES['DISTRIBUTION_LIST'];
+};
+
+type UserContact = {
+	id: string;
+	firstName?: string;
+	middleName?: string;
+	lastName?: string;
+	fullName?: string;
+	company?: string;
+	email: string;
+	type: USER_TYPES['CONTACT'];
+};
+export type ContactInputItemValue = UserContactGroup | UserDistributionList | UserContact;
+export type ContactInputItem = ChipItem<ContactInputItemValue>;
 
 export type MakeRequired<T, K extends keyof T> = T & Required<Pick<T, K>>;
 
-export type ContactInputValue = ContactInputItem[];
+export type ContactInputValue = ContactInputItemValue[];
 
 export type ContactInputOnChange = ((items: ContactInputValue) => void) | undefined;
 export type ContactInputChipDisplayName =

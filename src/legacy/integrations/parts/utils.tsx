@@ -6,10 +6,12 @@
 import { trim, unescape } from 'lodash';
 
 import { parseEmail } from '../../../carbonio-ui-commons/helpers/email-parser';
-import type {
+import {
 	ContactInputDistributionList,
 	ContactInputGroup,
-	ContactInputItem
+	ContactInputItem,
+	ContactInputItemValue,
+	USER_TYPES
 } from '../../types/integrations';
 import { NewContactGroup, NewDistributionList, RemoteContactResponse } from '../types';
 
@@ -27,24 +29,24 @@ export function isContactGroup(contact: {
 	);
 }
 
-// TODO: check if the empty string can be removed easily without changing all the typization
-export const getContactId = (contact: ContactInputItem): string =>
-	contact.id ?? contact.email ?? '';
+export const getContactId = (contact: ContactInputItemValue): string =>
+	contact.type === USER_TYPES.GROUP ? contact.id : contact.email;
 
-export const getChipLabel = (
-	contact: Pick<
-		ContactInputItem,
-		'firstName' | 'middleName' | 'lastName' | 'email' | 'address' | 'display' | 'fullName' | 'name'
-	>
-): string => {
+export const getChipLabel = (contact: ContactInputItemValue): string => {
+	switch (contact.type) {
+		case USER_TYPES.GROUP:
+			return contact.display;
+		case USER_TYPES.DISTRIBUTION_LIST:
+			return contact.email;
+		default:
+			break;
+	}
+
 	if (contact.firstName ?? contact.middleName ?? contact.lastName) {
 		return trim(`${contact.firstName ?? ''} ${contact.middleName ?? ''} ${contact.lastName ?? ''}`);
 	}
 
-	const email = typeof contact.email === 'string' ? contact.email : undefined;
-	const address = typeof contact.address === 'string' ? contact.address : undefined;
-
-	return contact.fullName ?? email ?? contact.name ?? address ?? contact.display ?? '';
+	return contact.fullName ?? contact.email;
 };
 
 export function tryToParseEmail(input: string | undefined): string {
@@ -64,36 +66,31 @@ export function newIsDistributionList(value: RemoteContactResponse): value is Ne
 	return 'isGroup' in value && 'email' in value && value.isGroup;
 }
 
-// TODO: Remember to align with the getChipLabel about the label value
-export const mapToContactInputItem = (value: RemoteContactResponse): ContactInputItem => {
+export const mapToContactInputItem = (value: RemoteContactResponse): ContactInputItemValue => {
 	if (newIsContactGroup(value)) {
 		return {
 			id: value.id,
 			display: value.display,
-			isGroup: value.isGroup,
 			groupId: value.id,
-			label: value.display
+			type: USER_TYPES.GROUP
 		};
 	}
 	const parsedEmail = tryToParseEmail(value.email);
 	if (newIsDistributionList(value)) {
 		return {
 			id: parsedEmail,
-			display: parsedEmail,
-			isGroup: value.isGroup,
-			label: parsedEmail,
-			email: parsedEmail
+			email: parsedEmail,
+			type: USER_TYPES.DISTRIBUTION_LIST
 		};
 	}
 	return {
 		id: parsedEmail,
-		display: parsedEmail,
-		isGroup: value.isGroup,
-		label: parsedEmail,
 		firstName: value.first,
 		lastName: value.last,
+		middleName: value.middle,
 		fullName: value.full,
 		company: value.company,
-		email: parsedEmail
+		email: parsedEmail,
+		type: USER_TYPES.CONTACT
 	};
 };
