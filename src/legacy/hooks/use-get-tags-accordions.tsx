@@ -16,11 +16,12 @@ import {
 	useModal,
 	DropdownItem
 } from '@zextras/carbonio-design-system';
-import { useTags, runSearch, QueryChip } from '@zextras/carbonio-shell-ui';
+import { runSearch, QueryChip } from '@zextras/carbonio-shell-ui';
 import { reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { ZIMBRA_STANDARD_COLORS } from '../../carbonio-ui-commons/constants/utils';
+import { useTags } from '../../carbonio-ui-commons/store/zustand/tags';
 import { createTag, useGetTagsActions } from '../ui-actions/tag-actions';
 import { ItemType, TagsAccordionItems } from '../views/secondary-bar/parts/tags/types';
 
