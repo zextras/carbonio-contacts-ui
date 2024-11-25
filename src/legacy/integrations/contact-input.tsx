@@ -11,7 +11,6 @@ import {
 	Container,
 	type ChipItem,
 	type ChipInputProps,
-	type DropdownItem,
 	useCombinedRefs
 } from '@zextras/carbonio-design-system';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
@@ -29,17 +28,15 @@ import type {
 } from '../types/contact';
 import type { ContactInputGroup, ContactInputItem, ContactInputValue } from '../types/integrations';
 import type { GetContactsRequest, GetContactsResponse } from '../types/soap';
-import { Hint } from './parts/hint';
 import { Loader } from './parts/loader';
 import { PasteContextMenu } from './parts/paste-context-menu';
 import {
 	getChipLabel,
 	isContactGroup,
 	tryToParseEmail,
-	getContactId,
-	mapToContactInputItem
+	mapToChipContactOptions
 } from './parts/utils';
-import { ContactInputProps } from './types';
+import { ContactInputOptions, ContactInputProps } from './types';
 
 const ContactInputCore: FC<ContactInputProps> = ({
 	onChange,
@@ -54,7 +51,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	...rest
 }) => {
 	const [defaults, setDefaults] = useState<ContactInputValue>([]);
-	const [options, setOptions] = useState<Array<DropdownItem & { value?: ContactInputItem }>>([]);
+	const [options, setOptions] = useState<Array<ContactInputOptions>>([]);
 	const [idToRemove, setIdToRemove] = useState('');
 	const [t] = useTranslation();
 	const inputRef = useCombinedRefs(propsInputRef);
@@ -189,15 +186,9 @@ const ContactInputCore: FC<ContactInputProps> = ({
 					},
 					_jsns: 'urn:zimbraMail'
 				})
-					.then((autoCompleteResult) => map(autoCompleteResult.match, mapToContactInputItem))
+					.then((autoCompleteResult) => map(autoCompleteResult.match, mapToChipContactOptions))
 					.then((contactinputItems) => {
-						setOptions(
-							map(contactinputItems, (contactinputItem) => ({
-								value: contactinputItem,
-								customComponent: <Hint contact={contactinputItem} />,
-								id: getContactId(contactinputItem)
-							}))
-						);
+						setOptions(contactinputItems);
 					})
 					.catch(() => {
 						setOptions([]);

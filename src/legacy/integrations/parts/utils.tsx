@@ -3,6 +3,8 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+import React from 'react';
+
 import { trim, unescape } from 'lodash';
 
 import { parseEmail } from '../../../carbonio-ui-commons/helpers/email-parser';
@@ -11,9 +13,18 @@ import {
 	ContactInputGroup,
 	ContactInputItem,
 	ContactInputItemValue,
-	USER_TYPES
+	USER_TYPES,
+	UserContact,
+	UserContactGroup
 } from '../../types/integrations';
-import { NewContactGroup, NewDistributionList, RemoteContactResponse } from '../types';
+import {
+	ContactInputOptions,
+	NewContactGroup,
+	NewDistributionList,
+	RemoteContactResponse
+} from '../types';
+import { Hint } from './hint';
+import { HintGroup } from './hint-group';
 
 export function isContactGroup(contact: {
 	isGroup?: boolean;
@@ -32,6 +43,15 @@ export function isContactGroup(contact: {
 export const getContactId = (contact: ContactInputItemValue): string =>
 	contact.type === USER_TYPES.GROUP ? contact.id : contact.email;
 
+function getUserChipLabel(contact: UserContact): string {
+	if (contact.firstName ?? contact.middleName ?? contact.lastName) {
+		return trim(`${contact.firstName ?? ''} ${contact.middleName ?? ''} ${contact.lastName ?? ''}`);
+	}
+
+	return contact.fullName ?? contact.email;
+}
+
+// TODO: check if it can be removed after fixing types
 export const getChipLabel = (contact: ContactInputItemValue): string => {
 	switch (contact.type) {
 		case USER_TYPES.GROUP:
@@ -41,12 +61,7 @@ export const getChipLabel = (contact: ContactInputItemValue): string => {
 		default:
 			break;
 	}
-
-	if (contact.firstName ?? contact.middleName ?? contact.lastName) {
-		return trim(`${contact.firstName ?? ''} ${contact.middleName ?? ''} ${contact.lastName ?? ''}`);
-	}
-
-	return contact.fullName ?? contact.email;
+	return getUserChipLabel(contact);
 };
 
 export function tryToParseEmail(input: string | undefined): string {
@@ -66,24 +81,37 @@ export function newIsDistributionList(value: RemoteContactResponse): value is Ne
 	return 'isGroup' in value && 'email' in value && value.isGroup;
 }
 
-export const mapToContactInputItem = (value: RemoteContactResponse): ContactInputItemValue => {
+export const mapToChipContactOptions = (value: RemoteContactResponse): ContactInputOptions => {
 	if (newIsContactGroup(value)) {
-		return {
+		const contactGroup: UserContactGroup = {
 			id: value.id,
 			display: value.display,
 			groupId: value.id,
 			type: USER_TYPES.GROUP
 		};
+		return {
+			label: contactGroup.display,
+			value: contactGroup,
+			id: getContactId(contactGroup),
+			customComponent: <HintGroup contact={contactGroup} />
+		};
 	}
 	const parsedEmail = tryToParseEmail(value.email);
 	if (newIsDistributionList(value)) {
-		return {
+		const distributionList = {
 			id: parsedEmail,
 			email: parsedEmail,
 			type: USER_TYPES.DISTRIBUTION_LIST
 		};
+		const label = distributionList.email;
+		return {
+			label,
+			value: distributionList,
+			id: getContactId(distributionList),
+			customComponent: <Hint email={distributionList.email} label={label} />
+		};
 	}
-	return {
+	const contact = {
 		id: parsedEmail,
 		firstName: value.first,
 		lastName: value.last,
@@ -92,5 +120,12 @@ export const mapToContactInputItem = (value: RemoteContactResponse): ContactInpu
 		company: value.company,
 		email: parsedEmail,
 		type: USER_TYPES.CONTACT
+	};
+	const label = getUserChipLabel(contact);
+	return {
+		label,
+		value: contact,
+		id: getContactId(contact),
+		customComponent: <Hint email={contact.email} label={label} />
 	};
 };

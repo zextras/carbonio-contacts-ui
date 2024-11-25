@@ -38,20 +38,20 @@ export const USER_TYPES: USER_TYPES = {
 	CONTACT: 'CONTACT'
 };
 
-type UserContactGroup = {
+export type UserContactGroup = {
 	id: string;
 	display: string;
 	groupId: string;
 	type: USER_TYPES['GROUP'];
 };
 
-type UserDistributionList = {
+export type UserDistributionList = {
 	id: string;
 	email: string;
 	type: USER_TYPES['DISTRIBUTION_LIST'];
 };
 
-type UserContact = {
+export type UserContact = {
 	id: string;
 	firstName?: string;
 	middleName?: string;

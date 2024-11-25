@@ -6,7 +6,7 @@
 
 import React from 'react';
 
-import { type ChipInputProps } from '@zextras/carbonio-design-system';
+import { type ChipInputProps, type DropdownItem } from '@zextras/carbonio-design-system';
 
 import type {
 	ContactChipAction,
@@ -95,3 +95,5 @@ export type NewDistributionList = {
 };
 
 export type RemoteContactResponse = NewContact | NewContactGroup | NewDistributionList;
+
+export type ContactInputOptions = DropdownItem & { value?: ContactInputItem };
