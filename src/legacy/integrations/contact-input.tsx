@@ -25,15 +25,20 @@ import { StoreProvider } from '../store/redux';
 import type {
 	ContactAddressMap,
 	FullAutocompleteRequest,
-	FullAutocompleteResponse,
-	Match
+	FullAutocompleteResponse
 } from '../types/contact';
 import type { ContactInputGroup, ContactInputItem, ContactInputValue } from '../types/integrations';
 import type { GetContactsRequest, GetContactsResponse } from '../types/soap';
 import { Hint } from './parts/hint';
 import { Loader } from './parts/loader';
 import { PasteContextMenu } from './parts/paste-context-menu';
-import { getChipLabel, isContactGroup, tryToParseEmail, getContactId } from './parts/utils';
+import {
+	getChipLabel,
+	isContactGroup,
+	tryToParseEmail,
+	getContactId,
+	mapToContactInputItem
+} from './parts/utils';
 import { ContactInputProps } from './types';
 
 const ContactInputCore: FC<ContactInputProps> = ({
@@ -184,43 +189,14 @@ const ContactInputCore: FC<ContactInputProps> = ({
 					},
 					_jsns: 'urn:zimbraMail'
 				})
-					.then((autoCompleteResult) =>
-						map<Match, Match>(autoCompleteResult.match, (m) => ({
-							...m,
-							email: isContactGroup(m) ? undefined : tryToParseEmail(m.email)
-						}))
-					)
-					.then((remoteResults) => {
-						const normRemoteResults = map(remoteResults, (result) => ({
-							email: result.email,
-							firstName: result.first,
-							lastName: result.last,
-							company: result.company,
-							fullName: result.full,
-							display: result.display,
-							isGroup: result.isGroup,
-							id: result.id,
-							l: result.l,
-							exp: result.exp,
-							label: getChipLabel(result)
-						}));
+					.then((autoCompleteResult) => map(autoCompleteResult.match, mapToContactInputItem))
+					.then((contactinputItems) => {
 						setOptions(
-							map(normRemoteResults, (contact) => ({
-								label: contact?.label ?? getChipLabel(contact),
-								value: {
-									id: getContactId(contact),
-									email: contact?.email,
-									firstName: contact?.firstName,
-									lastName: contact?.lastName,
-									company: contact?.company,
-									fullName: contact?.fullName,
-									display: contact?.display,
-									isGroup: contact?.isGroup,
-									groupId: contact?.id,
-									label: contact?.label ?? getChipLabel(contact)
-								},
-								customComponent: <Hint contact={contact} />,
-								id: `${contact.id} ${contact.email}`
+							map(contactinputItems, (contactinputItem) => ({
+								label: contactinputItem?.label ?? getChipLabel(contactinputItem),
+								value: contactinputItem,
+								customComponent: <Hint contact={contactinputItem} />,
+								id: getContactId(contactinputItem)
 							}))
 						);
 					})

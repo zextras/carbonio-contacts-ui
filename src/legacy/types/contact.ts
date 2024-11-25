@@ -5,6 +5,7 @@
  */
 
 import { NameSpace } from '../../types/utils';
+import { RemoteContactResponse } from '../integrations/types';
 
 export enum ContactPhoneType {
 	MOBILE = 'mobile',
@@ -108,6 +109,7 @@ export type Group = {
 	galType?: string;
 };
 
+// verificare altri utilizzi
 export type Match = {
 	first?: string;
 	middle?: string;
@@ -128,7 +130,7 @@ export type Match = {
 
 export type FullAutocompleteResponse = {
 	canBeCached: boolean;
-	match?: Match[];
+	match?: RemoteContactResponse[];
 	_jsns?: string;
 };
 

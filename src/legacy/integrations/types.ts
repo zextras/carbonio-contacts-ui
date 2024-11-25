@@ -68,7 +68,7 @@ export type DLCustomChipProps = CustomChipProps & {
 	contactInputValue: ContactInputValue;
 };
 
-type NewContact = {
+export type NewContact = {
 	ranking: string;
 	type: 'gal';
 	isGroup: boolean;
@@ -80,7 +80,7 @@ type NewContact = {
 	fileas: string;
 };
 
-type NewContactGroup = {
+export type NewContactGroup = {
 	ranking: string;
 	type: 'contact';
 	isGroup: boolean;
@@ -90,7 +90,7 @@ type NewContactGroup = {
 	display: string;
 };
 
-type NewDistributionList = {
+export type NewDistributionList = {
 	ranking: string;
 	type: 'gal';
 	isGroup: boolean;
