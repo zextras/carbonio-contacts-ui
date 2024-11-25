@@ -25,6 +25,7 @@ import { useTranslation } from 'react-i18next';
 
 import { FOLDER_VIEW } from './carbonio-ui-commons/constants';
 import { useInitializeFolders } from './carbonio-ui-commons/hooks/use-initialize-folders';
+import { InitializeTags } from './components/initialize-tags';
 import {
 	CONTACTS_APP_ID,
 	CONTACTS_ROUTE,
