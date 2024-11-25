@@ -16,9 +16,8 @@ import { generateStore } from '../../../tests/generators/store';
 import { Contact } from '../../../types/contact';
 import { SearchContactListItem } from '../search-contact-list-item';
 
-jest.mock('@zextras/carbonio-shell-ui', () => ({
-	useTags: jest.fn(),
-	replaceHistory: jest.fn()
+jest.mock('../../../../carbonio-ui-commons/store/zustand/tags', () => ({
+	useTags: jest.fn()
 }));
 
 jest.mock('../../../helpers/tags', () => ({
