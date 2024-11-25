@@ -33,7 +33,7 @@ import type { GetContactsRequest, GetContactsResponse } from '../types/soap';
 import { Hint } from './parts/hint';
 import { Loader } from './parts/loader';
 import { PasteContextMenu } from './parts/paste-context-menu';
-import { getChipLabel, isContactGroup, tryToParseEmail } from './parts/utils';
+import { getChipLabel, isContactGroup, tryToParseEmail, getContactId } from './parts/utils';
 import { ContactInputProps } from './types';
 
 const ContactInputCore: FC<ContactInputProps> = ({
@@ -208,7 +208,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 							map(normRemoteResults, (contact) => ({
 								label: contact?.label ?? getChipLabel(contact),
 								value: {
-									id: `${contact.id} ${contact.email}`,
+									id: getContactId(contact),
 									email: contact?.email,
 									firstName: contact?.firstName,
 									lastName: contact?.lastName,

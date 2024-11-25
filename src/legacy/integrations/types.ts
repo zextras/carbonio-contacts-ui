@@ -67,3 +67,37 @@ export type DLCustomChipProps = CustomChipProps & {
 	contactInputOnChange: ContactInputOnChange;
 	contactInputValue: ContactInputValue;
 };
+
+type NewContact = {
+	ranking: string;
+	type: 'gal';
+	isGroup: boolean;
+	email: string;
+	first: string;
+	last: string;
+	full: string;
+	company: string;
+	fileas: string;
+};
+
+type NewContactGroup = {
+	ranking: string;
+	type: 'contact';
+	isGroup: boolean;
+	exp: boolean;
+	id: string;
+	l: string;
+	display: string;
+};
+
+type NewDistributionList = {
+	ranking: string;
+	type: 'gal';
+	isGroup: boolean;
+	email: string;
+	exp: boolean;
+	full: string;
+	fileas: string;
+};
+
+export type RemoteContactResponse = NewContact | NewContactGroup | NewDistributionList;

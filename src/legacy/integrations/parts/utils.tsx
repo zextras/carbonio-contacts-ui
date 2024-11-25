@@ -26,6 +26,9 @@ export function isContactGroup(contact: {
 	);
 }
 
+export const getContactId = (contact: ContactInputItem): string | undefined =>
+	contact.id ?? contact.email;
+
 export const getChipLabel = (
 	contact: Pick<
 		ContactInputItem,
