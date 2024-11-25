@@ -21,21 +21,17 @@ import { ContactInputCustomChipComponent } from './contact-input-custom-chip-com
 import { isValidEmail } from '../../carbonio-ui-commons/helpers/email-parser';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
 import { StoreProvider } from '../store/redux';
-import type {
-	ContactAddressMap,
-	FullAutocompleteRequest,
-	FullAutocompleteResponse
-} from '../types/contact';
-import type { ContactInputGroup, ContactInputItem, ContactInputValue } from '../types/integrations';
+import type { ContactAddressMap } from '../types/contact';
+import {
+	ContactInputItem,
+	ContactInputItemValue,
+	USER_TYPES,
+	UserContactGroup
+} from '../types/integrations';
 import type { GetContactsRequest, GetContactsResponse } from '../types/soap';
 import { Loader } from './parts/loader';
 import { PasteContextMenu } from './parts/paste-context-menu';
-import {
-	getChipLabel,
-	isContactGroup,
-	tryToParseEmail,
-	mapToChipContactOptions
-} from './parts/utils';
+import { isContactGroup, searchContacts, tryToParseEmail } from './parts/utils';
 import { ContactInputOptions, ContactInputProps } from './types';
 
 const ContactInputCore: FC<ContactInputProps> = ({
@@ -50,7 +46,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	inputRef: propsInputRef = null,
 	...rest
 }) => {
-	const [defaults, setDefaults] = useState<ContactInputValue>([]);
+	const [defaults, setDefaults] = useState<Array<ContactInputItem>>([]);
 	const [options, setOptions] = useState<Array<ContactInputOptions>>([]);
 	const [idToRemove, setIdToRemove] = useState('');
 	const [t] = useTranslation();
@@ -63,6 +59,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	}>(emptyDraggedChip);
 	const isSameElement = useRef(false);
 
+	// TODO: check at the end if we are able to explode groups and just use values with email (non-optional) in all cases
 	const buildDragStartHandler = useCallback(
 		(chip: ContactInputItem) => (ev: React.DragEvent) => {
 			ev.dataTransfer.setData('contact', JSON.stringify(chip));
@@ -79,7 +76,6 @@ const ContactInputCore: FC<ContactInputProps> = ({
 		setDefaults(
 			map(filter(defaultValue, (c) => c.id !== idToRemove) ?? [], (obj) => ({
 				...obj,
-				label: getChipLabel(obj),
 				draggable: dragAndDropEnabled,
 				onDragStart: dragAndDropEnabled ? buildDragStartHandler(obj) : noop
 			}))
@@ -115,8 +111,11 @@ const ContactInputCore: FC<ContactInputProps> = ({
 			const isAValidEmail = isValidEmail(parsedEmail);
 			const chip: ContactInputItem = {
 				id,
-				email: parsedEmail,
-				label: parsedEmail,
+				value: {
+					id,
+					email: parsedEmail,
+					type: USER_TYPES.CONTACT
+				},
 				error: !isAValidEmail,
 				actions: [
 					{
@@ -138,34 +137,38 @@ const ContactInputCore: FC<ContactInputProps> = ({
 		[editChip, t]
 	);
 
+	const onInputEnter = useCallback((): void => {
+		if (inputRef?.current) {
+			// FIXME: innerText does not contain new line chars at this point
+			inputRef.current.innerText = inputRef.current.innerText?.replaceAll('\n', '');
+		}
+		if (options.length > 0 && !find(options, { id: 'loading' })) {
+			onChange?.([
+				...defaults,
+				{
+					...options[0].value
+				}
+			]);
+			if (inputRef.current) {
+				inputRef.current.innerText = '';
+			}
+			setOptions([]);
+			return;
+		}
+		const valueToAdd = inputRef.current?.innerText.replaceAll('\n', '');
+		const chip = createChip(valueToAdd ?? '');
+		if (valueToAdd !== '') {
+			onChange?.([...defaults, { ...chip }]);
+		}
+		if (inputRef?.current) {
+			inputRef.current.innerText = '';
+		}
+	}, [createChip, defaults, inputRef, onChange, options]);
+
 	const onInputType = useCallback<NonNullable<ChipInputProps['onInputType']>>(
 		({ key, textContent }) => {
 			if (key === 'Enter') {
-				if (inputRef?.current) {
-					// FIXME: innerText does not contain new line chars at this point
-					inputRef.current.innerText = inputRef.current.innerText?.replaceAll('\n', '');
-				}
-				if (options.length > 0 && !find(options, { id: 'loading' })) {
-					onChange?.([
-						...defaults,
-						{
-							...options[0].value
-						}
-					]);
-					if (inputRef.current) {
-						inputRef.current.innerText = '';
-					}
-					setOptions([]);
-					return;
-				}
-				const valueToAdd = inputRef.current?.innerText.replaceAll('\n', '');
-				const chip = createChip(valueToAdd ?? '');
-				if (valueToAdd !== '') {
-					onChange?.([...defaults, { ...chip }]);
-				}
-				if (inputRef?.current) {
-					inputRef.current.innerText = '';
-				}
+				onInputEnter();
 				return;
 			}
 			if (textContent && textContent !== '') {
@@ -176,17 +179,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 						customComponent: <Loader />
 					}
 				]);
-				soapFetch<FullAutocompleteRequest, FullAutocompleteResponse>('FullAutocomplete', {
-					...(orderedAccountIds?.length > 0 && {
-						orderedAccountIds: orderedAccountIds.toString()
-					}),
-					AutoCompleteRequest: {
-						name: textContent,
-						includeGal: 1
-					},
-					_jsns: 'urn:zimbraMail'
-				})
-					.then((autoCompleteResult) => map(autoCompleteResult.match, mapToChipContactOptions))
+				searchContacts(textContent, orderedAccountIds)
 					.then((contactinputItems) => {
 						setOptions(contactinputItems);
 					})
@@ -197,17 +190,21 @@ const ContactInputCore: FC<ContactInputProps> = ({
 				setOptions([]);
 			}
 		},
-		[createChip, defaults, inputRef, onChange, options, orderedAccountIds]
+		[onInputEnter, orderedAccountIds]
 	);
 
+	// TODO: extract me, this is used to explode a contact group
 	useEffect(() => {
-		const groups = filter(defaults, (def): def is ContactInputGroup => isContactGroup(def));
-		if (groups.length > 0) {
-			forEach(groups, (def) => {
+		const groupsChips = filter(
+			defaults,
+			(defaultContact) => defaultContact.value?.type === USER_TYPES.GROUP
+		).map((contactGroupChip) => contactGroupChip.value as UserContactGroup);
+		if (groupsChips.length > 0) {
+			forEach(groupsChips, (contactGroup) => {
 				soapFetch<GetContactsRequest, GetContactsResponse>('GetContacts', {
 					_jsns: 'urn:zimbraMail',
 					cn: {
-						id: def.groupId
+						id: contactGroup.groupId
 					},
 					derefGroupMember: true
 				}).then((result) => {
@@ -216,9 +213,13 @@ const ContactInputCore: FC<ContactInputProps> = ({
 					const newContacts = map(members, (member): ContactInputItem => {
 						const email = member.cn?.[0]._attrs.email ?? member.value;
 						return {
-							email,
 							id,
 							label: email,
+							value: {
+								email,
+								id,
+								type: USER_TYPES.CONTACT
+							},
 							error: !isValidEmail(email),
 							draggable: true,
 							onDragStart: buildDragStartHandler({ id, email, label: email })
@@ -236,25 +237,32 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	const contactInputValue = useMemo(() => uniqBy(defaults, 'email'), [defaults]);
 
 	const onAdd = useCallback(
-		(valueToAdd: ContactInputItem) => {
+		(valueToAdd: ContactInputItemValue) => {
 			setIdToRemove('');
+			// TODO: check me, this is called only when you click 'Enter' and not using autocomplete
 			if (typeof valueToAdd === 'string') {
 				return createChip(valueToAdd);
 			}
+			let error = false;
+			const editAction = {
+				id: 'action1',
+				label: t('label.edit_email', 'Edit E-mail'),
+				icon: 'EditOutline',
+				type: 'button',
+				onClick: editChip('', valueToAdd.id)
+			};
+			if (valueToAdd.type !== USER_TYPES.GROUP) {
+				const isEmailvalid = isValidEmail(valueToAdd.email);
+				error = !isEmailvalid;
+				editAction.label = isEmailvalid
+					? t('label.edit_email', 'Edit E-mail')
+					: t('label.edit_invalid_email', 'E-mail is invalid, click to edit it');
+				editAction.onClick = editChip(valueToAdd.email, valueToAdd.id);
+			}
 			return {
 				...valueToAdd,
-				error: !isValidEmail(valueToAdd.email),
-				actions: [
-					{
-						id: 'action1',
-						label: isValidEmail(valueToAdd.email)
-							? t('label.edit_email', 'Edit E-mail')
-							: t('label.edit_invalid_email', 'E-mail is invalid, click to edit it'),
-						icon: 'EditOutline',
-						type: 'button',
-						onClick: () => editChip(valueToAdd.email ?? '', valueToAdd.id ?? '')
-					}
-				]
+				error,
+				actions: [editAction]
 			};
 		},
 		[createChip, editChip, t]

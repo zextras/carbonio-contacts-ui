@@ -5,7 +5,8 @@
  */
 import React from 'react';
 
-import { trim, unescape } from 'lodash';
+import { soapFetch } from '@zextras/carbonio-shell-ui';
+import { map, trim, unescape } from 'lodash';
 
 import { parseEmail } from '../../../carbonio-ui-commons/helpers/email-parser';
 import {
@@ -25,6 +26,7 @@ import {
 } from '../types';
 import { Hint } from './hint';
 import { HintGroup } from './hint-group';
+import type { FullAutocompleteRequest, FullAutocompleteResponse } from '../../types/contact';
 
 export function isContactGroup(contact: {
 	isGroup?: boolean;
@@ -129,3 +131,18 @@ export const mapToChipContactOptions = (value: RemoteContactResponse): ContactIn
 		customComponent: <Hint email={contact.email} label={label} />
 	};
 };
+
+export const searchContacts = (
+	textToSearch: string,
+	orderedAccountIds: Array<string>
+): Promise<Array<ContactInputOptions>> =>
+	soapFetch<FullAutocompleteRequest, FullAutocompleteResponse>('FullAutocomplete', {
+		...(orderedAccountIds?.length > 0 && {
+			orderedAccountIds: orderedAccountIds.toString()
+		}),
+		AutoCompleteRequest: {
+			name: textToSearch,
+			includeGal: 1
+		},
+		_jsns: 'urn:zimbraMail'
+	}).then((autoCompleteResult) => map(autoCompleteResult.match, mapToChipContactOptions));

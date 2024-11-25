@@ -66,7 +66,7 @@ export type ContactInputItem = ChipItem<ContactInputItemValue>;
 
 export type MakeRequired<T, K extends keyof T> = T & Required<Pick<T, K>>;
 
-export type ContactInputValue = ContactInputItemValue[];
+export type ContactInputValue = ContactInputItem[];
 
 export type ContactInputOnChange = ((items: ContactInputValue) => void) | undefined;
 export type ContactInputChipDisplayName =
