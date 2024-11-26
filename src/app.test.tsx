@@ -16,8 +16,8 @@ import {
 } from './carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { setupTest } from './carbonio-ui-commons/test/test-setup';
 import { CONTACT_BOARD_ID } from './constants';
-import { ContactInputProps } from './legacy/integrations/contact-input';
 import { ContactInputIntegrationWrapper } from './legacy/integrations/contact-input-integration-wrapper';
+import { ContactInputProps } from './legacy/integrations/types';
 
 // mocking the worker. in commons jest-setup the worker is already mocked, but is improperly defined with wrong types and
 // is causing a call to "onMessage", which tries to alter the folders store and overrides the folders, breaking the test.
