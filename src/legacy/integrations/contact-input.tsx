@@ -233,7 +233,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 		}
 	}, [buildDragStartHandler, defaults, onChange]);
 
-	const contactInputValue = useMemo(() => uniqBy(defaults, 'email'), [defaults]);
+	const contactInputValue = useMemo(() => uniqBy(defaults, 'id'), [defaults]);
 
 	const onAdd = useCallback(
 		(valueToAdd: unknown): ContactInputItem => {
