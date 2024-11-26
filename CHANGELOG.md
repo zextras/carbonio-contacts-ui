@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.13.1](https://github.com/zextras/carbonio-contacts-ui/compare/v1.13.0...v1.13.1) (2024-11-20)
+
+
+### Bug Fixes
+
+* removed old sync-data-handler.jsx replaced by tsx version ([0478372](https://github.com/zextras/carbonio-contacts-ui/commit/0478372b8b7e9c18c8145c049732db0d26a28955))
+
+## [1.13.0](https://github.com/zextras/carbonio-contacts-ui/compare/v1.12.0...v1.13.0) (2024-11-18)
+
+
+### Features
+
+* [CO-1214] Implement load more on contact list and search list ([#263](https://github.com/zextras/carbonio-contacts-ui/issues/263)) ([57b48a0](https://github.com/zextras/carbonio-contacts-ui/commit/57b48a01a696a83a301afc5eecc1eafd237e7a5f))
+* [CO-1273] allow editing/deleting shared account contact groups ([#257](https://github.com/zextras/carbonio-contacts-ui/issues/257)) ([0c8e14d](https://github.com/zextras/carbonio-contacts-ui/commit/0c8e14d7ddc7b8cef1c16370c6854798a64802d7))
+
+
+### Bug Fixes
+
+* [CO-1315] avoid API call loop in case folder request fails ([#254](https://github.com/zextras/carbonio-contacts-ui/issues/254)) ([fae504e](https://github.com/zextras/carbonio-contacts-ui/commit/fae504eadbaff07f5f6ec63b9b953b4d5a65b17d))
+* [CO-1621] avoid adding duplicate contact and contact group items to the store ([#267](https://github.com/zextras/carbonio-contacts-ui/issues/267)) ([42b7076](https://github.com/zextras/carbonio-contacts-ui/commit/42b7076f66768338495807553da9439a742e887e))
+* avoid making duplicate search contacts call on load ([#264](https://github.com/zextras/carbonio-contacts-ui/issues/264)) ([16b5451](https://github.com/zextras/carbonio-contacts-ui/commit/16b54519ad454fa11cd0b79a07eab258d5a60d8f))
+* distribution lists module tooltip ([#265](https://github.com/zextras/carbonio-contacts-ui/issues/265)) ([cc3d3e6](https://github.com/zextras/carbonio-contacts-ui/commit/cc3d3e6e5555ec6eedd3de3143a2217c079b16d2))
+* move folder initialization to app.tsx ([#258](https://github.com/zextras/carbonio-contacts-ui/issues/258)) ([8730f39](https://github.com/zextras/carbonio-contacts-ui/commit/8730f390dbe807eed4d2de33518955e751ca03ba))
+
 ## [1.12.0](https://github.com/zextras/carbonio-contacts-ui/compare/v1.11.2...v1.12.0) (2024-08-26)
 
 
