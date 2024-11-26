@@ -9,7 +9,6 @@ import React, { useCallback, useEffect, useRef, useState, ReactElement, FC, useM
 import {
 	ChipInput,
 	Container,
-	type ChipItem,
 	type ChipInputProps,
 	useCombinedRefs,
 	ChipAction
@@ -67,7 +66,6 @@ const ContactInputCore: FC<ContactInputProps> = ({
 			ev.dataTransfer.dropEffect = 'move';
 			draggedChip.current = {
 				id: chip.id,
-				email: chip.email ?? chip.address,
 				dragStartRef: inputRef.current
 			};
 		},
@@ -84,7 +82,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	}, [buildDragStartHandler, defaultValue, dragAndDropEnabled, idToRemove]);
 
 	const buildDraggableChip = useCallback(
-		(chip: ContactInputItem): ChipItem => ({
+		(chip: ContactInputItem): ContactInputItem => ({
 			...chip,
 			draggable: true,
 			onDragStart: buildDragStartHandler(chip)
@@ -223,7 +221,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 							},
 							error: !isValidEmail(email),
 							draggable: true,
-							onDragStart: buildDragStartHandler({ id, email, label: email })
+							onDragStart: buildDragStartHandler({ id, label: email })
 						};
 					});
 					const newValue = reject(defaults, (chip) => isContactGroup(chip));
@@ -238,11 +236,16 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	const contactInputValue = useMemo(() => uniqBy(defaults, 'email'), [defaults]);
 
 	const onAdd = useCallback(
-		(valueToAdd: ContactInputItemValue) => {
+		(valueToAdd: unknown) => {
 			setIdToRemove('');
 			// TODO: check me, this is called only when you click 'Enter' and not using autocomplete
 			if (typeof valueToAdd === 'string') {
 				return createChip(valueToAdd);
+			}
+			const receivedContactInputItem = valueToAdd as ContactInputItem;
+			const contactValue = receivedContactInputItem?.value as ContactInputItemValue | undefined;
+			if (!contactValue) {
+				throw Error('Received an empty value, cannot determine chip behavior.');
 			}
 			let error = false;
 			const editAction: ChipAction = {
@@ -250,18 +253,18 @@ const ContactInputCore: FC<ContactInputProps> = ({
 				label: t('label.edit_email', 'Edit E-mail'),
 				icon: 'EditOutline',
 				type: 'button',
-				onClick: () => editChip('', valueToAdd.id)
+				onClick: () => editChip('', contactValue.id)
 			};
-			if (valueToAdd.type !== USER_TYPES.GROUP) {
-				const isEmailvalid = isValidEmail(valueToAdd.email);
+			if (contactValue.type !== USER_TYPES.GROUP) {
+				const isEmailvalid = isValidEmail(contactValue.email);
 				error = !isEmailvalid;
 				editAction.label = isEmailvalid
 					? t('label.edit_email', 'Edit E-mail')
 					: t('label.edit_invalid_email', 'E-mail is invalid, click to edit it');
-				editAction.onClick = (): void => editChip(valueToAdd.email, valueToAdd.id);
+				editAction.onClick = (): void => editChip(contactValue.email, contactValue.id);
 			}
 			return {
-				...valueToAdd,
+				...receivedContactInputItem,
 				error,
 				actions: [editAction]
 			};
@@ -305,12 +308,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 			setDefaults((prevState) =>
 				filter(prevState, (contact) => contact.id !== draggedChip.current.id)
 			);
-			const newDefaults = filter(defaults, (c) => {
-				if (c.email) {
-					return c.email !== draggedChip.current.email;
-				}
-				return c.id !== draggedChip.current.id;
-			});
+			const newDefaults = filter(defaults, (c) => c.id !== draggedChip.current.id);
 			onChange?.(newDefaults);
 			resetDraggedChip();
 			isSameElement.current = false;
@@ -355,7 +353,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 					options={options}
 					value={contactInputValue}
 					background={background}
-					onAdd={onAdd as ChipInputProps['onAdd']}
+					onAdd={onAdd}
 					requireUniqueChips
 					createChipOnPaste
 					pasteSeparators={[',', ';', '\n']}
