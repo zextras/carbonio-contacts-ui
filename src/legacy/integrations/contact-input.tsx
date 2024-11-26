@@ -11,7 +11,8 @@ import {
 	Container,
 	type ChipItem,
 	type ChipInputProps,
-	useCombinedRefs
+	useCombinedRefs,
+	ChipAction
 } from '@zextras/carbonio-design-system';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
 import { filter, find, map, forEach, reject, uniqBy, noop } from 'lodash';
@@ -244,12 +245,12 @@ const ContactInputCore: FC<ContactInputProps> = ({
 				return createChip(valueToAdd);
 			}
 			let error = false;
-			const editAction = {
+			const editAction: ChipAction = {
 				id: 'action1',
 				label: t('label.edit_email', 'Edit E-mail'),
 				icon: 'EditOutline',
 				type: 'button',
-				onClick: editChip('', valueToAdd.id)
+				onClick: () => editChip('', valueToAdd.id)
 			};
 			if (valueToAdd.type !== USER_TYPES.GROUP) {
 				const isEmailvalid = isValidEmail(valueToAdd.email);
@@ -257,7 +258,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 				editAction.label = isEmailvalid
 					? t('label.edit_email', 'Edit E-mail')
 					: t('label.edit_invalid_email', 'E-mail is invalid, click to edit it');
-				editAction.onClick = editChip(valueToAdd.email, valueToAdd.id);
+				editAction.onClick = (): void => editChip(valueToAdd.email, valueToAdd.id);
 			}
 			return {
 				...valueToAdd,
