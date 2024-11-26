@@ -344,7 +344,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	return (
 		<Container width="100%" onDrop={onDrop} height="100%">
 			<PasteContextMenu elementReceivingPaste={inputRef.current}>
-				<ChipInput
+				<ChipInput<ContactInputItemValue>
 					data-testid={'contact-input'}
 					disableOptions
 					placeholder={placeholder}
