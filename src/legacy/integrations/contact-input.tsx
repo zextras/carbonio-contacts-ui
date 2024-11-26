@@ -31,7 +31,7 @@ import {
 import type { GetContactsRequest, GetContactsResponse } from '../types/soap';
 import { Loader } from './parts/loader';
 import { PasteContextMenu } from './parts/paste-context-menu';
-import { isContactGroup, searchContacts, tryToParseEmail } from './parts/utils';
+import { getChipLabel, isContactGroup, searchContacts, tryToParseEmail } from './parts/utils';
 import { ContactInputOptions, ContactInputProps } from './types';
 
 const ContactInputCore: FC<ContactInputProps> = ({
@@ -236,14 +236,13 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	const contactInputValue = useMemo(() => uniqBy(defaults, 'email'), [defaults]);
 
 	const onAdd = useCallback(
-		(valueToAdd: unknown) => {
+		(valueToAdd: unknown): ContactInputItem => {
 			setIdToRemove('');
 			// TODO: check me, this is called only when you click 'Enter' and not using autocomplete
 			if (typeof valueToAdd === 'string') {
 				return createChip(valueToAdd);
 			}
-			const receivedContactInputItem = valueToAdd as ContactInputItem;
-			const contactValue = receivedContactInputItem?.value as ContactInputItemValue | undefined;
+			const contactValue = valueToAdd as ContactInputItemValue;
 			if (!contactValue) {
 				throw Error('Received an empty value, cannot determine chip behavior.');
 			}
@@ -263,8 +262,11 @@ const ContactInputCore: FC<ContactInputProps> = ({
 					: t('label.edit_invalid_email', 'E-mail is invalid, click to edit it');
 				editAction.onClick = (): void => editChip(contactValue.email, contactValue.id);
 			}
+			const label = getChipLabel(contactValue);
 			return {
-				...receivedContactInputItem,
+				id: contactValue.id,
+				label,
+				value: contactValue,
 				error,
 				actions: [editAction]
 			};
