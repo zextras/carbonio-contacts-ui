@@ -26,7 +26,7 @@ import {
 } from '../types';
 import { Hint } from './hint';
 import { HintGroup } from './hint-group';
-import type { FullAutocompleteRequest, FullAutocompleteResponse } from '../../types/contact';
+import type { FullAutocompleteRequest, SearchContactsResponse } from '../../types/contact';
 
 export function isContactGroup(contact: {
 	isGroup?: boolean;
@@ -136,7 +136,7 @@ export const searchContacts = (
 	textToSearch: string,
 	orderedAccountIds: Array<string>
 ): Promise<Array<ContactInputOptions>> =>
-	soapFetch<FullAutocompleteRequest, FullAutocompleteResponse>('FullAutocomplete', {
+	soapFetch<FullAutocompleteRequest, SearchContactsResponse>('FullAutocomplete', {
 		...(orderedAccountIds?.length > 0 && {
 			orderedAccountIds: orderedAccountIds.toString()
 		}),

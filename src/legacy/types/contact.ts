@@ -130,6 +130,12 @@ export type Match = {
 
 export type FullAutocompleteResponse = {
 	canBeCached: boolean;
+	match?: Match[];
+	_jsns?: string;
+};
+
+export type SearchContactsResponse = {
+	canBeCached: boolean;
 	match?: RemoteContactResponse[];
 	_jsns?: string;
 };
