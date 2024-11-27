@@ -18,26 +18,27 @@ import { soapFetch } from '@zextras/carbonio-shell-ui';
 import { filter, find, map, uniqBy, noop, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { ContactInputCustomChipComponent } from './contact-input-custom-chip-component';
+import { UserOrDLCustomChipComponent } from './contact-input-custom-chip-component';
 import { isValidEmail } from '../../carbonio-ui-commons/helpers/email-parser';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
 import { StoreProvider } from '../store/redux';
 import type { ContactAddressMap } from '../types/contact';
-
 import type { GetContactsRequest, GetContactsResponse } from '../types/soap';
 import { Loader } from './parts/loader';
 import { PasteContextMenu } from './parts/paste-context-menu';
 import { getChipLabel, searchContacts, tryToParseEmail } from './parts/utils';
 import {
 	ContactInputItem,
-	ContactInputItemInternal,
 	ContactInputItemValue,
 	ContactInputOptions,
 	ContactInputProps,
 	UserContact,
 	UserContactGroup,
-	USER_TYPES
+	USER_TYPES,
+	UserOrDL
 } from './types';
+
+const MY_SPECIAL_ID_TO_EXCLUDE = 'my-special-id';
 
 const ContactInputCore: FC<ContactInputProps> = ({
 	onChange,
@@ -47,7 +48,6 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	dragAndDropEnabled = false,
 	chipDisplayName = CHIP_DISPLAY_NAME_VALUES.label,
 	orderedAccountIds = [],
-	contactActions,
 	inputRef: propsInputRef = null,
 	...rest
 }) => {
@@ -157,7 +157,8 @@ const ContactInputCore: FC<ContactInputProps> = ({
 				},
 				[] as ContactInputItem[]
 			);
-			onChange?.(contactsWithoutGroups);
+
+			onChange?.(contactsWithoutGroups.filter((x) => x.id !== MY_SPECIAL_ID_TO_EXCLUDE));
 		},
 		[onChange]
 	);
@@ -243,7 +244,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	const contactInputValue = useMemo(() => uniqBy(defaults, 'id'), [defaults]);
 
 	const onAdd = useCallback(
-		(valueToAdd: unknown): ContactInputItemInternal => {
+		(valueToAdd: unknown): ContactInputItem => {
 			setIdToRemove('');
 			// TODO: check me, this is called only when you click 'Enter' and not using autocomplete
 			if (typeof valueToAdd === 'string') {
@@ -251,7 +252,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 			}
 			const contactValue = valueToAdd as ContactInputItemValue;
 			if (!contactValue) {
-				throw Error('Received an empty value, cannot determine chip behavior.');
+				throw new Error('no value in provided contact');
 			}
 
 			if (contactValue.type === USER_TYPES.GROUP) {
@@ -260,7 +261,15 @@ const ContactInputCore: FC<ContactInputProps> = ({
 					.then((chipItems) => {
 						onInternalChange([...defaults, ...chipItems]);
 					});
-				return { label: 'group', value: contactValue };
+				return {
+					id: MY_SPECIAL_ID_TO_EXCLUDE,
+					label: 'special-value',
+					value: {
+						email: 'whatever',
+						id: 'whatever',
+						type: USER_TYPES.CONTACT
+					}
+				};
 			}
 			const isEmailvalid = isValidEmail(contactValue.email);
 			const editAction: ChipAction = {
@@ -284,18 +293,20 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	);
 
 	const ChipComponent = useCallback(
-		(
-			props: React.ComponentPropsWithoutRef<NonNullable<ChipInputProps['ChipComponent']>>
-		): React.JSX.Element => (
-			<ContactInputCustomChipComponent
-				{...props}
-				contactActions={contactActions}
-				chipDisplayName={chipDisplayName}
-				contactInputOnChange={onChange}
-				contactInputValue={contactInputValue}
-			/>
+		(props: ChipItem<UserOrDL>): React.JSX.Element => (
+			<>
+				{props.value && props.label && (
+					<UserOrDLCustomChipComponent
+						{...props}
+						chipDisplayName={chipDisplayName}
+						onExpandDL={onInternalChange}
+						label={props.label}
+						value={props.value}
+					/>
+				)}
+			</>
 		),
-		[chipDisplayName, contactActions, contactInputValue, onChange]
+		[chipDisplayName, onInternalChange]
 	);
 
 	const onDragEnter = useCallback<React.DragEventHandler>((ev) => {
@@ -353,7 +364,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	return (
 		<Container width="100%" onDrop={onDrop} height="100%">
 			<PasteContextMenu elementReceivingPaste={inputRef.current}>
-				<ChipInput<ContactInputItemValue>
+				<ChipInput<UserOrDL>
 					data-testid={'contact-input'}
 					disableOptions
 					placeholder={placeholder}

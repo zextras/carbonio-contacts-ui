@@ -6,29 +6,18 @@
 
 import React, { ReactElement, useMemo } from 'react';
 
-import { Chip, type ChipAction } from '@zextras/carbonio-design-system';
-import { reduce, some } from 'lodash';
+import { Chip } from '@zextras/carbonio-design-system';
 
 import { DistributionListChip } from './distribution-list-chip';
-import { ContactChipAction, ContactInputCustomChipComponentProps } from './types';
+import { UserOrDLCustomChipComponentProps, USER_TYPES } from './types';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
-import { useGetDistributionList } from '../../hooks/use-get-distribution-list';
-import { isChipItemDistributionList } from './parts/utils';
 
-export const ContactInputCustomChipComponent = ({
-	email,
-	isGroup = false,
-	label,
-	chipDisplayName = CHIP_DISPLAY_NAME_VALUES.label,
-	contactActions,
-	actions,
-	...rest
-}: ContactInputCustomChipComponentProps): ReactElement => {
-	const contact = useMemo(() => ({ email, isGroup }), [email, isGroup]);
-	const { distributionList } = useGetDistributionList(
-		{ email },
-		{ skip: !isChipItemDistributionList(contact) }
-	);
+export const UserOrDLCustomChipComponent = (
+	props: UserOrDLCustomChipComponentProps
+): ReactElement => {
+	const { value, label, chipDisplayName = CHIP_DISPLAY_NAME_VALUES.label, ...rest } = props;
+	const { email, type } = value;
+	const isDistributionList = type === USER_TYPES.DISTRIBUTION_LIST;
 	const chipLabel = useMemo(() => {
 		if (label && chipDisplayName === CHIP_DISPLAY_NAME_VALUES.label) {
 			return label;
@@ -39,42 +28,8 @@ export const ContactInputCustomChipComponent = ({
 		return label || email || '';
 	}, [chipDisplayName, email, label]);
 
-	const chipActions = useMemo(
-		() =>
-			reduce<ContactChipAction, Array<ChipAction>>(
-				contactActions,
-				(result, contactAction) => {
-					if (some(result, (action) => contactAction.id === action.id)) {
-						return result;
-					}
-
-					if (contactAction.isVisible(distributionList ?? contact)) {
-						result.push({
-							...contactAction,
-							onClick: (): void => {
-								contactAction.onClick(distributionList ?? contact);
-							}
-						});
-					}
-
-					return result;
-				},
-				[...(actions ?? [])]
-			),
-		[actions, contact, contactActions, distributionList]
-	);
-
-	if (!isChipItemDistributionList(contact)) {
-		return <Chip {...rest} label={chipLabel} data-testid={'default-chip'} actions={chipActions} />;
+	if (isDistributionList) {
+		return <DistributionListChip value={value} {...rest} label={chipLabel} />;
 	}
-
-	return (
-		<DistributionListChip
-			{...rest}
-			label={chipLabel}
-			email={contact.email}
-			isGroup={contact.isGroup}
-			actions={chipActions}
-		/>
-	);
+	return <Chip {...rest} label={chipLabel} data-testid={'default-chip'} />;
 };

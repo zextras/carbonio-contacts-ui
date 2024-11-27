@@ -10,9 +10,7 @@ import { map, trim, unescape } from 'lodash';
 
 import { parseEmail } from '../../../carbonio-ui-commons/helpers/email-parser';
 import {
-	ContactInputDistributionList,
 	ContactInputGroup,
-	ContactInputItem,
 	ContactInputItemValue,
 	USER_TYPES,
 	UserContact,
@@ -68,10 +66,6 @@ export function tryToParseEmail(input: string | undefined): string {
 	const inputOrDefault = unescape(input ?? '');
 	return parseEmail(inputOrDefault) ?? inputOrDefault.trim();
 }
-
-export const isChipItemDistributionList = (
-	contact: Pick<ContactInputItem, 'email' | 'isGroup'>
-): contact is ContactInputDistributionList => (contact.isGroup && !!contact.email) ?? false;
 
 export function newIsContactGroup(value: RemoteContactResponse): value is NewContactGroup {
 	return 'isGroup' in value && !('email' in value) && value.isGroup;

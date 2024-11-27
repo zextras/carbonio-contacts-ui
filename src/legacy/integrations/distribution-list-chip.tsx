@@ -12,11 +12,11 @@ import {
 	Container,
 	Dropdown
 } from '@zextras/carbonio-design-system';
-import { debounce, DebouncedFuncLeading, filter, map } from 'lodash';
+import { debounce, DebouncedFuncLeading, map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { DLCustomChipProps, MakeRequired } from './types';
+import { ContactInputDistributionList, ContactInputUser, USER_TYPES } from './types';
 import { ACTION_IDS, DL_MEMBERS_LOAD_LIMIT } from '../../constants';
 import { useGetDistributionListMembers } from '../../hooks/use-get-distribution-list-members';
 import type { DistributionListMembersPage } from '../../model/distribution-list';
@@ -44,12 +44,11 @@ const debounceUserInput = <T extends (...args: unknown[]) => unknown>(
 export const DistributionListChip = ({
 	id,
 	label,
-	email,
-	contactInputOnChange,
-	contactInputValue,
+	value,
 	actions: propActions,
+	onExpandDL,
 	...rest
-}: MakeRequired<DLCustomChipProps, 'email'>): React.JSX.Element => {
+}: ContactInputDistributionList): React.JSX.Element => {
 	const [t] = useTranslation();
 	const [open, setOpen] = useState(false);
 
@@ -58,7 +57,7 @@ export const DistributionListChip = ({
 		more,
 		total,
 		findMore: loadMembers
-	} = useGetDistributionListMembers(email, {
+	} = useGetDistributionListMembers(value.email, {
 		limit: DL_MEMBERS_LOAD_LIMIT,
 		skip: !open
 	});
@@ -84,20 +83,20 @@ export const DistributionListChip = ({
 	);
 
 	const updateContactInputValue = useCallback(
-		(newItems: DistributionListMembersPage['members']) => {
-			const newValue = map(newItems, (item) => ({
-				label: item,
-				value: item,
-				id: item,
-				email: item
+		(memberEmails: DistributionListMembersPage['members']) => {
+			const newValue: Array<ContactInputUser> = map(memberEmails, (email) => ({
+				id: email,
+				label: email,
+				value: {
+					id: email,
+					email,
+					type: USER_TYPES.CONTACT
+				}
 			}));
 
-			contactInputOnChange?.([
-				...filter(contactInputValue, (value) => value.id !== id),
-				...newValue
-			]);
+			onExpandDL(newValue);
 		},
-		[contactInputOnChange, contactInputValue, id]
+		[onExpandDL]
 	);
 
 	const onSelectAllClick = useCallback(() => {

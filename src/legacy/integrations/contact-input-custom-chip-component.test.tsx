@@ -11,7 +11,7 @@ import { JSNS } from '@zextras/carbonio-shell-ui';
 import { times } from 'lodash';
 import { HttpResponse } from 'msw';
 
-import { ContactInputCustomChipComponent } from './contact-input-custom-chip-component';
+import { UserOrDLCustomChipComponent } from './contact-input-custom-chip-component';
 import { mockedAccount } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
 import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { DL_MEMBERS_LOAD_LIMIT } from '../../constants';
@@ -53,7 +53,7 @@ const selectAll = /Select address|Select all \d+ addresses/;
 describe('Contact input custom chip component', () => {
 	test('if chipDisplayName is not passed it will show chips label by default', () => {
 		setupTest(
-			<ContactInputCustomChipComponent
+			<UserOrDLCustomChipComponent
 				id={user1.id}
 				label={user1.label}
 				email={user1.email}
@@ -68,7 +68,7 @@ describe('Contact input custom chip component', () => {
 	});
 	test('if chipDisplayName has label value it will show chips label', () => {
 		setupTest(
-			<ContactInputCustomChipComponent
+			<UserOrDLCustomChipComponent
 				id={user1.id}
 				label={user1.label}
 				email={user1.email}
@@ -84,7 +84,7 @@ describe('Contact input custom chip component', () => {
 	});
 	test('if chipDisplayName has email value it will show chips email', () => {
 		setupTest(
-			<ContactInputCustomChipComponent
+			<UserOrDLCustomChipComponent
 				id={user1.id}
 				label={user1.label}
 				email={user1.email}
@@ -101,7 +101,7 @@ describe('Contact input custom chip component', () => {
 
 	it('should show email if the label is empty', () => {
 		setupTest(
-			<ContactInputCustomChipComponent
+			<UserOrDLCustomChipComponent
 				id={user1.id}
 				label={''}
 				email={user1.email}
@@ -116,7 +116,7 @@ describe('Contact input custom chip component', () => {
 
 	test('if it is a group it will render a normal chip', () => {
 		setupTest(
-			<ContactInputCustomChipComponent
+			<UserOrDLCustomChipComponent
 				id={'group-1'}
 				label={'group 1'}
 				email={''}
@@ -131,7 +131,7 @@ describe('Contact input custom chip component', () => {
 	});
 	test('if it is a contact it will render a normal chip', () => {
 		setupTest(
-			<ContactInputCustomChipComponent
+			<UserOrDLCustomChipComponent
 				id={user1.id}
 				label={user1.label}
 				email={user1.email}
@@ -148,7 +148,7 @@ describe('Contact input custom chip component', () => {
 	it('should show the distribution list custom chip if contact is a distribution list', async () => {
 		const getDistributionListHandler = registerGetDistributionListHandler(distributionList);
 		setupTest(
-			<ContactInputCustomChipComponent
+			<UserOrDLCustomChipComponent
 				id={distributionList.id}
 				label={distributionList.displayName}
 				email={distributionList.email}
@@ -169,7 +169,7 @@ describe('Contact input custom chip component', () => {
 			const getMemberHandler = registerGetDistributionListMembersHandler([user1.email]);
 			useDistributionListsStore.getState().setDistributionLists([distributionList]);
 			const { user } = setupTest(
-				<ContactInputCustomChipComponent
+				<UserOrDLCustomChipComponent
 					id={distributionList.id}
 					label={distributionList.displayName}
 					email={distributionList.email}
@@ -207,7 +207,7 @@ describe('Contact input custom chip component', () => {
 			const getMembersHandler = registerGetDistributionListMembersHandler([user1.email]);
 
 			const { user } = setupTest(
-				<ContactInputCustomChipComponent
+				<UserOrDLCustomChipComponent
 					id={distributionList.id}
 					label={distributionList.displayName}
 					email={distributionList.email}
@@ -255,7 +255,7 @@ describe('Contact input custom chip component', () => {
 			const getMembersHandler = registerGetDistributionListMembersHandler(dlm);
 
 			const { user } = setupTest(
-				<ContactInputCustomChipComponent
+				<UserOrDLCustomChipComponent
 					id={distributionList.id}
 					label={distributionList.displayName}
 					email={distributionList.email}
@@ -315,7 +315,7 @@ describe('Contact input custom chip component', () => {
 			const getMembersHandler = registerGetDistributionListMembersHandler(dlm, true);
 
 			const { user } = setupTest(
-				<ContactInputCustomChipComponent
+				<UserOrDLCustomChipComponent
 					id={distributionList.id}
 					label={distributionList.displayName}
 					email={distributionList.email}
@@ -345,7 +345,7 @@ describe('Contact input custom chip component', () => {
 			const getMembersHandler = registerGetDistributionListMembersHandler(dlm, false);
 
 			const { user } = setupTest(
-				<ContactInputCustomChipComponent
+				<UserOrDLCustomChipComponent
 					id={distributionList.id}
 					label={distributionList.displayName}
 					email={distributionList.email}
@@ -403,7 +403,7 @@ describe('Contact input custom chip component', () => {
 			});
 
 			const { user } = setupTest(
-				<ContactInputCustomChipComponent
+				<UserOrDLCustomChipComponent
 					id={distributionList.id}
 					label={distributionList.displayName}
 					email={distributionList.email}
@@ -439,7 +439,7 @@ describe('Contact input custom chip component', () => {
 			const getMembersHandler = registerGetDistributionListMembersHandler(dlm);
 			const contactInputOnChangeFn = jest.fn();
 			const { user } = setupTest(
-				<ContactInputCustomChipComponent
+				<UserOrDLCustomChipComponent
 					id={distributionList.id}
 					label={distributionList.displayName}
 					email={distributionList.email}
@@ -496,7 +496,7 @@ describe('Contact input custom chip component', () => {
 			const contactInputOnChangeFn = jest.fn();
 
 			const { user } = setupTest(
-				<ContactInputCustomChipComponent
+				<UserOrDLCustomChipComponent
 					id={distributionList.id}
 					label={distributionList.displayName}
 					email={distributionList.email}
@@ -540,7 +540,7 @@ describe('Contact input custom chip component', () => {
 			]);
 
 			const { user } = setupTest(
-				<ContactInputCustomChipComponent
+				<UserOrDLCustomChipComponent
 					id={distributionList.id}
 					label={distributionList.displayName}
 					email={distributionList.email}
@@ -572,7 +572,7 @@ describe('Contact input custom chip component', () => {
 				]);
 
 			const { user } = setupTest(
-				<ContactInputCustomChipComponent
+				<UserOrDLCustomChipComponent
 					id={distributionList.id}
 					label={distributionList.displayName}
 					email={distributionList.email}
@@ -599,7 +599,7 @@ describe('Contact input custom chip component', () => {
 		it('should request distribution list data to the network if it is not stored', async () => {
 			const getDLHandler = registerGetDistributionListHandler(distributionList);
 			setupTest(
-				<ContactInputCustomChipComponent
+				<UserOrDLCustomChipComponent
 					id={distributionList.id}
 					label={distributionList.displayName}
 					email={distributionList.email}
@@ -625,7 +625,7 @@ describe('Contact input custom chip component', () => {
 				} satisfies Required<DistributionList>
 			]);
 			setupTest(
-				<ContactInputCustomChipComponent
+				<UserOrDLCustomChipComponent
 					id={distributionList.id}
 					label={distributionList.displayName}
 					email={distributionList.email}

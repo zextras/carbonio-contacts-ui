@@ -10,10 +10,6 @@ import { ChipItem, type ChipInputProps, type DropdownItem } from '@zextras/carbo
 import { ChipAction } from '@zextras/carbonio-design-system';
 
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
-import type { DistributionList } from '../../model/distribution-list';
-import { Contact } from '../types/contact';
-
-export type ContactInputContact = Partial<Omit<Contact, 'email'>> & { email?: string };
 
 export type ContactInputGroup = ContactInputItem &
 	Required<Pick<ContactInputItem, 'display'>> & {
@@ -22,11 +18,11 @@ export type ContactInputGroup = ContactInputItem &
 		email?: '';
 	};
 
-export type ContactInputDistributionList = ChipItem<UserDistributionList>;
+export type ContactInputUser = RequiredEmailLabelChipItem<UserContact>;
 
 export type ContactChipAction = Omit<ChipAction, 'onClick'> & {
-	isVisible: (chipItem: ContactInputItem | DistributionList) => boolean;
-	onClick: (chipItem: ContactInputItem | DistributionList) => void;
+	isVisible: (chipItem: ContactInputItem) => boolean;
+	onClick: (chipItem: ContactInputItem) => void;
 };
 
 type USER_TYPES = {
@@ -68,7 +64,7 @@ export type ContactInputItemValue = UserContactGroup | UserDistributionList | Us
 
 export type ContactInputItemInternal = ChipItem<ContactInputItemValue>;
 
-export type MakeRequired<T, K extends keyof T> = T & Required<Pick<T, K>>;
+export type MakeRequired<T, K extends keyof T> = Required<Pick<T, K>> & T;
 
 export type ContactInputOnChange = ((items: ContactInputItem[]) => void) | undefined;
 export type ContactInputChipDisplayName =
@@ -90,9 +86,10 @@ export type ContactGroup = {
 	groupId: string;
 };
 
-type UserOrDL = UserContact | UserDistributionList;
+export type UserOrDL = UserContact | UserDistributionList;
 
-export type ContactInputItem = { label: string; value: UserOrDL } & ChipItem<UserOrDL>;
+export type ContactInputItem = RequiredEmailLabelChipItem<UserOrDL>;
+
 export type ContactInputValue = ContactInputItem[];
 export type ContactInputProps = Pick<
 	ChipInputProps,
@@ -113,9 +110,18 @@ export type ContactInputProps = Pick<
 	contactActions?: Array<ContactChipAction>;
 };
 
-export type ContactInputCustomChipComponentProps = DLCustomChipProps & {
+type RequiredEmailLabelChipItem<T> = Required<Pick<ChipItem<T>, 'value'>> &
+	Required<Pick<ChipItem<T>, 'label'>> &
+	Omit<ChipItem<T>, 'label' | 'value'>;
+
+type OnExpandDL = (items: Array<ContactInputItem>) => void;
+export type ContactInputDistributionList = RequiredEmailLabelChipItem<UserDistributionList> & {
+	onExpandDL: OnExpandDL;
+};
+
+export type UserOrDLCustomChipComponentProps = ContactInputItem & {
 	chipDisplayName?: ContactInputChipDisplayName;
-	contactActions?: Array<ContactChipAction>;
+	onExpandDL: OnExpandDL;
 };
 
 export type CustomChipProps = React.ComponentPropsWithoutRef<
@@ -158,4 +164,5 @@ export type NewDistributionList = {
 
 export type RemoteContactResponse = NewContact | NewContactGroup | NewDistributionList;
 
-export type ContactInputOptions = DropdownItem & { value?: ContactInputItem };
+// TODO: check if we really need optional, there is some code 'loading' on contact-input
+export type ContactInputOptions = DropdownItem & { value?: ContactInputItemInternal };
