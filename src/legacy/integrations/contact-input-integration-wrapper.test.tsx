@@ -136,6 +136,57 @@ describe('Contact input integration wrapper', () => {
 
 			expect(onChange).toHaveBeenCalledWith([expect.objectContaining({ label: first })]);
 		});
+		it('calls onChange with label equal to email if no other field in autocomplete', async () => {
+			const interceptor = createAutocompleteInterceptor([{ email: VALID_EMAIL }]);
+			const onChange = jest.fn();
+			const { user } = setupTest(
+				<ContactInputIntegrationWrapper
+					onChange={onChange}
+					defaultValue={[]}
+					orderedAccountIds={[]}
+				/>
+			);
+			await typeAndSelectOption(user, VALID_EMAIL);
+			await interceptor;
+
+			expect(onChange).toHaveBeenCalledWith([expect.objectContaining({ label: VALID_EMAIL })]);
+		});
+		it('calls onChange with label equal to fullname if present and no first, last or middle in autocomplete', async () => {
+			const interceptor = createAutocompleteInterceptor([
+				{ email: VALID_EMAIL, full: 'My fullname' }
+			]);
+			const onChange = jest.fn();
+			const { user } = setupTest(
+				<ContactInputIntegrationWrapper
+					onChange={onChange}
+					defaultValue={[]}
+					orderedAccountIds={[]}
+				/>
+			);
+			await typeAndSelectOption(user, VALID_EMAIL);
+			await interceptor;
+
+			expect(onChange).toHaveBeenCalledWith([expect.objectContaining({ label: 'My fullname' })]);
+		});
+		it('calls onChange with label equal to first + middle + last even if fullname present in autocomplete', async () => {
+			const interceptor = createAutocompleteInterceptor([
+				{ email: VALID_EMAIL, full: 'My fullname', first: 'first', middle: 'middle', last: 'last' }
+			]);
+			const onChange = jest.fn();
+			const { user } = setupTest(
+				<ContactInputIntegrationWrapper
+					onChange={onChange}
+					defaultValue={[]}
+					orderedAccountIds={[]}
+				/>
+			);
+			await typeAndSelectOption(user, VALID_EMAIL);
+			await interceptor;
+
+			expect(onChange).toHaveBeenCalledWith([
+				expect.objectContaining({ label: 'first middle last' })
+			]);
+		});
 		it('should create a chip with edit action after selecting a simple contact on the dropdown', async () => {
 			const onChange = jest.fn();
 			const autocompleteInterceptor = createAutocompleteInterceptor([
