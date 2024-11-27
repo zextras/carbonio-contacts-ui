@@ -21,6 +21,13 @@ import { FullAutocompleteRequest, FullAutocompleteResponse } from '../types/cont
 const VALID_EMAIL = 'valid@email.it';
 const INVALID_EMAIL = 'invalid@email';
 
+const typeAndSelectOption = async (user: any, textToFind: string): Promise<void> => {
+	await user.type(screen.getByRole('textbox'), 'a');
+
+	const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
+	const dropdownItem = await within(dropdown).findAllByText(textToFind);
+	await user.click(dropdownItem[0]);
+};
 const createSimpleChipItem = (
 	id = '1',
 	label = 'test',
@@ -112,6 +119,23 @@ describe('Contact input integration wrapper', () => {
 
 			expect(screen.getByText('AAA')).toBeVisible();
 		});
+
+		it('calls onChange with label equal to firstName if present in autocomplete', async () => {
+			const first = 'My name is';
+			const interceptor = createAutocompleteInterceptor([{ email: VALID_EMAIL, first }]);
+			const onChange = jest.fn();
+			const { user } = setupTest(
+				<ContactInputIntegrationWrapper
+					onChange={onChange}
+					defaultValue={[]}
+					orderedAccountIds={[]}
+				/>
+			);
+			await typeAndSelectOption(user, first);
+			await interceptor;
+
+			expect(onChange).toHaveBeenCalledWith([expect.objectContaining({ label: first })]);
+		});
 		it('should create a chip with edit action after selecting a simple contact on the dropdown', async () => {
 			const onChange = jest.fn();
 			const autocompleteInterceptor = createAutocompleteInterceptor([
@@ -125,12 +149,9 @@ describe('Contact input integration wrapper', () => {
 					onChange={onChange}
 				/>
 			);
+			await typeAndSelectOption(user, VALID_EMAIL);
 			await user.type(screen.getByRole('textbox'), 'a');
-
-			const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
 			await autocompleteInterceptor;
-			const dropdownItem = await within(dropdown).findAllByText(VALID_EMAIL);
-			await user.click(dropdownItem[0]);
 			expect(onChange).toHaveBeenCalledWith([
 				expect.objectContaining({ actions: [editValidChipAction] })
 			]);
