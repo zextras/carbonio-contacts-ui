@@ -16,9 +16,7 @@ import {
 	ContactInputItemValue,
 	USER_TYPES,
 	UserContact,
-	UserContactGroup
-} from '../../types/integrations';
-import {
+	UserContactGroup,
 	ContactInputOptions,
 	NewContactGroup,
 	NewDistributionList,

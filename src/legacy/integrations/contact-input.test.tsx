@@ -14,7 +14,7 @@ import { ContactInput } from './contact-input';
 import { UserEvent, screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../../constants/tests';
 import { registerFullAutocompleteHandler } from '../../tests/msw-handlers/full-autocomplete';
-import { ContactInputItem, ContactInputOnChange, ContactInputValue } from '../types/integrations';
+import { ContactInputItem, ContactInputOnChange, ContactInputValue } from './types';
 
 describe('Contact input', () => {
 	it('should render a textbox', async () => {

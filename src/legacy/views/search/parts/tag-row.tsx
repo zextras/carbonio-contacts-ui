@@ -10,7 +10,7 @@ import { filter } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { ZIMBRA_STANDARD_COLORS } from '../../../../carbonio-ui-commons/constants/utils';
-import { ContactInputItem } from '../../../types/integrations';
+import { ContactInputItem } from '../../../integrations/types';
 
 type ComponentProps = {
 	compProps: {
@@ -76,7 +76,7 @@ const TagRow: FC<ComponentProps> = ({ compProps }): ReactElement => {
 				defaultValue={[]}
 				options={tagOptions}
 				value={tag}
-				onChange={onTagChange as ChipInputProps['onChange']}
+				onChange={onTagChange}
 				onAdd={tagChipOnAdd as ChipInputProps['onAdd']}
 				disableOptions={false}
 				disabled

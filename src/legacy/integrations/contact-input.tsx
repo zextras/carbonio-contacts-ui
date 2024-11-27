@@ -41,7 +41,7 @@ import {
 
 const ContactInputCore: FC<ContactInputProps> = ({
 	onChange,
-	value,
+	defaultValue,
 	placeholder,
 	background = 'gray5',
 	dragAndDropEnabled = false,
@@ -78,13 +78,13 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	);
 	useEffect(() => {
 		setDefaults(
-			map(filter(value, (c) => c.id !== idToRemove) ?? [], (obj) => ({
+			map(filter(defaultValue, (c) => c.id !== idToRemove) ?? [], (obj) => ({
 				...obj,
 				draggable: dragAndDropEnabled,
 				onDragStart: dragAndDropEnabled ? buildDragStartHandler(obj) : noop
 			}))
 		);
-	}, [buildDragStartHandler, value, dragAndDropEnabled, idToRemove]);
+	}, [buildDragStartHandler, defaultValue, dragAndDropEnabled, idToRemove]);
 
 	const buildDraggableChip = useCallback(
 		(chip: ContactInputItem): ContactInputItem => ({

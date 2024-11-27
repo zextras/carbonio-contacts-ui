@@ -93,7 +93,7 @@ export type ContactGroup = {
 type UserOrDL = UserContact | UserDistributionList;
 
 export type ContactInputItem = { label: string; value: UserOrDL } & ChipItem<UserOrDL>;
-
+export type ContactInputValue = ContactInputItem[];
 export type ContactInputProps = Pick<
 	ChipInputProps,
 	| 'icon'
@@ -106,7 +106,7 @@ export type ContactInputProps = Pick<
 	| 'inputRef'
 > & {
 	onChange?: ContactInputOnChange;
-	value: Array<ContactInputItem>;
+	defaultValue: Array<ContactInputItem>;
 	dragAndDropEnabled?: boolean;
 	orderedAccountIds?: Array<string>;
 	chipDisplayName?: ContactInputChipDisplayName;

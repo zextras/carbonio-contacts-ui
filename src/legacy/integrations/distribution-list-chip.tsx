@@ -16,11 +16,10 @@ import { debounce, DebouncedFuncLeading, filter, map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { DLCustomChipProps } from './types';
+import { DLCustomChipProps, MakeRequired } from './types';
 import { ACTION_IDS, DL_MEMBERS_LOAD_LIMIT } from '../../constants';
 import { useGetDistributionListMembers } from '../../hooks/use-get-distribution-list-members';
 import type { DistributionListMembersPage } from '../../model/distribution-list';
-import type { MakeRequired } from '../types/integrations';
 
 const StyledChip = styled(Chip)`
 	cursor: default;
