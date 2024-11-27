@@ -5,19 +5,18 @@
  */
 import React from 'react';
 
-import { act, waitFor, within } from '@testing-library/react';
+import { act, within } from '@testing-library/react';
 import { ChipAction } from '@zextras/carbonio-design-system';
 
 import { ContactInputIntegrationWrapper } from './contact-input-integration-wrapper';
 import { USER_TYPES } from './types';
-import { mockedAccount } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
+import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../../constants/tests';
 import { registerFullAutocompleteHandler } from '../../tests/msw-handlers/full-autocomplete';
 import { registerGetDistributionListHandler } from '../../tests/msw-handlers/get-distribution-list';
 import { generateDistributionList } from '../../tests/utils';
 import { FullAutocompleteRequest, FullAutocompleteResponse } from '../types/contact';
-import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 
 const VALID_EMAIL = 'valid@email.it';
 const INVALID_EMAIL = 'invalid@email';
@@ -73,13 +72,6 @@ const editInvalidChipAction: ChipAction = expect.objectContaining<Partial<ChipAc
 	type: 'button'
 });
 
-const distributionList = generateDistributionList({
-	email: distributionListChipItem.value.email,
-	displayName: 'dl 1',
-	owners: [{ id: mockedAccount.id, name: mockedAccount.name }],
-	isOwner: true
-});
-
 const createAutocompleteInterceptor = (
 	contacts: FullAutocompleteResponse['match']
 ): Promise<FullAutocompleteRequest> =>
@@ -90,48 +82,25 @@ const createAutocompleteInterceptor = (
 
 describe('Contact input integration wrapper', () => {
 	describe('actions', () => {
-		// TODO: split the following test in 2 main groups - simple contacts and dl
-		describe('simple contact', () => {
-			it('should set edit action on chip to create when chip is created by typing', async () => {
-				const onChange = jest.fn();
-				registerFullAutocompleteHandler([]);
-				const { user } = setupTest(
-					<ContactInputIntegrationWrapper
-						defaultValue={[]}
-						orderedAccountIds={[]}
-						onChange={onChange}
-					/>
-				);
-				await act(async () => {
-					await user.type(screen.getByRole('textbox'), VALID_EMAIL);
-				});
-				expect(onChange).toHaveBeenCalledWith([
-					expect.objectContaining({ actions: [editValidChipAction] })
-				]);
-			});
+		it('should create chip with edit action when chip is created by by pressing enter', async () => {
+			const onChange = jest.fn();
+			registerFullAutocompleteHandler([]);
+			const { user } = setupTest(
+				<ContactInputIntegrationWrapper
+					defaultValue={[]}
+					orderedAccountIds={[]}
+					onChange={onChange}
+				/>
+			);
+			await user.type(screen.getByRole('textbox'), VALID_EMAIL);
+			await user.keyboard('{Enter}');
+			expect(onChange).toHaveBeenCalledWith([
+				expect.objectContaining({ actions: [editValidChipAction] })
+			]);
+		});
 
-			// FIXME(characterization test): edit action should be available also on chip created with enter
-			it('should not set edit action on chip to create when chip is created by pressing enter', async () => {
-				const onChange = jest.fn();
-
-				const { user } = setupTest(
-					<ContactInputIntegrationWrapper
-						defaultValue={[]}
-						orderedAccountIds={[]}
-						onChange={onChange}
-					/>
-				);
-				await user.type(screen.getByRole('textbox'), VALID_EMAIL);
-				await act(async () => {
-					await user.keyboard('{Enter}');
-				});
-				await waitFor(() => expect(onChange).toHaveBeenCalled());
-				expect(onChange).toHaveBeenCalledWith([
-					expect.not.objectContaining({ actions: [editValidChipAction] })
-				]);
-			});
-
-			it('should create a chip with edit action after selecting the option on the dropdown', async () => {
+		describe('on simple contact', () => {
+			it('should create a chip with edit action after selecting a simple contact on the dropdown', async () => {
 				const onChange = jest.fn();
 				const autocompleteInterceptor = createAutocompleteInterceptor([
 					{ email: VALID_EMAIL, isGroup: false }
@@ -154,82 +123,6 @@ describe('Contact input integration wrapper', () => {
 					expect.objectContaining({ actions: [editValidChipAction] })
 				]);
 			});
-		});
-
-		// describe('distribution list', () => {
-		// 	it('should set edit action on chip to create when chip is created by typing', async () => {
-		// 		const onChange = jest.fn();
-		// 		registerFullAutocompleteHandler([]);
-		// 		const { user } = setupTest(
-		// 			<ContactInputIntegrationWrapper
-		// 				defaultValue={[]}
-		// 				orderedAccountIds={[]}
-		// 				onChange={onChange}
-		// 			/>
-		// 		);
-		// 		await act(async () => {
-		// 			await user.type(screen.getByRole('textbox'), `${contact.value.email},`);
-		// 		});
-		// 		expect(onChange).toHaveBeenCalledWith([
-		// 			expect.objectContaining({ actions: [editValidChipAction] })
-		// 		]);
-		// 	});
-
-		// 	// FIXME(characterization test): edit action should be available also on chip created with enter
-		// 	it('should not set edit action on chip to create when chip is created by pressing enter', async () => {
-		// 		const onChange = jest.fn();
-		// 		const contact1 = { ...contact, email: 'email-1@domain.com' };
-		// 		const contact2 = { email: 'email-2@domain.com' };
-		// 		const contact3 = { email: 'email-3@domain.com' };
-		// 		registerFullAutocompleteHandler([contact1, contact2, contact3]);
-		// 		const { user } = setupTest(
-		// 			<ContactInputIntegrationWrapper
-		// 				defaultValue={[]}
-		// 				orderedAccountIds={[]}
-		// 				onChange={onChange}
-		// 			/>
-		// 		);
-		// 		await user.type(screen.getByRole('textbox'), contact1.email[0]);
-		// 		act(() => {
-		// 			jest.runOnlyPendingTimers();
-		// 		});
-		// 		await screen.findByTestId(TESTID_SELECTORS.dropdownList);
-		// 		expect(await screen.findByText(contact3.email, { exact: false })).toBeVisible();
-		// 		await act(async () => {
-		// 			await user.keyboard('{Enter}');
-		// 		});
-		// 		await waitFor(() => expect(onChange).toHaveBeenCalled());
-		// 		expect(onChange).toHaveBeenCalledWith([
-		// 			expect.not.objectContaining({ actions: [editValidChipAction] })
-		// 		]);
-		// 	});
-
-		// 	it('should create a chip with edit action after selecting the option on the dropdown', async () => {
-		// 		const onChange = jest.fn();
-		// 		const autocompleteInterceptor = createAutocompleteInterceptor([
-		// 			{ email: VALID_EMAIL, isGroup: false }
-		// 		]);
-
-		// 		const { user } = setupTest(
-		// 			<ContactInputIntegrationWrapper
-		// 				defaultValue={[]}
-		// 				orderedAccountIds={[]}
-		// 				onChange={onChange}
-		// 			/>
-		// 		);
-		// 		await user.type(screen.getByRole('textbox'), 'a');
-
-		// 		const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
-		// 		await autocompleteInterceptor;
-		// 		const dropdownItem = await within(dropdown).findAllByText(VALID_EMAIL);
-		// 		await user.click(dropdownItem[0]);
-		// 		expect(onChange).toHaveBeenCalledWith([
-		// 			expect.objectContaining({ actions: [editValidChipAction] })
-		// 		]);
-		// 	});
-		// });
-
-		describe('on simple contact', () => {
 			it('should show custom action if value is set from outside and contain the action', async () => {
 				registerGetDistributionListHandler(generateDistributionList(contactChipItem));
 				setupTest(
@@ -251,6 +144,29 @@ describe('Contact input integration wrapper', () => {
 		});
 
 		describe('on distribution list contact', () => {
+			it('should create a chip with edit action after selecting a distribution list on the dropdown', async () => {
+				const onChange = jest.fn();
+				const autocompleteInterceptor = createAutocompleteInterceptor([
+					{ email: VALID_EMAIL, isGroup: true }
+				]);
+
+				const { user } = setupTest(
+					<ContactInputIntegrationWrapper
+						defaultValue={[]}
+						orderedAccountIds={[]}
+						onChange={onChange}
+					/>
+				);
+				await user.type(screen.getByRole('textbox'), 'a');
+
+				const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
+				await autocompleteInterceptor;
+				const dropdownItem = await within(dropdown).findAllByText(VALID_EMAIL);
+				await user.click(dropdownItem[0]);
+				expect(onChange).toHaveBeenCalledWith([
+					expect.objectContaining({ actions: [editValidChipAction] })
+				]);
+			});
 			it('should show custom action if provided', async () => {
 				setupTest(
 					<ContactInputIntegrationWrapper
@@ -267,7 +183,6 @@ describe('Contact input integration wrapper', () => {
 					screen.getByRoleWithIcon('button', { icon: `icon: ${customAction.icon}` })
 				).toBeVisible();
 			});
-
 			it('should show action to see the members list', async () => {
 				setupTest(
 					<ContactInputIntegrationWrapper
@@ -284,7 +199,6 @@ describe('Contact input integration wrapper', () => {
 					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL })
 				).toBeVisible();
 			});
-
 			it('should not show the edit DL action', async () => {
 				setupTest(
 					<ContactInputIntegrationWrapper
@@ -308,7 +222,6 @@ describe('Contact input integration wrapper', () => {
 					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.close })
 				).toBeVisible();
 			});
-
 			it('should not show edit action if invalid contact is set from outside', () => {
 				setupTest(
 					<ContactInputIntegrationWrapper defaultValue={[invalidChipItem]} orderedAccountIds={[]} />
@@ -317,7 +230,6 @@ describe('Contact input integration wrapper', () => {
 					screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.editChip })
 				).not.toBeInTheDocument();
 			});
-
 			it('should set edit action on chip of invalid contact to create when chip is created by typing', async () => {
 				const onChange = jest.fn();
 				const { user } = setupTest(
@@ -334,7 +246,6 @@ describe('Contact input integration wrapper', () => {
 					expect.objectContaining({ actions: [editInvalidChipAction] })
 				]);
 			});
-
 			it('should create an invalid chip with edit action', async () => {
 				const onChange = jest.fn();
 
