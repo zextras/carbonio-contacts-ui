@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2023 Zextras <https://www.zextras.com>
+ * SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
@@ -11,12 +11,11 @@ import { JSNS } from '@zextras/carbonio-shell-ui';
 import { times } from 'lodash';
 import { HttpResponse } from 'msw';
 
-import { UserOrDLCustomChipComponent } from './contact-input-custom-chip-component';
+import { DistributionListChip } from './distribution-list-chip';
 import { USER_TYPES } from './types';
 import { mockedAccount } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
 import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { DL_MEMBERS_LOAD_LIMIT } from '../../constants';
-import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
 import { TESTID_SELECTORS, TIMERS } from '../../constants/tests';
 import { DistributionList } from '../../model/distribution-list';
 import { GetDistributionListMembersResponse } from '../../network/api/get-distribution-list-members';
@@ -37,9 +36,17 @@ const distributionList = generateDistributionList({
 	isOwner: true
 });
 
+const distributionListChip = {
+	id: 'dl-1',
+	label: 'dl@test.com',
+	value: {
+		id: 'dl',
+		email: 'dl@test.com',
+		type: USER_TYPES.DISTRIBUTION_LIST
+	}
+};
 const user1 = {
 	id: 'user1ID',
-	email: 'user1@mail.com',
 	label: 'user1',
 	value: {
 		id: 'user1ID',
@@ -47,140 +54,15 @@ const user1 = {
 		type: USER_TYPES.CONTACT
 	}
 };
-
-const user2Mail = 'user2@mail.com';
-const user3Mail = 'user3@mail.com';
-const user4Mail = 'user4@mail.com';
-const user5Mail = 'user5@mail.com';
-const user6Mail = 'user6@mail.com';
-
-const selectAll = /Select address|Select all \d+ addresses/;
-
-describe('Contact input custom chip component', () => {
-	it('renders the provided label', () => {
-		setupTest(
-			<UserOrDLCustomChipComponent
-				id={user1.id}
-				label={user1.label}
-				value={user1.value}
-				onExpandDL={jest.fn()}
-			/>
-		);
-		const defaultChipLabel = screen.getByText(user1.label);
-
-		expect(defaultChipLabel).toBeVisible();
-	});
-	test('if chipDisplayName has label value it will show chips label', () => {
-		setupTest(
-			<UserOrDLCustomChipComponent
-				id={user1.id}
-				label={user1.label}
-				email={user1.email}
-				isGroup={false}
-				contactInputOnChange={jest.fn()}
-				contactInputValue={[]}
-				chipDisplayName={CHIP_DISPLAY_NAME_VALUES.label}
-			/>
-		);
-		const defaultChipLabel = screen.getByText(user1.label);
-
-		expect(defaultChipLabel).toBeVisible();
-	});
-	test('if chipDisplayName has email value it will show chips email', () => {
-		setupTest(
-			<UserOrDLCustomChipComponent
-				id={user1.id}
-				label={user1.label}
-				email={user1.email}
-				isGroup={false}
-				contactInputOnChange={jest.fn()}
-				contactInputValue={[]}
-				chipDisplayName={CHIP_DISPLAY_NAME_VALUES.email}
-			/>
-		);
-		const defaultChipEmail = screen.getByText(user1.email);
-
-		expect(defaultChipEmail).toBeVisible();
-	});
-
-	it('should show email if the label is empty', () => {
-		setupTest(
-			<UserOrDLCustomChipComponent
-				id={user1.id}
-				label={''}
-				email={user1.email}
-				isGroup={false}
-				contactInputOnChange={jest.fn()}
-				contactInputValue={[]}
-				chipDisplayName={CHIP_DISPLAY_NAME_VALUES.email}
-			/>
-		);
-		expect(screen.getByText(user1.email)).toBeVisible();
-	});
-
-	test('if it is a group it will render a normal chip', () => {
-		setupTest(
-			<UserOrDLCustomChipComponent
-				id={'group-1'}
-				label={'group 1'}
-				email={''}
-				isGroup
-				contactInputOnChange={jest.fn()}
-				contactInputValue={[]}
-			/>
-		);
-
-		const defaultChip = screen.getByTestId(TESTID_SELECTORS.contactInputChip);
-		expect(defaultChip).toBeVisible();
-	});
-	test('if it is a contact it will render a normal chip', () => {
-		setupTest(
-			<UserOrDLCustomChipComponent
-				id={user1.id}
-				label={user1.label}
-				email={user1.email}
-				isGroup={false}
-				contactInputOnChange={jest.fn()}
-				contactInputValue={[]}
-			/>
-		);
-
-		const defaultChip = screen.getByTestId(TESTID_SELECTORS.contactInputChip);
-		expect(defaultChip).toBeVisible();
-	});
-
-	it('should show the distribution list custom chip if contact is a distribution list', async () => {
-		const getDistributionListHandler = registerGetDistributionListHandler(distributionList);
-		setupTest(
-			<UserOrDLCustomChipComponent
-				id={distributionList.id}
-				label={distributionList.displayName}
-				email={distributionList.email}
-				isGroup
-				contactInputOnChange={jest.fn()}
-				contactInputValue={[]}
-			/>
-		);
-
-		await waitFor(() => expect(getDistributionListHandler).toHaveBeenCalled());
-		const distributionListChip = screen.getByTestId(TESTID_SELECTORS.dlChip);
-		expect(distributionListChip).toBeVisible();
-	});
-
-	describe('Distribution list expand members action', () => {
+describe('Distribution ListChip', () => {
+	// TODO: tests extracted from old remove custom-component test, we need to click onExpand dl and check call is made
+	describe('expand members action', () => {
 		it('should request the list of members only the first time the user clicks on expand action and distribution list is stored without members', async () => {
 			const getDLHandler = registerGetDistributionListHandler(distributionList);
-			const getMemberHandler = registerGetDistributionListMembersHandler([user1.email]);
+			const getMemberHandler = registerGetDistributionListMembersHandler([user1.value.email]);
 			useDistributionListsStore.getState().setDistributionLists([distributionList]);
 			const { user } = setupTest(
-				<UserOrDLCustomChipComponent
-					id={distributionList.id}
-					label={distributionList.displayName}
-					email={distributionList.email}
-					isGroup
-					contactInputOnChange={jest.fn()}
-					contactInputValue={[]}
-				/>
+				<DistributionListChip onExpandDL={jest.fn()} {...distributionListChip} />
 			);
 
 			await waitFor(() => expect(getDLHandler).toHaveBeenCalled());
@@ -191,18 +73,18 @@ describe('Contact input custom chip component', () => {
 				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
 			});
 			await waitFor(() => expect(getMemberHandler).toHaveBeenCalledTimes(1));
-			await screen.findByText(user1.email);
+			await screen.findByText(user1.value.email);
 			await user.click(
 				await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.collapseDL })
 			);
-			await waitFor(() => expect(screen.queryByText(user1.email)).not.toBeInTheDocument());
+			await waitFor(() => expect(screen.queryByText(user1.value.email)).not.toBeInTheDocument());
 			await user.click(
 				await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL })
 			);
 			act(() => {
 				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
 			});
-			await screen.findByText(user1.email);
+			await screen.findByText(user1.value.email);
 			expect(getMemberHandler).toHaveBeenCalledTimes(1);
 		});
 
@@ -279,39 +161,6 @@ describe('Contact input custom chip component', () => {
 			expect(getMembersHandler).toHaveBeenCalled();
 			expect(screen.getByRole('button', { name: selectAll })).toBeVisible();
 		});
-
-		it.todo(
-			'IRIS-4949 should show a placeholder when there is no member'
-			/* async () => {
-				registerGetDistributionListHandler(distributionList);
-				const response = getDistributionListCustomResponse({ dlm: [], total: 0, more: false });
-
-				getSetupServer().use(
-					rest.post(getDistributionListMembersRequest, async (req, res, ctx) =>
-						res(ctx.json(response))
-					)
-				);
-
-				const { user } = setupTest(
-					<ContactInputCustomChipComponent
-						id={distributionList.id}
-						label={distributionList.displayName}
-						email={distributionList.email}
-						isGroup
-						contactInputOnChange={jest.fn()}
-						contactInputValue={[]}
-					/>
-				);
-
-				const chevronAction = await screen.findByTestId(TESTID_SELECTORS.ICONS.EXPAND_DL);
-
-				await user.click(chevronAction);
-
-				await screen.findByTestId(TESTID_SELECTORS.DROPDOWN_LIST);
-				expect(screen.queryByRole('button', { name: selectAll })).not.toBeInTheDocument();
-				expect(screen.getByText('PLACEHOLDER')).toBeVisible();
-			} */
-		);
 
 		it('should show the "show more" action when there are more members to load', async () => {
 			const dlm = [user1.email, user2Mail, user3Mail];
