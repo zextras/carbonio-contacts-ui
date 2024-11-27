@@ -11,7 +11,8 @@ import {
 	Container,
 	type ChipInputProps,
 	useCombinedRefs,
-	ChipAction
+	ChipAction,
+	ChipItem
 } from '@zextras/carbonio-design-system';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
 import { filter, find, map, forEach, reject, uniqBy, noop } from 'lodash';
@@ -26,13 +27,14 @@ import {
 	ContactInputItem,
 	ContactInputItemValue,
 	USER_TYPES,
-	UserContactGroup
+	UserContactGroup,
+	UserContact
 } from '../types/integrations';
 import type { GetContactsRequest, GetContactsResponse } from '../types/soap';
 import { Loader } from './parts/loader';
 import { PasteContextMenu } from './parts/paste-context-menu';
 import { getChipLabel, isContactGroup, searchContacts, tryToParseEmail } from './parts/utils';
-import { ContactInputOptions, ContactInputProps } from './types';
+import { ContactGroup, ContactInputOptions, ContactInputProps } from './types';
 
 const ContactInputCore: FC<ContactInputProps> = ({
 	onChange,
@@ -192,48 +194,37 @@ const ContactInputCore: FC<ContactInputProps> = ({
 		[onInputEnter, orderedAccountIds]
 	);
 
-	// TODO: extract me, this is used to explode a contact group
-	useEffect(() => {
-		const groupsChips = filter(
-			defaults,
-			(defaultContact) => defaultContact.value?.type === USER_TYPES.GROUP
-		).map((contactGroupChip) => contactGroupChip.value as UserContactGroup);
-		if (groupsChips.length > 0) {
-			forEach(groupsChips, (contactGroup) => {
-				soapFetch<GetContactsRequest, GetContactsResponse>('GetContacts', {
-					_jsns: 'urn:zimbraMail',
-					cn: {
-						id: contactGroup.groupId
-					},
-					derefGroupMember: true
-				}).then((result) => {
-					const id = Date.now().toString();
-					const members = result?.cn?.[0].m;
-					const newContacts = map(members, (member): ContactInputItem => {
-						const email = member.cn?.[0]._attrs.email ?? member.value;
-						return {
-							id,
-							label: email,
-							value: {
-								email,
-								id,
-								type: USER_TYPES.CONTACT
-							},
-							error: !isValidEmail(email),
-							draggable: true,
-							onDragStart: buildDragStartHandler({ id, label: email })
-						};
-					});
-					const newValue = reject(defaults, (chip) => isContactGroup(chip));
-					const updatedValue = [...newValue, ...newContacts];
-					onChange?.(updatedValue);
-					setDefaults(updatedValue);
+	const getGroupMembers = useCallback(
+		(contactGroup: UserContactGroup): Promise<UserContact[]> =>
+			soapFetch<GetContactsRequest, GetContactsResponse>('GetContacts', {
+				_jsns: 'urn:zimbraMail',
+				cn: {
+					id: contactGroup.groupId
+				},
+				derefGroupMember: true
+			}).then((result) => {
+				const members = result?.cn?.[0].m;
+				return map(members, (member) => {
+					const email = member.cn?.[0]._attrs.email ?? member.value;
+					return {
+						email,
+						id: email,
+						type: USER_TYPES.CONTACT
+					};
 				});
-			});
-		}
-	}, [buildDragStartHandler, defaults, onChange]);
+			}),
+		[]
+	);
 
 	const contactInputValue = useMemo(() => uniqBy(defaults, 'id'), [defaults]);
+
+	const onInternalChange = useCallback(
+		(items: ContactInputItem[]) => {
+			const contactsWithoutGroups = items.filter((item) => item.value?.type !== USER_TYPES.GROUP);
+			onChange?.(contactsWithoutGroups);
+		},
+		[onChange]
+	);
 
 	const onAdd = useCallback(
 		(valueToAdd: unknown): ContactInputItem => {
@@ -246,32 +237,34 @@ const ContactInputCore: FC<ContactInputProps> = ({
 			if (!contactValue) {
 				throw Error('Received an empty value, cannot determine chip behavior.');
 			}
-			let error = false;
+
+			if (contactValue.type === USER_TYPES.GROUP) {
+				getGroupMembers(contactValue)
+					.then((userContacts) => userContacts.map((userContact) => onAdd(userContact)))
+					.then((chipItems: ContactInputItem[]) => {
+						onInternalChange([...defaults, ...chipItems]);
+					});
+				return { label: 'group', value: contactValue };
+			}
+			const isEmailvalid = isValidEmail(contactValue.email);
 			const editAction: ChipAction = {
 				id: 'action1',
-				label: t('label.edit_email', 'Edit E-mail'),
+				label: isEmailvalid
+					? t('label.edit_email', 'Edit E-mail')
+					: t('label.edit_invalid_email', 'E-mail is invalid, click to edit it'),
 				icon: 'EditOutline',
 				type: 'button',
-				onClick: () => editChip('', contactValue.id)
+				onClick: (): void => editChip(contactValue.email, contactValue.id)
 			};
-			if (contactValue.type !== USER_TYPES.GROUP) {
-				const isEmailvalid = isValidEmail(contactValue.email);
-				error = !isEmailvalid;
-				editAction.label = isEmailvalid
-					? t('label.edit_email', 'Edit E-mail')
-					: t('label.edit_invalid_email', 'E-mail is invalid, click to edit it');
-				editAction.onClick = (): void => editChip(contactValue.email, contactValue.id);
-			}
-			const label = getChipLabel(contactValue);
 			return {
 				id: contactValue.id,
-				label,
+				label: getChipLabel(contactValue),
 				value: contactValue,
-				error,
+				error: !isEmailvalid,
 				actions: [editAction]
 			};
 		},
-		[createChip, editChip, t]
+		[createChip, defaults, editChip, getGroupMembers, onInternalChange, t]
 	);
 
 	const ChipComponent = useCallback(
@@ -351,7 +344,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 					confirmChipOnBlur
 					inputRef={inputRef}
 					onInputType={onInputType}
-					onChange={onChange}
+					onChange={onInternalChange}
 					options={options}
 					value={contactInputValue}
 					background={background}
