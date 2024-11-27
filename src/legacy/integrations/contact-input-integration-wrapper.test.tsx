@@ -201,7 +201,6 @@ describe('Contact input integration wrapper', () => {
 				/>
 			);
 			await typeAndSelectOption(user, VALID_EMAIL);
-			await user.type(screen.getByRole('textbox'), 'a');
 			await autocompleteInterceptor;
 			expect(onChange).toHaveBeenCalledWith([
 				expect.objectContaining({ actions: [editValidChipAction] })
@@ -242,12 +241,8 @@ describe('Contact input integration wrapper', () => {
 					onChange={onChange}
 				/>
 			);
-			await user.type(screen.getByRole('textbox'), 'a');
-
-			const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
+			await typeAndSelectOption(user, VALID_EMAIL);
 			await autocompleteInterceptor;
-			const dropdownItem = await within(dropdown).findAllByText(VALID_EMAIL);
-			await user.click(dropdownItem[0]);
 			expect(onChange).toHaveBeenCalledWith([
 				expect.objectContaining({ actions: [editValidChipAction] })
 			]);
@@ -343,13 +338,8 @@ describe('Contact input integration wrapper', () => {
 					onChange={onChange}
 				/>
 			);
-			await user.type(screen.getByRole('textbox'), 'email-not-valid');
-
-			const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
+			await typeAndSelectOption(user, INVALID_EMAIL);
 			await autocompleteInterceptor;
-			const dropdownItem = await within(dropdown).findAllByText(INVALID_EMAIL);
-			await user.click(dropdownItem[0]);
-
 			expect(onChange).toHaveBeenCalledWith([
 				expect.objectContaining({ actions: [editInvalidChipAction] })
 			]);
