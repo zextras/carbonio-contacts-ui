@@ -11,10 +11,10 @@ import { faker } from '@faker-js/faker';
 import { act, fireEvent, waitFor, within } from '@testing-library/react';
 
 import { ContactInput } from './contact-input';
+import { ContactInputItem, ContactInputOnChange, ContactInputValue, USER_TYPES } from './types';
 import { UserEvent, screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../../constants/tests';
 import { registerFullAutocompleteHandler } from '../../tests/msw-handlers/full-autocomplete';
-import { ContactInputItem, ContactInputOnChange, ContactInputValue } from './types';
 
 describe('Contact input', () => {
 	it('should render a textbox', async () => {
@@ -96,8 +96,11 @@ describe('Contact input', () => {
 		]);
 	});
 
-	it('render single email on ContactInput', async () => {
-		const email: ContactInputItem = { email: 'alice@domain.loc' };
+	it('renders label on ContactInput', async () => {
+		const email: ContactInputItem = {
+			label: 'alice@domain.loc',
+			value: { id: '1', email: 'alice@domain.loc', type: USER_TYPES.CONTACT }
+		};
 
 		setupTest(<ContactInput defaultValue={[email]} />);
 
