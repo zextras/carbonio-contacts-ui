@@ -9,7 +9,7 @@ import { act, within } from '@testing-library/react';
 import { ChipAction } from '@zextras/carbonio-design-system';
 
 import { ContactInputIntegrationWrapper } from './contact-input-integration-wrapper';
-import { USER_TYPES } from './types';
+import { ContactInputItem, USER_TYPES } from './types';
 import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../../constants/tests';
@@ -21,15 +21,19 @@ import { FullAutocompleteRequest, FullAutocompleteResponse } from '../types/cont
 const VALID_EMAIL = 'valid@email.it';
 const INVALID_EMAIL = 'invalid@email';
 
-const contactChipItem = {
-	id: VALID_EMAIL,
-	label: VALID_EMAIL,
+const createSimpleChipItem = (
+	id = '1',
+	label = 'test',
+	email = 'test@test.com'
+): ContactInputItem => ({
+	id,
+	label,
 	value: {
-		id: VALID_EMAIL,
-		email: VALID_EMAIL,
+		id,
+		email,
 		type: USER_TYPES.CONTACT
 	}
-};
+});
 
 const distributionListChipItem = {
 	id: VALID_EMAIL,
@@ -81,10 +85,39 @@ const createAutocompleteInterceptor = (
 	});
 
 describe('Contact input integration wrapper', () => {
-	describe('actions', () => {
-		it('should create chip with edit action when chip is created by by pressing enter', async () => {
+	it('should create chip with edit action when chip is created by by pressing enter', async () => {
+		const onChange = jest.fn();
+		registerFullAutocompleteHandler([]);
+		const { user } = setupTest(
+			<ContactInputIntegrationWrapper
+				defaultValue={[]}
+				orderedAccountIds={[]}
+				onChange={onChange}
+			/>
+		);
+		await user.type(screen.getByRole('textbox'), VALID_EMAIL);
+		await user.keyboard('{Enter}');
+		expect(onChange).toHaveBeenCalledWith([
+			expect.objectContaining({ actions: [editValidChipAction] })
+		]);
+	});
+
+	describe('on simple contact', () => {
+		it('renders the chip with the provided label', () => {
+			const simpleContact = createSimpleChipItem('1', 'AAA', 'test@test.com');
+
+			setupTest(
+				<ContactInputIntegrationWrapper defaultValue={[simpleContact]} orderedAccountIds={[]} />
+			);
+
+			expect(screen.getByText('AAA')).toBeVisible();
+		});
+		it('should create a chip with edit action after selecting a simple contact on the dropdown', async () => {
 			const onChange = jest.fn();
-			registerFullAutocompleteHandler([]);
+			const autocompleteInterceptor = createAutocompleteInterceptor([
+				{ email: VALID_EMAIL, isGroup: false }
+			]);
+
 			const { user } = setupTest(
 				<ContactInputIntegrationWrapper
 					defaultValue={[]}
@@ -92,183 +125,162 @@ describe('Contact input integration wrapper', () => {
 					onChange={onChange}
 				/>
 			);
-			await user.type(screen.getByRole('textbox'), VALID_EMAIL);
-			await user.keyboard('{Enter}');
+			await user.type(screen.getByRole('textbox'), 'a');
+
+			const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
+			await autocompleteInterceptor;
+			const dropdownItem = await within(dropdown).findAllByText(VALID_EMAIL);
+			await user.click(dropdownItem[0]);
 			expect(onChange).toHaveBeenCalledWith([
 				expect.objectContaining({ actions: [editValidChipAction] })
 			]);
 		});
+		it('should show display custom action if provided', async () => {
+			const contactChipItem = createSimpleChipItem();
+			registerGetDistributionListHandler(generateDistributionList(contactChipItem));
+			setupTest(
+				<ContactInputIntegrationWrapper
+					defaultValue={[
+						{
+							...contactChipItem,
+							actions: [customAction]
+						}
+					]}
+					orderedAccountIds={[]}
+				/>
+			);
 
-		describe('on simple contact', () => {
-			it('should create a chip with edit action after selecting a simple contact on the dropdown', async () => {
-				const onChange = jest.fn();
-				const autocompleteInterceptor = createAutocompleteInterceptor([
-					{ email: VALID_EMAIL, isGroup: false }
-				]);
-
-				const { user } = setupTest(
-					<ContactInputIntegrationWrapper
-						defaultValue={[]}
-						orderedAccountIds={[]}
-						onChange={onChange}
-					/>
-				);
-				await user.type(screen.getByRole('textbox'), 'a');
-
-				const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
-				await autocompleteInterceptor;
-				const dropdownItem = await within(dropdown).findAllByText(VALID_EMAIL);
-				await user.click(dropdownItem[0]);
-				expect(onChange).toHaveBeenCalledWith([
-					expect.objectContaining({ actions: [editValidChipAction] })
-				]);
-			});
-			it('should show custom action if value is set from outside and contain the action', async () => {
-				registerGetDistributionListHandler(generateDistributionList(contactChipItem));
-				setupTest(
-					<ContactInputIntegrationWrapper
-						defaultValue={[
-							{
-								...contactChipItem,
-								actions: [customAction]
-							}
-						]}
-						orderedAccountIds={[]}
-					/>
-				);
-
-				expect(
-					screen.getByRoleWithIcon('button', { icon: `icon: ${customAction.icon}` })
-				).toBeVisible();
-			});
+			expect(
+				screen.getByRoleWithIcon('button', { icon: `icon: ${customAction.icon}` })
+			).toBeVisible();
 		});
+	});
 
-		describe('on distribution list contact', () => {
-			it('should create a chip with edit action after selecting a distribution list on the dropdown', async () => {
-				const onChange = jest.fn();
-				const autocompleteInterceptor = createAutocompleteInterceptor([
-					{ email: VALID_EMAIL, isGroup: true }
-				]);
+	describe('on distribution list contact', () => {
+		it('should create a chip with edit action after selecting a distribution list on the dropdown', async () => {
+			const onChange = jest.fn();
+			const autocompleteInterceptor = createAutocompleteInterceptor([
+				{ email: VALID_EMAIL, isGroup: true }
+			]);
 
-				const { user } = setupTest(
-					<ContactInputIntegrationWrapper
-						defaultValue={[]}
-						orderedAccountIds={[]}
-						onChange={onChange}
-					/>
-				);
-				await user.type(screen.getByRole('textbox'), 'a');
+			const { user } = setupTest(
+				<ContactInputIntegrationWrapper
+					defaultValue={[]}
+					orderedAccountIds={[]}
+					onChange={onChange}
+				/>
+			);
+			await user.type(screen.getByRole('textbox'), 'a');
 
-				const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
-				await autocompleteInterceptor;
-				const dropdownItem = await within(dropdown).findAllByText(VALID_EMAIL);
-				await user.click(dropdownItem[0]);
-				expect(onChange).toHaveBeenCalledWith([
-					expect.objectContaining({ actions: [editValidChipAction] })
-				]);
-			});
-			it('should show custom action if provided', async () => {
-				setupTest(
-					<ContactInputIntegrationWrapper
-						defaultValue={[
-							{
-								...distributionListChipItem,
-								actions: [customAction]
-							}
-						]}
-						orderedAccountIds={[]}
-					/>
-				);
-				expect(
-					screen.getByRoleWithIcon('button', { icon: `icon: ${customAction.icon}` })
-				).toBeVisible();
-			});
-			it('should show action to see the members list', async () => {
-				setupTest(
-					<ContactInputIntegrationWrapper
-						defaultValue={[
-							{
-								...distributionListChipItem,
-								actions: [customAction]
-							}
-						]}
-						orderedAccountIds={[]}
-					/>
-				);
-				expect(
-					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL })
-				).toBeVisible();
-			});
-			it('should not show the edit DL action', async () => {
-				setupTest(
-					<ContactInputIntegrationWrapper
-						defaultValue={[distributionListChipItem]}
-						orderedAccountIds={[]}
-					/>
-				);
-
-				expect(
-					screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.editDL })
-				).not.toBeInTheDocument();
-			});
+			const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
+			await autocompleteInterceptor;
+			const dropdownItem = await within(dropdown).findAllByText(VALID_EMAIL);
+			await user.click(dropdownItem[0]);
+			expect(onChange).toHaveBeenCalledWith([
+				expect.objectContaining({ actions: [editValidChipAction] })
+			]);
 		});
+		it('should show custom action if provided', async () => {
+			setupTest(
+				<ContactInputIntegrationWrapper
+					defaultValue={[
+						{
+							...distributionListChipItem,
+							actions: [customAction]
+						}
+					]}
+					orderedAccountIds={[]}
+				/>
+			);
+			expect(
+				screen.getByRoleWithIcon('button', { icon: `icon: ${customAction.icon}` })
+			).toBeVisible();
+		});
+		it('should show action to see the members list', async () => {
+			setupTest(
+				<ContactInputIntegrationWrapper
+					defaultValue={[
+						{
+							...distributionListChipItem,
+							actions: [customAction]
+						}
+					]}
+					orderedAccountIds={[]}
+				/>
+			);
+			expect(
+				screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL })
+			).toBeVisible();
+		});
+		it('should not show the edit DL action', async () => {
+			setupTest(
+				<ContactInputIntegrationWrapper
+					defaultValue={[distributionListChipItem]}
+					orderedAccountIds={[]}
+				/>
+			);
 
-		describe('on invalid contact', () => {
-			it('should show remove action on value set from outside', () => {
-				setupTest(
-					<ContactInputIntegrationWrapper defaultValue={[invalidChipItem]} orderedAccountIds={[]} />
-				);
-				expect(
-					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.close })
-				).toBeVisible();
+			expect(
+				screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.editDL })
+			).not.toBeInTheDocument();
+		});
+	});
+
+	describe('on invalid contact', () => {
+		it('should show remove action on value set from outside', () => {
+			setupTest(
+				<ContactInputIntegrationWrapper defaultValue={[invalidChipItem]} orderedAccountIds={[]} />
+			);
+			expect(
+				screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.close })
+			).toBeVisible();
+		});
+		it('should not show edit action if invalid contact is set from outside', () => {
+			setupTest(
+				<ContactInputIntegrationWrapper defaultValue={[invalidChipItem]} orderedAccountIds={[]} />
+			);
+			expect(
+				screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.editChip })
+			).not.toBeInTheDocument();
+		});
+		it('should set edit action on chip of invalid contact to create when chip is created by typing', async () => {
+			const onChange = jest.fn();
+			const { user } = setupTest(
+				<ContactInputIntegrationWrapper
+					defaultValue={[]}
+					orderedAccountIds={[]}
+					onChange={onChange}
+				/>
+			);
+			await act(async () => {
+				await user.type(screen.getByRole('textbox'), `${invalidChipItem.value.email},`);
 			});
-			it('should not show edit action if invalid contact is set from outside', () => {
-				setupTest(
-					<ContactInputIntegrationWrapper defaultValue={[invalidChipItem]} orderedAccountIds={[]} />
-				);
-				expect(
-					screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.editChip })
-				).not.toBeInTheDocument();
-			});
-			it('should set edit action on chip of invalid contact to create when chip is created by typing', async () => {
-				const onChange = jest.fn();
-				const { user } = setupTest(
-					<ContactInputIntegrationWrapper
-						defaultValue={[]}
-						orderedAccountIds={[]}
-						onChange={onChange}
-					/>
-				);
-				await act(async () => {
-					await user.type(screen.getByRole('textbox'), `${invalidChipItem.value.email},`);
-				});
-				expect(onChange).toHaveBeenCalledWith([
-					expect.objectContaining({ actions: [editInvalidChipAction] })
-				]);
-			});
-			it('should create an invalid chip with edit action', async () => {
-				const onChange = jest.fn();
+			expect(onChange).toHaveBeenCalledWith([
+				expect.objectContaining({ actions: [editInvalidChipAction] })
+			]);
+		});
+		it('should create an invalid chip with edit action', async () => {
+			const onChange = jest.fn();
 
-				const autocompleteInterceptor = createAutocompleteInterceptor([{ email: INVALID_EMAIL }]);
+			const autocompleteInterceptor = createAutocompleteInterceptor([{ email: INVALID_EMAIL }]);
 
-				const { user } = setupTest(
-					<ContactInputIntegrationWrapper
-						defaultValue={[]}
-						orderedAccountIds={[]}
-						onChange={onChange}
-					/>
-				);
-				await user.type(screen.getByRole('textbox'), 'email-not-valid');
+			const { user } = setupTest(
+				<ContactInputIntegrationWrapper
+					defaultValue={[]}
+					orderedAccountIds={[]}
+					onChange={onChange}
+				/>
+			);
+			await user.type(screen.getByRole('textbox'), 'email-not-valid');
 
-				const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
-				await autocompleteInterceptor;
-				const dropdownItem = await within(dropdown).findAllByText(INVALID_EMAIL);
-				await user.click(dropdownItem[0]);
+			const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
+			await autocompleteInterceptor;
+			const dropdownItem = await within(dropdown).findAllByText(INVALID_EMAIL);
+			await user.click(dropdownItem[0]);
 
-				expect(onChange).toHaveBeenCalledWith([
-					expect.objectContaining({ actions: [editInvalidChipAction] })
-				]);
-			});
+			expect(onChange).toHaveBeenCalledWith([
+				expect.objectContaining({ actions: [editInvalidChipAction] })
+			]);
 		});
 	});
 });
