@@ -12,9 +12,10 @@ import { act, fireEvent, waitFor, within } from '@testing-library/react';
 
 import { ContactInput } from './contact-input';
 import { ContactInputItem, ContactInputOnChange, ContactInputValue, USER_TYPES } from './types';
+import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { UserEvent, screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../../constants/tests';
-import { registerFullAutocompleteHandler } from '../../tests/msw-handlers/full-autocomplete';
+import { FullAutocompleteRequest, FullAutocompleteResponse } from '../types/contact';
 
 describe('Contact input', () => {
 	it('should render a textbox', async () => {
@@ -29,47 +30,48 @@ describe('Contact input', () => {
 			first: faker.person.firstName(),
 			isGroup: false
 		};
-		registerFullAutocompleteHandler([contact]);
+
+		const autocompleteInterceptor = createSoapAPIInterceptor<
+			FullAutocompleteRequest,
+			FullAutocompleteResponse
+		>('FullAutocomplete', {
+			canBeCached: true,
+			match: [contact]
+		});
 
 		const { user } = setupTest(<ContactInput defaultValue={[]} orderedAccountIds={[]} />);
 
 		const input = screen.getByRole('textbox');
 		await user.type(input, contact.email);
 		const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
-
+		await autocompleteInterceptor;
 		expect(await within(dropdown).findByText(contact.first)).toBeVisible();
 		expect(await within(dropdown).findByText(contact.email)).toBeVisible();
 	});
 
-	it('should render a dropdown with a contact group', async () => {
-		const contact = {
-			first: faker.person.firstName(),
-			isGroup: true
-		};
-		registerFullAutocompleteHandler([contact]);
-
-		const { user } = setupTest(<ContactInput defaultValue={[]} orderedAccountIds={[]} />);
-
-		const input = screen.getByRole('textbox');
-		await user.type(input, contact.first);
-		const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
-		expect(await within(dropdown).findByText(contact.first)).toBeVisible();
-	});
-
 	it('should render a dropdown with a contact group with an avatar', async () => {
 		const contact = {
-			first: faker.person.firstName(),
-			isGroup: true
+			display: 'testgroup',
+			isGroup: true,
+			id: '123'
 		};
-		registerFullAutocompleteHandler([contact]);
+
+		const autocompleteInterceptor = createSoapAPIInterceptor<
+			FullAutocompleteRequest,
+			FullAutocompleteResponse
+		>('FullAutocomplete', {
+			canBeCached: true,
+			match: [contact]
+		});
 
 		const { user } = setupTest(<ContactInput defaultValue={[]} orderedAccountIds={[]} />);
 
 		const input = screen.getByRole('textbox');
-		await user.type(input, contact.first);
+		await user.type(input, contact.display);
 		const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
+		await autocompleteInterceptor;
 		const avatar = await within(dropdown).findByTestId(TESTID_SELECTORS.avatar);
-		expect(within(dropdown).getByText(contact.first)).toBeVisible();
+		expect(await within(dropdown).findByText(contact.display)).toBeVisible();
 		expect(within(avatar).queryByText('?')).not.toBeInTheDocument();
 	});
 
@@ -88,8 +90,12 @@ describe('Contact input', () => {
 		});
 		expect(onChange).toHaveBeenCalledWith([
 			expect.objectContaining({
-				email: contact.email,
-				id: expect.anything(),
+				id: contact.email,
+				value: {
+					email: contact.email,
+					id: contact.email,
+					type: USER_TYPES.CONTACT
+				},
 				label: contact.email,
 				error: false
 			})

@@ -106,7 +106,6 @@ export type ContactInputProps = Pick<
 	defaultValue: Array<ContactInputItem>;
 	dragAndDropEnabled?: boolean;
 	orderedAccountIds?: Array<string>;
-	chipDisplayName?: ContactInputChipDisplayName;
 	contactActions?: Array<ContactChipAction>;
 };
 

@@ -12,6 +12,7 @@ import { times } from 'lodash';
 import { HttpResponse } from 'msw';
 
 import { UserOrDLCustomChipComponent } from './contact-input-custom-chip-component';
+import { USER_TYPES } from './types';
 import { mockedAccount } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
 import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { DL_MEMBERS_LOAD_LIMIT } from '../../constants';
@@ -39,7 +40,12 @@ const distributionList = generateDistributionList({
 const user1 = {
 	id: 'user1ID',
 	email: 'user1@mail.com',
-	label: 'user1'
+	label: 'user1',
+	value: {
+		id: 'user1ID',
+		email: 'user1@mail.com',
+		type: USER_TYPES.CONTACT
+	}
 };
 
 const user2Mail = 'user2@mail.com';
@@ -51,15 +57,13 @@ const user6Mail = 'user6@mail.com';
 const selectAll = /Select address|Select all \d+ addresses/;
 
 describe('Contact input custom chip component', () => {
-	test('if chipDisplayName is not passed it will show chips label by default', () => {
+	it('renders the provided label', () => {
 		setupTest(
 			<UserOrDLCustomChipComponent
 				id={user1.id}
 				label={user1.label}
-				email={user1.email}
-				isGroup={false}
-				contactInputOnChange={jest.fn()}
-				contactInputValue={[]}
+				value={user1.value}
+				onExpandDL={jest.fn()}
 			/>
 		);
 		const defaultChipLabel = screen.getByText(user1.label);

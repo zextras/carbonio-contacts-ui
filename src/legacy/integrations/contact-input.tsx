@@ -12,15 +12,15 @@ import {
 	type ChipInputProps,
 	useCombinedRefs,
 	ChipAction,
-	ChipItem
+	ChipItem,
+	Chip
 } from '@zextras/carbonio-design-system';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
 import { filter, find, map, uniqBy, noop, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { UserOrDLCustomChipComponent } from './contact-input-custom-chip-component';
+import { DistributionListChip } from './distribution-list-chip';
 import { isValidEmail } from '../../carbonio-ui-commons/helpers/email-parser';
-import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
 import { StoreProvider } from '../store/redux';
 import type { ContactAddressMap } from '../types/contact';
 import type { GetContactsRequest, GetContactsResponse } from '../types/soap';
@@ -46,7 +46,6 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	placeholder,
 	background = 'gray5',
 	dragAndDropEnabled = false,
-	chipDisplayName = CHIP_DISPLAY_NAME_VALUES.label,
 	orderedAccountIds = [],
 	inputRef: propsInputRef = null,
 	...rest
@@ -293,20 +292,25 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	);
 
 	const ChipComponent = useCallback(
-		(props: ChipItem<UserOrDL>): React.JSX.Element => (
-			<>
-				{props.value && props.label && (
-					<UserOrDLCustomChipComponent
-						{...props}
-						chipDisplayName={chipDisplayName}
-						onExpandDL={onInternalChange}
-						label={props.label}
-						value={props.value}
-					/>
-				)}
-			</>
-		),
-		[chipDisplayName, onInternalChange]
+		(props: ChipItem<UserOrDL>): React.JSX.Element => {
+			const val = props.value;
+			return (
+				<>
+					{val && val.type === USER_TYPES.CONTACT && (
+						<Chip {...props} data-testid={'default-chip'} />
+					)}
+					{val && props.label && val.type === USER_TYPES.DISTRIBUTION_LIST && (
+						<DistributionListChip
+							{...props}
+							value={val}
+							label={props.label}
+							onExpandDL={onInternalChange}
+						/>
+					)}
+				</>
+			);
+		},
+		[onInternalChange]
 	);
 
 	const onDragEnter = useCallback<React.DragEventHandler>((ev) => {
