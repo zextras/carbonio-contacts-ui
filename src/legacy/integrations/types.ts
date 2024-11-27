@@ -6,15 +6,73 @@
 
 import React from 'react';
 
-import { type ChipInputProps, type DropdownItem } from '@zextras/carbonio-design-system';
+import { ChipItem, type ChipInputProps, type DropdownItem } from '@zextras/carbonio-design-system';
+import { ChipAction } from '@zextras/carbonio-design-system';
 
-import type {
-	ContactChipAction,
-	ContactInputChipDisplayName,
-	ContactInputItem,
-	ContactInputOnChange,
-	ContactInputValue
-} from '../types/integrations';
+import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
+import type { DistributionList } from '../../model/distribution-list';
+import { Contact } from '../types/contact';
+
+export type ContactInputContact = Partial<Omit<Contact, 'email'>> & { email?: string };
+
+export type ContactInputGroup = ContactInputItem &
+	Required<Pick<ContactInputItem, 'display'>> & {
+		isGroup: true;
+		groupId: string;
+		email?: '';
+	};
+
+export type ContactInputDistributionList = ChipItem<UserDistributionList>;
+
+export type ContactChipAction = Omit<ChipAction, 'onClick'> & {
+	isVisible: (chipItem: ContactInputItem | DistributionList) => boolean;
+	onClick: (chipItem: ContactInputItem | DistributionList) => void;
+};
+
+type USER_TYPES = {
+	GROUP: 'CONTACT_GROUP';
+	DISTRIBUTION_LIST: 'DISTRIBUTION_LIST';
+	CONTACT: 'CONTACT';
+};
+
+export const USER_TYPES: USER_TYPES = {
+	GROUP: 'CONTACT_GROUP',
+	DISTRIBUTION_LIST: 'DISTRIBUTION_LIST',
+	CONTACT: 'CONTACT'
+};
+
+export type UserContactGroup = {
+	id: string;
+	display: string;
+	groupId: string;
+	type: USER_TYPES['GROUP'];
+};
+
+export type UserDistributionList = {
+	id: string;
+	email: string;
+	type: USER_TYPES['DISTRIBUTION_LIST'];
+};
+
+export type UserContact = {
+	id: string;
+	firstName?: string;
+	middleName?: string;
+	lastName?: string;
+	fullName?: string;
+	company?: string;
+	email: string;
+	type: USER_TYPES['CONTACT'];
+};
+export type ContactInputItemValue = UserContactGroup | UserDistributionList | UserContact;
+
+export type ContactInputItemInternal = ChipItem<ContactInputItemValue>;
+
+export type MakeRequired<T, K extends keyof T> = T & Required<Pick<T, K>>;
+
+export type ContactInputOnChange = ((items: ContactInputItem[]) => void) | undefined;
+export type ContactInputChipDisplayName =
+	(typeof CHIP_DISPLAY_NAME_VALUES)[keyof typeof CHIP_DISPLAY_NAME_VALUES];
 
 export type RemoteContact = {
 	id: string;
@@ -32,6 +90,10 @@ export type ContactGroup = {
 	groupId: string;
 };
 
+type UserOrDL = UserContact | UserDistributionList;
+
+export type ContactInputItem = { label: string; value: UserOrDL } & ChipItem<UserOrDL>;
+
 export type ContactInputProps = Pick<
 	ChipInputProps,
 	| 'icon'
@@ -44,7 +106,7 @@ export type ContactInputProps = Pick<
 	| 'inputRef'
 > & {
 	onChange?: ContactInputOnChange;
-	defaultValue: Array<ContactInputItem>;
+	value: Array<ContactInputItem>;
 	dragAndDropEnabled?: boolean;
 	orderedAccountIds?: Array<string>;
 	chipDisplayName?: ContactInputChipDisplayName;
@@ -65,7 +127,7 @@ export type CustomChipProps = React.ComponentPropsWithoutRef<
 
 export type DLCustomChipProps = CustomChipProps & {
 	contactInputOnChange: ContactInputOnChange;
-	contactInputValue: ContactInputValue;
+	contactInputValue: ContactInputItem[];
 };
 
 export type NewContact = {

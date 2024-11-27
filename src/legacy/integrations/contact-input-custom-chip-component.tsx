@@ -10,10 +10,9 @@ import { Chip, type ChipAction } from '@zextras/carbonio-design-system';
 import { reduce, some } from 'lodash';
 
 import { DistributionListChip } from './distribution-list-chip';
-import { ContactInputCustomChipComponentProps } from './types';
+import { ContactChipAction, ContactInputCustomChipComponentProps } from './types';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
 import { useGetDistributionList } from '../../hooks/use-get-distribution-list';
-import type { ContactChipAction } from '../types/integrations';
 import { isChipItemDistributionList } from './parts/utils';
 
 export const ContactInputCustomChipComponent = ({

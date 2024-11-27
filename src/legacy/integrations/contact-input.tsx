@@ -15,7 +15,7 @@ import {
 	ChipItem
 } from '@zextras/carbonio-design-system';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
-import { filter, find, map, forEach, reject, uniqBy, noop } from 'lodash';
+import { filter, find, map, uniqBy, noop, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { ContactInputCustomChipComponent } from './contact-input-custom-chip-component';
@@ -23,22 +23,25 @@ import { isValidEmail } from '../../carbonio-ui-commons/helpers/email-parser';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
 import { StoreProvider } from '../store/redux';
 import type { ContactAddressMap } from '../types/contact';
-import {
-	ContactInputItem,
-	ContactInputItemValue,
-	USER_TYPES,
-	UserContactGroup,
-	UserContact
-} from '../types/integrations';
+
 import type { GetContactsRequest, GetContactsResponse } from '../types/soap';
 import { Loader } from './parts/loader';
 import { PasteContextMenu } from './parts/paste-context-menu';
-import { getChipLabel, isContactGroup, searchContacts, tryToParseEmail } from './parts/utils';
-import { ContactGroup, ContactInputOptions, ContactInputProps } from './types';
+import { getChipLabel, searchContacts, tryToParseEmail } from './parts/utils';
+import {
+	ContactInputItem,
+	ContactInputItemInternal,
+	ContactInputItemValue,
+	ContactInputOptions,
+	ContactInputProps,
+	UserContact,
+	UserContactGroup,
+	USER_TYPES
+} from './types';
 
 const ContactInputCore: FC<ContactInputProps> = ({
 	onChange,
-	defaultValue,
+	value,
 	placeholder,
 	background = 'gray5',
 	dragAndDropEnabled = false,
@@ -75,13 +78,13 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	);
 	useEffect(() => {
 		setDefaults(
-			map(filter(defaultValue, (c) => c.id !== idToRemove) ?? [], (obj) => ({
+			map(filter(value, (c) => c.id !== idToRemove) ?? [], (obj) => ({
 				...obj,
 				draggable: dragAndDropEnabled,
 				onDragStart: dragAndDropEnabled ? buildDragStartHandler(obj) : noop
 			}))
 		);
-	}, [buildDragStartHandler, defaultValue, dragAndDropEnabled, idToRemove]);
+	}, [buildDragStartHandler, value, dragAndDropEnabled, idToRemove]);
 
 	const buildDraggableChip = useCallback(
 		(chip: ContactInputItem): ContactInputItem => ({
@@ -112,6 +115,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 			const isAValidEmail = isValidEmail(parsedEmail);
 			const chip: ContactInputItem = {
 				id,
+				label: parsedEmail,
 				value: {
 					id,
 					email: parsedEmail,
@@ -138,13 +142,33 @@ const ContactInputCore: FC<ContactInputProps> = ({
 		[editChip, t]
 	);
 
+	const onInternalChange = useCallback(
+		(items: ChipItem<ContactInputItemValue>[]) => {
+			const contactsWithoutGroups = reduce(
+				items,
+				(acc, item) => {
+					const { value: itemValue, label } = item;
+					if (itemValue && label) {
+						if (itemValue.type !== USER_TYPES.GROUP) {
+							acc.push({ ...item, label, value: itemValue });
+						}
+					}
+					return acc;
+				},
+				[] as ContactInputItem[]
+			);
+			onChange?.(contactsWithoutGroups);
+		},
+		[onChange]
+	);
+
 	const onInputEnter = useCallback((): void => {
 		if (inputRef?.current) {
 			// FIXME: innerText does not contain new line chars at this point
 			inputRef.current.innerText = inputRef.current.innerText?.replaceAll('\n', '');
 		}
 		if (options.length > 0 && !find(options, { id: 'loading' })) {
-			onChange?.([
+			onInternalChange?.([
 				...defaults,
 				{
 					...options[0].value
@@ -164,7 +188,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 		if (inputRef?.current) {
 			inputRef.current.innerText = '';
 		}
-	}, [createChip, defaults, inputRef, onChange, options]);
+	}, [createChip, defaults, inputRef, onChange, onInternalChange, options]);
 
 	const onInputType = useCallback<NonNullable<ChipInputProps['onInputType']>>(
 		({ key, textContent }) => {
@@ -218,16 +242,8 @@ const ContactInputCore: FC<ContactInputProps> = ({
 
 	const contactInputValue = useMemo(() => uniqBy(defaults, 'id'), [defaults]);
 
-	const onInternalChange = useCallback(
-		(items: ContactInputItem[]) => {
-			const contactsWithoutGroups = items.filter((item) => item.value?.type !== USER_TYPES.GROUP);
-			onChange?.(contactsWithoutGroups);
-		},
-		[onChange]
-	);
-
 	const onAdd = useCallback(
-		(valueToAdd: unknown): ContactInputItem => {
+		(valueToAdd: unknown): ContactInputItemInternal => {
 			setIdToRemove('');
 			// TODO: check me, this is called only when you click 'Enter' and not using autocomplete
 			if (typeof valueToAdd === 'string') {
@@ -241,7 +257,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 			if (contactValue.type === USER_TYPES.GROUP) {
 				getGroupMembers(contactValue)
 					.then((userContacts) => userContacts.map((userContact) => onAdd(userContact)))
-					.then((chipItems: ContactInputItem[]) => {
+					.then((chipItems) => {
 						onInternalChange([...defaults, ...chipItems]);
 					});
 				return { label: 'group', value: contactValue };

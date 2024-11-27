@@ -22,7 +22,6 @@ import { MemberListItemComponent } from './member-list-item';
 import { Text } from './Text';
 import { CHIP_DISPLAY_NAME_VALUES } from '../constants/contact-input';
 import { ContactInput } from '../legacy/integrations/contact-input';
-import type { ContactInputValue } from '../legacy/types/integrations';
 
 const DUPLICATED_MEMBER_ACTION_ID = 'duplicated';
 
@@ -53,7 +52,7 @@ export const EditDLMembersComponent = ({
 	resetRef
 }: EditDLComponentProps): React.JSX.Element => {
 	const [t] = useTranslation();
-	const [contactInputValue, setContactInputValue] = useState<ContactInputValue>([]);
+	const [contactInputValue, setContactInputValue] = useState<ContactInputItem>([]);
 	const [searchValue, setSearchValue] = useState('');
 	const contactInputInputRef = useRef<HTMLInputElement>(null);
 
