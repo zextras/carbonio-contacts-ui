@@ -25,7 +25,7 @@ import { MemberListItemComponent } from '../../components/member-list-item';
 import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../constants';
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
 import { ContactInput } from '../../legacy/integrations/contact-input';
-import { ContactInputItem } from '../../legacy/types/integrations';
+import { ContactInputItem } from '../../legacy/integrations/types';
 
 export function isContactGroupNameInvalid(nameValue: string): boolean {
 	return nameValue.trim().length === 0 || nameValue.length > CONTACT_GROUP_NAME_MAX_LENGTH;
