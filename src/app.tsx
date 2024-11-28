@@ -19,12 +19,12 @@ import {
 	registerFunctions,
 	SearchViewProps,
 	SecondaryBarComponentProps,
-	Spinner
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
 import { FOLDER_VIEW } from './carbonio-ui-commons/constants';
 import { useInitializeFolders } from './carbonio-ui-commons/hooks/use-initialize-folders';
+import { InitializeTags } from './components/initialize-tags';
 import {
 	CONTACTS_APP_ID,
 	CONTACTS_ROUTE,
@@ -38,6 +38,7 @@ import { ContactInputIntegrationWrapper } from './legacy/integrations/contact-in
 import createContactIntegration from './legacy/integrations/create-contact';
 import { StoreProvider } from './legacy/store/redux';
 import { SyncDataHandler } from './legacy/views/secondary-bar/sync-data-handler';
+import { Spinner } from "./components/Spinner";
 
 const LazyContactsView = lazy(
 	() => import(/* webpackChunkName: "contacts-view" */ './views/contacts-view')
@@ -287,6 +288,7 @@ const App = (): React.JSX.Element => {
 
 	return (
 		<StoreProvider>
+			<InitializeTags />
 			<SyncDataHandler />
 		</StoreProvider>
 	);
