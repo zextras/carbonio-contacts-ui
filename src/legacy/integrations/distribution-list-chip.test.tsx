@@ -73,7 +73,7 @@ const clickCollapseDL = async (user: any): Promise<void> => {
 		await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.collapseDL })
 	);
 };
-
+const SHOW_MORE = /show more/i;
 const SELECT_ALL = /Select address|Select all \d+ addresses/;
 describe('Distribution ListChip', () => {
 	describe('expand members action', () => {
@@ -170,7 +170,7 @@ describe('Distribution ListChip', () => {
 			});
 			await waitFor(() => expect(getMembersHandler).toHaveBeenCalled());
 			await screen.findByText(user1.value.email);
-			expect(screen.getByRole('button', { name: /show more/i })).toBeVisible();
+			expect(screen.getByRole('button', { name: SHOW_MORE })).toBeVisible();
 		});
 
 		it('should not show "show more" action when there are no more members to load', async () => {
@@ -186,7 +186,7 @@ describe('Distribution ListChip', () => {
 			});
 			await waitFor(() => expect(getMembersHandler).toHaveBeenCalled());
 			await screen.findByText(user1.value.email);
-			expect(screen.queryByRole('button', { name: /show more/i })).not.toBeInTheDocument();
+			expect(screen.queryByRole('button', { name: SHOW_MORE })).not.toBeInTheDocument();
 		});
 
 		it('should load more members on "show more" action', async () => {
@@ -236,7 +236,7 @@ describe('Distribution ListChip', () => {
 			await screen.findByText(user1.value.email);
 			expect(screen.queryByText(userInSecondTranche)).not.toBeInTheDocument();
 
-			const showMore = screen.getByText(/show more/i);
+			const showMore = screen.getByText(SHOW_MORE);
 			await user.click(showMore);
 			await waitFor(() => expect(getMembersHandler).toHaveBeenCalledTimes(2));
 			expect(await screen.findByText(userInSecondTranche)).toBeVisible();
@@ -336,21 +336,27 @@ describe('Distribution ListChip', () => {
 		});
 
 		it('should request data to the network on "show more" if there are members already stored', async () => {
-			const members = [user1.value.email, 'other@test.com', 'another@test.com'];
+			const members = times(DL_MEMBERS_LOAD_LIMIT, () => faker.internet.email());
 			const secondPage = [faker.internet.email()];
 			const getMembersHandler = registerGetDistributionListMembersHandler(secondPage);
-			useDistributionListsStore
-				.getState()
-				.setDistributionLists([
-					{ ...distributionList, members: { members, total: 10, more: true } }
-				]);
+
+			useDistributionListsStore.getState().setDistributionLists([
+				{
+					...distributionList,
+					description: '',
+					isOwner: true,
+					isMember: true,
+					owners: [],
+					members: { members, total: DL_MEMBERS_LOAD_LIMIT + 1, more: true }
+				}
+			]);
 
 			const { user } = setupTest(
 				<DistributionListChip onExpandDL={jest.fn()} {...distributionListChip} />
 			);
 			await clickExpandDL(user);
 
-			const selectAllButton = await screen.findByRole('button', { name: SELECT_ALL });
+			const selectAllButton = await screen.findByRole('button', { name: SHOW_MORE });
 			await act(async () => {
 				await user.click(selectAllButton);
 			});
@@ -374,7 +380,7 @@ describe('Distribution ListChip', () => {
 					owners: [],
 					members: generateDistributionListMembersPage([]),
 					...distributionList
-				} satisfies Required<DistributionList>
+				}
 			]);
 			setupTest(<DistributionListChip onExpandDL={jest.fn()} {...distributionListChip} />);
 			await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL });
