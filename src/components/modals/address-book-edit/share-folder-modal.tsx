@@ -17,7 +17,8 @@ import {
 	ModalFooter,
 	ModalHeader,
 	Divider,
-	SelectItem
+	SelectItem,
+	ChipItem
 } from '@zextras/carbonio-design-system';
 import { useUserAccount } from '@zextras/carbonio-shell-ui';
 import { replace, split } from 'lodash';
@@ -29,6 +30,7 @@ import { Grant } from '../../../carbonio-ui-commons/types/folder';
 import { OnChangeSelect } from '../../../carbonio-ui-commons/types/select';
 import { TIMEOUTS } from '../../../constants';
 import { ContactInput } from '../../../legacy/integrations/contact-input';
+import { ContactInputValue } from '../../../legacy/integrations/types';
 import { capitalise } from '../../../legacy/views/secondary-bar/utils';
 import { apiClient } from '../../../network/api-client';
 import { getRoleDescription, getShareFolderRoleOptions } from '../shares-utils';
@@ -51,7 +53,7 @@ export const ShareFolderModal = ({
 	const shareFolderRoleOptions = useMemo(() => getShareFolderRoleOptions(t), [t]);
 	const [sendNotification, setSendNotification] = useState(true);
 	const [standardMessage, setStandardMessage] = useState('');
-	const [contacts, setContacts] = useState<Array<{ email: string }>>([]);
+	const [contacts, setContacts] = useState<ContactInputValue>([]);
 	const [shareWithUserRole, setshareWithUserRole] = useState<string | Array<SelectItem> | null>(
 		editMode ? activeGrant.perm : 'r'
 	);
@@ -80,7 +82,9 @@ export const ShareFolderModal = ({
 	);
 
 	const onConfirm = useCallback(() => {
-		const addresses = editMode ? [activeGrant?.d ?? ''] : contacts.map((contact) => contact.email);
+		const addresses = editMode
+			? [activeGrant?.d ?? '']
+			: contacts.map((contact) => contact.value.email);
 		apiClient
 			.shareFolder({
 				addresses,
@@ -170,14 +174,8 @@ export const ShareFolderModal = ({
 				<Container height="fit" padding={{ vertical: 'small' }}>
 					<ContactInput
 						placeholder={t('share.recipients_address', 'Recipients’ e-mail addresses')}
-						onChange={(ev): void => {
-							const normalizedContacts = ev.reduce<Array<{ email: string }>>((result, contact) => {
-								if (contact.email) {
-									result.push({ email: contact.email });
-								}
-								return result;
-							}, []);
-							setContacts(normalizedContacts);
+						onChange={(chips): void => {
+							setContacts(chips);
 						}}
 						defaultValue={contacts}
 					/>

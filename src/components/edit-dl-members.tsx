@@ -20,8 +20,8 @@ import { FilterMembersIcon } from './filter-members-icon';
 import { loadingItems } from './loading-items';
 import { MemberListItemComponent } from './member-list-item';
 import { Text } from './Text';
-import { CHIP_DISPLAY_NAME_VALUES } from '../constants/contact-input';
 import { ContactInput } from '../legacy/integrations/contact-input';
+import { ContactInputValue } from '../legacy/integrations/types';
 
 const DUPLICATED_MEMBER_ACTION_ID = 'duplicated';
 
@@ -52,7 +52,7 @@ export const EditDLMembersComponent = ({
 	resetRef
 }: EditDLComponentProps): React.JSX.Element => {
 	const [t] = useTranslation();
-	const [contactInputValue, setContactInputValue] = useState<ContactInputItem>([]);
+	const [contactInputValue, setContactInputValue] = useState<ContactInputValue>([]);
 	const [searchValue, setSearchValue] = useState('');
 	const contactInputInputRef = useRef<HTMLInputElement>(null);
 
@@ -103,12 +103,12 @@ export const EditDLMembersComponent = ({
 				duplicatedContacts: ContactInputValue;
 			}>(
 				(result, contactInputItem) => {
-					if (contactInputItem.error || contactInputItem.email === undefined) {
+					if (contactInputItem.error || contactInputItem.value.email === undefined) {
 						result.invalidEmailContacts.push(contactInputItem);
-					} else if (isMemberDuplicated(contactInputItem.email)) {
+					} else if (isMemberDuplicated(contactInputItem.value.email)) {
 						result.duplicatedContacts.push(contactInputItem);
 					} else {
-						result.validEmails.push(contactInputItem.email);
+						result.validEmails.push(contactInputItem.value.email);
 					}
 
 					return result;
@@ -169,25 +169,27 @@ export const EditDLMembersComponent = ({
 	const decorateContactInputValue = useCallback(
 		(value: ContactInputValue) =>
 			value.map((item): ContactInputValue[number] => {
-				const duplicated = item.email !== undefined && isMemberDuplicated(item.email);
+				const duplicated = item.value.email !== undefined && isMemberDuplicated(item.value.email);
 				const hasDuplicatedAction = item.actions?.some(
 					(action) => action.id === DUPLICATED_MEMBER_ACTION_ID
 				);
 				if (duplicated && !hasDuplicatedAction) {
 					return {
 						...item,
+						label: item.value.email,
 						actions: [createDuplicatedMemberAction(), ...(item.actions ?? [])]
 					};
 				}
 				if (!duplicated && hasDuplicatedAction) {
 					return {
 						...item,
+						label: item.value.email,
 						actions:
 							item.actions?.filter((action) => action.id !== DUPLICATED_MEMBER_ACTION_ID) ?? []
 					};
 				}
 
-				return item;
+				return { ...item, label: item.value.email };
 			}),
 		[isMemberDuplicated]
 	);
@@ -200,7 +202,7 @@ export const EditDLMembersComponent = ({
 		(value: ContactInputValue) => {
 			// TODO item are filtered to be uniq, because the ContactInput filters out dropdown duplicated items only visually,
 			//  but provide them inside onChange arg
-			const uniqueValue = uniqBy(value, (item) => item.email);
+			const uniqueValue = uniqBy(value, (item) => item.value.email);
 			setContactInputValue(decorateContactInputValue(uniqueValue));
 		},
 		[decorateContactInputValue]
@@ -243,7 +245,6 @@ export const EditDLMembersComponent = ({
 					iconAction={onAddRawMembers}
 					onChange={onContactInputChange}
 					iconDisabled={!isAddMembersAllowed}
-					chipDisplayName={CHIP_DISPLAY_NAME_VALUES.email}
 					description={contactInputErrorDescription}
 					hasError={isOnlyInvalidContacts}
 					inputRef={contactInputInputRef}
