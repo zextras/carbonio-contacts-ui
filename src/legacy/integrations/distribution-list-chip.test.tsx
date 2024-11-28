@@ -14,34 +14,42 @@ import { HttpResponse } from 'msw';
 import { DistributionListChip } from './distribution-list-chip';
 import { USER_TYPES } from './types';
 import { mockedAccount } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
+import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { DL_MEMBERS_LOAD_LIMIT } from '../../constants';
 import { TESTID_SELECTORS, TIMERS } from '../../constants/tests';
 import { DistributionList } from '../../model/distribution-list';
+import {
+	GetDistributionListRequest,
+	GetDistributionListResponse
+} from '../../network/api/get-distribution-list';
 import { GetDistributionListMembersResponse } from '../../network/api/get-distribution-list-members';
 import { useDistributionListsStore } from '../../store/distribution-lists';
 import { registerGetDistributionListHandler } from '../../tests/msw-handlers/get-distribution-list';
 import { registerGetDistributionListMembersHandler } from '../../tests/msw-handlers/get-distribution-list-members';
 import {
+	buildSoapError,
 	buildSoapResponse,
 	generateDistributionList,
 	generateDistributionListMembersPage
 } from '../../tests/utils';
 
+const id = 'dl-1';
+const email = 'dl1@mail.com';
 const distributionList = generateDistributionList({
-	id: 'dl-1',
-	email: 'dl1@mail.com',
+	id,
+	email,
 	displayName: 'dl 1',
 	owners: [{ id: mockedAccount.id, name: mockedAccount.name }],
 	isOwner: true
 });
 
 const distributionListChip = {
-	id: 'dl-1',
-	label: 'dl@test.com',
+	id,
+	label: email,
 	value: {
-		id: 'dl',
-		email: 'dl@test.com',
+		id,
+		email,
 		type: USER_TYPES.DISTRIBUTION_LIST
 	}
 };
@@ -68,14 +76,21 @@ const clickCollapseDL = async (user: any): Promise<void> => {
 
 const SELECT_ALL = /Select address|Select all \d+ addresses/;
 describe('Distribution ListChip', () => {
-	// TODO: tests extracted from old remove custom-component test, we need to click onExpand dl and check call is made
 	describe('expand members action', () => {
-		it('should request the list of members only the first time the user clicks on expand action and distribution list is stored without members', async () => {
+		it('should request the list of members only the first time the user clicks on expand action and distribution list is stored correctly', async () => {
 			const getMemberHandler = registerGetDistributionListMembersHandler([user1.value.email]);
-			useDistributionListsStore.getState().setDistributionLists([distributionList]);
+			const getDLInterceptor = createSoapAPIInterceptor<
+				GetDistributionListRequest,
+				GetDistributionListResponse
+			>('GetDistributionList', {
+				_jsns: 'urn:zimbraAccount',
+				dl: [{ id: distributionListChip.id, name: distributionListChip.value.email }],
+				requestId: ''
+			});
 			const { user } = setupTest(
 				<DistributionListChip onExpandDL={jest.fn()} {...distributionListChip} />
 			);
+			await getDLInterceptor;
 			await clickExpandDL(user);
 			act(() => {
 				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
@@ -95,11 +110,16 @@ describe('Distribution ListChip', () => {
 		});
 
 		it('should request the list of members each time if the user clicks on expand action and distribution list is not stored', async () => {
+			const getDLErrorInterceptor = createSoapAPIInterceptor(
+				'GetDistributionList',
+				buildSoapError('error')
+			);
 			const getMembersHandler = registerGetDistributionListMembersHandler([user1.value.email]);
 
 			const { user } = setupTest(
 				<DistributionListChip onExpandDL={jest.fn()} {...distributionListChip} />
 			);
+			await getDLErrorInterceptor;
 
 			await clickExpandDL(user);
 			await act(async () => {
@@ -293,31 +313,21 @@ describe('Distribution ListChip', () => {
 			expect(getMembersHandler).toHaveBeenCalledTimes(2);
 		});
 
-		it('should not request data to the network if at least first page is already stored', async () => {
+		it('should not request data to the network if at least first page/batch of results is already stored', async () => {
 			const members = times(DL_MEMBERS_LOAD_LIMIT, () => faker.internet.email());
-			const getDLHandler = registerGetDistributionListHandler(distributionList);
 			const getMembersHandler = registerGetDistributionListMembersHandler(members);
 			useDistributionListsStore.getState().setDistributionLists([
 				{
 					...distributionList,
+					description: 'Test',
 					members: { members, total: DL_MEMBERS_LOAD_LIMIT * 2, more: true }
 				}
 			]);
 
 			const { user } = setupTest(
-				<UserOrDLCustomChipComponent
-					id={distributionList.id}
-					label={distributionList.displayName}
-					email={distributionList.email}
-					isGroup
-					contactInputOnChange={jest.fn()}
-					contactInputValue={[]}
-				/>
+				<DistributionListChip onExpandDL={jest.fn()} {...distributionListChip} />
 			);
-			await waitFor(() => expect(getDLHandler).toHaveBeenCalled());
-			await user.click(
-				await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL })
-			);
+			await clickExpandDL(user);
 			act(() => {
 				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
 			});
@@ -326,9 +336,8 @@ describe('Distribution ListChip', () => {
 		});
 
 		it('should request data to the network on "show more" if there are members already stored', async () => {
-			const members = [user1.email, user2Mail, user3Mail];
+			const members = [user1.value.email, 'other@test.com', 'another@test.com'];
 			const secondPage = [faker.internet.email()];
-			const getDLHandler = registerGetDistributionListHandler(distributionList);
 			const getMembersHandler = registerGetDistributionListMembersHandler(secondPage);
 			useDistributionListsStore
 				.getState()
@@ -337,47 +346,25 @@ describe('Distribution ListChip', () => {
 				]);
 
 			const { user } = setupTest(
-				<UserOrDLCustomChipComponent
-					id={distributionList.id}
-					label={distributionList.displayName}
-					email={distributionList.email}
-					isGroup
-					contactInputOnChange={jest.fn()}
-					contactInputValue={[]}
-				/>
+				<DistributionListChip onExpandDL={jest.fn()} {...distributionListChip} />
 			);
-			const expandButton = await screen.findByRoleWithIcon('button', {
-				icon: TESTID_SELECTORS.icons.expandDL
-			});
-			await act(async () => {
-				await user.click(expandButton);
-			});
+			await clickExpandDL(user);
 
 			const selectAllButton = await screen.findByRole('button', { name: SELECT_ALL });
 			await act(async () => {
 				await user.click(selectAllButton);
 			});
-			expect(getDLHandler).toHaveBeenCalledTimes(1);
 			expect(getMembersHandler).toHaveBeenCalledTimes(1);
 		});
 
 		it('should request distribution list data to the network if it is not stored', async () => {
 			const getDLHandler = registerGetDistributionListHandler(distributionList);
-			setupTest(
-				<UserOrDLCustomChipComponent
-					id={distributionList.id}
-					label={distributionList.displayName}
-					email={distributionList.email}
-					isGroup
-					contactInputOnChange={jest.fn()}
-					contactInputValue={[]}
-				/>
-			);
+			setupTest(<DistributionListChip onExpandDL={jest.fn()} {...distributionListChip} />);
 			await waitFor(() => expect(getDLHandler).toHaveBeenCalled());
 			await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL });
 		});
 
-		it('should not request distribution list data to the network if it is already stored', async () => {
+		it('should not request distribution list data to the network if it is already stored with correct data: id, displayName, owners. description, isMember, isOwner', async () => {
 			const getDLHandler = registerGetDistributionListHandler(distributionList);
 			useDistributionListsStore.getState().setDistributionLists([
 				{
@@ -389,16 +376,7 @@ describe('Distribution ListChip', () => {
 					...distributionList
 				} satisfies Required<DistributionList>
 			]);
-			setupTest(
-				<UserOrDLCustomChipComponent
-					id={distributionList.id}
-					label={distributionList.displayName}
-					email={distributionList.email}
-					isGroup
-					contactInputOnChange={jest.fn()}
-					contactInputValue={[]}
-				/>
-			);
+			setupTest(<DistributionListChip onExpandDL={jest.fn()} {...distributionListChip} />);
 			await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL });
 			expect(getDLHandler).not.toHaveBeenCalled();
 		});

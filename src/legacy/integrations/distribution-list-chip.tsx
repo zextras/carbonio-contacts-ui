@@ -18,6 +18,7 @@ import styled from 'styled-components';
 
 import { ContactInputDistributionList, ContactInputUser, USER_TYPES } from './types';
 import { ACTION_IDS, DL_MEMBERS_LOAD_LIMIT } from '../../constants';
+import { useGetDistributionList } from '../../hooks/use-get-distribution-list';
 import { useGetDistributionListMembers } from '../../hooks/use-get-distribution-list-members';
 import type { DistributionListMembersPage } from '../../model/distribution-list';
 
@@ -51,6 +52,7 @@ export const DistributionListChip = ({
 }: ContactInputDistributionList): React.JSX.Element => {
 	const [t] = useTranslation();
 	const [open, setOpen] = useState(false);
+	const { distributionList } = useGetDistributionList({ id, email: value.email });
 
 	const {
 		members,
@@ -59,7 +61,7 @@ export const DistributionListChip = ({
 		findMore: loadMembers
 	} = useGetDistributionListMembers(value.email, {
 		limit: DL_MEMBERS_LOAD_LIMIT,
-		skip: !open
+		skip: !distributionList && !open
 	});
 
 	const showMoreLabel = t('label.show_more', 'Show more');
