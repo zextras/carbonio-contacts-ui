@@ -91,6 +91,8 @@ const createAutocompleteInterceptor = (
 		match: contacts
 	});
 
+const TRIGGER_ADD_CONTACT_CHARACTER = `,`;
+
 describe('Contact input integration wrapper', () => {
 	it('should create chip with edit action when chip is created by by pressing enter', async () => {
 		const onChange = jest.fn();
@@ -187,7 +189,7 @@ describe('Contact input integration wrapper', () => {
 				expect.objectContaining({ label: 'first middle last' })
 			]);
 		});
-		it('should create a chip with edit action after selecting a simple contact on the dropdown', async () => {
+		it('calls onChange with a chip with edit action after selecting a simple contact on the dropdown', async () => {
 			const onChange = jest.fn();
 			const autocompleteInterceptor = createAutocompleteInterceptor([
 				{ email: VALID_EMAIL, isGroup: false }
@@ -225,10 +227,21 @@ describe('Contact input integration wrapper', () => {
 				screen.getByRoleWithIcon('button', { icon: `icon: ${customAction.icon}` })
 			).toBeVisible();
 		});
+		it('should show remove action on value set from outside', () => {
+			setupTest(
+				<ContactInputIntegrationWrapper
+					defaultValue={[createSimpleChipItem()]}
+					orderedAccountIds={[]}
+				/>
+			);
+			expect(
+				screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.close })
+			).toBeVisible();
+		});
 	});
 
 	describe('on distribution list contact', () => {
-		it('should create a chip with edit action after selecting a distribution list on the dropdown', async () => {
+		it('calls onChange with a chip with edit action after selecting a distribution list on the dropdown', async () => {
 			const onChange = jest.fn();
 			const autocompleteInterceptor = createAutocompleteInterceptor([
 				{ email: VALID_EMAIL, isGroup: true }
@@ -279,7 +292,7 @@ describe('Contact input integration wrapper', () => {
 				screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL })
 			).toBeVisible();
 		});
-		it('should not show the edit DL action', async () => {
+		it('should not show the edit DL action if not provided in defaultValue', async () => {
 			setupTest(
 				<ContactInputIntegrationWrapper
 					defaultValue={[distributionListChipItem]}
@@ -290,6 +303,17 @@ describe('Contact input integration wrapper', () => {
 			expect(
 				screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.editDL })
 			).not.toBeInTheDocument();
+		});
+		it('should show remove action on value set from outside', () => {
+			setupTest(
+				<ContactInputIntegrationWrapper
+					defaultValue={[distributionListChipItem]}
+					orderedAccountIds={[]}
+				/>
+			);
+			expect(
+				screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.close })
+			).toBeVisible();
 		});
 	});
 
@@ -302,7 +326,7 @@ describe('Contact input integration wrapper', () => {
 				screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.close })
 			).toBeVisible();
 		});
-		it('should not show edit action if invalid contact is set from outside', () => {
+		it('should not show edit action if invalid contact is set from outside and actions not provided', () => {
 			setupTest(
 				<ContactInputIntegrationWrapper defaultValue={[invalidChipItem]} orderedAccountIds={[]} />
 			);
@@ -310,7 +334,7 @@ describe('Contact input integration wrapper', () => {
 				screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.editChip })
 			).not.toBeInTheDocument();
 		});
-		it('should set edit action on chip of invalid contact to create when chip is created by typing', async () => {
+		it('should call onChange with a chip with edit action if an invalid contact is added by typing', async () => {
 			const onChange = jest.fn();
 			const { user } = setupTest(
 				<ContactInputIntegrationWrapper
@@ -320,15 +344,17 @@ describe('Contact input integration wrapper', () => {
 				/>
 			);
 			await act(async () => {
-				await user.type(screen.getByRole('textbox'), `${invalidChipItem.value.email},`);
+				await user.type(screen.getByRole('textbox'), `${INVALID_EMAIL}`);
+			});
+			await act(async () => {
+				await user.type(screen.getByRole('textbox'), TRIGGER_ADD_CONTACT_CHARACTER);
 			});
 			expect(onChange).toHaveBeenCalledWith([
 				expect.objectContaining({ actions: [editInvalidChipAction] })
 			]);
 		});
-		it('should create an invalid chip with edit action', async () => {
+		it('should create an invalid chip with edit action after selecting a contact with invalid email from the dropdown', async () => {
 			const onChange = jest.fn();
-
 			const autocompleteInterceptor = createAutocompleteInterceptor([{ email: INVALID_EMAIL }]);
 
 			const { user } = setupTest(
