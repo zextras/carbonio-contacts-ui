@@ -23,7 +23,6 @@ import styled from 'styled-components';
 
 import { MemberListItemComponent } from '../../components/member-list-item';
 import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../constants';
-import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
 import { ContactInput } from '../../legacy/integrations/contact-input';
 import { ContactInputItem } from '../../legacy/integrations/types';
 
@@ -104,10 +103,11 @@ const CommonContactGroupBoard = ({
 	): void => {
 		// TODO item are filtered to be uniq, because the ContactInput filters out, dropdown duplicated, only visually
 		//  but provide that item inside onChange parameter
-		const uniqNewContactInputValue = uniqBy(newContactInputValue, (value) => value.email);
+		const uniqNewContactInputValue = uniqBy(newContactInputValue, (chip) => chip.value.email);
 
-		const uniqNewContactInputValueWithActions = uniqNewContactInputValue.map((value) => {
-			const duplicated = value.email !== undefined && memberListEmails.includes(value.email);
+		const uniqNewContactInputValueWithActions = uniqNewContactInputValue.map((chip) => {
+			const duplicated =
+				chip.value.email !== undefined && memberListEmails.includes(chip.value.email);
 
 			const duplicatedChipAction: ChipAction = {
 				id: 'duplicated',
@@ -116,17 +116,17 @@ const CommonContactGroupBoard = ({
 				icon: 'AlertCircle'
 			};
 
-			const duplicatedChipActionNotPresent = !value.actions?.find(
+			const duplicatedChipActionNotPresent = !chip.actions?.find(
 				(action) => action.id === 'duplicated'
 			);
 
 			const actions = [
-				...(value.actions ?? []),
+				...(chip.actions ?? []),
 				...(duplicated && duplicatedChipActionNotPresent ? [duplicatedChipAction] : [])
 			];
 
 			return {
-				...value,
+				...chip,
 				duplicated,
 				actions
 			};
@@ -139,11 +139,11 @@ const CommonContactGroupBoard = ({
 		const valid: string[] = [];
 		const invalid: typeof contactInputValue = [];
 
-		contactInputValue.forEach((value) => {
-			if (value.error || value.duplicated || value.email === undefined) {
-				invalid.push(value);
+		contactInputValue.forEach((chip) => {
+			if (chip.error || chip.duplicated || chip.value.email === undefined) {
+				invalid.push(chip);
 			} else {
-				valid.push(value.email);
+				valid.push(chip.value.email);
 			}
 		});
 
@@ -156,16 +156,17 @@ const CommonContactGroupBoard = ({
 			const newMemberListEmails = memberListEmails.filter((value) => value !== email);
 			setMemberListEmails(newMemberListEmails);
 			setContactInputValue((prevState) =>
-				prevState.map((value) => {
-					const duplicated = value.email !== undefined && newMemberListEmails.includes(value.email);
+				prevState.map((chip) => {
+					const duplicated =
+						chip.value.email !== undefined && newMemberListEmails.includes(chip.value.email);
 
-					const actions = [...(value.actions ?? [])];
-					if (!duplicated && value.duplicated) {
+					const actions = [...(chip.actions ?? [])];
+					if (!duplicated && chip.duplicated) {
 						remove(actions, (action) => action.id === 'duplicated');
 					}
 
 					return {
-						...value,
+						...chip,
 						duplicated,
 						actions
 					};
@@ -311,7 +312,6 @@ const CommonContactGroupBoard = ({
 						iconDisabled={noValidChip}
 						description={contactInputDescription}
 						hasError={contactInputValue.length > 0 && noValidChip}
-						chipDisplayName={CHIP_DISPLAY_NAME_VALUES.email}
 					/>
 				</Container>
 				<List data-testid={'members-list'}>{listItems}</List>
