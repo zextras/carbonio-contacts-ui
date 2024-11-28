@@ -15,7 +15,7 @@ import {
 	createSoapAPIInterceptor
 } from './carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { setupTest } from './carbonio-ui-commons/test/test-setup';
-import { CONTACT_BOARD_ID } from './constants';
+import { CONTACT_BOARD_ID, CONTACTS_APP_ID } from './constants';
 import { ContactInputProps } from './legacy/integrations/contact-input';
 import { ContactInputIntegrationWrapper } from './legacy/integrations/contact-input-integration-wrapper';
 
@@ -129,6 +129,15 @@ describe('App', () => {
 		expect(addBoardView).toHaveBeenCalledWith<Parameters<typeof shell.addBoardView>>({
 			id: 'edit-contact-group-board',
 			component: expect.anything()
+		});
+	});
+
+	it('should register upsertApp', () => {
+		const upsertApp = jest.spyOn(shell, 'upsertApp');
+		setupTest(<App />);
+		expect(upsertApp).toHaveBeenCalledWith<Parameters<typeof shell.upsertApp>>({
+			name: CONTACTS_APP_ID,
+			display: 'Contacts'
 		});
 	});
 

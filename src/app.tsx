@@ -19,12 +19,14 @@ import {
 	registerFunctions,
 	SearchViewProps,
 	SecondaryBarComponentProps,
+	upsertApp
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
 import { FOLDER_VIEW } from './carbonio-ui-commons/constants';
 import { useInitializeFolders } from './carbonio-ui-commons/hooks/use-initialize-folders';
 import { InitializeTags } from './components/initialize-tags';
+import { Spinner } from './components/Spinner';
 import {
 	CONTACTS_APP_ID,
 	CONTACTS_ROUTE,
@@ -38,7 +40,6 @@ import { ContactInputIntegrationWrapper } from './legacy/integrations/contact-in
 import createContactIntegration from './legacy/integrations/create-contact';
 import { StoreProvider } from './legacy/store/redux';
 import { SyncDataHandler } from './legacy/views/secondary-bar/sync-data-handler';
-import { Spinner } from "./components/Spinner";
 
 const LazyContactsView = lazy(
 	() => import(/* webpackChunkName: "contacts-view" */ './views/contacts-view')
@@ -259,6 +260,10 @@ const App = (): React.JSX.Element => {
 		addBoardView({
 			id: EDIT_DL_BOARD_ID,
 			component: EditDLBoardView
+		});
+		upsertApp({
+			name: CONTACTS_APP_ID,
+			display: t('label.app_name', 'Contacts')
 		});
 	}, [t]);
 
