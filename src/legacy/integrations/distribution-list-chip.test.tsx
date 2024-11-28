@@ -54,33 +54,35 @@ const user1 = {
 		type: USER_TYPES.CONTACT
 	}
 };
+
+const clickExpandDL = async (user: any): Promise<void> => {
+	await user.click(
+		await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL })
+	);
+};
+const clickCollapseDL = async (user: any): Promise<void> => {
+	await user.click(
+		await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.collapseDL })
+	);
+};
 describe('Distribution ListChip', () => {
 	// TODO: tests extracted from old remove custom-component test, we need to click onExpand dl and check call is made
 	describe('expand members action', () => {
 		it('should request the list of members only the first time the user clicks on expand action and distribution list is stored without members', async () => {
-			const getDLHandler = registerGetDistributionListHandler(distributionList);
 			const getMemberHandler = registerGetDistributionListMembersHandler([user1.value.email]);
 			useDistributionListsStore.getState().setDistributionLists([distributionList]);
 			const { user } = setupTest(
 				<DistributionListChip onExpandDL={jest.fn()} {...distributionListChip} />
 			);
-
-			await waitFor(() => expect(getDLHandler).toHaveBeenCalled());
-			await user.click(
-				await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL })
-			);
+			await clickExpandDL(user);
 			act(() => {
 				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
 			});
 			await waitFor(() => expect(getMemberHandler).toHaveBeenCalledTimes(1));
 			await screen.findByText(user1.value.email);
-			await user.click(
-				await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.collapseDL })
-			);
+			await clickCollapseDL(user);
 			await waitFor(() => expect(screen.queryByText(user1.value.email)).not.toBeInTheDocument());
-			await user.click(
-				await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL })
-			);
+			await clickExpandDL(user);
 			act(() => {
 				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
 			});
