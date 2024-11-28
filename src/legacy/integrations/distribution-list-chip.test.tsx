@@ -18,7 +18,6 @@ import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/n
 import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { DL_MEMBERS_LOAD_LIMIT } from '../../constants';
 import { TESTID_SELECTORS, TIMERS } from '../../constants/tests';
-import { DistributionList } from '../../model/distribution-list';
 import {
 	GetDistributionListRequest,
 	GetDistributionListResponse

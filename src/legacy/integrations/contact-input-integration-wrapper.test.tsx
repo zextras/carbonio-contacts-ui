@@ -17,6 +17,12 @@ import { registerFullAutocompleteHandler } from '../../tests/msw-handlers/full-a
 import { registerGetDistributionListHandler } from '../../tests/msw-handlers/get-distribution-list';
 import { generateDistributionList } from '../../tests/utils';
 import { FullAutocompleteRequest, FullAutocompleteResponse } from '../types/contact';
+import { GetContactsRequest, GetContactsResponse } from '../types/soap';
+import { registerGetDistributionListMembersHandler } from '../../tests/msw-handlers/get-distribution-list-members';
+import {
+	GetDistributionListRequest,
+	GetDistributionListResponse
+} from '../../network/api/get-distribution-list';
 
 const VALID_EMAIL = 'valid@email.it';
 const INVALID_EMAIL = 'invalid@email';
@@ -90,6 +96,11 @@ const createAutocompleteInterceptor = (
 		canBeCached: true,
 		match: contacts
 	});
+
+const createGetContactRequestInterceptor = (
+	cn: GetContactsResponse['cn']
+): Promise<GetContactsRequest> =>
+	createSoapAPIInterceptor<GetContactsRequest, GetContactsResponse>('GetContacts', { cn });
 
 const TRIGGER_ADD_CONTACT_CHARACTER = `,`;
 
@@ -315,6 +326,64 @@ describe('Contact input integration wrapper', () => {
 				screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.close })
 			).toBeVisible();
 		});
+
+		it('calls onChange with all member in distribution list', async () => {
+			const onChange = jest.fn();
+
+			const clickExpandDL = async (user: any): Promise<void> => {
+				await user.click(
+					await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL })
+				);
+			};
+
+			const getMemberHandler = registerGetDistributionListMembersHandler([
+				'dlmember1@test.it',
+				'dlmember2@test.it'
+			]);
+			const getDLInterceptor = createSoapAPIInterceptor<
+				GetDistributionListRequest,
+				GetDistributionListResponse
+			>('GetDistributionList', {
+				_jsns: 'urn:zimbraAccount',
+				dl: [{ id: '123', name: 'dl@dl.test' }],
+				requestId: ''
+			});
+
+			const { user } = setupTest(
+				<ContactInputIntegrationWrapper
+					defaultValue={[distributionListChipItem]}
+					orderedAccountIds={[]}
+					onChange={onChange}
+				/>
+			);
+			await getDLInterceptor;
+			await act(() => clickExpandDL(user));
+			await getMemberHandler;
+
+			const SELECT_ALL = /Select address|Select all \d+ addresses/;
+			await user.click(screen.getByRole('button', { name: SELECT_ALL }));
+
+			expect(onChange).toHaveBeenCalledWith([
+				{
+					id: 'dlmember1@test.it',
+					label: 'dlmember1@test.it',
+					value: {
+						email: 'dlmember1@test.it',
+						id: 'dlmember1@test.it',
+						type: 'CONTACT'
+					}
+				},
+				{
+					id: 'dlmember2@test.it',
+					label: 'dlmember2@test.it',
+					value: {
+						email: 'dlmember2@test.it',
+						id: 'dlmember2@test.it',
+						type: 'CONTACT'
+					}
+				}
+			]);
+		});
 	});
 
 	describe('on invalid contact', () => {
@@ -369,6 +438,59 @@ describe('Contact input integration wrapper', () => {
 			expect(onChange).toHaveBeenCalledWith([
 				expect.objectContaining({ actions: [editInvalidChipAction] })
 			]);
+		});
+	});
+
+	describe('on group selection', () => {
+		it.skip('should call onChange passing the members of the selected group', async () => {
+			const onChange = jest.fn();
+			const GROUP_NAME = 'group123';
+
+			const autocompleteInterceptor = createAutocompleteInterceptor([
+				{ display: GROUP_NAME, isGroup: true }
+			]);
+
+			const createGetContactInterceptor = createGetContactRequestInterceptor([
+				{
+					id: '5539',
+					l: '7',
+					d: 1732210444000,
+					rev: 23712,
+					fileAsStr: 'Davide',
+					_attrs: {
+						nickname: 'Davide',
+						fullName: 'Davide',
+						type: 'group'
+					},
+					m: [
+						{
+							type: 'I',
+							value: 'davide.frison@demo.zextras.io'
+						},
+						{
+							type: 'I',
+							value: 'giuliano.caregnato@demo.zextras.io'
+						},
+						{
+							type: 'I',
+							value: 'matteo.perdon@demo.zextras.io'
+						}
+					]
+				}
+			]);
+
+			const { user } = setupTest(
+				<ContactInputIntegrationWrapper
+					defaultValue={[]}
+					orderedAccountIds={[]}
+					onChange={onChange}
+				/>
+			);
+
+			await typeAndSelectOption(user, GROUP_NAME);
+			await autocompleteInterceptor;
+			await createGetContactInterceptor;
+			expect(onChange).toHaveBeenCalledWith([]);
 		});
 	});
 });
