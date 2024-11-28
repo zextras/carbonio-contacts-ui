@@ -80,8 +80,10 @@ describe('Distribution ListChip', () => {
 			});
 			await waitFor(() => expect(getMemberHandler).toHaveBeenCalledTimes(1));
 			await screen.findByText(user1.value.email);
+
 			await clickCollapseDL(user);
 			await waitFor(() => expect(screen.queryByText(user1.value.email)).not.toBeInTheDocument());
+
 			await clickExpandDL(user);
 			act(() => {
 				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
@@ -91,50 +93,28 @@ describe('Distribution ListChip', () => {
 		});
 
 		it('should request the list of members each time if the user clicks on expand action and distribution list is not stored', async () => {
-			const getDLHandler = registerGetDistributionListHandler(distributionList);
-			const getMembersHandler = registerGetDistributionListMembersHandler([user1.email]);
+			const getMembersHandler = registerGetDistributionListMembersHandler([user1.value.email]);
 
 			const { user } = setupTest(
-				<UserOrDLCustomChipComponent
-					id={distributionList.id}
-					label={distributionList.displayName}
-					email={distributionList.email}
-					isGroup
-					contactInputOnChange={jest.fn()}
-					contactInputValue={[]}
-				/>
+				<DistributionListChip onExpandDL={jest.fn()} {...distributionListChip} />
 			);
 
-			await waitFor(() => expect(getDLHandler).toHaveBeenCalled());
-
-			await act(async () => {
-				await user.click(
-					await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL })
-				);
-			});
-
+			await clickExpandDL(user);
 			await act(async () => {
 				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
 			});
-
 			expect(getMembersHandler).toHaveBeenCalledTimes(1);
-			await screen.findByText(user1.email);
-			await act(async () => {
-				await user.click(
-					await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.collapseDL })
-				);
-			});
-			await waitFor(() => expect(screen.queryByText(user1.email)).not.toBeInTheDocument());
-			await act(async () => {
-				await user.click(
-					await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL })
-				);
-			});
+			await screen.findByText(user1.value.email);
+
+			await clickCollapseDL(user);
+			await waitFor(() => expect(screen.queryByText(user1.value.email)).not.toBeInTheDocument());
+
+			await clickExpandDL(user);
 			await act(async () => {
 				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
 			});
 			await waitFor(() => expect(getMembersHandler).toHaveBeenCalledTimes(2));
-			await screen.findByText(user1.email);
+			await screen.findByText(user1.value.email);
 		});
 
 		it('should show the select all action', async () => {
