@@ -19,12 +19,13 @@ import {
 	Tooltip,
 	Link
 } from '@zextras/carbonio-design-system';
-import { runSearch, useTags } from '@zextras/carbonio-shell-ui';
+import { runSearch } from '@zextras/carbonio-shell-ui';
 import { every, includes, isEmpty, map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { ZIMBRA_STANDARD_COLORS } from '../../../carbonio-ui-commons/constants/utils';
 import { isTrash } from '../../../carbonio-ui-commons/helpers/folders';
+import { useTags } from '../../../carbonio-ui-commons/store/zustand/tags';
 import { CompactView } from '../../commons/contact-compact-view';
 import { useTagExist } from '../../ui-actions/tag-actions';
 
