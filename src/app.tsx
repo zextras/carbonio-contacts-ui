@@ -18,7 +18,8 @@ import {
 	registerComponents,
 	registerFunctions,
 	SearchViewProps,
-	SecondaryBarComponentProps
+	SecondaryBarComponentProps,
+	upsertApp
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
@@ -259,6 +260,10 @@ const App = (): React.JSX.Element => {
 		addBoardView({
 			id: EDIT_DL_BOARD_ID,
 			component: EditDLBoardView
+		});
+		upsertApp({
+			name: CONTACTS_APP_ID,
+			display: t('label.app_name', 'Contacts')
 		});
 	}, [t]);
 
