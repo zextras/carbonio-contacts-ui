@@ -226,40 +226,27 @@ describe('Distribution ListChip', () => {
 		});
 
 		it('should not request more data to the server on "select all" if all members are loaded', async () => {
-			const dlm = [user1.email, user2Mail, user3Mail];
-			const getDistributionListHandler = registerGetDistributionListHandler(distributionList);
+			const dlm = [user1.value.email, 'other@test.com', 'another@test.com'];
 			const getMembersHandler = registerGetDistributionListMembersHandler(dlm);
 			const contactInputOnChangeFn = jest.fn();
+
 			const { user } = setupTest(
-				<UserOrDLCustomChipComponent
-					id={distributionList.id}
-					label={distributionList.displayName}
-					email={distributionList.email}
-					isGroup
-					contactInputOnChange={contactInputOnChangeFn}
-					contactInputValue={[]}
-				/>
+				<DistributionListChip onExpandDL={contactInputOnChangeFn} {...distributionListChip} />
 			);
-			await waitFor(() => expect(getDistributionListHandler).toHaveBeenCalled());
-			await user.click(
-				await screen.findByRoleWithIcon('button', {
-					icon: TESTID_SELECTORS.icons.expandDL
-				})
-			);
+			await clickExpandDL(user);
 			act(() => {
 				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
 			});
 			await waitFor(() => expect(getMembersHandler).toHaveBeenCalled());
-			await screen.findByText(user1.email);
+			await screen.findByText(user1.value.email);
 			await user.click(screen.getByRole('button', { name: SELECT_ALL }));
 			await waitFor(() => expect(contactInputOnChangeFn).toHaveBeenCalled());
 			expect(getMembersHandler).toHaveBeenCalledTimes(1);
 		});
 
 		it('should request all members to the network on "select all" if not all members are loaded yet', async () => {
-			const dlm = [user1.email, user2Mail, user3Mail];
-			const dlm2 = [user4Mail, user5Mail, user6Mail];
-			const getDistributionListHandler = registerGetDistributionListHandler(distributionList);
+			const dlm = [user1.value.email, 'other@test.com', 'another@test.com'];
+			const dlm2 = ['another2@test.com', 'another3@test.com', 'another4@test.com'];
 			const getMembersHandler = registerGetDistributionListMembersHandler();
 			const firstResponse = { dlm: dlm.map((m) => ({ _content: m })), total: 6, more: true };
 			const secondResponse = { dlm: dlm2.map((m) => ({ _content: m })), total: 6, more: false };
@@ -269,12 +256,7 @@ describe('Distribution ListChip', () => {
 						GetDistributionListMembersRequest: { offset }
 					}
 				} = await request.json();
-				let response: Omit<GetDistributionListMembersResponse, '_jsns'>;
-				if (offset === undefined || offset === 0) {
-					response = firstResponse;
-				} else {
-					response = secondResponse;
-				}
+				const response = offset === undefined || offset === 0 ? firstResponse : secondResponse;
 				return HttpResponse.json(
 					buildSoapResponse<GetDistributionListMembersResponse>({
 						GetDistributionListMembersResponse: {
@@ -286,36 +268,27 @@ describe('Distribution ListChip', () => {
 			});
 
 			const contactInputOnChangeFn = jest.fn();
-
 			const { user } = setupTest(
-				<UserOrDLCustomChipComponent
-					id={distributionList.id}
-					label={distributionList.displayName}
-					email={distributionList.email}
-					isGroup
-					contactInputOnChange={contactInputOnChangeFn}
-					contactInputValue={[]}
-				/>
+				<DistributionListChip onExpandDL={contactInputOnChangeFn} {...distributionListChip} />
 			);
-			await waitFor(() => expect(getDistributionListHandler).toHaveBeenCalled());
-			await user.click(
-				await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL })
-			);
+			await clickExpandDL(user);
 			act(() => {
 				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
 			});
 			await waitFor(() => expect(getMembersHandler).toHaveBeenCalled());
-			await screen.findByText(user1.email);
+			await screen.findByText(user1.value.email);
 			await user.click(screen.getByRole('button', { name: SELECT_ALL }));
+			const expectedValuesInOnChange = [...dlm, ...dlm2].map((mail) => ({
+				id: mail,
+				label: mail,
+				value: {
+					email: mail,
+					id: mail,
+					type: USER_TYPES.CONTACT
+				}
+			}));
 			await waitFor(() =>
-				expect(contactInputOnChangeFn).toHaveBeenCalledWith(
-					[...dlm, ...dlm2].map((m) => ({
-						email: m,
-						id: m,
-						label: m,
-						value: m
-					}))
-				)
+				expect(contactInputOnChangeFn).toHaveBeenCalledWith(expectedValuesInOnChange)
 			);
 			expect(getMembersHandler).toHaveBeenCalledTimes(2);
 		});
