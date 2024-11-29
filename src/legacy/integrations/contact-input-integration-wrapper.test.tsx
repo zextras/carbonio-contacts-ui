@@ -5,11 +5,20 @@
  */
 import React from 'react';
 
-import { act, within } from '@testing-library/react';
+import { act } from '@testing-library/react';
 import { ChipAction } from '@zextras/carbonio-design-system';
 
 import { ContactInputIntegrationWrapper } from './contact-input-integration-wrapper';
-import { ContactInputItem, USER_TYPES } from './types';
+import {
+	createAutocompleteInterceptor,
+	createGetContactRequestInterceptor,
+	createGetDistributionListInterceptor,
+	createSimpleChipItem,
+	editInvalidChipAction,
+	editValidChipAction,
+	typeAndSelectOption
+} from './test/mocks';
+import { USER_TYPES } from './types';
 import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../../constants/tests';
@@ -21,32 +30,9 @@ import { registerFullAutocompleteHandler } from '../../tests/msw-handlers/full-a
 import { registerGetDistributionListHandler } from '../../tests/msw-handlers/get-distribution-list';
 import { registerGetDistributionListMembersHandler } from '../../tests/msw-handlers/get-distribution-list-members';
 import { generateDistributionList } from '../../tests/utils';
-import { FullAutocompleteRequest, FullAutocompleteResponse } from '../types/contact';
-import { GetContactsRequest, GetContactsResponse } from '../types/soap';
 
 const VALID_EMAIL = 'valid@email.it';
 const INVALID_EMAIL = 'invalid@email';
-
-const typeAndSelectOption = async (user: any, textToFind: string): Promise<void> => {
-	await user.type(screen.getByRole('textbox'), 'a');
-
-	const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
-	const dropdownItem = await within(dropdown).findAllByText(textToFind);
-	await user.click(dropdownItem[0]);
-};
-const createSimpleChipItem = (
-	id = '1',
-	label = 'test',
-	email = 'test@test.com'
-): ContactInputItem => ({
-	id,
-	label,
-	value: {
-		id,
-		email,
-		type: USER_TYPES.CONTACT
-	}
-});
 
 const distributionListChipItem = {
 	id: VALID_EMAIL,
@@ -75,45 +61,7 @@ const customAction: ChipAction = {
 	onClick: () => undefined
 };
 
-const editValidChipAction: ChipAction = expect.objectContaining<Partial<ChipAction>>({
-	id: 'action1',
-	label: 'Edit E-mail',
-	icon: 'EditOutline',
-	type: 'button'
-});
-
-const editInvalidChipAction: ChipAction = expect.objectContaining<Partial<ChipAction>>({
-	id: 'action1',
-	label: 'E-mail is invalid, click to edit it',
-	icon: 'EditOutline',
-	type: 'button'
-});
-
-const createAutocompleteInterceptor = (
-	contacts: FullAutocompleteResponse['match']
-): Promise<FullAutocompleteRequest> =>
-	createSoapAPIInterceptor<FullAutocompleteRequest, FullAutocompleteResponse>('FullAutocomplete', {
-		canBeCached: true,
-		match: contacts
-	});
-
-const createGetContactRequestInterceptor = (
-	cn: GetContactsResponse['cn']
-): Promise<GetContactsRequest> =>
-	createSoapAPIInterceptor<GetContactsRequest, GetContactsResponse>('GetContacts', { cn });
-
 const TRIGGER_ADD_CONTACT_CHARACTER = `,`;
-
-const createGetDistributionListInterceptor = (
-	dl: GetDistributionListResponse['dl']
-): Promise<GetDistributionListRequest> =>
-	createSoapAPIInterceptor<GetDistributionListRequest, GetDistributionListResponse>(
-		'GetDistributionList',
-		{
-			_jsns: 'urn:zimbraAccount',
-			dl
-		}
-	);
 
 describe('Contact input integration wrapper', () => {
 	it('should display multiple chips', async () => {
