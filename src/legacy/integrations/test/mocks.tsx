@@ -7,7 +7,7 @@ import { within } from '@testing-library/react';
 import { ChipAction } from '@zextras/carbonio-design-system';
 
 import { createSoapAPIInterceptor } from '../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { screen } from '../../../carbonio-ui-commons/test/test-setup';
+import { screen, UserEvent } from '../../../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../../../constants/tests';
 import {
 	GetDistributionListRequest,
@@ -16,29 +16,6 @@ import {
 import { FullAutocompleteRequest, FullAutocompleteResponse } from '../../types/contact';
 import { GetContactsRequest, GetContactsResponse } from '../../types/soap';
 import { ContactInputItem, USER_TYPES } from '../types';
-
-export const createSimpleChipItem = (
-	id = '1',
-	label = 'test',
-	email = 'test@test.com'
-): ContactInputItem => ({
-	id,
-	label,
-	value: {
-		id,
-		email,
-		type: USER_TYPES.CONTACT
-	}
-});
-
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const typeAndSelectOption = async (user: any, textToFind: string): Promise<void> => {
-	await user.type(screen.getByRole('textbox'), 'a');
-
-	const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
-	const dropdownItem = await within(dropdown).findAllByText(textToFind);
-	await user.click(dropdownItem[0]);
-};
 
 export const editValidChipAction: ChipAction = expect.objectContaining<Partial<ChipAction>>({
 	id: 'action1',
@@ -53,6 +30,57 @@ export const editInvalidChipAction: ChipAction = expect.objectContaining<Partial
 	icon: 'EditOutline',
 	type: 'button'
 });
+
+export const createSimpleChip = ({
+	id = 'simple_chip',
+	label = 'Simple chip',
+	email = 'simple@chip.com'
+}: {
+	id?: string;
+	label?: string;
+	email?: string;
+} = {}): ContactInputItem => ({
+	id,
+	label,
+	value: {
+		id,
+		email,
+		type: USER_TYPES.CONTACT
+	}
+});
+
+export const createDistributionListChip = (email: string): ContactInputItem => ({
+	id: email,
+	label: email,
+	value: {
+		id: email,
+		email,
+		type: USER_TYPES.DISTRIBUTION_LIST
+	}
+});
+
+export const generateGroupMemberChip = (email: string): ContactInputItem => ({
+	id: email,
+	label: email,
+	error: false,
+	actions: [editValidChipAction],
+	value: {
+		id: email,
+		email,
+		type: USER_TYPES.CONTACT
+	}
+});
+
+export const typeAndSelectOptionFromDropdown = async (
+	user: UserEvent,
+	textToFind: string
+): Promise<void> => {
+	await user.type(screen.getByRole('textbox'), 'a');
+
+	const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
+	const dropdownItem = await within(dropdown).findAllByText(textToFind);
+	await user.click(dropdownItem[0]);
+};
 
 export const createAutocompleteInterceptor = (
 	contacts: FullAutocompleteResponse['match']
@@ -77,3 +105,18 @@ export const createGetDistributionListInterceptor = (
 			dl
 		}
 	);
+
+export const clickExpandDL = async (user: UserEvent): Promise<void> => {
+	await user.click(
+		await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL })
+	);
+};
+
+export const clickCollapseDL = async (user: UserEvent): Promise<void> => {
+	await user.click(
+		await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.collapseDL })
+	);
+};
+
+export const SHOW_MORE = /show more/i;
+export const SELECT_ALL = /Select address|Select all \d+ addresses/;

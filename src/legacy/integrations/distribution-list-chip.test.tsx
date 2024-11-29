@@ -12,6 +12,7 @@ import { times } from 'lodash';
 import { HttpResponse } from 'msw';
 
 import { DistributionListChip } from './distribution-list-chip';
+import { clickCollapseDL, clickExpandDL, SELECT_ALL, SHOW_MORE } from './test/mocks';
 import { USER_TYPES } from './types';
 import { mockedAccount } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
 import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
@@ -62,18 +63,6 @@ const user1 = {
 	}
 };
 
-const clickExpandDL = async (user: any): Promise<void> => {
-	await user.click(
-		await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL })
-	);
-};
-const clickCollapseDL = async (user: any): Promise<void> => {
-	await user.click(
-		await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.collapseDL })
-	);
-};
-const SHOW_MORE = /show more/i;
-const SELECT_ALL = /Select address|Select all \d+ addresses/;
 describe('Distribution ListChip', () => {
 	describe('expand members action', () => {
 		it('should request the list of members only the first time the user clicks on expand action and distribution list is stored correctly', async () => {
