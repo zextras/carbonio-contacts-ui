@@ -47,6 +47,28 @@ const CUSTOM_ACTION: ChipAction = {
 };
 
 describe('Contact input integration wrapper', () => {
+	it('should set external contact chips as draggable if drag and drop is enabled', async () => {
+		setupTest(
+			<ContactInputIntegrationWrapper
+				defaultValue={[createSimpleChip()]}
+				orderedAccountIds={[]}
+				dragAndDropEnabled
+			/>
+		);
+
+		expect(screen.queryByTestId('default-chip')).toHaveProperty('draggable', true);
+	});
+
+	it('should NOT set external contact chips as draggable if drag and drop is disabled', async () => {
+		setupTest(
+			<ContactInputIntegrationWrapper
+				defaultValue={[createSimpleChip()]}
+				orderedAccountIds={[]}
+				dragAndDropEnabled={false}
+			/>
+		);
+		expect(screen.queryByTestId('default-chip')).toHaveProperty('draggable', false);
+	});
 	it('should display multiple chips', async () => {
 		const dl = createDistributionListChip(VALID_EMAIL);
 		const dlInterceptor = createGetDistributionListInterceptor([
