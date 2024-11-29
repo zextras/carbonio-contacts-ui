@@ -31,6 +31,7 @@ export const createSimpleChipItem = (
 	}
 });
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const typeAndSelectOption = async (user: any, textToFind: string): Promise<void> => {
 	await user.type(screen.getByRole('textbox'), 'a');
 

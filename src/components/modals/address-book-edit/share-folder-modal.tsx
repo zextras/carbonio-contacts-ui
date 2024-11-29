@@ -17,8 +17,7 @@ import {
 	ModalFooter,
 	ModalHeader,
 	Divider,
-	SelectItem,
-	ChipItem
+	SelectItem
 } from '@zextras/carbonio-design-system';
 import { useUserAccount } from '@zextras/carbonio-shell-ui';
 import { replace, split } from 'lodash';
