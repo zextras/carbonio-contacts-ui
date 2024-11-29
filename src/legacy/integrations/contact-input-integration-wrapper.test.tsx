@@ -13,16 +13,16 @@ import { ContactInputItem, USER_TYPES } from './types';
 import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../../constants/tests';
-import { registerFullAutocompleteHandler } from '../../tests/msw-handlers/full-autocomplete';
-import { registerGetDistributionListHandler } from '../../tests/msw-handlers/get-distribution-list';
-import { generateDistributionList } from '../../tests/utils';
-import { FullAutocompleteRequest, FullAutocompleteResponse } from '../types/contact';
-import { GetContactsRequest, GetContactsResponse } from '../types/soap';
-import { registerGetDistributionListMembersHandler } from '../../tests/msw-handlers/get-distribution-list-members';
 import {
 	GetDistributionListRequest,
 	GetDistributionListResponse
 } from '../../network/api/get-distribution-list';
+import { registerFullAutocompleteHandler } from '../../tests/msw-handlers/full-autocomplete';
+import { registerGetDistributionListHandler } from '../../tests/msw-handlers/get-distribution-list';
+import { registerGetDistributionListMembersHandler } from '../../tests/msw-handlers/get-distribution-list-members';
+import { generateDistributionList } from '../../tests/utils';
+import { FullAutocompleteRequest, FullAutocompleteResponse } from '../types/contact';
+import { GetContactsRequest, GetContactsResponse } from '../types/soap';
 
 const VALID_EMAIL = 'valid@email.it';
 const INVALID_EMAIL = 'invalid@email';
@@ -104,7 +104,40 @@ const createGetContactRequestInterceptor = (
 
 const TRIGGER_ADD_CONTACT_CHARACTER = `,`;
 
+const createGetDistributionListInterceptor = (
+	dl: GetDistributionListResponse['dl']
+): Promise<GetDistributionListRequest> =>
+	createSoapAPIInterceptor<GetDistributionListRequest, GetDistributionListResponse>(
+		'GetDistributionList',
+		{
+			_jsns: 'urn:zimbraAccount',
+			dl
+		}
+	);
+
 describe('Contact input integration wrapper', () => {
+	it('should display multiple chips', async () => {
+		const dlInterceptor = createGetDistributionListInterceptor([
+			{
+				id: distributionListChipItem.id,
+				name: distributionListChipItem.label
+			}
+		]);
+		setupTest(
+			<ContactInputIntegrationWrapper
+				defaultValue={[
+					createSimpleChipItem('1', 'Test User', 'testuser@test.com'),
+					distributionListChipItem
+				]}
+				orderedAccountIds={[]}
+			/>
+		);
+		await dlInterceptor;
+
+		expect(await screen.findByText('Test User')).toBeVisible();
+		expect(await screen.findByText(distributionListChipItem.value.email)).toBeVisible();
+	});
+
 	it('should create chip with edit action when chip is created by by pressing enter', async () => {
 		const onChange = jest.fn();
 		registerFullAutocompleteHandler([]);
