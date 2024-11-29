@@ -26,7 +26,7 @@ import type { ContactAddressMap } from '../types/contact';
 import type { GetContactsRequest, GetContactsResponse } from '../types/soap';
 import { Loader } from './parts/loader';
 import { PasteContextMenu } from './parts/paste-context-menu';
-import { getChipLabel, searchContacts, tryToParseEmail } from './parts/utils';
+import { getContactLabel, searchContacts, tryToParseEmail } from './parts/utils';
 import {
 	ContactInputItem,
 	ContactInputItemValue,
@@ -285,7 +285,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 			};
 			return {
 				id: contactValue.id,
-				label: getChipLabel(contactValue),
+				label: getContactLabel(contactValue),
 				value: contactValue,
 				error: !isEmailvalid,
 				actions: [editAction]

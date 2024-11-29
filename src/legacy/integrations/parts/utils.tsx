@@ -41,16 +41,7 @@ export function isContactGroup(contact: {
 export const getContactId = (contact: ContactInputItemValue): string =>
 	contact.type === USER_TYPES.GROUP ? contact.id : contact.email;
 
-function getUserChipLabel(contact: UserContact): string {
-	if (contact.firstName ?? contact.middleName ?? contact.lastName) {
-		return trim(`${contact.firstName ?? ''} ${contact.middleName ?? ''} ${contact.lastName ?? ''}`);
-	}
-
-	return contact.fullName ?? contact.email;
-}
-
-// TODO: check if it can be removed after fixing types
-export const getChipLabel = (contact: ContactInputItemValue): string => {
+export const getContactLabel = (contact: ContactInputItemValue): string => {
 	switch (contact.type) {
 		case USER_TYPES.GROUP:
 			return contact.display;
@@ -59,7 +50,10 @@ export const getChipLabel = (contact: ContactInputItemValue): string => {
 		default:
 			break;
 	}
-	return getUserChipLabel(contact);
+	if (contact.firstName ?? contact.middleName ?? contact.lastName) {
+		return trim(`${contact.firstName ?? ''} ${contact.middleName ?? ''} ${contact.lastName ?? ''}`);
+	}
+	return contact.fullName ?? contact.email;
 };
 
 export function tryToParseEmail(input: string | undefined): string {
@@ -84,7 +78,7 @@ export const mapToChipContactOptions = (value: RemoteContactResponse): ContactIn
 			type: USER_TYPES.GROUP
 		};
 		return {
-			label: contactGroup.display,
+			label: getContactLabel(contactGroup),
 			value: contactGroup,
 			id: getContactId(contactGroup),
 			customComponent: <HintGroup contact={contactGroup} />
@@ -97,7 +91,7 @@ export const mapToChipContactOptions = (value: RemoteContactResponse): ContactIn
 			email: parsedEmail,
 			type: USER_TYPES.DISTRIBUTION_LIST
 		};
-		const label = distributionList.email;
+		const label = getContactLabel(distributionList);
 		return {
 			label,
 			value: distributionList,
@@ -115,7 +109,7 @@ export const mapToChipContactOptions = (value: RemoteContactResponse): ContactIn
 		email: parsedEmail,
 		type: USER_TYPES.CONTACT
 	};
-	const label = getUserChipLabel(contact);
+	const label = getContactLabel(contact);
 	return {
 		label,
 		value: contact,
