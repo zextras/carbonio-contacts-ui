@@ -5,7 +5,7 @@
  */
 import React from 'react';
 
-import { act } from '@testing-library/react';
+import { act, waitFor } from '@testing-library/react';
 import { ChipAction } from '@zextras/carbonio-design-system';
 
 import { ContactInputIntegrationWrapper } from './contact-input-integration-wrapper';
@@ -18,7 +18,7 @@ import {
 	editValidChipAction,
 	typeAndSelectOption
 } from './test/mocks';
-import { USER_TYPES } from './types';
+import { ContactInputItem, USER_TYPES } from './types';
 import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../../constants/tests';
@@ -60,6 +60,18 @@ const customAction: ChipAction = {
 	icon: 'PeopleOutline',
 	onClick: () => undefined
 };
+
+const generateGroupMemberChip = (email: string): ContactInputItem => ({
+	id: email,
+	label: email,
+	error: false,
+	actions: [editValidChipAction],
+	value: {
+		id: email,
+		email,
+		type: USER_TYPES.CONTACT
+	}
+});
 
 const TRIGGER_ADD_CONTACT_CHARACTER = `,`;
 
@@ -423,38 +435,40 @@ describe('Contact input integration wrapper', () => {
 	});
 
 	describe('on group selection', () => {
-		it.skip('should call onChange passing the members of the selected group', async () => {
+		it('should call onChange passing the members of the selected group', async () => {
 			const onChange = jest.fn();
 			const GROUP_NAME = 'group123';
-
 			const autocompleteInterceptor = createAutocompleteInterceptor([
-				{ display: GROUP_NAME, isGroup: true }
+				{ display: GROUP_NAME, isGroup: true, id: 'GROUP-1' }
 			]);
 
+			const groupMember1 = 'test1@test.com';
+			const groupMember2 = 'test2@test.com';
+			const groupMember3 = 'test3@test.com';
 			const createGetContactInterceptor = createGetContactRequestInterceptor([
 				{
 					id: '5539',
 					l: '7',
 					d: 1732210444000,
 					rev: 23712,
-					fileAsStr: 'Davide',
+					fileAsStr: 'Test',
 					_attrs: {
-						nickname: 'Davide',
-						fullName: 'Davide',
+						nickname: 'Test Group',
+						fullName: 'Test Group',
 						type: 'group'
 					},
 					m: [
 						{
 							type: 'I',
-							value: 'davide.frison@demo.zextras.io'
+							value: groupMember1
 						},
 						{
 							type: 'I',
-							value: 'giuliano.caregnato@demo.zextras.io'
+							value: groupMember2
 						},
 						{
 							type: 'I',
-							value: 'matteo.perdon@demo.zextras.io'
+							value: groupMember3
 						}
 					]
 				}
@@ -471,7 +485,13 @@ describe('Contact input integration wrapper', () => {
 			await typeAndSelectOption(user, GROUP_NAME);
 			await autocompleteInterceptor;
 			await createGetContactInterceptor;
-			expect(onChange).toHaveBeenCalledWith([]);
+			await waitFor(() =>
+				expect(onChange).toHaveBeenCalledWith([
+					generateGroupMemberChip(groupMember1),
+					generateGroupMemberChip(groupMember2),
+					generateGroupMemberChip(groupMember3)
+				])
+			);
 		});
 	});
 });
