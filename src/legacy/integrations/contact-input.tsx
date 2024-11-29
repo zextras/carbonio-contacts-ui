@@ -155,11 +155,14 @@ const ContactInputCore: FC<ContactInputProps> = ({
 					return acc;
 				},
 				[] as ContactInputItem[]
-			);
+			).filter((x) => x.id !== MY_SPECIAL_ID_TO_EXCLUDE);
 
+			if (contactsWithoutGroups === defaultValue) {
+				return;
+			}
 			onChange?.(contactsWithoutGroups.filter((x) => x.id !== MY_SPECIAL_ID_TO_EXCLUDE));
 		},
-		[onChange]
+		[onChange, defaultValue]
 	);
 
 	const onInputEnter = useCallback((): void => {

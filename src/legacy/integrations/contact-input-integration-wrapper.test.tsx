@@ -485,6 +485,7 @@ describe('Contact input integration wrapper', () => {
 			await typeAndSelectOption(user, GROUP_NAME);
 			await autocompleteInterceptor;
 			await createGetContactInterceptor;
+			await waitFor(() => expect(onChange).toHaveBeenCalledTimes(1));
 			await waitFor(() =>
 				expect(onChange).toHaveBeenCalledWith([
 					generateGroupMemberChip(groupMember1),
