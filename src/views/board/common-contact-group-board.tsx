@@ -30,6 +30,25 @@ export function isContactGroupNameInvalid(nameValue: string): boolean {
 	return nameValue.trim().length === 0 || nameValue.length > CONTACT_GROUP_NAME_MAX_LENGTH;
 }
 
+function cleanupDuplicates(
+	chip: EnhancedChipItem,
+	newMemberListEmails: string[]
+): EnhancedChipItem {
+	const duplicated =
+		chip.value.email !== undefined && newMemberListEmails.includes(chip.value.email);
+
+	const actions = [...(chip.actions ?? [])];
+	if (!duplicated && chip.duplicated) {
+		remove(actions, (action) => action.id === 'duplicated');
+	}
+
+	return {
+		...chip,
+		duplicated,
+		actions
+	};
+}
+
 const List = styled(DSList)`
 	min-height: 0;
 `;
@@ -152,25 +171,11 @@ const CommonContactGroupBoard = ({
 	}, [contactInputValue, setMemberListEmails]);
 
 	const removeItem = useCallback(
-		(email: string) => {
-			const newMemberListEmails = memberListEmails.filter((value) => value !== email);
+		(emailToRemove: string) => {
+			const newMemberListEmails = memberListEmails.filter((value) => value !== emailToRemove);
 			setMemberListEmails(newMemberListEmails);
 			setContactInputValue((prevState) =>
-				prevState.map((chip) => {
-					const duplicated =
-						chip.value.email !== undefined && newMemberListEmails.includes(chip.value.email);
-
-					const actions = [...(chip.actions ?? [])];
-					if (!duplicated && chip.duplicated) {
-						remove(actions, (action) => action.id === 'duplicated');
-					}
-
-					return {
-						...chip,
-						duplicated,
-						actions
-					};
-				})
+				prevState.map((chip) => cleanupDuplicates(chip, newMemberListEmails))
 			);
 		},
 		[memberListEmails, setMemberListEmails]

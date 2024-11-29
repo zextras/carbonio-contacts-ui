@@ -13,7 +13,6 @@ import {
 	ContactInputGroup,
 	ContactInputItemValue,
 	USER_TYPES,
-	UserContact,
 	UserContactGroup,
 	ContactInputOptions,
 	NewContactGroup,

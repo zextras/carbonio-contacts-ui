@@ -163,5 +163,4 @@ export type NewDistributionList = {
 
 export type RemoteContactResponse = NewContact | NewContactGroup | NewDistributionList;
 
-// TODO: check if we really need optional, there is some code 'loading' on contact-input
 export type ContactInputOptions = DropdownItem & { value?: ContactInputItemInternal };

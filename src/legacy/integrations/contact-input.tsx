@@ -248,7 +248,6 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	const onAdd = useCallback(
 		(valueToAdd: unknown): ContactInputItem => {
 			setIdToRemove('');
-			// TODO: check me, this is called only when you click 'Enter' and not using autocomplete
 			if (typeof valueToAdd === 'string') {
 				return createChip(valueToAdd);
 			}
