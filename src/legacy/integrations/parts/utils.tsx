@@ -15,8 +15,8 @@ import {
 	USER_TYPES,
 	UserContactGroup,
 	ContactInputOptions,
-	NewContactGroup,
-	NewDistributionList,
+	RemoteContactGroup,
+	RemoteDistributionList,
 	RemoteContactResponse
 } from '../types';
 import { Hint } from './hint';
@@ -60,11 +60,13 @@ export function tryToParseEmail(input: string | undefined): string {
 	return parseEmail(inputOrDefault) ?? inputOrDefault.trim();
 }
 
-export function newIsContactGroup(value: RemoteContactResponse): value is NewContactGroup {
+export function newIsContactGroup(value: RemoteContactResponse): value is RemoteContactGroup {
 	return 'isGroup' in value && !('email' in value) && value.isGroup;
 }
 
-export function newIsDistributionList(value: RemoteContactResponse): value is NewDistributionList {
+export function newIsDistributionList(
+	value: RemoteContactResponse
+): value is RemoteDistributionList {
 	return 'isGroup' in value && 'email' in value && value.isGroup;
 }
 

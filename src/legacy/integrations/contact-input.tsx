@@ -35,7 +35,8 @@ import {
 	UserContact,
 	UserContactGroup,
 	USER_TYPES,
-	UserOrDL
+	UserOrDL,
+	ContactInputItemInternal
 } from './types';
 
 const MY_SPECIAL_ID_TO_EXCLUDE = 'my-special-id';
@@ -63,7 +64,6 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	}>(emptyDraggedChip);
 	const isSameElement = useRef(false);
 
-	// TODO: check at the end if we are able to explode groups and just use values with email (non-optional) in all cases
 	const buildDragStartHandler = useCallback(
 		(chip: ContactInputItem) => (ev: React.DragEvent) => {
 			ev.dataTransfer.setData('contact', JSON.stringify(chip));
@@ -142,15 +142,13 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	);
 
 	const onInternalChange = useCallback(
-		(items: ChipItem<ContactInputItemValue>[]) => {
+		(items: ContactInputItemInternal[]) => {
 			const contactsWithoutGroups = reduce(
 				items,
 				(acc, item) => {
 					const { value: itemValue, label } = item;
-					if (itemValue && label) {
-						if (itemValue.type !== USER_TYPES.GROUP) {
-							acc.push({ ...item, label, value: itemValue });
-						}
+					if (label && itemValue && itemValue?.type !== USER_TYPES.GROUP) {
+						acc.push({ ...item, label, value: itemValue });
 					}
 					return acc;
 				},
@@ -170,19 +168,6 @@ const ContactInputCore: FC<ContactInputProps> = ({
 			// FIXME: innerText does not contain new line chars at this point
 			inputRef.current.innerText = inputRef.current.innerText?.replaceAll('\n', '');
 		}
-		if (options.length > 0 && !find(options, { id: 'loading' })) {
-			onInternalChange?.([
-				...defaults,
-				{
-					...options[0].value
-				}
-			]);
-			if (inputRef.current) {
-				inputRef.current.innerText = '';
-			}
-			setOptions([]);
-			return;
-		}
 		const valueToAdd = inputRef.current?.innerText.replaceAll('\n', '');
 		const chip = createChip(valueToAdd ?? '');
 		if (valueToAdd !== '') {
@@ -191,7 +176,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 		if (inputRef?.current) {
 			inputRef.current.innerText = '';
 		}
-	}, [createChip, defaults, inputRef, onChange, onInternalChange, options]);
+	}, [createChip, defaults, inputRef, onChange]);
 
 	const onInputType = useCallback<NonNullable<ChipInputProps['onInputType']>>(
 		({ key, textContent }) => {

@@ -70,16 +70,6 @@ export type ContactInputOnChange = ((items: ContactInputItem[]) => void) | undef
 export type ContactInputChipDisplayName =
 	(typeof CHIP_DISPLAY_NAME_VALUES)[keyof typeof CHIP_DISPLAY_NAME_VALUES];
 
-export type RemoteContact = {
-	id: string;
-	email: string;
-	first?: string;
-	last?: string;
-	company?: string;
-	full?: string;
-	display?: string;
-};
-
 export type ContactGroup = {
 	company?: string;
 	name: string;
@@ -135,7 +125,7 @@ export type DLCustomChipProps = CustomChipProps & {
 	contactInputValue: ContactInputItem[];
 };
 
-export type NewContact = {
+export type RemoteUserContact = {
 	isGroup: boolean;
 	email: string;
 	first?: string;
@@ -145,7 +135,7 @@ export type NewContact = {
 	company?: string;
 };
 
-export type NewContactGroup = {
+export type RemoteContactGroup = {
 	isGroup: boolean;
 	exp: boolean;
 	id: string;
@@ -153,7 +143,7 @@ export type NewContactGroup = {
 	display: string;
 };
 
-export type NewDistributionList = {
+export type RemoteDistributionList = {
 	isGroup: boolean;
 	email: string;
 	exp: boolean;
@@ -161,6 +151,6 @@ export type NewDistributionList = {
 	fileas: string;
 };
 
-export type RemoteContactResponse = NewContact | NewContactGroup | NewDistributionList;
+export type RemoteContactResponse = RemoteUserContact | RemoteContactGroup | RemoteDistributionList;
 
 export type ContactInputOptions = DropdownItem & { value?: ContactInputItemInternal };
