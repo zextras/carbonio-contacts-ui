@@ -8,8 +8,6 @@ import React from 'react';
 
 import { ChipItem, type ChipInputProps, type DropdownItem } from '@zextras/carbonio-design-system';
 
-import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
-
 export type ContactInputGroup = ContactInputItem &
 	Required<Pick<ContactInputItem, 'display'>> & {
 		isGroup: true;
@@ -58,11 +56,7 @@ export type ContactInputItemValue = UserContactGroup | UserDistributionList | Us
 
 export type ContactInputItemInternal = ChipItem<ContactInputItemValue>;
 
-export type MakeRequired<T, K extends keyof T> = Required<Pick<T, K>> & T;
-
 export type ContactInputOnChange = ((items: ContactInputItem[]) => void) | undefined;
-export type ContactInputChipDisplayName =
-	(typeof CHIP_DISPLAY_NAME_VALUES)[keyof typeof CHIP_DISPLAY_NAME_VALUES];
 
 export type ContactGroup = {
 	company?: string;
@@ -98,11 +92,6 @@ type RequiredEmailLabelChipItem<T> = Required<Pick<ChipItem<T>, 'value'>> &
 
 type OnExpandDL = (items: Array<ContactInputItem>) => void;
 export type ContactInputDistributionList = RequiredEmailLabelChipItem<UserDistributionList> & {
-	onExpandDL: OnExpandDL;
-};
-
-export type UserOrDLCustomChipComponentProps = ContactInputItem & {
-	chipDisplayName?: ContactInputChipDisplayName;
 	onExpandDL: OnExpandDL;
 };
 
