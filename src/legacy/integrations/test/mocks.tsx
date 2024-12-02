@@ -15,17 +15,17 @@ import {
 } from '../../../network/api/get-distribution-list';
 import { FullAutocompleteRequest, FullAutocompleteResponse } from '../../types/contact';
 import { GetContactsRequest, GetContactsResponse } from '../../types/soap';
-import { ContactInputItem, USER_TYPES } from '../types';
+import { ContactInputItem, EDIT_ACTION_ID, USER_TYPES } from '../types';
 
 export const editValidChipAction: ChipAction = expect.objectContaining<Partial<ChipAction>>({
-	id: 'action1',
+	id: EDIT_ACTION_ID,
 	label: 'Edit E-mail',
 	icon: 'EditOutline',
 	type: 'button'
 });
 
 export const editInvalidChipAction: ChipAction = expect.objectContaining<Partial<ChipAction>>({
-	id: 'action1',
+	id: EDIT_ACTION_ID,
 	label: 'E-mail is invalid, click to edit it',
 	icon: 'EditOutline',
 	type: 'button'

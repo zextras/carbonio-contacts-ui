@@ -7,7 +7,6 @@
 import React from 'react';
 
 import { ChipItem, type ChipInputProps, type DropdownItem } from '@zextras/carbonio-design-system';
-import { ChipAction } from '@zextras/carbonio-design-system';
 
 import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
 
@@ -20,11 +19,6 @@ export type ContactInputGroup = ContactInputItem &
 
 export type ContactInputUser = RequiredEmailLabelChipItem<UserContact>;
 
-export type ContactChipAction = Omit<ChipAction, 'onClick'> & {
-	isVisible: (chipItem: ContactInputItem) => boolean;
-	onClick: (chipItem: ContactInputItem) => void;
-};
-
 type USER_TYPES = {
 	GROUP: 'CONTACT_GROUP';
 	DISTRIBUTION_LIST: 'DISTRIBUTION_LIST';
@@ -36,7 +30,7 @@ export const USER_TYPES: USER_TYPES = {
 	DISTRIBUTION_LIST: 'DISTRIBUTION_LIST',
 	CONTACT: 'CONTACT'
 };
-
+export const EDIT_ACTION_ID = 'edit-contact-chip-action';
 export type UserContactGroup = {
 	id: string;
 	display: string;
@@ -96,7 +90,6 @@ export type ContactInputProps = Pick<
 	defaultValue: Array<ContactInputItem>;
 	dragAndDropEnabled?: boolean;
 	orderedAccountIds?: Array<string>;
-	contactActions?: Array<ContactChipAction>;
 };
 
 type RequiredEmailLabelChipItem<T> = Required<Pick<ChipItem<T>, 'value'>> &

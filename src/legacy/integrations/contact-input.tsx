@@ -36,7 +36,8 @@ import {
 	UserContactGroup,
 	USER_TYPES,
 	UserOrDL,
-	ContactInputItemInternal
+	ContactInputItemInternal,
+	EDIT_ACTION_ID
 } from './types';
 
 const MY_SPECIAL_ID_TO_EXCLUDE = 'my-special-id';
@@ -259,7 +260,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 			}
 			const isEmailvalid = isValidEmail(contactValue.email);
 			const editAction: ChipAction = {
-				id: 'action1',
+				id: EDIT_ACTION_ID,
 				label: isEmailvalid
 					? t('label.edit_email', 'Edit E-mail')
 					: t('label.edit_invalid_email', 'E-mail is invalid, click to edit it'),

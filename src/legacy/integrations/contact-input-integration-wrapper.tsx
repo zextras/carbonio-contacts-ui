@@ -8,10 +8,6 @@ import React from 'react';
 import { ContactInput } from './contact-input';
 import { ContactInputProps } from './types';
 
-export type ContactInputIntegrationWrapperProps = Omit<ContactInputProps, 'contactActions'> & {
-	actions?: ContactInputProps['contactActions'];
-};
-
-export const ContactInputIntegrationWrapper = (
-	props: ContactInputIntegrationWrapperProps
-): React.JSX.Element => <ContactInput {...props} />;
+export const ContactInputIntegrationWrapper = (props: ContactInputProps): React.JSX.Element => (
+	<ContactInput {...props} />
+);
