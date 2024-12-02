@@ -6,10 +6,11 @@
 import React, { MouseEventHandler, useCallback, useMemo, DragEvent } from 'react';
 
 import { Container, Drag } from '@zextras/carbonio-design-system';
-import { replaceHistory, useTags } from '@zextras/carbonio-shell-ui';
+import { replaceHistory } from '@zextras/carbonio-shell-ui';
 
 import { ItemAvatar } from './item-avatar';
 import { ItemContent } from './item-content';
+import { useTags } from '../../../../carbonio-ui-commons/store/zustand/tags';
 import { getTagsArray } from '../../../helpers/tags';
 import { Contact } from '../../../types/contact';
 import ListItemActionWrapper from '../../folder/list-item-action-wrapper';

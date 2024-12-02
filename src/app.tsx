@@ -18,13 +18,14 @@ import {
 	registerComponents,
 	registerFunctions,
 	SearchViewProps,
-	SecondaryBarComponentProps,
-	Spinner
+	SecondaryBarComponentProps
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
 import { FOLDER_VIEW } from './carbonio-ui-commons/constants';
 import { useInitializeFolders } from './carbonio-ui-commons/hooks/use-initialize-folders';
+import { InitializeTags } from './components/initialize-tags';
+import { Spinner } from './components/Spinner';
 import {
 	CONTACTS_APP_ID,
 	CONTACTS_ROUTE,
@@ -287,6 +288,7 @@ const App = (): React.JSX.Element => {
 
 	return (
 		<StoreProvider>
+			<InitializeTags />
 			<SyncDataHandler />
 		</StoreProvider>
 	);
