@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import React from 'react';
-
 import { ChipItem, type ChipInputProps, type DropdownItem } from '@zextras/carbonio-design-system';
 
 export type ContactInputGroup = ContactInputItem &
@@ -93,18 +91,6 @@ type RequiredEmailLabelChipItem<T> = Required<Pick<ChipItem<T>, 'value'>> &
 type OnExpandDL = (items: Array<ContactInputItem>) => void;
 export type ContactInputDistributionList = RequiredEmailLabelChipItem<UserDistributionList> & {
 	onExpandDL: OnExpandDL;
-};
-
-export type CustomChipProps = React.ComponentPropsWithoutRef<
-	NonNullable<ChipInputProps['ChipComponent']>
-> & {
-	email?: string;
-	isGroup?: boolean;
-};
-
-export type DLCustomChipProps = CustomChipProps & {
-	contactInputOnChange: ContactInputOnChange;
-	contactInputValue: ContactInputItem[];
 };
 
 export type RemoteUserContact = {
