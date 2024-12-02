@@ -7,17 +7,17 @@
 import React from 'react';
 
 import { act, screen } from '@testing-library/react';
-import { useTags, replaceHistory } from '@zextras/carbonio-shell-ui';
+import { replaceHistory } from '@zextras/carbonio-shell-ui';
 
+import { useTags } from '../../../../carbonio-ui-commons/store/zustand/tags';
 import { setupTest } from '../../../../carbonio-ui-commons/test/test-setup';
 import { getTagsArray } from '../../../helpers/tags';
 import { generateStore } from '../../../tests/generators/store';
 import { Contact } from '../../../types/contact';
 import { SearchContactListItem } from '../search-contact-list-item';
 
-jest.mock('@zextras/carbonio-shell-ui', () => ({
-	useTags: jest.fn(),
-	replaceHistory: jest.fn()
+jest.mock('../../../../carbonio-ui-commons/store/zustand/tags', () => ({
+	useTags: jest.fn()
 }));
 
 jest.mock('../../../helpers/tags', () => ({

@@ -9,7 +9,8 @@ import { useNotify } from '@zextras/carbonio-shell-ui';
 import { forEach, isEmpty, sortBy } from 'lodash';
 
 import { useFolderStore } from '../../../carbonio-ui-commons/store/zustand/folder';
-import { folderWorker } from '../../../carbonio-ui-commons/worker';
+import { useTagStore } from '../../../carbonio-ui-commons/store/zustand/tags';
+import { folderWorker, tagsWorker } from '../../../carbonio-ui-commons/worker';
 import { useAppDispatch } from '../../hooks/redux';
 import {
 	handleCreatedContactsSync,
@@ -45,6 +46,11 @@ export const useSyncDataHandler = () => {
 		forEach(sortBy(notifyList, 'seq'), (notify) => {
 			if (!isEmpty(notify) && notify.seq > seq) {
 				handleFoldersNotify(seq, notifyList, notify, folderWorker, useFolderStore);
+				tagsWorker.postMessage({
+					op: 'notify',
+					notify,
+					state: useTagStore.getState().tags
+				});
 
 				if (notify.created?.cn) {
 					dispatch(handleCreatedContactsSync(normalizeSyncContactsFromSoap(notify.created.cn)));
