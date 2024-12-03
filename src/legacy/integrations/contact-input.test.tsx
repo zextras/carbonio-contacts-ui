@@ -84,6 +84,31 @@ describe('Contact input', () => {
 		expect(await within(dropdown).findByText(contact.email)).toBeVisible();
 	});
 
+	test('should not override previous chip label', async () => {
+		const onChangeFn = jest.fn();
+		const contact = {
+			email: 'simple@chip.it',
+			first: 'first name',
+			isGroup: false
+		};
+		const initialChip = createSimpleChip({
+			label: 'simple chip',
+			email: 'simple@chip.it',
+			id: 'simple@chip.it'
+		});
+		const autocompleteInterceptor = createAutocompleteInterceptor([contact]);
+
+		const { user } = setupTest(
+			<ContactInput defaultValue={[initialChip]} orderedAccountIds={[]} onChange={onChangeFn} />
+		);
+		await typeAndSelectOptionFromDropdown(user, contact.first);
+		await autocompleteInterceptor;
+
+		expect(onChangeFn).toHaveBeenCalledWith([
+			expect.objectContaining({ label: initialChip.label })
+		]);
+	});
+
 	it('should render a dropdown with a contact group with an avatar', async () => {
 		const contact = {
 			display: 'testgroup',

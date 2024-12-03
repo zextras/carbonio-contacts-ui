@@ -160,7 +160,11 @@ const ContactInputCore: FC<ContactInputProps> = ({
 			if (contactsWithoutGroups === defaultValue) {
 				return;
 			}
-			onChange?.(contactsWithoutGroups.filter((x) => x.id !== MY_SPECIAL_ID_TO_EXCLUDE));
+			const uniqueContacts = uniqBy(
+				contactsWithoutGroups.filter((x) => x.id !== MY_SPECIAL_ID_TO_EXCLUDE),
+				'value.email'
+			);
+			onChange?.(uniqueContacts);
 		},
 		[onChange, defaultValue]
 	);
@@ -268,6 +272,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 					}
 				};
 			}
+
 			const isEmailvalid = isValidEmail(contactValue.email);
 			const editAction: ChipAction = {
 				id: EDIT_ACTION_ID,
@@ -278,6 +283,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 				type: 'button',
 				onClick: (): void => editChip(contactValue.email, contactValue.id)
 			};
+
 			return {
 				id: contactValue.id,
 				label: getContactLabel(contactValue),
@@ -286,7 +292,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 				actions: [editAction]
 			};
 		},
-		[createChip, defaults, editChip, getGroupMembers, onInternalChange, t]
+		[createChip, defaultValue, defaults, editChip, getGroupMembers, onInternalChange, t]
 	);
 
 	const ChipComponent = useCallback(
