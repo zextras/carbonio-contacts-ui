@@ -16,6 +16,14 @@ import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/n
 import { UserEvent, screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../../constants/tests';
 import { FullAutocompleteRequest, FullAutocompleteResponse } from '../types/contact';
+import {
+	clickExpandDL,
+	createDistributionListChip,
+	createGetDistributionListInterceptor,
+	createSimpleChip,
+	SELECT_ALL
+} from './test/mocks';
+import { registerGetDistributionListMembersHandler } from '../../tests/msw-handlers/get-distribution-list-members';
 
 describe('Contact input', () => {
 	it('should render a textbox', async () => {
@@ -186,6 +194,37 @@ describe('Contact input', () => {
 
 		expect(await screen.findByText('Paste')).toBeInTheDocument();
 		// we can't test the clipboard paste through context menu because it's not supported by jsdom
+	});
+
+	it('should keep the previous chips after expanding a distribution list chip', async () => {
+		const onChangeFn = jest.fn();
+		const simpleChip = createSimpleChip({ label: 'simple chip', email: 'simple-chip@email.it' });
+		const dlChip = createDistributionListChip('distribution-list@email.it');
+		registerGetDistributionListMembersHandler(['dlmail1@email.test']);
+		const dlInterceptor = createGetDistributionListInterceptor([
+			{ id: dlChip.value.id, name: dlChip.label }
+		]);
+
+		const { user } = setupTest(
+			<ContactInput
+				defaultValue={[simpleChip, dlChip]}
+				orderedAccountIds={[]}
+				onChange={onChangeFn}
+			/>
+		);
+		await dlInterceptor;
+		await clickExpandDL(user);
+		const selectAllButton = await screen.findByRole('button', { name: SELECT_ALL });
+		await user.click(selectAllButton);
+
+		expect(onChangeFn).toHaveBeenCalledWith([
+			simpleChip,
+			{
+				id: 'dlmail1@email.test',
+				label: 'dlmail1@email.test',
+				value: { email: 'dlmail1@email.test', id: 'dlmail1@email.test', type: 'CONTACT' }
+			}
+		]);
 	});
 });
 

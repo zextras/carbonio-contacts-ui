@@ -164,6 +164,17 @@ const ContactInputCore: FC<ContactInputProps> = ({
 		[onChange, defaultValue]
 	);
 
+	const onExpandDL = useCallback(
+		(dlMembers: ContactInputItem[]) => {
+			const valueWithoutDl = defaultValue.filter(
+				(val) => val.value.type !== USER_TYPES.DISTRIBUTION_LIST
+			);
+			const newItems = [...valueWithoutDl, ...dlMembers];
+			onInternalChange(newItems);
+		},
+		[defaultValue, onInternalChange]
+	);
+
 	const onInputEnter = useCallback((): void => {
 		if (inputRef?.current) {
 			// FIXME: innerText does not contain new line chars at this point
@@ -292,13 +303,13 @@ const ContactInputCore: FC<ContactInputProps> = ({
 							{...props}
 							value={val}
 							label={props.label}
-							onExpandDL={onInternalChange}
+							onExpandDL={onExpandDL}
 						/>
 					)}
 				</>
 			);
 		},
-		[onInternalChange]
+		[onExpandDL]
 	);
 
 	const onDragEnter = useCallback<React.DragEventHandler>((ev) => {

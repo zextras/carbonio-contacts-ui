@@ -74,13 +74,16 @@ describe('Contact input integration wrapper', () => {
 		const dlInterceptor = createGetDistributionListInterceptor([
 			{ id: dl.value.id, name: dl.label }
 		]);
-		setupTest(
+
+		const { user } = setupTest(
 			<ContactInputIntegrationWrapper
 				defaultValue={[createSimpleChip({ label: 'Test User' }), dl]}
 				orderedAccountIds={[]}
 			/>
 		);
+
 		await dlInterceptor;
+		await clickExpandDL(user);
 
 		expect(await screen.findByText('Test User')).toBeVisible();
 		expect(await screen.findByText(dl.value.email)).toBeVisible();
