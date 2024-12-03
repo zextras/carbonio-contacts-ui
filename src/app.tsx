@@ -18,7 +18,7 @@ import {
 	registerComponents,
 	registerFunctions,
 	SearchViewProps,
-	SecondaryBarComponentProps,
+	SecondaryBarComponentProps
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
@@ -34,11 +34,11 @@ import {
 	EDIT_DL_BOARD_ID,
 	CONTACT_BOARD_ID
 } from './constants';
-import { ContactInputIntegrationWrapper } from './legacy/integrations/contact-input-integration-wrapper';
 import createContactIntegration from './legacy/integrations/create-contact';
 import { StoreProvider } from './legacy/store/redux';
 import { SyncDataHandler } from './legacy/views/secondary-bar/sync-data-handler';
-import { Spinner } from "./components/Spinner";
+import { Spinner } from './components/Spinner';
+import { ContactInput } from './legacy/integrations/contact-input';
 
 const LazyContactsView = lazy(
 	() => import(/* webpackChunkName: "contacts-view" */ './views/contacts-view')
@@ -265,7 +265,7 @@ const App = (): React.JSX.Element => {
 	useEffect(() => {
 		registerComponents({
 			id: 'contact-input',
-			component: ContactInputIntegrationWrapper
+			component: ContactInput
 		});
 
 		registerActions<NewAction>(

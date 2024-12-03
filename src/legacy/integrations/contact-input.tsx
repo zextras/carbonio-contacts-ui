@@ -125,7 +125,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 				error: !isAValidEmail,
 				actions: [
 					{
-						id: 'action1',
+						id: EDIT_ACTION_ID,
 						label: isAValidEmail
 							? t('label.edit_email', 'Edit E-mail')
 							: t('label.edit_invalid_email', 'E-mail is invalid, click to edit it'),
