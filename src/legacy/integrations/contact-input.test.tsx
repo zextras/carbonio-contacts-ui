@@ -23,6 +23,7 @@ import {
 	createDistributionListChip,
 	createGetDistributionListInterceptor,
 	createSimpleChip,
+	selectAllMembersInDL,
 	SELECT_ALL
 } from './test/mocks';
 import { GetDistributionListRequest } from '../../network/api/get-distribution-list';
@@ -237,31 +238,10 @@ describe('Contact input', () => {
 		const onChangeFn = jest.fn();
 		const dl1Chip = createDistributionListChip('dl1@email.it');
 		const dl2Chip = createDistributionListChip('dl2@email.it');
-		const dlInterceptor = new Promise<GetDistributionListRequest>((resolve) => {
-			getSetupServer().use(
-				http.post<never, HandlerRequest<GetDistributionListRequest>>(
-					`/service/soap/GetDistributionListRequest`,
-					async ({ request }) => {
-						const reqActionParamWrapper = `GetDistributionListRequest`;
-						const requestContent = await request.json();
-						const params = requestContent?.Body?.[reqActionParamWrapper];
-						resolve(params);
-						if (params?.dl._content === dl1Chip.value.email) {
-							return HttpResponse.json({
-								Body: {
-									[`GetDistributionListResponse`]: [{ id: dl2Chip.value.id, name: dl2Chip.label }]
-								}
-							});
-						}
-						return HttpResponse.json({
-							Body: {
-								[`GetDistributionListResponse`]: [{ id: dl2Chip.value.id, name: dl2Chip.label }]
-							}
-						});
-					}
-				)
-			);
-		});
+		const dlInterceptor = createGetDistributionListInterceptor([
+			{ id: dl2Chip.value.id, name: dl2Chip.label }
+		]);
+
 		registerGetDistributionListMembersHandler(['memberFromDl2@email.test']);
 
 		const { user } = setupTest(
@@ -274,11 +254,9 @@ describe('Contact input', () => {
 		await dlInterceptor;
 		const distributionListChips = await screen.findAllByTestId('distribution-list-chip');
 		const distributionListChip2 = distributionListChips[1];
-		await user.click(
-			await within(distributionListChip2).findByTestId(`${TESTID_SELECTORS.icons.expandDL}`)
-		);
-		const selectAllButton = await screen.findByRole('button', { name: SELECT_ALL });
-		await user.click(selectAllButton);
+		await clickExpandDL(user, distributionListChip2);
+
+		await selectAllMembersInDL(user);
 
 		expect(onChangeFn).toHaveBeenCalledWith([
 			dl1Chip,

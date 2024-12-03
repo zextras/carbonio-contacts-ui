@@ -17,6 +17,9 @@ import { FullAutocompleteRequest, FullAutocompleteResponse } from '../../types/c
 import { GetContactsRequest, GetContactsResponse } from '../../types/soap';
 import { ContactInputItem, EDIT_ACTION_ID, USER_TYPES } from '../types';
 
+export const SHOW_MORE = /show more/i;
+export const SELECT_ALL = /Select address|Select all \d+ addresses/;
+
 export const editValidChipAction: ChipAction = expect.objectContaining<Partial<ChipAction>>({
 	id: EDIT_ACTION_ID,
 	label: 'Edit E-mail',
@@ -106,10 +109,14 @@ export const createGetDistributionListInterceptor = (
 		}
 	);
 
-export const clickExpandDL = async (user: UserEvent): Promise<void> => {
-	await user.click(
-		await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL })
-	);
+export const clickExpandDL = async (
+	user: UserEvent,
+	parentElement?: HTMLElement
+): Promise<void> => {
+	const expandIcon = parentElement
+		? within(parentElement).findByTestId(TESTID_SELECTORS.icons.expandDL)
+		: screen.findByTestId(TESTID_SELECTORS.icons.expandDL);
+	await user.click(await expandIcon);
 };
 
 export const clickCollapseDL = async (user: UserEvent): Promise<void> => {
@@ -118,5 +125,6 @@ export const clickCollapseDL = async (user: UserEvent): Promise<void> => {
 	);
 };
 
-export const SHOW_MORE = /show more/i;
-export const SELECT_ALL = /Select address|Select all \d+ addresses/;
+export const selectAllMembersInDL = async (user: UserEvent): Promise<void> => {
+	await user.click(await screen.findByRole('button', { name: SELECT_ALL }));
+};
