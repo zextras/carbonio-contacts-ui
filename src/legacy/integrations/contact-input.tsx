@@ -37,7 +37,8 @@ import {
 	USER_TYPES,
 	UserOrDL,
 	ContactInputItemInternal,
-	EDIT_ACTION_ID
+	EDIT_ACTION_ID,
+	UserDistributionList
 } from './types';
 
 const MY_SPECIAL_ID_TO_EXCLUDE = 'my-special-id';
@@ -165,10 +166,8 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	);
 
 	const onExpandDL = useCallback(
-		(dlMembers: ContactInputItem[]) => {
-			const valueWithoutDl = defaultValue.filter(
-				(val) => val.value.type !== USER_TYPES.DISTRIBUTION_LIST
-			);
+		(expandedDl: UserDistributionList, dlMembers: ContactInputItem[]) => {
+			const valueWithoutDl = defaultValue.filter((val) => val.value.email !== expandedDl.email);
 			const newItems = [...valueWithoutDl, ...dlMembers];
 			onInternalChange(newItems);
 		},

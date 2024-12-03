@@ -96,9 +96,9 @@ export const DistributionListChip = ({
 				}
 			}));
 
-			onExpandDL(newValue);
+			onExpandDL(value, newValue);
 		},
-		[onExpandDL]
+		[onExpandDL, value]
 	);
 
 	const onSelectAllClick = useCallback(() => {

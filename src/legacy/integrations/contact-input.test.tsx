@@ -9,9 +9,11 @@ import React, { ReactElement, useState } from 'react';
 
 import { faker } from '@faker-js/faker';
 import { act, fireEvent, waitFor, within } from '@testing-library/react';
+import { DefaultBodyType, http, HttpResponse } from 'msw';
 
 import { ContactInput } from './contact-input';
 import { ContactInputItem, ContactInputOnChange, ContactInputValue, USER_TYPES } from './types';
+import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
 import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { UserEvent, screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../../constants/tests';
@@ -23,7 +25,12 @@ import {
 	createSimpleChip,
 	SELECT_ALL
 } from './test/mocks';
+import { GetDistributionListRequest } from '../../network/api/get-distribution-list';
 import { registerGetDistributionListMembersHandler } from '../../tests/msw-handlers/get-distribution-list-members';
+
+type HandlerRequest<T> = DefaultBodyType & {
+	Body: Record<string, T>;
+};
 
 describe('Contact input', () => {
 	it('should render a textbox', async () => {
@@ -196,7 +203,7 @@ describe('Contact input', () => {
 		// we can't test the clipboard paste through context menu because it's not supported by jsdom
 	});
 
-	it('should keep the previous chips after expanding a distribution list chip', async () => {
+	it('should keep the previous simple chips after expanding a distribution list chip', async () => {
 		const onChangeFn = jest.fn();
 		const simpleChip = createSimpleChip({ label: 'simple chip', email: 'simple-chip@email.it' });
 		const dlChip = createDistributionListChip('distribution-list@email.it');
@@ -223,6 +230,66 @@ describe('Contact input', () => {
 				id: 'dlmail1@email.test',
 				label: 'dlmail1@email.test',
 				value: { email: 'dlmail1@email.test', id: 'dlmail1@email.test', type: 'CONTACT' }
+			}
+		]);
+	});
+	it('should keep other distribution list chips after expanding a distribution list chip', async () => {
+		const onChangeFn = jest.fn();
+		const dl1Chip = createDistributionListChip('dl1@email.it');
+		const dl2Chip = createDistributionListChip('dl2@email.it');
+		const dlInterceptor = new Promise<GetDistributionListRequest>((resolve) => {
+			getSetupServer().use(
+				http.post<never, HandlerRequest<GetDistributionListRequest>>(
+					`/service/soap/GetDistributionListRequest`,
+					async ({ request }) => {
+						const reqActionParamWrapper = `GetDistributionListRequest`;
+						const requestContent = await request.json();
+						const params = requestContent?.Body?.[reqActionParamWrapper];
+						resolve(params);
+						if (params?.dl._content === dl1Chip.value.email) {
+							return HttpResponse.json({
+								Body: {
+									[`GetDistributionListResponse`]: [{ id: dl2Chip.value.id, name: dl2Chip.label }]
+								}
+							});
+						}
+						return HttpResponse.json({
+							Body: {
+								[`GetDistributionListResponse`]: [{ id: dl2Chip.value.id, name: dl2Chip.label }]
+							}
+						});
+					}
+				)
+			);
+		});
+		registerGetDistributionListMembersHandler(['memberFromDl2@email.test']);
+
+		const { user } = setupTest(
+			<ContactInput
+				defaultValue={[dl1Chip, dl2Chip]}
+				orderedAccountIds={[]}
+				onChange={onChangeFn}
+			/>
+		);
+		await dlInterceptor;
+		const distributionListChips = await screen.findAllByTestId('distribution-list-chip');
+		const distributionListChip2 = distributionListChips[1];
+		await user.click(
+			await within(distributionListChip2).findByTestId(`${TESTID_SELECTORS.icons.expandDL}`)
+		);
+		const selectAllButton = await screen.findByRole('button', { name: SELECT_ALL });
+		await user.click(selectAllButton);
+
+		expect(onChangeFn).toHaveBeenCalledWith([
+			dl1Chip,
+			{
+				id: 'memberFromDl2@email.test',
+				label: 'memberFromDl2@email.test',
+				value: {
+					email: 'memberFromDl2@email.test',
+					id: 'memberFromDl2@email.test',
+					type: USER_TYPES.CONTACT
+				}
 			}
 		]);
 	});

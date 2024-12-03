@@ -296,7 +296,10 @@ describe('Distribution ListChip', () => {
 				}
 			}));
 			await waitFor(() =>
-				expect(contactInputOnChangeFn).toHaveBeenCalledWith(expectedValuesInOnChange)
+				expect(contactInputOnChangeFn).toHaveBeenCalledWith(
+					distributionListChip.value,
+					expectedValuesInOnChange
+				)
 			);
 			expect(getMembersHandler).toHaveBeenCalledTimes(2);
 		});
