@@ -253,11 +253,11 @@ describe('Distribution ListChip', () => {
 		});
 
 		it('should request all members to the network on "select all" if not all members are loaded yet', async () => {
-			const dlm = [user1.value.email, 'other@test.com', 'another@test.com'];
-			const dlm2 = ['another2@test.com', 'another3@test.com', 'another4@test.com'];
+			const members1 = [user1.value.email, 'other@test.com', 'another@test.com'];
+			const members2 = ['another2@test.com', 'another3@test.com', 'another4@test.com'];
 			const getMembersHandler = registerGetDistributionListMembersHandler();
-			const firstResponse = { dlm: dlm.map((m) => ({ _content: m })), total: 6, more: true };
-			const secondResponse = { dlm: dlm2.map((m) => ({ _content: m })), total: 6, more: false };
+			const firstResponse = { dlm: members1.map((m) => ({ _content: m })), total: 6, more: true };
+			const secondResponse = { dlm: members2.map((m) => ({ _content: m })), total: 6, more: false };
 			getMembersHandler.mockImplementation(async ({ request }) => {
 				const {
 					Body: {
@@ -286,20 +286,11 @@ describe('Distribution ListChip', () => {
 			await waitFor(() => expect(getMembersHandler).toHaveBeenCalled());
 			await screen.findByText(user1.value.email);
 			await user.click(screen.getByRole('button', { name: SELECT_ALL }));
-			const expectedValuesInOnChange = [...dlm, ...dlm2].map((mail) => ({
-				id: mail,
-				label: mail,
-				value: {
-					email: mail,
-					id: mail,
-					type: USER_TYPES.CONTACT
-				}
-			}));
 			await waitFor(() =>
-				expect(contactInputOnChangeFn).toHaveBeenCalledWith(
-					distributionListChip.value,
-					expectedValuesInOnChange
-				)
+				expect(contactInputOnChangeFn).toHaveBeenCalledWith(distributionListChip.value, [
+					...members1,
+					...members2
+				])
 			);
 			expect(getMembersHandler).toHaveBeenCalledTimes(2);
 		});

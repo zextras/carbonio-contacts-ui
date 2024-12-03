@@ -462,7 +462,7 @@ describe('Contact input', () => {
 			await user.click(screen.getByRole('button', { name: SELECT_ALL }));
 
 			expect(onChange).toHaveBeenCalledWith([
-				{
+				expect.objectContaining({
 					id: 'dlmember1@test.it',
 					label: 'dlmember1@test.it',
 					value: {
@@ -470,8 +470,8 @@ describe('Contact input', () => {
 						id: 'dlmember1@test.it',
 						type: 'CONTACT'
 					}
-				},
-				{
+				}),
+				expect.objectContaining({
 					id: 'dlmember2@test.it',
 					label: 'dlmember2@test.it',
 					value: {
@@ -479,7 +479,7 @@ describe('Contact input', () => {
 						id: 'dlmember2@test.it',
 						type: 'CONTACT'
 					}
-				}
+				})
 			]);
 		});
 
@@ -506,11 +506,11 @@ describe('Contact input', () => {
 
 			expect(onChangeFn).toHaveBeenCalledWith([
 				simpleChip,
-				{
+				expect.objectContaining({
 					id: 'dlmail1@email.test',
 					label: 'dlmail1@email.test',
 					value: { email: 'dlmail1@email.test', id: 'dlmail1@email.test', type: 'CONTACT' }
-				}
+				})
 			]);
 		});
 		it('should keep other distribution list chips after expanding a distribution list chip', async () => {
@@ -539,7 +539,7 @@ describe('Contact input', () => {
 
 			expect(onChangeFn).toHaveBeenCalledWith([
 				dl1Chip,
-				{
+				expect.objectContaining({
 					id: 'memberFromDl2@email.test',
 					label: 'memberFromDl2@email.test',
 					value: {
@@ -547,7 +547,31 @@ describe('Contact input', () => {
 						id: 'memberFromDl2@email.test',
 						type: USER_TYPES.CONTACT
 					}
-				}
+				})
+			]);
+		});
+		it('should create DL member chip with edit action when after selecting all addresses in DL', async () => {
+			const onChange = jest.fn();
+			const dl = createDistributionListChip('dltest@test.com');
+			const dlInterceptor = createGetDistributionListInterceptor([
+				{ id: dl.value.email, name: dl.value.email }
+			]);
+			const getMembers = registerGetDistributionListMembersHandler(['member1@test.com']);
+
+			const { user } = setupTest(
+				<ContactInput defaultValue={[dl]} orderedAccountIds={[]} onChange={onChange} />
+			);
+			await dlInterceptor;
+			await clickExpandDL(user);
+			await selectAllMembersInDL(user);
+
+			expect(getMembers).toHaveBeenCalledTimes(1);
+			expect(onChange).toHaveBeenCalledWith([
+				expect.objectContaining({
+					id: 'member1@test.com',
+					label: 'member1@test.com',
+					actions: [editValidChipAction]
+				})
 			]);
 		});
 	});

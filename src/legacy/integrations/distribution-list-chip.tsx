@@ -16,7 +16,7 @@ import { debounce, DebouncedFuncLeading, map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { ContactInputDistributionList, ContactInputUser, USER_TYPES } from './types';
+import { ContactInputDistributionList } from './types';
 import { ACTION_IDS, DL_MEMBERS_LOAD_LIMIT } from '../../constants';
 import { useGetDistributionList } from '../../hooks/use-get-distribution-list';
 import { useGetDistributionListMembers } from '../../hooks/use-get-distribution-list-members';
@@ -86,17 +86,7 @@ export const DistributionListChip = ({
 
 	const updateContactInputValue = useCallback(
 		(memberEmails: DistributionListMembersPage['members']) => {
-			const newValue: Array<ContactInputUser> = map(memberEmails, (email) => ({
-				id: email,
-				label: email,
-				value: {
-					id: email,
-					email,
-					type: USER_TYPES.CONTACT
-				}
-			}));
-
-			onExpandDL(value, newValue);
+			onExpandDL(value, memberEmails);
 		},
 		[onExpandDL, value]
 	);

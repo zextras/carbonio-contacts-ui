@@ -88,7 +88,7 @@ type RequiredEmailLabelChipItem<T> = Required<Pick<ChipItem<T>, 'value'>> &
 	Required<Pick<ChipItem<T>, 'label'>> &
 	Omit<ChipItem<T>, 'label' | 'value'>;
 
-type OnExpandDL = (expandedDL: UserDistributionList, items: Array<ContactInputItem>) => void;
+type OnExpandDL = (expandedDL: UserDistributionList, memberEmails: Array<string>) => void;
 export type ContactInputDistributionList = RequiredEmailLabelChipItem<UserDistributionList> & {
 	onExpandDL: OnExpandDL;
 };

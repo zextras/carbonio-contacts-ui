@@ -169,15 +169,6 @@ const ContactInputCore: FC<ContactInputProps> = ({
 		[onChange, defaultValue]
 	);
 
-	const onExpandDL = useCallback(
-		(expandedDl: UserDistributionList, dlMembers: ContactInputItem[]) => {
-			const valueWithoutDl = defaultValue.filter((val) => val.value.email !== expandedDl.email);
-			const newItems = [...valueWithoutDl, ...dlMembers];
-			onInternalChange(newItems);
-		},
-		[defaultValue, onInternalChange]
-	);
-
 	const onInputEnter = useCallback((): void => {
 		if (inputRef?.current) {
 			// FIXME: innerText does not contain new line chars at this point
@@ -292,7 +283,17 @@ const ContactInputCore: FC<ContactInputProps> = ({
 				actions: [editAction]
 			};
 		},
-		[createChip, defaultValue, defaults, editChip, getGroupMembers, onInternalChange, t]
+		[createChip, defaults, editChip, getGroupMembers, onInternalChange, t]
+	);
+
+	const onExpandDL = useCallback(
+		(expandedDl: UserDistributionList, members: Array<string>) => {
+			const valueWithoutDl = defaultValue.filter((val) => val.value.email !== expandedDl.email);
+			const membersChips = members.map((member) => onAdd(member));
+			const newItems = [...valueWithoutDl, ...membersChips];
+			onInternalChange(newItems);
+		},
+		[defaultValue, onAdd, onInternalChange]
 	);
 
 	const ChipComponent = useCallback(
