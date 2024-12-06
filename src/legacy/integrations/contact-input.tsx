@@ -16,6 +16,7 @@ import {
 	Chip
 } from '@zextras/carbonio-design-system';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
+import { TFunction } from 'i18next';
 import { filter, find, map, uniqBy, noop, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
@@ -27,12 +28,7 @@ import type { GetContactsRequest, GetContactsResponse } from '../types/soap';
 import { Loader } from './parts/loader';
 import { PasteContextMenu } from './parts/paste-context-menu';
 import { getContactLabel, searchContacts, tryToParseEmail } from './parts/utils';
-import {
-	ContactInputItemInternalValue,
-	ContactInputOptions,
-	GroupContact,
-	ContactInputItemInternal
-} from './types';
+import { ContactInputItemInternalValue, ContactInputOptions, GroupContact } from './types';
 import { EDIT_ACTION_ID, CONTACT_TYPES } from '../../carbonio-ui-commons/integrations/constants';
 import {
 	ContactInputItem,
@@ -42,8 +38,43 @@ import {
 	UserOrDL
 } from '../../carbonio-ui-commons/integrations/types';
 
-const MY_SPECIAL_ID_TO_EXCLUDE = 'my-special-id';
+const CHIP_TO_EXCLUDE = 'this-value-represent-a-chip-that-should-not-be-present';
 
+type EditChipFn = (text: string, id: string) => void;
+function createChipFromEmail(
+	t: TFunction,
+	editChipFn: EditChipFn,
+	valueToAdd: string
+): ContactInputItem {
+	const id = valueToAdd;
+	const parsedEmail = tryToParseEmail(valueToAdd);
+	const isAValidEmail = isValidEmail(parsedEmail);
+	const chip: ContactInputItem = {
+		id,
+		label: parsedEmail,
+		value: {
+			id,
+			email: parsedEmail,
+			type: CONTACT_TYPES.CONTACT
+		},
+		error: !isAValidEmail,
+		actions: [
+			{
+				id: EDIT_ACTION_ID,
+				label: isAValidEmail
+					? t('label.edit_email', 'Edit E-mail')
+					: t('label.edit_invalid_email', 'E-mail is invalid, click to edit it'),
+				icon: 'EditOutline',
+				type: 'button',
+				onClick: () => editChipFn(valueToAdd, id)
+			}
+		]
+	};
+	if (!isAValidEmail) {
+		chip.avatarIcon = 'AlertCircleOutline';
+	}
+	return chip;
+}
 const ContactInputCore: FC<ContactInputProps> = ({
 	onChange,
 	defaultValue,
@@ -97,7 +128,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 		[buildDragStartHandler]
 	);
 
-	const editChip = useCallback(
+	const editChip = useCallback<EditChipFn>(
 		(text: string, id: string) => {
 			setIdToRemove(id);
 			if (inputRef?.current) {
@@ -110,61 +141,24 @@ const ContactInputCore: FC<ContactInputProps> = ({
 		[inputRef]
 	);
 
-	const createChip = useCallback(
-		(valueToAdd: string): ContactInputItem => {
-			const id = valueToAdd;
-			const parsedEmail = tryToParseEmail(valueToAdd);
-			const isAValidEmail = isValidEmail(parsedEmail);
-			const chip: ContactInputItem = {
-				id,
-				label: parsedEmail,
-				value: {
-					id,
-					email: parsedEmail,
-					type: CONTACT_TYPES.CONTACT
-				},
-				error: !isAValidEmail,
-				actions: [
-					{
-						id: EDIT_ACTION_ID,
-						label: isAValidEmail
-							? t('label.edit_email', 'Edit E-mail')
-							: t('label.edit_invalid_email', 'E-mail is invalid, click to edit it'),
-						icon: 'EditOutline',
-						type: 'button',
-						onClick: () => editChip(valueToAdd, id)
-					}
-				]
-			};
-			if (!isAValidEmail) {
-				chip.avatarIcon = 'AlertCircleOutline';
-			}
-			return chip;
-		},
-		[editChip, t]
-	);
-
-	const onInternalChange = useCallback(
-		(items: ContactInputItemInternal[]) => {
+	const handleChipOnChange = useCallback(
+		(items: ChipItem<UserOrDL>[]) => {
 			const contactsWithoutGroups = reduce(
 				items,
 				(acc, item) => {
 					const { value: itemValue, label } = item;
-					if (label && itemValue && itemValue?.type !== CONTACT_TYPES.GROUP) {
+					if (label && itemValue) {
 						acc.push({ ...item, label, value: itemValue });
 					}
 					return acc;
 				},
 				[] as ContactInputItem[]
-			).filter((x) => x.id !== MY_SPECIAL_ID_TO_EXCLUDE);
+			).filter((x) => x.id !== CHIP_TO_EXCLUDE);
 
 			if (contactsWithoutGroups === defaultValue) {
 				return;
 			}
-			const uniqueContacts = uniqBy(
-				contactsWithoutGroups.filter((x) => x.id !== MY_SPECIAL_ID_TO_EXCLUDE),
-				'value.email'
-			);
+			const uniqueContacts = uniqBy(contactsWithoutGroups, 'value.email');
 			onChange?.(uniqueContacts);
 		},
 		[onChange, defaultValue]
@@ -176,14 +170,14 @@ const ContactInputCore: FC<ContactInputProps> = ({
 			inputRef.current.innerText = inputRef.current.innerText?.replaceAll('\n', '');
 		}
 		const valueToAdd = inputRef.current?.innerText.replaceAll('\n', '');
-		const chip = createChip(valueToAdd ?? '');
+		const chip = createChipFromEmail(t, editChip, valueToAdd ?? '');
 		if (valueToAdd !== '') {
-			onChange?.([...defaults, { ...chip }]);
+			handleChipOnChange([...defaults, { ...chip }]);
 		}
 		if (inputRef?.current) {
 			inputRef.current.innerText = '';
 		}
-	}, [createChip, defaults, inputRef, onChange]);
+	}, [inputRef, t, editChip, handleChipOnChange, defaults]);
 
 	const onInputType = useCallback<NonNullable<ChipInputProps['onInputType']>>(
 		({ key, textContent }) => {
@@ -241,60 +235,60 @@ const ContactInputCore: FC<ContactInputProps> = ({
 		(valueToAdd: unknown): ContactInputItem => {
 			setIdToRemove('');
 			if (typeof valueToAdd === 'string') {
-				return createChip(valueToAdd);
+				return createChipFromEmail(t, editChip, valueToAdd);
 			}
-			const contactValue = valueToAdd as ContactInputItemInternalValue;
-			if (!contactValue) {
+			const selectedOption = valueToAdd as ContactInputItemInternalValue;
+			if (!selectedOption) {
 				throw new Error('no value in provided contact');
 			}
 
-			if (contactValue.type === CONTACT_TYPES.GROUP) {
-				getGroupMembers(contactValue)
+			if (selectedOption.type === CONTACT_TYPES.GROUP) {
+				getGroupMembers(selectedOption)
 					.then((userContacts) => userContacts.map((userContact) => onAdd(userContact)))
 					.then((chipItems) => {
-						onInternalChange([...defaults, ...chipItems]);
+						handleChipOnChange([...defaults, ...chipItems]);
 					});
 				return {
-					id: MY_SPECIAL_ID_TO_EXCLUDE,
-					label: 'special-value',
+					id: CHIP_TO_EXCLUDE,
+					label: '',
 					value: {
-						email: 'whatever',
-						id: 'whatever',
+						email: '',
+						id: '',
 						type: CONTACT_TYPES.CONTACT
 					}
 				};
 			}
 
-			const isEmailvalid = isValidEmail(contactValue.email);
+			const isEmailValid = isValidEmail(selectedOption.email);
 			const editAction: ChipAction = {
 				id: EDIT_ACTION_ID,
-				label: isEmailvalid
+				label: isEmailValid
 					? t('label.edit_email', 'Edit E-mail')
 					: t('label.edit_invalid_email', 'E-mail is invalid, click to edit it'),
 				icon: 'EditOutline',
 				type: 'button',
-				onClick: (): void => editChip(contactValue.email, contactValue.id)
+				onClick: (): void => editChip(selectedOption.email, selectedOption.id)
 			};
 
 			return {
-				id: contactValue.id,
-				label: getContactLabel(contactValue),
-				value: contactValue,
-				error: !isEmailvalid,
+				id: selectedOption.id,
+				label: getContactLabel(selectedOption),
+				value: selectedOption,
+				error: !isEmailValid,
 				actions: [editAction]
 			};
 		},
-		[createChip, defaults, editChip, getGroupMembers, onInternalChange, t]
+		[defaults, editChip, getGroupMembers, handleChipOnChange, t]
 	);
 
-	const onExpandDL = useCallback(
+	const onExpandDistributionList = useCallback(
 		(expandedDl: DistributionListContact, members: Array<string>) => {
-			const valueWithoutDl = defaultValue.filter((val) => val.value.email !== expandedDl.email);
+			const chipsWithoutDl = defaultValue.filter((val) => val.value.email !== expandedDl.email);
 			const membersChips = members.map((member) => onAdd(member));
-			const newItems = [...valueWithoutDl, ...membersChips];
-			onInternalChange(newItems);
+			const updatedChips = [...chipsWithoutDl, ...membersChips];
+			handleChipOnChange(updatedChips);
 		},
-		[defaultValue, onAdd, onInternalChange]
+		[defaultValue, onAdd, handleChipOnChange]
 	);
 
 	const ChipComponent = useCallback(
@@ -310,13 +304,13 @@ const ContactInputCore: FC<ContactInputProps> = ({
 							{...props}
 							value={val}
 							label={props.label}
-							onExpandDL={onExpandDL}
+							onExpandDL={onExpandDistributionList}
 						/>
 					)}
 				</>
 			);
 		},
-		[onExpandDL]
+		[onExpandDistributionList]
 	);
 
 	const onDragEnter = useCallback<React.DragEventHandler>((ev) => {
@@ -381,7 +375,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 					confirmChipOnBlur
 					inputRef={inputRef}
 					onInputType={onInputType}
-					onChange={onInternalChange}
+					onChange={handleChipOnChange}
 					options={options}
 					value={contactInputValue}
 					background={background}
