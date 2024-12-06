@@ -10,17 +10,17 @@ import { map, trim, unescape } from 'lodash';
 
 import { parseEmail } from '../../../carbonio-ui-commons/helpers/email-parser';
 import {
-	ContactInputGroup,
-	ContactInputItemValue,
-	USER_TYPES,
-	UserContactGroup,
+	GroupContact,
 	ContactInputOptions,
-	RemoteContactGroup,
-	RemoteDistributionList,
-	RemoteContactResponse
+	RemoteGroupContact,
+	RemoteDistributionListContact,
+	RemoteContactResponse,
+	ContactInputGroup,
+	ContactInputItemInternalValue
 } from '../types';
 import { Hint } from './hint';
 import { HintGroup } from './hint-group';
+import { USER_TYPES_CONST } from '../../../carbonio-ui-commons/integrations/constants';
 import type { FullAutocompleteRequest, SearchContactsResponse } from '../../types/contact';
 
 export function isContactGroup(contact: {
@@ -37,14 +37,14 @@ export function isContactGroup(contact: {
 	);
 }
 
-export const getContactId = (contact: ContactInputItemValue): string =>
-	contact.type === USER_TYPES.GROUP ? contact.id : contact.email;
+export const getContactId = (contact: ContactInputItemInternalValue): string =>
+	contact.type === USER_TYPES_CONST.GROUP ? contact.id : contact.email;
 
-export const getContactLabel = (contact: ContactInputItemValue): string => {
+export const getContactLabel = (contact: ContactInputItemInternalValue): string => {
 	switch (contact.type) {
-		case USER_TYPES.GROUP:
+		case USER_TYPES_CONST.GROUP:
 			return contact.display;
-		case USER_TYPES.DISTRIBUTION_LIST:
+		case USER_TYPES_CONST.DISTRIBUTION_LIST:
 			return contact.email;
 		default:
 			break;
@@ -60,23 +60,23 @@ export function tryToParseEmail(input: string | undefined): string {
 	return parseEmail(inputOrDefault) ?? inputOrDefault.trim();
 }
 
-export function newIsContactGroup(value: RemoteContactResponse): value is RemoteContactGroup {
+export function newIsContactGroup(value: RemoteContactResponse): value is RemoteGroupContact {
 	return 'isGroup' in value && !('email' in value) && value.isGroup;
 }
 
 export function newIsDistributionList(
 	value: RemoteContactResponse
-): value is RemoteDistributionList {
+): value is RemoteDistributionListContact {
 	return 'isGroup' in value && 'email' in value && value.isGroup;
 }
 
 export const mapToChipContactOptions = (value: RemoteContactResponse): ContactInputOptions => {
 	if (newIsContactGroup(value)) {
-		const contactGroup: UserContactGroup = {
+		const contactGroup: GroupContact = {
 			id: value.id,
 			display: value.display,
 			groupId: value.id,
-			type: USER_TYPES.GROUP
+			type: USER_TYPES_CONST.GROUP
 		};
 		return {
 			label: getContactLabel(contactGroup),
@@ -90,7 +90,7 @@ export const mapToChipContactOptions = (value: RemoteContactResponse): ContactIn
 		const distributionList = {
 			id: parsedEmail,
 			email: parsedEmail,
-			type: USER_TYPES.DISTRIBUTION_LIST
+			type: USER_TYPES_CONST.DISTRIBUTION_LIST
 		};
 		const label = getContactLabel(distributionList);
 		return {
@@ -108,7 +108,7 @@ export const mapToChipContactOptions = (value: RemoteContactResponse): ContactIn
 		fullName: value.full,
 		company: value.company,
 		email: parsedEmail,
-		type: USER_TYPES.CONTACT
+		type: USER_TYPES_CONST.CONTACT
 	};
 	const label = getContactLabel(contact);
 	return {

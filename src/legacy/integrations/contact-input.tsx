@@ -28,18 +28,19 @@ import { Loader } from './parts/loader';
 import { PasteContextMenu } from './parts/paste-context-menu';
 import { getContactLabel, searchContacts, tryToParseEmail } from './parts/utils';
 import {
-	ContactInputItem,
-	ContactInputItemValue,
+	ContactInputItemInternalValue,
 	ContactInputOptions,
+	GroupContact,
+	ContactInputItemInternal
+} from './types';
+import { EDIT_ACTION_ID, USER_TYPES_CONST } from '../../carbonio-ui-commons/integrations/constants';
+import {
+	ContactInputItem,
 	ContactInputProps,
 	UserContact,
-	UserContactGroup,
-	USER_TYPES,
-	UserOrDL,
-	ContactInputItemInternal,
-	EDIT_ACTION_ID,
-	UserDistributionList
-} from './types';
+	UserDistributionList,
+	UserOrDL
+} from '../../carbonio-ui-commons/integrations/types';
 
 const MY_SPECIAL_ID_TO_EXCLUDE = 'my-special-id';
 
@@ -120,7 +121,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 				value: {
 					id,
 					email: parsedEmail,
-					type: USER_TYPES.CONTACT
+					type: USER_TYPES_CONST.CONTACT
 				},
 				error: !isAValidEmail,
 				actions: [
@@ -149,7 +150,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 				items,
 				(acc, item) => {
 					const { value: itemValue, label } = item;
-					if (label && itemValue && itemValue?.type !== USER_TYPES.GROUP) {
+					if (label && itemValue && itemValue?.type !== USER_TYPES_CONST.GROUP) {
 						acc.push({ ...item, label, value: itemValue });
 					}
 					return acc;
@@ -213,7 +214,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	);
 
 	const getGroupMembers = useCallback(
-		(contactGroup: UserContactGroup): Promise<UserContact[]> =>
+		(contactGroup: GroupContact): Promise<UserContact[]> =>
 			soapFetch<GetContactsRequest, GetContactsResponse>('GetContacts', {
 				_jsns: 'urn:zimbraMail',
 				cn: {
@@ -227,7 +228,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 					return {
 						email,
 						id: email,
-						type: USER_TYPES.CONTACT
+						type: USER_TYPES_CONST.CONTACT
 					};
 				});
 			}),
@@ -242,12 +243,12 @@ const ContactInputCore: FC<ContactInputProps> = ({
 			if (typeof valueToAdd === 'string') {
 				return createChip(valueToAdd);
 			}
-			const contactValue = valueToAdd as ContactInputItemValue;
+			const contactValue = valueToAdd as ContactInputItemInternalValue;
 			if (!contactValue) {
 				throw new Error('no value in provided contact');
 			}
 
-			if (contactValue.type === USER_TYPES.GROUP) {
+			if (contactValue.type === USER_TYPES_CONST.GROUP) {
 				getGroupMembers(contactValue)
 					.then((userContacts) => userContacts.map((userContact) => onAdd(userContact)))
 					.then((chipItems) => {
@@ -259,7 +260,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 					value: {
 						email: 'whatever',
 						id: 'whatever',
-						type: USER_TYPES.CONTACT
+						type: USER_TYPES_CONST.CONTACT
 					}
 				};
 			}
@@ -301,10 +302,10 @@ const ContactInputCore: FC<ContactInputProps> = ({
 			const val = props.value;
 			return (
 				<>
-					{val && val.type === USER_TYPES.CONTACT && (
+					{val && val.type === USER_TYPES_CONST.CONTACT && (
 						<Chip {...props} data-testid={'default-chip'} />
 					)}
-					{val && props.label && val.type === USER_TYPES.DISTRIBUTION_LIST && (
+					{val && props.label && val.type === USER_TYPES_CONST.DISTRIBUTION_LIST && (
 						<DistributionListChip
 							{...props}
 							value={val}

@@ -4,7 +4,14 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { ChipItem, type ChipInputProps, type DropdownItem } from '@zextras/carbonio-design-system';
+import { ChipItem, type DropdownItem } from '@zextras/carbonio-design-system';
+
+import {
+	ContactInputItem,
+	USER_TYPES,
+	UserContact,
+	UserDistributionList
+} from '../../carbonio-ui-commons/integrations/types';
 
 export type ContactInputGroup = ContactInputItem &
 	Required<Pick<ContactInputItem, 'display'>> & {
@@ -13,75 +20,10 @@ export type ContactInputGroup = ContactInputItem &
 		email?: '';
 	};
 
-export type ContactInputUser = RequiredEmailLabelChipItem<UserContact>;
-
-type USER_TYPES = {
-	GROUP: 'CONTACT_GROUP';
-	DISTRIBUTION_LIST: 'DISTRIBUTION_LIST';
-	CONTACT: 'CONTACT';
-};
-
-export const USER_TYPES: USER_TYPES = {
-	GROUP: 'CONTACT_GROUP',
-	DISTRIBUTION_LIST: 'DISTRIBUTION_LIST',
-	CONTACT: 'CONTACT'
-};
-export const EDIT_ACTION_ID = 'edit-contact-chip-action';
-export type UserContactGroup = {
-	id: string;
-	display: string;
-	groupId: string;
-	type: USER_TYPES['GROUP'];
-};
-
-export type UserDistributionList = {
-	id: string;
-	email: string;
-	type: USER_TYPES['DISTRIBUTION_LIST'];
-};
-
-export type UserContact = {
-	id: string;
-	firstName?: string;
-	middleName?: string;
-	lastName?: string;
-	fullName?: string;
-	company?: string;
-	email: string;
-	type: USER_TYPES['CONTACT'];
-};
-export type ContactInputItemValue = UserContactGroup | UserDistributionList | UserContact;
-
-export type ContactInputItemInternal = ChipItem<ContactInputItemValue>;
-
-export type ContactInputOnChange = ((items: ContactInputItem[]) => void) | undefined;
-
 export type ContactGroup = {
 	company?: string;
 	name: string;
 	groupId: string;
-};
-
-export type UserOrDL = UserContact | UserDistributionList;
-
-export type ContactInputItem = RequiredEmailLabelChipItem<UserOrDL>;
-
-export type ContactInputValue = ContactInputItem[];
-export type ContactInputProps = Pick<
-	ChipInputProps,
-	| 'icon'
-	| 'iconAction'
-	| 'placeholder'
-	| 'background'
-	| 'iconDisabled'
-	| 'description'
-	| 'hasError'
-	| 'inputRef'
-> & {
-	onChange?: ContactInputOnChange;
-	defaultValue: Array<ContactInputItem>;
-	dragAndDropEnabled?: boolean;
-	orderedAccountIds?: Array<string>;
 };
 
 type RequiredEmailLabelChipItem<T> = Required<Pick<ChipItem<T>, 'value'>> &
@@ -103,7 +45,7 @@ export type RemoteUserContact = {
 	company?: string;
 };
 
-export type RemoteContactGroup = {
+export type RemoteGroupContact = {
 	isGroup: boolean;
 	exp: boolean;
 	id: string;
@@ -111,7 +53,7 @@ export type RemoteContactGroup = {
 	display: string;
 };
 
-export type RemoteDistributionList = {
+export type RemoteDistributionListContact = {
 	isGroup: boolean;
 	email: string;
 	exp: boolean;
@@ -119,6 +61,17 @@ export type RemoteDistributionList = {
 	fileas: string;
 };
 
-export type RemoteContactResponse = RemoteUserContact | RemoteContactGroup | RemoteDistributionList;
+export type RemoteContactResponse =
+	| RemoteUserContact
+	| RemoteGroupContact
+	| RemoteDistributionListContact;
 
+export type GroupContact = {
+	id: string;
+	display: string;
+	groupId: string;
+	type: USER_TYPES['GROUP'];
+};
+export type ContactInputItemInternalValue = GroupContact | UserDistributionList | UserContact;
+export type ContactInputItemInternal = ChipItem<ContactInputItemInternalValue>;
 export type ContactInputOptions = DropdownItem & { value?: ContactInputItemInternal };

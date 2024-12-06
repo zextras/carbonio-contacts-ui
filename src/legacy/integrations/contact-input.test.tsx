@@ -12,7 +12,11 @@ import { act, fireEvent, waitFor, within } from '@testing-library/react';
 import { ChipAction } from '@zextras/carbonio-design-system';
 
 import { ContactInput } from './contact-input';
-import { ContactInputOnChange, ContactInputValue, USER_TYPES } from './types';
+import { USER_TYPES_CONST } from '../../carbonio-ui-commons/integrations/constants';
+import {
+	ContactInputOnChange,
+	ContactInputValue
+} from '../../carbonio-ui-commons/integrations/types';
 import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { UserEvent, screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../../constants/tests';
@@ -545,7 +549,7 @@ describe('Contact input', () => {
 					value: {
 						email: 'memberFromDl2@email.test',
 						id: 'memberFromDl2@email.test',
-						type: USER_TYPES.CONTACT
+						type: USER_TYPES_CONST.CONTACT
 					}
 				})
 			]);
