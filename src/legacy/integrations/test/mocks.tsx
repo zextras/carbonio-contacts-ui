@@ -6,10 +6,7 @@
 import { within } from '@testing-library/react';
 import { ChipAction } from '@zextras/carbonio-design-system';
 
-import {
-	EDIT_ACTION_ID,
-	USER_TYPES_CONST
-} from '../../../carbonio-ui-commons/integrations/constants';
+import { EDIT_ACTION_ID, CONTACT_TYPES } from '../../../carbonio-ui-commons/integrations/constants';
 import { ContactInputItem } from '../../../carbonio-ui-commons/integrations/types';
 import { createSoapAPIInterceptor } from '../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { screen, UserEvent } from '../../../carbonio-ui-commons/test/test-setup';
@@ -52,7 +49,7 @@ export const createSimpleChip = ({
 	value: {
 		id,
 		email,
-		type: USER_TYPES_CONST.CONTACT
+		type: CONTACT_TYPES.CONTACT
 	}
 });
 
@@ -62,7 +59,7 @@ export const createDistributionListChip = (email: string): ContactInputItem => (
 	value: {
 		id: email,
 		email,
-		type: USER_TYPES_CONST.DISTRIBUTION_LIST
+		type: CONTACT_TYPES.DISTRIBUTION_LIST
 	}
 });
 
@@ -74,7 +71,7 @@ export const generateGroupMemberChip = (email: string): ContactInputItem => ({
 	value: {
 		id: email,
 		email,
-		type: USER_TYPES_CONST.CONTACT
+		type: CONTACT_TYPES.CONTACT
 	}
 });
 

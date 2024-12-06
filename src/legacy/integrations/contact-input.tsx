@@ -33,12 +33,12 @@ import {
 	GroupContact,
 	ContactInputItemInternal
 } from './types';
-import { EDIT_ACTION_ID, USER_TYPES_CONST } from '../../carbonio-ui-commons/integrations/constants';
+import { EDIT_ACTION_ID, CONTACT_TYPES } from '../../carbonio-ui-commons/integrations/constants';
 import {
 	ContactInputItem,
 	ContactInputProps,
 	UserContact,
-	UserDistributionList,
+	DistributionListContact,
 	UserOrDL
 } from '../../carbonio-ui-commons/integrations/types';
 
@@ -121,7 +121,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 				value: {
 					id,
 					email: parsedEmail,
-					type: USER_TYPES_CONST.CONTACT
+					type: CONTACT_TYPES.CONTACT
 				},
 				error: !isAValidEmail,
 				actions: [
@@ -150,7 +150,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 				items,
 				(acc, item) => {
 					const { value: itemValue, label } = item;
-					if (label && itemValue && itemValue?.type !== USER_TYPES_CONST.GROUP) {
+					if (label && itemValue && itemValue?.type !== CONTACT_TYPES.GROUP) {
 						acc.push({ ...item, label, value: itemValue });
 					}
 					return acc;
@@ -228,7 +228,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 					return {
 						email,
 						id: email,
-						type: USER_TYPES_CONST.CONTACT
+						type: CONTACT_TYPES.CONTACT
 					};
 				});
 			}),
@@ -248,7 +248,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 				throw new Error('no value in provided contact');
 			}
 
-			if (contactValue.type === USER_TYPES_CONST.GROUP) {
+			if (contactValue.type === CONTACT_TYPES.GROUP) {
 				getGroupMembers(contactValue)
 					.then((userContacts) => userContacts.map((userContact) => onAdd(userContact)))
 					.then((chipItems) => {
@@ -260,7 +260,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 					value: {
 						email: 'whatever',
 						id: 'whatever',
-						type: USER_TYPES_CONST.CONTACT
+						type: CONTACT_TYPES.CONTACT
 					}
 				};
 			}
@@ -288,7 +288,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	);
 
 	const onExpandDL = useCallback(
-		(expandedDl: UserDistributionList, members: Array<string>) => {
+		(expandedDl: DistributionListContact, members: Array<string>) => {
 			const valueWithoutDl = defaultValue.filter((val) => val.value.email !== expandedDl.email);
 			const membersChips = members.map((member) => onAdd(member));
 			const newItems = [...valueWithoutDl, ...membersChips];
@@ -302,10 +302,10 @@ const ContactInputCore: FC<ContactInputProps> = ({
 			const val = props.value;
 			return (
 				<>
-					{val && val.type === USER_TYPES_CONST.CONTACT && (
+					{val && val.type === CONTACT_TYPES.CONTACT && (
 						<Chip {...props} data-testid={'default-chip'} />
 					)}
-					{val && props.label && val.type === USER_TYPES_CONST.DISTRIBUTION_LIST && (
+					{val && props.label && val.type === CONTACT_TYPES.DISTRIBUTION_LIST && (
 						<DistributionListChip
 							{...props}
 							value={val}

@@ -8,9 +8,9 @@ import { ChipItem, type DropdownItem } from '@zextras/carbonio-design-system';
 
 import {
 	ContactInputItem,
-	USER_TYPES,
+	ContactType,
 	UserContact,
-	UserDistributionList
+	DistributionListContact
 } from '../../carbonio-ui-commons/integrations/types';
 
 export type ContactInputGroup = ContactInputItem &
@@ -30,8 +30,8 @@ type RequiredEmailLabelChipItem<T> = Required<Pick<ChipItem<T>, 'value'>> &
 	Required<Pick<ChipItem<T>, 'label'>> &
 	Omit<ChipItem<T>, 'label' | 'value'>;
 
-type OnExpandDL = (expandedDL: UserDistributionList, memberEmails: Array<string>) => void;
-export type ContactInputDistributionList = RequiredEmailLabelChipItem<UserDistributionList> & {
+type OnExpandDL = (expandedDL: DistributionListContact, memberEmails: Array<string>) => void;
+export type ContactInputDistributionList = RequiredEmailLabelChipItem<DistributionListContact> & {
 	onExpandDL: OnExpandDL;
 };
 
@@ -70,8 +70,8 @@ export type GroupContact = {
 	id: string;
 	display: string;
 	groupId: string;
-	type: USER_TYPES['GROUP'];
+	type: ContactType['GROUP'];
 };
-export type ContactInputItemInternalValue = GroupContact | UserDistributionList | UserContact;
+export type ContactInputItemInternalValue = GroupContact | DistributionListContact | UserContact;
 export type ContactInputItemInternal = ChipItem<ContactInputItemInternalValue>;
 export type ContactInputOptions = DropdownItem & { value?: ContactInputItemInternal };

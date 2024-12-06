@@ -13,7 +13,7 @@ import { HttpResponse } from 'msw';
 
 import { DistributionListChip } from './distribution-list-chip';
 import { clickCollapseDL, clickExpandDL, SELECT_ALL, SHOW_MORE } from './test/mocks';
-import { USER_TYPES_CONST } from '../../carbonio-ui-commons/integrations/constants';
+import { CONTACT_TYPES } from '../../carbonio-ui-commons/integrations/constants';
 import { mockedAccount } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
 import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
@@ -50,7 +50,7 @@ const distributionListChip = {
 	value: {
 		id,
 		email,
-		type: USER_TYPES_CONST.DISTRIBUTION_LIST
+		type: CONTACT_TYPES.DISTRIBUTION_LIST
 	}
 };
 const user1 = {
@@ -59,7 +59,7 @@ const user1 = {
 	value: {
 		id: 'user1ID',
 		email: 'user1@mail.com',
-		type: USER_TYPES_CONST.CONTACT
+		type: CONTACT_TYPES.CONTACT
 	}
 };
 

@@ -12,7 +12,7 @@ import { act, fireEvent, waitFor, within } from '@testing-library/react';
 import { ChipAction } from '@zextras/carbonio-design-system';
 
 import { ContactInput } from './contact-input';
-import { USER_TYPES_CONST } from '../../carbonio-ui-commons/integrations/constants';
+import { CONTACT_TYPES } from '../../carbonio-ui-commons/integrations/constants';
 import {
 	ContactInputOnChange,
 	ContactInputValue
@@ -549,7 +549,7 @@ describe('Contact input', () => {
 					value: {
 						email: 'memberFromDl2@email.test',
 						id: 'memberFromDl2@email.test',
-						type: USER_TYPES_CONST.CONTACT
+						type: CONTACT_TYPES.CONTACT
 					}
 				})
 			]);
