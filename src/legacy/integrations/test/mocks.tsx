@@ -6,6 +6,8 @@
 import { within } from '@testing-library/react';
 import { ChipAction } from '@zextras/carbonio-design-system';
 
+import { EDIT_ACTION_ID, CONTACT_TYPES } from '../../../carbonio-ui-commons/integrations/constants';
+import { ContactInputItem } from '../../../carbonio-ui-commons/integrations/types';
 import { createSoapAPIInterceptor } from '../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { screen, UserEvent } from '../../../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../../../constants/tests';
@@ -15,7 +17,6 @@ import {
 } from '../../../network/api/get-distribution-list';
 import { FullAutocompleteRequest, FullAutocompleteResponse } from '../../types/contact';
 import { GetContactsRequest, GetContactsResponse } from '../../types/soap';
-import { ContactInputItem, EDIT_ACTION_ID, USER_TYPES } from '../types';
 
 export const SHOW_MORE = /show more/i;
 export const SELECT_ALL = /Select address|Select all \d+ addresses/;
@@ -48,7 +49,7 @@ export const createSimpleChip = ({
 	value: {
 		id,
 		email,
-		type: USER_TYPES.CONTACT
+		type: CONTACT_TYPES.CONTACT
 	}
 });
 
@@ -58,7 +59,7 @@ export const createDistributionListChip = (email: string): ContactInputItem => (
 	value: {
 		id: email,
 		email,
-		type: USER_TYPES.DISTRIBUTION_LIST
+		type: CONTACT_TYPES.DISTRIBUTION_LIST
 	}
 });
 
@@ -70,7 +71,7 @@ export const generateGroupMemberChip = (email: string): ContactInputItem => ({
 	value: {
 		id: email,
 		email,
-		type: USER_TYPES.CONTACT
+		type: CONTACT_TYPES.CONTACT
 	}
 });
 

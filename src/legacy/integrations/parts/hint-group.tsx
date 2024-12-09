@@ -8,9 +8,9 @@ import React, { ReactElement } from 'react';
 
 import { Avatar, Container, Text } from '@zextras/carbonio-design-system';
 
-import { UserContactGroup } from '../types';
+import { GroupContact } from '../types';
 
-export const HintGroup = ({ contact }: { contact: UserContactGroup }): ReactElement => {
+export const HintGroup = ({ contact }: { contact: GroupContact }): ReactElement => {
 	const label = contact.display;
 	return (
 		<Container

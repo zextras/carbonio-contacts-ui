@@ -21,10 +21,10 @@ import { remove, some, uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
+import { ContactInputItem } from '../../carbonio-ui-commons/integrations/types';
 import { MemberListItemComponent } from '../../components/member-list-item';
 import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../constants';
 import { ContactInput } from '../../legacy/integrations/contact-input';
-import { ContactInputItem } from '../../legacy/integrations/types';
 
 export function isContactGroupNameInvalid(nameValue: string): boolean {
 	return nameValue.trim().length === 0 || nameValue.length > CONTACT_GROUP_NAME_MAX_LENGTH;
