@@ -35,7 +35,7 @@ import {
 	EDIT_DL_BOARD_ID,
 	CONTACT_BOARD_ID
 } from './constants';
-import { ContactInputIntegrationWrapper } from './legacy/integrations/contact-input-integration-wrapper';
+import { ContactInput } from './legacy/integrations/contact-input';
 import createContactIntegration from './legacy/integrations/create-contact';
 import { StoreProvider } from './legacy/store/redux';
 import { SyncDataHandler } from './legacy/views/secondary-bar/sync-data-handler';
@@ -265,7 +265,7 @@ const App = (): React.JSX.Element => {
 	useEffect(() => {
 		registerComponents({
 			id: 'contact-input',
-			component: ContactInputIntegrationWrapper
+			component: ContactInput
 		});
 
 		registerActions<NewAction>(
