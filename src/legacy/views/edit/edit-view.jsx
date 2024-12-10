@@ -80,6 +80,7 @@ const CustomStringField = ({ name, label, value, dispatch, autoFocus = false }) 
 	</Container>
 );
 
+/** @type { (props: { panel?: boolean; onClose?: () => void; onTitleChanged?: (title: string) => void }) => React.JSX.Element } */
 export default function EditView({ panel, onClose, onTitleChanged }) {
 	const { folderId, editId } = useParams();
 	const storeDispatch = useDispatch();

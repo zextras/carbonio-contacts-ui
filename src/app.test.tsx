@@ -5,6 +5,7 @@
  */
 import React from 'react';
 
+import * as SearchUI from '@zextras/carbonio-search-ui';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { HttpResponse } from 'msw';
 
@@ -15,7 +16,7 @@ import {
 	createSoapAPIInterceptor
 } from './carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { setupTest } from './carbonio-ui-commons/test/test-setup';
-import { CONTACT_BOARD_ID } from './constants';
+import { CONTACT_BOARD_ID, CONTACTS_APP_ID } from './constants';
 import { ContactInputProps } from './legacy/integrations/contact-input';
 import { ContactInputIntegrationWrapper } from './legacy/integrations/contact-input-integration-wrapper';
 
@@ -83,10 +84,16 @@ describe('App', () => {
 		);
 	});
 
-	it('should register a search view', () => {
-		const addSearchView = jest.spyOn(shell, 'addSearchView');
+	it('should register the search view', () => {
+		const addSearchView = jest.fn();
+		jest.spyOn(shell, 'useIntegratedFunction').mockImplementation((id) => {
+			if (id === 'search-add-view') {
+				return [addSearchView, true];
+			}
+			return [jest.fn(), false];
+		});
 		setupTest(<App />);
-		expect(addSearchView).toHaveBeenCalledWith<Parameters<typeof shell.addSearchView>>(
+		expect(addSearchView).toHaveBeenCalledWith<Parameters<typeof SearchUI.addSearchView>>(
 			expect.objectContaining({
 				route: 'contacts',
 				label: 'Contacts'
@@ -94,14 +101,24 @@ describe('App', () => {
 		);
 	});
 
-	it('should register a search view', () => {
-		const addSearchView = jest.spyOn(shell, 'addSearchView');
-		setupTest(<App />);
-		expect(addSearchView).toHaveBeenCalledWith<Parameters<typeof shell.addSearchView>>(
-			expect.objectContaining({
-				route: 'contacts',
-				label: 'Contacts'
-			})
+	it('should remove the search view on unmount', () => {
+		const addSearchView = jest.fn();
+		const removeSearchView = jest.fn();
+		jest.spyOn(shell, 'useIntegratedFunction').mockImplementation((id) => {
+			if (id === 'search-add-view') {
+				return [addSearchView, true];
+			}
+			if (id === 'search-remove-view') {
+				return [removeSearchView, true];
+			}
+			return [jest.fn(), false];
+		});
+		const { unmount } = setupTest(<App />);
+
+		unmount();
+
+		expect(removeSearchView).toHaveBeenCalledWith<Parameters<typeof SearchUI.removeSearchView>>(
+			CONTACTS_APP_ID
 		);
 	});
 

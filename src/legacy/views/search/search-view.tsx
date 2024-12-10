@@ -6,7 +6,8 @@
 import React, { FC, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Container, Spinner } from '@zextras/carbonio-design-system';
-import { type SearchViewProps, soapFetch } from '@zextras/carbonio-shell-ui';
+import { soapFetch } from '@zextras/carbonio-shell-ui';
+import type { SearchViewProps } from '@zextras/carbonio-search-ui';
 import { map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';

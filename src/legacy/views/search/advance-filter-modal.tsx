@@ -13,7 +13,7 @@ import {
 	Padding,
 	Icon
 } from '@zextras/carbonio-design-system';
-import { SearchViewProps } from '@zextras/carbonio-shell-ui';
+import type { SearchViewProps } from '@zextras/carbonio-search-ui';
 import { TFunction } from 'i18next';
 import { concat, filter, map } from 'lodash';
 

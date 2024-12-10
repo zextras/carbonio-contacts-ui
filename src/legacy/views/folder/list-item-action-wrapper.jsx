@@ -33,6 +33,7 @@ const CustomHoverRow = styled(HoverRow)`
 	}
 `;
 
+/** @type { (props: React.PropsWithChildren<{ current?: unknown; onClick?: () => void; contact: Contact }>) => React.JSX.Element } */
 const ListItemActionWrapper = ({ children, current, onClick, contact }) => {
 	const { getContextActions, getHoverActions } = useContext(ActionsContext);
 
