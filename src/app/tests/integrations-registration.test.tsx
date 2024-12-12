@@ -5,7 +5,12 @@
  */
 import React from 'react';
 
-import { ACTION_TYPES, registerActions, registerComponents } from '@zextras/carbonio-shell-ui';
+import {
+	ACTION_TYPES,
+	registerActions,
+	registerComponents,
+	registerFunctions
+} from '@zextras/carbonio-shell-ui';
 
 import { setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { IntegrationsRegistration } from '../integrations-registration';
@@ -23,9 +28,9 @@ describe('IntegrationsRegistration', () => {
 	it('should register the contact creation from vCard function', () => {
 		setupTest(<IntegrationsRegistration />);
 
-		expect(registerComponents).toHaveBeenCalledWith({
+		expect(registerFunctions).toHaveBeenCalledWith({
 			id: 'create_contact_from_vcard',
-			component: expect.any(Function)
+			fn: expect.any(Function)
 		});
 	});
 
