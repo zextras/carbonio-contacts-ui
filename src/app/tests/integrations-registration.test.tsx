@@ -5,7 +5,7 @@
  */
 import React from 'react';
 
-import { registerComponents } from '@zextras/carbonio-shell-ui';
+import { ACTION_TYPES, registerActions, registerComponents } from '@zextras/carbonio-shell-ui';
 
 import { setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { IntegrationsRegistration } from '../integrations-registration';
@@ -18,5 +18,31 @@ describe('IntegrationsRegistration', () => {
 			id: 'contact-input',
 			component: expect.any(Function)
 		});
+	});
+
+	it('should register the contact creation from vCard function', () => {
+		setupTest(<IntegrationsRegistration />);
+
+		expect(registerComponents).toHaveBeenCalledWith({
+			id: 'create_contact_from_vcard',
+			component: expect.any(Function)
+		});
+	});
+
+	it('should register the actions', () => {
+		setupTest(<IntegrationsRegistration />);
+
+		expect(registerActions).toHaveBeenCalledWith(
+			{
+				id: 'new-contact',
+				type: ACTION_TYPES.NEW,
+				action: expect.any(Function)
+			},
+			{
+				id: 'new-contact-group',
+				type: ACTION_TYPES.NEW,
+				action: expect.any(Function)
+			}
+		);
 	});
 });
