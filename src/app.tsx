@@ -6,7 +6,7 @@
 import React, { lazy, Suspense, useEffect, useMemo } from 'react';
 
 import { ModalManager, useSnackbar } from '@zextras/carbonio-design-system';
-import * as SearchUI from '@zextras/carbonio-search-ui';
+import type * as SearchUI from '@zextras/carbonio-search-ui';
 import {
 	ACTION_TYPES,
 	addBoard,

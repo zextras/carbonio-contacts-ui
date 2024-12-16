@@ -5,7 +5,7 @@
  */
 import React from 'react';
 
-import * as SearchUI from '@zextras/carbonio-search-ui';
+import type * as SearchUI from '@zextras/carbonio-search-ui';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { HttpResponse } from 'msw';
 
