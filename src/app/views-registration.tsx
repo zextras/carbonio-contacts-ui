@@ -12,11 +12,11 @@ import {
 	addSearchView,
 	addSettingsView,
 	SearchViewProps,
-	SecondaryBarComponentProps,
-	Spinner
+	SecondaryBarComponentProps
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
+import { Spinner } from '../components/Spinner';
 import {
 	CONTACT_BOARD_ID,
 	CONTACTS_ROUTE,
