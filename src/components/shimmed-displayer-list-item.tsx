@@ -21,7 +21,7 @@ export const ShimmedDisplayerListItem = (): React.JSX.Element => (
 				<Shimmer.Avatar size={'medium'} />
 			</Row>
 			<Row flexShrink={1} minWidth={'1rem'}>
-				<Shimmer.Text size="small" width="25ch" />
+				<Shimmer.Text width="25ch" />
 			</Row>
 		</Row>
 	</Row>

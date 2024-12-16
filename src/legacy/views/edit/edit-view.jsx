@@ -69,7 +69,7 @@ const cleanMultivalueFields = (contact) => ({
 const CustomStringField = ({ name, label, value, dispatch, autoFocus = false }) => (
 	<Container padding={{ all: 'small' }}>
 		<Input
-			backgroundColor="gray5"
+			background="gray5"
 			inputName={name}
 			label={label}
 			defaultValue={value}

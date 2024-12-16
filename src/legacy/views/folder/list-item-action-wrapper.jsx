@@ -33,8 +33,8 @@ const CustomHoverRow = styled(HoverRow)`
 	}
 `;
 
-/** @type { (props: React.PropsWithChildren<{ current?: unknown; onClick?: () => void; contact: Contact }>) => React.JSX.Element } */
-const ListItemActionWrapper = ({ children, current, onClick, contact }) => {
+/** @type { (props: React.PropsWithChildren<{ onClick?: () => void; contact: Contact }>) => React.JSX.Element } */
+const ListItemActionWrapper = ({ children, onClick, contact }) => {
 	const { getContextActions, getHoverActions } = useContext(ActionsContext);
 
 	const hoverActions = useMemo(() => getHoverActions(contact), [contact, getHoverActions]);
@@ -46,7 +46,6 @@ const ListItemActionWrapper = ({ children, current, onClick, contact }) => {
 				mainAlignment="flex-start"
 				crossAlignment="unset"
 				onClick={onClick}
-				current={current}
 			>
 				{children}
 				<HoverBarContainer

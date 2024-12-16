@@ -4,7 +4,10 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
+import React from 'react';
+
 import {
+	AnyColor,
 	Avatar,
 	Container,
 	getColor,
@@ -13,15 +16,15 @@ import {
 	pseudoClasses,
 	Row
 } from '@zextras/carbonio-design-system';
-import styled, { css, type DefaultTheme, type SimpleInterpolation } from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const HoverRow = styled(Row)`
 	position: relative;
 	cursor: pointer;
-	background: ${({ theme }): SimpleInterpolation => theme.palette.transparent.regular};
+	background: ${({ theme }): string => theme.palette.transparent.regular};
 
 	&:hover {
-		background: ${({ theme }): SimpleInterpolation => theme.palette.transparent.hover};
+		background: ${({ theme }): string => theme.palette.transparent.hover};
 	}
 `;
 
@@ -49,27 +52,22 @@ export const ListItemContainer = styled(Container)`
 	}
 `;
 
-export const StyledListItem = styled(ListItem).attrs<
-	ListItemProps,
-	{ backgroundColor?: string | keyof DefaultTheme['palette'] }
->(({ background, selectedBackground, activeBackground, active, selected }) => ({
-	backgroundColor: (active && activeBackground) || (selected && selectedBackground) || background
-}))`
-	${({ backgroundColor, theme }): SimpleInterpolation =>
-		backgroundColor && pseudoClasses(theme, backgroundColor, 'color')}
+const StyledListItem = styled(ListItem)<{ $backgroundColor: AnyColor | undefined }>`
+	${({ $backgroundColor, theme }): undefined | ReturnType<typeof pseudoClasses> =>
+		$backgroundColor && pseudoClasses(theme, $backgroundColor, 'color')}
 	transition: none;
 
-	${({ backgroundColor, theme }): SimpleInterpolation =>
-		backgroundColor &&
+	${({ $backgroundColor, theme }): undefined | ReturnType<typeof css> =>
+		$backgroundColor &&
 		css`
 			${HoverBarContainer} {
-				background: linear-gradient(to right, transparent, ${getColor(backgroundColor, theme)});
+				background: linear-gradient(to right, transparent, ${getColor($backgroundColor, theme)});
 			}
 			&:focus ${HoverBarContainer} {
 				background: linear-gradient(
 					to right,
 					transparent,
-					${getColor(`${backgroundColor}.focus`, theme)}
+					${getColor(`${$backgroundColor}.focus`, theme)}
 				);
 			}
 
@@ -77,7 +75,7 @@ export const StyledListItem = styled(ListItem).attrs<
 				background: linear-gradient(
 					to right,
 					transparent,
-					${getColor(`${backgroundColor}.hover`, theme)}
+					${getColor(`${$backgroundColor}.hover`, theme)}
 				);
 			}
 
@@ -85,11 +83,33 @@ export const StyledListItem = styled(ListItem).attrs<
 				background: linear-gradient(
 					to right,
 					transparent,
-					${getColor(`${backgroundColor}.active`, theme)}
+					${getColor(`${$backgroundColor}.active`, theme)}
 				);
 			}
 		`}
 `;
+
+export const EnhancedListItem = React.forwardRef<HTMLDivElement, ListItemProps>(
+	function EnhancedListItemFn(
+		{ background, selectedBackground, activeBackground, active, selected, ...rest },
+		ref
+	) {
+		return (
+			<StyledListItem
+				ref={ref}
+				$backgroundColor={
+					(active && activeBackground) || (selected && selectedBackground) || background
+				}
+				background={background}
+				selectedBackground={selectedBackground}
+				activeBackground={activeBackground}
+				active={active}
+				selected={selected}
+				{...rest}
+			/>
+		);
+	}
+);
 
 export const ScrollableContainer = styled(Container)`
 	overflow-y: auto;

@@ -78,7 +78,7 @@ export const ContactListItem = ({
 		>
 			<Container orientation="vertical" data-testid={'contact-list-item'} onClick={_onClick}>
 				<Container orientation="horizontal" mainAlignment="flex-start">
-					<ListItemActionWrapper contact={item} current={active}>
+					<ListItemActionWrapper contact={item}>
 						<ItemAvatar item={item} selected={selected} selecting={selecting} toggle={toggle} />
 						<ItemContent item={item} tags={tags} />
 					</ListItemActionWrapper>

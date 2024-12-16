@@ -10,7 +10,7 @@ import { Contact } from '../types/contact';
 
 type ACPProps = {
 	folderId: string;
-	selectedIds: Record<string, string>;
+	selectedIds: Record<string, unknown>;
 	deselectAll: () => void;
 	children: React.ReactNode;
 };
@@ -56,17 +56,17 @@ export const ActionsContextProvider: FC<ACPProps & { selectedContacts: Contact[]
 	);
 
 	const getContextActions = useCallback<SingleContactActionsProvider>(
-		// TODO: fix type to remove assertion
+		// FIXME: return type of contextActionsCallback does not match ActionList
 		(item: Contact): ActionList => contextActionsCallback(item) as ActionList,
 		[contextActionsCallback]
 	);
 	const getHoverActions = useCallback<SingleContactActionsProvider>(
-		// TODO: fix type to remove assertion
+		// FIXME: return type of hoverActionsCallback does not match ActionList
 		(item: Contact): ActionList => hoverActionsCallback(item) as ActionList,
 		[hoverActionsCallback]
 	);
 	const getSecondaryActions = useCallback<MultipleContactsActionsProvider>(
-		// TODO: fix type to remove assertion
+		// FIXME: return type of secondaryActionsCallback does not match ActionList
 		(): ActionList => secondaryActionsCallback() as ActionList,
 		[secondaryActionsCallback]
 	);
