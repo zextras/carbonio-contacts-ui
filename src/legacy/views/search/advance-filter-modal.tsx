@@ -9,9 +9,10 @@ import {
 	CustomModal,
 	Container,
 	Row,
-	TextWithTooltip,
 	Padding,
-	Icon
+	Icon,
+	Tooltip,
+	Text
 } from '@zextras/carbonio-design-system';
 import type { SearchViewProps } from '@zextras/carbonio-search-ui';
 import { TFunction } from 'i18next';
@@ -62,7 +63,9 @@ const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 								</Padding>
 							</Row>
 							<Row takeAvailableSpace mainAlignment="flex-start">
-								<TextWithTooltip>{item.name}</TextWithTooltip>
+								<Tooltip label={item.name} overflowTooltip>
+									<Text>{item.name}</Text>
+								</Tooltip>
 							</Row>
 						</Row>
 					</Row>
