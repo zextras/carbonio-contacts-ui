@@ -9,6 +9,7 @@ import { screen } from '@testing-library/react';
 
 import { FolderTreeSelector, FolderTreeSelectorProps } from './folder-tree-selector';
 import { FOLDER_VIEW } from '../../carbonio-ui-commons/constants';
+import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
 import {
 	getFolderOwnerAccountName,
 	isRoot,
@@ -24,7 +25,6 @@ import { populateFoldersStore } from '../../carbonio-ui-commons/test/mocks/store
 import { makeListItemsVisible, setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { isEmailedContacts } from '../../helpers/folders';
 import { getFoldersArray } from '../../tests/utils';
-import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
 
 describe('Folder selector', () => {
 	test('The selector is visible', () => {
