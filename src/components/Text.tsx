@@ -8,8 +8,8 @@ import React, { ReactNode } from 'react';
 import {
 	Text as DSText,
 	type TextProps,
-	TextWithTooltip,
-	type TextWithTooltipProps
+	Tooltip,
+	TooltipProps
 } from '@zextras/carbonio-design-system';
 import styled from 'styled-components';
 
@@ -22,7 +22,7 @@ interface TextExtendedProps {
 }
 
 type TextWithOptionalTooltipProps =
-	| ({ withTooltip: true } & MakeOptional<TextWithTooltipProps, 'children'>)
+	| ({ withTooltip: true } & MakeOptional<TooltipProps, 'children'>)
 	| ({ withTooltip?: boolean } & TextProps);
 
 const TextWithOptionalTooltip = ({
@@ -31,7 +31,9 @@ const TextWithOptionalTooltip = ({
 	...rest
 }: TextWithOptionalTooltipProps): React.JSX.Element =>
 	withTooltip ? (
-		<TextWithTooltip {...rest}>{children as ReactNode}</TextWithTooltip>
+		<Tooltip label={children as ReactNode} overflowTooltip>
+			<DSText {...rest}>{children as ReactNode}</DSText>
+		</Tooltip>
 	) : (
 		<DSText {...rest}>{children}</DSText>
 	);

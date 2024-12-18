@@ -24,6 +24,7 @@ import { replace, split } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { GranteeInfo } from './share-folder-properties';
+import { ContactInputValue } from '../../../carbonio-ui-commons/integrations/types';
 import { useFolder } from '../../../carbonio-ui-commons/store/zustand/folder';
 import { Grant } from '../../../carbonio-ui-commons/types/folder';
 import { OnChangeSelect } from '../../../carbonio-ui-commons/types/select';
@@ -51,7 +52,7 @@ export const ShareFolderModal = ({
 	const shareFolderRoleOptions = useMemo(() => getShareFolderRoleOptions(t), [t]);
 	const [sendNotification, setSendNotification] = useState(true);
 	const [standardMessage, setStandardMessage] = useState('');
-	const [contacts, setContacts] = useState<Array<{ email: string }>>([]);
+	const [contacts, setContacts] = useState<ContactInputValue>([]);
 	const [shareWithUserRole, setshareWithUserRole] = useState<string | Array<SelectItem> | null>(
 		editMode ? activeGrant.perm : 'r'
 	);
@@ -80,7 +81,9 @@ export const ShareFolderModal = ({
 	);
 
 	const onConfirm = useCallback(() => {
-		const addresses = editMode ? [activeGrant?.d ?? ''] : contacts.map((contact) => contact.email);
+		const addresses = editMode
+			? [activeGrant?.d ?? '']
+			: contacts.map((contact) => contact.value.email);
 		apiClient
 			.shareFolder({
 				addresses,
@@ -170,14 +173,8 @@ export const ShareFolderModal = ({
 				<Container height="fit" padding={{ vertical: 'small' }}>
 					<ContactInput
 						placeholder={t('share.recipients_address', 'Recipients’ e-mail addresses')}
-						onChange={(ev): void => {
-							const normalizedContacts = ev.reduce<Array<{ email: string }>>((result, contact) => {
-								if (contact.email) {
-									result.push({ email: contact.email });
-								}
-								return result;
-							}, []);
-							setContacts(normalizedContacts);
+						onChange={(chips): void => {
+							setContacts(chips);
 						}}
 						defaultValue={contacts}
 					/>
