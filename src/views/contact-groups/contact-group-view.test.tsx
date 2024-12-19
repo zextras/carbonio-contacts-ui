@@ -10,7 +10,7 @@ import { within } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
 
 import { ContactGroupView } from './contact-group-view';
-import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
+import {screen, setupHook, setupTest} from '../../carbonio-ui-commons/test/test-setup';
 import { ROUTES_INTERNAL_PARAMS } from '../../constants';
 import {
 	EMPTY_DISPLAYER_HINT,
@@ -24,9 +24,7 @@ import {
 	registerFindContactGroupsHandler
 } from '../../tests/msw-handlers/find-contact-groups';
 import { createCnItem } from '../../tests/utils';
-
-const STANDARD_BACKGROUND_COLOR = `background: rgb(217, 217, 217)`;
-const ACTIVE_BACKGROUND_COLOR = `background: rgb(150, 184, 233)`;
+import {useTheme} from "@zextras/carbonio-design-system";
 
 function setupMainAccountContactGroupView(): any {
 	return setupTest(<ContactGroupView />, {
@@ -38,6 +36,16 @@ function setupSharedAccountContactGroupView(accountId: string): any {
 	return setupTest(<ContactGroupView />, {
 		initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${accountId}`]
 	});
+}
+
+function getFocusBackgroundStyle(): string {
+	const { result: { current: theme }} = setupHook(useTheme);
+	return `background: ${theme.palette.highlight.focus}`;
+}
+
+function getActiveBackgroundStyle(): string {
+	const { result: { current: theme }} = setupHook(useTheme);
+	return `background: ${theme.palette.gray6.active}`;
 }
 
 describe('Contact Group View', () => {
@@ -216,11 +224,11 @@ describe('Contact Group View', () => {
 					const styledListItem = await screen.findByTestId(
 						`main-account-list-item-${contactGroupId}`
 					);
-					expect(styledListItem).toHaveStyle(STANDARD_BACKGROUND_COLOR);
+					expect(styledListItem).toHaveStyle(getActiveBackgroundStyle());
 					const listItem = await within(styledListItem).findByText(contactGroupName);
 					await user.click(listItem);
 					await screen.findByTestId('contact-group-displayer');
-					expect(styledListItem).toHaveStyle(ACTIVE_BACKGROUND_COLOR);
+					expect(styledListItem).toHaveStyle(getFocusBackgroundStyle());
 				});
 			});
 
@@ -481,11 +489,11 @@ describe('Contact Group View', () => {
 				});
 
 				const styledListItem = await screen.findByTestId(`shared-list-item-${contactGroupId}`);
-				expect(styledListItem).toHaveStyle(STANDARD_BACKGROUND_COLOR);
+				expect(styledListItem).toHaveStyle(getActiveBackgroundStyle());
 				const listItem = await within(styledListItem).findByText(contactGroupName);
 				await user.click(listItem);
 				await screen.findByTestId('contact-group-displayer');
-				expect(styledListItem).toHaveStyle(ACTIVE_BACKGROUND_COLOR);
+				expect(styledListItem).toHaveStyle(getFocusBackgroundStyle());
 			});
 		});
 
