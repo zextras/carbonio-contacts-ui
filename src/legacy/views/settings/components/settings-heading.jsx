@@ -6,13 +6,14 @@
 import React from 'react';
 
 import { Padding, Row, Text } from '@zextras/carbonio-design-system';
+import PropTypes from 'prop-types';
 
 export default function Heading({ title }) {
 	return (
 		<>
 			<Row
 				padding={{ all: 'small' }}
-				mainAlignment="baseline"
+				mainAlignment="flex-start"
 				crossAlignment="baseline"
 				width="100%"
 			>
@@ -24,3 +25,7 @@ export default function Heading({ title }) {
 		</>
 	);
 }
+
+Heading.propTypes = {
+	title: PropTypes.string
+};
