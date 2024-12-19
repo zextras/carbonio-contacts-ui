@@ -27,8 +27,8 @@ const AvatarMobile = styled(Avatar)`
 const AvatarHeader = styled(Row)`
 	background: linear-gradient(
 		to right,
-		${({ theme, bg }) => theme.avatarColors[bg]},
-		${({ theme, bg2 }) => theme.avatarColors[bg2]}
+		${({ theme, $bg }) => theme.avatarColors[$bg]},
+		${({ theme, $bg2 }) => theme.avatarColors[$bg2]}
 	);
 `;
 function calcColor(label) {
@@ -101,8 +101,8 @@ export const CompactView = ({ contact, toggleOpen, open }) => {
 					<AvatarHeader
 						takeAvailableSpace
 						height="fit"
-						bg={calcColor(`${contact.firstName} ${contact.lastName}`)}
-						bg2={calcColor(`${contact.firstName}${contact.lastName}`)}
+						$bg={calcColor(`${contact.firstName} ${contact.lastName}`)}
+						$bg2={calcColor(`${contact.firstName}${contact.lastName}`)}
 						// mainAlignment='center'
 					>
 						<AvatarMobile

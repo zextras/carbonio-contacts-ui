@@ -11,7 +11,7 @@ import { useParams } from 'react-router-dom';
 
 import { ContactGroupListComponent } from './contact-group-list-component';
 import { ContactGroupListItemMainAccount } from './contact-group-list-item-main-account';
-import { StyledListItem } from '../../../components/styled-components';
+import { EnhancedListItem } from '../../../components/styled-components';
 import { useFindContactGroups } from '../../../hooks/useFindContactGroups';
 
 export const ContactGroupListMainAccount = (): React.JSX.Element => {
@@ -23,7 +23,7 @@ export const ContactGroupListMainAccount = (): React.JSX.Element => {
 	const items = useMemo(
 		() =>
 			map(mainAccountContactGroups, (contactGroup) => (
-				<StyledListItem
+				<EnhancedListItem
 					key={contactGroup.id}
 					data-testid={`main-account-list-item-${contactGroup.id}`}
 					active={currentPathId === contactGroup.id}
@@ -31,7 +31,7 @@ export const ContactGroupListMainAccount = (): React.JSX.Element => {
 					{(visible): React.JSX.Element => (
 						<ContactGroupListItemMainAccount visible={visible} contactGroup={contactGroup} />
 					)}
-				</StyledListItem>
+				</EnhancedListItem>
 			)),
 		[currentPathId, mainAccountContactGroups]
 	);

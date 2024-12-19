@@ -70,7 +70,7 @@ export default function ContactSettingsView() {
 			<SettingsHeader onCancel={onClose} onSave={saveChanges} title={title} isDirty={!disabled} />
 			<Container
 				orientation="vertical"
-				mainAlignment="baseline"
+				mainAlignment="flex-start"
 				crossAlignment="baseline"
 				background="gray5"
 				style={{ overflowY: 'auto' }}
