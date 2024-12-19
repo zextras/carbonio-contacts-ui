@@ -7,8 +7,6 @@ import type { QueryChip } from '@zextras/carbonio-search-ui';
 
 export type Query = Array<
 	QueryChip & {
-		label?: string;
-		value?: string;
 		isGeneric?: boolean;
 		isQueryFilter?: boolean;
 	}
