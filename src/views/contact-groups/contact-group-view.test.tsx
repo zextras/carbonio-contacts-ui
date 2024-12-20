@@ -7,10 +7,11 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { within } from '@testing-library/react';
+import { useTheme } from '@zextras/carbonio-design-system';
 import * as shell from '@zextras/carbonio-shell-ui';
 
 import { ContactGroupView } from './contact-group-view';
-import {screen, setupHook, setupTest} from '../../carbonio-ui-commons/test/test-setup';
+import { screen, setupHook, setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { ROUTES_INTERNAL_PARAMS } from '../../constants';
 import {
 	EMPTY_DISPLAYER_HINT,
@@ -24,7 +25,6 @@ import {
 	registerFindContactGroupsHandler
 } from '../../tests/msw-handlers/find-contact-groups';
 import { createCnItem } from '../../tests/utils';
-import {useTheme} from "@zextras/carbonio-design-system";
 
 function setupMainAccountContactGroupView(): any {
 	return setupTest(<ContactGroupView />, {
@@ -39,12 +39,16 @@ function setupSharedAccountContactGroupView(accountId: string): any {
 }
 
 function getFocusBackgroundStyle(): string {
-	const { result: { current: theme }} = setupHook(useTheme);
+	const {
+		result: { current: theme }
+	} = setupHook(useTheme);
 	return `background: ${theme.palette.highlight.focus}`;
 }
 
 function getActiveBackgroundStyle(): string {
-	const { result: { current: theme }} = setupHook(useTheme);
+	const {
+		result: { current: theme }
+	} = setupHook(useTheme);
 	return `background: ${theme.palette.gray6.active}`;
 }
 
