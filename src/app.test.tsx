@@ -149,6 +149,15 @@ describe('App', () => {
 		});
 	});
 
+	it('should register upsertApp', () => {
+		const upsertApp = jest.spyOn(shell, 'upsertApp');
+		setupTest(<App />);
+		expect(upsertApp).toHaveBeenCalledWith<Parameters<typeof shell.upsertApp>>({
+			name: CONTACTS_APP_ID,
+			display: 'Contacts'
+		});
+	});
+
 	it('should register a board view to edit a distribution list', () => {
 		const addBoardView = jest.spyOn(shell, 'addBoardView');
 		setupTest(<App />);
