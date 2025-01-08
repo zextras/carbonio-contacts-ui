@@ -20,7 +20,7 @@ export type UsersSharesListProps = {
 
 const CustomListItem = styled(ListItem)`
 	&:hover {
-		background-color: ${({ theme, active }): string => theme.palette.transparent.regular}
+		background-color: ${({ theme }): string => theme.palette.transparent.regular}
 `;
 
 export const UsersSharesList: FC<UsersSharesListProps> = ({ shares, onSelectionChange }) => {

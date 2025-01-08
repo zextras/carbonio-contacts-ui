@@ -22,29 +22,27 @@ const ToggleFilters: FC<ToggleFiltersProps> = ({ compProps }): ReactElement => {
 	}, [isSharedFolderIncludedTobe, setIsSharedFolderIncludedTobe]);
 
 	return (
-		<>
-			<Container orientation="horizontal" mainAlignment="center" crossAlignment="center">
-				<Container
-					padding={{ all: 'extrasmall' }}
-					mainAlignment="flex-start"
-					crossAlignment="flex-start"
-				>
-					<Container orientation="horizontal" mainAlignment="baseline" crossAlignment="center">
-						<Padding right="small">
-							<Switch onClick={toggleSharedFolder} value={isSharedFolderIncludedTobe} />
-						</Padding>
-						<Text size="large" weight="bold">
-							{t('label.include_shared_folders', 'Include shared address books')}
-						</Text>
-					</Container>
-					<Padding bottom="small" />
-					<Text color="secondary" size="small" overflow="break-word">
-						{t('search.shared_folders_note', 'Include shared address books in searches.')}
+		<Container orientation="horizontal" mainAlignment="center" crossAlignment="center">
+			<Container
+				padding={{ all: 'extrasmall' }}
+				mainAlignment="flex-start"
+				crossAlignment="flex-start"
+			>
+				<Container orientation="horizontal" mainAlignment="flex-start" crossAlignment="center">
+					<Padding right="small">
+						<Switch onClick={toggleSharedFolder} value={isSharedFolderIncludedTobe} />
+					</Padding>
+					<Text size="large" weight="bold">
+						{t('label.include_shared_folders', 'Include shared address books')}
 					</Text>
-					<Padding bottom="small" />
 				</Container>
+				<Padding bottom="small" />
+				<Text color="secondary" size="small" overflow="break-word">
+					{t('search.shared_folders_note', 'Include shared address books in searches.')}
+				</Text>
+				<Padding bottom="small" />
 			</Container>
-		</>
+		</Container>
 	);
 };
 
