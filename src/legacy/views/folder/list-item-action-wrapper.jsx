@@ -6,7 +6,6 @@
 import React, { useContext, useMemo } from 'react';
 
 import { Container, Tooltip, Dropdown, IconButton } from '@zextras/carbonio-design-system';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import { HoverRow } from '../../../components/styled-components';
@@ -34,6 +33,7 @@ const CustomHoverRow = styled(HoverRow)`
 	}
 `;
 
+/** @type { (props: React.PropsWithChildren<{ onClick?: () => void; contact: Contact }>) => React.JSX.Element } */
 const ListItemActionWrapper = ({ children, onClick, contact }) => {
 	const { getContextActions, getHoverActions } = useContext(ActionsContext);
 
@@ -72,12 +72,6 @@ const ListItemActionWrapper = ({ children, onClick, contact }) => {
 			</CustomHoverRow>
 		</Dropdown>
 	);
-};
-
-ListItemActionWrapper.propTypes = {
-	onClick: PropTypes.func,
-	contact: PropTypes.object,
-	children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node])
 };
 
 export default ListItemActionWrapper;

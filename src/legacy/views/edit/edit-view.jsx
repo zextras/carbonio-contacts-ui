@@ -17,7 +17,6 @@ import {
 } from '@zextras/carbonio-design-system';
 import { useReplaceHistoryCallback, report } from '@zextras/carbonio-shell-ui';
 import { filter, find, map, reduce } from 'lodash';
-import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -81,14 +80,7 @@ const CustomStringField = ({ name, label, value, dispatch, autoFocus = false }) 
 	</Container>
 );
 
-CustomStringField.propTypes = {
-	name: PropTypes.string,
-	label: PropTypes.string,
-	value: PropTypes.string,
-	dispatch: PropTypes.func,
-	autoFocus: PropTypes.bool
-};
-
+/** @type { (props: { panel?: boolean; onClose?: () => void; onTitleChanged?: (title: string) => void }) => React.JSX.Element } */
 export default function EditView({ panel, onClose, onTitleChanged }) {
 	const { folderId, editId } = useParams();
 	const storeDispatch = useDispatch();
@@ -441,9 +433,3 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 		</Container>
 	) : null;
 }
-
-EditView.propTypes = {
-	panel: PropTypes.bool,
-	onClose: PropTypes.func,
-	onTitleChanged: PropTypes.func
-};

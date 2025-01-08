@@ -6,7 +6,6 @@
 import React, { useCallback, useMemo } from 'react';
 
 import { Avatar, Container, Tooltip } from '@zextras/carbonio-design-system';
-import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
@@ -19,6 +18,23 @@ const AvatarElement = styled(Avatar)`
 		font-size: 0.875rem;
 	}
 `;
+
+/**
+ * @type {
+ *   (props: {
+ * 			item: {
+ *				firstName: string;
+ *				middleName: string;
+ *				lastName: string;
+ *				id: string;
+ *			};
+ *			selected: boolean;
+ *			selecting: boolean;
+ *			toggle: func;
+ *			isSearch: boolean;
+ *   }) => React.JSX.Element
+ * }
+ */
 export const ItemAvatar = ({ item, selected, selecting, toggle, isSearch = false }) => {
 	const [t] = useTranslation();
 	const conversationSelect = useCallback(
@@ -56,17 +72,4 @@ export const ItemAvatar = ({ item, selected, selecting, toggle, isSearch = false
 			</Tooltip>
 		</Container>
 	);
-};
-
-ItemAvatar.propTypes = {
-	item: PropTypes.shape({
-		firstName: PropTypes.string,
-		middleName: PropTypes.string,
-		lastName: PropTypes.string,
-		id: PropTypes.string
-	}),
-	selected: PropTypes.bool,
-	selecting: PropTypes.bool,
-	toggle: PropTypes.func,
-	isSearch: PropTypes.bool
 };

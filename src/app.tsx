@@ -6,20 +6,20 @@
 import React, { lazy, Suspense, useEffect, useMemo } from 'react';
 
 import { ModalManager, useSnackbar } from '@zextras/carbonio-design-system';
+import type * as SearchUI from '@zextras/carbonio-search-ui';
 import {
 	ACTION_TYPES,
 	addBoard,
 	addBoardView,
 	addRoute,
-	addSearchView,
 	addSettingsView,
 	NewAction,
 	registerActions,
 	registerComponents,
 	registerFunctions,
-	SearchViewProps,
+	upsertApp,
 	SecondaryBarComponentProps,
-	upsertApp
+	useIntegratedFunction
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
@@ -153,7 +153,7 @@ const SettingsView = (): React.JSX.Element => (
 	</Suspense>
 );
 
-const SearchView = (props: SearchViewProps): React.JSX.Element => (
+const SearchView = (props: SearchUI.SearchViewProps): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
 		<StoreProvider>
 			<ModalManager>
@@ -216,12 +216,13 @@ const App = (): React.JSX.Element => {
 		[t]
 	);
 
+	const contactsAppLabel = t('label.app_name', 'Contacts');
 	useEffect(() => {
 		addRoute({
 			route: CONTACTS_ROUTE,
 			position: 300,
 			visible: true,
-			label: t('label.app_name', 'Contacts'),
+			label: contactsAppLabel,
 			primaryBar: 'ContactsModOutline',
 			secondaryBar: LegacySecondaryBarView,
 			appView: ContactsAppView
@@ -237,13 +238,8 @@ const App = (): React.JSX.Element => {
 		});
 		addSettingsView({
 			route: CONTACTS_ROUTE,
-			label: t('label.app_name', 'Contacts'),
+			label: contactsAppLabel,
 			component: SettingsView
-		});
-		addSearchView({
-			route: CONTACTS_ROUTE,
-			label: t('label.app_name', 'Contacts'),
-			component: SearchView
 		});
 		addBoardView({
 			id: CONTACT_BOARD_ID,
@@ -265,7 +261,7 @@ const App = (): React.JSX.Element => {
 			name: CONTACTS_APP_ID,
 			display: t('label.app_name', 'Contacts')
 		});
-	}, [t]);
+	}, [contactsAppLabel, t]);
 
 	useEffect(() => {
 		registerComponents({
@@ -290,6 +286,38 @@ const App = (): React.JSX.Element => {
 			fn: createContactIntegration(createSnackbar, t)
 		});
 	}, [createSnackbar, newContactAction, newContactGroupAction, t]);
+
+	const [addSearchView, isAddSearchViewAvailable] =
+		useIntegratedFunction<typeof SearchUI.addSearchView>('search-add-view');
+	const [removeSearchView, isRemoveSearchViewAvailable] =
+		useIntegratedFunction<typeof SearchUI.removeSearchView>('search-remove-view');
+
+	useEffect(() => {
+		if (isAddSearchViewAvailable) {
+			addSearchView({
+				id: CONTACTS_APP_ID,
+				app: CONTACTS_APP_ID,
+				route: CONTACTS_ROUTE,
+				label: contactsAppLabel,
+				component: SearchView,
+				icon: 'ContactsModOutline',
+				position: 300
+			});
+		}
+
+		return () => {
+			if (isRemoveSearchViewAvailable) {
+				removeSearchView(CONTACTS_APP_ID);
+			}
+		};
+	}, [
+		addSearchView,
+		contactsAppLabel,
+		isAddSearchViewAvailable,
+		isRemoveSearchViewAvailable,
+		removeSearchView,
+		t
+	]);
 
 	return (
 		<StoreProvider>

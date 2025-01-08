@@ -6,8 +6,8 @@
 import React from 'react';
 
 import { Padding, Row, Text } from '@zextras/carbonio-design-system';
-import PropTypes from 'prop-types';
 
+/** @type { (props: {title?: string }) => React.JSX.Element } */
 export default function Heading({ title }) {
 	return (
 		<>
@@ -25,7 +25,3 @@ export default function Heading({ title }) {
 		</>
 	);
 }
-
-Heading.propTypes = {
-	title: PropTypes.string
-};
