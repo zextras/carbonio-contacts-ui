@@ -5,7 +5,6 @@
  */
 import React from 'react';
 
-import type * as SearchUI from '@zextras/carbonio-search-ui';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { HttpResponse } from 'msw';
 
@@ -17,7 +16,7 @@ import {
 	createSoapAPIInterceptor
 } from './carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { setupTest } from './carbonio-ui-commons/test/test-setup';
-import { CONTACT_BOARD_ID, CONTACTS_APP_ID } from './constants';
+import { CONTACT_BOARD_ID } from './constants';
 import { ContactInput } from './legacy/integrations/contact-input';
 
 // mocking the worker. in commons jest-setup the worker is already mocked, but is improperly defined with wrong types and
@@ -84,44 +83,6 @@ describe('App', () => {
 		);
 	});
 
-	it('should register the search view', () => {
-		const addSearchView = jest.fn();
-		jest.spyOn(shell, 'useIntegratedFunction').mockImplementation((id) => {
-			if (id === 'search-add-view') {
-				return [addSearchView, true];
-			}
-			return [jest.fn(), false];
-		});
-		setupTest(<App />);
-		expect(addSearchView).toHaveBeenCalledWith<Parameters<typeof SearchUI.addSearchView>>(
-			expect.objectContaining({
-				route: 'contacts',
-				label: 'Contacts'
-			})
-		);
-	});
-
-	it('should remove the search view on unmount', () => {
-		const addSearchView = jest.fn();
-		const removeSearchView = jest.fn();
-		jest.spyOn(shell, 'useIntegratedFunction').mockImplementation((id) => {
-			if (id === 'search-add-view') {
-				return [addSearchView, true];
-			}
-			if (id === 'search-remove-view') {
-				return [removeSearchView, true];
-			}
-			return [jest.fn(), false];
-		});
-		const { unmount } = setupTest(<App />);
-
-		unmount();
-
-		expect(removeSearchView).toHaveBeenCalledWith<Parameters<typeof SearchUI.removeSearchView>>(
-			CONTACTS_APP_ID
-		);
-	});
-
 	it('should register a board view to edit a contact', () => {
 		const addBoardView = jest.spyOn(shell, 'addBoardView');
 		setupTest(<App />);
@@ -146,15 +107,6 @@ describe('App', () => {
 		expect(addBoardView).toHaveBeenCalledWith<Parameters<typeof shell.addBoardView>>({
 			id: 'edit-contact-group-board',
 			component: expect.anything()
-		});
-	});
-
-	it('should register upsertApp', () => {
-		const upsertApp = jest.spyOn(shell, 'upsertApp');
-		setupTest(<App />);
-		expect(upsertApp).toHaveBeenCalledWith<Parameters<typeof shell.upsertApp>>({
-			name: CONTACTS_APP_ID,
-			display: 'Contacts'
 		});
 	});
 

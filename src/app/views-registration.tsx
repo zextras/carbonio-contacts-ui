@@ -12,6 +12,7 @@ import {
 	addRoute,
 	addSettingsView,
 	SecondaryBarComponentProps,
+	upsertApp,
 	useIntegratedFunction
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
@@ -208,6 +209,10 @@ export const ViewsRegistration: FC = () => {
 		addBoardView({
 			id: EDIT_DL_BOARD_ID,
 			component: EditDLBoardView
+		});
+		upsertApp({
+			name: CONTACTS_APP_ID,
+			display: t('label.app_name', 'Contacts')
 		});
 	}, [contactsAppLabel, t]);
 

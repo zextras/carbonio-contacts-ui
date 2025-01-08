@@ -20,7 +20,8 @@
 		"lint-errors": "eslint --ext .js,.jsx,.ts,.tsx --quiet --resolve-plugins-relative-to node_modules/@zextras/carbonio-ui-configs src",
 		"lint-check": "npm run lint-errors; npm run type-check",
 		"lint-stats": "eslint --ext .js,.jsx,.ts,.tsx --format node_modules/eslint-stats/byErrorAndWarningStacked --resolve-plugins-relative-to node_modules/@zextras/carbonio-ui-configs src",
-		"build:dev": "sdk build --dev --pkgRel $(date +%s)"
+		"build:dev": "sdk build --dev --pkgRel $(date +%s)",
+		"dev-prepush" : "npm run lint-errors && npm run type-check && npm run test"
 	},
 	"keywords": [],
 	"author": "Zextras Crab Onions Team <https://www.zextras.com/carbonio/>",

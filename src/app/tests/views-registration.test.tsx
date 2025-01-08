@@ -5,11 +5,15 @@
  */
 import React from 'react';
 
-import { addBoardView, addRoute, addSearchView, addSettingsView } from '@zextras/carbonio-shell-ui';
+import type * as SearchUI from '@zextras/carbonio-search-ui';
+import { addBoardView, addRoute, addSettingsView } from '@zextras/carbonio-shell-ui';
+import * as shell from '@zextras/carbonio-shell-ui';
 
+import App from '../../app';
 import { setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import {
 	CONTACT_BOARD_ID,
+	CONTACTS_APP_ID,
 	CONTACTS_ROUTE,
 	EDIT_CONTACT_GROUP_BOARD_ID,
 	EDIT_DL_BOARD_ID,
@@ -58,13 +62,41 @@ describe('ViewsRegistration', () => {
 	});
 
 	it('should register the search view', () => {
-		setupTest(<ViewsRegistration />);
-
-		expect(addSearchView).toHaveBeenCalledWith({
-			route: CONTACTS_ROUTE,
-			label: 'Contacts',
-			component: expect.any(Function)
+		const addSearchView = jest.fn();
+		jest.spyOn(shell, 'useIntegratedFunction').mockImplementation((id) => {
+			if (id === 'search-add-view') {
+				return [addSearchView, true];
+			}
+			return [jest.fn(), false];
 		});
+		setupTest(<ViewsRegistration />);
+		expect(addSearchView).toHaveBeenCalledWith<Parameters<typeof SearchUI.addSearchView>>(
+			expect.objectContaining({
+				route: 'contacts',
+				label: 'Contacts'
+			})
+		);
+	});
+
+	it('should remove the search view on unmount', () => {
+		const addSearchView = jest.fn();
+		const removeSearchView = jest.fn();
+		jest.spyOn(shell, 'useIntegratedFunction').mockImplementation((id) => {
+			if (id === 'search-add-view') {
+				return [addSearchView, true];
+			}
+			if (id === 'search-remove-view') {
+				return [removeSearchView, true];
+			}
+			return [jest.fn(), false];
+		});
+		const { unmount } = setupTest(<App />);
+
+		unmount();
+
+		expect(removeSearchView).toHaveBeenCalledWith<Parameters<typeof SearchUI.removeSearchView>>(
+			CONTACTS_APP_ID
+		);
 	});
 
 	it('should register the contact board view', () => {
@@ -73,6 +105,15 @@ describe('ViewsRegistration', () => {
 		expect(addBoardView).toHaveBeenCalledWith({
 			id: CONTACT_BOARD_ID,
 			component: expect.any(Function)
+		});
+	});
+
+	it('should register upsertApp', () => {
+		const upsertApp = jest.spyOn(shell, 'upsertApp');
+		setupTest(<ViewsRegistration />);
+		expect(upsertApp).toHaveBeenCalledWith<Parameters<typeof shell.upsertApp>>({
+			name: CONTACTS_APP_ID,
+			display: 'Contacts'
 		});
 	});
 
