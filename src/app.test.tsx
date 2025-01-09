@@ -19,19 +19,6 @@ import { setupTest } from './carbonio-ui-commons/test/test-setup';
 import { CONTACT_BOARD_ID } from './constants';
 import { ContactInput } from './legacy/integrations/contact-input';
 
-// mocking the worker. in commons jest-setup the worker is already mocked, but is improperly defined with wrong types and
-// is causing a call to "onMessage", which tries to alter the folders store and overrides the folders, breaking the test.
-// It also causes warning/errors due the fact it tries to set an "undefined" in the folders.
-// I think we should consider removing that mock or redefine it or make it configurable
-jest.mock('./carbonio-ui-commons/worker', () => ({
-	folderWorker: {
-		postMessage: jest.fn()
-	},
-	tagsWorker: {
-		postMessage: jest.fn()
-	}
-}));
-
 describe('App', () => {
 	beforeEach(() => {
 		createAPIInterceptor('get', 'zx/login/v3/account', HttpResponse.json({}));

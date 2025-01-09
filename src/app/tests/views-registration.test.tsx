@@ -9,7 +9,6 @@ import type * as SearchUI from '@zextras/carbonio-search-ui';
 import { addBoardView, addRoute, addSettingsView } from '@zextras/carbonio-shell-ui';
 import * as shell from '@zextras/carbonio-shell-ui';
 
-import App from '../../app';
 import { setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import {
 	CONTACT_BOARD_ID,
@@ -90,7 +89,7 @@ describe('ViewsRegistration', () => {
 			}
 			return [jest.fn(), false];
 		});
-		const { unmount } = setupTest(<App />);
+		const { unmount } = setupTest(<ViewsRegistration />);
 
 		unmount();
 
