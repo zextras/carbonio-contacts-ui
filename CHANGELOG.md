@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.14.0](https://github.com/zextras/carbonio-contacts-ui/compare/v1.13.1...v1.14.0) (2024-12-12)
+
+
+### Features
+
+* add AuthGuard component to segregate authenticated-only content ([3541880](https://github.com/zextras/carbonio-contacts-ui/commit/3541880b21782e99571b4fea6d5a1e2db7af4c5d))
+
+
+### Bug Fixes
+
+* prevent module to load if the user is not authenticated ([9e7e393](https://github.com/zextras/carbonio-contacts-ui/commit/9e7e3939346cf82c82554604809a1e0cb32e7202))
+
 ### [1.13.1](https://github.com/zextras/carbonio-contacts-ui/compare/v1.13.0...v1.13.1) (2024-11-20)
 
 
