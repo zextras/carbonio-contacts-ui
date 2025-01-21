@@ -5,11 +5,12 @@
  */
 import React, { FC, ReactElement, useCallback, useMemo } from 'react';
 
-import { Container, ChipInput, ChipInputProps, ChipItem } from '@zextras/carbonio-design-system';
+import { Container, ChipInput, ChipInputProps } from '@zextras/carbonio-design-system';
 import { filter } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { ZIMBRA_STANDARD_COLORS } from '../../../../carbonio-ui-commons/constants/utils';
+import { ContactInputItem } from '../../../types/integrations';
 
 type ComponentProps = {
 	compProps: {
@@ -62,7 +63,7 @@ const TagRow: FC<ComponentProps> = ({ compProps }): ReactElement => {
 
 	const tagPlaceholder = useMemo(() => t('label.tag', 'Tag'), [t]);
 	const onTagChange = useCallback(
-		(chip: ChipItem) => {
+		(chip: ContactInputItem) => {
 			setTag(chip);
 		},
 		[setTag]

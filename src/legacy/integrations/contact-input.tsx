@@ -7,86 +7,178 @@
 import React, { useCallback, useEffect, useRef, useState, ReactElement, FC, useMemo } from 'react';
 
 import {
+	Avatar,
 	ChipInput,
 	Container,
+	Row,
+	Text,
+	type ChipItem,
 	type ChipInputProps,
+	type DropdownItem,
 	useCombinedRefs,
-	ChipAction,
-	ChipItem,
-	Chip
+	Dropdown
 } from '@zextras/carbonio-design-system';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
-import { TFunction } from 'i18next';
-import { filter, find, map, uniqBy, noop, reduce } from 'lodash';
+import { filter, find, map, trim, forEach, reject, uniqBy, noop, unescape } from 'lodash';
 import { useTranslation } from 'react-i18next';
+import styled, { type DefaultTheme } from 'styled-components';
 
-import { DistributionListChip } from './distribution-list-chip';
-import { isValidEmail } from '../../carbonio-ui-commons/helpers/email-parser';
+import { ContactInputCustomChipComponent } from './contact-input-custom-chip-component';
+import { isValidEmail, parseEmail } from '../../carbonio-ui-commons/helpers/email-parser';
+import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
 import { StoreProvider } from '../store/redux';
-import type { ContactAddressMap } from '../types/contact';
-import type { GetContactsRequest, GetContactsResponse } from '../types/soap';
-import { Loader } from './parts/loader';
-import { PasteContextMenu } from './parts/paste-context-menu';
-import { getContactLabel, searchContacts, tryToParseEmail } from './parts/utils';
-import { ContactInputItemInternalValue, ContactInputOptions, GroupContact } from './types';
-import { EDIT_ACTION_ID, CONTACT_TYPES } from '../../carbonio-ui-commons/integrations/constants';
-import {
+import type {
+	ContactAddressMap,
+	FullAutocompleteRequest,
+	FullAutocompleteResponse,
+	Match
+} from '../types/contact';
+import type {
+	ContactChipAction,
+	ContactInputChipDisplayName,
+	ContactInputGroup,
 	ContactInputItem,
-	ContactInputProps,
-	UserContact,
-	DistributionListContact,
-	UserOrDL
-} from '../../carbonio-ui-commons/integrations/types';
+	ContactInputOnChange,
+	ContactInputValue
+} from '../types/integrations';
+import type { GetContactsRequest, GetContactsResponse } from '../types/soap';
 
-const CHIP_TO_EXCLUDE = 'this-value-represent-a-chip-that-should-not-be-present';
-
-type EditChipFn = (text: string, id: string) => void;
-function createChipFromEmail(
-	t: TFunction,
-	editChipFn: EditChipFn,
-	valueToAdd: string
-): ContactInputItem {
-	const id = valueToAdd;
-	const parsedEmail = tryToParseEmail(valueToAdd);
-	const isAValidEmail = isValidEmail(parsedEmail);
-	const chip: ContactInputItem = {
-		id,
-		label: parsedEmail,
-		value: {
-			id,
-			email: parsedEmail,
-			type: CONTACT_TYPES.CONTACT
-		},
-		error: !isAValidEmail,
-		actions: [
-			{
-				id: EDIT_ACTION_ID,
-				label: isAValidEmail
-					? t('label.edit_email', 'Edit E-mail')
-					: t('label.edit_invalid_email', 'E-mail is invalid, click to edit it'),
-				icon: 'EditOutline',
-				type: 'button',
-				onClick: () => editChipFn(valueToAdd, id)
-			}
-		]
-	};
-	if (!isAValidEmail) {
-		chip.avatarIcon = 'AlertCircleOutline';
-	}
-	return chip;
+function isContactGroup(contact: {
+	isGroup?: boolean;
+	display?: string | null;
+	email?: string;
+}): contact is ContactInputGroup {
+	return (
+		(contact?.isGroup &&
+			contact?.display !== undefined &&
+			contact?.display !== null &&
+			!contact?.email) ??
+		false
+	);
 }
+
+const getChipLabel = (
+	contact: Pick<
+		ContactInputItem,
+		'firstName' | 'middleName' | 'lastName' | 'email' | 'address' | 'display' | 'fullName' | 'name'
+	>
+): string => {
+	if (contact.firstName ?? contact.middleName ?? contact.lastName) {
+		return trim(`${contact.firstName ?? ''} ${contact.middleName ?? ''} ${contact.lastName ?? ''}`);
+	}
+
+	const email = typeof contact.email === 'string' ? contact.email : undefined;
+	const address = typeof contact.address === 'string' ? contact.address : undefined;
+
+	return contact.fullName ?? email ?? contact.name ?? address ?? contact.display ?? '';
+};
+
+const Hint = ({ contact }: { contact: ContactInputItem }): ReactElement => {
+	const label = getChipLabel(contact);
+	return (
+		<Container
+			orientation="horizontal"
+			mainAlignment="flex-start"
+			crossAlignment="center"
+			minWidth="16rem"
+			minHeight="2rem"
+		>
+			<Avatar label={label} />
+			<Container orientation="vertical" crossAlignment="flex-start" padding={{ left: 'small' }}>
+				{!isContactGroup(contact) ? (
+					<>
+						<Row takeAvailableSpace mainAlignment="flex-start">
+							<Text size="large">{label}</Text>
+						</Row>
+						<Row takeAvailableSpace mainAlignment="flex-start">
+							<Text color="secondary">{contact.email}</Text>
+						</Row>
+					</>
+				) : (
+					<Text size="large">{label}</Text>
+				)}
+			</Container>
+		</Container>
+	);
+};
+
+interface SkeletonTileProps {
+	width?: string;
+	height?: string;
+	radius?: string;
+	theme: DefaultTheme;
+}
+
+const SkeletonTile = styled.div<SkeletonTileProps>`
+	width: ${({ width }): string => width ?? '1rem'};
+	max-width: ${({ width }): string => width ?? '1rem'};
+	min-width: ${({ width }): string => width ?? '1rem'};
+	height: ${({ height }): string => height ?? '1rem'};
+	max-height: ${({ height }): string => height ?? '1rem'};
+	min-height: ${({ height }): string => height ?? '1rem'};
+	border-radius: ${({ radius }): string => radius ?? '0.125rem'};
+	background: ${({ theme }): string => theme.palette.gray2.regular};
+`;
+
+const Loader = (): ReactElement => (
+	<Container
+		orientation="horizontal"
+		mainAlignment="flex-start"
+		crossAlignment="center"
+		minWidth="16rem"
+		minHeight="2rem"
+	>
+		<SkeletonTile radius="50%" width="2rem" height="2rem" />
+		<Container orientation="vertical" crossAlignment="flex-start" padding={{ left: 'small' }}>
+			<SkeletonTile
+				radius="0.25rem"
+				width={`${Math.random() * 9.375 + 4}rem`}
+				height="0.875rem"
+				style={{ marginBottom: '0.25rem' }}
+			/>
+			<SkeletonTile radius="0.25rem" width={`${Math.random() * 9.375 + 4}rem`} height="0.75rem" />
+		</Container>
+	</Container>
+);
+
+function tryToParseEmail(input: string | undefined): string {
+	const inputOrDefault = unescape(input ?? '');
+	return parseEmail(inputOrDefault) ?? inputOrDefault.trim();
+}
+
+export type ContactInputProps = Pick<
+	ChipInputProps,
+	| 'icon'
+	| 'iconAction'
+	| 'placeholder'
+	| 'background'
+	| 'iconDisabled'
+	| 'description'
+	| 'hasError'
+	| 'inputRef'
+> & {
+	onChange?: ContactInputOnChange;
+	defaultValue: Array<ContactInputItem>;
+	dragAndDropEnabled?: boolean;
+	orderedAccountIds?: Array<string>;
+	chipDisplayName?: ContactInputChipDisplayName;
+	contactActions?: Array<ContactChipAction>;
+};
+
 const ContactInputCore: FC<ContactInputProps> = ({
 	onChange,
 	defaultValue,
 	placeholder,
 	background = 'gray5',
 	dragAndDropEnabled = false,
+	chipDisplayName = CHIP_DISPLAY_NAME_VALUES.label,
 	orderedAccountIds = [],
+	contactActions,
 	inputRef: propsInputRef = null,
 	...rest
 }) => {
-	const [defaults, setDefaults] = useState<Array<ContactInputItem>>([]);
-	const [options, setOptions] = useState<Array<ContactInputOptions>>([]);
+	const [defaults, setDefaults] = useState<ContactInputValue>([]);
+	const [options, setOptions] = useState<Array<DropdownItem & { value?: ContactInputItem }>>([]);
 	const [idToRemove, setIdToRemove] = useState('');
 	const [t] = useTranslation();
 	const inputRef = useCombinedRefs(propsInputRef);
@@ -104,6 +196,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 			ev.dataTransfer.dropEffect = 'move';
 			draggedChip.current = {
 				id: chip.id,
+				email: chip.email ?? chip.address,
 				dragStartRef: inputRef.current
 			};
 		},
@@ -113,6 +206,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 		setDefaults(
 			map(filter(defaultValue, (c) => c.id !== idToRemove) ?? [], (obj) => ({
 				...obj,
+				label: getChipLabel(obj),
 				draggable: dragAndDropEnabled,
 				onDragStart: dragAndDropEnabled ? buildDragStartHandler(obj) : noop
 			}))
@@ -120,7 +214,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	}, [buildDragStartHandler, defaultValue, dragAndDropEnabled, idToRemove]);
 
 	const buildDraggableChip = useCallback(
-		(chip: ContactInputItem): ContactInputItem => ({
+		(chip: ContactInputItem): ChipItem => ({
 			...chip,
 			draggable: true,
 			onDragStart: buildDragStartHandler(chip)
@@ -128,7 +222,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 		[buildDragStartHandler]
 	);
 
-	const editChip = useCallback<EditChipFn>(
+	const editChip = useCallback(
 		(text: string, id: string) => {
 			setIdToRemove(id);
 			if (inputRef?.current) {
@@ -141,48 +235,64 @@ const ContactInputCore: FC<ContactInputProps> = ({
 		[inputRef]
 	);
 
-	const handleChipOnChange = useCallback(
-		(items: ChipItem<UserOrDL>[]) => {
-			const contactsWithoutGroups = reduce(
-				items,
-				(acc, item) => {
-					const { value: itemValue, label } = item;
-					if (label && itemValue) {
-						acc.push({ ...item, label, value: itemValue });
+	const createChip = useCallback(
+		(valueToAdd: string): ContactInputItem => {
+			const id = valueToAdd;
+			const parsedEmail = tryToParseEmail(valueToAdd);
+			const isAValidEmail = isValidEmail(parsedEmail);
+			const chip: ContactInputItem = {
+				id,
+				email: parsedEmail,
+				label: parsedEmail,
+				error: !isAValidEmail,
+				actions: [
+					{
+						id: 'action1',
+						label: isAValidEmail
+							? t('label.edit_email', 'Edit E-mail')
+							: t('label.edit_invalid_email', 'E-mail is invalid, click to edit it'),
+						icon: 'EditOutline',
+						type: 'button',
+						onClick: () => editChip(valueToAdd, id)
 					}
-					return acc;
-				},
-				[] as ContactInputItem[]
-			).filter((x) => x.id !== CHIP_TO_EXCLUDE);
-
-			if (contactsWithoutGroups === defaultValue) {
-				return;
+				]
+			};
+			if (!isAValidEmail) {
+				chip.avatarIcon = 'AlertCircleOutline';
 			}
-			const uniqueContacts = uniqBy(contactsWithoutGroups, 'value.email');
-			onChange?.(uniqueContacts);
+			return chip;
 		},
-		[onChange, defaultValue]
+		[editChip, t]
 	);
-
-	const onInputEnter = useCallback((): void => {
-		if (inputRef?.current) {
-			// FIXME: innerText does not contain new line chars at this point
-			inputRef.current.innerText = inputRef.current.innerText?.replaceAll('\n', '');
-		}
-		const valueToAdd = inputRef.current?.innerText.replaceAll('\n', '');
-		const chip = createChipFromEmail(t, editChip, valueToAdd ?? '');
-		if (valueToAdd !== '') {
-			handleChipOnChange([...defaults, { ...chip }]);
-		}
-		if (inputRef?.current) {
-			inputRef.current.innerText = '';
-		}
-	}, [inputRef, t, editChip, handleChipOnChange, defaults]);
 
 	const onInputType = useCallback<NonNullable<ChipInputProps['onInputType']>>(
 		({ key, textContent }) => {
 			if (key === 'Enter') {
-				onInputEnter();
+				if (inputRef?.current) {
+					// FIXME: innerText does not contain new line chars at this point
+					inputRef.current.innerText = inputRef.current.innerText?.replaceAll('\n', '');
+				}
+				if (options.length > 0 && !find(options, { id: 'loading' })) {
+					onChange?.([
+						...defaults,
+						{
+							...options[0].value
+						}
+					]);
+					if (inputRef.current) {
+						inputRef.current.innerText = '';
+					}
+					setOptions([]);
+					return;
+				}
+				const valueToAdd = inputRef.current?.innerText.replaceAll('\n', '');
+				const chip = createChip(valueToAdd ?? '');
+				if (valueToAdd !== '') {
+					onChange?.([...defaults, { ...chip }]);
+				}
+				if (inputRef?.current) {
+					inputRef.current.innerText = '';
+				}
 				return;
 			}
 			if (textContent && textContent !== '') {
@@ -193,9 +303,55 @@ const ContactInputCore: FC<ContactInputProps> = ({
 						customComponent: <Loader />
 					}
 				]);
-				searchContacts(textContent, orderedAccountIds)
-					.then((contactinputItems) => {
-						setOptions(contactinputItems);
+				soapFetch<FullAutocompleteRequest, FullAutocompleteResponse>('FullAutocomplete', {
+					...(orderedAccountIds?.length > 0 && {
+						orderedAccountIds: orderedAccountIds.toString()
+					}),
+					AutoCompleteRequest: {
+						name: textContent,
+						includeGal: 1
+					},
+					_jsns: 'urn:zimbraMail'
+				})
+					.then((autoCompleteResult) =>
+						map<Match, Match>(autoCompleteResult.match, (m) => ({
+							...m,
+							email: isContactGroup(m) ? undefined : tryToParseEmail(m.email)
+						}))
+					)
+					.then((remoteResults) => {
+						const normRemoteResults = map(remoteResults, (result) => ({
+							email: result.email,
+							firstName: result.first,
+							lastName: result.last,
+							company: result.company,
+							fullName: result.full,
+							display: result.display,
+							isGroup: result.isGroup,
+							id: result.id,
+							l: result.l,
+							exp: result.exp,
+							label: getChipLabel(result)
+						}));
+						setOptions(
+							map(normRemoteResults, (contact) => ({
+								label: contact?.label ?? getChipLabel(contact),
+								value: {
+									id: `${contact.id} ${contact.email}`,
+									email: contact?.email,
+									firstName: contact?.firstName,
+									lastName: contact?.lastName,
+									company: contact?.company,
+									fullName: contact?.fullName,
+									display: contact?.display,
+									isGroup: contact?.isGroup,
+									groupId: contact?.id,
+									label: contact?.label ?? getChipLabel(contact)
+								},
+								customComponent: <Hint contact={contact} />,
+								id: `${contact.id} ${contact.email}`
+							}))
+						);
 					})
 					.catch(() => {
 						setOptions([]);
@@ -204,113 +360,82 @@ const ContactInputCore: FC<ContactInputProps> = ({
 				setOptions([]);
 			}
 		},
-		[onInputEnter, orderedAccountIds]
+		[createChip, defaults, inputRef, onChange, options, orderedAccountIds]
 	);
 
-	const getGroupMembers = useCallback(
-		(contactGroup: GroupContact): Promise<UserContact[]> =>
-			soapFetch<GetContactsRequest, GetContactsResponse>('GetContacts', {
-				_jsns: 'urn:zimbraMail',
-				cn: {
-					id: contactGroup.groupId
-				},
-				derefGroupMember: true
-			}).then((result) => {
-				const members = result?.cn?.[0].m;
-				return map(members, (member) => {
-					const email = member.cn?.[0]._attrs.email ?? member.value;
-					return {
-						email,
-						id: email,
-						type: CONTACT_TYPES.CONTACT
-					};
+	useEffect(() => {
+		const groups = filter(defaults, (def): def is ContactInputGroup => isContactGroup(def));
+		if (groups.length > 0) {
+			forEach(groups, (def) => {
+				soapFetch<GetContactsRequest, GetContactsResponse>('GetContacts', {
+					_jsns: 'urn:zimbraMail',
+					cn: {
+						id: def.groupId
+					},
+					derefGroupMember: true
+				}).then((result) => {
+					const id = Date.now().toString();
+					const members = result?.cn?.[0].m;
+					const newContacts = map(members, (member): ContactInputItem => {
+						const email = member.cn?.[0]._attrs.email ?? member.value;
+						return {
+							email,
+							id,
+							label: email,
+							error: !isValidEmail(email),
+							draggable: true,
+							onDragStart: buildDragStartHandler({ id, email, label: email })
+						};
+					});
+					const newValue = reject(defaults, (chip) => isContactGroup(chip));
+					const updatedValue = [...newValue, ...newContacts];
+					onChange?.(updatedValue);
+					setDefaults(updatedValue);
 				});
-			}),
-		[]
-	);
+			});
+		}
+	}, [buildDragStartHandler, defaults, onChange]);
 
-	const contactInputValue = useMemo(() => uniqBy(defaults, 'id'), [defaults]);
+	const contactInputValue = useMemo(() => uniqBy(defaults, 'email'), [defaults]);
 
 	const onAdd = useCallback(
-		(valueToAdd: unknown): ContactInputItem => {
+		(valueToAdd: ContactInputItem) => {
 			setIdToRemove('');
 			if (typeof valueToAdd === 'string') {
-				return createChipFromEmail(t, editChip, valueToAdd);
+				return createChip(valueToAdd);
 			}
-			const selectedOption = valueToAdd as ContactInputItemInternalValue;
-			if (!selectedOption) {
-				throw new Error('no value in provided contact');
-			}
-
-			if (selectedOption.type === CONTACT_TYPES.GROUP) {
-				getGroupMembers(selectedOption)
-					.then((userContacts) => userContacts.map((userContact) => onAdd(userContact)))
-					.then((chipItems) => {
-						handleChipOnChange([...defaults, ...chipItems]);
-					});
-				return {
-					id: CHIP_TO_EXCLUDE,
-					label: '',
-					value: {
-						email: '',
-						id: '',
-						type: CONTACT_TYPES.CONTACT
-					}
-				};
-			}
-
-			const isEmailValid = isValidEmail(selectedOption.email);
-			const editAction: ChipAction = {
-				id: EDIT_ACTION_ID,
-				label: isEmailValid
-					? t('label.edit_email', 'Edit E-mail')
-					: t('label.edit_invalid_email', 'E-mail is invalid, click to edit it'),
-				icon: 'EditOutline',
-				type: 'button',
-				onClick: (): void => editChip(selectedOption.email, selectedOption.id)
-			};
-
 			return {
-				id: selectedOption.id,
-				label: getContactLabel(selectedOption),
-				value: selectedOption,
-				error: !isEmailValid,
-				actions: [editAction]
+				...valueToAdd,
+				error: !isValidEmail(valueToAdd.email),
+				actions: [
+					{
+						id: 'action1',
+						label: isValidEmail(valueToAdd.email)
+							? t('label.edit_email', 'Edit E-mail')
+							: t('label.edit_invalid_email', 'E-mail is invalid, click to edit it'),
+						icon: 'EditOutline',
+						type: 'button',
+						onClick: () => editChip(valueToAdd.email ?? '', valueToAdd.id ?? '')
+					}
+				]
 			};
 		},
-		[defaults, editChip, getGroupMembers, handleChipOnChange, t]
-	);
-
-	const onExpandDistributionList = useCallback(
-		(expandedDl: DistributionListContact, members: Array<string>) => {
-			const chipsWithoutDl = defaultValue.filter((val) => val.value.email !== expandedDl.email);
-			const membersChips = members.map((member) => onAdd(member));
-			const updatedChips = [...chipsWithoutDl, ...membersChips];
-			handleChipOnChange(updatedChips);
-		},
-		[defaultValue, onAdd, handleChipOnChange]
+		[createChip, editChip, t]
 	);
 
 	const ChipComponent = useCallback(
-		(props: ChipItem<UserOrDL>): React.JSX.Element => {
-			const val = props.value;
-			return (
-				<>
-					{val && val.type === CONTACT_TYPES.CONTACT && (
-						<Chip {...props} data-testid={'default-chip'} />
-					)}
-					{val && props.label && val.type === CONTACT_TYPES.DISTRIBUTION_LIST && (
-						<DistributionListChip
-							{...props}
-							value={val}
-							label={props.label}
-							onExpandDL={onExpandDistributionList}
-						/>
-					)}
-				</>
-			);
-		},
-		[onExpandDistributionList]
+		(
+			props: React.ComponentPropsWithoutRef<NonNullable<ChipInputProps['ChipComponent']>>
+		): React.JSX.Element => (
+			<ContactInputCustomChipComponent
+				{...props}
+				contactActions={contactActions}
+				chipDisplayName={chipDisplayName}
+				contactInputOnChange={onChange}
+				contactInputValue={contactInputValue}
+			/>
+		),
+		[chipDisplayName, contactActions, contactInputValue, onChange]
 	);
 
 	const onDragEnter = useCallback<React.DragEventHandler>((ev) => {
@@ -334,7 +459,12 @@ const ContactInputCore: FC<ContactInputProps> = ({
 			setDefaults((prevState) =>
 				filter(prevState, (contact) => contact.id !== draggedChip.current.id)
 			);
-			const newDefaults = filter(defaults, (c) => c.id !== draggedChip.current.id);
+			const newDefaults = filter(defaults, (c) => {
+				if (c.email) {
+					return c.email !== draggedChip.current.email;
+				}
+				return c.id !== draggedChip.current.id;
+			});
 			onChange?.(newDefaults);
 			resetDraggedChip();
 			isSameElement.current = false;
@@ -368,18 +498,18 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	return (
 		<Container width="100%" onDrop={onDrop} height="100%">
 			<PasteContextMenu elementReceivingPaste={inputRef.current}>
-				<ChipInput<UserOrDL>
+				<ChipInput
 					data-testid={'contact-input'}
 					disableOptions
 					placeholder={placeholder}
 					confirmChipOnBlur
 					inputRef={inputRef}
 					onInputType={onInputType}
-					onChange={handleChipOnChange}
+					onChange={onChange}
 					options={options}
 					value={contactInputValue}
 					background={background}
-					onAdd={onAdd}
+					onAdd={onAdd as ChipInputProps['onAdd']}
 					requireUniqueChips
 					createChipOnPaste
 					pasteSeparators={[',', ';', '\n']}
@@ -405,3 +535,38 @@ export const ContactInput = (props: ContactInputProps): ReactElement => (
 		<ContactInputCore {...props} />
 	</StoreProvider>
 );
+
+type PasteContextMenuProps = {
+	readonly elementReceivingPaste: HTMLInputElement | null;
+	readonly children: ReactElement;
+};
+
+function PasteContextMenu({
+	elementReceivingPaste,
+	children
+}: PasteContextMenuProps): ReactElement {
+	const { t } = useTranslation();
+
+	const pasteDropdownItem = {
+		id: 'paste',
+		label: t('label.paste', 'Paste'),
+		onClick: async (): Promise<void> => {
+			const dataTransfer = new DataTransfer();
+			dataTransfer.setData('text/plain', await navigator.clipboard.readText());
+
+			elementReceivingPaste?.dispatchEvent(
+				new ClipboardEvent('paste', {
+					clipboardData: dataTransfer,
+					bubbles: true,
+					cancelable: true
+				})
+			);
+		}
+	};
+
+	return (
+		<Dropdown display="block" items={[pasteDropdownItem]} contextMenu>
+			{children}
+		</Dropdown>
+	);
+}

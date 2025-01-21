@@ -6,8 +6,7 @@
 
 import React, { ReactElement } from 'react';
 
-import type { SearchViewProps, QueryChip } from '@zextras/carbonio-search-ui';
-import { AccountSettings } from '@zextras/carbonio-shell-ui';
+import { AccountSettings, SearchViewProps, type QueryChip } from '@zextras/carbonio-shell-ui';
 import * as hooks from '@zextras/carbonio-shell-ui';
 import { noop } from 'lodash';
 

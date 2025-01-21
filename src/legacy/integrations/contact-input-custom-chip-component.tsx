@@ -1,26 +1,54 @@
 /*
- * SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+ * SPDX-FileCopyrightText: 2022 Zextras <https://www.zextras.com>
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback, useMemo, useState } from 'react';
+
+import React, { ReactElement, useCallback, useMemo, useState } from 'react';
 
 import {
-	Button,
 	Chip,
-	type ChipAction,
+	Dropdown,
+	Button,
 	Container,
-	Dropdown
+	type ChipAction,
+	type ChipInputProps
 } from '@zextras/carbonio-design-system';
-import { debounce, DebouncedFuncLeading, map } from 'lodash';
+import { debounce, DebouncedFuncLeading, filter, map, reduce, some } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { ContactInputDistributionList } from './types';
 import { ACTION_IDS, DL_MEMBERS_LOAD_LIMIT } from '../../constants';
+import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
 import { useGetDistributionList } from '../../hooks/use-get-distribution-list';
 import { useGetDistributionListMembers } from '../../hooks/use-get-distribution-list-members';
 import type { DistributionListMembersPage } from '../../model/distribution-list';
+import type {
+	ContactChipAction,
+	ContactInputChipDisplayName,
+	ContactInputDistributionList,
+	ContactInputItem,
+	ContactInputOnChange,
+	ContactInputValue,
+	MakeRequired
+} from '../types/integrations';
+
+type CustomChipProps = React.ComponentPropsWithoutRef<
+	NonNullable<ChipInputProps['ChipComponent']>
+> & {
+	email?: string;
+	isGroup?: boolean;
+};
+
+type DLCustomChipProps = CustomChipProps & {
+	contactInputOnChange: ContactInputOnChange;
+	contactInputValue: ContactInputValue;
+};
+
+type ContactInputCustomChipComponentProps = DLCustomChipProps & {
+	chipDisplayName?: ContactInputChipDisplayName;
+	contactActions?: Array<ContactChipAction>;
+};
 
 const StyledChip = styled(Chip)`
 	cursor: default;
@@ -34,6 +62,10 @@ const DISTRIBUTION_ITEM = {
 	MORE_ITEM: 'dl-get-more'
 };
 
+export const isChipItemDistributionList = (
+	contact: Pick<ContactInputItem, 'email' | 'isGroup'>
+): contact is ContactInputDistributionList => (contact.isGroup && !!contact.email) ?? false;
+
 const debounceUserInput = <T extends (...args: unknown[]) => unknown>(
 	fn: T
 ): DebouncedFuncLeading<T> =>
@@ -42,26 +74,26 @@ const debounceUserInput = <T extends (...args: unknown[]) => unknown>(
 		leading: true
 	});
 
-export const DistributionListChip = ({
+const DistributionListChip = ({
 	id,
 	label,
-	value,
+	email,
+	contactInputOnChange,
+	contactInputValue,
 	actions: propActions,
-	onExpandDL,
 	...rest
-}: ContactInputDistributionList): React.JSX.Element => {
+}: MakeRequired<DLCustomChipProps, 'email'>): React.JSX.Element => {
 	const [t] = useTranslation();
 	const [open, setOpen] = useState(false);
-	const { distributionList } = useGetDistributionList({ id, email: value.email });
 
 	const {
 		members,
 		more,
 		total,
 		findMore: loadMembers
-	} = useGetDistributionListMembers(value.email, {
+	} = useGetDistributionListMembers(email, {
 		limit: DL_MEMBERS_LOAD_LIMIT,
-		skip: !distributionList && !open
+		skip: !open
 	});
 
 	const showMoreLabel = t('label.show_more', 'Show more');
@@ -85,10 +117,20 @@ export const DistributionListChip = ({
 	);
 
 	const updateContactInputValue = useCallback(
-		(memberEmails: DistributionListMembersPage['members']) => {
-			onExpandDL(value, memberEmails);
+		(newItems: DistributionListMembersPage['members']) => {
+			const newValue = map(newItems, (item) => ({
+				label: item,
+				value: item,
+				id: item,
+				email: item
+			}));
+
+			contactInputOnChange?.([
+				...filter(contactInputValue, (value) => value.id !== id),
+				...newValue
+			]);
 		},
-		[onExpandDL, value]
+		[contactInputOnChange, contactInputValue, id]
 	);
 
 	const onSelectAllClick = useCallback(() => {
@@ -206,5 +248,69 @@ export const DistributionListChip = ({
 				/>
 			</div>
 		</Dropdown>
+	);
+};
+
+export const ContactInputCustomChipComponent = ({
+	email,
+	isGroup = false,
+	label,
+	chipDisplayName = CHIP_DISPLAY_NAME_VALUES.label,
+	contactActions,
+	actions,
+	...rest
+}: ContactInputCustomChipComponentProps): ReactElement => {
+	const contact = useMemo(() => ({ email, isGroup }), [email, isGroup]);
+	const { distributionList } = useGetDistributionList(
+		{ email },
+		{ skip: !isChipItemDistributionList(contact) }
+	);
+	const chipLabel = useMemo(() => {
+		if (label && chipDisplayName === CHIP_DISPLAY_NAME_VALUES.label) {
+			return label;
+		}
+		if (email && chipDisplayName === CHIP_DISPLAY_NAME_VALUES.email) {
+			return email;
+		}
+		return label || email || '';
+	}, [chipDisplayName, email, label]);
+
+	const chipActions = useMemo(
+		() =>
+			reduce<ContactChipAction, Array<ChipAction>>(
+				contactActions,
+				(result, contactAction) => {
+					if (some(result, (action) => contactAction.id === action.id)) {
+						return result;
+					}
+
+					if (contactAction.isVisible(distributionList ?? contact)) {
+						result.push({
+							...contactAction,
+							onClick: (): void => {
+								contactAction.onClick(distributionList ?? contact);
+							}
+						});
+					}
+
+					return result;
+				},
+				[...(actions ?? [])]
+			),
+		[actions, contact, contactActions, distributionList]
+	);
+
+	if (!isChipItemDistributionList(contact)) {
+		return <Chip {...rest} label={chipLabel} data-testid={'default-chip'} actions={chipActions} />;
+	}
+
+	return (
+		<DistributionListChip
+			{...rest}
+			label={chipLabel}
+			email={contact.email}
+			isGroup={contact.isGroup}
+			actions={chipActions}
+		/>
 	);
 };

@@ -9,12 +9,11 @@ import {
 	CustomModal,
 	Container,
 	Row,
+	TextWithTooltip,
 	Padding,
-	Icon,
-	Tooltip,
-	Text
+	Icon
 } from '@zextras/carbonio-design-system';
-import type { SearchViewProps } from '@zextras/carbonio-search-ui';
+import { getTags, SearchViewProps } from '@zextras/carbonio-shell-ui';
 import { TFunction } from 'i18next';
 import { concat, filter, map } from 'lodash';
 
@@ -24,7 +23,6 @@ import ToggleFilters from './parts/toggle-filters';
 import { useDisabled, useSecondaryDisabled } from './parts/use-disable-hooks';
 import type { Query } from './search-types';
 import { ZIMBRA_STANDARD_COLORS } from '../../../carbonio-ui-commons/constants/utils';
-import { getTags } from '../../../carbonio-ui-commons/store/zustand/tags';
 import ModalFooter from '../secondary-bar/commons/modal-footer';
 import { ModalHeader } from '../secondary-bar/commons/modal-header';
 
@@ -63,9 +61,7 @@ const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 								</Padding>
 							</Row>
 							<Row takeAvailableSpace mainAlignment="flex-start">
-								<Tooltip label={item.name} overflowTooltip>
-									<Text>{item.name}</Text>
-								</Tooltip>
+								<TextWithTooltip>{item.name}</TextWithTooltip>
 							</Row>
 						</Row>
 					</Row>

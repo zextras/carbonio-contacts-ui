@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 library(
-	identifier: 'zapp-jenkins-lib@CO-1541-add-licence-check-and-commit-lint',
+	identifier: 'zapp-jenkins-lib@github-pipeline-v4',
 	retriever: modernSCM([
 		$class: 'GitSCMSource',
 		remote: 'git@github.com:zextras/jenkins-zapp-lib.git',

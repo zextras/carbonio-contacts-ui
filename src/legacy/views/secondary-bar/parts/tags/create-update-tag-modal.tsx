@@ -7,6 +7,7 @@
 import React, { FC, ReactElement, useCallback, useMemo, useState } from 'react';
 
 import { Input, Padding, Text, useSnackbar } from '@zextras/carbonio-design-system';
+import { changeTagColor, createTag, renameTag } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
 import { ItemType } from './types';
@@ -14,7 +15,6 @@ import {
 	ColorSelect,
 	ColorSelectProps
 } from '../../../../../carbonio-ui-commons/components/select/color-select';
-import { changeTagColor, createTag, renameTag } from '../../../../../carbonio-ui-commons/soap/tags';
 import { useAppDispatch } from '../../../../hooks/redux';
 import { contactAction } from '../../../../store/actions/contact-action';
 import { Contact } from '../../../../types/contact';

@@ -15,14 +15,12 @@ import {
 	useModal,
 	useSnackbar
 } from '@zextras/carbonio-design-system';
-import { replaceHistory } from '@zextras/carbonio-shell-ui';
+import { replaceHistory, useTags, Tag, Tags } from '@zextras/carbonio-shell-ui';
 import { TFunction } from 'i18next';
 import { every, find, includes, map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { ZIMBRA_STANDARD_COLORS } from '../../carbonio-ui-commons/constants/utils';
-import { useTags } from '../../carbonio-ui-commons/store/zustand/tags';
-import { Tag, Tags } from '../../carbonio-ui-commons/types/tags';
 import { useAppDispatch } from '../hooks/redux';
 import { contactAction } from '../store/actions/contact-action';
 import { StoreProvider } from '../store/redux';

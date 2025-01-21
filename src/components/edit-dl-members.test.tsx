@@ -6,11 +6,11 @@
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
-import { act, waitFor, within } from '@testing-library/react';
+import { act, waitFor } from '@testing-library/react';
 import { times } from 'lodash';
 
 import { EditDLMembersComponent, EditDLComponentProps } from './edit-dl-members';
-import { screen, setupTest } from '../carbonio-ui-commons/test/test-setup';
+import { screen, setupTest, within } from '../carbonio-ui-commons/test/test-setup';
 import { PALETTE, TESTID_SELECTORS } from '../constants/tests';
 import { generateStore } from '../legacy/tests/generators/store';
 import 'jest-styled-components';

@@ -6,10 +6,10 @@
 
 import { sortBy } from 'lodash';
 
-import { ZIMBRA_STANDARD_COLORS } from '../carbonio-ui-commons/constants';
 import { FOLDERS } from '../carbonio-ui-commons/constants/folders';
+import { ZIMBRA_STANDARD_COLORS } from '../carbonio-ui-commons/constants/utils';
 import { getFolderIdParts, isA, isLink, isRoot } from '../carbonio-ui-commons/helpers/folders';
-import type { Folder } from '../carbonio-ui-commons/types';
+import type { Folder } from '../carbonio-ui-commons/types/folder';
 
 /**
  * Tells if a folder with the given id is the Contacts folder
