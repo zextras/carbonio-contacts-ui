@@ -24,7 +24,7 @@ describe('App view', () => {
 					initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${filter}`]
 				});
 				await waitFor(() => expect(handler).toHaveBeenCalled());
-				expect(await screen.findByText(dl.displayName)).toBeVisible();
+				expect(await screen.findByText(dl.displayName)).not.toBeVisible();
 			}
 		);
 

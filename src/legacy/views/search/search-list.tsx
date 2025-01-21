@@ -16,8 +16,8 @@ import { type SearchResults } from './search-view';
 import { CustomListItem } from '../../../carbonio-ui-commons/components/list/list-item';
 
 const BorderContainer = styled(Container)`
-	border-bottom: 0.0625rem solid ${({ theme }): string => theme?.palette?.gray2?.regular};
-	border-right: 0.0625rem solid ${({ theme }): string => theme?.palette?.gray2?.regular};
+	border-bottom: 0.0625rem solid ${({ theme }): string => theme.palette.gray2.regular};
+	border-right: 0.0625rem solid ${({ theme }): string => theme.palette.gray2.regular};
 `;
 
 type SearchListProps = {

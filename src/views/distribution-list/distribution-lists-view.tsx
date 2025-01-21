@@ -13,7 +13,7 @@ import { useParams } from 'react-router-dom';
 import { DLDisplayerController } from '../../components/dl-displayer-controller';
 import { DLListItem } from '../../components/dl-list-item';
 import { MainList } from '../../components/main-list';
-import { StyledListItem } from '../../components/styled-components';
+import { EnhancedListItem } from '../../components/styled-components';
 import { DISPLAYER_WIDTH, RouteParams, ROUTES_INTERNAL_PARAMS } from '../../constants';
 import { useFindDistributionLists } from '../../hooks/use-find-distribution-lists';
 import { useActiveItem } from '../../hooks/useActiveItem';
@@ -30,7 +30,7 @@ export const DistributionListsView = (): React.JSX.Element => {
 	const items = useMemo(
 		() =>
 			distributionLists.map((dl) => (
-				<StyledListItem
+				<EnhancedListItem
 					key={dl.id || dl.email}
 					active={dl.id === activeItem}
 					data-testid={'list-item'}
@@ -38,7 +38,7 @@ export const DistributionListsView = (): React.JSX.Element => {
 					{(visible): React.JSX.Element => (
 						<DLListItem visible={visible} distributionList={dl} onClick={setActive} />
 					)}
-				</StyledListItem>
+				</EnhancedListItem>
 			)),
 		[activeItem, distributionLists, setActive]
 	);

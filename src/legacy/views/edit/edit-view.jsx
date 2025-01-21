@@ -69,7 +69,7 @@ const cleanMultivalueFields = (contact) => ({
 const CustomStringField = ({ name, label, value, dispatch, autoFocus = false }) => (
 	<Container padding={{ all: 'small' }}>
 		<Input
-			backgroundColor="gray5"
+			background="gray5"
 			inputName={name}
 			label={label}
 			defaultValue={value}
@@ -80,6 +80,7 @@ const CustomStringField = ({ name, label, value, dispatch, autoFocus = false }) 
 	</Container>
 );
 
+/** @type { (props: { panel?: boolean; onClose?: () => void; onTitleChanged?: (title: string) => void }) => React.JSX.Element } */
 export default function EditView({ panel, onClose, onTitleChanged }) {
 	const { folderId, editId } = useParams();
 	const storeDispatch = useDispatch();
