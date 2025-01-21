@@ -21,7 +21,7 @@
 		"lint-check": "npm run lint-errors; npm run type-check",
 		"lint-stats": "eslint --ext .js,.jsx,.ts,.tsx --format node_modules/eslint-stats/byErrorAndWarningStacked --resolve-plugins-relative-to node_modules/@zextras/carbonio-ui-configs src",
 		"build:dev": "sdk build --dev --pkgRel $(date +%s)",
-		"dev-prepush" : "npm run lint-errors && npm run type-check && npm run test"
+		"dev-prepush": "npm run lint-errors && npm run type-check && npm run test"
 	},
 	"keywords": [],
 	"author": "Zextras Crab Onions Team <https://www.zextras.com/carbonio/>",
@@ -31,8 +31,6 @@
 		"@babel/preset-env": "^7.24.0",
 		"@babel/preset-react": "^7.23.3",
 		"@babel/preset-typescript": "^7.23.3",
-		"@commitlint/cli": "^19.2.0",
-		"@commitlint/config-conventional": "^19.1.0",
 		"@faker-js/faker": "^8.4.1",
 		"@testing-library/jest-dom": "^6.4.5",
 		"@testing-library/react": "^15.0.7",
