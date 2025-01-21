@@ -7,13 +7,12 @@ import React from 'react';
 
 import { Padding, Row, Text } from '@zextras/carbonio-design-system';
 
-/** @type { (props: {title?: string }) => React.JSX.Element } */
 export default function Heading({ title }) {
 	return (
 		<>
 			<Row
 				padding={{ all: 'small' }}
-				mainAlignment="flex-start"
+				mainAlignment="baseline"
 				crossAlignment="baseline"
 				width="100%"
 			>

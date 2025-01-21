@@ -10,7 +10,7 @@ import { useParams } from 'react-router-dom';
 
 import { ContactGroupListComponent } from './contact-group-list-component';
 import { ContactGroupListItemSharedAccount } from './contact-group-list-item-shared-account';
-import { EnhancedListItem } from '../../../components/styled-components';
+import { StyledListItem } from '../../../components/styled-components';
 import { useFindSharedContactGroups } from '../../../hooks/use-find-shared-contact-groups';
 
 export const ContactGroupListShared = (): React.JSX.Element => {
@@ -21,7 +21,7 @@ export const ContactGroupListShared = (): React.JSX.Element => {
 	const items = useMemo(
 		() =>
 			map(sharedContactGroups, (contactGroup) => (
-				<EnhancedListItem
+				<StyledListItem
 					key={contactGroup.id}
 					data-testid={`shared-list-item-${contactGroup.id}`}
 					active={currentPathId === contactGroup.id}
@@ -29,7 +29,7 @@ export const ContactGroupListShared = (): React.JSX.Element => {
 					{(visible): React.JSX.Element => (
 						<ContactGroupListItemSharedAccount visible={visible} contactGroup={contactGroup} />
 					)}
-				</EnhancedListItem>
+				</StyledListItem>
 			)),
 		[currentPathId, sharedContactGroups]
 	);

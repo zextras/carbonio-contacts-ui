@@ -9,7 +9,6 @@ import * as shell from '@zextras/carbonio-shell-ui';
 import { HttpResponse } from 'msw';
 
 import App from './app';
-import { ContactInputProps } from './carbonio-ui-commons/integrations/types';
 import { generateFolder } from './carbonio-ui-commons/test/mocks/folders/folders-generator';
 import {
 	createAPIInterceptor,
@@ -17,7 +16,18 @@ import {
 } from './carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { setupTest } from './carbonio-ui-commons/test/test-setup';
 import { CONTACT_BOARD_ID } from './constants';
-import { ContactInput } from './legacy/integrations/contact-input';
+import { ContactInputProps } from './legacy/integrations/contact-input';
+import { ContactInputIntegrationWrapper } from './legacy/integrations/contact-input-integration-wrapper';
+
+// mocking the worker. in commons jest-setup the worker is already mocked, but is improperly defined with wrong types and
+// is causing a call to "onMessage", which tries to alter the folders store and overrides the folders, breaking the test.
+// It also causes warning/errors due the fact it tries to set an "undefined" in the folders.
+// I think we should consider removing that mock or redefine it or make it configurable
+jest.mock('./carbonio-ui-commons/worker', () => ({
+	folderWorker: {
+		postMessage: jest.fn()
+	}
+}));
 
 describe('App', () => {
 	beforeEach(() => {
@@ -70,6 +80,28 @@ describe('App', () => {
 		);
 	});
 
+	it('should register a search view', () => {
+		const addSearchView = jest.spyOn(shell, 'addSearchView');
+		setupTest(<App />);
+		expect(addSearchView).toHaveBeenCalledWith<Parameters<typeof shell.addSearchView>>(
+			expect.objectContaining({
+				route: 'contacts',
+				label: 'Contacts'
+			})
+		);
+	});
+
+	it('should register a search view', () => {
+		const addSearchView = jest.spyOn(shell, 'addSearchView');
+		setupTest(<App />);
+		expect(addSearchView).toHaveBeenCalledWith<Parameters<typeof shell.addSearchView>>(
+			expect.objectContaining({
+				route: 'contacts',
+				label: 'Contacts'
+			})
+		);
+	});
+
 	it('should register a board view to edit a contact', () => {
 		const addBoardView = jest.spyOn(shell, 'addBoardView');
 		setupTest(<App />);
@@ -113,7 +145,7 @@ describe('App', () => {
 			Parameters<typeof shell.registerComponents<ContactInputProps>>
 		>({
 			id: 'contact-input',
-			component: ContactInput
+			component: ContactInputIntegrationWrapper
 		});
 	});
 });

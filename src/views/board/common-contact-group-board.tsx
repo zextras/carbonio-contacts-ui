@@ -21,32 +21,14 @@ import { remove, some, uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { ContactInputItem } from '../../carbonio-ui-commons/integrations/types';
 import { MemberListItemComponent } from '../../components/member-list-item';
 import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../constants';
+import { CHIP_DISPLAY_NAME_VALUES } from '../../constants/contact-input';
 import { ContactInput } from '../../legacy/integrations/contact-input';
+import { ContactInputItem } from '../../legacy/types/integrations';
 
 export function isContactGroupNameInvalid(nameValue: string): boolean {
 	return nameValue.trim().length === 0 || nameValue.length > CONTACT_GROUP_NAME_MAX_LENGTH;
-}
-
-function cleanupDuplicates(
-	chip: EnhancedChipItem,
-	newMemberListEmails: string[]
-): EnhancedChipItem {
-	const duplicated =
-		chip.value.email !== undefined && newMemberListEmails.includes(chip.value.email);
-
-	const actions = [...(chip.actions ?? [])];
-	if (!duplicated && chip.duplicated) {
-		remove(actions, (action) => action.id === 'duplicated');
-	}
-
-	return {
-		...chip,
-		duplicated,
-		actions
-	};
 }
 
 const List = styled(DSList)`
@@ -122,11 +104,10 @@ const CommonContactGroupBoard = ({
 	): void => {
 		// TODO item are filtered to be uniq, because the ContactInput filters out, dropdown duplicated, only visually
 		//  but provide that item inside onChange parameter
-		const uniqNewContactInputValue = uniqBy(newContactInputValue, (chip) => chip.value.email);
+		const uniqNewContactInputValue = uniqBy(newContactInputValue, (value) => value.email);
 
-		const uniqNewContactInputValueWithActions = uniqNewContactInputValue.map((chip) => {
-			const duplicated =
-				chip.value.email !== undefined && memberListEmails.includes(chip.value.email);
+		const uniqNewContactInputValueWithActions = uniqNewContactInputValue.map((value) => {
+			const duplicated = value.email !== undefined && memberListEmails.includes(value.email);
 
 			const duplicatedChipAction: ChipAction = {
 				id: 'duplicated',
@@ -135,17 +116,17 @@ const CommonContactGroupBoard = ({
 				icon: 'AlertCircle'
 			};
 
-			const duplicatedChipActionNotPresent = !chip.actions?.find(
+			const duplicatedChipActionNotPresent = !value.actions?.find(
 				(action) => action.id === 'duplicated'
 			);
 
 			const actions = [
-				...(chip.actions ?? []),
+				...(value.actions ?? []),
 				...(duplicated && duplicatedChipActionNotPresent ? [duplicatedChipAction] : [])
 			];
 
 			return {
-				...chip,
+				...value,
 				duplicated,
 				actions
 			};
@@ -158,11 +139,11 @@ const CommonContactGroupBoard = ({
 		const valid: string[] = [];
 		const invalid: typeof contactInputValue = [];
 
-		contactInputValue.forEach((chip) => {
-			if (chip.error || chip.duplicated || chip.value.email === undefined) {
-				invalid.push(chip);
+		contactInputValue.forEach((value) => {
+			if (value.error || value.duplicated || value.email === undefined) {
+				invalid.push(value);
 			} else {
-				valid.push(chip.value.email);
+				valid.push(value.email);
 			}
 		});
 
@@ -171,11 +152,24 @@ const CommonContactGroupBoard = ({
 	}, [contactInputValue, setMemberListEmails]);
 
 	const removeItem = useCallback(
-		(emailToRemove: string) => {
-			const newMemberListEmails = memberListEmails.filter((value) => value !== emailToRemove);
+		(email: string) => {
+			const newMemberListEmails = memberListEmails.filter((value) => value !== email);
 			setMemberListEmails(newMemberListEmails);
 			setContactInputValue((prevState) =>
-				prevState.map((chip) => cleanupDuplicates(chip, newMemberListEmails))
+				prevState.map((value) => {
+					const duplicated = value.email !== undefined && newMemberListEmails.includes(value.email);
+
+					const actions = [...(value.actions ?? [])];
+					if (!duplicated && value.duplicated) {
+						remove(actions, (action) => action.id === 'duplicated');
+					}
+
+					return {
+						...value,
+						duplicated,
+						actions
+					};
+				})
 			);
 		},
 		[memberListEmails, setMemberListEmails]
@@ -317,6 +311,7 @@ const CommonContactGroupBoard = ({
 						iconDisabled={noValidChip}
 						description={contactInputDescription}
 						hasError={contactInputValue.length > 0 && noValidChip}
+						chipDisplayName={CHIP_DISPLAY_NAME_VALUES.email}
 					/>
 				</Container>
 				<List data-testid={'members-list'}>{listItems}</List>

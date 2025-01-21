@@ -3,9 +3,9 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+import { Tags } from '@zextras/carbonio-shell-ui';
 
 import { ZIMBRA_STANDARD_COLORS } from '../../../carbonio-ui-commons/constants';
-import { Tags } from '../../../carbonio-ui-commons/types/tags';
 import { Contact } from '../../types/contact';
 import { getTagsArray } from '../tags';
 

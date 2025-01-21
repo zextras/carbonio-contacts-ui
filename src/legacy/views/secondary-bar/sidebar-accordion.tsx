@@ -18,6 +18,7 @@ import { theme } from '../../../carbonio-ui-commons/theme/theme-mui';
 import { Folder } from '../../../carbonio-ui-commons/types';
 import { ContactGroupMainAccount } from '../../../views/contact-groups/sidebar/contact-group-main-account';
 import { ContactGroupSharedAccount } from '../../../views/contact-groups/sidebar/contact-group-shared-account';
+import type { SidebarAccordionProps } from '../../types/sidebar';
 
 export type SidebarAccordionProps = {
 	folders: Array<Folder>;

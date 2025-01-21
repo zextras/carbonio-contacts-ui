@@ -5,7 +5,7 @@
  */
 import React, { useCallback, useMemo } from 'react';
 
-import { Avatar, Button, Row, Tooltip, Text } from '@zextras/carbonio-design-system';
+import { Avatar, Button, Row, TextWithTooltip } from '@zextras/carbonio-design-system';
 
 import { useActionCopyToClipboard } from '../actions/copy-to-clipboard';
 import { useActionSendEmail } from '../actions/send-email';
@@ -42,9 +42,7 @@ export const MemberDisplayerListItemComponent = ({
 			<Row wrap={'nowrap'} gap={'0.5rem'} flexShrink={1} minWidth={'1rem'}>
 				<Avatar size={'medium'} label={email} />
 				<Row flexShrink={1} minWidth={'1rem'}>
-					<Tooltip label={email} overflowTooltip>
-						<Text size={'small'}>{email}</Text>
-					</Tooltip>
+					<TextWithTooltip size={'small'}>{email}</TextWithTooltip>
 				</Row>
 			</Row>
 			<Row wrap={'nowrap'} gap={'0.25rem'} flexShrink={1} minWidth={'fit-content'}>

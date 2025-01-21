@@ -17,7 +17,7 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import { CONTACT_BOARD_ID, CONTACTS_APP_ID, NEW_CONTACT_GROUP_BOARD_ID } from '../constants';
-import { ContactInput } from '../legacy/integrations/contact-input';
+import { ContactInputIntegrationWrapper } from '../legacy/integrations/contact-input-integration-wrapper';
 import createContactIntegration from '../legacy/integrations/create-contact';
 
 export const IntegrationsRegistration: FC = () => {
@@ -64,7 +64,7 @@ export const IntegrationsRegistration: FC = () => {
 	useEffect(() => {
 		registerComponents({
 			id: 'contact-input',
-			component: ContactInput
+			component: ContactInputIntegrationWrapper
 		});
 
 		registerActions<NewAction>(

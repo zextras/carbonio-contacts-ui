@@ -27,10 +27,7 @@ jest.setTimeout(10000);
 failOnConsole({
 	...getFailOnConsoleDefaultConfig(),
 	shouldFailOnWarn: false,
-	silenceMessage: (message): boolean =>
-		message.includes(JEST_MOCKED_ERROR) ||
-		// FIXME: move the duplicated field inside the value of the chip, instead of placing it on the chip itself
-		message.includes('Received `false` for a non-boolean attribute `duplicated`')
+	silenceMessage: (message): boolean => message.includes(JEST_MOCKED_ERROR)
 });
 
 beforeAll(() => {
