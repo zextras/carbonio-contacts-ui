@@ -28,7 +28,6 @@ chrome-user-data
 *.swp
 *.swo
 junit.xml
-*.tgz
 
 packages/react-devtools-core/dist
 packages/react-devtools-extensions/chrome/build

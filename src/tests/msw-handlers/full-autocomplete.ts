@@ -31,7 +31,6 @@ const createAutocompleteResponse = (match: Array<Match>): FullAutocompleteRespon
 		match: matchString
 	};
 };
-
 type FullAutoCompleteHandler = HttpResponseResolver<
 	never,
 	{ Body: { FullAutocompleteRequest: FullAutocompleteResponse } },

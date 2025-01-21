@@ -25,7 +25,7 @@ export const DisplayerActionsHeader = ({
 					size={'medium'}
 					backgroundColor={'transparent'}
 					disabled={action.disabled}
-					labelColor={action.color}
+					color={action.color}
 				/>
 			)),
 		[actions]

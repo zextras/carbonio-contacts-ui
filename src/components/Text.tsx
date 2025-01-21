@@ -8,21 +8,35 @@ import React, { ReactNode } from 'react';
 import {
 	Text as DSText,
 	type TextProps,
-	Tooltip,
-	TooltipProps
+	TextWithTooltip,
+	type TextWithTooltipProps
 } from '@zextras/carbonio-design-system';
-import styled from 'styled-components';
+import styled, { type SimpleInterpolation } from 'styled-components';
 
 import { MakeOptional } from '../types/utils';
 
 interface TextExtendedProps {
 	width?: string;
 	centered?: boolean;
+	italic?: boolean;
 	inline?: boolean;
+	lineHeight?: number;
 }
 
+type WithDollarPrefix<S extends string> = `$${S}`;
+
+type WithoutDollarPrefix<S extends string> = S extends `$${infer WithoutDollarString}`
+	? WithoutDollarString
+	: S;
+
+type StyledTextProps = {
+	[K in WithDollarPrefix<
+		keyof Omit<TextExtendedProps, 'withTooltip'>
+	>]: TextExtendedProps[WithoutDollarPrefix<K>];
+};
+
 type TextWithOptionalTooltipProps =
-	| ({ withTooltip: true } & MakeOptional<TooltipProps, 'children'>)
+	| ({ withTooltip: true } & MakeOptional<TextWithTooltipProps, 'children'>)
 	| ({ withTooltip?: boolean } & TextProps);
 
 const TextWithOptionalTooltip = ({
@@ -31,21 +45,22 @@ const TextWithOptionalTooltip = ({
 	...rest
 }: TextWithOptionalTooltipProps): React.JSX.Element =>
 	withTooltip ? (
-		<Tooltip label={children as ReactNode} overflowTooltip>
-			<DSText {...rest}>{children as ReactNode}</DSText>
-		</Tooltip>
+		<TextWithTooltip {...rest}>{children as ReactNode}</TextWithTooltip>
 	) : (
 		<DSText {...rest}>{children}</DSText>
 	);
 
-const StyledText = styled(TextWithOptionalTooltip)<{ $width?: string; $inline?: boolean }>`
-	width: ${({ $width }): string | undefined => $width};
-	display: ${({ $inline }): string | undefined | false => $inline && 'inline'};
+const StyledText = styled(TextWithOptionalTooltip)<StyledTextProps>`
+	width: ${({ $width }): SimpleInterpolation => $width};
+	display: ${({ $inline }): SimpleInterpolation => $inline && 'inline'};
+	font-style: ${({ $italic }): SimpleInterpolation => $italic && 'italic'};
+	text-align: ${({ $centered }): SimpleInterpolation => $centered && 'center'};
+	line-height: ${({ $lineHeight }): SimpleInterpolation => $lineHeight};
 `;
-
 export const Text = ({
 	width,
 	centered,
+	italic,
 	inline,
 	lineHeight = 1.5,
 	withTooltip = false,
@@ -53,9 +68,10 @@ export const Text = ({
 }: TextExtendedProps & TextWithOptionalTooltipProps): React.JSX.Element => (
 	<StyledText
 		$width={width}
+		$centered={centered}
+		$italic={italic}
 		$inline={inline}
-		textAlign={(centered && 'center') || undefined}
-		lineHeight={lineHeight}
+		$lineHeight={lineHeight}
 		withTooltip={withTooltip}
 		{...dsProps}
 	/>

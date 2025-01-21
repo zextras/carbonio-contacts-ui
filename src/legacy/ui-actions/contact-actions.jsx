@@ -5,7 +5,7 @@
  */
 
 import { useModal } from '@zextras/carbonio-design-system';
-import { getAction } from '@zextras/carbonio-shell-ui';
+import { getAction, useTags } from '@zextras/carbonio-shell-ui';
 import { compact, isEmpty } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
@@ -17,7 +17,6 @@ import { useActionRestoreContacts } from '../../actions/restore-contacts';
 import { useActionTrashContacts } from '../../actions/trash-contacts';
 import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
 import { getFolderIdParts } from '../../carbonio-ui-commons/helpers/folders';
-import { useTags } from '../../carbonio-ui-commons/store/zustand/tags';
 
 const generateClickableAction = (action, params) => ({
 	id: action.id,
@@ -33,16 +32,14 @@ const generateClickableAction = (action, params) => ({
 
 export function mailToContact(contact, t) {
 	const [mailTo, available] = getAction('contact-list', 'mail-to', [contact]);
-	if (!available) {
-		return undefined;
-	}
-	const { execute, ...action } = mailTo;
-	return {
-		...action,
-		onClick: execute,
-		label: t('action.send_msg', 'Send e-mail'),
-		disabled: isEmpty(contact?.email)
-	};
+	return available
+		? {
+				...mailTo,
+				onClick: mailTo.execute,
+				label: t('action.send_msg', 'Send e-mail'),
+				disabled: isEmpty(contact?.email)
+			}
+		: undefined;
 }
 
 export const useContextActions = (folderId) => {

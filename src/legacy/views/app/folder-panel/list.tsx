@@ -16,7 +16,7 @@ import {
 	useKeyboard
 } from '@zextras/carbonio-design-system';
 import { map, some } from 'lodash';
-import styled, { DefaultTheme } from 'styled-components';
+import styled, { DefaultTheme, SimpleInterpolation } from 'styled-components';
 
 const StyledContainer = styled(Container)`
 	overflow-y: auto;
@@ -64,7 +64,7 @@ const StyledDiv = styled.div<{
 		$activeBackground,
 		$active,
 		$selected
-	}): ReturnType<typeof pseudoClasses> =>
+	}): SimpleInterpolation =>
 		pseudoClasses(
 			theme,
 			($active && $activeBackground) || ($selected && $selectedBackground) || $background

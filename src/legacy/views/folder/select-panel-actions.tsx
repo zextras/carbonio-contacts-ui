@@ -82,4 +82,4 @@ const SelectPanelActions: FC<SelectPanelActionsProps> = ({ deselectAll }): React
 	);
 };
 
-export { SelectPanelActions, type SelectPanelActionsProps };
+export { SelectPanelActions, SelectPanelActionsProps };
