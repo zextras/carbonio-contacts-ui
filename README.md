@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 <div align="center">
   <h1>Carbonio Contacts UI</h1>
 </div>
- 
+
 Contacts module
 
 <p align="center">
