@@ -20,7 +20,7 @@ Contacts module
   <img src="https://img.shields.io/twitter/follow/zextras?style=social&logo=twitter" alt="Follow on Twitter"></a>
 </p>
 <h3>How to build</h3>
- 
+
 <h4>Setup</h4>
 
 - clone this repo
