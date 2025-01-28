@@ -56,7 +56,7 @@ export const findContactGroups = (
 	if (accountId) {
 		query = `${query} inid:"${accountId}:${folderId}"`;
 	} else {
-		query = `${query} inid:${folderId}`;
+		query = `${query} inid:"${folderId}"`;
 	}
 	return handleFindContactGroups(
 		fetch(`/service/soap/SearchRequest`, {
