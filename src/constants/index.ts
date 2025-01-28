@@ -13,6 +13,7 @@ export const ACTION_IDS = {
 	expandDL: 'dl-expand-action',
 	sendEmail: 'send-email-action',
 	sendEmailCG: 'cg-send-email-action',
+	addShareCG: 'cg-add-share',
 	deleteCG: 'cg-delete-action',
 	editCG: 'cg-edit-action',
 	copyToClipboard: 'copy-to-clipboard-action',

@@ -6,6 +6,7 @@
 
 import { type Action as DSAction } from '@zextras/carbonio-design-system';
 
+import { useAddShareCG } from '../actions/add-share-cg';
 import {
 	useActionDeleteMainAccountContactGroup,
 	useActionDeleteSharedAccountContactGroup
@@ -17,12 +18,20 @@ import { ContactGroup, SharedContactGroup } from '../model/contact-group';
 
 function evaluateContactGroupActions<T extends ContactGroup>(
 	contactGroup: T,
+	addShareCGAction: UIAction<T, never>,
 	deleteCGAction: UIAction<T, never>,
 	editCGAction: EditActionCG,
 	sendEmailAction: SendEmailActionCG
 ): DSAction[] {
 	const orderedActions: DSAction[] = [];
-
+	orderedActions.push({
+		id: addShareCGAction.id,
+		label: addShareCGAction.label,
+		onClick: () => {
+			addShareCGAction.execute(contactGroup);
+		},
+		icon: addShareCGAction.icon
+	});
 	if (sendEmailAction.canExecute(contactGroup)) {
 		orderedActions.push({
 			id: sendEmailAction.id,
@@ -63,9 +72,11 @@ export const useEvaluateMainAccountContactGroupActions = (): ((
 	const deleteCGAction = useActionDeleteMainAccountContactGroup();
 	const editCGAction = useActionEditCG();
 	const sendEmailAction = useActionSendEmailCG();
+	const addShareAction = useAddShareCG();
 	return (contactGroup: ContactGroup): DSAction[] =>
 		evaluateContactGroupActions<ContactGroup>(
 			contactGroup,
+			addShareAction,
 			deleteCGAction,
 			editCGAction,
 			sendEmailAction
@@ -78,9 +89,11 @@ export const useEvaluateSharedContactGroupActions = (): ((
 	const deleteCGAction = useActionDeleteSharedAccountContactGroup();
 	const editCGAction = useActionEditCG();
 	const sendEmailAction = useActionSendEmailCG();
+	const addShareAction = useAddShareCG();
 	return (contactGroup: SharedContactGroup): DSAction[] =>
 		evaluateContactGroupActions<SharedContactGroup>(
 			contactGroup,
+			addShareAction,
 			deleteCGAction,
 			editCGAction,
 			sendEmailAction
