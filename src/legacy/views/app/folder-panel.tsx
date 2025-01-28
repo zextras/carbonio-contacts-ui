@@ -5,9 +5,10 @@
  */
 import React, { ReactElement, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Container, Select } from '@zextras/carbonio-design-system';
+import { Container, MultiButton, Row, Tooltip } from '@zextras/carbonio-design-system';
 import { useAppContext } from '@zextras/carbonio-shell-ui';
-import { filter, find, orderBy } from 'lodash';
+import { filter, noop, orderBy } from 'lodash';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { Breadcrumbs } from './breadcrumbs';
@@ -20,7 +21,6 @@ import { selectAllContactsInFolder, selectContactsStatus } from '../../store/sel
 import { ActionsContextProvider } from '../../ui-actions/actions-context';
 import { SelectPanelActions } from '../folder/select-panel-actions';
 import { ContactGroupList } from './folder-panel/contact-groups-list';
-import { useTranslation } from 'react-i18next';
 
 type RouteParams = {
 	folderId: string;
@@ -72,11 +72,21 @@ export const FolderPanel = (): ReactElement => {
 		});
 	}, [dispatch, folderId, searchRequestStatus]);
 
+	const isContactView = activeFilter === FILTER_TYPES.CONTACT;
 	const selectOptions = [
-		{ label: t('folder_panel.option.contacts', 'Contacts'), value: FILTER_TYPES.CONTACT },
 		{
+			id: FILTER_TYPES.CONTACT,
+			label: t('folder_panel.option.contacts', 'Contacts'),
+			value: FILTER_TYPES.CONTACT,
+			onClick: () => setActiveFilter(FILTER_TYPES.CONTACT),
+			selected: isContactView
+		},
+		{
+			id: FILTER_TYPES.CONTACT_GROUP,
 			label: t('folder_panel.option.contact_group', 'Contact Groups'),
-			value: FILTER_TYPES.CONTACT_GROUP
+			value: FILTER_TYPES.CONTACT_GROUP,
+			onClick: () => setActiveFilter(FILTER_TYPES.CONTACT_GROUP),
+			selected: !isContactView
 		}
 	];
 	return (
@@ -103,16 +113,22 @@ export const FolderPanel = (): ReactElement => {
 					{isSelecting ? (
 						<SelectPanelActions deselectAll={deselectAll} />
 					) : (
-						<Breadcrumbs folderPath={folder?.absFolderPath ?? ''} itemsCount={folder?.n ?? 0} />
+						<Breadcrumbs folderPath={folder?.absFolderPath ?? ''} itemsCount={folder?.n ?? 0}>
+							<Row mainAlignment="flex-end" padding={{ all: 'small', right: 'medium' }}>
+								<Tooltip label={t('label.filter_mode', 'Filter mode')} maxWidth="100%">
+									<MultiButton
+										size={'large'}
+										primaryIcon={'PeopleOutline'}
+										type={'ghost'}
+										onClick={noop}
+										color={'gray0'}
+										items={selectOptions}
+										data-testid="select-contacts-view"
+									/>
+								</Tooltip>
+							</Row>
+						</Breadcrumbs>
 					)}
-					<Select
-						items={selectOptions}
-						label={t('label.filter_mode', 'Filter mode')}
-						onChange={(value): void => {
-							value && setActiveFilter(value);
-						}}
-						defaultSelection={find(selectOptions, ['value', activeFilter])}
-					/>
 					{activeFilter === FILTER_TYPES.CONTACT ? (
 						<ContactsList
 							folderId={folderId}
