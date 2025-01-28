@@ -17,11 +17,12 @@ type Props = {
 	contactGroup: ContactGroup;
 	visible: boolean;
 };
-export const ContactGroupListItemMainAccount = ({
+export const ContactGroupListItemWrapper = ({
 	contactGroup,
 	visible
 }: Props): React.JSX.Element => {
 	const replaceHistory = useReplaceHistoryCallback();
+	// TODO: fix routing
 	const displayContact = useCallback(
 		(id: string) => {
 			replaceHistory(`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${FOLDERS.CONTACTS}/${id}`);

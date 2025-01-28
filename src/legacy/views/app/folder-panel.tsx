@@ -14,13 +14,13 @@ import { useParams } from 'react-router-dom';
 import { Breadcrumbs } from './breadcrumbs';
 import { ContactsList } from './folder-panel/contacts-list';
 import { useFolder } from '../../../carbonio-ui-commons/store/zustand/folder';
+import { ContactGroupList } from '../../../views/contact-groups/list/contact-groups-list';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { useSelection } from '../../hooks/useSelection';
 import { searchContactsAsyncThunk } from '../../store/actions/search-contacts';
 import { selectAllContactsInFolder, selectContactsStatus } from '../../store/selectors/contacts';
 import { ActionsContextProvider } from '../../ui-actions/actions-context';
 import { SelectPanelActions } from '../folder/select-panel-actions';
-import { ContactGroupList } from './folder-panel/contact-groups-list';
 
 type RouteParams = {
 	folderId: string;

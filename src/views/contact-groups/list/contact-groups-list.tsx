@@ -7,14 +7,17 @@ import React, { useCallback, useMemo } from 'react';
 
 import { List } from '@zextras/carbonio-design-system';
 import { map } from 'lodash';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { EnhancedListItem } from '../../../../components/styled-components';
-import { useFindContactGroups } from '../../../../hooks/useFindContactGroups';
-import { ContactGroupListItemMainAccount } from '../../../../views/contact-groups/list/contact-group-list-item-main-account';
+import { ContactGroupListItemWrapper } from './contact-group-list-item-wrapper';
+import { EnhancedListItem } from '../../../components/styled-components';
+import { useFindContactGroups } from '../../../hooks/useFindContactGroups';
+import { EmptyListPanel } from '../../../legacy/views/app/folder-panel/empty-list-panel';
 
 export const ContactGroupList = (): React.JSX.Element => {
 	const { id: currentPathId, folderId } = useParams<{ id: string; folderId: string }>();
+	const [t] = useTranslation();
 	const {
 		contactGroups: mainAccountContactGroups,
 		hasMore,
@@ -31,7 +34,7 @@ export const ContactGroupList = (): React.JSX.Element => {
 					active={currentPathId === contactGroup.id}
 				>
 					{(visible): React.JSX.Element => (
-						<ContactGroupListItemMainAccount visible={visible} contactGroup={contactGroup} />
+						<ContactGroupListItemWrapper visible={visible} contactGroup={contactGroup} />
 					)}
 				</EnhancedListItem>
 			)),
@@ -39,13 +42,24 @@ export const ContactGroupList = (): React.JSX.Element => {
 	);
 
 	return (
-		<List
-			data-testid="main-list"
-			background={'gray6'}
-			onListBottom={onListBottom}
-			intersectionObserverInitOptions={{ threshold: 0.5 }}
-		>
-			{items}
-		</List>
+		<>
+			{items.length === 0 ? (
+				<EmptyListPanel
+					emptyListTitle={t(
+						'contactGroupList.emptyList',
+						'No contact groups have been created yet'
+					)}
+				/>
+			) : (
+				<List
+					data-testid="main-list"
+					background={'gray6'}
+					onListBottom={onListBottom}
+					intersectionObserverInitOptions={{ threshold: 0.5 }}
+				>
+					{items}
+				</List>
+			)}
+		</>
 	);
 };
