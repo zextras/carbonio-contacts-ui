@@ -73,15 +73,20 @@ export const FolderPanel = (): ReactElement => {
 	}, [dispatch, folderId, searchRequestStatus]);
 
 	const isContactView = activeFilter === FILTER_TYPES.CONTACT;
+	const personOutline = 'PersonOutline';
+	const peopleOutline = 'PeopleOutline';
+	const selectedViewTypeIcon = isContactView ? personOutline : peopleOutline;
 	const selectOptions = [
 		{
 			id: FILTER_TYPES.CONTACT,
+			icon: personOutline,
 			label: t('folder_panel.option.contacts', 'Contacts'),
 			value: FILTER_TYPES.CONTACT,
 			onClick: () => setActiveFilter(FILTER_TYPES.CONTACT),
 			selected: isContactView
 		},
 		{
+			icon: peopleOutline,
 			id: FILTER_TYPES.CONTACT_GROUP,
 			label: t('folder_panel.option.contact_group', 'Contact Groups'),
 			value: FILTER_TYPES.CONTACT_GROUP,
@@ -114,11 +119,11 @@ export const FolderPanel = (): ReactElement => {
 						<SelectPanelActions deselectAll={deselectAll} />
 					) : (
 						<Breadcrumbs folderPath={folder?.absFolderPath ?? ''} itemsCount={folder?.n ?? 0}>
-							<Row mainAlignment="flex-end" padding={{ all: 'small', right: 'medium' }}>
+							<Row mainAlignment="flex-end">
 								<Tooltip label={t('label.filter_mode', 'Filter mode')} maxWidth="100%">
 									<MultiButton
 										size={'large'}
-										primaryIcon={'PeopleOutline'}
+										primaryIcon={selectedViewTypeIcon}
 										type={'ghost'}
 										onClick={noop}
 										color={'gray0'}
