@@ -3,11 +3,11 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { ReactElement, useEffect, useMemo, useRef } from 'react';
+import React, { ReactElement, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Container } from '@zextras/carbonio-design-system';
+import { Container, Select } from '@zextras/carbonio-design-system';
 import { useAppContext } from '@zextras/carbonio-shell-ui';
-import { filter, orderBy } from 'lodash';
+import { filter, find, orderBy } from 'lodash';
 import { useParams } from 'react-router-dom';
 
 import { Breadcrumbs } from './breadcrumbs';
@@ -19,6 +19,8 @@ import { searchContactsAsyncThunk } from '../../store/actions/search-contacts';
 import { selectAllContactsInFolder, selectContactsStatus } from '../../store/selectors/contacts';
 import { ActionsContextProvider } from '../../ui-actions/actions-context';
 import { SelectPanelActions } from '../folder/select-panel-actions';
+import { ContactGroupList } from './folder-panel/contact-groups-list';
+import { useTranslation } from 'react-i18next';
 
 type RouteParams = {
 	folderId: string;
@@ -28,14 +30,20 @@ type UseAppContextType = {
 	setCount: (count: number) => void;
 };
 
+const FILTER_TYPES = {
+	CONTACT: 'CONTACT',
+	CONTACT_GROUP: 'CONTACT-GROUP'
+};
+
 export const FolderPanel = (): ReactElement => {
+	const [t] = useTranslation();
 	const isFirstRender = useRef(true);
 	const { folderId } = useParams<RouteParams>();
 	const dispatch = useAppDispatch();
 	const folder = useFolder(folderId);
 	const { setCount } = useAppContext<UseAppContextType>();
 	const { selected, isSelecting, toggle, deselectAll } = useSelection(folderId, setCount);
-
+	const [activeFilter, setActiveFilter] = useState(FILTER_TYPES.CONTACT);
 	const contacts = useAppSelector((state) => selectAllContactsInFolder(state, folderId));
 	const searchRequestStatus = useAppSelector((state) => selectContactsStatus(state, folderId));
 	const sortedContacts = useMemo(
@@ -64,6 +72,13 @@ export const FolderPanel = (): ReactElement => {
 		});
 	}, [dispatch, folderId, searchRequestStatus]);
 
+	const selectOptions = [
+		{ label: t('folder_panel.option.contacts', 'Contacts'), value: FILTER_TYPES.CONTACT },
+		{
+			label: t('folder_panel.option.contact_group', 'Contact Groups'),
+			value: FILTER_TYPES.CONTACT_GROUP
+		}
+	];
 	return (
 		<ActionsContextProvider
 			folderId={folderId}
@@ -90,13 +105,25 @@ export const FolderPanel = (): ReactElement => {
 					) : (
 						<Breadcrumbs folderPath={folder?.absFolderPath ?? ''} itemsCount={folder?.n ?? 0} />
 					)}
-					<ContactsList
-						folderId={folderId}
-						contacts={sortedContacts}
-						selected={selected}
-						isSelecting={isSelecting}
-						toggle={toggle}
+					<Select
+						items={selectOptions}
+						label={t('label.filter_mode', 'Filter mode')}
+						onChange={(value): void => {
+							value && setActiveFilter(value);
+						}}
+						defaultSelection={find(selectOptions, ['value', activeFilter])}
 					/>
+					{activeFilter === FILTER_TYPES.CONTACT ? (
+						<ContactsList
+							folderId={folderId}
+							contacts={sortedContacts}
+							selected={selected}
+							isSelecting={isSelecting}
+							toggle={toggle}
+						/>
+					) : (
+						<ContactGroupList />
+					)}
 				</Container>
 			</Container>
 		</ActionsContextProvider>

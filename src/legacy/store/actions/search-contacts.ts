@@ -19,7 +19,7 @@ export const searchContactsAsyncThunk = createAsyncThunk<SearchResponse, SearchC
 			sortBy: 'nameAsc',
 			types: 'contact',
 			query: {
-				_content: `inid:"${folderId}"`
+				_content: `inid:"${folderId}" or #type:group inid:"${folderId}"`
 			}
 		})) as SearchResponse
 );
