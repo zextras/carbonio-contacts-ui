@@ -37,6 +37,7 @@ function handleFindContactGroups(apiResponse: Promise<Response>): FindContactGro
 			const contactGroups = res.Body.SearchResponse.cn
 				? res.Body.SearchResponse.cn.map((value) => ({
 						id: value.id,
+						folderId: value.l,
 						title: value._attrs.fullName ?? '',
 						members:
 							value.m?.filter((value) => value.type === 'I').map((value) => value.value) ?? []
@@ -48,13 +49,14 @@ function handleFindContactGroups(apiResponse: Promise<Response>): FindContactGro
 
 export const findContactGroups = (
 	offset: number,
+	folderId: string,
 	accountId?: string
 ): FindContactGroupsResponse => {
 	let query = '#type:group';
 	if (accountId) {
-		query = `${query} inid:"${accountId}:7"`;
+		query = `${query} inid:"${accountId}:${folderId}"`;
 	} else {
-		query = `${query} inid:7`;
+		query = `${query} inid:${folderId}`;
 	}
 	return handleFindContactGroups(
 		fetch(`/service/soap/SearchRequest`, {

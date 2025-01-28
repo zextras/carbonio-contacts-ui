@@ -12,12 +12,11 @@ import { useTranslation } from 'react-i18next';
 import { Route, Switch, useParams, useRouteMatch } from 'react-router-dom';
 
 import { CollapsedSideBarFolderItem } from './collapsed-sidebar-folder-item';
-import { CollapsedSideBarItem } from './collapsed-sidebar-item';
 import { SidebarAccordionMui } from './sidebar-accordion';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { useRootsArray } from '../../../carbonio-ui-commons/store/zustand/folder';
 import { themeMui } from '../../../carbonio-ui-commons/theme/theme-mui';
-import { LOCAL_STORAGES, ROUTES_INTERNAL_PARAMS } from '../../../constants';
+import { LOCAL_STORAGES } from '../../../constants';
 import { sortFolders } from '../../../helpers/folders';
 import useGetTagsAccordion from '../../hooks/use-get-tags-accordions';
 
@@ -35,7 +34,6 @@ const SecondaryBarView: FC<SecondaryBarComponentProps> = ({ expanded = false }) 
 	const roots = useRootsArray();
 	const folders = useMemo(() => sortFolders(roots), [roots]);
 	const collapsedItems = [] as Array<ReactElement>;
-	const iconTooltip = t('Contact Groups');
 
 	folders.length > 0 &&
 		folders[0].children.forEach((folder) => {
@@ -46,18 +44,6 @@ const SecondaryBarView: FC<SecondaryBarComponentProps> = ({ expanded = false }) 
 					folder={folder}
 				/>
 			);
-			if (folder.id === FOLDERS.CONTACTS) {
-				const redirectPath = `${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${FOLDERS.CONTACTS}`;
-				collapsedItems.push(
-					<CollapsedSideBarItem
-						id={'contact-groups'}
-						key={`sidebar-contact-group`}
-						iconTooltip={iconTooltip}
-						icon={'PeopleOutline'}
-						redirectPath={redirectPath}
-					/>
-				);
-			}
 		});
 
 	return (

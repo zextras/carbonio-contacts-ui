@@ -11,7 +11,7 @@ describe('Find Contact Groups API', () => {
 	it('should request contact groups of given account', async () => {
 		const interceptor = createSoapAPIInterceptor<FindContactGroupsSoapApiRequest>('Search');
 
-		await findContactGroups(0, '123');
+		await findContactGroups(0, '7', '123');
 
 		const request = await interceptor;
 

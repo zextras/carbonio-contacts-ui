@@ -5,6 +5,8 @@
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { useParams } from 'react-router-dom';
+
 import { FIND_CONTACT_GROUP_LIMIT } from '../constants';
 import { ContactGroup } from '../model/contact-group';
 import { apiClient } from '../network/api-client';
@@ -16,7 +18,7 @@ type UseFindContactGroupsReturnType = {
 	findMore: () => void;
 };
 
-export const useFindContactGroups = (): UseFindContactGroupsReturnType => {
+export const useFindContactGroups = (folderId: string): UseFindContactGroupsReturnType => {
 	const isFirstRender = useRef(true);
 	const { addContactGroups, setOffset, orderedContactGroups, unorderedContactGroups } =
 		useContactGroupStore();
@@ -24,14 +26,14 @@ export const useFindContactGroups = (): UseFindContactGroupsReturnType => {
 	const [hasMore, setHasMore] = useState(useContactGroupStore.getState().offset !== -1);
 
 	const findCallback = useCallback(() => {
-		apiClient.findContactGroups(useContactGroupStore.getState().offset).then((result) => {
+		apiClient.findContactGroups(useContactGroupStore.getState().offset, folderId).then((result) => {
 			addContactGroups(result.contactGroups);
 			setOffset(
 				result.hasMore ? useContactGroupStore.getState().offset + FIND_CONTACT_GROUP_LIMIT : -1
 			);
 			setHasMore(result.hasMore);
 		});
-	}, [addContactGroups, setOffset]);
+	}, [addContactGroups, folderId, setOffset]);
 
 	useEffect(() => {
 		if (useContactGroupStore.getState().orderedContactGroups.length > 0 || !isFirstRender.current) {
@@ -48,5 +50,12 @@ export const useFindContactGroups = (): UseFindContactGroupsReturnType => {
 		findCallback();
 	}, [findCallback, hasMore]);
 
-	return { contactGroups: [...orderedContactGroups, ...unorderedContactGroups], hasMore, findMore };
+	return {
+		contactGroups: [
+			...orderedContactGroups.filter((cg) => cg.folderId === folderId),
+			...unorderedContactGroups.filter((cg) => cg.folderId === folderId)
+		],
+		hasMore,
+		findMore
+	};
 };

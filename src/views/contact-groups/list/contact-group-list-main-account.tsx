@@ -15,7 +15,7 @@ import { EnhancedListItem } from '../../../components/styled-components';
 import { useFindContactGroups } from '../../../hooks/useFindContactGroups';
 
 export const ContactGroupListMainAccount = (): React.JSX.Element => {
-	const { contactGroups: mainAccountContactGroups, hasMore, findMore } = useFindContactGroups();
+	const { contactGroups: mainAccountContactGroups, hasMore, findMore } = useFindContactGroups('7');
 
 	const onListBottom = useCallback(() => (hasMore ? findMore() : undefined), [hasMore, findMore]);
 	const { id: currentPathId } = useParams<{ id: string }>();

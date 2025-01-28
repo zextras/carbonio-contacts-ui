@@ -45,6 +45,7 @@ export const createContactGroup = (title: string, members: Array<string>): Promi
 
 			return {
 				id: cnItem.id,
+				folderId: cnItem.l,
 				title: cnItem._attrs.fullName ?? '',
 				members: cnItem.m?.map((value) => value.value) ?? []
 			};

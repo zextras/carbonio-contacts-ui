@@ -29,7 +29,7 @@ export const useFindSharedContactGroups = (
 	const findCallback = useCallback(() => {
 		if (!accountId) return;
 		const offset = sharedAccountData?.offset ?? 0;
-		findContactGroups(offset, accountId).then((result) => {
+		findContactGroups(offset, '7', accountId).then((result) => {
 			useContactGroupStore
 				.getState()
 				.populateSharedContactGroupsByAccountId(

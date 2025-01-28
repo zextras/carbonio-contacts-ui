@@ -12,12 +12,9 @@ import { useLocalStorage } from '@zextras/carbonio-shell-ui';
 
 import { AccordionCustomComponent } from './accordion-custom-component';
 import { FindSharesButton } from './find-shares-button';
-import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { getFolderIdParts, isRoot } from '../../../carbonio-ui-commons/helpers/folders';
 import { theme } from '../../../carbonio-ui-commons/theme/theme-mui';
 import { Folder } from '../../../carbonio-ui-commons/types';
-import { ContactGroupMainAccount } from '../../../views/contact-groups/sidebar/contact-group-main-account';
-import { ContactGroupSharedAccount } from '../../../views/contact-groups/sidebar/contact-group-shared-account';
 
 export type SidebarAccordionProps = {
 	folders: Array<Folder>;
@@ -53,7 +50,7 @@ export const SidebarAccordionMui: FC<SidebarAccordionProps> = ({
 	return (
 		<Container ref={sidebarRef} disableGutters>
 			{folders.map((folder) => {
-				const { id: folderId, zid: accountId } = getFolderIdParts(folder.id);
+				const { zid: accountId } = getFolderIdParts(folder.id);
 
 				return (
 					<div key={`accordion-div-${folder.id}`}>
@@ -107,12 +104,6 @@ export const SidebarAccordionMui: FC<SidebarAccordionProps> = ({
 								</AccordionDetails>
 							)}
 						</Accordion>
-						{folderId === FOLDERS.CONTACTS &&
-							(accountId ? (
-								<ContactGroupSharedAccount accountId={accountId} />
-							) : (
-								<ContactGroupMainAccount />
-							))}
 					</div>
 				);
 			})}

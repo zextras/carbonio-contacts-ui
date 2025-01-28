@@ -27,6 +27,7 @@ describe('Find contact groups', () => {
 		const expectedSharedContactGroup: SharedContactGroup = {
 			id: '100',
 			accountId: '123',
+			folderId: '7',
 			members: [],
 			title: 'My Group'
 		};

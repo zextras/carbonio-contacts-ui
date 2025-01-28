@@ -20,20 +20,25 @@ import { ShareInfo } from '../model/share-info';
 export const buildContactGroup = ({
 	title = faker.company.name(),
 	id = faker.number.int({ min: 100 }).toString(),
+	folderId = '7',
 	members = []
 }: Partial<ContactGroup> = {}): ContactGroup => ({
 	title,
 	id,
+	folderId,
 	members
 });
 export const buildSharedContactGroup = ({
 	title = faker.company.name(),
 	accountId = faker.number.int({ min: 100 }).toString(),
 	id = faker.number.int({ min: 100 }).toString(),
+	folderId = '7',
+
 	members = []
 }: Partial<SharedContactGroup> = {}): SharedContactGroup => ({
 	title,
 	id,
+	folderId,
 	members,
 	accountId
 });

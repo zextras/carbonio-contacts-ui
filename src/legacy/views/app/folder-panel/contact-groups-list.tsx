@@ -14,9 +14,13 @@ import { useFindContactGroups } from '../../../../hooks/useFindContactGroups';
 import { ContactGroupListItemMainAccount } from '../../../../views/contact-groups/list/contact-group-list-item-main-account';
 
 export const ContactGroupList = (): React.JSX.Element => {
-	const { contactGroups: mainAccountContactGroups, hasMore, findMore } = useFindContactGroups();
+	const { id: currentPathId, folderId } = useParams<{ id: string; folderId: string }>();
+	const {
+		contactGroups: mainAccountContactGroups,
+		hasMore,
+		findMore
+	} = useFindContactGroups(folderId);
 	const onListBottom = useCallback(() => (hasMore ? findMore() : undefined), [hasMore, findMore]);
-	const { id: currentPathId } = useParams<{ id: string }>();
 
 	const items = useMemo(
 		() =>
