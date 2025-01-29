@@ -5,8 +5,6 @@
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { useParams } from 'react-router-dom';
-
 import { FIND_CONTACT_GROUP_LIMIT } from '../constants';
 import { ContactGroup } from '../model/contact-group';
 import { apiClient } from '../network/api-client';
@@ -20,8 +18,8 @@ type UseFindContactGroupsReturnType = {
 
 export const useFindContactGroups = (folderId: string): UseFindContactGroupsReturnType => {
 	const isFirstRender = useRef(true);
-	const { addContactGroups, setOffset, orderedContactGroups, unorderedContactGroups } =
-		useContactGroupStore();
+	const { addContactGroups, setOffset, getContactGroupsByFolderId } = useContactGroupStore();
+	const contactGroupsByFolder = getContactGroupsByFolderId(folderId);
 
 	const [hasMore, setHasMore] = useState(useContactGroupStore.getState().offset !== -1);
 
@@ -51,10 +49,7 @@ export const useFindContactGroups = (folderId: string): UseFindContactGroupsRetu
 	}, [findCallback, hasMore]);
 
 	return {
-		contactGroups: [
-			...orderedContactGroups.filter((cg) => cg.folderId === folderId),
-			...unorderedContactGroups.filter((cg) => cg.folderId === folderId)
-		],
+		contactGroups: contactGroupsByFolder,
 		hasMore,
 		findMore
 	};

@@ -9,7 +9,6 @@ import produce from 'immer';
 import { differenceBy, findIndex } from 'lodash';
 import { create } from 'zustand';
 
-import { getFolderIdParts } from '../carbonio-ui-commons/helpers/folders';
 import { ContactGroup, SharedContactGroup } from '../model/contact-group';
 
 export function compareContactGroupName(nameA: string, nameB: string): number {
@@ -31,6 +30,7 @@ type SharedAccountData = {
 };
 
 type State = {
+	contactGroups: Array<ContactGroup>;
 	orderedContactGroups: Array<ContactGroup>;
 	unorderedContactGroups: Array<ContactGroup>;
 	sharedContactGroups: Record<string, SharedAccountData>;
@@ -46,6 +46,8 @@ export type ContactGroupStoreActions = {
 		more: boolean
 	) => void;
 	getSharedContactGroupsByAccountId: (accountId: string) => Array<SharedContactGroup>;
+	getContactGroupsByFolderId: (folderId: string) => Array<ContactGroup>;
+	getContactGroupById: (id: string) => ContactGroup | undefined;
 	addContactGroupInSortedPosition: (newContactGroup: ContactGroup) => void;
 	updateContactGroup: (contactGroup: ContactGroup) => void;
 	setOffset: (offset: number) => void;
@@ -55,6 +57,7 @@ export type ContactGroupStoreActions = {
 };
 
 export const initialState: State = {
+	contactGroups: [],
 	sharedContactGroups: {},
 	orderedContactGroups: [],
 	unorderedContactGroups: [],
@@ -130,102 +133,50 @@ export const useContactGroupStore = create<State & ContactGroupStoreActions>()((
 			? Object.values(sharedContactGroups[accountId].contactGroups)
 			: [];
 	},
+	getContactGroupsByFolderId: (folderId: string): Array<ContactGroup> => {
+		const { contactGroups } = get();
+		return contactGroups.filter((cg) => cg.folderId === folderId);
+	},
+
+	getContactGroupById: (id: string): ContactGroup | undefined => {
+		const { contactGroups } = get();
+		return contactGroups.find((cg) => cg.id === id);
+	},
 
 	updateContactGroup: (contactGroup): void => {
 		const contactGroupId = contactGroup.id;
-		const { zid: accountId } = getFolderIdParts(contactGroupId);
-		// Bloody ugly conditional, we have to put the same if - else everywhere
-		if (accountId) {
-			set(
-				produce(({ sharedContactGroups }: State) => {
-					sharedContactGroups[accountId].contactGroups[contactGroupId] = {
-						...contactGroup,
-						accountId
-					};
-				})
-			);
-			return;
-		}
-		const { orderedContactGroups, unorderedContactGroups, offset } = get();
-		const idxToRemove = orderedContactGroups.findIndex((item) => item.id === contactGroupId);
-
-		const newOrderedContactGroups = [...orderedContactGroups];
-		const newUnorderedContactGroups = [...unorderedContactGroups];
-		if (idxToRemove >= 0) {
-			newOrderedContactGroups.splice(idxToRemove, 1);
-			addToProperList(newOrderedContactGroups, newUnorderedContactGroups, contactGroup);
-			set(() => ({
-				orderedContactGroups: newOrderedContactGroups,
-				unorderedContactGroups: newUnorderedContactGroups,
-				offset:
-					newOrderedContactGroups.length === orderedContactGroups.length || offset === -1
-						? offset
-						: offset + newOrderedContactGroups.length - orderedContactGroups.length
-			}));
-		} else {
-			const uIdxToRemove = unorderedContactGroups.findIndex((item) => item.id === contactGroupId);
-			if (uIdxToRemove >= 0) {
-				newUnorderedContactGroups.splice(uIdxToRemove, 1);
-				addToProperList(newOrderedContactGroups, newUnorderedContactGroups, contactGroup);
-				set(() => ({
-					orderedContactGroups: newOrderedContactGroups,
-					unorderedContactGroups: newUnorderedContactGroups,
-					offset:
-						newOrderedContactGroups.length === orderedContactGroups.length || offset === -1
-							? offset
-							: offset + newOrderedContactGroups.length - orderedContactGroups.length
-				}));
-			} else {
-				throw new Error('Contact group not found');
-			}
-		}
+		const { contactGroups, offset } = get();
+		const idxOfContactGroup = contactGroups.findIndex((item) => item.id === contactGroupId);
+		contactGroups[idxOfContactGroup] = contactGroup;
+		set(() => ({
+			contactGroups
+		}));
 	},
 	setOffset: (offset): void => set(() => ({ offset })),
-	addContactGroups: (contactGroups): void => {
-		const { orderedContactGroups, unorderedContactGroups } = get();
+	addContactGroups: (contactGroupsToAdd): void => {
+		const { contactGroups } = get();
 
-		const newGroups = differenceBy(contactGroups, orderedContactGroups, (cg) => cg.id);
+		const newGroups = differenceBy(contactGroups, contactGroupsToAdd, (cg) => cg.id);
 
-		if (unorderedContactGroups.length > 0) {
-			const unorderedResult = differenceBy(unorderedContactGroups, contactGroups, (cg) => cg.id);
+		if (newGroups.length > 0) {
 			set(() => ({
-				orderedContactGroups: [...(orderedContactGroups ?? []), ...newGroups],
-				unorderedContactGroups: unorderedResult
-			}));
-		} else {
-			set(() => ({
-				orderedContactGroups: [...(orderedContactGroups ?? []), ...newGroups]
+				contactGroups: [...(contactGroups ?? []), ...newGroups]
 			}));
 		}
 	},
 
 	removeContactGroup: (contactGroupId: string): void => {
-		const { orderedContactGroups, unorderedContactGroups, offset } = get();
-		const idx = orderedContactGroups.findIndex(
-			(contactGroup) => contactGroup.id === contactGroupId
-		);
-		if (idx >= 0) {
+		// TODO: check offset as the new view is by folder
+		const { contactGroups, offset } = get();
+		const contactExists =
+			contactGroups.findIndex((contactGroup) => contactGroup.id === contactGroupId) >= 0;
+		if (contactExists) {
 			set(() => ({
-				// TODO replace with Array toSpliced when will be available
-				orderedContactGroups: orderedContactGroups.filter(
-					(contactGroup) => contactGroup.id !== contactGroupId
-				),
+				contactGroups: contactGroups.filter((contactGroup) => contactGroup.id !== contactGroupId),
 				offset: offset - 1
 			}));
 		} else {
-			const uIdx = unorderedContactGroups.findIndex(
-				(contactGroup) => contactGroup.id === contactGroupId
-			);
-			if (uIdx >= 0) {
-				set(() => ({
-					// TODO replace with Array toSpliced when will be available
-					unorderedContactGroups: unorderedContactGroups.filter(
-						(contactGroup) => contactGroup.id !== contactGroupId
-					)
-				}));
-			} else {
-				throw new Error('Contact group not found');
-			}
+			throw new Error('Contact group not found');
 		}
 	},
 	removeSharedContactGroup: (accountId: string, contactGroupId: string): void => {
