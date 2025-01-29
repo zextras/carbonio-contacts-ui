@@ -70,12 +70,12 @@ export const useContactGroupStore = create<State & ContactGroupStoreActions>()((
 
 	updateContactGroup: (contactGroup): void => {
 		const contactGroupId = contactGroup.id;
-		const { contactGroups } = get();
-		const idxOfContactGroup = contactGroups.findIndex((item) => item.id === contactGroupId);
-		contactGroups[idxOfContactGroup] = contactGroup;
-		set(() => ({
-			contactGroups
-		}));
+		set(
+			produce(({ contactGroups }: State) => {
+				const idxOfContactGroup = contactGroups.findIndex((item) => item.id === contactGroupId);
+				contactGroups[idxOfContactGroup] = contactGroup;
+			})
+		);
 	},
 	setOffset: (offset): void => set(() => ({ offset })),
 	addContactGroups: (contactGroupsToAdd): void => {
