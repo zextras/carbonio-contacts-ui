@@ -13,7 +13,7 @@ export const useGetContactGroupFromBoardId = (): ContactGroup | undefined => {
 	const { context } = useBoard<{ contactGroupId: string }>();
 
 	const contactGroupId = context?.contactGroupId;
-	const { useGetContactGroupById } = useContactGroupStore();
+	const { contactGroups } = useContactGroupStore();
 	if (!contactGroupId) return undefined;
-	return useGetContactGroupById(contactGroupId);
+	return contactGroups.find((contactGroup) => contactGroup.id === contactGroupId);
 };
