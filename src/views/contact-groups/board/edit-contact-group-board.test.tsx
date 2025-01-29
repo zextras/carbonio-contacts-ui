@@ -661,9 +661,7 @@ describe('Edit contact group board', () => {
 				title: 'Contact Group in shared account',
 				id: contactGroupId
 			});
-			useContactGroupStore
-				.getState()
-				.populateSharedContactGroupsByAccountId('123-456', [sharedContactGroup], 0, false);
+			useContactGroupStore.getState().contactGroups = [sharedContactGroup];
 			registerModifyContactGroupHandler(
 				createCnItem(sharedContactGroup.title, undefined, sharedContactGroup.id)
 			);

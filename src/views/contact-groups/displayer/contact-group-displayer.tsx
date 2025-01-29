@@ -12,11 +12,12 @@ import { ContactGroupDisplayerComponent } from './contact-group-displayer-compon
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { ROUTES_INTERNAL_PARAMS } from '../../../constants';
 import { useEvaluateMainAccountContactGroupActions } from '../../../hooks/use-contact-group-actions';
-import { useGetMainAccountContactGroup } from '../../../hooks/useGetContactGroup';
+import { useContactGroupStore } from '../../../store/contact-groups';
 
-export const ContactGroupDisplayerMainAccount = (): React.JSX.Element => {
+export const ContactGroupDisplayer = (): React.JSX.Element => {
 	const { id: contactGroupId } = useParams<{ id: string }>();
-	const contactGroup = useGetMainAccountContactGroup(contactGroupId);
+	const { getContactGroupById } = useContactGroupStore();
+	const contactGroup = getContactGroupById(contactGroupId);
 	const replaceHistory = useReplaceHistoryCallback();
 	const routeToContacts = useCallback((): void => {
 		replaceHistory(`${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${FOLDERS.CONTACTS}`);

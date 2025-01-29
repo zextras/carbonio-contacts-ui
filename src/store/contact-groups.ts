@@ -30,8 +30,6 @@ type SharedAccountData = {
 
 type State = {
 	contactGroups: Array<ContactGroup>;
-	orderedContactGroups: Array<ContactGroup>;
-	unorderedContactGroups: Array<ContactGroup>;
 	sharedContactGroups: Record<string, SharedAccountData>;
 	offset: number;
 };
@@ -40,7 +38,7 @@ export type ContactGroupStoreActions = {
 	addContactGroups: (newContactGroups: Array<ContactGroup>) => void;
 	getContactGroupsByFolderId: (folderId: string) => Array<ContactGroup>;
 	getContactGroupById: (id: string) => ContactGroup | undefined;
-	addContactGroupInSortedPosition: (newContactGroup: ContactGroup) => void;
+	addContactGroup: (newContactGroup: ContactGroup) => void;
 	updateContactGroup: (contactGroup: ContactGroup) => void;
 	setOffset: (offset: number) => void;
 	removeContactGroup: (contactGroupId: string) => void;
@@ -50,8 +48,6 @@ export type ContactGroupStoreActions = {
 export const initialState: State = {
 	contactGroups: [],
 	sharedContactGroups: {},
-	orderedContactGroups: [],
-	unorderedContactGroups: [],
 	offset: 0
 };
 
@@ -134,29 +130,12 @@ export const useContactGroupStore = create<State & ContactGroupStoreActions>()((
 		}
 	},
 
-	addContactGroupInSortedPosition: (newContactGroup: ContactGroup): void => {
-		const { orderedContactGroups, unorderedContactGroups, offset } = get();
-		const newOrderedContactGroups = [...orderedContactGroups];
-		const newUnorderedContactGroups = [...unorderedContactGroups];
-		addToProperList(newOrderedContactGroups, newUnorderedContactGroups, newContactGroup);
+	addContactGroup: (newContactGroup: ContactGroup): void => {
+		const { contactGroups, offset } = get();
+		const newContactGroups = [...contactGroups, newContactGroup];
 		set(() => ({
-			orderedContactGroups: newOrderedContactGroups,
-			unorderedContactGroups: newUnorderedContactGroups,
-			offset:
-				newOrderedContactGroups.length === orderedContactGroups.length || offset === -1
-					? offset
-					: offset + newOrderedContactGroups.length - orderedContactGroups.length
+			contactGroups: newContactGroups,
+			offset: newContactGroups.length
 		}));
 	}
 }));
-
-export const useSharedContactGroup = (
-	accountId: string,
-	contactGroupId: string
-): SharedContactGroup | undefined =>
-	useContactGroupStore(
-		(state) => state.sharedContactGroups[accountId]?.contactGroups?.[contactGroupId]
-	);
-
-export const useSharedAccountData = (accountId: string): SharedAccountData =>
-	useContactGroupStore((state) => state.sharedContactGroups[accountId]);

@@ -8,7 +8,7 @@ import React from 'react';
 
 import { Route } from 'react-router-dom';
 
-import { ContactGroupDisplayerMainAccount } from './contact-group-displayer-main-account';
+import { ContactGroupDisplayer } from './contact-group-displayer';
 import { screen, setupTest, within } from '../../../carbonio-ui-commons/test/test-setup';
 import { ROUTES, ROUTES_INTERNAL_PARAMS } from '../../../constants';
 import { EMPTY_DISPLAYER_HINT, TESTID_SELECTORS } from '../../../constants/tests';
@@ -17,7 +17,7 @@ import { buildContactGroup } from '../../../tests/model-builder';
 
 describe('Displayer controller', () => {
 	it('should show empty displayer if no contact group is active', async () => {
-		setupTest(<ContactGroupDisplayerMainAccount />, {
+		setupTest(<ContactGroupDisplayer />, {
 			initialEntries: ['/contact-groups/7']
 		});
 		await screen.findByText(EMPTY_DISPLAYER_HINT);
@@ -33,7 +33,7 @@ describe('Displayer controller', () => {
 
 		setupTest(
 			<Route path={`${ROUTES.mainRoute}${ROUTES.contactGroups}/7/:id?`}>
-				<ContactGroupDisplayerMainAccount />
+				<ContactGroupDisplayer />
 			</Route>,
 			{ initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}/7/${contactGroup.id}`] }
 		);

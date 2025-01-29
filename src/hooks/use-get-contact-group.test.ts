@@ -42,7 +42,7 @@ describe('Use get contact group hook', () => {
 
 		const last = list.splice(list.length - 1, 1)[0];
 		useContactGroupStore.getState().addContactGroups(list);
-		useContactGroupStore.getState().addContactGroupInSortedPosition(last);
+		useContactGroupStore.getState().addContactGroup(last);
 		spyUseBoard(last.id);
 		const { result } = setupHook(useGetContactGroupFromBoardId);
 

@@ -34,7 +34,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 			.createContactGroup(nameValue, memberListEmails)
 			.then((contactGroup) => {
 				if (pathname.includes(ROUTES_INTERNAL_PARAMS.route.contactGroups)) {
-					useContactGroupStore.getState().addContactGroupInSortedPosition(contactGroup);
+					useContactGroupStore.getState().addContactGroup(contactGroup);
 					const element = window.document.getElementById(contactGroup.id);
 					if (element) {
 						element.scrollIntoView({ block: 'end' });
