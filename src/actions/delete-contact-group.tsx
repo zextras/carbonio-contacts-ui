@@ -176,28 +176,3 @@ export const useActionDeleteMainAccountContactGroup = (): DeleteCGAction => {
 		doDelete: onDeleteConfirm
 	});
 };
-
-export const useActionDeleteSharedAccountContactGroup = (): DeleteSharedCGAction => {
-	const createDeleteModal = useCreateDeleteModalAction<SharedContactGroup>();
-	const replaceHistory = useReplaceHistoryCallback();
-	const activeContactGroup = useGetContactGroupFromPath();
-	const { removeSharedContactGroup } = useContactGroupStore();
-	const onDeleteConfirm = useCallback(
-		async (contactGroup: SharedContactGroup) =>
-			apiClient.deleteContact([contactGroup.id]).then(() => {
-				if (activeContactGroup?.id === contactGroup.id) {
-					replaceHistory(
-						`${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${contactGroup.accountId}/`
-					);
-				}
-				removeSharedContactGroup(contactGroup.accountId, contactGroup.id);
-				return { contactGroupId: contactGroup.id };
-			}),
-		[activeContactGroup?.id, removeSharedContactGroup, replaceHistory]
-	);
-
-	return createDeleteModal({
-		modalId: 'delete-shared-cg-modal',
-		doDelete: (contactGroup: SharedContactGroup) => onDeleteConfirm(contactGroup)
-	});
-};

@@ -5,7 +5,6 @@
  */
 /* eslint-disable no-param-reassign */
 
-import produce from 'immer';
 import { differenceBy, findIndex } from 'lodash';
 import { create } from 'zustand';
 
@@ -39,19 +38,12 @@ type State = {
 
 export type ContactGroupStoreActions = {
 	addContactGroups: (newContactGroups: Array<ContactGroup>) => void;
-	populateSharedContactGroupsByAccountId: (
-		accountId: string,
-		newContactGroups: Array<ContactGroup>,
-		offset: number,
-		more: boolean
-	) => void;
 	getContactGroupsByFolderId: (folderId: string) => Array<ContactGroup>;
 	getContactGroupById: (id: string) => ContactGroup | undefined;
 	addContactGroupInSortedPosition: (newContactGroup: ContactGroup) => void;
 	updateContactGroup: (contactGroup: ContactGroup) => void;
 	setOffset: (offset: number) => void;
 	removeContactGroup: (contactGroupId: string) => void;
-	removeSharedContactGroup: (accountId: string, contactGroupId: string) => void;
 	reset: () => void;
 };
 
@@ -94,37 +86,6 @@ export const useContactGroupStore = create<State & ContactGroupStoreActions>()((
 	...initialState,
 	reset: (): void => {
 		set(initialState);
-	},
-	populateSharedContactGroupsByAccountId: (
-		accountId: string,
-		contactGroups: Array<ContactGroup>,
-		offset: number,
-		more: boolean
-	): void => {
-		set(
-			produce(({ sharedContactGroups }: State) => {
-				let newSharedContactGroups = contactGroups.reduce(
-					(acc, contactGroup) => {
-						acc[contactGroup.id] = { ...contactGroup, accountId };
-						return acc;
-					},
-					{} as Record<string, SharedContactGroup>
-				);
-
-				if (sharedContactGroups[accountId]) {
-					newSharedContactGroups = {
-						...sharedContactGroups[accountId].contactGroups,
-						...newSharedContactGroups
-					};
-				}
-
-				sharedContactGroups[accountId] = {
-					contactGroups: newSharedContactGroups,
-					hasMore: more,
-					offset
-				};
-			})
-		);
 	},
 	getContactGroupsByFolderId: (folderId: string): Array<ContactGroup> => {
 		const { contactGroups } = get();
@@ -171,13 +132,6 @@ export const useContactGroupStore = create<State & ContactGroupStoreActions>()((
 		} else {
 			throw new Error('Contact group not found');
 		}
-	},
-	removeSharedContactGroup: (accountId: string, contactGroupId: string): void => {
-		set(
-			produce(({ sharedContactGroups }: State) => {
-				delete sharedContactGroups[accountId].contactGroups[contactGroupId];
-			})
-		);
 	},
 
 	addContactGroupInSortedPosition: (newContactGroup: ContactGroup): void => {
