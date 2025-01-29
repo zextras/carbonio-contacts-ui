@@ -10,10 +10,11 @@ import { Route } from 'react-router-dom';
 
 import { ContactGroupDisplayer } from './contact-group-displayer';
 import { screen, setupTest, within } from '../../../carbonio-ui-commons/test/test-setup';
-import { ROUTES, ROUTES_INTERNAL_PARAMS } from '../../../constants';
+import { ROUTES } from '../../../constants';
 import { EMPTY_DISPLAYER_HINT, TESTID_SELECTORS } from '../../../constants/tests';
 import { useContactGroupStore } from '../../../store/contact-groups';
 import { buildContactGroup } from '../../../tests/model-builder';
+import { CONTACT_GROUPS_PATH } from '../navigation';
 
 describe('Displayer controller', () => {
 	it('should show empty displayer if no contact group is active', async () => {
@@ -32,10 +33,10 @@ describe('Displayer controller', () => {
 		useContactGroupStore.getState().addContactGroups([contactGroup]);
 
 		setupTest(
-			<Route path={`${ROUTES.mainRoute}${ROUTES.contactGroups}/7/:id?`}>
+			<Route path={`${ROUTES.mainRoute}/${CONTACT_GROUPS_PATH}/7/:id?`}>
 				<ContactGroupDisplayer />
 			</Route>,
-			{ initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}/7/${contactGroup.id}`] }
+			{ initialEntries: [`/${CONTACT_GROUPS_PATH}/7/${contactGroup.id}`] }
 		);
 
 		expect(

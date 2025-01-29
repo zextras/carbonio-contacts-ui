@@ -10,13 +10,12 @@ import { useBoardHooks } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
-import { ROUTES_INTERNAL_PARAMS } from '../../../constants';
 import { apiClient } from '../../../network/api-client';
 import { useContactGroupStore } from '../../../store/contact-groups';
 import CommonContactGroupBoard, {
 	isContactGroupNameInvalid
 } from '../../board/common-contact-group-board';
-import { useRedirectToContactGroup } from '../navigation';
+import { CONTACT_GROUPS_PATH, useRedirectToContactGroup } from '../navigation';
 
 const NewContactGroupBoard = (): React.JSX.Element => {
 	const [t] = useTranslation();
@@ -35,7 +34,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 		apiClient
 			.createContactGroup(nameValue, memberListEmails)
 			.then((contactGroup) => {
-				if (pathname.includes(ROUTES_INTERNAL_PARAMS.route.contactGroups)) {
+				if (pathname.includes(CONTACT_GROUPS_PATH)) {
 					useContactGroupStore.getState().addContactGroup(contactGroup);
 					const element = window.document.getElementById(contactGroup.id);
 					if (element) {

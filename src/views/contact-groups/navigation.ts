@@ -6,19 +6,16 @@
 
 import { useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
 
-import { ROUTES_INTERNAL_PARAMS } from '../../constants';
 import { ContactGroup } from '../../model/contact-group';
 
+export const CONTACT_GROUPS_PATH = 'contact-groups';
 export function useRedirectToContactGroup(): (contactGroup: ContactGroup) => void {
 	const replaceHistory = useReplaceHistoryCallback();
 	return (contactGroup: ContactGroup) =>
-		replaceHistory(
-			`/folder/${contactGroup.folderId}/${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${contactGroup.id}`
-		);
+		replaceHistory(`/folder/${contactGroup.folderId}/${CONTACT_GROUPS_PATH}/${contactGroup.id}`);
 }
 
 export function useRedirectToContactGroupFolder(): (folderId: string) => void {
 	const replaceHistory = useReplaceHistoryCallback();
-	return (folderId: string) =>
-		replaceHistory(`/folder/${folderId}/${ROUTES_INTERNAL_PARAMS.route.contactGroups}`);
+	return (folderId: string) => replaceHistory(`/folder/${folderId}/${CONTACT_GROUPS_PATH}`);
 }

@@ -11,8 +11,8 @@ import { useTheme } from '@zextras/carbonio-design-system';
 import * as shell from '@zextras/carbonio-shell-ui';
 
 import { ContactGroupView } from './contact-group-view';
+import { CONTACT_GROUPS_PATH } from './navigation';
 import { screen, setupHook, setupTest } from '../../carbonio-ui-commons/test/test-setup';
-import { ROUTES_INTERNAL_PARAMS } from '../../constants';
 import {
 	EMPTY_DISPLAYER_HINT,
 	EMPTY_LIST_HINT,
@@ -28,13 +28,13 @@ import { createCnItem } from '../../tests/utils';
 
 function setupMainAccountContactGroupView(): any {
 	return setupTest(<ContactGroupView />, {
-		initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}/7`]
+		initialEntries: [`/${CONTACT_GROUPS_PATH}/7`]
 	});
 }
 
 function setupSharedAccountContactGroupView(accountId: string): any {
 	return setupTest(<ContactGroupView />, {
-		initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${accountId}`]
+		initialEntries: [`/${CONTACT_GROUPS_PATH}/${accountId}`]
 	});
 }
 
@@ -489,7 +489,7 @@ describe('Contact Group View', () => {
 				});
 
 				const { user } = setupTest(<ContactGroupView />, {
-					initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${accountId}`]
+					initialEntries: [`/${CONTACT_GROUPS_PATH}/${accountId}`]
 				});
 
 				const styledListItem = await screen.findByTestId(`shared-list-item-${contactGroupId}`);
