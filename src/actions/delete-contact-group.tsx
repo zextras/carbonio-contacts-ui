@@ -20,14 +20,13 @@ import { UIAction } from './types';
 import { Text } from '../components/Text';
 import { ACTION_IDS, EDIT_CONTACT_GROUP_BOARD_ID } from '../constants';
 import { useGetContactGroupFromPath } from '../hooks/useGetContactGroupFromPath';
-import { ContactGroup, SharedContactGroup } from '../model/contact-group';
+import { ContactGroup } from '../model/contact-group';
 import { apiClient } from '../network/api-client';
 import { useContactGroupStore } from '../store/contact-groups';
 import { useRedirectToContactGroupFolder } from '../views/contact-groups/navigation';
 
 type DeleteCGActionBase<T extends ContactGroup> = UIAction<T, never>;
 export type DeleteCGAction = DeleteCGActionBase<ContactGroup>;
-export type DeleteSharedCGAction = DeleteCGActionBase<SharedContactGroup>;
 
 type DeleteContactGroupActionReturn = {
 	contactGroupId: string;
