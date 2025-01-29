@@ -8,7 +8,7 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 
-import { ContactGroupListMainAccount } from './contact-group-list-main-account';
+import { ContactGroupList } from './contact-groups-list';
 import { createSoapAPIInterceptor } from '../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { screen, setupTest } from '../../../carbonio-ui-commons/test/test-setup';
 import { EMPTY_LIST_HINT } from '../../../constants/tests';
@@ -19,7 +19,7 @@ describe('Contact groups list', () => {
 		createSoapAPIInterceptor('Search', {});
 	});
 	test('Show a placeholder when the list is empty', async () => {
-		setupTest(<ContactGroupListMainAccount />);
+		setupTest(<ContactGroupList />);
 		expect(await screen.findByText(EMPTY_LIST_HINT)).toBeVisible();
 	});
 
@@ -38,8 +38,8 @@ describe('Contact groups list', () => {
 				members: []
 			}
 		];
-		useContactGroupStore.setState({ orderedContactGroups: contactGroups });
-		setupTest(<ContactGroupListMainAccount />);
+		useContactGroupStore.setState({ contactGroups });
+		setupTest(<ContactGroupList />);
 		expect(screen.getByText('hello')).toBeVisible();
 		expect(screen.getByText('test')).toBeVisible();
 	});
