@@ -36,13 +36,43 @@ describe('Contact groups list', () => {
 	beforeEach(() => {
 		createSoapAPIInterceptor('Search', {});
 	});
+	const folderId = '7';
 	test('Show a placeholder when the list is empty for folder', async () => {
 		(useParams as jest.Mock).mockReturnValue({ folderId: '1111' });
 		setupTest(<ContactGroupList />);
 		expect(await screen.findByText(EMPTY_LIST_HINT)).toBeVisible();
 	});
 
-	const folderId = '7';
+	it('should not display items of different folders', async () => {
+		const folder1Id = '1';
+		const folder2Id = '2';
+		const contactGroupsFolder1 = [
+			{
+				id: faker.string.uuid(),
+				folderId: folder1Id,
+				title: 'hello I am in folder 1',
+				members: []
+			}
+		];
+		const contactGroupsFolder2 = [
+			{
+				id: faker.string.uuid(),
+				folderId: folder2Id,
+				title: 'hello I am in folder 2',
+				members: []
+			}
+		];
+		useContactGroupStore.setState({
+			contactGroups: [...contactGroupsFolder1, ...contactGroupsFolder2]
+		});
+
+		(useParams as jest.Mock).mockReturnValue({ folderId: folder2Id });
+		setupTest(<ContactGroupList />);
+
+		expect(await screen.findByText('hello I am in folder 2')).toBeVisible();
+		expect(screen.queryByText('hello I am in folder 1')).not.toBeInTheDocument();
+	});
+
 	test('Show list items if the list is not empty', async () => {
 		(useParams as jest.Mock).mockReturnValue({ folderId });
 		const contactGroups = [
