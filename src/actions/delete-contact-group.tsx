@@ -155,7 +155,7 @@ function useCreateDeleteModalAction<T extends ContactGroup>(): ({
 	};
 }
 
-export const useActionDeleteMainAccountContactGroup = (): DeleteCGAction => {
+export const useActionDeleteContactGroup = (): DeleteCGAction => {
 	const createDeleteModal = useCreateDeleteModalAction<ContactGroup>();
 	const activeContactGroup = useGetContactGroupFromPath();
 	const { removeContactGroup } = useContactGroupStore();

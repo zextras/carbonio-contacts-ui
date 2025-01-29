@@ -6,7 +6,7 @@
 
 import { type Action as DSAction } from '@zextras/carbonio-design-system';
 
-import { useActionDeleteMainAccountContactGroup } from '../actions/delete-contact-group';
+import { useActionDeleteContactGroup } from '../actions/delete-contact-group';
 import { EditActionCG, useActionEditCG } from '../actions/edit-cg';
 import { SendEmailActionCG, useActionSendEmailCG } from '../actions/send-email-cg';
 import { UIAction } from '../actions/types';
@@ -56,7 +56,7 @@ function evaluateContactGroupActions<T extends ContactGroup>(
 export const useEvaluateMainAccountContactGroupActions = (): ((
 	contactGroup: ContactGroup
 ) => DSAction[]) => {
-	const deleteCGAction = useActionDeleteMainAccountContactGroup();
+	const deleteCGAction = useActionDeleteContactGroup();
 	const editCGAction = useActionEditCG();
 	const sendEmailAction = useActionSendEmailCG();
 	return (contactGroup: ContactGroup): DSAction[] =>
