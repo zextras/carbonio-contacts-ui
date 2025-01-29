@@ -34,7 +34,7 @@ export const useFindContactGroups = (folderId: string): UseFindContactGroupsRetu
 	}, [addContactGroups, folderId, setOffset]);
 
 	useEffect(() => {
-		if (useContactGroupStore.getState().orderedContactGroups.length > 0 || !isFirstRender.current) {
+		if (useContactGroupStore.getState().contactGroups.length > 0 || !isFirstRender.current) {
 			return;
 		}
 		isFirstRender.current = false;
