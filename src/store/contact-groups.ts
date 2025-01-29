@@ -45,7 +45,6 @@ export type ContactGroupStoreActions = {
 		offset: number,
 		more: boolean
 	) => void;
-	getSharedContactGroupsByAccountId: (accountId: string) => Array<SharedContactGroup>;
 	getContactGroupsByFolderId: (folderId: string) => Array<ContactGroup>;
 	getContactGroupById: (id: string) => ContactGroup | undefined;
 	addContactGroupInSortedPosition: (newContactGroup: ContactGroup) => void;
@@ -126,12 +125,6 @@ export const useContactGroupStore = create<State & ContactGroupStoreActions>()((
 				};
 			})
 		);
-	},
-	getSharedContactGroupsByAccountId: (accountId: string): Array<SharedContactGroup> => {
-		const { sharedContactGroups } = get();
-		return sharedContactGroups[accountId]
-			? Object.values(sharedContactGroups[accountId].contactGroups)
-			: [];
 	},
 	getContactGroupsByFolderId: (folderId: string): Array<ContactGroup> => {
 		const { contactGroups } = get();
