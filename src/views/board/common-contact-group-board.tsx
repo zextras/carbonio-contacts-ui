@@ -14,14 +14,27 @@ import {
 	Avatar,
 	Row,
 	ChipAction,
-	List as DSList
+	List as DSList,
+	Select,
+	SelectItem,
+	SingleSelectionOnChange
 } from '@zextras/carbonio-design-system';
 import { useBoardHooks } from '@zextras/carbonio-shell-ui';
-import { remove, some, uniqBy } from 'lodash';
+import { map, reduce, remove, some, uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
+import { ZIMBRA_STANDARD_COLORS } from '../../carbonio-ui-commons/constants';
+import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
+import {
+	getFolderIdParts,
+	isRoot,
+	isSharedAccountFolder,
+	isTrash
+} from '../../carbonio-ui-commons/helpers/folders';
 import { ContactInputItem } from '../../carbonio-ui-commons/integrations/types';
+import { useFoldersMap } from '../../carbonio-ui-commons/store/zustand/folder';
+import { Folders } from '../../carbonio-ui-commons/types';
 import { MemberListItemComponent } from '../../components/member-list-item';
 import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../constants';
 import { ContactInput } from '../../legacy/integrations/contact-input';
@@ -64,21 +77,63 @@ export interface CommonContactGroupBoardProps {
 	isOnSaveDisabled: boolean;
 	setMemberListEmails: React.Dispatch<React.SetStateAction<string[]>>;
 	initialNameValue: string;
+	initialFolderId?: string;
+	setFolderId?: (selectedFolderId: string) => void;
 	initialMemberListEmails: string[];
 	setNameValue: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const CommonContactGroupBoard = ({
+export const CommonContactGroupBoard = ({
 	onSave,
 	nameValue,
 	memberListEmails,
 	isOnSaveDisabled,
 	setMemberListEmails,
 	initialNameValue,
+	initialFolderId,
+	setFolderId,
 	initialMemberListEmails,
 	setNameValue
 }: CommonContactGroupBoardProps): React.JSX.Element => {
 	const [t] = useTranslation();
+	const folders = useFoldersMap();
+
+	const folderWithWritePerm = reduce(
+		folders,
+		(accumulator, folder, index): Folders => {
+			if (
+				!isTrash(folder.id) &&
+				!isRoot(folder.id) &&
+				!isSharedAccountFolder(folder.id) &&
+				(!folder.isLink || (folder.perm && folder.perm.indexOf('w') !== -1))
+			) {
+				accumulator[index] = folder;
+			}
+			return accumulator;
+		},
+		{} as Folders
+	);
+
+	const allFolders: SelectItem[] = useMemo(
+		() =>
+			map(folderWithWritePerm, (item) => ({
+				label:
+					getFolderIdParts(item.id).id === FOLDERS.CONTACTS
+						? t('folders.contacts', 'Contacts')
+						: item.name,
+				value: item.id,
+				color: ZIMBRA_STANDARD_COLORS[item.color || 0].hex
+			})),
+		[folderWithWritePerm, t]
+	);
+	const initialFolder = allFolders.find((folder) => folder.value === initialFolderId);
+
+	const onSelectedFolderChange = useCallback<SingleSelectionOnChange>(
+		(id) => {
+			id && setFolderId?.(id);
+		},
+		[setFolderId]
+	);
 
 	const { updateBoard } = useBoardHooks();
 
@@ -298,6 +353,17 @@ const CommonContactGroupBoard = ({
 						nameValue.trim().length === 0 || nameValue.length > CONTACT_GROUP_NAME_MAX_LENGTH
 					}
 				/>
+				{initialFolderId && setFolderId && (
+					<Row padding={{ top: '0.5rem' }} width={'fill'}>
+						<Select
+							label={t('label.destination_address_book', 'Destination Address Book')}
+							onChange={onSelectedFolderChange}
+							items={allFolders}
+							defaultSelection={initialFolder}
+							disablePortal
+						/>
+					</Row>
+				)}
 				<Row padding={{ top: '0.5rem' }}>
 					<Text color={'secondary'}>
 						{t('board.newContactGroup.input.contact_input.title', 'Addresses list')}
@@ -324,5 +390,3 @@ const CommonContactGroupBoard = ({
 		</Container>
 	);
 };
-
-export default CommonContactGroupBoard;

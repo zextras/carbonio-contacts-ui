@@ -5,7 +5,6 @@
  */
 
 import { createContactFromVcard } from './api/create-contact';
-import { createContactGroup } from './api/create-contact-group';
 import { createFolder } from './api/create-folder';
 import { createMountpoints } from './api/create-mountpoints';
 import { deleteContact } from './api/delete-contact';
@@ -20,7 +19,6 @@ import { getDistributionListMembers } from './api/get-distribution-list-members'
 import { getItem } from './api/get-item';
 import { getShareInfo } from './api/get-share-info';
 import { importContacts } from './api/import-contacts';
-import { modifyContactGroup } from './api/modify-contact';
 import { moveContact } from './api/move-contact';
 import { moveFolder } from './api/move-folder';
 import { revokeFolderGrant } from './api/revoke-folder-grant';
@@ -32,7 +30,6 @@ import { updateFolder } from './api/update-folder';
 import { upload } from './api/upload';
 
 export const apiClient = {
-	createContactGroup,
 	distributionListAction,
 	getDistributionList,
 	getDistributionListMembers,
@@ -40,7 +37,6 @@ export const apiClient = {
 	deleteContact,
 	moveContact,
 	getAccountDistributionLists,
-	modifyContactGroup,
 	getShareInfo,
 	createMountpoints,
 	deleteFolder,

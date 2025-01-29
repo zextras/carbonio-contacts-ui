@@ -10,9 +10,11 @@ import { useBoardHooks } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
-import { apiClient } from '../../../network/api-client';
+import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
+import { createContactGroup } from '../../../network/api/create-contact-group';
 import { useContactGroupStore } from '../../../store/contact-groups';
-import CommonContactGroupBoard, {
+import {
+	CommonContactGroupBoard,
 	isContactGroupNameInvalid
 } from '../../board/common-contact-group-board';
 import { CONTACT_GROUPS_PATH, useRedirectToContactGroup } from '../navigation';
@@ -24,6 +26,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 	const createSnackbar = useSnackbar();
 
 	const initialName = t('board.newContactGroup.name', 'New Group');
+	const [folderId, setFolderId] = useState(FOLDERS.CONTACTS);
 	const [nameValue, setNameValue] = useState(initialName);
 
 	const [memberListEmails, setMemberListEmails] = useState<string[]>([]);
@@ -31,8 +34,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 	const redirectTo = useRedirectToContactGroup();
 
 	const onSave = useCallback(() => {
-		apiClient
-			.createContactGroup(nameValue, memberListEmails)
+		createContactGroup(nameValue, memberListEmails, folderId)
 			.then((contactGroup) => {
 				if (pathname.includes(CONTACT_GROUPS_PATH)) {
 					useContactGroupStore.getState().addContactGroup(contactGroup);
@@ -62,7 +64,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 					label: t('label.error_try_again', 'Something went wrong, please try again')
 				});
 			});
-	}, [nameValue, memberListEmails, pathname, createSnackbar, t, closeBoard, redirectTo]);
+	}, [nameValue, memberListEmails, folderId, pathname, createSnackbar, t, closeBoard, redirectTo]);
 
 	return (
 		<CommonContactGroupBoard
@@ -71,6 +73,8 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 			memberListEmails={memberListEmails}
 			isOnSaveDisabled={isContactGroupNameInvalid(nameValue)}
 			setMemberListEmails={setMemberListEmails}
+			initialFolderId={folderId}
+			setFolderId={setFolderId}
 			initialNameValue={initialName}
 			initialMemberListEmails={[]}
 			setNameValue={setNameValue}

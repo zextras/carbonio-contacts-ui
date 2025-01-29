@@ -11,9 +11,10 @@ import { useTranslation } from 'react-i18next';
 
 import { useGetContactGroupFromBoardId } from '../../../hooks/use-get-contact-group-from-board-id';
 import { ContactGroup } from '../../../model/contact-group';
-import { apiClient } from '../../../network/api-client';
+import { modifyContactGroup } from '../../../network/api/modify-contact';
 import { useContactGroupStore } from '../../../store/contact-groups';
-import CommonContactGroupBoard, {
+import {
+	CommonContactGroupBoard,
 	isContactGroupNameInvalid
 } from '../../board/common-contact-group-board';
 
@@ -33,13 +34,12 @@ const InnerEditContactGroupBoard = ({
 		const addedMembers = difference(memberListEmails, contactGroup.members);
 		const removedMembers = difference(contactGroup.members, memberListEmails);
 
-		apiClient
-			.modifyContactGroup({
-				id: contactGroup.id,
-				addedMembers: addedMembers.length > 0 ? addedMembers : undefined,
-				removedMembers: removedMembers.length > 0 ? removedMembers : undefined,
-				name: contactGroup.title !== nameValue ? nameValue : undefined
-			})
+		modifyContactGroup({
+			id: contactGroup.id,
+			addedMembers: addedMembers.length > 0 ? addedMembers : undefined,
+			removedMembers: removedMembers.length > 0 ? removedMembers : undefined,
+			name: contactGroup.title !== nameValue ? nameValue : undefined
+		})
 			.then((contactGroup: ContactGroup) => {
 				useContactGroupStore.getState().updateContactGroup(contactGroup);
 				createSnackbar({

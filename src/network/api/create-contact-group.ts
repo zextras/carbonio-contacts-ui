@@ -6,7 +6,11 @@
 import { CnItem } from './types';
 import { ContactGroup } from '../../model/contact-group';
 
-export const createContactGroup = (title: string, members: Array<string>): Promise<ContactGroup> =>
+export const createContactGroup = (
+	title: string,
+	members: Array<string>,
+	folderId: string
+): Promise<ContactGroup> =>
 	fetch(`/service/soap/CreateContactRequest`, {
 		method: 'POST',
 		headers: {
@@ -23,7 +27,8 @@ export const createContactGroup = (title: string, members: Array<string>): Promi
 							{ n: 'type', _content: 'group' },
 							{ n: 'fileAs', _content: `8:${title}` }
 						],
-						m: members.map((member) => ({ type: 'I', value: member }))
+						m: members.map((member) => ({ type: 'I', value: member })),
+						l: folderId
 					}
 				}
 			},
