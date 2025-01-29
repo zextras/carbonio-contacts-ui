@@ -12,6 +12,7 @@ import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import SelectionInteractive from './selection-interactive';
 import ContactEditPanel from '../edit/contact-edit-panel';
 import ContactPreviewPanel from '../preview/contact-preview-panel';
+import { ContactGroupDisplayer } from '../../../views/contact-groups/displayer/contact-group-displayer';
 
 export const DetailPanel = (): React.JSX.Element => {
 	const { path } = useRouteMatch();
@@ -28,6 +29,12 @@ export const DetailPanel = (): React.JSX.Element => {
 					<ContactPreviewPanel />
 				</Container>
 			</Route>
+			<Route exact path={`${trimmedPath}/folder/:folderId/contact-groups/:id`}>
+				<Container width={'60%'} mainAlignment="flex-start" data-testid="ContactDetailsContainer">
+					<ContactGroupDisplayer />
+				</Container>
+			</Route>
+
 			<Route exact path={`${trimmedPath}/folder/:folderId/edit/:editId`}>
 				<Container width={'60%'} mainAlignment="flex-start" data-testid="ContactDetailsContainer">
 					<ContactEditPanel />

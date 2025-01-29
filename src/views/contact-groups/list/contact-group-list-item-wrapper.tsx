@@ -3,39 +3,29 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback } from 'react';
-
-import { useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
+import React from 'react';
 
 import { ContactGroupListItem } from './contact-group-list-item';
-import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
-import { ROUTES_INTERNAL_PARAMS } from '../../../constants';
 import { useEvaluateMainAccountContactGroupActions } from '../../../hooks/use-contact-group-actions';
 import { ContactGroup } from '../../../model/contact-group';
+import { useRedirectToContactGroup } from '../navigation';
 
 type Props = {
 	contactGroup: ContactGroup;
 	visible: boolean;
 };
+
 export const ContactGroupListItemWrapper = ({
 	contactGroup,
 	visible
 }: Props): React.JSX.Element => {
-	const replaceHistory = useReplaceHistoryCallback();
-	// TODO: fix routing
-	const displayContact = useCallback(
-		(id: string) => {
-			replaceHistory(`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${FOLDERS.CONTACTS}/${id}`);
-		},
-		[replaceHistory]
-	);
-
 	const actions = useEvaluateMainAccountContactGroupActions()(contactGroup);
+	const redirectTo = useRedirectToContactGroup();
 	return (
 		<ContactGroupListItem
 			visible={visible}
 			contactGroup={contactGroup}
-			onClick={displayContact}
+			onClick={(): void => redirectTo(contactGroup)}
 			actions={actions}
 		/>
 	);

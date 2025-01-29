@@ -17,6 +17,7 @@ import { useContactGroupStore } from '../../../store/contact-groups';
 import CommonContactGroupBoard, {
 	isContactGroupNameInvalid
 } from '../../board/common-contact-group-board';
+import { useRedirectToContactGroup } from '../navigation';
 
 const NewContactGroupBoard = (): React.JSX.Element => {
 	const [t] = useTranslation();
@@ -29,6 +30,8 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 
 	const [memberListEmails, setMemberListEmails] = useState<string[]>([]);
 
+	const redirectTo = useRedirectToContactGroup();
+
 	const onSave = useCallback(() => {
 		apiClient
 			.createContactGroup(nameValue, memberListEmails)
@@ -39,9 +42,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 					if (element) {
 						element.scrollIntoView({ block: 'end' });
 					}
-					replaceHistory(
-						`${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${FOLDERS.CONTACTS}/${contactGroup.id}`
-					);
+					redirectTo(contactGroup);
 				} else {
 					useContactGroupStore.getState().reset();
 				}

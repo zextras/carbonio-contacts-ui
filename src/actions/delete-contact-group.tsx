@@ -12,18 +12,18 @@ import {
 	useModal,
 	useSnackbar
 } from '@zextras/carbonio-design-system';
-import { closeBoard, getBoardById, useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
+import { closeBoard, getBoardById } from '@zextras/carbonio-shell-ui';
 import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 
 import { UIAction } from './types';
-import { FOLDERS } from '../carbonio-ui-commons/constants/folders';
 import { Text } from '../components/Text';
-import { ACTION_IDS, EDIT_CONTACT_GROUP_BOARD_ID, ROUTES_INTERNAL_PARAMS } from '../constants';
+import { ACTION_IDS, EDIT_CONTACT_GROUP_BOARD_ID } from '../constants';
 import { useGetContactGroupFromPath } from '../hooks/useGetContactGroupFromPath';
 import { ContactGroup, SharedContactGroup } from '../model/contact-group';
 import { apiClient } from '../network/api-client';
 import { useContactGroupStore } from '../store/contact-groups';
+import { useRedirectToContactGroupFolder } from '../views/contact-groups/navigation';
 
 type DeleteCGActionBase<T extends ContactGroup> = UIAction<T, never>;
 export type DeleteCGAction = DeleteCGActionBase<ContactGroup>;
@@ -156,20 +156,22 @@ function useCreateDeleteModalAction<T extends ContactGroup>(): ({
 }
 
 export const useActionDeleteMainAccountContactGroup = (): DeleteCGAction => {
-	const replaceHistory = useReplaceHistoryCallback();
 	const createDeleteModal = useCreateDeleteModalAction<ContactGroup>();
 	const activeContactGroup = useGetContactGroupFromPath();
 	const { removeContactGroup } = useContactGroupStore();
+
+	const redirectTo = useRedirectToContactGroupFolder();
+
 	const onDeleteConfirm = useCallback(
 		async (contactGroup: ContactGroup) =>
 			apiClient.deleteContact([contactGroup.id]).then(() => {
 				if (activeContactGroup?.id === contactGroup.id) {
-					replaceHistory(`${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${FOLDERS.CONTACTS}/`);
+					redirectTo(contactGroup.folderId);
 				}
 				removeContactGroup(contactGroup.id);
 				return { contactGroupId: contactGroup.id };
 			}),
-		[activeContactGroup?.id, removeContactGroup, replaceHistory]
+		[activeContactGroup?.id, redirectTo, removeContactGroup]
 	);
 	return createDeleteModal({
 		modalId: 'delete-cg-modal',
