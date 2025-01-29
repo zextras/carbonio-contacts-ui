@@ -5,7 +5,8 @@
  */
 /* eslint-disable no-param-reassign */
 
-import { differenceBy, findIndex } from 'lodash';
+import produce from 'immer';
+import { uniqBy } from 'lodash';
 import { create } from 'zustand';
 
 import { ContactGroup, SharedContactGroup } from '../model/contact-group';
@@ -51,32 +52,6 @@ export const initialState: State = {
 	offset: 0
 };
 
-/**
- * Note: this function will modify the contact Group arrays intentionally
- * */
-// TODO refactor as pure function when Array toSpliced will be available
-function addToProperList(
-	ordered: Array<ContactGroup>,
-	unOrdered: Array<ContactGroup>,
-	cgToAdd: ContactGroup
-): void {
-	const idxToAdd = findIndex(
-		ordered,
-		(item) => compareContactGroupName(cgToAdd.title, item.title) < 0
-	);
-	if (idxToAdd < ordered.length && idxToAdd >= 0) {
-		ordered.splice(idxToAdd, 0, cgToAdd);
-	} else if (unOrdered.length === 0) {
-		unOrdered.push(cgToAdd);
-	} else {
-		const unorderedIdxToAdd = findIndex(
-			unOrdered,
-			(item) => compareContactGroupName(cgToAdd.title, item.title) < 0
-		);
-		unOrdered.splice(unorderedIdxToAdd, 0, cgToAdd);
-	}
-}
-
 // extra currying as suggested in https://github.com/pmndrs/zustand/blob/main/docs/guides/typescript.md#basic-usage
 export const useContactGroupStore = create<State & ContactGroupStoreActions>()((set, get) => ({
 	...initialState,
@@ -95,7 +70,7 @@ export const useContactGroupStore = create<State & ContactGroupStoreActions>()((
 
 	updateContactGroup: (contactGroup): void => {
 		const contactGroupId = contactGroup.id;
-		const { contactGroups, offset } = get();
+		const { contactGroups } = get();
 		const idxOfContactGroup = contactGroups.findIndex((item) => item.id === contactGroupId);
 		contactGroups[idxOfContactGroup] = contactGroup;
 		set(() => ({
@@ -104,15 +79,13 @@ export const useContactGroupStore = create<State & ContactGroupStoreActions>()((
 	},
 	setOffset: (offset): void => set(() => ({ offset })),
 	addContactGroups: (contactGroupsToAdd): void => {
-		const { contactGroups } = get();
+		set(
+			produce(({ contactGroups }: State) => {
+				const newGroups = uniqBy([...contactGroups, ...contactGroupsToAdd], 'id');
 
-		const newGroups = differenceBy(contactGroups, contactGroupsToAdd, (cg) => cg.id);
-
-		if (newGroups.length > 0) {
-			set(() => ({
-				contactGroups: [...(contactGroups ?? []), ...newGroups]
-			}));
-		}
+				return { contactGroups: newGroups };
+			})
+		);
 	},
 
 	removeContactGroup: (contactGroupId: string): void => {

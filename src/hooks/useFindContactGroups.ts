@@ -17,10 +17,8 @@ type UseFindContactGroupsReturnType = {
 };
 
 export const useFindContactGroups = (folderId: string): UseFindContactGroupsReturnType => {
-	const isFirstRender = useRef(true);
-	const { addContactGroups, setOffset, getContactGroupsByFolderId } = useContactGroupStore();
-	const contactGroupsByFolder = getContactGroupsByFolderId(folderId);
-
+	const { addContactGroups, setOffset, contactGroups } = useContactGroupStore();
+	const contactGroupsByFolder = contactGroups.filter((cg) => cg.folderId === folderId);
 	const [hasMore, setHasMore] = useState(useContactGroupStore.getState().offset !== -1);
 
 	const findCallback = useCallback(() => {
@@ -34,12 +32,11 @@ export const useFindContactGroups = (folderId: string): UseFindContactGroupsRetu
 	}, [addContactGroups, folderId, setOffset]);
 
 	useEffect(() => {
-		if (useContactGroupStore.getState().contactGroups.length > 0 || !isFirstRender.current) {
+		if (contactGroupsByFolder.length > 0) {
 			return;
 		}
-		isFirstRender.current = false;
 		findCallback();
-	}, [findCallback]);
+	}, [contactGroupsByFolder.length, findCallback]);
 
 	const findMore = useCallback(() => {
 		if (!hasMore) {
