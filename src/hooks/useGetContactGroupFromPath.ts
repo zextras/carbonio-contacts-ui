@@ -11,6 +11,6 @@ import { useContactGroupStore } from '../store/contact-groups';
 
 export const useGetContactGroupFromPath = (): ContactGroup | undefined => {
 	const { id: contactGroupId } = useParams<{ id: string }>();
-	const { getContactGroupById } = useContactGroupStore();
-	return getContactGroupById(contactGroupId);
+	const { useGetContactGroupById } = useContactGroupStore();
+	return useGetContactGroupById(contactGroupId);
 };

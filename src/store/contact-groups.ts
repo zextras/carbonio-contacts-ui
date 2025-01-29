@@ -37,8 +37,8 @@ type State = {
 
 export type ContactGroupStoreActions = {
 	addContactGroups: (newContactGroups: Array<ContactGroup>) => void;
-	getContactGroupsByFolderId: (folderId: string) => Array<ContactGroup>;
-	getContactGroupById: (id: string) => ContactGroup | undefined;
+	useGetContactGroupsByFolderId: (folderId: string) => Array<ContactGroup>;
+	useGetContactGroupById: (id: string) => ContactGroup | undefined;
 	addContactGroup: (newContactGroup: ContactGroup) => void;
 	updateContactGroup: (contactGroup: ContactGroup) => void;
 	setOffset: (offset: number) => void;
@@ -58,12 +58,12 @@ export const useContactGroupStore = create<State & ContactGroupStoreActions>()((
 	reset: (): void => {
 		set(initialState);
 	},
-	getContactGroupsByFolderId: (folderId: string): Array<ContactGroup> => {
+	useGetContactGroupsByFolderId: (folderId: string): Array<ContactGroup> => {
 		const { contactGroups } = get();
 		return contactGroups.filter((cg) => cg.folderId === folderId);
 	},
 
-	getContactGroupById: (id: string): ContactGroup | undefined => {
+	useGetContactGroupById: (id: string): ContactGroup | undefined => {
 		const { contactGroups } = get();
 		return contactGroups.find((cg) => cg.id === id);
 	},

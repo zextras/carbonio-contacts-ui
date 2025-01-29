@@ -14,8 +14,8 @@ import { useRedirectToContactGroupFolder } from '../navigation';
 
 export const ContactGroupDisplayer = (): React.JSX.Element => {
 	const { id: contactGroupId } = useParams<{ id: string }>();
-	const { getContactGroupById } = useContactGroupStore();
-	const contactGroup = getContactGroupById(contactGroupId);
+	const { useGetContactGroupById } = useContactGroupStore();
+	const contactGroup = useGetContactGroupById(contactGroupId);
 	const redirectTo = useRedirectToContactGroupFolder();
 	const evaluateActions = useEvaluateMainAccountContactGroupActions();
 
