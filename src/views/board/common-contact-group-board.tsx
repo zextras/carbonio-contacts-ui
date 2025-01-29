@@ -14,16 +14,14 @@ import {
 	Avatar,
 	Row,
 	ChipAction,
-	List as DSList,
-	Select,
-	SelectItem,
-	SingleSelectionOnChange
+	List as DSList
 } from '@zextras/carbonio-design-system';
 import { useBoardHooks } from '@zextras/carbonio-shell-ui';
 import { map, reduce, remove, some, uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
+import { FoldersSelector } from '../../carbonio-ui-commons/components/select/folders-selector';
 import { ZIMBRA_STANDARD_COLORS } from '../../carbonio-ui-commons/constants';
 import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
 import {
@@ -35,6 +33,7 @@ import {
 import { ContactInputItem } from '../../carbonio-ui-commons/integrations/types';
 import { useFoldersMap } from '../../carbonio-ui-commons/store/zustand/folder';
 import { Folders } from '../../carbonio-ui-commons/types';
+import { FolderSelectorItem } from '../../carbonio-ui-commons/types/select';
 import { MemberListItemComponent } from '../../components/member-list-item';
 import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../constants';
 import { ContactInput } from '../../legacy/integrations/contact-input';
@@ -114,7 +113,7 @@ export const CommonContactGroupBoard = ({
 		{} as Folders
 	);
 
-	const allFolders: SelectItem[] = useMemo(
+	const allFolders: FolderSelectorItem[] = useMemo(
 		() =>
 			map(folderWithWritePerm, (item) => ({
 				label:
@@ -125,14 +124,6 @@ export const CommonContactGroupBoard = ({
 				color: ZIMBRA_STANDARD_COLORS[item.color || 0].hex
 			})),
 		[folderWithWritePerm, t]
-	);
-	const initialFolder = allFolders.find((folder) => folder.value === initialFolderId);
-
-	const onSelectedFolderChange = useCallback<SingleSelectionOnChange>(
-		(id) => {
-			id && setFolderId?.(id);
-		},
-		[setFolderId]
 	);
 
 	const { updateBoard } = useBoardHooks();
@@ -355,12 +346,11 @@ export const CommonContactGroupBoard = ({
 				/>
 				{initialFolderId && setFolderId && (
 					<Row padding={{ top: '0.5rem' }} width={'fill'}>
-						<Select
+						<FoldersSelector
+							defaultFolderId={initialFolderId}
+							onChange={(value): void => setFolderId(value as string)}
 							label={t('label.destination_address_book', 'Destination Address Book')}
-							onChange={onSelectedFolderChange}
-							items={allFolders}
-							defaultSelection={initialFolder}
-							disablePortal
+							folderItems={allFolders}
 						/>
 					</Row>
 				)}
