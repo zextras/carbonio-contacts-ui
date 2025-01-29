@@ -9,7 +9,7 @@ import produce from 'immer';
 import { uniqBy } from 'lodash';
 import { create } from 'zustand';
 
-import { ContactGroup, SharedContactGroup } from '../model/contact-group';
+import { ContactGroup } from '../model/contact-group';
 
 export function compareContactGroupName(nameA: string, nameB: string): number {
 	const nameALow = nameA.toLowerCase();
@@ -23,15 +23,9 @@ export function compareContactGroupName(nameA: string, nameB: string): number {
 	return 0;
 }
 
-type SharedAccountData = {
-	hasMore: boolean;
-	offset: number;
-	contactGroups: Record<string, SharedContactGroup>;
-};
-
 type State = {
 	contactGroups: Array<ContactGroup>;
-	sharedContactGroups: Record<string, SharedAccountData>;
+	// TODO: offset by folder
 	offset: number;
 };
 
@@ -48,7 +42,6 @@ export type ContactGroupStoreActions = {
 
 export const initialState: State = {
 	contactGroups: [],
-	sharedContactGroups: {},
 	offset: 0
 };
 

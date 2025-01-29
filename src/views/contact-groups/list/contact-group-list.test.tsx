@@ -15,6 +15,7 @@ import { createSoapAPIInterceptor } from '../../../carbonio-ui-commons/test/mock
 import { screen, setupTest, triggerLoadMore } from '../../../carbonio-ui-commons/test/test-setup';
 import { FIND_CONTACT_GROUP_LIMIT } from '../../../constants';
 import { EMPTY_LIST_HINT } from '../../../constants/tests';
+import { ContactGroup } from '../../../model/contact-group';
 import { CnItem } from '../../../network/api/types';
 import { useContactGroupStore } from '../../../store/contact-groups';
 import {
@@ -28,8 +29,19 @@ jest.mock('react-router-dom', () => ({
 	useParams: jest.fn()
 }));
 
-function generateNContactGroups(n: number): Array<CnItem> {
+function generateNContactGroupsForAPI(n: number): Array<CnItem> {
 	return [...Array(n)].map((value, index) => createCnItem(`name-${index}`, [], index.toString()));
+}
+
+function generateNContactGroups(n: number, folderId = '7'): Array<ContactGroup> {
+	return [...Array(n)].map(
+		(value, index): ContactGroup => ({
+			id: `${index}`,
+			members: [],
+			folderId,
+			title: `test-${index}`
+		})
+	);
 }
 
 describe('Contact groups list', () => {
@@ -41,6 +53,21 @@ describe('Contact groups list', () => {
 		(useParams as jest.Mock).mockReturnValue({ folderId: '1111' });
 		setupTest(<ContactGroupList />);
 		expect(await screen.findByText(EMPTY_LIST_HINT)).toBeVisible();
+	});
+
+	// TODO: implement me
+	it('should display only items until current offset', async () => {
+		const firstBatch = generateNContactGroups(10);
+		const secondBatch = generateNContactGroups(10);
+		useContactGroupStore.setState({
+			contactGroups: [...firstBatch, ...secondBatch]
+		});
+
+		(useParams as jest.Mock).mockReturnValue({ folderId: '7' });
+		setupTest(<ContactGroupList />);
+
+		expect(await screen.findByText('hello I am in folder 2')).toBeVisible();
+		expect(screen.queryByText('hello I am in folder 1')).not.toBeInTheDocument();
 	});
 
 	it('should not display items of different folders', async () => {
@@ -98,7 +125,7 @@ describe('Contact groups list', () => {
 	describe('Pagination', () => {
 		it('should load the second page only when bottom element becomes visible', async () => {
 			const cnItem1 = createCnItem();
-			const cnItems99 = generateNContactGroups(FIND_CONTACT_GROUP_LIMIT - 1);
+			const cnItems99 = generateNContactGroupsForAPI(FIND_CONTACT_GROUP_LIMIT - 1);
 			const first100Items = [cnItem1].concat(...cnItems99);
 			const cnItem101 = createCnItem('cgName101');
 			const findHandler = registerFindContactGroupsHandler(
