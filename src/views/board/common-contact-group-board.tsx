@@ -24,14 +24,10 @@ import styled from 'styled-components';
 import { FoldersSelector } from '../../carbonio-ui-commons/components/select/folders-selector';
 import { ZIMBRA_STANDARD_COLORS } from '../../carbonio-ui-commons/constants';
 import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
-import {
-	getFolderIdParts,
-	isRoot,
-	isSharedAccountFolder,
-	isTrash
-} from '../../carbonio-ui-commons/helpers/folders';
+import { getFolderIdParts, isSharedAccountFolder } from '../../carbonio-ui-commons/helpers/folders';
 import { ContactInputItem } from '../../carbonio-ui-commons/integrations/types';
-import { useFoldersMap } from '../../carbonio-ui-commons/store/zustand/folder';
+import { useFolder } from '../../carbonio-ui-commons/store/zustand/folder';
+import { getFlatChildrenFolders } from '../../carbonio-ui-commons/store/zustand/folder/utils';
 import { Folders } from '../../carbonio-ui-commons/types';
 import { FolderSelectorItem } from '../../carbonio-ui-commons/types/select';
 import { MemberListItemComponent } from '../../components/member-list-item';
@@ -95,14 +91,19 @@ export const CommonContactGroupBoard = ({
 	setNameValue
 }: CommonContactGroupBoardProps): React.JSX.Element => {
 	const [t] = useTranslation();
-	const folders = useFoldersMap();
+	const contactFolder = useFolder(FOLDERS.CONTACTS);
+
+	const folders = useMemo(() => {
+		if (!contactFolder) return {};
+		const folderState = getFlatChildrenFolders(contactFolder?.children ?? []);
+		folderState[FOLDERS.CONTACTS] = contactFolder;
+		return folderState;
+	}, [contactFolder]);
 
 	const folderWithWritePerm = reduce(
 		folders,
 		(accumulator, folder, index): Folders => {
 			if (
-				!isTrash(folder.id) &&
-				!isRoot(folder.id) &&
 				!isSharedAccountFolder(folder.id) &&
 				(!folder.isLink || (folder.perm && folder.perm.indexOf('w') !== -1))
 			) {
