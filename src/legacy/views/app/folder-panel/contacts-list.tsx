@@ -93,7 +93,7 @@ export const ContactsList = ({
 				const isSelected = selected[contact.id];
 				const active = itemId === contact.id;
 				if ('members' in contact) {
-					return <ContactGroupListItemWrapper visible contactGroup={contact} />;
+					return <ContactGroupListItemWrapper contactGroup={contact} />;
 				}
 
 				return (

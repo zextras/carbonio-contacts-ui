@@ -10,20 +10,17 @@ import { useEvaluateMainAccountContactGroupActions } from '../../../hooks/use-co
 import { ContactGroup } from '../../../model/contact-group';
 import { useRedirectToContactGroup } from '../navigation';
 
-type Props = {
+type ContactGroupListItemWrapperProps = {
 	contactGroup: ContactGroup;
-	visible: boolean;
 };
 
 export const ContactGroupListItemWrapper = ({
-	contactGroup,
-	visible
-}: Props): React.JSX.Element => {
+	contactGroup
+}: ContactGroupListItemWrapperProps): React.JSX.Element => {
 	const actions = useEvaluateMainAccountContactGroupActions()(contactGroup);
 	const redirectTo = useRedirectToContactGroup();
 	return (
 		<ContactGroupListItem
-			visible={visible}
 			contactGroup={contactGroup}
 			onClick={(): void => redirectTo(contactGroup)}
 			actions={actions}

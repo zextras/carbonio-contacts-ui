@@ -33,9 +33,7 @@ export const ContactGroupList = (): React.JSX.Element => {
 					data-testid={`main-account-list-item-${contactGroup.id}`}
 					active={currentPathId === contactGroup.id}
 				>
-					{(visible): React.JSX.Element => (
-						<ContactGroupListItemWrapper visible={visible} contactGroup={contactGroup} />
-					)}
+					{(): React.JSX.Element => <ContactGroupListItemWrapper contactGroup={contactGroup} />}
 				</EnhancedListItem>
 			)),
 		[currentPathId, mainAccountContactGroups]
