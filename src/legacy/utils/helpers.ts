@@ -8,7 +8,7 @@ import { cloneDeep, filter, find, forEach, map, merge, reduce, reject, some } fr
 
 import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
 import { Folder } from '../../carbonio-ui-commons/types';
-import { Contact, ContactOrGroup, ContactsFolder } from '../types/contact';
+import { Contact, ContactsFolder } from '../types/contact';
 import { ContactsSlice, FoldersSlice } from '../types/store';
 
 const folderIdRegex = /^(.+:)*(\d+)$/;
@@ -128,7 +128,7 @@ export function removeContactsFromStore(
 
 export function addContactsToStore(
 	state: ContactsSlice,
-	contacts: ContactOrGroup[],
+	contacts: Contact[],
 	sharedFolderParent?: string
 ): void {
 	reduce(
