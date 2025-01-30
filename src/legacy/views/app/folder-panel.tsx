@@ -20,6 +20,7 @@ import { searchContactsAsyncThunk } from '../../store/actions/search-contacts';
 import { selectAllContactsInFolder, selectContactsStatus } from '../../store/selectors/contacts';
 import { ActionsContextProvider } from '../../ui-actions/actions-context';
 import { SelectPanelActions } from '../folder/select-panel-actions';
+import { isGroup } from '../../utils/helpers';
 
 type RouteParams = {
 	folderId: string;
@@ -51,9 +52,11 @@ export const FolderPanel = (): ReactElement => {
 				contacts,
 				[
 					(item): string =>
-						item?.firstName?.toLowerCase() ||
-						item?.lastName?.toLowerCase() ||
-						item?.middleName?.toLowerCase()
+						isGroup(item)
+							? item?.title?.toLowerCase()
+							: item?.firstName?.toLowerCase() ||
+								item?.lastName?.toLowerCase() ||
+								item?.middleName?.toLowerCase()
 				],
 				'asc'
 			),

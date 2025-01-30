@@ -20,6 +20,7 @@ import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
 import { searchContactsAsyncThunk } from '../../../store/actions/search-contacts';
 import { selectFolderHasMore } from '../../../store/slices/contacts-slice';
 import { ContactOrGroup } from '../../../types/contact';
+import { isGroup } from '../../../utils/helpers';
 
 const DragImageContainer = styled.div`
 	position: absolute;
@@ -91,7 +92,7 @@ export const ContactsList = ({
 			map(contacts, (contact) => {
 				const isSelected = selected[contact.id];
 				const active = itemId === contact.id;
-				if ('members' in contact) {
+				if (isGroup(contact)) {
 					return (
 						<ContactGroupListItemWrapper
 							contactGroup={contact}
