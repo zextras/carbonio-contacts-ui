@@ -8,7 +8,8 @@ import { cloneDeep, filter, find, forEach, map, merge, reduce, reject, some } fr
 
 import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
 import { Folder } from '../../carbonio-ui-commons/types';
-import { Contact, ContactsFolder } from '../types/contact';
+import { ContactGroup } from '../../model/contact-group';
+import { Contact, ContactOrGroup, ContactsFolder } from '../types/contact';
 import { ContactsSlice, FoldersSlice } from '../types/store';
 
 const folderIdRegex = /^(.+:)*(\d+)$/;
@@ -126,15 +127,24 @@ export function removeContactsFromStore(
 	);
 }
 
+function isGroup(contact: ContactOrGroup): contact is ContactGroup {
+	return (<ContactGroup>contact).members != undefined;
+}
+
 export function addContactsToStore(
 	state: ContactsSlice,
-	contacts: Contact[],
+	contacts: ContactOrGroup[],
 	sharedFolderParent?: string
 ): void {
 	reduce(
 		contacts,
 		(acc, contact) => {
-			const parentKey = sharedFolderParent ?? contact.parent;
+			let parentKey;
+			if (isGroup(contact)) {
+				parentKey = sharedFolderParent ?? contact.folderId;
+			} else {
+				parentKey = sharedFolderParent ?? contact.parent;
+			}
 			if (!acc[parentKey]) {
 				// eslint-disable-next-line no-param-reassign
 				acc[parentKey] = [];

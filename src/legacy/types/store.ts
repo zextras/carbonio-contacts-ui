@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { Contact, ContactsFolder } from './contact';
+import { Contact, ContactOrGroup, ContactsFolder } from './contact';
 import { SoapContact } from './soap';
 import { SearchedFolderStateStatus } from '../../types/utils';
 
@@ -11,7 +11,7 @@ export type ContactsSlice = {
 	status: {
 		[k: string]: boolean;
 	};
-	contacts: { [k: string]: Array<Contact> };
+	contacts: { [k: string]: Array<ContactOrGroup> };
 	searchedInFolder: Record<string, SearchedFolderStateStatus>;
 };
 
