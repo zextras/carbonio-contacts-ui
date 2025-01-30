@@ -7,12 +7,12 @@ import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 
 import { useActionDeleteContactGroup } from './delete-contact-group';
-import { UIAction } from './types';
-import { screen, setupHook } from '../carbonio-ui-commons/test/test-setup';
-import { JEST_MOCKED_ERROR, TESTID_SELECTORS, TIMERS } from '../constants/tests';
-import { useContactGroupStore } from '../store/contact-groups';
-import { buildContactGroup, buildMembers } from '../tests/model-builder';
-import { registerDeleteContactHandler } from '../tests/msw-handlers/delete-contact';
+import { UIAction } from '../../../actions/types';
+import { screen, setupHook } from '../../../carbonio-ui-commons/test/test-setup';
+import { JEST_MOCKED_ERROR, TESTID_SELECTORS, TIMERS } from '../../../constants/tests';
+import { useContactGroupStore } from '../../../store/contact-groups';
+import { buildContactGroup, buildMembers } from '../../../tests/model-builder';
+import { registerDeleteContactHandler } from '../../../tests/msw-handlers/delete-contact';
 
 describe('useActionDeleteCG', () => {
 	const membersCount = faker.number.int({ min: 1, max: 42 });

@@ -6,11 +6,11 @@
 
 import { type Action as DSAction } from '@zextras/carbonio-design-system';
 
-import { useActionDeleteContactGroup } from '../actions/delete-contact-group';
-import { EditActionCG, useActionEditCG } from '../actions/edit-cg';
-import { SendEmailActionCG, useActionSendEmailCG } from '../actions/send-email-cg';
-import { UIAction } from '../actions/types';
-import { ContactGroup } from '../model/contact-group';
+import { EditActionCG, useActionEditCG } from '../../../actions/edit-cg';
+import { SendEmailActionCG, useActionSendEmailCG } from '../../../actions/send-email-cg';
+import { UIAction } from '../../../actions/types';
+import { ContactGroup } from '../../../model/contact-group';
+import { useActionDeleteContactGroup } from '../api/delete-contact-group';
 
 function evaluateContactGroupActions<T extends ContactGroup>(
 	contactGroup: T,
@@ -53,9 +53,7 @@ function evaluateContactGroupActions<T extends ContactGroup>(
 	return orderedActions;
 }
 
-export const useEvaluateMainAccountContactGroupActions = (): ((
-	contactGroup: ContactGroup
-) => DSAction[]) => {
+export const useContactGroupActions = (): ((contactGroup: ContactGroup) => DSAction[]) => {
 	const deleteCGAction = useActionDeleteContactGroup();
 	const editCGAction = useActionEditCG();
 	const sendEmailAction = useActionSendEmailCG();

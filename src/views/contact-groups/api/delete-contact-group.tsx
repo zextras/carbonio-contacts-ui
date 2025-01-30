@@ -16,14 +16,13 @@ import { closeBoard, getBoardById } from '@zextras/carbonio-shell-ui';
 import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 
-import { UIAction } from './types';
-import { Text } from '../components/Text';
-import { ACTION_IDS, EDIT_CONTACT_GROUP_BOARD_ID } from '../constants';
-import { useGetContactGroupFromPath } from '../hooks/useGetContactGroupFromPath';
-import { ContactGroup } from '../model/contact-group';
-import { apiClient } from '../network/api-client';
-import { useContactGroupStore } from '../store/contact-groups';
-import { useRedirectToContactGroupFolder } from '../views/contact-groups/navigation';
+import { UIAction } from '../../../actions/types';
+import { Text } from '../../../components/Text';
+import { ACTION_IDS, EDIT_CONTACT_GROUP_BOARD_ID } from '../../../constants';
+import { useGetContactGroupFromPath } from '../../../hooks/useGetContactGroupFromPath';
+import { ContactGroup } from '../../../model/contact-group';
+import { apiClient } from '../../../network/api-client';
+import { useRedirectToContactGroupFolder } from '../navigation';
 
 type DeleteCGActionBase<T extends ContactGroup> = UIAction<T, never>;
 export type DeleteCGAction = DeleteCGActionBase<ContactGroup>;
@@ -157,20 +156,19 @@ function useCreateDeleteModalAction<T extends ContactGroup>(): ({
 export const useActionDeleteContactGroup = (): DeleteCGAction => {
 	const createDeleteModal = useCreateDeleteModalAction<ContactGroup>();
 	const activeContactGroup = useGetContactGroupFromPath();
-	const { removeContactGroup } = useContactGroupStore();
 
 	const redirectTo = useRedirectToContactGroupFolder();
 
+	// NOTE: there is no store because this request is intercepted and item is ***magically*** removed
 	const onDeleteConfirm = useCallback(
 		async (contactGroup: ContactGroup) =>
 			apiClient.deleteContact([contactGroup.id]).then(() => {
 				if (activeContactGroup?.id === contactGroup.id) {
 					redirectTo(contactGroup.folderId);
 				}
-				removeContactGroup(contactGroup.id);
 				return { contactGroupId: contactGroup.id };
 			}),
-		[activeContactGroup?.id, redirectTo, removeContactGroup]
+		[activeContactGroup?.id, redirectTo]
 	);
 	return createDeleteModal({
 		modalId: 'delete-cg-modal',

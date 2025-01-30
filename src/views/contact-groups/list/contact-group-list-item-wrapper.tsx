@@ -6,8 +6,8 @@
 import React from 'react';
 
 import { ContactGroupListItem } from './contact-group-list-item';
-import { useEvaluateMainAccountContactGroupActions } from '../../../hooks/use-contact-group-actions';
 import { ContactGroup } from '../../../model/contact-group';
+import { useContactGroupActions } from '../actions/use-contact-group-actions';
 import { useRedirectToContactGroup } from '../navigation';
 
 type ContactGroupListItemWrapperProps = {
@@ -17,7 +17,7 @@ type ContactGroupListItemWrapperProps = {
 export const ContactGroupListItemWrapper = ({
 	contactGroup
 }: ContactGroupListItemWrapperProps): React.JSX.Element => {
-	const actions = useEvaluateMainAccountContactGroupActions()(contactGroup);
+	const actions = useContactGroupActions()(contactGroup);
 	const redirectTo = useRedirectToContactGroup();
 	return (
 		<ContactGroupListItem

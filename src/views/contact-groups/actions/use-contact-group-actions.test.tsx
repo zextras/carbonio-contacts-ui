@@ -7,10 +7,10 @@
 import { faker } from '@faker-js/faker';
 import * as shell from '@zextras/carbonio-shell-ui';
 
-import { useEvaluateMainAccountContactGroupActions } from './use-contact-group-actions';
-import { setupHook } from '../carbonio-ui-commons/test/test-setup';
-import { ACTION_IDS } from '../constants';
-import { buildContactGroup, buildMembers } from '../tests/model-builder';
+import { useContactGroupActions } from './use-contact-group-actions';
+import { setupHook } from '../../../carbonio-ui-commons/test/test-setup';
+import { ACTION_IDS } from '../../../constants';
+import { buildContactGroup, buildMembers } from '../../../tests/model-builder';
 
 describe('useContactGroupActions', () => {
 	it('should return send mail action when the contact group has at least 1 member', () => {
@@ -18,7 +18,7 @@ describe('useContactGroupActions', () => {
 		const contactGroup = buildContactGroup({
 			members: buildMembers(faker.number.int({ min: 1, max: 100 }))
 		});
-		const { result } = setupHook(() => useEvaluateMainAccountContactGroupActions()(contactGroup));
+		const { result } = setupHook(() => useContactGroupActions()(contactGroup));
 
 		expect(result.current).toContainEqual({
 			id: ACTION_IDS.sendEmailCG,
@@ -30,7 +30,7 @@ describe('useContactGroupActions', () => {
 
 	it('should not return send mail action when the contact group has 0 members', () => {
 		const contactGroup = buildContactGroup();
-		const { result } = setupHook(() => useEvaluateMainAccountContactGroupActions()(contactGroup));
+		const { result } = setupHook(() => useContactGroupActions()(contactGroup));
 		expect(result.current).not.toContainEqual({
 			id: ACTION_IDS.sendEmailCG,
 			label: 'Send e-mail',
@@ -41,7 +41,7 @@ describe('useContactGroupActions', () => {
 
 	it('should return delete action', () => {
 		const contactGroup = buildContactGroup();
-		const { result } = setupHook(() => useEvaluateMainAccountContactGroupActions()(contactGroup));
+		const { result } = setupHook(() => useContactGroupActions()(contactGroup));
 
 		expect(result.current).toContainEqual({
 			id: ACTION_IDS.deleteCG,

@@ -17,9 +17,9 @@ import { getSetupServer } from '../../../carbonio-ui-commons/test/jest-setup';
 import { setupTest, screen } from '../../../carbonio-ui-commons/test/test-setup';
 import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../../constants';
 import { PALETTE, TESTID_SELECTORS } from '../../../constants/tests';
-import * as createContactGroup from '../../../network/api/create-contact-group';
 import { spyUseBoardHooks } from '../../../tests/utils';
 import { getContactInput } from '../../board/common-contact-group-board.test';
+import * as createContactGroup from '../api/create-contact-group';
 
 function spyUseBoard(navigateTo?: jest.Mock): void {
 	jest.spyOn(shell, 'useBoard').mockReturnValue({

@@ -8,9 +8,9 @@ import React, { useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { ContactGroupDisplayerComponent } from './contact-group-displayer-component';
-import { useEvaluateMainAccountContactGroupActions } from '../../../hooks/use-contact-group-actions';
 import { useAppSelector } from '../../../legacy/hooks/redux';
 import { selectContactGroup } from '../../../legacy/store/selectors/contacts';
+import { useContactGroupActions } from '../actions/use-contact-group-actions';
 import { useRedirectToContactGroupFolder } from '../navigation';
 
 export const ContactGroupDisplayer = (): React.JSX.Element => {
@@ -19,7 +19,7 @@ export const ContactGroupDisplayer = (): React.JSX.Element => {
 		selectContactGroup(state, folderId, contactGroupId)
 	);
 	const redirectTo = useRedirectToContactGroupFolder();
-	const evaluateActions = useEvaluateMainAccountContactGroupActions();
+	const evaluateActions = useContactGroupActions();
 
 	const routeToContactGroups = useCallback((): void => {
 		contactGroup && redirectTo(contactGroup.folderId);

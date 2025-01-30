@@ -3,8 +3,8 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { ContactsSlice, ModifyContactGroup } from '../../types/store';
-import { updateContactsInStore } from '../../utils/helpers';
+import { ContactsSlice, ModifyContactGroup } from '../../../legacy/types/store';
+import { updateContactsInStore } from '../../../legacy/utils/helpers';
 
 export function modifyContactGroupPending(state: ContactsSlice): void {
 	state.status.pendingActions = true;

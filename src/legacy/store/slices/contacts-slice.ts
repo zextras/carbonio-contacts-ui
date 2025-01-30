@@ -6,8 +6,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { SEARCHED_FOLDER_STATE_STATUS } from '../../../constants';
-import { createContactGroup } from '../../../network/api/create-contact-group';
 import { modifyContactGroup } from '../../../network/api/modify-contact';
+import { createContactGroup } from '../../../views/contact-groups/api/create-contact-group';
+import {
+	modifyContactGroupFulFilled,
+	modifyContactGroupPending,
+	modifyContactGroupRejected
+} from '../../../views/contact-groups/api/modify-contact-group';
 import { State } from '../../types/store';
 import { contactAction } from '../actions/contact-action';
 import { createContact } from '../actions/create-contact';
@@ -41,11 +46,6 @@ import {
 	modifyContactRejected
 } from '../reducers/modify-contact';
 import {
-	modifyContactGroupFulFilled,
-	modifyContactGroupPending,
-	modifyContactGroupRejected
-} from '../reducers/modify-contact-group';
-import {
 	searchContactsFullFilled,
 	searchContactsPending,
 	searchContactsRejected
@@ -71,15 +71,19 @@ export const contactsSlice = createSlice({
 		builder.addCase(searchContactsAsyncThunk.pending, searchContactsPending);
 		builder.addCase(searchContactsAsyncThunk.fulfilled, searchContactsFullFilled);
 		builder.addCase(searchContactsAsyncThunk.rejected, searchContactsRejected);
+
 		builder.addCase(createContact.pending, createContactPending);
 		builder.addCase(createContact.fulfilled, createContactFulFilled);
 		builder.addCase(createContact.rejected, createContactRejected);
+
 		builder.addCase(modifyContact.pending, modifyContactPending);
 		builder.addCase(modifyContact.fulfilled, modifyContactFulFilled);
 		builder.addCase(modifyContact.rejected, modifyContactRejected);
+
 		builder.addCase(contactAction.pending, contactActionPending);
 		builder.addCase(contactAction.fulfilled, contactActionFulFilled);
 		builder.addCase(contactAction.rejected, contactActionRejected);
+
 		builder.addCase(folderAction.pending, folderActionPending);
 		builder.addCase(folderAction.rejected, folderActionRejected);
 

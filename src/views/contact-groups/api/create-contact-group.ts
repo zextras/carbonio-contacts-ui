@@ -5,8 +5,8 @@
  */
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { CnItem } from './types';
-import { ContactGroup } from '../../model/contact-group';
+import { ContactGroup } from '../../../model/contact-group';
+import { CnItem } from '../../../network/api/types';
 
 type ResponseJSON = { Body: { CreateContactResponse: { cn: Array<CnItem> } } };
 type ModifyContactRequest = {

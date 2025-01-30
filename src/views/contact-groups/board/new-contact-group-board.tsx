@@ -13,12 +13,12 @@ import { useLocation } from 'react-router-dom';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { useAppDispatch } from '../../../legacy/hooks/redux';
 import { ContactGroup } from '../../../model/contact-group';
-import { createContactGroup } from '../../../network/api/create-contact-group';
 import { useContactGroupStore } from '../../../store/contact-groups';
 import {
 	CommonContactGroupBoard,
 	isContactGroupNameInvalid
 } from '../../board/common-contact-group-board';
+import { createContactGroup } from '../api/create-contact-group';
 import { CONTACT_GROUPS_PATH, useRedirectToContactGroup } from '../navigation';
 
 const NewContactGroupBoard = (): React.JSX.Element => {
