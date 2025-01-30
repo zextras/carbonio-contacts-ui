@@ -11,6 +11,8 @@ import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
+import { useAppDispatch } from '../../../legacy/hooks/redux';
+import { ContactGroup } from '../../../model/contact-group';
 import { createContactGroup } from '../../../network/api/create-contact-group';
 import { useContactGroupStore } from '../../../store/contact-groups';
 import {
@@ -28,16 +30,17 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 	const initialName = t('board.newContactGroup.name', 'New Group');
 	const [folderId, setFolderId] = useState(FOLDERS.CONTACTS);
 	const [nameValue, setNameValue] = useState(initialName);
+	const dispatch = useAppDispatch();
 
 	const [memberListEmails, setMemberListEmails] = useState<string[]>([]);
 
 	const redirectTo = useRedirectToContactGroup();
 
 	const onSave = useCallback(() => {
-		createContactGroup(nameValue, memberListEmails, folderId)
-			.then((contactGroup) => {
+		dispatch(createContactGroup({ title: nameValue, members: memberListEmails, folderId }))
+			.then((res) => {
+				const contactGroup = res.payload as ContactGroup;
 				if (pathname.includes(CONTACT_GROUPS_PATH)) {
-					useContactGroupStore.getState().addContactGroup(contactGroup);
 					const element = window.document.getElementById(contactGroup.id);
 					if (element) {
 						element.scrollIntoView({ block: 'end' });
@@ -64,7 +67,17 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 					label: t('label.error_try_again', 'Something went wrong, please try again')
 				});
 			});
-	}, [nameValue, memberListEmails, folderId, pathname, createSnackbar, t, closeBoard, redirectTo]);
+	}, [
+		dispatch,
+		nameValue,
+		memberListEmails,
+		folderId,
+		pathname,
+		createSnackbar,
+		t,
+		closeBoard,
+		redirectTo
+	]);
 
 	return (
 		<CommonContactGroupBoard

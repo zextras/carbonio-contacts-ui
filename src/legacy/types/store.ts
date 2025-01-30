@@ -5,6 +5,7 @@
  */
 import { Contact, ContactOrGroup, ContactsFolder } from './contact';
 import { SoapContact } from './soap';
+import { ContactGroup } from '../../model/contact-group';
 import { SearchedFolderStateStatus } from '../../types/utils';
 
 export type ContactsSlice = {
@@ -49,6 +50,10 @@ export type AddContactRequest = {
 
 export type AddContactAction = AddContactRequest & {
 	payload: SoapContact[];
+};
+
+export type AddContactGroup = {
+	payload: ContactGroup;
 };
 
 export type DeleteContactAction = {
