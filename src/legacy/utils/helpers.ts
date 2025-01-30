@@ -64,7 +64,7 @@ export function addFoldersToStore(state: FoldersSlice, folders: ContactsFolder[]
 	}
 }
 
-export function updateContactsInStore(state: ContactsSlice, contactsArray: Contact[]): void {
+export function updateContactsInStore(state: ContactsSlice, contactsArray: ContactOrGroup[]): void {
 	state.contacts = reduce(
 		state.contacts,
 		(acc, v, k) => ({

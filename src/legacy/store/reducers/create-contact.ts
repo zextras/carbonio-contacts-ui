@@ -3,12 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import {
-	AddContactAction,
-	AddContactGroup,
-	AddContactRequest,
-	ContactsSlice
-} from '../../types/store';
+import { AddContactAction, AddContactRequest, ContactsSlice } from '../../types/store';
 import {
 	removeContactsWithoutID,
 	addContactsToStore,
@@ -33,22 +28,6 @@ export function createContactFulFilled(state: any, { payload }: AddContactAction
 }
 
 export function createContactRejected(state: ContactsSlice): void {
-	removeContactsFromStore(state);
-	state.status.pendingActions = false;
-}
-
-export function createContactGroupFulFilled(
-	state: ContactsSlice,
-	{ payload }: AddContactGroup
-): void {
-	if (payload) {
-		addContactsToStore(state, [payload]);
-	}
-}
-export function createContactGroupPending(state: ContactsSlice): void {
-	state.status.pendingActions = true;
-}
-export function createContactGroupRejected(state: ContactsSlice): void {
 	removeContactsFromStore(state);
 	state.status.pendingActions = false;
 }

@@ -10,9 +10,9 @@ import { difference, xor } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { useGetContactGroupFromBoardId } from '../../../hooks/use-get-contact-group-from-board-id';
+import { useAppDispatch } from '../../../legacy/hooks/redux';
 import { ContactGroup } from '../../../model/contact-group';
 import { modifyContactGroup } from '../../../network/api/modify-contact';
-import { useContactGroupStore } from '../../../store/contact-groups';
 import {
 	CommonContactGroupBoard,
 	isContactGroupNameInvalid
@@ -25,6 +25,7 @@ const InnerEditContactGroupBoard = ({
 }): React.JSX.Element => {
 	const [t] = useTranslation();
 
+	const dispatch = useAppDispatch();
 	const createSnackbar = useSnackbar();
 	const [nameValue, setNameValue] = useState(contactGroup.title);
 
@@ -34,14 +35,15 @@ const InnerEditContactGroupBoard = ({
 		const addedMembers = difference(memberListEmails, contactGroup.members);
 		const removedMembers = difference(contactGroup.members, memberListEmails);
 
-		modifyContactGroup({
-			id: contactGroup.id,
-			addedMembers: addedMembers.length > 0 ? addedMembers : undefined,
-			removedMembers: removedMembers.length > 0 ? removedMembers : undefined,
-			name: contactGroup.title !== nameValue ? nameValue : undefined
-		})
-			.then((contactGroup: ContactGroup) => {
-				useContactGroupStore.getState().updateContactGroup(contactGroup);
+		dispatch(
+			modifyContactGroup({
+				id: contactGroup.id,
+				addedMembers: addedMembers.length > 0 ? addedMembers : undefined,
+				removedMembers: removedMembers.length > 0 ? removedMembers : undefined,
+				name: contactGroup.title !== nameValue ? nameValue : undefined
+			})
+		)
+			.then(() => {
 				createSnackbar({
 					key: new Date().toLocaleString(),
 					severity: 'success',
@@ -66,6 +68,7 @@ const InnerEditContactGroupBoard = ({
 		contactGroup.members,
 		contactGroup.title,
 		createSnackbar,
+		dispatch,
 		memberListEmails,
 		nameValue,
 		t

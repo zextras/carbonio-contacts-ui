@@ -7,6 +7,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { SEARCHED_FOLDER_STATE_STATUS } from '../../../constants';
 import { createContactGroup } from '../../../network/api/create-contact-group';
+import { modifyContactGroup } from '../../../network/api/modify-contact';
 import { State } from '../../types/store';
 import { contactAction } from '../actions/contact-action';
 import { createContact } from '../actions/create-contact';
@@ -20,12 +21,14 @@ import {
 } from '../reducers/contact-action';
 import {
 	createContactFulFilled,
-	createContactGroupFulFilled,
-	createContactGroupPending,
-	createContactGroupRejected,
 	createContactPending,
 	createContactRejected
 } from '../reducers/create-contact';
+import {
+	createContactGroupFulFilled,
+	createContactGroupPending,
+	createContactGroupRejected
+} from '../reducers/create-contact-group';
 import { folderActionPending, folderActionRejected } from '../reducers/folder-action';
 import {
 	handleDeletedContactsSyncReducer,
@@ -37,6 +40,11 @@ import {
 	modifyContactPending,
 	modifyContactRejected
 } from '../reducers/modify-contact';
+import {
+	modifyContactGroupFulFilled,
+	modifyContactGroupPending,
+	modifyContactGroupRejected
+} from '../reducers/modify-contact-group';
 import {
 	searchContactsFullFilled,
 	searchContactsPending,
@@ -74,9 +82,14 @@ export const contactsSlice = createSlice({
 		builder.addCase(contactAction.rejected, contactActionRejected);
 		builder.addCase(folderAction.pending, folderActionPending);
 		builder.addCase(folderAction.rejected, folderActionRejected);
+
 		builder.addCase(createContactGroup.fulfilled, createContactGroupFulFilled);
 		builder.addCase(createContactGroup.pending, createContactGroupPending);
 		builder.addCase(createContactGroup.rejected, createContactGroupRejected);
+
+		builder.addCase(modifyContactGroup.fulfilled, modifyContactGroupFulFilled);
+		builder.addCase(modifyContactGroup.pending, modifyContactGroupPending);
+		builder.addCase(modifyContactGroup.rejected, modifyContactGroupRejected);
 	}
 });
 

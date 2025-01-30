@@ -56,6 +56,10 @@ export type AddContactGroup = {
 	payload: ContactGroup;
 };
 
+export type ModifyContactGroup = {
+	payload: ContactGroup;
+};
+
 export type DeleteContactAction = {
 	meta: {
 		arg: {

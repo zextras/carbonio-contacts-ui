@@ -3,10 +3,10 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ErrorSoapBodyResponse, JSNS, soapFetch } from '@zextras/carbonio-shell-ui';
 
 import { CnItem, GenericSoapPayload } from './types';
-import { ContactGroup } from '../../model/contact-group';
 
 export type ModifyContactAttribute = { n: 'fullName' | 'nickname' | 'fileAs'; _content: string };
 
@@ -62,30 +62,30 @@ export const modifyContact = ({
 	});
 };
 
-export const modifyContactGroup = ({
-	id,
-	addedMembers,
-	removedMembers,
-	name
-}: {
+type ModifyContactGroupRequest = {
 	id: string;
 	addedMembers?: string[];
 	removedMembers?: string[];
 	name?: string;
-}): Promise<ContactGroup> => {
-	const attributes: Array<ModifyContactAttribute> | undefined = name
-		? [
-				{ n: 'fullName', _content: name },
-				{ n: 'fileAs', _content: `8:${name}` },
-				{ n: 'nickname', _content: name }
-			]
-		: undefined;
-	return modifyContact({ id, addedMembers, removedMembers, attributes }).then(
-		(res: ModifyContactResponse) => ({
-			id: res.cn[0].id,
-			folderId: res.cn[0].l,
-			title: res.cn[0]._attrs.fullName ?? '',
-			members: res.cn[0].m?.map((value) => value.value) ?? []
-		})
-	);
 };
+
+export const modifyContactGroup = createAsyncThunk(
+	'contacts/modifyContactGroup',
+	async ({ id, addedMembers, removedMembers, name }: ModifyContactGroupRequest) => {
+		const attributes: Array<ModifyContactAttribute> | undefined = name
+			? [
+					{ n: 'fullName', _content: name },
+					{ n: 'fileAs', _content: `8:${name}` },
+					{ n: 'nickname', _content: name }
+				]
+			: undefined;
+		return modifyContact({ id, addedMembers, removedMembers, attributes }).then(
+			(res: ModifyContactResponse) => ({
+				id: res.cn[0].id,
+				folderId: res.cn[0].l,
+				title: res.cn[0]._attrs.fullName ?? '',
+				members: res.cn[0].m?.map((value) => value.value) ?? []
+			})
+		);
+	}
+);
