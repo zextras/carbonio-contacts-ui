@@ -14,7 +14,6 @@ import { useParams } from 'react-router-dom';
 import { Breadcrumbs } from './breadcrumbs';
 import { ContactsList } from './folder-panel/contacts-list';
 import { useFolder } from '../../../carbonio-ui-commons/store/zustand/folder';
-import { ContactGroupList } from '../../../views/contact-groups/list/contact-groups-list';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { useSelection } from '../../hooks/useSelection';
 import { searchContactsAsyncThunk } from '../../store/actions/search-contacts';
@@ -134,17 +133,13 @@ export const FolderPanel = (): ReactElement => {
 							</Row>
 						</Breadcrumbs>
 					)}
-					{activeFilter === FILTER_TYPES.CONTACT ? (
-						<ContactsList
-							folderId={folderId}
-							contacts={sortedContacts}
-							selected={selected}
-							isSelecting={isSelecting}
-							toggle={toggle}
-						/>
-					) : (
-						<ContactGroupList />
-					)}
+					<ContactsList
+						folderId={folderId}
+						contacts={sortedContacts}
+						selected={selected}
+						isSelecting={isSelecting}
+						toggle={toggle}
+					/>
 				</Container>
 			</Container>
 		</ActionsContextProvider>
