@@ -86,14 +86,26 @@ export const ContactsList = ({
 	}, [contacts.length, hasMore, search]);
 
 	const canLoadMore = useMemo(() => contacts.length > 0 && hasMore, [contacts.length, hasMore]);
-
 	const listItems = useMemo(
 		() =>
 			map(contacts, (contact) => {
 				const isSelected = selected[contact.id];
 				const active = itemId === contact.id;
 				if ('members' in contact) {
-					return <ContactGroupListItemWrapper contactGroup={contact} />;
+					return (
+						<ContactGroupListItemWrapper
+							contactGroup={contact}
+							selected={isSelected}
+							folderId={folderId}
+							selecting={isSelecting}
+							active={active}
+							toggle={toggle}
+							setDraggedIds={setDraggedIds}
+							setIsDragging={setIsDragging}
+							selectedItems={selected}
+							dragImageRef={dragImageRef}
+						/>
+					);
 				}
 
 				return (
