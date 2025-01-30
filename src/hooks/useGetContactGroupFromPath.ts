@@ -6,11 +6,11 @@
 
 import { useParams } from 'react-router-dom';
 
+import { useAppSelector } from '../legacy/hooks/redux';
+import { selectContactGroup } from '../legacy/store/selectors/contacts';
 import { ContactGroup } from '../model/contact-group';
-import { useContactGroupStore } from '../store/contact-groups';
 
 export const useGetContactGroupFromPath = (): ContactGroup | undefined => {
-	const { id: contactGroupId } = useParams<{ id: string }>();
-	const { useGetContactGroupById } = useContactGroupStore();
-	return useGetContactGroupById(contactGroupId);
+	const { id: contactGroupId, folderId } = useParams<{ id: string; folderId: string }>();
+	return useAppSelector((state) => selectContactGroup(state, folderId, contactGroupId));
 };

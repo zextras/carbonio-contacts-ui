@@ -13,7 +13,6 @@ import { useLocation } from 'react-router-dom';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { useAppDispatch } from '../../../legacy/hooks/redux';
 import { ContactGroup } from '../../../model/contact-group';
-import { useContactGroupStore } from '../../../store/contact-groups';
 import {
 	CommonContactGroupBoard,
 	isContactGroupNameInvalid
@@ -46,8 +45,6 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 						element.scrollIntoView({ block: 'end' });
 					}
 					redirectTo(contactGroup);
-				} else {
-					useContactGroupStore.getState().reset();
 				}
 
 				createSnackbar({

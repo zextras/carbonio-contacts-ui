@@ -5,8 +5,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { faker } from '@faker-js/faker';
-import { dropRight, first, last, nth, times } from 'lodash';
+import { times } from 'lodash';
 
 import {
 	compareContactGroupName,
@@ -14,7 +13,6 @@ import {
 	initialState,
 	useContactGroupStore
 } from './contact-groups';
-import { SharedContactGroup } from '../model/contact-group';
 import { buildContactGroup } from '../tests/model-builder';
 
 const addContactGroups: ContactGroupStoreActions['addContactGroups'] = (newContactGroups) =>
@@ -22,6 +20,8 @@ const addContactGroups: ContactGroupStoreActions['addContactGroups'] = (newConta
 
 const removeContactGroup: ContactGroupStoreActions['removeContactGroup'] = (contactGroupId) =>
 	useContactGroupStore.getState().removeContactGroup(contactGroupId);
+
+// TODO: store is merged with contacts, test reducers on that store
 describe('Contact groups store', () => {
 	it('should return 0 as default offset', () => {
 		expect(useContactGroupStore.getState().offset).toBe(0);
