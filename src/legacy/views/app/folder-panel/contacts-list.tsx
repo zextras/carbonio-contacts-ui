@@ -15,10 +15,11 @@ import { ContactListItem } from './contact-list-item';
 import { DragItems } from './drag-items';
 import { EmptyListPanel } from './empty-list-panel';
 import { CustomListItem } from '../../../../carbonio-ui-commons/components/list/list-item';
+import { ContactGroupListItemWrapper } from '../../../../views/contact-groups/list/contact-group-list-item-wrapper';
 import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
 import { searchContactsAsyncThunk } from '../../../store/actions/search-contacts';
 import { selectFolderHasMore } from '../../../store/slices/contacts-slice';
-import { Contact } from '../../../types/contact';
+import { ContactOrGroup } from '../../../types/contact';
 
 const DragImageContainer = styled.div`
 	position: absolute;
@@ -32,7 +33,7 @@ type ContactsListProps = {
 	folderId: string;
 	selected: Record<string, boolean>;
 	isSelecting: boolean;
-	contacts: Array<Contact>;
+	contacts: Array<ContactOrGroup>;
 	toggle: (id: string) => void;
 };
 export const ContactsList = ({
@@ -91,6 +92,10 @@ export const ContactsList = ({
 			map(contacts, (contact) => {
 				const isSelected = selected[contact.id];
 				const active = itemId === contact.id;
+				if ('members' in contact) {
+					return <ContactGroupListItemWrapper visible contactGroup={contact} />;
+				}
+
 				return (
 					<CustomListItem
 						key={contact.id}

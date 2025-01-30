@@ -15,12 +15,14 @@ import {
 	filter
 } from 'lodash';
 
+import { ContactGroup } from '../../../model/contact-group';
 import {
 	Contact,
 	ContactAddress,
 	ContactAddressMap,
 	ContactAddressType,
 	ContactEmailMap,
+	ContactOrGroup,
 	ContactPhoneMap,
 	ContactPhoneType,
 	ContactUrlMap,
@@ -128,13 +130,22 @@ function normalizeContactUrls(c: SoapContact): ContactUrlMap {
 	);
 }
 
-export function normalizeContactsFromSoap(contact: SoapContact[]): Contact[] | undefined {
+export function normalizeContactsFromSoap(contact: SoapContact[]): ContactOrGroup[] | undefined {
 	return isEmpty(contact)
 		? undefined
 		: reduce(
 				contact || [],
 				(r, c) => {
-					if (c._attrs?.type === 'group') return r;
+					if (c._attrs?.type === 'group') {
+						const contactGroup: ContactGroup = {
+							id: c.id,
+							folderId: c.l,
+							title: c._attrs.fullName ?? '',
+							members: c.m?.filter((value) => value.type === 'I').map((value) => value.value) ?? []
+						};
+						r.push(contactGroup);
+						return r;
+					}
 					r.push({
 						parent: c.l,
 						id: c.id,
@@ -161,7 +172,7 @@ export function normalizeContactsFromSoap(contact: SoapContact[]): Contact[] | u
 					});
 					return r;
 				},
-				[] as Contact[]
+				[] as ContactOrGroup[]
 			);
 }
 

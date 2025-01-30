@@ -11,12 +11,13 @@ import { replaceHistory } from '@zextras/carbonio-shell-ui';
 import { ItemAvatar } from './item-avatar';
 import { ItemContent } from './item-content';
 import { useTags } from '../../../../carbonio-ui-commons/store/zustand/tags';
+import { ContactGroupListItemWrapper } from '../../../../views/contact-groups/list/contact-group-list-item-wrapper';
 import { getTagsArray } from '../../../helpers/tags';
-import { Contact } from '../../../types/contact';
+import { ContactOrGroup } from '../../../types/contact';
 import ListItemActionWrapper from '../../folder/list-item-action-wrapper';
 
 type ContactListItemProps = {
-	item: Contact;
+	item: ContactOrGroup;
 	folderId?: string;
 	selecting?: boolean;
 	active?: boolean;
@@ -78,10 +79,14 @@ export const ContactListItem = ({
 		>
 			<Container orientation="vertical" data-testid={'contact-list-item'} onClick={_onClick}>
 				<Container orientation="horizontal" mainAlignment="flex-start">
-					<ListItemActionWrapper contact={item}>
-						<ItemAvatar item={item} selected={selected} selecting={selecting} toggle={toggle} />
-						<ItemContent item={item} tags={tags} />
-					</ListItemActionWrapper>
+					{'members' in item ? (
+						<ContactGroupListItemWrapper visible contactGroup={item} />
+					) : (
+						<ListItemActionWrapper contact={item}>
+							<ItemAvatar item={item} selected={selected} selecting={selecting} toggle={toggle} />
+							<ItemContent item={item} tags={tags} />
+						</ListItemActionWrapper>
+					)}
 				</Container>
 			</Container>
 		</Drag>

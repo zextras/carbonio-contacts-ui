@@ -20,11 +20,11 @@ import { useUpdateView } from '../../../carbonio-ui-commons/hooks/use-update-vie
 import { useFoldersMap } from '../../../carbonio-ui-commons/store/zustand/folder';
 import { Folder } from '../../../carbonio-ui-commons/types/folder';
 import { usePrefs } from '../../../carbonio-ui-commons/utils/use-prefs';
-import { Contact } from '../../types/contact';
+import { ContactOrGroup } from '../../types/contact';
 import { normalizeContactsFromSoap } from '../../utils/normalizations/normalize-contact-from-soap';
 
 export type SearchResults = {
-	contacts: Array<Contact>;
+	contacts: Array<ContactOrGroup>;
 	more: boolean;
 	offset: number;
 	sortBy: string;
