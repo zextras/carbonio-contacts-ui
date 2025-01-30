@@ -127,9 +127,17 @@ export function removeContactsFromStore(
 	);
 }
 
-function isGroup(contact: ContactOrGroup): contact is ContactGroup {
+export function isGroup(contact: ContactOrGroup): contact is ContactGroup {
 	return (<ContactGroup>contact).members !== undefined;
 }
+
+export const evaluateParentIds = (contacts: ContactOrGroup[]): Array<string> =>
+	contacts.map((contact) => {
+		if (isGroup(contact)) {
+			return contact.folderId;
+		}
+		return contact.parent;
+	});
 
 export function addContactsToStore(
 	state: ContactsSlice,
