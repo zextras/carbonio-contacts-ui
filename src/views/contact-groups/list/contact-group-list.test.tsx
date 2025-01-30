@@ -10,6 +10,7 @@ import { faker } from '@faker-js/faker';
 import { waitFor } from '@testing-library/react';
 import { useParams } from 'react-router-dom';
 
+// TODO: now contact groups are in contact-list, test there
 import { ContactGroupList } from './contact-groups-list';
 import { createSoapAPIInterceptor } from '../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { screen, setupTest, triggerLoadMore } from '../../../carbonio-ui-commons/test/test-setup';
