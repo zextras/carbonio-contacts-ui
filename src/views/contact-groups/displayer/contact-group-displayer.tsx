@@ -9,13 +9,15 @@ import { useParams } from 'react-router-dom';
 
 import { ContactGroupDisplayerComponent } from './contact-group-displayer-component';
 import { useEvaluateMainAccountContactGroupActions } from '../../../hooks/use-contact-group-actions';
-import { useContactGroupStore } from '../../../store/contact-groups';
+import { useAppSelector } from '../../../legacy/hooks/redux';
+import { selectContactGroup } from '../../../legacy/store/selectors/contacts';
 import { useRedirectToContactGroupFolder } from '../navigation';
 
 export const ContactGroupDisplayer = (): React.JSX.Element => {
-	const { id: contactGroupId } = useParams<{ id: string }>();
-	const { useGetContactGroupById } = useContactGroupStore();
-	const contactGroup = useGetContactGroupById(contactGroupId);
+	const { id: contactGroupId, folderId } = useParams<{ folderId: string; id: string }>();
+	const contactGroup = useAppSelector((state) =>
+		selectContactGroup(state, folderId, contactGroupId)
+	);
 	const redirectTo = useRedirectToContactGroupFolder();
 	const evaluateActions = useEvaluateMainAccountContactGroupActions();
 

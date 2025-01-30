@@ -35,7 +35,7 @@ export const DragItems = ({
 		<>
 			{map(items, (item, index) => {
 				if ('members' in item) {
-					return <ContactGroupListItemWrapper visible contactGroup={item} />;
+					return <ContactGroupListItemWrapper visible={false} contactGroup={item} />;
 				}
 				return <ContactListItem item={item} key={index} />;
 			})}

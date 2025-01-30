@@ -77,7 +77,7 @@ export function updateContactsInStore(state: ContactsSlice, contactsArray: Conta
 						(acc3, v3) => (v3.id === v2.id ? [...acc3, v3] : [...acc3, v2]),
 						acc2
 					),
-				[] as Contact[]
+				[] as ContactOrGroup[]
 			)
 		}),
 		{}
@@ -128,7 +128,7 @@ export function removeContactsFromStore(
 }
 
 function isGroup(contact: ContactOrGroup): contact is ContactGroup {
-	return (<ContactGroup>contact).members != undefined;
+	return (<ContactGroup>contact).members !== undefined;
 }
 
 export function addContactsToStore(

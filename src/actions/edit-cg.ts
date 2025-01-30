@@ -32,7 +32,7 @@ export const useActionEditCG = (): EditActionCG => {
 				id: `${EDIT_CONTACT_GROUP_BOARD_ID}-${contactGroup.id}`,
 				boardViewId: EDIT_CONTACT_GROUP_BOARD_ID,
 				title: contactGroup.title,
-				context: { contactGroupId: contactGroup.id }
+				context: { contactGroupId: contactGroup.id, folderId: contactGroup.folderId }
 			});
 		}
 	}, []);

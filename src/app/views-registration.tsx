@@ -111,17 +111,21 @@ const BoardView = (): React.JSX.Element => (
 
 const NewContactGroupBoardView = (): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
-		<ModalManager>
-			<LazyNewContactGroupBoardView />
-		</ModalManager>
+		<StoreProvider>
+			<ModalManager>
+				<LazyNewContactGroupBoardView />
+			</ModalManager>
+		</StoreProvider>
 	</Suspense>
 );
 
 const EditContactGroupBoardView = (): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
-		<ModalManager>
-			<LazyEditContactGroupBoardView />
-		</ModalManager>
+		<StoreProvider>
+			<ModalManager>
+				<LazyEditContactGroupBoardView />
+			</ModalManager>
+		</StoreProvider>
 	</Suspense>
 );
 
