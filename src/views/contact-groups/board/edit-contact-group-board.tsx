@@ -42,18 +42,8 @@ const InnerEditContactGroupBoard = ({
 				removedMembers: removedMembers.length > 0 ? removedMembers : undefined,
 				name: contactGroup.title !== nameValue ? nameValue : undefined
 			})
-		)
-			.then(() => {
-				createSnackbar({
-					key: new Date().toLocaleString(),
-					severity: 'success',
-					label: t(
-						'board.editContactGroup.snackbar.contact_group_edited',
-						'Group successfully updated'
-					)
-				});
-			})
-			.catch(() => {
+		).then((response) => {
+			if ('error' in response) {
 				createSnackbar({
 					key: new Date().toLocaleString(),
 					severity: 'error',
@@ -62,7 +52,17 @@ const InnerEditContactGroupBoard = ({
 						'Something went wrong saving the edits, try again'
 					)
 				});
+				return;
+			}
+			createSnackbar({
+				key: new Date().toLocaleString(),
+				severity: 'success',
+				label: t(
+					'board.editContactGroup.snackbar.contact_group_edited',
+					'Group successfully updated'
+				)
 			});
+		});
 	}, [
 		contactGroup.id,
 		contactGroup.members,
