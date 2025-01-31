@@ -11,6 +11,7 @@ import * as shell from '@zextras/carbonio-shell-ui';
 import { ContactGroupListItemWrapper } from './contact-group-list-item-wrapper';
 import { screen, setupTest } from '../../../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../../../constants/tests';
+import { generateStore } from '../../../legacy/tests/generators/store';
 import { buildContactGroup, buildMembers } from '../../../tests/model-builder';
 
 jest.mock('react-router-dom', () => ({
@@ -19,6 +20,7 @@ jest.mock('react-router-dom', () => ({
 }));
 
 describe('Contact group list item', () => {
+	const store = generateStore();
 	describe('Actions', () => {
 		it('should show send mail action when the contact group has at least 1 member', () => {
 			jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([jest.fn(), true]);
@@ -26,19 +28,19 @@ describe('Contact group list item', () => {
 				members: buildMembers(faker.number.int({ min: 1, max: 100 }))
 			});
 
-			setupTest(<ContactGroupListItemWrapper contactGroup={contactGroup} />);
+			setupTest(<ContactGroupListItemWrapper contactGroup={contactGroup} />, { store });
 			expect(screen.getByTestId(TESTID_SELECTORS.icons.sendEmail)).toBeVisible();
 		});
 		it('should hide send mail action when the contact group has 0 members', () => {
 			const contactGroup = buildContactGroup();
 
-			setupTest(<ContactGroupListItemWrapper contactGroup={contactGroup} />);
+			setupTest(<ContactGroupListItemWrapper contactGroup={contactGroup} />, { store });
 			expect(screen.queryByTestId(TESTID_SELECTORS.icons.sendEmail)).not.toBeInTheDocument();
 		});
 		it('should show delete action', () => {
 			const contactGroup = buildContactGroup();
 
-			setupTest(<ContactGroupListItemWrapper contactGroup={contactGroup} />);
+			setupTest(<ContactGroupListItemWrapper contactGroup={contactGroup} />, { store });
 			expect(screen.getByTestId(TESTID_SELECTORS.icons.trash)).toBeVisible();
 		});
 	});
