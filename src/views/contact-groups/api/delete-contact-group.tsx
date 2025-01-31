@@ -71,14 +71,13 @@ const getDeleteModal = (
 						hideButton: true
 					});
 				})
-				.catch((error: Error) => {
+				.catch(() => {
 					createSnackbar({
 						key: `snackbar-${Date.now()}`,
 						severity: 'error',
 						label: t('label.error_try_again', 'Something went wrong, please try again'),
 						hideButton: true
 					});
-					console.error(error);
 				});
 		},
 		showCloseIcon: true,

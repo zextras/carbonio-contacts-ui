@@ -7,6 +7,7 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
+import { useTheme } from '@zextras/carbonio-design-system';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { forEach } from 'lodash';
 import { Route } from 'react-router-dom';
@@ -34,6 +35,7 @@ import {
 	EMPTY_LIST_HINT
 } from '../../../../constants/tests';
 import { buildContact } from '../../../../tests/model-builder';
+import { registerDeleteContactHandler } from '../../../../tests/msw-handlers/delete-contact';
 import {
 	createFindContactGroupsResponse,
 	registerFindContactGroupsHandler
@@ -42,7 +44,6 @@ import { generateState } from '../../../../tests/state-builder';
 import { createCnItem } from '../../../../tests/utils';
 import { generateStore } from '../../../tests/generators/store';
 import { FolderPanel } from '../folder-panel';
-import { useTheme } from '@zextras/carbonio-design-system';
 
 const mockMailToAction = (): void => {
 	getActionMock.mockImplementation((type, id) => {
@@ -521,78 +522,80 @@ describe('Folder panel', () => {
 			});
 		});
 
-		// describe('Delete contact group action', () => {
-		//     it('should remove deleted contact group when you confirm deletion and api call will success (Hover trigger)', async () => {
-		//         const cnItem1 = createCnItem();
-		//         registerFindContactGroupsHandler({
-		//             findContactGroupsResponse: createFindContactGroupsResponse(
-		//                 [cnItem1, ...[...Array(2)].map(() => createCnItem())],
-		//                 false
-		//             ),
-		//             offset: 0
-		//         });
-		//         registerDeleteContactHandler(cnItem1.id);
+		describe('Delete contact group action', () => {
+			it('should remove deleted contact group when you confirm deletion and api call will success (Hover trigger)', async () => {
+				const folderId = '100';
+				const cnItem1 = createCnItem('Group 1', [], '1', folderId);
+				const cnItem2 = createCnItem('Group 2', [], '2', folderId);
+				const cnItem3 = createCnItem('Group 3', [], '3', folderId);
+				registerFindContactGroupsHandler({
+					findContactGroupsResponse: createFindContactGroupsResponse(
+						[cnItem1, cnItem2, cnItem3],
+						false
+					),
+					offset: 0
+				});
+				registerDeleteContactHandler(cnItem1.id);
 
-		//         const { user } = setupMainAccountContactGroupView();
+				const { user } = setupFolderPanel(folderId);
 
-		//         await screen.findByText(cnItem1.fileAsStr);
+				await screen.findByText(cnItem1.fileAsStr);
 
-		//         const listElement = screen
-		//             .getAllByTestId(TESTID_SELECTORS.listItemContent)
-		//             .find((element) => element.textContent?.includes(cnItem1.fileAsStr));
+				const listElement = screen.getByTestId(`contact-group-list-item-${cnItem1.id}`);
 
-		//         expect(listElement).toBeVisible();
+				expect(listElement).toBeVisible();
 
-		//         const deleteAction = within(listElement as HTMLElement).getByTestId(
-		//             TESTID_SELECTORS.icons.trash
-		//         );
+				const deleteAction = within(listElement as HTMLElement).getByTestId(
+					TESTID_SELECTORS.icons.trash
+				);
 
-		//         await user.click(deleteAction);
-		//         const button = await screen.findByRole('button', {
-		//             name: 'delete'
-		//         });
-		//         await user.click(button);
-		//         await screen.findByText('Contact group successfully deleted');
+				await user.click(deleteAction);
+				const button = await screen.findByRole('button', {
+					name: 'delete'
+				});
+				await user.click(button);
+				await screen.findByText('Contact group successfully deleted');
 
-		//         expect(screen.queryByText(cnItem1.fileAsStr)).not.toBeInTheDocument();
-		//     });
+				expect(screen.queryByText(cnItem1.fileAsStr)).not.toBeInTheDocument();
+			});
 
-		//     it('should not remove deleted contact group when you confirm deletion and api call fail (Hover trigger)', async () => {
-		//         jest.spyOn(console, 'warn').mockImplementation();
-		//         const cnItem1 = createCnItem();
-		//         registerFindContactGroupsHandler({
-		//             findContactGroupsResponse: createFindContactGroupsResponse(
-		//                 [cnItem1, ...[...Array(2)].map(() => createCnItem())],
-		//                 false
-		//             ),
-		//             offset: 0
-		//         });
-		//         registerDeleteContactHandler(cnItem1.id, JEST_MOCKED_ERROR);
+			it('should not remove deleted contact group when you confirm deletion and api call fail (Hover trigger)', async () => {
+				jest.spyOn(console, 'warn').mockImplementation();
+				const folderId = '100';
+				const cnItem1 = createCnItem('Group 1', [], '1', folderId);
+				const cnItem2 = createCnItem('Group 2', [], '2', folderId);
+				const cnItem3 = createCnItem('Group 3', [], '3', folderId);
+				registerFindContactGroupsHandler({
+					findContactGroupsResponse: createFindContactGroupsResponse(
+						[cnItem1, cnItem2, cnItem3],
+						false
+					),
+					offset: 0
+				});
 
-		//         const { user } = setupMainAccountContactGroupView();
+				const { user } = setupFolderPanel(folderId);
 
-		//         await screen.findByText(cnItem1.fileAsStr);
+				await screen.findByText(cnItem1.fileAsStr);
 
-		//         const listElement = screen
-		//             .getAllByTestId(TESTID_SELECTORS.listItemContent)
-		//             .find((element) => element.textContent?.includes(cnItem1.fileAsStr));
+				const listElement = screen.getByTestId(`contact-group-list-item-${cnItem1.id}`);
 
-		//         expect(listElement).toBeVisible();
+				expect(listElement).toBeVisible();
 
-		//         const deleteAction = within(listElement as HTMLElement).getByTestId(
-		//             TESTID_SELECTORS.icons.trash
-		//         );
+				const deleteAction = within(listElement as HTMLElement).getByTestId(
+					TESTID_SELECTORS.icons.trash
+				);
 
-		//         await user.click(deleteAction);
-		//         const button = await screen.findByRole('button', {
-		//             name: 'delete'
-		//         });
-		//         await user.click(button);
-		//         await screen.findByText('Something went wrong, please try again');
+				await user.click(deleteAction);
+				const button = await screen.findByRole('button', {
+					name: 'delete'
+				});
+				await user.click(button);
+				await screen.findByText('Something went wrong, please try again');
 
-		//         expect(screen.getByText(cnItem1.fileAsStr)).toBeVisible();
-		//         expect(screen.getAllByTestId(TESTID_SELECTORS.listItemContent)).toHaveLength(3);
-		//     });
-		// });
+				expect(screen.getByText(cnItem1.fileAsStr)).toBeVisible();
+				expect(screen.getByText(cnItem2.fileAsStr)).toBeVisible();
+				expect(screen.getByText(cnItem3.fileAsStr)).toBeVisible();
+			});
+		});
 	});
 });
