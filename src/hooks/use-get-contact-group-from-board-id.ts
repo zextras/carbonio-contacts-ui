@@ -15,7 +15,7 @@ export const useGetContactGroupFromBoardId = (): ContactGroup | undefined => {
 
 	if (!context) return undefined;
 
-	return contacts.contacts[context.folderId].find(
+	return contacts.contacts[context.folderId]?.find(
 		(contact) => contact.id === context.contactGroupId
 	) as ContactGroup | undefined;
 };
