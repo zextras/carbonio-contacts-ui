@@ -8,9 +8,10 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import { within } from '@testing-library/react';
 import { useTheme } from '@zextras/carbonio-design-system';
+import * as shell from '@zextras/carbonio-shell-ui';
 
 import { screen, setupHook, setupTest } from '../../../../carbonio-ui-commons/test/test-setup';
-import { EMPTY_DISPLAYER_HINT, TESTID_SELECTORS } from '../../../../constants/tests';
+import { TESTID_SELECTORS } from '../../../../constants/tests';
 import {
 	createFindContactGroupsResponse,
 	registerFindContactGroupsHandler
@@ -108,5 +109,31 @@ describe('Contact Group View', () => {
 		const listItem = await within(styledListItem).findByText(contactGroupName);
 		await user.click(listItem);
 		expect(styledListItem).toHaveStyle(activeBackground);
+	});
+
+	it('should open the mail board (ContactGroupDisplayerController trigger)', async () => {
+		const openMailComposer = jest.fn();
+		const contactGroupId = '1';
+		const folderId = '20';
+		jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
+		const contactGroupName = faker.company.name();
+		const member = faker.internet.email();
+		registerFindContactGroupsHandler({
+			findContactGroupsResponse: createFindContactGroupsResponse([
+				createCnItem(contactGroupName, [member], contactGroupId, folderId)
+			]),
+			offset: 0
+		});
+		const { user } = setupFolderView(folderId);
+
+		const listItem = await screen.findByText(contactGroupName);
+		await user.click(listItem);
+		const displayer = await screen.findByTestId('contact-group-displayer');
+		const openEmailComposerAction = within(displayer).getByRole('button', { name: /mail/i });
+		await user.click(openEmailComposerAction);
+		expect(openMailComposer).toHaveBeenCalledTimes(1);
+		expect(openMailComposer).toHaveBeenCalledWith({
+			recipients: [expect.objectContaining({ email: member })]
+		});
 	});
 });

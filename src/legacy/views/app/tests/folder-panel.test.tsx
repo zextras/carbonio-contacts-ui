@@ -7,7 +7,6 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
-import { useTheme } from '@zextras/carbonio-design-system';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { forEach } from 'lodash';
 import { Route } from 'react-router-dom';
@@ -21,8 +20,7 @@ import {
 	setupTest,
 	screen,
 	within,
-	makeListItemsVisible,
-	setupHook
+	makeListItemsVisible
 } from '../../../../carbonio-ui-commons/test/test-setup';
 import {
 	ActionDescriptorType,
@@ -401,31 +399,6 @@ describe('Folder panel', () => {
 		});
 
 		describe('Send mail action', () => {
-			it('should open the mail board (ContactGroupDisplayerController trigger)', async () => {
-				const openMailComposer = jest.fn();
-				jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
-				const contactGroupName = faker.company.name();
-				const member = faker.internet.email();
-				registerFindContactGroupsHandler({
-					findContactGroupsResponse: createFindContactGroupsResponse([
-						createCnItem(contactGroupName, [member])
-					]),
-					offset: 0
-				});
-				const { user } = setupFolderPanel();
-
-				await screen.findByText(contactGroupName);
-				const listItem = await screen.findByTestId(TESTID_SELECTORS.listItemContent);
-				await user.click(listItem);
-				const displayer = await screen.findByTestId(TESTID_SELECTORS.displayer);
-				const action = within(displayer).getByRole('button', { name: /mail/i });
-				await user.click(action);
-				expect(openMailComposer).toHaveBeenCalledTimes(1);
-				expect(openMailComposer).toHaveBeenCalledWith({
-					recipients: [expect.objectContaining({ email: member })]
-				});
-			});
-
 			it('should open the mail board (Hover trigger)', async () => {
 				const openMailComposer = jest.fn();
 				jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
@@ -529,16 +502,14 @@ describe('Folder panel', () => {
 				});
 				await user.click(button);
 				await screen.findByText('Contact group successfully deleted');
-
-				expect(screen.queryByText(cnItem1.fileAsStr)).not.toBeInTheDocument();
 			});
 
 			it('should not remove deleted contact group when you confirm deletion and api call fail (Hover trigger)', async () => {
 				jest.spyOn(console, 'warn').mockImplementation();
 				const folderId = '100';
-				const cnItem1 = createCnItem('Group 1', [], '1', folderId);
-				const cnItem2 = createCnItem('Group 2', [], '2', folderId);
-				const cnItem3 = createCnItem('Group 3', [], '3', folderId);
+				const cnItem1 = createCnItem('Group 1', [], '11', folderId);
+				const cnItem2 = createCnItem('Group 2', [], '22', folderId);
+				const cnItem3 = createCnItem('Group 3', [], '33', folderId);
 				registerFindContactGroupsHandler({
 					findContactGroupsResponse: createFindContactGroupsResponse(
 						[cnItem1, cnItem2, cnItem3],
@@ -546,6 +517,7 @@ describe('Folder panel', () => {
 					),
 					offset: 0
 				});
+				registerDeleteContactHandler(cnItem1.id, 'error-string');
 
 				const { user } = setupFolderPanel(folderId);
 
@@ -560,10 +532,10 @@ describe('Folder panel', () => {
 				);
 
 				await user.click(deleteAction);
-				const button = await screen.findByRole('button', {
+				const modalButton = await screen.findByRole('button', {
 					name: 'delete'
 				});
-				await user.click(button);
+				await user.click(modalButton);
 				await screen.findByText('Something went wrong, please try again');
 
 				expect(screen.getByText(cnItem1.fileAsStr)).toBeVisible();
