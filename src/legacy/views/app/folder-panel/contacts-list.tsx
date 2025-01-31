@@ -94,18 +94,29 @@ export const ContactsList = ({
 				const active = itemId === contact.id;
 				if (isGroup(contact)) {
 					return (
-						<ContactGroupListItemWrapper
-							contactGroup={contact}
+						<CustomListItem
+							key={contact.id}
 							selected={isSelected}
-							folderId={folderId}
-							selecting={isSelecting}
 							active={active}
-							toggle={toggle}
-							setDraggedIds={setDraggedIds}
-							setIsDragging={setIsDragging}
-							selectedItems={selected}
-							dragImageRef={dragImageRef}
-						/>
+							background={active ? 'gray6' : 'gray5'}
+							data-testid={`custom-list-item-${contact.id}`}
+						>
+							{(): React.JSX.Element => (
+								<ContactGroupListItemWrapper
+									contactGroup={contact}
+									selected={isSelected}
+									folderId={folderId}
+									selecting={isSelecting}
+									active={active}
+									toggle={toggle}
+									setDraggedIds={setDraggedIds}
+									setIsDragging={setIsDragging}
+									selectedItems={selected}
+									dragImageRef={dragImageRef}
+									key={`contact-group-${contact.id}`}
+								/>
+							)}
+						</CustomListItem>
 					);
 				}
 

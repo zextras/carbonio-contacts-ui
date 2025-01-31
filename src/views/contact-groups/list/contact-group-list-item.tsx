@@ -61,8 +61,11 @@ export const ContactGroupListItem = React.memo<CGListItemProps>(
 		}, []);
 
 		return (
-			<Container data-testid={id} height={LIST_ITEM_HEIGHT} id={id}>
-				<ContextualMenu actions={actions}>
+			<Container data-testid={`contact-group-list-item-${id}`} height={LIST_ITEM_HEIGHT} id={id}>
+				<ContextualMenu
+					actions={actions}
+					data-testid={`contact-group-list-item-contextual-menu-${id}`}
+				>
 					<CustomHoverRow
 						orientation="horizontal"
 						mainAlignment="flex-start"

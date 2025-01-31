@@ -104,7 +104,8 @@ export async function delayUntil(emitter: EventEmitter, event: string): Promise<
 export const createCnItem = (
 	contactGroupName = faker.company.name(),
 	members: string[] = [],
-	id = faker.number.int({ min: 100 }).toString()
+	id = faker.number.int({ min: 100 }).toString(),
+	folderId = '7'
 ): CnItem => {
 	const mappedMembers = members.map<CnItem['m'][number]>((member) => ({
 		type: 'I',
@@ -113,7 +114,7 @@ export const createCnItem = (
 
 	return {
 		id,
-		l: '7',
+		l: folderId,
 		d: faker.date.recent().valueOf(),
 		rev: 12974,
 		fileAsStr: contactGroupName,
