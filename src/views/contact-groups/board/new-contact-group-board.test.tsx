@@ -141,7 +141,11 @@ describe('New contact group board', () => {
 			const spyReplaceHistory = jest.spyOn(shell, 'replaceHistory');
 
 			const newName = faker.string.alpha(10);
-			const { user } = setupTest(<NewContactGroupBoard />, { initialEntries: ['/contact-groups'] });
+			const store = generateStore();
+			const { user } = setupTest(<NewContactGroupBoard />, {
+				initialEntries: ['/contact-groups'],
+				store
+			});
 			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
 			await user.clear(nameInput);
 			await user.type(nameInput, newName);

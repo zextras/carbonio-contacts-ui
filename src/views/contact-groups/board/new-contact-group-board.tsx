@@ -36,8 +36,16 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 	const redirectTo = useRedirectToContactGroup();
 
 	const onSave = useCallback(() => {
-		dispatch(createContactGroup({ title: nameValue, members: memberListEmails, folderId }))
-			.then((res) => {
+		dispatch(createContactGroup({ title: nameValue, members: memberListEmails, folderId })).then(
+			(res) => {
+				if ('error' in res) {
+					createSnackbar({
+						key: new Date().toLocaleString(),
+						severity: 'error',
+						label: t('label.error_try_again', 'Something went wrong, please try again')
+					});
+					return;
+				}
 				const contactGroup = res.payload as ContactGroup;
 				if (pathname.includes(CONTACT_GROUPS_PATH)) {
 					const element = window.document.getElementById(contactGroup.id);
@@ -56,14 +64,8 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 					)
 				});
 				closeBoard();
-			})
-			.catch(() => {
-				createSnackbar({
-					key: new Date().toLocaleString(),
-					severity: 'error',
-					label: t('label.error_try_again', 'Something went wrong, please try again')
-				});
-			});
+			}
+		);
 	}, [
 		dispatch,
 		nameValue,
