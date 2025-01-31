@@ -11,6 +11,7 @@ import 'jest-styled-components';
 import { act, waitFor, within } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { http, HttpResponse } from 'msw';
+import { useHistory } from 'react-router-dom';
 
 import NewContactGroupBoard from './new-contact-group-board';
 import { getSetupServer } from '../../../carbonio-ui-commons/test/jest-setup';
@@ -40,7 +41,10 @@ beforeAll(() => {
 beforeEach(() => {
 	spyUseBoard();
 });
-
+jest.mock('react-router-dom', () => ({
+	...jest.requireActual('react-router-dom'),
+	useHistory: jest.fn()
+}));
 function setupNewContactGroupBoard(): ReturnType<typeof setupTest> {
 	const store = generateStore();
 	return setupTest(<NewContactGroupBoard />, { store });
@@ -128,7 +132,7 @@ describe('New contact group board', () => {
 			expect(await screen.findByText('Contact group successfully created')).toBeVisible();
 		});
 
-		it('should redirect to contact groups after creating successfully', async () => {
+		it('should redirect to contacts after creating successfully', async () => {
 			getSetupServer().use(
 				http.post('/service/soap/CreateContactRequest', async () =>
 					HttpResponse.json({
@@ -138,10 +142,13 @@ describe('New contact group board', () => {
 					})
 				)
 			);
-			const spyReplaceHistory = jest.spyOn(shell, 'replaceHistory');
 
 			const newName = faker.string.alpha(10);
 			const store = generateStore();
+			const spyReplaceHistory = jest.fn();
+			(useHistory as jest.Mock).mockReturnValue({
+				replace: spyReplaceHistory
+			});
 			const { user } = setupTest(<NewContactGroupBoard />, {
 				initialEntries: ['/contact-groups'],
 				store
@@ -326,7 +333,9 @@ describe('New contact group board', () => {
 			});
 			await screen.findByText('Contact group successfully created');
 
-			expect(createContactGroupSpy).toHaveBeenCalledWith('New Group', [newEmail1]);
+			expect(createContactGroupSpy).toHaveBeenCalledWith(
+				expect.objectContaining({ title: 'New Group', members: [newEmail1] })
+			);
 		});
 
 		it('should use inserted name in createContact request', async () => {
@@ -355,7 +364,9 @@ describe('New contact group board', () => {
 			});
 			await screen.findByText('Contact group successfully created');
 
-			expect(createContactGroupSpy).toBeCalledWith(newName, []);
+			expect(createContactGroupSpy).toBeCalledWith(
+				expect.objectContaining({ title: newName, members: [] })
+			);
 		});
 	});
 
