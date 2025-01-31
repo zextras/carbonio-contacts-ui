@@ -494,32 +494,6 @@ describe('Folder panel', () => {
 					recipients: [expect.objectContaining({ email: member })]
 				});
 			});
-			it('should display list item as active after clicking on it', async () => {
-				const contactGroupId = '111';
-				const contactGroupName = 'My Contact Group';
-				const folderId = '7';
-				registerFindContactGroupsHandler({
-					findContactGroupsResponse: createFindContactGroupsResponse(
-						[
-							createCnItem(contactGroupName, [], contactGroupId, folderId),
-							...[...Array(2)].map(() => createCnItem())
-						],
-						false
-					),
-					offset: 0
-				});
-				const {
-					result: { current: theme }
-				} = setupHook(useTheme);
-				const activeBackground = `background: ${theme.palette.highlight.focus}`;
-
-				const { user } = setupFolderPanel(folderId);
-
-				const styledListItem = await screen.findByTestId(`custom-list-item-${contactGroupId}`);
-				const listItem = await within(styledListItem).findByText(contactGroupName);
-				await user.click(listItem);
-				expect(styledListItem).toHaveStyle(activeBackground);
-			});
 		});
 
 		describe('Delete contact group action', () => {

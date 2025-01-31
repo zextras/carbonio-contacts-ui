@@ -17,5 +17,5 @@ export function useRedirectToContactGroup(): (contactGroup: ContactGroup) => voi
 
 export function useRedirectToContactGroupFolder(): (folderId: string) => void {
 	const replaceHistory = useReplaceHistoryCallback();
-	return (folderId: string) => replaceHistory(`/folder/${folderId}/${CONTACT_GROUPS_PATH}`);
+	return (folderId: string) => replaceHistory(`/folder/${folderId}`);
 }

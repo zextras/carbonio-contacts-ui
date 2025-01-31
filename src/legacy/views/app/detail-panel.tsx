@@ -10,9 +10,9 @@ import { trimEnd } from 'lodash';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 
 import SelectionInteractive from './selection-interactive';
+import { ContactGroupDisplayer } from '../../../views/contact-groups/displayer/contact-group-displayer';
 import ContactEditPanel from '../edit/contact-edit-panel';
 import ContactPreviewPanel from '../preview/contact-preview-panel';
-import { ContactGroupDisplayer } from '../../../views/contact-groups/displayer/contact-group-displayer';
 
 export const DetailPanel = (): React.JSX.Element => {
 	const { path } = useRouteMatch();

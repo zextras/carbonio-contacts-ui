@@ -7,8 +7,9 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { within } from '@testing-library/react';
+import { useTheme } from '@zextras/carbonio-design-system';
 
-import { screen, setupTest } from '../../../../carbonio-ui-commons/test/test-setup';
+import { screen, setupHook, setupTest } from '../../../../carbonio-ui-commons/test/test-setup';
 import { EMPTY_DISPLAYER_HINT, TESTID_SELECTORS } from '../../../../constants/tests';
 import {
 	createFindContactGroupsResponse,
@@ -26,15 +27,16 @@ function setupFolderView(folderId: string): any {
 	});
 }
 
-describe('Contact Group Displayer', () => {
+describe('Contact Group View', () => {
 	it('should show the empty displayer message as default', async () => {
+		const NO_CONTACT_MESSAGE = 'It looks like there are no contacts yet';
 		registerFindContactGroupsHandler({
 			findContactGroupsResponse: createFindContactGroupsResponse([]),
 			offset: 0
 		});
 		setupFolderView('1');
 
-		expect(await screen.findByText(EMPTY_DISPLAYER_HINT)).toBeVisible();
+		expect(await screen.findByText(NO_CONTACT_MESSAGE)).toBeVisible();
 	});
 
 	it('Clicking on a contact group in the list opens the displayer for that item', async () => {
@@ -56,30 +58,55 @@ describe('Contact Group Displayer', () => {
 	});
 
 	it('Click on close action closes the displayer', async () => {
-		const cnItem = createCnItem();
+		const EMPTY_BOARD_MESSAGE = 'Create a new contact by clicking the “NEW” button.';
+		const contactGroupId = '111';
+		const contactGroupName = 'My Contact Group';
+		const folderId = '7';
+		const contactGroup = createCnItem(contactGroupName, [], contactGroupId, folderId);
 		registerFindContactGroupsHandler({
-			findContactGroupsResponse: createFindContactGroupsResponse([cnItem]),
+			findContactGroupsResponse: createFindContactGroupsResponse([contactGroup]),
 			offset: 0
 		});
-		const { user } = setupFolderView();
-		await screen.findAllByText(cnItem.fileAsStr);
-		const listItem = within(screen.getByTestId(TESTID_SELECTORS.mainList)).getByText(
-			cnItem.fileAsStr
-		);
+		const { user } = setupFolderView(folderId);
+
+		const listItem = await screen.findByText(contactGroupName);
 		await user.click(listItem);
-		expect(screen.queryByText(EMPTY_DISPLAYER_HINT)).not.toBeInTheDocument();
 		const closeButton = screen.getByRoleWithIcon('button', {
 			icon: TESTID_SELECTORS.icons.closeDisplayer
 		});
-		await screen.findByTestId('contact-group-displayer');
+
+		expect(screen.getByTestId('contact-group-displayer')).toBeVisible();
 		expect(closeButton).toBeVisible();
 		expect(closeButton).toBeEnabled();
 		await user.click(closeButton);
-		await screen.findByText(EMPTY_DISPLAYER_HINT);
-		// contact group name is shown only 1 time, inside the list
-		expect(screen.getByText(cnItem.fileAsStr)).toBeVisible();
-		expect(
-			screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.closeDisplayer })
-		).not.toBeInTheDocument();
+		expect(screen.queryByTestId('contact-group-displayer')).not.toBeInTheDocument();
+		await screen.findByText(EMPTY_BOARD_MESSAGE);
+	});
+
+	it('should display list item as active after clicking on it', async () => {
+		const contactGroupId = '111';
+		const contactGroupName = 'My Contact Group';
+		const folderId = '7';
+		registerFindContactGroupsHandler({
+			findContactGroupsResponse: createFindContactGroupsResponse(
+				[
+					createCnItem(contactGroupName, [], contactGroupId, folderId),
+					...[...Array(2)].map(() => createCnItem())
+				],
+				false
+			),
+			offset: 0
+		});
+		const {
+			result: { current: theme }
+		} = setupHook(useTheme);
+		const activeBackground = `background: ${theme.palette.highlight.focus}`;
+
+		const { user } = setupFolderView(folderId);
+
+		const styledListItem = await screen.findByTestId(`custom-list-item-${contactGroupId}`);
+		const listItem = await within(styledListItem).findByText(contactGroupName);
+		await user.click(listItem);
+		expect(styledListItem).toHaveStyle(activeBackground);
 	});
 });
