@@ -10,6 +10,8 @@ import { useActionEditCG } from '../../../actions/edit-cg';
 import { useActionSendEmailCG } from '../../../actions/send-email-cg';
 import { UIAction } from '../../../actions/types';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
+import { getFolderIdParts } from '../../../carbonio-ui-commons/helpers/folders';
+import { getFolder } from '../../../carbonio-ui-commons/store/zustand/folder';
 import { ContactGroup } from '../../../model/contact-group';
 import { useActionDeleteContactGroup } from '../api/delete-contact-group';
 
@@ -39,10 +41,17 @@ export const useContactGroupActions = (): ((contactGroup: ContactGroup) => DSAct
 	const editCGAction = useActionEditCG();
 	const sendEmailAction = useActionSendEmailCG();
 	return (contactGroup: ContactGroup): DSAction[] => {
-		const actions: Array<UIAction<ContactGroup, ContactGroup>> = [deleteCGAction];
-		if (contactGroup.folderId !== FOLDERS.TRASH) {
-			actions.push(editCGAction, sendEmailAction);
+		const folder = getFolder(contactGroup.folderId);
+		const folderPartsId = getFolderIdParts(contactGroup.folderId).id;
+
+		if (folder?.perm?.includes('w')) {
+			const actions: Array<UIAction<ContactGroup, ContactGroup>> = [deleteCGAction];
+			if (folderPartsId !== FOLDERS.TRASH) {
+				actions.push(editCGAction, sendEmailAction);
+			}
+			return evaluateContactGroupActions<ContactGroup>(contactGroup, actions);
 		}
-		return evaluateContactGroupActions<ContactGroup>(contactGroup, actions);
+
+		return evaluateContactGroupActions<ContactGroup>(contactGroup, [sendEmailAction]);
 	};
 };
