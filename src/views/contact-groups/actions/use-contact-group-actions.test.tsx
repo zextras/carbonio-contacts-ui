@@ -12,12 +12,87 @@ import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { useFolderStore } from '../../../carbonio-ui-commons/store/zustand/folder';
 import { generateFolder } from '../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
 import { setupHook } from '../../../carbonio-ui-commons/test/test-setup';
+import { Folder } from '../../../carbonio-ui-commons/types';
 import { ACTION_IDS } from '../../../constants';
 import { generateStore } from '../../../legacy/tests/generators/store';
 import { buildContactGroup, buildMembers } from '../../../tests/model-builder';
 
+function mockMailComposerIntegration(): void {
+	jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([jest.fn(), true]);
+}
+
+function generateLinkFolder(folderId: string, remoteId: string, permissions: string): Folder {
+	// TODO: generator in commons does not support setting rid
+	const folder = generateFolder({
+		isLink: true,
+		id: folderId,
+		perm: permissions
+	});
+	return {
+		...folder,
+		rid: remoteId
+	} as Folder;
+}
+
 describe('useContactGroupActions', () => {
 	const store = generateStore();
+	mockMailComposerIntegration();
+
+	it('should return edit, delete and send mail action when the contact group is owned by the user', () => {
+		const folderId = 'folder-id';
+		useFolderStore.setState({
+			folders: { [folderId]: generateFolder({ id: folderId, perm: undefined }) }
+		});
+		const contactGroup = buildContactGroup({
+			folderId,
+			members: buildMembers(faker.number.int({ min: 1, max: 3 }))
+		});
+
+		const { result } = setupHook(() => useContactGroupActions()(contactGroup), { store });
+		expect(result.current).toHaveLength(3);
+		expect(result.current[0].id).toBe(ACTION_IDS.sendEmailCG);
+		expect(result.current[1].id).toBe(ACTION_IDS.editCG);
+		expect(result.current[2].id).toBe(ACTION_IDS.deleteCG);
+	});
+
+	describe('Group is in shared folder/mountpoint', () => {
+		it('should return send, edit, delete actions when shared folder/mountpoint has write permission', () => {
+			const remoteFolderId = '123';
+			const folderId = 'folder-id';
+			const mountpoint = generateLinkFolder(folderId, remoteFolderId, 'rw');
+			useFolderStore.setState({
+				folders: { [folderId]: mountpoint }
+			});
+			const contactGroup = buildContactGroup({
+				folderId: `${faker.string.uuid()}:${remoteFolderId}`,
+				members: buildMembers(faker.number.int({ min: 1, max: 3 }))
+			});
+
+			const { result } = setupHook(() => useContactGroupActions()(contactGroup), { store });
+			expect(result.current).toHaveLength(3);
+			expect(result.current[0].id).toBe(ACTION_IDS.sendEmailCG);
+			expect(result.current[1].id).toBe(ACTION_IDS.editCG);
+			expect(result.current[2].id).toBe(ACTION_IDS.deleteCG);
+		});
+
+		it('should return only send action when shared folder/mountpoint does not have write permission', () => {
+			const remoteFolderId = '123';
+			const folderId = '789';
+			const mountpoint = generateLinkFolder(folderId, remoteFolderId, 'r');
+			useFolderStore.setState({
+				folders: { [folderId]: mountpoint }
+			});
+			const contactGroup = buildContactGroup({
+				folderId: `${faker.string.uuid()}:${remoteFolderId}`,
+				members: buildMembers(faker.number.int({ min: 1, max: 3 }))
+			});
+
+			const { result } = setupHook(() => useContactGroupActions()(contactGroup), { store });
+			expect(result.current).toHaveLength(1);
+			expect(result.current[0].id).toBe(ACTION_IDS.sendEmailCG);
+		});
+	});
+
 	it('should return send mail action when the contact group has at least 1 member', () => {
 		jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([jest.fn(), true]);
 		const contactGroup = buildContactGroup({
