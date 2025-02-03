@@ -122,7 +122,7 @@ export const CommonContactGroupBoard = ({
 						? t('folders.contacts', 'Contacts')
 						: item.name,
 				value: item.id,
-				color: ZIMBRA_STANDARD_COLORS[item.color || 0].hex
+				color: ZIMBRA_STANDARD_COLORS[item.color ?? 0].hex
 			})),
 		[folderWithWritePerm, t]
 	);

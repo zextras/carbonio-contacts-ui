@@ -12,7 +12,6 @@ import { useLocation } from 'react-router-dom';
 
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { useAppDispatch } from '../../../legacy/hooks/redux';
-import { ContactGroup } from '../../../model/contact-group';
 import {
 	CommonContactGroupBoard,
 	isContactGroupNameInvalid
@@ -46,7 +45,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 					});
 					return;
 				}
-				const contactGroup = res.payload as ContactGroup;
+				const contactGroup = res.payload;
 				if (pathname.includes(CONTACT_GROUPS_PATH)) {
 					const element = window.document.getElementById(contactGroup.id);
 					if (element) {

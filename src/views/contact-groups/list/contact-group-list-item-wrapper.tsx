@@ -14,29 +14,19 @@ import { ContactGroupListItem } from './contact-group-list-item';
 
 type ContactGroupListItemWrapperProps = {
 	contactGroup: ContactGroup;
-};
-
-type DraggableContactGroupListItemWrapper = ContactGroupListItemWrapperProps & {
-	folderId?: string;
-	selecting?: boolean;
-	active?: boolean;
-	toggle?: (id: string) => void;
 	setDraggedIds?: (ids: Record<string, boolean>) => void;
 	setIsDragging?: (id: boolean) => void;
 	selectedItems?: Record<string, boolean>;
-	selected?: boolean;
 	dragImageRef?: React.RefObject<HTMLElement>;
 };
 
 export const ContactGroupListItemWrapper = ({
 	contactGroup,
-	selectedItems,
-	selecting,
 	setDraggedIds,
 	setIsDragging,
-	dragImageRef,
-	active
-}: DraggableContactGroupListItemWrapper): React.JSX.Element => {
+	selectedItems,
+	dragImageRef
+}: ContactGroupListItemWrapperProps): React.JSX.Element => {
 	const actions = useContactGroupActions()(contactGroup);
 	const ids = useMemo(() => Object.keys(selectedItems ?? []), [selectedItems]);
 	const redirectTo = useRedirectToContactGroup();

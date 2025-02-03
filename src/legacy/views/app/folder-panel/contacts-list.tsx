@@ -104,11 +104,6 @@ export const ContactsList = ({
 							{(): React.JSX.Element => (
 								<ContactGroupListItemWrapper
 									contactGroup={contact}
-									selected={isSelected}
-									folderId={folderId}
-									selecting={isSelecting}
-									active={active}
-									toggle={toggle}
 									setDraggedIds={setDraggedIds}
 									setIsDragging={setIsDragging}
 									selectedItems={selected}
