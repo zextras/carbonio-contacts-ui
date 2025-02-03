@@ -8,6 +8,7 @@ import { faker } from '@faker-js/faker';
 import * as shell from '@zextras/carbonio-shell-ui';
 
 import { useContactGroupActions } from './use-contact-group-actions';
+import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { setupHook } from '../../../carbonio-ui-commons/test/test-setup';
 import { ACTION_IDS } from '../../../constants';
 import { generateStore } from '../../../legacy/tests/generators/store';
@@ -51,6 +52,21 @@ describe('useContactGroupActions', () => {
 			icon: 'Trash2Outline',
 			onClick: expect.anything(),
 			color: 'error'
+		});
+	});
+
+	describe('Trash folder', () => {
+		it('should return only delete action', () => {
+			const contactGroup = buildContactGroup({ folderId: FOLDERS.TRASH });
+			const { result } = setupHook(() => useContactGroupActions()(contactGroup), { store });
+			expect(result.current).toHaveLength(1);
+			expect(result.current).toContainEqual({
+				id: ACTION_IDS.deleteCG,
+				label: 'Delete',
+				icon: 'Trash2Outline',
+				onClick: expect.anything(),
+				color: 'error'
+			});
 		});
 	});
 });

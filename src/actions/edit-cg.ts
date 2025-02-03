@@ -12,7 +12,7 @@ import { UIAction } from './types';
 import { ACTION_IDS, EDIT_CONTACT_GROUP_BOARD_ID } from '../constants';
 import { ContactGroup } from '../model/contact-group';
 
-export type EditActionCG = UIAction<ContactGroup, never>;
+export type EditActionCG = UIAction<ContactGroup, ContactGroup>;
 
 export const useActionEditCG = (): EditActionCG => {
 	const [t] = useTranslation();

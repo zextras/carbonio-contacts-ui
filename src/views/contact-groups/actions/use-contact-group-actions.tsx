@@ -6,50 +6,31 @@
 
 import { type Action as DSAction } from '@zextras/carbonio-design-system';
 
-import { EditActionCG, useActionEditCG } from '../../../actions/edit-cg';
-import { SendEmailActionCG, useActionSendEmailCG } from '../../../actions/send-email-cg';
+import { useActionEditCG } from '../../../actions/edit-cg';
+import { useActionSendEmailCG } from '../../../actions/send-email-cg';
 import { UIAction } from '../../../actions/types';
+import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { ContactGroup } from '../../../model/contact-group';
 import { useActionDeleteContactGroup } from '../api/delete-contact-group';
 
 function evaluateContactGroupActions<T extends ContactGroup>(
 	contactGroup: T,
-	deleteCGAction: UIAction<T, never>,
-	editCGAction: EditActionCG,
-	sendEmailAction: SendEmailActionCG
+	actions: Array<UIAction<T, T>>
 ): DSAction[] {
 	const orderedActions: DSAction[] = [];
-	if (sendEmailAction.canExecute(contactGroup)) {
-		orderedActions.push({
-			id: sendEmailAction.id,
-			label: sendEmailAction.label,
-			onClick: () => {
-				sendEmailAction.execute(contactGroup);
-			},
-			icon: sendEmailAction.icon
-		});
-	}
-	if (editCGAction?.canExecute()) {
-		orderedActions.push({
-			id: editCGAction.id,
-			label: editCGAction.label,
-			icon: editCGAction.icon,
-			onClick: () => {
-				editCGAction.execute(contactGroup);
-			}
-		});
-	}
-	if (deleteCGAction?.canExecute()) {
-		orderedActions.push({
-			id: deleteCGAction.id,
-			label: deleteCGAction.label,
-			onClick: () => {
-				deleteCGAction.execute(contactGroup);
-			},
-			icon: deleteCGAction.icon,
-			color: deleteCGAction.color
-		});
-	}
+	actions.forEach((action) => {
+		if (action.canExecute(contactGroup)) {
+			orderedActions.push({
+				id: action.id,
+				label: action.label,
+				onClick: () => {
+					action.execute(contactGroup);
+				},
+				icon: action.icon,
+				color: action.color
+			});
+		}
+	});
 	return orderedActions;
 }
 
@@ -57,11 +38,11 @@ export const useContactGroupActions = (): ((contactGroup: ContactGroup) => DSAct
 	const deleteCGAction = useActionDeleteContactGroup();
 	const editCGAction = useActionEditCG();
 	const sendEmailAction = useActionSendEmailCG();
-	return (contactGroup: ContactGroup): DSAction[] =>
-		evaluateContactGroupActions<ContactGroup>(
-			contactGroup,
-			deleteCGAction,
-			editCGAction,
-			sendEmailAction
-		);
+	return (contactGroup: ContactGroup): DSAction[] => {
+		const actions: Array<UIAction<ContactGroup, ContactGroup>> = [deleteCGAction];
+		if (contactGroup.folderId !== FOLDERS.TRASH) {
+			actions.push(editCGAction, sendEmailAction);
+		}
+		return evaluateContactGroupActions<ContactGroup>(contactGroup, actions);
+	};
 };

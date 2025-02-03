@@ -24,7 +24,7 @@ import { ContactGroup } from '../../../model/contact-group';
 import { apiClient } from '../../../network/api-client';
 import { useRedirectToContactGroupFolder } from '../navigation';
 
-type DeleteCGActionBase<T extends ContactGroup> = UIAction<T, never>;
+type DeleteCGActionBase<T extends ContactGroup> = UIAction<T, T>;
 export type DeleteCGAction = DeleteCGActionBase<ContactGroup>;
 
 type DeleteContactGroupActionReturn = {
