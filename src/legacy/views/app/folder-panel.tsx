@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { ReactElement, useEffect, useMemo, useRef, useState } from 'react';
+import React, { ReactElement, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Container, MultiButton, Row, Tooltip } from '@zextras/carbonio-design-system';
 import { useAppContext } from '@zextras/carbonio-shell-ui';
@@ -37,6 +37,8 @@ const FILTER_TYPES = {
 	CONTACT_GROUP: 'CONTACT_GROUP'
 } as const;
 
+type ContactFilterType = (typeof FILTER_TYPES)[keyof typeof FILTER_TYPES];
+
 export const FolderPanel = (): ReactElement => {
 	const [t] = useTranslation();
 	const isFirstRender = useRef(true);
@@ -45,9 +47,7 @@ export const FolderPanel = (): ReactElement => {
 	const folder = useFolder(folderId);
 	const { setCount } = useAppContext<UseAppContextType>();
 	const { selected, isSelecting, toggle, deselectAll } = useSelection(folderId, setCount);
-	const [activeFilter, setActiveFilter] = useState<
-		(typeof FILTER_TYPES)[keyof typeof FILTER_TYPES]
-	>(FILTER_TYPES.ALL);
+	const [activeFilter, setActiveFilter] = useState<ContactFilterType>(FILTER_TYPES.ALL);
 	const contacts = useAppSelector((state) => selectAllContactsInFolder(state, folderId));
 	const searchRequestStatus = useAppSelector((state) => selectContactsStatus(state, folderId));
 	const sortedContacts = useMemo(
@@ -77,6 +77,13 @@ export const FolderPanel = (): ReactElement => {
 			isFirstRender.current = false;
 		});
 	}, [activeFilter, dispatch, folderId, searchRequestStatus]);
+	const selectType = useCallback(
+		(filterType: ContactFilterType) => {
+			dispatch(handleResetContactFolderSync(folderId));
+			setActiveFilter(filterType);
+		},
+		[dispatch, folderId]
+	);
 
 	const selectOptions = [
 		{
@@ -85,10 +92,7 @@ export const FolderPanel = (): ReactElement => {
 			icon: 'Team',
 			label: t('folder_panel.option.all_contacts', 'All'),
 			value: FILTER_TYPES.CONTACT,
-			onClick: (): void => {
-				dispatch(handleResetContactFolderSync(folderId));
-				setActiveFilter(FILTER_TYPES.ALL);
-			},
+			onClick: (): void => selectType(FILTER_TYPES.ALL),
 			selected: activeFilter === FILTER_TYPES.ALL
 		},
 		{
@@ -96,10 +100,7 @@ export const FolderPanel = (): ReactElement => {
 			icon: 'PersonOutline',
 			label: t('folder_panel.option.contacts', 'Contacts'),
 			value: FILTER_TYPES.CONTACT,
-			onClick: (): void => {
-				dispatch(handleResetContactFolderSync(folderId));
-				setActiveFilter(FILTER_TYPES.CONTACT);
-			},
+			onClick: (): void => selectType(FILTER_TYPES.CONTACT),
 			selected: activeFilter === FILTER_TYPES.CONTACT
 		},
 		{
@@ -107,10 +108,7 @@ export const FolderPanel = (): ReactElement => {
 			id: FILTER_TYPES.CONTACT_GROUP,
 			label: t('folder_panel.option.contact_group', 'Contact Groups'),
 			value: FILTER_TYPES.CONTACT_GROUP,
-			onClick: (): void => {
-				dispatch(handleResetContactFolderSync(folderId));
-				setActiveFilter(FILTER_TYPES.CONTACT_GROUP);
-			},
+			onClick: (): void => selectType(FILTER_TYPES.CONTACT_GROUP),
 			selected: activeFilter === FILTER_TYPES.CONTACT_GROUP
 		}
 	];
