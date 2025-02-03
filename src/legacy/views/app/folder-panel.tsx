@@ -7,7 +7,7 @@ import React, { ReactElement, useEffect, useMemo, useRef, useState } from 'react
 
 import { Container, MultiButton, Row, Tooltip } from '@zextras/carbonio-design-system';
 import { useAppContext } from '@zextras/carbonio-shell-ui';
-import { filter, noop, orderBy } from 'lodash';
+import { filter, find, noop, orderBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
@@ -18,9 +18,10 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { useSelection } from '../../hooks/useSelection';
 import { searchContactsAsyncThunk } from '../../store/actions/search-contacts';
 import { selectAllContactsInFolder, selectContactsStatus } from '../../store/selectors/contacts';
+import { handleResetContactFolderSync } from '../../store/slices/contacts-slice';
 import { ActionsContextProvider } from '../../ui-actions/actions-context';
-import { SelectPanelActions } from '../folder/select-panel-actions';
 import { isGroup } from '../../utils/helpers';
+import { SelectPanelActions } from '../folder/select-panel-actions';
 
 type RouteParams = {
 	folderId: string;
@@ -31,9 +32,10 @@ type UseAppContextType = {
 };
 
 const FILTER_TYPES = {
+	ALL: 'ALL',
 	CONTACT: 'CONTACT',
-	CONTACT_GROUP: 'CONTACT-GROUP'
-};
+	CONTACT_GROUP: 'CONTACT_GROUP'
+} as const;
 
 export const FolderPanel = (): ReactElement => {
 	const [t] = useTranslation();
@@ -43,7 +45,9 @@ export const FolderPanel = (): ReactElement => {
 	const folder = useFolder(folderId);
 	const { setCount } = useAppContext<UseAppContextType>();
 	const { selected, isSelecting, toggle, deselectAll } = useSelection(folderId, setCount);
-	const [activeFilter, setActiveFilter] = useState(FILTER_TYPES.CONTACT);
+	const [activeFilter, setActiveFilter] = useState<
+		(typeof FILTER_TYPES)[keyof typeof FILTER_TYPES]
+	>(FILTER_TYPES.ALL);
 	const contacts = useAppSelector((state) => selectAllContactsInFolder(state, folderId));
 	const searchRequestStatus = useAppSelector((state) => selectContactsStatus(state, folderId));
 	const sortedContacts = useMemo(
@@ -66,36 +70,53 @@ export const FolderPanel = (): ReactElement => {
 	const selectedContacts = filter(contacts, (contact) => ids.indexOf(contact.id) !== -1);
 
 	useEffect(() => {
-		if (!isFirstRender.current || searchRequestStatus !== undefined) {
+		if (searchRequestStatus !== undefined) {
 			return;
 		}
-		dispatch(searchContactsAsyncThunk({ folderId })).finally(() => {
+		dispatch(searchContactsAsyncThunk({ folderId, type: activeFilter })).finally(() => {
 			isFirstRender.current = false;
 		});
-	}, [dispatch, folderId, searchRequestStatus]);
+	}, [activeFilter, dispatch, folderId, searchRequestStatus]);
 
-	const isContactView = activeFilter === FILTER_TYPES.CONTACT;
-	const personOutline = 'PersonOutline';
-	const peopleOutline = 'PeopleOutline';
-	const selectedViewTypeIcon = isContactView ? personOutline : peopleOutline;
 	const selectOptions = [
 		{
-			id: FILTER_TYPES.CONTACT,
-			icon: personOutline,
-			label: t('folder_panel.option.contacts', 'Contacts'),
+			id: FILTER_TYPES.ALL,
+			// TODO: ICONA PROVVISORIA
+			icon: 'Team',
+			label: t('folder_panel.option.all_contacts', 'All'),
 			value: FILTER_TYPES.CONTACT,
-			onClick: () => setActiveFilter(FILTER_TYPES.CONTACT),
-			selected: isContactView
+			onClick: (): void => {
+				dispatch(handleResetContactFolderSync(folderId));
+				setActiveFilter(FILTER_TYPES.ALL);
+			},
+			selected: activeFilter === FILTER_TYPES.ALL
 		},
 		{
-			icon: peopleOutline,
+			id: FILTER_TYPES.CONTACT,
+			icon: 'PersonOutline',
+			label: t('folder_panel.option.contacts', 'Contacts'),
+			value: FILTER_TYPES.CONTACT,
+			onClick: (): void => {
+				dispatch(handleResetContactFolderSync(folderId));
+				setActiveFilter(FILTER_TYPES.CONTACT);
+			},
+			selected: activeFilter === FILTER_TYPES.CONTACT
+		},
+		{
+			icon: 'PeopleOutline',
 			id: FILTER_TYPES.CONTACT_GROUP,
 			label: t('folder_panel.option.contact_group', 'Contact Groups'),
 			value: FILTER_TYPES.CONTACT_GROUP,
-			onClick: () => setActiveFilter(FILTER_TYPES.CONTACT_GROUP),
-			selected: !isContactView
+			onClick: (): void => {
+				dispatch(handleResetContactFolderSync(folderId));
+				setActiveFilter(FILTER_TYPES.CONTACT_GROUP);
+			},
+			selected: activeFilter === FILTER_TYPES.CONTACT_GROUP
 		}
 	];
+
+	const selectedViewTypeIcon = find(selectOptions, (option) => option.id === activeFilter)?.icon;
+
 	return (
 		<ActionsContextProvider
 			folderId={folderId}

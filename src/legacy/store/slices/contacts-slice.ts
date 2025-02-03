@@ -38,7 +38,8 @@ import { folderActionPending, folderActionRejected } from '../reducers/folder-ac
 import {
 	handleDeletedContactsSyncReducer,
 	handleCreatedContactsSyncReducer,
-	handleModifiedContactsSyncReducer
+	handleModifiedContactsSyncReducer,
+	handleResetContactFolderSyncReducer
 } from '../reducers/handle-contacts-sync';
 import {
 	modifyContactFulFilled,
@@ -65,7 +66,8 @@ export const contactsSlice = createSlice({
 	reducers: {
 		handleModifiedContactsSync: handleModifiedContactsSyncReducer,
 		handleCreatedContactsSync: handleCreatedContactsSyncReducer,
-		handleDeletedContactsSync: handleDeletedContactsSyncReducer
+		handleDeletedContactsSync: handleDeletedContactsSyncReducer,
+		handleResetContactFolderSync: handleResetContactFolderSyncReducer
 	},
 	extraReducers: (builder) => {
 		builder.addCase(searchContactsAsyncThunk.pending, searchContactsPending);
@@ -97,8 +99,12 @@ export const contactsSlice = createSlice({
 	}
 });
 
-export const { handleCreatedContactsSync, handleModifiedContactsSync, handleDeletedContactsSync } =
-	contactsSlice.actions;
+export const {
+	handleCreatedContactsSync,
+	handleModifiedContactsSync,
+	handleDeletedContactsSync,
+	handleResetContactFolderSync
+} = contactsSlice.actions;
 export const contactSliceReducer = contactsSlice.reducer;
 
 export const selectFolderHasMore = (state: State, id: string): boolean =>

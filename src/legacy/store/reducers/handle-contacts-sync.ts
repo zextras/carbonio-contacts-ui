@@ -75,3 +75,14 @@ export function handleDeletedContactsSyncReducer(
 ): void {
 	removeContactsFromStore(state, payload);
 }
+
+export function handleResetContactFolderSyncReducer(
+	state: ContactsSlice,
+	{ payload }: { payload: string }
+): void {
+	const folderId = payload;
+	state.contacts[folderId] = [];
+	delete state.searchedInFolder[folderId];
+	state.status.pendingActions = false;
+	delete state.status[folderId];
+}
