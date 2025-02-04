@@ -186,11 +186,11 @@ it('should reload contacts when switching back to initial folder after changing 
 	});
 	const folder1ContactGroupName = faker.company.name();
 	const folder1ContactEmail = faker.internet.email();
-	const folder1SoapContact = createSoapContact({ folderId: folderId1, email: folder1ContactEmail });
-	const folder1SoapContactGroup = createCnItem(folder1ContactGroupName, [], '1', folderId1);
+	const folder1Contact = createSoapContact({ folderId: folderId1, email: folder1ContactEmail });
+	const folder1ContactGroup = createCnItem(folder1ContactGroupName, [], '1', folderId1);
 	const folder1SearchAllContactsInterceptor = createContactsApiInterceptor([
-		folder1SoapContactGroup,
-		folder1SoapContact
+		folder1ContactGroup,
+		folder1Contact
 	]);
 
 	const { user } = setupFolderView(folderId1, `/folder/${folderId2}`);
@@ -200,41 +200,37 @@ it('should reload contacts when switching back to initial folder after changing 
 	expect(await screen.findByText(folder1ContactGroupName)).toBeVisible();
 	makeListItemsVisible();
 	expect(screen.getByText(folder1ContactEmail)).toBeVisible();
-	const folder2contactEmail = faker.internet.email();
-	const folder2contactGroupName = faker.company.name();
-	const folder2soapContact = createSoapContact({ folderId: folderId2, email: folder2contactEmail });
-	const folder2SoapContactGroup = createCnItem(folder2contactGroupName, [], '1', folderId1);
+	const folder2ContactEmail = faker.internet.email();
+	const folder2ContactGroupName = faker.company.name();
+	const folder2Contact = createSoapContact({ folderId: folderId2, email: folder2ContactEmail });
+	const folder2ContactGroup = createCnItem(folder2ContactGroupName, [], '1', folderId1);
 	const folder2SearchAllContactsInterceptor = createContactsApiInterceptor([
-		folder2soapContact,
-		folder2SoapContactGroup
+		folder2Contact,
+		folder2ContactGroup
 	]);
 	await user.click(screen.getByTestId('navigation-to'));
 	await folder2SearchAllContactsInterceptor;
 
-	expect(await screen.findByText(folder2contactGroupName)).toBeVisible();
+	expect(await screen.findByText(folder2ContactGroupName)).toBeVisible();
 	makeListItemsVisible();
-	expect(screen.getByText(folder2contactEmail)).toBeVisible();
+	expect(screen.getByText(folder2ContactEmail)).toBeVisible();
 	expect(screen.queryByText(folder1ContactEmail)).not.toBeInTheDocument();
 
 	const selectContactsViewDropdown = await screen.findByTestId('icon: ChevronDownOutline');
 	await user.click(selectContactsViewDropdown);
-	const folder2SearchOnlyGroupsInterceptor = createContactsApiInterceptor([
-		folder2SoapContactGroup
-	]);
+	const folder2SearchOnlyGroupsInterceptor = createContactsApiInterceptor([folder2ContactGroup]);
 	await user.click(await screen.findByText('Contact Groups'));
 	await folder2SearchOnlyGroupsInterceptor;
 
-	expect(await screen.findByText(folder2contactGroupName)).toBeVisible();
+	expect(await screen.findByText(folder2ContactGroupName)).toBeVisible();
 	makeListItemsVisible();
-	expect(screen.queryByText(folder2contactEmail)).not.toBeInTheDocument();
-	const folder1SearchOnlyGroupsInterceptor = createContactsApiInterceptor([
-		folder1SoapContactGroup
-	]);
+	expect(screen.queryByText(folder2ContactEmail)).not.toBeInTheDocument();
+	const folder1SearchOnlyGroupsInterceptor = createContactsApiInterceptor([folder1ContactGroup]);
 	await user.click(screen.getByTestId('navigation-back'));
 	await folder1SearchOnlyGroupsInterceptor;
 
 	expect(await screen.findByText(folder1ContactGroupName)).toBeVisible();
 	makeListItemsVisible();
 	expect(screen.queryByText(folder1ContactEmail)).not.toBeInTheDocument();
-	expect(screen.queryByText(folder2contactGroupName)).not.toBeInTheDocument();
+	expect(screen.queryByText(folder2ContactGroupName)).not.toBeInTheDocument();
 });
