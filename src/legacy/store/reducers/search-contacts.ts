@@ -5,7 +5,7 @@
  */
 
 import { SEARCHED_FOLDER_STATE_STATUS } from '../../../constants';
-import { SearchRequestAsyncThunkProps, SearchResponse } from '../../../types';
+import { SearchRequestAsyncThunkProps, SearchContactsSoapResponse } from '../../../types';
 import { ContactsSlice, State } from '../../types/store';
 import { addContactsToStore } from '../../utils/helpers';
 import { normalizeContactsFromSoap } from '../../utils/normalizations/normalize-contact-from-soap';
@@ -20,7 +20,7 @@ export function searchContactsRejected(state: ContactsSlice): void {
 
 export function searchContactsFullFilled(
 	state: State['contacts'],
-	{ meta, payload }: { meta: SearchRequestAsyncThunkProps; payload: SearchResponse }
+	{ meta, payload }: { meta: SearchRequestAsyncThunkProps; payload: SearchContactsSoapResponse }
 ): void {
 	const contacts = normalizeContactsFromSoap(payload?.cn);
 	if (state.contacts) {

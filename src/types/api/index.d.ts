@@ -29,11 +29,21 @@ export type SortBy =
 	| 'readAsc'
 	| 'readDesc';
 
-export type SearchResponse = {
+export type SearchContactsSoapResponse = {
 	cn: Array<SoapContact>;
 	more: boolean;
 	offset: number;
 	sortBy: SortBy;
+};
+export type SearchContactsSoapRequest = {
+	_jsns: string;
+	limit?: number;
+	offset?: number;
+	sortBy?: string;
+	types: 'contact';
+	query?: {
+		_content: string;
+	};
 };
 
 export type SearchContactsRequest = {
