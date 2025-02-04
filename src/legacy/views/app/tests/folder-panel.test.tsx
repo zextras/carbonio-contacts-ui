@@ -576,4 +576,43 @@ describe('Folder panel', () => {
 		makeListItemsVisible();
 		expect(await screen.findByText(soapContactEmail)).toBeVisible();
 	});
+
+	it('should display only contact groups after selecting contact groups filter', async () => {
+		const contactGroupName = faker.company.name();
+		const folderId = '7';
+		const soapContactGroup = createCnItem(
+			contactGroupName,
+			[faker.internet.email(), faker.internet.email()],
+			'1',
+			folderId
+		);
+		const searchAllContactsInterceptor = createSoapAPIInterceptor('Search', {
+			sortBy: 'nameAsc',
+			offset: 0,
+			cn: [],
+			more: false
+		});
+
+		const { user } = setupFolderPanel(folderId);
+
+		await searchAllContactsInterceptor;
+		expect(screen.queryByText(contactGroupName)).not.toBeInTheDocument();
+		const selectContactsViewDropdown = await screen.findByTestId('icon: ChevronDownOutline');
+		await user.click(selectContactsViewDropdown);
+		const searchContactGroupsInterceptor = createSoapAPIInterceptor('Search', {
+			sortBy: 'nameAsc',
+			offset: 0,
+			cn: [soapContactGroup],
+			more: false
+		});
+		screen.logTestingPlaygroundURL();
+		await user.click(await screen.findByText('Contact Groups'));
+		expect(await screen.findByText(contactGroupName)).toBeVisible();
+		const contactGroupsRequest = await searchContactGroupsInterceptor;
+
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore
+		expect(contactGroupsRequest.query._content).toBe(`inid:"${folderId}" and #type:group`);
+		expect(await screen.findByText(contactGroupName)).toBeInTheDocument();
+	});
 });
