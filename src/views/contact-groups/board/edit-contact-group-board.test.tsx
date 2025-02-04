@@ -18,7 +18,7 @@ import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../../constants';
 import { JEST_MOCKED_ERROR, PALETTE, TESTID_SELECTORS } from '../../../constants/tests';
 import { generateStore } from '../../../legacy/tests/generators/store';
 import * as modifyContactGroup from '../../../network/api/modify-contact';
-import { buildContactGroup, buildSharedContactGroup } from '../../../tests/model-builder';
+import { buildContactGroup } from '../../../tests/model-builder';
 import { registerModifyContactGroupHandler } from '../../../tests/msw-handlers/modify-contact-group';
 import { createCnItem, spyUseBoardHooks } from '../../../tests/utils';
 import { getContactInput } from '../../board/common-contact-group-board.test';
@@ -668,7 +668,7 @@ describe('Edit contact group board', () => {
 				icon: '',
 				title: ''
 			});
-			const sharedContactGroup = buildSharedContactGroup({
+			const sharedContactGroup = buildContactGroup({
 				title: 'Contact Group in shared account',
 				id: contactGroupId,
 				folderId

@@ -11,11 +11,3 @@ export type ContactGroup = {
 	folderId: string;
 	members: Array<string>;
 };
-
-export type SharedContactGroup = {
-	title: string;
-	id: string;
-	folderId: string;
-	members: Array<string>;
-	accountId: string;
-};
