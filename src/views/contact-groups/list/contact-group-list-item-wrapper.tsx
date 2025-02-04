@@ -49,7 +49,7 @@ export const ContactGroupListItemWrapper = ({
 	return (
 		<Drag
 			type="contact"
-			data={{ ...contactGroup, parentFolderId: contactGroup.folderId, selectedIDs: ids }}
+			data={{ ...contactGroup, parentFolderId: contactGroup.parent, selectedIDs: ids }}
 			style={{ display: 'block' }}
 			onDragStart={(e): void => dragCheck(e, contactGroup.id)}
 		>

@@ -54,7 +54,7 @@ export const createContactGroup = createAsyncThunk(
 		const cnItem = Body.CreateContactResponse.cn[0];
 		return {
 			id: cnItem.id,
-			folderId: cnItem.l,
+			parent: cnItem.l,
 			title: cnItem._attrs.fullName ?? '',
 			members: cnItem.m?.map((value) => value.value) ?? []
 		} as ContactGroup;

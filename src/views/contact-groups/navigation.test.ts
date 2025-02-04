@@ -28,7 +28,7 @@ describe('contact groups navigation', () => {
 			(useHistory as jest.Mock).mockReturnValue({
 				replace: spyReplaceHistory
 			});
-			const contactGroup = buildContactGroup({ folderId: FOLDER_ID, id: GROUP_ID });
+			const contactGroup = buildContactGroup({ parent: FOLDER_ID, id: GROUP_ID });
 			useFolderStore.setState({ folders: { [FOLDER_ID]: generateFolder({ id: FOLDER_ID }) } });
 
 			await setupHook(() => useRedirectToContactGroup()(contactGroup));
@@ -48,7 +48,7 @@ describe('contact groups navigation', () => {
 				replace: spyReplaceHistory
 			});
 			const contactGroup = buildContactGroup({
-				folderId: `${faker.string.uuid()}:${REMOTE_FOLDER_ID}`,
+				parent: `${faker.string.uuid()}:${REMOTE_FOLDER_ID}`,
 				id: GROUP_ID
 			});
 			useFolderStore.setState({ folders: { [FOLDER_ID]: mountpoint } });
@@ -69,7 +69,7 @@ describe('contact groups navigation', () => {
 			(useHistory as jest.Mock).mockReturnValue({
 				replace: spyReplaceHistory
 			});
-			const contactGroup = buildContactGroup({ folderId: FOLDER_ID, id: GROUP_ID });
+			const contactGroup = buildContactGroup({ parent: FOLDER_ID, id: GROUP_ID });
 			useFolderStore.setState({ folders: { [FOLDER_ID]: generateFolder({ id: FOLDER_ID }) } });
 
 			await setupHook(() => useRedirectToContactGroupFolder()(contactGroup));
@@ -87,7 +87,7 @@ describe('contact groups navigation', () => {
 				replace: spyReplaceHistory
 			});
 			const contactGroup = buildContactGroup({
-				folderId: `${faker.string.uuid()}:${REMOTE_FOLDER_ID}`,
+				parent: `${faker.string.uuid()}:${REMOTE_FOLDER_ID}`,
 				id: GROUP_ID
 			});
 			useFolderStore.setState({ folders: { [FOLDER_ID]: mountpoint } });

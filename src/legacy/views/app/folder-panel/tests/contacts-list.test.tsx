@@ -63,13 +63,13 @@ describe('Contact groups list', () => {
 		const contactGroups = [
 			{
 				id: faker.string.uuid(),
-				folderId,
+				parent: folderId,
 				title: 'hello',
 				members: []
 			},
 			{
 				id: faker.string.uuid(),
-				folderId,
+				parent: folderId,
 				title: 'test',
 				members: []
 			}

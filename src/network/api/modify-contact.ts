@@ -7,6 +7,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ErrorSoapBodyResponse, JSNS, soapFetch } from '@zextras/carbonio-shell-ui';
 
 import { CnItem, GenericSoapPayload } from './types';
+import { ContactGroup } from '../../model/contact-group';
 
 export type ModifyContactAttribute = { n: 'fullName' | 'nickname' | 'fileAs'; _content: string };
 
@@ -69,7 +70,7 @@ type ModifyContactGroupRequest = {
 	name?: string;
 };
 
-export const modifyContactGroup = createAsyncThunk(
+export const modifyContactGroup = createAsyncThunk<ContactGroup, ModifyContactGroupRequest>(
 	'contacts/modifyContactGroup',
 	async ({ id, addedMembers, removedMembers, name }: ModifyContactGroupRequest) => {
 		const attributes: Array<ModifyContactAttribute> | undefined = name
@@ -82,7 +83,7 @@ export const modifyContactGroup = createAsyncThunk(
 		return modifyContact({ id, addedMembers, removedMembers, attributes }).then(
 			(res: ModifyContactResponse) => ({
 				id: res.cn[0].id,
-				folderId: res.cn[0].l,
+				parent: res.cn[0].l,
 				title: res.cn[0]._attrs.fullName ?? '',
 				members: res.cn[0].m?.map((value) => value.value) ?? []
 			})

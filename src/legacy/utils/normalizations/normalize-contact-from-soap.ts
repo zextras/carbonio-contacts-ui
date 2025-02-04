@@ -139,7 +139,7 @@ export function normalizeContactsFromSoap(contact: SoapContact[]): ContactOrGrou
 					if (c._attrs?.type === 'group') {
 						const contactGroup: ContactGroup = {
 							id: c.id,
-							folderId: c.l,
+							parent: c.l,
 							title: c._attrs.fullName ?? '',
 							members: c.m?.filter((value) => value.type === 'I').map((value) => value.value) ?? []
 						};

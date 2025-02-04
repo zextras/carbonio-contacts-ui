@@ -31,7 +31,7 @@ describe('useContactGroupActions', () => {
 			folders: { [folderId]: generateFolder({ id: folderId, perm: undefined }) }
 		});
 		const contactGroup = buildContactGroup({
-			folderId,
+			parent: folderId,
 			members: buildMembers(faker.number.int({ min: 1, max: 3 }))
 		});
 
@@ -51,7 +51,7 @@ describe('useContactGroupActions', () => {
 				folders: { [folderId]: mountpoint }
 			});
 			const contactGroup = buildContactGroup({
-				folderId: `${faker.string.uuid()}:${remoteFolderId}`,
+				parent: `${faker.string.uuid()}:${remoteFolderId}`,
 				members: buildMembers(faker.number.int({ min: 1, max: 3 }))
 			});
 
@@ -70,7 +70,7 @@ describe('useContactGroupActions', () => {
 				folders: { [folderId]: mountpoint }
 			});
 			const contactGroup = buildContactGroup({
-				folderId: `${faker.string.uuid()}:${remoteFolderId}`,
+				parent: `${faker.string.uuid()}:${remoteFolderId}`,
 				members: buildMembers(faker.number.int({ min: 1, max: 3 }))
 			});
 
@@ -115,7 +115,7 @@ describe('useContactGroupActions', () => {
 		jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([jest.fn(), true]);
 		const contactGroup = buildContactGroup({
 			members: buildMembers(faker.number.int({ min: 1, max: 100 })),
-			folderId: FOLDER_ID
+			parent: FOLDER_ID
 		});
 		const { result } = setupHook(() => useContactGroupActions()(contactGroup), { store });
 
@@ -130,7 +130,7 @@ describe('useContactGroupActions', () => {
 
 	it('should return delete action if user has write permisison on folder', () => {
 		const FOLDER_ID = 'folder-id';
-		const contactGroup = buildContactGroup({ folderId: FOLDER_ID });
+		const contactGroup = buildContactGroup({ parent: FOLDER_ID });
 		useFolderStore.setState({
 			folders: { [FOLDER_ID]: generateFolder({ id: FOLDER_ID, perm: 'w' }) }
 		});
@@ -150,7 +150,7 @@ describe('useContactGroupActions', () => {
 			useFolderStore.setState({
 				folders: { [FOLDERS.TRASH]: generateFolder({ id: FOLDERS.TRASH, perm: 'w' }) }
 			});
-			const contactGroup = buildContactGroup({ folderId: FOLDERS.TRASH });
+			const contactGroup = buildContactGroup({ parent: FOLDERS.TRASH });
 			const { result } = setupHook(() => useContactGroupActions()(contactGroup), { store });
 			expect(result.current).toHaveLength(1);
 			expect(result.current).toContainEqual({
@@ -172,7 +172,7 @@ describe('useContactGroupActions', () => {
 					})
 				}
 			});
-			const contactGroup = buildContactGroup({ folderId: SHARED_ACCOUNT_TRASH_FOLDER });
+			const contactGroup = buildContactGroup({ parent: SHARED_ACCOUNT_TRASH_FOLDER });
 			const { result } = setupHook(() => useContactGroupActions()(contactGroup), { store });
 
 			expect(result.current).toHaveLength(1);

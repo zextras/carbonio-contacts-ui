@@ -12,7 +12,6 @@ import { deleteFolder } from './api/delete-folder';
 import { distributionListAction } from './api/distribution-list-action';
 import { emptyFolder } from './api/empty-folder';
 import { exportContacts } from './api/export-contacts';
-import { findContactGroups } from './api/find-contact-groups';
 import { getAccountDistributionLists } from './api/get-account-distribution-lists';
 import { getDistributionList } from './api/get-distribution-list';
 import { getDistributionListMembers } from './api/get-distribution-list-members';
@@ -33,7 +32,6 @@ export const apiClient = {
 	distributionListAction,
 	getDistributionList,
 	getDistributionListMembers,
-	findContactGroups,
 	deleteContact,
 	moveContact,
 	getAccountDistributionLists,

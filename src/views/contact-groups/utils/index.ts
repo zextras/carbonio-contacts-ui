@@ -11,8 +11,8 @@ import { ContactGroup } from '../../../model/contact-group';
 
 export function getFolderFromContactGroup(contactGroup: ContactGroup): Folder | undefined {
 	const foldersMap = getFoldersMap();
-	const { id: realFolderId } = getFolderIdParts(contactGroup.folderId);
-	let folder = getFolder(contactGroup.folderId);
+	const { id: realFolderId } = getFolderIdParts(contactGroup.parent);
+	let folder = getFolder(contactGroup.parent);
 	if (!folder) {
 		folder = Object.values(foldersMap)
 			.filter((item) => item.isLink)

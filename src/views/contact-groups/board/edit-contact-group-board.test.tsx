@@ -671,7 +671,7 @@ describe('Edit contact group board', () => {
 			const sharedContactGroup = buildContactGroup({
 				title: 'Contact Group in shared account',
 				id: contactGroupId,
-				folderId
+				parent: folderId
 			});
 			const store = generateStore({
 				contacts: {

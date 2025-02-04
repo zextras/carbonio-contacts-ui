@@ -134,7 +134,7 @@ export function isGroup(contact: ContactOrGroup): contact is ContactGroup {
 export const evaluateParentIds = (contacts: ContactOrGroup[]): Array<string> =>
 	contacts.map((contact) => {
 		if (isGroup(contact)) {
-			return contact.folderId;
+			return contact.parent;
 		}
 		return contact.parent;
 	});
@@ -149,7 +149,7 @@ export function addContactsToStore(
 		(acc, contact) => {
 			let parentKey;
 			if (isGroup(contact)) {
-				parentKey = sharedFolderParent ?? contact.folderId;
+				parentKey = sharedFolderParent ?? contact.parent;
 			} else {
 				parentKey = sharedFolderParent ?? contact.parent;
 			}

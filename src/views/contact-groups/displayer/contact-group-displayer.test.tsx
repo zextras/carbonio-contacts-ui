@@ -17,11 +17,11 @@ import { CONTACT_GROUPS_PATH } from '../navigation';
 
 describe('Displayer controller', () => {
 	const contactGroup = buildContactGroup();
-	const { folderId, id } = contactGroup;
+	const { parent, id } = contactGroup;
 	const store = generateStore({
 		contacts: {
 			contacts: {
-				[folderId]: [contactGroup]
+				[parent]: [contactGroup]
 			},
 			status: {},
 			searchedInFolder: {}
@@ -32,7 +32,7 @@ describe('Displayer controller', () => {
 			<Route path={`/folder/:folderId/:type?/:id?`}>
 				<ContactGroupDisplayer />
 			</Route>,
-			{ store, initialEntries: [`/folder/${folderId}`] }
+			{ store, initialEntries: [`/folder/${parent}`] }
 		);
 		await screen.findByText(EMPTY_DISPLAYER_HINT);
 		expect(screen.getByText(EMPTY_DISPLAYER_HINT)).toBeVisible();
@@ -46,7 +46,7 @@ describe('Displayer controller', () => {
 			<Route path={`/folder/:folderId/:type?/:id?`}>
 				<ContactGroupDisplayer />
 			</Route>,
-			{ store, initialEntries: [`/folder/${folderId}/${CONTACT_GROUPS_PATH}/${id}`] }
+			{ store, initialEntries: [`/folder/${parent}/${CONTACT_GROUPS_PATH}/${id}`] }
 		);
 
 		expect(

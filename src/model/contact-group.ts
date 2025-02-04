@@ -4,10 +4,13 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-// NOTE: in case of shared account the id is accountId:itemId and folderId is accountId:folderId so there is no collision
+/* NOTE
+ * parent may be the folderId or the mountpointId in format remoteUuid:remoteId in case of shared folder
+ *
+ * */
 export type ContactGroup = {
 	title: string;
 	id: string;
-	folderId: string;
+	parent: string;
 	members: Array<string>;
 };

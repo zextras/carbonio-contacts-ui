@@ -42,7 +42,7 @@ export const useContactGroupActions = (): ((contactGroup: ContactGroup) => DSAct
 	const sendEmailAction = useActionSendEmailCG();
 	return (contactGroup: ContactGroup): DSAction[] => {
 		const folder = getFolderFromContactGroup(contactGroup);
-		const folderPartsId = getFolderIdParts(contactGroup.folderId).id;
+		const folderPartsId = getFolderIdParts(contactGroup.parent).id;
 		if (!folder?.perm) {
 			return evaluateContactGroupActions<ContactGroup>(contactGroup, [
 				sendEmailAction,

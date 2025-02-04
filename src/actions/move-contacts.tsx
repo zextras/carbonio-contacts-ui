@@ -16,7 +16,7 @@ import { Folder } from '../carbonio-ui-commons/types/folder';
 import { ContactMoveModal } from '../components/modals/contact-move';
 import { ACTION_IDS, TIMEOUTS } from '../constants';
 import { ContactOrGroup } from '../legacy/types/contact';
-import { evaluateParentIds, isGroup } from '../legacy/utils/helpers';
+import { evaluateParentIds } from '../legacy/utils/helpers';
 import { apiClient } from '../network/api-client';
 
 export type MoveContactsAction = UIAction<
@@ -83,7 +83,7 @@ export const useActionMoveContacts = (): MoveContactsAction => {
 			}
 
 			const parentAddressBooks = contacts.reduce<Array<Folder>>((result, contact) => {
-				const folder = getFolder(isGroup(contact) ? contact.folderId : contact.parent);
+				const folder = getFolder(contact.parent);
 				if (folder) {
 					result.push(folder);
 				}

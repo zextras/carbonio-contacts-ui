@@ -20,12 +20,12 @@ import { ShareInfo } from '../model/share-info';
 export const buildContactGroup = ({
 	title = faker.company.name(),
 	id = faker.number.int({ min: 100 }).toString(),
-	folderId = '7',
+	parent = '7',
 	members = []
 }: Partial<ContactGroup> = {}): ContactGroup => ({
 	title,
 	id,
-	folderId,
+	parent,
 	members
 });
 

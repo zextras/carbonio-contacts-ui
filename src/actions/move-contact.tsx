@@ -61,12 +61,7 @@ export const useActionMoveContact = (): MoveContactAction => {
 			}
 
 			// Return false if all the given contacts already belong to the destination address book
-			const parentsIds = contacts.map((contact) => {
-				if ('members' in contact) {
-					return contact.folderId;
-				}
-				return contact.parent;
-			});
+			const parentsIds = contacts.map((contact) => contact.parent);
 			if (!parentsIds.some((parentId) => parentId !== newParentAddressBook.id)) {
 				return false;
 			}
