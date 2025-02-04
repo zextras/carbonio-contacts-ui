@@ -11,6 +11,9 @@ import { ContactGroup } from '../../model/contact-group';
 export const CONTACT_GROUPS_PATH = 'contact-groups';
 export function useRedirectToContactGroup(): (contactGroup: ContactGroup) => void {
 	const replaceHistory = useReplaceHistoryCallback();
+	// TODO: if groups is in a mountpoint, folderId is mountpointId rather than folderId.
+	// We should get the real folder id from the store.
+	// We need to understand if it is correct to store the mountpointId as folderId or not
 	return (contactGroup: ContactGroup) =>
 		replaceHistory(`/folder/${contactGroup.folderId}/${CONTACT_GROUPS_PATH}/${contactGroup.id}`);
 }
