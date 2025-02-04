@@ -22,12 +22,14 @@ import {
 } from '../../../../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../../../../constants/tests';
 import { useNavigation } from '../../../../hooks/useNavigation';
+import { CnItem } from '../../../../network/api/types';
 import {
 	createFindContactGroupsResponse,
 	registerFindContactGroupsHandler
 } from '../../../../tests/msw-handlers/find-contact-groups';
 import { createCnItem, createSoapContact } from '../../../../tests/utils';
 import { generateStore } from '../../../tests/generators/store';
+import { SoapContact } from '../../../types/soap';
 import { FolderView } from '../folder-view';
 
 function MockedButton(props: { routeTo: string; initialRoute: string }): React.JSX.Element {
@@ -164,6 +166,15 @@ describe('Contact Group View', () => {
 		});
 	});
 });
+
+function createContactsApiInterceptor(items: (CnItem | SoapContact)[]): Promise<unknown> {
+	return createSoapAPIInterceptor('Search', {
+		sortBy: 'nameAsc',
+		offset: 0,
+		cn: items,
+		more: false
+	});
+}
 it('should reload contacts when switching back to initial folder after changing the filter type', async () => {
 	useAppContext.mockReturnValue({ count: 0, setCount: jest.fn() });
 	const folderId1 = '7';
@@ -177,12 +188,10 @@ it('should reload contacts when switching back to initial folder after changing 
 	const folder1ContactEmail = faker.internet.email();
 	const folder1SoapContact = createSoapContact({ folderId: folderId1, email: folder1ContactEmail });
 	const folder1SoapContactGroup = createCnItem(folder1ContactGroupName, [], '1', folderId1);
-	const folder1SearchAllContactsInterceptor = createSoapAPIInterceptor('Search', {
-		sortBy: 'nameAsc',
-		offset: 0,
-		cn: [folder1SoapContactGroup, folder1SoapContact],
-		more: false
-	});
+	const folder1SearchAllContactsInterceptor = createContactsApiInterceptor([
+		folder1SoapContactGroup,
+		folder1SoapContact
+	]);
 
 	const { user } = setupFolderView(folderId1, `/folder/${folderId2}`);
 
@@ -195,12 +204,10 @@ it('should reload contacts when switching back to initial folder after changing 
 	const folder2contactGroupName = faker.company.name();
 	const folder2soapContact = createSoapContact({ folderId: folderId2, email: folder2contactEmail });
 	const folder2SoapContactGroup = createCnItem(folder2contactGroupName, [], '1', folderId1);
-	const folder2SearchAllContactsInterceptor = createSoapAPIInterceptor('Search', {
-		sortBy: 'nameAsc',
-		offset: 0,
-		cn: [folder2soapContact, folder2SoapContactGroup],
-		more: false
-	});
+	const folder2SearchAllContactsInterceptor = createContactsApiInterceptor([
+		folder2soapContact,
+		folder2SoapContactGroup
+	]);
 	await user.click(screen.getByTestId('navigation-to'));
 	await folder2SearchAllContactsInterceptor;
 
@@ -211,24 +218,18 @@ it('should reload contacts when switching back to initial folder after changing 
 
 	const selectContactsViewDropdown = await screen.findByTestId('icon: ChevronDownOutline');
 	await user.click(selectContactsViewDropdown);
-	const folder2SearchOnlyGroupsInterceptor = createSoapAPIInterceptor('Search', {
-		sortBy: 'nameAsc',
-		offset: 0,
-		cn: [folder2SoapContactGroup],
-		more: false
-	});
+	const folder2SearchOnlyGroupsInterceptor = createContactsApiInterceptor([
+		folder2SoapContactGroup
+	]);
 	await user.click(await screen.findByText('Contact Groups'));
 	await folder2SearchOnlyGroupsInterceptor;
 
 	expect(await screen.findByText(folder2contactGroupName)).toBeVisible();
 	makeListItemsVisible();
 	expect(screen.queryByText(folder2contactEmail)).not.toBeInTheDocument();
-	const folder1SearchOnlyGroupsInterceptor = createSoapAPIInterceptor('Search', {
-		sortBy: 'nameAsc',
-		offset: 0,
-		cn: [folder1SoapContactGroup],
-		more: false
-	});
+	const folder1SearchOnlyGroupsInterceptor = createContactsApiInterceptor([
+		folder1SoapContactGroup
+	]);
 	await user.click(screen.getByTestId('navigation-back'));
 	await folder1SearchOnlyGroupsInterceptor;
 
