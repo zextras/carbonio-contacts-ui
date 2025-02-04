@@ -98,7 +98,7 @@ describe('Folder panel', () => {
 		it('should search contacts with current filter when loading more results', async () => {
 			const folderId = '7';
 			const firstSearchInterceptor = createContactsApiInterceptor({
-				items: [createCnItem(`First group`, [], '1', folderId)],
+				items: [createCnItem(`First group`, [], 'special-1', folderId)],
 				more: false
 			});
 
@@ -110,7 +110,7 @@ describe('Folder panel', () => {
 			const expectedQueryFilter = 'and #type:group';
 			const searchGroupsInterceptor = createContactsApiInterceptor({
 				items: times(100, (index) =>
-					createCnItem(`Contact Group ${index}`, [], index.toString(), folderId)
+					createCnItem(`Contact Group ${index}`, [], `group-${index.toString()}`, folderId)
 				),
 				more: true
 			});
@@ -123,7 +123,12 @@ describe('Folder panel', () => {
 			// load more with current filter
 			const loadMoreInterceptor = createContactsApiInterceptor({
 				items: times(10, (index) =>
-					createCnItem(`More Contact Group ${index}`, [], index.toString(), folderId)
+					createCnItem(
+						`More Contact Group ${index}`,
+						[],
+						`more-group-${index.toString()}`,
+						folderId
+					)
 				),
 				more: true
 			});
