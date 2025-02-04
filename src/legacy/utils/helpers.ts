@@ -132,12 +132,7 @@ export function isGroup(contact: ContactOrGroup): contact is ContactGroup {
 }
 
 export const evaluateParentIds = (contacts: ContactOrGroup[]): Array<string> =>
-	contacts.map((contact) => {
-		if (isGroup(contact)) {
-			return contact.parent;
-		}
-		return contact.parent;
-	});
+	contacts.map((contact) => contact.parent);
 
 export function addContactsToStore(
 	state: ContactsSlice,
