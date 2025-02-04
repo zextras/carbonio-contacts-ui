@@ -58,7 +58,15 @@ function setupFolderView(folderId: string, navigateTo = `/folder/${folderId}`): 
 }
 
 describe('Contact Group View', () => {
-	it('should show the empty displayer message as default', async () => {
+	const folderId = '100';
+	const folder = generateFolder({ id: folderId });
+	beforeEach(() => {
+		useFolderStore.setState({
+			folders: { [folder.id]: folder }
+		});
+	});
+
+	it('should show the empty displayer message as default, when no item in list is selected', async () => {
 		const NO_CONTACT_MESSAGE = 'It looks like there are no contacts yet';
 		registerFindContactGroupsHandler({
 			findContactGroupsResponse: createFindContactGroupsResponse([]),
@@ -71,7 +79,6 @@ describe('Contact Group View', () => {
 
 	it('Clicking on a contact group in the list opens the displayer for that item', async () => {
 		const contactGroupName = faker.company.name();
-		const folderId = '100';
 		const contactGroup = createCnItem(contactGroupName, [], '1', folderId);
 		registerFindContactGroupsHandler({
 			findContactGroupsResponse: createFindContactGroupsResponse([contactGroup]),
@@ -91,7 +98,6 @@ describe('Contact Group View', () => {
 		const EMPTY_BOARD_MESSAGE = 'Create a new contact by clicking the “NEW” button.';
 		const contactGroupId = '111';
 		const contactGroupName = 'My Contact Group';
-		const folderId = '7';
 		const contactGroup = createCnItem(contactGroupName, [], contactGroupId, folderId);
 		registerFindContactGroupsHandler({
 			findContactGroupsResponse: createFindContactGroupsResponse([contactGroup]),
@@ -116,7 +122,6 @@ describe('Contact Group View', () => {
 	it('should display list item as active after clicking on it', async () => {
 		const contactGroupId = '111';
 		const contactGroupName = 'My Contact Group';
-		const folderId = '7';
 		registerFindContactGroupsHandler({
 			findContactGroupsResponse: createFindContactGroupsResponse(
 				[
@@ -143,7 +148,6 @@ describe('Contact Group View', () => {
 	it('should open the mail board (ContactGroupDisplayerController trigger)', async () => {
 		const openMailComposer = jest.fn();
 		const contactGroupId = '1';
-		const folderId = '20';
 		jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
 		const contactGroupName = faker.company.name();
 		const member = faker.internet.email();
