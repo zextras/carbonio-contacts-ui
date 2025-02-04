@@ -13,7 +13,6 @@ import * as shell from '@zextras/carbonio-shell-ui';
 import { useFolderStore } from '../../../../carbonio-ui-commons/store/zustand/folder';
 import { useAppContext } from '../../../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
 import { generateFolder } from '../../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
-import { createSoapAPIInterceptor } from '../../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import {
 	makeListItemsVisible,
 	screen,
@@ -22,15 +21,14 @@ import {
 } from '../../../../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../../../../constants/tests';
 import { useNavigation } from '../../../../hooks/useNavigation';
-import { CnItem } from '../../../../network/api/types';
 import {
 	createFindContactGroupsResponse,
 	registerFindContactGroupsHandler
 } from '../../../../tests/msw-handlers/find-contact-groups';
 import { createCnItem, createSoapContact } from '../../../../tests/utils';
 import { generateStore } from '../../../tests/generators/store';
-import { SoapContact } from '../../../types/soap';
 import { FolderView } from '../folder-view';
+import { createContactsApiInterceptor } from './utils';
 
 function MockedButton(props: { routeTo: string; initialRoute: string }): React.JSX.Element {
 	const { navigateTo } = useNavigation();
@@ -171,14 +169,6 @@ describe('Contact Group View', () => {
 	});
 });
 
-function createContactsApiInterceptor(items: (CnItem | SoapContact)[]): Promise<unknown> {
-	return createSoapAPIInterceptor('Search', {
-		sortBy: 'nameAsc',
-		offset: 0,
-		cn: items,
-		more: false
-	});
-}
 it('should reload contacts when switching back to initial folder after changing the filter type', async () => {
 	useAppContext.mockReturnValue({ count: 0, setCount: jest.fn() });
 	const folderId1 = '7';
@@ -192,10 +182,9 @@ it('should reload contacts when switching back to initial folder after changing 
 	const folder1ContactEmail = faker.internet.email();
 	const folder1Contact = createSoapContact({ folderId: folderId1, email: folder1ContactEmail });
 	const folder1ContactGroup = createCnItem(folder1ContactGroupName, [], '1', folderId1);
-	const folder1SearchAllContactsInterceptor = createContactsApiInterceptor([
-		folder1ContactGroup,
-		folder1Contact
-	]);
+	const folder1SearchAllContactsInterceptor = createContactsApiInterceptor({
+		items: [folder1ContactGroup, folder1Contact]
+	});
 
 	const { user } = setupFolderView(folderId1, `/folder/${folderId2}`);
 
@@ -208,10 +197,9 @@ it('should reload contacts when switching back to initial folder after changing 
 	const folder2ContactGroupName = faker.company.name();
 	const folder2Contact = createSoapContact({ folderId: folderId2, email: folder2ContactEmail });
 	const folder2ContactGroup = createCnItem(folder2ContactGroupName, [], '1', folderId1);
-	const folder2SearchAllContactsInterceptor = createContactsApiInterceptor([
-		folder2Contact,
-		folder2ContactGroup
-	]);
+	const folder2SearchAllContactsInterceptor = createContactsApiInterceptor({
+		items: [folder2Contact, folder2ContactGroup]
+	});
 	await user.click(screen.getByTestId('navigation-to'));
 	await folder2SearchAllContactsInterceptor;
 
@@ -222,14 +210,18 @@ it('should reload contacts when switching back to initial folder after changing 
 
 	const selectContactsViewDropdown = await screen.findByTestId('icon: ChevronDownOutline');
 	await user.click(selectContactsViewDropdown);
-	const folder2SearchOnlyGroupsInterceptor = createContactsApiInterceptor([folder2ContactGroup]);
+	const folder2SearchOnlyGroupsInterceptor = createContactsApiInterceptor({
+		items: [folder2ContactGroup]
+	});
 	await user.click(await screen.findByText('Contact Groups'));
 	await folder2SearchOnlyGroupsInterceptor;
 
 	expect(await screen.findByText(folder2ContactGroupName)).toBeVisible();
 	makeListItemsVisible();
 	expect(screen.queryByText(folder2ContactEmail)).not.toBeInTheDocument();
-	const folder1SearchOnlyGroupsInterceptor = createContactsApiInterceptor([folder1ContactGroup]);
+	const folder1SearchOnlyGroupsInterceptor = createContactsApiInterceptor({
+		items: [folder1ContactGroup]
+	});
 	await user.click(screen.getByTestId('navigation-back'));
 	await folder1SearchOnlyGroupsInterceptor;
 

@@ -8,19 +8,20 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
-import { forEach } from 'lodash';
+import { forEach, times } from 'lodash';
 import { Route } from 'react-router-dom';
 
 import {
 	getAction as getActionMock,
 	useAppContext
 } from '../../../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
-import { createSoapAPIInterceptor } from '../../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { populateFoldersStore } from '../../../../carbonio-ui-commons/test/mocks/store/folders';
 import {
 	makeListItemsVisible,
 	screen,
 	setupTest,
+	triggerLoadMore,
+	UserEvent,
 	within
 } from '../../../../carbonio-ui-commons/test/test-setup';
 import {
@@ -43,6 +44,7 @@ import { generateState } from '../../../../tests/state-builder';
 import { createCnItem, createSoapContact } from '../../../../tests/utils';
 import { generateStore } from '../../../tests/generators/store';
 import { FolderPanel } from '../folder-panel';
+import { createContactsApiInterceptor } from './utils';
 
 const mockMailToAction = (): void => {
 	getActionMock.mockImplementation((type, id) => {
@@ -74,6 +76,11 @@ function setupFolderPanel(folderId: string): ReturnType<typeof setupTest> {
 	);
 }
 
+async function toggleSelectContactTypeFilter(user: UserEvent): Promise<void> {
+	const selectContactsViewDropdown = await screen.findByTestId('icon: ChevronDownOutline');
+	return user.click(selectContactsViewDropdown);
+}
+
 describe('Folder panel', () => {
 	it('should show the empty list message if there is no contact or contact group', async () => {
 		const folderId = '7';
@@ -85,6 +92,46 @@ describe('Folder panel', () => {
 		setupFolderPanel(folderId);
 
 		expect(await screen.findByText(EMPTY_LIST_HINT)).toBeVisible();
+	});
+
+	describe('Pagination', () => {
+		it('should search contacts with current filter when loading more results', async () => {
+			const folderId = '7';
+			const firstSearchInterceptor = createContactsApiInterceptor({
+				items: [createCnItem(`First group`, [], '1', folderId)],
+				more: false
+			});
+
+			const { user } = setupFolderPanel(folderId);
+			await firstSearchInterceptor;
+			expect(await screen.findByText('First group')).toBeVisible();
+
+			// switch filter and load groups
+			const expectedQueryFilter = 'and #type:group';
+			const searchGroupsInterceptor = createContactsApiInterceptor({
+				items: times(100, (index) =>
+					createCnItem(`Contact Group ${index}`, [], index.toString(), folderId)
+				),
+				more: true
+			});
+			await toggleSelectContactTypeFilter(user);
+			await user.click(await screen.findByText('Contact Groups'));
+			const searchGroupsRequest = await searchGroupsInterceptor;
+			expect(searchGroupsRequest.query?._content).toContain(expectedQueryFilter);
+			expect(await screen.findByText('Contact Group 99')).toBeVisible();
+
+			// load more with current filter
+			const loadMoreInterceptor = createContactsApiInterceptor({
+				items: times(10, (index) =>
+					createCnItem(`More Contact Group ${index}`, [], index.toString(), folderId)
+				),
+				more: true
+			});
+			await triggerLoadMore();
+			const loadMoreRequest = await loadMoreInterceptor;
+			expect(loadMoreRequest.query?._content).toContain(expectedQueryFilter);
+			expect(await screen.findByText('More Contact Group 1')).toBeVisible();
+		});
 	});
 
 	describe('contact', () => {
@@ -558,21 +605,15 @@ describe('Folder panel', () => {
 				'1',
 				folderId
 			);
-			const searchContactsInterceptor = createSoapAPIInterceptor('Search', {
-				sortBy: 'nameAsc',
-				offset: 0,
-				cn: [soapContact, soapContactGroup],
-				more: false
+			const searchContactsInterceptor = createContactsApiInterceptor({
+				items: [soapContact, soapContactGroup]
 			});
 
 			setupFolderPanel(folderId);
 
 			const searchContactsRequest = await searchContactsInterceptor;
 
-			// TODO: type search
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
-			expect(searchContactsRequest.query._content).toBe(`inid:"${folderId}"`);
+			expect(searchContactsRequest.query?._content).toBe(`inid:"${folderId}"`);
 			expect(await screen.findByText(contactGroupName)).toBeVisible();
 			makeListItemsVisible();
 			expect(await screen.findByText(soapContactEmail)).toBeVisible();
@@ -587,32 +628,21 @@ describe('Folder panel', () => {
 				'1',
 				folderId
 			);
-			const searchAllContactsInterceptor = createSoapAPIInterceptor('Search', {
-				sortBy: 'nameAsc',
-				offset: 0,
-				cn: [],
-				more: false
-			});
+			const searchAllContactsInterceptor = createContactsApiInterceptor({ items: [] });
 
 			const { user } = setupFolderPanel(folderId);
 
 			await searchAllContactsInterceptor;
 			expect(screen.queryByText(contactGroupName)).not.toBeInTheDocument();
-			const selectContactsViewDropdown = await screen.findByTestId('icon: ChevronDownOutline');
-			await user.click(selectContactsViewDropdown);
-			const searchContactGroupsInterceptor = createSoapAPIInterceptor('Search', {
-				sortBy: 'nameAsc',
-				offset: 0,
-				cn: [soapContactGroup],
-				more: false
+			await toggleSelectContactTypeFilter(user);
+			const searchContactGroupsInterceptor = createContactsApiInterceptor({
+				items: [soapContactGroup]
 			});
 			await user.click(await screen.findByText('Contact Groups'));
 			expect(await screen.findByText(contactGroupName)).toBeVisible();
 			const contactGroupsRequest = await searchContactGroupsInterceptor;
 
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
-			expect(contactGroupsRequest.query._content).toBe(`inid:"${folderId}" and #type:group`);
+			expect(contactGroupsRequest.query?._content).toBe(`inid:"${folderId}" and #type:group`);
 			expect(await screen.findByText(contactGroupName)).toBeInTheDocument();
 		});
 
@@ -627,26 +657,18 @@ describe('Folder panel', () => {
 				'1',
 				folderId
 			);
-			const searchAllContactsInterceptor = createSoapAPIInterceptor('Search', {
-				sortBy: 'nameAsc',
-				offset: 0,
-				cn: [soapContactGroup],
-				more: false
+			const searchAllContactsInterceptor = createContactsApiInterceptor({
+				items: [soapContactGroup]
 			});
 
 			const { user } = setupFolderPanel(folderId);
 
 			await searchAllContactsInterceptor;
 			expect(await screen.findByText(contactGroupName)).toBeInTheDocument();
-			const selectContactsViewDropdown = await screen.findByTestId('icon: ChevronDownOutline');
-			await user.click(selectContactsViewDropdown);
-			const searchOnlyContactsInterceptor = createSoapAPIInterceptor('Search', {
-				sortBy: 'nameAsc',
-				offset: 0,
-				cn: [soapContact],
-				more: false
+			const searchOnlyContactsInterceptor = createContactsApiInterceptor({
+				items: [soapContact]
 			});
-
+			await toggleSelectContactTypeFilter(user);
 			await user.click(await screen.findByText('Contacts'));
 			const contactsOnlyRequest = await searchOnlyContactsInterceptor;
 			expect(screen.queryByText(contactGroupName)).not.toBeInTheDocument();
@@ -656,9 +678,7 @@ describe('Folder panel', () => {
 			makeListItemsVisible();
 			expect(await screen.findByText(soapContactEmail)).toBeVisible();
 
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
-			expect(contactsOnlyRequest.query._content).toBe(`inid:"${folderId}" and not #type:group`);
+			expect(contactsOnlyRequest.query?._content).toBe(`inid:"${folderId}" and not #type:group`);
 		});
 	});
 });

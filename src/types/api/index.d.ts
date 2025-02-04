@@ -45,11 +45,11 @@ export type SearchContactsSoapRequest = {
 		_content: string;
 	};
 };
-
+export type ContactsFilter = 'ALL' | 'CONTACT' | 'CONTACT_GROUP';
 export type SearchContactsRequest = {
 	folderId: string;
 	offset?: number;
-	type?: 'ALL' | 'CONTACT' | 'CONTACT_GROUP';
+	type?: ContactsFilter;
 };
 export type SearchRequestAsyncThunkProps = {
 	arg: SearchContactsRequest;

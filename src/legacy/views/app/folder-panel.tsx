@@ -77,6 +77,7 @@ export const FolderPanel = (): ReactElement => {
 			isFirstRender.current = false;
 		});
 	}, [activeFilter, dispatch, folderId, searchRequestStatus]);
+
 	const selectType = useCallback(
 		(filterType: ContactFilterType) => {
 			dispatch(handleResetContactsSync());
@@ -113,7 +114,13 @@ export const FolderPanel = (): ReactElement => {
 	];
 
 	const selectedViewTypeIcon = find(selectOptions, (option) => option.id === activeFilter)?.icon;
-
+	const loadMore = useCallback(
+		(): Promise<void> =>
+			dispatch(
+				searchContactsAsyncThunk({ folderId, offset: contacts?.length, type: activeFilter })
+			).then(() => Promise.resolve()),
+		[activeFilter, contacts?.length, dispatch, folderId]
+	);
 	return (
 		<ActionsContextProvider
 			folderId={folderId}
@@ -155,6 +162,7 @@ export const FolderPanel = (): ReactElement => {
 						</Breadcrumbs>
 					)}
 					<ContactsList
+						onLoadMore={loadMore}
 						folderId={folderId}
 						contacts={sortedContacts}
 						selected={selected}

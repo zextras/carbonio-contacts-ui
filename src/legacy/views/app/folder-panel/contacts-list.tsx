@@ -16,8 +16,7 @@ import { DragItems } from './drag-items';
 import { EmptyListPanel } from './empty-list-panel';
 import { CustomListItem } from '../../../../carbonio-ui-commons/components/list/list-item';
 import { ContactGroupListItemWrapper } from '../../../../views/contact-groups/list/contact-group-list-item-wrapper';
-import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
-import { searchContactsAsyncThunk } from '../../../store/actions/search-contacts';
+import { useAppSelector } from '../../../hooks/redux';
 import { selectFolderHasMore } from '../../../store/slices/contacts-slice';
 import { ContactOrGroup } from '../../../types/contact';
 import { isGroup } from '../../../utils/helpers';
@@ -36,13 +35,15 @@ type ContactsListProps = {
 	isSelecting: boolean;
 	contacts: Array<ContactOrGroup>;
 	toggle: (id: string) => void;
+	onLoadMore?: () => Promise<void>;
 };
 export const ContactsList = ({
 	folderId,
 	selected,
 	isSelecting,
 	contacts,
-	toggle
+	toggle,
+	onLoadMore
 }: ContactsListProps): React.JSX.Element => {
 	const [t] = useTranslation();
 	const loading = useRef(false);
@@ -50,7 +51,6 @@ export const ContactsList = ({
 	const [isDragging, setIsDragging] = useState(false);
 	const [draggedIds, setDraggedIds] = useState<Record<string, boolean>>();
 	const dragImageRef = useRef(null);
-	const dispatch = useAppDispatch();
 
 	const listMessages = useMemo(
 		() => [
@@ -68,24 +68,18 @@ export const ContactsList = ({
 
 	const hasMore = useAppSelector((state) => selectFolderHasMore(state, folderId));
 
-	const search = useCallback(
-		(reset: boolean) => {
-			loading.current = true;
-			// TODO: search contacts should use filter type (all, contacts or groups)
-			dispatch(searchContactsAsyncThunk({ folderId, offset: reset ? 0 : contacts.length })).finally(
-				() => {
-					loading.current = false;
-				}
-			);
-		},
-		[contacts.length, dispatch, folderId]
-	);
+	const searchMoreResults = useCallback(() => {
+		loading.current = true;
+		onLoadMore?.().finally(() => {
+			loading.current = false;
+		});
+	}, [onLoadMore]);
 
 	const loadMore = useCallback(() => {
 		if (contacts.length > 0 && hasMore) {
-			search(false);
+			searchMoreResults();
 		}
-	}, [contacts.length, hasMore, search]);
+	}, [contacts.length, hasMore, searchMoreResults]);
 
 	const canLoadMore = useMemo(() => contacts.length > 0 && hasMore, [contacts.length, hasMore]);
 	const listItems = useMemo(

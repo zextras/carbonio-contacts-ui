@@ -13,8 +13,6 @@ import { createSoapAPIInterceptor } from '../../../../../carbonio-ui-commons/tes
 import { screen, setupTest } from '../../../../../carbonio-ui-commons/test/test-setup';
 import { EMPTY_LIST_HINT } from '../../../../../constants/tests';
 import { ContactGroup } from '../../../../../model/contact-group';
-import { CnItem } from '../../../../../network/api/types';
-import { createCnItem } from '../../../../../tests/utils';
 import { generateStore } from '../../../../tests/generators/store';
 import { ContactsList } from '../contacts-list';
 
@@ -22,10 +20,6 @@ jest.mock('react-router-dom', () => ({
 	...jest.requireActual('react-router-dom'),
 	useParams: jest.fn()
 }));
-
-function generateNContactGroupsForAPI(n: number): Array<CnItem> {
-	return [...Array(n)].map((value, index) => createCnItem(`name-${index}`, [], index.toString()));
-}
 
 function setupContactsList({
 	currentFolderId = '7',
