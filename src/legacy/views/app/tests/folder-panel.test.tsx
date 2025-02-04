@@ -660,5 +660,9 @@ describe('Folder panel', () => {
 			// @ts-ignore
 			expect(contactsOnlyRequest.query._content).toBe(`inid:"${folderId}" and not #type:group`);
 		});
+
+		it.todo(
+			'sei nella folder 7, filtro "all", cambio cartella (9), cambio filtro a "group", ritorno a cartella "7", verifico che 7 abbia solo gruppi'
+		);
 	});
 });
