@@ -88,8 +88,7 @@ export const FolderPanel = (): ReactElement => {
 	const selectOptions = [
 		{
 			id: FILTER_TYPES.ALL,
-			// TODO: ICONA PROVVISORIA
-			icon: 'Team',
+			icon: 'FunnelOutline',
 			label: t('folder_panel.option.all_contacts', 'All'),
 			value: FILTER_TYPES.CONTACT,
 			onClick: (): void => selectType(FILTER_TYPES.ALL),
