@@ -164,8 +164,7 @@ export const useActionDeleteContactGroup = (): DeleteCGAction => {
 		async (contactGroup: ContactGroup) =>
 			apiClient.deleteContact([contactGroup.id]).then(() => {
 				if (activeContactGroup?.id === contactGroup.id) {
-					const folder = getFolderFromContactGroup(contactGroup);
-					folder && redirectTo(folder.id);
+					contactGroup && redirectTo(contactGroup);
 				}
 				return { contactGroupId: contactGroup.id };
 			}),

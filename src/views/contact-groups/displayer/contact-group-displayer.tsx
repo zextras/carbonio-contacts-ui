@@ -22,8 +22,8 @@ export const ContactGroupDisplayer = (): React.JSX.Element => {
 	const evaluateActions = useContactGroupActions();
 
 	const routeToContactGroups = useCallback((): void => {
-		redirectTo(folderId);
-	}, [folderId, redirectTo]);
+		contactGroup && redirectTo(contactGroup);
+	}, [contactGroup, redirectTo]);
 
 	const actionsEvaluator = useCallback(() => {
 		if (contactGroup) {
