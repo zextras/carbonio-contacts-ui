@@ -137,7 +137,10 @@ export const ContactsList = ({
 									dragImageRef={dragImageRef}
 								/>
 							) : (
-								<div style={{ height: '4rem' }} />
+								<div
+									style={{ height: '4rem' }}
+									data-testid={`contact-list-item-invisible-${contact.id}`}
+								/>
 							)
 						}
 					</CustomListItem>
