@@ -7,23 +7,50 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { within } from '@testing-library/react';
-import { useTheme } from '@zextras/carbonio-design-system';
+import { Button, useTheme } from '@zextras/carbonio-design-system';
 import * as shell from '@zextras/carbonio-shell-ui';
 
-import { screen, setupHook, setupTest } from '../../../../carbonio-ui-commons/test/test-setup';
+import { useFolderStore } from '../../../../carbonio-ui-commons/store/zustand/folder';
+import { useAppContext } from '../../../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
+import { generateFolder } from '../../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
+import { createSoapAPIInterceptor } from '../../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
+import {
+	makeListItemsVisible,
+	screen,
+	setupHook,
+	setupTest
+} from '../../../../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../../../../constants/tests';
+import { useNavigation } from '../../../../hooks/useNavigation';
 import {
 	createFindContactGroupsResponse,
 	registerFindContactGroupsHandler
 } from '../../../../tests/msw-handlers/find-contact-groups';
-import { createCnItem } from '../../../../tests/utils';
+import { createCnItem, createSoapContact } from '../../../../tests/utils';
 import { generateStore } from '../../../tests/generators/store';
 import { FolderView } from '../folder-view';
 
-function setupFolderView(folderId: string): any {
+function MockedButton(props: { routeTo: string; initialRoute: string }): React.JSX.Element {
+	const { navigateTo } = useNavigation();
+	return (
+		<>
+			<Button data-testid={'navigation-to'} onClick={(): void => navigateTo(props.routeTo)} />
+			<Button
+				data-testid={'navigation-back'}
+				onClick={(): void => navigateTo(props.initialRoute)}
+			/>
+
+			<FolderView />
+		</>
+	);
+}
+
+function setupFolderView(folderId: string, navigateTo = `/folder/${folderId}`): any {
 	const store = generateStore();
-	return setupTest(<FolderView />, {
-		initialEntries: [`/folder/${folderId}`],
+
+	const initialRoute = `/folder/${folderId}`;
+	return setupTest(<MockedButton routeTo={navigateTo} initialRoute={initialRoute} />, {
+		initialEntries: [initialRoute],
 		store
 	});
 }
@@ -136,4 +163,77 @@ describe('Contact Group View', () => {
 			recipients: [expect.objectContaining({ email: member })]
 		});
 	});
+});
+it('should reload contacts when switching back to initial folder after changing the filter type', async () => {
+	useAppContext.mockReturnValue({ count: 0, setCount: jest.fn() });
+	const folderId1 = '7';
+	const folderId2 = '9';
+	const folder1 = generateFolder({ id: folderId1, name: 'folder 1' });
+	const folder2 = generateFolder({ id: folderId2, name: 'folder 2' });
+	useFolderStore.setState({
+		folders: { [folderId1]: folder1, [folderId2]: folder2 }
+	});
+	const folder1ContactGroupName = faker.company.name();
+	const folder1ContactEmail = faker.internet.email();
+	const folder1SoapContact = createSoapContact({ folderId: folderId1, email: folder1ContactEmail });
+	const folder1SoapContactGroup = createCnItem(folder1ContactGroupName, [], '1', folderId1);
+	const folder1SearchAllContactsInterceptor = createSoapAPIInterceptor('Search', {
+		sortBy: 'nameAsc',
+		offset: 0,
+		cn: [folder1SoapContactGroup, folder1SoapContact],
+		more: false
+	});
+
+	const { user } = setupFolderView(folderId1, `/folder/${folderId2}`);
+
+	await folder1SearchAllContactsInterceptor;
+
+	expect(await screen.findByText(folder1ContactGroupName)).toBeVisible();
+	makeListItemsVisible();
+	expect(screen.getByText(folder1ContactEmail)).toBeVisible();
+	const folder2contactEmail = faker.internet.email();
+	const folder2contactGroupName = faker.company.name();
+	const folder2soapContact = createSoapContact({ folderId: folderId2, email: folder2contactEmail });
+	const folder2SoapContactGroup = createCnItem(folder2contactGroupName, [], '1', folderId1);
+	const folder2SearchAllContactsInterceptor = createSoapAPIInterceptor('Search', {
+		sortBy: 'nameAsc',
+		offset: 0,
+		cn: [folder2soapContact, folder2SoapContactGroup],
+		more: false
+	});
+	await user.click(screen.getByTestId('navigation-to'));
+	await folder2SearchAllContactsInterceptor;
+
+	expect(await screen.findByText(folder2contactGroupName)).toBeVisible();
+	makeListItemsVisible();
+	expect(screen.getByText(folder2contactEmail)).toBeVisible();
+	expect(screen.queryByText(folder1ContactEmail)).not.toBeInTheDocument();
+
+	const selectContactsViewDropdown = await screen.findByTestId('icon: ChevronDownOutline');
+	await user.click(selectContactsViewDropdown);
+	const folder2SearchOnlyGroupsInterceptor = createSoapAPIInterceptor('Search', {
+		sortBy: 'nameAsc',
+		offset: 0,
+		cn: [folder2SoapContactGroup],
+		more: false
+	});
+	await user.click(await screen.findByText('Contact Groups'));
+	await folder2SearchOnlyGroupsInterceptor;
+
+	expect(await screen.findByText(folder2contactGroupName)).toBeVisible();
+	makeListItemsVisible();
+	expect(screen.queryByText(folder2contactEmail)).not.toBeInTheDocument();
+	const folder1SearchOnlyGroupsInterceptor = createSoapAPIInterceptor('Search', {
+		sortBy: 'nameAsc',
+		offset: 0,
+		cn: [folder1SoapContactGroup],
+		more: false
+	});
+	await user.click(screen.getByTestId('navigation-back'));
+	await folder1SearchOnlyGroupsInterceptor;
+
+	expect(await screen.findByText(folder1ContactGroupName)).toBeVisible();
+	makeListItemsVisible();
+	expect(screen.queryByText(folder1ContactEmail)).not.toBeInTheDocument();
+	expect(screen.queryByText(folder2contactGroupName)).not.toBeInTheDocument();
 });

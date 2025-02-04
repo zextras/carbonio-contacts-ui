@@ -5,6 +5,7 @@
  */
 import { createSlice } from '@reduxjs/toolkit';
 
+import { INITIAL_STATE } from './constants';
 import { SEARCHED_FOLDER_STATE_STATUS } from '../../../constants';
 import { modifyContactGroup } from '../../../network/api/modify-contact';
 import { createContactGroup } from '../../../views/contact-groups/api/create-contact-group';
@@ -39,7 +40,7 @@ import {
 	handleDeletedContactsSyncReducer,
 	handleCreatedContactsSyncReducer,
 	handleModifiedContactsSyncReducer,
-	handleResetContactFolderSyncReducer
+	handleResetContactsSyncReducer
 } from '../reducers/handle-contacts-sync';
 import {
 	modifyContactFulFilled,
@@ -52,22 +53,14 @@ import {
 	searchContactsRejected
 } from '../reducers/search-contacts';
 
-const initialState: State['contacts'] = {
-	status: {
-		pendingActions: false
-	},
-	contacts: {},
-	searchedInFolder: {}
-};
-
 export const contactsSlice = createSlice({
 	name: 'contacts',
-	initialState,
+	initialState: INITIAL_STATE,
 	reducers: {
 		handleModifiedContactsSync: handleModifiedContactsSyncReducer,
 		handleCreatedContactsSync: handleCreatedContactsSyncReducer,
 		handleDeletedContactsSync: handleDeletedContactsSyncReducer,
-		handleResetContactFolderSync: handleResetContactFolderSyncReducer
+		handleResetContactsSync: handleResetContactsSyncReducer
 	},
 	extraReducers: (builder) => {
 		builder.addCase(searchContactsAsyncThunk.pending, searchContactsPending);
@@ -103,7 +96,7 @@ export const {
 	handleCreatedContactsSync,
 	handleModifiedContactsSync,
 	handleDeletedContactsSync,
-	handleResetContactFolderSync
+	handleResetContactsSync
 } = contactsSlice.actions;
 export const contactSliceReducer = contactsSlice.reducer;
 

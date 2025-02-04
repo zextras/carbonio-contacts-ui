@@ -8,6 +8,7 @@ import { find, forEach, map, orderBy, reduce, reject, uniqBy } from 'lodash';
 import { Contact, ContactOrGroup } from '../../types/contact';
 import { ContactsSlice } from '../../types/store';
 import { isGroup, removeContactsFromStore } from '../../utils/helpers';
+import { INITIAL_STATE } from '../slices/constants';
 
 export function handleCreatedContactsSyncReducer(
 	state: ContactsSlice,
@@ -76,13 +77,6 @@ export function handleDeletedContactsSyncReducer(
 	removeContactsFromStore(state, payload);
 }
 
-export function handleResetContactFolderSyncReducer(
-	state: ContactsSlice,
-	{ payload }: { payload: string }
-): void {
-	const folderId = payload;
-	state.contacts[folderId] = [];
-	delete state.searchedInFolder[folderId];
-	state.status.pendingActions = false;
-	delete state.status[folderId];
+export function handleResetContactsSyncReducer(): ContactsSlice {
+	return INITIAL_STATE;
 }

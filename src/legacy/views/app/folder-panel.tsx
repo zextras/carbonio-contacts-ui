@@ -18,7 +18,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { useSelection } from '../../hooks/useSelection';
 import { searchContactsAsyncThunk } from '../../store/actions/search-contacts';
 import { selectAllContactsInFolder, selectContactsStatus } from '../../store/selectors/contacts';
-import { handleResetContactFolderSync } from '../../store/slices/contacts-slice';
+import { handleResetContactsSync } from '../../store/slices/contacts-slice';
 import { ActionsContextProvider } from '../../ui-actions/actions-context';
 import { isGroup } from '../../utils/helpers';
 import { SelectPanelActions } from '../folder/select-panel-actions';
@@ -79,10 +79,10 @@ export const FolderPanel = (): ReactElement => {
 	}, [activeFilter, dispatch, folderId, searchRequestStatus]);
 	const selectType = useCallback(
 		(filterType: ContactFilterType) => {
-			dispatch(handleResetContactFolderSync(folderId));
+			dispatch(handleResetContactsSync());
 			setActiveFilter(filterType);
 		},
-		[dispatch, folderId]
+		[dispatch]
 	);
 
 	const selectOptions = [
