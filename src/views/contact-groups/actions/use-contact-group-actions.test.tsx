@@ -12,26 +12,13 @@ import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { useFolderStore } from '../../../carbonio-ui-commons/store/zustand/folder';
 import { generateFolder } from '../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
 import { setupHook } from '../../../carbonio-ui-commons/test/test-setup';
-import { Folder } from '../../../carbonio-ui-commons/types';
 import { ACTION_IDS } from '../../../constants';
 import { generateStore } from '../../../legacy/tests/generators/store';
 import { buildContactGroup, buildMembers } from '../../../tests/model-builder';
+import { generateLinkFolder } from '../tests/utils';
 
 function mockMailComposerIntegration(): void {
 	jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([jest.fn(), true]);
-}
-
-function generateLinkFolder(folderId: string, remoteId: string, permissions: string): Folder {
-	// TODO: generator in commons does not support setting rid
-	const folder = generateFolder({
-		isLink: true,
-		id: folderId,
-		perm: permissions
-	});
-	return {
-		...folder,
-		rid: remoteId
-	} as Folder;
 }
 
 describe('useContactGroupActions', () => {

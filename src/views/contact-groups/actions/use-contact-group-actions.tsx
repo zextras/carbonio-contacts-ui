@@ -11,10 +11,9 @@ import { useActionSendEmailCG } from '../../../actions/send-email-cg';
 import { UIAction } from '../../../actions/types';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { getFolderIdParts } from '../../../carbonio-ui-commons/helpers/folders';
-import { getFolder, getFoldersMap } from '../../../carbonio-ui-commons/store/zustand/folder';
-import { Folder } from '../../../carbonio-ui-commons/types';
 import { ContactGroup } from '../../../model/contact-group';
 import { useActionDeleteContactGroup } from '../api/delete-contact-group';
+import { getFolderFromContactGroup } from '../utils';
 
 function evaluateContactGroupActions<T extends ContactGroup>(
 	contactGroup: T,
@@ -35,19 +34,6 @@ function evaluateContactGroupActions<T extends ContactGroup>(
 		}
 	});
 	return orderedActions;
-}
-
-function getFolderFromContactGroup(contactGroup: ContactGroup): Folder | undefined {
-	const foldersMap = getFoldersMap();
-	const { id: realFolderId } = getFolderIdParts(contactGroup.folderId);
-	let folder = getFolder(contactGroup.folderId);
-	if (!folder) {
-		folder = Object.values(foldersMap)
-			.filter((item) => item.isLink)
-			// TODO: fix type in commons, we are receiving a number instead of a string
-			.find((item) => item.rid?.toString() === realFolderId);
-	}
-	return folder;
 }
 
 export const useContactGroupActions = (): ((contactGroup: ContactGroup) => DSAction[]) => {

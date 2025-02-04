@@ -1,0 +1,56 @@
+/*
+ * SPDX-FileCopyrightText: 2025 Zextras <https://www.zextras.com>
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only
+ */
+
+import { faker } from '@faker-js/faker';
+import { useHistory } from 'react-router-dom';
+
+import { useRedirectToContactGroup } from './navigation';
+import { generateLinkFolder } from './tests/utils';
+import { useFolderStore } from '../../carbonio-ui-commons/store/zustand/folder';
+import { generateFolder } from '../../carbonio-ui-commons/test/mocks/folders/folders-generator';
+import { setupHook } from '../../carbonio-ui-commons/test/test-setup';
+import { generateStore } from '../../legacy/tests/generators/store';
+import { buildContactGroup } from '../../tests/model-builder';
+
+jest.mock('react-router-dom', () => ({
+	...jest.requireActual('react-router-dom'),
+	useHistory: jest.fn()
+}));
+
+it('should use the folderId for the redirect', async () => {
+	const FOLDER_ID = '7';
+	const GROUP_ID = '33';
+	const spyReplaceHistory = jest.fn();
+	(useHistory as jest.Mock).mockReturnValue({
+		replace: spyReplaceHistory
+	});
+	const contactGroup = buildContactGroup({ folderId: FOLDER_ID, id: GROUP_ID });
+	useFolderStore.setState({ folders: { [FOLDER_ID]: generateFolder({ id: FOLDER_ID }) } });
+
+	await setupHook(() => useRedirectToContactGroup()(contactGroup), { store: generateStore() });
+
+	expect(spyReplaceHistory).toHaveBeenCalledWith(`/folder/${FOLDER_ID}/contact-groups/${GROUP_ID}`);
+});
+
+it('should use the folderId instead of the mountpoint for the redirect', async () => {
+	const FOLDER_ID = '7';
+	const GROUP_ID = '33';
+	const REMOTE_FOLDER_ID = '123';
+	const spyReplaceHistory = jest.fn();
+	const mountpoint = generateLinkFolder(FOLDER_ID, REMOTE_FOLDER_ID);
+	(useHistory as jest.Mock).mockReturnValue({
+		replace: spyReplaceHistory
+	});
+	const contactGroup = buildContactGroup({
+		folderId: `${faker.string.uuid()}:${REMOTE_FOLDER_ID}`,
+		id: GROUP_ID
+	});
+	useFolderStore.setState({ folders: { [FOLDER_ID]: mountpoint } });
+
+	await setupHook(() => useRedirectToContactGroup()(contactGroup), { store: generateStore() });
+
+	expect(spyReplaceHistory).toHaveBeenCalledWith(`/folder/${FOLDER_ID}/contact-groups/${GROUP_ID}`);
+});
