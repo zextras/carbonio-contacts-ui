@@ -15,6 +15,8 @@ import { useHistory } from 'react-router-dom';
 
 import NewContactGroupBoard from './new-contact-group-board';
 import { getSetupServer } from '../../../carbonio-ui-commons/test/jest-setup';
+import { generateFolder } from '../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
+import { populateFoldersStore } from '../../../carbonio-ui-commons/test/mocks/store/folders';
 import { setupTest, screen } from '../../../carbonio-ui-commons/test/test-setup';
 import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../../constants';
 import { PALETTE, TESTID_SELECTORS } from '../../../constants/tests';
@@ -22,6 +24,7 @@ import { generateStore } from '../../../legacy/tests/generators/store';
 import { spyUseBoardHooks } from '../../../tests/utils';
 import { getContactInput } from '../../board/common-contact-group-board.test';
 import * as createContactGroup from '../api/create-contact-group';
+import { CONTACT_GROUPS_PATH } from '../navigation';
 
 function spyUseBoard(navigateTo?: jest.Mock): void {
 	jest.spyOn(shell, 'useBoard').mockReturnValue({
@@ -132,12 +135,15 @@ describe('New contact group board', () => {
 			expect(await screen.findByText('Contact group successfully created')).toBeVisible();
 		});
 
-		it('should redirect to contacts after creating successfully', async () => {
+		it('should redirect to created contact group after having created it successfully', async () => {
+			const folder = generateFolder({ id: '10' });
+			const newContactId = '1000';
+			populateFoldersStore({ customFolders: [folder] });
 			getSetupServer().use(
 				http.post('/service/soap/CreateContactRequest', async () =>
 					HttpResponse.json({
 						Body: {
-							CreateContactResponse: { cn: [{ id: '', _attrs: {} }] }
+							CreateContactResponse: { cn: [{ id: newContactId, l: folder.id, _attrs: {} }] }
 						}
 					})
 				)
@@ -163,6 +169,9 @@ describe('New contact group board', () => {
 			await user.click(saveButton);
 			expect(await screen.findByText('Contact group successfully created')).toBeVisible();
 			expect(spyReplaceHistory).toHaveBeenCalledTimes(1);
+			expect(spyReplaceHistory).toHaveBeenCalledWith(
+				`/folder/${folder.id}/${CONTACT_GROUPS_PATH}/${newContactId}`
+			);
 		});
 
 		it('should show error snackbar when create contact fails', async () => {
