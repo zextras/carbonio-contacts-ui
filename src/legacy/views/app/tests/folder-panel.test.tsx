@@ -572,8 +572,8 @@ describe('Folder panel', () => {
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
 		expect(searchContactsRequest.query._content).toBe(`inid:"${folderId}"`);
-		makeListItemsVisible();
 		expect(await screen.findByText(contactGroupName)).toBeVisible();
+		makeListItemsVisible();
 		expect(await screen.findByText(soapContactEmail)).toBeVisible();
 	});
 });
