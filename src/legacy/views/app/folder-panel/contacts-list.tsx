@@ -71,6 +71,7 @@ export const ContactsList = ({
 	const search = useCallback(
 		(reset: boolean) => {
 			loading.current = true;
+			// TODO: search contacts should use filter type (all, contacts or groups)
 			dispatch(searchContactsAsyncThunk({ folderId, offset: reset ? 0 : contacts.length })).finally(
 				() => {
 					loading.current = false;
