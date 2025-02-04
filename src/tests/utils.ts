@@ -131,14 +131,16 @@ export const createCnItem = (
 
 export function createSoapContact({
 	id = faker.number.int({ min: 100 }).toString(),
-	email = faker.internet.email()
+	email = faker.internet.email(),
+	folderId = '7'
 }: {
 	id?: string;
 	email?: string;
+	folderId?: string;
 }): SoapContact {
 	return {
 		id,
-		l: '7',
+		l: folderId,
 		d: faker.date.recent().valueOf(),
 		rev: 12974,
 		fileAsStr: faker.internet.userName(),

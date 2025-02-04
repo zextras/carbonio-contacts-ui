@@ -15,6 +15,7 @@ import {
 	getAction as getActionMock,
 	useAppContext
 } from '../../../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
+import { createSoapAPIInterceptor } from '../../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { populateFoldersStore } from '../../../../carbonio-ui-commons/test/mocks/store/folders';
 import {
 	setupTest,
@@ -39,7 +40,7 @@ import {
 	registerFindContactGroupsHandler
 } from '../../../../tests/msw-handlers/find-contact-groups';
 import { generateState } from '../../../../tests/state-builder';
-import { createCnItem } from '../../../../tests/utils';
+import { createCnItem, createSoapContact } from '../../../../tests/utils';
 import { generateStore } from '../../../tests/generators/store';
 import { FolderPanel } from '../folder-panel';
 
@@ -543,5 +544,40 @@ describe('Folder panel', () => {
 				expect(screen.getByText(cnItem3.fileAsStr)).toBeVisible();
 			});
 		});
+	});
+
+	it('should display contacts and contact groups by default', async () => {
+		const contactGroupName = faker.company.name();
+		const folderId = '7';
+		const soapContactEmail = 'test@mycontact.com';
+		const soapContact = createSoapContact({ folderId, email: soapContactEmail });
+		const soapContactGroup = createCnItem(
+			contactGroupName,
+			[faker.internet.email(), faker.internet.email()],
+			'1',
+			folderId
+		);
+		const apiResponseBody = {
+			sortBy: 'nameAsc',
+			offset: 0,
+			cn: [soapContact, soapContactGroup],
+			more: false,
+			_jsns: 'urn:zimbraMail'
+		};
+		const searchContactsInterceptor = createSoapAPIInterceptor('Search', {
+			Body: { SearchResponse: apiResponseBody }
+		});
+
+		setupFolderPanel(folderId);
+
+		const searchContactsRequest = await searchContactsInterceptor;
+
+		// TODO: type search
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore
+		expect(searchContactsRequest.query._content).toBe(`inid:"${folderId}"`);
+		makeListItemsVisible();
+		expect(await screen.findByText(soapContactEmail)).toBeVisible();
+		expect(await screen.findByText(contactGroupName)).toBeVisible();
 	});
 });
