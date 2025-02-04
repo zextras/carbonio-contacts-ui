@@ -18,20 +18,20 @@ import {
 import { createSoapAPIInterceptor } from '../../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { populateFoldersStore } from '../../../../carbonio-ui-commons/test/mocks/store/folders';
 import {
-	setupTest,
+	makeListItemsVisible,
 	screen,
-	within,
-	makeListItemsVisible
+	setupTest,
+	within
 } from '../../../../carbonio-ui-commons/test/test-setup';
 import {
 	ActionDescriptorType,
 	ACTIONS_DESCRIPTORS,
-	FolderDescriptorType,
-	FOLDERS_DESCRIPTORS,
-	TESTID_SELECTORS,
 	DISPLAY_ASSERTION,
 	DisplayAssertionType,
-	EMPTY_LIST_HINT
+	EMPTY_LIST_HINT,
+	FolderDescriptorType,
+	FOLDERS_DESCRIPTORS,
+	TESTID_SELECTORS
 } from '../../../../constants/tests';
 import { buildContact } from '../../../../tests/model-builder';
 import { registerDeleteContactHandler } from '../../../../tests/msw-handlers/delete-contact';
@@ -557,15 +557,11 @@ describe('Folder panel', () => {
 			'1',
 			folderId
 		);
-		const apiResponseBody = {
+		const searchContactsInterceptor = createSoapAPIInterceptor('Search', {
 			sortBy: 'nameAsc',
 			offset: 0,
 			cn: [soapContact, soapContactGroup],
-			more: false,
-			_jsns: 'urn:zimbraMail'
-		};
-		const searchContactsInterceptor = createSoapAPIInterceptor('Search', {
-			Body: { SearchResponse: apiResponseBody }
+			more: false
 		});
 
 		setupFolderPanel(folderId);
@@ -577,7 +573,7 @@ describe('Folder panel', () => {
 		// @ts-ignore
 		expect(searchContactsRequest.query._content).toBe(`inid:"${folderId}"`);
 		makeListItemsVisible();
-		expect(await screen.findByText(soapContactEmail)).toBeVisible();
 		expect(await screen.findByText(contactGroupName)).toBeVisible();
+		expect(await screen.findByText(soapContactEmail)).toBeVisible();
 	});
 });
