@@ -46,7 +46,7 @@ describe('useContactGroupActions', () => {
 		const folderId = '789';
 		const remoteAccountUuId = faker.string.uuid();
 		const remoteFolderId = '123';
-		const contactGroup = buildContactGroup({
+		const contactGroupInSharedFolder = buildContactGroup({
 			parent: `${remoteAccountUuId}:${remoteFolderId}`,
 			members: buildMembers(faker.number.int({ min: 1, max: 3 }))
 		});
@@ -62,7 +62,9 @@ describe('useContactGroupActions', () => {
 				folders: { [folderId]: mountpoint }
 			});
 
-			const { result } = setupHook(() => useContactGroupActions()(contactGroup), { store });
+			const { result } = setupHook(() => useContactGroupActions()(contactGroupInSharedFolder), {
+				store
+			});
 
 			expect(result.current).toHaveLength(3);
 			expect(result.current[0].id).toBe(ACTION_IDS.sendEmailCG);
@@ -81,7 +83,10 @@ describe('useContactGroupActions', () => {
 				folders: { [folderId]: mountpoint }
 			});
 
-			const { result } = setupHook(() => useContactGroupActions()(contactGroup), { store });
+			const { result } = setupHook(() => useContactGroupActions()(contactGroupInSharedFolder), {
+				store
+			});
+
 			expect(result.current).toHaveLength(1);
 			expect(result.current[0].id).toBe(ACTION_IDS.sendEmailCG);
 		});
