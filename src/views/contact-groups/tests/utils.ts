@@ -6,8 +6,18 @@ import { Folder } from '../../../carbonio-ui-commons/types';
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-export function generateLinkFolder(folderId: string, remoteId: string, permissions = 'r'): Folder {
-	// TODO: generator in commons does not support setting rid
+export function generateLinkFolder({
+	folderId,
+	remoteAccountUuId,
+	remoteId,
+	permissions = 'r'
+}: {
+	folderId: string;
+	remoteAccountUuId: string;
+	remoteId: string;
+	permissions?: string;
+}): Folder {
+	// TODO: generator in commons does not support setting rid and zid
 	const folder = generateFolder({
 		isLink: true,
 		id: folderId,
@@ -15,6 +25,7 @@ export function generateLinkFolder(folderId: string, remoteId: string, permissio
 	});
 	return {
 		...folder,
-		rid: remoteId
+		rid: remoteId,
+		zid: remoteAccountUuId
 	} as Folder;
 }

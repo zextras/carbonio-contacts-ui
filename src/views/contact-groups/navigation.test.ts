@@ -41,14 +41,19 @@ describe('contact groups navigation', () => {
 		it('should use the folderId instead of the mountpoint for the redirect', async () => {
 			const FOLDER_ID = '7';
 			const GROUP_ID = '33';
+			const REMOTE_ACCOUNT_UUID = faker.string.uuid();
 			const REMOTE_FOLDER_ID = '123';
 			const spyReplaceHistory = jest.fn();
-			const mountpoint = generateLinkFolder(FOLDER_ID, REMOTE_FOLDER_ID);
+			const mountpoint = generateLinkFolder({
+				folderId: FOLDER_ID,
+				remoteAccountUuId: REMOTE_ACCOUNT_UUID,
+				remoteId: REMOTE_FOLDER_ID
+			});
 			(useHistory as jest.Mock).mockReturnValue({
 				replace: spyReplaceHistory
 			});
 			const contactGroup = buildContactGroup({
-				parent: `${faker.string.uuid()}:${REMOTE_FOLDER_ID}`,
+				parent: `${REMOTE_ACCOUNT_UUID}:${REMOTE_FOLDER_ID}`,
 				id: GROUP_ID
 			});
 			useFolderStore.setState({ folders: { [FOLDER_ID]: mountpoint } });
@@ -80,14 +85,19 @@ describe('contact groups navigation', () => {
 		it('should use the folderId instead of the mountpoint for the redirect', async () => {
 			const FOLDER_ID = '7';
 			const GROUP_ID = '33';
+			const REMOTE_ACCOUNT_UUID = faker.string.uuid();
 			const REMOTE_FOLDER_ID = '123';
 			const spyReplaceHistory = jest.fn();
-			const mountpoint = generateLinkFolder(FOLDER_ID, REMOTE_FOLDER_ID);
+			const mountpoint = generateLinkFolder({
+				folderId: FOLDER_ID,
+				remoteAccountUuId: REMOTE_ACCOUNT_UUID,
+				remoteId: REMOTE_FOLDER_ID
+			});
 			(useHistory as jest.Mock).mockReturnValue({
 				replace: spyReplaceHistory
 			});
 			const contactGroup = buildContactGroup({
-				parent: `${faker.string.uuid()}:${REMOTE_FOLDER_ID}`,
+				parent: `${REMOTE_ACCOUNT_UUID}:${REMOTE_FOLDER_ID}`,
 				id: GROUP_ID
 			});
 			useFolderStore.setState({ folders: { [FOLDER_ID]: mountpoint } });

@@ -11,13 +11,13 @@ import { ContactGroup } from '../../../model/contact-group';
 
 export function getFolderFromContactGroup(contactGroup: ContactGroup): Folder | undefined {
 	const foldersMap = getFoldersMap();
-	const { id: realFolderId } = getFolderIdParts(contactGroup.parent);
+	const { zid, id: realFolderId } = getFolderIdParts(contactGroup.parent);
 	let folder = getFolder(contactGroup.parent);
 	if (!folder) {
 		folder = Object.values(foldersMap)
 			.filter((item) => item.isLink)
 			// TODO: fix type in commons, we are receiving a number instead of a string
-			.find((item) => item.rid?.toString() === realFolderId);
+			.find((item) => item.zid === zid && item.rid?.toString() === realFolderId);
 	}
 	return folder;
 }

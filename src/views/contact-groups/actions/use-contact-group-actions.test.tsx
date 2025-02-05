@@ -44,14 +44,20 @@ describe('useContactGroupActions', () => {
 
 	describe('Group is in shared folder/mountpoint', () => {
 		it('should return send, edit, delete actions when shared folder/mountpoint has write permission', () => {
+			const folderId = '789';
+			const remoteAccountUuId = faker.string.uuid();
 			const remoteFolderId = '123';
-			const folderId = 'folder-id';
-			const mountpoint = generateLinkFolder(folderId, remoteFolderId, 'rw');
+			const mountpoint = generateLinkFolder({
+				folderId,
+				remoteAccountUuId,
+				remoteId: remoteFolderId,
+				permissions: 'rw'
+			});
 			useFolderStore.setState({
 				folders: { [folderId]: mountpoint }
 			});
 			const contactGroup = buildContactGroup({
-				parent: `${faker.string.uuid()}:${remoteFolderId}`,
+				parent: `${remoteAccountUuId}:${remoteFolderId}`,
 				members: buildMembers(faker.number.int({ min: 1, max: 3 }))
 			});
 
@@ -64,13 +70,19 @@ describe('useContactGroupActions', () => {
 
 		it('should return only send action when shared folder/mountpoint does not have write permission', () => {
 			const remoteFolderId = '123';
+			const remoteAccountUuId = faker.string.uuid();
 			const folderId = '789';
-			const mountpoint = generateLinkFolder(folderId, remoteFolderId, 'r');
+			const mountpoint = generateLinkFolder({
+				folderId,
+				remoteAccountUuId,
+				remoteId: remoteFolderId,
+				permissions: 'r'
+			});
 			useFolderStore.setState({
 				folders: { [folderId]: mountpoint }
 			});
 			const contactGroup = buildContactGroup({
-				parent: `${faker.string.uuid()}:${remoteFolderId}`,
+				parent: `${remoteAccountUuId}:${remoteFolderId}`,
 				members: buildMembers(faker.number.int({ min: 1, max: 3 }))
 			});
 
