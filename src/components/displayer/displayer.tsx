@@ -5,25 +5,21 @@
  */
 import React from 'react';
 
-import { Action, Container } from '@zextras/carbonio-design-system';
+import { Container } from '@zextras/carbonio-design-system';
 
-import { DisplayerActionsHeader } from '../displayer-actions-header';
 import { DisplayerHeader } from '../displayer-header';
 
-type DisplayerProps = {
+type DisplayerProps = React.PropsWithChildren & {
 	title: string;
 	icon: string;
 	onClose: () => void;
-	actions: Array<Action>;
-	children?: React.JSX.Element;
 };
 
 export const Displayer = ({
 	children,
 	icon,
 	title,
-	onClose,
-	actions
+	onClose
 }: DisplayerProps): React.JSX.Element => (
 	<Container
 		orientation="vertical"
@@ -44,7 +40,6 @@ export const Displayer = ({
 				minHeight={0}
 				maxHeight={'100%'}
 			>
-				<DisplayerActionsHeader actions={actions} />
 				{children}
 			</Container>
 		</Container>

@@ -3,9 +3,9 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React from 'react';
+import React, { useMemo } from 'react';
 
-import { Action, Container } from '@zextras/carbonio-design-system';
+import { Action, Button, Container, Tooltip } from '@zextras/carbonio-design-system';
 
 import { ContactGroupDisplayerDetails } from './contact-group-displayer-details';
 import { ContactGroupEmptyDisplayer } from './contact-group-empty-displayer';
@@ -22,37 +22,59 @@ export const ContactGroupDisplayerComponent = ({
 	contactGroup,
 	onCloseDisplayer,
 	actionEvaluator
-}: Props): React.JSX.Element => (
-	<Container
-		orientation="vertical"
-		mainAlignment="flex-start"
-		crossAlignment="flex-start"
-		data-testid="displayer"
-	>
-		{contactGroup ? (
-			<Container
-				background={'gray5'}
-				mainAlignment={'flex-start'}
-				padding={{ bottom: '3rem' }}
-				data-testid={'contact-group-displayer'}
-			>
-				<DisplayerHeader
-					title={contactGroup.title}
-					icon={'PeopleOutline'}
-					closeDisplayer={onCloseDisplayer}
-				/>
+}: Props): React.JSX.Element => {
+	const actions = actionEvaluator();
+	const actionButtons = useMemo<React.JSX.Element[]>(
+		() =>
+			actions.map((action) => (
+				<Tooltip key={action.id} label={action.label}>
+					<Button
+						type="ghost"
+						icon={action.icon}
+						color="currentColor"
+						size="medium"
+						onClick={(ev): void => {
+							ev.stopPropagation();
+							action.onClick(ev);
+						}}
+						disabled={action.disabled}
+					/>
+				</Tooltip>
+			)),
+		[actions]
+	);
+	return (
+		<Container
+			orientation="vertical"
+			mainAlignment="flex-start"
+			crossAlignment="flex-start"
+			data-testid="displayer"
+		>
+			{contactGroup ? (
 				<Container
-					padding={{ horizontal: '1rem' }}
+					background={'gray5'}
 					mainAlignment={'flex-start'}
-					minHeight={0}
-					maxHeight={'100%'}
+					padding={{ bottom: '3rem' }}
+					data-testid={'contact-group-displayer'}
 				>
-					<DisplayerActionsHeader actions={actionEvaluator()} />
-					<ContactGroupDisplayerDetails contactGroup={contactGroup} />
+					<DisplayerHeader
+						title={contactGroup.title}
+						icon={'PeopleOutline'}
+						closeDisplayer={onCloseDisplayer}
+					/>
+					<Container
+						padding={{ horizontal: '1rem' }}
+						mainAlignment={'flex-start'}
+						minHeight={0}
+						maxHeight={'100%'}
+					>
+						<DisplayerActionsHeader>{actionButtons}</DisplayerActionsHeader>
+						<ContactGroupDisplayerDetails contactGroup={contactGroup} />
+					</Container>
 				</Container>
-			</Container>
-		) : (
-			<ContactGroupEmptyDisplayer />
-		)}{' '}
-	</Container>
-);
+			) : (
+				<ContactGroupEmptyDisplayer />
+			)}
+		</Container>
+	);
+};
