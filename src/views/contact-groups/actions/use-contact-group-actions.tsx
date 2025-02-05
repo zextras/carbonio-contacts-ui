@@ -43,7 +43,11 @@ export const useContactGroupActions = (): ((contactGroup: ContactGroup) => DSAct
 	return (contactGroup: ContactGroup): DSAction[] => {
 		const folder = getFolderFromContactGroup(contactGroup);
 		const folderPartsId = getFolderIdParts(contactGroup.parent).id;
-		if (!folder?.perm) {
+		const isMainAccount = !folder?.perm;
+		if (isMainAccount) {
+			if (folderPartsId === FOLDERS.TRASH) {
+				return evaluateContactGroupActions<ContactGroup>(contactGroup, [deleteCGAction]);
+			}
 			return evaluateContactGroupActions<ContactGroup>(contactGroup, [
 				sendEmailAction,
 				editCGAction,

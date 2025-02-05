@@ -158,9 +158,24 @@ describe('useContactGroupActions', () => {
 	});
 
 	describe('Trash folder', () => {
-		it('should return only delete action', () => {
+		it('should return only delete action when user has write permission', () => {
 			useFolderStore.setState({
 				folders: { [FOLDERS.TRASH]: generateFolder({ id: FOLDERS.TRASH, perm: 'w' }) }
+			});
+			const contactGroup = buildContactGroup({ parent: FOLDERS.TRASH });
+			const { result } = setupHook(() => useContactGroupActions()(contactGroup), { store });
+			expect(result.current).toHaveLength(1);
+			expect(result.current).toContainEqual({
+				id: ACTION_IDS.deleteCG,
+				label: 'Delete',
+				icon: 'Trash2Outline',
+				onClick: expect.anything(),
+				color: 'error'
+			});
+		});
+		it('should return only delete action when user doesnt have any permission', () => {
+			useFolderStore.setState({
+				folders: { [FOLDERS.TRASH]: generateFolder({ id: FOLDERS.TRASH, perm: undefined }) }
 			});
 			const contactGroup = buildContactGroup({ parent: FOLDERS.TRASH });
 			const { result } = setupHook(() => useContactGroupActions()(contactGroup), { store });
