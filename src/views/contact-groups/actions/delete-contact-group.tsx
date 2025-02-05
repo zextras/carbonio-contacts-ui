@@ -23,6 +23,7 @@ import { useGetContactGroupFromPath } from '../../../hooks/useGetContactGroupFro
 import { ContactGroup } from '../../../model/contact-group';
 import { apiClient } from '../../../network/api-client';
 import { useRedirectToContactGroupFolder } from '../navigation';
+import {CONTACT_GROUP_DELETE_ICON} from "./constants";
 import { CONTACT_GROUP_DELETE_ICON } from './constants';
 
 type DeleteCGActionBase<T extends ContactGroup> = UIAction<T, T>;
