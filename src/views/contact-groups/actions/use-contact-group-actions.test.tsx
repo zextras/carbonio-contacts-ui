@@ -43,10 +43,15 @@ describe('useContactGroupActions', () => {
 	});
 
 	describe('Group is in shared folder/mountpoint', () => {
+		const folderId = '789';
+		const remoteAccountUuId = faker.string.uuid();
+		const remoteFolderId = '123';
+		const contactGroup = buildContactGroup({
+			parent: `${remoteAccountUuId}:${remoteFolderId}`,
+			members: buildMembers(faker.number.int({ min: 1, max: 3 }))
+		});
+
 		it('should return send, edit, delete actions when shared folder/mountpoint has write permission', () => {
-			const folderId = '789';
-			const remoteAccountUuId = faker.string.uuid();
-			const remoteFolderId = '123';
 			const mountpoint = generateLinkFolder({
 				folderId,
 				remoteAccountUuId,
@@ -56,12 +61,9 @@ describe('useContactGroupActions', () => {
 			useFolderStore.setState({
 				folders: { [folderId]: mountpoint }
 			});
-			const contactGroup = buildContactGroup({
-				parent: `${remoteAccountUuId}:${remoteFolderId}`,
-				members: buildMembers(faker.number.int({ min: 1, max: 3 }))
-			});
 
 			const { result } = setupHook(() => useContactGroupActions()(contactGroup), { store });
+
 			expect(result.current).toHaveLength(3);
 			expect(result.current[0].id).toBe(ACTION_IDS.sendEmailCG);
 			expect(result.current[1].id).toBe(ACTION_IDS.editCG);
@@ -69,9 +71,6 @@ describe('useContactGroupActions', () => {
 		});
 
 		it('should return only send action when shared folder/mountpoint does not have write permission', () => {
-			const remoteFolderId = '123';
-			const remoteAccountUuId = faker.string.uuid();
-			const folderId = '789';
 			const mountpoint = generateLinkFolder({
 				folderId,
 				remoteAccountUuId,
@@ -80,10 +79,6 @@ describe('useContactGroupActions', () => {
 			});
 			useFolderStore.setState({
 				folders: { [folderId]: mountpoint }
-			});
-			const contactGroup = buildContactGroup({
-				parent: `${remoteAccountUuId}:${remoteFolderId}`,
-				members: buildMembers(faker.number.int({ min: 1, max: 3 }))
 			});
 
 			const { result } = setupHook(() => useContactGroupActions()(contactGroup), { store });
