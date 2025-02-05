@@ -10,21 +10,18 @@ import {
 	IconButton,
 	Row,
 	Responsive,
-	Button,
 	Text,
 	Collapse,
 	Dropdown,
 	Padding,
 	Icon,
-	Tooltip,
 	Link
 } from '@zextras/carbonio-design-system';
 import { runSearch } from '@zextras/carbonio-shell-ui';
-import { every, includes, isEmpty, map, reduce } from 'lodash';
+import { every, includes, map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { ZIMBRA_STANDARD_COLORS } from '../../../carbonio-ui-commons/constants/utils';
-import { isTrash } from '../../../carbonio-ui-commons/helpers/folders';
 import { useTags } from '../../../carbonio-ui-commons/store/zustand/tags';
 import { CompactView } from '../../commons/contact-compact-view';
 import { useTagExist } from '../../ui-actions/tag-actions';
@@ -356,72 +353,6 @@ function ContactPreviewContent({ contact, onEdit, onDelete, onMail, onMove }) {
 					height="fit"
 					padding={{ all: 'medium' }}
 				>
-					<Row
-						width="fill"
-						height="fit"
-						takeAvailableSpace
-						mainAlignment="flex-end"
-						padding={{ horizontal: 'extrasmall' }}
-					>
-						{!isTrash(contact.parent) && (
-							<IconButton
-								icon="MailModOutline"
-								onClick={onMail}
-								disabled={isEmpty(contact?.email)}
-							/>
-						)}
-
-						{showTagIcon && (
-							<Padding left="small">
-								<Tooltip label={singleTagLabel} disabled={showMultiTagIcon}>
-									<Button
-										data-testid="TagIcon"
-										type="ghost"
-										size="large"
-										onClick={onTagClick}
-										icon={tagIcon}
-										color={tagIconColor}
-									/>
-								</Tooltip>
-							</Padding>
-						)}
-						{showMultiTagIcon && (
-							<Dropdown items={tags} forceOpen={showDropdown} onClose={onDropdownClose}>
-								<Padding left="small">
-									<IconButton
-										size="large"
-										data-testid="TagIcon"
-										icon={tagIcon}
-										onClick={onIconClick}
-										color={tagIconColor}
-									/>
-								</Padding>
-							</Dropdown>
-						)}
-						<Tooltip
-							label={
-								isTrash(contact.parent) ? t('label.restore', 'Restore') : t('label.move', 'Move')
-							}
-						>
-							<IconButton
-								icon={isTrash(contact.parent) ? 'RestoreOutline' : 'MoveOutline'}
-								onClick={onMove}
-							/>
-						</Tooltip>
-						<Tooltip
-							label={
-								isTrash(contact.parent)
-									? t('tooltip.list_trash.deletePermanently', 'Delete contact permanently')
-									: t('label.delete', 'Delete')
-							}
-						>
-							<IconButton icon="Trash2Outline" onClick={onDelete} />
-						</Tooltip>
-						<Padding right="small" />
-						{!isTrash(contact.parent) && (
-							<Button icon="EditOutline" label={t('label.edit')} onClick={onEdit} />
-						)}
-					</Row>
 					<Container padding={{ all: 'small', top: 'extrasmall' }}>
 						<CompactView contact={contact} open={open} toggleOpen={toggleOpen} />
 					</Container>
