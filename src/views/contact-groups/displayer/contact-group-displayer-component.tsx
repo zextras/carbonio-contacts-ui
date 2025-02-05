@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 /*
  * SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
  *
@@ -25,22 +26,7 @@ export const ContactGroupDisplayerComponent = ({
 }: Props): React.JSX.Element => {
 	const actions = actionEvaluator();
 	const actionButtons = useMemo<React.JSX.Element[]>(
-		() =>
-			actions.map((action) => (
-				<Tooltip key={action.id} label={action.label}>
-					<Button
-						type="ghost"
-						icon={action.icon}
-						color="currentColor"
-						size="medium"
-						onClick={(ev): void => {
-							ev.stopPropagation();
-							action.onClick(ev);
-						}}
-						disabled={action.disabled}
-					/>
-				</Tooltip>
-			)),
+		() => actions.map((action) => actionIconButton(action)),
 		[actions]
 	);
 	return (
@@ -78,3 +64,22 @@ export const ContactGroupDisplayerComponent = ({
 		</Container>
 	);
 };
+
+// TODO: use for both cg and contact
+function actionIconButton(action: Action): React.JSX.Element {
+	return (
+		<Tooltip key={action.id} label={action.label}>
+			<Button
+				type="ghost"
+				icon={action.icon}
+				color="currentColor"
+				size="medium"
+				onClick={(ev): void => {
+					ev.stopPropagation();
+					action.onClick(ev);
+				}}
+				disabled={action.disabled}
+			/>
+		</Tooltip>
+	);
+}
