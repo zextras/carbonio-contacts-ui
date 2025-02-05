@@ -1,33 +1,31 @@
 /*
- * SPDX-FileCopyrightText: 2021 Zextras <https://www.zextras.com>
+ * SPDX-FileCopyrightText: 2025 Zextras <https://www.zextras.com>
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React, { useCallback } from 'react';
 
-import { Divider } from '@zextras/carbonio-design-system';
 import { getAction, replaceHistory } from '@zextras/carbonio-shell-ui';
 import { head, includes, split } from 'lodash';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 
+import { useContactActions } from './contact-preview-actions';
 import ContactPreviewContent from './contact-preview-content';
-import ContactPreviewHeader from './contact-preview-header';
 import { useActionDeleteContacts } from '../../../actions/delete-contacts';
 import { useActionMoveContacts } from '../../../actions/move-contacts';
 import { useActionTrashContacts } from '../../../actions/trash-contacts';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { getFolderIdParts } from '../../../carbonio-ui-commons/helpers/folders';
-import { useAppSelector } from '../../hooks/redux';
+import { Displayer } from '../../../components/displayer/displayer';
 import { useDisplayName } from '../../hooks/use-display-name';
-import { selectContact } from '../../store/selectors/contacts';
+import { Contact } from '../../types/contact';
 
-export default function ContactPreviewPanel() {
+export const ContactPreviewPanel = ({ contact }: { contact: Contact }): React.JSX.Element => {
 	const urlLocation = useLocation();
 	const history = useHistory();
 	const { pathname } = useLocation();
-	const { folderId, contactId } = useParams();
+	const { folderId, contactId } = useParams<{ folderId: string; contactId: string }>();
 	const contactInternalId = contactId;
-	const contact = useAppSelector((state) => selectContact(state, folderId, contactInternalId));
 	const contactsMoveAction = useActionMoveContacts();
 	const deleteAction = useActionDeleteContacts();
 	const trashAction = useActionTrashContacts();
@@ -65,16 +63,11 @@ export default function ContactPreviewPanel() {
 
 	const displayName = useDisplayName(contact);
 
+	const actions = useContactActions(contact);
+
 	if (contact && displayName) {
 		return (
-			<>
-				<ContactPreviewHeader
-					displayName={displayName}
-					onClose={onClose}
-					onEdit={onEdit}
-					onDelete={onDelete}
-					onMove={onMove}
-				/>
+			<Displayer title={displayName} icon={'PersonOutline'} onClose={onClose} actions={actions}>
 				<ContactPreviewContent
 					contact={contact}
 					onEdit={onEdit}
@@ -84,10 +77,8 @@ export default function ContactPreviewPanel() {
 					onMail={onMail}
 					onMove={onMove}
 				/>
-
-				<Divider />
-			</>
+			</Displayer>
 		);
 	}
-	return null;
-}
+	return <></>;
+};

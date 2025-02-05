@@ -11,7 +11,7 @@ import { useRouteMatch, Switch, Route } from 'react-router-dom';
 
 import { EmptyFieldMessages, EmptyListMessages } from './utils';
 import ContactEditPanel from '../edit/contact-edit-panel';
-import ContactPreviewPanel from '../preview/contact-preview-panel';
+import { ContactPreviewWrapper } from '../preview/contact-preview-wrapper';
 
 const generateRandomNumber = () => Math.floor(Math.random() * 3);
 const SearchPanel = ({ searchResults, query, width }) => {
@@ -39,7 +39,7 @@ const SearchPanel = ({ searchResults, query, width }) => {
 		<Container width={width ?? '55%'} mainAlignment="flex-start">
 			<Switch>
 				<Route exact path={`${path}/folder/:folderId/contacts/:contactId`}>
-					<ContactPreviewPanel />
+					<ContactPreviewWrapper />
 				</Route>
 				<Route exact path={`${path}/folder/:folderId/edit/:editId`}>
 					<ContactEditPanel />

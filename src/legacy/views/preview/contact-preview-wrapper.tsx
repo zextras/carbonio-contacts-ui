@@ -7,7 +7,7 @@ import React from 'react';
 
 import { useParams } from 'react-router-dom';
 
-import { ContactPreviewBody } from './contact-preview-body';
+import { ContactPreviewPanel } from './contact-preview-panel';
 import { useAppSelector } from '../../hooks/redux';
 import { selectContact } from '../../store/selectors/contacts';
 
@@ -16,5 +16,5 @@ export const ContactPreviewWrapper = (): React.JSX.Element => {
 	const contactInternalId = contactId;
 	const contact = useAppSelector((state) => selectContact(state, folderId, contactInternalId));
 
-	return <>{contact && <ContactPreviewBody contact={contact} />}</>;
+	return <>{contact && <ContactPreviewPanel contact={contact} />}</>;
 };
