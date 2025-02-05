@@ -5,7 +5,7 @@
  */
 import React, { useMemo } from 'react';
 
-import { type Action, Button, Container } from '@zextras/carbonio-design-system';
+import { type Action, Button, Container, Tooltip } from '@zextras/carbonio-design-system';
 
 interface DisplayerActionsHeaderProps {
 	actions: Action[];
@@ -17,16 +17,19 @@ export const DisplayerActionsHeader = ({
 	const actionButtons = useMemo<React.JSX.Element[]>(
 		() =>
 			actions.map((action) => (
-				<Button
-					key={action.id}
-					label={action.label}
-					type={'outlined'}
-					onClick={action.onClick}
-					size={'medium'}
-					backgroundColor={'transparent'}
-					disabled={action.disabled}
-					labelColor={action.color}
-				/>
+				<Tooltip key={action.id} label={action.label}>
+					<Button
+						type="ghost"
+						icon={action.icon}
+						color="currentColor"
+						size="medium"
+						onClick={(ev): void => {
+							ev.stopPropagation();
+							action.onClick(ev);
+						}}
+						disabled={action.disabled}
+					/>
+				</Tooltip>
 			)),
 		[actions]
 	);
