@@ -144,7 +144,7 @@ function useCreateDeleteModalAction<T extends ContactGroup>(): ({
 		return {
 			id: ACTION_IDS.deleteCG,
 			label: t('action.contactGroup.delete', 'Delete'),
-			icon: 'Trash2Outline',
+			icon: 'DeletePermanentlyOutline',
 			canExecute: () => true,
 			execute,
 			color: 'error'
