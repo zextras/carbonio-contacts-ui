@@ -45,6 +45,7 @@ import { createCnItem, createSoapContact } from '../../../../tests/utils';
 import { generateStore } from '../../../tests/generators/store';
 import { FolderPanel } from '../folder-panel';
 import { createContactsApiInterceptor } from './utils';
+import { CONTACT_GROUP_DELETE_ICON } from '../../../../views/contact-groups/actions/constants';
 
 const mockMailToAction = (): void => {
 	getActionMock.mockImplementation((type, id) => {
@@ -546,7 +547,7 @@ describe('Folder panel', () => {
 				expect(listElement).toBeVisible();
 
 				const deleteAction = within(listElement as HTMLElement).getByTestId(
-					TESTID_SELECTORS.icons.trash
+					`icon: ${CONTACT_GROUP_DELETE_ICON}`
 				);
 
 				await user.click(deleteAction);
@@ -581,7 +582,7 @@ describe('Folder panel', () => {
 				expect(listElement).toBeVisible();
 
 				const deleteAction = within(listElement as HTMLElement).getByTestId(
-					TESTID_SELECTORS.icons.trash
+					`icon: ${CONTACT_GROUP_DELETE_ICON}`
 				);
 
 				await user.click(deleteAction);

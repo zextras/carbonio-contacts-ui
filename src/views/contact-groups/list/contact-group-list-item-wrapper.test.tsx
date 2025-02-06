@@ -13,6 +13,7 @@ import { screen, setupTest } from '../../../carbonio-ui-commons/test/test-setup'
 import { TESTID_SELECTORS } from '../../../constants/tests';
 import { generateStore } from '../../../legacy/tests/generators/store';
 import { buildContactGroup, buildMembers } from '../../../tests/model-builder';
+import { CONTACT_GROUP_DELETE_ICON } from '../actions/constants';
 
 jest.mock('react-router-dom', () => ({
 	...jest.requireActual('react-router-dom'),
@@ -41,7 +42,7 @@ describe('Contact group list item', () => {
 			const contactGroup = buildContactGroup();
 
 			setupTest(<ContactGroupListItemWrapper contactGroup={contactGroup} />, { store });
-			expect(screen.getByTestId(TESTID_SELECTORS.icons.trash)).toBeVisible();
+			expect(screen.getByTestId(`icon: ${CONTACT_GROUP_DELETE_ICON}`)).toBeVisible();
 		});
 	});
 });
