@@ -1,17 +1,20 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 /*
  * SPDX-FileCopyrightText: 2025 Zextras <https://www.zextras.com>
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback, useMemo } from 'react';
+import React, { ReactNode, useCallback, useMemo } from 'react';
 
-import { Button, Tooltip } from '@zextras/carbonio-design-system';
 import { replaceHistory } from '@zextras/carbonio-shell-ui';
 import { head, includes, split } from 'lodash';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 
 import { useContactActions } from './contact-preview-actions';
 import ContactPreviewContent from './contact-preview-content';
+
+import { ActionIconButton } from '../../../components/action-icon-button';
+import { ActionTagButton } from '../../../components/action-tag-button';
 import { Displayer } from '../../../components/displayer/displayer';
 import { DisplayerActionsHeader } from '../../../components/displayer-actions-header';
 import { useDisplayName } from '../../hooks/use-display-name';
@@ -30,24 +33,15 @@ export const ContactPreviewPanel = ({ contact }: { contact: Contact }): React.JS
 	const displayName = useDisplayName(contact);
 	const actions = useContactActions(contact);
 
-	const actionButtons = useMemo<React.JSX.Element[]>(
+	const actionButtons = useMemo<ReactNode[]>(
 		() =>
-			actions.map((action) => (
-				<Tooltip key={action.id} label={action.label}>
-					<Button
-						type="ghost"
-						icon={action.icon}
-						color="currentColor"
-						size="medium"
-						onClick={(ev): void => {
-							ev.stopPropagation();
-							action.onClick(ev);
-						}}
-						disabled={action.disabled}
-					/>
-				</Tooltip>
-			)),
-		[actions]
+			actions.map((action) => {
+				if (action.id === 'tag') {
+					return <ActionTagButton key={action.id} contact={contact} />;
+				}
+				return <ActionIconButton action={action} key={action.id} />;
+			}),
+		[actions, contact]
 	);
 	return (
 		<Displayer title={displayName} icon={'PersonOutline'} onClose={onClose}>

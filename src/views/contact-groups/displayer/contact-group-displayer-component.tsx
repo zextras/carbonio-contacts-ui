@@ -4,12 +4,13 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useMemo } from 'react';
+import React, { ReactNode, useMemo } from 'react';
 
-import { Action, Button, Container, Tooltip } from '@zextras/carbonio-design-system';
+import { Action, Container } from '@zextras/carbonio-design-system';
 
 import { ContactGroupDisplayerDetails } from './contact-group-displayer-details';
 import { ContactGroupEmptyDisplayer } from './contact-group-empty-displayer';
+import { ActionIconButton } from '../../../components/action-icon-button';
 import { DisplayerActionsHeader } from '../../../components/displayer-actions-header';
 import { DisplayerHeader } from '../../../components/displayer-header';
 import { ContactGroup } from '../../../model/contact-group';
@@ -25,8 +26,8 @@ export const ContactGroupDisplayerComponent = ({
 	actionEvaluator
 }: Props): React.JSX.Element => {
 	const actions = actionEvaluator();
-	const actionButtons = useMemo<React.JSX.Element[]>(
-		() => actions.map((action) => actionIconButton(action)),
+	const actionButtons = useMemo<ReactNode[]>(
+		() => actions.map((action) => <ActionIconButton action={action} key={action.id} />),
 		[actions]
 	);
 	return (
@@ -64,22 +65,3 @@ export const ContactGroupDisplayerComponent = ({
 		</Container>
 	);
 };
-
-// TODO: use for both cg and contact
-function actionIconButton(action: Action): React.JSX.Element {
-	return (
-		<Tooltip key={action.id} label={action.label}>
-			<Button
-				type="ghost"
-				icon={action.icon}
-				color="currentColor"
-				size="medium"
-				onClick={(ev): void => {
-					ev.stopPropagation();
-					action.onClick(ev);
-				}}
-				disabled={action.disabled}
-			/>
-		</Tooltip>
-	);
-}

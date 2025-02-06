@@ -19,33 +19,14 @@ import { ZIMBRA_STANDARD_COLORS } from '../../../carbonio-ui-commons/constants';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { getFolderIdParts, isTrash } from '../../../carbonio-ui-commons/helpers/folders';
 import { useTags } from '../../../carbonio-ui-commons/store/zustand/tags';
-import { ItemType } from '../../../carbonio-ui-commons/types/tags';
 import { Contact } from '../../types/contact';
 import { useTagExist } from '../../ui-actions/tag-actions';
+import { ItemType } from '../secondary-bar/parts/tags/types';
 
 const useTagsAction = (contact: Contact): UIAction<Contact, Contact> => {
 	const tagsFromStore = useTags();
 	const triggerSearch = noop;
 
-	// useCallback(
-	// 	(tagToSearch: Tag) =>
-	// 		runSearch(
-	// 			[
-	// 				{
-	// 					avatarBackground: ZIMBRA_STANDARD_COLORS[tagToSearch?.color ?? 0].hex,
-	// 					avatarIcon: 'Tag',
-	// 					background: 'gray2',
-	// 					hasAvatar: true,
-	// 					isGeneric: false,
-	// 					isQueryFilter: true,
-	// 					label: `tag:${tagToSearch?.name}`,
-	// 					value: `tag:"${tagToSearch?.name}"`
-	// 				}
-	// 			],
-	// 			'contacts'
-	// 		),
-	// 	[]
-	// );
 	const tags: Array<ItemType> = useMemo(
 		() =>
 			reduce(
@@ -54,7 +35,7 @@ const useTagsAction = (contact: Contact): UIAction<Contact, Contact> => {
 					if (includes(contact.tags, v.id))
 						acc.push({
 							...v,
-							color: ZIMBRA_STANDARD_COLORS[v.color ?? 0].hex,
+							color: Number(ZIMBRA_STANDARD_COLORS[v.color ?? 0].hex),
 							label: v.name,
 							onClick: () => triggerSearch(v),
 							customComponent: (
@@ -79,35 +60,28 @@ const useTagsAction = (contact: Contact): UIAction<Contact, Contact> => {
 		[contact.tags, tagsFromStore, triggerSearch]
 	);
 	const tagIcon = useMemo(() => (tags.length > 1 ? 'TagsMoreOutline' : 'Tag'), [tags]);
-	const tagIconColor = useMemo(() => (tags.length === 1 ? tags[0].color : undefined), [tags]);
 
 	const isTagInStore = useTagExist(tags);
 
 	const onTagClick = useCallback(() => {
-		triggerSearch(tagsFromStore?.[contact?.tags[0]]);
+		contact?.tags && triggerSearch(tagsFromStore?.[contact?.tags[0]]);
 	}, [contact.tags, triggerSearch, tagsFromStore]);
-
-	const showMultiTagIcon = useMemo(
-		(): boolean => contact.tags !== undefined && contact.tags.length > 1 && isTagInStore,
-		[contact.tags?.length, isTagInStore]
-	);
 
 	const shouldDisplayTagIcon = useCallback(
 		(): boolean =>
 			contact.tags !== undefined &&
 			contact.tags?.length !== 0 &&
-			!showMultiTagIcon &&
 			isTagInStore &&
 			every(contact.tags, (tn) => tn !== ''),
-		[isTagInStore, contact.tags, showMultiTagIcon]
+		[contact.tags, isTagInStore]
 	);
+
 	return {
-		id: `tag-contact-${contact.id}`,
+		id: `tag`,
+		icon: tagIcon,
 		label: '',
 		execute: onTagClick,
-		canExecute: shouldDisplayTagIcon,
-		icon: tagIcon,
-		color: tagIconColor
+		canExecute: shouldDisplayTagIcon
 	};
 };
 
@@ -121,7 +95,7 @@ const useMoveAction = (contact: Contact): UIAction<Contact, Contact> => {
 	const moveActionLabel = isInTrash ? t('label.restore', 'Restore') : t('label.move', 'Move');
 	const moveActionIcon = isInTrash ? 'RestoreOutline' : 'MoveOutline';
 	return {
-		id: 'delete',
+		id: 'move',
 		icon: moveActionIcon,
 		label: moveActionLabel,
 		execute: onMove,
@@ -138,7 +112,7 @@ const useEditAction = (contact: Contact): UIAction<Contact, Contact> => {
 		[contactInternalId, folderId]
 	);
 	return {
-		id: 'delete',
+		id: 'edit',
 		icon: 'EditOutline',
 		label: t('label.edit'),
 		execute: onEdit,
@@ -179,7 +153,7 @@ const useSendMailAction = (contact: Contact): UIAction<Contact, Contact> => {
 		}
 	}, [contact]);
 	return {
-		id: 'delete',
+		id: 'send',
 		icon: 'MailModOutline',
 		label: '',
 		execute: onMail,
