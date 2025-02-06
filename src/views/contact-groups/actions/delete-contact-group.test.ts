@@ -6,6 +6,7 @@
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 
+import { CONTACT_GROUP_DELETE_ICON } from './constants';
 import { useActionDeleteContactGroup } from './delete-contact-group';
 import { UIAction } from '../../../actions/types';
 import { screen, setupHook } from '../../../carbonio-ui-commons/test/test-setup';
@@ -37,7 +38,7 @@ describe('useActionDeleteCG', () => {
 		const { result } = setupHook(useActionDeleteContactGroup, { store: defaultStore });
 		expect(result.current).toEqual<UIAction<unknown, unknown>>(
 			expect.objectContaining({
-				icon: 'Trash2Outline',
+				icon: CONTACT_GROUP_DELETE_ICON,
 				label: 'Delete',
 				id: 'cg-delete-action',
 				canExecute: expect.anything(),

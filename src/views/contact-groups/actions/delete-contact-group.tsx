@@ -23,6 +23,7 @@ import { useGetContactGroupFromPath } from '../../../hooks/useGetContactGroupFro
 import { ContactGroup } from '../../../model/contact-group';
 import { apiClient } from '../../../network/api-client';
 import { useRedirectToContactGroupFolder } from '../navigation';
+import { CONTACT_GROUP_DELETE_ICON } from './constants';
 
 type DeleteCGActionBase<T extends ContactGroup> = UIAction<T, T>;
 export type DeleteCGAction = DeleteCGActionBase<ContactGroup>;
@@ -144,7 +145,7 @@ function useCreateDeleteModalAction<T extends ContactGroup>(): ({
 		return {
 			id: ACTION_IDS.deleteCG,
 			label: t('action.contactGroup.delete', 'Delete'),
-			icon: 'DeletePermanentlyOutline',
+			icon: CONTACT_GROUP_DELETE_ICON,
 			canExecute: () => true,
 			execute,
 			color: 'error'

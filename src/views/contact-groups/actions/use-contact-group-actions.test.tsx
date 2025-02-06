@@ -7,6 +7,7 @@
 import { faker } from '@faker-js/faker';
 import * as shell from '@zextras/carbonio-shell-ui';
 
+import { CONTACT_GROUP_DELETE_ICON } from './constants';
 import { useContactGroupActions } from './use-contact-group-actions';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { useFolderStore } from '../../../carbonio-ui-commons/store/zustand/folder';
@@ -151,7 +152,7 @@ describe('useContactGroupActions', () => {
 		expect(result.current).toContainEqual({
 			id: ACTION_IDS.deleteCG,
 			label: 'Delete',
-			icon: 'Trash2Outline',
+			icon: CONTACT_GROUP_DELETE_ICON,
 			onClick: expect.anything(),
 			color: 'error'
 		});
@@ -168,7 +169,7 @@ describe('useContactGroupActions', () => {
 			expect(result.current).toContainEqual({
 				id: ACTION_IDS.deleteCG,
 				label: 'Delete',
-				icon: 'Trash2Outline',
+				icon: CONTACT_GROUP_DELETE_ICON,
 				onClick: expect.anything(),
 				color: 'error'
 			});
@@ -183,7 +184,7 @@ describe('useContactGroupActions', () => {
 			expect(result.current).toContainEqual({
 				id: ACTION_IDS.deleteCG,
 				label: 'Delete',
-				icon: 'Trash2Outline',
+				icon: CONTACT_GROUP_DELETE_ICON,
 				onClick: expect.anything(),
 				color: 'error'
 			});
@@ -206,7 +207,7 @@ describe('useContactGroupActions', () => {
 			expect(result.current).toContainEqual({
 				id: ACTION_IDS.deleteCG,
 				label: 'Delete',
-				icon: 'Trash2Outline',
+				icon: CONTACT_GROUP_DELETE_ICON,
 				onClick: expect.anything(),
 				color: 'error'
 			});
