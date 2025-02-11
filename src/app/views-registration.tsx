@@ -6,19 +6,21 @@
 import React, { FC, lazy, Suspense, useEffect } from 'react';
 
 import { ModalManager } from '@zextras/carbonio-design-system';
+import type * as SearchUI from '@zextras/carbonio-search-ui';
 import {
 	addBoardView,
 	addRoute,
-	addSearchView,
 	addSettingsView,
-	SearchViewProps,
 	SecondaryBarComponentProps,
-	Spinner
+	upsertApp,
+	useIntegratedFunction
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
+import { Spinner } from '../components/Spinner';
 import {
 	CONTACT_BOARD_ID,
+	CONTACTS_APP_ID,
 	CONTACTS_ROUTE,
 	EDIT_CONTACT_GROUP_BOARD_ID,
 	EDIT_DL_BOARD_ID,
@@ -139,7 +141,7 @@ const SettingsView = (): React.JSX.Element => (
 	</Suspense>
 );
 
-const SearchView = (props: SearchViewProps): React.JSX.Element => (
+const SearchView = (props: SearchUI.SearchViewProps): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
 		<StoreProvider>
 			<ModalManager>
@@ -161,13 +163,19 @@ const LegacySecondaryBarView = (props: SecondaryBarComponentProps): React.JSX.El
 
 export const ViewsRegistration: FC = () => {
 	const [t] = useTranslation();
+	const [addSearchView, isAddSearchViewAvailable] =
+		useIntegratedFunction<typeof SearchUI.addSearchView>('search-add-view');
+	const [removeSearchView, isRemoveSearchViewAvailable] =
+		useIntegratedFunction<typeof SearchUI.removeSearchView>('search-remove-view');
+
+	const contactsAppLabel = t('label.app_name', 'Contacts');
 
 	useEffect(() => {
 		addRoute({
 			route: CONTACTS_ROUTE,
 			position: 300,
 			visible: true,
-			label: t('label.app_name', 'Contacts'),
+			label: contactsAppLabel,
 			primaryBar: 'ContactsModOutline',
 			secondaryBar: LegacySecondaryBarView,
 			appView: ContactsAppView
@@ -183,13 +191,8 @@ export const ViewsRegistration: FC = () => {
 		});
 		addSettingsView({
 			route: CONTACTS_ROUTE,
-			label: t('label.app_name', 'Contacts'),
+			label: contactsAppLabel,
 			component: SettingsView
-		});
-		addSearchView({
-			route: CONTACTS_ROUTE,
-			label: t('label.app_name', 'Contacts'),
-			component: SearchView
 		});
 		addBoardView({
 			id: CONTACT_BOARD_ID,
@@ -207,7 +210,38 @@ export const ViewsRegistration: FC = () => {
 			id: EDIT_DL_BOARD_ID,
 			component: EditDLBoardView
 		});
-	}, [t]);
+		upsertApp({
+			name: CONTACTS_APP_ID,
+			display: t('label.app_name', 'Contacts')
+		});
+	}, [contactsAppLabel, t]);
+
+	useEffect(() => {
+		if (isAddSearchViewAvailable) {
+			addSearchView({
+				id: CONTACTS_APP_ID,
+				app: CONTACTS_APP_ID,
+				route: CONTACTS_ROUTE,
+				label: contactsAppLabel,
+				component: SearchView,
+				icon: 'ContactsModOutline',
+				position: 300
+			});
+		}
+
+		return () => {
+			if (isRemoveSearchViewAvailable) {
+				removeSearchView(CONTACTS_APP_ID);
+			}
+		};
+	}, [
+		addSearchView,
+		contactsAppLabel,
+		isAddSearchViewAvailable,
+		isRemoveSearchViewAvailable,
+		removeSearchView,
+		t
+	]);
 
 	return null;
 };

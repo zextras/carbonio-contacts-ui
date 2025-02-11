@@ -6,10 +6,11 @@
 import React, { MouseEventHandler, useCallback, useMemo, DragEvent } from 'react';
 
 import { Container, Drag } from '@zextras/carbonio-design-system';
-import { replaceHistory, useTags } from '@zextras/carbonio-shell-ui';
+import { replaceHistory } from '@zextras/carbonio-shell-ui';
 
 import { ItemAvatar } from './item-avatar';
 import { ItemContent } from './item-content';
+import { useTags } from '../../../../carbonio-ui-commons/store/zustand/tags';
 import { getTagsArray } from '../../../helpers/tags';
 import { Contact } from '../../../types/contact';
 import ListItemActionWrapper from '../../folder/list-item-action-wrapper';
@@ -77,14 +78,8 @@ export const ContactListItem = ({
 		>
 			<Container orientation="vertical" data-testid={'contact-list-item'} onClick={_onClick}>
 				<Container orientation="horizontal" mainAlignment="flex-start">
-					<ListItemActionWrapper contact={item} current={active}>
-						<ItemAvatar
-							item={item}
-							selected={selected}
-							selecting={selecting}
-							toggle={toggle}
-							folderId={folderId}
-						/>
+					<ListItemActionWrapper contact={item}>
+						<ItemAvatar item={item} selected={selected} selecting={selecting} toggle={toggle} />
 						<ItemContent item={item} tags={tags} />
 					</ListItemActionWrapper>
 				</Container>

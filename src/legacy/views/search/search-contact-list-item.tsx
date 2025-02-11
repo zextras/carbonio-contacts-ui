@@ -6,9 +6,10 @@
 import React, { MouseEventHandler, useCallback, useMemo } from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
-import { replaceHistory, useTags } from '@zextras/carbonio-shell-ui';
+import { replaceHistory } from '@zextras/carbonio-shell-ui';
 import { noop } from 'lodash';
 
+import { useTags } from '../../../carbonio-ui-commons/store/zustand/tags';
 import { getTagsArray } from '../../helpers/tags';
 import { Contact } from '../../types/contact';
 import { ItemAvatar } from '../app/folder-panel/item-avatar';
@@ -31,7 +32,7 @@ export const SearchContactListItem = ({ item }: { item: Contact }): React.JSX.El
 	return (
 		<Container orientation="vertical" data-testid={'search-contact-list-item'} onClick={_onClick}>
 			<Container orientation="horizontal" mainAlignment="flex-start">
-				<ItemAvatar item={item} selected={''} selecting={false} toggle={noop} isSearch />
+				<ItemAvatar item={item} selected={false} selecting={false} toggle={noop} isSearch />
 				<ItemContent item={item} tags={tags} />
 			</Container>
 		</Container>

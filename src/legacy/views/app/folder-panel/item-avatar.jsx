@@ -18,6 +18,23 @@ const AvatarElement = styled(Avatar)`
 		font-size: 0.875rem;
 	}
 `;
+
+/**
+ * @type {
+ *   (props: {
+ * 			item: {
+ *				firstName: string;
+ *				middleName: string;
+ *				lastName: string;
+ *				id: string;
+ *			};
+ *			selected: boolean;
+ *			selecting: boolean;
+ *			toggle: func;
+ *			isSearch: boolean;
+ *   }) => React.JSX.Element
+ * }
+ */
 export const ItemAvatar = ({ item, selected, selecting, toggle, isSearch = false }) => {
 	const [t] = useTranslation();
 	const conversationSelect = useCallback(
