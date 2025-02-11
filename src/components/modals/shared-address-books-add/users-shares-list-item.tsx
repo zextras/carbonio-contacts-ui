@@ -13,7 +13,8 @@ import {
 	ListItem,
 	List,
 	Row,
-	TextWithTooltip
+	Tooltip,
+	Text
 } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
@@ -61,7 +62,9 @@ export const UsersSharesListItem: FC<UsersSharesListItemProps> = ({
 				data-testid={'shares-users-list-item'}
 			>
 				<Row wrap={'nowrap'} gap={'0.5rem'} flexShrink={1} minWidth={'1rem'}>
-					<TextWithTooltip>{label}</TextWithTooltip>
+					<Tooltip label={label} overflowTooltip>
+						<Text>{label}</Text>
+					</Tooltip>
 				</Row>
 				<IconButton
 					icon={expanded ? 'ChevronUp' : 'ChevronDown'}

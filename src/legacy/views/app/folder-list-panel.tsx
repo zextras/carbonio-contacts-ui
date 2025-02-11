@@ -6,11 +6,11 @@
 import React, { Suspense, useMemo } from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
-import { Spinner } from '@zextras/carbonio-shell-ui';
 import { trimEnd } from 'lodash';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 
 import { FolderPanel } from './folder-panel';
+import { Spinner } from '../../../components/Spinner';
 
 export const FolderListPanel = (): React.JSX.Element => {
 	const { path } = useRouteMatch();

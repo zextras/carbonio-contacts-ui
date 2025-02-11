@@ -139,13 +139,13 @@ export const ShareRevokeModal = ({
 						setStandardMessage(ev.target.value);
 					}}
 					disabled={!sendNotification}
-					backgroundColor="gray5"
+					background="gray5"
 				/>
 			</Container>
 			<Container
 				orientation="horizontal"
 				crossAlignment="baseline"
-				mainAlignment="baseline"
+				mainAlignment="flex-start"
 				padding={{ all: 'small' }}
 			>
 				<Row padding={{ right: 'small' }}>

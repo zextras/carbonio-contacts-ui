@@ -5,22 +5,12 @@
  */
 import React, { FC, ReactElement, useCallback } from 'react';
 
-import { Container, ChipInput, ChipProps, ChipInputProps } from '@zextras/carbonio-design-system';
+import { Container, ChipInput } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
 import { Query } from '../search-types';
 
-export type KeywordState = Array<{
-	label?: string;
-	hasAvatar?: boolean;
-	value?: string;
-	isQueryFilter?: boolean;
-	isGeneric?: boolean;
-	avatarIcon?: ChipProps['avatarIcon'];
-	avatarBackground?: ChipProps['avatarBackground'];
-	hasError?: boolean;
-	error?: boolean | string;
-}>;
+export type KeywordState = Query;
 
 type ComponentProps = {
 	compProps: {
@@ -33,8 +23,8 @@ const KeywordRow: FC<ComponentProps> = ({ compProps }): ReactElement => {
 	const { otherKeywords, setOtherKeywords, query } = compProps;
 	const [t] = useTranslation();
 	const keywordChipOnAdd = useCallback(
-		(label: string) => ({
-			label,
+		(label: unknown): Query[number] => ({
+			label: label as string,
 			hasAvatar: false,
 			isGeneric: true
 		}),
@@ -53,8 +43,8 @@ const KeywordRow: FC<ComponentProps> = ({ compProps }): ReactElement => {
 				placeholder={t('label.keyword', 'Keyword')}
 				background="gray5"
 				value={otherKeywords}
-				onChange={onChange as ChipInputProps['onChange']}
-				onAdd={keywordChipOnAdd as ChipInputProps['onAdd']}
+				onChange={onChange}
+				onAdd={keywordChipOnAdd}
 				defaultValue={query}
 			/>
 		</Container>
