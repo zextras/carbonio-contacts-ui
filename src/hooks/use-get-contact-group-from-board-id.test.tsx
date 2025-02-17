@@ -1,0 +1,60 @@
+/*
+ * SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only
+ */
+
+import * as shell from '@zextras/carbonio-shell-ui';
+
+import { useGetContactGroupFromBoardId } from './use-get-contact-group-from-board-id';
+import { setupHook } from '../carbonio-ui-commons/test/test-setup';
+import { generateStore } from '../legacy/tests/generators/store';
+import { buildContactGroup } from '../tests/model-builder';
+
+function spyMockUseBoard(contactGroupId: string, folderId: string): void {
+	jest.spyOn(shell, 'useBoard').mockReturnValue({
+		context: { contactGroupId, folderId },
+		id: '',
+		boardViewId: '',
+		app: '',
+		icon: '',
+		title: ''
+	});
+}
+
+describe('Use get contact group hook', () => {
+	const folderId = '1';
+	const contactGroup = buildContactGroup();
+	const store = generateStore({
+		contacts: {
+			contacts: {
+				[folderId]: [contactGroup]
+			},
+			status: {},
+			searchedInFolder: {}
+		}
+	});
+	it('should return the contact group if is in the store', () => {
+		spyMockUseBoard(contactGroup.id, folderId);
+
+		const { result } = setupHook(useGetContactGroupFromBoardId, { store });
+
+		expect(result.current).toEqual(contactGroup);
+	});
+
+	it('should return undefined if the folder is not in the contacts store', () => {
+		spyMockUseBoard(contactGroup.id, 'non-existing-folder-id');
+
+		const { result } = setupHook(useGetContactGroupFromBoardId, { store });
+
+		expect(result.current).toBeUndefined();
+	});
+
+	it('should return undefined when requesting a contact that is not stored in an existing folder', () => {
+		spyMockUseBoard('non-existing-contact-group-id', folderId);
+
+		const { result } = setupHook(useGetContactGroupFromBoardId, { store });
+
+		expect(result.current).toBeUndefined();
+	});
+});

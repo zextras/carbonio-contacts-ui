@@ -15,7 +15,7 @@ import { createSoapAPIInterceptor } from '../../../../carbonio-ui-commons/test/m
 import { generateSettings } from '../../../../carbonio-ui-commons/test/mocks/settings/settings-generator';
 import { screen, setupTest } from '../../../../carbonio-ui-commons/test/test-setup';
 import { createSoapContact } from '../../../../tests/utils';
-import { SearchContactsRequest, SearchResponse } from '../../../../types';
+import { SearchContactsRequest, SearchContactsSoapResponse } from '../../../../types';
 import { generateStore } from '../../../tests/generators/store';
 import { type SoapContact } from '../../../types/soap';
 import SearchView from '../search-view';
@@ -36,15 +36,15 @@ describe('SearchView', () => {
 			label: 'test'
 		};
 		const soapContact: SoapContact = createSoapContact({});
-		const searchInterceptor = createSoapAPIInterceptor<SearchContactsRequest, SearchResponse>(
-			'Search',
-			{
-				cn: [soapContact],
-				more: false,
-				offset: 0,
-				sortBy: 'nameAsc'
-			}
-		);
+		const searchInterceptor = createSoapAPIInterceptor<
+			SearchContactsRequest,
+			SearchContactsSoapResponse
+		>('Search', {
+			cn: [soapContact],
+			more: false,
+			offset: 0,
+			sortBy: 'nameAsc'
+		});
 		const resultsHeader = (props: { label: string }): ReactElement => <>{props.label}</>;
 		const searchViewProps: SearchViewProps = {
 			useQuery: (): [QueryChip[], () => void] => [[queryChip], noop],

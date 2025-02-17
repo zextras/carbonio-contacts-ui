@@ -6,7 +6,7 @@
 import React, { createContext, FC, useCallback, useMemo } from 'react';
 
 import { useContextActions, useHoverActions, useSecondaryActions } from './contact-actions';
-import { Contact } from '../types/contact';
+import { Contact, ContactOrGroup } from '../types/contact';
 
 type ACPProps = {
 	folderId: string;
@@ -39,7 +39,7 @@ export const ActionsContext = createContext<{
 	getSecondaryActions: () => []
 });
 
-export const ActionsContextProvider: FC<ACPProps & { selectedContacts: Contact[] }> = ({
+export const ActionsContextProvider: FC<ACPProps & { selectedContacts: ContactOrGroup[] }> = ({
 	children,
 	folderId,
 	selectedIds,

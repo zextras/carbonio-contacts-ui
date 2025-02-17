@@ -3,16 +3,27 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { SoapResponse } from '@zextras/carbonio-shell-ui';
+import { JSNS, SoapResponse } from '@zextras/carbonio-shell-ui';
 import { http, HttpResponse, HttpResponseResolver } from 'msw';
 
 import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
-import {
-	FindContactGroupsSoapApiRequest,
-	FindContactGroupsSoapApiResponse
-} from '../../network/api/find-contact-groups';
+import { CnItem, GenericSoapPayload } from '../../network/api/types';
 import { buildSoapResponse, createCnItem } from '../utils';
 
+interface FindContactGroupsSoapApiRequest extends GenericSoapPayload<typeof JSNS.mail> {
+	limit: number;
+	offset: number;
+	sortBy: string;
+	types: string;
+	query: string;
+}
+
+interface FindContactGroupsSoapApiResponse extends GenericSoapPayload<typeof JSNS.mail> {
+	cn?: Array<CnItem>;
+	sortBy: string;
+	offset: number;
+	more: boolean;
+}
 export const createFindContactGroupsResponse = (
 	cn: FindContactGroupsSoapApiResponse['cn'],
 	more = false

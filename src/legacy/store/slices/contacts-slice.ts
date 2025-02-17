@@ -5,7 +5,15 @@
  */
 import { createSlice } from '@reduxjs/toolkit';
 
+import { INITIAL_STATE } from './constants';
 import { SEARCHED_FOLDER_STATE_STATUS } from '../../../constants';
+import { modifyContactGroup } from '../../../network/api/modify-contact';
+import { createContactGroup } from '../../../views/contact-groups/api/create-contact-group';
+import {
+	modifyContactGroupFulFilled,
+	modifyContactGroupPending,
+	modifyContactGroupRejected
+} from '../../../views/contact-groups/api/modify-contact-group';
 import { State } from '../../types/store';
 import { contactAction } from '../actions/contact-action';
 import { createContact } from '../actions/create-contact';
@@ -22,11 +30,17 @@ import {
 	createContactPending,
 	createContactRejected
 } from '../reducers/create-contact';
+import {
+	createContactGroupFulFilled,
+	createContactGroupPending,
+	createContactGroupRejected
+} from '../reducers/create-contact-group';
 import { folderActionPending, folderActionRejected } from '../reducers/folder-action';
 import {
 	handleDeletedContactsSyncReducer,
 	handleCreatedContactsSyncReducer,
-	handleModifiedContactsSyncReducer
+	handleModifiedContactsSyncReducer,
+	handleResetContactsSyncReducer
 } from '../reducers/handle-contacts-sync';
 import {
 	modifyContactFulFilled,
@@ -39,42 +53,51 @@ import {
 	searchContactsRejected
 } from '../reducers/search-contacts';
 
-const initialState: State['contacts'] = {
-	status: {
-		pendingActions: false
-	},
-	contacts: {},
-	searchedInFolder: {}
-};
-
 export const contactsSlice = createSlice({
 	name: 'contacts',
-	initialState,
+	initialState: INITIAL_STATE,
 	reducers: {
 		handleModifiedContactsSync: handleModifiedContactsSyncReducer,
 		handleCreatedContactsSync: handleCreatedContactsSyncReducer,
-		handleDeletedContactsSync: handleDeletedContactsSyncReducer
+		handleDeletedContactsSync: handleDeletedContactsSyncReducer,
+		handleResetContactsSync: handleResetContactsSyncReducer
 	},
 	extraReducers: (builder) => {
 		builder.addCase(searchContactsAsyncThunk.pending, searchContactsPending);
 		builder.addCase(searchContactsAsyncThunk.fulfilled, searchContactsFullFilled);
 		builder.addCase(searchContactsAsyncThunk.rejected, searchContactsRejected);
+
 		builder.addCase(createContact.pending, createContactPending);
 		builder.addCase(createContact.fulfilled, createContactFulFilled);
 		builder.addCase(createContact.rejected, createContactRejected);
+
 		builder.addCase(modifyContact.pending, modifyContactPending);
 		builder.addCase(modifyContact.fulfilled, modifyContactFulFilled);
 		builder.addCase(modifyContact.rejected, modifyContactRejected);
+
 		builder.addCase(contactAction.pending, contactActionPending);
 		builder.addCase(contactAction.fulfilled, contactActionFulFilled);
 		builder.addCase(contactAction.rejected, contactActionRejected);
+
 		builder.addCase(folderAction.pending, folderActionPending);
 		builder.addCase(folderAction.rejected, folderActionRejected);
+
+		builder.addCase(createContactGroup.fulfilled, createContactGroupFulFilled);
+		builder.addCase(createContactGroup.pending, createContactGroupPending);
+		builder.addCase(createContactGroup.rejected, createContactGroupRejected);
+
+		builder.addCase(modifyContactGroup.fulfilled, modifyContactGroupFulFilled);
+		builder.addCase(modifyContactGroup.pending, modifyContactGroupPending);
+		builder.addCase(modifyContactGroup.rejected, modifyContactGroupRejected);
 	}
 });
 
-export const { handleCreatedContactsSync, handleModifiedContactsSync, handleDeletedContactsSync } =
-	contactsSlice.actions;
+export const {
+	handleCreatedContactsSync,
+	handleModifiedContactsSync,
+	handleDeletedContactsSync,
+	handleResetContactsSync
+} = contactsSlice.actions;
 export const contactSliceReducer = contactsSlice.reducer;
 
 export const selectFolderHasMore = (state: State, id: string): boolean =>

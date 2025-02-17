@@ -11,7 +11,8 @@ import 'jest-styled-components';
 import { act, within } from '@testing-library/react';
 import { first, forEach, last, noop } from 'lodash';
 
-import CommonContactGroupBoard, {
+import {
+	CommonContactGroupBoard,
 	CommonContactGroupBoardProps
 } from './common-contact-group-board';
 import { setupTest, screen } from '../../carbonio-ui-commons/test/test-setup';
@@ -32,6 +33,8 @@ const buildProps = ({
 	memberListEmails = [],
 	nameValue = '',
 	initialNameValue = '',
+	initialFolderId = '7',
+	setFolderId = noop,
 	setNameValue = noop,
 	isOnSaveDisabled = false,
 	setMemberListEmails = noop,
@@ -40,6 +43,8 @@ const buildProps = ({
 	initialMemberListEmails,
 	memberListEmails,
 	nameValue,
+	initialFolderId,
+	setFolderId,
 	initialNameValue,
 	setNameValue,
 	isOnSaveDisabled,

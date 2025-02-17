@@ -10,6 +10,7 @@ import { trimEnd } from 'lodash';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 
 import SelectionInteractive from './selection-interactive';
+import { ContactGroupDisplayer } from '../../../views/contact-groups/displayer/contact-group-displayer';
 import ContactEditPanel from '../edit/contact-edit-panel';
 import ContactPreviewPanel from '../preview/contact-preview-panel';
 
@@ -28,6 +29,12 @@ export const DetailPanel = (): React.JSX.Element => {
 					<ContactPreviewPanel />
 				</Container>
 			</Route>
+			<Route exact path={`${trimmedPath}/folder/:folderId/contact-groups/:id`}>
+				<Container width={'60%'} mainAlignment="flex-start" data-testid="ContactDetailsContainer">
+					<ContactGroupDisplayer />
+				</Container>
+			</Route>
+
 			<Route exact path={`${trimmedPath}/folder/:folderId/edit/:editId`}>
 				<Container width={'60%'} mainAlignment="flex-start" data-testid="ContactDetailsContainer">
 					<ContactEditPanel />

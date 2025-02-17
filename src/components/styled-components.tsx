@@ -116,6 +116,10 @@ export const ScrollableContainer = styled(Container)`
 `;
 
 export const CustomIconAvatar = styled(Avatar)`
+	width: 2.625rem !important;
+	height: 2.625rem !important;
+	min-width: 2.625rem !important;
+	min-height: 2.625rem !important;
 	& > svg {
 		max-width: 1.5rem;
 		max-height: 1.5rem;

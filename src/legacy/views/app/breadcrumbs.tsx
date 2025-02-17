@@ -12,10 +12,12 @@ import { getFolderTranslatedNameByName } from '../../utils/helpers';
 
 export const Breadcrumbs = ({
 	folderPath,
-	itemsCount
+	itemsCount,
+	children
 }: {
 	folderPath: string;
 	itemsCount: number;
+	children?: React.JSX.Element;
 }): React.JSX.Element => {
 	const [t] = useTranslation();
 	const label = useMemo(
@@ -56,6 +58,7 @@ export const Breadcrumbs = ({
 							{itemsCount > 100 ? '100+' : itemsCount}
 						</Text>
 					</Row>
+					{children}
 				</Row>
 			</Container>
 			<Divider />

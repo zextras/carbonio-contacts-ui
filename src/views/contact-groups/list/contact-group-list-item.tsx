@@ -5,41 +5,55 @@
  */
 import React, { useCallback } from 'react';
 
-import { Action, Container, Row } from '@zextras/carbonio-design-system';
+import { Action, Button, Container, Row, Tooltip } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { ContextualMenu } from '../../../components/contextual-menu';
-import { ListItemHoverBar } from '../../../components/ListItemHoverBar';
-import {
-	CustomIconAvatar,
-	HoverContainer,
-	ListItemContainer
-} from '../../../components/styled-components';
+import { CustomIconAvatar, HoverRow } from '../../../components/styled-components';
 import { Text } from '../../../components/Text';
 import { LIST_ITEM_HEIGHT } from '../../../constants';
 import { ContactGroup } from '../../../model/contact-group';
 
 type CGListItemProps = {
 	contactGroup: ContactGroup;
-	visible?: boolean;
 	onClick?: (id: string) => void;
 	actions: Action[];
 };
 
-const ContentContainer = styled(Container)`
-	overflow: hidden;
+const HoverBarContainer = styled(Container)`
+	top: 0;
+	right: 0;
+	display: none;
+	position: absolute;
+	background: linear-gradient(
+		to right,
+		transparent,
+		${({ theme }): string => theme.palette.gray6.hover}
+	);
+	height: 55%;
+	& > * {
+		margin-top: ${({ theme }): string => theme.sizes.padding.small};
+		margin-right: ${({ theme }): string => theme.sizes.padding.small};
+	}
+`;
+
+const CustomHoverRow = styled(HoverRow)`
+	&:hover {
+		background: ${({ theme }): string => theme.palette.gray6.hover};
+		& ${HoverBarContainer} {
+			display: flex;
+		}
+	}
 `;
 
 export const ContactGroupListItem = React.memo<CGListItemProps>(
-	({ onClick, visible, contactGroup, actions }) => {
+	({ onClick, contactGroup, actions }) => {
 		const [t] = useTranslation();
 		const { id, title, members } = contactGroup;
-
 		const clickHandler = useCallback<React.MouseEventHandler<HTMLDivElement>>(() => {
 			onClick?.(id);
 		}, [id, onClick]);
-
 		const preventTextSelection = useCallback<React.MouseEventHandler<HTMLDivElement>>((e) => {
 			if (e.detail > 1) {
 				e.preventDefault();
@@ -47,51 +61,67 @@ export const ContactGroupListItem = React.memo<CGListItemProps>(
 		}, []);
 
 		return (
-			<Container data-testid={id} height={LIST_ITEM_HEIGHT} id={id}>
-				<ContextualMenu actions={actions}>
-					<ListItemContainer
-						height={'fit'}
-						crossAlignment={'flex-end'}
-						onMouseDown={preventTextSelection}
+			<Container data-testid={`contact-group-list-item-${id}`} height={LIST_ITEM_HEIGHT} id={id}>
+				<ContextualMenu
+					actions={actions}
+					data-testid={`contact-group-list-item-contextual-menu-${id}`}
+				>
+					<CustomHoverRow
+						orientation="horizontal"
+						mainAlignment="flex-start"
+						crossAlignment="unset"
 						onClick={clickHandler}
-						data-testid={'list-item-content'}
+						onMouseDown={preventTextSelection}
 					>
-						<HoverContainer
-							height={LIST_ITEM_HEIGHT}
-							wrap="nowrap"
-							mainAlignment="flex-start"
-							crossAlignment="center"
-							padding={{ horizontal: 'large', vertical: 'small' }}
+						<Row
+							gap={'0.5rem'}
 							width="fill"
-							gap={'1rem'}
+							wrap="nowrap"
+							mainAlignment={'flex-start'}
+							padding={{ all: 'small' }}
 						>
-							<ContentContainer
-								orientation="vertical"
-								height={'auto'}
-								maxHeight={'100%'}
+							<CustomIconAvatar label={title} icon={'PeopleOutline'} size={'large'} />
+							<Container
+								crossAlignment={'flex-start'}
 								gap={'0.25rem'}
-								width="fill"
-								mainAlignment={'flex-start'}
+								minWidth={0}
+								padding={{ left: 'small', right: 'small' }}
 							>
-								<Row gap={'0.5rem'} width="fill" wrap="nowrap" mainAlignment={'flex-start'}>
-									<CustomIconAvatar label={title} icon={'PeopleOutline'} size={'large'} />
-									<Container crossAlignment={'flex-start'} gap={'0.25rem'} minWidth={0}>
-										<Text overflow="ellipsis" size="small">
-											{title}
-										</Text>
-										<Text overflow="ellipsis" size="small" color={'gray1'}>
-											{t('contactGroupList.addressCount', {
-												count: members.length,
-												defaultValue_one: '{{count}} address',
-												defaultValue_other: `{{count}} addresses`
-											})}
-										</Text>
-									</Container>
-								</Row>
-							</ContentContainer>
-						</HoverContainer>
-						<ListItemHoverBar actions={actions} />
-					</ListItemContainer>
+								<Text overflow="ellipsis" size="small">
+									{title}
+								</Text>
+								<Text overflow="ellipsis" size="small" color={'gray1'}>
+									{t('contactGroupList.addressCount', {
+										count: members.length,
+										defaultValue_one: '{{count}} address',
+										defaultValue_other: `{{count}} addresses`
+									})}
+								</Text>
+							</Container>
+						</Row>
+						<HoverBarContainer
+							orientation="horizontal"
+							mainAlignment="flex-end"
+							crossAlignment="center"
+							padding={{ right: 'small' }}
+						>
+							{actions.map((action) => (
+								<Tooltip key={action.id} label={action.label}>
+									<Button
+										type="ghost"
+										icon={action.icon}
+										color="currentColor"
+										size="small"
+										onClick={(ev): void => {
+											ev.stopPropagation();
+											action.onClick(ev);
+										}}
+										disabled={action.disabled}
+									/>
+								</Tooltip>
+							))}
+						</HoverBarContainer>
+					</CustomHoverRow>
 				</ContextualMenu>
 			</Container>
 		);

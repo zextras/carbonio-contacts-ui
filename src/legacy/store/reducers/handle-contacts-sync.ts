@@ -5,9 +5,10 @@
  */
 import { find, forEach, map, orderBy, reduce, reject, uniqBy } from 'lodash';
 
-import { Contact } from '../../types/contact';
+import { Contact, ContactOrGroup } from '../../types/contact';
 import { ContactsSlice } from '../../types/store';
-import { removeContactsFromStore } from '../../utils/helpers';
+import { isGroup, removeContactsFromStore } from '../../utils/helpers';
+import { INITIAL_STATE } from '../slices/constants';
 
 export function handleCreatedContactsSyncReducer(
 	state: ContactsSlice,
@@ -18,7 +19,10 @@ export function handleCreatedContactsSyncReducer(
 			state.contacts[cn.parent] = orderBy(
 				[
 					...map(
-						reject(state.contacts[cn.parent], (item) => item.id === cn.id || !item.id),
+						reject(
+							state.contacts[cn.parent],
+							(item) => (item.id === cn.id || !item.id) && !isGroup(item)
+						) as Contact[],
 						(cnt) => ({
 							...cnt,
 							fileAsStr: cnt.fileAsStr.toLowerCase()
@@ -41,7 +45,7 @@ export function handleModifiedContactsSyncReducer(
 			state.contacts = reduce(
 				state.contacts,
 				(acc, v, key) => {
-					const oldContact = find(v, ['id', cn.id]);
+					const oldContact = find(v, ['id', cn.id]) as Contact;
 					if (oldContact) {
 						const updated = { ...oldContact, ...cn };
 						return oldContact.parent !== updated.parent
@@ -60,7 +64,7 @@ export function handleModifiedContactsSyncReducer(
 
 					return { ...acc, [key]: uniqBy([...(acc[key] ?? []), ...v], 'id') };
 				},
-				{} as { [k: string]: Array<Contact> }
+				{} as { [k: string]: Array<ContactOrGroup> }
 			);
 		}
 	});
@@ -71,4 +75,8 @@ export function handleDeletedContactsSyncReducer(
 	{ payload }: { payload: Array<string> }
 ): void {
 	removeContactsFromStore(state, payload);
+}
+
+export function handleResetContactsSyncReducer(): ContactsSlice {
+	return INITIAL_STATE;
 }

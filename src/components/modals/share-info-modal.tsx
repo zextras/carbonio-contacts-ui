@@ -72,7 +72,7 @@ export const ShareInfoModal = ({
 			mainAlignment="center"
 			crossAlignment="flex-start"
 			height="fit"
-			onClick={(e) => {
+			onClick={(e): void => {
 				if (e) {
 					e.stopPropagation();
 				}

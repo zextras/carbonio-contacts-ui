@@ -9,18 +9,19 @@ import React from 'react';
 import { find, map, reduce } from 'lodash';
 
 import { ContactListItem } from './contact-list-item';
-import { Contact } from '../../../types/contact';
+import { ContactGroupListItemWrapper } from '../../../../views/contact-groups/list/contact-group-list-item-wrapper';
+import { ContactOrGroup } from '../../../types/contact';
 
 export const DragItems = ({
 	contacts,
 	draggedIds
 }: {
-	contacts: Array<Contact>;
+	contacts: Array<ContactOrGroup>;
 	draggedIds: Record<string, boolean> | undefined;
 }): React.JSX.Element => {
 	const items = reduce(
 		draggedIds,
-		(acc: Array<Contact>, v, k) => {
+		(acc: Array<ContactOrGroup>, v, k) => {
 			const obj = find(contacts, ['id', k]);
 			if (obj) {
 				return [...acc, obj];
@@ -32,9 +33,12 @@ export const DragItems = ({
 
 	return (
 		<>
-			{map(items, (item, index) => (
-				<ContactListItem item={item} key={index} />
-			))}
+			{map(items, (item, index) => {
+				if ('members' in item) {
+					return <ContactGroupListItemWrapper contactGroup={item} />;
+				}
+				return <ContactListItem item={item} key={index} />;
+			})}
 		</>
 	);
 };

@@ -8,18 +8,32 @@ import React from 'react';
 
 import { Route } from 'react-router-dom';
 
-import { ContactGroupDisplayerMainAccount } from './contact-group-displayer-main-account';
+import { ContactGroupDisplayer } from './contact-group-displayer';
 import { screen, setupTest, within } from '../../../carbonio-ui-commons/test/test-setup';
-import { ROUTES, ROUTES_INTERNAL_PARAMS } from '../../../constants';
 import { EMPTY_DISPLAYER_HINT, TESTID_SELECTORS } from '../../../constants/tests';
-import { useContactGroupStore } from '../../../store/contact-groups';
+import { generateStore } from '../../../legacy/tests/generators/store';
 import { buildContactGroup } from '../../../tests/model-builder';
+import { CONTACT_GROUPS_PATH } from '../navigation';
 
 describe('Displayer controller', () => {
+	const contactGroup = buildContactGroup();
+	const { parent, id } = contactGroup;
+	const store = generateStore({
+		contacts: {
+			contacts: {
+				[parent]: [contactGroup]
+			},
+			status: {},
+			searchedInFolder: {}
+		}
+	});
 	it('should show empty displayer if no contact group is active', async () => {
-		setupTest(<ContactGroupDisplayerMainAccount />, {
-			initialEntries: ['/contact-groups/7']
-		});
+		setupTest(
+			<Route path={`/folder/:folderId/:type?/:id?`}>
+				<ContactGroupDisplayer />
+			</Route>,
+			{ store, initialEntries: [`/folder/${parent}`] }
+		);
 		await screen.findByText(EMPTY_DISPLAYER_HINT);
 		expect(screen.getByText(EMPTY_DISPLAYER_HINT)).toBeVisible();
 		expect(
@@ -28,14 +42,11 @@ describe('Displayer controller', () => {
 	});
 
 	it('should show contact group details if a contact group is active', () => {
-		const contactGroup = buildContactGroup();
-		useContactGroupStore.getState().addContactGroups([contactGroup]);
-
 		setupTest(
-			<Route path={`${ROUTES.mainRoute}${ROUTES.contactGroups}/7/:id?`}>
-				<ContactGroupDisplayerMainAccount />
+			<Route path={`/folder/:folderId/:type?/:id?`}>
+				<ContactGroupDisplayer />
 			</Route>,
-			{ initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.contactGroups}/7/${contactGroup.id}`] }
+			{ store, initialEntries: [`/folder/${parent}/${CONTACT_GROUPS_PATH}/${id}`] }
 		);
 
 		expect(

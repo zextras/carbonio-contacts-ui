@@ -15,10 +15,11 @@ import { ContactListItem } from './contact-list-item';
 import { DragItems } from './drag-items';
 import { EmptyListPanel } from './empty-list-panel';
 import { CustomListItem } from '../../../../carbonio-ui-commons/components/list/list-item';
-import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
-import { searchContactsAsyncThunk } from '../../../store/actions/search-contacts';
+import { ContactGroupListItemWrapper } from '../../../../views/contact-groups/list/contact-group-list-item-wrapper';
+import { useAppSelector } from '../../../hooks/redux';
 import { selectFolderHasMore } from '../../../store/slices/contacts-slice';
-import { Contact } from '../../../types/contact';
+import { ContactOrGroup } from '../../../types/contact';
+import { isGroup } from '../../../utils/helpers';
 
 const DragImageContainer = styled.div`
 	position: absolute;
@@ -32,15 +33,17 @@ type ContactsListProps = {
 	folderId: string;
 	selected: Record<string, boolean>;
 	isSelecting: boolean;
-	contacts: Array<Contact>;
+	contacts: Array<ContactOrGroup>;
 	toggle: (id: string) => void;
+	onLoadMore?: () => Promise<void>;
 };
 export const ContactsList = ({
 	folderId,
 	selected,
 	isSelecting,
 	contacts,
-	toggle
+	toggle,
+	onLoadMore
 }: ContactsListProps): React.JSX.Element => {
 	const [t] = useTranslation();
 	const loading = useRef(false);
@@ -48,7 +51,6 @@ export const ContactsList = ({
 	const [isDragging, setIsDragging] = useState(false);
 	const [draggedIds, setDraggedIds] = useState<Record<string, boolean>>();
 	const dragImageRef = useRef(null);
-	const dispatch = useAppDispatch();
 
 	const listMessages = useMemo(
 		() => [
@@ -66,31 +68,48 @@ export const ContactsList = ({
 
 	const hasMore = useAppSelector((state) => selectFolderHasMore(state, folderId));
 
-	const search = useCallback(
-		(reset: boolean) => {
-			loading.current = true;
-			dispatch(searchContactsAsyncThunk({ folderId, offset: reset ? 0 : contacts.length })).finally(
-				() => {
-					loading.current = false;
-				}
-			);
-		},
-		[contacts.length, dispatch, folderId]
-	);
+	const searchMoreResults = useCallback(() => {
+		loading.current = true;
+		onLoadMore?.().finally(() => {
+			loading.current = false;
+		});
+	}, [onLoadMore]);
 
 	const loadMore = useCallback(() => {
 		if (contacts.length > 0 && hasMore) {
-			search(false);
+			searchMoreResults();
 		}
-	}, [contacts.length, hasMore, search]);
+	}, [contacts.length, hasMore, searchMoreResults]);
 
 	const canLoadMore = useMemo(() => contacts.length > 0 && hasMore, [contacts.length, hasMore]);
-
 	const listItems = useMemo(
 		() =>
 			map(contacts, (contact) => {
 				const isSelected = selected[contact.id];
 				const active = itemId === contact.id;
+				if (isGroup(contact)) {
+					return (
+						<CustomListItem
+							key={contact.id}
+							selected={isSelected}
+							active={active}
+							background={active ? 'gray6' : 'gray5'}
+							data-testid={`custom-list-item-${contact.id}`}
+						>
+							{(): React.JSX.Element => (
+								<ContactGroupListItemWrapper
+									contactGroup={contact}
+									setDraggedIds={setDraggedIds}
+									setIsDragging={setIsDragging}
+									selectedItems={selected}
+									dragImageRef={dragImageRef}
+									key={`contact-group-${contact.id}`}
+								/>
+							)}
+						</CustomListItem>
+					);
+				}
+
 				return (
 					<CustomListItem
 						key={contact.id}
@@ -113,7 +132,10 @@ export const ContactsList = ({
 									dragImageRef={dragImageRef}
 								/>
 							) : (
-								<div style={{ height: '4rem' }} />
+								<div
+									style={{ height: '4rem' }}
+									data-testid={`contact-list-item-invisible-${contact.id}`}
+								/>
 							)
 						}
 					</CustomListItem>
