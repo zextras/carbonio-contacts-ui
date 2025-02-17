@@ -12,22 +12,21 @@ import {
 	useModal,
 	useSnackbar
 } from '@zextras/carbonio-design-system';
-import { closeBoard, getBoardById, useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
+import { closeBoard, getBoardById } from '@zextras/carbonio-shell-ui';
 import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 
-import { UIAction } from './types';
-import { FOLDERS } from '../carbonio-ui-commons/constants/folders';
-import { Text } from '../components/Text';
-import { ACTION_IDS, EDIT_CONTACT_GROUP_BOARD_ID, ROUTES_INTERNAL_PARAMS } from '../constants';
-import { useGetContactGroupFromPath } from '../hooks/useGetContactGroupFromPath';
-import { ContactGroup, SharedContactGroup } from '../model/contact-group';
-import { apiClient } from '../network/api-client';
-import { useContactGroupStore } from '../store/contact-groups';
+import { UIAction } from '../../../actions/types';
+import { Text } from '../../../components/Text';
+import { ACTION_IDS, EDIT_CONTACT_GROUP_BOARD_ID } from '../../../constants';
+import { useGetContactGroupFromPath } from '../../../hooks/useGetContactGroupFromPath';
+import { ContactGroup } from '../../../model/contact-group';
+import { apiClient } from '../../../network/api-client';
+import { useRedirectToContactGroupFolder } from '../navigation';
+import { CONTACT_GROUP_DELETE_ICON } from './constants';
 
-type DeleteCGActionBase<T extends ContactGroup> = UIAction<T, never>;
+type DeleteCGActionBase<T extends ContactGroup> = UIAction<T, T>;
 export type DeleteCGAction = DeleteCGActionBase<ContactGroup>;
-export type DeleteSharedCGAction = DeleteCGActionBase<SharedContactGroup>;
 
 type DeleteContactGroupActionReturn = {
 	contactGroupId: string;
@@ -73,14 +72,13 @@ const getDeleteModal = (
 						hideButton: true
 					});
 				})
-				.catch((error: Error) => {
+				.catch(() => {
 					createSnackbar({
 						key: `snackbar-${Date.now()}`,
 						severity: 'error',
 						label: t('label.error_try_again', 'Something went wrong, please try again'),
 						hideButton: true
 					});
-					console.error(error);
 				});
 		},
 		showCloseIcon: true,
@@ -147,7 +145,7 @@ function useCreateDeleteModalAction<T extends ContactGroup>(): ({
 		return {
 			id: ACTION_IDS.deleteCG,
 			label: t('action.contactGroup.delete', 'Delete'),
-			icon: 'Trash2Outline',
+			icon: CONTACT_GROUP_DELETE_ICON,
 			canExecute: () => true,
 			execute,
 			color: 'error'
@@ -155,49 +153,25 @@ function useCreateDeleteModalAction<T extends ContactGroup>(): ({
 	};
 }
 
-export const useActionDeleteMainAccountContactGroup = (): DeleteCGAction => {
-	const replaceHistory = useReplaceHistoryCallback();
+export const useActionDeleteContactGroup = (): DeleteCGAction => {
 	const createDeleteModal = useCreateDeleteModalAction<ContactGroup>();
 	const activeContactGroup = useGetContactGroupFromPath();
-	const { removeContactGroup } = useContactGroupStore();
+
+	const redirectTo = useRedirectToContactGroupFolder();
+
+	// NOTE: there is no store because this request is intercepted and item is ***magically*** removed
 	const onDeleteConfirm = useCallback(
 		async (contactGroup: ContactGroup) =>
 			apiClient.deleteContact([contactGroup.id]).then(() => {
 				if (activeContactGroup?.id === contactGroup.id) {
-					replaceHistory(`${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${FOLDERS.CONTACTS}/`);
+					contactGroup && redirectTo(contactGroup);
 				}
-				removeContactGroup(contactGroup.id);
 				return { contactGroupId: contactGroup.id };
 			}),
-		[activeContactGroup?.id, removeContactGroup, replaceHistory]
+		[activeContactGroup?.id, redirectTo]
 	);
 	return createDeleteModal({
 		modalId: 'delete-cg-modal',
 		doDelete: onDeleteConfirm
-	});
-};
-
-export const useActionDeleteSharedAccountContactGroup = (): DeleteSharedCGAction => {
-	const createDeleteModal = useCreateDeleteModalAction<SharedContactGroup>();
-	const replaceHistory = useReplaceHistoryCallback();
-	const activeContactGroup = useGetContactGroupFromPath();
-	const { removeSharedContactGroup } = useContactGroupStore();
-	const onDeleteConfirm = useCallback(
-		async (contactGroup: SharedContactGroup) =>
-			apiClient.deleteContact([contactGroup.id]).then(() => {
-				if (activeContactGroup?.id === contactGroup.id) {
-					replaceHistory(
-						`${ROUTES_INTERNAL_PARAMS.route.contactGroups}/${contactGroup.accountId}/`
-					);
-				}
-				removeSharedContactGroup(contactGroup.accountId, contactGroup.id);
-				return { contactGroupId: contactGroup.id };
-			}),
-		[activeContactGroup?.id, removeSharedContactGroup, replaceHistory]
-	);
-
-	return createDeleteModal({
-		modalId: 'delete-shared-cg-modal',
-		doDelete: (contactGroup: SharedContactGroup) => onDeleteConfirm(contactGroup)
 	});
 };

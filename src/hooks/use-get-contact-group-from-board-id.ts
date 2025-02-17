@@ -6,25 +6,16 @@
 
 import { useBoard } from '@zextras/carbonio-shell-ui';
 
-import { getFolderIdParts } from '../carbonio-ui-commons/helpers/folders';
+import { useAppSelector } from '../legacy/hooks/redux';
 import { ContactGroup } from '../model/contact-group';
-import { useContactGroupStore } from '../store/contact-groups';
 
 export const useGetContactGroupFromBoardId = (): ContactGroup | undefined => {
-	const { context } = useBoard<{ contactGroupId: string }>();
+	const { context } = useBoard<{ contactGroupId: string; folderId: string }>();
+	const contacts = useAppSelector((state) => state.contacts);
 
-	const contactGroupId = context?.contactGroupId;
-	const contactGroups = useContactGroupStore((state) => state.orderedContactGroups);
-	const unOrderedContactGroups = useContactGroupStore((state) => state.unorderedContactGroups);
-	const sharedContactGroups = useContactGroupStore((state) => state.sharedContactGroups);
-	if (!contactGroupId) return undefined;
+	if (!context) return undefined;
 
-	const { zid: accountId } = getFolderIdParts(contactGroupId);
-	if (accountId) {
-		return sharedContactGroups[accountId].contactGroups[contactGroupId];
-	}
-
-	return [...contactGroups, ...unOrderedContactGroups].find(
-		(contactGroupElement) => contactGroupElement.id === contactGroupId
-	);
+	return contacts.contacts[context.folderId]?.find(
+		(contact) => contact.id === context.contactGroupId
+	) as ContactGroup | undefined;
 };

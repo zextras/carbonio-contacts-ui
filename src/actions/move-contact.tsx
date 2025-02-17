@@ -12,12 +12,12 @@ import { UIAction } from './types';
 import { isRoot, isWriteAllowed } from '../carbonio-ui-commons/helpers/folders';
 import { Folder } from '../carbonio-ui-commons/types/folder';
 import { ACTION_IDS, TIMEOUTS } from '../constants';
-import { Contact } from '../legacy/types/contact';
+import { ContactOrGroup } from '../legacy/types/contact';
 import { apiClient } from '../network/api-client';
 
 export type MoveContactAction = UIAction<
-	{ contacts?: Array<Contact>; newParentAddressBook?: Folder },
-	{ contacts?: Array<Contact>; newParentAddressBook?: Folder }
+	{ contacts?: Array<ContactOrGroup>; newParentAddressBook?: Folder },
+	{ contacts?: Array<ContactOrGroup>; newParentAddressBook?: Folder }
 >;
 
 export const useActionMoveContact = (): MoveContactAction => {

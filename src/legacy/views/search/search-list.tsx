@@ -14,6 +14,8 @@ import styled from 'styled-components';
 import { SearchContactListItem } from './search-contact-list-item';
 import { type SearchResults } from './search-view';
 import { CustomListItem } from '../../../carbonio-ui-commons/components/list/list-item';
+import { ContactGroupListItemWrapper } from '../../../views/contact-groups/list/contact-group-list-item-wrapper';
+import { isGroup } from '../../utils/helpers';
 
 const BorderContainer = styled(Container)`
 	border-bottom: 0.0625rem solid ${({ theme }): string => theme.palette.gray2.regular};
@@ -57,7 +59,9 @@ export const SearchList = ({
 		() =>
 			map(searchResults.contacts, (contact) => {
 				const isActive = itemId === contact.id;
-
+				if (isGroup(contact)) {
+					return <ContactGroupListItemWrapper contactGroup={contact} />;
+				}
 				return (
 					<CustomListItem
 						selected={false}

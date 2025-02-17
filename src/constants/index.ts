@@ -13,6 +13,7 @@ export const ACTION_IDS = {
 	expandDL: 'dl-expand-action',
 	sendEmail: 'send-email-action',
 	sendEmailCG: 'cg-send-email-action',
+	addShareCG: 'cg-add-share',
 	deleteCG: 'cg-delete-action',
 	editCG: 'cg-edit-action',
 	copyToClipboard: 'copy-to-clipboard-action',
@@ -45,19 +46,17 @@ export const DL_NAME_MAX_LENGTH = 256;
 export const GROUPS_ROUTE = 'groups';
 export const ROUTES = {
 	mainRoute: '/:route',
-	contactGroups: '/:id?',
 	distributionLists: '/:filter?/:id?'
 } as const;
 
 export type RouteParams = {
-	route?: 'contact-groups' | 'distribution-lists';
+	route?: 'distribution-lists';
 	id?: string;
 	filter?: 'member' | 'manager';
 };
 
 export const ROUTES_INTERNAL_PARAMS = {
 	route: {
-		contactGroups: 'contact-groups',
 		distributionLists: 'distribution-lists'
 	},
 	filter: {

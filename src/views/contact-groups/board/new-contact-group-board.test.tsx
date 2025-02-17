@@ -11,15 +11,20 @@ import 'jest-styled-components';
 import { act, waitFor, within } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { http, HttpResponse } from 'msw';
+import { useHistory } from 'react-router-dom';
 
 import NewContactGroupBoard from './new-contact-group-board';
 import { getSetupServer } from '../../../carbonio-ui-commons/test/jest-setup';
+import { generateFolder } from '../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
+import { populateFoldersStore } from '../../../carbonio-ui-commons/test/mocks/store/folders';
 import { setupTest, screen } from '../../../carbonio-ui-commons/test/test-setup';
 import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../../constants';
 import { PALETTE, TESTID_SELECTORS } from '../../../constants/tests';
-import { apiClient } from '../../../network/api-client';
+import { generateStore } from '../../../legacy/tests/generators/store';
 import { spyUseBoardHooks } from '../../../tests/utils';
 import { getContactInput } from '../../board/common-contact-group-board.test';
+import * as createContactGroup from '../api/create-contact-group';
+import { CONTACT_GROUPS_PATH } from '../navigation';
 
 function spyUseBoard(navigateTo?: jest.Mock): void {
 	jest.spyOn(shell, 'useBoard').mockReturnValue({
@@ -39,12 +44,19 @@ beforeAll(() => {
 beforeEach(() => {
 	spyUseBoard();
 });
-
+jest.mock('react-router-dom', () => ({
+	...jest.requireActual('react-router-dom'),
+	useHistory: jest.fn()
+}));
+function setupNewContactGroupBoard(): ReturnType<typeof setupTest> {
+	const store = generateStore();
+	return setupTest(<NewContactGroupBoard />, { store });
+}
 describe('New contact group board', () => {
 	describe('Save button behaviours', () => {
 		describe('Save button disabled', () => {
 			it('should disable the save button when name input is empty string', async () => {
-				const { user } = setupTest(<NewContactGroupBoard />);
+				const { user } = setupNewContactGroupBoard();
 				await user.clear(screen.getByRole('textbox', { name: 'Group name*' }));
 				expect(
 					screen.getByRoleWithIcon('button', { name: /SAVE/i, icon: TESTID_SELECTORS.icons.save })
@@ -52,7 +64,7 @@ describe('New contact group board', () => {
 			});
 
 			it('should disable save button when name input contains only space characters', async () => {
-				const { user } = setupTest(<NewContactGroupBoard />);
+				const { user } = setupNewContactGroupBoard();
 				const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
 				await user.clear(nameInput);
 				await user.type(nameInput, '   ');
@@ -63,7 +75,7 @@ describe('New contact group board', () => {
 
 			it('should disable save button when name input length is greater than 256', async () => {
 				const newName = faker.string.alphanumeric(CONTACT_GROUP_NAME_MAX_LENGTH + 1);
-				const { user } = setupTest(<NewContactGroupBoard />);
+				const { user } = setupNewContactGroupBoard();
 				const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
 				await user.clear(nameInput);
 				await user.type(nameInput, newName);
@@ -87,7 +99,7 @@ describe('New contact group board', () => {
 			);
 
 			const newName = faker.string.alpha(10);
-			const { user } = setupTest(<NewContactGroupBoard />);
+			const { user } = setupNewContactGroupBoard();
 			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
 			await user.clear(nameInput);
 			await user.type(nameInput, newName);
@@ -111,7 +123,7 @@ describe('New contact group board', () => {
 			);
 
 			const newName = faker.string.alpha(10);
-			const { user } = setupTest(<NewContactGroupBoard />);
+			const { user } = setupNewContactGroupBoard();
 			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
 			await user.clear(nameInput);
 			await user.type(nameInput, newName);
@@ -123,20 +135,30 @@ describe('New contact group board', () => {
 			expect(await screen.findByText('Contact group successfully created')).toBeVisible();
 		});
 
-		it('should redirect to contact groups after creating successfully', async () => {
+		it('should redirect to created contact group after having created it successfully', async () => {
+			const folder = generateFolder({ id: '10' });
+			const newContactId = '1000';
+			populateFoldersStore({ customFolders: [folder] });
 			getSetupServer().use(
 				http.post('/service/soap/CreateContactRequest', async () =>
 					HttpResponse.json({
 						Body: {
-							CreateContactResponse: { cn: [{ id: '', _attrs: {} }] }
+							CreateContactResponse: { cn: [{ id: newContactId, l: folder.id, _attrs: {} }] }
 						}
 					})
 				)
 			);
-			const spyReplaceHistory = jest.spyOn(shell, 'replaceHistory');
 
 			const newName = faker.string.alpha(10);
-			const { user } = setupTest(<NewContactGroupBoard />, { initialEntries: ['/contact-groups'] });
+			const store = generateStore();
+			const spyReplaceHistory = jest.fn();
+			(useHistory as jest.Mock).mockReturnValue({
+				replace: spyReplaceHistory
+			});
+			const { user } = setupTest(<NewContactGroupBoard />, {
+				initialEntries: ['/contact-groups'],
+				store
+			});
 			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
 			await user.clear(nameInput);
 			await user.type(nameInput, newName);
@@ -147,6 +169,9 @@ describe('New contact group board', () => {
 			await user.click(saveButton);
 			expect(await screen.findByText('Contact group successfully created')).toBeVisible();
 			expect(spyReplaceHistory).toHaveBeenCalledTimes(1);
+			expect(spyReplaceHistory).toHaveBeenCalledWith(
+				`/folder/${folder.id}/${CONTACT_GROUPS_PATH}/${newContactId}`
+			);
 		});
 
 		it('should show error snackbar when create contact fails', async () => {
@@ -173,7 +198,7 @@ describe('New contact group board', () => {
 			);
 
 			const newName = faker.string.alpha(10);
-			const { user } = setupTest(<NewContactGroupBoard />);
+			const { user } = setupNewContactGroupBoard();
 			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
 			await user.clear(nameInput);
 			await user.type(nameInput, newName);
@@ -211,7 +236,7 @@ describe('New contact group board', () => {
 			);
 
 			const newName = faker.string.alpha(10);
-			const { user } = setupTest(<NewContactGroupBoard />);
+			const { user } = setupNewContactGroupBoard();
 			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
 			await user.clear(nameInput);
 			await user.type(nameInput, newName);
@@ -249,7 +274,7 @@ describe('New contact group board', () => {
 			const newEmail1 = faker.internet.email();
 			const newEmail2 = faker.internet.email();
 			const newName = faker.string.alpha(10);
-			const { user } = setupTest(<NewContactGroupBoard />);
+			const { user } = setupNewContactGroupBoard();
 			const contactInput = getContactInput();
 			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
 			await user.clear(nameInput);
@@ -289,10 +314,10 @@ describe('New contact group board', () => {
 				)
 			);
 
-			const createContactGroupSpy = jest.spyOn(apiClient, 'createContactGroup');
+			const createContactGroupSpy = jest.spyOn(createContactGroup, 'createContactGroup');
 			const newEmail1 = faker.internet.email();
 			const newEmail2 = faker.internet.email();
-			const { user } = setupTest(<NewContactGroupBoard />);
+			const { user } = setupNewContactGroupBoard();
 			const contactInput = getContactInput();
 
 			await user.type(contactInput, newEmail1);
@@ -317,7 +342,9 @@ describe('New contact group board', () => {
 			});
 			await screen.findByText('Contact group successfully created');
 
-			expect(createContactGroupSpy).toHaveBeenCalledWith('New Group', [newEmail1]);
+			expect(createContactGroupSpy).toHaveBeenCalledWith(
+				expect.objectContaining({ title: 'New Group', members: [newEmail1] })
+			);
 		});
 
 		it('should use inserted name in createContact request', async () => {
@@ -331,8 +358,8 @@ describe('New contact group board', () => {
 				)
 			);
 			const newName = faker.string.alpha(10);
-			const createContactGroupSpy = jest.spyOn(apiClient, 'createContactGroup');
-			const { user } = setupTest(<NewContactGroupBoard />);
+			const createContactGroupSpy = jest.spyOn(createContactGroup, 'createContactGroup');
+			const { user } = setupNewContactGroupBoard();
 			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
 			await user.clear(nameInput);
 			await user.type(nameInput, newName);
@@ -346,13 +373,15 @@ describe('New contact group board', () => {
 			});
 			await screen.findByText('Contact group successfully created');
 
-			expect(createContactGroupSpy).toBeCalledWith(newName, []);
+			expect(createContactGroupSpy).toBeCalledWith(
+				expect.objectContaining({ title: newName, members: [] })
+			);
 		});
 	});
 
 	describe('Discard button', () => {
 		it('should reset to the initial name when click on the discard button', async () => {
-			const { user } = setupTest(<NewContactGroupBoard />);
+			const { user } = setupNewContactGroupBoard();
 			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
 			const newName = faker.string.alphanumeric(CONTACT_GROUP_NAME_MAX_LENGTH + 1);
 			await user.clear(nameInput);
@@ -364,7 +393,7 @@ describe('New contact group board', () => {
 
 		it('should delete member list when click on the discard button', async () => {
 			const newEmail = faker.internet.email();
-			const { user } = setupTest(<NewContactGroupBoard />);
+			const { user } = setupNewContactGroupBoard();
 			const contactInput = getContactInput();
 			await user.type(contactInput, newEmail);
 			await act(async () => {
@@ -382,7 +411,7 @@ describe('New contact group board', () => {
 	describe('Name', () => {
 		it('should update name text', async () => {
 			const newName = faker.string.alpha(10);
-			const { user } = setupTest(<NewContactGroupBoard />);
+			const { user } = setupNewContactGroupBoard();
 			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
 			await user.clear(nameInput);
 			await user.type(nameInput, newName);
@@ -393,7 +422,7 @@ describe('New contact group board', () => {
 			const updateBoard = jest.fn();
 			spyUseBoardHooks(updateBoard);
 			const newName = faker.string.alpha(10);
-			const { user } = setupTest(<NewContactGroupBoard />);
+			const { user } = setupNewContactGroupBoard();
 
 			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
 			await user.clear(nameInput);
@@ -405,7 +434,7 @@ describe('New contact group board', () => {
 	describe('Addresses list', () => {
 		it('should update the number of the addresses when the user adds members on the list', async () => {
 			const email = faker.internet.email();
-			const { user } = setupTest(<NewContactGroupBoard />);
+			const { user } = setupNewContactGroupBoard();
 			const contactInput = getContactInput();
 			await user.type(contactInput, email);
 			await act(async () => {
@@ -421,7 +450,7 @@ describe('New contact group board', () => {
 		describe('Plus button and contact input', () => {
 			it('should disable the plus button when the user insert a duplicated chip only', async () => {
 				const validMail = faker.internet.email();
-				const { user } = setupTest(<NewContactGroupBoard />);
+				const { user } = setupNewContactGroupBoard();
 				const contactInput = getContactInput();
 				await user.type(contactInput, validMail);
 				await act(async () => {
@@ -450,7 +479,7 @@ describe('New contact group board', () => {
 		describe('Contact group add and remove members', () => {
 			it('should render the valid email on the list', async () => {
 				const email = faker.internet.email();
-				const { user } = setupTest(<NewContactGroupBoard />);
+				const { user } = setupNewContactGroupBoard();
 				const contactInput = getContactInput();
 				await user.type(contactInput, email);
 				await act(async () => {
@@ -466,7 +495,7 @@ describe('New contact group board', () => {
 			it('should add the valid email on the list and maintain also the previous list item', async () => {
 				const email = faker.internet.email();
 				const email2 = faker.internet.email();
-				const { user } = setupTest(<NewContactGroupBoard />);
+				const { user } = setupNewContactGroupBoard();
 				const contactInput = getContactInput();
 				await user.type(contactInput, email);
 				await act(async () => {
@@ -491,7 +520,7 @@ describe('New contact group board', () => {
 
 			it('should remove the email from the list when click on the remove button', async () => {
 				const email = faker.internet.email();
-				const { user } = setupTest(<NewContactGroupBoard />);
+				const { user } = setupNewContactGroupBoard();
 				const contactInput = getContactInput();
 				await user.type(contactInput, email);
 				await act(async () => {
@@ -513,7 +542,7 @@ describe('New contact group board', () => {
 			it('should update contactInput chips and icon when item is removed from the bottom list', async () => {
 				const errorMessage = 'Address already present';
 				const validMail = faker.internet.email();
-				const { user } = setupTest(<NewContactGroupBoard />);
+				const { user } = setupNewContactGroupBoard();
 				const contactInput = getContactInput();
 				await user.type(contactInput, validMail);
 				await act(async () => {
@@ -548,7 +577,7 @@ describe('New contact group board', () => {
 				const newEmail = faker.internet.email();
 				const invalidMail1 = faker.string.alpha(10);
 				const invalidMail2 = faker.string.alpha(10);
-				const { user } = setupTest(<NewContactGroupBoard />);
+				const { user } = setupNewContactGroupBoard();
 				const contactInput = getContactInput();
 				await user.type(contactInput, newEmail);
 				await act(async () => {
@@ -584,7 +613,7 @@ describe('New contact group board', () => {
 			it('should move valid chip addresses in bottom list and maintain duplicated ones in the contact input', async () => {
 				const email1 = faker.internet.email();
 				const email2 = faker.internet.email();
-				const { user } = setupTest(<NewContactGroupBoard />);
+				const { user } = setupNewContactGroupBoard();
 				const contactInput = getContactInput();
 				await user.type(contactInput, email1);
 				await act(async () => {
@@ -626,7 +655,7 @@ describe('New contact group board', () => {
 			it('should render "Address already present" error message when there is only a duplicated email as a chip and remove the error when a valid chip is added', async () => {
 				const errorMessage = 'Address already present';
 				const validMail = faker.internet.email();
-				const { user } = setupTest(<NewContactGroupBoard />);
+				const { user } = setupNewContactGroupBoard();
 				const contactInput = getContactInput();
 				await user.type(contactInput, validMail);
 				await act(async () => {
@@ -652,7 +681,7 @@ describe('New contact group board', () => {
 
 			it('should render AlertCircle error icon inside chip when the chip is a duplicated email and remove the icon error when duplicated item is removed from the bottom list', async () => {
 				const validMail = faker.internet.email();
-				const { user } = setupTest(<NewContactGroupBoard />);
+				const { user } = setupNewContactGroupBoard();
 				const contactInput = getContactInput();
 				await user.type(contactInput, validMail);
 				await act(async () => {
@@ -691,7 +720,7 @@ describe('New contact group board', () => {
 				const errorMessage = 'Addresses already present';
 				const validMail1 = faker.internet.email();
 				const validMail2 = faker.internet.email();
-				const { user } = setupTest(<NewContactGroupBoard />);
+				const { user } = setupNewContactGroupBoard();
 				const contactInput = getContactInput();
 
 				await user.type(contactInput, validMail1);
@@ -727,7 +756,7 @@ describe('New contact group board', () => {
 			it('should render "Invalid and already present addresses" error message when there are at least 1 error chip per type and remove the error when a valid chip is added', async () => {
 				const errorMessage = 'Invalid and already present addresses';
 				const validMail = faker.internet.email();
-				const { user } = setupTest(<NewContactGroupBoard />);
+				const { user } = setupNewContactGroupBoard();
 				const contactInput = getContactInput();
 
 				await user.type(contactInput, validMail);

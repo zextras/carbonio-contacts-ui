@@ -14,28 +14,19 @@ import {
 	ContactPhoneType,
 	ContactUrlType
 } from '../legacy/types/contact';
-import { ContactGroup, SharedContactGroup } from '../model/contact-group';
+import { ContactGroup } from '../model/contact-group';
 import { ShareInfo } from '../model/share-info';
 
 export const buildContactGroup = ({
 	title = faker.company.name(),
 	id = faker.number.int({ min: 100 }).toString(),
+	parent = '7',
 	members = []
 }: Partial<ContactGroup> = {}): ContactGroup => ({
 	title,
 	id,
+	parent,
 	members
-});
-export const buildSharedContactGroup = ({
-	title = faker.company.name(),
-	accountId = faker.number.int({ min: 100 }).toString(),
-	id = faker.number.int({ min: 100 }).toString(),
-	members = []
-}: Partial<SharedContactGroup> = {}): SharedContactGroup => ({
-	title,
-	id,
-	members,
-	accountId
 });
 
 export function buildMembers(count: number): string[] {

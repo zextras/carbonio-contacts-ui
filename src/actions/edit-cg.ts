@@ -12,7 +12,7 @@ import { UIAction } from './types';
 import { ACTION_IDS, EDIT_CONTACT_GROUP_BOARD_ID } from '../constants';
 import { ContactGroup } from '../model/contact-group';
 
-export type EditActionCG = UIAction<ContactGroup, never>;
+export type EditActionCG = UIAction<ContactGroup, ContactGroup>;
 
 export const useActionEditCG = (): EditActionCG => {
 	const [t] = useTranslation();
@@ -32,7 +32,7 @@ export const useActionEditCG = (): EditActionCG => {
 				id: `${EDIT_CONTACT_GROUP_BOARD_ID}-${contactGroup.id}`,
 				boardViewId: EDIT_CONTACT_GROUP_BOARD_ID,
 				title: contactGroup.title,
-				context: { contactGroupId: contactGroup.id }
+				context: { contactGroupId: contactGroup.id, folderId: contactGroup.parent }
 			});
 		}
 	}, []);

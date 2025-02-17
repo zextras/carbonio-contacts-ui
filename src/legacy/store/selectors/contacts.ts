@@ -5,16 +5,14 @@
  */
 import { find } from 'lodash';
 
-import { Contact } from '../../types/contact';
+import { ContactGroup } from '../../../model/contact-group';
+import { Contact, ContactOrGroup } from '../../types/contact';
 import { State } from '../../types/store';
 
-export function selectAllContacts({
-	contacts
-}: State): { [p: string]: Array<Contact> } | undefined {
-	return contacts?.contacts;
-}
-
-export function selectAllContactsInFolder({ contacts }: State, id: string): Contact[] | undefined {
+export function selectAllContactsInFolder(
+	{ contacts }: State,
+	id: string
+): ContactOrGroup[] | undefined {
 	return contacts?.contacts?.[id];
 }
 
@@ -23,7 +21,15 @@ export function selectContact(
 	folderId: string,
 	id: string
 ): Contact | undefined {
-	return find(contacts?.contacts?.[folderId], ['id', id]);
+	return find(contacts?.contacts?.[folderId], ['id', id]) as Contact | undefined;
+}
+
+export function selectContactGroup(
+	{ contacts }: State,
+	folderId: string,
+	id: string
+): ContactGroup | undefined {
+	return find(contacts?.contacts?.[folderId], ['id', id]) as ContactGroup | undefined;
 }
 
 export function selectContactsStatus({ contacts }: State, id: string): boolean | undefined {

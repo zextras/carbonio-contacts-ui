@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
+import { ContactGroup } from '../../model/contact-group';
 import { NameSpace } from '../../types/utils';
 import { RemoteContactResponse } from '../integrations/types';
 
@@ -96,6 +97,8 @@ export type Contact = {
 	URL: ContactUrlMap;
 	fileAsStr: string;
 };
+
+export type ContactOrGroup = Contact | ContactGroup;
 
 export type Group = {
 	display: undefined | string;

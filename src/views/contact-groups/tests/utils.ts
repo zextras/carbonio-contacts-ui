@@ -1,0 +1,31 @@
+import { generateFolder } from '../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
+import { Folder } from '../../../carbonio-ui-commons/types';
+
+/*
+ * SPDX-FileCopyrightText: 2025 Zextras <https://www.zextras.com>
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only
+ */
+export function generateLinkFolder({
+	folderId,
+	remoteAccountUuId,
+	remoteId,
+	permissions = 'r'
+}: {
+	folderId: string;
+	remoteAccountUuId: string;
+	remoteId: string;
+	permissions?: string;
+}): Folder {
+	// TODO: generator in commons does not support setting rid and zid
+	const folder = generateFolder({
+		isLink: true,
+		id: folderId,
+		perm: permissions
+	});
+	return {
+		...folder,
+		rid: remoteId,
+		zid: remoteAccountUuId
+	} as Folder;
+}

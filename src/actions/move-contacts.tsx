@@ -15,12 +15,13 @@ import { getFolder } from '../carbonio-ui-commons/store/zustand/folder';
 import { Folder } from '../carbonio-ui-commons/types/folder';
 import { ContactMoveModal } from '../components/modals/contact-move';
 import { ACTION_IDS, TIMEOUTS } from '../constants';
-import { Contact } from '../legacy/types/contact';
+import { ContactOrGroup } from '../legacy/types/contact';
+import { evaluateParentIds } from '../legacy/utils/helpers';
 import { apiClient } from '../network/api-client';
 
 export type MoveContactsAction = UIAction<
-	{ contacts?: Array<Contact>; newParentAddressBook?: Folder },
-	{ contacts?: Array<Contact>; newParentAddressBook?: Folder }
+	{ contacts?: Array<ContactOrGroup>; newParentAddressBook?: Folder },
+	{ contacts?: Array<ContactOrGroup>; newParentAddressBook?: Folder }
 >;
 
 export const useActionMoveContacts = (): MoveContactsAction => {
@@ -66,7 +67,7 @@ export const useActionMoveContacts = (): MoveContactsAction => {
 			// Additional checks if the destination folder is given
 			if (newParentAddressBook) {
 				// Return false if all the given contacts already belong to the destination address book
-				const parentsIds = contacts.map((contact) => contact.parent);
+				const parentsIds = evaluateParentIds(contacts);
 
 				if (!parentsIds.some((parentId) => parentId !== newParentAddressBook.id)) {
 					return false;
@@ -83,6 +84,7 @@ export const useActionMoveContacts = (): MoveContactsAction => {
 
 			const parentAddressBooks = contacts.reduce<Array<Folder>>((result, contact) => {
 				const folder = getFolder(contact.parent);
+
 				if (folder) {
 					result.push(folder);
 				}

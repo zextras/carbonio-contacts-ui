@@ -6,24 +6,39 @@
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 
-import { useActionDeleteMainAccountContactGroup } from './delete-contact-group';
-import { UIAction } from './types';
-import { screen, setupHook } from '../carbonio-ui-commons/test/test-setup';
-import { JEST_MOCKED_ERROR, TESTID_SELECTORS, TIMERS } from '../constants/tests';
-import { useContactGroupStore } from '../store/contact-groups';
-import { buildContactGroup, buildMembers } from '../tests/model-builder';
-import { registerDeleteContactHandler } from '../tests/msw-handlers/delete-contact';
+import { CONTACT_GROUP_DELETE_ICON } from './constants';
+import { useActionDeleteContactGroup } from './delete-contact-group';
+import { UIAction } from '../../../actions/types';
+import { screen, setupHook } from '../../../carbonio-ui-commons/test/test-setup';
+import { JEST_MOCKED_ERROR, TESTID_SELECTORS, TIMERS } from '../../../constants/tests';
+import { generateStore } from '../../../legacy/tests/generators/store';
+import { ContactOrGroup } from '../../../legacy/types/contact';
+import { buildContactGroup, buildMembers } from '../../../tests/model-builder';
+import { registerDeleteContactHandler } from '../../../tests/msw-handlers/delete-contact';
+
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+function createStoreInitialData(data: Record<string, ContactOrGroup[]>) {
+	return {
+		contacts: {
+			contacts: data,
+			status: {},
+			searchedInFolder: {}
+		}
+	};
+}
 
 describe('useActionDeleteCG', () => {
 	const membersCount = faker.number.int({ min: 1, max: 42 });
 	const contactGroupWithMembers = buildContactGroup({ members: buildMembers(membersCount) });
 	const contactGroupNoMembers = { ...contactGroupWithMembers, members: [] };
 
+	const defaultStore = generateStore();
+
 	it('should return an action with the specific data', () => {
-		const { result } = setupHook(useActionDeleteMainAccountContactGroup);
+		const { result } = setupHook(useActionDeleteContactGroup, { store: defaultStore });
 		expect(result.current).toEqual<UIAction<unknown, unknown>>(
 			expect.objectContaining({
-				icon: 'Trash2Outline',
+				icon: CONTACT_GROUP_DELETE_ICON,
 				label: 'Delete',
 				id: 'cg-delete-action',
 				canExecute: expect.anything(),
@@ -33,12 +48,12 @@ describe('useActionDeleteCG', () => {
 	});
 
 	it('should return an action which is always executable', () => {
-		const { result } = setupHook(useActionDeleteMainAccountContactGroup);
+		const { result } = setupHook(useActionDeleteContactGroup, { store: defaultStore });
 		expect(result.current.canExecute()).toBeTruthy();
 	});
 
 	it('should not open the modal if pass undefined argument  to execute function', async () => {
-		const { result } = setupHook(useActionDeleteMainAccountContactGroup);
+		const { result } = setupHook(useActionDeleteContactGroup, { store: defaultStore });
 		const action = result.current;
 		act(() => {
 			action.execute();
@@ -50,7 +65,7 @@ describe('useActionDeleteCG', () => {
 	});
 
 	it('should return an execute field which opens a modal with the CG name', async () => {
-		const { result } = setupHook(useActionDeleteMainAccountContactGroup);
+		const { result } = setupHook(useActionDeleteContactGroup, { store: defaultStore });
 		const action = result.current;
 		act(() => {
 			action.execute(contactGroupWithMembers);
@@ -65,7 +80,7 @@ describe('useActionDeleteCG', () => {
 	});
 
 	it('should return an execute field which opens a modal with an instruction text', async () => {
-		const { result } = setupHook(useActionDeleteMainAccountContactGroup);
+		const { result } = setupHook(useActionDeleteContactGroup, { store: defaultStore });
 		const action = result.current;
 		act(() => {
 			action.execute(contactGroupWithMembers);
@@ -82,7 +97,7 @@ describe('useActionDeleteCG', () => {
 	});
 
 	it('should return an execute field which opens a modal with a close icon', async () => {
-		const { result } = setupHook(useActionDeleteMainAccountContactGroup);
+		const { result } = setupHook(useActionDeleteContactGroup, { store: defaultStore });
 		const action = result.current;
 		act(() => {
 			action.execute(contactGroupWithMembers);
@@ -100,7 +115,7 @@ describe('useActionDeleteCG', () => {
 	});
 
 	it('should return an execute field which opens a modal with a delete action button', async () => {
-		const { result } = setupHook(useActionDeleteMainAccountContactGroup);
+		const { result } = setupHook(useActionDeleteContactGroup, { store: defaultStore });
 		const action = result.current;
 		act(() => {
 			action.execute(contactGroupWithMembers);
@@ -116,7 +131,7 @@ describe('useActionDeleteCG', () => {
 	});
 
 	it('should close the UI if the user clicks on the close icon on the header', async () => {
-		const { result, user } = setupHook(useActionDeleteMainAccountContactGroup);
+		const { result, user } = setupHook(useActionDeleteContactGroup, { store: defaultStore });
 		const action = result.current;
 		act(() => {
 			action.execute(contactGroupWithMembers);
@@ -135,9 +150,15 @@ describe('useActionDeleteCG', () => {
 	});
 
 	it('should show a success snackbar if the user clicks on the delete action button and the process completes successfully', async () => {
-		useContactGroupStore.getState().addContactGroups([contactGroupWithMembers]);
+		const store = generateStore(
+			createStoreInitialData({
+				'1': [contactGroupWithMembers]
+			})
+		);
 		registerDeleteContactHandler(contactGroupWithMembers.id);
-		const { result, user } = setupHook(useActionDeleteMainAccountContactGroup);
+
+		const { result, user } = setupHook(useActionDeleteContactGroup, { store });
+
 		const action = result.current;
 		act(() => {
 			action.execute(contactGroupWithMembers);
@@ -158,7 +179,7 @@ describe('useActionDeleteCG', () => {
 	it('should show an error snackbar if the user clicks on the delete action button and the API call return an error', async () => {
 		jest.spyOn(console, 'warn').mockImplementation();
 		registerDeleteContactHandler(contactGroupNoMembers.id, JEST_MOCKED_ERROR);
-		const { result, user } = setupHook(useActionDeleteMainAccountContactGroup);
+		const { result, user } = setupHook(useActionDeleteContactGroup, { store: defaultStore });
 		const action = result.current;
 		act(() => {
 			action.execute(contactGroupWithMembers);
@@ -177,9 +198,14 @@ describe('useActionDeleteCG', () => {
 	});
 
 	it('should call the API if the user clicks on the delete action button', async () => {
-		useContactGroupStore.getState().addContactGroups([contactGroupWithMembers]);
+		const store = generateStore(
+			createStoreInitialData({
+				'1': [contactGroupWithMembers]
+			})
+		);
 		const handler = registerDeleteContactHandler(contactGroupWithMembers.id);
-		const { result, user } = setupHook(useActionDeleteMainAccountContactGroup);
+
+		const { result, user } = setupHook(useActionDeleteContactGroup, { store });
 		const action = result.current;
 		act(() => {
 			action.execute(contactGroupWithMembers);
@@ -201,9 +227,15 @@ describe('useActionDeleteCG', () => {
 	});
 
 	it('should close the modal if the user clicks on the delete action button', async () => {
-		useContactGroupStore.getState().addContactGroups([contactGroupWithMembers]);
+		const store = generateStore(
+			createStoreInitialData({
+				'1': [contactGroupWithMembers]
+			})
+		);
 		registerDeleteContactHandler(contactGroupWithMembers.id);
-		const { result, user } = setupHook(useActionDeleteMainAccountContactGroup);
+
+		const { result, user } = setupHook(useActionDeleteContactGroup, { store });
+
 		const action = result.current;
 		act(() => {
 			action.execute(contactGroupWithMembers);

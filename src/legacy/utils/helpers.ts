@@ -8,7 +8,8 @@ import { cloneDeep, filter, find, forEach, map, merge, reduce, reject, some } fr
 
 import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
 import { Folder } from '../../carbonio-ui-commons/types';
-import { Contact, ContactsFolder } from '../types/contact';
+import { ContactGroup } from '../../model/contact-group';
+import { Contact, ContactOrGroup, ContactsFolder } from '../types/contact';
 import { ContactsSlice, FoldersSlice } from '../types/store';
 
 const folderIdRegex = /^(.+:)*(\d+)$/;
@@ -63,7 +64,7 @@ export function addFoldersToStore(state: FoldersSlice, folders: ContactsFolder[]
 	}
 }
 
-export function updateContactsInStore(state: ContactsSlice, contactsArray: Contact[]): void {
+export function updateContactsInStore(state: ContactsSlice, contactsArray: ContactOrGroup[]): void {
 	state.contacts = reduce(
 		state.contacts,
 		(acc, v, k) => ({
@@ -76,7 +77,7 @@ export function updateContactsInStore(state: ContactsSlice, contactsArray: Conta
 						(acc3, v3) => (v3.id === v2.id ? [...acc3, v3] : [...acc3, v2]),
 						acc2
 					),
-				[] as Contact[]
+				[] as ContactOrGroup[]
 			)
 		}),
 		{}
@@ -126,9 +127,16 @@ export function removeContactsFromStore(
 	);
 }
 
+export function isGroup(contact: ContactOrGroup): contact is ContactGroup {
+	return (<ContactGroup>contact).members !== undefined;
+}
+
+export const evaluateParentIds = (contacts: ContactOrGroup[]): Array<string> =>
+	contacts.map((contact) => contact.parent);
+
 export function addContactsToStore(
 	state: ContactsSlice,
-	contacts: Contact[],
+	contacts: ContactOrGroup[],
 	sharedFolderParent?: string
 ): void {
 	reduce(
