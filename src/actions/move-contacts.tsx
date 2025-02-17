@@ -83,7 +83,6 @@ export const useActionMoveContacts = (): MoveContactsAction => {
 			}
 
 			const parentAddressBooks = contacts.reduce<Array<Folder>>((result, contact) => {
-				// TODO: are we sure we are able to retrieve folder from parent? Check in case of mountpoint
 				const folder = getFolder(contact.parent);
 
 				if (folder) {
