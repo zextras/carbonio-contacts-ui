@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.15.0](https://github.com/zextras/carbonio-contacts-ui/compare/v1.14.1...v1.15.0) (2025-02-17)
+
+
+### Features
+
+* [CO-1785] share contact group same store ([#295](https://github.com/zextras/carbonio-contacts-ui/issues/295)) ([25dfe41](https://github.com/zextras/carbonio-contacts-ui/commit/25dfe415759eeb3f3f8f197181b9e0dcdf62aad4))
+
 ### [1.14.1](https://github.com/zextras/carbonio-contacts-ui/compare/v1.14.0...v1.14.1) (2025-02-11)
 
 
