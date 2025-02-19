@@ -8,7 +8,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 </div>
 
 Contacts module
-
 <p align="center">
   <a href="https://github.com/zextras/carbonio-contacts-ui/graphs/contributors" alt="Contributors">
   <img src="https://img.shields.io/github/contributors/zextras/carbonio-contacts-ui" /></a>
