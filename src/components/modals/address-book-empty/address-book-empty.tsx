@@ -18,6 +18,7 @@ import { useTranslation } from 'react-i18next';
 import { isTrash } from '../../../carbonio-ui-commons/helpers/folders';
 import { Folder } from '../../../carbonio-ui-commons/types/folder';
 import { TIMEOUTS } from '../../../constants';
+import { getFolderTranslatedNameByName } from '../../../legacy/utils/helpers';
 import { apiClient } from '../../../network/api-client';
 
 export type AddressBookEmptyModalProps = {
@@ -36,7 +37,7 @@ export const AddressBookEmptyModal = ({
 	const modalTitle = useMemo(
 		() =>
 			t('folder.modal.empty.title', {
-				addressBookName: addressBook.name,
+				addressBookName: getFolderTranslatedNameByName(t, addressBook.name),
 				defaultValue: 'Empty {{addressBookName}}'
 			}),
 		[addressBook.name, t]
