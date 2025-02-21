@@ -36,7 +36,7 @@ describe('useActionEditDL', () => {
 		const action = result.current;
 		action.execute(dl);
 
-		expect(addBoardFn).not.toHaveBeenCalledWith<Parameters<typeof shell.addBoard>>({
+		expect(addBoardFn).toHaveBeenCalledWith<Parameters<typeof shell.addBoard>>({
 			title: dl.displayName,
 			icon: 'DistributionListOutline',
 			context: { id: dl.id },
