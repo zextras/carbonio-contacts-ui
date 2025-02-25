@@ -7,7 +7,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 
 import { Container, Padding, Text } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
-import { useRouteMatch, Switch, Route } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import { EmptyFieldMessages, EmptyListMessages } from './utils';
 import ContactEditPanel from '../edit/contact-edit-panel';
@@ -15,7 +15,6 @@ import ContactPreviewPanel from '../preview/contact-preview-panel';
 
 const generateRandomNumber = () => Math.floor(Math.random() * 3);
 const SearchPanel = ({ searchResults, query, width }) => {
-	const { path } = useRouteMatch();
 	const [t] = useTranslation();
 	const emptyListMessages = useMemo(() => EmptyListMessages(t), [t]);
 	const emptyFieldMessages = useMemo(() => EmptyFieldMessages(t), [t]);
@@ -36,42 +35,36 @@ const SearchPanel = ({ searchResults, query, width }) => {
 		[displayerMessage?.description]
 	);
 	return (
-		<Container width={width ?? '55%'} mainAlignment="flex-start">
-			<Switch>
-				<Route exact path={`${path}/folder/:folderId/contacts/:contactId`}>
-					<ContactPreviewPanel />
-				</Route>
-				<Route exact path={`${path}/folder/:folderId/edit/:editId`}>
-					<ContactEditPanel />
-				</Route>
-				<Route
-					path={path}
-					render={() => (
-						<Container background="gray5">
-							<Padding all="medium">
-								<Text
-									color="gray1"
-									overflow="break-word"
-									weight="bold"
-									size="large"
-									style={{ whiteSpace: 'pre-line', textAlign: 'center' }}
-								>
-									{displayerTitle}
-								</Text>
-							</Padding>
+		<Routes>
+			<Route path={`/folder/:folderId/contacts/:contactId`} element={<ContactPreviewPanel />} />
+			<Route path={`/folder/:folderId/edit/:editId`} element={<ContactEditPanel />} />
+			<Route
+				path={'/'}
+				render={() => (
+					<Container background="gray5">
+						<Padding all="medium">
 							<Text
-								size="small"
 								color="gray1"
 								overflow="break-word"
+								weight="bold"
+								size="large"
 								style={{ whiteSpace: 'pre-line', textAlign: 'center' }}
 							>
-								{displayerDescription}
+								{displayerTitle}
 							</Text>
-						</Container>
-					)}
-				/>
-			</Switch>
-		</Container>
+						</Padding>
+						<Text
+							size="small"
+							color="gray1"
+							overflow="break-word"
+							style={{ whiteSpace: 'pre-line', textAlign: 'center' }}
+						>
+							{displayerDescription}
+						</Text>
+					</Container>
+				)}
+			/>
+		</Routes>
 	);
 };
 

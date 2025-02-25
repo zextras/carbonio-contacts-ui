@@ -19,11 +19,10 @@ import {
 import { useUserAccount } from '@zextras/carbonio-shell-ui';
 import { noop } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { ROUTES_INTERNAL_PARAMS } from '../../constants';
-import { useNavigation } from '../../hooks/useNavigation';
 
 const StyledText = styled(Text)`
 	min-width: 0;
@@ -53,7 +52,7 @@ const AccordionItem = ({ item }: { item: AccordionItemType }): React.JSX.Element
 const SecondaryBarView = ({ expanded }: { expanded: boolean }): React.JSX.Element => {
 	const [t] = useTranslation();
 	const { name } = useUserAccount();
-	const { navigateTo } = useNavigation();
+	const navigate = useNavigate();
 	const { pathname } = useLocation();
 
 	const items = useMemo(
@@ -76,13 +75,9 @@ const SecondaryBarView = ({ expanded }: { expanded: boolean }): React.JSX.Elemen
 								label: t('secondaryBar.distributionListsMember', 'Member'),
 								onClick: (ev): void => {
 									ev.stopPropagation();
-									navigateTo(
-										`${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.member}`
-									);
+									navigate(`${ROUTES_INTERNAL_PARAMS.filter.member}`);
 								},
-								active: pathname.includes(
-									`${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.member}`
-								)
+								active: pathname.includes(`${ROUTES_INTERNAL_PARAMS.filter.member}`)
 							},
 							{
 								id: 'distribution-lists-manager',
@@ -90,13 +85,9 @@ const SecondaryBarView = ({ expanded }: { expanded: boolean }): React.JSX.Elemen
 								label: t('secondaryBar.distributionListsManager', 'Manager'),
 								onClick: (ev): void => {
 									ev.stopPropagation();
-									navigateTo(
-										`${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.manager}`
-									);
+									navigate(`${ROUTES_INTERNAL_PARAMS.filter.manager}`);
 								},
-								active: pathname.includes(
-									`${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.manager}`
-								)
+								active: pathname.includes(`${ROUTES_INTERNAL_PARAMS.filter.manager}`)
 							}
 						]
 					}
@@ -106,7 +97,7 @@ const SecondaryBarView = ({ expanded }: { expanded: boolean }): React.JSX.Elemen
 				}
 			}
 		],
-		[name, navigateTo, pathname, t]
+		[name, navigate, pathname, t]
 	);
 
 	const collapsedItems = useMemo(

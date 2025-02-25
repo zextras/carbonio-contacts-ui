@@ -8,8 +8,7 @@ import React, { FC, ReactElement, useMemo } from 'react';
 import { ThemeProvider } from '@mui/material';
 import { Accordion, Divider } from '@zextras/carbonio-design-system';
 import { SecondaryBarComponentProps } from '@zextras/carbonio-shell-ui';
-import { useTranslation } from 'react-i18next';
-import { Route, Switch, useParams, useRouteMatch } from 'react-router-dom';
+import { Route, Routes, useParams } from 'react-router-dom';
 
 import { CollapsedSideBarFolderItem } from './collapsed-sidebar-folder-item';
 import { SidebarAccordionMui } from './sidebar-accordion';
@@ -28,9 +27,6 @@ import useGetTagsAccordion from '../../hooks/use-get-tags-accordions';
 const SecondaryBarView: FC<SecondaryBarComponentProps> = ({ expanded = false }) => {
 	const { folderId: selectedFolderId } = useParams<{ folderId: string }>();
 	const tagsAccordionItems = useGetTagsAccordion();
-	const { path } = useRouteMatch();
-	const [t] = useTranslation();
-
 	const roots = useRootsArray();
 	const folders = useMemo(() => sortFolders(roots), [roots]);
 	const collapsedItems = [] as Array<ReactElement>;
@@ -49,19 +45,24 @@ const SecondaryBarView: FC<SecondaryBarComponentProps> = ({ expanded = false }) 
 	return (
 		<ThemeProvider theme={themeMui}>
 			{expanded ? (
-				<Switch>
-					<Route path={`${path}/folder/:folderId/:type?/:itemId?`}>
-						<SidebarAccordionMui
-							folders={folders}
-							selectedFolderId={selectedFolderId}
-							localStorageName={LOCAL_STORAGES.EXPANDED_ADDRESSBOOKS}
-							initialExpanded={[FOLDERS.USER_ROOT]}
-						/>
+				<Routes>
+					<Route
+						path={`folder/:folderId/:type?/:itemId?`}
+						element={
+							<>
+								<SidebarAccordionMui
+									folders={folders}
+									selectedFolderId={selectedFolderId!}
+									localStorageName={LOCAL_STORAGES.EXPANDED_ADDRESSBOOKS}
+									initialExpanded={[FOLDERS.USER_ROOT]}
+								/>
 
-						<Divider />
-						<Accordion items={[tagsAccordionItems]} />
-					</Route>
-				</Switch>
+								<Divider />
+								<Accordion items={[tagsAccordionItems]} />
+							</>
+						}
+					/>
+				</Routes>
 			) : (
 				<div data-testid={'sidebar-collapsed'}>{collapsedItems}</div>
 			)}

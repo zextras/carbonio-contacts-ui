@@ -10,7 +10,7 @@ import type { SearchViewProps } from '@zextras/carbonio-search-ui';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
 import { map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import { Route, Switch, useRouteMatch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import AdvancedFilterModal from './advance-filter-modal';
 import { SearchList } from './search-list';
@@ -128,8 +128,6 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 		}
 	}, [query, queryToString, searchQuery, searchResults.query]);
 
-	const { path } = useRouteMatch();
-
 	return (
 		<Container>
 			<ResultsHeader label={t('label.results_for', 'Results for:')} />
@@ -139,17 +137,20 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 				style={{ overflowY: 'auto' }}
 				mainAlignment="flex-start"
 			>
-				<Switch>
-					<Route path={`${path}/:folder?/:folderId?/:type?/:itemId?`}>
-						<SearchList
-							searchResults={searchResults}
-							search={searchQuery}
-							query={queryToString}
-							filterCount={filterCount}
-							setShowAdvanceFilters={setShowAdvanceFilters}
-						/>
-					</Route>
-				</Switch>
+				<Routes>
+					<Route
+						path={`:folder?/:folderId?/:type?/:itemId?`}
+						element={
+							<SearchList
+								searchResults={searchResults}
+								search={searchQuery}
+								query={queryToString}
+								filterCount={filterCount}
+								setShowAdvanceFilters={setShowAdvanceFilters}
+							/>
+						}
+					/>
+				</Routes>
 				<Suspense fallback={<Spinner color="gray5" />}>
 					<SearchPanel searchResults={searchResults} query={query} width="75%" />
 				</Suspense>

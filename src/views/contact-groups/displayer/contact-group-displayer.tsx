@@ -16,7 +16,7 @@ import { useRedirectToContactGroupFolder } from '../navigation';
 export const ContactGroupDisplayer = (): React.JSX.Element => {
 	const { id: contactGroupId, folderId } = useParams<{ folderId: string; id: string }>();
 	const contactGroup = useAppSelector((state) =>
-		selectContactGroup(state, folderId, contactGroupId)
+		selectContactGroup(state, folderId!, contactGroupId!)
 	);
 	const redirectTo = useRedirectToContactGroupFolder();
 	const evaluateActions = useContactGroupActions();

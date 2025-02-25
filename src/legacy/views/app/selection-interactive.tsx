@@ -15,7 +15,8 @@ import { selectAllContactsInFolder } from '../../store/selectors/contacts';
 export default function SelectionInteractive(): JSX.Element {
 	const [t] = useTranslation();
 	const { folderId } = useParams<{ folderId: string }>();
-	const contacts = useAppSelector((state) => selectAllContactsInFolder(state, folderId));
+	console.log('folderId: ', folderId);
+	const contacts = useAppSelector((state) => selectAllContactsInFolder(state, folderId!));
 	const trashMessages = useMemo(
 		() => [
 			{

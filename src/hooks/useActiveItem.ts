@@ -3,23 +3,22 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import { useNavigation, type UseNavigationReturnType } from './useNavigation';
-import { RouteParams, ROUTES_INTERNAL_PARAMS } from '../constants';
+import { RouteParams } from '../constants';
 
 export type UseActiveItemReturnType = {
 	activeItem: string | undefined;
 	isActive: (id: string) => boolean;
-	setActive: (id: string, options?: Parameters<UseNavigationReturnType['navigateTo']>[1]) => void;
-	removeActive: (options?: Parameters<UseNavigationReturnType['navigateTo']>[1]) => void;
+	setActive: (id: string, options?: { replace?: boolean }) => void;
+	removeActive: (options?: { replace?: boolean }) => void;
 };
 
 export const useActiveItem = (): UseActiveItemReturnType => {
-	const { navigateTo } = useNavigation();
-	const { id, route, filter } = useParams<RouteParams>();
+	const navigate = useNavigate();
+	const { id, filter } = useParams<RouteParams>();
 	const activeIdRef = useRef<string>();
 
 	useEffect(() => {
@@ -36,25 +35,18 @@ export const useActiveItem = (): UseActiveItemReturnType => {
 		[]
 	);
 
-	const currentPath = useMemo<string>(() => {
-		if (route === ROUTES_INTERNAL_PARAMS.route.distributionLists) {
-			return `${route}/${filter ?? ''}`;
-		}
-		return route ?? '';
-	}, [filter, route]);
-
 	const setActive = useCallback<UseActiveItemReturnType['setActive']>(
 		(itemId, options) => {
-			navigateTo(`${currentPath}/${itemId}`, options);
+			navigate(`../${filter ?? ''}/${itemId}`, options);
 		},
-		[currentPath, navigateTo]
+		[filter, navigate]
 	);
 
 	const removeActive = useCallback<UseActiveItemReturnType['removeActive']>(
 		(options) => {
-			navigateTo(currentPath, options);
+			navigate(`../${filter ?? ''}`, options);
 		},
-		[currentPath, navigateTo]
+		[filter, navigate]
 	);
 
 	return { activeItem: id, isActive, setActive, removeActive };

@@ -6,9 +6,9 @@
 import React, { useCallback } from 'react';
 
 import { Divider } from '@zextras/carbonio-design-system';
-import { getAction, replaceHistory } from '@zextras/carbonio-shell-ui';
-import { head, includes, split } from 'lodash';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { getAction } from '@zextras/carbonio-shell-ui';
+import { includes } from 'lodash';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import ContactPreviewContent from './contact-preview-content';
 import ContactPreviewHeader from './contact-preview-header';
@@ -22,8 +22,7 @@ import { useDisplayName } from '../../hooks/use-display-name';
 import { selectContact } from '../../store/selectors/contacts';
 
 export default function ContactPreviewPanel() {
-	const urlLocation = useLocation();
-	const history = useHistory();
+	const navigate = useNavigate();
 	const { pathname } = useLocation();
 	const { folderId, contactId } = useParams();
 	const contactInternalId = contactId;
@@ -33,22 +32,23 @@ export default function ContactPreviewPanel() {
 	const trashAction = useActionTrashContacts();
 
 	const onEdit = useCallback(
-		() => replaceHistory(`/folder/${folderId}/edit/${contactInternalId}`),
-		[contactInternalId, folderId]
+		() => navigate(`../folder/${folderId}/edit/${contactInternalId}`, { replace: true }),
+		[contactInternalId, folderId, navigate]
 	);
 
 	const onClose = useCallback(() => {
-		includes(urlLocation?.pathname, 'search')
-			? history.push(head(split(pathname, '/folder')))
-			: replaceHistory(`/folder/${folderId}`);
-	}, [folderId, history, pathname, urlLocation?.pathname]);
+		includes(pathname, 'search')
+			? navigate(`/search`)
+			: navigate(`/contacts/folder/${folderId}`, { replace: true });
+	}, [folderId, navigate, pathname]);
 
 	const onDelete = useCallback(() => {
-		replaceHistory(`/folder/${folderId}/contacts/${contact.id}`);
+		// verified and improved
+		navigate(`../folder/${folderId}/contacts`, { replace: true });
 		if (getFolderIdParts(folderId).id === FOLDERS.TRASH) {
 			deleteAction.execute([contact]);
 		} else trashAction.execute([contact]);
-	}, [folderId, contact, trashAction, deleteAction]);
+	}, [navigate, folderId, contact, trashAction, deleteAction]);
 
 	const onPrint = useCallback(() => null, []);
 	const onArchieve = useCallback(() => null, []);

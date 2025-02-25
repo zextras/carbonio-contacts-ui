@@ -15,11 +15,11 @@ import {
 	Tooltip,
 	useSnackbar
 } from '@zextras/carbonio-design-system';
-import { useReplaceHistoryCallback, report } from '@zextras/carbonio-shell-ui';
+import { report } from '@zextras/carbonio-shell-ui';
 import { filter, find, map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { ContactEditorRow, CustomMultivalueField } from './CustomMultivalueField';
@@ -83,6 +83,7 @@ const CustomStringField = ({ name, label, value, dispatch, autoFocus = false }) 
 /** @type { (props: { panel?: boolean; onClose?: () => void; onTitleChanged?: (title: string) => void }) => React.JSX.Element } */
 export default function EditView({ panel, onClose, onTitleChanged }) {
 	const { folderId, editId } = useParams();
+	const navigate = useNavigate();
 	const storeDispatch = useDispatch();
 	const existingContact = useAppSelector((state) => selectContact(state, folderId, editId));
 	const [contact, dispatch] = useReducer(reducer);
@@ -184,15 +185,13 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 		}
 	}, [onTitleChanged, panel, title]);
 
-	const replaceHistory = useReplaceHistoryCallback();
-
 	const onSubmit = useCallback(() => {
 		const updatedContact = cleanMultivalueFields(contact);
 		if (!updatedContact.id) {
 			storeDispatch(createContact(updatedContact))
 				.then((res) => {
 					if (panel && !res.error) {
-						replaceHistory(`/folder/${folderId}/contacts/${res.payload[0].id}`);
+						navigate(`../folder/${folderId}/contacts/${res.payload[0].id}`, { replace: true });
 					} else if (res.type.includes('fulfilled')) {
 						onClose && onClose();
 						createSnackbar({
@@ -215,7 +214,7 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 			)
 				.then((res) => {
 					if (panel) {
-						replaceHistory(`/folder/${folderId}/contacts/${res.payload[0].id}`);
+						navigate(`../folder/${folderId}/contacts/${res.payload[0].id}`, { replace: true });
 					}
 				})
 				.catch(report);
@@ -225,9 +224,9 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 		createSnackbar,
 		existingContact,
 		folderId,
+		navigate,
 		onClose,
 		panel,
-		replaceHistory,
 		storeDispatch,
 		t
 	]);

@@ -9,6 +9,7 @@ import { faker } from '@faker-js/faker';
 import { within } from '@testing-library/react';
 import { Button, useTheme } from '@zextras/carbonio-design-system';
 import * as shell from '@zextras/carbonio-shell-ui';
+import { useNavigate } from 'react-router-dom';
 
 import { useFolderStore } from '../../../../carbonio-ui-commons/store/zustand/folder';
 import { useAppContext } from '../../../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
@@ -20,7 +21,6 @@ import {
 	setupTest
 } from '../../../../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../../../../constants/tests';
-import { useNavigation } from '../../../../hooks/useNavigation';
 import {
 	createFindContactGroupsResponse,
 	registerFindContactGroupsHandler
@@ -31,14 +31,11 @@ import { FolderView } from '../folder-view';
 import { createContactsApiInterceptor } from './utils';
 
 function MockedButton(props: { routeTo: string; initialRoute: string }): React.JSX.Element {
-	const { navigateTo } = useNavigation();
+	const navigate = useNavigate();
 	return (
 		<>
-			<Button data-testid={'navigation-to'} onClick={(): void => navigateTo(props.routeTo)} />
-			<Button
-				data-testid={'navigation-back'}
-				onClick={(): void => navigateTo(props.initialRoute)}
-			/>
+			<Button data-testid={'navigation-to'} onClick={(): void => navigate(props.routeTo)} />
+			<Button data-testid={'navigation-back'} onClick={(): void => navigate(props.initialRoute)} />
 
 			<FolderView />
 		</>

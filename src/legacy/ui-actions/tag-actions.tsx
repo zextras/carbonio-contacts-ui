@@ -15,10 +15,10 @@ import {
 	useModal,
 	useSnackbar
 } from '@zextras/carbonio-design-system';
-import { replaceHistory } from '@zextras/carbonio-shell-ui';
 import { TFunction } from 'i18next';
 import { every, find, includes, map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import { ZIMBRA_STANDARD_COLORS } from '../../carbonio-ui-commons/constants/utils';
 import { useTags } from '../../carbonio-ui-commons/store/zustand/tags';
@@ -257,6 +257,7 @@ export const MultiSelectTagsDropdownItem = ({
 	const createSnackbar = useSnackbar();
 	const dispatch = useAppDispatch();
 	const [isHovering, setIsHovering] = useState(false);
+	const navigate = useNavigate();
 
 	const tagsToShow = reduce(
 		tags,
@@ -284,7 +285,7 @@ export const MultiSelectTagsDropdownItem = ({
 			).then((res: any) => {
 				if (res.type.includes('fulfilled')) {
 					deselectAll && deselectAll();
-					replaceHistory(`/folder/${folderId}/`);
+					navigate(`../folder/${folderId}/`, { replace: true });
 					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 					// @ts-ignore
 					createSnackbar({
@@ -314,7 +315,7 @@ export const MultiSelectTagsDropdownItem = ({
 				}
 			});
 		},
-		[dispatch, ids, tag.name, deselectAll, folderId, createSnackbar, t]
+		[dispatch, ids, tag.name, deselectAll, navigate, folderId, createSnackbar, t]
 	);
 
 	const tagIcon = useMemo(() => (checked ? 'Tag' : 'TagOutline'), [checked]);

@@ -18,8 +18,9 @@ import {
 	Row,
 	Tooltip
 } from '@zextras/carbonio-design-system';
-import { AppLink, useUserAccount } from '@zextras/carbonio-shell-ui';
+import { useUserAccount } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { useAddressBookContextualMenuItems } from './commons/use-address-book-contextual-menu-items';
@@ -205,8 +206,8 @@ export const AccordionCustomComponent: FC<{ item: Folder }> = ({ item: folder })
 					dragDisabled={dragFolderDisable}
 					style={{ display: 'block' }}
 				>
-					<AppLink
-						to={`/folder/${folder.id}`}
+					<Link
+						to={`/contacts/folder/${folder.id}`}
 						style={{ width: '100%', height: '100%', textDecoration: 'none' }}
 					>
 						<Dropdown
@@ -228,7 +229,7 @@ export const AccordionCustomComponent: FC<{ item: Folder }> = ({ item: folder })
 								</Tooltip>
 							</Row>
 						</Dropdown>
-					</AppLink>
+					</Link>
 				</Drag>
 			</Drop>
 		</Row>
