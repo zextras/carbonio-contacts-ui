@@ -7,7 +7,7 @@ import { useCallback, useEffect, useRef } from 'react';
 
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { RouteParams } from '../constants';
+import { RouteParams, ROUTES_INTERNAL_PARAMS } from '../constants';
 
 export type UseActiveItemReturnType = {
 	activeItem: string | undefined;
@@ -37,14 +37,17 @@ export const useActiveItem = (): UseActiveItemReturnType => {
 
 	const setActive = useCallback<UseActiveItemReturnType['setActive']>(
 		(itemId, options) => {
-			navigate(`../${filter ?? ''}/${itemId}`, options);
+			navigate(
+				`../${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${filter ?? ''}/${itemId}`,
+				options
+			);
 		},
 		[filter, navigate]
 	);
 
 	const removeActive = useCallback<UseActiveItemReturnType['removeActive']>(
 		(options) => {
-			navigate(`../${filter ?? ''}`, options);
+			navigate(`../${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${filter ?? ''}`, options);
 		},
 		[filter, navigate]
 	);

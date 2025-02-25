@@ -75,7 +75,9 @@ const SecondaryBarView = ({ expanded }: { expanded: boolean }): React.JSX.Elemen
 								label: t('secondaryBar.distributionListsMember', 'Member'),
 								onClick: (ev): void => {
 									ev.stopPropagation();
-									navigate(`${ROUTES_INTERNAL_PARAMS.filter.member}`);
+									navigate(
+										`${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.member}`
+									);
 								},
 								active: pathname.includes(`${ROUTES_INTERNAL_PARAMS.filter.member}`)
 							},
@@ -85,7 +87,9 @@ const SecondaryBarView = ({ expanded }: { expanded: boolean }): React.JSX.Elemen
 								label: t('secondaryBar.distributionListsManager', 'Manager'),
 								onClick: (ev): void => {
 									ev.stopPropagation();
-									navigate(`${ROUTES_INTERNAL_PARAMS.filter.manager}`);
+									navigate(
+										`${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.manager}`
+									);
 								},
 								active: pathname.includes(`${ROUTES_INTERNAL_PARAMS.filter.manager}`)
 							}
