@@ -30,39 +30,38 @@ const SearchPanel = ({ searchResults, query, width }) => {
 		[displayerMessage?.description]
 	);
 	return (
-		<Routes>
-			<Route
-				path={`/search/folder/:folderId/contacts/:contactId`}
-				element={<ContactPreviewPanel />}
-			/>
-			<Route path={`/search/folder/:folderId/edit/:editId`} element={<ContactEditPanel />} />
-			<Route
-				path={'/'}
-				render={() => (
-					<Container background="gray5">
-						<Padding all="medium">
+		<Container width={width ?? '55%'} mainAlignment="flex-start">
+			<Routes>
+				<Route path={`folder/:folderId/contacts/:contactId`} element={<ContactPreviewPanel />} />
+				<Route path={`folder/:folderId/edit/:editId`} element={<ContactEditPanel />} />
+				<Route
+					path={'/'}
+					element={
+						<Container background="gray5">
+							<Padding all="medium">
+								<Text
+									color="gray1"
+									overflow="break-word"
+									weight="bold"
+									size="large"
+									style={{ whiteSpace: 'pre-line', textAlign: 'center' }}
+								>
+									{displayerTitle}
+								</Text>
+							</Padding>
 							<Text
+								size="small"
 								color="gray1"
 								overflow="break-word"
-								weight="bold"
-								size="large"
 								style={{ whiteSpace: 'pre-line', textAlign: 'center' }}
 							>
-								{displayerTitle}
+								{displayerDescription}
 							</Text>
-						</Padding>
-						<Text
-							size="small"
-							color="gray1"
-							overflow="break-word"
-							style={{ whiteSpace: 'pre-line', textAlign: 'center' }}
-						>
-							{displayerDescription}
-						</Text>
-					</Container>
-				)}
-			/>
-		</Routes>
+						</Container>
+					}
+				/>
+			</Routes>
+		</Container>
 	);
 };
 
