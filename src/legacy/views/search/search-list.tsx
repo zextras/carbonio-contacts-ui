@@ -57,7 +57,7 @@ export const SearchList = ({
 
 	const listItems = useMemo(
 		() =>
-			map(searchResults.contacts, (contact) => {
+			map(searchResults.contacts, (contact, index) => {
 				const isActive = itemId === contact.id;
 				if (isGroup(contact)) {
 					return <ContactGroupListItemWrapper contactGroup={contact} />;
@@ -66,7 +66,7 @@ export const SearchList = ({
 					<CustomListItem
 						selected={false}
 						active={isActive}
-						key={contact.id}
+						key={`${contact.id}/${index}`}
 						background={'transparent'}
 					>
 						{(visible: boolean): React.JSX.Element =>
