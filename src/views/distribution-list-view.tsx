@@ -20,7 +20,7 @@ const AppView = (): React.JSX.Element => (
 
 const MainRouteAppView = (): React.JSX.Element => (
 	<Routes>
-		<Route path={ROUTES.mainRoute} element={<AppView />} />
+		<Route path={ROUTES.distributionLists} element={<AppView />} />
 	</Routes>
 );
 
