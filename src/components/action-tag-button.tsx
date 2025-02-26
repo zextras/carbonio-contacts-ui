@@ -14,7 +14,7 @@ import {
 	Tooltip,
 	Text
 } from '@zextras/carbonio-design-system';
-import { runSearch } from '@zextras/carbonio-shell-ui';
+import { runSearch } from '@zextras/carbonio-search-ui';
 import { every, includes, reduce } from 'lodash';
 
 import { ZIMBRA_STANDARD_COLORS } from '../carbonio-ui-commons/constants';
