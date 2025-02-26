@@ -142,6 +142,7 @@ const useDeleteAction = (contact: Contact): UIAction<Contact, Contact> => {
 };
 
 const useSendMailAction = (contact: Contact): UIAction<Contact, Contact> => {
+	const [t] = useTranslation();
 	const onMail = useCallback(() => {
 		const [mailTo, available] = getAction('contact-list', 'mail-to', [contact]);
 		if (available && mailTo) {
@@ -151,7 +152,7 @@ const useSendMailAction = (contact: Contact): UIAction<Contact, Contact> => {
 	return {
 		id: 'send',
 		icon: 'MailModOutline',
-		label: '',
+		label: t('action.mail', 'Send e-mail'),
 		execute: onMail,
 		canExecute: () => !isTrash(contact.parent),
 		disabled: isEmpty(contact?.email)
