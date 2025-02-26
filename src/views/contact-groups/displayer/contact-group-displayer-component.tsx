@@ -6,13 +6,13 @@
  */
 import React, { ReactNode, useMemo } from 'react';
 
-import { Action, Container } from '@zextras/carbonio-design-system';
+import { Action } from '@zextras/carbonio-design-system';
 
 import { ContactGroupDisplayerDetails } from './contact-group-displayer-details';
 import { ContactGroupEmptyDisplayer } from './contact-group-empty-displayer';
 import { ActionIconButton } from '../../../components/action-icon-button';
+import { Displayer } from '../../../components/displayer/displayer';
 import { DisplayerActionsHeader } from '../../../components/displayer-actions-header';
-import { DisplayerHeader } from '../../../components/displayer-header';
 import { ContactGroup } from '../../../model/contact-group';
 
 interface Props {
@@ -31,37 +31,15 @@ export const ContactGroupDisplayerComponent = ({
 		[actions]
 	);
 	return (
-		<Container
-			orientation="vertical"
-			mainAlignment="flex-start"
-			crossAlignment="flex-start"
-			data-testid="displayer"
-		>
+		<>
 			{contactGroup ? (
-				<Container
-					background={'gray5'}
-					mainAlignment={'flex-start'}
-					padding={{ bottom: '3rem' }}
-					data-testid={'contact-group-displayer'}
-				>
-					<DisplayerHeader
-						title={contactGroup.title}
-						icon={'PeopleOutline'}
-						closeDisplayer={onCloseDisplayer}
-					/>
-					<Container
-						padding={{ horizontal: '1rem' }}
-						mainAlignment={'flex-start'}
-						minHeight={0}
-						maxHeight={'100%'}
-					>
-						<DisplayerActionsHeader>{actionButtons}</DisplayerActionsHeader>
-						<ContactGroupDisplayerDetails contactGroup={contactGroup} />
-					</Container>
-				</Container>
+				<Displayer title={contactGroup.title} icon={'PeopleOutline'} onClose={onCloseDisplayer}>
+					<DisplayerActionsHeader>{actionButtons}</DisplayerActionsHeader>
+					<ContactGroupDisplayerDetails contactGroup={contactGroup} />
+				</Displayer>
 			) : (
 				<ContactGroupEmptyDisplayer />
 			)}
-		</Container>
+		</>
 	);
 };

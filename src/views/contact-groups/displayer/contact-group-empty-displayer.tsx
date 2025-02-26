@@ -5,6 +5,7 @@
  */
 import React from 'react';
 
+import { Container } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
 import { EmptyDisplayer } from '../../../components/empty-displayer';
@@ -13,12 +14,19 @@ export const ContactGroupEmptyDisplayer = (): React.JSX.Element => {
 	const [t] = useTranslation();
 
 	return (
-		<EmptyDisplayer
-			description={t(
-				'emptyDisplayer.contactGroup.hint',
-				'Click the “NEW” button to create a new contacts group.'
-			)}
-			title={t('displayer.title3', 'Stay in touch with your colleagues.')}
-		/>
+		<Container
+			orientation="vertical"
+			mainAlignment="flex-start"
+			crossAlignment="flex-start"
+			data-testid="displayer"
+		>
+			<EmptyDisplayer
+				description={t(
+					'emptyDisplayer.contactGroup.hint',
+					'Click the “NEW” button to create a new contacts group.'
+				)}
+				title={t('displayer.title3', 'Stay in touch with your colleagues.')}
+			/>
+		</Container>
 	);
 };
