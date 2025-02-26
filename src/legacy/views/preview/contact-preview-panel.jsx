@@ -39,7 +39,7 @@ export default function ContactPreviewPanel() {
 	const onClose = useCallback(() => {
 		includes(pathname, 'search')
 			? navigate(`/search`)
-			: navigate(`/contacts/folder/${folderId}`, { replace: true });
+			: navigate(`../folder/${folderId}`, { replace: true });
 	}, [folderId, navigate, pathname]);
 
 	const onDelete = useCallback(() => {

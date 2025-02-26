@@ -14,7 +14,7 @@ export function useRedirectToContactGroup(): (contactGroup: ContactGroup) => voi
 	const navigate = useNavigate();
 	return (contactGroup: ContactGroup) => {
 		const folder = getFolderFromContactGroup(contactGroup);
-		folder && navigate(`/contacts/folder/${folder.id}/${CONTACT_GROUPS_PATH}/${contactGroup.id}`);
+		folder && navigate(`../folder/${folder.id}/${CONTACT_GROUPS_PATH}/${contactGroup.id}`);
 	};
 }
 
@@ -22,6 +22,6 @@ export function useRedirectToContactGroupFolder(): (contactGroup: ContactGroup) 
 	const navigate = useNavigate();
 	return (contactGroup: ContactGroup) => {
 		const folder = getFolderFromContactGroup(contactGroup);
-		folder && navigate(`/contacts/folder/${folder.id}`);
+		folder && navigate(`../folder/${folder.id}`);
 	};
 }

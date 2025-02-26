@@ -31,9 +31,7 @@ describe('contact groups navigation', () => {
 
 			setupHook(() => useRedirectToContactGroup()(contactGroup));
 
-			expect(spyNavigate).toHaveBeenCalledWith(
-				`/contacts/folder/${FOLDER_ID}/contact-groups/${GROUP_ID}`
-			);
+			expect(spyNavigate).toHaveBeenCalledWith(`../folder/${FOLDER_ID}/contact-groups/${GROUP_ID}`);
 		});
 
 		it('should use the folderId instead of the mountpoint for the redirect', async () => {
@@ -56,9 +54,7 @@ describe('contact groups navigation', () => {
 
 			setupHook(() => useRedirectToContactGroup()(contactGroup));
 
-			expect(spyNavigate).toHaveBeenCalledWith(
-				`/contacts/folder/${FOLDER_ID}/contact-groups/${GROUP_ID}`
-			);
+			expect(spyNavigate).toHaveBeenCalledWith(`../folder/${FOLDER_ID}/contact-groups/${GROUP_ID}`);
 		});
 	});
 
@@ -74,7 +70,7 @@ describe('contact groups navigation', () => {
 
 			setupHook(() => useRedirectToContactGroupFolder()(contactGroup));
 
-			expect(spyNavigate).toHaveBeenCalledWith(`/contacts/folder/${FOLDER_ID}`);
+			expect(spyNavigate).toHaveBeenCalledWith(`../folder/${FOLDER_ID}`);
 		});
 
 		it('should use the folderId instead of the mountpoint for the redirect', async () => {
@@ -98,7 +94,7 @@ describe('contact groups navigation', () => {
 
 			setupHook(() => useRedirectToContactGroupFolder()(contactGroup));
 
-			expect(spyNavigate).toHaveBeenCalledWith(`/contacts/folder/${FOLDER_ID}`);
+			expect(spyNavigate).toHaveBeenCalledWith(`../folder/${FOLDER_ID}`);
 		});
 	});
 });
