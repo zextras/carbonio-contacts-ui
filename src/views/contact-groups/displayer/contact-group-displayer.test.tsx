@@ -6,8 +6,6 @@
 
 import React from 'react';
 
-import { Route } from 'react-router-dom';
-
 import { ContactGroupDisplayer } from './contact-group-displayer';
 import { screen, setupTest, within } from '../../../carbonio-ui-commons/test/test-setup';
 import { EMPTY_DISPLAYER_HINT, TESTID_SELECTORS } from '../../../constants/tests';
@@ -28,12 +26,11 @@ describe('Displayer controller', () => {
 		}
 	});
 	it('should show empty displayer if no contact group is active', async () => {
-		setupTest(
-			<Route path={`/folder/:folderId/:type?/:id?`}>
-				<ContactGroupDisplayer />
-			</Route>,
-			{ store, initialEntries: [`/folder/${parent}`] }
-		);
+		setupTest(<ContactGroupDisplayer />, {
+			store,
+			initialEntries: [`/folder/${parent}`],
+			path: `/folder/:folderId/:type?/:id?`
+		});
 		await screen.findByText(EMPTY_DISPLAYER_HINT);
 		expect(screen.getByText(EMPTY_DISPLAYER_HINT)).toBeVisible();
 		expect(
@@ -42,12 +39,11 @@ describe('Displayer controller', () => {
 	});
 
 	it('should show contact group details if a contact group is active', () => {
-		setupTest(
-			<Route path={`/folder/:folderId/:type?/:id?`}>
-				<ContactGroupDisplayer />
-			</Route>,
-			{ store, initialEntries: [`/folder/${parent}/${CONTACT_GROUPS_PATH}/${id}`] }
-		);
+		setupTest(<ContactGroupDisplayer />, {
+			store,
+			initialEntries: [`/folder/${parent}/${CONTACT_GROUPS_PATH}/${id}`],
+			path: `/folder/:folderId/:type?/:id?`
+		});
 
 		expect(
 			within(screen.getByTestId(TESTID_SELECTORS.displayerHeader)).getByText(contactGroup.title)
