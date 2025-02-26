@@ -4,27 +4,19 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import React, { ComponentType, FC, ReactElement, useCallback, useMemo } from 'react';
+import React, { FC, ReactElement, useCallback, useMemo } from 'react';
 
 import { Container, Text, useSnackbar } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
+import { ItemType } from './types';
 import { deleteTag } from '../../../../../carbonio-ui-commons/soap/tags';
 import ModalFooter from '../../commons/modal-footer';
 import { ModalHeader } from '../../commons/modal-header';
 
 type ComponentProps = {
 	onClose: () => void;
-	tag?: {
-		CustomComponent?: ComponentType;
-		active: boolean;
-		color?: number;
-		divider: boolean;
-		id: string;
-		label: string;
-		name: string;
-		open: boolean;
-	};
+	tag: ItemType;
 };
 const DeleteTagModal: FC<ComponentProps> = ({ onClose, tag }): ReactElement => {
 	const createSnackbar = useSnackbar();
