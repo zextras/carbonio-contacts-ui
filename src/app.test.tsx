@@ -35,7 +35,7 @@ describe('App', () => {
 
 		expect(addRoute).toHaveBeenCalledWith<Parameters<typeof shell.addRoute>>(
 			expect.objectContaining({
-				route: 'contacts',
+				route: 'paperino',
 				position: 300,
 				visible: true,
 				label: 'Contacts',
