@@ -13,18 +13,12 @@ import {
 	Text,
 	Collapse,
 	Dropdown,
-	Padding,
-	Icon,
 	Link
 } from '@zextras/carbonio-design-system';
-import { runSearch } from '@zextras/carbonio-shell-ui';
-import { every, includes, map, reduce } from 'lodash';
+import { map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { ZIMBRA_STANDARD_COLORS } from '../../../carbonio-ui-commons/constants/utils';
-import { useTags } from '../../../carbonio-ui-commons/store/zustand/tags';
 import { CompactView } from '../../commons/contact-compact-view';
-import { useTagExist } from '../../ui-actions/tag-actions';
 
 function typeToIcon(type) {
 	switch (type) {
@@ -248,7 +242,6 @@ function ContactPreviewContent({ contact }) {
 	return (
 		<Row
 			data-testid="PreviewPanel"
-			padding={{ all: 'extrasmall' }}
 			width="100%"
 			mainAlignment="normal"
 			style={{ overflowY: 'auto' }}
