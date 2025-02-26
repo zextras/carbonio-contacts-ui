@@ -140,17 +140,18 @@ export const deleteTag = ({ t, createModal, closeModal, tag }: TagsActionsParams
 			e.stopPropagation();
 		}
 		const modalId = 'delete-tag';
-		createModal?.(
-			{
-				id: modalId,
-				children: (
-					<StoreProvider>
-						<DeleteTagModal onClose={(): void => closeModal?.(modalId)} tag={tag} />
-					</StoreProvider>
-				)
-			},
-			true
-		);
+		tag &&
+			createModal?.(
+				{
+					id: modalId,
+					children: (
+						<StoreProvider>
+							<DeleteTagModal onClose={(): void => closeModal?.(modalId)} tag={tag} />
+						</StoreProvider>
+					)
+				},
+				true
+			);
 	}
 });
 

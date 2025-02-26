@@ -38,7 +38,7 @@ const useTagsAction = (contact: Contact): UIAction<Contact, Contact> => {
 							color: Number(ZIMBRA_STANDARD_COLORS[v.color ?? 0].hex),
 							label: v.name,
 							onClick: () => triggerSearch(v),
-							customComponent: (
+							CustomComponent: () => (
 								<Row takeAvailableSpace mainAlignment="flex-start">
 									<Row takeAvailableSpace mainAlignment="space-between">
 										<Row mainAlignment="flex-end">

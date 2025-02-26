@@ -45,8 +45,8 @@ export const ActionTagButton: React.FC<ActionTagButtonProps> = ({
 						avatarIcon: 'Tag',
 						background: 'gray2',
 						hasAvatar: true,
-						isGeneric: false,
-						isQueryFilter: true,
+						// isGeneric: false,
+						// isQueryFilter: true,
 						label: `tag:${tagToSearch?.name}`,
 						value: `tag:"${tagToSearch?.name}"`
 					}
