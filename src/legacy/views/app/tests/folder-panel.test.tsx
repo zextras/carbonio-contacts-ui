@@ -9,7 +9,6 @@ import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { forEach, times } from 'lodash';
-import { Route } from 'react-router-dom';
 
 import {
 	getAction as getActionMock,
@@ -66,15 +65,11 @@ const mockMailToAction = (): void => {
 
 function setupFolderPanel(folderId: string): ReturnType<typeof setupTest> {
 	const store = generateStore();
-	return setupTest(
-		<Route path={`/folder/:folderId/:type?/:itemId?`}>
-			<FolderPanel />
-		</Route>,
-		{
-			initialEntries: [`/folder/${folderId}`],
-			store
-		}
-	);
+	return setupTest(<FolderPanel />, {
+		initialEntries: [`/folder/${folderId}`],
+		path: 'folder/:folderId/:type?/:itemId?',
+		store
+	});
 }
 
 async function toggleSelectContactTypeFilter(user: UserEvent): Promise<void> {
@@ -148,15 +143,11 @@ describe('Folder panel', () => {
 				contacts: [contact]
 			});
 			const store = generateStore(state);
-			setupTest(
-				<Route path={`/folder/:folderId/:type?/:itemId?`}>
-					<FolderPanel />
-				</Route>,
-				{
-					initialEntries: [`/folder/${folder.id}`],
-					store
-				}
-			);
+			setupTest(<FolderPanel />, {
+				initialEntries: [`/folder/${folder.id}`],
+				path: `/folder/:folderId/:type?/:itemId?`,
+				store
+			});
 			makeListItemsVisible();
 			expect(screen.getByText(contact.lastName, { exact: false })).toBeVisible();
 		});
@@ -202,15 +193,11 @@ describe('Folder panel', () => {
 							contacts: [contact]
 						});
 						const store = generateStore(state);
-						const { user } = setupTest(
-							<Route path={`/folder/:folderId/:type?/:itemId?`}>
-								<FolderPanel />
-							</Route>,
-							{
-								initialEntries: [`/folder/${folder.id}`],
-								store
-							}
-						);
+						const { user } = setupTest(<FolderPanel />, {
+							initialEntries: [`/folder/${folder.id}`],
+							path: `/folder/:folderId/:type?/:itemId?`,
+							store
+						});
 						makeListItemsVisible();
 
 						const listItem = screen.getByText(contact.lastName, { exact: false });
@@ -271,15 +258,11 @@ describe('Folder panel', () => {
 							contacts: [contact]
 						});
 						const store = generateStore(state);
-						const { user } = setupTest(
-							<Route path={`/folder/:folderId/:type?/:itemId?`}>
-								<FolderPanel />
-							</Route>,
-							{
-								initialEntries: [`/folder/${folder.id}`],
-								store
-							}
-						);
+						const { user } = setupTest(<FolderPanel />, {
+							initialEntries: [`/folder/${folder.id}`],
+							path: `/folder/:folderId/:type?/:itemId?`,
+							store
+						});
 						makeListItemsVisible();
 
 						const listItem = screen.getByText(contact.lastName, { exact: false });
@@ -307,15 +290,11 @@ describe('Folder panel', () => {
 						contacts
 					});
 					const store = generateStore(state);
-					const { user } = setupTest(
-						<Route path={`/folder/:folderId/:type?/:itemId?`}>
-							<FolderPanel />
-						</Route>,
-						{
-							initialEntries: [`/folder/${folder.id}`],
-							store
-						}
-					);
+					const { user } = setupTest(<FolderPanel />, {
+						initialEntries: [`/folder/${folder.id}`],
+						path: `/folder/:folderId/:type?/:itemId?`,
+						store
+					});
 					makeListItemsVisible();
 
 					// Select all the items
@@ -359,15 +338,12 @@ describe('Folder panel', () => {
 								contacts: [contact]
 							});
 							const store = generateStore(state);
-							const { user } = setupTest(
-								<Route path={`/folder/:folderId/:type?/:itemId?`}>
-									<FolderPanel />
-								</Route>,
-								{
-									initialEntries: [`/folder/${folder.id}`],
-									store
-								}
-							);
+							const { user } = setupTest(<FolderPanel />, {
+								initialEntries: [`/folder/${folder.id}`],
+
+								path: `/folder/:folderId/:type?/:itemId?`,
+								store
+							});
 							makeListItemsVisible();
 
 							// Select all the items
