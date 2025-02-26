@@ -7,7 +7,6 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
-import { Route } from 'react-router-dom';
 
 import EditView from './edit-view';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
@@ -24,12 +23,11 @@ describe('Edit view', () => {
 		const store = generateStore();
 		const folderId = FOLDERS.CONTACTS;
 		const contactId = faker.string.uuid();
-		setupTest(
-			<Route path={`/folder/:folderId/edit/:editId`}>
-				<EditView />
-			</Route>,
-			{ store, initialEntries: [`/folder/${folderId}/edit/${contactId}`] }
-		);
+		setupTest(<EditView />, {
+			store,
+			initialEntries: [`/folder/${folderId}/edit/${contactId}`],
+			path: 'folder/:folderId/edit/:editId'
+		});
 		expect(screen.getByRole('button', { name: /save/i })).toBeVisible();
 		expect(screen.queryByText('Destination address book')).not.toBeInTheDocument();
 		expect(screen.queryByText('Address Book')).not.toBeInTheDocument();
@@ -131,12 +129,11 @@ describe('Edit view', () => {
 		const store = generateStore();
 		const folderId = FOLDERS.CONTACTS;
 		const contactId = faker.string.uuid();
-		const { user } = setupTest(
-			<Route path={`/folder/:folderId/edit/:editId`}>
-				<EditView />
-			</Route>,
-			{ store, initialEntries: [`/folder/${folderId}/edit/${contactId}`] }
-		);
+		const { user } = setupTest(<EditView />, {
+			store,
+			initialEntries: [`/folder/${folderId}/edit/${contactId}`],
+			path: 'folder/:folderId/edit/:editId'
+		});
 		const saveButton = screen.getByRole('button', { name: /save/i });
 		expect(saveButton).toBeVisible();
 		expect(saveButton).toBeDisabled();
