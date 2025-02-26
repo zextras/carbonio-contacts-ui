@@ -14,10 +14,10 @@ import {
 	Tooltip,
 	Text
 } from '@zextras/carbonio-design-system';
-import { runSearch } from '@zextras/carbonio-search-ui';
 import { every, includes, reduce } from 'lodash';
 
 import { ZIMBRA_STANDARD_COLORS } from '../carbonio-ui-commons/constants';
+import { useRunSearchIntegration } from '../carbonio-ui-commons/integrations/search/use-run-search';
 import { useTags } from '../carbonio-ui-commons/store/zustand/tags';
 import { Tag } from '../carbonio-ui-commons/types/tags';
 import { Contact } from '../legacy/types/contact';
@@ -35,10 +35,10 @@ export const ActionTagButton: React.FC<ActionTagButtonProps> = ({
 		() => contact?.tags && tagsFromStore[contact?.tags?.[0]]?.name,
 		[contact?.tags, tagsFromStore]
 	);
-
+	const runSearch = useRunSearchIntegration();
 	const triggerTagSearch = useCallback(
 		(tagToSearch: Tag) =>
-			runSearch(
+			runSearch?.(
 				[
 					{
 						avatarBackground: ZIMBRA_STANDARD_COLORS[tagToSearch?.color ?? 0].hex,
@@ -53,7 +53,7 @@ export const ActionTagButton: React.FC<ActionTagButtonProps> = ({
 				],
 				'contacts'
 			),
-		[]
+		[runSearch]
 	);
 
 	const tags = useMemo(
