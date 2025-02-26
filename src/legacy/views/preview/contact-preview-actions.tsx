@@ -20,25 +20,24 @@ import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { getFolderIdParts, isTrash } from '../../../carbonio-ui-commons/helpers/folders';
 import { useTags } from '../../../carbonio-ui-commons/store/zustand/tags';
 import { Contact } from '../../types/contact';
-import { useTagExist } from '../../ui-actions/tag-actions';
-import { ItemType } from '../secondary-bar/parts/tags/types';
 
 const useTagsAction = (contact: Contact): UIAction<Contact, Contact> => {
 	const tagsFromStore = useTags();
 	const triggerSearch = noop;
 
-	const tags: Array<ItemType> = useMemo(
+	// originally in contact-preview-content.jsx
+	const tags = useMemo(
 		() =>
 			reduce(
 				tagsFromStore,
-				(acc: Array<ItemType>, v) => {
+				(acc, v) => {
 					if (includes(contact.tags, v.id))
 						acc.push({
 							...v,
-							color: Number(ZIMBRA_STANDARD_COLORS[v.color ?? 0].hex),
+							color: ZIMBRA_STANDARD_COLORS[v.color ?? 0].hex,
 							label: v.name,
 							onClick: () => triggerSearch(v),
-							CustomComponent: () => (
+							customComponent: (
 								<Row takeAvailableSpace mainAlignment="flex-start">
 									<Row takeAvailableSpace mainAlignment="space-between">
 										<Row mainAlignment="flex-end">
@@ -55,13 +54,11 @@ const useTagsAction = (contact: Contact): UIAction<Contact, Contact> => {
 						});
 					return acc;
 				},
-				[]
+				[] as Array<unknown>
 			),
 		[contact.tags, tagsFromStore, triggerSearch]
 	);
 	const tagIcon = useMemo(() => (tags.length > 1 ? 'TagsMoreOutline' : 'Tag'), [tags]);
-
-	const isTagInStore = useTagExist(tags);
 
 	const onTagClick = useCallback(() => {
 		contact?.tags && triggerSearch(tagsFromStore?.[contact?.tags[0]]);
@@ -71,9 +68,8 @@ const useTagsAction = (contact: Contact): UIAction<Contact, Contact> => {
 		(): boolean =>
 			contact.tags !== undefined &&
 			contact.tags?.length !== 0 &&
-			isTagInStore &&
 			every(contact.tags, (tn) => tn !== ''),
-		[contact.tags, isTagInStore]
+		[contact.tags]
 	);
 
 	return {
