@@ -3,11 +3,15 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback } from 'react';
+import React, { ReactNode, useCallback, useMemo } from 'react';
 
 import { useParams } from 'react-router-dom';
 
-import { ContactGroupDisplayerComponent } from './contact-group-displayer-component';
+import { ContactGroupDisplayerDetails } from './contact-group-displayer-details';
+import { ContactGroupEmptyDisplayer } from './contact-group-empty-displayer';
+import { ActionIconButton } from '../../../components/action-icon-button';
+import { Displayer } from '../../../components/displayer/displayer';
+import { DisplayerActionsHeader } from '../../../components/displayer-actions-header';
 import { useAppSelector } from '../../../legacy/hooks/redux';
 import { selectContactGroup } from '../../../legacy/store/selectors/contacts';
 import { useContactGroupActions } from '../actions/use-contact-group-actions';
@@ -31,12 +35,21 @@ export const ContactGroupDisplayer = (): React.JSX.Element => {
 		}
 		return [];
 	}, [contactGroup, evaluateActions]);
-
+	const actions = actionsEvaluator();
+	const actionButtons = useMemo<ReactNode[]>(
+		() => actions.map((action) => <ActionIconButton action={action} key={action.id} />),
+		[actions]
+	);
 	return (
-		<ContactGroupDisplayerComponent
-			contactGroup={contactGroup}
-			onCloseDisplayer={routeToContactGroups}
-			actionEvaluator={actionsEvaluator}
-		/>
+		<>
+			{contactGroup ? (
+				<Displayer title={contactGroup.title} icon={'PeopleOutline'} onClose={routeToContactGroups}>
+					<DisplayerActionsHeader>{actionButtons}</DisplayerActionsHeader>
+					<ContactGroupDisplayerDetails contactGroup={contactGroup} />
+				</Displayer>
+			) : (
+				<ContactGroupEmptyDisplayer />
+			)}
+		</>
 	);
 };
