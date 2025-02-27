@@ -240,20 +240,18 @@ function ContactPreviewContent({ contact }) {
 	const phoneData = useMemo(() => Object.values(contact.phone), [contact]);
 	const addressData = useMemo(() => Object.values(contact.address), [contact]);
 	return (
-		<Row
-			data-testid="PreviewPanel"
-			width="100%"
-			mainAlignment="normal"
-			style={{ overflowY: 'auto' }}
+		<Container
+			padding={{ horizontal: '1rem', top: '1rem', bottom: '0' }}
+			crossAlignment={'flex-start'}
+			mainAlignment={'flex-start'}
+			gap={'1rem'}
+			background={'gray6'}
+			minHeight={'0'}
+			height={'auto'}
 		>
 			<Responsive mode="desktop" target={window.top}>
-				<Container
-					data-testid="contact-preview-content-desktop"
-					background="gray6"
-					height="fit"
-					padding={{ all: 'medium' }}
-				>
-					<Container padding={{ all: 'small', top: 'extrasmall' }}>
+				<Container data-testid="contact-preview-content-desktop" background="gray6" height="fit">
+					<Container>
 						<CompactView contact={contact} open={open} toggleOpen={toggleOpen} />
 					</Container>
 				</Container>
@@ -443,7 +441,7 @@ function ContactPreviewContent({ contact }) {
 					</Container>
 				</Collapse>
 			</Responsive>
-		</Row>
+		</Container>
 	);
 }
 
