@@ -116,6 +116,7 @@ export const ContactsList = ({
 						selected={isSelected}
 						active={active}
 						background={active ? 'gray6' : 'gray5'}
+						data-testid={`custom-contact-list-item-${contact.id}`}
 					>
 						{(visible: boolean): ReactElement =>
 							visible ? (
