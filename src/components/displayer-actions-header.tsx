@@ -8,7 +8,8 @@ import React from 'react';
 import { Container } from '@zextras/carbonio-design-system';
 
 export const DisplayerActionsHeader = ({
-	children
+	children,
+	...rest
 }: React.PropsWithChildren): React.JSX.Element => (
 	<Container
 		orientation={'horizontal'}
@@ -16,6 +17,7 @@ export const DisplayerActionsHeader = ({
 		padding={{ vertical: '0.5rem' }}
 		gap={'0.25rem'}
 		mainAlignment={'flex-end'}
+		{...rest}
 	>
 		{children}
 	</Container>

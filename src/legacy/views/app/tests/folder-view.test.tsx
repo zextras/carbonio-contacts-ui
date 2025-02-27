@@ -143,7 +143,7 @@ describe('Contact Group View', () => {
 		expect(styledListItem).toHaveStyle(activeBackground);
 	});
 
-	it('should open the mail board (ContactGroupDisplayerController trigger)', async () => {
+	it('should open the mail board when clicking on send mail action', async () => {
 		const openMailComposer = jest.fn();
 		const contactGroupId = '1';
 		jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
@@ -159,8 +159,9 @@ describe('Contact Group View', () => {
 
 		const listItem = await screen.findByText(contactGroupName);
 		await user.click(listItem);
-		const displayer = await screen.findByTestId('contact-group-displayer');
-		const openEmailComposerAction = within(displayer).getByRole('button', { name: /mail/i });
+		const displayerActions = await screen.findByTestId('contact-group-displayer-actions');
+		screen.logTestingPlaygroundURL();
+		const openEmailComposerAction = within(displayerActions).getByTestId('icon: EmailOutline');
 		await user.click(openEmailComposerAction);
 		expect(openMailComposer).toHaveBeenCalledTimes(1);
 		expect(openMailComposer).toHaveBeenCalledWith({

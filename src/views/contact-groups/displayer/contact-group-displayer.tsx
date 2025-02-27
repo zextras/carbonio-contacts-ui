@@ -50,7 +50,9 @@ export const ContactGroupDisplayer = (): React.JSX.Element => {
 					icon={'PeopleOutline'}
 					onClose={routeToContactGroups}
 				>
-					<DisplayerActionsHeader>{actionButtons}</DisplayerActionsHeader>
+					<DisplayerActionsHeader data-testid={'contact-group-displayer-actions'}>
+						{actionButtons}
+					</DisplayerActionsHeader>
 					<DisplayerContent>
 						<ContactGroupDisplayerDetails contactGroup={contactGroup} />
 					</DisplayerContent>
