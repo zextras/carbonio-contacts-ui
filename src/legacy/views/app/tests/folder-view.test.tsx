@@ -58,7 +58,7 @@ function setupFolderView(
 	navigateTo = `/folder/${folderId}`,
 	store = generateStore(),
 	initialRoute = `/folder/${folderId}`
-): any {
+): ReturnType<typeof setupTest> {
 	return setupTest(<MockedButton routeTo={navigateTo} initialRoute={initialRoute} />, {
 		initialEntries: [initialRoute],
 		store
