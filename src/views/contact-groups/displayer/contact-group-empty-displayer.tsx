@@ -15,6 +15,7 @@ export const ContactGroupEmptyDisplayer = (): React.JSX.Element => {
 
 	return (
 		<Container
+			background="gray5"
 			orientation="vertical"
 			mainAlignment="flex-start"
 			crossAlignment="flex-start"
