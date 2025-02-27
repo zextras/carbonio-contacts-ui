@@ -11,7 +11,7 @@ import { act, waitFor } from '@testing-library/react';
 import { ErrorSoapResponse, JSNS } from '@zextras/carbonio-shell-ui';
 import { times } from 'lodash';
 import { HttpResponse } from 'msw';
-import { Link, Route } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import { DistributionListsView } from './distribution-lists-view';
 import { screen, setupTest, within } from '../../carbonio-ui-commons/test/test-setup';
@@ -44,12 +44,10 @@ describe('Distribution Lists View', () => {
 	it('should show the list of distribution lists', async () => {
 		const items = generateDistributionLists(10, { isMember: true });
 		registerGetAccountDistributionListsHandler(items);
-		setupTest(
-			<Route path={ROUTES.distributionLists}>
-				<DistributionListsView />
-			</Route>,
-			{ initialEntries: [`/${ROUTES_INTERNAL_PARAMS.filter.member}`] }
-		);
+		setupTest(<DistributionListsView />, {
+			initialEntries: [`/${ROUTES_INTERNAL_PARAMS.filter.member}`],
+			path: ROUTES.distributionLists
+		});
 		await screen.findByText(items[0].displayName);
 		items.forEach((item) => expect(screen.getByText(item.displayName)).toBeVisible());
 	});
@@ -69,14 +67,10 @@ describe('Distribution Lists View', () => {
 
 	it('should render empty list message when the distribution list is empty', async () => {
 		const handler = registerGetAccountDistributionListsHandler([]);
-		setupTest(
-			<Route path={ROUTES.distributionLists}>
-				<DistributionListsView />
-			</Route>,
-			{
-				initialEntries: [`/${ROUTES_INTERNAL_PARAMS.filter.member}`]
-			}
-		);
+		setupTest(<DistributionListsView />, {
+			initialEntries: [`/${ROUTES_INTERNAL_PARAMS.filter.member}`],
+			path: ROUTES.distributionLists
+		});
 		await waitFor(() => expect(handler).toHaveBeenCalled());
 		expect(screen.getByText(EMPTY_DISTRIBUTION_LIST_HINT)).toBeVisible();
 	});
@@ -118,12 +112,11 @@ describe('Distribution Lists View', () => {
 		const { user } = setupTest(
 			<>
 				<Link to={`/${ROUTES_INTERNAL_PARAMS.filter.manager}`}>Manager</Link>
-				<Route path={ROUTES.distributionLists}>
-					<DistributionListsView />
-				</Route>
+				<DistributionListsView />
 			</>,
 			{
-				initialEntries: [`/${ROUTES_INTERNAL_PARAMS.filter.member}`]
+				initialEntries: [`/${ROUTES_INTERNAL_PARAMS.filter.member}`],
+				path: ROUTES.distributionLists
 			}
 		);
 		expect(await screen.findByText(memberList[0].displayName)).toBeVisible();
@@ -136,26 +129,20 @@ describe('Distribution Lists View', () => {
 	it('should show an error snackbar if there is a network error while loading the list', async () => {
 		jest.spyOn(console, 'warn').mockImplementation();
 		registerGetAccountDistributionListsHandler([], JEST_MOCKED_ERROR);
-		setupTest(
-			<Route path={ROUTES.distributionLists}>
-				<DistributionListsView />
-			</Route>,
-			{
-				initialEntries: [`/${ROUTES_INTERNAL_PARAMS.filter.member}/`]
-			}
-		);
+		setupTest(<DistributionListsView />, {
+			initialEntries: [`/${ROUTES_INTERNAL_PARAMS.filter.member}/`],
+			path: ROUTES.distributionLists
+		});
 		expect(await screen.findByText(/something went wrong/i)).toBeVisible();
 	});
 
 	it('should show edit action on item of which the user is also owner, inside the member filter', async () => {
 		const dl = generateDistributionList({ isOwner: true, isMember: true });
 		registerGetAccountDistributionListsHandler([dl]);
-		const { user } = setupTest(
-			<Route path={ROUTES.distributionLists}>
-				<DistributionListsView />
-			</Route>,
-			{ initialEntries: [`/${ROUTES_INTERNAL_PARAMS.filter.member}`] }
-		);
+		const { user } = setupTest(<DistributionListsView />, {
+			initialEntries: [`/${ROUTES_INTERNAL_PARAMS.filter.member}`],
+			path: ROUTES.distributionLists
+		});
 		const listItem = await screen.findByText(dl.displayName);
 		expect(
 			screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.editDL })
@@ -175,16 +162,12 @@ describe('Distribution Lists View', () => {
 			registerGetAccountDistributionListsHandler([dl]);
 			registerGetDistributionListHandler(dl);
 
-			const { user } = setupTest(
-				<Route path={`${ROUTES.mainRoute}${ROUTES.distributionLists}`}>
-					<DistributionListsView />
-				</Route>,
-				{
-					initialEntries: [
-						`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.member}`
-					]
-				}
-			);
+			const { user } = setupTest(<DistributionListsView />, {
+				initialEntries: [
+					`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.member}`
+				],
+				path: `${ROUTES.mainRoute}${ROUTES.distributionLists}`
+			});
 			const distributionList = await screen.findByText(dl.displayName);
 			await act(async () => {
 				await user.click(distributionList);
@@ -202,16 +185,12 @@ describe('Distribution Lists View', () => {
 			registerGetAccountDistributionListsHandler([dl]);
 			registerGetDistributionListHandler(dl);
 
-			const { user } = setupTest(
-				<Route path={`${ROUTES.mainRoute}${ROUTES.distributionLists}`}>
-					<DistributionListsView />
-				</Route>,
-				{
-					initialEntries: [
-						`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.member}/${dl.id}`
-					]
-				}
-			);
+			const { user } = setupTest(<DistributionListsView />, {
+				initialEntries: [
+					`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.member}/${dl.id}`
+				],
+				path: `${ROUTES.mainRoute}${ROUTES.distributionLists}`
+			});
 
 			const displayerHeader = await screen.findByTestId(TESTID_SELECTORS.displayerHeader);
 			const closeAction = await within(displayerHeader).findByRoleWithIcon('button', {
@@ -297,16 +276,12 @@ describe('Distribution Lists View', () => {
 				);
 			});
 
-			const { user } = setupTest(
-				<Route path={`${ROUTES.mainRoute}${ROUTES.distributionLists}`}>
-					<DistributionListsView />
-				</Route>,
-				{
-					initialEntries: [
-						`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.member}/${dl1.id}`
-					]
-				}
-			);
+			const { user } = setupTest(<DistributionListsView />, {
+				initialEntries: [
+					`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.member}/${dl1.id}`
+				],
+				path: `${ROUTES.mainRoute}${ROUTES.distributionLists}`
+			});
 
 			await screen.findByText(dl2.displayName);
 			await screen.findByTestId(TESTID_SELECTORS.displayer);
@@ -350,16 +325,12 @@ describe('Distribution Lists View', () => {
 				);
 			});
 
-			const { user } = setupTest(
-				<Route path={`${ROUTES.mainRoute}${ROUTES.distributionLists}`}>
-					<DistributionListsView />
-				</Route>,
-				{
-					initialEntries: [
-						`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.member}`
-					]
-				}
-			);
+			const { user } = setupTest(<DistributionListsView />, {
+				initialEntries: [
+					`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.member}`
+				],
+				path: `${ROUTES.mainRoute}${ROUTES.distributionLists}`
+			});
 			const dlButton = await screen.findByText(dl1.displayName);
 			await act(async () => {
 				await user.click(dlButton);
