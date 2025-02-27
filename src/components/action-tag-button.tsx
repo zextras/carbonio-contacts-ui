@@ -132,7 +132,7 @@ export const ActionTagButton: React.FC<ActionTagButtonProps> = ({
 	if (showMultiTagIcon || showTagIcon) {
 		const commonButton = (
 			<Button
-				data-testid="TagIcon"
+				data-testid="TagIconButton"
 				type="ghost"
 				size="medium"
 				icon={icon}

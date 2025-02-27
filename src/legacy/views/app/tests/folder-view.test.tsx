@@ -10,7 +10,9 @@ import { within } from '@testing-library/react';
 import { Button, useTheme } from '@zextras/carbonio-design-system';
 import * as shell from '@zextras/carbonio-shell-ui';
 
+import { useRunSearchIntegration } from '../../../../carbonio-ui-commons/integrations/search/use-run-search';
 import { useFolderStore } from '../../../../carbonio-ui-commons/store/zustand/folder';
+import { useTagStore } from '../../../../carbonio-ui-commons/store/zustand/tags';
 import { useAppContext } from '../../../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
 import { generateFolder } from '../../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
 import {
@@ -19,7 +21,7 @@ import {
 	setupHook,
 	setupTest
 } from '../../../../carbonio-ui-commons/test/test-setup';
-import { TESTID_SELECTORS } from '../../../../constants/tests';
+import { FOLDERS_DESCRIPTORS, TESTID_SELECTORS } from '../../../../constants/tests';
 import { useNavigation } from '../../../../hooks/useNavigation';
 import {
 	createFindContactGroupsResponse,
@@ -29,6 +31,12 @@ import { createCnItem, createSoapContact } from '../../../../tests/utils';
 import { generateStore } from '../../../tests/generators/store';
 import { FolderView } from '../folder-view';
 import { createContactsApiInterceptor } from './utils';
+import { buildContact } from '../../../../tests/model-builder';
+import { generateState } from '../../../../tests/state-builder';
+
+jest.mock('../../../../carbonio-ui-commons/integrations/search/use-run-search', () => ({
+	useRunSearchIntegration: jest.fn()
+}));
 
 function MockedButton(props: { routeTo: string; initialRoute: string }): React.JSX.Element {
 	const { navigateTo } = useNavigation();
@@ -45,10 +53,12 @@ function MockedButton(props: { routeTo: string; initialRoute: string }): React.J
 	);
 }
 
-function setupFolderView(folderId: string, navigateTo = `/folder/${folderId}`): any {
-	const store = generateStore();
-
-	const initialRoute = `/folder/${folderId}`;
+function setupFolderView(
+	folderId: string,
+	navigateTo = `/folder/${folderId}`,
+	store = generateStore(),
+	initialRoute = `/folder/${folderId}`
+): any {
 	return setupTest(<MockedButton routeTo={navigateTo} initialRoute={initialRoute} />, {
 		initialEntries: [initialRoute],
 		store
@@ -160,13 +170,45 @@ describe('Contact Group View', () => {
 		const listItem = await screen.findByText(contactGroupName);
 		await user.click(listItem);
 		const displayerActions = await screen.findByTestId('contact-group-displayer-actions');
-		screen.logTestingPlaygroundURL();
+
 		const openEmailComposerAction = within(displayerActions).getByTestId('icon: EmailOutline');
 		await user.click(openEmailComposerAction);
 		expect(openMailComposer).toHaveBeenCalledTimes(1);
 		expect(openMailComposer).toHaveBeenCalledWith({
 			recipients: [expect.objectContaining({ email: member })]
 		});
+	});
+});
+
+describe('Contacts', () => {
+	it('should call search when tag icon is clicked in the displayer', async () => {
+		const runSearch = jest.fn();
+		(useRunSearchIntegration as jest.Mock).mockReturnValue(runSearch);
+
+		const folder = FOLDERS_DESCRIPTORS.contacts;
+		const contact = buildContact({ lastName: faker.string.uuid(), tags: ['1'] });
+		useTagStore.setState({ tags: { '1': { id: '1', name: 'testTag' } } });
+		const state = generateState({
+			contacts: [contact]
+		});
+		const store = generateStore(state);
+
+		const { user } = setupFolderView(
+			folder.id,
+			`/folder/${folder.id}`,
+			store,
+			`/folder/${folder.id}/contacts/${contact.id}`
+		);
+
+		const displayer = await screen.findByTestId('displayer');
+		expect(displayer).toBeVisible();
+		const tagButtonInDisplayer = await within(displayer).findByTestId('TagIconButton');
+		await user.click(tagButtonInDisplayer);
+
+		expect(runSearch).toHaveBeenCalledWith(
+			[expect.objectContaining({ label: 'tag:testTag', value: 'tag:"testTag"' })],
+			'contacts'
+		);
 	});
 });
 
