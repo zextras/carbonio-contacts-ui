@@ -5,14 +5,14 @@
  */
 import React from 'react';
 
-import { act, waitFor } from '@testing-library/react';
-import { ModalManager } from '@zextras/carbonio-design-system';
+import { act, fireEvent, waitFor } from '@testing-library/react';
 import { HttpResponse } from 'msw';
 
+import { useTagStore } from '../../../../carbonio-ui-commons/store/zustand/tags';
 import { createAPIInterceptor } from '../../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { buildSoapResponse } from '../../../../carbonio-ui-commons/test/mocks/utils/soap';
 import { screen, setupTest } from '../../../../carbonio-ui-commons/test/test-setup';
-import { TIMERS } from '../../../../constants/tests';
+import { TESTID_SELECTORS, TIMERS } from '../../../../constants/tests';
 import { TagsAccordion } from '../tags-accordion';
 
 jest.mock('../../../../carbonio-ui-commons/integrations/search/use-run-search', () => ({
@@ -21,7 +21,46 @@ jest.mock('../../../../carbonio-ui-commons/integrations/search/use-run-search', 
 
 describe('TagsAccordion', () => {
 	it.todo('performs a search when clicking the tag');
-	it.todo('delete tag');
+	it('delete tag', async () => {
+		useTagStore.setState({ tags: { '1': { id: '1', name: 'testTag' } } });
+
+		const { user } = setupTest(<TagsAccordion />);
+
+		const tagsAccordion = await screen.findByText('Tags');
+		expect(tagsAccordion).toBeVisible();
+
+		await user.click(screen.getByTestId(TESTID_SELECTORS.icons.accordionExpandAction));
+		act(() => {
+			jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
+		});
+		const testTag = await screen.findByText('testTag');
+		expect(testTag).toBeVisible();
+		// user.rightClick dow not work
+		fireEvent.contextMenu(testTag);
+		const deleteTag = await screen.findByText(/delete tag/i);
+		expect(deleteTag).toBeVisible();
+		await user.click(deleteTag);
+		act(() => {
+			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+		});
+
+		const deleteTagButton = screen.getByRole('button', { name: 'Delete' });
+		const deleteTagInterceptor = createAPIInterceptor(
+			'post',
+			'/service/soap/TagActionRequest',
+			HttpResponse.json(
+				buildSoapResponse({
+					TagActionResponse: {
+						action: [{ id: '1', op: 'delete' }]
+					}
+				})
+			)
+		);
+		await user.click(deleteTagButton);
+		await waitFor(async () => {
+			expect(deleteTagInterceptor.getCalledTimes()).toBe(1);
+		});
+	});
 	it('should create a new tag after filling in the create tag modal opened from the contextual menu', async () => {
 		const createTagInterceptor = createAPIInterceptor(
 			'post',
@@ -34,11 +73,7 @@ describe('TagsAccordion', () => {
 				})
 			)
 		);
-		const { user } = setupTest(
-			<ModalManager>
-				<TagsAccordion />
-			</ModalManager>
-		);
+		const { user } = setupTest(<TagsAccordion />);
 
 		const tagsAccordion = await screen.findByText('Tags');
 		expect(tagsAccordion).toBeVisible();
