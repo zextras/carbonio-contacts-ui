@@ -178,7 +178,7 @@ export const TESTID_SELECTORS = {
 		distributionList: 'icon: DistributionListOutline',
 		copy: 'icon: Copy',
 		edit: 'icon: EditOutline',
-		displayerIcon: 'icon: PeopleOutline',
+		contactsDisplayerIcon: 'icon: PersonOutline',
 		exitSelection: 'icon: ArrowBack',
 		moreOptions: 'icon: MoreVertical',
 		findUsers: 'icon: FunnelOutline',
