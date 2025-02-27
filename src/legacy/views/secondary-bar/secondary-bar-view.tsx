@@ -6,7 +6,7 @@
 import React, { FC, ReactElement, useMemo } from 'react';
 
 import { ThemeProvider } from '@mui/material';
-import { Container, Divider } from '@zextras/carbonio-design-system';
+import { Divider } from '@zextras/carbonio-design-system';
 import { SecondaryBarComponentProps } from '@zextras/carbonio-shell-ui';
 import { Route, Switch, useParams, useRouteMatch } from 'react-router-dom';
 
@@ -45,19 +45,22 @@ const SecondaryBarView: FC<SecondaryBarComponentProps> = ({ expanded = false }) 
 
 	return (
 		<ThemeProvider theme={themeMui}>
-			<Switch>
-				<Route path={`${path}/folder/:folderId/:type?/:itemId?`}>
-					<SidebarAccordionMui
-						folders={folders}
-						selectedFolderId={selectedFolderId}
-						localStorageName={LOCAL_STORAGES.EXPANDED_ADDRESSBOOKS}
-						initialExpanded={[FOLDERS.USER_ROOT]}
-					/>
-					<TagsAccordion />
-					<Divider />
-					<Container data-testid={'davide'} />
-				</Route>
-			</Switch>
+			{expanded ? (
+				<Switch>
+					<Route path={`${path}/folder/:folderId/:type?/:itemId?`}>
+						<SidebarAccordionMui
+							folders={folders}
+							selectedFolderId={selectedFolderId}
+							localStorageName={LOCAL_STORAGES.EXPANDED_ADDRESSBOOKS}
+							initialExpanded={[FOLDERS.USER_ROOT]}
+						/>
+						<Divider />
+						<TagsAccordion />
+					</Route>
+				</Switch>
+			) : (
+				<div data-testid={'sidebar-collapsed'}>{collapsedItems}</div>
+			)}
 		</ThemeProvider>
 	);
 };
