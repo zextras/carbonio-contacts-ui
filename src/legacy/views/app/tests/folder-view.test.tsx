@@ -105,11 +105,11 @@ describe('Contact Group View', () => {
 
 		const listItem = await screen.findByText(contactGroupName);
 		await user.click(listItem);
+
+		expect(screen.getByTestId('contact-group-displayer')).toBeVisible();
 		const closeButton = screen.getByRoleWithIcon('button', {
 			icon: TESTID_SELECTORS.icons.closeDisplayer
 		});
-
-		expect(screen.getByTestId('contact-group-displayer')).toBeVisible();
 		expect(closeButton).toBeVisible();
 		expect(closeButton).toBeEnabled();
 		await user.click(closeButton);

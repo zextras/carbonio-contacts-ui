@@ -44,7 +44,12 @@ export const ContactGroupDisplayer = (): React.JSX.Element => {
 	return (
 		<>
 			{contactGroup ? (
-				<Displayer title={contactGroup.title} icon={'PeopleOutline'} onClose={routeToContactGroups}>
+				<Displayer
+					data-testid="contact-group-displayer"
+					title={contactGroup.title}
+					icon={'PeopleOutline'}
+					onClose={routeToContactGroups}
+				>
 					<DisplayerActionsHeader>{actionButtons}</DisplayerActionsHeader>
 					<DisplayerContent>
 						<ContactGroupDisplayerDetails contactGroup={contactGroup} />

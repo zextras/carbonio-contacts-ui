@@ -19,13 +19,15 @@ export const Displayer = ({
 	children,
 	icon,
 	title,
-	onClose
+	onClose,
+	...rest
 }: DisplayerProps): React.JSX.Element => (
 	<Container
 		orientation="vertical"
 		mainAlignment="flex-start"
 		crossAlignment="flex-start"
 		data-testid="displayer"
+		{...rest}
 	>
 		<Container
 			background={'gray5'}
