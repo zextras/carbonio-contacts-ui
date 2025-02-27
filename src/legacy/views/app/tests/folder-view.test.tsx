@@ -210,6 +210,51 @@ describe('Contacts', () => {
 			'contacts'
 		);
 	});
+	it('should call search when selecting a tag icon inside multitag icon button is clicked in the displayer', async () => {
+		const runSearch = jest.fn();
+		(useRunSearchIntegration as jest.Mock).mockReturnValue(runSearch);
+
+		const folder = FOLDERS_DESCRIPTORS.contacts;
+		const contact = buildContact({ lastName: faker.string.uuid(), tags: ['1', '2'] });
+		useTagStore.setState({
+			tags: { '1': { id: '1', name: 'testTag1' }, '2': { id: '2', name: 'testTag2' } }
+		});
+		const state = generateState({
+			contacts: [contact]
+		});
+		const store = generateStore(state);
+
+		const { user } = setupFolderView(
+			folder.id,
+			`/folder/${folder.id}`,
+			store,
+			`/folder/${folder.id}/contacts/${contact.id}`
+		);
+
+		const displayer = await screen.findByTestId('displayer');
+		expect(displayer).toBeVisible();
+		const tagButtonInDisplayer = await within(displayer).findByTestId('TagIconButton');
+		await user.click(tagButtonInDisplayer);
+
+		const tagsDropdown = await screen.findByTestId('dropdown-popper-list');
+
+		const testTag1 = within(tagsDropdown).getByText('testTag1');
+		await user.click(testTag1);
+		expect(runSearch).toHaveBeenCalledWith(
+			[expect.objectContaining({ label: 'tag:testTag1', value: 'tag:"testTag1"' })],
+			'contacts'
+		);
+
+		await user.click(tagButtonInDisplayer);
+		const tagsDropdown2 = await screen.findByTestId('dropdown-popper-list');
+
+		const testTag2 = within(tagsDropdown2).getByText('testTag2');
+		await user.click(testTag2);
+		expect(runSearch).toHaveBeenCalledWith(
+			[expect.objectContaining({ label: 'tag:testTag2', value: 'tag:"testTag2"' })],
+			'contacts'
+		);
+	});
 });
 
 it('should reload contacts when switching back to initial folder after changing the filter type', async () => {
