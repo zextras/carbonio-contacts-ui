@@ -134,7 +134,7 @@ export const ActionTagButton: React.FC<ActionTagButtonProps> = ({
 			<Button
 				data-testid="TagIcon"
 				type="ghost"
-				size="large"
+				size="medium"
 				icon={icon}
 				color={color}
 				onClick={showMultiTagIcon ? toggleDropdown : onClick}
