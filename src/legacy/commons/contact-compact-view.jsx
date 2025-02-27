@@ -17,6 +17,7 @@ import {
 import { trim } from 'lodash';
 import styled from 'styled-components';
 
+import { CustomIconAvatar } from '../../components/styled-components';
 import { useDisplayName } from '../hooks/use-display-name';
 
 const AvatarMobile = styled(Avatar)`
@@ -56,7 +57,7 @@ export const CompactView = ({ contact, toggleOpen, open }) => {
 			<Responsive mode="desktop" target={window.top}>
 				<Drag style={{ width: '100%' }}>
 					<Row width="fill" height="fit" mainAlignment="flex-start">
-						<Avatar
+						<CustomIconAvatar
 							label={`${contact.firstName} ${contact.lastName}`}
 							picture={contact.image}
 							size="large"
