@@ -5,7 +5,15 @@
  */
 import React, { useMemo } from 'react';
 
-import { Avatar, Button, IconButton, Responsive, Row, Text } from '@zextras/carbonio-design-system';
+import {
+	Avatar,
+	Button,
+	Container,
+	IconButton,
+	Responsive,
+	Row,
+	Text
+} from '@zextras/carbonio-design-system';
 import { trim } from 'lodash';
 import styled from 'styled-components';
 
@@ -47,21 +55,19 @@ export const CompactView = ({ contact, toggleOpen, open }) => {
 	return (
 		<>
 			<Responsive mode="desktop" target={window.top}>
-				<Row width="fill" height="fit" mainAlignment="flex-start">
+				<Container
+					height={'fit'}
+					orientation={'horizontal'}
+					mainAlignment={'flex-start'}
+					gap={'1rem'}
+				>
 					<CustomIconAvatar
 						label={`${contact.firstName} ${contact.lastName}`}
 						picture={contact.image}
 						size="large"
 						fallbackIcon="PeopleOutline"
 					/>
-					<Row
-						orientation="vertical"
-						takeAvailableSpace
-						mainAlignment="center"
-						crossAlignment="flex-start"
-						padding={{ horizontal: 'large', vertical: 'small' }}
-						height="fill"
-					>
+					<Container height={'fit'} crossAlignment={'flex-start'} minWidth={0}>
 						<Text size="medium" weight="bold">
 							{displayName}
 						</Text>
@@ -76,7 +82,7 @@ export const CompactView = ({ contact, toggleOpen, open }) => {
 						<Text size="small" color="secondary">
 							{displayMailAndPhone}
 						</Text>
-					</Row>
+					</Container>
 
 					{toggleOpen && (
 						<IconButton
@@ -85,7 +91,7 @@ export const CompactView = ({ contact, toggleOpen, open }) => {
 							icon={open ? 'ArrowIosUpward' : 'ArrowIosDownward'}
 						/>
 					)}
-				</Row>
+				</Container>
 			</Responsive>
 			<Responsive mode="mobile" target={window.top}>
 				<Row padding={{ vertical: 'large' }} width="90vw" height="fit" mainAlignment="flex-start">

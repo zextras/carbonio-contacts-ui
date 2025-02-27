@@ -11,6 +11,7 @@ import { ContactGroupDisplayerDetails } from './contact-group-displayer-details'
 import { ContactGroupEmptyDisplayer } from './contact-group-empty-displayer';
 import { ActionIconButton } from '../../../components/action-icon-button';
 import { Displayer } from '../../../components/displayer/displayer';
+import { DisplayerContent } from '../../../components/displayer/displayer-content';
 import { DisplayerActionsHeader } from '../../../components/displayer-actions-header';
 import { useAppSelector } from '../../../legacy/hooks/redux';
 import { selectContactGroup } from '../../../legacy/store/selectors/contacts';
@@ -45,7 +46,9 @@ export const ContactGroupDisplayer = (): React.JSX.Element => {
 			{contactGroup ? (
 				<Displayer title={contactGroup.title} icon={'PeopleOutline'} onClose={routeToContactGroups}>
 					<DisplayerActionsHeader>{actionButtons}</DisplayerActionsHeader>
-					<ContactGroupDisplayerDetails contactGroup={contactGroup} />
+					<DisplayerContent>
+						<ContactGroupDisplayerDetails contactGroup={contactGroup} />
+					</DisplayerContent>
 				</Displayer>
 			) : (
 				<ContactGroupEmptyDisplayer />

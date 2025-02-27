@@ -18,6 +18,7 @@ import {
 import { map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
+import { DisplayerContent } from '../../../components/displayer/displayer-content';
 import { CompactView } from '../../commons/contact-compact-view';
 
 function typeToIcon(type) {
@@ -240,20 +241,10 @@ function ContactPreviewContent({ contact }) {
 	const phoneData = useMemo(() => Object.values(contact.phone), [contact]);
 	const addressData = useMemo(() => Object.values(contact.address), [contact]);
 	return (
-		<Container
-			padding={{ horizontal: '1rem', top: '1rem', bottom: '0' }}
-			crossAlignment={'flex-start'}
-			mainAlignment={'flex-start'}
-			gap={'1rem'}
-			background={'gray6'}
-			minHeight={'0'}
-			height={'auto'}
-		>
+		<DisplayerContent>
 			<Responsive mode="desktop" target={window.top}>
 				<Container data-testid="contact-preview-content-desktop" background="gray6" height="fit">
-					<Container>
-						<CompactView contact={contact} open={open} toggleOpen={toggleOpen} />
-					</Container>
+					<CompactView contact={contact} open={open} toggleOpen={toggleOpen} />
 				</Container>
 				<Collapse orientation="vertical" open={open} crossSize="100%" disableTransition>
 					<Container
@@ -441,7 +432,7 @@ function ContactPreviewContent({ contact }) {
 					</Container>
 				</Collapse>
 			</Responsive>
-		</Container>
+		</DisplayerContent>
 	);
 }
 
