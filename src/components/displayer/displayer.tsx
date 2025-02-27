@@ -29,12 +29,7 @@ export const Displayer = ({
 		data-testid="displayer"
 		{...rest}
 	>
-		<Container
-			background={'gray5'}
-			mainAlignment={'flex-start'}
-			padding={{ bottom: '3rem' }}
-			data-testid={'displayer'}
-		>
+		<Container background={'gray5'} mainAlignment={'flex-start'} padding={{ bottom: '3rem' }}>
 			<DisplayerHeader title={title} icon={icon} closeDisplayer={onClose} />
 			<Container
 				padding={{ horizontal: '1rem' }}
