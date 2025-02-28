@@ -113,10 +113,6 @@ export const ActionTagButton: React.FC<ActionTagButtonProps> = ({
 		setShowDropdown(false);
 	}, []);
 
-	// const showMultiTagIcon = useMemo(
-	// 	() => contact.tags?.length > 1 && isTagInStore,
-	// 	[contact.tags?.length, isTagInStore]
-	// );
 	const showMultiTagIcon = useMemo(() => tags.length > 1, [tags]);
 
 	const showTagIcon = useMemo(
