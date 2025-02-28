@@ -7,16 +7,30 @@
 import React from 'react';
 
 import { ModalManager } from '@zextras/carbonio-design-system';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, useParams } from 'react-router-dom';
 
-import { ROUTES, ROUTES_INTERNAL_PARAMS } from '../constants';
+import { GROUPS_ROUTE, ROUTES, ROUTES_INTERNAL_PARAMS } from '../constants';
 import { DistributionListsView } from './distribution-list/distribution-lists-view';
 
-const AppView = (): React.JSX.Element => (
-	<ModalManager>
-		<DistributionListsView />
-	</ModalManager>
-);
+const AppView = (): React.JSX.Element => {
+	const { filter } = useParams();
+	if (
+		filter !== ROUTES_INTERNAL_PARAMS.filter.member &&
+		filter !== ROUTES_INTERNAL_PARAMS.filter.manager
+	) {
+		return (
+			<Navigate
+				to={`/${GROUPS_ROUTE}/${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.member}`}
+				replace
+			/>
+		);
+	}
+	return (
+		<ModalManager>
+			<DistributionListsView />
+		</ModalManager>
+	);
+};
 
 const MainRouteAppView = (): React.JSX.Element => (
 	<Routes>

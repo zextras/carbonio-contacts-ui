@@ -6,9 +6,10 @@
 
 import React from 'react';
 
-import { screen } from '@testing-library/react';
+import { act, screen } from '@testing-library/react';
 
 import { useTags } from '../../../../carbonio-ui-commons/store/zustand/tags';
+import { mockUseHistoryNavigation } from '../../../../carbonio-ui-commons/test/mocks/routing/use-history-navigation-mock';
 import { setupTest } from '../../../../carbonio-ui-commons/test/test-setup';
 import { getTagsArray } from '../../../helpers/tags';
 import { generateStore } from '../../../tests/generators/store';
@@ -61,15 +62,16 @@ describe('SearchContactListItem', () => {
 		expect(await screen.findByText('display name')).toBeInTheDocument();
 	});
 
-	// it('should handle click event correctly', async () => {
-	// 	const store = generateStore();
-	// 	const { user } = setupTest(<SearchContactListItem item={mockItem} />, { store });
-	// 	const container = screen.getByTestId('search-contact-list-item');
-	// 	await act(async () => {
-	// 		await user.click(container);
-	// 	});
-	// 	expect(replaceHistory).toHaveBeenCalledWith('/folder/folder1/contacts/1');
-	// });
+	it('should handle click event correctly', async () => {
+		const { replaceHistory } = mockUseHistoryNavigation();
+		const store = generateStore();
+		const { user } = setupTest(<SearchContactListItem item={mockItem} />, { store });
+		const container = screen.getByTestId('search-contact-list-item');
+		await act(async () => {
+			await user.click(container);
+		});
+		expect(replaceHistory).toHaveBeenCalledWith('../folder/folder1/contacts/1');
+	});
 
 	it('should pass the correct tags to ItemContent', () => {
 		const store = generateStore();

@@ -7,8 +7,8 @@ import React, { MouseEventHandler, useCallback, useMemo } from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
 import { noop } from 'lodash';
-import { useNavigate } from 'react-router-dom';
 
+import { useHistoryNavigation } from '../../../carbonio-ui-commons/helpers/use-history-navigation';
 import { useTags } from '../../../carbonio-ui-commons/store/zustand/tags';
 import { getTagsArray } from '../../helpers/tags';
 import { Contact } from '../../types/contact';
@@ -17,17 +17,17 @@ import { ItemContent } from '../app/folder-panel/item-content';
 
 export const SearchContactListItem = ({ item }: { item: Contact }): React.JSX.Element => {
 	const tagsFromStore = useTags();
-	const navigate = useNavigate();
+	const { replaceHistory } = useHistoryNavigation();
 	const folderId = item.parent;
 	const tags = useMemo(() => getTagsArray(tagsFromStore, item.tags), [item.tags, tagsFromStore]);
 
 	const _onClick = useCallback<MouseEventHandler<HTMLDivElement>>(
 		(e) => {
 			if (!e.isDefaultPrevented()) {
-				navigate(`../folder/${folderId}/contacts/${item.id}`, { replace: true });
+				replaceHistory(`../folder/${folderId}/contacts/${item.id}`);
 			}
 		},
-		[folderId, item.id, navigate]
+		[folderId, item.id, replaceHistory]
 	);
 	return (
 		<Container orientation="vertical" data-testid={'search-contact-list-item'} onClick={_onClick}>
