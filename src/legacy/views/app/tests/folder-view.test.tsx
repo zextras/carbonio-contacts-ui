@@ -10,6 +10,7 @@ import { act, within } from '@testing-library/react';
 import { Button, useTheme } from '@zextras/carbonio-design-system';
 import * as shell from '@zextras/carbonio-shell-ui';
 
+import { useActionMoveContacts } from '../../../../actions/move-contacts';
 import { useRunSearchIntegration } from '../../../../carbonio-ui-commons/integrations/search/use-run-search';
 import { useFolderStore } from '../../../../carbonio-ui-commons/store/zustand/folder';
 import { useTagStore } from '../../../../carbonio-ui-commons/store/zustand/tags';
@@ -42,6 +43,10 @@ import { generateState } from '../../../../tests/state-builder';
 
 jest.mock('../../../../carbonio-ui-commons/integrations/search/use-run-search', () => ({
 	useRunSearchIntegration: jest.fn()
+}));
+
+jest.mock('../../../../actions/move-contacts', () => ({
+	useActionMoveContacts: jest.fn()
 }));
 
 function MockedButton(props: { routeTo: string; initialRoute: string }): React.JSX.Element {
@@ -227,6 +232,59 @@ describe('Contacts', () => {
 			}
 		});
 	});
+
+	it('should call contactsMoveAction when move icon is clicked in the displayer', async () => {
+		const contactsMoveAction = { execute: jest.fn() };
+		(useActionMoveContacts as jest.Mock).mockReturnValue(contactsMoveAction);
+
+		const contact = buildContact({ id: '10', parent: folder.id });
+		const state = generateState({
+			contacts: [contact]
+		});
+		const store = generateStore(state);
+
+		const { user } = setupFolderView(
+			folder.id,
+			`/folder/${folder.id}`,
+			store,
+			`/folder/${folder.id}/contacts/${contact.id}`
+		);
+
+		const displayer = await screen.findByTestId('displayer');
+		expect(displayer).toBeVisible();
+		const moveButtonInDisplayer = await within(displayer).findByTestId('icon: MoveOutline');
+		await user.click(moveButtonInDisplayer);
+
+		expect(contactsMoveAction.execute).toHaveBeenCalledWith({
+			contacts: [expect.objectContaining({ id: contact.id })]
+		});
+	});
+
+	it('should call SendMailAction when Mail icon is clicked in the displayer', async () => {
+		const mailTo = { label: 'mail', execute: jest.fn() };
+		jest.spyOn(shell, 'getAction').mockReturnValue([mailTo, true]);
+
+		const contact = buildContact({ id: '10', parent: folder.id });
+		const state = generateState({
+			contacts: [contact]
+		});
+		const store = generateStore(state);
+
+		const { user } = setupFolderView(
+			folder.id,
+			`/folder/${folder.id}`,
+			store,
+			`/folder/${folder.id}/contacts/${contact.id}`
+		);
+
+		const displayer = await screen.findByTestId('displayer');
+		expect(displayer).toBeVisible();
+		const mailButtonInDisplayer = await within(displayer).findByTestId('icon: MailModOutline');
+		await user.click(mailButtonInDisplayer);
+
+		expect(mailTo.execute).toHaveBeenCalledWith(contact);
+	});
+
 	it('should call search when tag icon is clicked in the displayer', async () => {
 		const runSearch = jest.fn();
 		(useRunSearchIntegration as jest.Mock).mockReturnValue(runSearch);
