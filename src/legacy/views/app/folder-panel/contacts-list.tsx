@@ -5,7 +5,7 @@
  */
 import React, { ReactElement, useCallback, useMemo, useRef, useState } from 'react';
 
-import { List } from '@zextras/carbonio-design-system';
+import { List, ListItem } from '@zextras/carbonio-design-system';
 import { map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -14,7 +14,6 @@ import styled from 'styled-components';
 import { ContactListItem } from './contact-list-item';
 import { DragItems } from './drag-items';
 import { EmptyListPanel } from './empty-list-panel';
-import { CustomListItem } from '../../../../carbonio-ui-commons/components/list/list-item';
 import { ContactGroupListItemWrapper } from '../../../../views/contact-groups/list/contact-group-list-item-wrapper';
 import { useAppSelector } from '../../../hooks/redux';
 import { selectFolderHasMore } from '../../../store/slices/contacts-slice';
@@ -89,11 +88,10 @@ export const ContactsList = ({
 				const active = itemId === contact.id;
 				if (isGroup(contact)) {
 					return (
-						<CustomListItem
+						<ListItem
 							key={contact.id}
 							selected={isSelected}
 							active={active}
-							background={active ? 'gray6' : 'gray5'}
 							data-testid={`custom-list-item-${contact.id}`}
 						>
 							{(): React.JSX.Element => (
@@ -106,16 +104,15 @@ export const ContactsList = ({
 									key={`contact-group-${contact.id}`}
 								/>
 							)}
-						</CustomListItem>
+						</ListItem>
 					);
 				}
 
 				return (
-					<CustomListItem
+					<ListItem
 						key={contact.id}
 						selected={isSelected}
 						active={active}
-						background={active ? 'gray6' : 'gray5'}
 						data-testid={`custom-contact-list-item-${contact.id}`}
 					>
 						{(visible: boolean): ReactElement =>
@@ -139,7 +136,7 @@ export const ContactsList = ({
 								/>
 							)
 						}
-					</CustomListItem>
+					</ListItem>
 				);
 			}),
 		[contacts, folderId, isSelecting, itemId, selected, toggle]
