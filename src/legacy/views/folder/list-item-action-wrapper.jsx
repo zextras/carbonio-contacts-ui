@@ -57,7 +57,6 @@ const ListItemActionWrapper = ({ children, onClick, contact }) => {
 					{hoverActions.map((action) => (
 						<Tooltip key={action.id} label={action.label}>
 							<IconButton
-								key={action.id}
 								icon={action.icon}
 								onClick={(ev) => {
 									ev.stopPropagation();
