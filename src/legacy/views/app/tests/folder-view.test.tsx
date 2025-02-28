@@ -6,7 +6,7 @@
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
-import { within } from '@testing-library/react';
+import { act, within } from '@testing-library/react';
 import { Button, useTheme } from '@zextras/carbonio-design-system';
 import * as shell from '@zextras/carbonio-shell-ui';
 
@@ -15,6 +15,8 @@ import { useFolderStore } from '../../../../carbonio-ui-commons/store/zustand/fo
 import { useTagStore } from '../../../../carbonio-ui-commons/store/zustand/tags';
 import { useAppContext } from '../../../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
 import { generateFolder } from '../../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
+import { createSoapAPIInterceptor } from '../../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
+import { populateFoldersStore } from '../../../../carbonio-ui-commons/test/mocks/store/folders';
 import {
 	makeListItemsVisible,
 	screen,
@@ -23,6 +25,10 @@ import {
 } from '../../../../carbonio-ui-commons/test/test-setup';
 import { FOLDERS_DESCRIPTORS, TESTID_SELECTORS } from '../../../../constants/tests';
 import { useNavigation } from '../../../../hooks/useNavigation';
+import {
+	ContactActionRequest,
+	ContactActionResponse
+} from '../../../../network/api/contact-action';
 import {
 	createFindContactGroupsResponse,
 	registerFindContactGroupsHandler
@@ -65,7 +71,7 @@ function setupFolderView(
 	});
 }
 
-describe('Contact Group View', () => {
+describe('Contact Groups', () => {
 	const folderId = '100';
 	const folder = generateFolder({ id: folderId });
 	beforeEach(() => {
@@ -181,11 +187,50 @@ describe('Contact Group View', () => {
 });
 
 describe('Contacts', () => {
+	const folder = FOLDERS_DESCRIPTORS.contacts;
+	it('should delete a contact (move to trash)', async () => {
+		populateFoldersStore();
+		const contact = buildContact({ id: '10', parent: folder.id });
+		const state = generateState({
+			contacts: [contact]
+		});
+		const store = generateStore(state);
+		const deleteContactInterceptor = createSoapAPIInterceptor<
+			ContactActionRequest,
+			ContactActionResponse
+		>('ContactAction', {
+			_jsns: 'urn:zimbraMail',
+			requestId: '123-456',
+			action: {
+				id: contact.id,
+				op: 'delete'
+			}
+		});
+		const { user } = setupFolderView(
+			folder.id,
+			`/folder/${folder.id}`,
+			store,
+			`/folder/${folder.id}/contacts/${contact.id}`
+		);
+
+		const displayer = await screen.findByTestId('displayer');
+		expect(displayer).toBeVisible();
+		const deleteContactInDisplayer = await within(displayer).findByTestId(
+			TESTID_SELECTORS.icons.trash
+		);
+		await act(() => user.click(deleteContactInDisplayer));
+		const deleteContactRequest = await deleteContactInterceptor;
+		expect(deleteContactRequest).toEqual({
+			action: {
+				id: contact.id,
+				op: 'trash'
+			}
+		});
+	});
 	it('should call search when tag icon is clicked in the displayer', async () => {
 		const runSearch = jest.fn();
 		(useRunSearchIntegration as jest.Mock).mockReturnValue(runSearch);
 
-		const folder = FOLDERS_DESCRIPTORS.contacts;
 		const contact = buildContact({ lastName: faker.string.uuid(), tags: ['1'] });
 		useTagStore.setState({ tags: { '1': { id: '1', name: 'testTag' } } });
 		const state = generateState({
@@ -214,7 +259,6 @@ describe('Contacts', () => {
 		const runSearch = jest.fn();
 		(useRunSearchIntegration as jest.Mock).mockReturnValue(runSearch);
 
-		const folder = FOLDERS_DESCRIPTORS.contacts;
 		const contact = buildContact({ lastName: faker.string.uuid(), tags: ['1', '2'] });
 		useTagStore.setState({
 			tags: { '1': { id: '1', name: 'testTag1' }, '2': { id: '2', name: 'testTag2' } }
