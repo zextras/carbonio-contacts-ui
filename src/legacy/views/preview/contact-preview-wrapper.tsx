@@ -10,11 +10,12 @@ import { useParams } from 'react-router-dom';
 import { ContactPreviewPanel } from './contact-preview-panel';
 import { useAppSelector } from '../../hooks/redux';
 import { selectContact } from '../../store/selectors/contacts';
+import ContactsEmptyDisplayer from '../app/contacts-empty-displayer';
 
 export const ContactPreviewWrapper = (): React.JSX.Element => {
 	const { folderId, contactId } = useParams<{ folderId: string; contactId: string }>();
 	const contactInternalId = contactId;
 	const contact = useAppSelector((state) => selectContact(state, folderId, contactInternalId));
 
-	return <>{contact && <ContactPreviewPanel contact={contact} />}</>;
+	return <>{contact ? <ContactPreviewPanel contact={contact} /> : <ContactsEmptyDisplayer />}</>;
 };

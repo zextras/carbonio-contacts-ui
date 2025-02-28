@@ -320,7 +320,9 @@ export const TIMERS = {
 } as const;
 
 export const JEST_MOCKED_ERROR = 'jest mocked error';
-export const EMPTY_DISPLAYER_HINT = 'Stay in touch with your colleagues.';
+export const EMPTY_DISPLAYER_NO_CONTACTS_HINT = 'Stay in touch with your colleagues.';
+export const EMPTY_DISPLAYER_WITH_CONTACTS_HINT =
+	'Create a new contact by clicking the “NEW” button.';
 export const EMPTY_LIST_HINT = 'It looks like there are no contacts yet';
 
 export const EMPTY_DISTRIBUTION_LIST_HINT = 'There are no distribution lists yet.';

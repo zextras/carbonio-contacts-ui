@@ -12,7 +12,11 @@ import { HttpResponse } from 'msw';
 
 import { DLDisplayerController } from './dl-displayer-controller';
 import { screen, setupTest } from '../carbonio-ui-commons/test/test-setup';
-import { EMPTY_DISPLAYER_HINT, JEST_MOCKED_ERROR, TESTID_SELECTORS } from '../constants/tests';
+import {
+	EMPTY_DISPLAYER_NO_CONTACTS_HINT,
+	JEST_MOCKED_ERROR,
+	TESTID_SELECTORS
+} from '../constants/tests';
 import { DistributionList } from '../model/distribution-list';
 import {
 	buildGetDistributionListResponse,
@@ -29,7 +33,7 @@ describe('Distribution List Displayer Controller', () => {
 	it('should render empty distribution list displayer suggestions', async () => {
 		setupTest(<DLDisplayerController id={undefined} />);
 		expect(screen.getByTestId(TESTID_SELECTORS.icons.distributionList)).toBeVisible();
-		expect(screen.getByText(EMPTY_DISPLAYER_HINT)).toBeVisible();
+		expect(screen.getByText(EMPTY_DISPLAYER_NO_CONTACTS_HINT)).toBeVisible();
 		expect(
 			screen.getByText(/Select a distribution list or contact the Admin to have one./i)
 		).toBeVisible();

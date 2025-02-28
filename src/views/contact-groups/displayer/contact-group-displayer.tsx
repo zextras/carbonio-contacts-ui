@@ -8,13 +8,13 @@ import React, { ReactNode, useCallback, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { ContactGroupDisplayerDetails } from './contact-group-displayer-details';
-import { ContactGroupEmptyDisplayer } from './contact-group-empty-displayer';
 import { ActionIconButton } from '../../../components/action-icon-button';
 import { Displayer } from '../../../components/displayer/displayer';
 import { DisplayerContent } from '../../../components/displayer/displayer-content';
 import { DisplayerActionsHeader } from '../../../components/displayer-actions-header';
 import { useAppSelector } from '../../../legacy/hooks/redux';
 import { selectContactGroup } from '../../../legacy/store/selectors/contacts';
+import ContactsEmptyDisplayer from '../../../legacy/views/app/contacts-empty-displayer';
 import { useContactGroupActions } from '../actions/use-contact-group-actions';
 import { useRedirectToContactGroupFolder } from '../navigation';
 
@@ -58,7 +58,7 @@ export const ContactGroupDisplayer = (): React.JSX.Element => {
 					</DisplayerContent>
 				</Displayer>
 			) : (
-				<ContactGroupEmptyDisplayer />
+				<ContactsEmptyDisplayer />
 			)}
 		</>
 	);
