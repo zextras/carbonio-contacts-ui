@@ -3,6 +3,8 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+import * as shell from '@zextras/carbonio-shell-ui';
+
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { populateFoldersStore } from '../../../carbonio-ui-commons/test/mocks/store/folders';
 import { setupHook } from '../../../carbonio-ui-commons/test/test-setup';
@@ -11,6 +13,10 @@ import { useHoverActions } from '../contact-actions';
 
 describe('Contacts actions', () => {
 	describe('document current behavior', () => {
+		beforeAll(() => {
+			const mailTo = { id: 'mail-to', label: 'action.send_msg', execute: jest.fn() };
+			jest.spyOn(shell, 'getAction').mockReturnValue([mailTo, true]);
+		});
 		it('should return [trash, move] hover actions in this order when contact not in trash', () => {
 			populateFoldersStore();
 			const contact = buildContact({ parent: FOLDERS.CONTACTS });
@@ -20,7 +26,8 @@ describe('Contacts actions', () => {
 			const actions = result.current(contact);
 
 			expect(actions[0].id).toBe('trash-contacts-action');
-			expect(actions[1].id).toBe('move-contacts-action');
+			expect(actions[1].id).toBe('mail-to');
+			expect(actions[2].id).toBe('move-contacts-action');
 		});
 
 		it('should return [restore, deletePermanently] hover actions in this order when contact in trash', () => {
