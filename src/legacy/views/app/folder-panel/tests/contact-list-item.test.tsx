@@ -70,7 +70,7 @@ describe('ContactListItem', () => {
 		expect(screen.getByTestId('contact-list-item')).toBeInTheDocument();
 	});
 
-	it('calls replaceHistory on click when not prevented', async () => {
+	it('calls navigate on click when not prevented', async () => {
 		const useNavigateSpy = jest.fn();
 		(useNavigate as jest.Mock).mockReturnValue(useNavigateSpy);
 		const { user } = renderComponent();
@@ -83,7 +83,7 @@ describe('ContactListItem', () => {
 		expect(useNavigateSpy).toHaveBeenCalledWith('../foldeu/folder123/contacts/1');
 	});
 
-	it('does not call replaceHistory if the click event is prevented', () => {
+	it('does not call navigate if the click event is prevented', () => {
 		const useNavigateSpy = jest.fn();
 		(useNavigate as jest.Mock).mockReturnValue(useNavigateSpy);
 
