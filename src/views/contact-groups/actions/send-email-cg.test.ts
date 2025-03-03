@@ -7,9 +7,9 @@ import { faker } from '@faker-js/faker';
 import * as shell from '@zextras/carbonio-shell-ui';
 
 import { useActionSendEmailCG } from './send-email-cg';
-import { UIAction } from './types';
-import { setupHook } from '../carbonio-ui-commons/test/test-setup';
-import { buildContactGroup, buildMembers } from '../tests/model-builder';
+import { UIAction } from '../../../actions/types';
+import { setupHook } from '../../../carbonio-ui-commons/test/test-setup';
+import { buildContactGroup, buildMembers } from '../../../tests/model-builder';
 
 describe('useActionSendEmailCG', () => {
 	const membersCount = faker.number.int({ min: 1, max: 42 });

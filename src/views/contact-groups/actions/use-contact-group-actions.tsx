@@ -7,8 +7,8 @@
 import { type Action as DSAction } from '@zextras/carbonio-design-system';
 
 import { useActionDeleteContactGroup } from './delete-contact-group';
-import { useActionEditCG } from '../../../actions/edit-cg';
-import { useActionSendEmailCG } from '../../../actions/send-email-cg';
+import { useActionEditCG } from './edit-cg';
+import { useActionSendEmailCG } from './send-email-cg';
 import { UIAction } from '../../../actions/types';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { getFolderIdParts } from '../../../carbonio-ui-commons/helpers/folders';
