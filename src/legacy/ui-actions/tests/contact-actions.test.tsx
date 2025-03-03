@@ -11,16 +11,28 @@ import { useHoverActions } from '../contact-actions';
 
 describe('Contacts actions', () => {
 	describe('document current behavior', () => {
-		it('should return [trash , mailTo] hover actions in this order when contact not in trash', () => {
+		it('should return [trash, move] hover actions in this order when contact not in trash', () => {
 			populateFoldersStore();
 			const contact = buildContact({ parent: FOLDERS.CONTACTS });
 
-			const { result } = setupHook(useHoverActions);
+			const { result } = setupHook(useHoverActions, { initialProps: [FOLDERS.CONTACTS] });
 
 			const actions = result.current(contact);
 
 			expect(actions[0].id).toBe('trash-contacts-action');
 			expect(actions[1].id).toBe('move-contacts-action');
+		});
+
+		it('should return [restore, deletePermanently] hover actions in this order when contact in trash', () => {
+			populateFoldersStore();
+			const contact = buildContact({ parent: FOLDERS.TRASH });
+
+			const { result } = setupHook(useHoverActions, { initialProps: [FOLDERS.TRASH] });
+
+			const actions = result.current(contact);
+
+			expect(actions[0].id).toBe('restore-contacts-action');
+			expect(actions[1].id).toBe('delete-contacts-action');
 		});
 	});
 	it.todo('should return [send, tag, edit, move, delete] hover actions in this order');
