@@ -21,17 +21,5 @@ export const ListActionIconButton = ({ action }: ListIconButtonProps): React.JSX
 			size="small"
 			disabled={action.disabled}
 		/>
-		{/* /> */}
-		{/* <Button */}
-		{/*	type="ghost" */}
-		{/*	icon={action.icon} */}
-		{/*	color="currentColor" */}
-		{/*	size="small" */}
-		{/*	onClick={(ev): void => { */}
-		{/*		ev.stopPropagation(); */}
-		{/*		action.onClick(ev); */}
-		{/*	}} */}
-		{/*	disabled */}
-		{/* /> */}
 	</Tooltip>
 );
