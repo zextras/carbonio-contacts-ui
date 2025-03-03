@@ -8,7 +8,7 @@ import React from 'react';
 import { Container, Divider, Icon, IconButton } from '@zextras/carbonio-design-system';
 import styled, { DefaultTheme } from 'styled-components';
 
-import { Text } from './Text';
+import { Text } from '../Text';
 
 interface DisplayerHeaderProps {
 	title: string;

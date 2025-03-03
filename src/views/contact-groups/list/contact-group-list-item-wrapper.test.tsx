@@ -23,6 +23,10 @@ jest.mock('react-router-dom', () => ({
 describe('Contact group list item', () => {
 	const store = generateStore();
 	describe('Actions', () => {
+		beforeAll(() => {
+			const mailTo = { id: 'mail-to', label: 'action.send_msg', execute: jest.fn() };
+			jest.spyOn(shell, 'getAction').mockReturnValue([mailTo, true]);
+		});
 		it('should show send mail action when the contact group has at least 1 member', () => {
 			jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([jest.fn(), true]);
 			const contactGroup = buildContactGroup({
@@ -32,11 +36,14 @@ describe('Contact group list item', () => {
 			setupTest(<ContactGroupListItemWrapper contactGroup={contactGroup} />, { store });
 			expect(screen.getByTestId(TESTID_SELECTORS.icons.sendEmail)).toBeVisible();
 		});
-		it('should hide send mail action when the contact group has 0 members', () => {
+		it('should show send mail action as disabled when the contact group has 0 members', async () => {
 			const contactGroup = buildContactGroup();
 
 			setupTest(<ContactGroupListItemWrapper contactGroup={contactGroup} />, { store });
-			expect(screen.queryByTestId(TESTID_SELECTORS.icons.sendEmail)).not.toBeInTheDocument();
+			const mailToAction = screen.getByTestId(TESTID_SELECTORS.icons.sendEmail);
+			expect(mailToAction).toBeInTheDocument();
+			const mailToButton = mailToAction.parentElement;
+			expect(mailToButton).toBeDisabled();
 		});
 		it('should show delete action', () => {
 			const contactGroup = buildContactGroup();

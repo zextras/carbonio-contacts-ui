@@ -37,7 +37,7 @@ describe('useContactGroupActions', () => {
 				members: buildMembers(faker.number.int({ min: 1, max: 3 }))
 			});
 
-			const { result } = setupHook(() => useContactGroupActions()(contactGroup), { store });
+			const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
 			expect(result.current).toHaveLength(3);
 			expect(result.current[0].id).toBe(ACTION_IDS.sendEmailCG);
 			expect(result.current[1].id).toBe(ACTION_IDS.editCG);
@@ -65,7 +65,7 @@ describe('useContactGroupActions', () => {
 				folders: { [folderId]: mountpoint }
 			});
 
-			const { result } = setupHook(() => useContactGroupActions()(contactGroupInSharedFolder), {
+			const { result } = setupHook(() => useContactGroupActions(contactGroupInSharedFolder), {
 				store
 			});
 
@@ -86,7 +86,7 @@ describe('useContactGroupActions', () => {
 				folders: { [folderId]: mountpoint }
 			});
 
-			const { result } = setupHook(() => useContactGroupActions()(contactGroupInSharedFolder), {
+			const { result } = setupHook(() => useContactGroupActions(contactGroupInSharedFolder), {
 				store
 			});
 
@@ -95,33 +95,39 @@ describe('useContactGroupActions', () => {
 		});
 	});
 
-	it('should return send mail action when the contact group has at least 1 member', () => {
+	it('should return send mail action as enabled when the contact group has at least 1 member', () => {
 		jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([jest.fn(), true]);
 		const contactGroup = buildContactGroup({
 			members: buildMembers(faker.number.int({ min: 1, max: 100 }))
 		});
-		const { result } = setupHook(() => useContactGroupActions()(contactGroup), { store });
+		const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
 
-		expect(result.current).toContainEqual({
-			id: ACTION_IDS.sendEmailCG,
-			label: 'Send e-mail',
-			icon: 'EmailOutline',
-			onClick: expect.anything()
-		});
+		expect(result.current[0]).toEqual(
+			expect.objectContaining({
+				id: ACTION_IDS.sendEmailCG,
+				label: 'Send e-mail',
+				icon: 'EmailOutline',
+				onClick: expect.anything(),
+				disabled: false
+			})
+		);
 	});
 
-	it('should not return send mail action when the contact group has 0 members', () => {
+	it('should return send mail action as disabled when the contact group has 0 members', () => {
 		const contactGroup = buildContactGroup();
-		const { result } = setupHook(() => useContactGroupActions()(contactGroup), { store });
-		expect(result.current).not.toContainEqual({
-			id: ACTION_IDS.sendEmailCG,
-			label: 'Send e-mail',
-			icon: 'EmailOutline',
-			onClick: expect.anything()
-		});
+		const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
+		expect(result.current[0]).toEqual(
+			expect.objectContaining({
+				id: ACTION_IDS.sendEmailCG,
+				label: 'Send e-mail',
+				icon: 'EmailOutline',
+				disabled: true,
+				onClick: expect.anything()
+			})
+		);
 	});
 
-	it('should return only send mail action when the contact group has at least 1 member and doesnt have write permissions', () => {
+	it('should return send mail action as enabled when the contact group has at least 1 member and doesnt have write permissions', () => {
 		const FOLDER_ID = 'folder-id';
 		useFolderStore.setState({
 			folders: { [FOLDER_ID]: generateFolder({ id: FOLDER_ID, perm: 'r' }) }
@@ -132,24 +138,25 @@ describe('useContactGroupActions', () => {
 			members: buildMembers(faker.number.int({ min: 1, max: 100 })),
 			parent: FOLDER_ID
 		});
-		const { result } = setupHook(() => useContactGroupActions()(contactGroup), { store });
+		const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
 
 		expect(result.current).toHaveLength(1);
 		expect(result.current).toContainEqual({
 			id: ACTION_IDS.sendEmailCG,
 			label: 'Send e-mail',
 			icon: 'EmailOutline',
-			onClick: expect.anything()
+			onClick: expect.anything(),
+			disabled: false
 		});
 	});
 
-	it('should return delete action if user has write permisison on folder', () => {
+	it('should return delete action if user has write permission on folder', () => {
 		const FOLDER_ID = 'folder-id';
 		const contactGroup = buildContactGroup({ parent: FOLDER_ID });
 		useFolderStore.setState({
 			folders: { [FOLDER_ID]: generateFolder({ id: FOLDER_ID, perm: 'w' }) }
 		});
-		const { result } = setupHook(() => useContactGroupActions()(contactGroup), { store });
+		const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
 
 		expect(result.current).toContainEqual({
 			id: ACTION_IDS.deleteCG,
@@ -166,7 +173,7 @@ describe('useContactGroupActions', () => {
 				folders: { [FOLDERS.TRASH]: generateFolder({ id: FOLDERS.TRASH, perm: 'w' }) }
 			});
 			const contactGroup = buildContactGroup({ parent: FOLDERS.TRASH });
-			const { result } = setupHook(() => useContactGroupActions()(contactGroup), { store });
+			const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
 			expect(result.current).toHaveLength(1);
 			expect(result.current).toContainEqual({
 				id: ACTION_IDS.deleteCG,
@@ -181,7 +188,7 @@ describe('useContactGroupActions', () => {
 				folders: { [FOLDERS.TRASH]: generateFolder({ id: FOLDERS.TRASH, perm: undefined }) }
 			});
 			const contactGroup = buildContactGroup({ parent: FOLDERS.TRASH });
-			const { result } = setupHook(() => useContactGroupActions()(contactGroup), { store });
+			const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
 			expect(result.current).toHaveLength(1);
 			expect(result.current).toContainEqual({
 				id: ACTION_IDS.deleteCG,
@@ -203,7 +210,7 @@ describe('useContactGroupActions', () => {
 				}
 			});
 			const contactGroup = buildContactGroup({ parent: SHARED_ACCOUNT_TRASH_FOLDER });
-			const { result } = setupHook(() => useContactGroupActions()(contactGroup), { store });
+			const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
 
 			expect(result.current).toHaveLength(1);
 			expect(result.current).toContainEqual({

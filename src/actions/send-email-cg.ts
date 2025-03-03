@@ -14,30 +14,26 @@ import { ContactGroup } from '../model/contact-group';
 
 export type SendEmailActionCG = UIAction<ContactGroup, ContactGroup>;
 
-export const useActionSendEmailCG = (): SendEmailActionCG => {
+export const useActionSendEmailCG = (contactGroup: ContactGroup): SendEmailActionCG => {
 	const [t] = useTranslation();
 	const sendMailAction = useActionSendEmail();
 
 	const canExecute = useCallback<SendEmailActionCG['canExecute']>(
-		(contactGroup) =>
-			contactGroup !== undefined && contactGroup.members.length > 0 && sendMailAction.canExecute(),
-		[sendMailAction]
+		() => contactGroup !== undefined && sendMailAction.canExecute(),
+		[contactGroup, sendMailAction]
 	);
+	const isDisabled = !(contactGroup.members.length > 0);
+	const sendEmail = useCallback<SendEmailActionCG['execute']>(() => {
+		if (contactGroup === undefined) {
+			return;
+		}
 
-	const sendEmail = useCallback<SendEmailActionCG['execute']>(
-		(contactGroup) => {
-			if (contactGroup === undefined) {
-				return;
-			}
+		if (!canExecute(contactGroup) || isDisabled) {
+			return;
+		}
 
-			if (!canExecute(contactGroup)) {
-				return;
-			}
-
-			sendMailAction.execute(contactGroup.members);
-		},
-		[canExecute, sendMailAction]
-	);
+		sendMailAction.execute(contactGroup.members);
+	}, [canExecute, contactGroup, isDisabled, sendMailAction]);
 
 	return useMemo(
 		() => ({
@@ -45,8 +41,9 @@ export const useActionSendEmailCG = (): SendEmailActionCG => {
 			label: t('action.mail', 'Send e-mail'),
 			icon: 'EmailOutline',
 			canExecute,
-			execute: sendEmail
+			execute: sendEmail,
+			disabled: isDisabled
 		}),
-		[canExecute, sendEmail, t]
+		[canExecute, contactGroup.members.length, sendEmail, t]
 	);
 };

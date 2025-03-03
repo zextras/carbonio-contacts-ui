@@ -539,7 +539,7 @@ describe('Folder panel', () => {
 				});
 			});
 
-			it('should hide send mail hover action when the contact group has 0 members', async () => {
+			it('should display send mail hover action as disabled when the contact group has 0 members', async () => {
 				const openMailComposer = jest.fn();
 				const folderId = '7';
 				jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
@@ -554,7 +554,7 @@ describe('Folder panel', () => {
 				setupFolderPanel(folderId);
 
 				await screen.findAllByText(contactGroupName);
-				expect(screen.queryByTestId(TESTID_SELECTORS.icons.sendEmail)).not.toBeInTheDocument();
+				expect(screen.queryByTestId(TESTID_SELECTORS.icons.sendEmail)).toBeInTheDocument();
 			});
 
 			it('should open the mail board (Contextual menu trigger)', async () => {

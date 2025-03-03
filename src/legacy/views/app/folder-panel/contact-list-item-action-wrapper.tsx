@@ -8,7 +8,7 @@ import React, { ReactNode, useContext, useMemo } from 'react';
 import { Container, Dropdown } from '@zextras/carbonio-design-system';
 import styled from 'styled-components';
 
-import { ListActionIconButton } from '../../../../components/list-action-icon-button';
+import { ListActionIconButton } from '../../../../components/list/list-action-icon-button';
 import { HoverRow } from '../../../../components/styled-components';
 import { Contact } from '../../../types/contact';
 import { ActionsContext } from '../../../ui-actions/actions-context';

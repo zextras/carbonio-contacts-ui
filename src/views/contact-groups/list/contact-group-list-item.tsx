@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { ContextualMenu } from '../../../components/contextual-menu';
-import { ListActionIconButton } from '../../../components/list-action-icon-button';
+import { ListActionIconButton } from '../../../components/list/list-action-icon-button';
 import { CustomIconAvatar, HoverRow } from '../../../components/styled-components';
 import { Text } from '../../../components/Text';
 import { ContactGroup } from '../../../model/contact-group';
