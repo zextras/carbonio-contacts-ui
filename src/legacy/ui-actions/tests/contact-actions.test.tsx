@@ -17,7 +17,7 @@ describe('Contacts actions', () => {
 			const mailTo = { id: 'mail-to', label: 'action.send_msg', execute: jest.fn() };
 			jest.spyOn(shell, 'getAction').mockReturnValue([mailTo, true]);
 		});
-		it('should return [trash, move] hover actions in this order when contact not in trash', () => {
+		it('should return [mailTo, move, delete] hover actions in this order when contact not in trash', () => {
 			populateFoldersStore();
 			const contact = buildContact({ parent: FOLDERS.CONTACTS });
 
@@ -25,9 +25,9 @@ describe('Contacts actions', () => {
 
 			const actions = result.current(contact);
 
-			expect(actions[0].id).toBe('trash-contacts-action');
-			expect(actions[1].id).toBe('mail-to');
-			expect(actions[2].id).toBe('move-contacts-action');
+			expect(actions[0].id).toBe('mail-to');
+			expect(actions[1].id).toBe('move-contacts-action');
+			expect(actions[2].id).toBe('trash-contacts-action');
 		});
 
 		it('should return [restore, deletePermanently] hover actions in this order when contact in trash', () => {
@@ -42,5 +42,4 @@ describe('Contacts actions', () => {
 			expect(actions[1].id).toBe('delete-contacts-action');
 		});
 	});
-	it.todo('should return [send, tag, edit, move, delete] hover actions in this order');
 });

@@ -41,7 +41,7 @@ const generateClickableAction = (action: InternalAction, params: unknown): DSAct
 	}
 });
 
-export function mailToContact(contact: Contact, t: TFunction): Action | undefined {
+function mailToContact(contact: Contact, t: TFunction): Action | undefined {
 	const [mailTo, available] = getAction('contact-list', 'mail-to', [contact]);
 	if (!available || !mailTo) {
 		return undefined;
@@ -112,12 +112,12 @@ export const useHoverActions = (folderId: string): ContactActionsFn => {
 	}
 	return (contact: Contact) =>
 		compact([
-			...(trashAction.canExecute([contact])
-				? [generateClickableAction(trashAction, [contact])]
-				: []),
 			mailToContact(contact, t),
 			...(moveAction.canExecute({ contacts: [contact] })
 				? [generateClickableAction(moveAction, { contacts: [contact] })]
+				: []),
+			...(trashAction.canExecute([contact])
+				? [generateClickableAction(trashAction, [contact])]
 				: [])
 		]);
 };

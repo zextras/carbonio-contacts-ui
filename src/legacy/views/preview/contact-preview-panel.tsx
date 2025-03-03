@@ -10,13 +10,12 @@ import { replaceHistory } from '@zextras/carbonio-shell-ui';
 import { head, includes, split } from 'lodash';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 
-import { useContactActions } from './contact-preview-actions';
 import ContactPreviewContent from './contact-preview-content';
-
 import { ActionIconButton } from '../../../components/action-icon-button';
 import { ActionTagButton } from '../../../components/action-tag-button';
 import { Displayer } from '../../../components/displayer/displayer';
 import { DisplayerActionsHeader } from '../../../components/displayer-actions-header';
+import { useContactPreviewActions } from '../../../views/contacts/actions/contact-preview-actions';
 import { useDisplayName } from '../../hooks/use-display-name';
 import { Contact } from '../../types/contact';
 
@@ -31,7 +30,7 @@ export const ContactPreviewPanel = ({ contact }: { contact: Contact }): React.JS
 			: replaceHistory(`/folder/${folderId}`);
 	}, [folderId, history, pathname, urlLocation?.pathname]);
 	const displayName = useDisplayName(contact);
-	const actions = useContactActions(contact);
+	const actions = useContactPreviewActions(contact);
 
 	const actionButtons = useMemo<ReactNode[]>(
 		() =>

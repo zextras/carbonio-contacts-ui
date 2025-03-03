@@ -6,13 +6,13 @@
 
 import { setupHook } from '../../../../carbonio-ui-commons/test/test-setup';
 import { buildContact } from '../../../../tests/model-builder';
-import { useContactActions } from '../contact-preview-actions';
+import { useContactPreviewActions } from '../contact-preview-actions';
 
 describe('Contact Preview Actions', () => {
 	it('should return [send, tag, edit, move, delete] actions in this order', () => {
 		const contact = buildContact();
 
-		const { result } = setupHook(useContactActions, {
+		const { result } = setupHook(useContactPreviewActions, {
 			initialProps: [contact]
 		});
 
