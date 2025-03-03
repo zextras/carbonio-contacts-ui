@@ -8,11 +8,11 @@ import React, { ReactNode, useContext, useMemo } from 'react';
 import { Container, Dropdown } from '@zextras/carbonio-design-system';
 import styled from 'styled-components';
 
-import { ListActionIconButton } from '../../../components/list-action-icon-button';
-import { HoverRow } from '../../../components/styled-components';
-import { Contact } from '../../types/contact';
-import { ActionsContext } from '../../ui-actions/actions-context';
-import { useHoverActions } from '../../ui-actions/contact-actions';
+import { ListActionIconButton } from '../../../../components/list-action-icon-button';
+import { HoverRow } from '../../../../components/styled-components';
+import { Contact } from '../../../types/contact';
+import { ActionsContext } from '../../../ui-actions/actions-context';
+import { useHoverActions } from '../../../ui-actions/contact-actions';
 
 const HoverBarContainer = styled(Container)`
 	top: 0;
@@ -44,7 +44,7 @@ type ListItemActionWrapperProps = React.PropsWithChildren<{
 	onClick?: () => void;
 	contact: Contact;
 }>;
-export const ListItemActionWrapper = ({
+export const ContactListItemActionWrapper = ({
 	children,
 	onClick,
 	contact

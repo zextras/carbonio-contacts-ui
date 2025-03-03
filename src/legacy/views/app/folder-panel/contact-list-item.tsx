@@ -8,12 +8,12 @@ import React, { MouseEventHandler, useCallback, useMemo, DragEvent } from 'react
 import { Container, Drag } from '@zextras/carbonio-design-system';
 import { replaceHistory } from '@zextras/carbonio-shell-ui';
 
+import { ContactListItemActionWrapper } from './contact-list-item-action-wrapper';
 import { ItemAvatar } from './item-avatar';
 import { ItemContent } from './item-content';
 import { useTags } from '../../../../carbonio-ui-commons/store/zustand/tags';
 import { getTagsArray } from '../../../helpers/tags';
 import { Contact } from '../../../types/contact';
-import { ListItemActionWrapper } from '../../folder/list-item-action-wrapper';
 
 type ContactListItemProps = {
 	item: Contact;
@@ -78,10 +78,10 @@ export const ContactListItem = ({
 		>
 			<Container orientation="vertical" data-testid={'contact-list-item'} onClick={_onClick}>
 				<Container orientation="horizontal" mainAlignment="flex-start">
-					<ListItemActionWrapper contact={item}>
+					<ContactListItemActionWrapper contact={item}>
 						<ItemAvatar item={item} selected={selected} selecting={selecting} toggle={toggle} />
 						<ItemContent item={item} tags={tags} />
-					</ListItemActionWrapper>
+					</ContactListItemActionWrapper>
 				</Container>
 			</Container>
 		</Drag>
