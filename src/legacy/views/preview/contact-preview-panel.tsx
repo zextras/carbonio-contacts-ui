@@ -11,9 +11,9 @@ import { head, includes, split } from 'lodash';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 
 import ContactPreviewContent from './contact-preview-content';
-import { ActionIconButton } from '../../../components/action-icon-button';
 import { ActionTagButton } from '../../../components/action-tag-button';
 import { Displayer } from '../../../components/displayer/displayer';
+import { DisplayerActionIconButton } from '../../../components/displayer-action-icon-button';
 import { DisplayerActionsHeader } from '../../../components/displayer-actions-header';
 import { useContactPreviewActions } from '../../../views/contacts/actions/contact-preview-actions';
 import { useDisplayName } from '../../hooks/use-display-name';
@@ -38,7 +38,7 @@ export const ContactPreviewPanel = ({ contact }: { contact: Contact }): React.JS
 				if (action.id === 'tag') {
 					return <ActionTagButton key={action.id} contact={contact} />;
 				}
-				return <ActionIconButton action={action} key={action.id} />;
+				return <DisplayerActionIconButton action={action} key={action.id} />;
 			}),
 		[actions, contact]
 	);

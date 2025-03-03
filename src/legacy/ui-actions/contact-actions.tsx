@@ -22,6 +22,7 @@ import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
 import { getFolderIdParts } from '../../carbonio-ui-commons/helpers/folders';
 import { useTags } from '../../carbonio-ui-commons/store/zustand/tags';
 import { MakeOptional } from '../../types';
+import { useEditAction } from '../../views/contacts/actions/common-contact-actions';
 import { Contact } from '../types/contact';
 
 type OptionallyClickableAction = MakeOptional<DSAction, 'onClick'>;
@@ -93,15 +94,17 @@ export const useContextActions = (folderId: string): ContactActionsFn => {
 		]);
 };
 
-export const useHoverActions = (folderId: string): ContactActionsFn => {
+export const useHoverActions = (contact: Contact): Array<DSAction> => {
 	const [t] = useTranslation();
 	const moveAction = useActionMoveContacts();
 	const restoreAction = useActionRestoreContacts();
 	const deleteAction = useActionDeleteContacts();
 	const trashAction = useActionTrashContacts();
+	const folderId = contact.parent;
+	const editAction = useEditAction(contact);
 
 	if (getFolderIdParts(folderId).id === FOLDERS.TRASH) {
-		return (contact: Contact) => [
+		return [
 			...(restoreAction.canExecute({ contacts: [contact] })
 				? [generateClickableAction(restoreAction, { contacts: [contact] })]
 				: []),
@@ -110,16 +113,14 @@ export const useHoverActions = (folderId: string): ContactActionsFn => {
 				: [])
 		];
 	}
-	return (contact: Contact) =>
-		compact([
-			mailToContact(contact, t),
-			...(moveAction.canExecute({ contacts: [contact] })
-				? [generateClickableAction(moveAction, { contacts: [contact] })]
-				: []),
-			...(trashAction.canExecute([contact])
-				? [generateClickableAction(trashAction, [contact])]
-				: [])
-		]);
+	return compact([
+		mailToContact(contact, t),
+		...(editAction.canExecute(contact) ? [generateClickableAction(editAction, [contact])] : []),
+		...(moveAction.canExecute({ contacts: [contact] })
+			? [generateClickableAction(moveAction, { contacts: [contact] })]
+			: []),
+		...(trashAction.canExecute([contact]) ? [generateClickableAction(trashAction, [contact])] : [])
+	]);
 };
 
 type SecondaryActionsProps = {

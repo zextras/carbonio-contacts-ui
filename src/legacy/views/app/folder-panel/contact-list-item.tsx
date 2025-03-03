@@ -13,7 +13,7 @@ import { ItemContent } from './item-content';
 import { useTags } from '../../../../carbonio-ui-commons/store/zustand/tags';
 import { getTagsArray } from '../../../helpers/tags';
 import { Contact } from '../../../types/contact';
-import ListItemActionWrapper from '../../folder/list-item-action-wrapper';
+import { ListItemActionWrapper } from '../../folder/list-item-action-wrapper';
 
 type ContactListItemProps = {
 	item: Contact;

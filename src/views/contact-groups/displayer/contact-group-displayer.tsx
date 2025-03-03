@@ -8,9 +8,9 @@ import React, { ReactNode, useCallback, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { ContactGroupDisplayerDetails } from './contact-group-displayer-details';
-import { ActionIconButton } from '../../../components/action-icon-button';
 import { Displayer } from '../../../components/displayer/displayer';
 import { DisplayerContent } from '../../../components/displayer/displayer-content';
+import { DisplayerActionIconButton } from '../../../components/displayer-action-icon-button';
 import { DisplayerActionsHeader } from '../../../components/displayer-actions-header';
 import { useAppSelector } from '../../../legacy/hooks/redux';
 import { selectContactGroup } from '../../../legacy/store/selectors/contacts';
@@ -38,7 +38,7 @@ export const ContactGroupDisplayer = (): React.JSX.Element => {
 	}, [contactGroup, evaluateActions]);
 	const actions = actionsEvaluator();
 	const actionButtons = useMemo<ReactNode[]>(
-		() => actions.map((action) => <ActionIconButton action={action} key={action.id} />),
+		() => actions.map((action) => <DisplayerActionIconButton action={action} key={action.id} />),
 		[actions]
 	);
 	return (

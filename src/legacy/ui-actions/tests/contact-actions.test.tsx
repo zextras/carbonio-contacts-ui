@@ -21,22 +21,23 @@ describe('Contacts actions', () => {
 			populateFoldersStore();
 			const contact = buildContact({ parent: FOLDERS.CONTACTS });
 
-			const { result } = setupHook(useHoverActions, { initialProps: [FOLDERS.CONTACTS] });
+			const { result } = setupHook(useHoverActions, { initialProps: [contact] });
 
-			const actions = result.current(contact);
+			const actions = result.current;
 
 			expect(actions[0].id).toBe('mail-to');
-			expect(actions[1].id).toBe('move-contacts-action');
-			expect(actions[2].id).toBe('trash-contacts-action');
+			expect(actions[1].id).toBe('edit');
+			expect(actions[2].id).toBe('move-contacts-action');
+			expect(actions[3].id).toBe('trash-contacts-action');
 		});
 
 		it('should return [restore, deletePermanently] hover actions in this order when contact in trash', () => {
 			populateFoldersStore();
 			const contact = buildContact({ parent: FOLDERS.TRASH });
 
-			const { result } = setupHook(useHoverActions, { initialProps: [FOLDERS.TRASH] });
+			const { result } = setupHook(useHoverActions, { initialProps: [contact] });
 
-			const actions = result.current(contact);
+			const actions = result.current;
 
 			expect(actions[0].id).toBe('restore-contacts-action');
 			expect(actions[1].id).toBe('delete-contacts-action');
