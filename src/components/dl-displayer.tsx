@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
-import { Container, Divider, Row, TabBar } from '@zextras/carbonio-design-system';
+import { Button, Container, Divider, Row, TabBar } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
 import { DisplayerActionsHeader } from './displayer-actions-header';
@@ -41,6 +41,22 @@ export const DistributionListDisplayer = ({
 	const closeDisplayer = useCallback(() => {
 		removeActive();
 	}, [removeActive]);
+	const actionButtons = useMemo<React.JSX.Element[]>(
+		() =>
+			actions.map((action) => (
+				<Button
+					key={action.id}
+					label={action.label}
+					type={'outlined'}
+					onClick={action.onClick}
+					size={'medium'}
+					backgroundColor={'transparent'}
+					disabled={action.disabled}
+					labelColor={action.color}
+				/>
+			)),
+		[actions]
+	);
 
 	return (
 		<Container
@@ -61,7 +77,7 @@ export const DistributionListDisplayer = ({
 				maxHeight={'100%'}
 				minHeight={0}
 			>
-				<DisplayerActionsHeader actions={actions} />
+				<DisplayerActionsHeader>{actionButtons}</DisplayerActionsHeader>
 				<Container
 					background={'gray6'}
 					padding={'1rem'}

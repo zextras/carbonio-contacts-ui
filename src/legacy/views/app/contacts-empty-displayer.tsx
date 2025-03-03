@@ -12,7 +12,7 @@ import { useParams } from 'react-router-dom';
 import { useAppSelector } from '../../hooks/redux';
 import { selectAllContactsInFolder } from '../../store/selectors/contacts';
 
-export default function SelectionInteractive(): JSX.Element {
+export default function ContactsEmptyDisplayer(): React.JSX.Element {
 	const [t] = useTranslation();
 	const { folderId } = useParams<{ folderId: string }>();
 	const contacts = useAppSelector((state) => selectAllContactsInFolder(state, folderId));

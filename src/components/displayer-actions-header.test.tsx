@@ -6,27 +6,29 @@
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
-import { Action } from '@zextras/carbonio-design-system';
+import { Button } from '@zextras/carbonio-design-system';
 import { times } from 'lodash';
 
 import { DisplayerActionsHeader } from './displayer-actions-header';
 import { screen, setupTest } from '../carbonio-ui-commons/test/test-setup';
 
 describe('Contact group displayer header actions', () => {
-	it('should display no buttons if no action is passed', () => {
-		const actions: Array<Action> = [];
-		setupTest(<DisplayerActionsHeader actions={actions} />);
+	it('should display no buttons if no children is passed', () => {
+		setupTest(<DisplayerActionsHeader />);
 		expect(screen.queryByRole('button')).not.toBeInTheDocument();
 	});
 
 	it('should display a button for each action passed as prop', () => {
-		const actions: Array<Action> = times(faker.number.int({ min: 1, max: 20 }), (index) => ({
+		const actions = times(faker.number.int({ min: 1, max: 20 }), (index) => ({
 			id: `action-id-${index}`,
 			icon: `action-icon-${index}`,
 			label: `Stub action ${index}`,
 			onClick: jest.fn()
 		}));
-		setupTest(<DisplayerActionsHeader actions={actions} />);
+		const actionButtons = actions.map((action) => (
+			<Button key={action.label} onClick={action.onClick} label={action.label} />
+		));
+		setupTest(<DisplayerActionsHeader>{actionButtons}</DisplayerActionsHeader>);
 		actions.forEach((action) => {
 			expect(screen.getByRole('button', { name: action.label })).toBeVisible();
 		});

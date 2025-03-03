@@ -6,15 +6,17 @@
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
-import { act } from '@testing-library/react';
+import { act, fireEvent } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { forEach, times } from 'lodash';
 import { Route } from 'react-router-dom';
 
+import { useTagStore } from '../../../../carbonio-ui-commons/store/zustand/tags';
 import {
 	getAction as getActionMock,
 	useAppContext
 } from '../../../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
+import { createSoapAPIInterceptor } from '../../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { populateFoldersStore } from '../../../../carbonio-ui-commons/test/mocks/store/folders';
 import {
 	makeListItemsVisible,
@@ -34,6 +36,10 @@ import {
 	FOLDERS_DESCRIPTORS,
 	TESTID_SELECTORS
 } from '../../../../constants/tests';
+import {
+	ContactActionRequest,
+	ContactActionResponse
+} from '../../../../network/api/contact-action';
 import { buildContact } from '../../../../tests/model-builder';
 import { registerDeleteContactHandler } from '../../../../tests/msw-handlers/delete-contact';
 import {
@@ -284,7 +290,7 @@ describe('Folder panel', () => {
 
 						const listItem = screen.getByText(contact.lastName, { exact: false });
 						await act(() => user.rightClick(listItem));
-						const dropdown = await screen.findByTestId('dropdown-popper-list');
+						const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
 						if (assertion.value) {
 							expect(within(dropdown).getByText(action.desc)).toBeVisible();
 							expect(within(dropdown).getByTestId(`icon: ${action.icon}`)).toBeVisible();
@@ -296,6 +302,62 @@ describe('Folder panel', () => {
 						}
 					}
 				);
+
+				it('applying tag should call ContactAction with op tag', async () => {
+					populateFoldersStore();
+
+					const contactsFolder = FOLDERS_DESCRIPTORS.contacts;
+
+					const contact = buildContact({
+						lastName: faker.string.uuid(),
+						parent: contactsFolder.id,
+						tags: []
+					});
+
+					useTagStore.setState({ tags: { '1': { id: '1', name: 'testTag' } } });
+
+					const state = generateState({
+						contacts: [contact]
+					});
+					const store = generateStore(state);
+					const { user } = setupTest(
+						<Route path={`/folder/:folderId/:type?/:itemId?`}>
+							<FolderPanel />
+						</Route>,
+						{
+							initialEntries: [`/folder/${contactsFolder.id}`],
+							store
+						}
+					);
+					makeListItemsVisible();
+					const contactListItem = screen.getByTestId('contact-list-item');
+					expect(contactListItem).toBeVisible();
+					const contactListItemName = within(contactListItem).getByText(contact.lastName, {
+						exact: false
+					});
+					await act(() => user.rightClick(contactListItemName));
+					const dropdown = await screen.findByTestId('dropdown-popper-list');
+					expect(dropdown).toBeVisible();
+					const tagMenuItem = within(dropdown).getByText('Tags');
+					// eslint-disable-next-line testing-library/prefer-user-event
+					fireEvent.mouseOver(tagMenuItem);
+					const tag = await screen.findByText('testTag');
+					const soapAPIInterceptor = createSoapAPIInterceptor<
+						ContactActionRequest,
+						ContactActionResponse
+					>('ContactAction', {
+						_jsns: 'urn:zimbraMail',
+						action: {
+							op: 'tag',
+							id: contact.id
+						}
+					});
+					await user.click(tag);
+					const contactActionRequest = await soapAPIInterceptor;
+					expect(contactActionRequest.action).toEqual(
+						expect.objectContaining({ id: contact.id, tn: 'testTag', op: 'tag' })
+					);
+				});
 			});
 
 			describe('Selection', () => {
