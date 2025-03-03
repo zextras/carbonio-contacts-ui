@@ -7,9 +7,9 @@
 import React from 'react';
 
 import { act, screen } from '@testing-library/react';
+import { useNavigate } from 'react-router-dom';
 
 import { useTags } from '../../../../carbonio-ui-commons/store/zustand/tags';
-import { mockUseHistoryNavigation } from '../../../../carbonio-ui-commons/test/mocks/routing/use-history-navigation-mock';
 import { setupTest } from '../../../../carbonio-ui-commons/test/test-setup';
 import { getTagsArray } from '../../../helpers/tags';
 import { generateStore } from '../../../tests/generators/store';
@@ -18,6 +18,11 @@ import { SearchContactListItem } from '../search-contact-list-item';
 
 jest.mock('../../../../carbonio-ui-commons/store/zustand/tags', () => ({
 	useTags: jest.fn()
+}));
+
+jest.mock('react-router-dom', () => ({
+	...jest.requireActual('react-router-dom'),
+	useNavigate: jest.fn()
 }));
 
 jest.mock('../../../helpers/tags', () => ({
@@ -63,14 +68,16 @@ describe('SearchContactListItem', () => {
 	});
 
 	it('should handle click event correctly', async () => {
-		const { replaceHistory } = mockUseHistoryNavigation();
+		const useNavigateSpy = jest.fn();
+		(useNavigate as jest.Mock).mockReturnValue(useNavigateSpy);
+
 		const store = generateStore();
 		const { user } = setupTest(<SearchContactListItem item={mockItem} />, { store });
 		const container = screen.getByTestId('search-contact-list-item');
 		await act(async () => {
 			await user.click(container);
 		});
-		expect(replaceHistory).toHaveBeenCalledWith('../folder/folder1/contacts/1');
+		expect(useNavigateSpy).toHaveBeenCalledWith('../folder/folder1/contacts/1', { replace: true });
 	});
 
 	it('should pass the correct tags to ItemContent', () => {
