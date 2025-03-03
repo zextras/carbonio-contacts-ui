@@ -165,7 +165,7 @@ export function useContactActions(contact: Contact): DSAction[] {
 	const deleteAction = useDeleteAction(contact);
 	const moveOrRestoreAction = useMoveAction(contact);
 	const tagsActions = useTagsAction(contact);
-	const actions = [sendMailAction, tagsActions, moveOrRestoreAction, deleteAction, editAction];
+	const actions = [sendMailAction, tagsActions, editAction, moveOrRestoreAction, deleteAction];
 	const orderedActions: DSAction[] = [];
 	actions.forEach((action) => {
 		if (action.canExecute(contact)) {
