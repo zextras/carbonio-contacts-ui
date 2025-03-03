@@ -22,7 +22,7 @@ export const useActionSendEmailCG = (contactGroup: ContactGroup): SendEmailActio
 		() => contactGroup !== undefined && sendMailAction.canExecute(),
 		[contactGroup, sendMailAction]
 	);
-	const isDisabled = !(contactGroup.members.length > 0);
+	const isDisabled = contactGroup.members.length === 0;
 	const sendEmail = useCallback<SendEmailActionCG['execute']>(() => {
 		if (contactGroup === undefined) {
 			return;
