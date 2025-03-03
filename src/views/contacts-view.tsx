@@ -22,7 +22,7 @@ const ContactsView = (): React.JSX.Element => {
 	}, [count]);
 
 	return (
-		<Container orientation="horizontal" mainAlignment="flex-start">
+		<Container orientation="horizontal" mainAlignment="flex-start" style={{ overflowY: 'hidden' }}>
 			<Route path={path}>
 				<FolderView />
 				<Redirect strict from={path} to={`${path}/folder/7`} />

@@ -9,10 +9,10 @@ import { Container } from '@zextras/carbonio-design-system';
 import { trimEnd } from 'lodash';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 
-import SelectionInteractive from './selection-interactive';
+import ContactsEmptyDisplayer from './contacts-empty-displayer';
 import { ContactGroupDisplayer } from '../../../views/contact-groups/displayer/contact-group-displayer';
 import ContactEditPanel from '../edit/contact-edit-panel';
-import ContactPreviewPanel from '../preview/contact-preview-panel';
+import { ContactPreviewWrapper } from '../preview/contact-preview-wrapper';
 
 export const DetailPanel = (): React.JSX.Element => {
 	const { path } = useRouteMatch();
@@ -21,12 +21,12 @@ export const DetailPanel = (): React.JSX.Element => {
 		<Switch>
 			<Route exact path={`${trimmedPath}/folder/:folderId`}>
 				<Container width={'60%'} mainAlignment="flex-start" data-testid="ContactDetailsContainer">
-					<SelectionInteractive />
+					<ContactsEmptyDisplayer />
 				</Container>
 			</Route>
 			<Route exact path={`${trimmedPath}/folder/:folderId/contacts/:contactId`}>
 				<Container width={'60%'} mainAlignment="flex-start" data-testid="ContactDetailsContainer">
-					<ContactPreviewPanel />
+					<ContactPreviewWrapper />
 				</Container>
 			</Route>
 			<Route exact path={`${trimmedPath}/folder/:folderId/contact-groups/:id`}>

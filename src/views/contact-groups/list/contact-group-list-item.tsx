@@ -12,7 +12,6 @@ import styled from 'styled-components';
 import { ContextualMenu } from '../../../components/contextual-menu';
 import { CustomIconAvatar, HoverRow } from '../../../components/styled-components';
 import { Text } from '../../../components/Text';
-import { LIST_ITEM_HEIGHT } from '../../../constants';
 import { ContactGroup } from '../../../model/contact-group';
 
 type CGListItemProps = {
@@ -61,68 +60,70 @@ export const ContactGroupListItem = React.memo<CGListItemProps>(
 		}, []);
 
 		return (
-			<Container data-testid={`contact-group-list-item-${id}`} height={LIST_ITEM_HEIGHT} id={id}>
-				<ContextualMenu
-					actions={actions}
-					data-testid={`contact-group-list-item-contextual-menu-${id}`}
-				>
-					<CustomHoverRow
-						orientation="horizontal"
-						mainAlignment="flex-start"
-						crossAlignment="unset"
-						onClick={clickHandler}
-						onMouseDown={preventTextSelection}
+			<Container orientation="vertical" data-testid={`contact-group-list-item-${id}`}>
+				<Container orientation="horizontal" mainAlignment="flex-start">
+					<ContextualMenu
+						actions={actions}
+						data-testid={`contact-group-list-item-contextual-menu-${id}`}
 					>
-						<Row
-							gap={'0.5rem'}
-							width="fill"
-							wrap="nowrap"
-							mainAlignment={'flex-start'}
-							padding={{ all: 'small' }}
-						>
-							<CustomIconAvatar label={title} icon={'PeopleOutline'} size={'large'} />
-							<Container
-								crossAlignment={'flex-start'}
-								gap={'0.25rem'}
-								minWidth={0}
-								padding={{ left: 'small', right: 'small' }}
-							>
-								<Text overflow="ellipsis" size="small">
-									{title}
-								</Text>
-								<Text overflow="ellipsis" size="small" color={'gray1'}>
-									{t('contactGroupList.addressCount', {
-										count: members.length,
-										defaultValue_one: '{{count}} address',
-										defaultValue_other: `{{count}} addresses`
-									})}
-								</Text>
-							</Container>
-						</Row>
-						<HoverBarContainer
+						<CustomHoverRow
 							orientation="horizontal"
-							mainAlignment="flex-end"
-							crossAlignment="center"
-							padding={{ right: 'small' }}
+							mainAlignment="flex-start"
+							crossAlignment="unset"
+							onClick={clickHandler}
+							onMouseDown={preventTextSelection}
 						>
-							{actions.map((action) => (
-								<Tooltip key={action.id} label={action.label}>
-									<Button
-										type="ghost"
-										icon={action.icon}
-										color="currentColor"
-										size="small"
-										onClick={(ev): void => {
-											ev.stopPropagation();
-											action.onClick(ev);
-										}}
-										disabled={action.disabled}
-									/>
-								</Tooltip>
-							))}
-						</HoverBarContainer>
-					</CustomHoverRow>
-				</ContextualMenu>
+							<Row
+								gap={'0.5rem'}
+								width="fill"
+								wrap="nowrap"
+								mainAlignment={'flex-start'}
+								padding={{ all: 'small' }}
+							>
+								<CustomIconAvatar label={title} icon={'PeopleOutline'} size={'large'} />
+								<Container
+									crossAlignment={'flex-start'}
+									gap={'0.25rem'}
+									minWidth={0}
+									padding={{ left: 'small', right: 'small' }}
+								>
+									<Text overflow="ellipsis" size="small">
+										{title}
+									</Text>
+									<Text overflow="ellipsis" size="small" color={'gray1'}>
+										{t('contactGroupList.addressCount', {
+											count: members.length,
+											defaultValue_one: '{{count}} address',
+											defaultValue_other: `{{count}} addresses`
+										})}
+									</Text>
+								</Container>
+							</Row>
+							<HoverBarContainer
+								orientation="horizontal"
+								mainAlignment="flex-end"
+								crossAlignment="center"
+								padding={{ right: 'small' }}
+							>
+								{actions.map((action) => (
+									<Tooltip key={action.id} label={action.label}>
+										<Button
+											type="ghost"
+											icon={action.icon}
+											color="currentColor"
+											size="small"
+											onClick={(ev): void => {
+												ev.stopPropagation();
+												action.onClick(ev);
+											}}
+											disabled={action.disabled}
+										/>
+									</Tooltip>
+								))}
+							</HoverBarContainer>
+						</CustomHoverRow>
+					</ContextualMenu>
+				</Container>
 			</Container>
 		);
 	}

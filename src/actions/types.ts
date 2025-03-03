@@ -13,4 +13,5 @@ export type UIAction<ExecArg, CanExecArg> = {
 	execute: (arg?: ExecArg) => void;
 	canExecute: (arg?: CanExecArg) => boolean;
 	color?: Action['color'];
+	disabled?: boolean;
 };

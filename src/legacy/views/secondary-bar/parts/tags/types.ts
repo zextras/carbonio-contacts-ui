@@ -13,7 +13,7 @@ export type ItemType = {
 	item: AccordionItemType;
 	active: boolean;
 	color: number;
-	divider: boolean;
+	divider?: boolean;
 	id: string;
 	label: string;
 	name: string;

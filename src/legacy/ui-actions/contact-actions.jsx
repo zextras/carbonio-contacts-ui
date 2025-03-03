@@ -39,6 +39,7 @@ export function mailToContact(contact, t) {
 	const { execute, ...action } = mailTo;
 	return {
 		...action,
+		id: 'mail-to',
 		onClick: execute,
 		label: t('action.send_msg', 'Send e-mail'),
 		disabled: isEmpty(contact?.email)

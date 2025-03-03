@@ -10,7 +10,7 @@ import { Route } from 'react-router-dom';
 
 import { ContactGroupDisplayer } from './contact-group-displayer';
 import { screen, setupTest, within } from '../../../carbonio-ui-commons/test/test-setup';
-import { EMPTY_DISPLAYER_HINT, TESTID_SELECTORS } from '../../../constants/tests';
+import { EMPTY_DISPLAYER_WITH_CONTACTS_HINT, TESTID_SELECTORS } from '../../../constants/tests';
 import { generateStore } from '../../../legacy/tests/generators/store';
 import { buildContactGroup } from '../../../tests/model-builder';
 import { CONTACT_GROUPS_PATH } from '../navigation';
@@ -27,15 +27,15 @@ describe('Displayer controller', () => {
 			searchedInFolder: {}
 		}
 	});
-	it('should show empty displayer if no contact group is active', async () => {
+	it('should show empty displayer if no contact group is active but there are contacts groups in the store', async () => {
 		setupTest(
 			<Route path={`/folder/:folderId/:type?/:id?`}>
 				<ContactGroupDisplayer />
 			</Route>,
 			{ store, initialEntries: [`/folder/${parent}`] }
 		);
-		await screen.findByText(EMPTY_DISPLAYER_HINT);
-		expect(screen.getByText(EMPTY_DISPLAYER_HINT)).toBeVisible();
+		const emptyDisplayerMessage = await screen.findByText(EMPTY_DISPLAYER_WITH_CONTACTS_HINT);
+		expect(emptyDisplayerMessage).toBeVisible();
 		expect(
 			screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.closeDisplayer })
 		).not.toBeInTheDocument();
