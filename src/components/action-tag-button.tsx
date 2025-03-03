@@ -95,7 +95,7 @@ export const ActionTagButton: React.FC<ActionTagButtonProps> = ({
 	);
 
 	const icon = useMemo(() => (tags.length > 1 ? 'TagsMoreOutline' : 'Tag'), [tags]);
-	const color = useMemo(() => (tags.length === 1 ? tags[0].color : undefined), [tags]);
+	const color = useMemo(() => (tags.length === 1 ? tags[0].color : 'text'), [tags]);
 
 	const onClick = useCallback(() => {
 		contact?.tags && triggerTagSearch(tagsFromStore?.[contact?.tags[0]]);
