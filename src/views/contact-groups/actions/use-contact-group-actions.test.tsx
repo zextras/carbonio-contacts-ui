@@ -26,21 +26,23 @@ describe('useContactGroupActions', () => {
 	const store = generateStore();
 	mockMailComposerIntegration();
 
-	it('should return edit, delete and send mail action when the contact group is owned by the user', () => {
-		const folderId = 'folder-id';
-		useFolderStore.setState({
-			folders: { [folderId]: generateFolder({ id: folderId, perm: undefined }) }
-		});
-		const contactGroup = buildContactGroup({
-			parent: folderId,
-			members: buildMembers(faker.number.int({ min: 1, max: 3 }))
-		});
+	describe('Actions order', () => {
+		it('should return [send, edit, delete] actions when the contact group is owned by the user', () => {
+			const folderId = 'folder-id';
+			useFolderStore.setState({
+				folders: { [folderId]: generateFolder({ id: folderId, perm: undefined }) }
+			});
+			const contactGroup = buildContactGroup({
+				parent: folderId,
+				members: buildMembers(faker.number.int({ min: 1, max: 3 }))
+			});
 
-		const { result } = setupHook(() => useContactGroupActions()(contactGroup), { store });
-		expect(result.current).toHaveLength(3);
-		expect(result.current[0].id).toBe(ACTION_IDS.sendEmailCG);
-		expect(result.current[1].id).toBe(ACTION_IDS.editCG);
-		expect(result.current[2].id).toBe(ACTION_IDS.deleteCG);
+			const { result } = setupHook(() => useContactGroupActions()(contactGroup), { store });
+			expect(result.current).toHaveLength(3);
+			expect(result.current[0].id).toBe(ACTION_IDS.sendEmailCG);
+			expect(result.current[1].id).toBe(ACTION_IDS.editCG);
+			expect(result.current[2].id).toBe(ACTION_IDS.deleteCG);
+		});
 	});
 
 	describe('Group is in shared folder/mountpoint', () => {
