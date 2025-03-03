@@ -6,14 +6,18 @@
 import React from 'react';
 
 import { screen, fireEvent, act } from '@testing-library/react';
+import { useNavigate } from 'react-router-dom';
 
-import { mockUseHistoryNavigation } from '../../../../../carbonio-ui-commons/test/mocks/routing/use-history-navigation-mock';
 import { setupTest, UserEvent } from '../../../../../carbonio-ui-commons/test/test-setup';
 import { Contact } from '../../../../types/contact';
 import { ContactListItem } from '../contact-list-item';
 
 jest.mock('@zextras/carbonio-shell-ui', () => ({
 	useTags: jest.fn(() => [])
+}));
+jest.mock('react-router-dom', () => ({
+	...jest.requireActual('react-router-dom'),
+	useNavigate: jest.fn()
 }));
 
 const mockToggle = jest.fn();
@@ -67,7 +71,8 @@ describe('ContactListItem', () => {
 	});
 
 	it('calls replaceHistory on click when not prevented', async () => {
-		const { replaceHistory } = mockUseHistoryNavigation();
+		const useNavigateSpy = jest.fn();
+		(useNavigate as jest.Mock).mockReturnValue(useNavigateSpy);
 		const { user } = renderComponent();
 
 		const listItem = await screen.findByTestId('contact-list-item');
@@ -75,11 +80,13 @@ describe('ContactListItem', () => {
 
 		await user.click(listItem);
 
-		expect(replaceHistory).toHaveBeenCalledWith('../folder/folder123/contacts/1');
+		expect(useNavigateSpy).toHaveBeenCalledWith('../foldeu/folder123/contacts/1');
 	});
 
 	it('does not call replaceHistory if the click event is prevented', () => {
-		const { replaceHistory } = mockUseHistoryNavigation();
+		const useNavigateSpy = jest.fn();
+		(useNavigate as jest.Mock).mockReturnValue(useNavigateSpy);
+
 		const { user } = renderComponent();
 
 		const listItem = screen.getByTestId('contact-list-item');
@@ -87,7 +94,7 @@ describe('ContactListItem', () => {
 
 		user.click(listItem);
 
-		expect(replaceHistory).not.toHaveBeenCalled();
+		expect(useNavigateSpy).not.toHaveBeenCalled();
 	});
 
 	it('calls setIsDragging and sets dragged item IDs on drag start', () => {
