@@ -35,11 +35,13 @@ describe('useActionSendEmailCG', () => {
 		expect(result.current.canExecute()).toBeTruthy();
 	});
 
-	// TODO: what is the point of canExecute? we want the action to be disabled when there are no members
-	it.skip('should return an action which is not executable if the given CG has no members', () => {
+	// TODO: what is the point of canExecute?
+	//  we want the action to be disabled when there are no members
+	//  however in actions we want to check permission vs disabled (has permission but some condition is false)
+	it('should return an action which is executable even if the given CG has no members', () => {
 		jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([jest.fn(), true]);
 		const { result } = setupHook(useActionSendEmailCG, { initialProps: [contactGroupNoMembers] });
-		expect(result.current.canExecute(contactGroupNoMembers)).toBeFalsy();
+		expect(result.current.canExecute(contactGroupNoMembers)).toBeTruthy();
 	});
 
 	it('should not call the Mails integrated function if execute function is invoked passing a CG without members', () => {

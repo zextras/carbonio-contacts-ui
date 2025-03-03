@@ -8,17 +8,19 @@ import React from 'react';
 interface ListIconButtonProps {
 	action: Action;
 }
-import { Action, IconButton, Tooltip } from '@zextras/carbonio-design-system';
+import { Action, Button, Tooltip } from '@zextras/carbonio-design-system';
 
 export const ListActionIconButton = ({ action }: ListIconButtonProps): React.JSX.Element => (
 	<Tooltip key={action.id} label={action.label}>
-		<IconButton
-			icon={action.icon as string}
+		<Button
+			type="ghost"
+			icon={action.icon}
+			color={'text'}
+			size="small"
 			onClick={(ev): void => {
 				ev.stopPropagation();
 				action.onClick(ev);
 			}}
-			size="small"
 			disabled={action.disabled}
 		/>
 	</Tooltip>

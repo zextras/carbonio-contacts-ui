@@ -5,7 +5,7 @@
  */
 import React from 'react';
 
-import { Action, IconButton, Tooltip } from '@zextras/carbonio-design-system';
+import { Action, Button, Tooltip } from '@zextras/carbonio-design-system';
 
 interface ActionIconButtonProps {
 	action: Action;
@@ -13,13 +13,15 @@ interface ActionIconButtonProps {
 
 export const DisplayerActionIconButton: React.FC<ActionIconButtonProps> = ({ action }) => (
 	<Tooltip key={action.id} label={action.label}>
-		<IconButton
-			icon={action.icon as string}
+		<Button
+			type="ghost"
+			icon={action.icon}
+			size="medium"
+			color={'text'}
 			onClick={(ev): void => {
 				ev.stopPropagation();
 				action.onClick(ev);
 			}}
-			size="medium"
 			disabled={action.disabled}
 		/>
 	</Tooltip>
