@@ -40,10 +40,11 @@ describe('Contact group list item', () => {
 			const contactGroup = buildContactGroup();
 
 			setupTest(<ContactGroupListItemWrapper contactGroup={contactGroup} />, { store });
-			const mailToAction = screen.getByTestId(TESTID_SELECTORS.icons.sendEmail);
-			expect(mailToAction).toBeInTheDocument();
-			const mailToButton = mailToAction.parentElement;
-			expect(mailToButton).toBeDisabled();
+			const mailToActionButton = screen.getByRoleWithIcon('button', {
+				icon: TESTID_SELECTORS.icons.sendEmail
+			});
+			expect(mailToActionButton).toBeInTheDocument();
+			expect(mailToActionButton).toBeDisabled();
 		});
 		it('should show delete action', () => {
 			const contactGroup = buildContactGroup();

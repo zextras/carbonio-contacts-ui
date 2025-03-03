@@ -44,6 +44,6 @@ export const useActionSendEmailCG = (contactGroup: ContactGroup): SendEmailActio
 			execute: sendEmail,
 			disabled: isDisabled
 		}),
-		[canExecute, contactGroup.members.length, sendEmail, t]
+		[canExecute, isDisabled, sendEmail, t]
 	);
 };

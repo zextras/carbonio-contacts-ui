@@ -554,7 +554,11 @@ describe('Folder panel', () => {
 				setupFolderPanel(folderId);
 
 				await screen.findAllByText(contactGroupName);
-				expect(screen.queryByTestId(TESTID_SELECTORS.icons.sendEmail)).toBeInTheDocument();
+				const mailToIcon = screen.getByRoleWithIcon('button', {
+					icon: TESTID_SELECTORS.icons.sendEmail
+				});
+				expect(mailToIcon).toBeInTheDocument();
+				expect(mailToIcon).toBeDisabled();
 			});
 
 			it('should open the mail board (Contextual menu trigger)', async () => {
