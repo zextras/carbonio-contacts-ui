@@ -6,7 +6,7 @@
 import React from 'react';
 
 import { screen, fireEvent, act } from '@testing-library/react';
-import { replaceHistory } from '@zextras/carbonio-shell-ui';
+import { getAction, replaceHistory } from '@zextras/carbonio-shell-ui';
 
 import { setupTest, UserEvent } from '../../../../../carbonio-ui-commons/test/test-setup';
 import { Contact } from '../../../../types/contact';
@@ -14,7 +14,8 @@ import { ContactListItem } from '../contact-list-item';
 
 jest.mock('@zextras/carbonio-shell-ui', () => ({
 	replaceHistory: jest.fn(),
-	useTags: jest.fn(() => [])
+	useTags: jest.fn(() => []),
+	getAction: jest.fn()
 }));
 
 const mockToggle = jest.fn();
@@ -58,6 +59,10 @@ const renderComponent = (props = {}): { user: UserEvent } =>
 	);
 
 describe('ContactListItem', () => {
+	beforeAll(() => {
+		const mailTo = { id: 'mail-to', label: 'action.send_msg', execute: jest.fn() };
+		(getAction as jest.Mock).mockReturnValue([mailTo, true]);
+	});
 	afterEach(() => {
 		jest.clearAllMocks();
 	});

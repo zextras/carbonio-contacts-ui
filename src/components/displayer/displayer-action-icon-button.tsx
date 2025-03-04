@@ -11,13 +11,13 @@ interface ActionIconButtonProps {
 	action: Action;
 }
 
-export const ActionIconButton: React.FC<ActionIconButtonProps> = ({ action }) => (
+export const DisplayerActionIconButton: React.FC<ActionIconButtonProps> = ({ action }) => (
 	<Tooltip key={action.id} label={action.label}>
 		<Button
 			type="ghost"
 			icon={action.icon}
-			color="currentColor"
 			size="medium"
+			color={'text'}
 			onClick={(ev): void => {
 				ev.stopPropagation();
 				action.onClick(ev);

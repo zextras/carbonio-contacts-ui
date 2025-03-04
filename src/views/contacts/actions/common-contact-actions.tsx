@@ -6,7 +6,7 @@
 
 import React, { useCallback, useMemo } from 'react';
 
-import { type Action as DSAction, Icon, Padding, Row, Text } from '@zextras/carbonio-design-system';
+import { Icon, Padding, Row, Text } from '@zextras/carbonio-design-system';
 import { getAction, replaceHistory } from '@zextras/carbonio-shell-ui';
 import { every, includes, isEmpty, noop, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
@@ -19,9 +19,9 @@ import { ZIMBRA_STANDARD_COLORS } from '../../../carbonio-ui-commons/constants';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { getFolderIdParts, isTrash } from '../../../carbonio-ui-commons/helpers/folders';
 import { useTags } from '../../../carbonio-ui-commons/store/zustand/tags';
-import { Contact } from '../../types/contact';
+import { Contact } from '../../../legacy/types/contact';
 
-const useTagsAction = (contact: Contact): UIAction<Contact, Contact> => {
+export const useTagsAction = (contact: Contact): UIAction<Contact, Contact> => {
 	const tagsFromStore = useTags();
 	const triggerSearch = noop;
 
@@ -81,7 +81,7 @@ const useTagsAction = (contact: Contact): UIAction<Contact, Contact> => {
 	};
 };
 
-const useMoveAction = (contact: Contact): UIAction<Contact, Contact> => {
+export const useMoveAction = (contact: Contact): UIAction<Contact, Contact> => {
 	const [t] = useTranslation();
 	const contactsMoveAction = useActionMoveContacts();
 	const onMove = useCallback(() => {
@@ -99,7 +99,7 @@ const useMoveAction = (contact: Contact): UIAction<Contact, Contact> => {
 	};
 };
 
-const useEditAction = (contact: Contact): UIAction<Contact, Contact> => {
+export const useEditAction = (contact: Contact): UIAction<Contact, Contact> => {
 	const [t] = useTranslation();
 	const folderId = contact.parent;
 	const contactInternalId = contact.id;
@@ -116,7 +116,7 @@ const useEditAction = (contact: Contact): UIAction<Contact, Contact> => {
 	};
 };
 
-const useDeleteAction = (contact: Contact): UIAction<Contact, Contact> => {
+export const useDeleteAction = (contact: Contact): UIAction<Contact, Contact> => {
 	const folderId = contact.parent;
 	const deleteAction = useActionDeleteContacts();
 	const trashAction = useActionTrashContacts();
@@ -141,7 +141,7 @@ const useDeleteAction = (contact: Contact): UIAction<Contact, Contact> => {
 	};
 };
 
-const useSendMailAction = (contact: Contact): UIAction<Contact, Contact> => {
+export const useSendMailAction = (contact: Contact): UIAction<Contact, Contact> => {
 	const [t] = useTranslation();
 	const onMail = useCallback(() => {
 		const [mailTo, available] = getAction('contact-list', 'mail-to', [contact]);
@@ -158,28 +158,3 @@ const useSendMailAction = (contact: Contact): UIAction<Contact, Contact> => {
 		disabled: isEmpty(contact?.email)
 	};
 };
-
-export function useContactActions(contact: Contact): DSAction[] {
-	const sendMailAction = useSendMailAction(contact);
-	const editAction = useEditAction(contact);
-	const deleteAction = useDeleteAction(contact);
-	const moveOrRestoreAction = useMoveAction(contact);
-	const tagsActions = useTagsAction(contact);
-	const actions = [sendMailAction, tagsActions, moveOrRestoreAction, deleteAction, editAction];
-	const orderedActions: DSAction[] = [];
-	actions.forEach((action) => {
-		if (action.canExecute(contact)) {
-			orderedActions.push({
-				id: action.id,
-				label: action.label,
-				onClick: () => {
-					action.execute(contact);
-				},
-				icon: action.icon,
-				color: action.color,
-				disabled: action.disabled
-			});
-		}
-	});
-	return orderedActions;
-}

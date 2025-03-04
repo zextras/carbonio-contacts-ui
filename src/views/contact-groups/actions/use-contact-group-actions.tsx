@@ -7,8 +7,8 @@
 import { type Action as DSAction } from '@zextras/carbonio-design-system';
 
 import { useActionDeleteContactGroup } from './delete-contact-group';
-import { useActionEditCG } from '../../../actions/edit-cg';
-import { useActionSendEmailCG } from '../../../actions/send-email-cg';
+import { useActionEditCG } from './edit-cg';
+import { useActionSendEmailCG } from './send-email-cg';
 import { UIAction } from '../../../actions/types';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { getFolderIdParts } from '../../../carbonio-ui-commons/helpers/folders';
@@ -28,6 +28,7 @@ function evaluateContactGroupActions<T extends ContactGroup>(
 				onClick: () => {
 					action.execute(contactGroup);
 				},
+				disabled: action.disabled,
 				icon: action.icon,
 				color: action.color
 			});
@@ -36,35 +37,32 @@ function evaluateContactGroupActions<T extends ContactGroup>(
 	return orderedActions;
 }
 
-export const useContactGroupActions = (): ((contactGroup: ContactGroup) => DSAction[]) => {
+export const useContactGroupActions = (contactGroup: ContactGroup): Array<DSAction> => {
 	const deleteCGAction = useActionDeleteContactGroup();
 	const editCGAction = useActionEditCG();
-	const sendEmailAction = useActionSendEmailCG();
-	return (contactGroup: ContactGroup): DSAction[] => {
-		const folder = getFolderFromContactGroup(contactGroup);
-		const folderPartsId = getFolderIdParts(contactGroup.parent).id;
-		const isMainAccount = !folder?.perm;
-		if (isMainAccount) {
-			if (folderPartsId === FOLDERS.TRASH) {
-				return evaluateContactGroupActions<ContactGroup>(contactGroup, [deleteCGAction]);
-			}
-			return evaluateContactGroupActions<ContactGroup>(contactGroup, [
-				sendEmailAction,
-				editCGAction,
-				deleteCGAction
-			]);
+	const sendEmailAction = useActionSendEmailCG(contactGroup);
+	const folder = getFolderFromContactGroup(contactGroup);
+	const folderPartsId = getFolderIdParts(contactGroup.parent).id;
+	const isMainAccount = !folder?.perm;
+	if (isMainAccount) {
+		if (folderPartsId === FOLDERS.TRASH) {
+			return evaluateContactGroupActions<ContactGroup>(contactGroup, [deleteCGAction]);
 		}
-		if (folder?.perm?.includes('w')) {
-			if (folderPartsId === FOLDERS.TRASH) {
-				return evaluateContactGroupActions<ContactGroup>(contactGroup, [deleteCGAction]);
-			}
-			return evaluateContactGroupActions<ContactGroup>(contactGroup, [
-				sendEmailAction,
-				editCGAction,
-				deleteCGAction
-			]);
+		return evaluateContactGroupActions<ContactGroup>(contactGroup, [
+			sendEmailAction,
+			editCGAction,
+			deleteCGAction
+		]);
+	}
+	if (folder?.perm?.includes('w')) {
+		if (folderPartsId === FOLDERS.TRASH) {
+			return evaluateContactGroupActions<ContactGroup>(contactGroup, [deleteCGAction]);
 		}
-
-		return evaluateContactGroupActions<ContactGroup>(contactGroup, [sendEmailAction]);
-	};
+		return evaluateContactGroupActions<ContactGroup>(contactGroup, [
+			sendEmailAction,
+			editCGAction,
+			deleteCGAction
+		]);
+	}
+	return evaluateContactGroupActions<ContactGroup>(contactGroup, [sendEmailAction]);
 };

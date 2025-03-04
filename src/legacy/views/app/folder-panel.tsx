@@ -67,7 +67,9 @@ export const FolderPanel = (): ReactElement => {
 		[contacts]
 	);
 	const ids = useMemo(() => Object.keys(selected ?? []), [selected]);
-	const selectedContacts = filter(contacts, (contact) => ids.indexOf(contact.id) !== -1);
+	const selectedContacts = filter(contacts, (contact) => ids.indexOf(contact.id) !== -1)
+		.map((contact) => (isGroup(contact) ? undefined : contact))
+		.filter((contact) => !!contact);
 
 	useEffect(() => {
 		if (searchRequestStatus !== undefined) {

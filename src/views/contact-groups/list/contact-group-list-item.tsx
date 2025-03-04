@@ -5,11 +5,12 @@
  */
 import React, { useCallback } from 'react';
 
-import { Action, Button, Container, Row, Tooltip } from '@zextras/carbonio-design-system';
+import { Action, Container, Row } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { ContextualMenu } from '../../../components/contextual-menu';
+import { ListActionIconButton } from '../../../components/list/list-action-icon-button';
 import { CustomIconAvatar, HoverRow } from '../../../components/styled-components';
 import { Text } from '../../../components/Text';
 import { ContactGroup } from '../../../model/contact-group';
@@ -106,19 +107,7 @@ export const ContactGroupListItem = React.memo<CGListItemProps>(
 								padding={{ right: 'small' }}
 							>
 								{actions.map((action) => (
-									<Tooltip key={action.id} label={action.label}>
-										<Button
-											type="ghost"
-											icon={action.icon}
-											color="currentColor"
-											size="small"
-											onClick={(ev): void => {
-												ev.stopPropagation();
-												action.onClick(ev);
-											}}
-											disabled={action.disabled}
-										/>
-									</Tooltip>
+									<ListActionIconButton key={action.id} action={action} />
 								))}
 							</HoverBarContainer>
 						</CustomHoverRow>

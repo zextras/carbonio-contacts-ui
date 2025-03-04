@@ -9,8 +9,8 @@ import React, { useCallback, useMemo } from 'react';
 import { Button, Container, Divider, Row, TabBar } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
-import { DisplayerActionsHeader } from './displayer-actions-header';
-import { DisplayerHeader } from './displayer-header';
+import { DisplayerActionsHeader } from './displayer/displayer-actions-header';
+import { DisplayerHeader } from './displayer/displayer-header';
 import { DLDetailsInfo } from './dl-details-info';
 import { ManagerList } from './manager-list';
 import { MemberList } from './member-list';

@@ -27,7 +27,7 @@ export const ContactGroupListItemWrapper = ({
 	selectedItems,
 	dragImageRef
 }: ContactGroupListItemWrapperProps): React.JSX.Element => {
-	const actions = useContactGroupActions()(contactGroup);
+	const actions = useContactGroupActions(contactGroup);
 	const ids = useMemo(() => Object.keys(selectedItems ?? []), [selectedItems]);
 	const redirectTo = useRedirectToContactGroup();
 

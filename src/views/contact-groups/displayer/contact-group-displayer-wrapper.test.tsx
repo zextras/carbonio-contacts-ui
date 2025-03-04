@@ -8,14 +8,14 @@ import React from 'react';
 
 import { Route } from 'react-router-dom';
 
-import { ContactGroupDisplayer } from './contact-group-displayer';
 import { screen, setupTest, within } from '../../../carbonio-ui-commons/test/test-setup';
 import { EMPTY_DISPLAYER_WITH_CONTACTS_HINT, TESTID_SELECTORS } from '../../../constants/tests';
 import { generateStore } from '../../../legacy/tests/generators/store';
 import { buildContactGroup } from '../../../tests/model-builder';
+import { ContactGroupDisplayerWrapper } from '../actions/contact-group-displayer-wrapper';
 import { CONTACT_GROUPS_PATH } from '../navigation';
 
-describe('Displayer controller', () => {
+describe('Contact groups displayer wrapper', () => {
 	const contactGroup = buildContactGroup();
 	const { parent, id } = contactGroup;
 	const store = generateStore({
@@ -30,7 +30,7 @@ describe('Displayer controller', () => {
 	it('should show empty displayer if no contact group is active but there are contacts groups in the store', async () => {
 		setupTest(
 			<Route path={`/folder/:folderId/:type?/:id?`}>
-				<ContactGroupDisplayer />
+				<ContactGroupDisplayerWrapper />
 			</Route>,
 			{ store, initialEntries: [`/folder/${parent}`] }
 		);
@@ -44,7 +44,7 @@ describe('Displayer controller', () => {
 	it('should show contact group details if a contact group is active', () => {
 		setupTest(
 			<Route path={`/folder/:folderId/:type?/:id?`}>
-				<ContactGroupDisplayer />
+				<ContactGroupDisplayerWrapper />
 			</Route>,
 			{ store, initialEntries: [`/folder/${parent}/${CONTACT_GROUPS_PATH}/${id}`] }
 		);
