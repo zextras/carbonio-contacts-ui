@@ -20,13 +20,14 @@ import { TFunction } from 'i18next';
 import { every, find, includes, map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
+import { TaggableItem } from '../../actions/types';
 import { ZIMBRA_STANDARD_COLORS } from '../../carbonio-ui-commons/constants/utils';
 import { useTags } from '../../carbonio-ui-commons/store/zustand/tags';
 import { Tag, Tags } from '../../carbonio-ui-commons/types/tags';
 import { useAppDispatch } from '../hooks/redux';
 import { contactAction } from '../store/actions/contact-action';
 import { StoreProvider } from '../store/redux';
-import { Contact, ContactOrGroup } from '../types/contact';
+import { Contact } from '../types/contact';
 import { TagsActionsType } from '../types/tags';
 import CreateUpdateTagModal from '../views/secondary-bar/parts/tags/create-update-tag-modal';
 import DeleteTagModal from '../views/secondary-bar/parts/tags/delete-tag-modal';
@@ -238,16 +239,16 @@ export const TagsDropdownItem = ({
 	);
 };
 
-export const MultiSelectTagsDropdownItem = ({
+const MultiSelectTagsDropdownItem = ({
 	tag,
 	ids,
 	tags,
-	contacts,
+	items,
 	deselectAll,
 	folderId
 }: {
 	tag: Tag;
-	contacts: Array<ContactOrGroup>;
+	items: Array<TaggableItem>;
 	ids: string[];
 	tags: Tags;
 	multiSelect?: boolean;
@@ -262,7 +263,7 @@ export const MultiSelectTagsDropdownItem = ({
 	const tagsToShow = reduce(
 		tags,
 		(acc: Array<string>, v: Tag) => {
-			const values = map(contacts, (c) => includes(c.tags, v.id));
+			const values = map(items, (c) => includes(c.tags, v.id));
 			if (every(values)) acc.push(v.id);
 			return acc;
 		},
@@ -351,12 +352,12 @@ export const applyMultiTag = ({
 	t,
 	tags,
 	ids,
-	contacts,
+	itemsToTag,
 	deselectAll,
 	folderId
 }: {
 	t: TFunction;
-	contacts: Array<ContactOrGroup>;
+	itemsToTag: Array<TaggableItem>;
 	tags: Tags;
 	ids: string[];
 	deselectAll?: () => void;
@@ -375,7 +376,7 @@ export const applyMultiTag = ({
 						tag={v}
 						tags={tags}
 						ids={ids}
-						contacts={contacts}
+						items={itemsToTag}
 						deselectAll={deselectAll}
 						folderId={folderId}
 					/>

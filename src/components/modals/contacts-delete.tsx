@@ -15,12 +15,12 @@ import {
 } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
+import { DeletableItem } from '../../actions/types';
 import { TIMEOUTS } from '../../constants';
-import { ContactOrGroup } from '../../legacy/types/contact';
 import { apiClient } from '../../network/api-client';
 
 export type ContactDeleteModalProps = {
-	contacts: Array<ContactOrGroup>;
+	contacts: Array<DeletableItem>;
 	onClose: () => void;
 };
 

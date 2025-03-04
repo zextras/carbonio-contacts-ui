@@ -15,3 +15,13 @@ export type UIAction<ExecArg, CanExecArg> = {
 	color?: Action['color'];
 	disabled?: boolean;
 };
+
+export type DeletableItem = {
+	id: string;
+	parent: string;
+};
+
+export type TaggableItem = {
+	id: string;
+	tags?: Array<string>;
+};

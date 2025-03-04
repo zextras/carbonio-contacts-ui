@@ -9,16 +9,15 @@ import { useModal } from '@zextras/carbonio-design-system';
 import { every } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { UIAction } from './types';
+import { DeletableItem, UIAction } from './types';
 import { isTrashed } from '../carbonio-ui-commons/helpers/folders';
 import { getFolder } from '../carbonio-ui-commons/store/zustand/folder';
 import { Folder } from '../carbonio-ui-commons/types';
 import { ContactsDeleteModal } from '../components/modals/contacts-delete';
 import { ACTION_IDS } from '../constants';
 import { StoreProvider } from '../legacy/store/redux';
-import { ContactOrGroup } from '../legacy/types/contact';
 
-export type ActionDeleteContacts = UIAction<Array<ContactOrGroup>, Array<ContactOrGroup>>;
+export type ActionDeleteContacts = UIAction<Array<DeletableItem>, Array<DeletableItem>>;
 export const useActionDeleteContacts = (): ActionDeleteContacts => {
 	const [t] = useTranslation();
 	const { createModal, closeModal } = useModal();

@@ -129,7 +129,7 @@ type SecondaryActionsProps = {
 	selectedContacts: Array<ContactOrGroup>;
 	ids: Array<string>;
 };
-export const useSecondaryActions = ({
+export const useMultipleSelectionActions = ({
 	folderId,
 	deselectAll,
 	selectedContacts,
@@ -150,7 +150,7 @@ export const useSecondaryActions = ({
 				t,
 				tags,
 				ids,
-				contacts: selectedContacts,
+				itemsToTag: selectedContacts,
 				deselectAll,
 				folderId
 			})
@@ -164,7 +164,7 @@ export const useSecondaryActions = ({
 			t,
 			tags,
 			ids,
-			contacts: selectedContacts,
+			itemsToTag: selectedContacts,
 			deselectAll,
 			folderId
 		})
