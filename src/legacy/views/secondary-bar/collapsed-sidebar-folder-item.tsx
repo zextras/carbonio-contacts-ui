@@ -12,6 +12,7 @@ import { CollapsedSideBarItem } from './collapsed-sidebar-item';
 import { ZIMBRA_STANDARD_COLORS } from '../../../carbonio-ui-commons/constants';
 import { isLink } from '../../../carbonio-ui-commons/helpers/folders';
 import { Folder } from '../../../carbonio-ui-commons/types';
+import { CONTACTS_ROUTE } from '../../../constants';
 import { getFolderTranslatedName } from '../../utils/helpers';
 
 const folderIconName: Record<number, string> = {
@@ -43,7 +44,7 @@ export const CollapsedSideBarFolderItem = ({ folder }: { folder: Folder }): Reac
 
 	return (
 		<CollapsedSideBarItem
-			redirectPath={`/folder/${folder.id}`}
+			redirectPath={`/${CONTACTS_ROUTE}/folder/${folder.id}`}
 			iconTooltip={folderIconTooltip}
 			id={folder.id}
 			icon={folderIcon}
