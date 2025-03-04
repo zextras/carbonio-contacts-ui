@@ -26,7 +26,7 @@ import { Tag, Tags } from '../../carbonio-ui-commons/types/tags';
 import { useAppDispatch } from '../hooks/redux';
 import { contactAction } from '../store/actions/contact-action';
 import { StoreProvider } from '../store/redux';
-import { Contact } from '../types/contact';
+import { Contact, ContactOrGroup } from '../types/contact';
 import { TagsActionsType } from '../types/tags';
 import CreateUpdateTagModal from '../views/secondary-bar/parts/tags/create-update-tag-modal';
 import DeleteTagModal from '../views/secondary-bar/parts/tags/delete-tag-modal';
@@ -247,7 +247,7 @@ export const MultiSelectTagsDropdownItem = ({
 	folderId
 }: {
 	tag: Tag;
-	contacts: Array<Contact>;
+	contacts: Array<ContactOrGroup>;
 	ids: string[];
 	tags: Tags;
 	multiSelect?: boolean;
@@ -356,7 +356,7 @@ export const applyMultiTag = ({
 	folderId
 }: {
 	t: TFunction;
-	contacts: Array<Contact>;
+	contacts: Array<ContactOrGroup>;
 	tags: Tags;
 	ids: string[];
 	deselectAll?: () => void;

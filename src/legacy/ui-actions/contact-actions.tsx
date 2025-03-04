@@ -23,7 +23,7 @@ import { getFolderIdParts } from '../../carbonio-ui-commons/helpers/folders';
 import { useTags } from '../../carbonio-ui-commons/store/zustand/tags';
 import { MakeOptional } from '../../types';
 import { useEditAction } from '../../views/contacts/actions/common-contact-actions';
-import { Contact } from '../types/contact';
+import { Contact, ContactOrGroup } from '../types/contact';
 
 type OptionallyClickableAction = MakeOptional<DSAction, 'onClick'>;
 type ContactActionsFn = (contact: Contact) => Array<OptionallyClickableAction>;
@@ -126,7 +126,7 @@ export const useHoverActions = (contact: Contact): Array<DSAction> => {
 type SecondaryActionsProps = {
 	folderId: string;
 	deselectAll: () => void;
-	selectedContacts: Array<Contact>;
+	selectedContacts: Array<ContactOrGroup>;
 	ids: Array<string>;
 };
 export const useSecondaryActions = ({

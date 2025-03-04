@@ -16,11 +16,11 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import { TIMEOUTS } from '../../constants';
-import { Contact } from '../../legacy/types/contact';
+import { ContactOrGroup } from '../../legacy/types/contact';
 import { apiClient } from '../../network/api-client';
 
 export type ContactDeleteModalProps = {
-	contacts: Array<Contact>;
+	contacts: Array<ContactOrGroup>;
 	onClose: () => void;
 };
 

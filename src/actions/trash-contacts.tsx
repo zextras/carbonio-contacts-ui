@@ -14,10 +14,10 @@ import { isTrashed } from '../carbonio-ui-commons/helpers/folders';
 import { getFolder } from '../carbonio-ui-commons/store/zustand/folder';
 import { Folder } from '../carbonio-ui-commons/types';
 import { ACTION_IDS, TIMEOUTS } from '../constants';
-import { Contact } from '../legacy/types/contact';
+import { ContactOrGroup } from '../legacy/types/contact';
 import { apiClient } from '../network/api-client';
 
-export type ActionTrashContacts = UIAction<Array<Contact>, Array<Contact>>;
+export type ActionTrashContacts = UIAction<Array<ContactOrGroup>, Array<ContactOrGroup>>;
 export const useActionTrashContacts = (): ActionTrashContacts => {
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
@@ -37,7 +37,7 @@ export const useActionTrashContacts = (): ActionTrashContacts => {
 	}, []);
 
 	const onRestore = useCallback(
-		(contacts: Array<Contact>) => {
+		(contacts: Array<ContactOrGroup>) => {
 			// TODO support contacts in different parents
 			const firstParent = contacts[0].parent;
 			const contactsIds = contacts.map((cont) => cont.id);

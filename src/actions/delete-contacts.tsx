@@ -16,9 +16,9 @@ import { Folder } from '../carbonio-ui-commons/types';
 import { ContactsDeleteModal } from '../components/modals/contacts-delete';
 import { ACTION_IDS } from '../constants';
 import { StoreProvider } from '../legacy/store/redux';
-import { Contact } from '../legacy/types/contact';
+import { ContactOrGroup } from '../legacy/types/contact';
 
-export type ActionDeleteContacts = UIAction<Array<Contact>, Array<Contact>>;
+export type ActionDeleteContacts = UIAction<Array<ContactOrGroup>, Array<ContactOrGroup>>;
 export const useActionDeleteContacts = (): ActionDeleteContacts => {
 	const [t] = useTranslation();
 	const { createModal, closeModal } = useModal();
