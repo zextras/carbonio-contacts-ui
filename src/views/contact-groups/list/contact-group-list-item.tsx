@@ -3,9 +3,9 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback } from 'react';
+import React, { DragEvent, useCallback, useMemo } from 'react';
 
-import { Action, Row } from '@zextras/carbonio-design-system';
+import { Drag } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
 import { ListActionIconButton } from '../../../components/list/list-action-icon-button';
@@ -14,53 +14,92 @@ import { ListItemAvatar } from '../../../components/list/list-item-avatar';
 import { ListItemContent } from '../../../components/list/list-item-content';
 import { Text } from '../../../components/Text';
 import { ContactGroup } from '../../../model/contact-group';
+import { useContactGroupActions } from '../actions/use-contact-group-actions';
+import { useRedirectToContactGroup } from '../navigation';
 
 type CGListItemProps = {
 	contactGroup: ContactGroup;
-	onClick?: (id: string) => void;
-	actions: Action[];
+	setDraggedIds?: (ids: Record<string, boolean>) => void;
+	setIsDragging?: (id: boolean) => void;
+	selectedItems?: Record<string, boolean>;
+	dragImageRef?: React.RefObject<HTMLElement>;
+	selecting?: boolean;
+	selected?: boolean;
+	toggle?: (id: string) => void;
 };
 
 export const ContactGroupListItem = React.memo<CGListItemProps>(
-	({ onClick, contactGroup, actions }) => {
+	({
+		contactGroup,
+		setDraggedIds,
+		setIsDragging,
+		selectedItems,
+		dragImageRef,
+		selecting,
+		selected,
+		toggle
+	}) => {
 		const [t] = useTranslation();
-		const { id, title, members } = contactGroup;
-		const clickHandler = useCallback(() => {
-			onClick?.(id);
-		}, [id, onClick]);
+		const redirectTo = useRedirectToContactGroup();
 
+		const clickHandler = useCallback(() => {
+			redirectTo(contactGroup);
+		}, [contactGroup, redirectTo]);
 		const avatar = {
 			id: contactGroup.id,
 			label: contactGroup.title,
 			icon: 'PeopleOutline'
 		};
+		const actions = useContactGroupActions(contactGroup);
+
 		const hoverActions = actions.map((action) => (
 			<ListActionIconButton key={action.id} action={action} />
 		));
+		const ids = useMemo(() => Object.keys(selectedItems ?? []), [selectedItems]);
+
+		const dragCheck = useCallback(
+			(e: DragEvent, id: string) => {
+				setIsDragging?.(true);
+				if (dragImageRef?.current) {
+					e?.dataTransfer?.setDragImage(dragImageRef.current, 0, 0);
+				}
+				if (selectedItems?.[id]) {
+					setDraggedIds?.(selectedItems);
+				} else {
+					setDraggedIds?.({ [id]: true });
+				}
+			},
+			[setIsDragging, dragImageRef, selectedItems, setDraggedIds]
+		);
 
 		return (
-			<Row style={{ display: 'block' }}>
+			<Drag
+				type="contact"
+				data={{ ...contactGroup, parentFolderId: contactGroup.parent, selectedIDs: ids }}
+				style={{ display: 'block' }}
+				onDragStart={(e): void => dragCheck(e, contactGroup.id)}
+			>
 				<ListItemActionsWrapper
-					data-testid={`contact-group-list-item-${id}`}
+					data-testid={`contact-group-list-item-${contactGroup.id}`}
 					contextualMenuActions={actions}
 					hoverActions={hoverActions}
 					onClick={clickHandler}
 				>
-					<ListItemAvatar item={avatar} />
+					<ListItemAvatar item={avatar} selected={selected} selecting={selecting} toggle={toggle} />
 					<ListItemContent>
 						<Text overflow="ellipsis" size="small">
-							{title}
+							{contactGroup.title}
 						</Text>
 						<Text overflow="ellipsis" size="small" color={'gray1'}>
 							{t('contactGroupList.addressCount', {
-								count: members.length,
+								count: contactGroup.members.length,
 								defaultValue_one: '{{count}} address',
 								defaultValue_other: `{{count}} addresses`
 							})}
 						</Text>
 					</ListItemContent>
 				</ListItemActionsWrapper>
-			</Row>
+			</Drag>
 		);
 	}
 );

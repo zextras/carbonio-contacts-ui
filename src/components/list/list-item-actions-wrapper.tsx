@@ -9,9 +9,8 @@ import { Action, Container } from '@zextras/carbonio-design-system';
 import styled from 'styled-components';
 
 import { ContextualMenu } from '../contextual-menu';
-import { HoverRow } from '../styled-components';
 
-const HoverBarContainer = styled(Container)`
+export const HoverBarContainer = styled(Container)`
 	top: 0;
 	right: 0;
 	display: none;
@@ -21,16 +20,26 @@ const HoverBarContainer = styled(Container)`
 		transparent,
 		${({ theme }): string => theme.palette.gray6.hover}
 	);
-	height: 55%;
+	width: calc(100% - 4rem);
+	height: 45%;
+
 	& > * {
 		margin-top: ${({ theme }): string => theme.sizes.padding.small};
 		margin-right: ${({ theme }): string => theme.sizes.padding.small};
 	}
 `;
 
-const CustomHoverRow = styled(HoverRow)`
+export const HoverContainer = styled(Container).attrs(() => ({
+	background: 'transparent'
+}))`
+	width: 100%;
+	position: relative;
+	cursor: pointer;
+	text-decoration: none;
+
 	&:hover {
 		background: ${({ theme }): string => theme.palette.gray6.hover};
+
 		& ${HoverBarContainer} {
 			display: flex;
 		}
@@ -49,7 +58,7 @@ export const ListItemActionsWrapper = ({
 	children,
 	...rest
 }: ListItemActionsWrapperProps): React.JSX.Element => {
-	const preventTextSelection = useCallback<React.MouseEventHandler<HTMLDivElement>>((e) => {
+	useCallback<React.MouseEventHandler<HTMLDivElement>>((e) => {
 		if (e.detail > 1) {
 			e.preventDefault();
 		}
@@ -58,23 +67,21 @@ export const ListItemActionsWrapper = ({
 		<Container orientation="vertical" onClick={onClick} data-testid={'list-item'}>
 			<Container orientation="horizontal" mainAlignment="flex-start">
 				<ContextualMenu actions={contextualMenuActions} {...rest}>
-					<CustomHoverRow
+					<HoverContainer
 						orientation="horizontal"
 						mainAlignment="flex-start"
 						crossAlignment="unset"
 						onClick={onClick}
-						onMouseDown={preventTextSelection}
 					>
 						{children}
 						<HoverBarContainer
 							orientation="horizontal"
 							mainAlignment="flex-end"
 							crossAlignment="center"
-							padding={{ right: 'small' }}
 						>
 							{hoverActions}
 						</HoverBarContainer>
-					</CustomHoverRow>
+					</HoverContainer>
 				</ContextualMenu>
 			</Container>
 		</Container>

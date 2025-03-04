@@ -8,7 +8,7 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import * as shell from '@zextras/carbonio-shell-ui';
 
-import { ContactGroupListItemWrapper } from './contact-group-list-item-wrapper';
+import { ContactGroupListItem } from './contact-group-list-item';
 import { screen, setupTest } from '../../../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../../../constants/tests';
 import { generateStore } from '../../../legacy/tests/generators/store';
@@ -33,13 +33,13 @@ describe('Contact group list item', () => {
 				members: buildMembers(faker.number.int({ min: 1, max: 100 }))
 			});
 
-			setupTest(<ContactGroupListItemWrapper contactGroup={contactGroup} />, { store });
+			setupTest(<ContactGroupListItem contactGroup={contactGroup} />, { store });
 			expect(screen.getByTestId(TESTID_SELECTORS.icons.sendEmail)).toBeVisible();
 		});
 		it('should show send mail action as disabled when the contact group has 0 members', async () => {
 			const contactGroup = buildContactGroup();
 
-			setupTest(<ContactGroupListItemWrapper contactGroup={contactGroup} />, { store });
+			setupTest(<ContactGroupListItem contactGroup={contactGroup} />, { store });
 			const mailToActionButton = screen.getByRoleWithIcon('button', {
 				icon: TESTID_SELECTORS.icons.sendEmail
 			});
@@ -49,7 +49,7 @@ describe('Contact group list item', () => {
 		it('should show delete action', () => {
 			const contactGroup = buildContactGroup();
 
-			setupTest(<ContactGroupListItemWrapper contactGroup={contactGroup} />, { store });
+			setupTest(<ContactGroupListItem contactGroup={contactGroup} />, { store });
 			expect(screen.getByTestId(`icon: ${CONTACT_GROUP_DELETE_ICON}`)).toBeVisible();
 		});
 	});
