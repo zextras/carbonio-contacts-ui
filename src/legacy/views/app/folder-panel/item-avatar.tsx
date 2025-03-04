@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback, useMemo } from 'react';
+import React, { SyntheticEvent, useCallback, useMemo } from 'react';
 
 import { Avatar, Container, Tooltip } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
@@ -19,32 +19,35 @@ const AvatarElement = styled(Avatar)`
 	}
 `;
 
-/**
- * @type {
- *   (props: {
- * 			item: {
- *				firstName: string;
- *				middleName: string;
- *				lastName: string;
- *				id: string;
- *			};
- *			selected: boolean;
- *			selecting: boolean;
- *			toggle: func;
- *			isSearch: boolean;
- *   }) => React.JSX.Element
- * }
- */
-export const ItemAvatar = ({ item, selected, selecting, toggle, isSearch = false }) => {
+type ItemAvatarProps = {
+	item: {
+		firstName: string;
+		middleName: string;
+		lastName: string;
+		id: string;
+	};
+	selected?: boolean;
+	selecting?: boolean;
+	toggle?: (id: string) => void;
+	isSearch?: boolean;
+};
+export const ItemAvatar = ({
+	item,
+	selected,
+	selecting,
+	toggle,
+	isSearch = false
+}: ItemAvatarProps): React.JSX.Element => {
 	const [t] = useTranslation();
-	const conversationSelect = useCallback(
-		(id) => (ev) => {
-			ev.preventDefault();
-			toggle(id);
-		},
+	const toggleSelectContact = useCallback(
+		(id: string) =>
+			(ev: SyntheticEvent): void => {
+				ev.preventDefault();
+				toggle?.(id);
+			},
 		[toggle]
 	);
-	const activateSelectionMode = useMemo(
+	const activateSelectionModeTooltipLabel = useMemo(
 		() =>
 			isSearch
 				? t(
@@ -61,12 +64,12 @@ export const ItemAvatar = ({ item, selected, selecting, toggle, isSearch = false
 			width="fit"
 			mainAlignment="flex-start"
 		>
-			<Tooltip label={activateSelectionMode} disabled={selecting} maxWidth="100%">
+			<Tooltip label={activateSelectionModeTooltipLabel} disabled={selecting} maxWidth="100%">
 				<AvatarElement
 					selecting={selecting}
 					selected={selected}
 					label={`${item.firstName} ${item.middleName} ${item.lastName}`}
-					onClick={conversationSelect(item.id)}
+					onClick={toggleSelectContact(item.id)}
 					size="large"
 				/>
 			</Tooltip>

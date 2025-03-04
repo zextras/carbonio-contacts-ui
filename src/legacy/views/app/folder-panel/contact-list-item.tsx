@@ -33,7 +33,6 @@ export const ContactListItem = ({
 	selected,
 	folderId,
 	selecting,
-	active,
 	toggle,
 	setDraggedIds,
 	setIsDragging,
