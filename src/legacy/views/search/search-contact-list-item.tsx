@@ -12,7 +12,7 @@ import { noop } from 'lodash';
 import { useTags } from '../../../carbonio-ui-commons/store/zustand/tags';
 import { getTagsArray } from '../../helpers/tags';
 import { Contact } from '../../types/contact';
-import { ItemAvatar } from '../app/folder-panel/item-avatar';
+import { ListItemAvatar } from '../../../components/list/list-item-avatar';
 import { ItemContent } from '../app/folder-panel/item-content';
 
 export const SearchContactListItem = ({ item }: { item: Contact }): React.JSX.Element => {
@@ -29,10 +29,14 @@ export const SearchContactListItem = ({ item }: { item: Contact }): React.JSX.El
 		},
 		[folderId, item.id]
 	);
+	const avatarItem = {
+		id: item.id,
+		label: `${item.firstName} ${item.middleName} ${item.lastName}`
+	};
 	return (
 		<Container orientation="vertical" data-testid={'search-contact-list-item'} onClick={_onClick}>
 			<Container orientation="horizontal" mainAlignment="flex-start">
-				<ItemAvatar item={item} selected={false} selecting={false} toggle={noop} isSearch />
+				<ListItemAvatar item={avatarItem} selected={false} selecting={false} toggle={noop} isSearch />
 				<ItemContent item={item} tags={tags} />
 			</Container>
 		</Container>

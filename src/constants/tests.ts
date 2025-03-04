@@ -197,7 +197,7 @@ export const TESTID_SELECTORS = {
 	membersList: 'members-list',
 	mainList: 'main-list',
 	membersListItem: 'member-list-item',
-	contactsListItem: 'contact-list-item',
+	contactsListItem: 'list-item',
 	snackbar: 'snackbar',
 	listItemContent: 'list-item-content',
 	listBottomElement: 'list-bottom-element',

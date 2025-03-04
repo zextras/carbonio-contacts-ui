@@ -330,7 +330,7 @@ describe('Folder panel', () => {
 						}
 					);
 					makeListItemsVisible();
-					const contactListItem = screen.getByTestId('contact-list-item');
+					const contactListItem = screen.getByTestId(`contact-list-item-${contact.id}`);
 					expect(contactListItem).toBeVisible();
 					const contactListItemName = within(contactListItem).getByText(contact.lastName, {
 						exact: false

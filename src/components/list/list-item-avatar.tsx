@@ -17,21 +17,26 @@ const AvatarElement = styled(Avatar)`
 	p {
 		font-size: 0.875rem;
 	}
+	& > svg {
+		max-width: 1.5rem;
+		max-height: 1.5rem;
+		min-width: 1.5rem;
+		min-height: 1.5rem;
+	}
 `;
 
 type ItemAvatarProps = {
 	item: {
-		firstName: string;
-		middleName: string;
-		lastName: string;
 		id: string;
+		label: string;
+		icon?: string;
 	};
 	selected?: boolean;
 	selecting?: boolean;
 	toggle?: (id: string) => void;
 	isSearch?: boolean;
 };
-export const ItemAvatar = ({
+export const ListItemAvatar = ({
 	item,
 	selected,
 	selecting,
@@ -68,7 +73,8 @@ export const ItemAvatar = ({
 				<AvatarElement
 					selecting={selecting}
 					selected={selected}
-					label={`${item.firstName} ${item.middleName} ${item.lastName}`}
+					label={item.label}
+					icon={item.icon}
 					onClick={toggleSelectContact(item.id)}
 					size="large"
 				/>

@@ -8,6 +8,7 @@ import React, { useMemo } from 'react';
 import { Text, Row, Tooltip, Container, Padding, Icon } from '@zextras/carbonio-design-system';
 import { trim } from 'lodash';
 
+import { ListItemContent } from '../../../../components/list/list-item-content';
 import { useDisplayName } from '../../../hooks/use-display-name';
 import { useTagExist } from '../../../ui-actions/tag-actions';
 
@@ -45,13 +46,7 @@ export const ItemContent = ({ item, tags }) => {
 		[item]
 	);
 	return (
-		<Row
-			mainAlignment="space-around"
-			crossAlignment="flex-start"
-			orientation="vertical"
-			padding={{ all: 'small', right: 'medium' }}
-			takeAvailableSpace
-		>
+		<ListItemContent>
 			<Container orientation="horizontal" height="fit" width="fill">
 				<Row wrap="nowrap" takeAvailableSpace mainAlignment="flex-start">
 					<Text>{displayName}</Text>
@@ -69,6 +64,6 @@ export const ItemContent = ({ item, tags }) => {
 					{secondaryRow}
 				</Text>
 			</Tooltip>
-		</Row>
+		</ListItemContent>
 	);
 };
