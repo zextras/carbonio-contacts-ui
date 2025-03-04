@@ -106,7 +106,7 @@ export const useEditAction = (contact: Contact): UIAction<Contact, Contact> => {
 	const navigate = useNavigate();
 	const contactInternalId = contact.id;
 	const onEdit = useCallback(
-		() => navigate(`/folder/${folderId}/edit/${contactInternalId}`),
+		() => navigate(`../folder/${folderId}/edit/${contactInternalId}`),
 		[contactInternalId, folderId, navigate]
 	);
 	return {
