@@ -30,15 +30,7 @@ export const ContactGroupDisplayerDetails = ({
 	);
 
 	return (
-		<Container
-			padding={{ horizontal: '1rem', top: '1rem', bottom: '0' }}
-			crossAlignment={'flex-start'}
-			mainAlignment={'flex-start'}
-			gap={'1rem'}
-			background={'gray6'}
-			minHeight={'0'}
-			height={'auto'}
-		>
+		<>
 			<Container
 				height={'fit'}
 				orientation={'horizontal'}
@@ -64,6 +56,6 @@ export const ContactGroupDisplayerDetails = ({
 			<Container minHeight={'0'} mainAlignment={'flex-start'}>
 				<List>{memberItems}</List>
 			</Container>
-		</Container>
+		</>
 	);
 };

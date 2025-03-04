@@ -5,7 +5,7 @@
  */
 import React, { useCallback, useMemo } from 'react';
 
-import { Button, Container, List, Padding, Text } from '@zextras/carbonio-design-system';
+import { Button, Container, List, ListItem, Padding, Text } from '@zextras/carbonio-design-system';
 import { map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -13,7 +13,6 @@ import styled from 'styled-components';
 
 import { SearchContactListItem } from './search-contact-list-item';
 import { type SearchResults } from './search-view';
-import { CustomListItem } from '../../../carbonio-ui-commons/components/list/list-item';
 import { ContactGroupListItemWrapper } from '../../../views/contact-groups/list/contact-group-list-item-wrapper';
 import { isGroup } from '../../utils/helpers';
 
@@ -63,12 +62,7 @@ export const SearchList = ({
 					return <ContactGroupListItemWrapper contactGroup={contact} />;
 				}
 				return (
-					<CustomListItem
-						selected={false}
-						active={isActive}
-						key={`${contact.id}/${index}`}
-						background={'transparent'}
-					>
+					<ListItem selected={false} active={isActive} key={contact.id}>
 						{(visible: boolean): React.JSX.Element =>
 							visible ? (
 								<SearchContactListItem item={contact} />
@@ -76,7 +70,7 @@ export const SearchList = ({
 								<div style={{ height: '4rem' }} />
 							)
 						}
-					</CustomListItem>
+					</ListItem>
 				);
 			}),
 		[itemId, searchResults.contacts]

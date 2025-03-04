@@ -11,7 +11,7 @@ import { Route, Routes } from 'react-router-dom';
 
 import { EmptyFieldMessages, EmptyListMessages } from './utils';
 import ContactEditPanel from '../edit/contact-edit-panel';
-import ContactPreviewPanel from '../preview/contact-preview-panel';
+import { ContactPreviewWrapper } from '../preview/contact-preview-wrapper';
 
 const SearchPanel = ({ searchResults, query, width }) => {
 	const [t] = useTranslation();
@@ -32,7 +32,7 @@ const SearchPanel = ({ searchResults, query, width }) => {
 	return (
 		<Container width={width ?? '55%'} mainAlignment="flex-start">
 			<Routes>
-				<Route path={`folder/:folderId/contacts/:contactId`} element={<ContactPreviewPanel />} />
+				<Route path={`folder/:folderId/contacts/:contactId`} element={<ContactPreviewWrapper />} />
 				<Route path={`folder/:folderId/edit/:editId`} element={<ContactEditPanel />} />
 				<Route
 					path={'/'}

@@ -8,10 +8,10 @@ import React from 'react';
 import { Container } from '@zextras/carbonio-design-system';
 import { Route, Routes } from 'react-router-dom';
 
-import SelectionInteractive from './selection-interactive';
-import { ContactGroupDisplayer } from '../../../views/contact-groups/displayer/contact-group-displayer';
+import ContactsEmptyDisplayer from './contacts-empty-displayer';
+import { ContactGroupDisplayerWrapper } from '../../../views/contact-groups/actions/contact-group-displayer-wrapper';
 import ContactEditPanel from '../edit/contact-edit-panel';
-import ContactPreviewPanel from '../preview/contact-preview-panel';
+import { ContactPreviewWrapper } from '../preview/contact-preview-wrapper';
 
 export const DetailPanel = (): React.JSX.Element => (
 	<Routes>
@@ -19,7 +19,7 @@ export const DetailPanel = (): React.JSX.Element => (
 			path={'folder/:folderId'}
 			element={
 				<Container width={'60%'} mainAlignment="flex-start" data-testid="ContactDetailsContainer">
-					<SelectionInteractive />
+					<ContactsEmptyDisplayer />
 				</Container>
 			}
 		/>
@@ -27,7 +27,7 @@ export const DetailPanel = (): React.JSX.Element => (
 			path={'folder/:folderId/contacts/:contactId'}
 			element={
 				<Container width={'60%'} mainAlignment="flex-start" data-testid="ContactDetailsContainer">
-					<ContactPreviewPanel />
+					<ContactPreviewWrapper />
 				</Container>
 			}
 		/>
@@ -35,7 +35,7 @@ export const DetailPanel = (): React.JSX.Element => (
 			path={'folder/:folderId/contact-groups/:id'}
 			element={
 				<Container width={'60%'} mainAlignment="flex-start" data-testid="ContactDetailsContainer">
-					<ContactGroupDisplayer />
+					<ContactGroupDisplayerWrapper />
 				</Container>
 			}
 		/>

@@ -60,7 +60,7 @@ export default function ContactEditPanel(): React.JSX.Element {
 	const { editId, folderId } = useParams<ContactEditProps>();
 	return (
 		<>
-			<ContactEditHeader editId={editId!} folderId={folderId!} />
+			<ContactEditHeader editId={editId ?? ''} folderId={folderId ?? ''} />
 			<Container height="fit" style={{ maxHeight: '100%', overflowY: 'auto' }}>
 				<EditView panel />
 			</Container>

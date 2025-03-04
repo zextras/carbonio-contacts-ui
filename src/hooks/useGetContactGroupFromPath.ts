@@ -12,5 +12,5 @@ import { ContactGroup } from '../model/contact-group';
 
 export const useGetContactGroupFromPath = (): ContactGroup | undefined => {
 	const { id: contactGroupId, folderId } = useParams<{ id: string; folderId: string }>();
-	return useAppSelector((state) => selectContactGroup(state, folderId!, contactGroupId!));
+	return useAppSelector((state) => selectContactGroup(state, folderId ?? '', contactGroupId ?? ''));
 };

@@ -24,7 +24,7 @@ export const SearchContactListItem = ({ item }: { item: Contact }): React.JSX.El
 	const _onClick = useCallback<MouseEventHandler<HTMLDivElement>>(
 		(e) => {
 			if (!e.isDefaultPrevented()) {
-				navigate(`../folder/${folderId}/contacts/${item.id}`);
+				navigate(`../folder/${folderId}/contacts/${item.id}`, { replace: true });
 			}
 		},
 		[folderId, item.id, navigate]

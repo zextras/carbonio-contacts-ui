@@ -17,7 +17,7 @@ import { DistributionListsView } from './distribution-lists-view';
 import { screen, setupTest, within } from '../../carbonio-ui-commons/test/test-setup';
 import { ROUTES, ROUTES_INTERNAL_PARAMS } from '../../constants';
 import {
-	EMPTY_DISPLAYER_HINT,
+	EMPTY_DISPLAYER_NO_CONTACTS_HINT,
 	EMPTY_DISTRIBUTION_LIST_HINT,
 	JEST_MOCKED_ERROR,
 	TESTID_SELECTORS
@@ -198,7 +198,7 @@ describe('Distribution Lists View', () => {
 			});
 			await within(displayerHeader).findByText(dl.displayName);
 			await user.click(closeAction);
-			expect(await screen.findByText(EMPTY_DISPLAYER_HINT)).toBeVisible();
+			expect(await screen.findByText(EMPTY_DISPLAYER_NO_CONTACTS_HINT)).toBeVisible();
 		});
 
 		it('should show only members of the new active distribution list starting from first page when setting a different distribution list as active with the displayer already open', async () => {

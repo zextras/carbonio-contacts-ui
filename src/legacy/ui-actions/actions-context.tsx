@@ -5,8 +5,8 @@
  */
 import React, { createContext, FC, useCallback, useMemo } from 'react';
 
-import { useContextActions, useHoverActions, useSecondaryActions } from './contact-actions';
-import { Contact, ContactOrGroup } from '../types/contact';
+import { useContextActions, useSecondaryActions } from './contact-actions';
+import { Contact } from '../types/contact';
 
 type ACPProps = {
 	folderId: string;
@@ -31,15 +31,13 @@ type MultipleContactsActionsProvider = () => ActionList;
 
 export const ActionsContext = createContext<{
 	getContextActions: SingleContactActionsProvider;
-	getHoverActions: SingleContactActionsProvider;
 	getSecondaryActions: MultipleContactsActionsProvider;
 }>({
 	getContextActions: () => [],
-	getHoverActions: () => [],
 	getSecondaryActions: () => []
 });
 
-export const ActionsContextProvider: FC<ACPProps & { selectedContacts: ContactOrGroup[] }> = ({
+export const ActionsContextProvider: FC<ACPProps & { selectedContacts: Contact[] }> = ({
 	children,
 	folderId,
 	selectedIds,
@@ -48,22 +46,16 @@ export const ActionsContextProvider: FC<ACPProps & { selectedContacts: ContactOr
 }) => {
 	const ids = useMemo(() => Object.keys(selectedIds ?? []), [selectedIds]);
 	const contextActions = useContextActions(folderId);
-	const hoverActions = useHoverActions(folderId);
 	const secondaryActions = useSecondaryActions({ folderId, deselectAll, selectedContacts, ids });
-	const [contextActionsCallback, hoverActionsCallback, secondaryActionsCallback] = useMemo(
-		() => [contextActions, hoverActions, secondaryActions],
-		[contextActions, hoverActions, secondaryActions]
+	const [contextActionsCallback, secondaryActionsCallback] = useMemo(
+		() => [contextActions, secondaryActions],
+		[contextActions, secondaryActions]
 	);
 
 	const getContextActions = useCallback<SingleContactActionsProvider>(
 		// FIXME: return type of contextActionsCallback does not match ActionList
 		(item: Contact): ActionList => contextActionsCallback(item) as ActionList,
 		[contextActionsCallback]
-	);
-	const getHoverActions = useCallback<SingleContactActionsProvider>(
-		// FIXME: return type of hoverActionsCallback does not match ActionList
-		(item: Contact): ActionList => hoverActionsCallback(item) as ActionList,
-		[hoverActionsCallback]
 	);
 	const getSecondaryActions = useCallback<MultipleContactsActionsProvider>(
 		// FIXME: return type of secondaryActionsCallback does not match ActionList
@@ -72,7 +64,7 @@ export const ActionsContextProvider: FC<ACPProps & { selectedContacts: ContactOr
 	);
 
 	return (
-		<ActionsContext.Provider value={{ getContextActions, getHoverActions, getSecondaryActions }}>
+		<ActionsContext.Provider value={{ getContextActions, getSecondaryActions }}>
 			{children}
 		</ActionsContext.Provider>
 	);

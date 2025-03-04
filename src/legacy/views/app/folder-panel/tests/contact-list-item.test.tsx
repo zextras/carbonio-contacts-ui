@@ -6,6 +6,7 @@
 import React from 'react';
 
 import { screen, fireEvent, act } from '@testing-library/react';
+import { getAction } from '@zextras/carbonio-shell-ui';
 import { useNavigate } from 'react-router-dom';
 
 import { setupTest, UserEvent } from '../../../../../carbonio-ui-commons/test/test-setup';
@@ -13,7 +14,8 @@ import { Contact } from '../../../../types/contact';
 import { ContactListItem } from '../contact-list-item';
 
 jest.mock('@zextras/carbonio-shell-ui', () => ({
-	useTags: jest.fn(() => [])
+	useTags: jest.fn(() => []),
+	getAction: jest.fn()
 }));
 jest.mock('react-router-dom', () => ({
 	...jest.requireActual('react-router-dom'),
@@ -61,6 +63,10 @@ const renderComponent = (props = {}): { user: UserEvent } =>
 	);
 
 describe('ContactListItem', () => {
+	beforeAll(() => {
+		const mailTo = { id: 'mail-to', label: 'action.send_msg', execute: jest.fn() };
+		(getAction as jest.Mock).mockReturnValue([mailTo, true]);
+	});
 	afterEach(() => {
 		jest.clearAllMocks();
 	});
@@ -80,7 +86,7 @@ describe('ContactListItem', () => {
 
 		await user.click(listItem);
 
-		expect(useNavigateSpy).toHaveBeenCalledWith('../foldeu/folder123/contacts/1');
+		expect(useNavigateSpy).toHaveBeenCalledWith('../folder/folder123/contacts/1');
 	});
 
 	it('does not call navigate if the click event is prevented', () => {
