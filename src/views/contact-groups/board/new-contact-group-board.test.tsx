@@ -169,7 +169,7 @@ describe('New contact group board', () => {
 			expect(await screen.findByText('Contact group successfully created')).toBeVisible();
 			expect(mockedUseNavigate).toHaveBeenCalledTimes(1);
 			expect(mockedUseNavigate).toHaveBeenCalledWith(
-				`../folder/${folder.id}/${CONTACT_GROUPS_PATH}/${newContactId}`
+				`/contacts/folder/${folder.id}/${CONTACT_GROUPS_PATH}/${newContactId}`
 			);
 		});
 
