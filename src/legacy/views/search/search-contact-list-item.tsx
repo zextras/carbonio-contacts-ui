@@ -10,9 +10,9 @@ import { replaceHistory } from '@zextras/carbonio-shell-ui';
 import { noop } from 'lodash';
 
 import { useTags } from '../../../carbonio-ui-commons/store/zustand/tags';
+import { ListItemAvatar } from '../../../components/list/list-item-avatar';
 import { getTagsArray } from '../../helpers/tags';
 import { Contact } from '../../types/contact';
-import { ListItemAvatar } from '../../../components/list/list-item-avatar';
 import { ItemContent } from '../app/folder-panel/item-content';
 
 export const SearchContactListItem = ({ item }: { item: Contact }): React.JSX.Element => {
@@ -36,7 +36,13 @@ export const SearchContactListItem = ({ item }: { item: Contact }): React.JSX.El
 	return (
 		<Container orientation="vertical" data-testid={'search-contact-list-item'} onClick={_onClick}>
 			<Container orientation="horizontal" mainAlignment="flex-start">
-				<ListItemAvatar item={avatarItem} selected={false} selecting={false} toggle={noop} isSearch />
+				<ListItemAvatar
+					item={avatarItem}
+					selected={false}
+					selecting={false}
+					toggle={noop}
+					isSearch
+				/>
 				<ItemContent item={item} tags={tags} />
 			</Container>
 		</Container>
