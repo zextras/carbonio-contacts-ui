@@ -31,6 +31,7 @@ import { ROOT_NAME } from '../../../carbonio-ui-commons/constants/utils';
 import { isLink, isRoot } from '../../../carbonio-ui-commons/helpers/folders';
 import { Folder } from '../../../carbonio-ui-commons/types/folder';
 import { DragEnterAction, OnDropActionProps } from '../../../carbonio-ui-commons/types/sidebar';
+import { CONTACTS_ROUTE } from '../../../constants';
 import { getFolderIconColor, getFolderIconName } from '../../../helpers/folders';
 import { Contact } from '../../types/contact';
 import { getFolderTranslatedName } from '../../utils/helpers';
@@ -207,7 +208,7 @@ export const AccordionCustomComponent: FC<{ item: Folder }> = ({ item: folder })
 					style={{ display: 'block' }}
 				>
 					<Link
-						to={`/contacts/folder/${folder.id}`}
+						to={`/${CONTACTS_ROUTE}/folder/${folder.id}`}
 						style={{ width: '100%', height: '100%', textDecoration: 'none' }}
 					>
 						<Dropdown
