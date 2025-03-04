@@ -7,6 +7,7 @@
 import { useNavigate } from 'react-router-dom';
 
 import { getFolderFromContactGroup } from './utils';
+import { CONTACTS_ROUTE } from '../../constants';
 import { ContactGroup } from '../../model/contact-group';
 
 export const CONTACT_GROUPS_PATH = 'contact-groups';
@@ -14,7 +15,8 @@ export function useRedirectToContactGroup(): (contactGroup: ContactGroup) => voi
 	const navigate = useNavigate();
 	return (contactGroup: ContactGroup) => {
 		const folder = getFolderFromContactGroup(contactGroup);
-		folder && navigate(`../folder/${folder.id}/${CONTACT_GROUPS_PATH}/${contactGroup.id}`);
+		folder &&
+			navigate(`/${CONTACTS_ROUTE}/folder/${folder.id}/${CONTACT_GROUPS_PATH}/${contactGroup.id}`);
 	};
 }
 
