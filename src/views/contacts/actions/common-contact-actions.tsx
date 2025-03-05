@@ -134,7 +134,7 @@ export const useDeleteAction = (contact: Contact): UIAction<Contact, Contact> =>
 
 	return {
 		id: 'delete',
-		icon: 'DeletePermanentlyOutline',
+		icon: isInTrash ? 'DeletePermanentlyOutline' : 'Trash2Outline',
 		label: deleteActionLabel,
 		execute: onDelete,
 		canExecute: () => true
