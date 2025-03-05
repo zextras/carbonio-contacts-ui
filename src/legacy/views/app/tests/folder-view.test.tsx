@@ -219,7 +219,7 @@ describe('folder-view', () => {
 			const displayer = await screen.findByTestId('displayer');
 			expect(displayer).toBeVisible();
 			const deleteContactInDisplayer = await within(displayer).findByTestId(
-				TESTID_SELECTORS.icons.deletePermanently
+				TESTID_SELECTORS.icons.trash
 			);
 			await act(() => user.click(deleteContactInDisplayer));
 			const deleteContactRequest = await deleteContactInterceptor;
