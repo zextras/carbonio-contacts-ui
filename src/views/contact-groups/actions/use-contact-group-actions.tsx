@@ -6,11 +6,11 @@
 
 import { type Action as DSAction } from '@zextras/carbonio-design-system';
 
-import { useActionDeleteContactGroup } from './delete-contact-group';
-import { useActionEditCG } from './edit-cg';
-import { useActionSendEmailCG } from './send-email-cg';
-import { useActionRestoreContacts } from '../../../actions/restore-contacts';
-import { useActionTrashContacts } from '../../../actions/trash-contacts';
+import { DeleteCGAction, useActionDeleteContactGroup } from './delete-contact-group';
+import { EditActionCG, useActionEditCG } from './edit-cg';
+import { SendEmailActionCG, useActionSendEmailCG } from './send-email-cg';
+import { RestoreContactsAction, useActionRestoreContacts } from '../../../actions/restore-contacts';
+import { ActionTrashContacts, useActionTrashContacts } from '../../../actions/trash-contacts';
 import { DeletableItem, UIAction } from '../../../actions/types';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { getFolderIdParts } from '../../../carbonio-ui-commons/helpers/folders';
@@ -45,6 +45,41 @@ function evaluateContactGroupActions<T extends DeletableItem>(
 	return orderedActions;
 }
 
+function getActionsInTrash(
+	contactGroup: ContactGroup,
+	deletePermanentlyContactGroupAction: DeleteCGAction,
+	restoreContactsGroupActionDS: RestoreContactsAction
+): Array<DSAction> {
+	const actionsInTrash = evaluateContactGroupActions<ContactGroup>(contactGroup, [
+		deletePermanentlyContactGroupAction
+	]);
+
+	const restoreDSAction = mapActionToDSAction(restoreContactsGroupActionDS, [contactGroup]);
+
+	if (restoreDSAction) {
+		actionsInTrash.unshift(restoreDSAction);
+	}
+
+	return actionsInTrash;
+}
+
+function getActionsNotInTrash(
+	trashContactGroupAction: ActionTrashContacts,
+	contactGroup: ContactGroup,
+	sendEmailAction: SendEmailActionCG,
+	editContactGroupAction: EditActionCG
+): Array<DSAction> {
+	const trashActionDS = mapActionToDSAction<Array<ContactGroup>>(trashContactGroupAction, [
+		contactGroup
+	]);
+	const actionsNotInTrash = evaluateContactGroupActions<ContactGroup>(contactGroup, [
+		sendEmailAction,
+		editContactGroupAction
+	]);
+	trashActionDS && actionsNotInTrash.push(trashActionDS);
+	return actionsNotInTrash;
+}
+
 export const useContactGroupActions = (contactGroup: ContactGroup): Array<DSAction> => {
 	const deletePermanentlyContactGroupAction = useActionDeleteContactGroup();
 	const editContactGroupAction = useActionEditCG();
@@ -55,48 +90,22 @@ export const useContactGroupActions = (contactGroup: ContactGroup): Array<DSActi
 	const folderPartsId = getFolderIdParts(contactGroup.parent).id;
 	const isMainAccount = !folder?.perm;
 
-	const restoreContactsGroupActionDS = mapActionToDSAction<Array<ContactGroup>>(
-		restoreContactsGroupAction,
-		[contactGroup]
-	);
-	if (isMainAccount) {
+	if (isMainAccount || folder?.perm?.includes('w')) {
 		if (folderPartsId === FOLDERS.TRASH) {
-			const mainAccountActionsInTrash = evaluateContactGroupActions<ContactGroup>(contactGroup, [
-				deletePermanentlyContactGroupAction
-			]);
-
-			if (restoreContactsGroupActionDS) {
-				mainAccountActionsInTrash.unshift(restoreContactsGroupActionDS);
-			}
-
-			return mainAccountActionsInTrash;
+			return getActionsInTrash(
+				contactGroup,
+				deletePermanentlyContactGroupAction,
+				restoreContactsGroupAction
+			);
 		}
 
-		const trashActionDS = mapActionToDSAction<Array<ContactGroup>>(trashContactGroupAction, [
-			contactGroup
-		]);
-		const mainAccountActionsNotInTrash = evaluateContactGroupActions<ContactGroup>(contactGroup, [
+		return getActionsNotInTrash(
+			trashContactGroupAction,
+			contactGroup,
 			sendEmailAction,
 			editContactGroupAction
-		]);
-		trashActionDS && mainAccountActionsNotInTrash.push(trashActionDS);
-		return mainAccountActionsNotInTrash;
+		);
 	}
-	if (folder?.perm?.includes('w')) {
-		if (folderPartsId === FOLDERS.TRASH) {
-			return evaluateContactGroupActions<ContactGroup>(contactGroup, [
-				deletePermanentlyContactGroupAction
-			]);
-		}
-		const trashActionDS = mapActionToDSAction<Array<ContactGroup>>(trashContactGroupAction, [
-			contactGroup
-		]);
-		const sharedFolderActionsNotInTrash = evaluateContactGroupActions<ContactGroup>(contactGroup, [
-			sendEmailAction,
-			editContactGroupAction
-		]);
-		trashActionDS && sharedFolderActionsNotInTrash.push(trashActionDS);
-		return sharedFolderActionsNotInTrash;
-	}
+
 	return evaluateContactGroupActions<ContactGroup>(contactGroup, [sendEmailAction]);
 };
