@@ -93,7 +93,7 @@ describe('useContactGroupActions', () => {
 				expect(result.current).toHaveLength(1);
 				expect(result.current).toContainEqual({
 					id: ACTION_IDS.deleteCG,
-					label: 'Delete',
+					label: 'Delete Permanently',
 					icon: CONTACT_GROUP_DELETE_ICON,
 					onClick: expect.anything(),
 					color: 'error'
@@ -198,7 +198,7 @@ describe('useContactGroupActions', () => {
 				expect(result.current).toHaveLength(1);
 				expect(result.current).toContainEqual({
 					id: ACTION_IDS.deleteCG,
-					label: 'Delete',
+					label: 'Delete Permanently',
 					icon: CONTACT_GROUP_DELETE_ICON,
 					onClick: expect.anything(),
 					color: 'error'
@@ -213,7 +213,7 @@ describe('useContactGroupActions', () => {
 				expect(result.current).toHaveLength(1);
 				expect(result.current).toContainEqual({
 					id: ACTION_IDS.deleteCG,
-					label: 'Delete',
+					label: 'Delete Permanently',
 					icon: CONTACT_GROUP_DELETE_ICON,
 					onClick: expect.anything(),
 					color: 'error'

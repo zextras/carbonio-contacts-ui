@@ -64,7 +64,7 @@ export const CONTACT_ACTIONS_DESCRIPTORS = {
 	},
 	deletePermanently: {
 		id: 'deletePermanently',
-		desc: 'Delete contact permanently',
+		desc: 'Delete Permanently',
 		icon: 'DeletePermanentlyOutline'
 	},
 	delete: {

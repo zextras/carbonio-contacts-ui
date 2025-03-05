@@ -39,7 +39,7 @@ describe('useActionDeleteCG', () => {
 		expect(result.current).toEqual<UIAction<unknown, unknown>>(
 			expect.objectContaining({
 				icon: CONTACT_GROUP_DELETE_ICON,
-				label: 'Delete',
+				label: 'Delete Permanently',
 				id: 'cg-delete-action',
 				canExecute: expect.anything(),
 				execute: expect.anything()
