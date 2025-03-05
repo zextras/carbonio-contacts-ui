@@ -77,21 +77,28 @@ describe('useContactGroupActions', () => {
 			});
 		});
 		describe('Trash folder', () => {
-			it('should return only delete action when group is on a trash folder of a shared account', () => {
+			it('should return delete and restore action when group is on a trash folder of a shared account and has write permission', () => {
 				const SHARED_ACCOUNT_TRASH_FOLDER = `uuid:${FOLDERS.TRASH}`;
 				useFolderStore.setState({
 					folders: {
 						[SHARED_ACCOUNT_TRASH_FOLDER]: generateFolder({
 							id: SHARED_ACCOUNT_TRASH_FOLDER,
-							perm: 'w'
+							perm: 'w',
+							absFolderPath: '/trash'
 						})
 					}
 				});
 				const contactGroup = buildContactGroup({ parent: SHARED_ACCOUNT_TRASH_FOLDER });
 				const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
 
-				expect(result.current).toHaveLength(1);
-				expect(result.current).toContainEqual({
+				expect(result.current).toHaveLength(2);
+				expect(result.current[0]).toEqual({
+					id: ACTION_IDS.restoreContacts,
+					label: 'Restore',
+					icon: 'RestoreOutline',
+					onClick: expect.anything()
+				});
+				expect(result.current[1]).toEqual({
 					id: ACTION_IDS.deleteCG,
 					label: 'Delete Permanently',
 					icon: CONTACT_GROUP_DELETE_ICON,
@@ -189,14 +196,26 @@ describe('useContactGroupActions', () => {
 			});
 		});
 		describe('Trash folder', () => {
-			it('should return delete permanently action when user has write permission', () => {
+			it('should return delete permanently, restore actions when user has write permission', () => {
 				useFolderStore.setState({
-					folders: { [FOLDERS.TRASH]: generateFolder({ id: FOLDERS.TRASH, perm: 'w' }) }
+					folders: {
+						[FOLDERS.TRASH]: generateFolder({
+							id: FOLDERS.TRASH,
+							absFolderPath: '/trash',
+							perm: 'w'
+						})
+					}
 				});
 				const contactGroup = buildContactGroup({ parent: FOLDERS.TRASH });
 				const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
-				expect(result.current).toHaveLength(1);
-				expect(result.current).toContainEqual({
+				expect(result.current).toHaveLength(2);
+				expect(result.current[0]).toEqual({
+					id: ACTION_IDS.restoreContacts,
+					label: 'Restore',
+					icon: 'RestoreOutline',
+					onClick: expect.anything()
+				});
+				expect(result.current[1]).toEqual({
 					id: ACTION_IDS.deleteCG,
 					label: 'Delete Permanently',
 					icon: CONTACT_GROUP_DELETE_ICON,
@@ -204,14 +223,26 @@ describe('useContactGroupActions', () => {
 					color: 'error'
 				});
 			});
-			it('should return delete action also when user doesnt have any permission', () => {
+			it('should return delete permanently, restore actions also when user doesnt have any permission', () => {
 				useFolderStore.setState({
-					folders: { [FOLDERS.TRASH]: generateFolder({ id: FOLDERS.TRASH, perm: undefined }) }
+					folders: {
+						[FOLDERS.TRASH]: generateFolder({
+							id: FOLDERS.TRASH,
+							absFolderPath: '/trash',
+							perm: undefined
+						})
+					}
 				});
 				const contactGroup = buildContactGroup({ parent: FOLDERS.TRASH });
 				const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
-				expect(result.current).toHaveLength(1);
-				expect(result.current).toContainEqual({
+				expect(result.current).toHaveLength(2);
+				expect(result.current[0]).toEqual({
+					id: ACTION_IDS.restoreContacts,
+					label: 'Restore',
+					icon: 'RestoreOutline',
+					onClick: expect.anything()
+				});
+				expect(result.current[1]).toEqual({
 					id: ACTION_IDS.deleteCG,
 					label: 'Delete Permanently',
 					icon: CONTACT_GROUP_DELETE_ICON,

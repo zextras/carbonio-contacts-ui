@@ -9,25 +9,15 @@ import { useSnackbar } from '@zextras/carbonio-design-system';
 import { every } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
+import { getParentFolder } from './folder-utils';
 import { DeletableItem, UIAction } from './types';
-import { getFolderIdParts, isTrashed } from '../carbonio-ui-commons/helpers/folders';
-import { getFolder, getFoldersMap } from '../carbonio-ui-commons/store/zustand/folder';
-import { Folder, LinkFolder } from '../carbonio-ui-commons/types';
+import { isTrashed } from '../carbonio-ui-commons/helpers/folders';
+import { Folder } from '../carbonio-ui-commons/types';
 import { ACTION_IDS, TIMEOUTS } from '../constants';
 import { apiClient } from '../network/api-client';
 
 export type ActionTrashContacts = UIAction<Array<DeletableItem>, Array<DeletableItem>>;
 
-function getLinkFolder(item: { parent: string }): LinkFolder | undefined {
-	const foldersMap = getFoldersMap();
-	const { zid, id: realFolderId } = getFolderIdParts(item.parent);
-	return (
-		Object.values(foldersMap)
-			.filter((folder) => folder.isLink)
-			// TODO: fix type in commons, we are receiving a number instead of a string
-			.find((folder) => folder.zid === zid && folder.rid?.toString() === realFolderId)
-	);
-}
 export const useActionTrashContacts = (): ActionTrashContacts => {
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
@@ -35,10 +25,7 @@ export const useActionTrashContacts = (): ActionTrashContacts => {
 	const canExecute = useCallback<ActionTrashContacts['canExecute']>((contacts): boolean => {
 		if (!contacts || contacts.length === 0) return false;
 		const parentContacts = contacts.reduce<Array<Folder>>((result, contact) => {
-			let folder = getFolder(contact.parent);
-			if (!folder) {
-				folder = getLinkFolder(contact);
-			}
+			const folder = getParentFolder(contact);
 			if (folder) {
 				result.push(folder);
 			}

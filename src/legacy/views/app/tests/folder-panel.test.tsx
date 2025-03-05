@@ -625,6 +625,9 @@ describe('Folder panel', () => {
 				await screen.findByText('Contact group successfully deleted');
 			});
 			it.todo('test the move to trash action');
+			it('restore action. In order to test me we have to mock the trash folder in a specific way (see use-contact-group-actions.test.tsx)', () => {
+				expect(true).toBeFalsy();
+			});
 			it('should not remove deleted contact group when you confirm deletion and api call fail (Hover trigger)', async () => {
 				jest.spyOn(console, 'warn').mockImplementation();
 				const folderId = FOLDERS.TRASH;

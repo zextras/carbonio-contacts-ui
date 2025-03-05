@@ -8,9 +8,9 @@ import React, { useCallback, useMemo } from 'react';
 import { useModal, useSnackbar } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
+import { getParentFolder } from './folder-utils';
 import { UIAction } from './types';
 import { isTrashed } from '../carbonio-ui-commons/helpers/folders';
-import { getFolder } from '../carbonio-ui-commons/store/zustand/folder';
 import { ContactMoveModal } from '../components/modals/contact-move';
 import { ACTION_IDS, TIMEOUTS } from '../constants';
 import { ContactOrGroup } from '../legacy/types/contact';
@@ -28,7 +28,7 @@ export const useActionRestoreContacts = (): RestoreContactsAction => {
 			return false;
 		}
 
-		const parentAddressBooks = contacts.map((contact) => getFolder(contact.parent)).filter(Boolean);
+		const parentAddressBooks = contacts.map((contact) => getParentFolder(contact)).filter(Boolean);
 
 		return parentAddressBooks.every((addressBook) => isTrashed({ folder: addressBook }));
 	}, []);
