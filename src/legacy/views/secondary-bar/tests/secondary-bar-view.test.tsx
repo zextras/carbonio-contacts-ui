@@ -5,7 +5,7 @@
  */
 import React from 'react';
 
-import { act } from '@testing-library/react';
+import { act, waitFor } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
 
 import { FOLDER_VIEW } from '../../../../carbonio-ui-commons/constants';
@@ -53,11 +53,13 @@ describe('Secondary Bar', () => {
 		});
 
 		setupTest(<SecondaryBarView expanded />, {
-			initialEntries: [`folder/${mainAccountFolder.id}`],
-			path: `folder/:folderId`
+			initialEntries: [`/folder/${mainAccountFolder.id}`]
 		});
 
-		const findSharesBtn = await screen.findAllByTestId(`button-find-shares`);
+		await waitFor(() => {
+			expect(screen.getByTestId(`button-find-shares`)).toBeVisible();
+		});
+		const findSharesBtn = screen.getAllByTestId('button-find-shares');
 		expect(findSharesBtn.length).toBe(1);
 		expect(findSharesBtn[0]).toBeVisible();
 	});
