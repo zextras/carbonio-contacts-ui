@@ -125,7 +125,7 @@ export const useDeleteAction = (contact: Contact): UIAction<Contact, Contact> =>
 	const navigate = useNavigate();
 	const [t] = useTranslation();
 	const onDelete = useCallback(() => {
-		navigate(`/folder/${folderId}/contacts/${contact.id}`);
+		navigate(`../folder/${folderId}/contacts/${contact.id}`);
 		if (getFolderIdParts(folderId).id === FOLDERS.TRASH) {
 			deleteAction.execute([contact]);
 		} else trashAction.execute([contact]);
