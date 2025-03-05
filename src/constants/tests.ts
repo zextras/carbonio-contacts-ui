@@ -161,6 +161,7 @@ export const TESTID_SELECTORS = {
 	icons: {
 		save: /icon: SaveOutline/i,
 		trash: /icon: Trash2Outline/i,
+		deletePermanently: /icon: DeletePermanentlyOutline/i,
 		contactGroup: /icon: PeopleOutline/i,
 		editChip: 'icon: EditOutline',
 		editDL: 'icon: Edit2Outline',

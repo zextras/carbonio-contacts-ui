@@ -26,25 +26,6 @@ describe('useContactGroupActions', () => {
 	const store = generateStore();
 	mockMailComposerIntegration();
 
-	describe('Actions order', () => {
-		it('should return [send, edit, delete] actions when the contact group is owned by the user', () => {
-			const folderId = 'folder-id';
-			useFolderStore.setState({
-				folders: { [folderId]: generateFolder({ id: folderId, perm: undefined }) }
-			});
-			const contactGroup = buildContactGroup({
-				parent: folderId,
-				members: buildMembers(faker.number.int({ min: 1, max: 3 }))
-			});
-
-			const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
-			expect(result.current).toHaveLength(3);
-			expect(result.current[0].id).toBe(ACTION_IDS.sendEmailCG);
-			expect(result.current[1].id).toBe(ACTION_IDS.editCG);
-			expect(result.current[2].id).toBe(ACTION_IDS.deleteCG);
-		});
-	});
-
 	describe('Group is in shared folder/mountpoint', () => {
 		const folderId = '789';
 		const remoteAccountUuId = faker.string.uuid();
@@ -54,171 +35,189 @@ describe('useContactGroupActions', () => {
 			members: buildMembers(faker.number.int({ min: 1, max: 3 }))
 		});
 
-		it('should return send, edit, delete actions when shared folder/mountpoint has write permission', () => {
-			const mountpoint = generateLinkFolder({
-				folderId,
-				remoteAccountUuId,
-				remoteId: remoteFolderId,
-				permissions: 'rw'
-			});
-			useFolderStore.setState({
-				folders: { [folderId]: mountpoint }
+		describe('Not in trash', () => {
+			it('should return send, edit, trash actions when shared folder/mountpoint has write permission', () => {
+				const mountpoint = generateLinkFolder({
+					folderId,
+					remoteAccountUuId,
+					remoteId: remoteFolderId,
+					permissions: 'rw'
+				});
+				useFolderStore.setState({
+					folders: { [folderId]: mountpoint }
+				});
+
+				const { result } = setupHook(() => useContactGroupActions(contactGroupInSharedFolder), {
+					store
+				});
+
+				expect(result.current).toHaveLength(3);
+				expect(result.current[0].id).toBe(ACTION_IDS.sendEmailCG);
+				expect(result.current[1].id).toBe(ACTION_IDS.editCG);
+				expect(result.current[2].id).toBe(ACTION_IDS.trashContacts);
 			});
 
-			const { result } = setupHook(() => useContactGroupActions(contactGroupInSharedFolder), {
-				store
-			});
+			it('should return only send action when shared folder/mountpoint does not have write permission', () => {
+				const mountpoint = generateLinkFolder({
+					folderId,
+					remoteAccountUuId,
+					remoteId: remoteFolderId,
+					permissions: 'r'
+				});
+				useFolderStore.setState({
+					folders: { [folderId]: mountpoint }
+				});
 
-			expect(result.current).toHaveLength(3);
-			expect(result.current[0].id).toBe(ACTION_IDS.sendEmailCG);
-			expect(result.current[1].id).toBe(ACTION_IDS.editCG);
-			expect(result.current[2].id).toBe(ACTION_IDS.deleteCG);
+				const { result } = setupHook(() => useContactGroupActions(contactGroupInSharedFolder), {
+					store
+				});
+
+				expect(result.current).toHaveLength(1);
+				expect(result.current[0].id).toBe(ACTION_IDS.sendEmailCG);
+			});
 		});
+		describe('Trash folder', () => {
+			it('should return only delete action when group is on a trash folder of a shared account', () => {
+				const SHARED_ACCOUNT_TRASH_FOLDER = `uuid:${FOLDERS.TRASH}`;
+				useFolderStore.setState({
+					folders: {
+						[SHARED_ACCOUNT_TRASH_FOLDER]: generateFolder({
+							id: SHARED_ACCOUNT_TRASH_FOLDER,
+							perm: 'w'
+						})
+					}
+				});
+				const contactGroup = buildContactGroup({ parent: SHARED_ACCOUNT_TRASH_FOLDER });
+				const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
 
-		it('should return only send action when shared folder/mountpoint does not have write permission', () => {
-			const mountpoint = generateLinkFolder({
-				folderId,
-				remoteAccountUuId,
-				remoteId: remoteFolderId,
-				permissions: 'r'
+				expect(result.current).toHaveLength(1);
+				expect(result.current).toContainEqual({
+					id: ACTION_IDS.deleteCG,
+					label: 'Delete',
+					icon: CONTACT_GROUP_DELETE_ICON,
+					onClick: expect.anything(),
+					color: 'error'
+				});
 			});
-			useFolderStore.setState({
-				folders: { [folderId]: mountpoint }
-			});
-
-			const { result } = setupHook(() => useContactGroupActions(contactGroupInSharedFolder), {
-				store
-			});
-
-			expect(result.current).toHaveLength(1);
-			expect(result.current[0].id).toBe(ACTION_IDS.sendEmailCG);
 		});
 	});
 
-	it('should return send mail action as enabled when the contact group has at least 1 member', () => {
-		jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([jest.fn(), true]);
-		const contactGroup = buildContactGroup({
-			members: buildMembers(faker.number.int({ min: 1, max: 100 }))
-		});
-		const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
+	describe('Group is not in a shared folder (main account folder)', () => {
+		describe('Not in trash', () => {
+			it('should return [send, edit, trash] actions in this exact order', () => {
+				const folderId = 'folder-id';
+				useFolderStore.setState({
+					folders: { [folderId]: generateFolder({ id: folderId, perm: undefined }) }
+				});
+				const contactGroup = buildContactGroup({
+					parent: folderId,
+					members: buildMembers(faker.number.int({ min: 1, max: 3 }))
+				});
 
-		expect(result.current[0]).toEqual(
-			expect.objectContaining({
-				id: ACTION_IDS.sendEmailCG,
-				label: 'Send e-mail',
-				icon: 'EmailOutline',
-				onClick: expect.anything(),
-				disabled: false
-			})
-		);
-	});
-
-	it('should return send mail action as disabled when the contact group has 0 members', () => {
-		const contactGroup = buildContactGroup();
-		const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
-		expect(result.current[0]).toEqual(
-			expect.objectContaining({
-				id: ACTION_IDS.sendEmailCG,
-				label: 'Send e-mail',
-				icon: 'EmailOutline',
-				disabled: true,
-				onClick: expect.anything()
-			})
-		);
-	});
-
-	it('should return send mail action as enabled when the contact group has at least 1 member and doesnt have write permissions', () => {
-		const FOLDER_ID = 'folder-id';
-		useFolderStore.setState({
-			folders: { [FOLDER_ID]: generateFolder({ id: FOLDER_ID, perm: 'r' }) }
-		});
-
-		jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([jest.fn(), true]);
-		const contactGroup = buildContactGroup({
-			members: buildMembers(faker.number.int({ min: 1, max: 100 })),
-			parent: FOLDER_ID
-		});
-		const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
-
-		expect(result.current).toHaveLength(1);
-		expect(result.current).toContainEqual({
-			id: ACTION_IDS.sendEmailCG,
-			label: 'Send e-mail',
-			icon: 'EmailOutline',
-			onClick: expect.anything(),
-			disabled: false
-		});
-	});
-
-	it('should return delete action if user has write permission on folder', () => {
-		const FOLDER_ID = 'folder-id';
-		const contactGroup = buildContactGroup({ parent: FOLDER_ID });
-		useFolderStore.setState({
-			folders: { [FOLDER_ID]: generateFolder({ id: FOLDER_ID, perm: 'w' }) }
-		});
-		const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
-
-		expect(result.current).toContainEqual({
-			id: ACTION_IDS.deleteCG,
-			label: 'Delete',
-			icon: CONTACT_GROUP_DELETE_ICON,
-			onClick: expect.anything(),
-			color: 'error'
-		});
-	});
-
-	describe('Trash folder', () => {
-		it('should return only delete action when user has write permission', () => {
-			useFolderStore.setState({
-				folders: { [FOLDERS.TRASH]: generateFolder({ id: FOLDERS.TRASH, perm: 'w' }) }
+				const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
+				expect(result.current).toHaveLength(3);
+				expect(result.current[0].id).toBe(ACTION_IDS.sendEmailCG);
+				expect(result.current[1].id).toBe(ACTION_IDS.editCG);
+				expect(result.current[2].id).toBe(ACTION_IDS.trashContacts);
 			});
-			const contactGroup = buildContactGroup({ parent: FOLDERS.TRASH });
-			const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
-			expect(result.current).toHaveLength(1);
-			expect(result.current).toContainEqual({
-				id: ACTION_IDS.deleteCG,
-				label: 'Delete',
-				icon: CONTACT_GROUP_DELETE_ICON,
-				onClick: expect.anything(),
-				color: 'error'
-			});
-		});
-		it('should return only delete action when user doesnt have any permission', () => {
-			useFolderStore.setState({
-				folders: { [FOLDERS.TRASH]: generateFolder({ id: FOLDERS.TRASH, perm: undefined }) }
-			});
-			const contactGroup = buildContactGroup({ parent: FOLDERS.TRASH });
-			const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
-			expect(result.current).toHaveLength(1);
-			expect(result.current).toContainEqual({
-				id: ACTION_IDS.deleteCG,
-				label: 'Delete',
-				icon: CONTACT_GROUP_DELETE_ICON,
-				onClick: expect.anything(),
-				color: 'error'
-			});
-		});
+			it('should return send mail action as enabled when the contact group has at least 1 member', () => {
+				jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([jest.fn(), true]);
+				const contactGroup = buildContactGroup({
+					members: buildMembers(faker.number.int({ min: 1, max: 100 }))
+				});
+				const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
 
-		it('should return only delete action when group is on a thrash folder of a shared account', () => {
-			const SHARED_ACCOUNT_TRASH_FOLDER = `uuid:${FOLDERS.TRASH}`;
-			useFolderStore.setState({
-				folders: {
-					[SHARED_ACCOUNT_TRASH_FOLDER]: generateFolder({
-						id: SHARED_ACCOUNT_TRASH_FOLDER,
-						perm: 'w'
+				expect(result.current[0]).toEqual(
+					expect.objectContaining({
+						id: ACTION_IDS.sendEmailCG,
+						label: 'Send e-mail',
+						icon: 'EmailOutline',
+						onClick: expect.anything(),
+						disabled: false
 					})
-				}
+				);
 			});
-			const contactGroup = buildContactGroup({ parent: SHARED_ACCOUNT_TRASH_FOLDER });
-			const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
+			it('should return send mail action as disabled when the contact group has 0 members', () => {
+				const contactGroup = buildContactGroup();
+				const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
+				expect(result.current[0]).toEqual(
+					expect.objectContaining({
+						id: ACTION_IDS.sendEmailCG,
+						label: 'Send e-mail',
+						icon: 'EmailOutline',
+						disabled: true,
+						onClick: expect.anything()
+					})
+				);
+			});
+			it('should return send mail action as enabled when the contact group has at least 1 member and doesnt have write permissions', () => {
+				const FOLDER_ID = 'folder-id';
+				useFolderStore.setState({
+					folders: { [FOLDER_ID]: generateFolder({ id: FOLDER_ID, perm: 'r' }) }
+				});
 
-			expect(result.current).toHaveLength(1);
-			expect(result.current).toContainEqual({
-				id: ACTION_IDS.deleteCG,
-				label: 'Delete',
-				icon: CONTACT_GROUP_DELETE_ICON,
-				onClick: expect.anything(),
-				color: 'error'
+				jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([jest.fn(), true]);
+				const contactGroup = buildContactGroup({
+					members: buildMembers(faker.number.int({ min: 1, max: 100 })),
+					parent: FOLDER_ID
+				});
+				const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
+
+				expect(result.current).toHaveLength(1);
+				expect(result.current).toContainEqual({
+					id: ACTION_IDS.sendEmailCG,
+					label: 'Send e-mail',
+					icon: 'EmailOutline',
+					onClick: expect.anything(),
+					disabled: false
+				});
+			});
+			it('should return trash action if user has write permission on folder', () => {
+				const FOLDER_ID = 'folder-id';
+				const contactGroup = buildContactGroup({ parent: FOLDER_ID });
+				useFolderStore.setState({
+					folders: { [FOLDER_ID]: generateFolder({ id: FOLDER_ID, perm: 'w' }) }
+				});
+				const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
+
+				expect(result.current).toContainEqual({
+					id: ACTION_IDS.trashContacts,
+					label: 'Delete',
+					icon: 'Trash2Outline',
+					onClick: expect.anything()
+				});
+			});
+		});
+		describe('Trash folder', () => {
+			it('should return delete permanently action when user has write permission', () => {
+				useFolderStore.setState({
+					folders: { [FOLDERS.TRASH]: generateFolder({ id: FOLDERS.TRASH, perm: 'w' }) }
+				});
+				const contactGroup = buildContactGroup({ parent: FOLDERS.TRASH });
+				const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
+				expect(result.current).toHaveLength(1);
+				expect(result.current).toContainEqual({
+					id: ACTION_IDS.deleteCG,
+					label: 'Delete',
+					icon: CONTACT_GROUP_DELETE_ICON,
+					onClick: expect.anything(),
+					color: 'error'
+				});
+			});
+			it('should return delete action also when user doesnt have any permission', () => {
+				useFolderStore.setState({
+					folders: { [FOLDERS.TRASH]: generateFolder({ id: FOLDERS.TRASH, perm: undefined }) }
+				});
+				const contactGroup = buildContactGroup({ parent: FOLDERS.TRASH });
+				const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
+				expect(result.current).toHaveLength(1);
+				expect(result.current).toContainEqual({
+					id: ACTION_IDS.deleteCG,
+					label: 'Delete',
+					icon: CONTACT_GROUP_DELETE_ICON,
+					onClick: expect.anything(),
+					color: 'error'
+				});
 			});
 		});
 	});

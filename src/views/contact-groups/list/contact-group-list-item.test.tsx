@@ -9,11 +9,12 @@ import { faker } from '@faker-js/faker';
 import * as shell from '@zextras/carbonio-shell-ui';
 
 import { ContactGroupListItem } from './contact-group-list-item';
+import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
+import { populateFoldersStore } from '../../../carbonio-ui-commons/test/mocks/store/folders';
 import { screen, setupTest } from '../../../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../../../constants/tests';
 import { generateStore } from '../../../legacy/tests/generators/store';
 import { buildContactGroup, buildMembers } from '../../../tests/model-builder';
-import { CONTACT_GROUP_DELETE_ICON } from '../actions/constants';
 
 jest.mock('react-router-dom', () => ({
 	...jest.requireActual('react-router-dom'),
@@ -46,11 +47,19 @@ describe('Contact group list item', () => {
 			expect(mailToActionButton).toBeInTheDocument();
 			expect(mailToActionButton).toBeDisabled();
 		});
-		it('should show delete action', () => {
+		it('should display trash action', () => {
+			populateFoldersStore();
 			const contactGroup = buildContactGroup();
 
 			setupTest(<ContactGroupListItem contactGroup={contactGroup} />, { store });
-			expect(screen.getByTestId(`icon: ${CONTACT_GROUP_DELETE_ICON}`)).toBeVisible();
+			expect(screen.getByTestId(TESTID_SELECTORS.icons.trash)).toBeVisible();
+		});
+		it('should display delete action when contact group is in trash', () => {
+			populateFoldersStore();
+			const contactGroup = buildContactGroup({ parent: FOLDERS.TRASH });
+
+			setupTest(<ContactGroupListItem contactGroup={contactGroup} />, { store });
+			expect(screen.getByTestId(TESTID_SELECTORS.icons.deletePermanently)).toBeVisible();
 		});
 	});
 });

@@ -11,6 +11,7 @@ import * as shell from '@zextras/carbonio-shell-ui';
 import { forEach, times } from 'lodash';
 import { Route } from 'react-router-dom';
 
+import { FOLDERS } from '../../../../carbonio-ui-commons/constants/folders';
 import { useTagStore } from '../../../../carbonio-ui-commons/store/zustand/tags';
 import {
 	getAction as getActionMock,
@@ -589,9 +590,9 @@ describe('Folder panel', () => {
 			});
 		});
 
-		describe('Delete contact group action', () => {
+		describe('Delete permanently (trash folder) contact group action', () => {
 			it('should remove deleted contact group when you confirm deletion and api call will success (Hover trigger)', async () => {
-				const folderId = '100';
+				const folderId = FOLDERS.TRASH;
 				const cnItem1 = createCnItem('Group 1', [], '1', folderId);
 				const cnItem2 = createCnItem('Group 2', [], '2', folderId);
 				const cnItem3 = createCnItem('Group 3', [], '3', folderId);
@@ -623,10 +624,10 @@ describe('Folder panel', () => {
 				await user.click(button);
 				await screen.findByText('Contact group successfully deleted');
 			});
-
+			it.todo('test the move to trash action');
 			it('should not remove deleted contact group when you confirm deletion and api call fail (Hover trigger)', async () => {
 				jest.spyOn(console, 'warn').mockImplementation();
-				const folderId = '100';
+				const folderId = FOLDERS.TRASH;
 				const cnItem1 = createCnItem('Group 1', [], '11', folderId);
 				const cnItem2 = createCnItem('Group 2', [], '22', folderId);
 				const cnItem3 = createCnItem('Group 3', [], '33', folderId);
