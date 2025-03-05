@@ -9,6 +9,7 @@ import { type Action as DSAction } from '@zextras/carbonio-design-system';
 import { useActionDeleteContactGroup } from './delete-contact-group';
 import { useActionEditCG } from './edit-cg';
 import { useActionSendEmailCG } from './send-email-cg';
+import { useActionRestoreContacts } from '../../../actions/restore-contacts';
 import { useActionTrashContacts } from '../../../actions/trash-contacts';
 import { DeletableItem, UIAction } from '../../../actions/types';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
@@ -49,15 +50,28 @@ export const useContactGroupActions = (contactGroup: ContactGroup): Array<DSActi
 	const editContactGroupAction = useActionEditCG();
 	const sendEmailAction = useActionSendEmailCG(contactGroup);
 	const trashContactGroupAction = useActionTrashContacts();
+	const restoreContactsGroupAction = useActionRestoreContacts();
 	const folder = getFolderFromContactGroup(contactGroup);
 	const folderPartsId = getFolderIdParts(contactGroup.parent).id;
 	const isMainAccount = !folder?.perm;
+
+	const restoreContactsGroupActionDS = mapActionToDSAction<Array<ContactGroup>>(
+		restoreContactsGroupAction,
+		[contactGroup]
+	);
 	if (isMainAccount) {
 		if (folderPartsId === FOLDERS.TRASH) {
-			return evaluateContactGroupActions<ContactGroup>(contactGroup, [
+			const mainAccountActionsInTrash = evaluateContactGroupActions<ContactGroup>(contactGroup, [
 				deletePermanentlyContactGroupAction
 			]);
+
+			if (restoreContactsGroupActionDS) {
+				mainAccountActionsInTrash.unshift(restoreContactsGroupActionDS);
+			}
+
+			return mainAccountActionsInTrash;
 		}
+
 		const trashActionDS = mapActionToDSAction<Array<ContactGroup>>(trashContactGroupAction, [
 			contactGroup
 		]);

@@ -69,7 +69,7 @@ export const useContextActions = (folderId: string): ContactActionsFn => {
 
 	if (getFolderIdParts(folderId).id === FOLDERS.TRASH) {
 		return (contact: Contact) => [
-			...(restoreAction.canExecute({ contacts: [contact] })
+			...(restoreAction.canExecute([contact])
 				? [generateClickableAction(restoreAction, { contacts: [contact] })]
 				: []),
 			...(deleteAction.canExecute([contact])
@@ -105,7 +105,7 @@ export const useHoverActions = (contact: Contact): Array<DSAction> => {
 
 	if (getFolderIdParts(folderId).id === FOLDERS.TRASH) {
 		return [
-			...(restoreAction.canExecute({ contacts: [contact] })
+			...(restoreAction.canExecute([contact])
 				? [generateClickableAction(restoreAction, { contacts: [contact] })]
 				: []),
 			...(deleteAction.canExecute([contact])

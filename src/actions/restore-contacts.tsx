@@ -6,55 +6,36 @@
 import React, { useCallback, useMemo } from 'react';
 
 import { useModal, useSnackbar } from '@zextras/carbonio-design-system';
-import { every } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { UIAction } from './types';
 import { isTrashed } from '../carbonio-ui-commons/helpers/folders';
 import { getFolder } from '../carbonio-ui-commons/store/zustand/folder';
-import { Folder } from '../carbonio-ui-commons/types/folder';
 import { ContactMoveModal } from '../components/modals/contact-move';
 import { ACTION_IDS, TIMEOUTS } from '../constants';
-import { Contact } from '../legacy/types/contact';
+import { ContactOrGroup } from '../legacy/types/contact';
 import { apiClient } from '../network/api-client';
 
-export type RestoreContactsAction = UIAction<
-	{ contacts?: Array<Contact> },
-	{ contacts?: Array<Contact> }
->;
+export type RestoreContactsAction = UIAction<Array<ContactOrGroup>, Array<ContactOrGroup>>;
 
 export const useActionRestoreContacts = (): RestoreContactsAction => {
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
 	const { createModal, closeModal } = useModal();
 
-	const canExecute = useCallback<RestoreContactsAction['canExecute']>(
-		({ contacts } = {}): boolean => {
-			if (!contacts || contacts.length === 0) {
-				return false;
-			}
+	const canExecute = useCallback<RestoreContactsAction['canExecute']>((contacts): boolean => {
+		if (!Array.isArray(contacts) || contacts.length === 0) {
+			return false;
+		}
 
-			const parentAddressBooks = contacts.reduce<Array<Folder>>((result, contact) => {
-				const folder = getFolder(contact.parent);
-				if (folder) {
-					result.push(folder);
-				}
+		const parentAddressBooks = contacts.map((contact) => getFolder(contact.parent)).filter(Boolean);
 
-				return result;
-			}, []);
-
-			return every(parentAddressBooks, (addressBook) => isTrashed({ folder: addressBook }));
-		},
-		[]
-	);
+		return parentAddressBooks.every((addressBook) => isTrashed({ folder: addressBook }));
+	}, []);
 
 	const execute = useCallback<RestoreContactsAction['execute']>(
-		({ contacts } = {}) => {
-			if (!contacts || contacts.length === 0) {
-				return;
-			}
-
-			if (!canExecute({ contacts })) {
+		(contacts) => {
+			if (!contacts || contacts.length === 0 || !canExecute(contacts)) {
 				return;
 			}
 

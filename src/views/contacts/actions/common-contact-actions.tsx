@@ -129,12 +129,12 @@ export const useDeleteAction = (contact: Contact): UIAction<Contact, Contact> =>
 	}, [folderId, contact, trashAction, deleteAction]);
 	const isInTrash = isTrash(contact.parent);
 	const deleteActionLabel = isInTrash
-		? t('tooltip.list_trash.deletePermanently', 'Delete contact permanently')
+		? t('tooltip.list_trash.deletePermanently', 'Delete Permanently')
 		: t('label.delete', 'Delete');
 
 	return {
 		id: 'delete',
-		icon: 'Trash2Outline',
+		icon: 'DeletePermanentlyOutline',
 		label: deleteActionLabel,
 		execute: onDelete,
 		canExecute: () => true

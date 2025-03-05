@@ -35,7 +35,7 @@ describe('useActionRestoreContacts', () => {
 			const contacts = [buildContact({ parent: FOLDERS_DESCRIPTORS.trash.id })];
 			const { result } = setupHook(useActionRestoreContacts);
 			const action = result.current;
-			expect(action.canExecute({ contacts })).toBeTruthy();
+			expect(action.canExecute(contacts)).toBeTruthy();
 		});
 
 		it('should return true if the contact is nested inside the trash', () => {
@@ -51,7 +51,7 @@ describe('useActionRestoreContacts', () => {
 			const contacts = [buildContact({ parent: trashedFolder.id })];
 			const { result } = setupHook(useActionRestoreContacts);
 			const action = result.current;
-			expect(action.canExecute({ contacts })).toBeTruthy();
+			expect(action.canExecute(contacts)).toBeTruthy();
 		});
 
 		it('should return false if one of the contacts is not inside the trash', () => {
@@ -60,7 +60,7 @@ describe('useActionRestoreContacts', () => {
 			contacts[7].parent = FOLDERS.CONTACTS;
 			const { result } = setupHook(useActionRestoreContacts);
 			const action = result.current;
-			expect(action.canExecute({ contacts })).toBeFalsy();
+			expect(action.canExecute(contacts)).toBeFalsy();
 		});
 	});
 
@@ -72,7 +72,7 @@ describe('useActionRestoreContacts', () => {
 			const { result } = setupHook(useActionRestoreContacts);
 			const action = result.current;
 			act(() => {
-				action.execute({ contacts });
+				action.execute(contacts);
 			});
 
 			act(() => {
@@ -88,7 +88,7 @@ describe('useActionRestoreContacts', () => {
 			const { result } = setupHook(useActionRestoreContacts);
 			const action = result.current;
 			act(() => {
-				action.execute({ contacts });
+				action.execute(contacts);
 			});
 
 			act(() => {
