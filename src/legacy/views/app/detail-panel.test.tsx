@@ -100,7 +100,6 @@ describe('Detail panel', () => {
 			expect(modifyContactSpy).toHaveBeenCalled();
 			await screen.findByTestId(TESTID_SELECTORS.icons.contactsDisplayerIcon);
 			expect(screen.queryByRole('button', { name: /save/i })).not.toBeInTheDocument();
-			screen.logTestingPlaygroundURL();
 			expect(screen.getByTestId('icon: EditOutline')).toBeVisible();
 		});
 
