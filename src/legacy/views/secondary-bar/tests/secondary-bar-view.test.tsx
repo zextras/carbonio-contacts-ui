@@ -7,7 +7,6 @@ import React from 'react';
 
 import { act } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
-import { Route } from 'react-router-dom';
 
 import { FOLDER_VIEW } from '../../../../carbonio-ui-commons/constants';
 import { FOLDERS } from '../../../../carbonio-ui-commons/constants/folders';
@@ -53,14 +52,10 @@ describe('Secondary Bar', () => {
 			}
 		});
 
-		setupTest(
-			<Route path={`/contacts`}>
-				<SecondaryBarView expanded />
-			</Route>,
-			{
-				initialEntries: [`/contacts/folder/${mainAccountFolder.id}`]
-			}
-		);
+		setupTest(<SecondaryBarView expanded />, {
+			initialEntries: [`folder/${mainAccountFolder.id}`],
+			path: `folder/:folderId`
+		});
 
 		const findSharesBtn = await screen.findAllByTestId(`button-find-shares`);
 		expect(findSharesBtn.length).toBe(1);
