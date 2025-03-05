@@ -6,15 +6,20 @@
 import React, { FC, ReactElement, useMemo } from 'react';
 
 import { ThemeProvider } from '@mui/material';
-import { Accordion, Divider } from '@zextras/carbonio-design-system';
+import { Container, Divider } from '@zextras/carbonio-design-system';
 import { SecondaryBarComponentProps } from '@zextras/carbonio-shell-ui';
-import { Route, Routes, useParams } from 'react-router-dom';
+import { map } from 'lodash';
+import { Route, Switch, useParams, useRouteMatch } from 'react-router-dom';
 
+import { AccordionCustomComponent } from './accordion-custom-component';
 import { CollapsedSideBarFolderItem } from './collapsed-sidebar-folder-item';
-import { SidebarAccordionMui } from './sidebar-accordion';
+import { FindSharesButton } from './find-shares-button';
+import { TagsAccordion } from './tags-accordion';
+import { SidebarAccordionMui } from '../../../carbonio-ui-commons/components/sidebar/sidebar-accordion-mui';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { useRootsArray } from '../../../carbonio-ui-commons/store/zustand/folder';
 import { themeMui } from '../../../carbonio-ui-commons/theme/theme-mui';
+import { Folder } from '../../../carbonio-ui-commons/types';
 import { LOCAL_STORAGES } from '../../../constants';
 import { sortFolders } from '../../../helpers/folders';
 import useGetTagsAccordion from '../../hooks/use-get-tags-accordions';
@@ -23,6 +28,40 @@ import useGetTagsAccordion from '../../hooks/use-get-tags-accordions';
  * Item component for the collapsed secondary bar
  * @param folder
  */
+
+export type SidebarComponentProps = {
+	accordions: Array<Folder>;
+};
+const SidebarComponent = ({ accordions }: SidebarComponentProps): React.JSX.Element => {
+	const { folderId } = useParams<{ folderId: string }>();
+
+	const accordionsWithFindShare = useMemo(() => {
+		if (!accordions?.[0]?.children.find((folder: Folder) => folder.id === 'find_shares')) {
+			accordions[0]?.children?.push({
+				id: 'find_shares',
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+				// @ts-ignore
+				disableHover: true
+			});
+		}
+		return map(accordions, (item) => ({ ...item, background: 'gray4' }));
+	}, [accordions]);
+	return (
+		<Container orientation="vertical" height="fit" width="fill">
+			<SidebarAccordionMui
+				accordions={accordionsWithFindShare}
+				folderId={folderId}
+				localStorageName={LOCAL_STORAGES.EXPANDED_ADDRESSBOOKS}
+				AccordionCustomComponent={AccordionCustomComponent}
+				buttonFindShares={<FindSharesButton key={'find-shares-button'} />}
+				initialExpanded={[FOLDERS.USER_ROOT]}
+			/>
+
+			<Divider />
+			<TagsAccordion />
+		</Container>
+	);
+};
 
 const SecondaryBarView: FC<SecondaryBarComponentProps> = ({ expanded = false }) => {
 	const { folderId: selectedFolderId } = useParams<{ folderId: string }>();
@@ -69,5 +108,4 @@ const SecondaryBarView: FC<SecondaryBarComponentProps> = ({ expanded = false }) 
 		</ThemeProvider>
 	);
 };
-
 export default SecondaryBarView;

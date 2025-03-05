@@ -6,6 +6,8 @@
 import React from 'react';
 
 import { act } from '@testing-library/react';
+import * as shell from '@zextras/carbonio-shell-ui';
+import { Route } from 'react-router-dom';
 
 import { FOLDER_VIEW } from '../../../../carbonio-ui-commons/constants';
 import { FOLDERS } from '../../../../carbonio-ui-commons/constants/folders';
@@ -23,8 +25,49 @@ describe('Secondary Bar', () => {
 	it('should not break if empty folders', () => {
 		setupTest(<SecondaryBarView expanded={false} />);
 	});
+	it('should display FindShare button only on the main account when all folders expanded', async () => {
+		const sharedAccountFolderId = '200';
+		const expandedAccordions = [FOLDERS.USER_ROOT, sharedAccountFolderId];
+		jest.spyOn(shell, 'useLocalStorage').mockReturnValue([expandedAccordions, jest.fn()]);
+		const mainAccountFolder = generateFolder({
+			name: 'userRoot',
+			id: FOLDERS.USER_ROOT,
+			children: [
+				generateFolder({
+					parent: FOLDERS.USER_ROOT,
+					name: 'aChild',
+					id: '100',
+					children: []
+				})
+			]
+		});
+		const sharedAccountFolder = generateFolder({
+			name: 'sharedAccount',
+			id: sharedAccountFolderId,
+			children: []
+		});
+		useFolderStore.setState({
+			folders: {
+				'1': mainAccountFolder,
+				'2': sharedAccountFolder
+			}
+		});
 
-	it('should display only mainAccount folders when collapsed', async () => {
+		setupTest(
+			<Route path={`/contacts`}>
+				<SecondaryBarView expanded />
+			</Route>,
+			{
+				initialEntries: [`/contacts/folder/${mainAccountFolder.id}`]
+			}
+		);
+
+		const findSharesBtn = await screen.findAllByTestId(`button-find-shares`);
+		expect(findSharesBtn.length).toBe(1);
+		expect(findSharesBtn[0]).toBeVisible();
+	});
+
+	it('should display only mainAccount folders when collapsed (sidebar minimized)', async () => {
 		const folderId = '100';
 		const sharedFolderId = '56789';
 		const mainAccountFolders = generateFolder({
