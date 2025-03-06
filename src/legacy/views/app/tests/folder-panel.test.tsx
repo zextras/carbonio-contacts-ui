@@ -11,12 +11,14 @@ import * as shell from '@zextras/carbonio-shell-ui';
 import { forEach, times } from 'lodash';
 import { Route } from 'react-router-dom';
 
+import { FOLDER_VIEW } from '../../../../carbonio-ui-commons/constants';
 import { FOLDERS } from '../../../../carbonio-ui-commons/constants/folders';
 import { useTagStore } from '../../../../carbonio-ui-commons/store/zustand/tags';
 import {
 	getAction as getActionMock,
 	useAppContext
 } from '../../../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
+import { generateFolder } from '../../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
 import { createSoapAPIInterceptor } from '../../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { populateFoldersStore } from '../../../../carbonio-ui-commons/test/mocks/store/folders';
 import {
@@ -601,8 +603,62 @@ describe('Folder panel', () => {
 						}
 					});
 				});
-				it('restore action. In order to test me we have to mock the trash folder in a specific way (see use-contact-group-actions.test.tsx)', () => {
-					expect(true).toBeFalsy();
+				it('should restore the contact group to anotherFolder', async () => {
+					const anotherFolder = generateFolder({
+						parent: FOLDERS.USER_ROOT,
+						name: 'anotherContactFolder',
+						id: '500',
+						absFolderPath: '/anotherContactFolder',
+						view: FOLDER_VIEW.contact,
+						children: []
+					});
+					populateFoldersStore({
+						customFolders: [anotherFolder]
+					});
+					const folderId = FOLDERS.TRASH;
+					const contactGroupName = 'Group 1';
+					const cnItem1 = createCnItem(contactGroupName, [], '1', folderId);
+					registerFindContactGroupsHandler({
+						findContactGroupsResponse: createFindContactGroupsResponse([cnItem1], false),
+						offset: 0
+					});
+					const restoreInterceptor = createSoapAPIInterceptor<
+						ContactActionRequest,
+						ContactActionResponse
+					>('ContactAction', {
+						_jsns: 'urn:zimbraMail',
+						action: { id: cnItem1.id, op: 'move' },
+						requestId: '123'
+					});
+
+					const { user } = setupFolderPanel(folderId);
+
+					await screen.findByText(contactGroupName);
+					const listElement = screen.getByTestId(`contact-group-list-item-${cnItem1.id}`);
+					expect(listElement).toBeVisible();
+					const restoreAction = within(listElement as HTMLElement).getByTestId(
+						TESTID_SELECTORS.icons.restore
+					);
+					await act(() => user.click(restoreAction));
+					act(() => {
+						jest.advanceTimersByTime(1000);
+					});
+					const restoreModal = await screen.findByTestId('modal');
+					await within(restoreModal).findByText(`Restore ${contactGroupName}'s contact`);
+					makeListItemsVisible();
+					await user.click(screen.getByTestId(`folder-accordion-item-${anotherFolder.id}`));
+					const restoreButton = within(restoreModal).getByRole('button', { name: /restore/i });
+					expect(restoreButton).toBeEnabled();
+					await act(() => user.click(restoreButton));
+
+					const contactActionRequest = await restoreInterceptor;
+					expect(contactActionRequest).toEqual({
+						action: {
+							id: cnItem1.id,
+							op: 'move',
+							l: anotherFolder.id
+						}
+					});
 				});
 			});
 			describe('Delete permanently (trash folder) contact group action', () => {
