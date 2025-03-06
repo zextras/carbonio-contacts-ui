@@ -519,7 +519,7 @@ describe('Folder panel', () => {
 
 		describe('hover actions', () => {
 			describe('Send mail action', () => {
-				it('should open the mail board (Hover trigger)', async () => {
+				it('should open the mail board when clicking the action and group has at least one member', async () => {
 					const openMailComposer = jest.fn();
 					jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
 					const contactGroupName = faker.company.name();
@@ -565,7 +565,42 @@ describe('Folder panel', () => {
 				});
 			});
 			describe('Delete (move to trash) contact group action', () => {
-				it.todo('test the move to trash action');
+				it('should call move operation when calling the action', async () => {
+					populateFoldersStore();
+					const folderId = FOLDERS.CONTACTS;
+					const contactGroupName = 'Group 1';
+					const cnItem1 = createCnItem(contactGroupName, [], '1', folderId);
+					registerFindContactGroupsHandler({
+						findContactGroupsResponse: createFindContactGroupsResponse([cnItem1], false),
+						offset: 0
+					});
+					const moveToTrashSoapInterceptor = createSoapAPIInterceptor<
+						ContactActionRequest,
+						ContactActionResponse
+					>('ContactAction', {
+						_jsns: 'urn:zimbraMail',
+						action: { id: cnItem1.id, op: 'trash' },
+						requestId: ''
+					});
+
+					const { user } = setupFolderPanel(folderId);
+
+					await screen.findByText(contactGroupName);
+					const listElement = screen.getByTestId(`contact-group-list-item-${cnItem1.id}`);
+					expect(listElement).toBeVisible();
+					const trashAction = within(listElement as HTMLElement).getByTestId(
+						TESTID_SELECTORS.icons.trash
+					);
+					await act(() => user.click(trashAction));
+
+					const trashRequest = await moveToTrashSoapInterceptor;
+					expect(trashRequest).toEqual({
+						action: {
+							id: cnItem1.id,
+							op: 'trash'
+						}
+					});
+				});
 				it('restore action. In order to test me we have to mock the trash folder in a specific way (see use-contact-group-actions.test.tsx)', () => {
 					expect(true).toBeFalsy();
 				});
