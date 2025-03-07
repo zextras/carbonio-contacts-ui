@@ -5,7 +5,7 @@
  */
 import React, { useCallback, useMemo, DragEvent, ReactNode } from 'react';
 
-import { Container, Drag } from '@zextras/carbonio-design-system';
+import { Drag } from '@zextras/carbonio-design-system';
 import { useNavigate } from 'react-router-dom';
 
 import { ItemContent } from './item-content';
@@ -47,14 +47,9 @@ export const ContactListItem = ({
 	const navigate = useNavigate();
 	const tags = useMemo(() => getTagsArray(tagsFromStore, item.tags), [item.tags, tagsFromStore]);
 
-	const _onClick = useCallback<MouseEventHandler<HTMLDivElement>>(
-		(e) => {
-			if (!e.isDefaultPrevented()) {
-				navigate(`../folder/${folderId}/contacts/${item.id}`);
-			}
-		},
-		[folderId, item.id, navigate]
-	);
+	const openDisplayer = useCallback(() => {
+		navigate(`../folder/${folderId}/contacts/${item.id}`);
+	}, [folderId, item.id, navigate]);
 
 	const dragCheck = useCallback(
 		(e: DragEvent, id: string) => {
