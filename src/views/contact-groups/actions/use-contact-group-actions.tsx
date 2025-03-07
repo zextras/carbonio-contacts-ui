@@ -120,7 +120,10 @@ const useMoveContactGroups = (contactGroup: ContactGroup): UIAction<ContactGroup
 	const moveModal = {
 		id: ACTION_IDS.moveContacts,
 		confirmButtonLabel: t('label.move', 'Move'),
-		title: 'Move contact group'
+		title: t('contact.modal.move_single.title', {
+			contactDesc: contactGroup.title,
+			defaultValue: "Move {{contactDesc}}'s contact"
+		})
 	};
 	const contactGroupIds = [contactGroup.id];
 	const action = useMoveItemAction({
@@ -167,7 +170,10 @@ const useRestoreContactGroups = (
 	const restoreModal = {
 		id: ACTION_IDS.restoreContacts,
 		confirmButtonLabel: t('label.restore', 'Restore'),
-		title: 'Restore contact group'
+		title: t('contact.modal.restore_single.title', {
+			contactDesc: contactGroup.title,
+			defaultValue: "Restore {{contactDesc}}'s contact"
+		})
 	};
 	const contactGroupIds = [contactGroup.id];
 	const action = useMoveItemAction({
