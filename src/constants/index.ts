@@ -15,6 +15,7 @@ export const ACTION_IDS = {
 	sendEmailCG: 'cg-send-email-action',
 	addShareCG: 'cg-add-share',
 	deleteCG: 'cg-delete-action',
+	deletePermanently: 'delete-permanently',
 	editCG: 'cg-edit-action',
 	copyToClipboard: 'copy-to-clipboard-action',
 	addSharedAddressBooks: 'shares-add-action',
