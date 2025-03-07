@@ -20,7 +20,7 @@ import { ZIMBRA_STANDARD_COLORS } from '../../../carbonio-ui-commons/constants';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { getFolderIdParts, isTrash } from '../../../carbonio-ui-commons/helpers/folders';
 import { useTags } from '../../../carbonio-ui-commons/store/zustand/tags';
-import { Contact } from '../../../legacy/types/contact';
+import { Contact, ContactOrGroup } from '../../../legacy/types/contact';
 
 export const useTagsAction = (contact: Contact): UIAction<Contact, Contact> => {
 	const tagsFromStore = useTags();
@@ -82,7 +82,7 @@ export const useTagsAction = (contact: Contact): UIAction<Contact, Contact> => {
 	};
 };
 
-export const useMoveAction = (contact: Contact): UIAction<Contact, Contact> => {
+export const useMoveOrRestoreAction = (contact: ContactOrGroup): UIAction<Contact, Contact> => {
 	const [t] = useTranslation();
 	const contactsMoveAction = useActionMoveContacts();
 	const onMove = useCallback(() => {
@@ -117,7 +117,7 @@ export const useEditAction = (contact: Contact): UIAction<Contact, Contact> => {
 	};
 };
 
-export const useDeleteAction = (contact: Contact): UIAction<Contact, Contact> => {
+export const useTrashOrDeletePermanentlyAction = (contact: Contact): UIAction<Contact, Contact> => {
 	const folderId = contact.parent;
 	const deleteAction = useActionDeleteContacts();
 	const trashAction = useActionTrashContacts();

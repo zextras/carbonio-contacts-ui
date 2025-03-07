@@ -13,6 +13,7 @@ import { DeletableItem, UIAction } from '../../../actions/types';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { getFolderIdParts } from '../../../carbonio-ui-commons/helpers/folders';
 import { ContactGroup } from '../../../model/contact-group';
+import { MoveContactsAction, useActionMoveContacts } from '../../contacts/actions/move-contacts';
 import {
 	RestoreContactsAction,
 	useActionRestoreContacts
@@ -67,6 +68,7 @@ function getActionsInTrash(
 }
 
 function getActionsNotInTrash(
+	moveContactGroupAction: MoveContactsAction,
 	trashContactGroupAction: ActionTrashContacts,
 	contactGroup: ContactGroup,
 	sendEmailAction: SendEmailActionCG,
@@ -79,6 +81,10 @@ function getActionsNotInTrash(
 		sendEmailAction,
 		editContactGroupAction
 	]);
+	const moveActionDS = mapActionToDSAction(moveContactGroupAction, {
+		contacts: [contactGroup]
+	});
+	moveActionDS && actionsNotInTrash.push(moveActionDS);
 	trashActionDS && actionsNotInTrash.push(trashActionDS);
 	return actionsNotInTrash;
 }
@@ -88,6 +94,7 @@ export const useContactGroupActions = (contactGroup: ContactGroup): Array<DSActi
 	const editContactGroupAction = useActionEditCG();
 	const sendEmailAction = useActionSendEmailCG(contactGroup);
 	const trashContactGroupAction = useActionTrashContacts();
+	const moveContactGroupAction = useActionMoveContacts();
 	const restoreContactsGroupAction = useActionRestoreContacts();
 	const folder = getFolderFromContactGroup(contactGroup);
 	const folderPartsId = getFolderIdParts(contactGroup.parent).id;
@@ -103,6 +110,7 @@ export const useContactGroupActions = (contactGroup: ContactGroup): Array<DSActi
 		}
 
 		return getActionsNotInTrash(
+			moveContactGroupAction,
 			trashContactGroupAction,
 			contactGroup,
 			sendEmailAction,

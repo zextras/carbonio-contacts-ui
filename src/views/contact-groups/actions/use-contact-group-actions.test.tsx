@@ -111,7 +111,7 @@ describe('useContactGroupActions', () => {
 
 	describe('Group is not in a shared folder (main account folder)', () => {
 		describe('Not in trash', () => {
-			it('should return [send, edit, trash] actions in this exact order', () => {
+			it('should return [send, edit, move, trash] actions in this exact order', () => {
 				const folderId = 'folder-id';
 				useFolderStore.setState({
 					folders: { [folderId]: generateFolder({ id: folderId, perm: undefined }) }
@@ -122,10 +122,11 @@ describe('useContactGroupActions', () => {
 				});
 
 				const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
-				expect(result.current).toHaveLength(3);
+				expect(result.current).toHaveLength(4);
 				expect(result.current[0].id).toBe(ACTION_IDS.sendEmailCG);
 				expect(result.current[1].id).toBe(ACTION_IDS.editCG);
-				expect(result.current[2].id).toBe(ACTION_IDS.trashContacts);
+				expect(result.current[2].id).toBe(ACTION_IDS.moveContacts);
+				expect(result.current[3].id).toBe(ACTION_IDS.trashContacts);
 			});
 			it('should return send mail action as enabled when the contact group has at least 1 member', () => {
 				jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([jest.fn(), true]);

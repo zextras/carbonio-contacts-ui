@@ -7,9 +7,9 @@
 import type { Action as DSAction } from '@zextras/carbonio-design-system';
 
 import {
-	useDeleteAction,
+	useTrashOrDeletePermanentlyAction,
 	useEditAction,
-	useMoveAction,
+	useMoveOrRestoreAction,
 	useSendMailAction,
 	useTagsAction
 } from './single-contact-actions';
@@ -18,8 +18,8 @@ import { Contact } from '../../../legacy/types/contact';
 export function useContactPreviewActions(contact: Contact): DSAction[] {
 	const sendMailAction = useSendMailAction(contact);
 	const editAction = useEditAction(contact);
-	const deleteAction = useDeleteAction(contact);
-	const moveOrRestoreAction = useMoveAction(contact);
+	const deleteAction = useTrashOrDeletePermanentlyAction(contact);
+	const moveOrRestoreAction = useMoveOrRestoreAction(contact);
 	const tagsActions = useTagsAction(contact);
 	const actions = [sendMailAction, tagsActions, editAction, moveOrRestoreAction, deleteAction];
 	const orderedActions: DSAction[] = [];
