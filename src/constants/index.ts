@@ -9,13 +9,14 @@ export const CONTACTS_ROUTE = 'contacts';
 export const CONTACTS_APP_ID = 'carbonio-contacts-ui';
 
 export const ACTION_IDS = {
+	deletePermanently: 'delete-permanently',
+	move: 'move',
 	editDL: 'dl-edit-action',
 	expandDL: 'dl-expand-action',
 	sendEmail: 'send-email-action',
 	sendEmailCG: 'cg-send-email-action',
 	addShareCG: 'cg-add-share',
 	deleteCG: 'cg-delete-action',
-	deletePermanently: 'delete-permanently',
 	editCG: 'cg-edit-action',
 	copyToClipboard: 'copy-to-clipboard-action',
 	addSharedAddressBooks: 'shares-add-action',
