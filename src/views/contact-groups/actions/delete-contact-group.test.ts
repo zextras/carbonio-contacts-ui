@@ -6,11 +6,15 @@
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 
-import { CONTACT_GROUP_DELETE_ICON } from './constants';
 import { useActionDeleteContactGroup } from './delete-contact-group';
 import { UIAction } from '../../../actions/types';
 import { screen, setupHook } from '../../../carbonio-ui-commons/test/test-setup';
-import { JEST_MOCKED_ERROR, TESTID_SELECTORS, TIMERS } from '../../../constants/tests';
+import {
+	DELETE_PERMANENTLY_ACTION_DESCRIPTOR,
+	JEST_MOCKED_ERROR,
+	TESTID_SELECTORS,
+	TIMERS
+} from '../../../constants/tests';
 import { generateStore } from '../../../legacy/tests/generators/store';
 import { ContactOrGroup } from '../../../legacy/types/contact';
 import { buildContactGroup, buildMembers } from '../../../tests/model-builder';
@@ -47,9 +51,9 @@ describe('useActionDeleteCG', () => {
 		});
 		expect(result.current).toEqual<UIAction<unknown, unknown>>(
 			expect.objectContaining({
-				icon: CONTACT_GROUP_DELETE_ICON,
-				label: 'Delete Permanently',
-				id: 'delete-permanently',
+				icon: DELETE_PERMANENTLY_ACTION_DESCRIPTOR.icon,
+				label: DELETE_PERMANENTLY_ACTION_DESCRIPTOR.label,
+				id: DELETE_PERMANENTLY_ACTION_DESCRIPTOR.id,
 				canExecute: expect.anything(),
 				execute: expect.anything()
 			})

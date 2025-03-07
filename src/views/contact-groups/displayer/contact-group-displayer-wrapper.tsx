@@ -7,10 +7,10 @@ import React from 'react';
 
 import { useParams } from 'react-router-dom';
 
+import { ContactGroupDisplayer } from './contact-group-displayer';
 import { useAppSelector } from '../../../legacy/hooks/redux';
 import { selectContactGroup } from '../../../legacy/store/selectors/contacts';
 import ContactsEmptyDisplayer from '../../../legacy/views/app/contacts-empty-displayer';
-import { ContactGroupDisplayer } from '../displayer/contact-group-displayer';
 
 export const ContactGroupDisplayerWrapper = (): React.JSX.Element => {
 	const { id: contactGroupId, folderId } = useParams<{ folderId: string; id: string }>();

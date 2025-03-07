@@ -12,7 +12,6 @@ import { useTranslation } from 'react-i18next';
 import { ACTION_IDS } from '../constants';
 import { DeletableItem, UIAction } from './types';
 import { Text } from '../components/Text';
-import { CONTACT_GROUP_DELETE_ICON } from '../views/contact-groups/actions/constants';
 
 type DeleteItemActionReturn = {
 	deletedItemId: string;
@@ -104,7 +103,7 @@ function useCreateDeleteModalAction<T extends DeletableItem>(): ({
 		return {
 			id: ACTION_IDS.deletePermanently,
 			label: t('action.deletePermanently', 'Delete Permanently'),
-			icon: CONTACT_GROUP_DELETE_ICON,
+			icon: 'DeletePermanentlyOutline',
 			canExecute: () => true,
 			execute,
 			color: 'error'

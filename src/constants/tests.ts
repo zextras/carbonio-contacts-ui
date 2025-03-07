@@ -20,7 +20,11 @@ export const DISPLAY_ASSERTION = {
 };
 
 export type DisplayAssertionType = TypeOfEnumeration<typeof DISPLAY_ASSERTION>;
-
+export const DELETE_PERMANENTLY_ACTION_DESCRIPTOR = {
+	icon: 'DeletePermanentlyOutline',
+	label: 'Delete Permanently',
+	id: 'delete-permanently'
+};
 export const FOLDERS_DESCRIPTORS = {
 	contacts: {
 		id: FOLDERS.CONTACTS,

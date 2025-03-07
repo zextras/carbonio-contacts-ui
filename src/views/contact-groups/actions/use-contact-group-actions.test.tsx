@@ -7,13 +7,13 @@
 import { faker } from '@faker-js/faker';
 import * as shell from '@zextras/carbonio-shell-ui';
 
-import { CONTACT_GROUP_DELETE_ICON } from './constants';
 import { useContactGroupActions } from './use-contact-group-actions';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { useFolderStore } from '../../../carbonio-ui-commons/store/zustand/folder';
 import { generateFolder } from '../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
 import { setupHook } from '../../../carbonio-ui-commons/test/test-setup';
 import { ACTION_IDS } from '../../../constants';
+import { DELETE_PERMANENTLY_ACTION_DESCRIPTOR } from '../../../constants/tests';
 import { generateStore } from '../../../legacy/tests/generators/store';
 import { buildContactGroup, buildMembers } from '../../../tests/model-builder';
 import { generateLinkFolder } from '../tests/utils';
@@ -100,9 +100,7 @@ describe('useContactGroupActions', () => {
 					onClick: expect.anything()
 				});
 				expect(result.current[1]).toEqual({
-					id: ACTION_IDS.deletePermanently,
-					label: 'Delete Permanently',
-					icon: CONTACT_GROUP_DELETE_ICON,
+					...DELETE_PERMANENTLY_ACTION_DESCRIPTOR,
 					onClick: expect.anything(),
 					color: 'error'
 				});
@@ -218,9 +216,7 @@ describe('useContactGroupActions', () => {
 					onClick: expect.anything()
 				});
 				expect(result.current[1]).toEqual({
-					id: ACTION_IDS.deletePermanently,
-					label: 'Delete Permanently',
-					icon: CONTACT_GROUP_DELETE_ICON,
+					...DELETE_PERMANENTLY_ACTION_DESCRIPTOR,
 					onClick: expect.anything(),
 					color: 'error'
 				});
@@ -245,9 +241,7 @@ describe('useContactGroupActions', () => {
 					onClick: expect.anything()
 				});
 				expect(result.current[1]).toEqual({
-					id: ACTION_IDS.deletePermanently,
-					label: 'Delete Permanently',
-					icon: CONTACT_GROUP_DELETE_ICON,
+					...DELETE_PERMANENTLY_ACTION_DESCRIPTOR,
 					onClick: expect.anything(),
 					color: 'error'
 				});

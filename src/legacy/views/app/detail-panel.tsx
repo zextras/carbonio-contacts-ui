@@ -9,7 +9,7 @@ import { Container } from '@zextras/carbonio-design-system';
 import { Route, Routes } from 'react-router-dom';
 
 import ContactsEmptyDisplayer from './contacts-empty-displayer';
-import { ContactGroupDisplayerWrapper } from '../../../views/contact-groups/actions/contact-group-displayer-wrapper';
+import { ContactGroupDisplayerWrapper } from '../../../views/contact-groups/displayer/contact-group-displayer-wrapper';
 import ContactEditPanel from '../edit/contact-edit-panel';
 import { ContactPreviewWrapper } from '../preview/contact-preview-wrapper';
 
