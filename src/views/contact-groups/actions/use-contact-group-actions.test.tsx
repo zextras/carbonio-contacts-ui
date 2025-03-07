@@ -36,7 +36,7 @@ describe('useContactGroupActions', () => {
 		});
 
 		describe('Not in trash', () => {
-			it('should return send, edit, trash actions when shared folder/mountpoint has write permission', () => {
+			it('should return send, edit, move, trash actions when shared folder/mountpoint has write permission', () => {
 				const mountpoint = generateLinkFolder({
 					folderId,
 					remoteAccountUuId,
@@ -51,10 +51,11 @@ describe('useContactGroupActions', () => {
 					store
 				});
 
-				expect(result.current).toHaveLength(3);
+				expect(result.current).toHaveLength(4);
 				expect(result.current[0].id).toBe(ACTION_IDS.sendEmailCG);
 				expect(result.current[1].id).toBe(ACTION_IDS.editCG);
-				expect(result.current[2].id).toBe(ACTION_IDS.trashContacts);
+				expect(result.current[2].id).toBe(ACTION_IDS.move);
+				expect(result.current[3].id).toBe(ACTION_IDS.trashContacts);
 			});
 
 			it('should return only send action when shared folder/mountpoint does not have write permission', () => {
@@ -125,7 +126,7 @@ describe('useContactGroupActions', () => {
 				expect(result.current).toHaveLength(4);
 				expect(result.current[0].id).toBe(ACTION_IDS.sendEmailCG);
 				expect(result.current[1].id).toBe(ACTION_IDS.editCG);
-				expect(result.current[2].id).toBe(ACTION_IDS.moveContacts);
+				expect(result.current[2].id).toBe(ACTION_IDS.move);
 				expect(result.current[3].id).toBe(ACTION_IDS.trashContacts);
 			});
 			it('should return send mail action as enabled when the contact group has at least 1 member', () => {

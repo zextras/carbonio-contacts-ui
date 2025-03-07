@@ -4,16 +4,22 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { type Action as DSAction } from '@zextras/carbonio-design-system';
+import { useCallback } from 'react';
+
+import { type Action as DSAction, useSnackbar } from '@zextras/carbonio-design-system';
+import { useTranslation } from 'react-i18next';
 
 import { DeleteCGAction, useActionDeleteContactGroup } from './delete-contact-group';
 import { EditActionCG, useActionEditCG } from './edit-cg';
 import { SendEmailActionCG, useActionSendEmailCG } from './send-email-cg';
+import { useMoveItemAction } from '../../../actions/move-items';
 import { DeletableItem, UIAction } from '../../../actions/types';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { getFolderIdParts } from '../../../carbonio-ui-commons/helpers/folders';
+import { Folder } from '../../../carbonio-ui-commons/types';
+import { ACTION_IDS, TIMEOUTS } from '../../../constants';
 import { ContactGroup } from '../../../model/contact-group';
-import { MoveContactsAction, useActionMoveContacts } from '../../contacts/actions/move-contacts';
+import { apiClient } from '../../../network/api-client';
 import {
 	RestoreContactsAction,
 	useActionRestoreContacts
@@ -21,7 +27,7 @@ import {
 import { ActionTrashContacts, useActionTrashContacts } from '../../contacts/actions/trash-contacts';
 import { getFolderFromContactGroup } from '../utils';
 
-function mapActionToDSAction<T>(action: UIAction<T, T>, items: T): DSAction | undefined {
+function mapActionToDSAction<T>(action: UIAction<T, T>, items?: T): DSAction | undefined {
 	if (action.canExecute(items)) {
 		return {
 			id: action.id,
@@ -68,7 +74,7 @@ function getActionsInTrash(
 }
 
 function getActionsNotInTrash(
-	moveContactGroupAction: MoveContactsAction,
+	moveContactGroupAction: UIAction<ContactGroup, ContactGroup>,
 	trashContactGroupAction: ActionTrashContacts,
 	contactGroup: ContactGroup,
 	sendEmailAction: SendEmailActionCG,
@@ -81,21 +87,60 @@ function getActionsNotInTrash(
 		sendEmailAction,
 		editContactGroupAction
 	]);
-	const moveActionDS = mapActionToDSAction(moveContactGroupAction, {
-		contacts: [contactGroup]
-	});
+	const moveActionDS = mapActionToDSAction(moveContactGroupAction);
 	moveActionDS && actionsNotInTrash.push(moveActionDS);
 	trashActionDS && actionsNotInTrash.push(trashActionDS);
 	return actionsNotInTrash;
 }
+const useMoveContactGroups = (contactGroup: ContactGroup): UIAction<ContactGroup, ContactGroup> => {
+	const [t] = useTranslation();
+	const createSnackbar = useSnackbar();
+	const move = useCallback(
+		(contactsIds: Array<string>, parentAddressBookId: string): Promise<void> =>
+			apiClient
+				.moveContact(contactsIds, parentAddressBookId)
+				.then(() => {
+					createSnackbar({
+						key: `move-contact-success`,
+						replace: true,
+						severity: 'success',
+						label: t('messages.snackbar.contact_moved', 'Contact moved'),
+						autoHideTimeout: TIMEOUTS.defaultSnackbar,
+						hideButton: true
+					});
+				})
+				.catch(() => {
+					createSnackbar({
+						key: `move-contact-error`,
+						replace: true,
+						severity: 'error',
+						label: t('label.error_try_again', 'Something went wrong, please try again'),
+						autoHideTimeout: TIMEOUTS.defaultSnackbar,
+						hideButton: true
+					});
+				}),
+		[createSnackbar, t]
+	);
+	const moveModal = {
+		id: ACTION_IDS.moveContacts,
+		confirmButtonLabel: t('label.move', 'Move'),
+		title: 'Move contact group'
+	};
+	const contactGroupIds = [contactGroup.id];
+	const action = useMoveItemAction<ContactGroup>({
+		modal: moveModal,
+		onMoveConfirm: (targetFolder: Folder) => move(contactGroupIds, targetFolder.id)
+	});
+	return { ...action, canExecute: () => true };
+};
 
 export const useContactGroupActions = (contactGroup: ContactGroup): Array<DSAction> => {
 	const deletePermanentlyContactGroupAction = useActionDeleteContactGroup(contactGroup);
+	const moveContactGroupAction = useMoveContactGroups(contactGroup);
+	const trashContactGroupAction = useActionTrashContacts();
+	const restoreContactsGroupAction = useActionRestoreContacts();
 	const editContactGroupAction = useActionEditCG();
 	const sendEmailAction = useActionSendEmailCG(contactGroup);
-	const trashContactGroupAction = useActionTrashContacts();
-	const moveContactGroupAction = useActionMoveContacts();
-	const restoreContactsGroupAction = useActionRestoreContacts();
 	const folder = getFolderFromContactGroup(contactGroup);
 	const folderPartsId = getFolderIdParts(contactGroup.parent).id;
 	const isMainAccount = !folder?.perm;
