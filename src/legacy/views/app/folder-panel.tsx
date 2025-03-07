@@ -44,12 +44,14 @@ export const FolderPanel = (): ReactElement => {
 	const isFirstRender = useRef(true);
 	const { folderId } = useParams<RouteParams>();
 	const dispatch = useAppDispatch();
-	const folder = useFolder(folderId);
+	const folder = useFolder(folderId ?? '');
 	const { setCount } = useAppContext<UseAppContextType>();
 	const { selected, isSelecting, toggle, deselectAll } = useSelection(folderId, setCount);
 	const [activeFilter, setActiveFilter] = useState<ContactFilterType>(FILTER_TYPES.ALL);
-	const contacts = useAppSelector((state) => selectAllContactsInFolder(state, folderId));
-	const searchRequestStatus = useAppSelector((state) => selectContactsStatus(state, folderId));
+	const contacts = useAppSelector((state) => selectAllContactsInFolder(state, folderId ?? ''));
+	const searchRequestStatus = useAppSelector((state) =>
+		selectContactsStatus(state, folderId ?? '')
+	);
 	const sortedContacts = useMemo(
 		() =>
 			orderBy(
@@ -73,9 +75,11 @@ export const FolderPanel = (): ReactElement => {
 		if (searchRequestStatus !== undefined) {
 			return;
 		}
-		dispatch(searchContactsAsyncThunk({ folderId, type: activeFilter })).finally(() => {
-			isFirstRender.current = false;
-		});
+		dispatch(searchContactsAsyncThunk({ folderId: folderId ?? '', type: activeFilter })).finally(
+			() => {
+				isFirstRender.current = false;
+			}
+		);
 	}, [activeFilter, dispatch, folderId, searchRequestStatus]);
 
 	const selectType = useCallback(
@@ -117,13 +121,17 @@ export const FolderPanel = (): ReactElement => {
 	const loadMore = useCallback(
 		(): Promise<void> =>
 			dispatch(
-				searchContactsAsyncThunk({ folderId, offset: contacts?.length, type: activeFilter })
+				searchContactsAsyncThunk({
+					folderId: folderId ?? '',
+					offset: contacts?.length,
+					type: activeFilter
+				})
 			).then(() => Promise.resolve()),
 		[activeFilter, contacts?.length, dispatch, folderId]
 	);
 	return (
 		<ActionsContextProvider
-			folderId={folderId}
+			folderId={folderId ?? ''}
 			deselectAll={deselectAll}
 			selectedContacts={selectedContacts}
 			selectedIds={selected}
@@ -163,7 +171,7 @@ export const FolderPanel = (): ReactElement => {
 					)}
 					<ContactsList
 						onLoadMore={loadMore}
-						folderId={folderId}
+						folderId={folderId ?? ''}
 						contacts={sortedContacts}
 						selected={selected}
 						isSelecting={isSelecting}

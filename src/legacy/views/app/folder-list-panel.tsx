@@ -3,27 +3,25 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { Suspense, useMemo } from 'react';
+import React, { Suspense } from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
-import { trimEnd } from 'lodash';
-import { Route, Switch, useRouteMatch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import { FolderPanel } from './folder-panel';
 import { Spinner } from '../../../components/Spinner';
 
-export const FolderListPanel = (): React.JSX.Element => {
-	const { path } = useRouteMatch();
-	const trimmedPath = useMemo(() => trimEnd(path, '/'), [path]);
-	return (
-		<Switch>
-			<Route path={`${trimmedPath}/folder/:folderId/:type?/:itemId?`}>
+export const FolderListPanel = (): React.JSX.Element => (
+	<Routes>
+		<Route
+			path={'folder/:folderId/:type?/:itemId?'}
+			element={
 				<Container width="40%" borderColor={{ right: 'gray3' }}>
 					<Suspense fallback={<Spinner />}>
 						<FolderPanel />
 					</Suspense>
 				</Container>
-			</Route>
-		</Switch>
-	);
-};
+			}
+		/>
+	</Routes>
+);

@@ -6,16 +6,20 @@
 import React from 'react';
 
 import { screen, fireEvent, act } from '@testing-library/react';
-import { getAction, replaceHistory } from '@zextras/carbonio-shell-ui';
+import { getAction } from '@zextras/carbonio-shell-ui';
+import { useNavigate } from 'react-router-dom';
 
 import { setupTest, UserEvent } from '../../../../../carbonio-ui-commons/test/test-setup';
 import { Contact } from '../../../../types/contact';
 import { ContactListItem } from '../contact-list-item';
 
 jest.mock('@zextras/carbonio-shell-ui', () => ({
-	replaceHistory: jest.fn(),
 	useTags: jest.fn(() => []),
 	getAction: jest.fn()
+}));
+jest.mock('react-router-dom', () => ({
+	...jest.requireActual('react-router-dom'),
+	useNavigate: jest.fn()
 }));
 
 const mockToggle = jest.fn();
@@ -72,7 +76,9 @@ describe('ContactListItem', () => {
 		expect(screen.getByTestId(`contact-list-item-${contact.id}`)).toBeInTheDocument();
 	});
 
-	it('calls replaceHistory on click when not prevented', async () => {
+	it('calls navigate on click when not prevented', async () => {
+		const useNavigateSpy = jest.fn();
+		(useNavigate as jest.Mock).mockReturnValue(useNavigateSpy);
 		const { user } = renderComponent();
 
 		const listItem = await screen.findByTestId(`contact-list-item-${contact.id}`);
@@ -80,14 +86,15 @@ describe('ContactListItem', () => {
 			await user.hover(listItem);
 		});
 
-		await act(async () => {
-			await user.click(listItem);
-		});
+		await user.click(listItem);
 
-		expect(replaceHistory).toHaveBeenCalledWith('/folder/folder123/contacts/1');
+		expect(useNavigateSpy).toHaveBeenCalledWith('../folder/folder123/contacts/1');
 	});
 
-	it('does not call replaceHistory if the click event is prevented', () => {
+	it('does not call navigate if the click event is prevented', () => {
+		const useNavigateSpy = jest.fn();
+		(useNavigate as jest.Mock).mockReturnValue(useNavigateSpy);
+
 		const { user } = renderComponent();
 
 		const listItem = screen.getByTestId(`contact-list-item-${contact.id}`);
@@ -95,7 +102,7 @@ describe('ContactListItem', () => {
 
 		user.click(listItem);
 
-		expect(replaceHistory).not.toHaveBeenCalled();
+		expect(useNavigateSpy).not.toHaveBeenCalled();
 	});
 
 	it('calls setIsDragging and sets dragged item IDs on drag start', () => {

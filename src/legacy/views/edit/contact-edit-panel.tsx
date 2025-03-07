@@ -14,16 +14,24 @@ import {
 	Row,
 	Text
 } from '@zextras/carbonio-design-system';
-import { replaceHistory } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import EditView from './edit-view';
 
-function ContactEditHeader({ editPanelId, folderId }) {
-	const [t] = useTranslation();
+type ContactEditProps = {
+	editId: string;
+	folderId: string;
+};
 
-	const onClose = useCallback(() => replaceHistory(`/folder/${folderId}`), [folderId]);
+function ContactEditHeader({ editId, folderId }: ContactEditProps): React.JSX.Element {
+	const [t] = useTranslation();
+	const navigate = useNavigate();
+
+	const onClose = useCallback(
+		() => navigate(`../folder/${folderId}`, { replace: true }),
+		[navigate, folderId]
+	);
 
 	return (
 		<Container height="3.0625rem">
@@ -38,9 +46,7 @@ function ContactEditHeader({ editPanelId, folderId }) {
 				</Padding>
 				<Row takeAvailableSpace mainAlignment="flex-start">
 					<Text size="medium">
-						{editPanelId && editPanelId !== 'new'
-							? t('label.edit', 'Edit')
-							: t('label.create', 'Create')}
+						{editId && editId !== 'new' ? t('label.edit', 'Edit') : t('label.create', 'Create')}
 					</Text>
 				</Row>
 				<IconButton icon="Close" size="small" onClick={onClose} />
@@ -50,11 +56,11 @@ function ContactEditHeader({ editPanelId, folderId }) {
 	);
 }
 
-export default function ContactEditPanel() {
-	const { editId, folderId } = useParams();
+export default function ContactEditPanel(): React.JSX.Element {
+	const { editId, folderId } = useParams<ContactEditProps>();
 	return (
 		<>
-			<ContactEditHeader editPanelId={editId} folderId={folderId} />
+			<ContactEditHeader editId={editId ?? ''} folderId={folderId ?? ''} />
 			<Container height="fit" style={{ maxHeight: '100%', overflowY: 'auto' }}>
 				<EditView panel />
 			</Container>
