@@ -18,26 +18,31 @@ type DeleteItemActionReturn = {
 	deletedItemId: string;
 };
 type DeleteConfirmProps<T extends DeletableItem> = {
-	modal: { modalId: string; title: string };
+	modal: { id: string; title: string; body: string };
 	doDelete: (item: T) => Promise<DeleteItemActionReturn>;
 };
 type DeleteActionBase<T extends DeletableItem> = UIAction<T, T>;
 type DeleteModalProps = {
 	modalId: string;
 	modalTitle: string;
+	modalBody: string;
 	deleteAction: () => Promise<DeleteItemActionReturn>;
 };
 
 const getDeleteModal = (
-	{ modalId, modalTitle, deleteAction, onClose }: DeleteModalProps & { onClose: () => void },
+	{
+		modalId,
+		modalTitle,
+		modalBody,
+		deleteAction,
+		onClose
+	}: DeleteModalProps & { onClose: () => void },
 	t: TFunction
 ): CreateModalArgs => [
 	{
 		id: modalId,
-		title: t('modal.delete.contactGroup.header', 'Delete "{{contactGroupName}}"', {
-			contactGroupName: modalTitle
-		}),
-		confirmLabel: t('modal.delete.button.confirm', 'delete'),
+		title: modalTitle,
+		confirmLabel: t('action.delete_permanently', 'Delete Permanently'),
 		confirmColor: 'error',
 		onConfirm: deleteAction,
 		showCloseIcon: true,
@@ -45,7 +50,7 @@ const getDeleteModal = (
 		children: (
 			<Container padding={{ vertical: 'medium' }} crossAlignment={'flex-start'}>
 				<Text lineHeight={1.3125} overflow="break-word" size="small">
-					{modalTitle}
+					{modalBody}
 				</Text>
 			</Container>
 		)
@@ -72,6 +77,7 @@ function useCreateDeleteModalAction<T extends DeletableItem>(): ({
 	const createDeleteModal = (
 		modalId: string,
 		modalTitle: string,
+		modalBody: string,
 		contactGroup: T,
 		doDelete: (contactGroup: T) => Promise<DeleteItemActionReturn>
 	): void => {
@@ -80,6 +86,7 @@ function useCreateDeleteModalAction<T extends DeletableItem>(): ({
 				{
 					modalId,
 					modalTitle,
+					modalBody,
 					deleteAction: () => handleDelete(contactGroup, doDelete, modalId),
 					onClose: () => closeModal(modalId)
 				},
@@ -91,7 +98,7 @@ function useCreateDeleteModalAction<T extends DeletableItem>(): ({
 	return ({ modal, doDelete }): DeleteActionBase<T> => {
 		const execute = (item?: T): void => {
 			if (!item) return;
-			createDeleteModal(modal.modalId, modal.title, item, doDelete);
+			createDeleteModal(modal.id, modal.title, modal.body, item, doDelete);
 		};
 
 		return {
@@ -106,7 +113,7 @@ function useCreateDeleteModalAction<T extends DeletableItem>(): ({
 }
 
 type DeletePermanentlyItem<T extends DeletableItem> = {
-	modal: { modalId: string; title: string };
+	modal: { id: string; title: string; body: string };
 	onDeleteConfirm: (item: T) => void;
 };
 export const useDeletePermanentlyItem = <T extends DeletableItem>({
@@ -115,7 +122,6 @@ export const useDeletePermanentlyItem = <T extends DeletableItem>({
 }: DeletePermanentlyItem<T>): UIAction<T, T> => {
 	const createDeleteModal = useCreateDeleteModalAction<T>();
 
-	// NOTE: there is no store because this request is intercepted and item is ***magically*** removed
 	const doDelete = useCallback(
 		async (item: T) => {
 			onDeleteConfirm(item);

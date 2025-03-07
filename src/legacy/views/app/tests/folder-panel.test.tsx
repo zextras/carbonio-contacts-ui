@@ -690,7 +690,7 @@ describe('Folder panel', () => {
 
 					await user.click(deleteAction);
 					const button = await screen.findByRole('button', {
-						name: 'delete'
+						name: /delete permanently/i
 					});
 					await user.click(button);
 					await screen.findByText('Contact group successfully deleted');
@@ -724,7 +724,7 @@ describe('Folder panel', () => {
 
 					await user.click(deleteAction);
 					const modalButton = await screen.findByRole('button', {
-						name: 'delete'
+						name: /delete permanently/i
 					});
 					await user.click(modalButton);
 					await screen.findByText('Something went wrong, please try again');

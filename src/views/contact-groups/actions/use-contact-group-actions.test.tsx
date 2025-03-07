@@ -99,7 +99,7 @@ describe('useContactGroupActions', () => {
 					onClick: expect.anything()
 				});
 				expect(result.current[1]).toEqual({
-					id: ACTION_IDS.deleteCG,
+					id: ACTION_IDS.deletePermanently,
 					label: 'Delete Permanently',
 					icon: CONTACT_GROUP_DELETE_ICON,
 					onClick: expect.anything(),
@@ -217,7 +217,7 @@ describe('useContactGroupActions', () => {
 					onClick: expect.anything()
 				});
 				expect(result.current[1]).toEqual({
-					id: ACTION_IDS.deleteCG,
+					id: ACTION_IDS.deletePermanently,
 					label: 'Delete Permanently',
 					icon: CONTACT_GROUP_DELETE_ICON,
 					onClick: expect.anything(),
@@ -244,7 +244,7 @@ describe('useContactGroupActions', () => {
 					onClick: expect.anything()
 				});
 				expect(result.current[1]).toEqual({
-					id: ACTION_IDS.deleteCG,
+					id: ACTION_IDS.deletePermanently,
 					label: 'Delete Permanently',
 					icon: CONTACT_GROUP_DELETE_ICON,
 					onClick: expect.anything(),

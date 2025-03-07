@@ -27,6 +27,12 @@ function createStoreInitialData(data: Record<string, ContactOrGroup[]>) {
 	};
 }
 
+async function findDeletePermanentlyButton(): Promise<any> {
+	return screen.findByRole('button', {
+		name: /delete permanently/i
+	});
+}
+
 describe('useActionDeleteCG', () => {
 	const membersCount = faker.number.int({ min: 1, max: 42 });
 	const contactGroupWithMembers = buildContactGroup({ members: buildMembers(membersCount) });
@@ -35,12 +41,15 @@ describe('useActionDeleteCG', () => {
 	const defaultStore = generateStore();
 
 	it('should return an action with the specific data', () => {
-		const { result } = setupHook(useActionDeleteContactGroup, { store: defaultStore });
+		const { result } = setupHook(useActionDeleteContactGroup, {
+			initialProps: [contactGroupWithMembers],
+			store: defaultStore
+		});
 		expect(result.current).toEqual<UIAction<unknown, unknown>>(
 			expect.objectContaining({
 				icon: CONTACT_GROUP_DELETE_ICON,
 				label: 'Delete Permanently',
-				id: 'cg-delete-action',
+				id: 'delete-permanently',
 				canExecute: expect.anything(),
 				execute: expect.anything()
 			})
@@ -48,12 +57,18 @@ describe('useActionDeleteCG', () => {
 	});
 
 	it('should return an action which is always executable', () => {
-		const { result } = setupHook(useActionDeleteContactGroup, { store: defaultStore });
+		const { result } = setupHook(useActionDeleteContactGroup, {
+			initialProps: [contactGroupWithMembers],
+			store: defaultStore
+		});
 		expect(result.current.canExecute()).toBeTruthy();
 	});
 
-	it('should not open the modal if pass undefined argument  to execute function', async () => {
-		const { result } = setupHook(useActionDeleteContactGroup, { store: defaultStore });
+	it('should not open the modal if pass undefined argument to execute function', async () => {
+		const { result } = setupHook(useActionDeleteContactGroup, {
+			initialProps: [contactGroupWithMembers],
+			store: defaultStore
+		});
 		const action = result.current;
 		act(() => {
 			action.execute();
@@ -65,7 +80,10 @@ describe('useActionDeleteCG', () => {
 	});
 
 	it('should return an execute field which opens a modal with the CG name', async () => {
-		const { result } = setupHook(useActionDeleteContactGroup, { store: defaultStore });
+		const { result } = setupHook(useActionDeleteContactGroup, {
+			initialProps: [contactGroupWithMembers],
+			store: defaultStore
+		});
 		const action = result.current;
 		act(() => {
 			action.execute(contactGroupWithMembers);
@@ -80,7 +98,10 @@ describe('useActionDeleteCG', () => {
 	});
 
 	it('should return an execute field which opens a modal with an instruction text', async () => {
-		const { result } = setupHook(useActionDeleteContactGroup, { store: defaultStore });
+		const { result } = setupHook(useActionDeleteContactGroup, {
+			initialProps: [contactGroupWithMembers],
+			store: defaultStore
+		});
 		const action = result.current;
 		act(() => {
 			action.execute(contactGroupWithMembers);
@@ -93,11 +114,13 @@ describe('useActionDeleteCG', () => {
 		expect(
 			await screen.findByText('Are you sure to delete the selected contact group?')
 		).toBeVisible();
-		expect(screen.getByText('If you delete it will be lost forever.')).toBeVisible();
 	});
 
 	it('should return an execute field which opens a modal with a close icon', async () => {
-		const { result } = setupHook(useActionDeleteContactGroup, { store: defaultStore });
+		const { result } = setupHook(useActionDeleteContactGroup, {
+			initialProps: [contactGroupWithMembers],
+			store: defaultStore
+		});
 		const action = result.current;
 		act(() => {
 			action.execute(contactGroupWithMembers);
@@ -115,7 +138,10 @@ describe('useActionDeleteCG', () => {
 	});
 
 	it('should return an execute field which opens a modal with a delete action button', async () => {
-		const { result } = setupHook(useActionDeleteContactGroup, { store: defaultStore });
+		const { result } = setupHook(useActionDeleteContactGroup, {
+			initialProps: [contactGroupWithMembers],
+			store: defaultStore
+		});
 		const action = result.current;
 		act(() => {
 			action.execute(contactGroupWithMembers);
@@ -125,13 +151,16 @@ describe('useActionDeleteCG', () => {
 			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 
-		const button = await screen.findByRole('button', { name: 'delete' });
+		const button = await findDeletePermanentlyButton();
 		expect(button).toBeVisible();
 		expect(button).toBeEnabled();
 	});
 
 	it('should close the UI if the user clicks on the close icon on the header', async () => {
-		const { result, user } = setupHook(useActionDeleteContactGroup, { store: defaultStore });
+		const { result, user } = setupHook(useActionDeleteContactGroup, {
+			initialProps: [contactGroupWithMembers],
+			store: defaultStore
+		});
 		const action = result.current;
 		act(() => {
 			action.execute(contactGroupWithMembers);
@@ -157,7 +186,10 @@ describe('useActionDeleteCG', () => {
 		);
 		registerDeleteContactHandler(contactGroupWithMembers.id);
 
-		const { result, user } = setupHook(useActionDeleteContactGroup, { store });
+		const { result, user } = setupHook(useActionDeleteContactGroup, {
+			initialProps: [contactGroupWithMembers],
+			store
+		});
 
 		const action = result.current;
 		act(() => {
@@ -167,19 +199,19 @@ describe('useActionDeleteCG', () => {
 		act(() => {
 			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
+		await screen.findByTestId('modal');
 
-		const button = await screen.findByRole('button', {
-			name: 'delete'
-		});
-
-		await user.click(button);
+		await user.click(await findDeletePermanentlyButton());
 		expect(await screen.findByText('Contact group successfully deleted')).toBeVisible();
 	});
 
 	it('should show an error snackbar if the user clicks on the delete action button and the API call return an error', async () => {
 		jest.spyOn(console, 'warn').mockImplementation();
 		registerDeleteContactHandler(contactGroupNoMembers.id, JEST_MOCKED_ERROR);
-		const { result, user } = setupHook(useActionDeleteContactGroup, { store: defaultStore });
+		const { result, user } = setupHook(useActionDeleteContactGroup, {
+			initialProps: [contactGroupWithMembers],
+			store: defaultStore
+		});
 		const action = result.current;
 		act(() => {
 			action.execute(contactGroupWithMembers);
@@ -189,11 +221,7 @@ describe('useActionDeleteCG', () => {
 			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 
-		const button = await screen.findByRole('button', {
-			name: 'delete'
-		});
-
-		await user.click(button);
+		await user.click(await findDeletePermanentlyButton());
 		expect(await screen.findByText('Something went wrong, please try again')).toBeVisible();
 	});
 
@@ -205,7 +233,10 @@ describe('useActionDeleteCG', () => {
 		);
 		const handler = registerDeleteContactHandler(contactGroupWithMembers.id);
 
-		const { result, user } = setupHook(useActionDeleteContactGroup, { store });
+		const { result, user } = setupHook(useActionDeleteContactGroup, {
+			initialProps: [contactGroupWithMembers],
+			store
+		});
 		const action = result.current;
 		act(() => {
 			action.execute(contactGroupWithMembers);
@@ -215,13 +246,10 @@ describe('useActionDeleteCG', () => {
 			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 
-		const button = await screen.findByRole('button', {
-			name: 'delete'
-		});
 		const titleElement = screen.getByText(`Delete "${contactGroupWithMembers.title}"`);
 		expect(titleElement).toBeVisible();
 
-		await user.click(button);
+		await user.click(await findDeletePermanentlyButton());
 		await screen.findByText('Contact group successfully deleted');
 		expect(handler).toHaveBeenCalled();
 	});
@@ -234,7 +262,10 @@ describe('useActionDeleteCG', () => {
 		);
 		registerDeleteContactHandler(contactGroupWithMembers.id);
 
-		const { result, user } = setupHook(useActionDeleteContactGroup, { store });
+		const { result, user } = setupHook(useActionDeleteContactGroup, {
+			initialProps: [contactGroupWithMembers],
+			store
+		});
 
 		const action = result.current;
 		act(() => {
@@ -242,14 +273,9 @@ describe('useActionDeleteCG', () => {
 			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 
-		const button = await screen.findByRole('button', {
-			name: 'delete'
-		});
 		const titleElement = screen.getByText(`Delete "${contactGroupWithMembers.title}"`);
 
-		await act(async () => {
-			await user.click(button);
-		});
+		await user.click(await findDeletePermanentlyButton());
 		await screen.findByText('Contact group successfully deleted');
 		expect(titleElement).not.toBeInTheDocument();
 	});

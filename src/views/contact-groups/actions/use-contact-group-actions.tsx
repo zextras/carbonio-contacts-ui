@@ -90,7 +90,7 @@ function getActionsNotInTrash(
 }
 
 export const useContactGroupActions = (contactGroup: ContactGroup): Array<DSAction> => {
-	const deletePermanentlyContactGroupAction = useActionDeleteContactGroup();
+	const deletePermanentlyContactGroupAction = useActionDeleteContactGroup(contactGroup);
 	const editContactGroupAction = useActionEditCG();
 	const sendEmailAction = useActionSendEmailCG(contactGroup);
 	const trashContactGroupAction = useActionTrashContacts();
