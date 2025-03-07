@@ -9,12 +9,15 @@ import { type Action as DSAction } from '@zextras/carbonio-design-system';
 import { DeleteCGAction, useActionDeleteContactGroup } from './delete-contact-group';
 import { EditActionCG, useActionEditCG } from './edit-cg';
 import { SendEmailActionCG, useActionSendEmailCG } from './send-email-cg';
-import { RestoreContactsAction, useActionRestoreContacts } from '../../../actions/restore-contacts';
-import { ActionTrashContacts, useActionTrashContacts } from '../../../actions/trash-contacts';
 import { DeletableItem, UIAction } from '../../../actions/types';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { getFolderIdParts } from '../../../carbonio-ui-commons/helpers/folders';
 import { ContactGroup } from '../../../model/contact-group';
+import {
+	RestoreContactsAction,
+	useActionRestoreContacts
+} from '../../contacts/actions/restore-contacts';
+import { ActionTrashContacts, useActionTrashContacts } from '../../contacts/actions/trash-contacts';
 import { getFolderFromContactGroup } from '../utils';
 
 function mapActionToDSAction<T>(action: UIAction<T, T>, items: T): DSAction | undefined {

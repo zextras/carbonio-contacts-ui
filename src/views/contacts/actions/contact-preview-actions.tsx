@@ -12,7 +12,7 @@ import {
 	useMoveAction,
 	useSendMailAction,
 	useTagsAction
-} from './common-contact-actions';
+} from './single-contact-actions';
 import { Contact } from '../../../legacy/types/contact';
 
 export function useContactPreviewActions(contact: Contact): DSAction[] {

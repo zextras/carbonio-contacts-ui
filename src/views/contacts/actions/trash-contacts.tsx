@@ -9,12 +9,12 @@ import { useSnackbar } from '@zextras/carbonio-design-system';
 import { every } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { getParentFolder } from './folder-utils';
-import { DeletableItem, UIAction } from './types';
-import { isTrashed } from '../carbonio-ui-commons/helpers/folders';
-import { Folder } from '../carbonio-ui-commons/types';
-import { ACTION_IDS, TIMEOUTS } from '../constants';
-import { apiClient } from '../network/api-client';
+import { getParentFolder } from '../../../actions/folder-utils';
+import { DeletableItem, UIAction } from '../../../actions/types';
+import { isTrashed } from '../../../carbonio-ui-commons/helpers/folders';
+import { Folder } from '../../../carbonio-ui-commons/types';
+import { ACTION_IDS, TIMEOUTS } from '../../../constants';
+import { apiClient } from '../../../network/api-client';
 
 export type ActionTrashContacts = UIAction<Array<DeletableItem>, Array<DeletableItem>>;
 

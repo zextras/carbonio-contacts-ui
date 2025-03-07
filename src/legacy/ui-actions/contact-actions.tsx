@@ -13,16 +13,16 @@ import { compact, isEmpty } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { applyTag, applyMultiTag } from './tag-actions';
-import { useActionDeleteContacts } from '../../actions/delete-contacts';
 import { useActionExportContact } from '../../actions/export-contact';
-import { useActionMoveContacts } from '../../actions/move-contacts';
-import { useActionRestoreContacts } from '../../actions/restore-contacts';
-import { useActionTrashContacts } from '../../actions/trash-contacts';
 import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
 import { getFolderIdParts } from '../../carbonio-ui-commons/helpers/folders';
 import { useTags } from '../../carbonio-ui-commons/store/zustand/tags';
 import { MakeOptional } from '../../types';
-import { useEditAction } from '../../views/contacts/actions/common-contact-actions';
+import { useActionDeleteContacts } from '../../views/contacts/actions/delete-contacts';
+import { useActionMoveContacts } from '../../views/contacts/actions/move-contacts';
+import { useActionRestoreContacts } from '../../views/contacts/actions/restore-contacts';
+import { useEditAction } from '../../views/contacts/actions/single-contact-actions';
+import { useActionTrashContacts } from '../../views/contacts/actions/trash-contacts';
 import { Contact, ContactOrGroup } from '../types/contact';
 
 type OptionallyClickableAction = MakeOptional<DSAction, 'onClick'>;

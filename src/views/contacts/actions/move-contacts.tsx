@@ -9,15 +9,15 @@ import { useModal, useSnackbar } from '@zextras/carbonio-design-system';
 import { every } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { UIAction } from './types';
-import { isRoot, isTrashed, isWriteAllowed } from '../carbonio-ui-commons/helpers/folders';
-import { getFolder } from '../carbonio-ui-commons/store/zustand/folder';
-import { Folder } from '../carbonio-ui-commons/types/folder';
-import { ContactMoveModal } from '../components/modals/contact-move';
-import { ACTION_IDS, TIMEOUTS } from '../constants';
-import { ContactOrGroup } from '../legacy/types/contact';
-import { evaluateParentIds } from '../legacy/utils/helpers';
-import { apiClient } from '../network/api-client';
+import { UIAction } from '../../../actions/types';
+import { isRoot, isTrashed, isWriteAllowed } from '../../../carbonio-ui-commons/helpers/folders';
+import { getFolder } from '../../../carbonio-ui-commons/store/zustand/folder';
+import { Folder } from '../../../carbonio-ui-commons/types/folder';
+import { ContactMoveModal } from '../../../components/modals/contact-move';
+import { ACTION_IDS, TIMEOUTS } from '../../../constants';
+import { ContactOrGroup } from '../../../legacy/types/contact';
+import { evaluateParentIds } from '../../../legacy/utils/helpers';
+import { apiClient } from '../../../network/api-client';
 
 export type MoveContactsAction = UIAction<
 	{ contacts?: Array<ContactOrGroup>; newParentAddressBook?: Folder },

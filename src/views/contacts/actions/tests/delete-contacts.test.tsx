@@ -6,14 +6,14 @@
 
 import { act } from '@testing-library/react';
 
-import { useActionDeleteContacts } from './delete-contacts';
-import { UIAction } from './types';
-import { FOLDERS } from '../carbonio-ui-commons/constants/folders';
-import { populateFoldersStore } from '../carbonio-ui-commons/test/mocks/store/folders';
-import { screen, setupHook } from '../carbonio-ui-commons/test/test-setup';
-import { TIMERS } from '../constants/tests';
-import { Contact } from '../legacy/types/contact';
-import { buildContact } from '../tests/model-builder';
+import { UIAction } from '../../../../actions/types';
+import { FOLDERS } from '../../../../carbonio-ui-commons/constants/folders';
+import { populateFoldersStore } from '../../../../carbonio-ui-commons/test/mocks/store/folders';
+import { screen, setupHook } from '../../../../carbonio-ui-commons/test/test-setup';
+import { TIMERS } from '../../../../constants/tests';
+import { Contact } from '../../../../legacy/types/contact';
+import { buildContact } from '../../../../tests/model-builder';
+import { useActionDeleteContacts } from '../delete-contacts';
 
 describe('Delete-contacts', () => {
 	describe("Delete-contacts' actions", () => {

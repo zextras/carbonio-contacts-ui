@@ -11,9 +11,9 @@ import { getAction, replaceHistory } from '@zextras/carbonio-shell-ui';
 import { every, includes, isEmpty, noop, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { useActionDeleteContacts } from '../../../actions/delete-contacts';
-import { useActionMoveContacts } from '../../../actions/move-contacts';
-import { useActionTrashContacts } from '../../../actions/trash-contacts';
+import { useActionDeleteContacts } from './delete-contacts';
+import { useActionMoveContacts } from './move-contacts';
+import { useActionTrashContacts } from './trash-contacts';
 import { UIAction } from '../../../actions/types';
 import { ZIMBRA_STANDARD_COLORS } from '../../../carbonio-ui-commons/constants';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';

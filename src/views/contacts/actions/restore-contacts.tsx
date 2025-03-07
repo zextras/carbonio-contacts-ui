@@ -8,13 +8,13 @@ import React, { useCallback, useMemo } from 'react';
 import { useModal, useSnackbar } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
-import { getParentFolder } from './folder-utils';
-import { UIAction } from './types';
-import { isTrashed } from '../carbonio-ui-commons/helpers/folders';
-import { ContactMoveModal } from '../components/modals/contact-move';
-import { ACTION_IDS, TIMEOUTS } from '../constants';
-import { ContactOrGroup } from '../legacy/types/contact';
-import { apiClient } from '../network/api-client';
+import { getParentFolder } from '../../../actions/folder-utils';
+import { UIAction } from '../../../actions/types';
+import { isTrashed } from '../../../carbonio-ui-commons/helpers/folders';
+import { ContactMoveModal } from '../../../components/modals/contact-move';
+import { ACTION_IDS, TIMEOUTS } from '../../../constants';
+import { ContactOrGroup } from '../../../legacy/types/contact';
+import { apiClient } from '../../../network/api-client';
 
 export type RestoreContactsAction = UIAction<Array<ContactOrGroup>, Array<ContactOrGroup>>;
 

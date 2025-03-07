@@ -24,13 +24,13 @@ import styled from 'styled-components';
 
 import { useAddressBookContextualMenuItems } from './commons/use-address-book-contextual-menu-items';
 import { useActionMoveAddressBook } from '../../../actions/move-address-book';
-import { useActionMoveContacts } from '../../../actions/move-contacts';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { ROOT_NAME } from '../../../carbonio-ui-commons/constants/utils';
 import { isLink, isRoot } from '../../../carbonio-ui-commons/helpers/folders';
 import { Folder } from '../../../carbonio-ui-commons/types/folder';
 import { DragEnterAction, OnDropActionProps } from '../../../carbonio-ui-commons/types/sidebar';
 import { getFolderIconColor, getFolderIconName } from '../../../helpers/folders';
+import { useActionMoveContacts } from '../../../views/contacts/actions/move-contacts';
 import { Contact } from '../../types/contact';
 import { getFolderTranslatedName } from '../../utils/helpers';
 

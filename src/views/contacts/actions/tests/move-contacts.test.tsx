@@ -9,25 +9,25 @@ import { act } from '@testing-library/react';
 import { ErrorSoapBodyResponse, JSNS } from '@zextras/carbonio-shell-ui';
 import { times } from 'lodash';
 
-import { useActionMoveContacts } from './move-contacts';
-import { UIAction } from './types';
-import { FOLDERS } from '../carbonio-ui-commons/constants/folders';
-import { isLink, isSystemFolder } from '../carbonio-ui-commons/helpers/folders';
-import { getFolder } from '../carbonio-ui-commons/store/zustand/folder';
-import { createSoapAPIInterceptor } from '../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { populateFoldersStore } from '../carbonio-ui-commons/test/mocks/store/folders';
+import { UIAction } from '../../../../actions/types';
+import { FOLDERS } from '../../../../carbonio-ui-commons/constants/folders';
+import { isLink, isSystemFolder } from '../../../../carbonio-ui-commons/helpers/folders';
+import { getFolder } from '../../../../carbonio-ui-commons/store/zustand/folder';
+import { createSoapAPIInterceptor } from '../../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
+import { populateFoldersStore } from '../../../../carbonio-ui-commons/test/mocks/store/folders';
 import {
 	setupHook,
 	screen,
 	makeListItemsVisible,
 	within
-} from '../carbonio-ui-commons/test/test-setup';
-import { FOLDERS_DESCRIPTORS, TIMERS } from '../constants/tests';
-import { Contact } from '../legacy/types/contact';
-import { ContactActionRequest } from '../legacy/types/soap';
-import { ContactActionResponse } from '../network/api/contact-action';
-import { buildContact } from '../tests/model-builder';
-import { getFoldersArray } from '../tests/utils';
+} from '../../../../carbonio-ui-commons/test/test-setup';
+import { FOLDERS_DESCRIPTORS, TIMERS } from '../../../../constants/tests';
+import { Contact } from '../../../../legacy/types/contact';
+import { ContactActionRequest } from '../../../../legacy/types/soap';
+import { ContactActionResponse } from '../../../../network/api/contact-action';
+import { buildContact } from '../../../../tests/model-builder';
+import { getFoldersArray } from '../../../../tests/utils';
+import { useActionMoveContacts } from '../move-contacts';
 
 describe('useActionMoveContacts', () => {
 	it('should return an object with the specific data', () => {
