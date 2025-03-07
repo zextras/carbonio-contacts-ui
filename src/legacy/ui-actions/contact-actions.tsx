@@ -4,16 +4,13 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { SyntheticEvent } from 'react';
-
-import { type Action as DSAction, Action, useModal } from '@zextras/carbonio-design-system';
-import { getAction } from '@zextras/carbonio-shell-ui';
-import { TFunction } from 'i18next';
-import { compact, isEmpty } from 'lodash';
+import { type Action as DSAction, useModal } from '@zextras/carbonio-design-system';
+import { compact } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { applyTag, applyMultiTag } from './tag-actions';
+import { applyMultiTag, applyTag } from './tag-actions';
 import { useActionExportContact } from '../../actions/export-contact';
+import { generateClickableAction } from '../../actions/generate-clickable-action';
 import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
 import { getFolderIdParts } from '../../carbonio-ui-commons/helpers/folders';
 import { useTags } from '../../carbonio-ui-commons/store/zustand/tags';
@@ -21,41 +18,13 @@ import { MakeOptional } from '../../types';
 import { useActionDeleteContacts } from '../../views/contacts/actions/delete-contacts';
 import { useActionMoveContacts } from '../../views/contacts/actions/move-contacts';
 import { useActionRestoreContacts } from '../../views/contacts/actions/restore-contacts';
-import { useEditAction } from '../../views/contacts/actions/single-contact-actions';
+import { mailToContact } from '../../views/contacts/actions/single-contact-actions';
 import { useActionTrashContacts } from '../../views/contacts/actions/trash-contacts';
 import { Contact, ContactOrGroup } from '../types/contact';
 
 type OptionallyClickableAction = MakeOptional<DSAction, 'onClick'>;
 type ContactActionsFn = (contact: Contact) => Array<OptionallyClickableAction>;
 type SecondaryContactActionsFn = () => Array<OptionallyClickableAction>;
-
-type InternalAction = NonNullable<ReturnType<typeof getAction>[0]> & { id: string };
-const generateClickableAction = (action: InternalAction, params: unknown): DSAction => ({
-	id: action.id,
-	icon: action.icon,
-	label: action.label,
-	onClick: (ev: SyntheticEvent | KeyboardEvent): void => {
-		if (ev) {
-			ev.preventDefault();
-		}
-		action.execute(params);
-	}
-});
-
-function mailToContact(contact: Contact, t: TFunction): Action | undefined {
-	const [mailTo, available] = getAction('contact-list', 'mail-to', [contact]);
-	if (!available || !mailTo) {
-		return undefined;
-	}
-	const { execute, ...action } = mailTo;
-	return {
-		...action,
-		id: 'mail-to',
-		onClick: execute,
-		label: t('action.send_msg', 'Send e-mail'),
-		disabled: isEmpty(contact?.email)
-	};
-}
 
 export const useContextActions = (folderId: string): ContactActionsFn => {
 	const [t] = useTranslation();
@@ -92,35 +61,6 @@ export const useContextActions = (folderId: string): ContactActionsFn => {
 			...(exportAction.canExecute(contact) ? [generateClickableAction(exportAction, contact)] : []),
 			applyTag({ contact, tags, t, createModal, closeModal })
 		]);
-};
-
-export const useHoverActions = (contact: Contact): Array<DSAction> => {
-	const [t] = useTranslation();
-	const moveAction = useActionMoveContacts();
-	const restoreAction = useActionRestoreContacts();
-	const deleteAction = useActionDeleteContacts();
-	const trashAction = useActionTrashContacts();
-	const folderId = contact.parent;
-	const editAction = useEditAction(contact);
-
-	if (getFolderIdParts(folderId).id === FOLDERS.TRASH) {
-		return [
-			...(restoreAction.canExecute([contact])
-				? [generateClickableAction(restoreAction, { contacts: [contact] })]
-				: []),
-			...(deleteAction.canExecute([contact])
-				? [generateClickableAction(deleteAction, [contact])]
-				: [])
-		];
-	}
-	return compact([
-		mailToContact(contact, t),
-		...(editAction.canExecute(contact) ? [generateClickableAction(editAction, [contact])] : []),
-		...(moveAction.canExecute({ contacts: [contact] })
-			? [generateClickableAction(moveAction, { contacts: [contact] })]
-			: []),
-		...(trashAction.canExecute([contact]) ? [generateClickableAction(trashAction, [contact])] : [])
-	]);
 };
 
 type SecondaryActionsProps = {

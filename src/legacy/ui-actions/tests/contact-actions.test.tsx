@@ -9,7 +9,7 @@ import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { populateFoldersStore } from '../../../carbonio-ui-commons/test/mocks/store/folders';
 import { setupHook } from '../../../carbonio-ui-commons/test/test-setup';
 import { buildContact } from '../../../tests/model-builder';
-import { useHoverActions } from '../contact-actions';
+import { useHoverActions } from '../../../views/contacts/actions/use-hover-actions';
 
 describe('Contacts actions', () => {
 	describe('document current behavior', () => {

@@ -13,10 +13,10 @@ import { useTags } from '../../../../carbonio-ui-commons/store/zustand/tags';
 import { ListActionIconButton } from '../../../../components/list/list-action-icon-button';
 import { ListItemActionsWrapper } from '../../../../components/list/list-item-actions-wrapper';
 import { ListItemAvatar } from '../../../../components/list/list-item-avatar';
+import { useHoverActions } from '../../../../views/contacts/actions/use-hover-actions';
 import { getTagsArray } from '../../../helpers/tags';
 import { Contact } from '../../../types/contact';
 import { ActionsContext } from '../../../ui-actions/actions-context';
-import { useHoverActions } from '../../../ui-actions/contact-actions';
 
 type ContactListItemProps = {
 	item: Contact;

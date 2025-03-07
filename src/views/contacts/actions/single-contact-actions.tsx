@@ -6,8 +6,9 @@
 
 import React, { useCallback, useMemo } from 'react';
 
-import { Icon, Padding, Row, Text } from '@zextras/carbonio-design-system';
+import { Action, Icon, Padding, Row, Text } from '@zextras/carbonio-design-system';
 import { getAction, replaceHistory } from '@zextras/carbonio-shell-ui';
+import { TFunction } from 'i18next';
 import { every, includes, isEmpty, noop, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
@@ -141,6 +142,22 @@ export const useDeleteAction = (contact: Contact): UIAction<Contact, Contact> =>
 	};
 };
 
+export function mailToContact(contact: Contact, t: TFunction): Action | undefined {
+	const [mailTo, available] = getAction('contact-list', 'mail-to', [contact]);
+	if (!available || !mailTo) {
+		return undefined;
+	}
+	const { execute, ...action } = mailTo;
+	return {
+		...action,
+		id: 'mail-to',
+		onClick: execute,
+		label: t('action.send_msg', 'Send e-mail'),
+		disabled: isEmpty(contact?.email)
+	};
+}
+
+// TODO: use mailToContact if possible
 export const useSendMailAction = (contact: Contact): UIAction<Contact, Contact> => {
 	const [t] = useTranslation();
 	const onMail = useCallback(() => {
