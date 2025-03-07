@@ -15,7 +15,7 @@ import { ActionTagButton } from '../../../components/action-tag-button';
 import { Displayer } from '../../../components/displayer/displayer';
 import { DisplayerActionIconButton } from '../../../components/displayer/displayer-action-icon-button';
 import { DisplayerActionsHeader } from '../../../components/displayer/displayer-actions-header';
-import { useContactPreviewActions } from '../../../views/contacts/actions/contact-preview-actions';
+import { useContactPreviewActions } from '../../../views/contacts/actions/use-contact-preview-actions';
 import { useDisplayName } from '../../hooks/use-display-name';
 import { Contact } from '../../types/contact';
 

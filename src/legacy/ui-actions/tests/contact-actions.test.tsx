@@ -9,7 +9,7 @@ import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { populateFoldersStore } from '../../../carbonio-ui-commons/test/mocks/store/folders';
 import { setupHook } from '../../../carbonio-ui-commons/test/test-setup';
 import { buildContact } from '../../../tests/model-builder';
-import { useHoverActions } from '../../../views/contacts/actions/use-hover-actions';
+import { useContactHoverActions } from '../../../views/contacts/actions/use-contact-hover-actions';
 
 describe('Contacts actions', () => {
 	describe('document current behavior', () => {
@@ -21,7 +21,7 @@ describe('Contacts actions', () => {
 			populateFoldersStore();
 			const contact = buildContact({ parent: FOLDERS.CONTACTS });
 
-			const { result } = setupHook(useHoverActions, { initialProps: [contact] });
+			const { result } = setupHook(useContactHoverActions, { initialProps: [contact] });
 
 			const actions = result.current;
 
@@ -35,7 +35,7 @@ describe('Contacts actions', () => {
 			populateFoldersStore();
 			const contact = buildContact({ parent: FOLDERS.TRASH });
 
-			const { result } = setupHook(useHoverActions, { initialProps: [contact] });
+			const { result } = setupHook(useContactHoverActions, { initialProps: [contact] });
 
 			const actions = result.current;
 

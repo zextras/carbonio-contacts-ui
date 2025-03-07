@@ -19,9 +19,7 @@ import { getFolderIdParts } from '../../../carbonio-ui-commons/helpers/folders';
 import { useTags } from '../../../carbonio-ui-commons/store/zustand/tags';
 import { Contact } from '../../../legacy/types/contact';
 import { applyTag } from '../../../legacy/ui-actions/tag-actions';
-import { MakeOptional } from '../../../types';
 
-type OptionallyClickableAction = MakeOptional<DSAction, 'onClick'>;
 type ContactActionsFn = (contact: Contact) => Array<DSAction>;
 
 export const useContactsContextualMenuActions = (folderId: string): ContactActionsFn => {

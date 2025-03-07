@@ -18,7 +18,7 @@ import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { getFolderIdParts } from '../../../carbonio-ui-commons/helpers/folders';
 import { Contact } from '../../../legacy/types/contact';
 
-export const useHoverActions = (contact: Contact): Array<DSAction> => {
+export const useContactHoverActions = (contact: Contact): Array<DSAction> => {
 	const [t] = useTranslation();
 	const moveAction = useActionMoveContacts();
 	const restoreAction = useActionRestoreContacts();
