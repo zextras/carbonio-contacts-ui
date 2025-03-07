@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback, useMemo, DragEvent, useContext, ReactNode } from 'react';
+import React, { useCallback, useMemo, DragEvent, ReactNode } from 'react';
 
 import { Drag } from '@zextras/carbonio-design-system';
 import { replaceHistory } from '@zextras/carbonio-shell-ui';
@@ -13,10 +13,10 @@ import { useTags } from '../../../../carbonio-ui-commons/store/zustand/tags';
 import { ListActionIconButton } from '../../../../components/list/list-action-icon-button';
 import { ListItemActionsWrapper } from '../../../../components/list/list-item-actions-wrapper';
 import { ListItemAvatar } from '../../../../components/list/list-item-avatar';
+import { useContactsContextualMenuActions } from '../../../../views/contacts/actions/use-contextual-menu-actions';
 import { useHoverActions } from '../../../../views/contacts/actions/use-hover-actions';
 import { getTagsArray } from '../../../helpers/tags';
 import { Contact } from '../../../types/contact';
-import { ActionsContext } from '../../../ui-actions/actions-context';
 
 type ContactListItemProps = {
 	item: Contact;
@@ -70,7 +70,8 @@ export const ContactListItem = ({
 		id: item.id,
 		label: `${item.firstName} ${item.middleName} ${item.lastName}`
 	};
-	const { getContextActions } = useContext(ActionsContext);
+	// FIXME: how can the folderId be undefined??
+	const getContextActions = useContactsContextualMenuActions(folderId ?? '');
 
 	const hoverActions = useHoverActions(item);
 	const hoverActionsIcons = useMemo<ReactNode[]>(

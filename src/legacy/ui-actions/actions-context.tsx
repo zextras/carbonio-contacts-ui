@@ -5,8 +5,8 @@
  */
 import React, { createContext, FC, useCallback, useMemo } from 'react';
 
-import { useContextActions, useMultipleSelectionActions } from './contact-actions';
-import { Contact, ContactOrGroup } from '../types/contact';
+import { useMultipleSelectionActions } from './contact-actions';
+import { ContactOrGroup } from '../types/contact';
 
 type ACPProps = {
 	folderId: string;
@@ -26,14 +26,11 @@ type ActionObj = {
 
 type ActionList = Array<ActionObj>;
 
-type SingleContactActionsProvider = (item: Contact) => ActionList;
 type MultipleContactsActionsProvider = () => ActionList;
 
 export const ActionsContext = createContext<{
-	getContextActions: SingleContactActionsProvider;
 	getSecondaryActions: MultipleContactsActionsProvider;
 }>({
-	getContextActions: () => [],
 	getSecondaryActions: () => []
 });
 
@@ -45,23 +42,14 @@ export const ActionsContextProvider: FC<ACPProps & { selectedContacts: ContactOr
 	selectedContacts
 }) => {
 	const ids = useMemo(() => Object.keys(selectedIds ?? []), [selectedIds]);
-	const contextActions = useContextActions(folderId);
 	const secondaryActions = useMultipleSelectionActions({
 		folderId,
 		deselectAll,
 		selectedContacts,
 		ids
 	});
-	const [contextActionsCallback, secondaryActionsCallback] = useMemo(
-		() => [contextActions, secondaryActions],
-		[contextActions, secondaryActions]
-	);
+	const [secondaryActionsCallback] = useMemo(() => [secondaryActions], [secondaryActions]);
 
-	const getContextActions = useCallback<SingleContactActionsProvider>(
-		// FIXME: return type of contextActionsCallback does not match ActionList
-		(item: Contact): ActionList => contextActionsCallback(item) as ActionList,
-		[contextActionsCallback]
-	);
 	const getSecondaryActions = useCallback<MultipleContactsActionsProvider>(
 		// FIXME: return type of secondaryActionsCallback does not match ActionList
 		(): ActionList => secondaryActionsCallback() as ActionList,
@@ -69,8 +57,6 @@ export const ActionsContextProvider: FC<ACPProps & { selectedContacts: ContactOr
 	);
 
 	return (
-		<ActionsContext.Provider value={{ getContextActions, getSecondaryActions }}>
-			{children}
-		</ActionsContext.Provider>
+		<ActionsContext.Provider value={{ getSecondaryActions }}>{children}</ActionsContext.Provider>
 	);
 };

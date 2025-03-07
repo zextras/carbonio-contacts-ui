@@ -17,7 +17,7 @@ import {
 } from '@zextras/carbonio-design-system';
 import { replaceHistory } from '@zextras/carbonio-shell-ui';
 import { TFunction } from 'i18next';
-import { every, find, includes, map, reduce } from 'lodash';
+import { every, find, includes, map, noop, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { TaggableItem } from '../../actions/types';
@@ -425,6 +425,7 @@ export const applyTag = ({
 	customComponent: ReactElement;
 	label?: string;
 	icon?: string;
+	onClick: () => void;
 } => {
 	const tagItem = reduce(
 		tags,
@@ -467,6 +468,7 @@ export const applyTag = ({
 		items: tagItem,
 		label: t('label.tag', 'Tag'),
 		icon: 'TagsMoreOutline',
+		onClick: noop,
 		customComponent: (
 			<Row takeAvailableSpace mainAlignment="flex-start">
 				<Padding right="small">
