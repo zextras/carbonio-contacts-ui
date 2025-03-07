@@ -7,7 +7,7 @@
 import React, { useCallback, useMemo } from 'react';
 
 import { Action, Icon, Padding, Row, Text } from '@zextras/carbonio-design-system';
-import { getAction, replaceHistory } from '@zextras/carbonio-shell-ui';
+import { getAction } from '@zextras/carbonio-shell-ui';
 import { TFunction } from 'i18next';
 import { every, includes, isEmpty, noop, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
