@@ -20,10 +20,6 @@ import { Folder } from '../../../carbonio-ui-commons/types';
 import { ACTION_IDS, TIMEOUTS } from '../../../constants';
 import { ContactGroup } from '../../../model/contact-group';
 import { apiClient } from '../../../network/api-client';
-import {
-	RestoreContactsAction,
-	useActionRestoreContacts
-} from '../../contacts/actions/restore-contacts';
 import { ActionTrashContacts, useActionTrashContacts } from '../../contacts/actions/trash-contacts';
 import { getFolderFromContactGroup } from '../utils';
 
@@ -58,13 +54,13 @@ function evaluateContactGroupActions<T extends DeletableItem>(
 function getActionsInTrash(
 	contactGroup: ContactGroup,
 	deletePermanentlyContactGroupAction: DeleteCGAction,
-	restoreContactsGroupActionDS: RestoreContactsAction
+	restoreContactsGroupActionDS: UIAction<ContactGroup, ContactGroup>
 ): Array<DSAction> {
 	const actionsInTrash = evaluateContactGroupActions<ContactGroup>(contactGroup, [
 		deletePermanentlyContactGroupAction
 	]);
 
-	const restoreDSAction = mapActionToDSAction(restoreContactsGroupActionDS, [contactGroup]);
+	const restoreDSAction = mapActionToDSAction(restoreContactsGroupActionDS);
 
 	if (restoreDSAction) {
 		actionsInTrash.unshift(restoreDSAction);
@@ -127,8 +123,58 @@ const useMoveContactGroups = (contactGroup: ContactGroup): UIAction<ContactGroup
 		title: 'Move contact group'
 	};
 	const contactGroupIds = [contactGroup.id];
-	const action = useMoveItemAction<ContactGroup>({
+	const action = useMoveItemAction({
+		actionId: ACTION_IDS.move,
+		label: t('label.move', 'Move'),
 		modal: moveModal,
+		icon: 'MoveOutline',
+		onMoveConfirm: (targetFolder: Folder) => move(contactGroupIds, targetFolder.id)
+	});
+	return { ...action, canExecute: () => true };
+};
+
+const useRestoreContactGroups = (
+	contactGroup: ContactGroup
+): UIAction<ContactGroup, ContactGroup> => {
+	const [t] = useTranslation();
+	const createSnackbar = useSnackbar();
+	const move = useCallback(
+		(contactsIds: Array<string>, parentAddressBookId: string): Promise<void> =>
+			apiClient
+				.moveContact(contactsIds, parentAddressBookId)
+				.then(() => {
+					createSnackbar({
+						key: `move-contact-success`,
+						replace: true,
+						severity: 'success',
+						label: t('messages.snackbar.contact_restored', 'Contact restored'),
+						autoHideTimeout: TIMEOUTS.defaultSnackbar,
+						hideButton: true
+					});
+				})
+				.catch(() => {
+					createSnackbar({
+						key: `move-contact-error`,
+						replace: true,
+						severity: 'error',
+						label: t('label.error_try_again', 'Something went wrong, please try again'),
+						autoHideTimeout: TIMEOUTS.defaultSnackbar,
+						hideButton: true
+					});
+				}),
+		[createSnackbar, t]
+	);
+	const restoreModal = {
+		id: ACTION_IDS.restoreContacts,
+		confirmButtonLabel: t('label.restore', 'Restore'),
+		title: 'Restore contact group'
+	};
+	const contactGroupIds = [contactGroup.id];
+	const action = useMoveItemAction({
+		actionId: ACTION_IDS.restoreContacts,
+		label: t('label.restore', 'Restore'),
+		modal: restoreModal,
+		icon: 'RestoreOutline',
 		onMoveConfirm: (targetFolder: Folder) => move(contactGroupIds, targetFolder.id)
 	});
 	return { ...action, canExecute: () => true };
@@ -137,8 +183,8 @@ const useMoveContactGroups = (contactGroup: ContactGroup): UIAction<ContactGroup
 export const useContactGroupActions = (contactGroup: ContactGroup): Array<DSAction> => {
 	const deletePermanentlyContactGroupAction = useActionDeleteContactGroup(contactGroup);
 	const moveContactGroupAction = useMoveContactGroups(contactGroup);
+	const restoreContactsGroupAction = useRestoreContactGroups(contactGroup);
 	const trashContactGroupAction = useActionTrashContacts();
-	const restoreContactsGroupAction = useActionRestoreContacts();
 	const editContactGroupAction = useActionEditCG();
 	const sendEmailAction = useActionSendEmailCG(contactGroup);
 	const folder = getFolderFromContactGroup(contactGroup);

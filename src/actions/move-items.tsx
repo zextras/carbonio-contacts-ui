@@ -13,12 +13,9 @@ import {
 	Padding,
 	useModal
 } from '@zextras/carbonio-design-system';
-import { useTranslation } from 'react-i18next';
 
-import { DeletableItem } from './types';
 import { Folder } from '../carbonio-ui-commons/types';
 import { FolderTreeSelector } from '../components/folder-tree-selector/folder-tree-selector';
-import { ACTION_IDS } from '../constants';
 
 export type MoveItemModalProps = {
 	modal: {
@@ -28,6 +25,9 @@ export type MoveItemModalProps = {
 	};
 };
 type MoveItems = MoveItemModalProps & {
+	actionId: string;
+	icon: string;
+	label: string;
 	onMoveConfirm: (targetFolder: Folder) => Promise<void>;
 };
 type MoveActionBase = {
@@ -89,8 +89,7 @@ const BaseMoveModal = ({
 	);
 };
 
-function useCreateMoveModalAction(): ({ modal, onMoveConfirm }: MoveItems) => MoveActionBase {
-	const [t] = useTranslation();
+function useCreateMoveModalAction(): ({ modal, icon, onMoveConfirm }: MoveItems) => MoveActionBase {
 	const { createModal, closeModal } = useModal();
 	const createMoveModal = (
 		modalId: string,
@@ -115,27 +114,21 @@ function useCreateMoveModalAction(): ({ modal, onMoveConfirm }: MoveItems) => Mo
 		);
 	};
 
-	return ({ modal, onMoveConfirm }): MoveActionBase => {
+	return ({ actionId, modal, icon, label, onMoveConfirm }): MoveActionBase => {
 		const openMoveModal = (): void => {
 			createMoveModal(modal.id, modal.title, modal.confirmButtonLabel, onMoveConfirm);
 		};
 
 		return {
-			id: ACTION_IDS.move,
-			label: t('label.move', 'Move'),
-			icon: 'MoveOutline',
+			id: actionId,
+			label,
+			icon,
 			execute: openMoveModal
 		};
 	};
 }
 
-export const useMoveItemAction = <T extends DeletableItem>({
-	modal,
-	onMoveConfirm
-}: MoveItems): MoveActionBase => {
+export const useMoveItemAction = (props: MoveItems): MoveActionBase => {
 	const createMoveAction = useCreateMoveModalAction();
-	return createMoveAction({
-		modal,
-		onMoveConfirm
-	});
+	return createMoveAction(props);
 };
