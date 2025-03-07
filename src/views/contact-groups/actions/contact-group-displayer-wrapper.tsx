@@ -15,7 +15,7 @@ import { ContactGroupDisplayer } from '../displayer/contact-group-displayer';
 export const ContactGroupDisplayerWrapper = (): React.JSX.Element => {
 	const { id: contactGroupId, folderId } = useParams<{ folderId: string; id: string }>();
 	const contactGroup = useAppSelector((state) =>
-		selectContactGroup(state, folderId, contactGroupId)
+		selectContactGroup(state, folderId ?? '', contactGroupId ?? '')
 	);
 	return (
 		<>

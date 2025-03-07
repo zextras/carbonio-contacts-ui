@@ -8,7 +8,7 @@ import React, { useCallback, useState } from 'react';
 import { useSnackbar } from '@zextras/carbonio-design-system';
 import { useBoardHooks } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { useAppDispatch } from '../../../legacy/hooks/redux';
@@ -17,22 +17,21 @@ import {
 	isContactGroupNameInvalid
 } from '../../board/common-contact-group-board';
 import { createContactGroup } from '../api/create-contact-group';
-import { CONTACT_GROUPS_PATH, useRedirectToContactGroup } from '../navigation';
+import { CONTACT_GROUPS_PATH } from '../navigation';
+import { getFolderFromContactGroup } from '../utils';
 
 const NewContactGroupBoard = (): React.JSX.Element => {
 	const [t] = useTranslation();
 	const { pathname } = useLocation();
 	const { closeBoard } = useBoardHooks();
 	const createSnackbar = useSnackbar();
-
+	const navigate = useNavigate();
 	const initialName = t('board.newContactGroup.name', 'New Group');
 	const [folderId, setFolderId] = useState(FOLDERS.CONTACTS);
 	const [nameValue, setNameValue] = useState(initialName);
 	const dispatch = useAppDispatch();
 
 	const [memberListEmails, setMemberListEmails] = useState<string[]>([]);
-
-	const redirectTo = useRedirectToContactGroup();
 
 	const onSave = useCallback(() => {
 		dispatch(createContactGroup({ title: nameValue, members: memberListEmails, folderId })).then(
@@ -46,12 +45,14 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 					return;
 				}
 				const contactGroup = res.payload;
+				const folder = getFolderFromContactGroup(contactGroup);
 				if (pathname.includes(CONTACT_GROUPS_PATH)) {
 					const element = window.document.getElementById(contactGroup.id);
 					if (element) {
 						element.scrollIntoView({ block: 'end' });
 					}
-					redirectTo(contactGroup);
+					folder &&
+						navigate(`/contacts/folder/${folder.id}/${CONTACT_GROUPS_PATH}/${contactGroup.id}`);
 				}
 
 				createSnackbar({
@@ -74,7 +75,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 		createSnackbar,
 		t,
 		closeBoard,
-		redirectTo
+		navigate
 	]);
 
 	return (

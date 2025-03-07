@@ -15,7 +15,7 @@ import { selectAllContactsInFolder } from '../../store/selectors/contacts';
 export default function ContactsEmptyDisplayer(): React.JSX.Element {
 	const [t] = useTranslation();
 	const { folderId } = useParams<{ folderId: string }>();
-	const contacts = useAppSelector((state) => selectAllContactsInFolder(state, folderId));
+	const contacts = useAppSelector((state) => selectAllContactsInFolder(state, folderId ?? ''));
 	const trashMessages = useMemo(
 		() => [
 			{

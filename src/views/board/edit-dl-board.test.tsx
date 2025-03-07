@@ -10,7 +10,6 @@ import { act, waitFor } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { EventEmitter } from 'events';
 import { HttpResponse } from 'msw';
-import { Route } from 'react-router-dom';
 
 import EditDLBoard, { EditDLBoardContext } from './edit-dl-board';
 import { screen, setupTest, within } from '../../carbonio-ui-commons/test/test-setup';
@@ -237,15 +236,14 @@ describe('Edit DL board', () => {
 		spyUseBoard(dl);
 		const { user } = setupTest(
 			<>
-				<Route path={`${ROUTES.mainRoute}${ROUTES.distributionLists}`}>
-					<DistributionListsView />
-				</Route>
+				<DistributionListsView />
 				<EditDLBoard />
 			</>,
 			{
 				initialEntries: [
 					`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.member}/${dl.id}`
-				]
+				],
+				path: `${ROUTES.mainRoute}${ROUTES.distributionLists}`
 			}
 		);
 		await screen.findAllByText(dl.email);
@@ -280,15 +278,14 @@ describe('Edit DL board', () => {
 		spyUseBoard(dl);
 		const { user } = setupTest(
 			<>
-				<Route path={`${ROUTES.mainRoute}${ROUTES.distributionLists}`}>
-					<DistributionListsView />
-				</Route>
+				<DistributionListsView />
 				<EditDLBoard />
 			</>,
 			{
 				initialEntries: [
 					`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.member}/${dl.id}`
-				]
+				],
+				path: `${ROUTES.mainRoute}${ROUTES.distributionLists}`
 			}
 		);
 		await screen.findAllByText(dl.email);
@@ -319,15 +316,14 @@ describe('Edit DL board', () => {
 		spyUseBoard(dl);
 		const { user } = setupTest(
 			<>
-				<Route path={`${ROUTES.mainRoute}${ROUTES.distributionLists}`}>
-					<DistributionListsView />
-				</Route>
+				<DistributionListsView />
 				<EditDLBoard />
 			</>,
 			{
 				initialEntries: [
 					`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.member}/${dl.id}`
-				]
+				],
+				path: `${ROUTES.mainRoute}${ROUTES.distributionLists}`
 			}
 		);
 		await screen.findAllByText(dl.email);

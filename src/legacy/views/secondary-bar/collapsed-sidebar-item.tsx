@@ -7,7 +7,7 @@
 import React, { SyntheticEvent } from 'react';
 
 import { Button, Padding, Row, Tooltip } from '@zextras/carbonio-design-system';
-import { useReplaceHistoryCallback } from '@zextras/carbonio-shell-ui';
+import { useNavigate } from 'react-router-dom';
 
 type CollapsedSidebarItemProps = {
 	id: string;
@@ -23,10 +23,10 @@ export const CollapsedSideBarItem = ({
 	iconColor = 'text',
 	redirectPath
 }: CollapsedSidebarItemProps): React.JSX.Element => {
-	const replaceHistory = useReplaceHistoryCallback();
+	const navigate = useNavigate();
 	const onClick = (ev: KeyboardEvent | SyntheticEvent): void => {
 		ev.preventDefault();
-		replaceHistory(redirectPath);
+		navigate(redirectPath, { replace: true });
 	};
 
 	return (

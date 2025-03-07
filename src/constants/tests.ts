@@ -211,7 +211,7 @@ export const TESTID_SELECTORS = {
 	findUsersFilterInput: 'find-users-filter-input',
 	sharesUsersListItem: 'shares-users-list-item',
 	checkbox: 'checkbox'
-};
+} as const;
 
 export const PALETTE = {
 	primary: {

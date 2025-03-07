@@ -3,33 +3,27 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 
 import { Container, Padding, Text } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
-import { useRouteMatch, Switch, Route } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import { EmptyFieldMessages, EmptyListMessages } from './utils';
 import ContactEditPanel from '../edit/contact-edit-panel';
 import { ContactPreviewWrapper } from '../preview/contact-preview-wrapper';
 
-const generateRandomNumber = () => Math.floor(Math.random() * 3);
 const SearchPanel = ({ searchResults, query, width }) => {
-	const { path } = useRouteMatch();
 	const [t] = useTranslation();
 	const emptyListMessages = useMemo(() => EmptyListMessages(t), [t]);
 	const emptyFieldMessages = useMemo(() => EmptyFieldMessages(t), [t]);
-	const [randomIndex, setRandomIndex] = useState(0);
-	useEffect(() => {
-		const random = generateRandomNumber();
-		setRandomIndex(random);
-	}, [searchResults?.contacts.length, query]);
+
 	const displayerMessage = useMemo(() => {
 		if (searchResults?.contacts.length === 0) {
-			return emptyListMessages[randomIndex];
+			return emptyListMessages[0];
 		}
 		return emptyFieldMessages[0];
-	}, [randomIndex, emptyListMessages, emptyFieldMessages, searchResults?.contacts.length]);
+	}, [emptyListMessages, emptyFieldMessages, searchResults?.contacts.length]);
 	const displayerTitle = useMemo(() => displayerMessage?.title, [displayerMessage?.title]);
 	const displayerDescription = useMemo(
 		() => displayerMessage?.description,
@@ -37,16 +31,12 @@ const SearchPanel = ({ searchResults, query, width }) => {
 	);
 	return (
 		<Container width={width ?? '55%'} mainAlignment="flex-start">
-			<Switch>
-				<Route exact path={`${path}/folder/:folderId/contacts/:contactId`}>
-					<ContactPreviewWrapper />
-				</Route>
-				<Route exact path={`${path}/folder/:folderId/edit/:editId`}>
-					<ContactEditPanel />
-				</Route>
+			<Routes>
+				<Route path={`folder/:folderId/contacts/:contactId`} element={<ContactPreviewWrapper />} />
+				<Route path={`folder/:folderId/edit/:editId`} element={<ContactEditPanel />} />
 				<Route
-					path={path}
-					render={() => (
+					path={'/'}
+					element={
 						<Container background="gray5">
 							<Padding all="medium">
 								<Text
@@ -68,9 +58,9 @@ const SearchPanel = ({ searchResults, query, width }) => {
 								{displayerDescription}
 							</Text>
 						</Container>
-					)}
+					}
 				/>
-			</Switch>
+			</Routes>
 		</Container>
 	);
 };

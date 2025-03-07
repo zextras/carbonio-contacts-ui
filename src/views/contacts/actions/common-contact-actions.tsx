@@ -7,9 +7,10 @@
 import React, { useCallback, useMemo } from 'react';
 
 import { Icon, Padding, Row, Text } from '@zextras/carbonio-design-system';
-import { getAction, replaceHistory } from '@zextras/carbonio-shell-ui';
+import { getAction } from '@zextras/carbonio-shell-ui';
 import { every, includes, isEmpty, noop, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import { useActionDeleteContacts } from '../../../actions/delete-contacts';
 import { useActionMoveContacts } from '../../../actions/move-contacts';
@@ -102,10 +103,11 @@ export const useMoveAction = (contact: Contact): UIAction<Contact, Contact> => {
 export const useEditAction = (contact: Contact): UIAction<Contact, Contact> => {
 	const [t] = useTranslation();
 	const folderId = contact.parent;
+	const navigate = useNavigate();
 	const contactInternalId = contact.id;
 	const onEdit = useCallback(
-		() => replaceHistory(`/folder/${folderId}/edit/${contactInternalId}`),
-		[contactInternalId, folderId]
+		() => navigate(`../folder/${folderId}/edit/${contactInternalId}`),
+		[contactInternalId, folderId, navigate]
 	);
 	return {
 		id: 'edit',
@@ -120,13 +122,14 @@ export const useDeleteAction = (contact: Contact): UIAction<Contact, Contact> =>
 	const folderId = contact.parent;
 	const deleteAction = useActionDeleteContacts();
 	const trashAction = useActionTrashContacts();
+	const navigate = useNavigate();
 	const [t] = useTranslation();
 	const onDelete = useCallback(() => {
-		replaceHistory(`/folder/${folderId}/contacts/${contact.id}`);
+		navigate(`../folder/${folderId}/contacts/${contact.id}`);
 		if (getFolderIdParts(folderId).id === FOLDERS.TRASH) {
 			deleteAction.execute([contact]);
 		} else trashAction.execute([contact]);
-	}, [folderId, contact, trashAction, deleteAction]);
+	}, [navigate, folderId, contact, trashAction, deleteAction]);
 	const isInTrash = isTrash(contact.parent);
 	const deleteActionLabel = isInTrash
 		? t('tooltip.list_trash.deletePermanently', 'Delete contact permanently')

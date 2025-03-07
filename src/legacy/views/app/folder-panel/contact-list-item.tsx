@@ -6,7 +6,7 @@
 import React, { MouseEventHandler, useCallback, useMemo, DragEvent } from 'react';
 
 import { Container, Drag } from '@zextras/carbonio-design-system';
-import { replaceHistory } from '@zextras/carbonio-shell-ui';
+import { useNavigate } from 'react-router-dom';
 
 import { ContactListItemActionWrapper } from './contact-list-item-action-wrapper';
 import { ItemAvatar } from './item-avatar';
@@ -42,16 +42,16 @@ export const ContactListItem = ({
 }: ContactListItemProps): React.JSX.Element => {
 	const ids = useMemo(() => Object.keys(selectedItems ?? []), [selectedItems]);
 	const tagsFromStore = useTags();
-
+	const navigate = useNavigate();
 	const tags = useMemo(() => getTagsArray(tagsFromStore, item.tags), [item.tags, tagsFromStore]);
 
 	const _onClick = useCallback<MouseEventHandler<HTMLDivElement>>(
 		(e) => {
 			if (!e.isDefaultPrevented()) {
-				replaceHistory(`/folder/${folderId}/contacts/${item.id}`);
+				navigate(`../folder/${folderId}/contacts/${item.id}`);
 			}
 		},
-		[folderId, item.id]
+		[folderId, item.id, navigate]
 	);
 
 	const dragCheck = useCallback(

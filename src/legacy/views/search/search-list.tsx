@@ -56,7 +56,7 @@ export const SearchList = ({
 
 	const listItems = useMemo(
 		() =>
-			map(searchResults.contacts, (contact) => {
+			map(searchResults.contacts, (contact, index) => {
 				const isActive = itemId === contact.id;
 				if (isGroup(contact)) {
 					return <ContactGroupListItemWrapper contactGroup={contact} />;

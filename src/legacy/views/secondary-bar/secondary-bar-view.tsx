@@ -9,7 +9,7 @@ import { ThemeProvider } from '@mui/material';
 import { Container, Divider } from '@zextras/carbonio-design-system';
 import { SecondaryBarComponentProps } from '@zextras/carbonio-shell-ui';
 import { map } from 'lodash';
-import { Route, Switch, useParams, useRouteMatch } from 'react-router-dom';
+import { Route, Routes, useParams } from 'react-router-dom';
 
 import { AccordionCustomComponent } from './accordion-custom-component';
 import { CollapsedSideBarFolderItem } from './collapsed-sidebar-folder-item';
@@ -49,7 +49,7 @@ const SidebarComponent = ({ accordions }: SidebarComponentProps): React.JSX.Elem
 		<Container orientation="vertical" height="fit" width="fill">
 			<SidebarAccordionMui
 				accordions={accordionsWithFindShare}
-				folderId={folderId}
+				folderId={folderId ?? ''}
 				localStorageName={LOCAL_STORAGES.EXPANDED_ADDRESSBOOKS}
 				AccordionCustomComponent={AccordionCustomComponent}
 				buttonFindShares={<FindSharesButton key={'find-shares-button'} />}
@@ -63,8 +63,6 @@ const SidebarComponent = ({ accordions }: SidebarComponentProps): React.JSX.Elem
 };
 
 const SecondaryBarView: FC<SecondaryBarComponentProps> = ({ expanded = false }) => {
-	const { path } = useRouteMatch();
-
 	const roots = useRootsArray();
 	const folders = useMemo(() => sortFolders(roots), [roots]);
 	const collapsedItems = [] as Array<ReactElement>;
@@ -83,15 +81,17 @@ const SecondaryBarView: FC<SecondaryBarComponentProps> = ({ expanded = false }) 
 	return (
 		<ThemeProvider theme={themeMui}>
 			{expanded ? (
-				<Switch>
-					<Route path={`${path}/folder/:folderId/:type?/:itemId?`}>
-						<SidebarComponent accordions={folders} />
-					</Route>
-				</Switch>
+				<Routes>
+					<Route
+						path={`folder/:folderId/:type?/:itemId?`}
+						element={<SidebarComponent accordions={folders} />}
+					/>
+				</Routes>
 			) : (
 				<div data-testid={'sidebar-collapsed'}>{collapsedItems}</div>
 			)}
 		</ThemeProvider>
 	);
 };
+
 export default SecondaryBarView;
