@@ -17,14 +17,11 @@ import { ContactGroup } from '../../../model/contact-group';
 import { apiClient } from '../../../network/api-client';
 import { useRedirectToContactGroupFolder } from '../navigation';
 
-type DeleteCGActionBase<T extends ContactGroup> = UIAction<T, T>;
-export type DeleteCGAction = DeleteCGActionBase<ContactGroup>;
-
 type DeleteContactGroupActionReturn = {
 	contactGroupId: string;
 };
 
-export const useActionDeleteContactGroup = (contactGroup: ContactGroup): DeleteCGAction => {
+export const useActionDeleteContactGroup = (contactGroup: ContactGroup): UIAction<void, void> => {
 	const [t] = useTranslation();
 	const modalTitle = t('modal.delete.contactGroup.header', 'Delete "{{contactGroupName}}"', {
 		contactGroupName: contactGroup.title
@@ -38,7 +35,7 @@ export const useActionDeleteContactGroup = (contactGroup: ContactGroup): DeleteC
 	const redirectTo = useRedirectToContactGroupFolder();
 
 	const onDeleteConfirm = useCallback(
-		async (contactGroup: ContactGroup) =>
+		async () =>
 			apiClient
 				.deleteContact([contactGroup.id])
 				.then(() => {
@@ -71,10 +68,10 @@ export const useActionDeleteContactGroup = (contactGroup: ContactGroup): DeleteC
 						hideButton: true
 					});
 				}),
-		[activeContactGroup?.id, createSnackbar, redirectTo, t]
+		[activeContactGroup?.id, contactGroup, createSnackbar, redirectTo, t]
 	);
 
-	return useDeletePermanentlyItem<ContactGroup>({
+	return useDeletePermanentlyItem({
 		modal: { id: 'delete-cg-modal', title: modalTitle, body: modalBody },
 		onDeleteConfirm
 	});

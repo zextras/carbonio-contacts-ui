@@ -12,7 +12,7 @@ import { UIAction } from '../../../actions/types';
 import { ACTION_IDS } from '../../../constants';
 import { ContactGroup } from '../../../model/contact-group';
 
-export type SendEmailActionCG = UIAction<ContactGroup, ContactGroup>;
+export type SendEmailActionCG = UIAction<void, void>;
 
 export const useActionSendEmailCG = (contactGroup: ContactGroup): SendEmailActionCG => {
 	const [t] = useTranslation();
@@ -28,7 +28,7 @@ export const useActionSendEmailCG = (contactGroup: ContactGroup): SendEmailActio
 			return;
 		}
 
-		if (!canExecute(contactGroup) || isDisabled) {
+		if (!canExecute() || isDisabled) {
 			return;
 		}
 

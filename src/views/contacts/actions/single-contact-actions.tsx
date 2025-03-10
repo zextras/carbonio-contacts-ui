@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { useActionDeleteContacts } from './delete-contacts';
 import { useActionMoveContacts } from './move-contacts';
-import { useActionTrashContacts } from './trash-contacts';
+import { useTrashContacts } from '../../../actions/common-contacts-actions/use-trash-contact';
 import { UIAction } from '../../../actions/types';
 import { ZIMBRA_STANDARD_COLORS } from '../../../carbonio-ui-commons/constants';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
@@ -122,14 +122,14 @@ export const useEditAction = (contact: Contact): UIAction<Contact, Contact> => {
 export const useTrashOrDeletePermanentlyAction = (contact: Contact): UIAction<Contact, Contact> => {
 	const folderId = contact.parent;
 	const deleteAction = useActionDeleteContacts();
-	const trashAction = useActionTrashContacts();
+	const trashAction = useTrashContacts([contact]);
 	const navigate = useNavigate();
 	const [t] = useTranslation();
 	const onDelete = useCallback(() => {
 		navigate(`../folder/${folderId}/contacts/${contact.id}`);
 		if (getFolderIdParts(folderId).id === FOLDERS.TRASH) {
 			deleteAction.execute([contact]);
-		} else trashAction.execute([contact]);
+		} else trashAction.execute();
 	}, [navigate, folderId, contact, trashAction, deleteAction]);
 	const isInTrash = isTrash(contact.parent);
 	const deleteActionLabel = isInTrash

@@ -10,22 +10,19 @@ import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 
 import { ACTION_IDS } from '../constants';
-import { DeletableItem, UIAction } from './types';
+import { UIAction } from './types';
 import { Text } from '../components/Text';
 
-type DeleteItemActionReturn = {
-	deletedItemId: string;
-};
-type DeleteConfirmProps<T extends DeletableItem> = {
+type DeleteConfirmProps = {
 	modal: { id: string; title: string; body: string };
-	doDelete: (item: T) => Promise<DeleteItemActionReturn>;
+	doDelete: () => Promise<void>;
 };
-type DeleteActionBase<T extends DeletableItem> = UIAction<T, T>;
+type DeleteActionBase = UIAction<void, void>;
 type DeleteModalProps = {
 	modalId: string;
 	modalTitle: string;
 	modalBody: string;
-	deleteAction: () => Promise<DeleteItemActionReturn>;
+	deleteAction: () => Promise<void>;
 };
 
 const getDeleteModal = (
@@ -56,19 +53,15 @@ const getDeleteModal = (
 	}
 ];
 
-function useCreateDeleteModalAction<T extends DeletableItem>(): ({
+function useCreateDeleteModalAction(): ({
 	modal,
 	doDelete
-}: DeleteConfirmProps<T>) => DeleteActionBase<T> {
+}: DeleteConfirmProps) => DeleteActionBase {
 	const [t] = useTranslation();
 	const { createModal, closeModal } = useModal();
 
-	const handleDelete = (
-		item: T,
-		doDelete: (item: T) => Promise<DeleteItemActionReturn>,
-		modalId: string
-	): Promise<DeleteItemActionReturn> =>
-		doDelete(item).then((response) => {
+	const handleDelete = (doDelete: () => Promise<void>, modalId: string): Promise<void> =>
+		doDelete().then((response) => {
 			closeModal(modalId);
 			return response;
 		});
@@ -77,8 +70,7 @@ function useCreateDeleteModalAction<T extends DeletableItem>(): ({
 		modalId: string,
 		modalTitle: string,
 		modalBody: string,
-		contactGroup: T,
-		doDelete: (contactGroup: T) => Promise<DeleteItemActionReturn>
+		doDelete: () => Promise<void>
 	): void => {
 		createModal(
 			...getDeleteModal(
@@ -86,7 +78,7 @@ function useCreateDeleteModalAction<T extends DeletableItem>(): ({
 					modalId,
 					modalTitle,
 					modalBody,
-					deleteAction: () => handleDelete(contactGroup, doDelete, modalId),
+					deleteAction: () => handleDelete(doDelete, modalId),
 					onClose: () => closeModal(modalId)
 				},
 				t
@@ -94,10 +86,9 @@ function useCreateDeleteModalAction<T extends DeletableItem>(): ({
 		);
 	};
 
-	return ({ modal, doDelete }): DeleteActionBase<T> => {
-		const execute = (item?: T): void => {
-			if (!item) return;
-			createDeleteModal(modal.id, modal.title, modal.body, item, doDelete);
+	return ({ modal, doDelete }): DeleteActionBase => {
+		const execute = (): void => {
+			createDeleteModal(modal.id, modal.title, modal.body, doDelete);
 		};
 
 		return {
@@ -111,23 +102,19 @@ function useCreateDeleteModalAction<T extends DeletableItem>(): ({
 	};
 }
 
-type DeletePermanentlyItem<T extends DeletableItem> = {
+type DeletePermanentlyItem = {
 	modal: { id: string; title: string; body: string };
-	onDeleteConfirm: (item: T) => void;
+	onDeleteConfirm: () => void;
 };
-export const useDeletePermanentlyItem = <T extends DeletableItem>({
+export const useDeletePermanentlyItem = ({
 	modal,
 	onDeleteConfirm
-}: DeletePermanentlyItem<T>): UIAction<T, T> => {
-	const createDeleteModal = useCreateDeleteModalAction<T>();
+}: DeletePermanentlyItem): UIAction<void, void> => {
+	const createDeleteModal = useCreateDeleteModalAction();
 
-	const doDelete = useCallback(
-		async (item: T) => {
-			onDeleteConfirm(item);
-			return { deletedItemId: item.id };
-		},
-		[onDeleteConfirm]
-	);
+	const doDelete = useCallback(async () => {
+		onDeleteConfirm();
+	}, [onDeleteConfirm]);
 	return createDeleteModal({
 		modal,
 		doDelete

@@ -41,14 +41,14 @@ describe('useActionSendEmailCG', () => {
 	it('should return an action which is executable even if the given CG has no members', () => {
 		jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([jest.fn(), true]);
 		const { result } = setupHook(useActionSendEmailCG, { initialProps: [contactGroupNoMembers] });
-		expect(result.current.canExecute(contactGroupNoMembers)).toBeTruthy();
+		expect(result.current.canExecute()).toBeTruthy();
 	});
 
 	it('should not call the Mails integrated function if execute function is invoked passing a CG without members', () => {
 		const openComposer = jest.fn();
 		jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openComposer, true]);
 		const { result } = setupHook(useActionSendEmailCG, { initialProps: [contactGroupNoMembers] });
-		result.current.execute(contactGroupNoMembers);
+		result.current.execute();
 		expect(openComposer).not.toHaveBeenCalled();
 	});
 
@@ -56,7 +56,7 @@ describe('useActionSendEmailCG', () => {
 		const openComposer = jest.fn();
 		jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openComposer, true]);
 		const { result } = setupHook(useActionSendEmailCG, { initialProps: [contactGroupWithMembers] });
-		result.current.execute(contactGroupWithMembers);
+		result.current.execute();
 		expect(openComposer).toBeCalledWith({
 			recipients: contactGroupWithMembers.members.map((member) =>
 				expect.objectContaining({ email: member })

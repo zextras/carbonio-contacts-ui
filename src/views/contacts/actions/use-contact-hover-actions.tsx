@@ -20,11 +20,11 @@ import { Contact } from '../../../legacy/types/contact';
 
 export const useContactHoverActions = (contact: Contact): Array<DSAction> => {
 	const [t] = useTranslation();
+	const folderId = contact.parent;
 	const moveAction = useActionMoveContacts();
 	const restoreAction = useActionRestoreContacts();
 	const deleteAction = useActionDeleteContacts();
 	const trashAction = useActionTrashContacts();
-	const folderId = contact.parent;
 	const editAction = useEditAction(contact);
 
 	if (getFolderIdParts(folderId).id === FOLDERS.TRASH) {

@@ -12,14 +12,14 @@ import { UIAction } from '../../../actions/types';
 import { ACTION_IDS, EDIT_CONTACT_GROUP_BOARD_ID } from '../../../constants';
 import { ContactGroup } from '../../../model/contact-group';
 
-export type EditActionCG = UIAction<ContactGroup, ContactGroup>;
+export type EditActionCG = UIAction<void, void>;
 
-export const useActionEditCG = (): EditActionCG => {
+export const useActionEditCG = (contactGroup: ContactGroup): EditActionCG => {
 	const [t] = useTranslation();
 
 	const canExecute = useCallback<EditActionCG['canExecute']>(() => true, []);
 
-	const editCG = useCallback<EditActionCG['execute']>((contactGroup) => {
+	const editCG = useCallback<EditActionCG['execute']>(() => {
 		if (contactGroup === undefined) {
 			return;
 		}
@@ -35,7 +35,7 @@ export const useActionEditCG = (): EditActionCG => {
 				context: { contactGroupId: contactGroup.id, folderId: contactGroup.parent }
 			});
 		}
-	}, []);
+	}, [contactGroup]);
 
 	return useMemo(
 		() => ({

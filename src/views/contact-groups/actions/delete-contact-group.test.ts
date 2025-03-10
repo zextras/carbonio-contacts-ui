@@ -68,21 +68,6 @@ describe('useActionDeleteCG', () => {
 		expect(result.current.canExecute()).toBeTruthy();
 	});
 
-	it('should not open the modal if pass undefined argument to execute function', async () => {
-		const { result } = setupHook(useActionDeleteContactGroup, {
-			initialProps: [contactGroupWithMembers],
-			store: defaultStore
-		});
-		const action = result.current;
-		act(() => {
-			action.execute();
-		});
-		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
-		});
-		expect(screen.queryByText(`Delete "${contactGroupWithMembers.title}"`)).not.toBeInTheDocument();
-	});
-
 	it('should return an execute field which opens a modal with the CG name', async () => {
 		const { result } = setupHook(useActionDeleteContactGroup, {
 			initialProps: [contactGroupWithMembers],
@@ -90,7 +75,7 @@ describe('useActionDeleteCG', () => {
 		});
 		const action = result.current;
 		act(() => {
-			action.execute(contactGroupWithMembers);
+			action.execute();
 		});
 
 		act(() => {
@@ -108,7 +93,7 @@ describe('useActionDeleteCG', () => {
 		});
 		const action = result.current;
 		act(() => {
-			action.execute(contactGroupWithMembers);
+			action.execute();
 		});
 
 		act(() => {
@@ -127,7 +112,7 @@ describe('useActionDeleteCG', () => {
 		});
 		const action = result.current;
 		act(() => {
-			action.execute(contactGroupWithMembers);
+			action.execute();
 		});
 
 		act(() => {
@@ -148,7 +133,7 @@ describe('useActionDeleteCG', () => {
 		});
 		const action = result.current;
 		act(() => {
-			action.execute(contactGroupWithMembers);
+			action.execute();
 		});
 
 		act(() => {
@@ -167,7 +152,7 @@ describe('useActionDeleteCG', () => {
 		});
 		const action = result.current;
 		act(() => {
-			action.execute(contactGroupWithMembers);
+			action.execute();
 		});
 
 		act(() => {
@@ -197,7 +182,7 @@ describe('useActionDeleteCG', () => {
 
 		const action = result.current;
 		act(() => {
-			action.execute(contactGroupWithMembers);
+			action.execute();
 		});
 
 		act(() => {
@@ -218,7 +203,7 @@ describe('useActionDeleteCG', () => {
 		});
 		const action = result.current;
 		act(() => {
-			action.execute(contactGroupWithMembers);
+			action.execute();
 		});
 
 		act(() => {
@@ -243,7 +228,7 @@ describe('useActionDeleteCG', () => {
 		});
 		const action = result.current;
 		act(() => {
-			action.execute(contactGroupWithMembers);
+			action.execute();
 		});
 
 		act(() => {
@@ -273,7 +258,7 @@ describe('useActionDeleteCG', () => {
 
 		const action = result.current;
 		act(() => {
-			action.execute(contactGroupWithMembers);
+			action.execute();
 			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 
