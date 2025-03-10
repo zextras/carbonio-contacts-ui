@@ -8,13 +8,13 @@ import { type Action as DSAction } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
 import { applyMultiTag } from './tag-actions';
+import { useDeleteContactsMultipleSelection } from './use-delete-contacts-multiple-selection';
+import { useTrashContactsMultipleSelection } from './use-trash-contacts-multiple-selection';
 import { generateClickableAction } from '../../actions/generate-clickable-action';
 import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
 import { getFolderIdParts } from '../../carbonio-ui-commons/helpers/folders';
 import { useTags } from '../../carbonio-ui-commons/store/zustand/tags';
 import { MakeOptional } from '../../types';
-import { useDeleteMultipleSelectionContacts } from '../../views/contacts/actions/use-delete-multiple-selection-contacts';
-import { useTrashContactsMultipleSelection } from '../../views/contacts/actions/use-trash-contacts-multiple-selection';
 import { ContactOrGroup } from '../types/contact';
 
 type OptionallyClickableAction = MakeOptional<DSAction, 'onClick'>;
@@ -35,7 +35,7 @@ export const useMultipleSelectionContactsActions = ({
 }: SecondaryActionsProps): SecondaryContactActionsFn => {
 	const [t] = useTranslation();
 	const tags = useTags();
-	const deleteAction = useDeleteMultipleSelectionContacts();
+	const deleteAction = useDeleteContactsMultipleSelection();
 	const trashAction = useTrashContactsMultipleSelection();
 
 	if (getFolderIdParts(folderId).id === FOLDERS.TRASH) {

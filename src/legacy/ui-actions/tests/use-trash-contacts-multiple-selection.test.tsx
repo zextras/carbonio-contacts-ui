@@ -8,13 +8,13 @@ import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 
-import { UIAction } from '../../../../actions/types';
-import { FOLDERS } from '../../../../carbonio-ui-commons/constants/folders';
-import { createSoapAPIInterceptor } from '../../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { populateFoldersStore } from '../../../../carbonio-ui-commons/test/mocks/store/folders';
-import { screen, setupHook } from '../../../../carbonio-ui-commons/test/test-setup';
-import { Contact } from '../../../../legacy/types/contact';
-import { buildContact } from '../../../../tests/model-builder';
+import { UIAction } from '../../../actions/types';
+import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
+import { createSoapAPIInterceptor } from '../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
+import { populateFoldersStore } from '../../../carbonio-ui-commons/test/mocks/store/folders';
+import { screen, setupHook } from '../../../carbonio-ui-commons/test/test-setup';
+import { buildContact } from '../../../tests/model-builder';
+import { Contact } from '../../types/contact';
 import { useTrashContactsMultipleSelection } from '../use-trash-contacts-multiple-selection';
 
 describe("Trash-contacts' actions", () => {

@@ -6,19 +6,19 @@
 
 import { act } from '@testing-library/react';
 
-import { UIAction } from '../../../../actions/types';
-import { FOLDERS } from '../../../../carbonio-ui-commons/constants/folders';
-import { populateFoldersStore } from '../../../../carbonio-ui-commons/test/mocks/store/folders';
-import { screen, setupHook } from '../../../../carbonio-ui-commons/test/test-setup';
-import { TIMERS } from '../../../../constants/tests';
-import { Contact } from '../../../../legacy/types/contact';
-import { buildContact } from '../../../../tests/model-builder';
-import { useDeleteMultipleSelectionContacts } from '../use-delete-multiple-selection-contacts';
+import { UIAction } from '../../../actions/types';
+import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
+import { populateFoldersStore } from '../../../carbonio-ui-commons/test/mocks/store/folders';
+import { screen, setupHook } from '../../../carbonio-ui-commons/test/test-setup';
+import { TIMERS } from '../../../constants/tests';
+import { buildContact } from '../../../tests/model-builder';
+import { Contact } from '../../types/contact';
+import { useDeleteContactsMultipleSelection } from '../use-delete-contacts-multiple-selection';
 
 describe('Delete-contacts', () => {
 	describe("Delete-contacts' actions", () => {
 		it('should return true if the object response is correctly initialized', () => {
-			const { result } = setupHook(useDeleteMultipleSelectionContacts);
+			const { result } = setupHook(useDeleteContactsMultipleSelection);
 			expect(result.current).toEqual<UIAction<unknown, unknown>>(
 				expect.objectContaining({
 					icon: 'DeletePermanentlyOutline',
@@ -33,7 +33,7 @@ describe('Delete-contacts', () => {
 		it('should return true if canExecute has TRASH as parent', () => {
 			populateFoldersStore();
 			const cont: Contact[] = [buildContact({ parent: FOLDERS.TRASH })];
-			const { result } = setupHook(useDeleteMultipleSelectionContacts);
+			const { result } = setupHook(useDeleteContactsMultipleSelection);
 			const action = result.current;
 			expect(action.canExecute(cont)).toBeTruthy();
 		});
@@ -41,7 +41,7 @@ describe('Delete-contacts', () => {
 		it("should return false if canExecute hasn't a correct parent as prop", () => {
 			populateFoldersStore();
 			const cont: Contact[] = [buildContact({ parent: FOLDERS.CONTACTS })];
-			const { result } = setupHook(useDeleteMultipleSelectionContacts);
+			const { result } = setupHook(useDeleteContactsMultipleSelection);
 			const action = result.current;
 			expect(action.canExecute(cont)).toBeFalsy();
 		});
@@ -51,7 +51,7 @@ describe('Delete-contacts', () => {
 		it('should return true if it can open the modal', async () => {
 			populateFoldersStore();
 			const cont: Contact[] = [buildContact({ parent: FOLDERS.TRASH })];
-			const { result } = setupHook(useDeleteMultipleSelectionContacts);
+			const { result } = setupHook(useDeleteContactsMultipleSelection);
 			const action = result.current;
 			act(() => {
 				action.execute(cont);
@@ -64,7 +64,7 @@ describe('Delete-contacts', () => {
 
 		it('returns true if the label has a correct value', async () => {
 			populateFoldersStore();
-			const { result } = setupHook(useDeleteMultipleSelectionContacts);
+			const { result } = setupHook(useDeleteContactsMultipleSelection);
 			const action = result.current;
 			expect(action.label).toBe('Delete Permanently');
 		});

@@ -9,29 +9,29 @@ import { act } from '@testing-library/react';
 import { ErrorSoapBodyResponse, JSNS } from '@zextras/carbonio-shell-ui';
 import { times } from 'lodash';
 
-import { UIAction } from '../../../../actions/types';
-import { FOLDERS } from '../../../../carbonio-ui-commons/constants/folders';
-import { isLink, isSystemFolder } from '../../../../carbonio-ui-commons/helpers/folders';
-import { getFolder } from '../../../../carbonio-ui-commons/store/zustand/folder';
-import { createSoapAPIInterceptor } from '../../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { populateFoldersStore } from '../../../../carbonio-ui-commons/test/mocks/store/folders';
+import { UIAction } from '../../../actions/types';
+import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
+import { isLink, isSystemFolder } from '../../../carbonio-ui-commons/helpers/folders';
+import { getFolder } from '../../../carbonio-ui-commons/store/zustand/folder';
+import { createSoapAPIInterceptor } from '../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
+import { populateFoldersStore } from '../../../carbonio-ui-commons/test/mocks/store/folders';
 import {
 	setupHook,
 	screen,
 	makeListItemsVisible,
 	within
-} from '../../../../carbonio-ui-commons/test/test-setup';
-import { FOLDERS_DESCRIPTORS, TIMERS } from '../../../../constants/tests';
-import { Contact } from '../../../../legacy/types/contact';
-import { ContactActionRequest } from '../../../../legacy/types/soap';
-import { ContactActionResponse } from '../../../../network/api/contact-action';
-import { buildContact } from '../../../../tests/model-builder';
-import { getFoldersArray } from '../../../../tests/utils';
-import { useActionMoveMultipleSelectionContacts } from '../use-move-multiple-selection-contacts';
+} from '../../../carbonio-ui-commons/test/test-setup';
+import { FOLDERS_DESCRIPTORS, TIMERS } from '../../../constants/tests';
+import { ContactActionResponse } from '../../../network/api/contact-action';
+import { buildContact } from '../../../tests/model-builder';
+import { getFoldersArray } from '../../../tests/utils';
+import { Contact } from '../../types/contact';
+import { ContactActionRequest } from '../../types/soap';
+import { useMoveContactsMultipleSelection } from '../use-move-contacts-multiple-selection';
 
 describe('useActionMoveContacts', () => {
 	it('should return an object with the specific data', () => {
-		const { result } = setupHook(useActionMoveMultipleSelectionContacts);
+		const { result } = setupHook(useMoveContactsMultipleSelection);
 		expect(result.current).toEqual<UIAction<unknown, unknown>>(
 			expect.objectContaining({
 				icon: 'MoveOutline',
@@ -62,7 +62,7 @@ describe('useActionMoveContacts', () => {
 			}
 
 			const contacts = [buildContact({ parent: currentParentFolder.id })];
-			const { result } = setupHook(useActionMoveMultipleSelectionContacts);
+			const { result } = setupHook(useMoveContactsMultipleSelection);
 			const action = result.current;
 			expect(action.canExecute({ contacts, newParentAddressBook: addressBook })).toBeTruthy();
 		});
@@ -76,7 +76,7 @@ describe('useActionMoveContacts', () => {
 				throw new Error(`Cannot find a linked address book`);
 			}
 			const contacts = [buildContact()];
-			const { result } = setupHook(useActionMoveMultipleSelectionContacts);
+			const { result } = setupHook(useMoveContactsMultipleSelection);
 			const action = result.current;
 			expect(action.canExecute({ contacts, newParentAddressBook: linkedFolder })).toBeTruthy();
 		});
@@ -86,7 +86,7 @@ describe('useActionMoveContacts', () => {
 			const newParentAddressBook = getFolder(FOLDERS.CONTACTS);
 			const contacts = times(10, () => buildContact({ parent: newParentAddressBook?.id }));
 
-			const { result } = setupHook(useActionMoveMultipleSelectionContacts);
+			const { result } = setupHook(useMoveContactsMultipleSelection);
 			const action = result.current;
 			expect(action.canExecute({ contacts, newParentAddressBook })).toBeFalsy();
 		});
@@ -97,7 +97,7 @@ describe('useActionMoveContacts', () => {
 			const contacts = times(10, () => buildContact({ parent: newParentAddressBook?.id }));
 			contacts[4].parent = FOLDERS.AUTO_CONTACTS;
 
-			const { result } = setupHook(useActionMoveMultipleSelectionContacts);
+			const { result } = setupHook(useMoveContactsMultipleSelection);
 			const action = result.current;
 			expect(action.canExecute({ contacts, newParentAddressBook })).toBeTruthy();
 		});
@@ -110,7 +110,7 @@ describe('useActionMoveContacts', () => {
 				const newParentAddressBook = getFolder(FOLDERS.CONTACTS);
 				const contacts = times(10, () => buildContact({ parent: newParentAddressBook?.id }));
 
-				const { result } = setupHook(useActionMoveMultipleSelectionContacts);
+				const { result } = setupHook(useMoveContactsMultipleSelection);
 				const action = result.current;
 				act(() => {
 					action.execute({ contacts });
@@ -126,7 +126,7 @@ describe('useActionMoveContacts', () => {
 			it("shouldn't open a modal if the action cannot be executed", () => {
 				populateFoldersStore();
 				const contacts: Array<Contact> = [];
-				const { result } = setupHook(useActionMoveMultipleSelectionContacts);
+				const { result } = setupHook(useMoveContactsMultipleSelection);
 				const action = result.current;
 				act(() => {
 					action.execute({ contacts });
@@ -146,7 +146,7 @@ describe('useActionMoveContacts', () => {
 					'ContactAction'
 				);
 				const contact = buildContact({ parent: FOLDERS.AUTO_CONTACTS });
-				const { user, result } = setupHook(useActionMoveMultipleSelectionContacts);
+				const { user, result } = setupHook(useMoveContactsMultipleSelection);
 				const action = result.current;
 				await act(async () => {
 					action.execute({ contacts: [contact] });
@@ -180,7 +180,7 @@ describe('useActionMoveContacts', () => {
 					'ContactAction'
 				);
 				const contact = buildContact({ parent: FOLDERS.CONTACTS });
-				const { result } = setupHook(useActionMoveMultipleSelectionContacts);
+				const { result } = setupHook(useMoveContactsMultipleSelection);
 				const action = result.current;
 				await act(async () => {
 					action.execute({ contacts: [contact], newParentAddressBook });
@@ -215,7 +215,7 @@ describe('useActionMoveContacts', () => {
 					response
 				);
 
-				const { result } = setupHook(useActionMoveMultipleSelectionContacts);
+				const { result } = setupHook(useMoveContactsMultipleSelection);
 				const action = result.current;
 				await act(async () => {
 					action.execute({ contacts: [contact], newParentAddressBook });
@@ -242,7 +242,7 @@ describe('useActionMoveContacts', () => {
 					response
 				);
 
-				const { result } = setupHook(useActionMoveMultipleSelectionContacts);
+				const { result } = setupHook(useMoveContactsMultipleSelection);
 				const action = result.current;
 				await act(async () => {
 					action.execute({ contacts: [contact], newParentAddressBook });

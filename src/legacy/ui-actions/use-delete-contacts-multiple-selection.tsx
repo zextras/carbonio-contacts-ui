@@ -9,16 +9,16 @@ import { useModal } from '@zextras/carbonio-design-system';
 import { every } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { DeletableItem, UIAction } from '../../../actions/types';
-import { isTrashed } from '../../../carbonio-ui-commons/helpers/folders';
-import { getFolder } from '../../../carbonio-ui-commons/store/zustand/folder';
-import { Folder } from '../../../carbonio-ui-commons/types';
-import { ContactsDeleteModal } from '../../../components/modals/contacts-delete';
-import { ACTION_IDS } from '../../../constants';
-import { StoreProvider } from '../../../legacy/store/redux';
+import { DeletableItem, UIAction } from '../../actions/types';
+import { isTrashed } from '../../carbonio-ui-commons/helpers/folders';
+import { getFolder } from '../../carbonio-ui-commons/store/zustand/folder';
+import { Folder } from '../../carbonio-ui-commons/types';
+import { ContactsDeleteModal } from '../../components/modals/contacts-delete';
+import { ACTION_IDS } from '../../constants';
+import { StoreProvider } from '../store/redux';
 
 export type ActionDeleteContacts = UIAction<Array<DeletableItem>, Array<DeletableItem>>;
-export const useDeleteMultipleSelectionContacts = (): ActionDeleteContacts => {
+export const useDeleteContactsMultipleSelection = (): ActionDeleteContacts => {
 	const [t] = useTranslation();
 	const { createModal, closeModal } = useModal();
 
