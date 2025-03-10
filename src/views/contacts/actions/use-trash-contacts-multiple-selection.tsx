@@ -18,7 +18,7 @@ import { apiClient } from '../../../network/api-client';
 
 export type ActionTrashContacts = UIAction<Array<DeletableItem>, Array<DeletableItem>>;
 
-export const useActionTrashContacts = (): ActionTrashContacts => {
+export const useTrashContactsMultipleSelection = (): ActionTrashContacts => {
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
 

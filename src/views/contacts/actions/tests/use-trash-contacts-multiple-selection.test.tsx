@@ -15,11 +15,11 @@ import { populateFoldersStore } from '../../../../carbonio-ui-commons/test/mocks
 import { screen, setupHook } from '../../../../carbonio-ui-commons/test/test-setup';
 import { Contact } from '../../../../legacy/types/contact';
 import { buildContact } from '../../../../tests/model-builder';
-import { useActionTrashContacts } from '../trash-contacts';
+import { useTrashContactsMultipleSelection } from '../use-trash-contacts-multiple-selection';
 
 describe("Trash-contacts' actions", () => {
 	it('should return true if the object response is correctly initialized', () => {
-		const { result } = setupHook(useActionTrashContacts);
+		const { result } = setupHook(useTrashContactsMultipleSelection);
 		expect(result.current).toEqual<UIAction<unknown, unknown>>(
 			expect.objectContaining({
 				icon: 'Trash2Outline',
@@ -34,7 +34,7 @@ describe('canExecute actions', () => {
 	it('should return false if canExecute has TRASH as parent', () => {
 		populateFoldersStore();
 		const cont: Contact[] = [buildContact({ parent: FOLDERS.TRASH })];
-		const { result } = setupHook(useActionTrashContacts);
+		const { result } = setupHook(useTrashContactsMultipleSelection);
 		const action = result.current;
 		expect(action.canExecute(cont)).toBeFalsy();
 	});
@@ -42,7 +42,7 @@ describe('canExecute actions', () => {
 	it("should return true if canExecute hasn't a correct parent as prop", () => {
 		populateFoldersStore();
 		const cont: Contact[] = [buildContact({ parent: FOLDERS.CONTACTS })];
-		const { result } = setupHook(useActionTrashContacts);
+		const { result } = setupHook(useTrashContactsMultipleSelection);
 		const action = result.current;
 		expect(action.canExecute(cont)).toBeTruthy();
 	});
@@ -51,7 +51,7 @@ describe('canExecute actions', () => {
 describe('execute actions', () => {
 	it('returns true if the label has a correct value', async () => {
 		populateFoldersStore();
-		const { result } = setupHook(useActionTrashContacts);
+		const { result } = setupHook(useTrashContactsMultipleSelection);
 		const action = result.current;
 		expect(action.label).toBe('Delete');
 	});
@@ -62,7 +62,7 @@ describe('apiClientactions', () => {
 		populateFoldersStore();
 		const arrayContacts: Array<Contact> = [buildContact()];
 
-		const { result } = setupHook(useActionTrashContacts);
+		const { result } = setupHook(useTrashContactsMultipleSelection);
 		const action = result.current;
 		act(() => {
 			action.execute(arrayContacts);
@@ -83,7 +83,7 @@ describe('apiClientactions', () => {
 		createSoapAPIInterceptor('ContactAction', response);
 		const arrayContacts: Array<Contact> = [buildContact({ parent: FOLDERS.CONTACTS })];
 
-		const { result } = setupHook(useActionTrashContacts);
+		const { result } = setupHook(useTrashContactsMultipleSelection);
 		const action = result.current;
 		act(() => {
 			action.execute(arrayContacts);
@@ -100,7 +100,7 @@ describe('apiClientactions', () => {
 		createSoapAPIInterceptor('ContactAction');
 		const arrayContacts: Array<Contact> = [buildContact()];
 
-		const { result, user } = setupHook(useActionTrashContacts);
+		const { result, user } = setupHook(useTrashContactsMultipleSelection);
 		const action = result.current;
 		act(() => {
 			action.execute(arrayContacts);
@@ -135,7 +135,7 @@ describe('apiClientactions', () => {
 		createSoapAPIInterceptor('ContactAction');
 		const arrayContacts: Array<Contact> = [buildContact({ parent: FOLDERS.CONTACTS })];
 
-		const { result, user } = setupHook(useActionTrashContacts);
+		const { result, user } = setupHook(useTrashContactsMultipleSelection);
 		const action = result.current;
 		act(() => {
 			action.execute(arrayContacts);
