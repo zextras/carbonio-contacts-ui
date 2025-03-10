@@ -30,7 +30,7 @@ export const useContactHoverActions = (contact: Contact): Array<DSAction> => {
 	if (getFolderIdParts(folderId).id === FOLDERS.TRASH) {
 		return [
 			...(restoreAction.canExecute([contact])
-				? [generateClickableAction(restoreAction, { contacts: [contact] })]
+				? [generateClickableAction(restoreAction, [contact])]
 				: []),
 			...(deleteAction.canExecute([contact])
 				? [generateClickableAction(deleteAction, [contact])]
