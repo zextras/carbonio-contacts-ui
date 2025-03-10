@@ -3,7 +3,6 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-
 import React, { useCallback, useMemo } from 'react';
 
 import { Icon, Padding, Row, Text } from '@zextras/carbonio-design-system';
@@ -14,7 +13,7 @@ import { ZIMBRA_STANDARD_COLORS } from '../../../carbonio-ui-commons/constants';
 import { useTags } from '../../../carbonio-ui-commons/store/zustand/tags';
 import { Contact } from '../../../legacy/types/contact';
 
-export const useTagsAction = (contact: Contact): UIAction<void, void> => {
+export const useContactShowTagAction = (contact: Contact): UIAction<void, void> => {
 	const tagsFromStore = useTags();
 	const triggerSearch = noop;
 

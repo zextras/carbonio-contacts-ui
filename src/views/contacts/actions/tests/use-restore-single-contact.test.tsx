@@ -14,12 +14,12 @@ import { setupHook, screen } from '../../../../carbonio-ui-commons/test/test-set
 import { FOLDERS_DESCRIPTORS, TIMERS } from '../../../../constants/tests';
 import { buildContact } from '../../../../tests/model-builder';
 import { getFoldersArray } from '../../../../tests/utils';
-import { useRestoreSingleContact } from '../use-restore-single-contact';
+import { useContactRestoreAction } from '../use-contact-restore-action';
 
 describe('useRestoreSingleContact', () => {
 	it('should return an object with the specific data', () => {
 		const contact = buildContact({ parent: FOLDERS_DESCRIPTORS.trash.id });
-		const { result } = setupHook(useRestoreSingleContact, { initialProps: [contact] });
+		const { result } = setupHook(useContactRestoreAction, { initialProps: [contact] });
 		expect(result.current).toEqual<UIAction<unknown, unknown>>(
 			expect.objectContaining({
 				icon: 'RestoreOutline',
@@ -32,7 +32,7 @@ describe('useRestoreSingleContact', () => {
 	describe('canExecute', () => {
 		it('should return true if the contact is inside the trash', () => {
 			const contact = buildContact({ parent: FOLDERS_DESCRIPTORS.trash.id });
-			const { result } = setupHook(useRestoreSingleContact, { initialProps: [contact] });
+			const { result } = setupHook(useContactRestoreAction, { initialProps: [contact] });
 			const action = result.current;
 			expect(action.canExecute()).toBeTruthy();
 		});
@@ -48,7 +48,7 @@ describe('useRestoreSingleContact', () => {
 				throw new Error('Cannot find a trashed addressbook');
 			}
 			const contact = buildContact({ parent: trashedFolder.id });
-			const { result } = setupHook(useRestoreSingleContact, { initialProps: [contact] });
+			const { result } = setupHook(useContactRestoreAction, { initialProps: [contact] });
 			const action = result.current;
 			expect(action.canExecute()).toBeTruthy();
 		});
@@ -62,7 +62,7 @@ describe('useRestoreSingleContact', () => {
 			const contact = buildContact({ parent: FOLDERS.TRASH });
 			const expectedTitle = `Restore ${contact.firstName} ${contact.lastName}'s contact`;
 
-			const { result } = setupHook(useRestoreSingleContact, { initialProps: [contact] });
+			const { result } = setupHook(useContactRestoreAction, { initialProps: [contact] });
 			const action = result.current;
 			act(() => {
 				action.execute();

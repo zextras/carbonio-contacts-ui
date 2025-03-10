@@ -6,15 +6,16 @@
 
 import { act } from '@testing-library/react';
 
-import { useActionExportContact } from './export-contact';
-import { UIAction } from './types';
-import { screen, setupHook } from '../carbonio-ui-commons/test/test-setup';
-import { buildContact } from '../tests/model-builder';
-import { registerGetItemHandler } from '../tests/msw-handlers/get-item';
+import { UIAction } from '../../../../actions/types';
+import { screen, setupHook } from '../../../../carbonio-ui-commons/test/test-setup';
+import { buildContact } from '../../../../tests/model-builder';
+import { registerGetItemHandler } from '../../../../tests/msw-handlers/get-item';
+import { useContactExportAction } from '../use-contact-export-action';
 
 describe('useActionExportContact', () => {
 	it('should return an object with the specific data', () => {
-		const { result } = setupHook(useActionExportContact);
+		const contact = buildContact();
+		const { result } = setupHook(useContactExportAction, { initialProps: [contact] });
 		expect(result.current).toEqual<UIAction<unknown, unknown>>(
 			expect.objectContaining({
 				icon: 'DownloadOutline',
@@ -25,43 +26,24 @@ describe('useActionExportContact', () => {
 	});
 
 	describe('canExecute', () => {
-		it('should return false if no contact is passed', () => {
-			const { result } = setupHook(useActionExportContact);
-			const action = result.current;
-			expect(action.canExecute()).toBeFalsy();
-		});
-
 		it('should return true', () => {
 			const contact = buildContact();
-			const { result } = setupHook(useActionExportContact);
+			const { result } = setupHook(useContactExportAction, { initialProps: [contact] });
 			const action = result.current;
-			expect(action.canExecute(contact)).toBeTruthy();
+			expect(action.canExecute()).toBeTruthy();
 		});
 	});
 
 	describe('Execute', () => {
-		it('should not call the Get Item API if the action cannot be executed', () => {
-			const callFlag = jest.fn();
-			registerGetItemHandler().then(() => callFlag());
-
-			const { result } = setupHook(useActionExportContact);
-			const action = result.current;
-			act(() => {
-				action.execute();
-			});
-
-			expect(callFlag).not.toHaveBeenCalled();
-		});
-
-		it('should call the Get Item API', async () => {
+		it('should call the Get Item API when action is executed', async () => {
 			const contact = buildContact();
 
 			const apiInterceptor = registerGetItemHandler();
+			const { result } = setupHook(useContactExportAction, { initialProps: [contact] });
 
-			const { result } = setupHook(useActionExportContact);
 			const action = result.current;
 			await act(async () => {
-				action.execute(contact);
+				action.execute();
 			});
 
 			await expect(apiInterceptor).resolves.toEqual({ id: contact.id });
@@ -72,10 +54,10 @@ describe('useActionExportContact', () => {
 
 			registerGetItemHandler({ error: true });
 
-			const { result } = setupHook(useActionExportContact);
+			const { result } = setupHook(useContactExportAction, { initialProps: [contact] });
 			const action = result.current;
 			await act(async () => {
-				action.execute(contact);
+				action.execute();
 			});
 
 			expect(await screen.findByText('Something went wrong, please try again')).toBeVisible();
@@ -84,12 +66,12 @@ describe('useActionExportContact', () => {
 		it('should display a success snackbar if the API returns without errors', async () => {
 			registerGetItemHandler({ response: 'something' });
 
-			const { result } = setupHook(useActionExportContact);
-			const action = result.current;
 			const contact = buildContact();
+			const { result } = setupHook(useContactExportAction, { initialProps: [contact] });
+			const action = result.current;
 
 			await act(async () => {
-				action.execute(contact);
+				action.execute();
 			});
 
 			expect(await screen.findByText('vCard file exported successfully')).toBeVisible();

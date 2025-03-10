@@ -9,7 +9,7 @@ import { useRestoreContacts } from '../../../actions/common-contacts-actions/use
 import { UIAction } from '../../../actions/types';
 import { Contact } from '../../../legacy/types/contact';
 
-export const useRestoreSingleContact = (contact: Contact): UIAction<void, void> => {
+export const useContactRestoreAction = (contact: Contact): UIAction<void, void> => {
 	const [t] = useTranslation();
 	const modalTitle = t('contact.modal.restore_single.title', {
 		contactDesc: `${contact.firstName} ${contact.lastName}`,

@@ -9,7 +9,7 @@ import { useMoveContacts } from '../../../actions/common-contacts-actions/use-mo
 import { UIAction } from '../../../actions/types';
 import { Contact } from '../../../legacy/types/contact';
 
-export const useMoveSingleContact = (contact: Contact): UIAction<void, void> => {
+export const useContactMoveAction = (contact: Contact): UIAction<void, void> => {
 	const [t] = useTranslation();
 	const modalTitle = t('contact.modal.restore_single.title', {
 		contactDesc: `${contact.firstName} ${contact.lastName}`,

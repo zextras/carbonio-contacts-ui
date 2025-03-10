@@ -7,9 +7,9 @@
 import type { Action as DSAction } from '@zextras/carbonio-design-system';
 
 import { useContactEditAction } from './use-contact-edit-actions';
+import { useContactMoveAction } from './use-contact-move-action';
+import { useContactRestoreAction } from './use-contact-restore-action';
 import { useContactSendMailAction } from './use-contact-send-mail';
-import { useMoveSingleContact } from './use-move-single-contact';
-import { useRestoreSingleContact } from './use-restore-single-contact';
 import { toEffectiveActions } from '../../../actions/common-contacts-actions/effective-actions';
 import { useDeletePermanentlyContacts } from '../../../actions/common-contacts-actions/use-delete-permanently-contacts';
 import { useTrashContacts } from '../../../actions/common-contacts-actions/use-trash-contacts';
@@ -20,8 +20,8 @@ import { Contact } from '../../../legacy/types/contact';
 export const useContactHoverActions = (contact: Contact): Array<DSAction> => {
 	const folderId = contact.parent;
 	const sendMailAction = useContactSendMailAction(contact);
-	const moveAction = useMoveSingleContact(contact);
-	const restoreAction = useRestoreSingleContact(contact);
+	const moveAction = useContactMoveAction(contact);
+	const restoreAction = useContactRestoreAction(contact);
 	const deleteAction = useDeletePermanentlyContacts([contact]);
 	const trashAction = useTrashContacts([contact]);
 	const editAction = useContactEditAction(contact);

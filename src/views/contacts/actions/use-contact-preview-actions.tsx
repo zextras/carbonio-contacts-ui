@@ -6,11 +6,11 @@
 
 import type { Action as DSAction } from '@zextras/carbonio-design-system';
 
-import { useTagsAction } from './single-contact-actions';
 import { useContactEditAction } from './use-contact-edit-actions';
+import { useContactMoveAction } from './use-contact-move-action';
+import { useContactRestoreAction } from './use-contact-restore-action';
 import { useContactSendMailAction } from './use-contact-send-mail';
-import { useMoveSingleContact } from './use-move-single-contact';
-import { useRestoreSingleContact } from './use-restore-single-contact';
+import { useContactShowTagAction } from './use-contact-show-tag-action';
 import { toEffectiveActions } from '../../../actions/common-contacts-actions/effective-actions';
 import { useDeletePermanentlyContacts } from '../../../actions/common-contacts-actions/use-delete-permanently-contacts';
 import { useTrashContacts } from '../../../actions/common-contacts-actions/use-trash-contacts';
@@ -20,12 +20,12 @@ import { Contact } from '../../../legacy/types/contact';
 
 export function useContactPreviewActions(contact: Contact): DSAction[] {
 	const sendMailAction = useContactSendMailAction(contact);
-	const tagsAction = useTagsAction(contact);
+	const tagsAction = useContactShowTagAction(contact);
 	const editAction = useContactEditAction(contact);
-	const moveContact = useMoveSingleContact(contact);
+	const moveContact = useContactMoveAction(contact);
 	const trashAction = useTrashContacts([contact]);
 	const deleteAction = useDeletePermanentlyContacts([contact]);
-	const restoreContact = useRestoreSingleContact(contact);
+	const restoreContact = useContactRestoreAction(contact);
 
 	if (getFolderIdParts(contact.parent).id === FOLDERS.TRASH) {
 		return toEffectiveActions([restoreContact, deleteAction]);
