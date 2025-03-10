@@ -15,8 +15,8 @@ import { apiClient } from '../../network/api-client';
 import { useMoveItemAction } from '../move-items';
 import { UIAction } from '../types';
 
-export const useMoveContact = (
-	contact: ContactOrGroup,
+export const useMoveContacts = (
+	contacts: Array<ContactOrGroup>,
 	modalTitle: string
 ): UIAction<void, void> => {
 	const [t] = useTranslation();
@@ -52,7 +52,7 @@ export const useMoveContact = (
 		confirmButtonLabel: t('label.move', 'Move'),
 		title: modalTitle
 	};
-	const contactGroupIds = [contact.id];
+	const contactGroupIds = contacts.map((contact) => contact.id);
 	const action = useMoveItemAction({
 		actionId: ACTION_IDS.move,
 		label: t('label.move', 'Move'),

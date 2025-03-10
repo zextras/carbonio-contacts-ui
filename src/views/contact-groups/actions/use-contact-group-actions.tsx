@@ -11,7 +11,7 @@ import { useActionDeleteContactGroup } from './delete-contact-group';
 import { useActionEditCG } from './edit-cg';
 import { useActionSendEmailCG } from './send-email-cg';
 import { toEffectiveActions } from '../../../actions/common-contacts-actions/effective-actions';
-import { useMoveContact } from '../../../actions/common-contacts-actions/use-move-contact';
+import { useMoveContacts } from '../../../actions/common-contacts-actions/use-move-contacts';
 import { useRestoreContact } from '../../../actions/common-contacts-actions/use-restore-contact';
 import { useTrashContacts } from '../../../actions/common-contacts-actions/use-trash-contact';
 import { UIAction } from '../../../actions/types';
@@ -26,7 +26,7 @@ const useMoveContactGroups = (contactGroup: ContactGroup): UIAction<void, void> 
 		contactDesc: contactGroup.title,
 		defaultValue: "Move {{contactDesc}}'s contact"
 	});
-	return useMoveContact(contactGroup, modalTitle);
+	return useMoveContacts([contactGroup], modalTitle);
 };
 
 const useRestoreContactGroups = (contactGroup: ContactGroup): UIAction<void, void> => {
