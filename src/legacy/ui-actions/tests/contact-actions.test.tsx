@@ -25,9 +25,9 @@ describe('Contacts actions', () => {
 
 			const actions = result.current;
 
-			expect(actions[0].id).toBe('mail-to');
+			expect(actions[0].id).toBe('send');
 			expect(actions[1].id).toBe('edit');
-			expect(actions[2].id).toBe('move-contacts-action');
+			expect(actions[2].id).toBe('move');
 			expect(actions[3].id).toBe('trash-contacts-action');
 		});
 
@@ -40,7 +40,7 @@ describe('Contacts actions', () => {
 			const actions = result.current;
 
 			expect(actions[0].id).toBe('restore-contacts-action');
-			expect(actions[1].id).toBe('delete-contacts-action');
+			expect(actions[1].id).toBe('delete-permanently');
 		});
 	});
 });

@@ -12,8 +12,8 @@ import { Folder } from '../../carbonio-ui-commons/types';
 import { ACTION_IDS, TIMEOUTS } from '../../constants';
 import { ContactOrGroup } from '../../legacy/types/contact';
 import { apiClient } from '../../network/api-client';
-import { useMoveItemAction } from '../move-items';
 import { UIAction } from '../types';
+import { useMoveItemsAction } from '../use-move-items';
 
 export const useMoveContacts = (
 	contacts: Array<ContactOrGroup>,
@@ -53,7 +53,7 @@ export const useMoveContacts = (
 		title: modalTitle
 	};
 	const contactGroupIds = contacts.map((contact) => contact.id);
-	const action = useMoveItemAction({
+	const action = useMoveItemsAction({
 		actionId: ACTION_IDS.move,
 		label: t('label.move', 'Move'),
 		modal: moveModal,

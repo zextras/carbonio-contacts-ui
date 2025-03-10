@@ -24,7 +24,7 @@ export type MoveItemModalProps = {
 		confirmButtonLabel: string;
 	};
 };
-type MoveItems = MoveItemModalProps & {
+type UseMoveItems = MoveItemModalProps & {
 	actionId: string;
 	icon: string;
 	label: string;
@@ -89,7 +89,11 @@ const BaseMoveModal = ({
 	);
 };
 
-function useCreateMoveModalAction(): ({ modal, icon, onMoveConfirm }: MoveItems) => MoveActionBase {
+function useCreateMoveModalAction(): ({
+	modal,
+	icon,
+	onMoveConfirm
+}: UseMoveItems) => MoveActionBase {
 	const { createModal, closeModal } = useModal();
 	const createMoveModal = (
 		modalId: string,
@@ -128,7 +132,7 @@ function useCreateMoveModalAction(): ({ modal, icon, onMoveConfirm }: MoveItems)
 	};
 }
 
-export const useMoveItemAction = (props: MoveItems): MoveActionBase => {
+export const useMoveItemsAction = (props: UseMoveItems): MoveActionBase => {
 	const createMoveAction = useCreateMoveModalAction();
 	return createMoveAction(props);
 };

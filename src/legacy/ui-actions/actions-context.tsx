@@ -5,7 +5,7 @@
  */
 import React, { createContext, FC, useCallback, useMemo } from 'react';
 
-import { useMultipleSelectionActions } from './contact-actions';
+import { useMultipleSelectionContactsActions } from './use-multiple-selection-contacts-actions';
 import { ContactOrGroup } from '../types/contact';
 
 type ACPProps = {
@@ -42,7 +42,7 @@ export const ActionsContextProvider: FC<ACPProps & { selectedContacts: ContactOr
 	selectedContacts
 }) => {
 	const ids = useMemo(() => Object.keys(selectedIds ?? []), [selectedIds]);
-	const secondaryActions = useMultipleSelectionActions({
+	const secondaryActions = useMultipleSelectionContactsActions({
 		folderId,
 		deselectAll,
 		selectedContacts,

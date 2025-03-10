@@ -259,7 +259,7 @@ describe('Folder panel', () => {
 						});
 					});
 				});
-				describe('Delete (move to trash) contact group action', () => {
+				describe('Delete (move to trash) contact action', () => {
 					it('should call move operation when calling the action', async () => {
 						populateFoldersStore();
 						const folderId = FOLDERS.CONTACTS;
@@ -295,8 +295,8 @@ describe('Folder panel', () => {
 						});
 					});
 				});
-				describe('Delete permanently (trash folder) contact group action', () => {
-					it('should remove deleted contact when you confirm and api call will success', async () => {
+				describe('Delete permanently (trash folder) contact action', () => {
+					it('should call ContactAction api when you confirm delete and api call succeeds', async () => {
 						populateFoldersStore();
 						const folderId = FOLDERS.TRASH;
 						const soapContact1 = createSoapContact({ id: '1', folderId });
@@ -326,7 +326,8 @@ describe('Folder panel', () => {
 						const button = await screen.findByRole('button', {
 							name: /delete permanently/i
 						});
-						await act(() => user.click(button));
+						await user.click(button);
+						await screen.findByText('Contact permanently deleted');
 						const deletePermanentlyRequest = await deletePermanentlySoapInterceptor;
 						expect(deletePermanentlyRequest).toEqual({
 							action: {

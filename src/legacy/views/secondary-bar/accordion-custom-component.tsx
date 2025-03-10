@@ -32,7 +32,7 @@ import { Folder } from '../../../carbonio-ui-commons/types/folder';
 import { DragEnterAction, OnDropActionProps } from '../../../carbonio-ui-commons/types/sidebar';
 import { CONTACTS_ROUTE } from '../../../constants';
 import { getFolderIconColor, getFolderIconName } from '../../../helpers/folders';
-import { useActionMoveContacts } from '../../../views/contacts/actions/move-contacts';
+import { useActionMoveMultipleSelectionContacts } from '../../../views/contacts/actions/use-move-multiple-selection-contacts';
 import { Contact } from '../../types/contact';
 import { getFolderTranslatedName } from '../../utils/helpers';
 
@@ -64,7 +64,7 @@ const DropDenyOverlayContainer = styled(Container)<{ $folder: Folder }>`
 export const AccordionCustomComponent: FC<{ item: Folder }> = ({ item: folder }) => {
 	const [t] = useTranslation();
 	const accountName = useUserAccount().name;
-	const moveContactAction = useActionMoveContacts();
+	const moveContactAction = useActionMoveMultipleSelectionContacts();
 	const moveAddressBookAction = useActionMoveAddressBook();
 
 	const onDragEnterAction = useCallback(

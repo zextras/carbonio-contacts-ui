@@ -12,11 +12,11 @@ import { Folder } from '../../carbonio-ui-commons/types';
 import { ACTION_IDS, TIMEOUTS } from '../../constants';
 import { ContactOrGroup } from '../../legacy/types/contact';
 import { apiClient } from '../../network/api-client';
-import { useMoveItemAction } from '../move-items';
 import { UIAction } from '../types';
+import { useMoveItemsAction } from '../use-move-items';
 
-export const useRestoreContact = (
-	contact: ContactOrGroup,
+export const useRestoreContacts = (
+	contacts: Array<ContactOrGroup>,
 	modalTitle: string
 ): UIAction<void, void> => {
 	const [t] = useTranslation();
@@ -52,13 +52,13 @@ export const useRestoreContact = (
 		confirmButtonLabel: t('label.restore', 'Restore'),
 		title: modalTitle
 	};
-	const contactGroupIds = [contact.id];
-	const action = useMoveItemAction({
+	const contactIds = contacts.map((contact) => contact.id);
+	const action = useMoveItemsAction({
 		actionId: ACTION_IDS.restoreContacts,
 		label: t('label.restore', 'Restore'),
 		modal: restoreModal,
 		icon: 'RestoreOutline',
-		onMoveConfirm: (targetFolder: Folder) => move(contactGroupIds, targetFolder.id)
+		onMoveConfirm: (targetFolder: Folder) => move(contactIds, targetFolder.id)
 	});
 	return { ...action, canExecute: () => true };
 };

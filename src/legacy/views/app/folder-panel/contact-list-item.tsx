@@ -71,14 +71,13 @@ export const ContactListItem = ({
 		label: `${item.firstName} ${item.middleName} ${item.lastName}`
 	};
 	// FIXME: how can the folderId be undefined??
-	const getContextActions = useContactsContextualMenuActions(folderId ?? '');
+	const contextualMenuActions = useContactsContextualMenuActions(item, folderId ?? '');
 
 	const hoverActions = useContactHoverActions(item);
 	const hoverActionsIcons = useMemo<ReactNode[]>(
 		() => hoverActions.map((action) => <ListActionIconButton key={action.id} action={action} />),
 		[hoverActions]
 	);
-	const contextualMenuActions = useMemo(() => getContextActions(item), [item, getContextActions]);
 	return (
 		<Drag
 			type="contact"

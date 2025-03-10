@@ -13,8 +13,8 @@ import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
 import { getFolderIdParts } from '../../carbonio-ui-commons/helpers/folders';
 import { useTags } from '../../carbonio-ui-commons/store/zustand/tags';
 import { MakeOptional } from '../../types';
-import { useActionDeleteContacts } from '../../views/contacts/actions/delete-contacts';
 import { useActionTrashContacts } from '../../views/contacts/actions/trash-contacts';
+import { useDeleteMultipleSelectionContacts } from '../../views/contacts/actions/use-delete-multiple-selection-contacts';
 import { ContactOrGroup } from '../types/contact';
 
 type OptionallyClickableAction = MakeOptional<DSAction, 'onClick'>;
@@ -27,7 +27,7 @@ type SecondaryActionsProps = {
 	selectedContacts: Array<ContactOrGroup>;
 	ids: Array<string>;
 };
-export const useMultipleSelectionActions = ({
+export const useMultipleSelectionContactsActions = ({
 	folderId,
 	deselectAll,
 	selectedContacts,
@@ -35,7 +35,7 @@ export const useMultipleSelectionActions = ({
 }: SecondaryActionsProps): SecondaryContactActionsFn => {
 	const [t] = useTranslation();
 	const tags = useTags();
-	const deleteAction = useActionDeleteContacts();
+	const deleteAction = useDeleteMultipleSelectionContacts();
 	const trashAction = useActionTrashContacts();
 
 	if (getFolderIdParts(folderId).id === FOLDERS.TRASH) {

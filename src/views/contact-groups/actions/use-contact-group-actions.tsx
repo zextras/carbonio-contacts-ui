@@ -12,8 +12,8 @@ import { useActionEditCG } from './edit-cg';
 import { useActionSendEmailCG } from './send-email-cg';
 import { toEffectiveActions } from '../../../actions/common-contacts-actions/effective-actions';
 import { useMoveContacts } from '../../../actions/common-contacts-actions/use-move-contacts';
-import { useRestoreContact } from '../../../actions/common-contacts-actions/use-restore-contact';
-import { useTrashContacts } from '../../../actions/common-contacts-actions/use-trash-contact';
+import { useRestoreContacts } from '../../../actions/common-contacts-actions/use-restore-contacts';
+import { useTrashContacts } from '../../../actions/common-contacts-actions/use-trash-contacts';
 import { UIAction } from '../../../actions/types';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { getFolderIdParts } from '../../../carbonio-ui-commons/helpers/folders';
@@ -35,7 +35,7 @@ const useRestoreContactGroups = (contactGroup: ContactGroup): UIAction<void, voi
 		contactDesc: contactGroup.title,
 		defaultValue: "Restore {{contactDesc}}'s contact"
 	});
-	return useRestoreContact(contactGroup, modalTitle);
+	return useRestoreContacts([contactGroup], modalTitle);
 };
 
 export const useContactGroupActions = (contactGroup: ContactGroup): Array<DSAction> => {
@@ -45,6 +45,7 @@ export const useContactGroupActions = (contactGroup: ContactGroup): Array<DSActi
 	const trashContactGroupAction = useTrashContacts([contactGroup]);
 	const editContactGroupAction = useActionEditCG(contactGroup);
 	const sendEmailAction = useActionSendEmailCG(contactGroup);
+
 	const folder = getFolderFromContactGroup(contactGroup);
 	const folderPartsId = getFolderIdParts(contactGroup.parent).id;
 	const isMainAccount = !folder?.perm;

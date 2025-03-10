@@ -18,7 +18,7 @@ import { ACTION_IDS } from '../../../constants';
 import { StoreProvider } from '../../../legacy/store/redux';
 
 export type ActionDeleteContacts = UIAction<Array<DeletableItem>, Array<DeletableItem>>;
-export const useActionDeleteContacts = (): ActionDeleteContacts => {
+export const useDeleteMultipleSelectionContacts = (): ActionDeleteContacts => {
 	const [t] = useTranslation();
 	const { createModal, closeModal } = useModal();
 

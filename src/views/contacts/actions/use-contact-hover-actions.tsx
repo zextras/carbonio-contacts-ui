@@ -5,44 +5,29 @@
  */
 
 import type { Action as DSAction } from '@zextras/carbonio-design-system';
-import { compact } from 'lodash';
-import { useTranslation } from 'react-i18next';
 
-import { useActionDeleteContacts } from './delete-contacts';
-import { useActionMoveContacts } from './move-contacts';
-import { useActionRestoreContacts } from './restore-contacts';
-import { mailToContact, useEditAction } from './single-contact-actions';
-import { useActionTrashContacts } from './trash-contacts';
-import { generateClickableAction } from '../../../actions/generate-clickable-action';
+import { useContactEditAction } from './use-contact-edit-actions';
+import { useContactSendMailAction } from './use-contact-send-mail';
+import { useMoveSingleContact } from './use-move-single-contact';
+import { useRestoreSingleContact } from './use-restore-single-contact';
+import { toEffectiveActions } from '../../../actions/common-contacts-actions/effective-actions';
+import { useDeletePermanentlyContacts } from '../../../actions/common-contacts-actions/use-delete-permanently-contacts';
+import { useTrashContacts } from '../../../actions/common-contacts-actions/use-trash-contacts';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { getFolderIdParts } from '../../../carbonio-ui-commons/helpers/folders';
 import { Contact } from '../../../legacy/types/contact';
 
 export const useContactHoverActions = (contact: Contact): Array<DSAction> => {
-	const [t] = useTranslation();
 	const folderId = contact.parent;
-	const moveAction = useActionMoveContacts();
-	const restoreAction = useActionRestoreContacts();
-	const deleteAction = useActionDeleteContacts();
-	const trashAction = useActionTrashContacts();
-	const editAction = useEditAction(contact);
+	const sendMailAction = useContactSendMailAction(contact);
+	const moveAction = useMoveSingleContact(contact);
+	const restoreAction = useRestoreSingleContact(contact);
+	const deleteAction = useDeletePermanentlyContacts([contact]);
+	const trashAction = useTrashContacts([contact]);
+	const editAction = useContactEditAction(contact);
 
 	if (getFolderIdParts(folderId).id === FOLDERS.TRASH) {
-		return [
-			...(restoreAction.canExecute([contact])
-				? [generateClickableAction(restoreAction, [contact])]
-				: []),
-			...(deleteAction.canExecute([contact])
-				? [generateClickableAction(deleteAction, [contact])]
-				: [])
-		];
+		return toEffectiveActions([restoreAction, deleteAction]);
 	}
-	return compact([
-		mailToContact(contact, t),
-		...(editAction.canExecute(contact) ? [generateClickableAction(editAction, [contact])] : []),
-		...(moveAction.canExecute({ contacts: [contact] })
-			? [generateClickableAction(moveAction, { contacts: [contact] })]
-			: []),
-		...(trashAction.canExecute([contact]) ? [generateClickableAction(trashAction, [contact])] : [])
-	]);
+	return toEffectiveActions([sendMailAction, editAction, moveAction, trashAction]);
 };
