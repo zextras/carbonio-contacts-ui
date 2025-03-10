@@ -536,6 +536,63 @@ describe('Folder panel', () => {
 					expect(mailToIcon).toBeDisabled();
 				});
 			});
+			it('should restore the contact group to anotherFolder', async () => {
+				const anotherFolder = generateFolder({
+					parent: FOLDERS.USER_ROOT,
+					name: 'anotherContactFolder',
+					id: '500',
+					absFolderPath: '/anotherContactFolder',
+					view: FOLDER_VIEW.contact,
+					children: []
+				});
+				populateFoldersStore({
+					customFolders: [anotherFolder]
+				});
+				const folderId = FOLDERS.TRASH;
+				const contactGroupName = 'Group 1';
+				const cnItem1 = createCnItem(contactGroupName, [], '1', folderId);
+				registerFindContactGroupsHandler({
+					findContactGroupsResponse: createFindContactGroupsResponse([cnItem1], false),
+					offset: 0
+				});
+				const restoreInterceptor = createSoapAPIInterceptor<
+					ContactActionRequest,
+					ContactActionResponse
+				>('ContactAction', {
+					_jsns: 'urn:zimbraMail',
+					action: { id: cnItem1.id, op: 'move' },
+					requestId: '123'
+				});
+
+				const { user } = setupFolderPanel(folderId);
+
+				await screen.findByText(contactGroupName);
+				const listElement = screen.getByTestId(`contact-group-list-item-${cnItem1.id}`);
+				expect(listElement).toBeVisible();
+				const restoreAction = within(listElement as HTMLElement).getByTestId(
+					TESTID_SELECTORS.icons.restore
+				);
+				await act(() => user.click(restoreAction));
+				act(() => {
+					jest.advanceTimersByTime(1000);
+				});
+				const restoreModal = await screen.findByTestId('modal');
+				await within(restoreModal).findByText(`Restore ${contactGroupName}'s contact`);
+				makeListItemsVisible();
+				await user.click(screen.getByTestId(`folder-accordion-item-${anotherFolder.id}`));
+				const restoreButton = within(restoreModal).getByRole('button', { name: /restore/i });
+				expect(restoreButton).toBeEnabled();
+				await act(() => user.click(restoreButton));
+
+				const contactActionRequest = await restoreInterceptor;
+				expect(contactActionRequest).toEqual({
+					action: {
+						id: cnItem1.id,
+						op: 'move',
+						l: anotherFolder.id
+					}
+				});
+			});
 			describe('Delete (move to trash) contact group action', () => {
 				it('should call move operation when calling the action', async () => {
 					populateFoldersStore();
@@ -570,63 +627,6 @@ describe('Folder panel', () => {
 						action: {
 							id: cnItem1.id,
 							op: 'trash'
-						}
-					});
-				});
-				it('should restore the contact group to anotherFolder', async () => {
-					const anotherFolder = generateFolder({
-						parent: FOLDERS.USER_ROOT,
-						name: 'anotherContactFolder',
-						id: '500',
-						absFolderPath: '/anotherContactFolder',
-						view: FOLDER_VIEW.contact,
-						children: []
-					});
-					populateFoldersStore({
-						customFolders: [anotherFolder]
-					});
-					const folderId = FOLDERS.TRASH;
-					const contactGroupName = 'Group 1';
-					const cnItem1 = createCnItem(contactGroupName, [], '1', folderId);
-					registerFindContactGroupsHandler({
-						findContactGroupsResponse: createFindContactGroupsResponse([cnItem1], false),
-						offset: 0
-					});
-					const restoreInterceptor = createSoapAPIInterceptor<
-						ContactActionRequest,
-						ContactActionResponse
-					>('ContactAction', {
-						_jsns: 'urn:zimbraMail',
-						action: { id: cnItem1.id, op: 'move' },
-						requestId: '123'
-					});
-
-					const { user } = setupFolderPanel(folderId);
-
-					await screen.findByText(contactGroupName);
-					const listElement = screen.getByTestId(`contact-group-list-item-${cnItem1.id}`);
-					expect(listElement).toBeVisible();
-					const restoreAction = within(listElement as HTMLElement).getByTestId(
-						TESTID_SELECTORS.icons.restore
-					);
-					await act(() => user.click(restoreAction));
-					act(() => {
-						jest.advanceTimersByTime(1000);
-					});
-					const restoreModal = await screen.findByTestId('modal');
-					await within(restoreModal).findByText(`Restore ${contactGroupName}'s contact`);
-					makeListItemsVisible();
-					await user.click(screen.getByTestId(`folder-accordion-item-${anotherFolder.id}`));
-					const restoreButton = within(restoreModal).getByRole('button', { name: /restore/i });
-					expect(restoreButton).toBeEnabled();
-					await act(() => user.click(restoreButton));
-
-					const contactActionRequest = await restoreInterceptor;
-					expect(contactActionRequest).toEqual({
-						action: {
-							id: cnItem1.id,
-							op: 'move',
-							l: anotherFolder.id
 						}
 					});
 				});
