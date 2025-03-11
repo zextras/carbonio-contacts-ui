@@ -19,7 +19,7 @@ export const useDeleteContacts = (contacts: Array<ContactOrGroup>): Action => {
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
 
-	const onDeleteConfirm = useCallback(() => {
+	const onDeleteConfirm = useCallback(async () => {
 		const contactsIds = contacts.map((cont) => cont.id);
 		apiClient
 			.deleteContact(contactsIds)

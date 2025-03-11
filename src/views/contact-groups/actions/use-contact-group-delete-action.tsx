@@ -34,7 +34,7 @@ export const useContactGroupDeleteAction = (contactGroup: ContactGroup): Action 
 	const createSnackbar = useSnackbar();
 	const redirectTo = useRedirectToContactGroupFolder();
 
-	const onDeleteConfirm = useCallback(() => {
+	const onDeleteConfirm = useCallback(async () => {
 		apiClient
 			.deleteContact([contactGroup.id])
 			.then(() => {

@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback } from 'react';
+import React from 'react';
 
 import { Container, useModal } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
@@ -14,20 +14,23 @@ import { Action } from './types';
 
 type DeleteModal = { id: string; title: string; body: string };
 
-type DeleteConfirmProps = {
+type UseDeleteActionProps = {
 	modal: DeleteModal;
-	doDelete: () => Promise<void>;
+	onDeleteConfirm: () => Promise<void>;
 };
 
-function useCreateDeleteModalAction(): ({ modal, doDelete }: DeleteConfirmProps) => Action {
+function useCreateDeleteModalAction(): ({
+	modal,
+	onDeleteConfirm
+}: UseDeleteActionProps) => Action {
 	const [t] = useTranslation();
 	const { createModal, closeModal } = useModal();
 
-	return ({ modal, doDelete }): Action => {
+	return ({ modal, onDeleteConfirm }): Action => {
 		const execute = (): void => {
 			const onClose = (): void => closeModal(modal.id);
 			const onConfirm = (): void => {
-				doDelete().then(() => {
+				onDeleteConfirm().then(() => {
 					onClose();
 				});
 			};
@@ -59,18 +62,10 @@ function useCreateDeleteModalAction(): ({ modal, doDelete }: DeleteConfirmProps)
 	};
 }
 
-type UseDeleteActionProps = {
-	modal: DeleteModal;
-	onDeleteConfirm: () => void;
-};
 export const useDeleteAction = ({ modal, onDeleteConfirm }: UseDeleteActionProps): Action => {
 	const createDeleteModal = useCreateDeleteModalAction();
-
-	const doDelete = useCallback(async () => {
-		onDeleteConfirm();
-	}, [onDeleteConfirm]);
 	return createDeleteModal({
 		modal,
-		doDelete
+		onDeleteConfirm
 	});
 };
