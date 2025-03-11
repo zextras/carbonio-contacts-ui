@@ -22,7 +22,7 @@ export const useContactEditAction = (contact: Contact): Action => {
 	);
 	return {
 		id: 'edit',
-		icon: 'EditOutline',
+		icon: 'Edit2Outline',
 		label: t('label.edit'),
 		onClick: onEdit
 	};

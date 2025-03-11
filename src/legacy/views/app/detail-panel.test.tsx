@@ -90,7 +90,7 @@ describe('Detail panel', () => {
 				store
 			});
 			await screen.findByText(/edit/i);
-			expect(screen.getByTestId(TESTID_SELECTORS.icons.edit)).toBeVisible();
+			expect(screen.getByTestId('icon: Edit2Outline')).toBeVisible();
 			const saveButton = screen.getByRole('button', { name: /save/i });
 			expect(saveButton).toBeDisabled();
 			const inputName = screen.getByRole('textbox', { name: /first name/i });
@@ -100,7 +100,7 @@ describe('Detail panel', () => {
 			expect(modifyContactSpy).toHaveBeenCalled();
 			await screen.findByTestId(TESTID_SELECTORS.icons.contactsDisplayerIcon);
 			expect(screen.queryByRole('button', { name: /save/i })).not.toBeInTheDocument();
-			expect(screen.getByTestId('icon: EditOutline')).toBeVisible();
+			expect(screen.getByTestId('icon: Edit2Outline')).toBeVisible();
 		});
 
 		// the test doesn't work because the error case is not handled
