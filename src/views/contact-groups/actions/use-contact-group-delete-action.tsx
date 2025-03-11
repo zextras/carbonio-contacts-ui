@@ -10,7 +10,7 @@ import { closeBoard, getBoardById } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
 import { Action } from '../../../actions/types';
-import { useDeletePermanentlyItem } from '../../../actions/use-delete-permanently-item';
+import { useDeleteAction } from '../../../actions/use-delete-action';
 import { EDIT_CONTACT_GROUP_BOARD_ID } from '../../../constants';
 import { useGetContactGroupFromPath } from '../../../hooks/useGetContactGroupFromPath';
 import { ContactGroup } from '../../../model/contact-group';
@@ -71,7 +71,7 @@ export const useContactGroupDeleteAction = (contactGroup: ContactGroup): Action 
 		[activeContactGroup?.id, contactGroup, createSnackbar, redirectTo, t]
 	);
 
-	return useDeletePermanentlyItem({
+	return useDeleteAction({
 		modal: { id: 'delete-cg-modal', title: modalTitle, body: modalBody },
 		onDeleteConfirm
 	});

@@ -13,7 +13,7 @@ import { ACTION_IDS, TIMEOUTS } from '../../constants';
 import { ContactOrGroup } from '../../legacy/types/contact';
 import { apiClient } from '../../network/api-client';
 import { Action } from '../types';
-import { useMoveItemsAction } from '../use-move-items';
+import { useSelectFolderAction } from '../use-select-folder-action';
 
 export const useMoveContacts = (contacts: Array<ContactOrGroup>, modalTitle: string): Action => {
 	const [t] = useTranslation();
@@ -50,11 +50,11 @@ export const useMoveContacts = (contacts: Array<ContactOrGroup>, modalTitle: str
 		title: modalTitle
 	};
 	const contactGroupIds = contacts.map((contact) => contact.id);
-	return useMoveItemsAction({
+	return useSelectFolderAction({
 		actionId: ACTION_IDS.move,
 		label: t('label.move', 'Move'),
 		modal: moveModal,
 		icon: 'MoveOutline',
-		onMoveConfirm: (targetFolder: Folder) => move(contactGroupIds, targetFolder.id)
+		onConfirm: (targetFolder: Folder) => move(contactGroupIds, targetFolder.id)
 	});
 };

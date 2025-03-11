@@ -9,13 +9,13 @@ import { useCallback, useMemo } from 'react';
 import { useSnackbar } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
-import { TIMEOUTS } from '../../constants';
-import { ContactOrGroup } from '../../legacy/types/contact';
-import { apiClient } from '../../network/api-client';
-import { Action } from '../types';
-import { useDeletePermanentlyItem } from '../use-delete-permanently-item';
+import { useDeleteAction } from '../../../actions/use-delete-action';
+import { TIMEOUTS } from '../../../constants';
+import { ContactOrGroup } from '../../../legacy/types/contact';
+import { apiClient } from '../../../network/api-client';
+import { Action } from '../../../actions/types';
 
-export const useDeletePermanentlyContacts = (contacts: Array<ContactOrGroup>): Action => {
+export const useContactDeleteAction = (contacts: Array<ContactOrGroup>): Action => {
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
 
@@ -63,7 +63,7 @@ export const useDeletePermanentlyContacts = (contacts: Array<ContactOrGroup>): A
 		[t]
 	);
 
-	return useDeletePermanentlyItem({
+	return useDeleteAction({
 		modal: { id: 'delete-cg-modal', title: modalTitle, body: confirmationText },
 		onDeleteConfirm
 	});

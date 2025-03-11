@@ -18,21 +18,19 @@ import { Action } from './types';
 import { Folder } from '../carbonio-ui-commons/types';
 import { FolderTreeSelector } from '../components/folder-tree-selector/folder-tree-selector';
 
-export type MoveItemModalProps = {
+type UseSelectFolderModalActionProps = {
 	modal: {
 		id: string;
 		title: string;
 		confirmButtonLabel: string;
 	};
-};
-type UseMoveItems = MoveItemModalProps & {
 	actionId: string;
 	icon: string;
 	label: string;
-	onMoveConfirm: (targetFolder: Folder) => Promise<void>;
+	onConfirm: (targetFolder: Folder) => Promise<void>;
 };
 
-const BaseMoveModal = ({
+const SelectFolderModal = ({
 	onClose,
 	onConfirm,
 	modalTitle,
@@ -47,7 +45,7 @@ const BaseMoveModal = ({
 	const onFolderSelected = useCallback((selectedFolder: Folder) => {
 		setTargetFolder(selectedFolder);
 	}, []);
-	const onMoveConfirm = (): void => {
+	const _onConfirm = (): void => {
 		targetFolder &&
 			onConfirm(targetFolder).then(() => {
 				onClose();
@@ -78,52 +76,46 @@ const BaseMoveModal = ({
 			<ModalFooter
 				confirmLabel={confirmLabel}
 				confirmDisabled={!targetFolder}
-				onConfirm={onMoveConfirm}
+				onConfirm={_onConfirm}
 			/>
 		</>
 	);
 };
 
-function useCreateMoveModalAction(): ({ modal, icon, onMoveConfirm }: UseMoveItems) => Action {
+function useSelectFolderModalAction(): ({
+	modal,
+	icon,
+	onConfirm
+}: UseSelectFolderModalActionProps) => Action {
 	const { createModal, closeModal } = useModal();
-	const createMoveModal = (
-		modalId: string,
-		modalTitle: string,
-		modalConfirmLabel: string,
-		doMove: (targetFolder: Folder) => Promise<void>
-	): void => {
-		const onClose = (): void => closeModal(modalId);
-		createModal(
-			{
-				id: modalId,
-				children: (
-					<BaseMoveModal
-						onClose={onClose}
-						onConfirm={doMove}
-						modalTitle={modalTitle}
-						confirmLabel={modalConfirmLabel}
-					/>
-				)
-			},
-			true
-		);
-	};
-
-	return ({ actionId, modal, icon, label, onMoveConfirm }): Action => {
-		const openMoveModal = (): void => {
-			createMoveModal(modal.id, modal.title, modal.confirmButtonLabel, onMoveConfirm);
+	return ({ actionId, modal, icon, label, onConfirm }): Action => {
+		const openSelectFolderModal = (): void => {
+			const onClose = (): void => closeModal(modal.id);
+			createModal(
+				{
+					id: modal.id,
+					children: (
+						<SelectFolderModal
+							onClose={onClose}
+							onConfirm={onConfirm}
+							modalTitle={modal.title}
+							confirmLabel={modal.confirmButtonLabel}
+						/>
+					)
+				},
+				true
+			);
 		};
-
 		return {
 			id: actionId,
 			label,
 			icon,
-			onClick: openMoveModal
+			onClick: openSelectFolderModal
 		};
 	};
 }
 
-export const useMoveItemsAction = (props: UseMoveItems): Action => {
-	const createMoveAction = useCreateMoveModalAction();
-	return createMoveAction(props);
+export const useSelectFolderAction = (props: UseSelectFolderModalActionProps): Action => {
+	const createSelectFolderAction = useSelectFolderModalAction();
+	return createSelectFolderAction(props);
 };

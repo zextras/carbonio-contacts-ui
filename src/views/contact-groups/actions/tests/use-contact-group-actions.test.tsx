@@ -7,16 +7,16 @@
 import { faker } from '@faker-js/faker';
 import * as shell from '@zextras/carbonio-shell-ui';
 
-import { useContactGroupActions } from './use-contact-group-actions';
-import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
-import { useFolderStore } from '../../../carbonio-ui-commons/store/zustand/folder';
-import { generateFolder } from '../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
-import { setupHook } from '../../../carbonio-ui-commons/test/test-setup';
-import { ACTION_IDS } from '../../../constants';
-import { DELETE_PERMANENTLY_ACTION_DESCRIPTOR } from '../../../constants/tests';
-import { generateStore } from '../../../legacy/tests/generators/store';
-import { buildContactGroup, buildMembers } from '../../../tests/model-builder';
-import { generateLinkFolder } from '../tests/utils';
+import { FOLDERS } from '../../../../carbonio-ui-commons/constants/folders';
+import { useFolderStore } from '../../../../carbonio-ui-commons/store/zustand/folder';
+import { generateFolder } from '../../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
+import { setupHook } from '../../../../carbonio-ui-commons/test/test-setup';
+import { ACTION_IDS } from '../../../../constants';
+import { DELETE_PERMANENTLY_ACTION_DESCRIPTOR } from '../../../../constants/tests';
+import { generateStore } from '../../../../legacy/tests/generators/store';
+import { buildContactGroup, buildMembers } from '../../../../tests/model-builder';
+import { generateLinkFolder } from '../../tests/utils';
+import { useContactGroupActions } from '../use-contact-group-actions';
 
 function mockMailComposerIntegration(): void {
 	jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([jest.fn(), true]);

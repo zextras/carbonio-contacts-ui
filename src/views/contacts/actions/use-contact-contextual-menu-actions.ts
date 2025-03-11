@@ -11,7 +11,7 @@ import { useContactMoveAction } from './use-contact-move-action';
 import { useContactRestoreAction } from './use-contact-restore-action';
 import { useContactSendMailAction } from './use-contact-send-mail-action';
 import { useApplyTagsToContact } from '../../../actions/common-contacts-actions/use-apply-tag-contacts';
-import { useDeletePermanentlyContacts } from '../../../actions/common-contacts-actions/use-delete-permanently-contacts';
+import { useContactDeleteAction } from './use-contact-delete-action';
 import { useTrashContacts } from '../../../actions/common-contacts-actions/use-trash-contacts';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { getFolderIdParts } from '../../../carbonio-ui-commons/helpers/folders';
@@ -26,7 +26,7 @@ export const useContactsContextualMenuActions = (
 	const exportAction = useContactExportAction(contact);
 	const moveAction = useContactMoveAction(contact);
 	const restoreAction = useContactRestoreAction(contact);
-	const deleteAction = useDeletePermanentlyContacts([contact]);
+	const deleteAction = useContactDeleteAction([contact]);
 	const trashAction = useTrashContacts([contact]);
 
 	if (getFolderIdParts(folderId).id === FOLDERS.TRASH) {

@@ -6,18 +6,18 @@
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 
-import { useContactGroupDeleteAction } from './use-contact-group-delete-action';
-import { screen, setupHook } from '../../../carbonio-ui-commons/test/test-setup';
+import { screen, setupHook } from '../../../../carbonio-ui-commons/test/test-setup';
 import {
 	DELETE_PERMANENTLY_ACTION_DESCRIPTOR,
 	JEST_MOCKED_ERROR,
 	TESTID_SELECTORS,
 	TIMERS
-} from '../../../constants/tests';
-import { generateStore } from '../../../legacy/tests/generators/store';
-import { ContactOrGroup } from '../../../legacy/types/contact';
-import { buildContactGroup, buildMembers } from '../../../tests/model-builder';
-import { registerDeleteContactHandler } from '../../../tests/msw-handlers/delete-contact';
+} from '../../../../constants/tests';
+import { generateStore } from '../../../../legacy/tests/generators/store';
+import { ContactOrGroup } from '../../../../legacy/types/contact';
+import { buildContactGroup, buildMembers } from '../../../../tests/model-builder';
+import { registerDeleteContactHandler } from '../../../../tests/msw-handlers/delete-contact';
+import { useContactGroupDeleteAction } from '../use-contact-group-delete-action';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function createStoreInitialData(data: Record<string, ContactOrGroup[]>) {
