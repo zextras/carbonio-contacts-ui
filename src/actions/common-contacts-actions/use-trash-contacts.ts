@@ -11,9 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { ACTION_IDS, TIMEOUTS } from '../../constants';
 import { ContactOrGroup } from '../../legacy/types/contact';
 import { apiClient } from '../../network/api-client';
-import { Action, UIAction } from '../types';
-
-export type ActionTrashContacts = UIAction<void, void>;
+import { Action } from '../types';
 
 export const useTrashContacts = (contacts: Array<ContactOrGroup>): Action => {
 	const [t] = useTranslation();

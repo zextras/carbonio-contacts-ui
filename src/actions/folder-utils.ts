@@ -10,8 +10,8 @@ import { Folder } from '../carbonio-ui-commons/types';
 // return the folder based on the item parent from the folders store. Checks for link folders also
 export function getParentFolder(item: { parent: string }): Folder | undefined {
 	const foldersMap = getFoldersMap();
-	const folder = getFolder(item.parent);
-	if (!folder) {
+	const currentFolder = getFolder(item.parent);
+	if (!currentFolder) {
 		const { zid, id: realFolderId } = getFolderIdParts(item.parent);
 		return (
 			Object.values(foldersMap)
@@ -20,5 +20,5 @@ export function getParentFolder(item: { parent: string }): Folder | undefined {
 				.find((folder) => folder.zid === zid && folder.rid?.toString() === realFolderId)
 		);
 	}
-	return folder;
+	return currentFolder;
 }
