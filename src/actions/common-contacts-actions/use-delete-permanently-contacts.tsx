@@ -16,8 +16,8 @@ import { Folder } from '../../carbonio-ui-commons/types';
 import { TIMEOUTS } from '../../constants';
 import { ContactOrGroup } from '../../legacy/types/contact';
 import { apiClient } from '../../network/api-client';
-import { useDeletePermanentlyItem } from '../delete-permanently-item';
 import { UIAction } from '../types';
+import { useDeletePermanentlyItem } from '../use-delete-permanently-item';
 
 export const useDeletePermanentlyContacts = (
 	contacts: Array<ContactOrGroup>

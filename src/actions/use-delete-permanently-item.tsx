@@ -100,14 +100,14 @@ function useCreateDeleteModalAction(): ({
 	};
 }
 
-type DeletePermanentlyItem = {
+type UseDeletePermanentlyItem = {
 	modal: DeleteModal;
 	onDeleteConfirm: () => void;
 };
 export const useDeletePermanentlyItem = ({
 	modal,
 	onDeleteConfirm
-}: DeletePermanentlyItem): DeleteActionBase => {
+}: UseDeletePermanentlyItem): DeleteActionBase => {
 	const createDeleteModal = useCreateDeleteModalAction();
 
 	const doDelete = useCallback(async () => {
