@@ -5,13 +5,13 @@
  */
 import * as shell from '@zextras/carbonio-shell-ui';
 
-import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
-import { populateFoldersStore } from '../../../carbonio-ui-commons/test/mocks/store/folders';
-import { setupHook } from '../../../carbonio-ui-commons/test/test-setup';
-import { buildContact } from '../../../tests/model-builder';
-import { useContactHoverActions } from '../../../views/contacts/actions/use-contact-hover-actions';
+import { FOLDERS } from '../../../../carbonio-ui-commons/constants/folders';
+import { populateFoldersStore } from '../../../../carbonio-ui-commons/test/mocks/store/folders';
+import { setupHook } from '../../../../carbonio-ui-commons/test/test-setup';
+import { buildContact } from '../../../../tests/model-builder';
+import { useContactHoverActions } from '../use-contact-hover-actions';
 
-describe('Contacts actions', () => {
+describe('useContactHoverActions', () => {
 	describe('document current behavior', () => {
 		beforeAll(() => {
 			const mailTo = { id: 'mail-to', label: 'action.send_msg', execute: jest.fn() };
