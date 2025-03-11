@@ -24,7 +24,7 @@ export type MoveContactsAction = UIAction<
 	{ contacts?: Array<ContactOrGroup>; newParentAddressBook?: Folder }
 >;
 
-export const useMoveContactsMultipleSelection = (): MoveContactsAction => {
+export const useMoveContactsDragAndDrop = (): MoveContactsAction => {
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
 	const { createModal, closeModal } = useModal();
