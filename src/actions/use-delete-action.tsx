@@ -27,13 +27,13 @@ function useCreateDeleteModalAction(): ({
 	const { createModal, closeModal } = useModal();
 
 	return ({ modal, onDeleteConfirm }): Action => {
+		const onClose = (): void => closeModal(modal.id);
+		const onConfirm = (): void => {
+			onDeleteConfirm().then(() => {
+				onClose();
+			});
+		};
 		const execute = (): void => {
-			const onClose = (): void => closeModal(modal.id);
-			const onConfirm = (): void => {
-				onDeleteConfirm().then(() => {
-					onClose();
-				});
-			};
 			createModal({
 				id: modal.id,
 				title: modal.title,
