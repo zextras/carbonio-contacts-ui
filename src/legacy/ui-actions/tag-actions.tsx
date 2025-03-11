@@ -46,8 +46,6 @@ export type TagsActions = {
 	}>;
 };
 
-export type TagsFromStoreType = Record<string, Tag>;
-
 export type TagsActionsParams = {
 	t: TFunction;
 	createModal?: ReturnType<typeof useModal>['createModal'];
