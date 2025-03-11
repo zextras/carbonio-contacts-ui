@@ -9,7 +9,7 @@ import type { Action as DSAction } from '@zextras/carbonio-design-system';
 import { useContactEditAction } from './use-contact-edit-actions';
 import { useContactMoveAction } from './use-contact-move-action';
 import { useContactRestoreAction } from './use-contact-restore-action';
-import { useContactSendMailAction } from './use-contact-send-mail';
+import { useContactSendMailAction } from './use-contact-send-mail-action';
 import { useContactShowTagAction } from './use-contact-show-tag-action';
 import { useDeletePermanentlyContacts } from '../../../actions/common-contacts-actions/use-delete-permanently-contacts';
 import { useTrashContacts } from '../../../actions/common-contacts-actions/use-trash-contacts';
