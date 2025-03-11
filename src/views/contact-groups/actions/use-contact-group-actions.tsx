@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useContactGroupDeleteAction } from './use-contact-group-delete-action';
 import { useContactGroupEditAction } from './use-contact-group-edit-action';
-import { useContactGroupSendEmailAction } from './use-contact-group-send-email-action.';
+import { useContactGroupSendEmailAction } from './use-contact-group-send-email-action';
 import { useMoveContacts } from '../../../actions/common-contacts-actions/use-move-contacts';
 import { useRestoreContacts } from '../../../actions/common-contacts-actions/use-restore-contacts';
 import { useTrashContacts } from '../../../actions/common-contacts-actions/use-trash-contacts';
