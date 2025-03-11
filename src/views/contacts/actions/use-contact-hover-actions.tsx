@@ -10,7 +10,7 @@ import { useContactEditAction } from './use-contact-edit-actions';
 import { useContactMoveAction } from './use-contact-move-action';
 import { useContactRestoreAction } from './use-contact-restore-action';
 import { useContactSendMailAction } from './use-contact-send-mail-action';
-import { useContactDeleteAction } from './use-contact-delete-action';
+import { useDeleteContacts } from '../../../actions/common-contacts-actions/use-delete-contacts';
 import { useTrashContacts } from '../../../actions/common-contacts-actions/use-trash-contacts';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { getFolderIdParts } from '../../../carbonio-ui-commons/helpers/folders';
@@ -21,7 +21,7 @@ export const useContactHoverActions = (contact: Contact): Array<DSAction> => {
 	const sendMailAction = useContactSendMailAction(contact);
 	const moveAction = useContactMoveAction(contact);
 	const restoreAction = useContactRestoreAction(contact);
-	const deleteAction = useContactDeleteAction([contact]);
+	const deleteAction = useDeleteContacts([contact]);
 	const trashAction = useTrashContacts([contact]);
 	const editAction = useContactEditAction(contact);
 

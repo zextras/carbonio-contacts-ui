@@ -12,10 +12,11 @@ import {
 	Icon,
 	Checkbox,
 	useModal,
-	useSnackbar
+	useSnackbar,
+	Action
 } from '@zextras/carbonio-design-system';
 import { TFunction } from 'i18next';
-import { every, find, includes, map, reduce } from 'lodash';
+import { every, find, includes, map, noop, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -362,7 +363,7 @@ export const applyMultiTag = ({
 	ids: string[];
 	deselectAll?: () => void;
 	folderId?: string;
-}): { id: string; items: ItemType[]; customComponent: ReactElement } => {
+}): Action => {
 	const tagItem = reduce(
 		tags,
 		(acc, v: Tag) => {
@@ -393,6 +394,7 @@ export const applyMultiTag = ({
 	return {
 		id: TagsActionsType.APPLY,
 		items: tagItem,
+		onClick: noop,
 		customComponent: (
 			<Row takeAvailableSpace mainAlignment="flex-start">
 				<Padding right="small">

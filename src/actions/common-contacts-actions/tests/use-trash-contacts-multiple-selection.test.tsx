@@ -8,19 +8,19 @@ import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 
-import { UIAction } from '../../../actions/types';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { createSoapAPIInterceptor } from '../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { populateFoldersStore } from '../../../carbonio-ui-commons/test/mocks/store/folders';
 import { screen, setupHook } from '../../../carbonio-ui-commons/test/test-setup';
+import { Contact } from '../../../legacy/types/contact';
 import { buildContact } from '../../../tests/model-builder';
-import { Contact } from '../../types/contact';
-import { useTrashContactsMultipleSelection } from '../use-trash-contacts-multiple-selection';
+import { useTrashContacts } from '../use-trash-contacts';
 
-describe("Trash-contacts' actions", () => {
-	it('should return true if the object response is correctly initialized', () => {
-		const { result } = setupHook(useTrashContactsMultipleSelection);
-		expect(result.current).toEqual<UIAction<unknown, unknown>>(
+describe('useTrashContacts', () => {
+	it('should return trash label and icon when action is correctly initialized', () => {
+		const contacts: Array<Contact> = [buildContact()];
+		const { result } = setupHook(() => useTrashContacts(contacts));
+		expect(result.current).toEqual(
 			expect.objectContaining({
 				icon: 'Trash2Outline',
 				label: 'Delete',
@@ -30,42 +30,24 @@ describe("Trash-contacts' actions", () => {
 	});
 });
 
-describe('canExecute actions', () => {
-	it('should return false if canExecute has TRASH as parent', () => {
-		populateFoldersStore();
-		const cont: Contact[] = [buildContact({ parent: FOLDERS.TRASH })];
-		const { result } = setupHook(useTrashContactsMultipleSelection);
-		const action = result.current;
-		expect(action.canExecute(cont)).toBeFalsy();
-	});
-
-	it("should return true if canExecute hasn't a correct parent as prop", () => {
-		populateFoldersStore();
-		const cont: Contact[] = [buildContact({ parent: FOLDERS.CONTACTS })];
-		const { result } = setupHook(useTrashContactsMultipleSelection);
-		const action = result.current;
-		expect(action.canExecute(cont)).toBeTruthy();
-	});
-});
-
 describe('execute actions', () => {
 	it('returns true if the label has a correct value', async () => {
 		populateFoldersStore();
-		const { result } = setupHook(useTrashContactsMultipleSelection);
+		const { result } = setupHook(useTrashContacts);
 		const action = result.current;
 		expect(action.label).toBe('Delete');
 	});
 });
-describe('apiClientactions', () => {
+describe('Api Client Actions', () => {
 	it('should show a success snackbar after receiving a successful result from the API', async () => {
 		createSoapAPIInterceptor('ContactAction');
 		populateFoldersStore();
-		const arrayContacts: Array<Contact> = [buildContact()];
+		const contacts: Array<Contact> = [buildContact()];
 
-		const { result } = setupHook(useTrashContactsMultipleSelection);
+		const { result } = setupHook(() => useTrashContacts(contacts));
 		const action = result.current;
 		act(() => {
-			action.execute(arrayContacts);
+			action.onClick();
 		});
 
 		expect(await screen.findByText('Contact moved to trash')).toBeVisible();
@@ -81,12 +63,12 @@ describe('apiClientactions', () => {
 		};
 		populateFoldersStore();
 		createSoapAPIInterceptor('ContactAction', response);
-		const arrayContacts: Array<Contact> = [buildContact({ parent: FOLDERS.CONTACTS })];
+		const contacts: Array<Contact> = [buildContact({ parent: FOLDERS.CONTACTS })];
 
-		const { result } = setupHook(useTrashContactsMultipleSelection);
+		const { result, user } = setupHook(() => useTrashContacts(contacts));
 		const action = result.current;
 		act(() => {
-			action.execute(arrayContacts);
+			action.onClick();
 		});
 		act(() => {
 			jest.advanceTimersByTime(2000);
@@ -98,12 +80,12 @@ describe('apiClientactions', () => {
 	it('should call the API to restore the folder position if the user clicks on the "undo" button on the snackbar', async () => {
 		populateFoldersStore();
 		createSoapAPIInterceptor('ContactAction');
-		const arrayContacts: Array<Contact> = [buildContact()];
+		const contacts: Array<Contact> = [buildContact()];
 
-		const { result, user } = setupHook(useTrashContactsMultipleSelection);
+		const { result, user } = setupHook(() => useTrashContacts(contacts));
 		const action = result.current;
 		act(() => {
-			action.execute(arrayContacts);
+			action.onClick();
 		});
 		act(() => {
 			jest.advanceTimersByTime(2000);
@@ -115,9 +97,9 @@ describe('apiClientactions', () => {
 		await expect(restoreApiInterceptor).resolves.toEqual(
 			expect.objectContaining({
 				action: {
-					id: arrayContacts[0].id,
+					id: contacts[0].id,
 					op: 'move',
-					l: arrayContacts[0].parent
+					l: contacts[0].parent
 				}
 			})
 		);
@@ -133,12 +115,12 @@ describe('apiClientactions', () => {
 		};
 		populateFoldersStore();
 		createSoapAPIInterceptor('ContactAction');
-		const arrayContacts: Array<Contact> = [buildContact({ parent: FOLDERS.CONTACTS })];
+		const contacts: Array<Contact> = [buildContact({ parent: FOLDERS.CONTACTS })];
 
-		const { result, user } = setupHook(useTrashContactsMultipleSelection);
+		const { result, user } = setupHook(() => useTrashContacts(contacts));
 		const action = result.current;
 		act(() => {
-			action.execute(arrayContacts);
+			action.onClick();
 		});
 		act(() => {
 			jest.advanceTimersByTime(2000);

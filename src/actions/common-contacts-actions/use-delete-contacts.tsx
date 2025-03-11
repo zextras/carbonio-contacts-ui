@@ -9,13 +9,13 @@ import { useCallback, useMemo } from 'react';
 import { useSnackbar } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
-import { useDeleteAction } from '../../../actions/use-delete-action';
-import { TIMEOUTS } from '../../../constants';
-import { ContactOrGroup } from '../../../legacy/types/contact';
-import { apiClient } from '../../../network/api-client';
-import { Action } from '../../../actions/types';
+import { TIMEOUTS } from '../../constants';
+import { ContactOrGroup } from '../../legacy/types/contact';
+import { apiClient } from '../../network/api-client';
+import { Action } from '../types';
+import { useDeleteAction } from '../use-delete-action';
 
-export const useContactDeleteAction = (contacts: Array<ContactOrGroup>): Action => {
+export const useDeleteContacts = (contacts: Array<ContactOrGroup>): Action => {
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
 

@@ -49,7 +49,6 @@ export const useContactGroupActions = (contactGroup: ContactGroup): Array<DSActi
 	const folderPartsId = getFolderIdParts(contactGroup.parent).id;
 	const isMainAccount = !folder?.perm;
 	const isSharedFolderWithWritePermission = folder?.perm?.includes('w');
-
 	if (isMainAccount || isSharedFolderWithWritePermission) {
 		if (folderPartsId === FOLDERS.TRASH) {
 			return [restoreContactsGroupAction, deletePermanentlyContactGroupAction];
