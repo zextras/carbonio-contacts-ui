@@ -5,24 +5,17 @@
  */
 import { useCallback, useMemo } from 'react';
 
+import { Action } from '@zextras/carbonio-design-system';
 import { addBoard, getBoardById, reopenBoards, setCurrentBoard } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
-import { UIAction } from '../../../actions/types';
 import { ACTION_IDS, EDIT_CONTACT_GROUP_BOARD_ID } from '../../../constants';
 import { ContactGroup } from '../../../model/contact-group';
 
-export type EditActionCG = UIAction<void, void>;
-
-export const useActionEditCG = (contactGroup: ContactGroup): EditActionCG => {
+export const useActionEditCG = (contactGroup: ContactGroup): Action => {
 	const [t] = useTranslation();
 
-	const canExecute = useCallback<EditActionCG['canExecute']>(() => true, []);
-
-	const editCG = useCallback<EditActionCG['execute']>(() => {
-		if (contactGroup === undefined) {
-			return;
-		}
+	const editCG = useCallback(() => {
 		const board = getBoardById(`${EDIT_CONTACT_GROUP_BOARD_ID}-${contactGroup.id}`);
 		if (board) {
 			setCurrentBoard(board.id);
@@ -42,9 +35,8 @@ export const useActionEditCG = (contactGroup: ContactGroup): EditActionCG => {
 			id: ACTION_IDS.editCG,
 			label: t('action.edit', 'Edit'),
 			icon: 'Edit2Outline',
-			canExecute,
-			execute: editCG
+			onClick: editCG
 		}),
-		[canExecute, editCG, t]
+		[editCG, t]
 	);
 };

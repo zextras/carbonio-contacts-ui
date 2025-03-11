@@ -14,6 +14,7 @@ import {
 	useModal
 } from '@zextras/carbonio-design-system';
 
+import { Action } from './types';
 import { Folder } from '../carbonio-ui-commons/types';
 import { FolderTreeSelector } from '../components/folder-tree-selector/folder-tree-selector';
 
@@ -29,12 +30,6 @@ type UseMoveItems = MoveItemModalProps & {
 	icon: string;
 	label: string;
 	onMoveConfirm: (targetFolder: Folder) => Promise<void>;
-};
-type MoveActionBase = {
-	id: string;
-	icon: string;
-	label: string;
-	execute: () => void;
 };
 
 const BaseMoveModal = ({
@@ -89,11 +84,7 @@ const BaseMoveModal = ({
 	);
 };
 
-function useCreateMoveModalAction(): ({
-	modal,
-	icon,
-	onMoveConfirm
-}: UseMoveItems) => MoveActionBase {
+function useCreateMoveModalAction(): ({ modal, icon, onMoveConfirm }: UseMoveItems) => Action {
 	const { createModal, closeModal } = useModal();
 	const createMoveModal = (
 		modalId: string,
@@ -118,7 +109,7 @@ function useCreateMoveModalAction(): ({
 		);
 	};
 
-	return ({ actionId, modal, icon, label, onMoveConfirm }): MoveActionBase => {
+	return ({ actionId, modal, icon, label, onMoveConfirm }): Action => {
 		const openMoveModal = (): void => {
 			createMoveModal(modal.id, modal.title, modal.confirmButtonLabel, onMoveConfirm);
 		};
@@ -127,12 +118,12 @@ function useCreateMoveModalAction(): ({
 			id: actionId,
 			label,
 			icon,
-			execute: openMoveModal
+			onClick: openMoveModal
 		};
 	};
 }
 
-export const useMoveItemsAction = (props: UseMoveItems): MoveActionBase => {
+export const useMoveItemsAction = (props: UseMoveItems): Action => {
 	const createMoveAction = useCreateMoveModalAction();
 	return createMoveAction(props);
 };

@@ -6,10 +6,10 @@
 import { useTranslation } from 'react-i18next';
 
 import { useMoveContacts } from '../../../actions/common-contacts-actions/use-move-contacts';
-import { UIAction } from '../../../actions/types';
+import { Action } from '../../../actions/types';
 import { Contact } from '../../../legacy/types/contact';
 
-export const useContactMoveAction = (contact: Contact): UIAction<void, void> => {
+export const useContactMoveAction = (contact: Contact): Action => {
 	const [t] = useTranslation();
 	const modalTitle = t('contact.modal.restore_single.title', {
 		contactDesc: `${contact.firstName} ${contact.lastName}`,

@@ -9,7 +9,7 @@ import { useSnackbar } from '@zextras/carbonio-design-system';
 import { closeBoard, getBoardById } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
-import { UIAction } from '../../../actions/types';
+import { Action } from '../../../actions/types';
 import { useDeletePermanentlyItem } from '../../../actions/use-delete-permanently-item';
 import { EDIT_CONTACT_GROUP_BOARD_ID } from '../../../constants';
 import { useGetContactGroupFromPath } from '../../../hooks/useGetContactGroupFromPath';
@@ -22,7 +22,7 @@ type DeleteContactGroupActionReturn = {
 };
 
 // TODO: consider not using UIAction because "canExecute" does not make much sense
-export const useActionDeleteContactGroup = (contactGroup: ContactGroup): UIAction<void, void> => {
+export const useActionDeleteContactGroup = (contactGroup: ContactGroup): Action => {
 	const [t] = useTranslation();
 	const modalTitle = t('modal.delete.contactGroup.header', 'Delete "{{contactGroupName}}"', {
 		contactGroupName: contactGroup.title
@@ -72,9 +72,8 @@ export const useActionDeleteContactGroup = (contactGroup: ContactGroup): UIActio
 		[activeContactGroup?.id, contactGroup, createSnackbar, redirectTo, t]
 	);
 
-	const deletePermanentlyItem = useDeletePermanentlyItem({
+	return useDeletePermanentlyItem({
 		modal: { id: 'delete-cg-modal', title: modalTitle, body: modalBody },
 		onDeleteConfirm
 	});
-	return { ...deletePermanentlyItem, canExecute: () => true };
 };

@@ -8,11 +8,10 @@ import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { UIAction } from '../../../actions/types';
-import { isTrash } from '../../../carbonio-ui-commons/helpers/folders';
+import { Action } from '../../../actions/types';
 import { Contact } from '../../../legacy/types/contact';
 
-export const useContactEditAction = (contact: Contact): UIAction<void, void> => {
+export const useContactEditAction = (contact: Contact): Action => {
 	const [t] = useTranslation();
 	const folderId = contact.parent;
 	const navigate = useNavigate();
@@ -25,7 +24,6 @@ export const useContactEditAction = (contact: Contact): UIAction<void, void> => 
 		id: 'edit',
 		icon: 'EditOutline',
 		label: t('label.edit'),
-		execute: onEdit,
-		canExecute: () => !isTrash(contact.parent)
+		onClick: onEdit
 	};
 };

@@ -10,17 +10,16 @@ import { useTranslation } from 'react-i18next';
 import { useActionDeleteContactGroup } from './delete-contact-group';
 import { useActionEditCG } from './edit-cg';
 import { useActionSendEmailCG } from './send-email-cg';
-import { toEffectiveActions } from '../../../actions/common-contacts-actions/effective-actions';
 import { useMoveContacts } from '../../../actions/common-contacts-actions/use-move-contacts';
 import { useRestoreContacts } from '../../../actions/common-contacts-actions/use-restore-contacts';
 import { useTrashContacts } from '../../../actions/common-contacts-actions/use-trash-contacts';
-import { UIAction } from '../../../actions/types';
+import { Action } from '../../../actions/types';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { getFolderIdParts } from '../../../carbonio-ui-commons/helpers/folders';
 import { ContactGroup } from '../../../model/contact-group';
 import { getFolderFromContactGroup } from '../utils';
 
-const useMoveContactGroups = (contactGroup: ContactGroup): UIAction<void, void> => {
+const useMoveContactGroups = (contactGroup: ContactGroup): Action => {
 	const [t] = useTranslation();
 	const modalTitle = t('contact.modal.move_single.title', {
 		contactDesc: contactGroup.title,
@@ -29,7 +28,7 @@ const useMoveContactGroups = (contactGroup: ContactGroup): UIAction<void, void> 
 	return useMoveContacts([contactGroup], modalTitle);
 };
 
-const useRestoreContactGroups = (contactGroup: ContactGroup): UIAction<void, void> => {
+const useRestoreContactGroups = (contactGroup: ContactGroup): Action => {
 	const [t] = useTranslation();
 	const modalTitle = t('contact.modal.restore_single.title', {
 		contactDesc: contactGroup.title,
@@ -53,16 +52,16 @@ export const useContactGroupActions = (contactGroup: ContactGroup): Array<DSActi
 
 	if (isMainAccount || isSharedFolderWithWritePermission) {
 		if (folderPartsId === FOLDERS.TRASH) {
-			return toEffectiveActions([restoreContactsGroupAction, deletePermanentlyContactGroupAction]);
+			return [restoreContactsGroupAction, deletePermanentlyContactGroupAction];
 		}
 
-		return toEffectiveActions([
+		return [
 			sendEmailAction,
 			editContactGroupAction,
 			moveContactGroupAction,
 			trashContactGroupAction
-		]);
+		];
 	}
 
-	return toEffectiveActions([sendEmailAction]);
+	return [sendEmailAction];
 };

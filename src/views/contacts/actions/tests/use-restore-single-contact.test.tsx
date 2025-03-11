@@ -8,12 +8,10 @@ import { act } from '@testing-library/react';
 
 import { UIAction } from '../../../../actions/types';
 import { FOLDERS } from '../../../../carbonio-ui-commons/constants/folders';
-import { getFolderIdParts } from '../../../../carbonio-ui-commons/helpers/folders';
 import { populateFoldersStore } from '../../../../carbonio-ui-commons/test/mocks/store/folders';
 import { setupHook, screen } from '../../../../carbonio-ui-commons/test/test-setup';
 import { FOLDERS_DESCRIPTORS, TIMERS } from '../../../../constants/tests';
 import { buildContact } from '../../../../tests/model-builder';
-import { getFoldersArray } from '../../../../tests/utils';
 import { useContactRestoreAction } from '../use-contact-restore-action';
 
 describe('useRestoreSingleContact', () => {
@@ -29,34 +27,7 @@ describe('useRestoreSingleContact', () => {
 		);
 	});
 
-	describe('canExecute', () => {
-		it('should return true if the contact is inside the trash', () => {
-			const contact = buildContact({ parent: FOLDERS_DESCRIPTORS.trash.id });
-			const { result } = setupHook(useContactRestoreAction, { initialProps: [contact] });
-			const action = result.current;
-			expect(action.canExecute()).toBeTruthy();
-		});
-
-		it('should return true if the contact is nested inside the trash', () => {
-			populateFoldersStore();
-			const trashedFolder = getFoldersArray().find(
-				(folder) =>
-					folder.absFolderPath?.startsWith('/Trash') &&
-					getFolderIdParts(folder.id).id !== FOLDERS.TRASH
-			);
-			if (!trashedFolder) {
-				throw new Error('Cannot find a trashed addressbook');
-			}
-			const contact = buildContact({ parent: trashedFolder.id });
-			const { result } = setupHook(useContactRestoreAction, { initialProps: [contact] });
-			const action = result.current;
-			expect(action.canExecute()).toBeTruthy();
-		});
-
-		it.todo('should return false if one of the contacts is not inside the trash');
-	});
-
-	describe('Execute', () => {
+	describe('onClick', () => {
 		it('should open the restore modal with the contact first name and last name in title', () => {
 			populateFoldersStore();
 			const contact = buildContact({ parent: FOLDERS.TRASH });
@@ -65,7 +36,7 @@ describe('useRestoreSingleContact', () => {
 			const { result } = setupHook(useContactRestoreAction, { initialProps: [contact] });
 			const action = result.current;
 			act(() => {
-				action.execute();
+				action.onClick();
 			});
 
 			act(() => {

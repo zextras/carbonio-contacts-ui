@@ -11,7 +11,6 @@ import { useContactMoveAction } from './use-contact-move-action';
 import { useContactRestoreAction } from './use-contact-restore-action';
 import { useContactSendMailAction } from './use-contact-send-mail';
 import { useContactShowTagAction } from './use-contact-show-tag-action';
-import { toEffectiveActions } from '../../../actions/common-contacts-actions/effective-actions';
 import { useDeletePermanentlyContacts } from '../../../actions/common-contacts-actions/use-delete-permanently-contacts';
 import { useTrashContacts } from '../../../actions/common-contacts-actions/use-trash-contacts';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
@@ -28,7 +27,10 @@ export function useContactPreviewActions(contact: Contact): DSAction[] {
 	const restoreContact = useContactRestoreAction(contact);
 
 	if (getFolderIdParts(contact.parent).id === FOLDERS.TRASH) {
-		return toEffectiveActions([restoreContact, deleteAction]);
+		return [restoreContact, deleteAction];
 	}
-	return toEffectiveActions([sendMailAction, tagsAction, editAction, moveContact, trashAction]);
+	const actions = [sendMailAction];
+	tagsAction && actions.push(tagsAction);
+	actions.push(...[editAction, moveContact, trashAction]);
+	return actions;
 }

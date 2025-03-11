@@ -9,11 +9,10 @@ import { getAction } from '@zextras/carbonio-shell-ui';
 import { isEmpty } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { UIAction } from '../../../actions/types';
-import { isTrash } from '../../../carbonio-ui-commons/helpers/folders';
+import { Action } from '../../../actions/types';
 import { Contact } from '../../../legacy/types/contact';
 
-export const useContactSendMailAction = (contact: Contact): UIAction<void, void> => {
+export const useContactSendMailAction = (contact: Contact): Action => {
 	const [t] = useTranslation();
 	const onMail = useCallback(() => {
 		const [mailTo, available] = getAction('contact-list', 'mail-to', [contact]);
@@ -25,8 +24,7 @@ export const useContactSendMailAction = (contact: Contact): UIAction<void, void>
 		id: 'send',
 		icon: 'MailModOutline',
 		label: t('action.mail', 'Send e-mail'),
-		execute: onMail,
-		canExecute: () => !isTrash(contact.parent),
+		onClick: onMail,
 		disabled: isEmpty(contact?.email)
 	};
 };

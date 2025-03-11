@@ -7,37 +7,17 @@
 import { useCallback, useMemo } from 'react';
 
 import { useSnackbar } from '@zextras/carbonio-design-system';
-import { every } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { isTrashed } from '../../carbonio-ui-commons/helpers/folders';
-import { getFolder } from '../../carbonio-ui-commons/store/zustand/folder';
-import { Folder } from '../../carbonio-ui-commons/types';
 import { TIMEOUTS } from '../../constants';
 import { ContactOrGroup } from '../../legacy/types/contact';
 import { apiClient } from '../../network/api-client';
-import { UIAction } from '../types';
+import { Action } from '../types';
 import { useDeletePermanentlyItem } from '../use-delete-permanently-item';
 
-export const useDeletePermanentlyContacts = (
-	contacts: Array<ContactOrGroup>
-): UIAction<void, void> => {
+export const useDeletePermanentlyContacts = (contacts: Array<ContactOrGroup>): Action => {
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
-
-	const canExecute = useCallback((): boolean => {
-		if (!contacts || contacts.length === 0) return false;
-		const parentContacts = contacts.reduce<Array<Folder>>((result, contact) => {
-			const folder = getFolder(contact.parent);
-			if (folder) {
-				result.push(folder);
-			}
-
-			return result;
-		}, []);
-		if (parentContacts.length === 0) return false;
-		return every(parentContacts, (cont) => isTrashed({ folder: cont }));
-	}, [contacts]);
 
 	const onDeleteConfirm = useCallback(() => {
 		const contactsIds = contacts.map((cont) => cont.id);
@@ -83,9 +63,8 @@ export const useDeletePermanentlyContacts = (
 		[t]
 	);
 
-	const deletePermanentlyItem = useDeletePermanentlyItem({
+	return useDeletePermanentlyItem({
 		modal: { id: 'delete-cg-modal', title: modalTitle, body: confirmationText },
 		onDeleteConfirm
 	});
-	return { ...deletePermanentlyItem, canExecute };
 };

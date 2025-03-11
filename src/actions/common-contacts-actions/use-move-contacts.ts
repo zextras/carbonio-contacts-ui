@@ -12,13 +12,10 @@ import { Folder } from '../../carbonio-ui-commons/types';
 import { ACTION_IDS, TIMEOUTS } from '../../constants';
 import { ContactOrGroup } from '../../legacy/types/contact';
 import { apiClient } from '../../network/api-client';
-import { UIAction } from '../types';
+import { Action } from '../types';
 import { useMoveItemsAction } from '../use-move-items';
 
-export const useMoveContacts = (
-	contacts: Array<ContactOrGroup>,
-	modalTitle: string
-): UIAction<void, void> => {
+export const useMoveContacts = (contacts: Array<ContactOrGroup>, modalTitle: string): Action => {
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
 	const move = useCallback(
@@ -53,12 +50,11 @@ export const useMoveContacts = (
 		title: modalTitle
 	};
 	const contactGroupIds = contacts.map((contact) => contact.id);
-	const action = useMoveItemsAction({
+	return useMoveItemsAction({
 		actionId: ACTION_IDS.move,
 		label: t('label.move', 'Move'),
 		modal: moveModal,
 		icon: 'MoveOutline',
 		onMoveConfirm: (targetFolder: Folder) => move(contactGroupIds, targetFolder.id)
 	});
-	return { ...action, canExecute: () => true };
 };

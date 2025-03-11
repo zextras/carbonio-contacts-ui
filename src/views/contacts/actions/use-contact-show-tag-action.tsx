@@ -8,12 +8,12 @@ import React, { useCallback, useMemo } from 'react';
 import { Icon, Padding, Row, Text } from '@zextras/carbonio-design-system';
 import { every, includes, noop, reduce } from 'lodash';
 
-import { UIAction } from '../../../actions/types';
+import { Action } from '../../../actions/types';
 import { ZIMBRA_STANDARD_COLORS } from '../../../carbonio-ui-commons/constants';
 import { useTags } from '../../../carbonio-ui-commons/store/zustand/tags';
 import { Contact } from '../../../legacy/types/contact';
 
-export const useContactShowTagAction = (contact: Contact): UIAction<void, void> => {
+export const useContactShowTagAction = (contact: Contact): Action | undefined => {
 	const tagsFromStore = useTags();
 	const triggerSearch = noop;
 
@@ -56,7 +56,7 @@ export const useContactShowTagAction = (contact: Contact): UIAction<void, void> 
 		contact?.tags && triggerSearch(tagsFromStore?.[contact?.tags[0]]);
 	}, [contact.tags, triggerSearch, tagsFromStore]);
 
-	const shouldDisplayTagIcon = useCallback(
+	const shouldDisplayTagIcon = useMemo(
 		(): boolean =>
 			contact.tags !== undefined &&
 			contact.tags?.length !== 0 &&
@@ -64,11 +64,12 @@ export const useContactShowTagAction = (contact: Contact): UIAction<void, void> 
 		[contact.tags]
 	);
 
-	return {
-		id: `tag`,
-		icon: tagIcon,
-		label: '',
-		execute: onTagClick,
-		canExecute: shouldDisplayTagIcon
-	};
+	return shouldDisplayTagIcon
+		? {
+				id: `tag`,
+				icon: tagIcon,
+				label: '',
+				onClick: onTagClick
+			}
+		: undefined;
 };

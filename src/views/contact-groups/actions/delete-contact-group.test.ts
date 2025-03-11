@@ -7,7 +7,6 @@ import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 
 import { useActionDeleteContactGroup } from './delete-contact-group';
-import { UIAction } from '../../../actions/types';
 import { screen, setupHook } from '../../../carbonio-ui-commons/test/test-setup';
 import {
 	DELETE_PERMANENTLY_ACTION_DESCRIPTOR,
@@ -49,23 +48,15 @@ describe('useActionDeleteCG', () => {
 			initialProps: [contactGroupWithMembers],
 			store: defaultStore
 		});
-		expect(result.current).toEqual<UIAction<unknown, unknown>>(
+		expect(result.current).toEqual(
 			expect.objectContaining({
 				icon: DELETE_PERMANENTLY_ACTION_DESCRIPTOR.icon,
 				label: DELETE_PERMANENTLY_ACTION_DESCRIPTOR.label,
 				id: DELETE_PERMANENTLY_ACTION_DESCRIPTOR.id,
-				canExecute: expect.anything(),
-				execute: expect.anything()
+				onClick: expect.anything(),
+				color: 'error'
 			})
 		);
-	});
-
-	it('should return an action which is always executable', () => {
-		const { result } = setupHook(useActionDeleteContactGroup, {
-			initialProps: [contactGroupWithMembers],
-			store: defaultStore
-		});
-		expect(result.current.canExecute()).toBeTruthy();
 	});
 
 	it('should return an execute field which opens a modal with the CG name', async () => {
@@ -75,7 +66,7 @@ describe('useActionDeleteCG', () => {
 		});
 		const action = result.current;
 		act(() => {
-			action.execute();
+			action.onClick();
 		});
 
 		act(() => {
@@ -93,7 +84,7 @@ describe('useActionDeleteCG', () => {
 		});
 		const action = result.current;
 		act(() => {
-			action.execute();
+			action.onClick();
 		});
 
 		act(() => {
@@ -112,7 +103,7 @@ describe('useActionDeleteCG', () => {
 		});
 		const action = result.current;
 		act(() => {
-			action.execute();
+			action.onClick();
 		});
 
 		act(() => {
@@ -133,7 +124,7 @@ describe('useActionDeleteCG', () => {
 		});
 		const action = result.current;
 		act(() => {
-			action.execute();
+			action.onClick();
 		});
 
 		act(() => {
@@ -152,7 +143,7 @@ describe('useActionDeleteCG', () => {
 		});
 		const action = result.current;
 		act(() => {
-			action.execute();
+			action.onClick();
 		});
 
 		act(() => {
@@ -182,7 +173,7 @@ describe('useActionDeleteCG', () => {
 
 		const action = result.current;
 		act(() => {
-			action.execute();
+			action.onClick();
 		});
 
 		act(() => {
@@ -203,7 +194,7 @@ describe('useActionDeleteCG', () => {
 		});
 		const action = result.current;
 		act(() => {
-			action.execute();
+			action.onClick();
 		});
 
 		act(() => {
@@ -228,7 +219,7 @@ describe('useActionDeleteCG', () => {
 		});
 		const action = result.current;
 		act(() => {
-			action.execute();
+			action.onClick();
 		});
 
 		act(() => {
@@ -258,7 +249,7 @@ describe('useActionDeleteCG', () => {
 
 		const action = result.current;
 		act(() => {
-			action.execute();
+			action.onClick();
 			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 

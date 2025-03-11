@@ -11,19 +11,13 @@ import { useTranslation } from 'react-i18next';
 
 import { Text } from '../components/Text';
 import { ACTION_IDS } from '../constants';
+import { Action } from './types';
 
 type DeleteModal = { id: string; title: string; body: string };
 
 type DeleteConfirmProps = {
 	modal: DeleteModal;
 	doDelete: () => Promise<void>;
-};
-type DeleteActionBase = {
-	id: string;
-	label: string;
-	color: string;
-	icon: string;
-	execute: () => void;
 };
 
 type DeleteModalProps = DeleteModal & {
@@ -52,10 +46,7 @@ const getDeleteModal = (
 	}
 ];
 
-function useCreateDeleteModalAction(): ({
-	modal,
-	doDelete
-}: DeleteConfirmProps) => DeleteActionBase {
+function useCreateDeleteModalAction(): ({ modal, doDelete }: DeleteConfirmProps) => Action {
 	const [t] = useTranslation();
 	const { createModal, closeModal } = useModal();
 
@@ -85,7 +76,7 @@ function useCreateDeleteModalAction(): ({
 		);
 	};
 
-	return ({ modal, doDelete }): DeleteActionBase => {
+	return ({ modal, doDelete }): Action => {
 		const execute = (): void => {
 			createDeleteModal(modal.id, modal.title, modal.body, doDelete);
 		};
@@ -94,7 +85,7 @@ function useCreateDeleteModalAction(): ({
 			id: ACTION_IDS.deletePermanently,
 			label: t('action.deletePermanently', 'Delete Permanently'),
 			icon: 'DeletePermanentlyOutline',
-			execute,
+			onClick: execute,
 			color: 'error'
 		};
 	};
@@ -107,7 +98,7 @@ type UseDeletePermanentlyItem = {
 export const useDeletePermanentlyItem = ({
 	modal,
 	onDeleteConfirm
-}: UseDeletePermanentlyItem): DeleteActionBase => {
+}: UseDeletePermanentlyItem): Action => {
 	const createDeleteModal = useCreateDeleteModalAction();
 
 	const doDelete = useCallback(async () => {

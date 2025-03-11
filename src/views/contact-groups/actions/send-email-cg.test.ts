@@ -7,7 +7,6 @@ import { faker } from '@faker-js/faker';
 import * as shell from '@zextras/carbonio-shell-ui';
 
 import { useActionSendEmailCG } from './send-email-cg';
-import { UIAction } from '../../../actions/types';
 import { setupHook } from '../../../carbonio-ui-commons/test/test-setup';
 import { buildContactGroup, buildMembers } from '../../../tests/model-builder';
 
@@ -18,37 +17,34 @@ describe('useActionSendEmailCG', () => {
 
 	it('should return an action with the specific data', () => {
 		const { result } = setupHook(useActionSendEmailCG, { initialProps: [contactGroupWithMembers] });
-		expect(result.current).toEqual<UIAction<unknown, unknown>>(
+		expect(result.current).toEqual(
 			expect.objectContaining({
 				icon: 'EmailOutline',
 				label: 'Send e-mail',
 				id: 'cg-send-email-action',
-				canExecute: expect.anything(),
-				execute: expect.anything()
+				disabled: false,
+				onClick: expect.anything()
 			})
 		);
 	});
 
-	it('should return an action which is executable if the given CG has members', () => {
+	it('should return an action which is not disabled if the given CG has members', () => {
 		jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([jest.fn(), true]);
 		const { result } = setupHook(useActionSendEmailCG, { initialProps: [contactGroupWithMembers] });
-		expect(result.current.canExecute()).toBeTruthy();
+		expect(result.current.disabled).toBeFalsy();
 	});
 
-	// TODO: what is the point of canExecute?
-	//  we want the action to be disabled when there are no members
-	//  however in actions we want to check permission vs disabled (has permission but some condition is false)
-	it('should return an action which is executable even if the given CG has no members', () => {
+	it('should return a disabled action when the given CG has no members', () => {
 		jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([jest.fn(), true]);
 		const { result } = setupHook(useActionSendEmailCG, { initialProps: [contactGroupNoMembers] });
-		expect(result.current.canExecute()).toBeTruthy();
+		expect(result.current.disabled).toBeTruthy();
 	});
 
 	it('should not call the Mails integrated function if execute function is invoked passing a CG without members', () => {
 		const openComposer = jest.fn();
 		jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openComposer, true]);
 		const { result } = setupHook(useActionSendEmailCG, { initialProps: [contactGroupNoMembers] });
-		result.current.execute();
+		result.current.onClick();
 		expect(openComposer).not.toHaveBeenCalled();
 	});
 
@@ -56,7 +52,7 @@ describe('useActionSendEmailCG', () => {
 		const openComposer = jest.fn();
 		jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openComposer, true]);
 		const { result } = setupHook(useActionSendEmailCG, { initialProps: [contactGroupWithMembers] });
-		result.current.execute();
+		result.current.onClick();
 		expect(openComposer).toBeCalledWith({
 			recipients: contactGroupWithMembers.members.map((member) =>
 				expect.objectContaining({ email: member })

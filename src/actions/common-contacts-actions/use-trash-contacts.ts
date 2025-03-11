@@ -6,36 +6,18 @@
 import { useCallback, useMemo } from 'react';
 
 import { useSnackbar } from '@zextras/carbonio-design-system';
-import { every } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { isTrashed } from '../../carbonio-ui-commons/helpers/folders';
-import { Folder } from '../../carbonio-ui-commons/types';
 import { ACTION_IDS, TIMEOUTS } from '../../constants';
 import { ContactOrGroup } from '../../legacy/types/contact';
 import { apiClient } from '../../network/api-client';
-import { getParentFolder } from '../folder-utils';
-import { UIAction } from '../types';
+import { Action, UIAction } from '../types';
 
 export type ActionTrashContacts = UIAction<void, void>;
 
-export const useTrashContacts = (contacts: Array<ContactOrGroup>): ActionTrashContacts => {
+export const useTrashContacts = (contacts: Array<ContactOrGroup>): Action => {
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
-
-	const canExecute = useCallback<ActionTrashContacts['canExecute']>((): boolean => {
-		if (!contacts || contacts.length === 0) return false;
-		const parentContacts = contacts.reduce<Array<Folder>>((result, contact) => {
-			const folder = getParentFolder(contact);
-			if (folder) {
-				result.push(folder);
-			}
-
-			return result;
-		}, []);
-		if (parentContacts.length === 0) return false;
-		return every(parentContacts, (cont: Folder) => !isTrashed({ folder: cont }));
-	}, [contacts]);
 
 	const onRestore = useCallback(() => {
 		// TODO support contacts in different parents
@@ -65,9 +47,8 @@ export const useTrashContacts = (contacts: Array<ContactOrGroup>): ActionTrashCo
 			});
 	}, [contacts, createSnackbar, t]);
 
-	const execute = useCallback<ActionTrashContacts['execute']>(() => {
+	const execute = useCallback(() => {
 		if (!contacts) return;
-		if (!canExecute()) return;
 		const contactsIds = contacts.map((cont) => cont.id);
 		apiClient
 			.trashContacts(contactsIds)
@@ -93,16 +74,15 @@ export const useTrashContacts = (contacts: Array<ContactOrGroup>): ActionTrashCo
 					hideButton: true
 				})
 			);
-	}, [contacts, canExecute, createSnackbar, t, onRestore]);
+	}, [contacts, createSnackbar, t, onRestore]);
 
 	return useMemo(
 		() => ({
 			id: ACTION_IDS.trashContacts,
 			label: t('label.delete', 'Delete'),
 			icon: 'Trash2Outline',
-			execute,
-			canExecute
+			onClick: execute
 		}),
-		[canExecute, execute, t]
+		[execute, t]
 	);
 };

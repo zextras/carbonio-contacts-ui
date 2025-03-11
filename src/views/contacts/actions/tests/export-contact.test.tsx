@@ -25,16 +25,7 @@ describe('useActionExportContact', () => {
 		);
 	});
 
-	describe('canExecute', () => {
-		it('should return true', () => {
-			const contact = buildContact();
-			const { result } = setupHook(useContactExportAction, { initialProps: [contact] });
-			const action = result.current;
-			expect(action.canExecute()).toBeTruthy();
-		});
-	});
-
-	describe('Execute', () => {
+	describe('onClick', () => {
 		it('should call the Get Item API when action is executed', async () => {
 			const contact = buildContact();
 
@@ -43,7 +34,7 @@ describe('useActionExportContact', () => {
 
 			const action = result.current;
 			await act(async () => {
-				action.execute();
+				action.onClick();
 			});
 
 			await expect(apiInterceptor).resolves.toEqual({ id: contact.id });
@@ -57,7 +48,7 @@ describe('useActionExportContact', () => {
 			const { result } = setupHook(useContactExportAction, { initialProps: [contact] });
 			const action = result.current;
 			await act(async () => {
-				action.execute();
+				action.onClick();
 			});
 
 			expect(await screen.findByText('Something went wrong, please try again')).toBeVisible();
@@ -71,7 +62,7 @@ describe('useActionExportContact', () => {
 			const action = result.current;
 
 			await act(async () => {
-				action.execute();
+				action.onClick();
 			});
 
 			expect(await screen.findByText('vCard file exported successfully')).toBeVisible();
