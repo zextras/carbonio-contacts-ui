@@ -13,7 +13,7 @@ import { useTags } from '../../../../carbonio-ui-commons/store/zustand/tags';
 import { ListActionIconButton } from '../../../../components/list/list-action-icon-button';
 import { ListItemActionsWrapper } from '../../../../components/list/list-item-actions-wrapper';
 import { ListItemAvatar } from '../../../../components/list/list-item-avatar';
-import { useContactsContextualMenuActions } from '../../../../views/contacts/actions/use-contact-contextual-menu-actions';
+import { useContactContextualMenuActions } from '../../../../views/contacts/actions/use-contact-contextual-menu-actions';
 import { useContactHoverActions } from '../../../../views/contacts/actions/use-contact-hover-actions';
 import { getTagsArray } from '../../../helpers/tags';
 import { Contact } from '../../../types/contact';
@@ -70,8 +70,7 @@ export const ContactListItem = ({
 		id: item.id,
 		label: `${item.firstName} ${item.middleName} ${item.lastName}`
 	};
-	// FIXME: how can the folderId be undefined??
-	const contextualMenuActions = useContactsContextualMenuActions(item, folderId ?? '');
+	const contextualMenuActions = useContactContextualMenuActions(item);
 
 	const hoverActions = useContactHoverActions(item);
 	const hoverActionsIcons = useMemo<ReactNode[]>(

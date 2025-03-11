@@ -17,10 +17,8 @@ import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { getFolderIdParts } from '../../../carbonio-ui-commons/helpers/folders';
 import { Contact } from '../../../legacy/types/contact';
 
-export const useContactsContextualMenuActions = (
-	contact: Contact,
-	folderId: string
-): Array<Action> => {
+export const useContactContextualMenuActions = (contact: Contact): Array<Action> => {
+	const folderId = contact.parent;
 	const sendMailAction = useContactSendMailAction(contact);
 	const applyTagsAction = useApplyTagsToContact(contact);
 	const exportAction = useContactExportAction(contact);

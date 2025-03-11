@@ -12,35 +12,33 @@ import { buildContact } from '../../../../tests/model-builder';
 import { useContactHoverActions } from '../use-contact-hover-actions';
 
 describe('useContactHoverActions', () => {
-	describe('document current behavior', () => {
-		beforeAll(() => {
-			const mailTo = { id: 'mail-to', label: 'action.send_msg', execute: jest.fn() };
-			jest.spyOn(shell, 'getAction').mockReturnValue([mailTo, true]);
-		});
-		it('should return [mailTo, move, delete] hover actions in this order when contact not in trash', () => {
-			populateFoldersStore();
-			const contact = buildContact({ parent: FOLDERS.CONTACTS });
+	beforeAll(() => {
+		const mailTo = { id: 'mail-to', label: 'action.send_msg', execute: jest.fn() };
+		jest.spyOn(shell, 'getAction').mockReturnValue([mailTo, true]);
+	});
+	it('should return [mailTo, edit, move, trash] hover actions in this order when contact not in trash', () => {
+		populateFoldersStore();
+		const contact = buildContact({ parent: FOLDERS.CONTACTS });
 
-			const { result } = setupHook(useContactHoverActions, { initialProps: [contact] });
+		const { result } = setupHook(useContactHoverActions, { initialProps: [contact] });
 
-			const actions = result.current;
+		const actions = result.current;
 
-			expect(actions[0].id).toBe('send');
-			expect(actions[1].id).toBe('edit');
-			expect(actions[2].id).toBe('move');
-			expect(actions[3].id).toBe('trash-contacts-action');
-		});
+		expect(actions[0].id).toBe('send');
+		expect(actions[1].id).toBe('edit');
+		expect(actions[2].id).toBe('move');
+		expect(actions[3].id).toBe('trash-contacts-action');
+	});
 
-		it('should return [restore, deletePermanently] hover actions in this order when contact in trash', () => {
-			populateFoldersStore();
-			const contact = buildContact({ parent: FOLDERS.TRASH });
+	it('should return [restore, deletePermanently] hover actions in this order when contact in trash', () => {
+		populateFoldersStore();
+		const contact = buildContact({ parent: FOLDERS.TRASH });
 
-			const { result } = setupHook(useContactHoverActions, { initialProps: [contact] });
+		const { result } = setupHook(useContactHoverActions, { initialProps: [contact] });
 
-			const actions = result.current;
+		const actions = result.current;
 
-			expect(actions[0].id).toBe('restore-contacts-action');
-			expect(actions[1].id).toBe('delete-permanently');
-		});
+		expect(actions[0].id).toBe('restore-contacts-action');
+		expect(actions[1].id).toBe('delete-permanently');
 	});
 });
