@@ -7,9 +7,9 @@
 import { type Action as DSAction } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
-import { useActionDeleteContactGroup } from './delete-contact-group';
-import { useActionEditCG } from './edit-cg';
-import { useActionSendEmailCG } from './send-email-cg';
+import { useContactGroupDeleteAction } from './use-contact-group-delete-action';
+import { useContactGroupEditAction } from './use-contact-group-edit-action';
+import { useContactGroupSendEmailAction } from './use-contact-group-send-email-action.';
 import { useMoveContacts } from '../../../actions/common-contacts-actions/use-move-contacts';
 import { useRestoreContacts } from '../../../actions/common-contacts-actions/use-restore-contacts';
 import { useTrashContacts } from '../../../actions/common-contacts-actions/use-trash-contacts';
@@ -38,12 +38,12 @@ const useRestoreContactGroups = (contactGroup: ContactGroup): Action => {
 };
 
 export const useContactGroupActions = (contactGroup: ContactGroup): Array<DSAction> => {
-	const deletePermanentlyContactGroupAction = useActionDeleteContactGroup(contactGroup);
+	const deletePermanentlyContactGroupAction = useContactGroupDeleteAction(contactGroup);
 	const moveContactGroupAction = useMoveContactGroups(contactGroup);
 	const restoreContactsGroupAction = useRestoreContactGroups(contactGroup);
 	const trashContactGroupAction = useTrashContacts([contactGroup]);
-	const editContactGroupAction = useActionEditCG(contactGroup);
-	const sendEmailAction = useActionSendEmailCG(contactGroup);
+	const editContactGroupAction = useContactGroupEditAction(contactGroup);
+	const sendEmailAction = useContactGroupSendEmailAction(contactGroup);
 
 	const folder = getFolderFromContactGroup(contactGroup);
 	const folderPartsId = getFolderIdParts(contactGroup.parent).id;

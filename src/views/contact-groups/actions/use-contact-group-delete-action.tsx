@@ -21,8 +21,7 @@ type DeleteContactGroupActionReturn = {
 	contactGroupId: string;
 };
 
-// TODO: consider not using UIAction because "canExecute" does not make much sense
-export const useActionDeleteContactGroup = (contactGroup: ContactGroup): Action => {
+export const useContactGroupDeleteAction = (contactGroup: ContactGroup): Action => {
 	const [t] = useTranslation();
 	const modalTitle = t('modal.delete.contactGroup.header', 'Delete "{{contactGroupName}}"', {
 		contactGroupName: contactGroup.title

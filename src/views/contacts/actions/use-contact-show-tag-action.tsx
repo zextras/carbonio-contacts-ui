@@ -17,7 +17,6 @@ export const useContactShowTagAction = (contact: Contact): Action | undefined =>
 	const tagsFromStore = useTags();
 	const triggerSearch = noop;
 
-	// originally in contact-preview-content.jsx
 	const tags = useMemo(
 		() =>
 			reduce(

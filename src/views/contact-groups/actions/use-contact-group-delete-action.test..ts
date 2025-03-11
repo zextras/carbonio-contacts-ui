@@ -6,7 +6,7 @@
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 
-import { useActionDeleteContactGroup } from './delete-contact-group';
+import { useContactGroupDeleteAction } from './use-contact-group-delete-action';
 import { screen, setupHook } from '../../../carbonio-ui-commons/test/test-setup';
 import {
 	DELETE_PERMANENTLY_ACTION_DESCRIPTOR,
@@ -36,7 +36,7 @@ async function findDeletePermanentlyButton(): Promise<any> {
 	});
 }
 
-describe('useActionDeleteCG', () => {
+describe('useContactGroupDeleteAction', () => {
 	const membersCount = faker.number.int({ min: 1, max: 42 });
 	const contactGroupWithMembers = buildContactGroup({ members: buildMembers(membersCount) });
 	const contactGroupNoMembers = { ...contactGroupWithMembers, members: [] };
@@ -44,7 +44,7 @@ describe('useActionDeleteCG', () => {
 	const defaultStore = generateStore();
 
 	it('should return an action with the specific data', () => {
-		const { result } = setupHook(useActionDeleteContactGroup, {
+		const { result } = setupHook(useContactGroupDeleteAction, {
 			initialProps: [contactGroupWithMembers],
 			store: defaultStore
 		});
@@ -60,7 +60,7 @@ describe('useActionDeleteCG', () => {
 	});
 
 	it('should return an execute field which opens a modal with the CG name', async () => {
-		const { result } = setupHook(useActionDeleteContactGroup, {
+		const { result } = setupHook(useContactGroupDeleteAction, {
 			initialProps: [contactGroupWithMembers],
 			store: defaultStore
 		});
@@ -78,7 +78,7 @@ describe('useActionDeleteCG', () => {
 	});
 
 	it('should return an execute field which opens a modal with an instruction text', async () => {
-		const { result } = setupHook(useActionDeleteContactGroup, {
+		const { result } = setupHook(useContactGroupDeleteAction, {
 			initialProps: [contactGroupWithMembers],
 			store: defaultStore
 		});
@@ -97,7 +97,7 @@ describe('useActionDeleteCG', () => {
 	});
 
 	it('should return an execute field which opens a modal with a close icon', async () => {
-		const { result } = setupHook(useActionDeleteContactGroup, {
+		const { result } = setupHook(useContactGroupDeleteAction, {
 			initialProps: [contactGroupWithMembers],
 			store: defaultStore
 		});
@@ -118,7 +118,7 @@ describe('useActionDeleteCG', () => {
 	});
 
 	it('should return an execute field which opens a modal with a delete action button', async () => {
-		const { result } = setupHook(useActionDeleteContactGroup, {
+		const { result } = setupHook(useContactGroupDeleteAction, {
 			initialProps: [contactGroupWithMembers],
 			store: defaultStore
 		});
@@ -137,7 +137,7 @@ describe('useActionDeleteCG', () => {
 	});
 
 	it('should close the UI if the user clicks on the close icon on the header', async () => {
-		const { result, user } = setupHook(useActionDeleteContactGroup, {
+		const { result, user } = setupHook(useContactGroupDeleteAction, {
 			initialProps: [contactGroupWithMembers],
 			store: defaultStore
 		});
@@ -166,7 +166,7 @@ describe('useActionDeleteCG', () => {
 		);
 		registerDeleteContactHandler(contactGroupWithMembers.id);
 
-		const { result, user } = setupHook(useActionDeleteContactGroup, {
+		const { result, user } = setupHook(useContactGroupDeleteAction, {
 			initialProps: [contactGroupWithMembers],
 			store
 		});
@@ -188,7 +188,7 @@ describe('useActionDeleteCG', () => {
 	it('should show an error snackbar if the user clicks on the delete action button and the API call return an error', async () => {
 		jest.spyOn(console, 'warn').mockImplementation();
 		registerDeleteContactHandler(contactGroupNoMembers.id, JEST_MOCKED_ERROR);
-		const { result, user } = setupHook(useActionDeleteContactGroup, {
+		const { result, user } = setupHook(useContactGroupDeleteAction, {
 			initialProps: [contactGroupWithMembers],
 			store: defaultStore
 		});
@@ -213,7 +213,7 @@ describe('useActionDeleteCG', () => {
 		);
 		const handler = registerDeleteContactHandler(contactGroupWithMembers.id);
 
-		const { result, user } = setupHook(useActionDeleteContactGroup, {
+		const { result, user } = setupHook(useContactGroupDeleteAction, {
 			initialProps: [contactGroupWithMembers],
 			store
 		});
@@ -242,7 +242,7 @@ describe('useActionDeleteCG', () => {
 		);
 		registerDeleteContactHandler(contactGroupWithMembers.id);
 
-		const { result, user } = setupHook(useActionDeleteContactGroup, {
+		const { result, user } = setupHook(useContactGroupDeleteAction, {
 			initialProps: [contactGroupWithMembers],
 			store
 		});

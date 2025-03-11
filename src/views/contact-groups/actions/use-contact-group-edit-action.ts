@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { ACTION_IDS, EDIT_CONTACT_GROUP_BOARD_ID } from '../../../constants';
 import { ContactGroup } from '../../../model/contact-group';
 
-export const useActionEditCG = (contactGroup: ContactGroup): Action => {
+export const useContactGroupEditAction = (contactGroup: ContactGroup): Action => {
 	const [t] = useTranslation();
 
 	const editCG = useCallback(() => {

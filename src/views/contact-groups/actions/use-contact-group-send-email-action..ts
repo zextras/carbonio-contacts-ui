@@ -12,7 +12,7 @@ import { Action } from '../../../actions/types';
 import { ACTION_IDS } from '../../../constants';
 import { ContactGroup } from '../../../model/contact-group';
 
-export const useActionSendEmailCG = (contactGroup: ContactGroup): Action => {
+export const useContactGroupSendEmailAction = (contactGroup: ContactGroup): Action => {
 	const [t] = useTranslation();
 	const sendMailAction = useActionSendEmail();
 
