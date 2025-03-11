@@ -9,35 +9,34 @@ import { Container, CreateModalArgs, useModal } from '@zextras/carbonio-design-s
 import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 
-import { ACTION_IDS } from '../constants';
-import { UIAction } from './types';
 import { Text } from '../components/Text';
+import { ACTION_IDS } from '../constants';
+
+type DeleteModal = { id: string; title: string; body: string };
 
 type DeleteConfirmProps = {
-	modal: { id: string; title: string; body: string };
+	modal: DeleteModal;
 	doDelete: () => Promise<void>;
 };
-type DeleteActionBase = UIAction<void, void>;
-type DeleteModalProps = {
-	modalId: string;
-	modalTitle: string;
-	modalBody: string;
+type DeleteActionBase = {
+	id: string;
+	label: string;
+	color: string;
+	icon: string;
+	execute: () => void;
+};
+
+type DeleteModalProps = DeleteModal & {
 	deleteAction: () => Promise<void>;
 };
 
 const getDeleteModal = (
-	{
-		modalId,
-		modalTitle,
-		modalBody,
-		deleteAction,
-		onClose
-	}: DeleteModalProps & { onClose: () => void },
+	{ id, title, body, deleteAction, onClose }: DeleteModalProps & { onClose: () => void },
 	t: TFunction
 ): CreateModalArgs => [
 	{
-		id: modalId,
-		title: modalTitle,
+		id,
+		title,
 		confirmLabel: t('action.delete_permanently', 'Delete Permanently'),
 		confirmColor: 'error',
 		onConfirm: deleteAction,
@@ -46,7 +45,7 @@ const getDeleteModal = (
 		children: (
 			<Container padding={{ vertical: 'medium' }} crossAlignment={'flex-start'}>
 				<Text lineHeight={1.3125} overflow="break-word" size="small">
-					{modalBody}
+					{body}
 				</Text>
 			</Container>
 		)
@@ -75,9 +74,9 @@ function useCreateDeleteModalAction(): ({
 		createModal(
 			...getDeleteModal(
 				{
-					modalId,
-					modalTitle,
-					modalBody,
+					id: modalId,
+					title: modalTitle,
+					body: modalBody,
 					deleteAction: () => handleDelete(doDelete, modalId),
 					onClose: () => closeModal(modalId)
 				},
@@ -95,7 +94,6 @@ function useCreateDeleteModalAction(): ({
 			id: ACTION_IDS.deletePermanently,
 			label: t('action.deletePermanently', 'Delete Permanently'),
 			icon: 'DeletePermanentlyOutline',
-			canExecute: () => true,
 			execute,
 			color: 'error'
 		};
@@ -103,13 +101,13 @@ function useCreateDeleteModalAction(): ({
 }
 
 type DeletePermanentlyItem = {
-	modal: { id: string; title: string; body: string };
+	modal: DeleteModal;
 	onDeleteConfirm: () => void;
 };
 export const useDeletePermanentlyItem = ({
 	modal,
 	onDeleteConfirm
-}: DeletePermanentlyItem): UIAction<void, void> => {
+}: DeletePermanentlyItem): DeleteActionBase => {
 	const createDeleteModal = useCreateDeleteModalAction();
 
 	const doDelete = useCallback(async () => {

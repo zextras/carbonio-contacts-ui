@@ -21,6 +21,7 @@ type DeleteContactGroupActionReturn = {
 	contactGroupId: string;
 };
 
+// TODO: consider not using UIAction because "canExecute" does not make much sense
 export const useActionDeleteContactGroup = (contactGroup: ContactGroup): UIAction<void, void> => {
 	const [t] = useTranslation();
 	const modalTitle = t('modal.delete.contactGroup.header', 'Delete "{{contactGroupName}}"', {
@@ -71,8 +72,9 @@ export const useActionDeleteContactGroup = (contactGroup: ContactGroup): UIActio
 		[activeContactGroup?.id, contactGroup, createSnackbar, redirectTo, t]
 	);
 
-	return useDeletePermanentlyItem({
+	const deletePermanentlyItem = useDeletePermanentlyItem({
 		modal: { id: 'delete-cg-modal', title: modalTitle, body: modalBody },
 		onDeleteConfirm
 	});
+	return { ...deletePermanentlyItem, canExecute: () => true };
 };
