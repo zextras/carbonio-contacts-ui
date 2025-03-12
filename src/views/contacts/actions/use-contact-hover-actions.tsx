@@ -15,6 +15,7 @@ import { useTrashContacts } from '../../../actions/common-contacts-actions/use-t
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { getFolderIdParts } from '../../../carbonio-ui-commons/helpers/folders';
 import { Contact } from '../../../legacy/types/contact';
+import { getFolderFromParent } from '../../contact-groups/utils';
 
 export const useContactHoverActions = (contact: Contact): Array<DSAction> => {
 	const folderId = contact.parent;
@@ -25,8 +26,16 @@ export const useContactHoverActions = (contact: Contact): Array<DSAction> => {
 	const trashAction = useTrashContacts([contact]);
 	const editAction = useContactEditAction(contact);
 
-	if (getFolderIdParts(folderId).id === FOLDERS.TRASH) {
-		return [restoreAction, deleteAction];
+	const folder = getFolderFromParent(contact);
+	const folderPartsId = getFolderIdParts(folderId).id;
+	const isMainAccount = !folder?.perm;
+	const isSharedFolderWithWritePermission = folder?.perm?.includes('w');
+
+	if (isMainAccount || isSharedFolderWithWritePermission) {
+		if (folderPartsId === FOLDERS.TRASH) {
+			return [restoreAction, deleteAction];
+		}
+		return [sendMailAction, editAction, moveAction, trashAction];
 	}
-	return [sendMailAction, editAction, moveAction, trashAction];
+	return [sendMailAction];
 };

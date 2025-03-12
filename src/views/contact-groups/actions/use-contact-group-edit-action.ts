@@ -9,11 +9,14 @@ import { Action } from '@zextras/carbonio-design-system';
 import { addBoard, getBoardById, reopenBoards, setCurrentBoard } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
+import { getParentFolder } from '../../../actions/folder-utils';
 import { ACTION_IDS, EDIT_CONTACT_GROUP_BOARD_ID } from '../../../constants';
 import { ContactGroup } from '../../../model/contact-group';
 
 export const useContactGroupEditAction = (contactGroup: ContactGroup): Action => {
 	const [t] = useTranslation();
+
+	const parentFolder = getParentFolder(contactGroup);
 
 	const editCG = useCallback(() => {
 		const board = getBoardById(`${EDIT_CONTACT_GROUP_BOARD_ID}-${contactGroup.id}`);
@@ -25,10 +28,10 @@ export const useContactGroupEditAction = (contactGroup: ContactGroup): Action =>
 				id: `${EDIT_CONTACT_GROUP_BOARD_ID}-${contactGroup.id}`,
 				boardViewId: EDIT_CONTACT_GROUP_BOARD_ID,
 				title: contactGroup.title,
-				context: { contactGroupId: contactGroup.id, folderId: contactGroup.parent }
+				context: { contactGroupId: contactGroup.id, folderId: parentFolder?.id }
 			});
 		}
-	}, [contactGroup]);
+	}, [contactGroup.id, contactGroup.title, parentFolder?.id]);
 
 	return useMemo(
 		() => ({

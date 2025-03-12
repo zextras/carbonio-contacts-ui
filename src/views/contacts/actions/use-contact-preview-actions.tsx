@@ -16,21 +16,31 @@ import { useTrashContacts } from '../../../actions/common-contacts-actions/use-t
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { getFolderIdParts } from '../../../carbonio-ui-commons/helpers/folders';
 import { Contact } from '../../../legacy/types/contact';
+import { getFolderFromParent } from '../../contact-groups/utils';
 
 export function useContactPreviewActions(contact: Contact): DSAction[] {
+	const folderId = contact.parent;
 	const sendMailAction = useContactSendMailAction(contact);
-	const tagsAction = useContactShowTagAction(contact);
+	const showTag = useContactShowTagAction(contact);
 	const editAction = useContactEditAction(contact);
 	const moveContact = useContactMoveAction(contact);
 	const trashAction = useTrashContacts([contact]);
 	const deleteAction = useDeleteContacts([contact]);
 	const restoreContact = useContactRestoreAction(contact);
+	const folder = getFolderFromParent(contact);
+	const folderPartsId = getFolderIdParts(folderId).id;
 
-	if (getFolderIdParts(contact.parent).id === FOLDERS.TRASH) {
-		return [restoreContact, deleteAction];
+	const isMainAccount = !folder?.perm;
+	const isSharedFolderWithWritePermission = folder?.perm?.includes('w');
+
+	if (isMainAccount || isSharedFolderWithWritePermission) {
+		if (folderPartsId === FOLDERS.TRASH) {
+			return [restoreContact, deleteAction];
+		}
+		const actions = [sendMailAction];
+		showTag && actions.push(showTag);
+		actions.push(...[editAction, moveContact, trashAction]);
+		return actions;
 	}
-	const actions = [sendMailAction];
-	tagsAction && actions.push(tagsAction);
-	actions.push(...[editAction, moveContact, trashAction]);
-	return actions;
+	return [sendMailAction, ...(showTag ? [showTag] : [])];
 }
