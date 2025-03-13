@@ -12,6 +12,15 @@ import { setupHook } from '../../../../carbonio-ui-commons/test/test-setup';
 import { buildContact } from '../../../../tests/model-builder';
 import { generateLinkFolder } from '../../../contact-groups/tests/utils';
 import { useContactContextualMenuActions } from '../use-contact-contextual-menu-actions';
+import {
+	APPLY_TAG_ACTION,
+	DELETE_PERMANENTLY_ACTION,
+	EXPORT_CONTACT_ACTION,
+	MOVE_ACTION,
+	RESTORE_ACTION,
+	SEND_EMAIL_ACTION,
+	TRASH_ACTION
+} from '../../../../constants/actions';
 
 describe('useContactContextualMenuActions', () => {
 	it('should return no actions when folder is not in the store', () => {
@@ -37,11 +46,11 @@ describe('useContactContextualMenuActions', () => {
 			});
 
 			const actions = result.current;
-			expect(actions[0].id).toBe('send-email-action');
-			expect(actions[1].id).toBe('trash-contacts-action');
-			expect(actions[2].id).toBe('move-action');
-			expect(actions[3].id).toBe('export-contact-action');
-			expect(actions[4].id).toBe('apply-tag-action');
+			expect(actions[0].id).toBe(SEND_EMAIL_ACTION.ID);
+			expect(actions[1].id).toBe(TRASH_ACTION.ID);
+			expect(actions[2].id).toBe(MOVE_ACTION.ID);
+			expect(actions[3].id).toBe(EXPORT_CONTACT_ACTION.ID);
+			expect(actions[4].id).toBe(APPLY_TAG_ACTION.ID);
 		});
 		it('should return [restore, delete permanently, apply tags] actions in this order when in trash folder', () => {
 			populateFoldersStore();
@@ -53,9 +62,9 @@ describe('useContactContextualMenuActions', () => {
 			});
 
 			const actions = result.current;
-			expect(actions[0].id).toBe('restore-contacts-action');
-			expect(actions[1].id).toBe('delete-permanently-action');
-			expect(actions[2].id).toBe('apply-tag-action');
+			expect(actions[0].id).toBe(RESTORE_ACTION.ID);
+			expect(actions[1].id).toBe(DELETE_PERMANENTLY_ACTION.ID);
+			expect(actions[2].id).toBe(APPLY_TAG_ACTION.ID);
 		});
 	});
 
@@ -108,9 +117,9 @@ describe('useContactContextualMenuActions', () => {
 
 				const actions = result.current;
 				expect(actions.length).toBe(3);
-				expect(actions[0].id).toBe('restore-contacts-action');
-				expect(actions[1].id).toBe('delete-permanently-action');
-				expect(actions[2].id).toBe('apply-tag-action');
+				expect(actions[0].id).toBe(RESTORE_ACTION.ID);
+				expect(actions[1].id).toBe(DELETE_PERMANENTLY_ACTION.ID);
+				expect(actions[2].id).toBe(APPLY_TAG_ACTION.ID);
 			});
 		});
 
@@ -151,11 +160,11 @@ describe('useContactContextualMenuActions', () => {
 
 				const actions = result.current;
 				expect(actions.length).toBe(5);
-				expect(actions[0].id).toBe('send-email-action');
-				expect(actions[1].id).toBe('trash-contacts-action');
-				expect(actions[2].id).toBe('move-action');
-				expect(actions[3].id).toBe('export-contact-action');
-				expect(actions[4].id).toBe('apply-tag-action');
+				expect(actions[0].id).toBe(SEND_EMAIL_ACTION.ID);
+				expect(actions[1].id).toBe(TRASH_ACTION.ID);
+				expect(actions[2].id).toBe(MOVE_ACTION.ID);
+				expect(actions[3].id).toBe(EXPORT_CONTACT_ACTION.ID);
+				expect(actions[4].id).toBe(APPLY_TAG_ACTION.ID);
 			});
 		});
 	});

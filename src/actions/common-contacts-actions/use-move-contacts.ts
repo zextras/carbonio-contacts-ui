@@ -9,7 +9,8 @@ import { useSnackbar } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
 import { Folder } from '../../carbonio-ui-commons/types';
-import { ACTION_IDS, TIMEOUTS } from '../../constants';
+import { TIMEOUTS } from '../../constants';
+import { MOVE_ACTION } from '../../constants/actions';
 import { ContactOrGroup } from '../../legacy/types/contact';
 import { apiClient } from '../../network/api-client';
 import { Action } from '../types';
@@ -51,10 +52,10 @@ export const useMoveContacts = (contacts: Array<ContactOrGroup>, modalTitle: str
 	};
 	const contactGroupIds = contacts.map((contact) => contact.id);
 	return useSelectFolderAction({
-		actionId: ACTION_IDS.move,
+		actionId: MOVE_ACTION.ID,
 		label: t('label.move', 'Move'),
 		modal: moveModal,
-		icon: 'MoveOutline',
+		icon: MOVE_ACTION.ICON,
 		onConfirm: (targetFolder: Folder) => move(contactGroupIds, targetFolder.id)
 	});
 };

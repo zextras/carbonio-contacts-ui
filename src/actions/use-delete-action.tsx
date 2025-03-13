@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { Text } from '../components/Text';
 import { ACTION_IDS } from '../constants';
 import { Action } from './types';
+import { DELETE_PERMANENTLY_ACTION } from '../constants/actions';
 
 type DeleteModal = { id: string; title: string; body: string };
 
@@ -51,9 +52,9 @@ function useCreateDeleteModalAction(): ({
 		};
 
 		return {
-			id: ACTION_IDS.deletePermanently,
+			id: DELETE_PERMANENTLY_ACTION.ID,
 			label: t('action.deletePermanently', 'Delete Permanently'),
-			icon: 'DeletePermanentlyOutline',
+			icon: DELETE_PERMANENTLY_ACTION.ICON,
 			onClick: execute,
 			color: 'error'
 		};

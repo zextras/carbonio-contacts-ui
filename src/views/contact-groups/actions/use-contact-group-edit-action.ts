@@ -10,7 +10,8 @@ import { addBoard, getBoardById, reopenBoards, setCurrentBoard } from '@zextras/
 import { useTranslation } from 'react-i18next';
 
 import { getParentFolder } from '../../../actions/folder-utils';
-import { ACTION_IDS, EDIT_CONTACT_GROUP_BOARD_ID } from '../../../constants';
+import { EDIT_CONTACT_GROUP_BOARD_ID } from '../../../constants';
+import { EDIT_ACTION } from '../../../constants/actions';
 import { ContactGroup } from '../../../model/contact-group';
 
 export const useContactGroupEditAction = (contactGroup: ContactGroup): Action => {
@@ -35,9 +36,9 @@ export const useContactGroupEditAction = (contactGroup: ContactGroup): Action =>
 
 	return useMemo(
 		() => ({
-			id: ACTION_IDS.editCG,
+			id: EDIT_ACTION.ID,
 			label: t('action.edit', 'Edit'),
-			icon: 'Edit2Outline',
+			icon: EDIT_ACTION.ICON,
 			onClick: editCG
 		}),
 		[editCG, t]

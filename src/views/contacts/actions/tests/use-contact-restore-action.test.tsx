@@ -22,7 +22,7 @@ describe('useRestoreSingleContact', () => {
 			expect.objectContaining({
 				icon: 'RestoreOutline',
 				label: 'Restore',
-				id: 'restore-contacts-action'
+				id: 'restore-action'
 			})
 		);
 	});

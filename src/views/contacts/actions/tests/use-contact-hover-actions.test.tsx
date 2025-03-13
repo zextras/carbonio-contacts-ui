@@ -43,7 +43,7 @@ describe('useContactHoverActions', () => {
 			expect(actions[0].id).toBe('send-email-action');
 			expect(actions[1].id).toBe('edit-action');
 			expect(actions[2].id).toBe('move-action');
-			expect(actions[3].id).toBe('trash-contacts-action');
+			expect(actions[3].id).toBe('move-to-trash-action');
 		});
 
 		it('should return [restore, deletePermanently] actions in this order when contact in trash', () => {
@@ -54,7 +54,7 @@ describe('useContactHoverActions', () => {
 
 			const actions = result.current;
 
-			expect(actions[0].id).toBe('restore-contacts-action');
+			expect(actions[0].id).toBe('restore-action');
 			expect(actions[1].id).toBe('delete-permanently-action');
 		});
 	});
@@ -108,7 +108,7 @@ describe('useContactHoverActions', () => {
 
 				const actions = result.current;
 				expect(actions.length).toBe(2);
-				expect(actions[0].id).toBe('restore-contacts-action');
+				expect(actions[0].id).toBe('restore-action');
 				expect(actions[1].id).toBe('delete-permanently-action');
 			});
 		});
@@ -152,7 +152,7 @@ describe('useContactHoverActions', () => {
 				expect(actions[0].id).toBe('send-email-action');
 				expect(actions[1].id).toBe('edit-action');
 				expect(actions[2].id).toBe('move-action');
-				expect(actions[3].id).toBe('trash-contacts-action');
+				expect(actions[3].id).toBe('move-to-trash-action');
 			});
 		});
 	});

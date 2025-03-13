@@ -18,6 +18,7 @@ import { ACTION_IDS, TIMEOUTS } from '../../constants';
 import { apiClient } from '../../network/api-client';
 import { ContactOrGroup } from '../types/contact';
 import { evaluateParentIds } from '../utils/helpers';
+import { MOVE_ACTION } from '../../constants/actions';
 
 export type MoveContactsAction = UIAction<
 	{ contacts?: Array<ContactOrGroup>; newParentAddressBook?: Folder },
@@ -137,9 +138,9 @@ export const useMoveContactsDragAndDrop = (): MoveContactsAction => {
 
 	return useMemo(
 		() => ({
-			id: ACTION_IDS.moveContacts,
+			id: MOVE_ACTION.ID,
 			label: t('label.move', 'Move'),
-			icon: 'MoveOutline',
+			icon: MOVE_ACTION.ICON,
 			execute,
 			canExecute
 		}),

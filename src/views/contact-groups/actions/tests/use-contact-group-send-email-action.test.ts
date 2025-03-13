@@ -7,6 +7,7 @@ import { faker } from '@faker-js/faker';
 import * as shell from '@zextras/carbonio-shell-ui';
 
 import { setupHook } from '../../../../carbonio-ui-commons/test/test-setup';
+import { SEND_EMAIL_ACTION } from '../../../../constants/actions';
 import { buildContactGroup, buildMembers } from '../../../../tests/model-builder';
 import { useContactGroupSendEmailAction } from '../use-contact-group-send-email-action';
 
@@ -21,9 +22,9 @@ describe('useContactGroupSendEmailAction', () => {
 		});
 		expect(result.current).toEqual(
 			expect.objectContaining({
-				icon: 'EmailOutline',
+				icon: SEND_EMAIL_ACTION.ICON,
 				label: 'Send e-mail',
-				id: 'cg-send-email-action',
+				id: SEND_EMAIL_ACTION.ID,
 				disabled: false,
 				onClick: expect.anything()
 			})

@@ -21,6 +21,7 @@ import {
 	makeListItemsVisible,
 	within
 } from '../../../carbonio-ui-commons/test/test-setup';
+import { MOVE_ACTION } from '../../../constants/actions';
 import { FOLDERS_DESCRIPTORS, TIMERS } from '../../../constants/tests';
 import { ContactActionResponse } from '../../../network/api/contact-action';
 import { buildContact } from '../../../tests/model-builder';
@@ -34,9 +35,9 @@ describe('useActionMoveContacts', () => {
 		const { result } = setupHook(useMoveContactsDragAndDrop);
 		expect(result.current).toEqual<UIAction<unknown, unknown>>(
 			expect.objectContaining({
-				icon: 'MoveOutline',
+				icon: MOVE_ACTION.ICON,
 				label: 'Move',
-				id: 'move-contacts-action'
+				id: MOVE_ACTION.ID
 			})
 		);
 	});

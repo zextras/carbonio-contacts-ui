@@ -13,6 +13,13 @@ import { generateFolder } from '../../../../carbonio-ui-commons/test/mocks/folde
 import { populateFoldersStore } from '../../../../carbonio-ui-commons/test/mocks/store/folders';
 import { setupHook } from '../../../../carbonio-ui-commons/test/test-setup';
 import { ACTION_IDS } from '../../../../constants';
+import {
+	EDIT_ACTION,
+	MOVE_ACTION,
+	RESTORE_ACTION,
+	SEND_EMAIL_ACTION,
+	TRASH_ACTION
+} from '../../../../constants/actions';
 import { DELETE_PERMANENTLY_ACTION_DESCRIPTOR } from '../../../../constants/tests';
 import { generateStore } from '../../../../legacy/tests/generators/store';
 import { buildContactGroup, buildMembers } from '../../../../tests/model-builder';
@@ -40,10 +47,10 @@ describe('useContactGroupActions', () => {
 
 				const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
 				expect(result.current).toHaveLength(4);
-				expect(result.current[0].id).toBe(ACTION_IDS.sendEmailCG);
-				expect(result.current[1].id).toBe(ACTION_IDS.editCG);
-				expect(result.current[2].id).toBe(ACTION_IDS.move);
-				expect(result.current[3].id).toBe(ACTION_IDS.trashContacts);
+				expect(result.current[0].id).toBe(SEND_EMAIL_ACTION.ID);
+				expect(result.current[1].id).toBe(EDIT_ACTION.ID);
+				expect(result.current[2].id).toBe(MOVE_ACTION.ID);
+				expect(result.current[3].id).toBe(TRASH_ACTION.ID);
 			});
 			it('should return send mail action as enabled when the contact group has at least 1 member', () => {
 				jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([jest.fn(), true]);
@@ -55,7 +62,7 @@ describe('useContactGroupActions', () => {
 
 				expect(result.current[0]).toEqual(
 					expect.objectContaining({
-						id: ACTION_IDS.sendEmailCG,
+						id: SEND_EMAIL_ACTION.ID,
 						label: 'Send e-mail',
 						icon: 'EmailOutline',
 						onClick: expect.anything(),
@@ -68,7 +75,7 @@ describe('useContactGroupActions', () => {
 				const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
 				expect(result.current[0]).toEqual(
 					expect.objectContaining({
-						id: ACTION_IDS.sendEmailCG,
+						id: SEND_EMAIL_ACTION.ID,
 						label: 'Send e-mail',
 						icon: 'EmailOutline',
 						disabled: true,
@@ -91,7 +98,7 @@ describe('useContactGroupActions', () => {
 
 				expect(result.current).toHaveLength(1);
 				expect(result.current).toContainEqual({
-					id: ACTION_IDS.sendEmailCG,
+					id: SEND_EMAIL_ACTION.ID,
 					label: 'Send e-mail',
 					icon: 'EmailOutline',
 					onClick: expect.anything(),
@@ -107,9 +114,9 @@ describe('useContactGroupActions', () => {
 				const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
 
 				expect(result.current).toContainEqual({
-					id: ACTION_IDS.trashContacts,
+					id: TRASH_ACTION.ID,
 					label: 'Delete',
-					icon: 'Trash2Outline',
+					icon: TRASH_ACTION.ICON,
 					onClick: expect.anything()
 				});
 			});
@@ -129,9 +136,9 @@ describe('useContactGroupActions', () => {
 				const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
 				expect(result.current).toHaveLength(2);
 				expect(result.current[0]).toEqual({
-					id: ACTION_IDS.restoreContacts,
+					id: RESTORE_ACTION.ID,
 					label: 'Restore',
-					icon: 'RestoreOutline',
+					icon: RESTORE_ACTION.ICON,
 					onClick: expect.anything()
 				});
 				expect(result.current[1]).toEqual({
@@ -154,9 +161,9 @@ describe('useContactGroupActions', () => {
 				const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
 				expect(result.current).toHaveLength(2);
 				expect(result.current[0]).toEqual({
-					id: ACTION_IDS.restoreContacts,
+					id: RESTORE_ACTION.ID,
 					label: 'Restore',
-					icon: 'RestoreOutline',
+					icon: RESTORE_ACTION.ICON,
 					onClick: expect.anything()
 				});
 				expect(result.current[1]).toEqual({
@@ -194,10 +201,10 @@ describe('useContactGroupActions', () => {
 				});
 
 				expect(result.current).toHaveLength(4);
-				expect(result.current[0].id).toBe(ACTION_IDS.sendEmailCG);
-				expect(result.current[1].id).toBe(ACTION_IDS.editCG);
-				expect(result.current[2].id).toBe(ACTION_IDS.move);
-				expect(result.current[3].id).toBe(ACTION_IDS.trashContacts);
+				expect(result.current[0].id).toBe(SEND_EMAIL_ACTION.ID);
+				expect(result.current[1].id).toBe(EDIT_ACTION.ID);
+				expect(result.current[2].id).toBe(MOVE_ACTION.ID);
+				expect(result.current[3].id).toBe(TRASH_ACTION.ID);
 			});
 
 			it('should return only send action when shared folder does not have write permission', () => {
@@ -216,7 +223,7 @@ describe('useContactGroupActions', () => {
 				});
 
 				expect(result.current).toHaveLength(1);
-				expect(result.current[0].id).toBe(ACTION_IDS.sendEmailCG);
+				expect(result.current[0].id).toBe(SEND_EMAIL_ACTION.ID);
 			});
 		});
 		describe('Trash folder', () => {
@@ -236,9 +243,9 @@ describe('useContactGroupActions', () => {
 
 				expect(result.current).toHaveLength(2);
 				expect(result.current[0]).toEqual({
-					id: ACTION_IDS.restoreContacts,
+					id: RESTORE_ACTION.ID,
 					label: 'Restore',
-					icon: 'RestoreOutline',
+					icon: RESTORE_ACTION.ICON,
 					onClick: expect.anything()
 				});
 				expect(result.current[1]).toEqual({

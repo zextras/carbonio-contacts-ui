@@ -17,6 +17,7 @@ import { DisplayerActionsHeader } from '../../../components/displayer/displayer-
 import { useContactPreviewActions } from '../../../views/contacts/actions/use-contact-preview-actions';
 import { useDisplayName } from '../../hooks/use-display-name';
 import { Contact } from '../../types/contact';
+import { SHOW_TAG_ACTION } from '../../../constants/actions';
 
 export const ContactPreviewPanel = ({ contact }: { contact: Contact }): React.JSX.Element => {
 	const urlLocation = useLocation();
@@ -31,7 +32,7 @@ export const ContactPreviewPanel = ({ contact }: { contact: Contact }): React.JS
 	const actionButtons = useMemo<ReactNode[]>(
 		() =>
 			actions.map((action) => {
-				if (action.id === 'tag') {
+				if (action.id === SHOW_TAG_ACTION.ID) {
 					return <ActionTagButton key={action.id} contact={contact} />;
 				}
 				return <DisplayerActionIconButton action={action} key={action.id} />;

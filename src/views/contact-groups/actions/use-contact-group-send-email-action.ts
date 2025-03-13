@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useActionSendEmail } from '../../../actions/send-email';
 import { Action } from '../../../actions/types';
-import { ACTION_IDS } from '../../../constants';
+import { SEND_EMAIL_ACTION } from '../../../constants/actions';
 import { ContactGroup } from '../../../model/contact-group';
 
 export const useContactGroupSendEmailAction = (contactGroup: ContactGroup): Action => {
@@ -27,9 +27,9 @@ export const useContactGroupSendEmailAction = (contactGroup: ContactGroup): Acti
 
 	return useMemo(
 		() => ({
-			id: ACTION_IDS.sendEmailCG,
+			id: SEND_EMAIL_ACTION.ID,
 			label: t('action.mail', 'Send e-mail'),
-			icon: 'EmailOutline',
+			icon: SEND_EMAIL_ACTION.ICON,
 			onClick: sendEmail,
 			disabled: isDisabled
 		}),

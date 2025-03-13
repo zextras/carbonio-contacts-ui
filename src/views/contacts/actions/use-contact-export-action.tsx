@@ -9,7 +9,8 @@ import { useSnackbar } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
 import { Action } from '../../../actions/types';
-import { ACTION_IDS, TIMEOUTS } from '../../../constants';
+import { TIMEOUTS } from '../../../constants';
+import { EXPORT_CONTACT_ACTION } from '../../../constants/actions';
 import { redirectToBlob } from '../../../helpers/download';
 import { getDisplayName } from '../../../legacy/hooks/use-display-name';
 import { Contact } from '../../../legacy/types/contact';
@@ -52,9 +53,9 @@ export const useContactExportAction = (contact: Contact): Action => {
 
 	return useMemo(
 		() => ({
-			id: ACTION_IDS.exportContact,
+			id: EXPORT_CONTACT_ACTION.ID,
 			label: t('label.export_contact', 'Export vCard file'),
-			icon: 'DownloadOutline',
+			icon: EXPORT_CONTACT_ACTION.ICON,
 			onClick: execute
 		}),
 		[execute, t]

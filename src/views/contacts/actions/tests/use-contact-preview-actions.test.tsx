@@ -10,7 +10,15 @@ import { FOLDERS } from '../../../../carbonio-ui-commons/constants/folders';
 import { useFolderStore } from '../../../../carbonio-ui-commons/store/zustand/folder';
 import { populateFoldersStore } from '../../../../carbonio-ui-commons/test/mocks/store/folders';
 import { setupHook } from '../../../../carbonio-ui-commons/test/test-setup';
-import { ACTION_IDS } from '../../../../constants';
+import {
+	DELETE_PERMANENTLY_ACTION,
+	EDIT_ACTION,
+	MOVE_ACTION,
+	RESTORE_ACTION,
+	SEND_EMAIL_ACTION,
+	SHOW_TAG_ACTION,
+	TRASH_ACTION
+} from '../../../../constants/actions';
 import { buildContact } from '../../../../tests/model-builder';
 import { generateLinkFolder } from '../../../contact-groups/tests/utils';
 import { useContactPreviewActions } from '../use-contact-preview-actions';
@@ -40,11 +48,11 @@ describe('Contact Preview Actions', () => {
 			});
 
 			const actions = result.current;
-			expect(actions[0].id).toBe(ACTION_IDS.sendEmail);
-			expect(actions[1].id).toBe('tag');
-			expect(actions[2].id).toBe(ACTION_IDS.edit);
-			expect(actions[3].id).toBe(ACTION_IDS.move);
-			expect(actions[4].id).toBe('trash-contacts-action');
+			expect(actions[0].id).toBe(SEND_EMAIL_ACTION.ID);
+			expect(actions[1].id).toBe(SHOW_TAG_ACTION.ID);
+			expect(actions[2].id).toBe(EDIT_ACTION.ID);
+			expect(actions[3].id).toBe(MOVE_ACTION.ID);
+			expect(actions[4].id).toBe(TRASH_ACTION.ID);
 		});
 		it('should return [restore, delete permanently] actions in this order when in trash folder', () => {
 			populateFoldersStore();
@@ -56,8 +64,8 @@ describe('Contact Preview Actions', () => {
 			});
 
 			const actions = result.current;
-			expect(actions[0].id).toBe('restore-contacts-action');
-			expect(actions[1].id).toBe(ACTION_IDS.deletePermanently);
+			expect(actions[0].id).toBe(RESTORE_ACTION.ID);
+			expect(actions[1].id).toBe(DELETE_PERMANENTLY_ACTION.ID);
 		});
 	});
 
@@ -110,8 +118,8 @@ describe('Contact Preview Actions', () => {
 
 				const actions = result.current;
 				expect(actions.length).toBe(2);
-				expect(actions[0].id).toBe('restore-contacts-action');
-				expect(actions[1].id).toBe('delete-permanently-action');
+				expect(actions[0].id).toBe(RESTORE_ACTION.ID);
+				expect(actions[1].id).toBe(DELETE_PERMANENTLY_ACTION.ID);
 			});
 		});
 
@@ -137,8 +145,8 @@ describe('Contact Preview Actions', () => {
 
 					const actions = result.current;
 					expect(actions.length).toBe(2);
-					expect(actions[0].id).toBe(ACTION_IDS.sendEmail);
-					expect(actions[1].id).toBe('tag');
+					expect(actions[0].id).toBe(SEND_EMAIL_ACTION.ID);
+					expect(actions[1].id).toBe(SHOW_TAG_ACTION.ID);
 				});
 
 				it('should return send, show tags, edit, move, trash actions when has Write permission', () => {
@@ -157,11 +165,11 @@ describe('Contact Preview Actions', () => {
 
 					const actions = result.current;
 					expect(actions.length).toBe(5);
-					expect(actions[0].id).toBe(ACTION_IDS.sendEmail);
-					expect(actions[1].id).toBe('tag');
-					expect(actions[2].id).toBe(ACTION_IDS.edit);
-					expect(actions[3].id).toBe(ACTION_IDS.move);
-					expect(actions[4].id).toBe('trash-contacts-action');
+					expect(actions[0].id).toBe(SEND_EMAIL_ACTION.ID);
+					expect(actions[1].id).toBe(SHOW_TAG_ACTION.ID);
+					expect(actions[2].id).toBe(EDIT_ACTION.ID);
+					expect(actions[3].id).toBe(MOVE_ACTION.ID);
+					expect(actions[4].id).toBe(TRASH_ACTION.ID);
 				});
 			});
 
@@ -186,7 +194,7 @@ describe('Contact Preview Actions', () => {
 
 					const actions = result.current;
 					expect(actions.length).toBe(1);
-					expect(actions[0].id).toBe(ACTION_IDS.sendEmail);
+					expect(actions[0].id).toBe(SEND_EMAIL_ACTION.ID);
 				});
 
 				it('should return send, show tags, edit, move, trash actions when has Write permission', () => {
@@ -205,10 +213,10 @@ describe('Contact Preview Actions', () => {
 
 					const actions = result.current;
 					expect(actions.length).toBe(4);
-					expect(actions[0].id).toBe(ACTION_IDS.sendEmail);
-					expect(actions[1].id).toBe(ACTION_IDS.edit);
-					expect(actions[2].id).toBe(ACTION_IDS.move);
-					expect(actions[3].id).toBe('trash-contacts-action');
+					expect(actions[0].id).toBe(SEND_EMAIL_ACTION.ID);
+					expect(actions[1].id).toBe(EDIT_ACTION.ID);
+					expect(actions[2].id).toBe(MOVE_ACTION.ID);
+					expect(actions[3].id).toBe(TRASH_ACTION.ID);
 				});
 			});
 		});

@@ -8,7 +8,8 @@ import { useCallback, useMemo } from 'react';
 import { useSnackbar } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
-import { ACTION_IDS, TIMEOUTS } from '../../constants';
+import { TIMEOUTS } from '../../constants';
+import { TRASH_ACTION } from '../../constants/actions';
 import { ContactOrGroup } from '../../legacy/types/contact';
 import { apiClient } from '../../network/api-client';
 import { Action } from '../types';
@@ -76,9 +77,9 @@ export const useTrashContacts = (contacts: Array<ContactOrGroup>): Action => {
 
 	return useMemo(
 		() => ({
-			id: ACTION_IDS.trashContacts,
+			id: TRASH_ACTION.ID,
 			label: t('label.delete', 'Delete'),
-			icon: 'Trash2Outline',
+			icon: TRASH_ACTION.ICON,
 			onClick: execute
 		}),
 		[execute, t]

@@ -18,10 +18,9 @@ import { noop, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { useTags } from '../../carbonio-ui-commons/store/zustand/tags';
+import { APPLY_TAG_ACTION } from '../../constants/actions';
 import { Contact } from '../../legacy/types/contact';
-import { TagsActionsType } from '../../legacy/types/tags';
 import { createAndApplyTag, TagsDropdownItem } from '../../legacy/ui-actions/tag-actions';
-import { ACTION_IDS } from '../../constants';
 
 export const useApplyTagsToContact = (contact: Contact): Action => {
 	const tags = useTags();
@@ -64,10 +63,10 @@ export const useApplyTagsToContact = (contact: Contact): Action => {
 	tagItem.push(newTag);
 
 	return {
-		id: ACTION_IDS.applyTag,
+		id: APPLY_TAG_ACTION.ID,
 		items: tagItem,
 		label: t('label.tag', 'Tag'),
-		icon: 'TagsMoreOutline',
+		icon: APPLY_TAG_ACTION.ICON,
 		onClick: noop,
 		customComponent: (
 			<Row takeAvailableSpace mainAlignment="flex-start">

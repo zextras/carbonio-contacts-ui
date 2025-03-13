@@ -12,6 +12,7 @@ import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { createSoapAPIInterceptor } from '../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { populateFoldersStore } from '../../../carbonio-ui-commons/test/mocks/store/folders';
 import { screen, setupHook } from '../../../carbonio-ui-commons/test/test-setup';
+import { TRASH_ACTION } from '../../../constants/actions';
 import { Contact } from '../../../legacy/types/contact';
 import { buildContact } from '../../../tests/model-builder';
 import { useTrashContacts } from '../use-trash-contacts';
@@ -22,9 +23,9 @@ describe('useTrashContacts', () => {
 		const { result } = setupHook(() => useTrashContacts(contacts));
 		expect(result.current).toEqual(
 			expect.objectContaining({
-				icon: 'Trash2Outline',
+				icon: TRASH_ACTION.ICON,
 				label: 'Delete',
-				id: 'trash-contacts-action'
+				id: TRASH_ACTION.ID
 			})
 		);
 	});

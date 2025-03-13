@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { ACTION_IDS } from './index';
+import { DELETE_PERMANENTLY_ACTION } from './actions';
 import { FOLDERS } from '../carbonio-ui-commons/constants/folders';
 
 type TypeOfEnumeration<T> = T[keyof T];
@@ -22,10 +22,12 @@ export const DISPLAY_ASSERTION = {
 
 export type DisplayAssertionType = TypeOfEnumeration<typeof DISPLAY_ASSERTION>;
 export const DELETE_PERMANENTLY_ACTION_DESCRIPTOR = {
-	icon: 'DeletePermanentlyOutline',
+	icon: DELETE_PERMANENTLY_ACTION.ICON,
 	label: 'Delete Permanently',
-	id: ACTION_IDS.deletePermanently
+	id: DELETE_PERMANENTLY_ACTION.ID
 };
+
+// TODO check if we can use the ones defined in actions,ts instead
 export const FOLDERS_DESCRIPTORS = {
 	contacts: {
 		id: FOLDERS.CONTACTS,

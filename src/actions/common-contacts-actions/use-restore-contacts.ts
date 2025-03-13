@@ -9,7 +9,8 @@ import { useSnackbar } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
 import { Folder } from '../../carbonio-ui-commons/types';
-import { ACTION_IDS, TIMEOUTS } from '../../constants';
+import { TIMEOUTS } from '../../constants';
+import { RESTORE_ACTION } from '../../constants/actions';
 import { ContactOrGroup } from '../../legacy/types/contact';
 import { apiClient } from '../../network/api-client';
 import { Action } from '../types';
@@ -45,16 +46,16 @@ export const useRestoreContacts = (contacts: Array<ContactOrGroup>, modalTitle: 
 		[createSnackbar, t]
 	);
 	const restoreModal = {
-		id: ACTION_IDS.restoreContacts,
+		id: `${RESTORE_ACTION.ID}-modal`,
 		confirmButtonLabel: t('label.restore', 'Restore'),
 		title: modalTitle
 	};
 	const contactIds = contacts.map((contact) => contact.id);
 	return useSelectFolderAction({
-		actionId: ACTION_IDS.restoreContacts,
+		actionId: RESTORE_ACTION.ID,
 		label: t('label.restore', 'Restore'),
 		modal: restoreModal,
-		icon: 'RestoreOutline',
+		icon: RESTORE_ACTION.ICON,
 		onConfirm: (targetFolder: Folder) => move(contactIds, targetFolder.id)
 	});
 };
