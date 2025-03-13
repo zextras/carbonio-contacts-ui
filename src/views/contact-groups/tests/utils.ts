@@ -10,18 +10,24 @@ export function generateLinkFolder({
 	folderId,
 	remoteAccountUuId,
 	remoteId,
-	permissions = 'r'
+	permissions = 'r',
+	absFolderPath,
+	name
 }: {
 	folderId: string;
 	remoteAccountUuId: string;
 	remoteId: string;
 	permissions?: string;
+	absFolderPath?: string;
+	name?: string;
 }): Folder {
 	// TODO: generator in commons does not support setting rid and zid
 	const folder = generateFolder({
 		isLink: true,
 		id: folderId,
-		perm: permissions
+		perm: permissions,
+		absFolderPath,
+		name
 	});
 	return {
 		...folder,

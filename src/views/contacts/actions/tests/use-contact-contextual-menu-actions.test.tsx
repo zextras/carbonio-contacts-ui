@@ -7,9 +7,7 @@ import { faker } from '@faker-js/faker';
 
 import { FOLDERS } from '../../../../carbonio-ui-commons/constants/folders';
 import { useFolderStore } from '../../../../carbonio-ui-commons/store/zustand/folder';
-import { generateFolder } from '../../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
 import { populateFoldersStore } from '../../../../carbonio-ui-commons/test/mocks/store/folders';
-import { getMocksContext } from '../../../../carbonio-ui-commons/test/mocks/utils/mocks-context';
 import { setupHook } from '../../../../carbonio-ui-commons/test/test-setup';
 import { buildContact } from '../../../../tests/model-builder';
 import { generateLinkFolder } from '../../../contact-groups/tests/utils';
@@ -76,22 +74,40 @@ describe('useContactContextualMenuActions', () => {
 			expect(actions[1].id).toBe('export-contact-action');
 		});
 
-		it('should return no actions when in Trash - Read permission', () => {
-			const mockContext = getMocksContext();
-			const rootUuid = mockContext.identities.primary.userRootId;
-			const mountpount = generateFolder({
-				id: folderId,
-				name: 'Trash',
-				perm: 'r',
-				absFolderPath: '/Trash',
-				l: FOLDERS.USER_ROOT,
-				luuid: rootUuid,
-				isLink: true,
-				children: []
+		it('should return send and export action when NOT in Trash - Write permission', () => {
+			const mountpoint = generateLinkFolder({
+				folderId,
+				remoteAccountUuId,
+				remoteId: remoteFolderId,
+				permissions: 'w'
 			});
-			const folder = { ...mountpount, rid: remoteFolderId, zid: remoteAccountUuId };
 			useFolderStore.setState({
-				folders: { [folderId]: folder }
+				folders: { [folderId]: mountpoint }
+			});
+			const { result } = setupHook(useContactContextualMenuActions, {
+				initialProps: [contactInSharedFolder]
+			});
+
+			const actions = result.current;
+			expect(actions.length).toBe(5);
+			expect(actions[0].id).toBe('send-email-action');
+			expect(actions[1].id).toBe('trash-contacts-action');
+			expect(actions[2].id).toBe('move-action');
+			expect(actions[3].id).toBe('export-contact-action');
+			expect(actions[4].id).toBe('apply-tag-action');
+		});
+
+		it('should return no actions when in Trash - Read permission', () => {
+			const mountpount = generateLinkFolder({
+				folderId,
+				remoteAccountUuId,
+				remoteId: remoteFolderId,
+				permissions: 'r',
+				absFolderPath: '/Trash',
+				name: 'Trash'
+			});
+			useFolderStore.setState({
+				folders: { [folderId]: mountpount }
 			});
 
 			const { result } = setupHook(useContactContextualMenuActions, {
@@ -103,21 +119,16 @@ describe('useContactContextualMenuActions', () => {
 		});
 
 		it('should return restore, delete permanently, apply tag actions when in Trash - Write permission', () => {
-			const mockContext = getMocksContext();
-			const rootUuid = mockContext.identities.primary.userRootId;
-			const mountpount = generateFolder({
-				id: folderId,
-				name: 'Trash',
-				perm: 'w',
+			const mountpount = generateLinkFolder({
+				folderId,
+				remoteAccountUuId,
+				remoteId: remoteFolderId,
+				permissions: 'w',
 				absFolderPath: '/Trash',
-				l: FOLDERS.USER_ROOT,
-				luuid: rootUuid,
-				isLink: true,
-				children: []
+				name: 'Trash'
 			});
-			const folder = { ...mountpount, rid: remoteFolderId, zid: remoteAccountUuId };
 			useFolderStore.setState({
-				folders: { [folderId]: folder }
+				folders: { [folderId]: mountpount }
 			});
 
 			const { result } = setupHook(useContactContextualMenuActions, {
