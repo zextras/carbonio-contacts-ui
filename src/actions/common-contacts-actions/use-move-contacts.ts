@@ -45,7 +45,7 @@ export const useMoveContacts = (contacts: Array<ContactOrGroup>, modalTitle: str
 		[createSnackbar, t]
 	);
 	const moveModal = {
-		id: ACTION_IDS.moveContacts,
+		id: 'move-contacts-modal',
 		confirmButtonLabel: t('label.move', 'Move'),
 		title: modalTitle
 	};

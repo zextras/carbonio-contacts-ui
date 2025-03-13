@@ -21,6 +21,7 @@ import { useTags } from '../../carbonio-ui-commons/store/zustand/tags';
 import { Contact } from '../../legacy/types/contact';
 import { TagsActionsType } from '../../legacy/types/tags';
 import { createAndApplyTag, TagsDropdownItem } from '../../legacy/ui-actions/tag-actions';
+import { ACTION_IDS } from '../../constants';
 
 export const useApplyTagsToContact = (contact: Contact): Action => {
 	const tags = useTags();
@@ -63,7 +64,7 @@ export const useApplyTagsToContact = (contact: Contact): Action => {
 	tagItem.push(newTag);
 
 	return {
-		id: TagsActionsType.APPLY,
+		id: ACTION_IDS.applyTag,
 		items: tagItem,
 		label: t('label.tag', 'Tag'),
 		icon: 'TagsMoreOutline',

@@ -10,6 +10,7 @@ import { isEmpty } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { Action } from '../../../actions/types';
+import { ACTION_IDS } from '../../../constants';
 import { Contact } from '../../../legacy/types/contact';
 
 export const useContactSendMailAction = (contact: Contact): Action => {
@@ -21,7 +22,7 @@ export const useContactSendMailAction = (contact: Contact): Action => {
 		}
 	}, [contact]);
 	return {
-		id: 'send',
+		id: ACTION_IDS.sendEmail,
 		icon: 'MailModOutline',
 		label: t('action.mail', 'Send e-mail'),
 		onClick: onMail,

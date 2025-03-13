@@ -13,13 +13,11 @@ import { useContactSendMailAction } from './use-contact-send-mail-action';
 import { useApplyTagsToContact } from '../../../actions/common-contacts-actions/use-apply-tag-contacts';
 import { useDeleteContacts } from '../../../actions/common-contacts-actions/use-delete-contacts';
 import { useTrashContacts } from '../../../actions/common-contacts-actions/use-trash-contacts';
-import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
-import { getFolderIdParts } from '../../../carbonio-ui-commons/helpers/folders';
+import { isTrashed } from '../../../carbonio-ui-commons/helpers/folders';
 import { Contact } from '../../../legacy/types/contact';
 import { getFolderFromParent } from '../../contact-groups/utils';
 
 export const useContactContextualMenuActions = (contact: Contact): Array<Action> => {
-	const folderId = contact.parent;
 	const sendMailAction = useContactSendMailAction(contact);
 	const applyTagsAction = useApplyTagsToContact(contact);
 	const exportAction = useContactExportAction(contact);
@@ -28,19 +26,19 @@ export const useContactContextualMenuActions = (contact: Contact): Array<Action>
 	const deleteAction = useDeleteContacts([contact]);
 	const trashAction = useTrashContacts([contact]);
 	const folder = getFolderFromParent(contact);
-	const folderPartsId = getFolderIdParts(folderId).id;
-
 	const isMainAccount = !folder?.perm;
 	const isSharedFolderWithWritePermission = folder?.perm?.includes('w');
-
-	if (isMainAccount || isSharedFolderWithWritePermission) {
-		if (folderPartsId === FOLDERS.TRASH) {
+	const hasWritePermission = isMainAccount || isSharedFolderWithWritePermission;
+	if (folder && isTrashed({ folder })) {
+		if (hasWritePermission) {
 			const effectiveActions: Array<Action> = [restoreAction, deleteAction];
 			applyTagsAction && effectiveActions.push(applyTagsAction);
 			return effectiveActions;
 		}
+		return [];
+	}
+	if (hasWritePermission) {
 		return [sendMailAction, trashAction, moveAction, exportAction, applyTagsAction];
 	}
-
 	return [sendMailAction, exportAction];
 };

@@ -9,8 +9,8 @@ export const CONTACTS_ROUTE = 'contacts';
 export const CONTACTS_APP_ID = 'carbonio-contacts-ui';
 
 export const ACTION_IDS = {
-	deletePermanently: 'delete-permanently',
-	move: 'move',
+	deletePermanently: 'delete-permanently-action',
+	move: 'move-action',
 	editDL: 'dl-edit-action',
 	expandDL: 'dl-expand-action',
 	sendEmail: 'send-email-action',
@@ -35,7 +35,8 @@ export const ACTION_IDS = {
 	restoreContacts: 'restore-contacts-action',
 	trashContacts: 'trash-contacts-action',
 	deleteContacts: 'delete-contacts-action',
-	exportContact: 'export-contact-action'
+	exportContact: 'export-contact-action',
+	applyTag: 'apply-tag-action'
 } as const;
 
 export const CONTACT_BOARD_ID = 'contact-board';
