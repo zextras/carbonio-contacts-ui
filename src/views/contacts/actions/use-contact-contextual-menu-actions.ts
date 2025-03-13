@@ -26,10 +26,13 @@ export const useContactContextualMenuActions = (contact: Contact): Array<Action>
 	const deleteAction = useDeleteContacts([contact]);
 	const trashAction = useTrashContacts([contact]);
 	const folder = getFolderFromParent(contact);
+	if (!folder) {
+		return [];
+	}
 	const isMainAccount = !folder?.perm;
 	const isSharedFolderWithWritePermission = folder?.perm?.includes('w');
 	const hasWritePermission = isMainAccount || isSharedFolderWithWritePermission;
-	if (folder && isTrashed({ folder })) {
+	if (isTrashed({ folder })) {
 		if (hasWritePermission) {
 			const effectiveActions: Array<Action> = [restoreAction, deleteAction];
 			applyTagsAction && effectiveActions.push(applyTagsAction);

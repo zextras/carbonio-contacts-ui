@@ -15,6 +15,18 @@ import { useContactContextualMenuActions } from '../use-contact-contextual-menu-
 
 describe('useContactContextualMenuActions', () => {
 	describe('Main Account', () => {
+		it('should return no actions when folder is not in the store', () => {
+			const contact = buildContact({
+				parent: `unknown`
+			});
+
+			const { result } = setupHook(useContactContextualMenuActions, {
+				initialProps: [contact]
+			});
+
+			const actions = result.current;
+			expect(actions.length).toBe(0);
+		});
 		it('should return [send mail, trash, move, export vCard, apply tags] actions in this order if not in trash folder', () => {
 			populateFoldersStore();
 			const folderId = FOLDERS.CONTACTS;
