@@ -19,31 +19,38 @@ export const useDeleteContacts = (contacts: Array<ContactOrGroup>): Action => {
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
 
-	const onDeleteConfirm = useCallback(async () => {
-		const contactsIds = contacts.map((cont) => cont.id);
-		apiClient
-			.deleteContact(contactsIds)
-			.then(() => {
-				createSnackbar({
-					key: `delete-contacts-success`,
-					replace: true,
-					severity: 'info',
-					label: t('messages.snackbar.contact_deleted_permanently', 'Contact permanently deleted'),
-					autoHideTimeout: TIMEOUTS.defaultSnackbar,
-					hideButton: true
-				});
-			})
-			.catch(() =>
-				createSnackbar({
-					key: `delete-contacts-error`,
-					replace: true,
-					severity: 'error',
-					label: t('label.error_try_again', 'Something went wrong, please try again'),
-					autoHideTimeout: TIMEOUTS.defaultSnackbar,
-					hideButton: true
+	const onDeleteConfirm = useCallback(
+		async (onCloseModalCallback: () => void) => {
+			const contactsIds = contacts.map((cont) => cont.id);
+			return apiClient
+				.deleteContact(contactsIds)
+				.then(() => {
+					createSnackbar({
+						key: `delete-contacts-success`,
+						replace: true,
+						severity: 'info',
+						label: t(
+							'messages.snackbar.contact_deleted_permanently',
+							'Contact permanently deleted'
+						),
+						autoHideTimeout: TIMEOUTS.defaultSnackbar,
+						hideButton: true
+					});
+					onCloseModalCallback();
 				})
-			);
-	}, [contacts, createSnackbar, t]);
+				.catch(() => {
+					createSnackbar({
+						key: `delete-contacts-error`,
+						replace: true,
+						severity: 'error',
+						label: t('label.error_try_again', 'Something went wrong, please try again'),
+						autoHideTimeout: TIMEOUTS.defaultSnackbar,
+						hideButton: true
+					});
+				});
+		},
+		[contacts, createSnackbar, t]
+	);
 	const modalTitle = useMemo(
 		() =>
 			t('messages.modal.delete.sure_delete_contact', {

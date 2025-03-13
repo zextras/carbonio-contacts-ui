@@ -34,40 +34,44 @@ export const useContactGroupDeleteAction = (contactGroup: ContactGroup): Action 
 	const createSnackbar = useSnackbar();
 	const redirectTo = useRedirectToContactGroupFolder();
 
-	const onDeleteConfirm = useCallback(async () => {
-		apiClient
-			.deleteContact([contactGroup.id])
-			.then(() => {
-				if (activeContactGroup?.id === contactGroup.id) {
-					contactGroup && redirectTo(contactGroup);
-				}
-				return { contactGroupId: contactGroup.id };
-			})
-			.then((response: DeleteContactGroupActionReturn) => {
-				const boardId = `${EDIT_CONTACT_GROUP_BOARD_ID}-${response.contactGroupId}`;
-				const board = getBoardById(boardId);
-				if (board) {
-					closeBoard(boardId);
-				}
-				createSnackbar({
-					severity: 'success',
-					key: `snackbar-${Date.now()}`,
-					label: t(
-						'snackbar.delete_contact_group.confirm.success',
-						'Contact group successfully deleted'
-					),
-					hideButton: true
+	const onDeleteConfirm = useCallback(
+		async (onCloseModalCallback: () => void) => {
+			apiClient
+				.deleteContact([contactGroup.id])
+				.then(() => {
+					if (activeContactGroup?.id === contactGroup.id) {
+						contactGroup && redirectTo(contactGroup);
+					}
+					return { contactGroupId: contactGroup.id };
+				})
+				.then((response: DeleteContactGroupActionReturn) => {
+					const boardId = `${EDIT_CONTACT_GROUP_BOARD_ID}-${response.contactGroupId}`;
+					const board = getBoardById(boardId);
+					if (board) {
+						closeBoard(boardId);
+					}
+					createSnackbar({
+						severity: 'success',
+						key: `snackbar-${Date.now()}`,
+						label: t(
+							'snackbar.delete_contact_group.confirm.success',
+							'Contact group successfully deleted'
+						),
+						hideButton: true
+					});
+					onCloseModalCallback();
+				})
+				.catch(() => {
+					createSnackbar({
+						key: `snackbar-${Date.now()}`,
+						severity: 'error',
+						label: t('label.error_try_again', 'Something went wrong, please try again'),
+						hideButton: true
+					});
 				});
-			})
-			.catch(() => {
-				createSnackbar({
-					key: `snackbar-${Date.now()}`,
-					severity: 'error',
-					label: t('label.error_try_again', 'Something went wrong, please try again'),
-					hideButton: true
-				});
-			});
-	}, [activeContactGroup?.id, contactGroup, createSnackbar, redirectTo, t]);
+		},
+		[activeContactGroup?.id, contactGroup, createSnackbar, redirectTo, t]
+	);
 
 	return useDeleteAction({
 		modal: { id: 'delete-cg-modal', title: modalTitle, body: modalBody },

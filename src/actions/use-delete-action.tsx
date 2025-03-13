@@ -16,7 +16,7 @@ type DeleteModal = { id: string; title: string; body: string };
 
 type UseDeleteActionProps = {
 	modal: DeleteModal;
-	onDeleteConfirm: () => Promise<void>;
+	onDeleteConfirm: (onCloseCallback: () => void) => void;
 };
 
 function useCreateDeleteModalAction(): ({
@@ -29,9 +29,7 @@ function useCreateDeleteModalAction(): ({
 	return ({ modal, onDeleteConfirm }): Action => {
 		const onClose = (): void => closeModal(modal.id);
 		const onConfirm = (): void => {
-			onDeleteConfirm().then(() => {
-				onClose();
-			});
+			onDeleteConfirm(onClose);
 		};
 		const execute = (): void => {
 			createModal({
