@@ -54,92 +54,97 @@ describe('useContactContextualMenuActions', () => {
 		const contactInSharedFolder = buildContact({
 			parent: `${remoteAccountUuId}:${remoteFolderId}`
 		});
-		it('should return send and export action when NOT in Trash - Read permission', () => {
-			const mountpoint = generateLinkFolder({
-				folderId,
-				remoteAccountUuId,
-				remoteId: remoteFolderId,
-				permissions: 'r'
-			});
-			useFolderStore.setState({
-				folders: { [folderId]: mountpoint }
-			});
-			const { result } = setupHook(useContactContextualMenuActions, {
-				initialProps: [contactInSharedFolder]
+
+		describe('Trash folder', () => {
+			it('should return no actions when if has only Read permission', () => {
+				const mountpount = generateLinkFolder({
+					folderId,
+					remoteAccountUuId,
+					remoteId: remoteFolderId,
+					permissions: 'r',
+					absFolderPath: '/Trash',
+					name: 'Trash'
+				});
+				useFolderStore.setState({
+					folders: { [folderId]: mountpount }
+				});
+
+				const { result } = setupHook(useContactContextualMenuActions, {
+					initialProps: [contactInSharedFolder]
+				});
+
+				const actions = result.current;
+				expect(actions.length).toBe(0);
 			});
 
-			const actions = result.current;
-			expect(actions.length).toBe(2);
-			expect(actions[0].id).toBe('send-email-action');
-			expect(actions[1].id).toBe('export-contact-action');
+			it('should return restore, delete permanently, apply tag actions when has Write permission', () => {
+				const mountpount = generateLinkFolder({
+					folderId,
+					remoteAccountUuId,
+					remoteId: remoteFolderId,
+					permissions: 'w',
+					absFolderPath: '/Trash',
+					name: 'Trash'
+				});
+				useFolderStore.setState({
+					folders: { [folderId]: mountpount }
+				});
+
+				const { result } = setupHook(useContactContextualMenuActions, {
+					initialProps: [contactInSharedFolder]
+				});
+
+				const actions = result.current;
+				expect(actions.length).toBe(3);
+				expect(actions[0].id).toBe('restore-contacts-action');
+				expect(actions[1].id).toBe('delete-permanently-action');
+				expect(actions[2].id).toBe('apply-tag-action');
+			});
 		});
 
-		it('should return send and export action when NOT in Trash - Write permission', () => {
-			const mountpoint = generateLinkFolder({
-				folderId,
-				remoteAccountUuId,
-				remoteId: remoteFolderId,
-				permissions: 'w'
-			});
-			useFolderStore.setState({
-				folders: { [folderId]: mountpoint }
-			});
-			const { result } = setupHook(useContactContextualMenuActions, {
-				initialProps: [contactInSharedFolder]
+		describe('Not Trash folder', () => {
+			it('should return send and export action when has only Read permission', () => {
+				const mountpoint = generateLinkFolder({
+					folderId,
+					remoteAccountUuId,
+					remoteId: remoteFolderId,
+					permissions: 'r'
+				});
+				useFolderStore.setState({
+					folders: { [folderId]: mountpoint }
+				});
+				const { result } = setupHook(useContactContextualMenuActions, {
+					initialProps: [contactInSharedFolder]
+				});
+
+				const actions = result.current;
+				expect(actions.length).toBe(2);
+				expect(actions[0].id).toBe('send-email-action');
+				expect(actions[1].id).toBe('export-contact-action');
 			});
 
-			const actions = result.current;
-			expect(actions.length).toBe(5);
-			expect(actions[0].id).toBe('send-email-action');
-			expect(actions[1].id).toBe('trash-contacts-action');
-			expect(actions[2].id).toBe('move-action');
-			expect(actions[3].id).toBe('export-contact-action');
-			expect(actions[4].id).toBe('apply-tag-action');
-		});
+			it('should return send and export action when NOT has Write permission', () => {
+				const mountpoint = generateLinkFolder({
+					folderId,
+					remoteAccountUuId,
+					remoteId: remoteFolderId,
+					permissions: 'w'
+				});
+				useFolderStore.setState({
+					folders: { [folderId]: mountpoint }
+				});
+				const { result } = setupHook(useContactContextualMenuActions, {
+					initialProps: [contactInSharedFolder]
+				});
 
-		it('should return no actions when in Trash - Read permission', () => {
-			const mountpount = generateLinkFolder({
-				folderId,
-				remoteAccountUuId,
-				remoteId: remoteFolderId,
-				permissions: 'r',
-				absFolderPath: '/Trash',
-				name: 'Trash'
+				const actions = result.current;
+				expect(actions.length).toBe(5);
+				expect(actions[0].id).toBe('send-email-action');
+				expect(actions[1].id).toBe('trash-contacts-action');
+				expect(actions[2].id).toBe('move-action');
+				expect(actions[3].id).toBe('export-contact-action');
+				expect(actions[4].id).toBe('apply-tag-action');
 			});
-			useFolderStore.setState({
-				folders: { [folderId]: mountpount }
-			});
-
-			const { result } = setupHook(useContactContextualMenuActions, {
-				initialProps: [contactInSharedFolder]
-			});
-
-			const actions = result.current;
-			expect(actions.length).toBe(0);
-		});
-
-		it('should return restore, delete permanently, apply tag actions when in Trash - Write permission', () => {
-			const mountpount = generateLinkFolder({
-				folderId,
-				remoteAccountUuId,
-				remoteId: remoteFolderId,
-				permissions: 'w',
-				absFolderPath: '/Trash',
-				name: 'Trash'
-			});
-			useFolderStore.setState({
-				folders: { [folderId]: mountpount }
-			});
-
-			const { result } = setupHook(useContactContextualMenuActions, {
-				initialProps: [contactInSharedFolder]
-			});
-
-			const actions = result.current;
-			expect(actions.length).toBe(3);
-			expect(actions[0].id).toBe('restore-contacts-action');
-			expect(actions[1].id).toBe('delete-permanently-action');
-			expect(actions[2].id).toBe('apply-tag-action');
 		});
 	});
 });
