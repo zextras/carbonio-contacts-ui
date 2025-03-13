@@ -19,10 +19,11 @@ import { useSelectFolderAction } from '../use-select-folder-action';
 export const useMoveContacts = (contacts: Array<ContactOrGroup>, modalTitle: string): Action => {
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
+	const contactsIds = contacts.map((contact) => contact.id);
 	const move = useCallback(
-		(contactsIds: Array<string>, parentAddressBookId: string): Promise<void> =>
+		(targetFolder: Folder, onClose: () => void): void => {
 			apiClient
-				.moveContact(contactsIds, parentAddressBookId)
+				.moveContact(contactsIds, targetFolder.id)
 				.then(() => {
 					createSnackbar({
 						key: `move-contact-success`,
@@ -32,6 +33,7 @@ export const useMoveContacts = (contacts: Array<ContactOrGroup>, modalTitle: str
 						autoHideTimeout: TIMEOUTS.defaultSnackbar,
 						hideButton: true
 					});
+					onClose();
 				})
 				.catch(() => {
 					createSnackbar({
@@ -42,20 +44,21 @@ export const useMoveContacts = (contacts: Array<ContactOrGroup>, modalTitle: str
 						autoHideTimeout: TIMEOUTS.defaultSnackbar,
 						hideButton: true
 					});
-				}),
-		[createSnackbar, t]
+				});
+		},
+		[contactsIds, createSnackbar, t]
 	);
 	const moveModal = {
 		id: 'move-contacts-modal',
 		confirmButtonLabel: t('label.move', 'Move'),
 		title: modalTitle
 	};
-	const contactGroupIds = contacts.map((contact) => contact.id);
+
 	return useSelectFolderAction({
 		actionId: MOVE_ACTION.ID,
 		label: t('label.move', 'Move'),
 		modal: moveModal,
 		icon: MOVE_ACTION.ICON,
-		onConfirm: (targetFolder: Folder) => move(contactGroupIds, targetFolder.id)
+		onConfirm: move
 	});
 };

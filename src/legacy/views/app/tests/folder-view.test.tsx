@@ -231,7 +231,7 @@ describe('folder-view', () => {
 			});
 		});
 
-		it('should call contactsMoveAction when move icon is clicked in the displayer', async () => {
+		it('should call contactsMoveAction when move action is confirmed (displayer)', async () => {
 			const anotherFolder = generateFolder({
 				parent: FOLDERS.USER_ROOT,
 				name: 'anotherContactFolder',

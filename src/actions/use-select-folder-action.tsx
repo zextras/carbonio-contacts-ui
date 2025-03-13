@@ -18,6 +18,7 @@ import { Action } from './types';
 import { Folder } from '../carbonio-ui-commons/types';
 import { FolderTreeSelector } from '../components/folder-tree-selector/folder-tree-selector';
 
+type OnConfirmFn = (targetFolder: Folder, onModalCloseCallbackFn: () => void) => void;
 type UseSelectFolderModalActionProps = {
 	modal: {
 		id: string;
@@ -27,7 +28,7 @@ type UseSelectFolderModalActionProps = {
 	actionId: string;
 	icon: string;
 	label: string;
-	onConfirm: (targetFolder: Folder) => Promise<void>;
+	onConfirm: OnConfirmFn;
 };
 
 const SelectFolderModal = ({
@@ -36,7 +37,7 @@ const SelectFolderModal = ({
 	modalTitle,
 	confirmLabel
 }: {
-	onConfirm: (targetFolder: Folder) => Promise<void>;
+	onConfirm: OnConfirmFn;
 	onClose: () => void;
 	modalTitle: string;
 	confirmLabel: string;
@@ -46,10 +47,7 @@ const SelectFolderModal = ({
 		setTargetFolder(selectedFolder);
 	}, []);
 	const _onConfirm = (): void => {
-		targetFolder &&
-			onConfirm(targetFolder).then(() => {
-				onClose();
-			});
+		targetFolder && onConfirm(targetFolder, onClose);
 	};
 	return (
 		<>
