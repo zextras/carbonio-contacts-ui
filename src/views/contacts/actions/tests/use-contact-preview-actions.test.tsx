@@ -12,33 +12,48 @@ import { buildContact } from '../../../../tests/model-builder';
 import { useContactPreviewActions } from '../use-contact-preview-actions';
 
 describe('Contact Preview Actions', () => {
-	it('should return [send, tag, edit, move, trash] actions in this order if not in trash folder', () => {
-		populateFoldersStore();
-		const folderId = FOLDERS.CONTACTS;
-		const contact = buildContact({ parent: folderId });
+	it('should return no actions when folder is not in the store', () => {
+		const contact = buildContact({
+			parent: `unknown`
+		});
 
 		const { result } = setupHook(useContactPreviewActions, {
 			initialProps: [contact]
 		});
 
 		const actions = result.current;
-		expect(actions[0].id).toBe(ACTION_IDS.sendEmail);
-		expect(actions[1].id).toBe('tag');
-		expect(actions[2].id).toBe(ACTION_IDS.edit);
-		expect(actions[3].id).toBe(ACTION_IDS.move);
-		expect(actions[4].id).toBe('trash-contacts-action');
+		expect(actions.length).toBe(0);
 	});
-	it('should return [restore, delete permanently] actions in this order when in trash folder', () => {
-		populateFoldersStore();
-		const folderId = FOLDERS.TRASH;
-		const contact = buildContact({ parent: folderId });
 
-		const { result } = setupHook(useContactPreviewActions, {
-			initialProps: [contact]
+	describe('Main Account', () => {
+		it('should return [send, tag, edit, move, trash] actions in this order if not in trash folder', () => {
+			populateFoldersStore();
+			const folderId = FOLDERS.CONTACTS;
+			const contact = buildContact({ parent: folderId });
+
+			const { result } = setupHook(useContactPreviewActions, {
+				initialProps: [contact]
+			});
+
+			const actions = result.current;
+			expect(actions[0].id).toBe(ACTION_IDS.sendEmail);
+			expect(actions[1].id).toBe('tag');
+			expect(actions[2].id).toBe(ACTION_IDS.edit);
+			expect(actions[3].id).toBe(ACTION_IDS.move);
+			expect(actions[4].id).toBe('trash-contacts-action');
 		});
+		it('should return [restore, delete permanently] actions in this order when in trash folder', () => {
+			populateFoldersStore();
+			const folderId = FOLDERS.TRASH;
+			const contact = buildContact({ parent: folderId });
 
-		const actions = result.current;
-		expect(actions[0].id).toBe('restore-contacts-action');
-		expect(actions[1].id).toBe(ACTION_IDS.deletePermanently);
+			const { result } = setupHook(useContactPreviewActions, {
+				initialProps: [contact]
+			});
+
+			const actions = result.current;
+			expect(actions[0].id).toBe('restore-contacts-action');
+			expect(actions[1].id).toBe(ACTION_IDS.deletePermanently);
+		});
 	});
 });

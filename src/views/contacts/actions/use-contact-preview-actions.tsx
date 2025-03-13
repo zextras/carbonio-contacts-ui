@@ -28,6 +28,9 @@ export function useContactPreviewActions(contact: Contact): DSAction[] {
 	const deleteAction = useDeleteContacts([contact]);
 	const restoreContact = useContactRestoreAction(contact);
 	const folder = getFolderFromParent(contact);
+	if (!folder) {
+		return [];
+	}
 	const folderPartsId = getFolderIdParts(folderId).id;
 
 	const isMainAccount = !folder?.perm;

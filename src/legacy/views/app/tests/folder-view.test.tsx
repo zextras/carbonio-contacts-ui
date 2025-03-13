@@ -188,6 +188,9 @@ describe('folder-view', () => {
 
 	describe('Contacts', () => {
 		const folder = FOLDERS_DESCRIPTORS.contacts;
+		beforeEach(() => {
+			populateFoldersStore();
+		});
 		it('should delete a contact (move to trash)', async () => {
 			populateFoldersStore();
 			const contact = buildContact({ id: '10', parent: folder.id });
