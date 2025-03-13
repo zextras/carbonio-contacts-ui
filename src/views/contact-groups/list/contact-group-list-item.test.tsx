@@ -23,6 +23,10 @@ jest.mock('react-router-dom', () => ({
 
 describe('Contact group list item', () => {
 	const store = generateStore();
+	beforeEach(() => {
+		populateFoldersStore();
+		jest.clearAllMocks();
+	});
 	describe('Actions', () => {
 		beforeAll(() => {
 			const mailTo = { id: 'mail-to', label: 'action.send_msg', execute: jest.fn() };

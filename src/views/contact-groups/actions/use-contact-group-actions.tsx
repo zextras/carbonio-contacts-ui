@@ -14,8 +14,7 @@ import { useMoveContacts } from '../../../actions/common-contacts-actions/use-mo
 import { useRestoreContacts } from '../../../actions/common-contacts-actions/use-restore-contacts';
 import { useTrashContacts } from '../../../actions/common-contacts-actions/use-trash-contacts';
 import { Action } from '../../../actions/types';
-import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
-import { getFolderIdParts } from '../../../carbonio-ui-commons/helpers/folders';
+import { isTrashed } from '../../../carbonio-ui-commons/helpers/folders';
 import { ContactGroup } from '../../../model/contact-group';
 import { getFolderFromContactGroup } from '../utils';
 
@@ -46,14 +45,22 @@ export const useContactGroupActions = (contactGroup: ContactGroup): Array<DSActi
 	const sendEmailAction = useContactGroupSendEmailAction(contactGroup);
 
 	const folder = getFolderFromContactGroup(contactGroup);
-	const folderPartsId = getFolderIdParts(contactGroup.parent).id;
 	const isMainAccount = !folder?.perm;
 	const isSharedFolderWithWritePermission = folder?.perm?.includes('w');
-	if (isMainAccount || isSharedFolderWithWritePermission) {
-		if (folderPartsId === FOLDERS.TRASH) {
+	const hasWritePermission = isMainAccount || isSharedFolderWithWritePermission;
+
+	if (!folder) {
+		return [];
+	}
+
+	if (isTrashed({ folder })) {
+		if (hasWritePermission) {
 			return [restoreContactsGroupAction, deletePermanentlyContactGroupAction];
 		}
+		return [];
+	}
 
+	if (hasWritePermission) {
 		return [
 			sendEmailAction,
 			editContactGroupAction,
@@ -61,6 +68,5 @@ export const useContactGroupActions = (contactGroup: ContactGroup): Array<DSActi
 			trashContactGroupAction
 		];
 	}
-
 	return [sendEmailAction];
 };

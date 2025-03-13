@@ -97,6 +97,10 @@ function registerSearchContacts(soapContacts: Array<SoapContact>): void {
 }
 
 describe('Folder panel', () => {
+	beforeEach(() => {
+		populateFoldersStore();
+		jest.clearAllMocks();
+	});
 	it('should show the empty list message if there is no contact or contact group', async () => {
 		const folderId = '7';
 		registerFindContactGroupsHandler({
@@ -180,7 +184,6 @@ describe('Folder panel', () => {
 				describe('Send mail action', () => {
 					it('should open the mail board when clicking the action and contact has an address', async () => {
 						const folderId = FOLDERS.CONTACTS;
-						populateFoldersStore();
 						const openMailComposer = jest.fn();
 						jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
 						mockMailToAction(openMailComposer);
@@ -844,6 +847,7 @@ describe('Folder panel', () => {
 						const cnItem1 = createCnItem('Group 1', [], '11', folderId);
 						const cnItem2 = createCnItem('Group 2', [], '22', folderId);
 						const cnItem3 = createCnItem('Group 3', [], '33', folderId);
+						populateFoldersStore();
 						registerFindContactGroupsHandler({
 							findContactGroupsResponse: createFindContactGroupsResponse(
 								[cnItem1, cnItem2, cnItem3],
@@ -854,7 +858,6 @@ describe('Folder panel', () => {
 						registerDeleteContactHandler(cnItem1.id, 'error-string');
 
 						const { user } = setupFolderPanel(folderId);
-
 						await screen.findByText(cnItem1.fileAsStr);
 
 						const listElement = screen.getByTestId(`contact-group-list-item-${cnItem1.id}`);
