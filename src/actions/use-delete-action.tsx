@@ -8,9 +8,8 @@ import React from 'react';
 import { Container, useModal } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
-import { Text } from '../components/Text';
-import { ACTION_IDS } from '../constants';
 import { Action } from './types';
+import { Text } from '../components/Text';
 import { DELETE_PERMANENTLY_ACTION } from '../constants/actions';
 
 type DeleteModal = { id: string; title: string; body: string };

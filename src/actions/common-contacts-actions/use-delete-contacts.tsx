@@ -20,9 +20,9 @@ export const useDeleteContacts = (contacts: Array<ContactOrGroup>): Action => {
 	const createSnackbar = useSnackbar();
 
 	const onDeleteConfirm = useCallback(
-		async (onCloseModalCallback: () => void) => {
+		(onCloseModalCallback: () => void): void => {
 			const contactsIds = contacts.map((cont) => cont.id);
-			return apiClient
+			apiClient
 				.deleteContact(contactsIds)
 				.then(() => {
 					createSnackbar({

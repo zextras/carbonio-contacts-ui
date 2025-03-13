@@ -35,7 +35,7 @@ export const useContactGroupDeleteAction = (contactGroup: ContactGroup): Action 
 	const redirectTo = useRedirectToContactGroupFolder();
 
 	const onDeleteConfirm = useCallback(
-		async (onCloseModalCallback: () => void) => {
+		(onCloseModalCallback: () => void): void => {
 			apiClient
 				.deleteContact([contactGroup.id])
 				.then(() => {

@@ -13,12 +13,11 @@ import { useContactSendMailAction } from './use-contact-send-mail-action';
 import { useContactShowTagAction } from './use-contact-show-tag-action';
 import { useDeleteContacts } from '../../../actions/common-contacts-actions/use-delete-contacts';
 import { useTrashContacts } from '../../../actions/common-contacts-actions/use-trash-contacts';
-import { getFolderIdParts, isTrashed } from '../../../carbonio-ui-commons/helpers/folders';
+import { isTrashed } from '../../../carbonio-ui-commons/helpers/folders';
 import { Contact } from '../../../legacy/types/contact';
 import { getFolderFromParent } from '../../contact-groups/utils';
 
 export function useContactPreviewActions(contact: Contact): DSAction[] {
-	const folderId = contact.parent;
 	const sendMailAction = useContactSendMailAction(contact);
 	const showTag = useContactShowTagAction(contact);
 	const editAction = useContactEditAction(contact);
@@ -30,7 +29,6 @@ export function useContactPreviewActions(contact: Contact): DSAction[] {
 	if (!folder) {
 		return [];
 	}
-	const folderPartsId = getFolderIdParts(folderId).id;
 
 	const isMainAccount = !folder?.perm;
 	const isSharedFolderWithWritePermission = folder?.perm?.includes('w');

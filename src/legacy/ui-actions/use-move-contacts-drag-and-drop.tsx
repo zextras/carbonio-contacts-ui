@@ -14,11 +14,11 @@ import { isRoot, isTrashed, isWriteAllowed } from '../../carbonio-ui-commons/hel
 import { getFolder } from '../../carbonio-ui-commons/store/zustand/folder';
 import { Folder } from '../../carbonio-ui-commons/types/folder';
 import { ContactMoveModal } from '../../components/modals/contact-move';
-import { ACTION_IDS, TIMEOUTS } from '../../constants';
+import { TIMEOUTS } from '../../constants';
+import { MOVE_ACTION } from '../../constants/actions';
 import { apiClient } from '../../network/api-client';
 import { ContactOrGroup } from '../types/contact';
 import { evaluateParentIds } from '../utils/helpers';
-import { MOVE_ACTION } from '../../constants/actions';
 
 export type MoveContactsAction = UIAction<
 	{ contacts?: Array<ContactOrGroup>; newParentAddressBook?: Folder },

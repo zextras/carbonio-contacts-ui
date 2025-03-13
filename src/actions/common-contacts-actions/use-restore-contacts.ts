@@ -21,7 +21,7 @@ export const useRestoreContacts = (contacts: Array<ContactOrGroup>, modalTitle: 
 	const createSnackbar = useSnackbar();
 	const contactIds = contacts.map((contact) => contact.id);
 	const move = useCallback(
-		(selectedFolder: Folder, onCloseModal: () => void): Promise<void> =>
+		(selectedFolder: Folder, onCloseModal: () => void): void => {
 			apiClient
 				.moveContact(contactIds, selectedFolder.id)
 				.then(() => {
@@ -44,7 +44,8 @@ export const useRestoreContacts = (contacts: Array<ContactOrGroup>, modalTitle: 
 						autoHideTimeout: TIMEOUTS.defaultSnackbar,
 						hideButton: true
 					});
-				}),
+				});
+		},
 		[contactIds, createSnackbar, t]
 	);
 	const restoreModal = {
