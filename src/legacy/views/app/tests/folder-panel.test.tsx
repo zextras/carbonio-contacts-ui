@@ -179,11 +179,11 @@ describe('Folder panel', () => {
 			describe('hover actions', () => {
 				describe('Send mail action', () => {
 					it('should open the mail board when clicking the action and contact has an address', async () => {
+						const folderId = FOLDERS.CONTACTS;
+						populateFoldersStore();
 						const openMailComposer = jest.fn();
 						jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
 						mockMailToAction(openMailComposer);
-						const folderId = FOLDERS.CONTACTS;
-						const memberEmail = faker.internet.email();
 						const soapContact = createSoapContact({ id: '1', folderId, email: 'test123@test.com' });
 						registerSearchContacts([soapContact]);
 

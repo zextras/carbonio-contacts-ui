@@ -14,19 +14,19 @@ import { generateLinkFolder } from '../../../contact-groups/tests/utils';
 import { useContactContextualMenuActions } from '../use-contact-contextual-menu-actions';
 
 describe('useContactContextualMenuActions', () => {
-	describe('Main Account', () => {
-		it('should return no actions when folder is not in the store', () => {
-			const contact = buildContact({
-				parent: `unknown`
-			});
-
-			const { result } = setupHook(useContactContextualMenuActions, {
-				initialProps: [contact]
-			});
-
-			const actions = result.current;
-			expect(actions.length).toBe(0);
+	it('should return no actions when folder is not in the store', () => {
+		const contact = buildContact({
+			parent: `unknown`
 		});
+
+		const { result } = setupHook(useContactContextualMenuActions, {
+			initialProps: [contact]
+		});
+
+		const actions = result.current;
+		expect(actions.length).toBe(0);
+	});
+	describe('Main Account', () => {
 		it('should return [send mail, trash, move, export vCard, apply tags] actions in this order if not in trash folder', () => {
 			populateFoldersStore();
 			const folderId = FOLDERS.CONTACTS;
@@ -68,7 +68,7 @@ describe('useContactContextualMenuActions', () => {
 		});
 
 		describe('Trash folder', () => {
-			it('should return no actions when if has only Read permission', () => {
+			it('should return no actions when has only Read permission', () => {
 				const mountpount = generateLinkFolder({
 					folderId,
 					remoteAccountUuId,
@@ -135,7 +135,7 @@ describe('useContactContextualMenuActions', () => {
 				expect(actions[1].id).toBe('export-contact-action');
 			});
 
-			it('should return send and export action when NOT has Write permission', () => {
+			it('should return send, trash, move, export, apply tags actions when has Write permission', () => {
 				const mountpoint = generateLinkFolder({
 					folderId,
 					remoteAccountUuId,

@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
+import { ACTION_IDS } from './index';
 import { FOLDERS } from '../carbonio-ui-commons/constants/folders';
 
 type TypeOfEnumeration<T> = T[keyof T];
@@ -23,7 +24,7 @@ export type DisplayAssertionType = TypeOfEnumeration<typeof DISPLAY_ASSERTION>;
 export const DELETE_PERMANENTLY_ACTION_DESCRIPTOR = {
 	icon: 'DeletePermanentlyOutline',
 	label: 'Delete Permanently',
-	id: 'delete-permanently'
+	id: ACTION_IDS.deletePermanently
 };
 export const FOLDERS_DESCRIPTORS = {
 	contacts: {

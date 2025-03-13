@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { getParentFolder } from '../../../actions/folder-utils';
 import { Action } from '../../../actions/types';
+import { ACTION_IDS } from '../../../constants';
 import { Contact } from '../../../legacy/types/contact';
 
 export const useContactEditAction = (contact: Contact): Action => {
@@ -22,7 +23,7 @@ export const useContactEditAction = (contact: Contact): Action => {
 		[contactInternalId, folderId, navigate]
 	);
 	return {
-		id: 'edit',
+		id: ACTION_IDS.edit,
 		icon: 'Edit2Outline',
 		label: t('label.edit'),
 		onClick: onEdit
