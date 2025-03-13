@@ -18,11 +18,11 @@ import {
 import { TESTID_SELECTORS, TIMERS } from '../../../constants/tests';
 import { Contact } from '../../../legacy/types/contact';
 import { ContactActionRequest, ContactActionResponse } from '../../../network/api/contact-action';
-import { setupMoveItemModal } from '../../../tests/modal-helpers';
+import { setupRestoreModal } from '../../../tests/modal-helpers';
 import { buildContact } from '../../../tests/model-builder';
-import { useMoveContacts } from '../use-move-contacts';
+import { useRestoreContacts } from '../use-restore-contacts';
 
-function aFailingContactMove(): any {
+function aFailingContactRestore(): any {
 	const response: ErrorSoapBodyResponse = {
 		Fault: {
 			Code: { Value: faker.string.uuid() },
@@ -33,11 +33,11 @@ function aFailingContactMove(): any {
 	return createSoapAPIInterceptor('ContactAction', response);
 }
 
-describe('useMoveContacts', () => {
+describe('useRestoreContacts', () => {
 	const contacts: Contact[] = [buildContact()];
-	it('should open the move modal on click', async () => {
+	it('should open the restore modal on click', async () => {
 		populateFoldersStore();
-		const { result } = setupHook(() => useMoveContacts(contacts, 'My Modal'));
+		const { result } = setupHook(() => useRestoreContacts(contacts, 'My Modal'));
 		const action = result.current;
 		act(() => {
 			action.onClick();
@@ -45,12 +45,12 @@ describe('useMoveContacts', () => {
 		act(() => {
 			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
-		expect(screen.getByRole('button', { name: /Move/i })).toBeVisible();
+		expect(screen.getByRole('button', { name: /Restore/i })).toBeVisible();
 	});
 
 	it('should render a modal with the given title', () => {
 		const arrayContacts: Array<Contact> = [buildContact()];
-		const { result } = setupHook(() => useMoveContacts(arrayContacts, 'My Modal'));
+		const { result } = setupHook(() => useRestoreContacts(arrayContacts, 'My Modal'));
 		const action = result.current;
 		act(() => {
 			action.onClick();
@@ -63,7 +63,7 @@ describe('useMoveContacts', () => {
 
 	it('should display a close icon in the modal', () => {
 		const arrayContacts: Array<Contact> = [buildContact()];
-		const { result } = setupHook(() => useMoveContacts(arrayContacts, ''));
+		const { result } = setupHook(() => useRestoreContacts(arrayContacts, ''));
 		const action = result.current;
 		act(() => {
 			action.onClick();
@@ -78,7 +78,7 @@ describe('useMoveContacts', () => {
 
 	it('should close the modal if the user clicks on the close icon', async () => {
 		const arrayContacts: Array<Contact> = [buildContact()];
-		const { result, user } = setupHook(() => useMoveContacts(arrayContacts, ''));
+		const { result, user } = setupHook(() => useRestoreContacts(arrayContacts, ''));
 		const action = result.current;
 		act(() => {
 			action.onClick();
@@ -91,14 +91,14 @@ describe('useMoveContacts', () => {
 		expect(screen.queryByTestId('modal')).not.toBeInTheDocument();
 	});
 
-	it('should call the API with the proper parameters if the user clicks on the "Move" button', async () => {
-		const apiInterceptor = aFailingContactMove();
+	it('should call the API with the proper parameters if the user clicks on the "Restore" button', async () => {
+		const apiInterceptor = aFailingContactRestore();
 		const customFolder = generateFolder({
 			id: '100'
 		});
-		const { selectFolder, confirm } = setupMoveItemModal(customFolder);
+		const { selectFolder, confirm } = setupRestoreModal(customFolder);
 		const arrayContacts: Array<Contact> = [buildContact()];
-		const { result, user } = setupHook(() => useMoveContacts(arrayContacts, ''));
+		const { result, user } = setupHook(() => useRestoreContacts(arrayContacts, ''));
 		const action = result.current;
 		act(() => {
 			action.onClick();
@@ -119,7 +119,7 @@ describe('useMoveContacts', () => {
 	});
 
 	it('should show a success snackbar and close the modal after receiving a successful result from the API', async () => {
-		const { selectFolder, confirm } = setupMoveItemModal();
+		const { selectFolder, confirm } = setupRestoreModal();
 		const contact = buildContact();
 		const contactActionRequestPromise = createSoapAPIInterceptor<
 			ContactActionRequest,
@@ -131,7 +131,7 @@ describe('useMoveContacts', () => {
 		});
 		const arrayContacts: Array<Contact> = [contact];
 
-		const { result, user } = setupHook(() => useMoveContacts(arrayContacts, ''));
+		const { result, user } = setupHook(() => useRestoreContacts(arrayContacts, ''));
 		const action = result.current;
 		act(() => {
 			action.onClick();
@@ -139,16 +139,16 @@ describe('useMoveContacts', () => {
 		await selectFolder(user);
 		await confirm(user);
 
-		expect(await screen.findByText('Contact moved')).toBeVisible();
+		expect(await screen.findByText('Contact restored')).toBeVisible();
 		await contactActionRequestPromise;
 		expect(screen.queryByTestId('modal')).not.toBeInTheDocument();
 	});
 
 	it('should show an error snackbar and leave the modal open after receiving a failure result from the API', async () => {
-		aFailingContactMove();
-		const { selectFolder, confirm } = setupMoveItemModal();
+		aFailingContactRestore();
+		const { selectFolder, confirm } = setupRestoreModal();
 		const arrayContacts: Array<Contact> = [buildContact()];
-		const { result, user } = setupHook(() => useMoveContacts(arrayContacts, ''));
+		const { result, user } = setupHook(() => useRestoreContacts(arrayContacts, ''));
 		const action = result.current;
 		act(() => {
 			action.onClick();

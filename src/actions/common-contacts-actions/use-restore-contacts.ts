@@ -19,10 +19,11 @@ import { useSelectFolderAction } from '../use-select-folder-action';
 export const useRestoreContacts = (contacts: Array<ContactOrGroup>, modalTitle: string): Action => {
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
+	const contactIds = contacts.map((contact) => contact.id);
 	const move = useCallback(
-		(contactsIds: Array<string>, parentAddressBookId: string): Promise<void> =>
+		(selectedFolder: Folder, onCloseModal: () => void): Promise<void> =>
 			apiClient
-				.moveContact(contactsIds, parentAddressBookId)
+				.moveContact(contactIds, selectedFolder.id)
 				.then(() => {
 					createSnackbar({
 						key: `move-contact-success`,
@@ -32,6 +33,7 @@ export const useRestoreContacts = (contacts: Array<ContactOrGroup>, modalTitle: 
 						autoHideTimeout: TIMEOUTS.defaultSnackbar,
 						hideButton: true
 					});
+					onCloseModal();
 				})
 				.catch(() => {
 					createSnackbar({
@@ -43,19 +45,19 @@ export const useRestoreContacts = (contacts: Array<ContactOrGroup>, modalTitle: 
 						hideButton: true
 					});
 				}),
-		[createSnackbar, t]
+		[contactIds, createSnackbar, t]
 	);
 	const restoreModal = {
 		id: `${RESTORE_ACTION.ID}-modal`,
 		confirmButtonLabel: t('label.restore', 'Restore'),
 		title: modalTitle
 	};
-	const contactIds = contacts.map((contact) => contact.id);
+
 	return useSelectFolderAction({
 		actionId: RESTORE_ACTION.ID,
 		label: t('label.restore', 'Restore'),
 		modal: restoreModal,
 		icon: RESTORE_ACTION.ICON,
-		onConfirm: (targetFolder: Folder) => move(contactIds, targetFolder.id)
+		onConfirm: move
 	});
 };
