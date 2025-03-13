@@ -12,7 +12,6 @@ import { useFolderStore } from '../../../../carbonio-ui-commons/store/zustand/fo
 import { generateFolder } from '../../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
 import { populateFoldersStore } from '../../../../carbonio-ui-commons/test/mocks/store/folders';
 import { setupHook } from '../../../../carbonio-ui-commons/test/test-setup';
-import { ACTION_IDS } from '../../../../constants';
 import {
 	EDIT_ACTION,
 	MOVE_ACTION,
@@ -64,7 +63,7 @@ describe('useContactGroupActions', () => {
 					expect.objectContaining({
 						id: SEND_EMAIL_ACTION.ID,
 						label: 'Send e-mail',
-						icon: 'EmailOutline',
+						icon: SEND_EMAIL_ACTION.ICON,
 						onClick: expect.anything(),
 						disabled: false
 					})
@@ -77,7 +76,7 @@ describe('useContactGroupActions', () => {
 					expect.objectContaining({
 						id: SEND_EMAIL_ACTION.ID,
 						label: 'Send e-mail',
-						icon: 'EmailOutline',
+						icon: SEND_EMAIL_ACTION.ICON,
 						disabled: true,
 						onClick: expect.anything()
 					})
@@ -100,7 +99,7 @@ describe('useContactGroupActions', () => {
 				expect(result.current).toContainEqual({
 					id: SEND_EMAIL_ACTION.ID,
 					label: 'Send e-mail',
-					icon: 'EmailOutline',
+					icon: SEND_EMAIL_ACTION.ICON,
 					onClick: expect.anything(),
 					disabled: false
 				});
