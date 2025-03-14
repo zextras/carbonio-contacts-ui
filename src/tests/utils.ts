@@ -145,11 +145,15 @@ export const createSoapContactGroupV2 = ({
 export function createSoapContact({
 	id = faker.number.int({ min: 100 }).toString(),
 	email = faker.internet.email(),
-	folderId = '7'
+	folderId = '7',
+	tn,
+	t
 }: {
 	id?: string;
 	email?: string;
 	folderId?: string;
+	tn?: string;
+	t?: string;
 } = {}): SoapContact {
 	return {
 		id,
@@ -161,7 +165,9 @@ export function createSoapContact({
 			nickname: faker.word.noun(),
 			fullName: faker.person.fullName(),
 			email
-		}
+		},
+		tn,
+		t
 	};
 }
 

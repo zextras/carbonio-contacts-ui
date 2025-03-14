@@ -50,14 +50,10 @@ import {
 import { createSoapContact, createSoapContactGroup } from '../../../../tests/utils';
 import { generateStore } from '../../../tests/generators/store';
 import { FolderPanel } from '../folder-panel';
-import { createContactsApiInterceptor } from './utils';
+import { createContactsApiInterceptor, findContactListItem } from './utils';
 import { SearchContactsRequest, SearchContactsSoapResponse } from '../../../../types';
 import { SoapContact } from '../../../types/soap';
 
-const findContactListItem = async (contact: SoapContact): Promise<void> => {
-	await screen.findByTestId(`custom-contact-list-item-${contact.id}`);
-	makeListItemsVisible();
-};
 const mockMailToAction = (execute = jest.fn()): void => {
 	getActionMock.mockImplementation((type, id) => {
 		if (type !== 'contact-list' || id !== 'mail-to') {

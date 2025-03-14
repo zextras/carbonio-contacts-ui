@@ -26,35 +26,33 @@ export const addContactsToStore = (contacts: Array<ContactOrGroup>): void => {
 	);
 };
 
-export const useContactsById = (contactIds: Array<string>): Array<ContactOrGroup> => {
-	const { contacts } = useContactsStore.getState();
-	return contactIds.map((id) => contacts[id]).filter(Boolean);
-};
+export const useContactsById = (contactIds: Array<string>): Array<ContactOrGroup> =>
+	useContactsStore(({ contacts }) => contactIds.map((id) => contacts[id]).filter(Boolean));
 
-export const useContactGroupById = (contactGroupId: string): ContactGroup | undefined => {
-	const { contacts } = useContactsStore.getState();
-	const exists = contacts[contactGroupId];
-	if (exists && 'members' in exists) {
-		return exists;
-	}
-	return undefined;
-};
+export const useContactGroupById = (contactGroupId: string): ContactGroup | undefined =>
+	useContactsStore(({ contacts }) => {
+		const exists = contacts[contactGroupId];
+		if (exists && 'members' in exists) {
+			return exists;
+		}
+		return undefined;
+	});
 
-export const useContactById = (contactId: string): Contact | undefined => {
-	const { contacts } = useContactsStore.getState();
-	const exists = contacts[contactId];
-	if (exists && !('members' in exists)) {
-		return exists;
-	}
-	return undefined;
-};
+export const useContactById = (contactId: string): Contact | undefined =>
+	useContactsStore(({ contacts }) => {
+		const exists = contacts[contactId];
+		if (exists && !('members' in exists)) {
+			return exists;
+		}
+		return undefined;
+	});
 
-export const useContactsByFolderId = (folderId: string): Array<ContactOrGroup> => {
-	const { contacts } = useContactsStore.getState();
-	const allKeys = Object.keys(contacts);
-	return allKeys
-		.map((key: string) => contacts[key])
-		.filter((contact) => contact.parent === folderId);
-};
+export const useContactsByFolderId = (folderId: string): Array<ContactOrGroup> =>
+	useContactsStore(({ contacts }) => {
+		const allKeys = Object.keys(contacts);
+		return allKeys
+			.map((key: string) => contacts[key])
+			.filter((contact) => contact.parent === folderId);
+	});
 
 export const useContactsStoreForTesting = useContactsStore;
