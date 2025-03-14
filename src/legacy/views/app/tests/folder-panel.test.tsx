@@ -56,6 +56,10 @@ import { createContactsApiInterceptor } from './utils';
 import { SearchContactsRequest, SearchContactsSoapResponse } from '../../../../types';
 import { SoapContact } from '../../../types/soap';
 
+const findContactListItem = async (contact: SoapContact): Promise<void> => {
+	await screen.findByTestId(`custom-contact-list-item-${contact.id}`);
+	makeListItemsVisible();
+};
 const mockMailToAction = (execute = jest.fn()): void => {
 	getActionMock.mockImplementation((type, id) => {
 		if (type !== 'contact-list' || id !== 'mail-to') {
@@ -181,8 +185,7 @@ describe('Folder panel', () => {
 				path: `/folder/:folderId/:type?/:itemId?`,
 				store
 			});
-			await screen.findByTestId(`custom-contact-list-item-${soapContact.id}`);
-			makeListItemsVisible();
+			await findContactListItem(soapContact);
 			expect(screen.getByText(email)).toBeVisible();
 			await firstSearchInterceptor;
 		});
@@ -384,19 +387,21 @@ describe('Folder panel', () => {
 					}) => {
 						populateFoldersStore();
 						mockMailToAction();
-						const contact = buildContact({ lastName: faker.string.uuid(), parent: folder.id });
-						const state = generateState({
-							contacts: [contact]
+						const email = 'test@test.com';
+						const soapContact = createSoapContact({ email, folderId: folder.id });
+						const firstSearchInterceptor = createContactsApiInterceptor({
+							items: [soapContact],
+							more: false
 						});
-						const store = generateStore(state);
+						const store = generateStore();
 						const { user } = setupTest(<FolderPanel />, {
 							initialEntries: [`/folder/${folder.id}`],
 							path: `/folder/:folderId/:type?/:itemId?`,
 							store
 						});
-						makeListItemsVisible();
+						await findContactListItem(soapContact);
 
-						const listItem = screen.getByText(contact.lastName, { exact: false });
+						const listItem = screen.getByText(email);
 						await act(() => user.hover(listItem));
 						if (assertion.value) {
 							expect(
@@ -449,19 +454,21 @@ describe('Folder panel', () => {
 					}) => {
 						populateFoldersStore();
 						mockMailToAction();
-						const contact = buildContact({ lastName: faker.string.uuid(), parent: folder.id });
-						const state = generateState({
-							contacts: [contact]
+						const email = 'test@test.com';
+						const soapContact = createSoapContact({ email, folderId: folder.id });
+						const firstSearchInterceptor = createContactsApiInterceptor({
+							items: [soapContact],
+							more: false
 						});
-						const store = generateStore(state);
+						const store = generateStore();
 						const { user } = setupTest(<FolderPanel />, {
 							initialEntries: [`/folder/${folder.id}`],
 							path: `/folder/:folderId/:type?/:itemId?`,
 							store
 						});
-						makeListItemsVisible();
+						await findContactListItem(soapContact);
 
-						const listItem = screen.getByText(contact.lastName, { exact: false });
+						const listItem = screen.getByText(email);
 						await act(() => user.rightClick(listItem));
 						const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
 						if (assertion.value) {
@@ -480,30 +487,23 @@ describe('Folder panel', () => {
 					populateFoldersStore();
 
 					const contactsFolder = FOLDERS_DESCRIPTORS.contacts;
-
-					const contact = buildContact({
-						lastName: faker.string.uuid(),
-						parent: contactsFolder.id,
-						tags: []
+					const email = 'test@test.com';
+					const soapContact = createSoapContact({ email, folderId: contactsFolder.id });
+					const firstSearchInterceptor = createContactsApiInterceptor({
+						items: [soapContact],
+						more: false
 					});
-
+					const store = generateStore();
 					useTagStore.setState({ tags: { '1': { id: '1', name: 'testTag' } } });
-
-					const state = generateState({
-						contacts: [contact]
-					});
-					const store = generateStore(state);
 					const { user } = setupTest(<FolderPanel />, {
 						initialEntries: [`/folder/${contactsFolder.id}`],
 						path: `/folder/:folderId/:type?/:itemId?`,
 						store
 					});
-					makeListItemsVisible();
-					const contactListItem = screen.getByTestId(`contact-list-item-${contact.id}`);
+					await findContactListItem(soapContact);
+					const contactListItem = await screen.findByTestId(`contact-list-item-${soapContact.id}`);
 					expect(contactListItem).toBeVisible();
-					const contactListItemName = within(contactListItem).getByText(contact.lastName, {
-						exact: false
-					});
+					const contactListItemName = within(contactListItem).getByText(email);
 					await act(() => user.rightClick(contactListItemName));
 					const dropdown = await screen.findByTestId('dropdown-popper-list');
 					expect(dropdown).toBeVisible();
@@ -518,13 +518,13 @@ describe('Folder panel', () => {
 						_jsns: 'urn:zimbraMail',
 						action: {
 							op: 'tag',
-							id: contact.id
+							id: soapContact.id
 						}
 					});
 					await user.click(tag);
 					const contactActionRequest = await soapAPIInterceptor;
 					expect(contactActionRequest.action).toEqual(
-						expect.objectContaining({ id: contact.id, tn: 'testTag', op: 'tag' })
+						expect.objectContaining({ id: soapContact.id, tn: 'testTag', op: 'tag' })
 					);
 				});
 			});
