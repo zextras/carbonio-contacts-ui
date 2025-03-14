@@ -14,7 +14,7 @@ import { useParams } from 'react-router-dom';
 import { Breadcrumbs } from './breadcrumbs';
 import { ContactsList } from './folder-panel/contacts-list';
 import { useFolder } from '../../../carbonio-ui-commons/store/zustand/folder';
-import { soapFetch } from '../../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
+import { searchContactsHelper } from '../../../views/search-contacts-helper';
 import { useSelection } from '../../hooks/useSelection';
 import { addContactsToStore, useContactsById } from '../../store/contacts';
 import { ContactOrGroup } from '../../types/contact';
@@ -87,20 +87,11 @@ export const FolderPanel = (): ReactElement => {
 	const searchQuery = useCallback(
 		(queryStr: string, reset: boolean) => {
 			loading.current = true;
-			soapFetch<any, any>('Search', {
-				limit: 100,
-				query: queryStr,
-				offset: reset ? 0 : searchResults.contacts.length,
-				sortBy: searchResults.sortBy,
-				types: 'contact',
-				_jsns: 'urn:zimbraMail'
-			})
-				.then(({ cn, more, offset, sortBy }) => ({
+			const offset = reset ? 0 : searchResults.contacts.length;
+			searchContactsHelper({ query: queryStr, offset, sortBy: searchResults.sortBy })
+				.then(({ cn, more, sortBy }) => ({
 					query: queryStr,
-					contacts: [
-						...(reset ? [] : (searchContacts ?? [])),
-						...(normalizeContactsFromSoap(cn) ?? [])
-					],
+					contacts: [...(reset ? [] : searchContacts), ...normalizeContactsFromSoap(cn)],
 					more,
 					offset: (offset ?? 0) + 100,
 					sortBy: sortBy ?? 'nameAsc'

@@ -130,9 +130,9 @@ function normalizeContactUrls(c: SoapContact): ContactUrlMap {
 	);
 }
 
-export function normalizeContactsFromSoap(contact: SoapContact[]): ContactOrGroup[] | undefined {
+export function normalizeContactsFromSoap(contact: SoapContact[]): ContactOrGroup[] {
 	return isEmpty(contact)
-		? undefined
+		? []
 		: reduce(
 				contact || [],
 				(r, c) => {
