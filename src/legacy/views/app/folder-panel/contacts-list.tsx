@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { ReactElement, useCallback, useMemo, useRef, useState } from 'react';
+import React, { ReactElement, useMemo, useRef, useState } from 'react';
 
 import { List, ListItem } from '@zextras/carbonio-design-system';
 import { map } from 'lodash';
@@ -15,8 +15,6 @@ import { ContactListItem } from './contact-list-item';
 import { DragItems } from './drag-items';
 import { EmptyListPanel } from './empty-list-panel';
 import { ContactGroupListItem } from '../../../../views/contact-groups/list/contact-group-list-item';
-import { useAppSelector } from '../../../hooks/redux';
-import { selectFolderHasMore } from '../../../store/slices/contacts-slice';
 import { ContactOrGroup } from '../../../types/contact';
 import { isGroup } from '../../../utils/helpers';
 
@@ -34,7 +32,7 @@ type ContactsListProps = {
 	isSelecting: boolean;
 	contacts: Array<ContactOrGroup>;
 	toggle: (id: string) => void;
-	onLoadMore?: () => Promise<void>;
+	onListBottom?: () => void;
 };
 export const ContactsList = ({
 	folderId,
@@ -42,10 +40,9 @@ export const ContactsList = ({
 	isSelecting,
 	contacts,
 	toggle,
-	onLoadMore
+	onListBottom
 }: ContactsListProps): React.JSX.Element => {
 	const [t] = useTranslation();
-	const loading = useRef(false);
 	const { itemId } = useParams<{ itemId: string }>();
 	const [isDragging, setIsDragging] = useState(false);
 	const [draggedIds, setDraggedIds] = useState<Record<string, boolean>>();
@@ -65,22 +62,6 @@ export const ContactsList = ({
 		[t]
 	);
 
-	const hasMore = useAppSelector((state) => selectFolderHasMore(state, folderId));
-
-	const searchMoreResults = useCallback(() => {
-		loading.current = true;
-		onLoadMore?.().finally(() => {
-			loading.current = false;
-		});
-	}, [onLoadMore]);
-
-	const loadMore = useCallback(() => {
-		if (contacts.length > 0 && hasMore) {
-			searchMoreResults();
-		}
-	}, [contacts.length, hasMore, searchMoreResults]);
-
-	const canLoadMore = useMemo(() => contacts.length > 0 && hasMore, [contacts.length, hasMore]);
 	const listItems = useMemo(
 		() =>
 			map(contacts, (contact) => {
@@ -162,7 +143,7 @@ export const ContactsList = ({
 			) : (
 				<List
 					background={'gray6'}
-					onListBottom={canLoadMore ? loadMore : undefined}
+					onListBottom={onListBottom}
 					data-testid="SearchResultContactsContainer"
 				>
 					{listItems}

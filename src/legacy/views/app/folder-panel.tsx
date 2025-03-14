@@ -14,13 +14,14 @@ import { useParams } from 'react-router-dom';
 import { Breadcrumbs } from './breadcrumbs';
 import { ContactsList } from './folder-panel/contacts-list';
 import { useFolder } from '../../../carbonio-ui-commons/store/zustand/folder';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { soapFetch } from '../../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
 import { useSelection } from '../../hooks/useSelection';
-import { searchContactsAsyncThunk } from '../../store/actions/search-contacts';
-import { selectAllContactsInFolder, selectContactsStatus } from '../../store/selectors/contacts';
-import { handleResetContactsSync } from '../../store/slices/contacts-slice';
+import { addContactsToStore, useContactsById } from '../../store/contacts';
+import { ContactOrGroup } from '../../types/contact';
 import { isGroup } from '../../utils/helpers';
+import { normalizeContactsFromSoap } from '../../utils/normalizations/normalize-contact-from-soap';
 import { SelectPanelActions } from '../folder/select-panel-actions';
+import { SearchResults } from '../search/types';
 
 type RouteParams = {
 	folderId: string;
@@ -40,21 +41,34 @@ type ContactFilterType = (typeof FILTER_TYPES)[keyof typeof FILTER_TYPES];
 
 export const FolderPanel = (): ReactElement => {
 	const [t] = useTranslation();
-	const isFirstRender = useRef(true);
 	const { folderId } = useParams<RouteParams>();
-	const dispatch = useAppDispatch();
 	const folder = useFolder(folderId ?? '');
 	const { setCount } = useAppContext<UseAppContextType>();
+	const loading = useRef(false);
+	const searchDone = useRef(false);
 	const { selected, isSelecting, toggle, deselectAll } = useSelection(folderId, setCount);
 	const [activeFilter, setActiveFilter] = useState<ContactFilterType>(FILTER_TYPES.ALL);
-	const contacts = useAppSelector((state) => selectAllContactsInFolder(state, folderId ?? ''));
-	const searchRequestStatus = useAppSelector((state) =>
-		selectContactsStatus(state, folderId ?? '')
+
+	const initialState = useMemo(
+		() => ({
+			contacts: [],
+			more: false,
+			offset: 0,
+			sortBy: 'nameAsc',
+			query: ''
+		}),
+		[]
 	);
+	const [searchResults, setSearchResults] = useState<SearchResults>(initialState);
+
+	const searchContacts = useContactsById(searchResults.contacts).filter(
+		(contact: ContactOrGroup) => contact.parent === folderId
+	);
+
 	const sortedContacts = useMemo(
 		() =>
 			orderBy(
-				contacts,
+				searchContacts,
 				[
 					(item): string =>
 						isGroup(item)
@@ -65,28 +79,80 @@ export const FolderPanel = (): ReactElement => {
 				],
 				'asc'
 			),
-		[contacts]
+		[searchContacts]
 	);
 	const ids = useMemo(() => Object.keys(selected ?? []), [selected]);
-	const selectedContacts = filter(contacts, (contact) => ids.indexOf(contact.id) !== -1);
+	const selectedContacts = filter(searchContacts, (contact) => ids.indexOf(contact.id) !== -1);
+
+	const searchQuery = useCallback(
+		(queryStr: string, reset: boolean) => {
+			loading.current = true;
+			soapFetch<any, any>('Search', {
+				limit: 100,
+				query: queryStr,
+				offset: reset ? 0 : searchResults.contacts.length,
+				sortBy: searchResults.sortBy,
+				types: 'contact',
+				_jsns: 'urn:zimbraMail'
+			})
+				.then(({ cn, more, offset, sortBy }) => ({
+					query: queryStr,
+					contacts: [
+						...(reset ? [] : (searchContacts ?? [])),
+						...(normalizeContactsFromSoap(cn) ?? [])
+					],
+					more,
+					offset: (offset ?? 0) + 100,
+					sortBy: sortBy ?? 'nameAsc'
+				}))
+				.then((r) => {
+					const contactIds = r.contacts.map((c) => c.id);
+					addContactsToStore(r.contacts);
+					setSearchResults({
+						...r,
+						contacts: contactIds
+					});
+				})
+				.finally(() => {
+					loading.current = false;
+				});
+		},
+		[searchContacts, searchResults.contacts.length, searchResults.sortBy]
+	);
+	const queryToString = useMemo(() => {
+		let queryContent = `inid:"${folderId}"`;
+		if (activeFilter === 'CONTACT') {
+			queryContent += ` and not #type:group`;
+		} else if (activeFilter === 'CONTACT_GROUP') {
+			queryContent += ` and #type:group`;
+		}
+		return queryContent;
+	}, [activeFilter, folderId]);
 
 	useEffect(() => {
-		if (searchRequestStatus !== undefined) {
+		if (searchDone) {
 			return;
 		}
-		dispatch(searchContactsAsyncThunk({ folderId: folderId ?? '', type: activeFilter })).finally(
-			() => {
-				isFirstRender.current = false;
-			}
-		);
-	}, [activeFilter, dispatch, folderId, searchRequestStatus]);
+		searchQuery(queryToString, true);
+	}, [activeFilter, folderId, queryToString, searchQuery]);
 
 	const selectType = useCallback(
 		(filterType: ContactFilterType) => {
-			dispatch(handleResetContactsSync());
+			setSearchResults(initialState);
 			setActiveFilter(filterType);
 		},
-		[dispatch]
+		[initialState]
+	);
+
+	const loadMore = useCallback(() => {
+		if (searchResults && searchResults.contacts.length > 0 && searchResults.more) {
+			searchQuery(queryToString, false);
+		}
+	}, [queryToString, searchQuery, searchResults]);
+
+	const canLoadMore = useMemo(
+		() => searchResults && searchResults.contacts.length > 0 && searchResults.more,
+		[searchResults]
 	);
 
 	const selectOptions = [
@@ -117,17 +183,6 @@ export const FolderPanel = (): ReactElement => {
 	];
 
 	const selectedViewTypeIcon = find(selectOptions, (option) => option.id === activeFilter)?.icon;
-	const loadMore = useCallback(
-		(): Promise<void> =>
-			dispatch(
-				searchContactsAsyncThunk({
-					folderId: folderId ?? '',
-					offset: contacts?.length,
-					type: activeFilter
-				})
-			).then(() => Promise.resolve()),
-		[activeFilter, contacts?.length, dispatch, folderId]
-	);
 	return (
 		<Container
 			orientation="row"
@@ -168,7 +223,7 @@ export const FolderPanel = (): ReactElement => {
 					</Breadcrumbs>
 				)}
 				<ContactsList
-					onLoadMore={loadMore}
+					onListBottom={canLoadMore ? loadMore : undefined}
 					folderId={folderId ?? ''}
 					contacts={sortedContacts}
 					selected={selected}
