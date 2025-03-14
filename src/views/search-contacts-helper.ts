@@ -10,7 +10,7 @@ export const searchContactsHelper = ({
 	offset,
 	sortBy
 }: {
-	query: string;
+	query: { _content: string };
 	offset: number;
 	sortBy: string;
 }) =>

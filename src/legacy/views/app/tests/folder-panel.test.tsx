@@ -121,8 +121,8 @@ describe('Folder panel', () => {
 			});
 
 			const { user } = setupFolderPanel(folderId);
-			await firstSearchInterceptor;
 			expect(await screen.findByText('First group')).toBeVisible();
+			await firstSearchInterceptor;
 
 			// switch filter and load groups
 			const expectedQueryFilter = 'and #type:group';
@@ -144,6 +144,9 @@ describe('Folder panel', () => {
 			expect(await screen.findByText('Contact Group 99')).toBeVisible();
 
 			// load more with current filter
+			act(() => {
+				jest.advanceTimersByTime(1000);
+			});
 			const loadMoreInterceptor = createContactsApiInterceptor({
 				items: times(10, (index) =>
 					createSoapContactGroup(
@@ -155,10 +158,11 @@ describe('Folder panel', () => {
 				),
 				more: true
 			});
+			await screen.findByTestId('list-bottom-element');
 			await triggerLoadMore();
+			expect(await screen.findByText('More Contact Group 1')).toBeVisible();
 			const loadMoreRequest = await loadMoreInterceptor;
 			expect(loadMoreRequest.query?._content).toContain(expectedQueryFilter);
-			expect(await screen.findByText('More Contact Group 1')).toBeVisible();
 		});
 	});
 

@@ -45,10 +45,12 @@ export const FolderPanel = (): ReactElement => {
 	const folder = useFolder(folderId ?? '');
 	const { setCount } = useAppContext<UseAppContextType>();
 	const loading = useRef(false);
-	const searchDone = useRef(false);
+	const firstSearchDone = useRef(false);
 	const { selected, isSelecting, toggle, deselectAll } = useSelection(folderId, setCount);
 	const [activeFilter, setActiveFilter] = useState<ContactFilterType>(FILTER_TYPES.ALL);
 
+	const [query, setQuery] = useState('');
+	const prevQuery = useRef<string>('');
 	const initialState = useMemo(
 		() => ({
 			contacts: [],
@@ -88,7 +90,7 @@ export const FolderPanel = (): ReactElement => {
 		(queryStr: string, reset: boolean) => {
 			loading.current = true;
 			const offset = reset ? 0 : searchResults.contacts.length;
-			searchContactsHelper({ query: queryStr, offset, sortBy: searchResults.sortBy })
+			searchContactsHelper({ query: { _content: queryStr }, offset, sortBy: searchResults.sortBy })
 				.then(({ cn, more, sortBy }) => ({
 					query: queryStr,
 					contacts: [...(reset ? [] : searchContacts), ...normalizeContactsFromSoap(cn)],
@@ -106,45 +108,39 @@ export const FolderPanel = (): ReactElement => {
 				})
 				.finally(() => {
 					loading.current = false;
+					firstSearchDone.current = true;
 				});
 		},
 		[searchContacts, searchResults.contacts.length, searchResults.sortBy]
 	);
-	const queryToString = useMemo(() => {
+	useEffect(() => {
 		let queryContent = `inid:"${folderId}"`;
 		if (activeFilter === 'CONTACT') {
 			queryContent += ` and not #type:group`;
 		} else if (activeFilter === 'CONTACT_GROUP') {
 			queryContent += ` and #type:group`;
 		}
-		return queryContent;
-	}, [activeFilter, folderId]);
+		setQuery(queryContent);
+	}, [folderId, activeFilter]);
 
 	useEffect(() => {
-		if (searchDone) {
-			return;
+		if (query !== prevQuery.current) {
+			prevQuery.current = query;
+			searchQuery(query, true);
 		}
-		searchQuery(queryToString, true);
-	}, [activeFilter, folderId, queryToString, searchQuery]);
+	}, [activeFilter, folderId, query, searchQuery]);
 
-	const selectType = useCallback(
-		(filterType: ContactFilterType) => {
-			setSearchResults(initialState);
-			setActiveFilter(filterType);
-		},
-		[initialState]
-	);
+	const selectType = useCallback((filterType: ContactFilterType) => {
+		setActiveFilter(filterType);
+	}, []);
 
 	const loadMore = useCallback(() => {
-		if (searchResults && searchResults.contacts.length > 0 && searchResults.more) {
-			searchQuery(queryToString, false);
+		if (searchResults.more) {
+			searchQuery(query, false);
 		}
-	}, [queryToString, searchQuery, searchResults]);
+	}, [query, searchQuery, searchResults.more]);
 
-	const canLoadMore = useMemo(
-		() => searchResults && searchResults.contacts.length > 0 && searchResults.more,
-		[searchResults]
-	);
+	const canLoadMore = searchResults.more;
 
 	const selectOptions = [
 		{
@@ -214,7 +210,7 @@ export const FolderPanel = (): ReactElement => {
 					</Breadcrumbs>
 				)}
 				<ContactsList
-					onListBottom={canLoadMore ? loadMore : undefined}
+					onListBottom={loadMore}
 					folderId={folderId ?? ''}
 					contacts={sortedContacts}
 					selected={selected}
