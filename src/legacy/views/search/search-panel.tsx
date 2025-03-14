@@ -9,11 +9,18 @@ import { Container, Padding, Text } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 import { Route, Routes } from 'react-router-dom';
 
+import { SearchResults } from './search-view';
 import { EmptyFieldMessages, EmptyListMessages } from './utils';
 import ContactEditPanel from '../edit/contact-edit-panel';
 import { ContactPreviewWrapper } from '../preview/contact-preview-wrapper';
 
-const SearchPanel = ({ searchResults, query, width }) => {
+export const SearchPanel = ({
+	searchResults,
+	width
+}: {
+	searchResults: SearchResults;
+	width: string;
+}): React.JSX.Element => {
 	const [t] = useTranslation();
 	const emptyListMessages = useMemo(() => EmptyListMessages(t), [t]);
 	const emptyFieldMessages = useMemo(() => EmptyFieldMessages(t), [t]);
@@ -30,7 +37,7 @@ const SearchPanel = ({ searchResults, query, width }) => {
 		[displayerMessage?.description]
 	);
 	return (
-		<Container width={width ?? '55%'} mainAlignment="flex-start">
+		<Container width={width} mainAlignment="flex-start">
 			<Routes>
 				<Route path={`folder/:folderId/contacts/:contactId`} element={<ContactPreviewWrapper />} />
 				<Route path={`folder/:folderId/edit/:editId`} element={<ContactEditPanel />} />
@@ -64,5 +71,3 @@ const SearchPanel = ({ searchResults, query, width }) => {
 		</Container>
 	);
 };
-
-export default SearchPanel;

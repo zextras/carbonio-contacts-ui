@@ -14,7 +14,7 @@ import { Route, Routes } from 'react-router-dom';
 
 import AdvancedFilterModal from './advance-filter-modal';
 import { SearchList } from './search-list';
-import SearchPanel from './search-panel';
+import { SearchPanel } from './search-panel';
 import { isTrash } from '../../../carbonio-ui-commons/helpers/folders';
 import { useUpdateView } from '../../../carbonio-ui-commons/hooks/use-update-view';
 import { useFoldersMap } from '../../../carbonio-ui-commons/store/zustand/folder';
@@ -152,7 +152,7 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 					/>
 				</Routes>
 				<Suspense fallback={<Spinner color="gray5" />}>
-					<SearchPanel searchResults={searchResults} query={query} width="75%" />
+					<SearchPanel searchResults={searchResults} width="75%" />
 				</Suspense>
 			</Container>
 
