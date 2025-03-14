@@ -48,3 +48,13 @@ export const useContactById = (contactId: string): Contact | undefined => {
 	}
 	return undefined;
 };
+
+export const useContactsByFolderId = (folderId: string): Array<ContactOrGroup> => {
+	const { contacts } = useContactsStore.getState();
+	const allKeys = Object.keys(contacts);
+	return allKeys
+		.map((key: string) => contacts[key])
+		.filter((contact) => contact.parent === folderId);
+};
+
+export const useContactsStoreForTesting = useContactsStore;
