@@ -7,29 +7,24 @@ import React, { FC, Suspense, useCallback, useEffect, useMemo, useRef, useState 
 
 import { Container, Spinner } from '@zextras/carbonio-design-system';
 import type { SearchViewProps } from '@zextras/carbonio-search-ui';
-import { soapFetch } from '@zextras/carbonio-shell-ui';
 import { map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { Route, Routes } from 'react-router-dom';
 
 import AdvancedFilterModal from './advance-filter-modal';
+import { SearchContactsEmptyPanel } from './search-contacts-empty-panel';
 import { SearchList } from './search-list';
-import { SearchPanel } from './search-panel';
+import { SearchResults } from './types';
 import { isTrash } from '../../../carbonio-ui-commons/helpers/folders';
 import { useUpdateView } from '../../../carbonio-ui-commons/hooks/use-update-view';
 import { useFoldersMap } from '../../../carbonio-ui-commons/store/zustand/folder';
+import { soapFetch } from '../../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
 import { Folder } from '../../../carbonio-ui-commons/types/folder';
 import { usePrefs } from '../../../carbonio-ui-commons/utils/use-prefs';
-import { ContactOrGroup } from '../../types/contact';
+import { ContactGroupDisplayerWrapper } from '../../../views/contact-groups/displayer/contact-group-displayer-wrapper';
 import { normalizeContactsFromSoap } from '../../utils/normalizations/normalize-contact-from-soap';
-
-export type SearchResults = {
-	contacts: Array<ContactOrGroup>;
-	more: boolean;
-	offset: number;
-	sortBy: string;
-	query: string;
-};
+import ContactEditPanel from '../edit/contact-edit-panel';
+import { ContactPreviewWrapper } from '../preview/contact-preview-wrapper';
 
 const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 	const [query, updateQuery] = useQuery();
@@ -152,7 +147,23 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 					/>
 				</Routes>
 				<Suspense fallback={<Spinner color="gray5" />}>
-					<SearchPanel searchResults={searchResults} width="75%" />
+					<Container width={'75%'} mainAlignment="flex-start">
+						<Routes>
+							<Route
+								path={`folder/:folderId/contacts/:contactId`}
+								element={<ContactPreviewWrapper />}
+							/>
+							<Route path={`folder/:folderId/edit/:editId`} element={<ContactEditPanel />} />
+							<Route
+								path={'folder/:folderId/contact-groups/:id'}
+								element={<ContactGroupDisplayerWrapper />}
+							/>
+							<Route
+								path={'/'}
+								element={<SearchContactsEmptyPanel searchResults={searchResults} />}
+							/>
+						</Routes>
+					</Container>
 				</Suspense>
 			</Container>
 

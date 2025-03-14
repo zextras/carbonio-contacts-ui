@@ -12,7 +12,7 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { SearchContactListItem } from './search-contact-list-item';
-import { type SearchResults } from './search-view';
+import { SearchResults } from './types';
 import { ContactGroupListItem } from '../../../views/contact-groups/list/contact-group-list-item';
 import { isGroup } from '../../utils/helpers';
 

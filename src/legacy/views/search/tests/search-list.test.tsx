@@ -12,7 +12,7 @@ import { makeListItemsVisible, setupTest } from '../../../../carbonio-ui-commons
 import { generateStore } from '../../../tests/generators/store';
 import { Contact } from '../../../types/contact';
 import { SearchList } from '../search-list';
-import { SearchResults } from '../search-view';
+import { SearchResults } from '../types';
 
 const mockSearch = jest.fn();
 const mockSetShowAdvanceFilters = jest.fn();

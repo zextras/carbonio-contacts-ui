@@ -11,17 +11,19 @@ import { AccountSettings } from '@zextras/carbonio-shell-ui';
 import * as hooks from '@zextras/carbonio-shell-ui';
 import { noop } from 'lodash';
 
+import { FOLDERS } from '../../../../carbonio-ui-commons/constants/folders';
 import { createSoapAPIInterceptor } from '../../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { generateSettings } from '../../../../carbonio-ui-commons/test/mocks/settings/settings-generator';
+import { populateFoldersStore } from '../../../../carbonio-ui-commons/test/mocks/store/folders';
 import { screen, setupTest } from '../../../../carbonio-ui-commons/test/test-setup';
 import { CnItem } from '../../../../network/api/types';
-import { createSoapContact, createSoapContactGroup } from '../../../../tests/utils';
+import { createSoapContact, createSoapContactGroupV2 } from '../../../../tests/utils';
 import { SearchContactsRequest, SearchContactsSoapResponse } from '../../../../types';
 import { generateStore } from '../../../tests/generators/store';
 import { type SoapContact } from '../../../types/soap';
 import SearchView from '../search-view';
 
-const mockSearch = ({ contacts }: { contacts: Array<CnItem> }): SearchViewProps => {
+const setupSearch = ({ contacts }: { contacts: Array<CnItem> }): SearchViewProps => {
 	const customSettings: Partial<AccountSettings> = {
 		prefs: {
 			zimbraPrefIncludeTrashInSearch: 'TRUE',
@@ -98,14 +100,21 @@ describe('SearchView', () => {
 
 	describe('Contact Groups', () => {
 		it('should display the selected contact group in detail panel', async () => {
-			const soapContactGroup = createSoapContactGroup('Test Contact Group');
-			const searchViewProps = mockSearch({ contacts: [soapContactGroup] });
-
+			populateFoldersStore();
+			const soapContactGroup = createSoapContactGroupV2({
+				contactGroupName: 'Test Contact Group',
+				folderId: FOLDERS.CONTACTS
+			});
 			const store = generateStore();
-			setupTest(<SearchView {...searchViewProps} />, {
+
+			const searchViewProps = setupSearch({ contacts: [soapContactGroup] });
+			const { user } = setupTest(<SearchView {...searchViewProps} />, {
 				store
 			});
-			await screen.findByText('Test Contact Group');
+			const listItem = await screen.findByText('Test Contact Group');
+			await user.click(listItem);
+
+			expect(await screen.findByTestId('contact-group-displayer')).toBeVisible();
 		});
 	});
 });

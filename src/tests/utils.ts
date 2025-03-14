@@ -101,6 +101,7 @@ export async function delayUntil(emitter: EventEmitter, event: string): Promise<
 	});
 }
 
+// deprecated: use the object counterpart instead
 export const createSoapContactGroup = (
 	contactGroupName = faker.company.name(),
 	members: string[] = [],
@@ -128,6 +129,18 @@ export const createSoapContactGroup = (
 		sf: 'bo0000000276'
 	};
 };
+
+export const createSoapContactGroupV2 = ({
+	contactGroupName = faker.company.name(),
+	members = [],
+	id = faker.number.int({ min: 100 }).toString(),
+	folderId = '7'
+}: {
+	contactGroupName?: string;
+	members?: Array<string>;
+	id?: string;
+	folderId?: string;
+}): CnItem => createSoapContactGroup(contactGroupName, members, id, folderId);
 
 export function createSoapContact({
 	id = faker.number.int({ min: 100 }).toString(),
