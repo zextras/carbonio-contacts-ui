@@ -59,7 +59,12 @@ export const SearchList = ({
 			map(searchResults.contacts, (contact, index) => {
 				const isActive = itemId === contact.id;
 				if (isGroup(contact)) {
-					return <ContactGroupListItem contactGroup={contact} />;
+					return (
+						<ContactGroupListItem
+							key={`contact-group-list-item-${contact.id}`}
+							contactGroup={contact}
+						/>
+					);
 				}
 				return (
 					<ListItem selected={false} active={isActive} key={contact.id}>
