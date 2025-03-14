@@ -19,7 +19,6 @@ import { contactAction } from '../actions/contact-action';
 import { createContact } from '../actions/create-contact';
 import { folderAction } from '../actions/folder-action';
 import { modifyContact } from '../actions/modify-contact';
-import { searchContactsAsyncThunk } from '../actions/search-contacts';
 import {
 	contactActionFulFilled,
 	contactActionPending,
@@ -47,11 +46,6 @@ import {
 	modifyContactPending,
 	modifyContactRejected
 } from '../reducers/modify-contact';
-import {
-	searchContactsFullFilled,
-	searchContactsPending,
-	searchContactsRejected
-} from '../reducers/search-contacts';
 
 export const contactsSlice = createSlice({
 	name: 'contacts',
@@ -63,10 +57,6 @@ export const contactsSlice = createSlice({
 		handleResetContactsSync: handleResetContactsSyncReducer
 	},
 	extraReducers: (builder) => {
-		builder.addCase(searchContactsAsyncThunk.pending, searchContactsPending);
-		builder.addCase(searchContactsAsyncThunk.fulfilled, searchContactsFullFilled);
-		builder.addCase(searchContactsAsyncThunk.rejected, searchContactsRejected);
-
 		builder.addCase(createContact.pending, createContactPending);
 		builder.addCase(createContact.fulfilled, createContactFulFilled);
 		builder.addCase(createContact.rejected, createContactRejected);
