@@ -49,7 +49,7 @@ import {
 	registerFindContactGroupsHandler
 } from '../../../../tests/msw-handlers/find-contact-groups';
 import { generateState } from '../../../../tests/state-builder';
-import { createSoapContactGroup, createSoapContact } from '../../../../tests/utils';
+import { createSoapContact, createSoapContactGroup } from '../../../../tests/utils';
 import { generateStore } from '../../../tests/generators/store';
 import { FolderPanel } from '../folder-panel';
 import { createContactsApiInterceptor } from './utils';
@@ -167,20 +167,24 @@ describe('Folder panel', () => {
 	});
 
 	describe('Contact', () => {
-		it('should render the component', () => {
+		it('should render the folder panel with the contact in the list', async () => {
 			const folder = FOLDERS_DESCRIPTORS.contacts;
-			const contact = buildContact({ lastName: faker.string.uuid() });
-			const state = generateState({
-				contacts: [contact]
+			const email = 'test@test.com';
+			const soapContact = createSoapContact({ email });
+			const firstSearchInterceptor = createContactsApiInterceptor({
+				items: [soapContact],
+				more: false
 			});
-			const store = generateStore(state);
+			const store = generateStore();
 			setupTest(<FolderPanel />, {
 				initialEntries: [`/folder/${folder.id}`],
 				path: `/folder/:folderId/:type?/:itemId?`,
 				store
 			});
+			await screen.findByTestId(`custom-contact-list-item-${soapContact.id}`);
 			makeListItemsVisible();
-			expect(screen.getByText(contact.lastName, { exact: false })).toBeVisible();
+			expect(screen.getByText(email)).toBeVisible();
+			await firstSearchInterceptor;
 		});
 
 		// remove all warning as the search request is not intercepted
