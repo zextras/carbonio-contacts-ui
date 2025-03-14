@@ -6,6 +6,7 @@
 import produce from 'immer';
 import { create } from 'zustand';
 
+import { ContactGroup } from '../../model/contact-group';
 import { ContactOrGroup } from '../types/contact';
 
 type ContactsStoreState = {
@@ -28,4 +29,13 @@ export const addContactsToStore = (contacts: Array<ContactOrGroup>): void => {
 export const useContactsById = (contactIds: Array<string>): Array<ContactOrGroup> => {
 	const { contacts } = useContactsStore.getState();
 	return contactIds.map((id) => contacts[id]).filter(Boolean);
+};
+
+export const useContactGroupById = (contactGroupId: string): ContactGroup | undefined => {
+	const { contacts } = useContactsStore.getState();
+	const exists = contacts[contactGroupId];
+	if (exists && 'members' in exists) {
+		return exists;
+	}
+	return undefined;
 };
