@@ -35,7 +35,7 @@ import {
 	createFindContactGroupsResponse,
 	registerFindContactGroupsHandler
 } from '../../../../tests/msw-handlers/find-contact-groups';
-import { createCnItem, createSoapContact } from '../../../../tests/utils';
+import { createSoapContactGroup, createSoapContact } from '../../../../tests/utils';
 import { generateStore } from '../../../tests/generators/store';
 import { FolderView } from '../folder-view';
 import { createContactsApiInterceptor } from './utils';
@@ -93,7 +93,7 @@ describe('folder-view', () => {
 
 		it('Clicking on a contact group in the list opens the displayer for that item', async () => {
 			const contactGroupName = faker.company.name();
-			const contactGroup = createCnItem(contactGroupName, [], '1', folderId);
+			const contactGroup = createSoapContactGroup(contactGroupName, [], '1', folderId);
 			registerFindContactGroupsHandler({
 				findContactGroupsResponse: createFindContactGroupsResponse([contactGroup]),
 				offset: 0
@@ -112,7 +112,7 @@ describe('folder-view', () => {
 			const EMPTY_BOARD_MESSAGE = 'Create a new contact by clicking the “NEW” button.';
 			const contactGroupId = '111';
 			const contactGroupName = 'My Contact Group';
-			const contactGroup = createCnItem(contactGroupName, [], contactGroupId, folderId);
+			const contactGroup = createSoapContactGroup(contactGroupName, [], contactGroupId, folderId);
 			registerFindContactGroupsHandler({
 				findContactGroupsResponse: createFindContactGroupsResponse([contactGroup]),
 				offset: 0
@@ -139,8 +139,8 @@ describe('folder-view', () => {
 			registerFindContactGroupsHandler({
 				findContactGroupsResponse: createFindContactGroupsResponse(
 					[
-						createCnItem(contactGroupName, [], contactGroupId, folderId),
-						...[...Array(2)].map(() => createCnItem())
+						createSoapContactGroup(contactGroupName, [], contactGroupId, folderId),
+						...[...Array(2)].map(() => createSoapContactGroup())
 					],
 					false
 				),
@@ -167,7 +167,7 @@ describe('folder-view', () => {
 			const member = faker.internet.email();
 			registerFindContactGroupsHandler({
 				findContactGroupsResponse: createFindContactGroupsResponse([
-					createCnItem(contactGroupName, [member], contactGroupId, folderId)
+					createSoapContactGroup(contactGroupName, [member], contactGroupId, folderId)
 				]),
 				offset: 0
 			});
@@ -407,7 +407,7 @@ describe('folder-view', () => {
 		const folder1ContactGroupName = faker.company.name();
 		const folder1ContactEmail = faker.internet.email();
 		const folder1Contact = createSoapContact({ folderId: folderId1, email: folder1ContactEmail });
-		const folder1ContactGroup = createCnItem(folder1ContactGroupName, [], '1', folderId1);
+		const folder1ContactGroup = createSoapContactGroup(folder1ContactGroupName, [], '1', folderId1);
 		const folder1SearchAllContactsInterceptor = createContactsApiInterceptor({
 			items: [folder1ContactGroup, folder1Contact]
 		});
@@ -422,7 +422,7 @@ describe('folder-view', () => {
 		const folder2ContactEmail = faker.internet.email();
 		const folder2ContactGroupName = faker.company.name();
 		const folder2Contact = createSoapContact({ folderId: folderId2, email: folder2ContactEmail });
-		const folder2ContactGroup = createCnItem(folder2ContactGroupName, [], '1', folderId1);
+		const folder2ContactGroup = createSoapContactGroup(folder2ContactGroupName, [], '1', folderId1);
 		const folder2SearchAllContactsInterceptor = createContactsApiInterceptor({
 			items: [folder2Contact, folder2ContactGroup]
 		});

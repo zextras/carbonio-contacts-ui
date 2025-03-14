@@ -49,7 +49,7 @@ import {
 	registerFindContactGroupsHandler
 } from '../../../../tests/msw-handlers/find-contact-groups';
 import { generateState } from '../../../../tests/state-builder';
-import { createCnItem, createSoapContact } from '../../../../tests/utils';
+import { createSoapContactGroup, createSoapContact } from '../../../../tests/utils';
 import { generateStore } from '../../../tests/generators/store';
 import { FolderPanel } from '../folder-panel';
 import { createContactsApiInterceptor } from './utils';
@@ -116,7 +116,7 @@ describe('Folder panel', () => {
 		it('should search contacts with current filter when loading more results', async () => {
 			const folderId = '7';
 			const firstSearchInterceptor = createContactsApiInterceptor({
-				items: [createCnItem(`First group`, [], 'special-1', folderId)],
+				items: [createSoapContactGroup(`First group`, [], 'special-1', folderId)],
 				more: false
 			});
 
@@ -128,7 +128,12 @@ describe('Folder panel', () => {
 			const expectedQueryFilter = 'and #type:group';
 			const searchGroupsInterceptor = createContactsApiInterceptor({
 				items: times(100, (index) =>
-					createCnItem(`Contact Group ${index}`, [], `group-${index.toString()}`, folderId)
+					createSoapContactGroup(
+						`Contact Group ${index}`,
+						[],
+						`group-${index.toString()}`,
+						folderId
+					)
 				),
 				more: true
 			});
@@ -141,7 +146,7 @@ describe('Folder panel', () => {
 			// load more with current filter
 			const loadMoreInterceptor = createContactsApiInterceptor({
 				items: times(10, (index) =>
-					createCnItem(
+					createSoapContactGroup(
 						`More Contact Group ${index}`,
 						[],
 						`more-group-${index.toString()}`,
@@ -616,7 +621,7 @@ describe('Folder panel', () => {
 				const folderId = '7';
 				registerFindContactGroupsHandler({
 					findContactGroupsResponse: createFindContactGroupsResponse([
-						createCnItem(
+						createSoapContactGroup(
 							contactGroupName,
 							[faker.internet.email(), faker.internet.email()],
 							'1',
@@ -636,7 +641,7 @@ describe('Folder panel', () => {
 				const folderId = '7';
 				registerFindContactGroupsHandler({
 					findContactGroupsResponse: createFindContactGroupsResponse([
-						createCnItem(contactGroupName, [], '1', folderId)
+						createSoapContactGroup(contactGroupName, [], '1', folderId)
 					]),
 					offset: 0
 				});
@@ -651,7 +656,7 @@ describe('Folder panel', () => {
 				const folderId = '7';
 				registerFindContactGroupsHandler({
 					findContactGroupsResponse: createFindContactGroupsResponse([
-						createCnItem(contactGroupName, [faker.internet.email()], '1', folderId)
+						createSoapContactGroup(contactGroupName, [faker.internet.email()], '1', folderId)
 					]),
 					offset: 0
 				});
@@ -672,7 +677,7 @@ describe('Folder panel', () => {
 						const memberEmail = faker.internet.email();
 						registerFindContactGroupsHandler({
 							findContactGroupsResponse: createFindContactGroupsResponse([
-								createCnItem(contactGroupName, [memberEmail], '1', folderId)
+								createSoapContactGroup(contactGroupName, [memberEmail], '1', folderId)
 							]),
 							offset: 0
 						});
@@ -694,7 +699,7 @@ describe('Folder panel', () => {
 						const contactGroupName = faker.company.name();
 						registerFindContactGroupsHandler({
 							findContactGroupsResponse: createFindContactGroupsResponse([
-								createCnItem(contactGroupName, [], '1', folderId)
+								createSoapContactGroup(contactGroupName, [], '1', folderId)
 							]),
 							offset: 0
 						});
@@ -724,7 +729,7 @@ describe('Folder panel', () => {
 						});
 						const folderId = FOLDERS.TRASH;
 						const contactGroupName = 'Group 1';
-						const cnItem1 = createCnItem(contactGroupName, [], '1', folderId);
+						const cnItem1 = createSoapContactGroup(contactGroupName, [], '1', folderId);
 						registerFindContactGroupsHandler({
 							findContactGroupsResponse: createFindContactGroupsResponse([cnItem1], false),
 							offset: 0
@@ -773,7 +778,7 @@ describe('Folder panel', () => {
 						populateFoldersStore();
 						const folderId = FOLDERS.CONTACTS;
 						const contactGroupName = 'Group 1';
-						const cnItem1 = createCnItem(contactGroupName, [], '1', folderId);
+						const cnItem1 = createSoapContactGroup(contactGroupName, [], '1', folderId);
 						registerFindContactGroupsHandler({
 							findContactGroupsResponse: createFindContactGroupsResponse([cnItem1], false),
 							offset: 0
@@ -809,9 +814,9 @@ describe('Folder panel', () => {
 				describe('Delete permanently (trash folder) contact group action', () => {
 					it('should remove deleted contact group when you confirm deletion and api call will success (Hover trigger)', async () => {
 						const folderId = FOLDERS.TRASH;
-						const cnItem1 = createCnItem('Group 1', [], '1', folderId);
-						const cnItem2 = createCnItem('Group 2', [], '2', folderId);
-						const cnItem3 = createCnItem('Group 3', [], '3', folderId);
+						const cnItem1 = createSoapContactGroup('Group 1', [], '1', folderId);
+						const cnItem2 = createSoapContactGroup('Group 2', [], '2', folderId);
+						const cnItem3 = createSoapContactGroup('Group 3', [], '3', folderId);
 						registerFindContactGroupsHandler({
 							findContactGroupsResponse: createFindContactGroupsResponse(
 								[cnItem1, cnItem2, cnItem3],
@@ -843,9 +848,9 @@ describe('Folder panel', () => {
 					it('should not remove deleted contact group when you confirm deletion and api call fail (Hover trigger)', async () => {
 						jest.spyOn(console, 'warn').mockImplementation();
 						const folderId = FOLDERS.TRASH;
-						const cnItem1 = createCnItem('Group 1', [], '11', folderId);
-						const cnItem2 = createCnItem('Group 2', [], '22', folderId);
-						const cnItem3 = createCnItem('Group 3', [], '33', folderId);
+						const cnItem1 = createSoapContactGroup('Group 1', [], '11', folderId);
+						const cnItem2 = createSoapContactGroup('Group 2', [], '22', folderId);
+						const cnItem3 = createSoapContactGroup('Group 3', [], '33', folderId);
 						populateFoldersStore();
 						registerFindContactGroupsHandler({
 							findContactGroupsResponse: createFindContactGroupsResponse(
@@ -891,7 +896,7 @@ describe('Folder panel', () => {
 						const member = faker.internet.email();
 						registerFindContactGroupsHandler({
 							findContactGroupsResponse: createFindContactGroupsResponse([
-								createCnItem(contactGroupName, [member], contactGroupId, folderId)
+								createSoapContactGroup(contactGroupName, [member], contactGroupId, folderId)
 							]),
 							offset: 0
 						});
@@ -919,7 +924,7 @@ describe('Folder panel', () => {
 			const folderId = '7';
 			const soapContactEmail = 'test@mycontact.com';
 			const soapContact = createSoapContact({ folderId, email: soapContactEmail });
-			const soapContactGroup = createCnItem(
+			const soapContactGroup = createSoapContactGroup(
 				contactGroupName,
 				[faker.internet.email(), faker.internet.email()],
 				'1',
@@ -941,7 +946,7 @@ describe('Folder panel', () => {
 		it('should display only contact groups after selecting contact groups filter', async () => {
 			const contactGroupName = faker.company.name();
 			const folderId = '7';
-			const soapContactGroup = createCnItem(
+			const soapContactGroup = createSoapContactGroup(
 				contactGroupName,
 				[faker.internet.email(), faker.internet.email()],
 				'1',
@@ -969,7 +974,7 @@ describe('Folder panel', () => {
 			const folderId = '7';
 			const soapContactEmail = 'test@mycontact.com';
 			const soapContact = createSoapContact({ folderId, email: soapContactEmail });
-			const soapContactGroup = createCnItem(
+			const soapContactGroup = createSoapContactGroup(
 				contactGroupName,
 				[faker.internet.email(), faker.internet.email()],
 				'1',

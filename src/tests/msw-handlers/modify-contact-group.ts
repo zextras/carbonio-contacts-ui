@@ -9,7 +9,7 @@ import { HttpResponse, HttpResponseResolver, http } from 'msw';
 import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
 import { ModifyContactRequest, ModifyContactResponse } from '../../network/api/modify-contact';
 import { CnItem } from '../../network/api/types';
-import { buildSoapError, buildSoapResponse, createCnItem } from '../utils';
+import { buildSoapError, buildSoapResponse, createSoapContactGroup } from '../utils';
 
 type ModifyContactGroupHandler = HttpResponseResolver<
 	never,
@@ -17,7 +17,7 @@ type ModifyContactGroupHandler = HttpResponseResolver<
 	SoapResponse<ModifyContactResponse>
 >;
 export const registerModifyContactGroupHandler = (
-	cnItem: CnItem = createCnItem(),
+	cnItem: CnItem = createSoapContactGroup(),
 	error: string | undefined = undefined
 ): jest.Mock<ReturnType<ModifyContactGroupHandler>, Parameters<ModifyContactGroupHandler>> => {
 	const handler = jest.fn<

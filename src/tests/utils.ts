@@ -101,7 +101,7 @@ export async function delayUntil(emitter: EventEmitter, event: string): Promise<
 	});
 }
 
-export const createCnItem = (
+export const createSoapContactGroup = (
 	contactGroupName = faker.company.name(),
 	members: string[] = [],
 	id = faker.number.int({ min: 100 }).toString(),
