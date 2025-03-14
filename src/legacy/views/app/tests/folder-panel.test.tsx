@@ -1005,10 +1005,10 @@ describe('Folder panel', () => {
 			await toggleSelectContactTypeFilter(user);
 			await user.click(await screen.findByText('Contacts'));
 			const contactsOnlyRequest = await searchOnlyContactsInterceptor;
-			expect(screen.queryByText(contactGroupName)).not.toBeInTheDocument();
 			expect(
 				await screen.findByTestId(`contact-list-item-invisible-${soapContact.id}`)
 			).toBeInTheDocument();
+			expect(screen.queryByText(contactGroupName)).not.toBeInTheDocument();
 			makeListItemsVisible();
 			expect(await screen.findByText(soapContactEmail)).toBeVisible();
 
