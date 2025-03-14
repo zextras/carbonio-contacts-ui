@@ -3,10 +3,9 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { ContactOrGroup } from '../../types/contact';
 
 export type SearchResults = {
-	contacts: Array<ContactOrGroup>;
+	contacts: Array<string>;
 	more: boolean;
 	offset: number;
 	sortBy: string;

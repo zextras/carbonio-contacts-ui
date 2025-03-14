@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 import { Button, Container, List, ListItem, Padding, Text } from '@zextras/carbonio-design-system';
 import { map } from 'lodash';
@@ -12,8 +12,8 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { SearchContactListItem } from './search-contact-list-item';
-import { SearchResults } from './types';
 import { ContactGroupListItem } from '../../../views/contact-groups/list/contact-group-list-item';
+import { ContactOrGroup } from '../../types/contact';
 import { isGroup } from '../../utils/helpers';
 
 const BorderContainer = styled(Container)`
@@ -22,41 +22,30 @@ const BorderContainer = styled(Container)`
 `;
 
 type SearchListProps = {
-	searchResults: SearchResults;
-	search: (folderId: string, reset: boolean) => void;
-	query: string;
+	contacts: Array<ContactOrGroup>;
+	onListBottom?: () => void;
 	filterCount: number;
 	setShowAdvanceFilters: (show: boolean) => void;
 };
 export const SearchList = ({
-	searchResults,
-	search,
-	query,
+	contacts,
+	onListBottom,
 	filterCount,
 	setShowAdvanceFilters
 }: SearchListProps): React.JSX.Element => {
 	const [t] = useTranslation();
 	const { itemId } = useParams<{ itemId: string }>();
-	const loadMore = useCallback(() => {
-		if (searchResults && searchResults.contacts.length > 0 && searchResults.more) {
-			search(query, false);
-		}
-	}, [query, search, searchResults]);
 
-	const canLoadMore = useMemo(
-		() => searchResults && searchResults.contacts.length > 0 && searchResults.more,
-		[searchResults]
-	);
 	const displayerTitle = useMemo(() => {
-		if (searchResults?.contacts.length === 0) {
+		if (contacts.length === 0) {
 			t('displayer.search_list_title1', 'It looks like there are no results. Keep searching!');
 		}
 		return null;
-	}, [t, searchResults?.contacts.length]);
+	}, [t, contacts.length]);
 
 	const listItems = useMemo(
 		() =>
-			map(searchResults.contacts, (contact, index) => {
+			map(contacts, (contact, index) => {
 				const isActive = itemId === contact.id;
 				if (isGroup(contact)) {
 					return (
@@ -78,7 +67,7 @@ export const SearchList = ({
 					</ListItem>
 				);
 			}),
-		[itemId, searchResults.contacts]
+		[itemId, contacts]
 	);
 
 	return (
@@ -107,18 +96,18 @@ export const SearchList = ({
 					icon="Options2Outline"
 				/>
 			</BorderContainer>
-			{searchResults?.contacts.length > 0 && (
+			{contacts.length > 0 && (
 				<Container>
 					<List
 						background="gray6"
-						onListBottom={canLoadMore ? loadMore : undefined}
+						onListBottom={onListBottom}
 						data-testid="SearchResultContactsContainer"
 					>
 						{listItems}
 					</List>
 				</Container>
 			)}
-			{searchResults?.contacts.length === 0 && (
+			{contacts.length === 0 && (
 				<Container>
 					<Padding top="medium">
 						<Text

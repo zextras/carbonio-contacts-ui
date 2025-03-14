@@ -22,6 +22,7 @@ import { soapFetch } from '../../../carbonio-ui-commons/test/mocks/carbonio-shel
 import { Folder } from '../../../carbonio-ui-commons/types/folder';
 import { usePrefs } from '../../../carbonio-ui-commons/utils/use-prefs';
 import { ContactGroupDisplayerWrapper } from '../../../views/contact-groups/displayer/contact-group-displayer-wrapper';
+import { addContactsToStore, useContactsById } from '../../store/contacts';
 import { normalizeContactsFromSoap } from '../../utils/normalizations/normalize-contact-from-soap';
 import ContactEditPanel from '../edit/contact-edit-panel';
 import { ContactPreviewWrapper } from '../preview/contact-preview-wrapper';
@@ -37,6 +38,7 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 		sortBy: 'nameAsc',
 		query: ''
 	});
+	const searchContacts = useContactsById(searchResults.contacts);
 
 	const loading = useRef(false);
 	const [t] = useTranslation();
@@ -94,26 +96,29 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 				types: 'contact',
 				_jsns: 'urn:zimbraMail'
 			})
-				.then(
-					({ cn, more, offset, sortBy }): SearchResults => ({
-						query: queryStr,
-						contacts: [
-							...(reset ? [] : (searchResults.contacts ?? [])),
-							...(normalizeContactsFromSoap(cn) ?? [])
-						],
-						more,
-						offset: (offset ?? 0) + 100,
-						sortBy: sortBy ?? 'nameAsc'
-					})
-				)
+				.then(({ cn, more, offset, sortBy }) => ({
+					query: queryStr,
+					contacts: [
+						...(reset ? [] : (searchContacts ?? [])),
+						...(normalizeContactsFromSoap(cn) ?? [])
+					],
+					more,
+					offset: (offset ?? 0) + 100,
+					sortBy: sortBy ?? 'nameAsc'
+				}))
 				.then((r) => {
-					setSearchResults(r);
+					const contactIds = r.contacts.map((c) => c.id);
+					addContactsToStore(r.contacts);
+					setSearchResults({
+						...r,
+						contacts: contactIds
+					});
 				})
 				.finally(() => {
 					loading.current = false;
 				});
 		},
-		[searchResults.contacts, searchResults.sortBy]
+		[searchContacts, searchResults.contacts.length, searchResults.sortBy]
 	);
 
 	useEffect(() => {
@@ -122,6 +127,17 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 			searchQuery(queryToString, true);
 		}
 	}, [query, queryToString, searchQuery, searchResults.query]);
+
+	const loadMore = useCallback(() => {
+		if (searchResults && searchResults.contacts.length > 0 && searchResults.more) {
+			searchQuery(queryToString, false);
+		}
+	}, [queryToString, searchQuery, searchResults]);
+
+	const canLoadMore = useMemo(
+		() => searchResults && searchResults.contacts.length > 0 && searchResults.more,
+		[searchResults]
+	);
 
 	return (
 		<Container>
@@ -137,9 +153,8 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 						path={`:folder?/:folderId?/:type?/:itemId?`}
 						element={
 							<SearchList
-								searchResults={searchResults}
-								search={searchQuery}
-								query={queryToString}
+								contacts={searchContacts}
+								onListBottom={canLoadMore ? loadMore : undefined}
 								filterCount={filterCount}
 								setShowAdvanceFilters={setShowAdvanceFilters}
 							/>
