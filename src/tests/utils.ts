@@ -150,7 +150,7 @@ export function createSoapContact({
 	id?: string;
 	email?: string;
 	folderId?: string;
-}): SoapContact {
+} = {}): SoapContact {
 	return {
 		id,
 		l: folderId,
