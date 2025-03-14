@@ -42,7 +42,7 @@ function ContactEditHeader({ editId, folderId }: ContactEditProps): React.JSX.El
 				padding={{ left: 'large', right: 'large' }}
 			>
 				<Padding right="medium">
-					<Icon size="medium" icon="EditOutline" />
+					<Icon size="medium" icon="Edit2Outline" />
 				</Padding>
 				<Row takeAvailableSpace mainAlignment="flex-start">
 					<Text size="medium">

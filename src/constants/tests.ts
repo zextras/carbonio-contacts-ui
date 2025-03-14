@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
+import { DELETE_PERMANENTLY_ACTION } from './actions';
 import { FOLDERS } from '../carbonio-ui-commons/constants/folders';
 
 type TypeOfEnumeration<T> = T[keyof T];
@@ -20,7 +21,13 @@ export const DISPLAY_ASSERTION = {
 };
 
 export type DisplayAssertionType = TypeOfEnumeration<typeof DISPLAY_ASSERTION>;
+export const DELETE_PERMANENTLY_ACTION_DESCRIPTOR = {
+	icon: DELETE_PERMANENTLY_ACTION.ICON,
+	label: 'Delete Permanently',
+	id: DELETE_PERMANENTLY_ACTION.ID
+};
 
+// TODO check if we can use the ones defined in actions,ts instead
 export const FOLDERS_DESCRIPTORS = {
 	contacts: {
 		id: FOLDERS.CONTACTS,
@@ -64,7 +71,7 @@ export const CONTACT_ACTIONS_DESCRIPTORS = {
 	},
 	deletePermanently: {
 		id: 'deletePermanently',
-		desc: 'Delete contact permanently',
+		desc: 'Delete Permanently',
 		icon: 'DeletePermanentlyOutline'
 	},
 	delete: {
@@ -161,6 +168,8 @@ export const TESTID_SELECTORS = {
 	icons: {
 		save: /icon: SaveOutline/i,
 		trash: /icon: Trash2Outline/i,
+		deletePermanently: /icon: DeletePermanentlyOutline/i,
+		restore: /icon: RestoreOutline/i,
 		contactGroup: /icon: PeopleOutline/i,
 		editChip: 'icon: EditOutline',
 		editDL: 'icon: Edit2Outline',
@@ -197,7 +206,7 @@ export const TESTID_SELECTORS = {
 	membersList: 'members-list',
 	mainList: 'main-list',
 	membersListItem: 'member-list-item',
-	contactsListItem: 'contact-list-item',
+	contactsListItem: 'list-item',
 	snackbar: 'snackbar',
 	listItemContent: 'list-item-content',
 	listBottomElement: 'list-bottom-element',

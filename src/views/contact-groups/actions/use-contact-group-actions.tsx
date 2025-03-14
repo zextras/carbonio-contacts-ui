@@ -5,64 +5,68 @@
  */
 
 import { type Action as DSAction } from '@zextras/carbonio-design-system';
+import { useTranslation } from 'react-i18next';
 
-import { useActionDeleteContactGroup } from './delete-contact-group';
-import { useActionEditCG } from './edit-cg';
-import { useActionSendEmailCG } from './send-email-cg';
-import { UIAction } from '../../../actions/types';
-import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
-import { getFolderIdParts } from '../../../carbonio-ui-commons/helpers/folders';
+import { useContactGroupDeleteAction } from './use-contact-group-delete-action';
+import { useContactGroupEditAction } from './use-contact-group-edit-action';
+import { useContactGroupSendEmailAction } from './use-contact-group-send-email-action';
+import { useMoveContacts } from '../../../actions/common-contacts-actions/use-move-contacts';
+import { useRestoreContacts } from '../../../actions/common-contacts-actions/use-restore-contacts';
+import { useTrashContacts } from '../../../actions/common-contacts-actions/use-trash-contacts';
+import { Action } from '../../../actions/types';
+import { isTrashed } from '../../../carbonio-ui-commons/helpers/folders';
 import { ContactGroup } from '../../../model/contact-group';
 import { getFolderFromContactGroup } from '../utils';
 
-function evaluateContactGroupActions<T extends ContactGroup>(
-	contactGroup: T,
-	actions: Array<UIAction<T, T>>
-): DSAction[] {
-	const orderedActions: DSAction[] = [];
-	actions.forEach((action) => {
-		if (action.canExecute(contactGroup)) {
-			orderedActions.push({
-				id: action.id,
-				label: action.label,
-				onClick: () => {
-					action.execute(contactGroup);
-				},
-				disabled: action.disabled,
-				icon: action.icon,
-				color: action.color
-			});
-		}
+const useMoveContactGroups = (contactGroup: ContactGroup): Action => {
+	const [t] = useTranslation();
+	const modalTitle = t('contact.modal.move_single.title', {
+		contactDesc: contactGroup.title,
+		defaultValue: "Move {{contactDesc}}'s contact"
 	});
-	return orderedActions;
-}
+	return useMoveContacts([contactGroup], modalTitle);
+};
+
+const useRestoreContactGroups = (contactGroup: ContactGroup): Action => {
+	const [t] = useTranslation();
+	const modalTitle = t('contact.modal.restore_single.title', {
+		contactDesc: contactGroup.title,
+		defaultValue: "Restore {{contactDesc}}'s contact"
+	});
+	return useRestoreContacts([contactGroup], modalTitle);
+};
 
 export const useContactGroupActions = (contactGroup: ContactGroup): Array<DSAction> => {
-	const deleteCGAction = useActionDeleteContactGroup();
-	const editCGAction = useActionEditCG();
-	const sendEmailAction = useActionSendEmailCG(contactGroup);
+	const deletePermanentlyContactGroupAction = useContactGroupDeleteAction(contactGroup);
+	const moveContactGroupAction = useMoveContactGroups(contactGroup);
+	const restoreContactsGroupAction = useRestoreContactGroups(contactGroup);
+	const trashContactGroupAction = useTrashContacts([contactGroup]);
+	const editContactGroupAction = useContactGroupEditAction(contactGroup);
+	const sendEmailAction = useContactGroupSendEmailAction(contactGroup);
+
 	const folder = getFolderFromContactGroup(contactGroup);
-	const folderPartsId = getFolderIdParts(contactGroup.parent).id;
 	const isMainAccount = !folder?.perm;
-	if (isMainAccount) {
-		if (folderPartsId === FOLDERS.TRASH) {
-			return evaluateContactGroupActions<ContactGroup>(contactGroup, [deleteCGAction]);
-		}
-		return evaluateContactGroupActions<ContactGroup>(contactGroup, [
-			sendEmailAction,
-			editCGAction,
-			deleteCGAction
-		]);
+	const isSharedFolderWithWritePermission = folder?.perm?.includes('w');
+	const hasWritePermission = isMainAccount || isSharedFolderWithWritePermission;
+
+	if (!folder) {
+		return [];
 	}
-	if (folder?.perm?.includes('w')) {
-		if (folderPartsId === FOLDERS.TRASH) {
-			return evaluateContactGroupActions<ContactGroup>(contactGroup, [deleteCGAction]);
+
+	if (isTrashed({ folder })) {
+		if (hasWritePermission) {
+			return [restoreContactsGroupAction, deletePermanentlyContactGroupAction];
 		}
-		return evaluateContactGroupActions<ContactGroup>(contactGroup, [
-			sendEmailAction,
-			editCGAction,
-			deleteCGAction
-		]);
+		return [];
 	}
-	return evaluateContactGroupActions<ContactGroup>(contactGroup, [sendEmailAction]);
+
+	if (hasWritePermission) {
+		return [
+			sendEmailAction,
+			editContactGroupAction,
+			moveContactGroupAction,
+			trashContactGroupAction
+		];
+	}
+	return [sendEmailAction];
 };

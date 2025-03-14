@@ -13,7 +13,7 @@ import styled from 'styled-components';
 
 import { SearchContactListItem } from './search-contact-list-item';
 import { type SearchResults } from './search-view';
-import { ContactGroupListItemWrapper } from '../../../views/contact-groups/list/contact-group-list-item-wrapper';
+import { ContactGroupListItem } from '../../../views/contact-groups/list/contact-group-list-item';
 import { isGroup } from '../../utils/helpers';
 
 const BorderContainer = styled(Container)`
@@ -59,7 +59,7 @@ export const SearchList = ({
 			map(searchResults.contacts, (contact, index) => {
 				const isActive = itemId === contact.id;
 				if (isGroup(contact)) {
-					return <ContactGroupListItemWrapper contactGroup={contact} />;
+					return <ContactGroupListItem contactGroup={contact} />;
 				}
 				return (
 					<ListItem selected={false} active={isActive} key={contact.id}>

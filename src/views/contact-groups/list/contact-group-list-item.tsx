@@ -3,117 +3,103 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback } from 'react';
+import React, { DragEvent, useCallback, useMemo } from 'react';
 
-import { Action, Container, Row } from '@zextras/carbonio-design-system';
+import { Drag } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
 
-import { ContextualMenu } from '../../../components/contextual-menu';
 import { ListActionIconButton } from '../../../components/list/list-action-icon-button';
-import { CustomIconAvatar, HoverRow } from '../../../components/styled-components';
+import { ListItemActionsWrapper } from '../../../components/list/list-item-actions-wrapper';
+import { ListItemAvatar } from '../../../components/list/list-item-avatar';
+import { ListItemContent } from '../../../components/list/list-item-content';
 import { Text } from '../../../components/Text';
 import { ContactGroup } from '../../../model/contact-group';
+import { useContactGroupActions } from '../actions/use-contact-group-actions';
+import { useRedirectToContactGroup } from '../navigation';
 
 type CGListItemProps = {
 	contactGroup: ContactGroup;
-	onClick?: (id: string) => void;
-	actions: Action[];
+	setDraggedIds?: (ids: Record<string, boolean>) => void;
+	setIsDragging?: (id: boolean) => void;
+	selectedItems?: Record<string, boolean>;
+	dragImageRef?: React.RefObject<HTMLElement>;
+	selecting?: boolean;
+	selected?: boolean;
+	toggle?: (id: string) => void;
 };
 
-const HoverBarContainer = styled(Container)`
-	top: 0;
-	right: 0;
-	display: none;
-	position: absolute;
-	background: linear-gradient(
-		to right,
-		transparent,
-		${({ theme }): string => theme.palette.gray6.hover}
-	);
-	height: 55%;
-	& > * {
-		margin-top: ${({ theme }): string => theme.sizes.padding.small};
-		margin-right: ${({ theme }): string => theme.sizes.padding.small};
-	}
-`;
-
-const CustomHoverRow = styled(HoverRow)`
-	&:hover {
-		background: ${({ theme }): string => theme.palette.gray6.hover};
-		& ${HoverBarContainer} {
-			display: flex;
-		}
-	}
-`;
-
 export const ContactGroupListItem = React.memo<CGListItemProps>(
-	({ onClick, contactGroup, actions }) => {
+	({
+		contactGroup,
+		setDraggedIds,
+		setIsDragging,
+		selectedItems,
+		dragImageRef,
+		selecting,
+		selected,
+		toggle
+	}) => {
 		const [t] = useTranslation();
-		const { id, title, members } = contactGroup;
-		const clickHandler = useCallback<React.MouseEventHandler<HTMLDivElement>>(() => {
-			onClick?.(id);
-		}, [id, onClick]);
-		const preventTextSelection = useCallback<React.MouseEventHandler<HTMLDivElement>>((e) => {
-			if (e.detail > 1) {
-				e.preventDefault();
-			}
-		}, []);
+		const redirectTo = useRedirectToContactGroup();
+
+		const clickHandler = useCallback(() => {
+			redirectTo(contactGroup);
+		}, [contactGroup, redirectTo]);
+		const avatar = {
+			id: contactGroup.id,
+			label: contactGroup.title,
+			icon: 'PeopleOutline'
+		};
+		const actions = useContactGroupActions(contactGroup);
+
+		const hoverActions = actions.map((action) => (
+			<ListActionIconButton key={action.id} action={action} />
+		));
+		const ids = useMemo(() => Object.keys(selectedItems ?? []), [selectedItems]);
+
+		const dragCheck = useCallback(
+			(e: DragEvent, id: string) => {
+				setIsDragging?.(true);
+				if (dragImageRef?.current) {
+					e?.dataTransfer?.setDragImage(dragImageRef.current, 0, 0);
+				}
+				if (selectedItems?.[id]) {
+					setDraggedIds?.(selectedItems);
+				} else {
+					setDraggedIds?.({ [id]: true });
+				}
+			},
+			[setIsDragging, dragImageRef, selectedItems, setDraggedIds]
+		);
 
 		return (
-			<Container orientation="vertical" data-testid={`contact-group-list-item-${id}`}>
-				<Container orientation="horizontal" mainAlignment="flex-start">
-					<ContextualMenu
-						actions={actions}
-						data-testid={`contact-group-list-item-contextual-menu-${id}`}
-					>
-						<CustomHoverRow
-							orientation="horizontal"
-							mainAlignment="flex-start"
-							crossAlignment="unset"
-							onClick={clickHandler}
-							onMouseDown={preventTextSelection}
-						>
-							<Row
-								gap={'0.5rem'}
-								width="fill"
-								wrap="nowrap"
-								mainAlignment={'flex-start'}
-								padding={{ all: 'small' }}
-							>
-								<CustomIconAvatar label={title} icon={'PeopleOutline'} size={'large'} />
-								<Container
-									crossAlignment={'flex-start'}
-									gap={'0.25rem'}
-									minWidth={0}
-									padding={{ left: 'small', right: 'small' }}
-								>
-									<Text overflow="ellipsis" size="small">
-										{title}
-									</Text>
-									<Text overflow="ellipsis" size="small" color={'gray1'}>
-										{t('contactGroupList.addressCount', {
-											count: members.length,
-											defaultValue_one: '{{count}} address',
-											defaultValue_other: `{{count}} addresses`
-										})}
-									</Text>
-								</Container>
-							</Row>
-							<HoverBarContainer
-								orientation="horizontal"
-								mainAlignment="flex-end"
-								crossAlignment="center"
-								padding={{ right: 'small' }}
-							>
-								{actions.map((action) => (
-									<ListActionIconButton key={action.id} action={action} />
-								))}
-							</HoverBarContainer>
-						</CustomHoverRow>
-					</ContextualMenu>
-				</Container>
-			</Container>
+			<Drag
+				type="contact"
+				data={{ ...contactGroup, parentFolderId: contactGroup.parent, selectedIDs: ids }}
+				style={{ display: 'block' }}
+				onDragStart={(e): void => dragCheck(e, contactGroup.id)}
+			>
+				<ListItemActionsWrapper
+					data-testid={`contact-group-list-item-${contactGroup.id}`}
+					contextualMenuActions={actions}
+					hoverActions={hoverActions}
+					onClick={clickHandler}
+				>
+					<ListItemAvatar item={avatar} selected={selected} selecting={selecting} toggle={toggle} />
+					<ListItemContent>
+						<Text overflow="ellipsis" size="small">
+							{contactGroup.title}
+						</Text>
+						<Text overflow="ellipsis" size="small" color={'gray1'}>
+							{t('contactGroupList.addressCount', {
+								count: contactGroup.members.length,
+								defaultValue_one: '{{count}} address',
+								defaultValue_other: `{{count}} addresses`
+							})}
+						</Text>
+					</ListItemContent>
+				</ListItemActionsWrapper>
+			</Drag>
 		);
 	}
 );

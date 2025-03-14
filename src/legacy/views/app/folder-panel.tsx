@@ -19,7 +19,6 @@ import { useSelection } from '../../hooks/useSelection';
 import { searchContactsAsyncThunk } from '../../store/actions/search-contacts';
 import { selectAllContactsInFolder, selectContactsStatus } from '../../store/selectors/contacts';
 import { handleResetContactsSync } from '../../store/slices/contacts-slice';
-import { ActionsContextProvider } from '../../ui-actions/actions-context';
 import { isGroup } from '../../utils/helpers';
 import { SelectPanelActions } from '../folder/select-panel-actions';
 
@@ -69,9 +68,7 @@ export const FolderPanel = (): ReactElement => {
 		[contacts]
 	);
 	const ids = useMemo(() => Object.keys(selected ?? []), [selected]);
-	const selectedContacts = filter(contacts, (contact) => ids.indexOf(contact.id) !== -1)
-		.map((contact) => (isGroup(contact) ? undefined : contact))
-		.filter((contact) => !!contact);
+	const selectedContacts = filter(contacts, (contact) => ids.indexOf(contact.id) !== -1);
 
 	useEffect(() => {
 		if (searchRequestStatus !== undefined) {
@@ -132,55 +129,53 @@ export const FolderPanel = (): ReactElement => {
 		[activeFilter, contacts?.length, dispatch, folderId]
 	);
 	return (
-		<ActionsContextProvider
-			folderId={folderId ?? ''}
-			deselectAll={deselectAll}
-			selectedContacts={selectedContacts}
-			selectedIds={selected}
+		<Container
+			orientation="row"
+			crossAlignment="flex-start"
+			mainAlignment="flex-start"
+			width="fill"
+			height="fill"
+			background={'gray6'}
+			borderRadius="none"
+			data-testid="ContactsListContainer"
+			style={{
+				maxHeight: '100%'
+			}}
 		>
-			<Container
-				orientation="row"
-				crossAlignment="flex-start"
-				mainAlignment="flex-start"
-				width="fill"
-				height="fill"
-				background={'gray6'}
-				borderRadius="none"
-				data-testid="ContactsListContainer"
-				style={{
-					maxHeight: '100%'
-				}}
-			>
-				<Container mainAlignment="flex-start" borderRadius="none">
-					{isSelecting ? (
-						<SelectPanelActions deselectAll={deselectAll} />
-					) : (
-						<Breadcrumbs folderPath={folder?.absFolderPath ?? ''} itemsCount={folder?.n ?? 0}>
-							<Row mainAlignment="flex-end">
-								<Tooltip label={t('label.filter_mode', 'Filter mode')} maxWidth="100%">
-									<MultiButton
-										size={'large'}
-										primaryIcon={selectedViewTypeIcon}
-										type={'ghost'}
-										onClick={noop}
-										color={'gray0'}
-										items={selectOptions}
-										data-testid="select-contacts-view"
-									/>
-								</Tooltip>
-							</Row>
-						</Breadcrumbs>
-					)}
-					<ContactsList
-						onLoadMore={loadMore}
+			<Container mainAlignment="flex-start" borderRadius="none">
+				{isSelecting ? (
+					<SelectPanelActions
 						folderId={folderId ?? ''}
-						contacts={sortedContacts}
-						selected={selected}
-						isSelecting={isSelecting}
-						toggle={toggle}
+						deselectAll={deselectAll}
+						selectedContacts={selectedContacts}
+						selectedIds={selected}
 					/>
-				</Container>
+				) : (
+					<Breadcrumbs folderPath={folder?.absFolderPath ?? ''} itemsCount={folder?.n ?? 0}>
+						<Row mainAlignment="flex-end">
+							<Tooltip label={t('label.filter_mode', 'Filter mode')} maxWidth="100%">
+								<MultiButton
+									size={'large'}
+									primaryIcon={selectedViewTypeIcon}
+									type={'ghost'}
+									onClick={noop}
+									color={'gray0'}
+									items={selectOptions}
+									data-testid="select-contacts-view"
+								/>
+							</Tooltip>
+						</Row>
+					</Breadcrumbs>
+				)}
+				<ContactsList
+					onLoadMore={loadMore}
+					folderId={folderId ?? ''}
+					contacts={sortedContacts}
+					selected={selected}
+					isSelecting={isSelecting}
+					toggle={toggle}
+				/>
 			</Container>
-		</ActionsContextProvider>
+		</Container>
 	);
 };

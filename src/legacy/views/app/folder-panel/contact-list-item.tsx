@@ -3,15 +3,18 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { MouseEventHandler, useCallback, useMemo, DragEvent } from 'react';
+import React, { useCallback, useMemo, DragEvent, ReactNode } from 'react';
 
-import { Container, Drag } from '@zextras/carbonio-design-system';
+import { Drag } from '@zextras/carbonio-design-system';
 import { useNavigate } from 'react-router-dom';
 
-import { ContactListItemActionWrapper } from './contact-list-item-action-wrapper';
-import { ItemAvatar } from './item-avatar';
 import { ItemContent } from './item-content';
 import { useTags } from '../../../../carbonio-ui-commons/store/zustand/tags';
+import { ListActionIconButton } from '../../../../components/list/list-action-icon-button';
+import { ListItemActionsWrapper } from '../../../../components/list/list-item-actions-wrapper';
+import { ListItemAvatar } from '../../../../components/list/list-item-avatar';
+import { useContactContextualMenuActions } from '../../../../views/contacts/actions/use-contact-contextual-menu-actions';
+import { useContactHoverActions } from '../../../../views/contacts/actions/use-contact-hover-actions';
 import { getTagsArray } from '../../../helpers/tags';
 import { Contact } from '../../../types/contact';
 
@@ -33,7 +36,6 @@ export const ContactListItem = ({
 	selected,
 	folderId,
 	selecting,
-	active,
 	toggle,
 	setDraggedIds,
 	setIsDragging,
@@ -45,14 +47,9 @@ export const ContactListItem = ({
 	const navigate = useNavigate();
 	const tags = useMemo(() => getTagsArray(tagsFromStore, item.tags), [item.tags, tagsFromStore]);
 
-	const _onClick = useCallback<MouseEventHandler<HTMLDivElement>>(
-		(e) => {
-			if (!e.isDefaultPrevented()) {
-				navigate(`../folder/${folderId}/contacts/${item.id}`);
-			}
-		},
-		[folderId, item.id, navigate]
-	);
+	const openDisplayer = useCallback(() => {
+		navigate(`../folder/${folderId}/contacts/${item.id}`);
+	}, [folderId, item.id, navigate]);
 
 	const dragCheck = useCallback(
 		(e: DragEvent, id: string) => {
@@ -69,6 +66,17 @@ export const ContactListItem = ({
 		[setIsDragging, dragImageRef, selectedItems, setDraggedIds]
 	);
 
+	const avatarItem = {
+		id: item.id,
+		label: `${item.firstName} ${item.middleName} ${item.lastName}`
+	};
+	const contextualMenuActions = useContactContextualMenuActions(item);
+
+	const hoverActions = useContactHoverActions(item);
+	const hoverActionsIcons = useMemo<ReactNode[]>(
+		() => hoverActions.map((action) => <ListActionIconButton key={action.id} action={action} />),
+		[hoverActions]
+	);
 	return (
 		<Drag
 			type="contact"
@@ -76,14 +84,20 @@ export const ContactListItem = ({
 			style={{ display: 'block' }}
 			onDragStart={(e): void => dragCheck(e, item.id)}
 		>
-			<Container orientation="vertical" data-testid={'contact-list-item'} onClick={_onClick}>
-				<Container orientation="horizontal" mainAlignment="flex-start">
-					<ContactListItemActionWrapper contact={item}>
-						<ItemAvatar item={item} selected={selected} selecting={selecting} toggle={toggle} />
-						<ItemContent item={item} tags={tags} />
-					</ContactListItemActionWrapper>
-				</Container>
-			</Container>
+			<ListItemActionsWrapper
+				data-testid={`contact-list-item-${item.id}`}
+				contextualMenuActions={contextualMenuActions}
+				hoverActions={hoverActionsIcons}
+				onClick={openDisplayer}
+			>
+				<ListItemAvatar
+					item={avatarItem}
+					selected={selected}
+					selecting={selecting}
+					toggle={toggle}
+				/>
+				<ItemContent item={item} tags={tags} />
+			</ListItemActionsWrapper>
 		</Drag>
 	);
 };

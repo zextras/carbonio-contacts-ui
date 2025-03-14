@@ -11,15 +11,16 @@ import {
 	Padding,
 	Icon,
 	Checkbox,
-	Button,
 	useModal,
-	useSnackbar
+	useSnackbar,
+	Action
 } from '@zextras/carbonio-design-system';
 import { TFunction } from 'i18next';
-import { every, find, includes, map, reduce } from 'lodash';
+import { every, find, includes, map, noop, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
+import { TaggableItem } from '../../actions/types';
 import { ZIMBRA_STANDARD_COLORS } from '../../carbonio-ui-commons/constants/utils';
 import { useTags } from '../../carbonio-ui-commons/store/zustand/tags';
 import { Tag, Tags } from '../../carbonio-ui-commons/types/tags';
@@ -44,8 +45,6 @@ export type TagsActions = {
 		label: string;
 	}>;
 };
-
-export type TagsFromStoreType = Record<string, Tag>;
 
 export type TagsActionsParams = {
 	t: TFunction;
@@ -238,16 +237,16 @@ export const TagsDropdownItem = ({
 	);
 };
 
-export const MultiSelectTagsDropdownItem = ({
+const MultiSelectTagsDropdownItem = ({
 	tag,
 	ids,
 	tags,
-	contacts,
+	items,
 	deselectAll,
 	folderId
 }: {
 	tag: Tag;
-	contacts: Array<Contact>;
+	items: Array<TaggableItem>;
 	ids: string[];
 	tags: Tags;
 	multiSelect?: boolean;
@@ -263,7 +262,7 @@ export const MultiSelectTagsDropdownItem = ({
 	const tagsToShow = reduce(
 		tags,
 		(acc: Array<string>, v: Tag) => {
-			const values = map(contacts, (c) => includes(c.tags, v.id));
+			const values = map(items, (c) => includes(c.tags, v.id));
 			if (every(values)) acc.push(v.id);
 			return acc;
 		},
@@ -352,17 +351,17 @@ export const applyMultiTag = ({
 	t,
 	tags,
 	ids,
-	contacts,
+	itemsToTag,
 	deselectAll,
 	folderId
 }: {
 	t: TFunction;
-	contacts: Array<Contact>;
+	itemsToTag: Array<TaggableItem>;
 	tags: Tags;
 	ids: string[];
 	deselectAll?: () => void;
 	folderId?: string;
-}): { id: string; items: ItemType[]; customComponent: ReactElement } => {
+}): Action => {
 	const tagItem = reduce(
 		tags,
 		(acc, v: Tag) => {
@@ -376,7 +375,7 @@ export const applyMultiTag = ({
 						tag={v}
 						tags={tags}
 						ids={ids}
-						contacts={contacts}
+						items={itemsToTag}
 						deselectAll={deselectAll}
 						folderId={folderId}
 					/>
@@ -393,80 +392,7 @@ export const applyMultiTag = ({
 	return {
 		id: TagsActionsType.APPLY,
 		items: tagItem,
-		customComponent: (
-			<Row takeAvailableSpace mainAlignment="flex-start">
-				<Padding right="small">
-					<Icon icon="TagsMoreOutline" />
-				</Padding>
-				<Row takeAvailableSpace mainAlignment="space-between">
-					<Padding right="small">
-						<Text>{t('label.tags', 'Tags')}</Text>
-					</Padding>
-				</Row>
-			</Row>
-		)
-	};
-};
-export const applyTag = ({
-	t,
-	contact,
-	tags,
-	createModal,
-	closeModal
-}: {
-	t: TFunction;
-	contact: any;
-	tags: TagsFromStoreType;
-	createModal: ReturnType<typeof useModal>['createModal'];
-	closeModal: ReturnType<typeof useModal>['closeModal'];
-}): {
-	id: string;
-	items: ItemType[];
-	customComponent: ReactElement;
-	label?: string;
-	icon?: string;
-} => {
-	const tagItem = reduce(
-		tags,
-		(acc, v) => {
-			const item = {
-				id: v.id,
-				label: v.name,
-				icon: 'TagOutline',
-				keepOpen: true,
-				customComponent: <TagsDropdownItem tag={v} contact={contact} />
-			};
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
-			acc.push(item);
-			return acc;
-		},
-		[]
-	);
-	const newTag = {
-		id: 'new_tag',
-		keepOpen: true,
-		customComponent: (
-			<Button
-				label={t('label.new_tag', 'New Tag')}
-				type="outlined"
-				width="fill"
-				size="small"
-				onClick={(ev): void => {
-					createAndApplyTag({ t, contact, createModal, closeModal }).onClick?.(ev);
-				}}
-			/>
-		)
-	};
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
-	tagItem.push(newTag);
-
-	return {
-		id: TagsActionsType.APPLY,
-		items: tagItem,
-		label: t('label.tag', 'Tag'),
-		icon: 'TagsMoreOutline',
+		onClick: noop,
 		customComponent: (
 			<Row takeAvailableSpace mainAlignment="flex-start">
 				<Padding right="small">

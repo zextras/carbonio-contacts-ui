@@ -73,7 +73,7 @@ describe('ContactListItem', () => {
 
 	it('renders the contact item with avatar and content', () => {
 		renderComponent();
-		expect(screen.getByTestId('contact-list-item')).toBeInTheDocument();
+		expect(screen.getByTestId(`contact-list-item-${contact.id}`)).toBeInTheDocument();
 	});
 
 	it('calls navigate on click when not prevented', async () => {
@@ -81,8 +81,10 @@ describe('ContactListItem', () => {
 		(useNavigate as jest.Mock).mockReturnValue(useNavigateSpy);
 		const { user } = renderComponent();
 
-		const listItem = await screen.findByTestId('contact-list-item');
-		await user.hover(listItem);
+		const listItem = await screen.findByTestId(`contact-list-item-${contact.id}`);
+		await act(async () => {
+			await user.hover(listItem);
+		});
 
 		await user.click(listItem);
 
@@ -95,7 +97,7 @@ describe('ContactListItem', () => {
 
 		const { user } = renderComponent();
 
-		const listItem = screen.getByTestId('contact-list-item');
+		const listItem = screen.getByTestId(`contact-list-item-${contact.id}`);
 		act(() => listItem.addEventListener('click', (e) => e.preventDefault()));
 
 		user.click(listItem);
@@ -106,7 +108,7 @@ describe('ContactListItem', () => {
 	it('calls setIsDragging and sets dragged item IDs on drag start', () => {
 		renderComponent({ selectedItems: { '1': true } });
 
-		const listItem = screen.getByTestId('contact-list-item');
+		const listItem = screen.getByTestId(`contact-list-item-${contact.id}`);
 		fireEvent.dragStart(listItem);
 
 		expect(mockSetIsDragging).toHaveBeenCalledWith(true);
@@ -116,7 +118,7 @@ describe('ContactListItem', () => {
 	it('calls setDraggedIds with only the dragged item if it is not already selected', () => {
 		renderComponent({ selectedItems: {} });
 
-		const listItem = screen.getByTestId('contact-list-item');
+		const listItem = screen.getByTestId(`contact-list-item-${contact.id}`);
 		fireEvent.dragStart(listItem);
 
 		expect(mockSetDraggedIds).toHaveBeenCalledWith({ '1': true });

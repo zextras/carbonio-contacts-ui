@@ -25,7 +25,6 @@ import styled from 'styled-components';
 
 import { useAddressBookContextualMenuItems } from './commons/use-address-book-contextual-menu-items';
 import { useActionMoveAddressBook } from '../../../actions/move-address-book';
-import { useActionMoveContacts } from '../../../actions/move-contacts';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { ROOT_NAME } from '../../../carbonio-ui-commons/constants/utils';
 import { isLink, isRoot } from '../../../carbonio-ui-commons/helpers/folders';
@@ -34,6 +33,7 @@ import { DragEnterAction, OnDropActionProps } from '../../../carbonio-ui-commons
 import { CONTACTS_ROUTE } from '../../../constants';
 import { getFolderIconColor, getFolderIconName } from '../../../helpers/folders';
 import { Contact } from '../../types/contact';
+import { useMoveContactsDragAndDrop } from '../../ui-actions/use-move-contacts-drag-and-drop';
 import { getFolderTranslatedName } from '../../utils/helpers';
 
 const FittedRow = styled(Row)`
@@ -64,7 +64,7 @@ const DropDenyOverlayContainer = styled(Container)<{ $folder: Folder }>`
 export const AccordionCustomComponent: FC<{ item: Folder }> = ({ item: folder }) => {
 	const [t] = useTranslation();
 	const accountName = useUserAccount().name;
-	const moveContactAction = useActionMoveContacts();
+	const moveContactAction = useMoveContactsDragAndDrop();
 	const moveAddressBookAction = useActionMoveAddressBook();
 
 	const onDragEnterAction = useCallback(

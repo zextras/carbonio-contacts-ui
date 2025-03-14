@@ -11,7 +11,6 @@ export const CONTACTS_APP_ID = 'carbonio-contacts-ui';
 export const ACTION_IDS = {
 	editDL: 'dl-edit-action',
 	expandDL: 'dl-expand-action',
-	sendEmail: 'send-email-action',
 	sendEmailCG: 'cg-send-email-action',
 	addShareCG: 'cg-add-share',
 	deleteCG: 'cg-delete-action',
@@ -28,12 +27,7 @@ export const ACTION_IDS = {
 	removeAddressBookLink: 'remove-address-book-link-action',
 	exportAddressBook: 'export-address-book-action',
 	importContacts: 'import-contacts-action',
-	showShareInfo: 'show-share-info-action',
-	moveContacts: 'move-contacts-action',
-	restoreContacts: 'restore-contacts-action',
-	trashContacts: 'trash-contacts-action',
-	deleteContacts: 'delete-contacts-action',
-	exportContact: 'export-contact-action'
+	showShareInfo: 'show-share-info-action'
 } as const;
 
 export const CONTACT_BOARD_ID = 'contact-board';

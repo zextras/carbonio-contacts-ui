@@ -14,7 +14,7 @@ import styled from 'styled-components';
 import { ContactListItem } from './contact-list-item';
 import { DragItems } from './drag-items';
 import { EmptyListPanel } from './empty-list-panel';
-import { ContactGroupListItemWrapper } from '../../../../views/contact-groups/list/contact-group-list-item-wrapper';
+import { ContactGroupListItem } from '../../../../views/contact-groups/list/contact-group-list-item';
 import { useAppSelector } from '../../../hooks/redux';
 import { selectFolderHasMore } from '../../../store/slices/contacts-slice';
 import { ContactOrGroup } from '../../../types/contact';
@@ -95,7 +95,10 @@ export const ContactsList = ({
 							data-testid={`custom-list-item-${contact.id}`}
 						>
 							{(): React.JSX.Element => (
-								<ContactGroupListItemWrapper
+								<ContactGroupListItem
+									selected={isSelected}
+									selecting={isSelecting}
+									toggle={toggle}
 									contactGroup={contact}
 									setDraggedIds={setDraggedIds}
 									setIsDragging={setIsDragging}

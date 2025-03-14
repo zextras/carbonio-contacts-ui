@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useMemo, useContext, ReactElement, FC, SyntheticEvent } from 'react';
+import React, { useMemo, ReactElement, FC } from 'react';
 
 import {
 	Container,
@@ -15,16 +15,30 @@ import {
 } from '@zextras/carbonio-design-system';
 import { map, noop } from 'lodash';
 
-import { ActionsContext } from '../../ui-actions/actions-context';
+import { ContactOrGroup } from '../../types/contact';
+import { useMultipleSelectionContactsActions } from '../../ui-actions/use-multiple-selection-contacts-actions';
 
 interface SelectPanelActionsProps {
-	deselectAll?: (e: SyntheticEvent) => void;
+	folderId: string;
+	selectedIds: Record<string, unknown>;
+	selectedContacts: ContactOrGroup[];
+	deselectAll: () => void;
 }
 
-const SelectPanelActions: FC<SelectPanelActionsProps> = ({ deselectAll }): ReactElement => {
-	const { getSecondaryActions } = useContext(ActionsContext);
+const SelectPanelActions: FC<SelectPanelActionsProps> = ({
+	folderId,
+	selectedContacts,
+	selectedIds,
+	deselectAll
+}): ReactElement => {
+	const ids = useMemo(() => Object.keys(selectedIds ?? []), [selectedIds]);
+	const secondaryActions = useMultipleSelectionContactsActions({
+		folderId,
+		deselectAll,
+		selectedContacts,
+		ids
+	});
 
-	const secondaryActions = useMemo(() => getSecondaryActions(), [getSecondaryActions]);
 	const dropDownItems = useMemo(
 		() =>
 			map(secondaryActions, (action) => ({
