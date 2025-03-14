@@ -7,7 +7,7 @@ import produce from 'immer';
 import { create } from 'zustand';
 
 import { ContactGroup } from '../../model/contact-group';
-import { ContactOrGroup } from '../types/contact';
+import { Contact, ContactOrGroup } from '../types/contact';
 
 type ContactsStoreState = {
 	contacts: Record<string, ContactOrGroup>;
@@ -35,6 +35,15 @@ export const useContactGroupById = (contactGroupId: string): ContactGroup | unde
 	const { contacts } = useContactsStore.getState();
 	const exists = contacts[contactGroupId];
 	if (exists && 'members' in exists) {
+		return exists;
+	}
+	return undefined;
+};
+
+export const useContactById = (contactId: string): Contact | undefined => {
+	const { contacts } = useContactsStore.getState();
+	const exists = contacts[contactId];
+	if (exists && !('members' in exists)) {
 		return exists;
 	}
 	return undefined;

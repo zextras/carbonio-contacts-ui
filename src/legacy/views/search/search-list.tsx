@@ -11,10 +11,10 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { SearchContactListItem } from './search-contact-list-item';
 import { ContactGroupListItem } from '../../../views/contact-groups/list/contact-group-list-item';
 import { ContactOrGroup } from '../../types/contact';
 import { isGroup } from '../../utils/helpers';
+import { ContactListItem } from '../app/folder-panel/contact-list-item';
 
 const BorderContainer = styled(Container)`
 	border-bottom: 0.0625rem solid ${({ theme }): string => theme.palette.gray2.regular};
@@ -56,13 +56,14 @@ export const SearchList = ({
 					);
 				}
 				return (
-					<ListItem selected={false} active={isActive} key={contact.id}>
+					<ListItem
+						data-testid={`search-contact-list-item-${contact.id}`}
+						selected={false}
+						active={isActive}
+						key={contact.id}
+					>
 						{(visible: boolean): React.JSX.Element =>
-							visible ? (
-								<SearchContactListItem item={contact} />
-							) : (
-								<div style={{ height: '4rem' }} />
-							)
+							visible ? <ContactListItem item={contact} /> : <div style={{ height: '4rem' }} />
 						}
 					</ListItem>
 				);

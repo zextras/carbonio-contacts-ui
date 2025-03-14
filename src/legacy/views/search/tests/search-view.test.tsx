@@ -15,7 +15,11 @@ import { FOLDERS } from '../../../../carbonio-ui-commons/constants/folders';
 import { createSoapAPIInterceptor } from '../../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { generateSettings } from '../../../../carbonio-ui-commons/test/mocks/settings/settings-generator';
 import { populateFoldersStore } from '../../../../carbonio-ui-commons/test/mocks/store/folders';
-import { screen, setupTest } from '../../../../carbonio-ui-commons/test/test-setup';
+import {
+	makeListItemsVisible,
+	screen,
+	setupTest
+} from '../../../../carbonio-ui-commons/test/test-setup';
 import { CnItem } from '../../../../network/api/types';
 import { createSoapContact, createSoapContactGroupV2 } from '../../../../tests/utils';
 import { SearchContactsRequest, SearchContactsSoapResponse } from '../../../../types';
@@ -23,7 +27,7 @@ import { generateStore } from '../../../tests/generators/store';
 import { type SoapContact } from '../../../types/soap';
 import SearchView from '../search-view';
 
-const setupSearch = ({ contacts }: { contacts: Array<CnItem> }): SearchViewProps => {
+const setupSearch = ({ contacts }: { contacts: Array<CnItem | SoapContact> }): SearchViewProps => {
 	const customSettings: Partial<AccountSettings> = {
 		prefs: {
 			zimbraPrefIncludeTrashInSearch: 'TRUE',
@@ -96,6 +100,29 @@ describe('SearchView', () => {
 		expect(
 			await screen.findByText('Select one or more results to perform actions or display details.')
 		).toBeInTheDocument();
+	});
+	describe('Contacts', () => {
+		it('should display the selected contact in the detail panel', async () => {
+			populateFoldersStore();
+			const email = 'testContact@demo.com';
+			const soapContact = createSoapContact({
+				id: '1',
+				email,
+				folderId: FOLDERS.CONTACTS
+			});
+			const store = generateStore();
+
+			const searchViewProps = setupSearch({ contacts: [soapContact] });
+			const { user } = setupTest(<SearchView {...searchViewProps} />, {
+				store
+			});
+			const listItem = await screen.findByTestId(`search-contact-list-item-${soapContact.id}`);
+			makeListItemsVisible();
+			const clickableItem = await screen.findByText(email);
+			await user.click(clickableItem);
+
+			expect(await screen.findByTestId('contact-displayer')).toBeVisible();
+		});
 	});
 
 	describe('Contact Groups', () => {
