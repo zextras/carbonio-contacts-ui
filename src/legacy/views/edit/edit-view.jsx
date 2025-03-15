@@ -18,7 +18,6 @@ import {
 import { report } from '@zextras/carbonio-shell-ui';
 import { filter, find, map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -35,10 +34,9 @@ import {
 } from '../../../carbonio-ui-commons/helpers/folders';
 import { useFoldersMap } from '../../../carbonio-ui-commons/store/zustand/folder';
 import { CompactView } from '../../commons/contact-compact-view';
-import { useAppSelector } from '../../hooks/redux';
 import { createContact } from '../../store/actions/create-contact';
 import { modifyContact } from '../../store/actions/modify-contact';
-import { selectContact } from '../../store/selectors/contacts';
+import { addContactsToStore, useContactById } from '../../store/contacts';
 import { getFolderTranslatedName } from '../../utils/helpers';
 import { differenceObject } from '../settings/components/utils';
 
@@ -84,8 +82,7 @@ const CustomStringField = ({ name, label, value, dispatch, autoFocus = false }) 
 export default function EditView({ panel, onClose, onTitleChanged }) {
 	const { folderId, editId } = useParams();
 	const navigate = useNavigate();
-	const storeDispatch = useDispatch();
-	const existingContact = useAppSelector((state) => selectContact(state, folderId, editId));
+	const existingContact = useContactById(editId);
 	const [contact, dispatch] = useReducer(reducer);
 	const [compareToContact, setCompareToContact] = useState(existingContact);
 	const [selectFolderId, setSelectFolderId] = useState(FOLDERS.CONTACTS);
@@ -188,11 +185,12 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 	const onSubmit = useCallback(() => {
 		const updatedContact = cleanMultivalueFields(contact);
 		if (!updatedContact.id) {
-			storeDispatch(createContact(updatedContact))
+			createContact(updatedContact)
 				.then((res) => {
-					if (panel && !res.error) {
+					if (panel) {
 						navigate(`../folder/${folderId}/contacts/${res.payload[0].id}`, { replace: true });
-					} else if (res.type.includes('fulfilled')) {
+					} else {
+						addContactsToStore([res]);
 						onClose && onClose();
 						createSnackbar({
 							key: `edit`,
@@ -206,30 +204,19 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 				})
 				.catch(report);
 		} else {
-			storeDispatch(
-				modifyContact({
-					updatedContact,
-					existingContact
-				})
-			)
+			modifyContact({
+				updatedContact,
+				existingContact
+			})
 				.then((res) => {
+					addContactsToStore([res]);
 					if (panel) {
 						navigate(`../folder/${folderId}/contacts/${res.payload[0].id}`, { replace: true });
 					}
 				})
 				.catch(report);
 		}
-	}, [
-		contact,
-		createSnackbar,
-		existingContact,
-		folderId,
-		navigate,
-		onClose,
-		panel,
-		storeDispatch,
-		t
-	]);
+	}, [contact, createSnackbar, existingContact, folderId, navigate, onClose, panel, t]);
 
 	const defaultTypes = useMemo(
 		() => [

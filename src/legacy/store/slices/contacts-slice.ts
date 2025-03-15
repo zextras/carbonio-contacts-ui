@@ -9,19 +9,12 @@ import { INITIAL_STATE } from './constants';
 import { SEARCHED_FOLDER_STATE_STATUS } from '../../../constants';
 import { State } from '../../types/store';
 import { contactAction } from '../actions/contact-action';
-import { createContact } from '../actions/create-contact';
 import { folderAction } from '../actions/folder-action';
-import { modifyContact } from '../actions/modify-contact';
 import {
 	contactActionFulFilled,
 	contactActionPending,
 	contactActionRejected
 } from '../reducers/contact-action';
-import {
-	createContactFulFilled,
-	createContactPending,
-	createContactRejected
-} from '../reducers/create-contact';
 import { folderActionPending, folderActionRejected } from '../reducers/folder-action';
 import {
 	handleDeletedContactsSyncReducer,
@@ -29,11 +22,6 @@ import {
 	handleModifiedContactsSyncReducer,
 	handleResetContactsSyncReducer
 } from '../reducers/handle-contacts-sync';
-import {
-	modifyContactFulFilled,
-	modifyContactPending,
-	modifyContactRejected
-} from '../reducers/modify-contact';
 
 export const contactsSlice = createSlice({
 	name: 'contacts',
@@ -45,14 +33,6 @@ export const contactsSlice = createSlice({
 		handleResetContactsSync: handleResetContactsSyncReducer
 	},
 	extraReducers: (builder) => {
-		builder.addCase(createContact.pending, createContactPending);
-		builder.addCase(createContact.fulfilled, createContactFulFilled);
-		builder.addCase(createContact.rejected, createContactRejected);
-
-		builder.addCase(modifyContact.pending, modifyContactPending);
-		builder.addCase(modifyContact.fulfilled, modifyContactFulFilled);
-		builder.addCase(modifyContact.rejected, modifyContactRejected);
-
 		builder.addCase(contactAction.pending, contactActionPending);
 		builder.addCase(contactAction.fulfilled, contactActionFulFilled);
 		builder.addCase(contactAction.rejected, contactActionRejected);
