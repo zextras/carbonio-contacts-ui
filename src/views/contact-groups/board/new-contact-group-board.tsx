@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
-import { useAppDispatch } from '../../../legacy/hooks/redux';
+import { addContactsToStore } from '../../../legacy/store/contacts';
 import {
 	CommonContactGroupBoard,
 	isContactGroupNameInvalid
@@ -29,22 +29,13 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 	const initialName = t('board.newContactGroup.name', 'New Group');
 	const [folderId, setFolderId] = useState(FOLDERS.CONTACTS);
 	const [nameValue, setNameValue] = useState(initialName);
-	const dispatch = useAppDispatch();
 
 	const [memberListEmails, setMemberListEmails] = useState<string[]>([]);
 
 	const onSave = useCallback(() => {
-		dispatch(createContactGroup({ title: nameValue, members: memberListEmails, folderId })).then(
-			(res) => {
-				if ('error' in res) {
-					createSnackbar({
-						key: new Date().toLocaleString(),
-						severity: 'error',
-						label: t('label.error_try_again', 'Something went wrong, please try again')
-					});
-					return;
-				}
-				const contactGroup = res.payload;
+		createContactGroup({ title: nameValue, members: memberListEmails, folderId })
+			.then((contactGroup) => {
+				addContactsToStore([contactGroup]);
 				const folder = getFolderFromContactGroup(contactGroup);
 				if (pathname.includes(CONTACT_GROUPS_PATH)) {
 					const element = window.document.getElementById(contactGroup.id);
@@ -54,7 +45,6 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 					folder &&
 						navigate(`/contacts/folder/${folder.id}/${CONTACT_GROUPS_PATH}/${contactGroup.id}`);
 				}
-
 				createSnackbar({
 					key: new Date().toLocaleString(),
 					severity: 'success',
@@ -64,19 +54,15 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 					)
 				});
 				closeBoard();
-			}
-		);
-	}, [
-		dispatch,
-		nameValue,
-		memberListEmails,
-		folderId,
-		pathname,
-		createSnackbar,
-		t,
-		closeBoard,
-		navigate
-	]);
+			})
+			.catch(() => {
+				createSnackbar({
+					key: new Date().toLocaleString(),
+					severity: 'error',
+					label: t('label.error_try_again', 'Something went wrong, please try again')
+				});
+			});
+	}, [nameValue, memberListEmails, folderId, pathname, createSnackbar, t, closeBoard, navigate]);
 
 	return (
 		<CommonContactGroupBoard
