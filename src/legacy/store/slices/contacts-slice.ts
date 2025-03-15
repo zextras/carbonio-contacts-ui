@@ -7,13 +7,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { INITIAL_STATE } from './constants';
 import { SEARCHED_FOLDER_STATE_STATUS } from '../../../constants';
-import { modifyContactGroup } from '../../../network/api/modify-contact';
 import { createContactGroup } from '../../../views/contact-groups/api/create-contact-group';
-import {
-	modifyContactGroupFulFilled,
-	modifyContactGroupPending,
-	modifyContactGroupRejected
-} from '../../../views/contact-groups/api/modify-contact-group';
 import { State } from '../../types/store';
 import { contactAction } from '../actions/contact-action';
 import { createContact } from '../actions/create-contact';
@@ -75,10 +69,6 @@ export const contactsSlice = createSlice({
 		builder.addCase(createContactGroup.fulfilled, createContactGroupFulFilled);
 		builder.addCase(createContactGroup.pending, createContactGroupPending);
 		builder.addCase(createContactGroup.rejected, createContactGroupRejected);
-
-		builder.addCase(modifyContactGroup.fulfilled, modifyContactGroupFulFilled);
-		builder.addCase(modifyContactGroup.pending, modifyContactGroupPending);
-		builder.addCase(modifyContactGroup.rejected, modifyContactGroupRejected);
 	}
 });
 

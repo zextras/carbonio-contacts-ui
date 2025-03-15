@@ -10,7 +10,7 @@ import { difference, xor } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { useGetContactGroupFromBoardId } from '../../../hooks/use-get-contact-group-from-board-id';
-import { useAppDispatch } from '../../../legacy/hooks/redux';
+import { addContactsToStore } from '../../../legacy/store/contacts';
 import { ContactGroup } from '../../../model/contact-group';
 import { modifyContactGroup } from '../../../network/api/modify-contact';
 import {
@@ -25,7 +25,6 @@ const InnerEditContactGroupBoard = ({
 }): React.JSX.Element => {
 	const [t] = useTranslation();
 
-	const dispatch = useAppDispatch();
 	const createSnackbar = useSnackbar();
 	const [nameValue, setNameValue] = useState(contactGroup.title);
 
@@ -35,15 +34,24 @@ const InnerEditContactGroupBoard = ({
 		const addedMembers = difference(memberListEmails, contactGroup.members);
 		const removedMembers = difference(contactGroup.members, memberListEmails);
 
-		dispatch(
-			modifyContactGroup({
-				id: contactGroup.id,
-				addedMembers: addedMembers.length > 0 ? addedMembers : undefined,
-				removedMembers: removedMembers.length > 0 ? removedMembers : undefined,
-				name: contactGroup.title !== nameValue ? nameValue : undefined
+		modifyContactGroup({
+			id: contactGroup.id,
+			addedMembers: addedMembers.length > 0 ? addedMembers : undefined,
+			removedMembers: removedMembers.length > 0 ? removedMembers : undefined,
+			name: contactGroup.title !== nameValue ? nameValue : undefined
+		})
+			.then((updatedGroup) => {
+				addContactsToStore([updatedGroup]);
+				createSnackbar({
+					key: new Date().toLocaleString(),
+					severity: 'success',
+					label: t(
+						'board.editContactGroup.snackbar.contact_group_edited',
+						'Group successfully updated'
+					)
+				});
 			})
-		).then((response) => {
-			if ('error' in response) {
+			.catch(() => {
 				createSnackbar({
 					key: new Date().toLocaleString(),
 					severity: 'error',
@@ -52,23 +60,12 @@ const InnerEditContactGroupBoard = ({
 						'Something went wrong saving the edits, try again'
 					)
 				});
-				return;
-			}
-			createSnackbar({
-				key: new Date().toLocaleString(),
-				severity: 'success',
-				label: t(
-					'board.editContactGroup.snackbar.contact_group_edited',
-					'Group successfully updated'
-				)
 			});
-		});
 	}, [
 		contactGroup.id,
 		contactGroup.members,
 		contactGroup.title,
 		createSnackbar,
-		dispatch,
 		memberListEmails,
 		nameValue,
 		t
