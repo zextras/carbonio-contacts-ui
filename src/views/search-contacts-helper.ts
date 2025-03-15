@@ -3,7 +3,8 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { soapFetch } from '../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
+
+import { soapFetch } from '@zextras/carbonio-shell-ui';
 
 export const searchContactsHelper = ({
 	query,
