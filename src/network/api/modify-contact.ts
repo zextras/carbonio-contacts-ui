@@ -22,7 +22,7 @@ export type ModifyContactResponse = GenericSoapPayload<typeof JSNS.mail> & {
 	cn: Array<CnItem>;
 };
 
-export const modifyContact = ({
+const modifyContact = ({
 	id,
 	addedMembers,
 	removedMembers,
