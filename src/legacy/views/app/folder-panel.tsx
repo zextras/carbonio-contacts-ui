@@ -63,6 +63,7 @@ export const FolderPanel = (): ReactElement => {
 	);
 	const [searchResults, setSearchResults] = useState<SearchResults>(initialState);
 
+	console.log(searchResults.contacts);
 	const searchContacts = useContactsById(searchResults.contacts).filter(
 		(contact: ContactOrGroup) => contact.parent === folderId
 	);
@@ -98,13 +99,14 @@ export const FolderPanel = (): ReactElement => {
 					offset: (offset ?? 0) + 100,
 					sortBy: sortBy ?? 'nameAsc'
 				}))
-				.then((r) => {
-					const contactIds = r.contacts.map((c) => c.id);
-					addContactsToStore(r.contacts);
+				.then((searchResult) => {
+					console.log('received new contacts', searchResult.contacts);
+					const contactIds = searchResult.contacts.map((c) => c.id);
 					setSearchResults({
-						...r,
+						...searchResult,
 						contacts: contactIds
 					});
+					addContactsToStore(searchResult.contacts);
 				})
 				.finally(() => {
 					loading.current = false;
@@ -126,6 +128,7 @@ export const FolderPanel = (): ReactElement => {
 	useEffect(() => {
 		if (query !== prevQuery.current) {
 			prevQuery.current = query;
+			console.log('reset search');
 			searchQuery(query, true);
 		}
 	}, [activeFilter, folderId, query, searchQuery]);
@@ -139,8 +142,6 @@ export const FolderPanel = (): ReactElement => {
 			searchQuery(query, false);
 		}
 	}, [query, searchQuery, searchResults.more]);
-
-	const canLoadMore = searchResults.more;
 
 	const selectOptions = [
 		{
@@ -210,7 +211,7 @@ export const FolderPanel = (): ReactElement => {
 					</Breadcrumbs>
 				)}
 				<ContactsList
-					onListBottom={loadMore}
+					onListBottom={searchResults.more ? loadMore : undefined}
 					folderId={folderId ?? ''}
 					contacts={sortedContacts}
 					selected={selected}
