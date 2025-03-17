@@ -7,6 +7,7 @@ import React, { FC, Suspense, useCallback, useEffect, useMemo, useRef, useState 
 
 import { Container, Spinner } from '@zextras/carbonio-design-system';
 import type { SearchViewProps } from '@zextras/carbonio-search-ui';
+import { soapFetch } from '@zextras/carbonio-shell-ui';
 import { map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { Route, Routes } from 'react-router-dom';
@@ -18,7 +19,6 @@ import { SearchResults } from './types';
 import { isTrash } from '../../../carbonio-ui-commons/helpers/folders';
 import { useUpdateView } from '../../../carbonio-ui-commons/hooks/use-update-view';
 import { useFoldersMap } from '../../../carbonio-ui-commons/store/zustand/folder';
-import { soapFetch } from '../../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
 import { Folder } from '../../../carbonio-ui-commons/types/folder';
 import { usePrefs } from '../../../carbonio-ui-commons/utils/use-prefs';
 import { ContactGroupDisplayerWrapper } from '../../../views/contact-groups/displayer/contact-group-displayer-wrapper';
