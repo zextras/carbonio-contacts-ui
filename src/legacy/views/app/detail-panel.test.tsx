@@ -17,6 +17,7 @@ import { screen, setupTest } from '../../../carbonio-ui-commons/test/test-setup'
 import { JEST_MOCKED_ERROR, TESTID_SELECTORS } from '../../../constants/tests';
 import { buildSoapError } from '../../../tests/utils';
 import * as modifyContactApi from '../../store/actions/modify-contact';
+import { useContactsStoreForTesting } from '../../store/contacts';
 import { generateStore } from '../../tests/generators/store';
 import { State } from '../../types/store';
 
@@ -29,36 +30,31 @@ describe('Detail panel', () => {
 			const folderId = FOLDERS.CONTACTS;
 			const oldName = faker.person.firstName();
 			const newName = faker.person.firstName();
-			const preloadedState: Partial<State> = {
-				contacts: {
-					contacts: {
-						[folderId]: [
-							{
-								fileAsStr: oldName,
-								URL: {},
-								address: {},
-								company: faker.company.name(),
-								department: faker.string.alpha(10),
-								email: {},
-								firstName: oldName,
-								id: contactId,
-								image: faker.string.alpha(10),
-								jobTitle: faker.person.jobTitle(),
-								lastName: faker.person.lastName(),
-								middleName: faker.person.middleName(),
-								namePrefix: faker.string.alpha(10),
-								nameSuffix: faker.string.alpha(10),
-								nickName: faker.string.alpha(10),
-								notes: faker.string.alpha(10),
-								parent: folderId,
-								phone: {}
-							}
-						]
-					},
-					status: {},
-					searchedInFolder: {}
-				}
+			const contact = {
+				fileAsStr: oldName,
+				URL: {},
+				address: {},
+				company: faker.company.name(),
+				department: faker.string.alpha(10),
+				email: {},
+				firstName: oldName,
+				id: contactId,
+				image: faker.string.alpha(10),
+				jobTitle: faker.person.jobTitle(),
+				lastName: faker.person.lastName(),
+				middleName: faker.person.middleName(),
+				namePrefix: faker.string.alpha(10),
+				nameSuffix: faker.string.alpha(10),
+				nickName: faker.string.alpha(10),
+				notes: faker.string.alpha(10),
+				parent: folderId,
+				phone: {}
 			};
+			useContactsStoreForTesting.setState({
+				contacts: {
+					[contact.id]: contact
+				}
+			});
 			getSetupServer().use(
 				http.post('/service/soap/ModifyContactRequest', async () =>
 					HttpResponse.json({
@@ -84,7 +80,7 @@ describe('Detail panel', () => {
 					})
 				)
 			);
-			const store = generateStore(preloadedState);
+			const store = generateStore();
 			const { user } = setupTest(<DetailPanel />, {
 				initialEntries: [`/folder/${folderId}/edit/${contactId}`],
 				store

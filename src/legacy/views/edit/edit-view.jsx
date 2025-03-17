@@ -38,6 +38,7 @@ import { createContact } from '../../store/actions/create-contact';
 import { modifyContact } from '../../store/actions/modify-contact';
 import { addContactsToStore, useContactById } from '../../store/contacts';
 import { getFolderTranslatedName } from '../../utils/helpers';
+import { normalizeContactsFromSoap } from '../../utils/normalizations/normalize-contact-from-soap';
 import { differenceObject } from '../settings/components/utils';
 
 const ItalicText = styled(Text)`
@@ -188,9 +189,10 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 			createContact(updatedContact)
 				.then((res) => {
 					if (panel) {
-						navigate(`../folder/${folderId}/contacts/${res.payload[0].id}`, { replace: true });
+						navigate(`../folder/${folderId}/contacts/${res.id}`, { replace: true });
 					} else {
-						addContactsToStore([res]);
+						const normalizedContacts = normalizeContactsFromSoap([res]);
+						addContactsToStore(normalizedContacts);
 						onClose && onClose();
 						createSnackbar({
 							key: `edit`,
@@ -205,18 +207,18 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 				.catch(report);
 		} else {
 			modifyContact({
-				updatedContact,
-				existingContact
+				updatedContact
 			})
 				.then((res) => {
-					addContactsToStore([res]);
+					const normalizedContacts = normalizeContactsFromSoap([res]);
+					addContactsToStore(normalizedContacts);
 					if (panel) {
-						navigate(`../folder/${folderId}/contacts/${res.payload[0].id}`, { replace: true });
+						navigate(`../folder/${folderId}/contacts/${res.id}`, { replace: true });
 					}
 				})
 				.catch(report);
 		}
-	}, [contact, createSnackbar, existingContact, folderId, navigate, onClose, panel, t]);
+	}, [contact, createSnackbar, folderId, navigate, onClose, panel, t]);
 
 	const defaultTypes = useMemo(
 		() => [
