@@ -8,13 +8,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { INITIAL_STATE } from './constants';
 import { SEARCHED_FOLDER_STATE_STATUS } from '../../../constants';
 import { State } from '../../types/store';
-import { contactAction } from '../actions/contact-action';
 import { folderAction } from '../actions/folder-action';
-import {
-	contactActionFulFilled,
-	contactActionPending,
-	contactActionRejected
-} from '../reducers/contact-action';
 import { folderActionPending, folderActionRejected } from '../reducers/folder-action';
 import {
 	handleDeletedContactsSyncReducer,
@@ -33,10 +27,6 @@ export const contactsSlice = createSlice({
 		handleResetContactsSync: handleResetContactsSyncReducer
 	},
 	extraReducers: (builder) => {
-		builder.addCase(contactAction.pending, contactActionPending);
-		builder.addCase(contactAction.fulfilled, contactActionFulFilled);
-		builder.addCase(contactAction.rejected, contactActionRejected);
-
 		builder.addCase(folderAction.pending, folderActionPending);
 		builder.addCase(folderAction.rejected, folderActionRejected);
 	}

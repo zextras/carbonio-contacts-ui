@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { NameSpace } from '../../types/utils';
+import { MakeRequired, NameSpace } from '../../types/utils';
 
 export type IFolderView =
 	| 'search folder'
@@ -131,6 +131,8 @@ export type SoapContact = {
 		cn?: Array<SoapContact & { memberOf?: string }>;
 	}>;
 };
+
+export type PartialSoapContactWithId = MakeRequired<Partial<SoapContact>, 'id'>;
 
 type ContactGroupMemberType =
 	/** reference to another contact */

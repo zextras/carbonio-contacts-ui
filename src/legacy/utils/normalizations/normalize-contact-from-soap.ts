@@ -28,7 +28,7 @@ import {
 	ContactUrlMap,
 	ContactUrlType
 } from '../../types/contact';
-import { SoapContact } from '../../types/soap';
+import { PartialSoapContactWithId, SoapContact } from '../../types/soap';
 
 const MAIL_REG = /^email(\d*)$/;
 const PHONE_REG = /^(.*)Phone(\d*)$/;
@@ -70,9 +70,9 @@ function getParts(key: string): [ContactAddressType, keyof ContactAddress, numbe
 	];
 }
 
-function normalizeContactAddresses(c: SoapContact): ContactAddressMap {
+function normalizeContactAddressesKV(attrs: { [k: string]: string }): ContactAddressMap {
 	return reduce(
-		c._attrs as { [k: string]: string },
+		attrs,
 		(r: { [id: string]: ContactAddress }, attr: string, key) => {
 			if (ADDR_PART_REG.test(key)) {
 				const [type, subType, index] = getParts(key);
@@ -88,10 +88,12 @@ function normalizeContactAddresses(c: SoapContact): ContactAddressMap {
 		{}
 	);
 }
-
-function normalizeContactMails(c: SoapContact): ContactEmailMap {
+function normalizeContactAddresses(c: SoapContact): ContactAddressMap {
+	return normalizeContactAddressesKV(c._attrs as { [k: string]: string });
+}
+function normalizeContactMailsKV(attrs: SoapContact['_attrs']): ContactEmailMap {
 	return reduce(
-		pickBy<string>(c._attrs, (v, k) => MAIL_REG.test(k)),
+		pickBy<string>(attrs, (v, k) => MAIL_REG.test(k)),
 		(acc, v, k) => ({
 			...acc,
 			[k]: {
@@ -102,9 +104,12 @@ function normalizeContactMails(c: SoapContact): ContactEmailMap {
 	);
 }
 
-function normalizeContactPhones(c: SoapContact): ContactPhoneMap {
+function normalizeContactMails(c: SoapContact): ContactEmailMap {
+	return normalizeContactMailsKV(c._attrs);
+}
+function normalizeContactPhonesKV(attrs: SoapContact['_attrs']): ContactPhoneMap {
 	return reduce(
-		pickBy<string>(c._attrs, (v, k) => PHONE_REG.test(k)),
+		pickBy<string>(attrs, (v, k) => PHONE_REG.test(k)),
 		(acc, v, k) => ({
 			...acc,
 			[k]: {
@@ -116,9 +121,13 @@ function normalizeContactPhones(c: SoapContact): ContactPhoneMap {
 	);
 }
 
-function normalizeContactUrls(c: SoapContact): ContactUrlMap {
+function normalizeContactPhones(c: SoapContact): ContactPhoneMap {
+	return normalizeContactPhonesKV(c._attrs);
+}
+
+function normalizeContactUrlsKV(attrs: SoapContact['_attrs']): ContactUrlMap {
 	return reduce(
-		pickBy<string>(c._attrs, (v, k) => URL_REG.test(k)),
+		pickBy<string>(attrs, (v, k) => URL_REG.test(k)),
 		(acc, v, k) => ({
 			...acc,
 			[k]: {
@@ -128,6 +137,9 @@ function normalizeContactUrls(c: SoapContact): ContactUrlMap {
 		}),
 		{}
 	);
+}
+function normalizeContactUrls(c: SoapContact): ContactUrlMap {
+	return normalizeContactUrlsKV(c._attrs);
 }
 
 export function normalizeContactsFromSoap(contact: SoapContact[]): ContactOrGroup[] {
@@ -177,45 +189,48 @@ export function normalizeContactsFromSoap(contact: SoapContact[]): ContactOrGrou
 }
 
 export function normalizeSyncContactsFromSoap(
-	contact: SoapContact[]
-): Array<Partial<Contact>> | undefined {
+	contact: Array<PartialSoapContactWithId>
+): Array<Partial<Contact> & { id: string }> | undefined {
 	return isEmpty(contact)
 		? undefined
 		: reduce(
 				contact,
 				(r, c) => {
 					if (c._attrs?.type === 'group') return r;
-					r.push(
-						omitBy<Partial<Contact>>(
-							{
-								parent: c.l,
-								id: c.id,
-								tags: !isNil(c.t) ? filter(c.t.split(','), (t) => t !== '') : [],
-								fileAsStr: c.fileAsStr,
-								address: c._attrs ? normalizeContactAddresses(c) : undefined,
-								company: c._attrs?.company,
-								department: c._attrs?.department,
-								displayName: c._attrs?.displayName,
-								email: c._attrs ? normalizeContactMails(c) : undefined,
-								firstName: c._attrs?.firstName || c._attrs?.givenName,
-								middleName: c._attrs?.middleName,
-								lastName: c._attrs?.lastName,
-								nickName: c._attrs?.nickname,
-								image: c._attrs?.image
-									? `/service/home/~/?auth=co&id=${c.id}&part=${c._attrs.image.part}&max_width=32&max_height=32`
-									: undefined,
-								jobTitle: c._attrs?.jobTitle,
-								notes: c._attrs?.notes,
-								phone: c._attrs ? normalizeContactPhones(c) : undefined,
-								nameSuffix: c._attrs?.nameSuffix,
-								namePrefix: c._attrs?.namePrefix,
-								URL: c._attrs ? normalizeContactUrls(c) : undefined
-							},
-							isNil
-						)
+					const partialContactData = omitBy<Partial<Contact>>(
+						{
+							parent: c.l,
+							tags: !isNil(c.t) ? filter(c.t.split(','), (t) => t !== '') : [],
+							fileAsStr: c.fileAsStr,
+							address: c._attrs
+								? normalizeContactAddressesKV(c._attrs as { [k: string]: string })
+								: undefined,
+							company: c._attrs?.company,
+							department: c._attrs?.department,
+							displayName: c._attrs?.displayName,
+							email: c._attrs ? normalizeContactMailsKV(c._attrs) : undefined,
+							firstName: c._attrs?.firstName || c._attrs?.givenName,
+							middleName: c._attrs?.middleName,
+							lastName: c._attrs?.lastName,
+							nickName: c._attrs?.nickname,
+							image: c._attrs?.image
+								? `/service/home/~/?auth=co&id=${c.id}&part=${c._attrs.image.part}&max_width=32&max_height=32`
+								: undefined,
+							jobTitle: c._attrs?.jobTitle,
+							notes: c._attrs?.notes,
+							phone: c._attrs ? normalizeContactPhonesKV(c._attrs) : undefined,
+							nameSuffix: c._attrs?.nameSuffix,
+							namePrefix: c._attrs?.namePrefix,
+							URL: c._attrs ? normalizeContactUrlsKV(c._attrs) : undefined
+						},
+						isNil
 					);
+					r.push({
+						id: c.id,
+						...partialContactData
+					});
 					return r;
 				},
-				[] as Array<Partial<Contact>>
+				[] as Array<Partial<Contact> & { id: string }>
 			);
 }

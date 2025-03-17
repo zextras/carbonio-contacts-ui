@@ -5,7 +5,7 @@
  */
 import { useEffect, useState } from 'react';
 
-import { useNotify } from '@zextras/carbonio-shell-ui';
+import { SoapNotify, useNotify } from '@zextras/carbonio-shell-ui';
 import { forEach, isEmpty, sortBy } from 'lodash';
 
 import { useFolderStore } from '../../../carbonio-ui-commons/store/zustand/folder';
@@ -13,13 +13,23 @@ import { useTagStore } from '../../../carbonio-ui-commons/store/zustand/tags';
 import { folderWorker, tagsWorker } from '../../../carbonio-ui-commons/worker';
 import { useAppDispatch } from '../../hooks/redux';
 import {
-	handleCreatedContactsSync,
-	handleDeletedContactsSync,
-	handleModifiedContactsSync
-} from '../../store/slices/contacts-slice';
-import { normalizeSyncContactsFromSoap } from '../../utils/normalizations/normalize-contact-from-soap';
+	addContactsToStore,
+	removeContactsFromStore,
+	updateContactsInStore
+} from '../../store/contacts';
+import { PartialSoapContactWithId, SoapContact } from '../../types/soap';
+import {
+	normalizeContactsFromSoap,
+	normalizeSyncContactsFromSoap
+} from '../../utils/normalizations/normalize-contact-from-soap';
 
-function handleFoldersNotify(seq, notifyList, notify, worker, store) {
+function handleFoldersNotify(
+	seq: number,
+	notifyList: SoapNotify[],
+	notify: SoapNotify,
+	worker: Worker,
+	store: typeof useFolderStore
+): void {
 	const isNotifyRelatedToFolders =
 		!isEmpty(notifyList) &&
 		(notify?.created?.folder ||
@@ -36,7 +46,7 @@ function handleFoldersNotify(seq, notifyList, notify, worker, store) {
 		});
 	}
 }
-export const useSyncDataHandler = () => {
+export const useSyncDataHandler = (): void => {
 	const notifyList = useNotify();
 	const [seq, setSeq] = useState(-1);
 	const dispatch = useAppDispatch();
@@ -52,15 +62,24 @@ export const useSyncDataHandler = () => {
 					state: useTagStore.getState().tags
 				});
 
-				if (notify.created?.cn) {
-					dispatch(handleCreatedContactsSync(normalizeSyncContactsFromSoap(notify.created.cn)));
+				const created = notify?.created;
+				const { modified } = notify;
+				if (created && 'cn' in created) {
+					const createdContacts = created.cn as Array<SoapContact>;
+					if (createdContacts.length > 0) {
+						const normalizedCreatedContacts = normalizeContactsFromSoap(createdContacts);
+						addContactsToStore(normalizedCreatedContacts);
+					}
 				}
-				if (notify.modified?.cn) {
-					const norm = normalizeSyncContactsFromSoap(notify.modified.cn);
-					dispatch(handleModifiedContactsSync(norm));
+				if (modified && 'cn' in modified) {
+					const modifiedContacts = modified.cn as Array<PartialSoapContactWithId>;
+					if (modifiedContacts.length > 0) {
+						const partialContacts = normalizeSyncContactsFromSoap(modifiedContacts);
+						partialContacts && updateContactsInStore(partialContacts);
+					}
 				}
 				if (notify.deleted?.length > 0) {
-					dispatch(handleDeletedContactsSync(notify.deleted));
+					removeContactsFromStore(notify.deleted);
 				}
 
 				setSeq(notify.seq);

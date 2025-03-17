@@ -516,6 +516,7 @@ describe('Folder panel', () => {
 						}
 					});
 					await user.click(tag);
+					await screen.findByText('"testTag" tag applied');
 					const contactActionRequest = await soapAPIInterceptor;
 					expect(contactActionRequest.action).toEqual(
 						expect.objectContaining({ id: soapContact.id, tn: 'testTag', op: 'tag' })

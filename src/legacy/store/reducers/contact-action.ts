@@ -3,44 +3,39 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { cloneDeep, map } from 'lodash';
 
-import {
-	addContactsToStore,
-	findContactsInStore,
-	removeContactsFromStore
-} from '../../utils/helpers';
+import { removeContactsFromStore, updateContactsParent } from '../contacts';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export function contactActionPending(state: any, request: any): void {
-	const { op, contactsIDs, destinationID } = request.meta.arg;
-
-	if (state.contacts) {
-		state.status.pendingActions = true;
-
-		const contacts = map(findContactsInStore(state, contactsIDs), (contact) => ({
-			...contact,
-			parent: destinationID
-		}));
-		// eslint-disable-next-line no-param-reassign
-		request.meta.arg.prevState = cloneDeep(state.contacts);
-		switch (op) {
-			case 'move':
-				if (contactsIDs) {
-					removeContactsFromStore(state, contactsIDs);
-				}
-				if (contacts) {
-					addContactsToStore(state, contacts);
-				}
-				break;
-			case 'delete':
-				if (contactsIDs) {
-					removeContactsFromStore(state, contactsIDs);
-				}
-				break;
-			default:
-				break;
-		}
+export function handleContactAction({
+	op,
+	contactsIDs,
+	destinationId
+}: {
+	op: string;
+	contactsIDs: Array<string>;
+	destinationId?: string;
+}): void {
+	switch (op) {
+		case 'move':
+			if (contactsIDs) {
+				removeContactsFromStore(contactsIDs);
+			}
+			if (contactsIDs.length > 0 && destinationId) {
+				const contactsWithNewParent = contactsIDs.map((contactID) => ({
+					id: contactID,
+					newParent: destinationId
+				}));
+				updateContactsParent(contactsWithNewParent);
+			}
+			break;
+		case 'delete':
+			if (contactsIDs) {
+				removeContactsFromStore(contactsIDs);
+			}
+			break;
+		default:
+			break;
 	}
 }
 

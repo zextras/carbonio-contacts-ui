@@ -67,13 +67,11 @@ const CreateUpdateTagModal: FC<ComponentProps> = ({
 
 	const applyNewlyCreatedTag = useCallback(
 		({ id, tagName }: { id: string; tagName: string }) => {
-			dispatch(
-				contactAction({
-					op: 'tag',
-					contactsIDs: [id],
-					tagName
-				})
-			) // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+			contactAction({
+				op: 'tag',
+				contactsIDs: [id],
+				tagName
+			}) // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-ignore
 				.then(() => {
 					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -103,7 +101,7 @@ const CreateUpdateTagModal: FC<ComponentProps> = ({
 					});
 				});
 		},
-		[createSnackbar, dispatch, t]
+		[createSnackbar, t]
 	);
 	const onCreate = useCallback(
 		() =>
