@@ -62,8 +62,6 @@ export const FolderPanel = (): ReactElement => {
 		[]
 	);
 	const [searchResults, setSearchResults] = useState<SearchResults>(initialState);
-
-	console.log(searchResults.contacts);
 	const searchContacts = useContactsById(searchResults.contacts).filter(
 		(contact: ContactOrGroup) => contact.parent === folderId
 	);
@@ -100,7 +98,6 @@ export const FolderPanel = (): ReactElement => {
 					sortBy: sortBy ?? 'nameAsc'
 				}))
 				.then((searchResult) => {
-					console.log('received new contacts', searchResult.contacts);
 					const contactIds = searchResult.contacts.map((c) => c.id);
 					setSearchResults({
 						...searchResult,
@@ -128,7 +125,6 @@ export const FolderPanel = (): ReactElement => {
 	useEffect(() => {
 		if (query !== prevQuery.current) {
 			prevQuery.current = query;
-			console.log('reset search');
 			searchQuery(query, true);
 		}
 	}, [activeFilter, folderId, query, searchQuery]);

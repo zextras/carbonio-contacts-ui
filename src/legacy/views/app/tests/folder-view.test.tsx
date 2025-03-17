@@ -6,7 +6,7 @@
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
-import { act, within } from '@testing-library/react';
+import { act, waitFor, within } from '@testing-library/react';
 import { Button, useTheme } from '@zextras/carbonio-design-system';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { useNavigate } from 'react-router-dom';
@@ -35,7 +35,11 @@ import {
 	createFindContactGroupsResponse,
 	registerFindContactGroupsHandler
 } from '../../../../tests/msw-handlers/find-contact-groups';
-import { createSoapContactGroup, createSoapContact } from '../../../../tests/utils';
+import {
+	createSoapContactGroup,
+	createSoapContact,
+	createSoapContactGroupV2
+} from '../../../../tests/utils';
 import { generateStore } from '../../../tests/generators/store';
 import { FolderView } from '../folder-view';
 import { createContactsApiInterceptor, findContactListItem } from './utils';
@@ -66,6 +70,20 @@ function setupFolderView(
 		initialEntries: [initialRoute],
 		store
 	});
+}
+
+function setupFolderViewV2({
+	folderId,
+	navigateTo = `/folder/${folderId}`,
+	store = generateStore(),
+	initialRoute = `/folder/${folderId}`
+}: {
+	folderId: string;
+	navigateTo?: string;
+	store?: ReturnType<typeof generateStore>;
+	initialRoute?: string;
+}): ReturnType<typeof setupTest> {
+	return setupFolderView(folderId, navigateTo, store, initialRoute);
 }
 
 describe('folder-view', () => {
@@ -399,39 +417,46 @@ describe('folder-view', () => {
 		});
 	});
 
+	// This test is a bit messy and complex
 	it('should reload contacts when switching back to initial folder after changing the filter type', async () => {
 		useAppContext.mockReturnValue({ count: 0, setCount: jest.fn() });
 
-		const folderId1 = '7';
-		const folderId2 = '9';
+		const folderId1 = FOLDERS.CONTACTS;
+		const folderId2 = FOLDERS.TRASH;
 		const folder1 = generateFolder({ id: folderId1, name: 'folder 1' });
 		const folder2 = generateFolder({ id: folderId2, name: 'folder 2' });
 		useFolderStore.setState({
 			folders: { [folderId1]: folder1, [folderId2]: folder2 }
 		});
-		const folder1ContactGroupName = faker.company.name();
-		const folder1ContactEmail = faker.internet.email();
+		const folder1ContactGroupName = 'group-in-folder1@test.com';
+		const folder1ContactEmail = 'contact-in-folder1@test.com';
 		const folder1Contact = createSoapContact({ folderId: folderId1, email: folder1ContactEmail });
 		const folder1ContactGroup = createSoapContactGroup(folder1ContactGroupName, [], '1', folderId1);
-		const folder1SearchAllContactsInterceptor = createContactsApiInterceptor({
+		const searchContactsInFolder1 = createContactsApiInterceptor({
 			items: [folder1ContactGroup, folder1Contact]
 		});
 
-		const { user } = setupFolderView(folderId1, `/folder/${folderId2}`);
+		const { user } = setupFolderViewV2({ folderId: folderId1, navigateTo: `/folder/${folderId2}` });
 
-		await folder1SearchAllContactsInterceptor;
+		await searchContactsInFolder1;
 
 		expect(await screen.findByText(folder1ContactGroupName)).toBeVisible();
 		makeListItemsVisible();
 		expect(screen.getByText(folder1ContactEmail)).toBeVisible();
-		const folder2ContactEmail = faker.internet.email();
-		const folder2ContactGroupName = faker.company.name();
+
+		const folder2ContactEmail = 'contact-in-folder2@test.com';
+		const folder2ContactGroupName = 'group-in-folder2@test.com';
 		const folder2Contact = createSoapContact({ folderId: folderId2, email: folder2ContactEmail });
-		const folder2ContactGroup = createSoapContactGroup(folder2ContactGroupName, [], '1', folderId1);
+		const folder2ContactGroup = createSoapContactGroupV2({
+			contactGroupName: folder2ContactGroupName,
+			id: '1',
+			folderId: folderId2
+		});
 		const folder2SearchAllContactsInterceptor = createContactsApiInterceptor({
 			items: [folder2Contact, folder2ContactGroup]
 		});
-		await user.click(screen.getByTestId('navigation-to'));
+		const navigateToFolder2 = screen.getByTestId('navigation-to');
+		await user.click(navigateToFolder2);
 		await folder2SearchAllContactsInterceptor;
 
 		expect(await screen.findByText(folder2ContactGroupName)).toBeVisible();
@@ -449,7 +474,10 @@ describe('folder-view', () => {
 
 		expect(await screen.findByText(folder2ContactGroupName)).toBeVisible();
 		makeListItemsVisible();
-		expect(screen.queryByText(folder2ContactEmail)).not.toBeInTheDocument();
+		await waitFor(() => {
+			expect(screen.queryByText(folder2ContactEmail)).not.toBeInTheDocument();
+		});
+
 		const folder1SearchOnlyGroupsInterceptor = createContactsApiInterceptor({
 			items: [folder1ContactGroup]
 		});
