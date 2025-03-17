@@ -64,26 +64,6 @@ export function addFoldersToStore(state: FoldersSlice, folders: ContactsFolder[]
 	}
 }
 
-export function updateContactsInStore(state: ContactsSlice, contactsArray: ContactOrGroup[]): void {
-	state.contacts = reduce(
-		state.contacts,
-		(acc, v, k) => ({
-			...acc,
-			[k]: reduce(
-				v,
-				(acc2, v2) =>
-					reduce(
-						contactsArray,
-						(acc3, v3) => (v3.id === v2.id ? [...acc3, v3] : [...acc3, v2]),
-						acc2
-					),
-				[] as ContactOrGroup[]
-			)
-		}),
-		{}
-	);
-}
-
 export function findContactsInStore(state: ContactsSlice, ids: Array<string>): Array<Contact> {
 	return reduce(
 		ids,
