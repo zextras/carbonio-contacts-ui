@@ -16,12 +16,15 @@ import { ContactsList } from './folder-panel/contacts-list';
 import { useFolder } from '../../../carbonio-ui-commons/store/zustand/folder';
 import { searchContactsHelper } from '../../../views/search-contacts-helper';
 import { useSelection } from '../../hooks/useSelection';
-import { addContactsToStore, useContactsById } from '../../store/contacts';
-import { ContactOrGroup } from '../../types/contact';
+import {
+	addContactsToStore,
+	setContactsInStore,
+	useCurrentFolderViewList
+} from '../../store/contacts';
 import { isGroup } from '../../utils/helpers';
 import { normalizeContactsFromSoap } from '../../utils/normalizations/normalize-contact-from-soap';
 import { SelectPanelActions } from '../folder/select-panel-actions';
-import { SearchResults } from '../search/types';
+import { FolderViewSearchResults } from '../search/types';
 
 type RouteParams = {
 	folderId: string;
@@ -61,10 +64,8 @@ export const FolderPanel = (): ReactElement => {
 		}),
 		[]
 	);
-	const [searchResults, setSearchResults] = useState<SearchResults>(initialState);
-	const searchContacts = useContactsById(searchResults.contacts).filter(
-		(contact: ContactOrGroup) => contact.parent === folderId
-	);
+	const [searchResults, setSearchResults] = useState<FolderViewSearchResults>(initialState);
+	const searchContacts = useCurrentFolderViewList(folderId ?? '');
 
 	const sortedContacts = useMemo(
 		() =>
@@ -88,29 +89,19 @@ export const FolderPanel = (): ReactElement => {
 	const searchQuery = useCallback(
 		(queryStr: string, reset: boolean) => {
 			loading.current = true;
-			const offset = reset ? 0 : searchResults.contacts.length;
+			const offset = reset ? 0 : searchResults.offset;
 			searchContactsHelper({ query: { _content: queryStr }, offset, sortBy: searchResults.sortBy })
-				.then(({ cn, more, sortBy }) => ({
-					query: queryStr,
-					contacts: [...(reset ? [] : searchContacts), ...normalizeContactsFromSoap(cn)],
-					more,
-					offset: (offset ?? 0) + 100,
-					sortBy: sortBy ?? 'nameAsc'
-				}))
-				.then((searchResult) => {
-					const contactIds = searchResult.contacts.map((c) => c.id);
-					setSearchResults({
-						...searchResult,
-						contacts: contactIds
-					});
-					addContactsToStore(searchResult.contacts);
+				.then((searchResultResponse) => {
+					const newContacts = normalizeContactsFromSoap(searchResultResponse.cn);
+					setSearchResults(searchResultResponse);
+					reset ? setContactsInStore(newContacts) : addContactsToStore(newContacts);
 				})
 				.finally(() => {
 					loading.current = false;
 					firstSearchDone.current = true;
 				});
 		},
-		[searchContacts, searchResults.contacts.length, searchResults.sortBy]
+		[searchResults.offset, searchResults.sortBy]
 	);
 	useEffect(() => {
 		let queryContent = `inid:"${folderId}"`;

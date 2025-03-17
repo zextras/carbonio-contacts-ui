@@ -8,7 +8,7 @@ import * as shell from '@zextras/carbonio-shell-ui';
 
 import { useGetContactGroupFromBoardId } from './use-get-contact-group-from-board-id';
 import { setupHook } from '../carbonio-ui-commons/test/test-setup';
-import { useContactsStoreForTesting } from '../legacy/store/contacts';
+import { addContactsToStore } from '../legacy/store/contacts';
 import { generateStore } from '../legacy/tests/generators/store';
 import { buildContactGroup } from '../tests/model-builder';
 
@@ -27,11 +27,7 @@ describe('Use get contact group from board id', () => {
 	const folderId = '1';
 	const contactGroup = buildContactGroup();
 	beforeEach(() => {
-		useContactsStoreForTesting.setState({
-			contacts: {
-				[contactGroup.id]: contactGroup
-			}
-		});
+		addContactsToStore([contactGroup]);
 	});
 
 	const store = generateStore();

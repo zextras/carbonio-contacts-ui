@@ -15,7 +15,7 @@ import EditContactGroupBoard from './edit-contact-group-board';
 import { setupTest, screen } from '../../../carbonio-ui-commons/test/test-setup';
 import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../../constants';
 import { JEST_MOCKED_ERROR, PALETTE, TESTID_SELECTORS } from '../../../constants/tests';
-import { useContactsStoreForTesting } from '../../../legacy/store/contacts';
+import { addContactsToStore } from '../../../legacy/store/contacts';
 import { generateStore } from '../../../legacy/tests/generators/store';
 import * as modifyContactGroup from '../../../network/api/modify-contact';
 import { buildContactGroup } from '../../../tests/model-builder';
@@ -36,11 +36,7 @@ function spyUseBoard(contactGroupId: string, folderId: string): void {
 
 const contactGroup = buildContactGroup();
 const setupStoreForTest = (): void => {
-	useContactsStoreForTesting.setState({
-		contacts: {
-			[contactGroup.id]: contactGroup
-		}
-	});
+	addContactsToStore([contactGroup]);
 };
 beforeEach(() => {
 	spyUseBoardHooks();
@@ -671,9 +667,7 @@ describe('Edit contact group board', () => {
 				id: contactGroupId,
 				parent: folderId
 			});
-			useContactsStoreForTesting.setState({
-				contacts: { [sharedContactGroup.id]: sharedContactGroup }
-			});
+			addContactsToStore([sharedContactGroup]);
 			const store = generateStore();
 
 			registerModifyContactGroupHandler(

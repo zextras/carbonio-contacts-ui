@@ -9,12 +9,12 @@ import { Container, Padding, Text } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { useContactsByFolderId } from '../../store/contacts';
+import { useCurrentFolderViewList } from '../../store/contacts';
 
 export default function ContactsEmptyDisplayer(): React.JSX.Element {
 	const [t] = useTranslation();
 	const { folderId } = useParams<{ folderId: string }>();
-	const contacts = useContactsByFolderId(folderId as string);
+	const contacts = useCurrentFolderViewList(folderId as string);
 	const trashMessages = useMemo(
 		() => [
 			{
@@ -46,12 +46,13 @@ export default function ContactsEmptyDisplayer(): React.JSX.Element {
 		[t]
 	);
 
+	const folderHasAtLeastOneContact = contacts.length > 0;
 	const displayerMessage = useMemo(() => {
 		if (folderId === '3') {
-			return contacts?.length && contacts.length > 0 ? trashMessages[1] : trashMessages[0];
+			return folderHasAtLeastOneContact ? trashMessages[1] : trashMessages[0];
 		}
-		return contacts?.length && contacts.length > 0 ? emptyFieldMessage : emptyListMessage;
-	}, [contacts, emptyListMessage, emptyFieldMessage, folderId, trashMessages]);
+		return folderHasAtLeastOneContact ? emptyFieldMessage : emptyListMessage;
+	}, [folderId, folderHasAtLeastOneContact, emptyFieldMessage, emptyListMessage, trashMessages]);
 	const displayerTitle = displayerMessage ? displayerMessage.title : '';
 	const displayerDescription = displayerMessage ? displayerMessage.description : '';
 	return (

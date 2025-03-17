@@ -9,7 +9,7 @@ import React from 'react';
 import { ContactGroupDisplayerWrapper } from './contact-group-displayer-wrapper';
 import { screen, setupTest, within } from '../../../carbonio-ui-commons/test/test-setup';
 import { EMPTY_DISPLAYER_WITH_CONTACTS_HINT, TESTID_SELECTORS } from '../../../constants/tests';
-import { useContactsStoreForTesting } from '../../../legacy/store/contacts';
+import { addContactsToStore } from '../../../legacy/store/contacts';
 import { generateStore } from '../../../legacy/tests/generators/store';
 import { buildContactGroup } from '../../../tests/model-builder';
 import { CONTACT_GROUPS_PATH } from '../navigation';
@@ -32,7 +32,7 @@ describe('Contact groups displayer wrapper', () => {
 	});
 
 	it('should show contact group details if a contact group is active', () => {
-		useContactsStoreForTesting.setState({ contacts: { [contactGroup.id]: contactGroup } });
+		addContactsToStore([contactGroup]);
 		setupTest(<ContactGroupDisplayerWrapper />, {
 			store: generateStore(),
 			initialEntries: [`/folder/${parent}/${CONTACT_GROUPS_PATH}/${id}`],

@@ -14,6 +14,13 @@ export type SearchResults = {
 	query: string;
 };
 
+export type FolderViewSearchResults = {
+	more: boolean;
+	offset: number;
+	sortBy: string;
+	query: string;
+};
+
 export type SoapSearchResults = {
 	cn: Array<SoapContact>;
 	more: boolean;

@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import produce from 'immer';
+import produce, { enableMapSet } from 'immer';
 import { create } from 'zustand';
 
 import { ContactGroup } from '../../model/contact-group';
@@ -11,17 +11,38 @@ import { Contact, ContactOrGroup } from '../types/contact';
 
 type ContactsStoreState = {
 	contacts: Record<string, ContactOrGroup>;
+	// TODO: I don't like this field as it is used only to track the state of the folder view
+	currentFolderViewList: Set<string>;
 };
 const useContactsStore = create<ContactsStoreState>()(() => ({
-	contacts: {}
+	contacts: {},
+	currentFolderViewList: new Set([])
 }));
+
+enableMapSet();
 
 export const addContactsToStore = (contacts: Array<ContactOrGroup>): void => {
 	useContactsStore.setState(
 		produce((state: ContactsStoreState) => {
 			contacts.forEach((contact) => {
 				state.contacts[contact.id] = contact;
+				state.currentFolderViewList.add(contact.id);
 			});
+		})
+	);
+};
+
+export const setContactsInStore = (contacts: Array<ContactOrGroup>): void => {
+	useContactsStore.setState(
+		produce((state: ContactsStoreState) => {
+			const newContacts = {} as Record<string, ContactOrGroup>;
+			const newSet = new Set<string>([]);
+			contacts.forEach((contact) => {
+				newContacts[contact.id] = contact;
+				newSet.add(contact.id);
+			});
+			state.contacts = newContacts;
+			state.currentFolderViewList = newSet;
 		})
 	);
 };
@@ -44,19 +65,7 @@ export const removeContactsFromStore = (contactIds: Array<string>): void => {
 		produce((state: ContactsStoreState) => {
 			contactIds.forEach((contactId) => {
 				delete state.contacts[contactId];
-			});
-		})
-	);
-};
-
-export const updateContactsParent = (
-	contactsWithParent: Array<{ id: string; newParent: string }>
-): void => {
-	useContactsStore.setState(
-		produce((state: ContactsStoreState) => {
-			contactsWithParent.forEach((contact) => {
-				const existingContact = state.contacts[contact.id];
-				existingContact.parent = contact.newParent;
+				state.currentFolderViewList.delete(contactId);
 			});
 		})
 	);
@@ -83,12 +92,11 @@ export const useContactById = (contactId: string): Contact | undefined =>
 		return undefined;
 	});
 
-export const useContactsByFolderId = (folderId: string): Array<ContactOrGroup> =>
-	useContactsStore(({ contacts }) => {
-		const allKeys = Object.keys(contacts);
-		return allKeys
+export const useCurrentFolderViewList = (folderId: string): Array<ContactOrGroup> =>
+	useContactsStore(({ contacts, currentFolderViewList }) =>
+		Array.from(currentFolderViewList)
 			.map((key: string) => contacts[key])
-			.filter((contact) => contact.parent === folderId);
-	});
+			.filter((contact) => contact.parent === folderId)
+	);
 
 export const useContactsStoreForTesting = useContactsStore;

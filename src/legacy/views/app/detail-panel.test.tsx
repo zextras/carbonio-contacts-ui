@@ -17,7 +17,7 @@ import { screen, setupTest } from '../../../carbonio-ui-commons/test/test-setup'
 import { JEST_MOCKED_ERROR, TESTID_SELECTORS } from '../../../constants/tests';
 import { buildSoapError } from '../../../tests/utils';
 import * as modifyContactApi from '../../store/actions/modify-contact';
-import { useContactsStoreForTesting } from '../../store/contacts';
+import { addContactsToStore } from '../../store/contacts';
 import { generateStore } from '../../tests/generators/store';
 import { State } from '../../types/store';
 
@@ -50,11 +50,7 @@ describe('Detail panel', () => {
 				parent: folderId,
 				phone: {}
 			};
-			useContactsStoreForTesting.setState({
-				contacts: {
-					[contact.id]: contact
-				}
-			});
+			addContactsToStore([contact]);
 			getSetupServer().use(
 				http.post('/service/soap/ModifyContactRequest', async () =>
 					HttpResponse.json({
