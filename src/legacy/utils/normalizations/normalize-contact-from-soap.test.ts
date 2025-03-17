@@ -6,25 +6,26 @@
 import { normalizeSyncContactsFromSoap } from './normalize-contact-from-soap';
 
 describe('normalizeContactFromSoap', () => {
-	describe('normalizeSyncContactFromSoap', () => {});
-	it('should return empty array tags when receiving empty string', () => {
-		const partialContactWithId = {
-			id: '1',
-			t: ''
-		};
+	describe('normalizeSyncContactFromSoap', () => {
+		it('should return empty array tags when receiving empty string', () => {
+			const partialContactWithId = {
+				id: '1',
+				t: ''
+			};
 
-		const result = normalizeSyncContactsFromSoap([partialContactWithId]);
+			const result = normalizeSyncContactsFromSoap([partialContactWithId]);
 
-		expect(result).toEqual([{ id: '1', tags: [] }]);
-	});
-	it('should return undefined tags when receiving undefined', () => {
-		const partialContactWithId = {
-			id: '1',
-			t: undefined
-		};
+			expect(result).toEqual([{ id: '1', tags: [] }]);
+		});
+		it('should return undefined tags when receiving undefined', () => {
+			const partialContactWithId = {
+				id: '1',
+				t: undefined
+			};
 
-		const result = normalizeSyncContactsFromSoap([partialContactWithId]);
+			const result = normalizeSyncContactsFromSoap([partialContactWithId]);
 
-		expect(result).toEqual([{ id: '1' }]);
+			expect(result).toEqual([{ id: '1' }]);
+		});
 	});
 });
