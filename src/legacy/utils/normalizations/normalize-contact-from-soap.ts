@@ -200,7 +200,7 @@ export function normalizeSyncContactsFromSoap(
 					const partialContactData = omitBy<Partial<Contact>>(
 						{
 							parent: c.l,
-							tags: !isNil(c.t) ? filter(c.t.split(','), (t) => t !== '') : [],
+							tags: !isNil(c.t) ? filter(c.t.split(','), (t) => t !== '') : undefined,
 							fileAsStr: c.fileAsStr,
 							address: c._attrs
 								? normalizeContactAddressesKV(c._attrs as { [k: string]: string })
