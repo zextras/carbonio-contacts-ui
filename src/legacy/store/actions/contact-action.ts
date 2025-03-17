@@ -16,7 +16,7 @@ export const contactAction = async ({
 	destinationID?: string;
 	op: string;
 	tagName: string;
-}) => {
+}): Promise<unknown> => {
 	const ids = contactsIDs.join(',');
 
 	return soapFetch('ContactAction', {

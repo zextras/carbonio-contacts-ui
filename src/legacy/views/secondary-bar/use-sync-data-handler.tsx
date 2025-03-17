@@ -63,7 +63,6 @@ export const useSyncDataHandler = (): void => {
 				});
 
 				const created = notify?.created;
-				const { modified } = notify;
 				if (created && 'cn' in created) {
 					const createdContacts = created.cn as Array<SoapContact>;
 					if (createdContacts.length > 0) {
@@ -71,6 +70,8 @@ export const useSyncDataHandler = (): void => {
 						addContactsToStore(normalizedCreatedContacts);
 					}
 				}
+
+				const { modified } = notify;
 				if (modified && 'cn' in modified) {
 					const modifiedContacts = modified.cn as Array<PartialSoapContactWithId>;
 					if (modifiedContacts.length > 0) {

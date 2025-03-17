@@ -71,8 +71,7 @@ const CreateUpdateTagModal: FC<ComponentProps> = ({
 				op: 'tag',
 				contactsIDs: [id],
 				tagName
-			}) // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
+			})
 				.then(() => {
 					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 					// @ts-ignore
@@ -89,8 +88,6 @@ const CreateUpdateTagModal: FC<ComponentProps> = ({
 					});
 				})
 				.catch(() => {
-					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-					// @ts-ignore
 					createSnackbar({
 						key: `tag`,
 						replace: true,
@@ -133,8 +130,6 @@ const CreateUpdateTagModal: FC<ComponentProps> = ({
 		Promise.all([renameTag(`${tag?.id}`, name), changeTagColor(`${tag?.id}`, Number(color))])
 			.then(() => {
 				onClose();
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
 				createSnackbar({
 					key: `update-tag`,
 					replace: true,
@@ -146,8 +141,6 @@ const CreateUpdateTagModal: FC<ComponentProps> = ({
 			})
 			.catch(() => {
 				onClose();
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
 				createSnackbar({
 					key: `update-tag-error`,
 					replace: true,

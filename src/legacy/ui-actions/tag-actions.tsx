@@ -277,42 +277,35 @@ const MultiSelectTagsDropdownItem = ({
 				contactsIDs: ids,
 				tagName: tag.name
 			})
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
-				.then((res: any) => {
-					if (res.type.includes('fulfilled')) {
-						deselectAll && deselectAll();
-						navigate(`../folder/${folderId}/`, { replace: true });
-						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-						// @ts-ignore
-						createSnackbar({
-							key: `tag`,
-							replace: true,
-							hideButton: true,
-							severity: 'info',
-							label: value
-								? t('snackbar.tag_removed', {
-										tag: tag.name,
-										defaultValue: '"{{tag}}" tag removed'
-									})
-								: t('snackbar.tag_applied', {
-										tag: tag.name,
-										defaultValue: '"{{tag}}" tag applied'
-									}),
-							autoHideTimeout: 3000
-						});
-					} else {
-						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-						// @ts-ignore
-						createSnackbar({
-							key: `tag`,
-							replace: true,
-							severity: 'error',
-							label: t('label.error_try_again', 'Something went wrong, please try again'),
-							autoHideTimeout: 3000,
-							hideButton: true
-						});
-					}
+				.then(() => {
+					deselectAll && deselectAll();
+					navigate(`../folder/${folderId}/`, { replace: true });
+					createSnackbar({
+						key: `tag`,
+						replace: true,
+						hideButton: true,
+						severity: 'info',
+						label: value
+							? t('snackbar.tag_removed', {
+									tag: tag.name,
+									defaultValue: '"{{tag}}" tag removed'
+								})
+							: t('snackbar.tag_applied', {
+									tag: tag.name,
+									defaultValue: '"{{tag}}" tag applied'
+								}),
+						autoHideTimeout: 3000
+					});
+				})
+				.catch(() => {
+					createSnackbar({
+						key: `tag`,
+						replace: true,
+						severity: 'error',
+						label: t('label.error_try_again', 'Something went wrong, please try again'),
+						autoHideTimeout: 3000,
+						hideButton: true
+					});
 				});
 		},
 		[ids, tag.name, deselectAll, navigate, folderId, createSnackbar, t]

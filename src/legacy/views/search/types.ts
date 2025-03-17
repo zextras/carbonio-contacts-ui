@@ -4,8 +4,18 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
+import { SoapContact } from '../../types/soap';
+
 export type SearchResults = {
 	contacts: Array<string>;
+	more: boolean;
+	offset: number;
+	sortBy: string;
+	query: string;
+};
+
+export type SoapSearchResults = {
+	cn: Array<SoapContact>;
 	more: boolean;
 	offset: number;
 	sortBy: string;

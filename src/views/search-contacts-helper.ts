@@ -6,6 +6,8 @@
 
 import { soapFetch } from '@zextras/carbonio-shell-ui';
 
+import { SoapSearchResults } from '../legacy/views/search/types';
+
 export const searchContactsHelper = ({
 	query,
 	offset,
@@ -14,7 +16,7 @@ export const searchContactsHelper = ({
 	query: { _content: string };
 	offset: number;
 	sortBy: string;
-}) =>
+}): Promise<SoapSearchResults> =>
 	soapFetch<any, any>('Search', {
 		limit: 100,
 		query,
@@ -23,7 +25,7 @@ export const searchContactsHelper = ({
 		types: 'contact',
 		_jsns: 'urn:zimbraMail'
 	}).then(({ cn, more, offset }) => ({
-		query,
+		query: query._content,
 		more,
 		cn,
 		offset: (offset ?? 0) + 100,
