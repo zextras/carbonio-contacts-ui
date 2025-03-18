@@ -8,7 +8,7 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import { act, fireEvent } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
-import { forEach, times } from 'lodash';
+import { forEach } from 'lodash';
 
 import { FOLDER_VIEW } from '../../../../carbonio-ui-commons/constants';
 import { FOLDERS } from '../../../../carbonio-ui-commons/constants/folders';
@@ -111,56 +111,28 @@ describe('Folder panel', () => {
 	});
 
 	describe('Pagination', () => {
-		it.skip('should search contacts with current filter when loading more results', async () => {
-			const folderId = '7';
+		it('should load more results when scrolling bottom of the list', async () => {
+			const folderId = FOLDERS.CONTACTS;
 			const firstSearchInterceptor = createContactsApiInterceptor({
 				items: [createSoapContactGroup(`First group`, [], 'special-1', folderId)],
-				more: false
+				more: true
 			});
 
-			const { user } = setupFolderPanel(folderId);
+			setupFolderPanel(folderId);
 			expect(await screen.findByText('First group')).toBeVisible();
 			await firstSearchInterceptor;
 
-			// switch filter and load groups
-			const expectedQueryFilter = 'and #type:group';
-			const searchGroupsInterceptor = createContactsApiInterceptor({
-				items: times(100, (index) =>
-					createSoapContactGroup(
-						`Contact Group ${index}`,
-						[],
-						`group-${index.toString()}`,
-						folderId
-					)
-				),
-				more: true
+			const loadMoreInterceptor = createContactsApiInterceptor({
+				items: [createSoapContactGroup(`More Contact Group`, [], `more-group-1`, folderId)],
+				more: false
 			});
-			await toggleSelectContactTypeFilter(user);
-			await user.click(await screen.findByText('Contact Groups'));
-			const searchGroupsRequest = await searchGroupsInterceptor;
-			expect(searchGroupsRequest.query?._content).toContain(expectedQueryFilter);
-			expect(await screen.findByText('Contact Group 99')).toBeVisible();
-
-			// load more with current filter
+			await screen.findByTestId('list-bottom-element');
 			act(() => {
 				jest.advanceTimersByTime(1000);
 			});
-			const loadMoreInterceptor = createContactsApiInterceptor({
-				items: times(10, (index) =>
-					createSoapContactGroup(
-						`More Contact Group ${index}`,
-						[],
-						`more-group-${index.toString()}`,
-						folderId
-					)
-				),
-				more: true
-			});
-			await screen.findByTestId('list-bottom-element');
 			await triggerLoadMore();
-			expect(await screen.findByText('More Contact Group 1')).toBeVisible();
-			const loadMoreRequest = await loadMoreInterceptor;
-			expect(loadMoreRequest.query?._content).toContain(expectedQueryFilter);
+			expect(await screen.findByText('More Contact Group')).toBeVisible();
+			await loadMoreInterceptor;
 		});
 	});
 

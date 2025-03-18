@@ -44,23 +44,19 @@ type ContactFilterType = (typeof FILTER_TYPES)[keyof typeof FILTER_TYPES];
 
 export const FolderPanel = (): ReactElement => {
 	const [t] = useTranslation();
-	const { folderId } = useParams<RouteParams>();
-	const folder = useFolder(folderId ?? '');
+	const { folderId } = useParams<RouteParams>() as { folderId: string };
+	const folder = useFolder(folderId);
 	const { setCount } = useAppContext<UseAppContextType>();
 	const loading = useRef(false);
-	const firstSearchDone = useRef(false);
 	const { selected, isSelecting, toggle, deselectAll } = useSelection(folderId, setCount);
 	const [activeFilter, setActiveFilter] = useState<ContactFilterType>(FILTER_TYPES.ALL);
 
-	const [query, setQuery] = useState('');
 	const prevQuery = useRef<string>('');
 	const initialState = useMemo(
 		() => ({
 			contacts: [],
 			more: false,
-			offset: 0,
-			sortBy: 'nameAsc',
-			query: ''
+			offset: 0
 		}),
 		[]
 	);
@@ -88,37 +84,44 @@ export const FolderPanel = (): ReactElement => {
 
 	const searchQuery = useCallback(
 		(queryStr: string, reset: boolean) => {
+			if (loading.current) return;
+			prevQuery.current = queryStr;
 			loading.current = true;
 			const offset = reset ? 0 : searchResults.offset;
-			searchContactsHelper({ query: { _content: queryStr }, offset, sortBy: searchResults.sortBy })
+			searchContactsHelper({
+				query: { _content: queryStr },
+				offset,
+				sortBy: 'nameAsc'
+			})
 				.then((searchResultResponse) => {
 					const newContacts = normalizeContactsFromSoap(searchResultResponse.cn);
-					setSearchResults(searchResultResponse);
+					setSearchResults({
+						offset: searchResultResponse.offset,
+						more: searchResultResponse.more
+					});
 					reset ? setContactsInStore(newContacts) : addContactsToStore(newContacts);
 				})
 				.finally(() => {
 					loading.current = false;
-					firstSearchDone.current = true;
 				});
 		},
-		[searchResults.offset, searchResults.sortBy]
+		[searchResults.offset]
 	);
-	useEffect(() => {
+
+	const query = useMemo((): string => {
 		let queryContent = `inid:"${folderId}"`;
 		if (activeFilter === 'CONTACT') {
 			queryContent += ` and not #type:group`;
 		} else if (activeFilter === 'CONTACT_GROUP') {
 			queryContent += ` and #type:group`;
 		}
-		setQuery(queryContent);
-	}, [folderId, activeFilter]);
+		return queryContent;
+	}, [activeFilter, folderId]);
 
 	useEffect(() => {
-		if (query !== prevQuery.current) {
-			prevQuery.current = query;
-			searchQuery(query, true);
-		}
-	}, [activeFilter, folderId, query, searchQuery]);
+		if (query === prevQuery.current) return;
+		searchQuery(query, true);
+	}, [query, searchQuery]);
 
 	const selectType = useCallback((filterType: ContactFilterType) => {
 		setActiveFilter(filterType);
@@ -198,7 +201,7 @@ export const FolderPanel = (): ReactElement => {
 					</Breadcrumbs>
 				)}
 				<ContactsList
-					onListBottom={searchResults.more ? loadMore : undefined}
+					onListBottom={loadMore}
 					folderId={folderId ?? ''}
 					contacts={sortedContacts}
 					selected={selected}

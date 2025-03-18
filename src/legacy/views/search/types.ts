@@ -17,8 +17,6 @@ export type SearchResults = {
 export type FolderViewSearchResults = {
 	more: boolean;
 	offset: number;
-	sortBy: string;
-	query: string;
 };
 
 export type SoapSearchResults = {
