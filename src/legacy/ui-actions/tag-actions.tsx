@@ -163,38 +163,37 @@ export const TagsDropdownItem = ({
 }): ReactElement => {
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
-	const dispatch = useAppDispatch();
 	const [checked, setChecked] = useState(includes(contact.tags, tag.id));
 	const [isHovering, setIsHovering] = useState(false);
 	const toggleCheck = useCallback(
 		(value: boolean) => {
 			setChecked((c) => !c);
-			dispatch(
-				contactAction({
-					op: value ? '!tag' : 'tag',
-					contactsIDs: [contact.id],
-					tagName: tag.name
-				})
+			contactAction({
+				op: value ? '!tag' : 'tag',
+				contactsIDs: [contact.id],
+				tagName: tag.name
+			})
 				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-ignore
-			).then((res: any) => {
-				if (res.type.includes('fulfilled')) {
-					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-					// @ts-ignore
+				.then((res: any) => {
 					createSnackbar({
 						key: `tag`,
 						replace: true,
 						hideButton: true,
 						severity: 'info',
 						label: value
-							? t('snackbar.tag_removed', { tag: tag.name, defaultValue: '"{{tag}}" tag removed' })
+							? t('snackbar.tag_removed', {
+									tag: tag.name,
+									defaultValue: '"{{tag}}" tag removed'
+								})
 							: t('snackbar.tag_applied', {
 									tag: tag.name,
 									defaultValue: '"{{tag}}" tag applied'
 								}),
 						autoHideTimeout: 3000
 					});
-				} else {
+				})
+				.catch(() => {
 					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 					// @ts-ignore
 					createSnackbar({
@@ -205,10 +204,9 @@ export const TagsDropdownItem = ({
 						autoHideTimeout: 3000,
 						hideButton: true
 					});
-				}
-			});
+				});
 		},
-		[contact.id, createSnackbar, dispatch, t, tag.name]
+		[contact.id, createSnackbar, t, tag.name]
 	);
 	const tagColor = useMemo(() => ZIMBRA_STANDARD_COLORS[tag.color || 0].hex, [tag.color]);
 	const tagIcon = useMemo(() => (checked ? 'Tag' : 'TagOutline'), [checked]);
@@ -274,36 +272,32 @@ const MultiSelectTagsDropdownItem = ({
 	const toggleCheck = useCallback(
 		(value: boolean) => {
 			setChecked((c) => !c);
-			dispatch(
-				contactAction({
-					op: value ? '!tag' : 'tag',
-					contactsIDs: ids,
-					tagName: tag.name
-				})
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
-			).then((res: any) => {
-				if (res.type.includes('fulfilled')) {
+			contactAction({
+				op: value ? '!tag' : 'tag',
+				contactsIDs: ids,
+				tagName: tag.name
+			})
+				.then(() => {
 					deselectAll && deselectAll();
 					navigate(`../folder/${folderId}/`, { replace: true });
-					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-					// @ts-ignore
 					createSnackbar({
 						key: `tag`,
 						replace: true,
 						hideButton: true,
 						severity: 'info',
 						label: value
-							? t('snackbar.tag_removed', { tag: tag.name, defaultValue: '"{{tag}}" tag removed' })
+							? t('snackbar.tag_removed', {
+									tag: tag.name,
+									defaultValue: '"{{tag}}" tag removed'
+								})
 							: t('snackbar.tag_applied', {
 									tag: tag.name,
 									defaultValue: '"{{tag}}" tag applied'
 								}),
 						autoHideTimeout: 3000
 					});
-				} else {
-					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-					// @ts-ignore
+				})
+				.catch(() => {
 					createSnackbar({
 						key: `tag`,
 						replace: true,
@@ -312,10 +306,9 @@ const MultiSelectTagsDropdownItem = ({
 						autoHideTimeout: 3000,
 						hideButton: true
 					});
-				}
-			});
+				});
 		},
-		[dispatch, ids, tag.name, deselectAll, navigate, folderId, createSnackbar, t]
+		[ids, tag.name, deselectAll, navigate, folderId, createSnackbar, t]
 	);
 
 	const tagIcon = useMemo(() => (checked ? 'Tag' : 'TagOutline'), [checked]);

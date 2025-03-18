@@ -8,7 +8,7 @@ import { http, HttpResponse, HttpResponseResolver } from 'msw';
 
 import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
 import { CnItem, GenericSoapPayload } from '../../network/api/types';
-import { buildSoapResponse, createCnItem } from '../utils';
+import { buildSoapResponse, createSoapContactGroup } from '../utils';
 
 interface FindContactGroupsSoapApiRequest extends GenericSoapPayload<typeof JSNS.mail> {
 	limit: number;
@@ -57,7 +57,8 @@ export const registerFindContactGroupsHandler = (
 		return HttpResponse.json(
 			buildSoapResponse<FindContactGroupsSoapApiResponse>({
 				SearchResponse:
-					match?.findContactGroupsResponse ?? createFindContactGroupsResponse([createCnItem()])
+					match?.findContactGroupsResponse ??
+					createFindContactGroupsResponse([createSoapContactGroup()])
 			})
 		);
 	});

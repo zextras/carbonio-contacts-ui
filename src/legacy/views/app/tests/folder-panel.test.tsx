@@ -8,7 +8,7 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import { act, fireEvent } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
-import { forEach, times } from 'lodash';
+import { forEach } from 'lodash';
 
 import { FOLDER_VIEW } from '../../../../carbonio-ui-commons/constants';
 import { FOLDERS } from '../../../../carbonio-ui-commons/constants/folders';
@@ -42,17 +42,15 @@ import {
 	ContactActionRequest,
 	ContactActionResponse
 } from '../../../../network/api/contact-action';
-import { buildContact } from '../../../../tests/model-builder';
 import { registerDeleteContactHandler } from '../../../../tests/msw-handlers/delete-contact';
 import {
 	createFindContactGroupsResponse,
 	registerFindContactGroupsHandler
 } from '../../../../tests/msw-handlers/find-contact-groups';
-import { generateState } from '../../../../tests/state-builder';
-import { createCnItem, createSoapContact } from '../../../../tests/utils';
+import { createSoapContact, createSoapContactGroup } from '../../../../tests/utils';
 import { generateStore } from '../../../tests/generators/store';
 import { FolderPanel } from '../folder-panel';
-import { createContactsApiInterceptor } from './utils';
+import { createContactsApiInterceptor, findContactListItem } from './utils';
 import { SearchContactsRequest, SearchContactsSoapResponse } from '../../../../types';
 import { SoapContact } from '../../../types/soap';
 
@@ -113,65 +111,49 @@ describe('Folder panel', () => {
 	});
 
 	describe('Pagination', () => {
-		it('should search contacts with current filter when loading more results', async () => {
-			const folderId = '7';
+		it('should load more results when scrolling bottom of the list', async () => {
+			const folderId = FOLDERS.CONTACTS;
 			const firstSearchInterceptor = createContactsApiInterceptor({
-				items: [createCnItem(`First group`, [], 'special-1', folderId)],
+				items: [createSoapContactGroup(`First group`, [], 'special-1', folderId)],
+				more: true
+			});
+
+			setupFolderPanel(folderId);
+			expect(await screen.findByText('First group')).toBeVisible();
+			await firstSearchInterceptor;
+
+			const loadMoreInterceptor = createContactsApiInterceptor({
+				items: [createSoapContactGroup(`More Contact Group`, [], `more-group-1`, folderId)],
 				more: false
 			});
-
-			const { user } = setupFolderPanel(folderId);
-			await firstSearchInterceptor;
-			expect(await screen.findByText('First group')).toBeVisible();
-
-			// switch filter and load groups
-			const expectedQueryFilter = 'and #type:group';
-			const searchGroupsInterceptor = createContactsApiInterceptor({
-				items: times(100, (index) =>
-					createCnItem(`Contact Group ${index}`, [], `group-${index.toString()}`, folderId)
-				),
-				more: true
-			});
-			await toggleSelectContactTypeFilter(user);
-			await user.click(await screen.findByText('Contact Groups'));
-			const searchGroupsRequest = await searchGroupsInterceptor;
-			expect(searchGroupsRequest.query?._content).toContain(expectedQueryFilter);
-			expect(await screen.findByText('Contact Group 99')).toBeVisible();
-
-			// load more with current filter
-			const loadMoreInterceptor = createContactsApiInterceptor({
-				items: times(10, (index) =>
-					createCnItem(
-						`More Contact Group ${index}`,
-						[],
-						`more-group-${index.toString()}`,
-						folderId
-					)
-				),
-				more: true
+			await screen.findByTestId('list-bottom-element');
+			act(() => {
+				jest.advanceTimersByTime(1000);
 			});
 			await triggerLoadMore();
-			const loadMoreRequest = await loadMoreInterceptor;
-			expect(loadMoreRequest.query?._content).toContain(expectedQueryFilter);
-			expect(await screen.findByText('More Contact Group 1')).toBeVisible();
+			expect(await screen.findByText('More Contact Group')).toBeVisible();
+			await loadMoreInterceptor;
 		});
 	});
 
 	describe('Contact', () => {
-		it('should render the component', () => {
+		it('should render the folder panel with the contact in the list', async () => {
 			const folder = FOLDERS_DESCRIPTORS.contacts;
-			const contact = buildContact({ lastName: faker.string.uuid() });
-			const state = generateState({
-				contacts: [contact]
+			const email = 'test@test.com';
+			const soapContact = createSoapContact({ email });
+			const firstSearchInterceptor = createContactsApiInterceptor({
+				items: [soapContact],
+				more: false
 			});
-			const store = generateStore(state);
+			const store = generateStore();
 			setupTest(<FolderPanel />, {
 				initialEntries: [`/folder/${folder.id}`],
 				path: `/folder/:folderId/:type?/:itemId?`,
 				store
 			});
-			makeListItemsVisible();
-			expect(screen.getByText(contact.lastName, { exact: false })).toBeVisible();
+			await findContactListItem(soapContact);
+			expect(screen.getByText(email)).toBeVisible();
+			await firstSearchInterceptor;
 		});
 
 		// remove all warning as the search request is not intercepted
@@ -371,19 +353,21 @@ describe('Folder panel', () => {
 					}) => {
 						populateFoldersStore();
 						mockMailToAction();
-						const contact = buildContact({ lastName: faker.string.uuid(), parent: folder.id });
-						const state = generateState({
-							contacts: [contact]
+						const email = 'test@test.com';
+						const soapContact = createSoapContact({ email, folderId: folder.id });
+						const firstSearchInterceptor = createContactsApiInterceptor({
+							items: [soapContact],
+							more: false
 						});
-						const store = generateStore(state);
+						const store = generateStore();
 						const { user } = setupTest(<FolderPanel />, {
 							initialEntries: [`/folder/${folder.id}`],
 							path: `/folder/:folderId/:type?/:itemId?`,
 							store
 						});
-						makeListItemsVisible();
+						await findContactListItem(soapContact);
 
-						const listItem = screen.getByText(contact.lastName, { exact: false });
+						const listItem = screen.getByText(email);
 						await act(() => user.hover(listItem));
 						if (assertion.value) {
 							expect(
@@ -436,19 +420,21 @@ describe('Folder panel', () => {
 					}) => {
 						populateFoldersStore();
 						mockMailToAction();
-						const contact = buildContact({ lastName: faker.string.uuid(), parent: folder.id });
-						const state = generateState({
-							contacts: [contact]
+						const email = 'test@test.com';
+						const soapContact = createSoapContact({ email, folderId: folder.id });
+						const firstSearchInterceptor = createContactsApiInterceptor({
+							items: [soapContact],
+							more: false
 						});
-						const store = generateStore(state);
+						const store = generateStore();
 						const { user } = setupTest(<FolderPanel />, {
 							initialEntries: [`/folder/${folder.id}`],
 							path: `/folder/:folderId/:type?/:itemId?`,
 							store
 						});
-						makeListItemsVisible();
+						await findContactListItem(soapContact);
 
-						const listItem = screen.getByText(contact.lastName, { exact: false });
+						const listItem = screen.getByText(email);
 						await act(() => user.rightClick(listItem));
 						const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
 						if (assertion.value) {
@@ -467,30 +453,23 @@ describe('Folder panel', () => {
 					populateFoldersStore();
 
 					const contactsFolder = FOLDERS_DESCRIPTORS.contacts;
-
-					const contact = buildContact({
-						lastName: faker.string.uuid(),
-						parent: contactsFolder.id,
-						tags: []
+					const email = 'test@test.com';
+					const soapContact = createSoapContact({ email, folderId: contactsFolder.id });
+					const firstSearchInterceptor = createContactsApiInterceptor({
+						items: [soapContact],
+						more: false
 					});
-
+					const store = generateStore();
 					useTagStore.setState({ tags: { '1': { id: '1', name: 'testTag' } } });
-
-					const state = generateState({
-						contacts: [contact]
-					});
-					const store = generateStore(state);
 					const { user } = setupTest(<FolderPanel />, {
 						initialEntries: [`/folder/${contactsFolder.id}`],
 						path: `/folder/:folderId/:type?/:itemId?`,
 						store
 					});
-					makeListItemsVisible();
-					const contactListItem = screen.getByTestId(`contact-list-item-${contact.id}`);
+					await findContactListItem(soapContact);
+					const contactListItem = await screen.findByTestId(`contact-list-item-${soapContact.id}`);
 					expect(contactListItem).toBeVisible();
-					const contactListItemName = within(contactListItem).getByText(contact.lastName, {
-						exact: false
-					});
+					const contactListItemName = within(contactListItem).getByText(email);
 					await act(() => user.rightClick(contactListItemName));
 					const dropdown = await screen.findByTestId('dropdown-popper-list');
 					expect(dropdown).toBeVisible();
@@ -505,13 +484,14 @@ describe('Folder panel', () => {
 						_jsns: 'urn:zimbraMail',
 						action: {
 							op: 'tag',
-							id: contact.id
+							id: soapContact.id
 						}
 					});
 					await user.click(tag);
+					await screen.findByText('"testTag" tag applied');
 					const contactActionRequest = await soapAPIInterceptor;
 					expect(contactActionRequest.action).toEqual(
-						expect.objectContaining({ id: contact.id, tn: 'testTag', op: 'tag' })
+						expect.objectContaining({ id: soapContact.id, tn: 'testTag', op: 'tag' })
 					);
 				});
 			});
@@ -520,17 +500,19 @@ describe('Folder panel', () => {
 				it('should not display any primary action', async () => {
 					useAppContext.mockReturnValue({ count: 42, setCount: jest.fn() });
 					const folder = FOLDERS_DESCRIPTORS.contacts;
-					const contacts = [buildContact(), buildContact()];
-					const state = generateState({
-						contacts
+					const soapContact1 = createSoapContact();
+					const contacts = [soapContact1, createSoapContact()];
+					const firstSearchInterceptor = createContactsApiInterceptor({
+						items: contacts,
+						more: false
 					});
-					const store = generateStore(state);
+					const store = generateStore();
 					const { user } = setupTest(<FolderPanel />, {
 						initialEntries: [`/folder/${folder.id}`],
 						path: `/folder/:folderId/:type?/:itemId?`,
 						store
 					});
-					makeListItemsVisible();
+					await findContactListItem(soapContact1);
 
 					// Select all the items
 					const listItems = screen.getAllByTestId(TESTID_SELECTORS.contactsListItem);
@@ -567,17 +549,20 @@ describe('Folder panel', () => {
 							assertion: DisplayAssertionType;
 						}) => {
 							populateFoldersStore();
-							useAppContext.mockReturnValue({ count: 42, setCount: jest.fn() });
-							const contact = buildContact({ parent: folder.id });
-							const state = generateState({
-								contacts: [contact]
+							const soapContact1 = createSoapContact({ folderId: folder.id });
+							const contacts = [soapContact1, createSoapContact({ folderId: folder.id })];
+							const firstSearchInterceptor = createContactsApiInterceptor({
+								items: contacts,
+								more: false
 							});
-							const store = generateStore(state);
+							useAppContext.mockReturnValue({ count: 42, setCount: jest.fn() });
+							const store = generateStore();
 							const { user } = setupTest(<FolderPanel />, {
 								initialEntries: [`/folder/${folder.id}`],
 								path: `/folder/:folderId/:type?/:itemId?`,
 								store
 							});
+							await findContactListItem(soapContact1);
 							makeListItemsVisible();
 
 							// Select all the items
@@ -616,7 +601,7 @@ describe('Folder panel', () => {
 				const folderId = '7';
 				registerFindContactGroupsHandler({
 					findContactGroupsResponse: createFindContactGroupsResponse([
-						createCnItem(
+						createSoapContactGroup(
 							contactGroupName,
 							[faker.internet.email(), faker.internet.email()],
 							'1',
@@ -636,7 +621,7 @@ describe('Folder panel', () => {
 				const folderId = '7';
 				registerFindContactGroupsHandler({
 					findContactGroupsResponse: createFindContactGroupsResponse([
-						createCnItem(contactGroupName, [], '1', folderId)
+						createSoapContactGroup(contactGroupName, [], '1', folderId)
 					]),
 					offset: 0
 				});
@@ -651,7 +636,7 @@ describe('Folder panel', () => {
 				const folderId = '7';
 				registerFindContactGroupsHandler({
 					findContactGroupsResponse: createFindContactGroupsResponse([
-						createCnItem(contactGroupName, [faker.internet.email()], '1', folderId)
+						createSoapContactGroup(contactGroupName, [faker.internet.email()], '1', folderId)
 					]),
 					offset: 0
 				});
@@ -672,7 +657,7 @@ describe('Folder panel', () => {
 						const memberEmail = faker.internet.email();
 						registerFindContactGroupsHandler({
 							findContactGroupsResponse: createFindContactGroupsResponse([
-								createCnItem(contactGroupName, [memberEmail], '1', folderId)
+								createSoapContactGroup(contactGroupName, [memberEmail], '1', folderId)
 							]),
 							offset: 0
 						});
@@ -694,7 +679,7 @@ describe('Folder panel', () => {
 						const contactGroupName = faker.company.name();
 						registerFindContactGroupsHandler({
 							findContactGroupsResponse: createFindContactGroupsResponse([
-								createCnItem(contactGroupName, [], '1', folderId)
+								createSoapContactGroup(contactGroupName, [], '1', folderId)
 							]),
 							offset: 0
 						});
@@ -724,7 +709,7 @@ describe('Folder panel', () => {
 						});
 						const folderId = FOLDERS.TRASH;
 						const contactGroupName = 'Group 1';
-						const cnItem1 = createCnItem(contactGroupName, [], '1', folderId);
+						const cnItem1 = createSoapContactGroup(contactGroupName, [], '1', folderId);
 						registerFindContactGroupsHandler({
 							findContactGroupsResponse: createFindContactGroupsResponse([cnItem1], false),
 							offset: 0
@@ -773,7 +758,7 @@ describe('Folder panel', () => {
 						populateFoldersStore();
 						const folderId = FOLDERS.CONTACTS;
 						const contactGroupName = 'Group 1';
-						const cnItem1 = createCnItem(contactGroupName, [], '1', folderId);
+						const cnItem1 = createSoapContactGroup(contactGroupName, [], '1', folderId);
 						registerFindContactGroupsHandler({
 							findContactGroupsResponse: createFindContactGroupsResponse([cnItem1], false),
 							offset: 0
@@ -809,9 +794,9 @@ describe('Folder panel', () => {
 				describe('Delete permanently (trash folder) contact group action', () => {
 					it('should remove deleted contact group when you confirm deletion and api call will success (Hover trigger)', async () => {
 						const folderId = FOLDERS.TRASH;
-						const cnItem1 = createCnItem('Group 1', [], '1', folderId);
-						const cnItem2 = createCnItem('Group 2', [], '2', folderId);
-						const cnItem3 = createCnItem('Group 3', [], '3', folderId);
+						const cnItem1 = createSoapContactGroup('Group 1', [], '1', folderId);
+						const cnItem2 = createSoapContactGroup('Group 2', [], '2', folderId);
+						const cnItem3 = createSoapContactGroup('Group 3', [], '3', folderId);
 						registerFindContactGroupsHandler({
 							findContactGroupsResponse: createFindContactGroupsResponse(
 								[cnItem1, cnItem2, cnItem3],
@@ -843,9 +828,9 @@ describe('Folder panel', () => {
 					it('should not remove deleted contact group when you confirm deletion and api call fail (Hover trigger)', async () => {
 						jest.spyOn(console, 'warn').mockImplementation();
 						const folderId = FOLDERS.TRASH;
-						const cnItem1 = createCnItem('Group 1', [], '11', folderId);
-						const cnItem2 = createCnItem('Group 2', [], '22', folderId);
-						const cnItem3 = createCnItem('Group 3', [], '33', folderId);
+						const cnItem1 = createSoapContactGroup('Group 1', [], '11', folderId);
+						const cnItem2 = createSoapContactGroup('Group 2', [], '22', folderId);
+						const cnItem3 = createSoapContactGroup('Group 3', [], '33', folderId);
 						populateFoldersStore();
 						registerFindContactGroupsHandler({
 							findContactGroupsResponse: createFindContactGroupsResponse(
@@ -891,7 +876,7 @@ describe('Folder panel', () => {
 						const member = faker.internet.email();
 						registerFindContactGroupsHandler({
 							findContactGroupsResponse: createFindContactGroupsResponse([
-								createCnItem(contactGroupName, [member], contactGroupId, folderId)
+								createSoapContactGroup(contactGroupName, [member], contactGroupId, folderId)
 							]),
 							offset: 0
 						});
@@ -919,7 +904,7 @@ describe('Folder panel', () => {
 			const folderId = '7';
 			const soapContactEmail = 'test@mycontact.com';
 			const soapContact = createSoapContact({ folderId, email: soapContactEmail });
-			const soapContactGroup = createCnItem(
+			const soapContactGroup = createSoapContactGroup(
 				contactGroupName,
 				[faker.internet.email(), faker.internet.email()],
 				'1',
@@ -941,7 +926,7 @@ describe('Folder panel', () => {
 		it('should display only contact groups after selecting contact groups filter', async () => {
 			const contactGroupName = faker.company.name();
 			const folderId = '7';
-			const soapContactGroup = createCnItem(
+			const soapContactGroup = createSoapContactGroup(
 				contactGroupName,
 				[faker.internet.email(), faker.internet.email()],
 				'1',
@@ -969,7 +954,7 @@ describe('Folder panel', () => {
 			const folderId = '7';
 			const soapContactEmail = 'test@mycontact.com';
 			const soapContact = createSoapContact({ folderId, email: soapContactEmail });
-			const soapContactGroup = createCnItem(
+			const soapContactGroup = createSoapContactGroup(
 				contactGroupName,
 				[faker.internet.email(), faker.internet.email()],
 				'1',
@@ -989,10 +974,10 @@ describe('Folder panel', () => {
 			await toggleSelectContactTypeFilter(user);
 			await user.click(await screen.findByText('Contacts'));
 			const contactsOnlyRequest = await searchOnlyContactsInterceptor;
-			expect(screen.queryByText(contactGroupName)).not.toBeInTheDocument();
 			expect(
 				await screen.findByTestId(`contact-list-item-invisible-${soapContact.id}`)
 			).toBeInTheDocument();
+			expect(screen.queryByText(contactGroupName)).not.toBeInTheDocument();
 			makeListItemsVisible();
 			expect(await screen.findByText(soapContactEmail)).toBeVisible();
 

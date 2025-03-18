@@ -13,23 +13,19 @@ import { useTranslation } from 'react-i18next';
 import { Route, Routes } from 'react-router-dom';
 
 import AdvancedFilterModal from './advance-filter-modal';
+import { SearchContactsEmptyPanel } from './search-contacts-empty-panel';
 import { SearchList } from './search-list';
-import SearchPanel from './search-panel';
+import { SearchResults } from './types';
 import { isTrash } from '../../../carbonio-ui-commons/helpers/folders';
 import { useUpdateView } from '../../../carbonio-ui-commons/hooks/use-update-view';
 import { useFoldersMap } from '../../../carbonio-ui-commons/store/zustand/folder';
 import { Folder } from '../../../carbonio-ui-commons/types/folder';
 import { usePrefs } from '../../../carbonio-ui-commons/utils/use-prefs';
-import { ContactOrGroup } from '../../types/contact';
+import { ContactGroupDisplayerWrapper } from '../../../views/contact-groups/displayer/contact-group-displayer-wrapper';
+import { addContactsToStore, useContactsById } from '../../store/contacts';
 import { normalizeContactsFromSoap } from '../../utils/normalizations/normalize-contact-from-soap';
-
-export type SearchResults = {
-	contacts: Array<ContactOrGroup>;
-	more: boolean;
-	offset: number;
-	sortBy: string;
-	query: string;
-};
+import ContactEditPanel from '../edit/contact-edit-panel';
+import { ContactPreviewWrapper } from '../preview/contact-preview-wrapper';
 
 const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 	const [query, updateQuery] = useQuery();
@@ -42,6 +38,7 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 		sortBy: 'nameAsc',
 		query: ''
 	});
+	const searchContacts = useContactsById(searchResults.contacts);
 
 	const loading = useRef(false);
 	const [t] = useTranslation();
@@ -99,26 +96,29 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 				types: 'contact',
 				_jsns: 'urn:zimbraMail'
 			})
-				.then(
-					({ cn, more, offset, sortBy }): SearchResults => ({
-						query: queryStr,
-						contacts: [
-							...(reset ? [] : (searchResults.contacts ?? [])),
-							...(normalizeContactsFromSoap(cn) ?? [])
-						],
-						more,
-						offset: (offset ?? 0) + 100,
-						sortBy: sortBy ?? 'nameAsc'
-					})
-				)
+				.then(({ cn, more, offset, sortBy }) => ({
+					query: queryStr,
+					contacts: [
+						...(reset ? [] : (searchContacts ?? [])),
+						...(normalizeContactsFromSoap(cn) ?? [])
+					],
+					more,
+					offset: (offset ?? 0) + 100,
+					sortBy: sortBy ?? 'nameAsc'
+				}))
 				.then((r) => {
-					setSearchResults(r);
+					const contactIds = r.contacts.map((c) => c.id);
+					addContactsToStore(r.contacts);
+					setSearchResults({
+						...r,
+						contacts: contactIds
+					});
 				})
 				.finally(() => {
 					loading.current = false;
 				});
 		},
-		[searchResults.contacts, searchResults.sortBy]
+		[searchContacts, searchResults.contacts.length, searchResults.sortBy]
 	);
 
 	useEffect(() => {
@@ -127,6 +127,17 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 			searchQuery(queryToString, true);
 		}
 	}, [query, queryToString, searchQuery, searchResults.query]);
+
+	const loadMore = useCallback(() => {
+		if (searchResults && searchResults.contacts.length > 0 && searchResults.more) {
+			searchQuery(queryToString, false);
+		}
+	}, [queryToString, searchQuery, searchResults]);
+
+	const canLoadMore = useMemo(
+		() => searchResults && searchResults.contacts.length > 0 && searchResults.more,
+		[searchResults]
+	);
 
 	return (
 		<Container>
@@ -142,9 +153,8 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 						path={`:folder?/:folderId?/:type?/:itemId?`}
 						element={
 							<SearchList
-								searchResults={searchResults}
-								search={searchQuery}
-								query={queryToString}
+								contacts={searchContacts}
+								onListBottom={canLoadMore ? loadMore : undefined}
 								filterCount={filterCount}
 								setShowAdvanceFilters={setShowAdvanceFilters}
 							/>
@@ -152,7 +162,23 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 					/>
 				</Routes>
 				<Suspense fallback={<Spinner color="gray5" />}>
-					<SearchPanel searchResults={searchResults} query={query} width="75%" />
+					<Container width={'75%'} mainAlignment="flex-start">
+						<Routes>
+							<Route
+								path={`folder/:folderId/contacts/:contactId`}
+								element={<ContactPreviewWrapper />}
+							/>
+							<Route path={`folder/:folderId/edit/:editId`} element={<ContactEditPanel />} />
+							<Route
+								path={'folder/:folderId/contact-groups/:id'}
+								element={<ContactGroupDisplayerWrapper />}
+							/>
+							<Route
+								path={'/'}
+								element={<SearchContactsEmptyPanel searchResults={searchResults} />}
+							/>
+						</Routes>
+					</Container>
 				</Suspense>
 			</Container>
 

@@ -14,13 +14,17 @@ import { useParams } from 'react-router-dom';
 import { Breadcrumbs } from './breadcrumbs';
 import { ContactsList } from './folder-panel/contacts-list';
 import { useFolder } from '../../../carbonio-ui-commons/store/zustand/folder';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { searchContactsHelper } from '../../../views/search-contacts-helper';
 import { useSelection } from '../../hooks/useSelection';
-import { searchContactsAsyncThunk } from '../../store/actions/search-contacts';
-import { selectAllContactsInFolder, selectContactsStatus } from '../../store/selectors/contacts';
-import { handleResetContactsSync } from '../../store/slices/contacts-slice';
+import {
+	addContactsToStore,
+	setContactsInStore,
+	useCurrentFolderViewList
+} from '../../store/contacts';
 import { isGroup } from '../../utils/helpers';
+import { normalizeContactsFromSoap } from '../../utils/normalizations/normalize-contact-from-soap';
 import { SelectPanelActions } from '../folder/select-panel-actions';
+import { FolderViewSearchResults } from '../search/types';
 
 type RouteParams = {
 	folderId: string;
@@ -40,21 +44,29 @@ type ContactFilterType = (typeof FILTER_TYPES)[keyof typeof FILTER_TYPES];
 
 export const FolderPanel = (): ReactElement => {
 	const [t] = useTranslation();
-	const isFirstRender = useRef(true);
-	const { folderId } = useParams<RouteParams>();
-	const dispatch = useAppDispatch();
-	const folder = useFolder(folderId ?? '');
+	const { folderId } = useParams<RouteParams>() as { folderId: string };
+	const folder = useFolder(folderId);
 	const { setCount } = useAppContext<UseAppContextType>();
+	const loading = useRef(false);
 	const { selected, isSelecting, toggle, deselectAll } = useSelection(folderId, setCount);
 	const [activeFilter, setActiveFilter] = useState<ContactFilterType>(FILTER_TYPES.ALL);
-	const contacts = useAppSelector((state) => selectAllContactsInFolder(state, folderId ?? ''));
-	const searchRequestStatus = useAppSelector((state) =>
-		selectContactsStatus(state, folderId ?? '')
+
+	const prevQuery = useRef<string>('');
+	const initialState = useMemo(
+		() => ({
+			contacts: [],
+			more: false,
+			offset: 0
+		}),
+		[]
 	);
+	const [searchResults, setSearchResults] = useState<FolderViewSearchResults>(initialState);
+	const searchContacts = useCurrentFolderViewList(folderId ?? '');
+
 	const sortedContacts = useMemo(
 		() =>
 			orderBy(
-				contacts,
+				searchContacts,
 				[
 					(item): string =>
 						isGroup(item)
@@ -65,29 +77,61 @@ export const FolderPanel = (): ReactElement => {
 				],
 				'asc'
 			),
-		[contacts]
+		[searchContacts]
 	);
 	const ids = useMemo(() => Object.keys(selected ?? []), [selected]);
-	const selectedContacts = filter(contacts, (contact) => ids.indexOf(contact.id) !== -1);
+	const selectedContacts = filter(searchContacts, (contact) => ids.indexOf(contact.id) !== -1);
+
+	const searchQuery = useCallback(
+		(queryStr: string, reset: boolean) => {
+			if (loading.current) return;
+			prevQuery.current = queryStr;
+			loading.current = true;
+			const offset = reset ? 0 : searchResults.offset;
+			searchContactsHelper({
+				query: { _content: queryStr },
+				offset,
+				sortBy: 'nameAsc'
+			})
+				.then((searchResultResponse) => {
+					const newContacts = normalizeContactsFromSoap(searchResultResponse.cn);
+					setSearchResults({
+						offset: searchResultResponse.offset,
+						more: searchResultResponse.more
+					});
+					reset ? setContactsInStore(newContacts) : addContactsToStore(newContacts);
+				})
+				.finally(() => {
+					loading.current = false;
+				});
+		},
+		[searchResults.offset]
+	);
+
+	const query = useMemo((): string => {
+		let queryContent = `inid:"${folderId}"`;
+		if (activeFilter === 'CONTACT') {
+			queryContent += ` and not #type:group`;
+		} else if (activeFilter === 'CONTACT_GROUP') {
+			queryContent += ` and #type:group`;
+		}
+		return queryContent;
+	}, [activeFilter, folderId]);
 
 	useEffect(() => {
-		if (searchRequestStatus !== undefined) {
-			return;
-		}
-		dispatch(searchContactsAsyncThunk({ folderId: folderId ?? '', type: activeFilter })).finally(
-			() => {
-				isFirstRender.current = false;
-			}
-		);
-	}, [activeFilter, dispatch, folderId, searchRequestStatus]);
+		if (query === prevQuery.current) return;
+		searchQuery(query, true);
+	}, [query, searchQuery]);
 
-	const selectType = useCallback(
-		(filterType: ContactFilterType) => {
-			dispatch(handleResetContactsSync());
-			setActiveFilter(filterType);
-		},
-		[dispatch]
-	);
+	const selectType = useCallback((filterType: ContactFilterType) => {
+		setActiveFilter(filterType);
+	}, []);
+
+	const loadMore = useCallback(() => {
+		if (searchResults.more) {
+			searchQuery(query, false);
+		}
+	}, [query, searchQuery, searchResults.more]);
 
 	const selectOptions = [
 		{
@@ -117,17 +161,6 @@ export const FolderPanel = (): ReactElement => {
 	];
 
 	const selectedViewTypeIcon = find(selectOptions, (option) => option.id === activeFilter)?.icon;
-	const loadMore = useCallback(
-		(): Promise<void> =>
-			dispatch(
-				searchContactsAsyncThunk({
-					folderId: folderId ?? '',
-					offset: contacts?.length,
-					type: activeFilter
-				})
-			).then(() => Promise.resolve()),
-		[activeFilter, contacts?.length, dispatch, folderId]
-	);
 	return (
 		<Container
 			orientation="row"
@@ -168,7 +201,7 @@ export const FolderPanel = (): ReactElement => {
 					</Breadcrumbs>
 				)}
 				<ContactsList
-					onLoadMore={loadMore}
+					onListBottom={loadMore}
 					folderId={folderId ?? ''}
 					contacts={sortedContacts}
 					selected={selected}
