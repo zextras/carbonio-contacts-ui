@@ -35,9 +35,9 @@ export const DragItems = ({
 		<>
 			{map(items, (item, index) => {
 				if ('members' in item) {
-					return <ContactGroupListItem contactGroup={item} />;
+					return <ContactGroupListItem contactGroup={item} key={`${item.id}-${index}`} />;
 				}
-				return <ContactListItem item={item} key={index} />;
+				return <ContactListItem item={item} key={`${item.id}-${index}`} />;
 			})}
 		</>
 	);
