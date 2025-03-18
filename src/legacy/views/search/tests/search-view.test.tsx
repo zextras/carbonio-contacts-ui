@@ -6,6 +6,7 @@
 
 import React, { ReactElement } from 'react';
 
+import { act } from '@testing-library/react';
 import type { SearchViewProps, QueryChip } from '@zextras/carbonio-search-ui';
 import { AccountSettings } from '@zextras/carbonio-shell-ui';
 import * as hooks from '@zextras/carbonio-shell-ui';
@@ -58,7 +59,7 @@ const setupSearch = ({ contacts }: { contacts: Array<CnItem | SoapContact> }): S
 	};
 };
 describe('SearchView', () => {
-	it('should display render the basic elements of the view API fulfilled', async () => {
+	it('should render the basic elements of the view API fulfilled', async () => {
 		const customSettings: Partial<AccountSettings> = {
 			prefs: {
 				zimbraPrefIncludeTrashInSearch: 'TRUE',
@@ -116,12 +117,40 @@ describe('SearchView', () => {
 			const { user } = setupTest(<SearchView {...searchViewProps} />, {
 				store
 			});
-			const listItem = await screen.findByTestId(`search-contact-list-item-${soapContact.id}`);
+			await screen.findByTestId(`search-contact-list-item-${soapContact.id}`);
 			makeListItemsVisible();
 			const clickableItem = await screen.findByText(email);
 			await user.click(clickableItem);
 
 			expect(await screen.findByTestId('contact-displayer')).toBeVisible();
+		});
+		it('should display the actions on hover', async () => {
+			populateFoldersStore();
+			const email = 'testContact@demo.com';
+			const soapContact = createSoapContact({
+				id: '1',
+				email,
+				folderId: FOLDERS.CONTACTS
+			});
+			const store = generateStore();
+
+			const searchViewProps = setupSearch({ contacts: [soapContact] });
+			const { user } = setupTest(<SearchView {...searchViewProps} />, {
+				store
+			});
+			await screen.findByTestId(`search-contact-list-item-${soapContact.id}`);
+			makeListItemsVisible();
+			const clickableItem = await screen.findByText(email);
+
+			await act(() => user.hover(clickableItem));
+			const sendEmailButton = await screen.findByTestId('icon: MailModOutline');
+			expect(sendEmailButton).toBeVisible();
+			const moveEmailButton = await screen.findByTestId('icon: MoveOutline');
+			expect(moveEmailButton).toBeVisible();
+			const trashEmailButton = await screen.findByTestId('icon: Trash2Outline');
+			expect(trashEmailButton).toBeVisible();
+			const editEmailButton = await screen.findByTestId('icon: Edit2Outline');
+			expect(editEmailButton).toBeVisible();
 		});
 	});
 
