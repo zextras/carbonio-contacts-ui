@@ -172,5 +172,29 @@ describe('SearchView', () => {
 
 			expect(await screen.findByTestId('contact-group-displayer')).toBeVisible();
 		});
+		it('should display the actions on hover', async () => {
+			populateFoldersStore();
+			const soapContactGroup = createSoapContactGroupV2({
+				contactGroupName: 'Test Contact Group',
+				folderId: FOLDERS.CONTACTS
+			});
+			const store = generateStore();
+
+			const searchViewProps = setupSearch({ contacts: [soapContactGroup] });
+			const { user } = setupTest(<SearchView {...searchViewProps} />, {
+				store
+			});
+			const listItem = await screen.findByText('Test Contact Group');
+
+			await act(() => user.hover(listItem));
+			const sendEmailButton = await screen.findByTestId('icon: EmailOutline');
+			expect(sendEmailButton).toBeVisible();
+			const moveEmailButton = await screen.findByTestId('icon: MoveOutline');
+			expect(moveEmailButton).toBeVisible();
+			const trashEmailButton = await screen.findByTestId('icon: Trash2Outline');
+			expect(trashEmailButton).toBeVisible();
+			const editEmailButton = await screen.findByTestId('icon: Edit2Outline');
+			expect(editEmailButton).toBeVisible();
+		});
 	});
 });
