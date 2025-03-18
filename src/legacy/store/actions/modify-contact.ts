@@ -5,8 +5,9 @@
  */
 import { soapFetch } from '@zextras/carbonio-shell-ui';
 
+import { ModifyContactResponse } from '../../../network/api/modify-contact';
 import { Contact } from '../../types/contact';
-import { SoapContact } from '../../types/soap';
+import { ModifyContactRequest, SoapContact } from '../../types/soap';
 import { normalizeContactToSoap } from '../../utils/normalizations/normalize-contact-to-soap';
 
 export const modifyContact = async ({
@@ -14,8 +15,7 @@ export const modifyContact = async ({
 }: {
 	updatedContact: Contact;
 }): Promise<SoapContact> => {
-	const { cn } = (await soapFetch('ModifyContact', {
-		_jsns: 'urn:zimbraMail',
+	const { cn } = await soapFetch<ModifyContactRequest, ModifyContactResponse>('ModifyContact', {
 		force: '1',
 		replace: '0',
 		cn: {
@@ -23,6 +23,6 @@ export const modifyContact = async ({
 			id: updatedContact.id,
 			a: normalizeContactToSoap(updatedContact)
 		}
-	})) as { cn: Array<SoapContact> };
+	});
 	return cn[0];
 };
