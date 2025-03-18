@@ -11,7 +11,6 @@ import { Contact, ContactOrGroup } from '../types/contact';
 
 type ContactsStoreState = {
 	contacts: Record<string, ContactOrGroup>;
-	// TODO: I don't like this field as it is used only to track the state of the folder view
 	currentFolderViewList: Set<string>;
 };
 const useContactsStore = create<ContactsStoreState>()(() => ({
