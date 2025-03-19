@@ -16,6 +16,7 @@ export const modifyContact = async ({
 	updatedContact: Contact;
 }): Promise<SoapContact> => {
 	const { cn } = await soapFetch<ModifyContactRequest, ModifyContactResponse>('ModifyContact', {
+		_jsns: 'urn:zimbraMail',
 		force: '1',
 		replace: '0',
 		cn: {

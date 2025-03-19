@@ -242,6 +242,7 @@ export type CreateContactRequest = {
 export type ModifyContactRequestAttr = CreateContactRequestAttr;
 
 export type ModifyContactRequest = {
+	_jsns: 'urn:zimbraMail';
 	force: '0' | '1'; // Default to '1'
 	replace: '0' | '1'; // Default to '0'
 	cn: {
