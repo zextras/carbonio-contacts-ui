@@ -390,7 +390,7 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 				/>
 				<CustomMultivalueField
 					name="URL"
-					label={t('label.website', 'Website')}
+					label={t('label.website_one', 'Website')}
 					typeLabel={t('select.default', 'Select type')}
 					typeField="type"
 					types={defaultTypes}
@@ -401,7 +401,7 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 				/>
 				<CustomMultivalueField
 					name="address"
-					label={t('section.title.address', 'Address')}
+					label={t('section.title.address_one', 'Address')}
 					typeField="type"
 					typeLabel={t('select.default', 'Select type')}
 					types={defaultTypes}
