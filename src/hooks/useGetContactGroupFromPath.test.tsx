@@ -12,6 +12,7 @@ import { useParams } from 'react-router-dom';
 import { Store } from 'redux';
 
 import { useGetContactGroupFromPath } from './useGetContactGroupFromPath';
+import { addContactsToStore } from '../legacy/store/contacts';
 import { generateStore } from '../legacy/tests/generators/store';
 import { buildContactGroup } from '../tests/model-builder';
 
@@ -29,17 +30,11 @@ function getWrapper(store: Store<any, AnyAction>): React.FC {
 
 describe('Active Contact Group', () => {
 	const folderId = '1';
-	const contactGroup = buildContactGroup();
-	const store = generateStore({
-		contacts: {
-			contacts: {
-				[folderId]: [contactGroup]
-			},
-			status: {},
-			searchedInFolder: {}
-		}
-	});
+
+	const store = generateStore();
 	it('should return contact group using id parameter', () => {
+		const contactGroup = buildContactGroup();
+		addContactsToStore([contactGroup]);
 		(useParams as jest.Mock).mockReturnValue({ id: contactGroup.id, folderId });
 		const wrapper = getWrapper(store);
 
