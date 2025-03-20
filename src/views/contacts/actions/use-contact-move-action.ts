@@ -11,9 +11,9 @@ import { Contact } from '../../../legacy/types/contact';
 
 export const useContactMoveAction = (contact: Contact): Action => {
 	const [t] = useTranslation();
-	const modalTitle = t('contact.modal.restore_single.title', {
+	const modalTitle = t('contact.modal.move_single.title', {
 		contactDesc: `${contact.firstName} ${contact.lastName}`,
-		defaultValue: "Restore {{contactDesc}}'s contact"
+		defaultValue: "Move {{contactDesc}}'s contact"
 	});
 	return useMoveContacts([contact], modalTitle);
 };
