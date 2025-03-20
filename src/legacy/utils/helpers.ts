@@ -4,12 +4,11 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import type { TFunction } from 'i18next';
-import { cloneDeep, filter, find, forEach, map, merge, reduce, reject, some } from 'lodash';
+import { find, forEach, merge, reduce, some } from 'lodash';
 
 import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
-import { Folder } from '../../carbonio-ui-commons/types';
 import { ContactGroup } from '../../model/contact-group';
-import { Contact, ContactOrGroup, ContactsFolder } from '../types/contact';
+import { ContactOrGroup, ContactsFolder } from '../types/contact';
 import { ContactsSlice, FoldersSlice } from '../types/store';
 
 const folderIdRegex = /^(.+:)*(\d+)$/;
@@ -55,58 +54,6 @@ export const applyFoldersChangesToStore = (
 	});
 };
 
-export function addFoldersToStore(state: FoldersSlice, folders: ContactsFolder[]): void {
-	if (folders && folders.length) {
-		const isFolderAvailable = state.folders?.find((item) => item.id === folders[0].id);
-		if (isFolderAvailable === undefined) {
-			state.folders = reduce(folders, (acc, v) => [...acc, v], state.folders);
-		}
-	}
-}
-
-export function findContactsInStore(state: ContactsSlice, ids: Array<string>): Array<Contact> {
-	return reduce(
-		ids,
-		(acc, id) =>
-			reduce(
-				state.contacts,
-				(acc2, v2) => {
-					const contactInStore = find(v2, (item) => item.id === id);
-					if (contactInStore) {
-						return [...acc2, cloneDeep(contactInStore)];
-					}
-					return acc2;
-				},
-				acc
-			),
-		[] as any
-	);
-}
-
-export function removeContactsWithoutID(state: ContactsSlice): void {
-	map(state.contacts, (v) => reject(v, (item) => !item.id));
-}
-
-export function removeContactsFromStore(
-	state: ContactsSlice,
-	idsToDelete?: Array<string | undefined>
-): void {
-	state.contacts = reduce(
-		state.contacts,
-		(acc, v, k) =>
-			idsToDelete
-				? {
-						...acc,
-						[k]: filter(v, (contact) => !some(idsToDelete, (id) => id === contact.id))
-					}
-				: {
-						...acc,
-						[k]: filter(v, (contact) => (contact.id ? contact : false))
-					},
-		{}
-	);
-}
-
 export function isGroup(contact: ContactOrGroup): contact is ContactGroup {
 	return (<ContactGroup>contact).members !== undefined;
 }
@@ -137,13 +84,6 @@ export function addContactsToStore(
 		state.contacts
 	);
 }
-
-export const getSystemFoldersTranslatedName = (t: TFunction): Array<string> => [
-	t('folders.root', 'Root'),
-	t('folders.contacts', 'Contacts'),
-	t('folders.auto_contacts', 'Emailed Contacts'),
-	t('folders.trash', 'Trash')
-];
 
 export const getFolderTranslatedName = (
 	t: TFunction,
@@ -190,9 +130,3 @@ export const getFolderTranslatedNameByName = (t: TFunction, folderName: string):
 
 	return t(`folders.${translationKey}`, folderName);
 };
-
-export const translateFoldersNames = (t: TFunction, folders: Folder[]): Folder[] =>
-	folders.map((folder: Folder) => ({
-		...folder,
-		name: getFolderTranslatedName(t, folder.id, folder.name)
-	}));
