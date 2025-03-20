@@ -9,7 +9,7 @@ import { find, forEach, merge, reduce, some } from 'lodash';
 import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
 import { ContactGroup } from '../../model/contact-group';
 import { ContactOrGroup, ContactsFolder } from '../types/contact';
-import { ContactsSlice, FoldersSlice } from '../types/store';
+import { FoldersSlice } from '../types/store';
 
 const folderIdRegex = /^(.+:)*(\d+)$/;
 
@@ -60,30 +60,6 @@ export function isGroup(contact: ContactOrGroup): contact is ContactGroup {
 
 export const evaluateParentIds = (contacts: ContactOrGroup[]): Array<string> =>
 	contacts.map((contact) => contact.parent);
-
-export function addContactsToStore(
-	state: ContactsSlice,
-	contacts: ContactOrGroup[],
-	sharedFolderParent?: string
-): void {
-	reduce(
-		contacts,
-		(acc, contact) => {
-			const parentKey = sharedFolderParent ?? contact.parent;
-			if (!acc[parentKey]) {
-				// eslint-disable-next-line no-param-reassign
-				acc[parentKey] = [];
-			}
-
-			if (!acc[parentKey].some((existingContact) => existingContact.id === contact.id)) {
-				acc[parentKey].push(contact);
-			}
-
-			return acc;
-		},
-		state.contacts
-	);
-}
 
 export const getFolderTranslatedName = (
 	t: TFunction,
