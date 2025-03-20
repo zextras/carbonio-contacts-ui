@@ -24,7 +24,6 @@ import {
 import { CnItem } from '../../../../network/api/types';
 import { createSoapContact, createSoapContactGroupV2 } from '../../../../tests/utils';
 import { SearchContactsRequest, SearchContactsSoapResponse } from '../../../../types';
-import { generateStore } from '../../../tests/generators/store';
 import { type SoapContact } from '../../../types/soap';
 import SearchView from '../search-view';
 
@@ -90,10 +89,7 @@ describe('SearchView', () => {
 			useDisableSearch: (): [boolean, () => void] => [false, noop]
 		};
 
-		const store = generateStore();
-		setupTest(<SearchView {...searchViewProps} />, {
-			store
-		});
+		setupTest(<SearchView {...searchViewProps} />);
 		await searchInterceptor;
 
 		expect(await screen.findByText('Results for:')).toBeInTheDocument();
@@ -111,12 +107,9 @@ describe('SearchView', () => {
 				email,
 				folderId: FOLDERS.CONTACTS
 			});
-			const store = generateStore();
 
 			const searchViewProps = setupSearch({ contacts: [soapContact] });
-			const { user } = setupTest(<SearchView {...searchViewProps} />, {
-				store
-			});
+			const { user } = setupTest(<SearchView {...searchViewProps} />);
 			await screen.findByTestId(`search-contact-list-item-${soapContact.id}`);
 			makeListItemsVisible();
 			const clickableItem = await screen.findByText(email);
@@ -132,12 +125,9 @@ describe('SearchView', () => {
 				email,
 				folderId: FOLDERS.CONTACTS
 			});
-			const store = generateStore();
 
 			const searchViewProps = setupSearch({ contacts: [soapContact] });
-			const { user } = setupTest(<SearchView {...searchViewProps} />, {
-				store
-			});
+			const { user } = setupTest(<SearchView {...searchViewProps} />);
 			await screen.findByTestId(`search-contact-list-item-${soapContact.id}`);
 			makeListItemsVisible();
 			const clickableItem = await screen.findByText(email);
@@ -161,12 +151,9 @@ describe('SearchView', () => {
 				contactGroupName: 'Test Contact Group',
 				folderId: FOLDERS.CONTACTS
 			});
-			const store = generateStore();
 
 			const searchViewProps = setupSearch({ contacts: [soapContactGroup] });
-			const { user } = setupTest(<SearchView {...searchViewProps} />, {
-				store
-			});
+			const { user } = setupTest(<SearchView {...searchViewProps} />);
 			const listItem = await screen.findByText('Test Contact Group');
 			await user.click(listItem);
 
@@ -178,12 +165,9 @@ describe('SearchView', () => {
 				contactGroupName: 'Test Contact Group',
 				folderId: FOLDERS.CONTACTS
 			});
-			const store = generateStore();
 
 			const searchViewProps = setupSearch({ contacts: [soapContactGroup] });
-			const { user } = setupTest(<SearchView {...searchViewProps} />, {
-				store
-			});
+			const { user } = setupTest(<SearchView {...searchViewProps} />);
 			const listItem = await screen.findByText('Test Contact Group');
 
 			await act(() => user.hover(listItem));

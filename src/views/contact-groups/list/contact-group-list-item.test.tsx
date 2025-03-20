@@ -13,7 +13,6 @@ import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { populateFoldersStore } from '../../../carbonio-ui-commons/test/mocks/store/folders';
 import { screen, setupTest } from '../../../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../../../constants/tests';
-import { generateStore } from '../../../legacy/tests/generators/store';
 import { buildContactGroup, buildMembers } from '../../../tests/model-builder';
 
 jest.mock('react-router-dom', () => ({
@@ -22,7 +21,6 @@ jest.mock('react-router-dom', () => ({
 }));
 
 describe('Contact group list item', () => {
-	const store = generateStore();
 	beforeEach(() => {
 		populateFoldersStore();
 		jest.clearAllMocks();
@@ -38,13 +36,13 @@ describe('Contact group list item', () => {
 				members: buildMembers(faker.number.int({ min: 1, max: 100 }))
 			});
 
-			setupTest(<ContactGroupListItem contactGroup={contactGroup} />, { store });
+			setupTest(<ContactGroupListItem contactGroup={contactGroup} />);
 			expect(screen.getByTestId(TESTID_SELECTORS.icons.sendEmail)).toBeVisible();
 		});
 		it('should show send mail action as disabled when the contact group has 0 members', async () => {
 			const contactGroup = buildContactGroup();
 
-			setupTest(<ContactGroupListItem contactGroup={contactGroup} />, { store });
+			setupTest(<ContactGroupListItem contactGroup={contactGroup} />);
 			const mailToActionButton = screen.getByRoleWithIcon('button', {
 				icon: TESTID_SELECTORS.icons.sendEmail
 			});
@@ -55,14 +53,14 @@ describe('Contact group list item', () => {
 			populateFoldersStore();
 			const contactGroup = buildContactGroup();
 
-			setupTest(<ContactGroupListItem contactGroup={contactGroup} />, { store });
+			setupTest(<ContactGroupListItem contactGroup={contactGroup} />);
 			expect(screen.getByTestId(TESTID_SELECTORS.icons.trash)).toBeVisible();
 		});
 		it('should display delete action when contact group is in trash', () => {
 			populateFoldersStore();
 			const contactGroup = buildContactGroup({ parent: FOLDERS.TRASH });
 
-			setupTest(<ContactGroupListItem contactGroup={contactGroup} />, { store });
+			setupTest(<ContactGroupListItem contactGroup={contactGroup} />);
 			expect(screen.getByTestId(TESTID_SELECTORS.icons.deletePermanently)).toBeVisible();
 		});
 	});

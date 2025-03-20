@@ -5,15 +5,11 @@
  */
 import React from 'react';
 
-import { AnyAction } from '@reduxjs/toolkit';
 import { renderHook } from '@testing-library/react';
-import { Provider } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Store } from 'redux';
 
 import { useGetContactGroupFromPath } from './useGetContactGroupFromPath';
 import { addContactsToStore } from '../legacy/store/contacts';
-import { generateStore } from '../legacy/tests/generators/store';
 import { buildContactGroup } from '../tests/model-builder';
 
 jest.mock('react-router-dom', () => ({
@@ -21,22 +17,19 @@ jest.mock('react-router-dom', () => ({
 	useParams: jest.fn()
 }));
 
-function getWrapper(store: Store<any, AnyAction>): React.FC {
+function getWrapper(): React.FC {
 	// eslint-disable-next-line react/display-name
-	return ({ children }: { children?: React.ReactNode }) => (
-		<Provider store={store}>{children}</Provider>
-	);
+	return ({ children }: { children?: React.ReactNode }) => <>{children}</>;
 }
 
 describe('Active Contact Group', () => {
 	const folderId = '1';
 
-	const store = generateStore();
 	it('should return contact group using id parameter', () => {
 		const contactGroup = buildContactGroup();
 		addContactsToStore([contactGroup]);
 		(useParams as jest.Mock).mockReturnValue({ id: contactGroup.id, folderId });
-		const wrapper = getWrapper(store);
+		const wrapper = getWrapper();
 
 		const { result } = renderHook(useGetContactGroupFromPath, { wrapper });
 
@@ -44,7 +37,7 @@ describe('Active Contact Group', () => {
 	});
 
 	it('should return undefined if contact group not present', () => {
-		const wrapper = getWrapper(store);
+		const wrapper = getWrapper();
 		(useParams as jest.Mock).mockReturnValue({ id: 'non-existing', folderId });
 
 		const { result } = renderHook(useGetContactGroupFromPath, { wrapper });

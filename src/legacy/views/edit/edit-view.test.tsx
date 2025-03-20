@@ -13,18 +13,16 @@ import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { generateFolder } from '../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
 import { populateFoldersStore } from '../../../carbonio-ui-commons/test/mocks/store/folders';
 import { screen, setupTest } from '../../../carbonio-ui-commons/test/test-setup';
-import { generateStore } from '../../tests/generators/store';
 import { registerCreateContactHandler } from '../../tests/msw/create-contact';
 import { CreateContactRequest } from '../../types/soap';
 
 describe('Edit view', () => {
 	it('should not show the destination folder select while editing a contact', () => {
 		populateFoldersStore();
-		const store = generateStore();
+
 		const folderId = FOLDERS.CONTACTS;
 		const contactId = faker.string.uuid();
 		setupTest(<EditView />, {
-			store,
 			initialEntries: [`/folder/${folderId}/edit/${contactId}`],
 			path: 'folder/:folderId/edit/:editId'
 		});
@@ -35,8 +33,8 @@ describe('Edit view', () => {
 
 	it('should show the destination folder select while creating a contact', async () => {
 		populateFoldersStore();
-		const store = generateStore();
-		setupTest(<EditView />, { store });
+
+		setupTest(<EditView />);
 		expect(screen.getByRole('button', { name: /save/i })).toBeVisible();
 
 		expect(screen.getByText('Destination address book')).toBeVisible();
@@ -47,12 +45,10 @@ describe('Edit view', () => {
 	it('should create the new contact in the selected folder', async () => {
 		const addressBook = generateFolder({ view: 'contact', id: faker.string.uuid() });
 		populateFoldersStore({ customFolders: [addressBook] });
-		const store = generateStore();
+
 		const handler = registerCreateContactHandler();
 		const newName = faker.person.firstName();
-		const { user } = setupTest(<EditView />, {
-			store
-		});
+		const { user } = setupTest(<EditView />);
 		const inputName = screen.getByRole('textbox', { name: /first name/i });
 		const saveButton = screen.getByRole('button', { name: /save/i });
 		expect(screen.getByText('Destination address book')).toBeVisible();
@@ -76,9 +72,9 @@ describe('Edit view', () => {
 	it('should call the onTitleChanged callback if the title is changed', async () => {
 		populateFoldersStore();
 		const firstName = faker.person.firstName();
-		const store = generateStore();
+
 		const onTitleChanged = jest.fn();
-		const { user } = setupTest(<EditView onTitleChanged={onTitleChanged} />, { store });
+		const { user } = setupTest(<EditView onTitleChanged={onTitleChanged} />);
 		const inputName = await screen.findByRole('textbox', { name: /first name/i });
 		await act(async () => user.type(inputName, firstName));
 		expect(onTitleChanged).toHaveBeenCalled();
@@ -87,8 +83,8 @@ describe('Edit view', () => {
 	it('should create the new contact in the contact folder (parent 7) by default', async () => {
 		populateFoldersStore();
 		const handler = registerCreateContactHandler();
-		const store = generateStore();
-		const { user } = setupTest(<EditView />, { store });
+
+		const { user } = setupTest(<EditView />);
 		const newName = faker.person.firstName();
 		const inputName = screen.getByRole('textbox', { name: /first name/i });
 		const saveButton = screen.getByRole('button', { name: /save/i });
@@ -111,9 +107,9 @@ describe('Edit view', () => {
 	it('should call the onClose callback if the contacts is successfully saved', async () => {
 		populateFoldersStore();
 		registerCreateContactHandler();
-		const store = generateStore();
+
 		const onClose = jest.fn();
-		const { user } = setupTest(<EditView onClose={onClose} />, { store });
+		const { user } = setupTest(<EditView onClose={onClose} />);
 		const newName = faker.person.firstName();
 		const inputName = screen.getByRole('textbox', { name: /first name/i });
 		const saveButton = screen.getByRole('button', { name: /save/i });
@@ -126,11 +122,10 @@ describe('Edit view', () => {
 
 	it('should save button enabled once after change anything in editing a contact', async () => {
 		populateFoldersStore();
-		const store = generateStore();
+
 		const folderId = FOLDERS.CONTACTS;
 		const contactId = faker.string.uuid();
 		const { user } = setupTest(<EditView />, {
-			store,
 			initialEntries: [`/folder/${folderId}/edit/${contactId}`],
 			path: 'folder/:folderId/edit/:editId'
 		});
