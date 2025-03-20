@@ -24,7 +24,6 @@ import { TaggableItem } from '../../actions/types';
 import { ZIMBRA_STANDARD_COLORS } from '../../carbonio-ui-commons/constants/utils';
 import { useTags } from '../../carbonio-ui-commons/store/zustand/tags';
 import { Tag, Tags } from '../../carbonio-ui-commons/types/tags';
-import { useAppDispatch } from '../hooks/redux';
 import { contactAction } from '../store/actions/contact-action';
 import { StoreProvider } from '../store/redux';
 import { Contact } from '../types/contact';
@@ -253,7 +252,6 @@ const MultiSelectTagsDropdownItem = ({
 }): ReactElement => {
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
-	const dispatch = useAppDispatch();
 	const [isHovering, setIsHovering] = useState(false);
 	const navigate = useNavigate();
 

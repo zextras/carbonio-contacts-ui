@@ -4,12 +4,11 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import type { TFunction } from 'i18next';
-import { find, forEach, merge, reduce, some } from 'lodash';
+import { reduce } from 'lodash';
 
 import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
 import { ContactGroup } from '../../model/contact-group';
 import { ContactOrGroup, ContactsFolder } from '../types/contact';
-import { FoldersSlice } from '../types/store';
 
 const folderIdRegex = /^(.+:)*(\d+)$/;
 
@@ -25,34 +24,6 @@ export function extractFolders(accordions: ContactsFolder[]): ContactsFolder[] {
 		[] as ContactsFolder[]
 	);
 }
-
-export function removeFoldersFromStore(
-	state: FoldersSlice,
-	idsToDelete?: Array<string | undefined>
-): void {
-	state.folders = reduce(
-		state.folders,
-		(acc, v) => {
-			const value = some(idsToDelete, (cid) => cid === v.id);
-			return value ? [...acc] : [...acc, v];
-		},
-		[] as ContactsFolder[]
-	);
-}
-
-export const applyFoldersChangesToStore = (
-	state: FoldersSlice,
-	folders: ContactsFolder[]
-): void => {
-	forEach(folders, (f) => {
-		const isFolderInStore = find(state.folders, ['id', f.id]);
-		if (isFolderInStore) {
-			merge(isFolderInStore, f);
-		} else {
-			state.folders = [...state.folders, f];
-		}
-	});
-};
 
 export function isGroup(contact: ContactOrGroup): contact is ContactGroup {
 	return (<ContactGroup>contact).members !== undefined;
