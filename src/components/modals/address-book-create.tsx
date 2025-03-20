@@ -6,18 +6,18 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
 import {
-	Container,
 	Divider,
 	Input,
 	InputProps,
 	ModalFooter,
 	ModalHeader,
-	Padding,
 	useSnackbar
 } from '@zextras/carbonio-design-system';
 import { filter } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
+import { ModalContentAndFooterWrapper } from './modal-content-and-footer-wrapper';
+import { ModalWrapper } from './modal-wrapper';
 import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
 import { useFolder } from '../../carbonio-ui-commons/store/zustand/folder/hooks';
 import { Folder } from '../../carbonio-ui-commons/types/folder';
@@ -108,40 +108,33 @@ export const AddressBookCreateModal = ({
 	}, [createSnackbar, newAddressBookName, onClose, parentAddressBook, t]);
 
 	return (
-		<>
+		<ModalWrapper>
 			<ModalHeader title={modalTitle} onClose={onClose} showCloseIcon />
 			<Divider />
-			<Padding vertical={'medium'}>
-				<Container
-					gap={'0.5rem'}
-					mainAlignment={'flex-start'}
-					crossAlignment={'flex-start'}
-					height={'fit'}
-				>
-					<Input
-						label={addressBookNameFieldLabel}
-						backgroundColor={'gray5'}
-						hasError={addressBookAlreadyExists}
-						value={newAddressBookName}
-						onChange={onAddressBookNameChanged}
-					/>
-					<FolderTreeSelector
-						selectedFolderId={parentAddressBook?.id}
-						onFolderSelected={onParentAddressBookSelected}
-						showSharedAccounts
-						showTrashFolder={false}
-						showLinkedFolders
-						allowRootSelection
-						allowFolderCreation={false}
-					/>
-				</Container>
-			</Padding>
-			<Divider />
-			<ModalFooter
-				confirmLabel={confirmLabel}
-				confirmDisabled={confirmDisabled}
-				onConfirm={onConfirm}
-			/>
-		</>
+			<ModalContentAndFooterWrapper>
+				<Input
+					label={addressBookNameFieldLabel}
+					backgroundColor={'gray5'}
+					hasError={addressBookAlreadyExists}
+					value={newAddressBookName}
+					onChange={onAddressBookNameChanged}
+				/>
+				<FolderTreeSelector
+					selectedFolderId={parentAddressBook?.id}
+					onFolderSelected={onParentAddressBookSelected}
+					showSharedAccounts
+					showTrashFolder={false}
+					showLinkedFolders
+					allowRootSelection
+					allowFolderCreation={false}
+				/>
+				<Divider />
+				<ModalFooter
+					confirmLabel={confirmLabel}
+					confirmDisabled={confirmDisabled}
+					onConfirm={onConfirm}
+				/>
+			</ModalContentAndFooterWrapper>
+		</ModalWrapper>
 	);
 };
