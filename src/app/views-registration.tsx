@@ -27,7 +27,6 @@ import {
 	GROUPS_ROUTE,
 	NEW_CONTACT_GROUP_BOARD_ID
 } from '../constants';
-import { StoreProvider } from '../legacy/store/redux';
 
 const LazyContactsView = lazy(
 	() => import(/* webpackChunkName: "contacts-view" */ '../views/contacts-view')
@@ -77,11 +76,9 @@ const LazyEditDLBoardView = lazy(
 
 const ContactsAppView = (): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
-		<StoreProvider>
-			<ModalManager>
-				<LazyContactsView />
-			</ModalManager>
-		</StoreProvider>
+		<ModalManager>
+			<LazyContactsView />
+		</ModalManager>
 	</Suspense>
 );
 
@@ -101,31 +98,25 @@ const DistributionListAppView = (): React.JSX.Element => (
 
 const BoardView = (): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
-		<StoreProvider>
-			<ModalManager>
-				<LazyBoardView />
-			</ModalManager>
-		</StoreProvider>
+		<ModalManager>
+			<LazyBoardView />
+		</ModalManager>
 	</Suspense>
 );
 
 const NewContactGroupBoardView = (): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
-		<StoreProvider>
-			<ModalManager>
-				<LazyNewContactGroupBoardView />
-			</ModalManager>
-		</StoreProvider>
+		<ModalManager>
+			<LazyNewContactGroupBoardView />
+		</ModalManager>
 	</Suspense>
 );
 
 const EditContactGroupBoardView = (): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
-		<StoreProvider>
-			<ModalManager>
-				<LazyEditContactGroupBoardView />
-			</ModalManager>
-		</StoreProvider>
+		<ModalManager>
+			<LazyEditContactGroupBoardView />
+		</ModalManager>
 	</Suspense>
 );
 
@@ -137,31 +128,25 @@ const EditDLBoardView = (): React.JSX.Element => (
 
 const SettingsView = (): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
-		<StoreProvider>
-			<ModalManager>
-				<LazySettingsView />
-			</ModalManager>
-		</StoreProvider>
+		<ModalManager>
+			<LazySettingsView />
+		</ModalManager>
 	</Suspense>
 );
 
 const SearchView = (props: SearchUI.SearchViewProps): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
-		<StoreProvider>
-			<ModalManager>
-				<LazySearchView {...props} />
-			</ModalManager>
-		</StoreProvider>
+		<ModalManager>
+			<LazySearchView {...props} />
+		</ModalManager>
 	</Suspense>
 );
 
 const LegacySecondaryBarView = (props: SecondaryBarComponentProps): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
-		<StoreProvider>
-			<ModalManager>
-				<LazyLegacySecondaryBarView {...props} />
-			</ModalManager>
-		</StoreProvider>
+		<ModalManager>
+			<LazyLegacySecondaryBarView {...props} />
+		</ModalManager>
 	</Suspense>
 );
 

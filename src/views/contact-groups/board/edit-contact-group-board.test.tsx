@@ -16,7 +16,6 @@ import { setupTest, screen } from '../../../carbonio-ui-commons/test/test-setup'
 import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../../constants';
 import { JEST_MOCKED_ERROR, PALETTE, TESTID_SELECTORS } from '../../../constants/tests';
 import { addContactsToStore } from '../../../legacy/store/contacts';
-import { generateStore } from '../../../legacy/tests/generators/store';
 import * as modifyContactGroup from '../../../network/api/modify-contact';
 import { buildContactGroup } from '../../../tests/model-builder';
 import { registerModifyContactGroupHandler } from '../../../tests/msw-handlers/modify-contact-group';
@@ -48,7 +47,7 @@ describe('Edit contact group board', () => {
 	describe('Save button behaviours', () => {
 		describe('Save button disabled', () => {
 			it('should disable the save button when name input is empty string', async () => {
-				const { user } = setupTest(<EditContactGroupBoard />, { store: generateStore() });
+				const { user } = setupTest(<EditContactGroupBoard />);
 				await user.clear(screen.getByRole('textbox', { name: 'Group name*' }));
 				expect(
 					screen.getByRoleWithIcon('button', { name: /SAVE/i, icon: TESTID_SELECTORS.icons.save })
@@ -56,7 +55,7 @@ describe('Edit contact group board', () => {
 			});
 
 			it('should disable save button when name input contains only space characters', async () => {
-				const { user } = setupTest(<EditContactGroupBoard />, { store: generateStore() });
+				const { user } = setupTest(<EditContactGroupBoard />);
 				const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
 				await user.clear(nameInput);
 				await user.type(nameInput, '   ');
@@ -67,7 +66,7 @@ describe('Edit contact group board', () => {
 
 			it('should disable save button when name input length is greater than 256', async () => {
 				const newName = faker.string.alphanumeric(CONTACT_GROUP_NAME_MAX_LENGTH + 1);
-				const { user } = setupTest(<EditContactGroupBoard />, { store: generateStore() });
+				const { user } = setupTest(<EditContactGroupBoard />);
 				const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
 				await user.clear(nameInput);
 				await user.type(nameInput, newName);
@@ -81,7 +80,7 @@ describe('Edit contact group board', () => {
 			const handler = registerModifyContactGroupHandler();
 
 			const newName = faker.string.alpha(10);
-			const { user } = setupTest(<EditContactGroupBoard />, { store: generateStore() });
+			const { user } = setupTest(<EditContactGroupBoard />);
 			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
 			await user.clear(nameInput);
 			await user.type(nameInput, newName);
@@ -101,7 +100,7 @@ describe('Edit contact group board', () => {
 				createSoapContactGroup(contactGroup.title, undefined, contactGroup.id)
 			);
 			const newName = faker.string.alpha(10);
-			const { user } = setupTest(<EditContactGroupBoard />, { store: generateStore() });
+			const { user } = setupTest(<EditContactGroupBoard />);
 			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
 			await user.clear(nameInput);
 			await user.type(nameInput, newName);
@@ -117,7 +116,7 @@ describe('Edit contact group board', () => {
 			jest.spyOn(console, 'warn').mockImplementation();
 			registerModifyContactGroupHandler(undefined, JEST_MOCKED_ERROR);
 			const newName = faker.string.alpha(10);
-			const { user } = setupTest(<EditContactGroupBoard />, { store: generateStore() });
+			const { user } = setupTest(<EditContactGroupBoard />);
 			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
 			await user.clear(nameInput);
 			await user.type(nameInput, newName);
@@ -137,7 +136,7 @@ describe('Edit contact group board', () => {
 			registerModifyContactGroupHandler(undefined, JEST_MOCKED_ERROR);
 
 			const newName = faker.string.alpha(10);
-			const { user } = setupTest(<EditContactGroupBoard />, { store: generateStore() });
+			const { user } = setupTest(<EditContactGroupBoard />);
 			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
 			await user.clear(nameInput);
 			await user.type(nameInput, newName);
@@ -156,7 +155,7 @@ describe('Edit contact group board', () => {
 			const newEmail1 = faker.internet.email();
 			const newEmail2 = faker.internet.email();
 			const newName = faker.string.alpha(10);
-			const { user } = setupTest(<EditContactGroupBoard />, { store: generateStore() });
+			const { user } = setupTest(<EditContactGroupBoard />);
 			const contactInput = getContactInput();
 			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
 			await user.clear(nameInput);
@@ -192,7 +191,7 @@ describe('Edit contact group board', () => {
 			const modifyContactGroupSpy = jest.spyOn(modifyContactGroup, 'modifyContactGroup');
 			const newEmail1 = faker.internet.email();
 			const newEmail2 = faker.internet.email();
-			const { user } = setupTest(<EditContactGroupBoard />, { store: generateStore() });
+			const { user } = setupTest(<EditContactGroupBoard />);
 			const contactInput = getContactInput();
 
 			await user.type(contactInput, newEmail1);
@@ -228,7 +227,7 @@ describe('Edit contact group board', () => {
 			);
 			const newName = faker.string.alpha(10);
 			const modifyContactGroupSpy = jest.spyOn(modifyContactGroup, 'modifyContactGroup');
-			const { user } = setupTest(<EditContactGroupBoard />, { store: generateStore() });
+			const { user } = setupTest(<EditContactGroupBoard />);
 			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
 			await user.clear(nameInput);
 			await user.type(nameInput, newName);
@@ -248,7 +247,7 @@ describe('Edit contact group board', () => {
 
 	describe('Discard button', () => {
 		it('should reset to the initial name when click on the discard button', async () => {
-			const { user } = setupTest(<EditContactGroupBoard />, { store: generateStore() });
+			const { user } = setupTest(<EditContactGroupBoard />);
 			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
 			const newName = faker.string.alphanumeric(CONTACT_GROUP_NAME_MAX_LENGTH + 1);
 			await user.clear(nameInput);
@@ -260,7 +259,7 @@ describe('Edit contact group board', () => {
 
 		it('should delete member list when click on the discard button', async () => {
 			const newEmail = faker.internet.email();
-			const { user } = setupTest(<EditContactGroupBoard />, { store: generateStore() });
+			const { user } = setupTest(<EditContactGroupBoard />);
 			const contactInput = getContactInput();
 			await user.type(contactInput, newEmail);
 			await act(async () => {
@@ -278,7 +277,7 @@ describe('Edit contact group board', () => {
 	describe('Name', () => {
 		it('should update name text', async () => {
 			const newName = faker.string.alpha(10);
-			const { user } = setupTest(<EditContactGroupBoard />, { store: generateStore() });
+			const { user } = setupTest(<EditContactGroupBoard />);
 			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
 			await user.clear(nameInput);
 			await user.type(nameInput, newName);
@@ -289,7 +288,7 @@ describe('Edit contact group board', () => {
 			const updateBoard = jest.fn();
 			spyUseBoardHooks(updateBoard);
 			const newName = faker.string.alpha(10);
-			const { user } = setupTest(<EditContactGroupBoard />, { store: generateStore() });
+			const { user } = setupTest(<EditContactGroupBoard />);
 
 			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
 			await user.clear(nameInput);
@@ -301,7 +300,7 @@ describe('Edit contact group board', () => {
 	describe('Addresses list', () => {
 		it('should update the number of the addresses when the user adds members on the list', async () => {
 			const email = faker.internet.email();
-			const { user } = setupTest(<EditContactGroupBoard />, { store: generateStore() });
+			const { user } = setupTest(<EditContactGroupBoard />);
 			const contactInput = getContactInput();
 			await user.type(contactInput, email);
 			await act(async () => {
@@ -317,7 +316,7 @@ describe('Edit contact group board', () => {
 		describe('Plus button and contact input', () => {
 			it('should disable the plus button when the user insert a duplicated chip only', async () => {
 				const validMail = faker.internet.email();
-				const { user } = setupTest(<EditContactGroupBoard />, { store: generateStore() });
+				const { user } = setupTest(<EditContactGroupBoard />);
 				const contactInput = getContactInput();
 				await user.type(contactInput, validMail);
 				await act(async () => {
@@ -341,7 +340,7 @@ describe('Edit contact group board', () => {
 		describe('Contact group add and remove members', () => {
 			it('should render the valid email on the list', async () => {
 				const email = faker.internet.email();
-				const { user } = setupTest(<EditContactGroupBoard />, { store: generateStore() });
+				const { user } = setupTest(<EditContactGroupBoard />);
 				const contactInput = getContactInput();
 				await user.type(contactInput, email);
 				await act(async () => {
@@ -357,7 +356,7 @@ describe('Edit contact group board', () => {
 			it('should add the valid email on the list and maintain also the previous list item', async () => {
 				const email = faker.internet.email();
 				const email2 = faker.internet.email();
-				const { user } = setupTest(<EditContactGroupBoard />, { store: generateStore() });
+				const { user } = setupTest(<EditContactGroupBoard />);
 				const contactInput = getContactInput();
 				await user.type(contactInput, email);
 				await act(async () => {
@@ -382,7 +381,7 @@ describe('Edit contact group board', () => {
 
 			it('should remove the email from the list when click on the remove button', async () => {
 				const email = faker.internet.email();
-				const { user } = setupTest(<EditContactGroupBoard />, { store: generateStore() });
+				const { user } = setupTest(<EditContactGroupBoard />);
 				const contactInput = getContactInput();
 				await user.type(contactInput, email);
 				await act(async () => {
@@ -404,7 +403,7 @@ describe('Edit contact group board', () => {
 			it('should update contactInput chips and icon when item is removed from the bottom list', async () => {
 				const errorMessage = 'Address already present';
 				const validMail = faker.internet.email();
-				const { user } = setupTest(<EditContactGroupBoard />, { store: generateStore() });
+				const { user } = setupTest(<EditContactGroupBoard />);
 				const contactInput = getContactInput();
 				await user.type(contactInput, validMail);
 				await act(async () => {
@@ -439,7 +438,7 @@ describe('Edit contact group board', () => {
 				const newEmail = faker.internet.email();
 				const invalidMail1 = faker.string.alpha(10);
 				const invalidMail2 = faker.string.alpha(10);
-				const { user } = setupTest(<EditContactGroupBoard />, { store: generateStore() });
+				const { user } = setupTest(<EditContactGroupBoard />);
 				const contactInput = getContactInput();
 				await user.type(contactInput, newEmail);
 				await act(async () => {
@@ -475,7 +474,7 @@ describe('Edit contact group board', () => {
 			it('should move valid chip addresses in bottom list and maintain duplicated ones in the contact input', async () => {
 				const email1 = faker.internet.email();
 				const email2 = faker.internet.email();
-				const { user } = setupTest(<EditContactGroupBoard />, { store: generateStore() });
+				const { user } = setupTest(<EditContactGroupBoard />);
 				const contactInput = getContactInput();
 				await user.type(contactInput, email1);
 				await act(async () => {
@@ -517,7 +516,7 @@ describe('Edit contact group board', () => {
 			it('should render "Address already present" error message when there is only a duplicated email as a chip and remove the error when a valid chip is added', async () => {
 				const errorMessage = 'Address already present';
 				const validMail = faker.internet.email();
-				const { user } = setupTest(<EditContactGroupBoard />, { store: generateStore() });
+				const { user } = setupTest(<EditContactGroupBoard />);
 				const contactInput = getContactInput();
 				await user.type(contactInput, validMail);
 				await act(async () => {
@@ -543,7 +542,7 @@ describe('Edit contact group board', () => {
 
 			it('should render AlertCircle error icon inside chip when the chip is a duplicated email and remove the icon error when duplicated item is removed from the bottom list', async () => {
 				const validMail = faker.internet.email();
-				const { user } = setupTest(<EditContactGroupBoard />, { store: generateStore() });
+				const { user } = setupTest(<EditContactGroupBoard />);
 				const contactInput = getContactInput();
 				await user.type(contactInput, validMail);
 				await act(async () => {
@@ -582,7 +581,7 @@ describe('Edit contact group board', () => {
 				const errorMessage = 'Addresses already present';
 				const validMail1 = faker.internet.email();
 				const validMail2 = faker.internet.email();
-				const { user } = setupTest(<EditContactGroupBoard />, { store: generateStore() });
+				const { user } = setupTest(<EditContactGroupBoard />);
 				const contactInput = getContactInput();
 
 				await user.type(contactInput, validMail1);
@@ -618,7 +617,7 @@ describe('Edit contact group board', () => {
 			it('should render "Invalid and already present addresses" error message when there are at least 1 error chip per type and remove the error when a valid chip is added', async () => {
 				const errorMessage = 'Invalid and already present addresses';
 				const validMail = faker.internet.email();
-				const { user } = setupTest(<EditContactGroupBoard />, { store: generateStore() });
+				const { user } = setupTest(<EditContactGroupBoard />);
 				const contactInput = getContactInput();
 
 				await user.type(contactInput, validMail);
@@ -668,13 +667,12 @@ describe('Edit contact group board', () => {
 				parent: folderId
 			});
 			addContactsToStore([sharedContactGroup]);
-			const store = generateStore();
 
 			registerModifyContactGroupHandler(
 				createSoapContactGroup(sharedContactGroup.title, undefined, sharedContactGroup.id)
 			);
 			const newName = faker.string.alpha(10);
-			const { user } = setupTest(<EditContactGroupBoard />, { store });
+			const { user } = setupTest(<EditContactGroupBoard />);
 			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
 			await user.clear(nameInput);
 			await user.type(nameInput, newName);

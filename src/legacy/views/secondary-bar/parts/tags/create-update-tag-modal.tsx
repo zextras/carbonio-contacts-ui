@@ -15,7 +15,6 @@ import {
 	ColorSelectProps
 } from '../../../../../carbonio-ui-commons/components/select/color-select';
 import { changeTagColor, createTag, renameTag } from '../../../../../carbonio-ui-commons/soap/tags';
-import { useAppDispatch } from '../../../../hooks/redux';
 import { contactAction } from '../../../../store/actions/contact-action';
 import { Contact } from '../../../../types/contact';
 import ModalFooter from '../../commons/modal-footer';
@@ -38,7 +37,6 @@ const CreateUpdateTagModal: FC<ComponentProps> = ({
 	const [t] = useTranslation();
 	const [name, setName] = useState(tag?.name || '');
 	const [color, setColor] = useState(tag?.color || 0);
-	const dispatch = useAppDispatch();
 	const title = useMemo(
 		() =>
 			editMode

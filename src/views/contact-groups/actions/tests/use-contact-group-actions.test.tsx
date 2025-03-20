@@ -20,7 +20,6 @@ import {
 	TRASH_ACTION
 } from '../../../../constants/actions';
 import { DELETE_PERMANENTLY_ACTION_DESCRIPTOR } from '../../../../constants/tests';
-import { generateStore } from '../../../../legacy/tests/generators/store';
 import { buildContactGroup, buildMembers } from '../../../../tests/model-builder';
 import { generateLinkFolder } from '../../tests/utils';
 import { useContactGroupActions } from '../use-contact-group-actions';
@@ -30,7 +29,6 @@ function mockMailComposerIntegration(): void {
 }
 
 describe('useContactGroupActions', () => {
-	const store = generateStore();
 	mockMailComposerIntegration();
 
 	describe('main account folder', () => {
@@ -44,7 +42,7 @@ describe('useContactGroupActions', () => {
 					members: buildMembers(faker.number.int({ min: 1, max: 3 }))
 				});
 
-				const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
+				const { result } = setupHook(() => useContactGroupActions(contactGroup));
 				expect(result.current).toHaveLength(4);
 				expect(result.current[0].id).toBe(SEND_EMAIL_ACTION.ID);
 				expect(result.current[1].id).toBe(EDIT_ACTION.ID);
@@ -57,7 +55,7 @@ describe('useContactGroupActions', () => {
 					members: buildMembers(faker.number.int({ min: 1, max: 100 })),
 					parent: FOLDERS.CONTACTS
 				});
-				const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
+				const { result } = setupHook(() => useContactGroupActions(contactGroup));
 
 				expect(result.current[0]).toEqual(
 					expect.objectContaining({
@@ -71,7 +69,7 @@ describe('useContactGroupActions', () => {
 			});
 			it('should return send mail action as disabled when the contact group has 0 members', () => {
 				const contactGroup = buildContactGroup({ parent: FOLDERS.CONTACTS, members: [] });
-				const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
+				const { result } = setupHook(() => useContactGroupActions(contactGroup));
 				expect(result.current[0]).toEqual(
 					expect.objectContaining({
 						id: SEND_EMAIL_ACTION.ID,
@@ -93,7 +91,7 @@ describe('useContactGroupActions', () => {
 					members: buildMembers(faker.number.int({ min: 1, max: 100 })),
 					parent: FOLDER_ID
 				});
-				const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
+				const { result } = setupHook(() => useContactGroupActions(contactGroup));
 
 				expect(result.current).toHaveLength(1);
 				expect(result.current).toContainEqual({
@@ -110,7 +108,7 @@ describe('useContactGroupActions', () => {
 				useFolderStore.setState({
 					folders: { [FOLDER_ID]: generateFolder({ id: FOLDER_ID, perm: 'w' }) }
 				});
-				const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
+				const { result } = setupHook(() => useContactGroupActions(contactGroup));
 
 				expect(result.current).toContainEqual({
 					id: TRASH_ACTION.ID,
@@ -132,7 +130,7 @@ describe('useContactGroupActions', () => {
 					}
 				});
 				const contactGroup = buildContactGroup({ parent: FOLDERS.TRASH });
-				const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
+				const { result } = setupHook(() => useContactGroupActions(contactGroup));
 				expect(result.current).toHaveLength(2);
 				expect(result.current[0]).toEqual({
 					id: RESTORE_ACTION.ID,
@@ -157,7 +155,7 @@ describe('useContactGroupActions', () => {
 					}
 				});
 				const contactGroup = buildContactGroup({ parent: FOLDERS.TRASH });
-				const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
+				const { result } = setupHook(() => useContactGroupActions(contactGroup));
 				expect(result.current).toHaveLength(2);
 				expect(result.current[0]).toEqual({
 					id: RESTORE_ACTION.ID,
@@ -195,9 +193,7 @@ describe('useContactGroupActions', () => {
 					folders: { [folderId]: mountpoint }
 				});
 
-				const { result } = setupHook(() => useContactGroupActions(contactGroupInSharedFolder), {
-					store
-				});
+				const { result } = setupHook(() => useContactGroupActions(contactGroupInSharedFolder));
 
 				expect(result.current).toHaveLength(4);
 				expect(result.current[0].id).toBe(SEND_EMAIL_ACTION.ID);
@@ -217,9 +213,7 @@ describe('useContactGroupActions', () => {
 					folders: { [folderId]: mountpoint }
 				});
 
-				const { result } = setupHook(() => useContactGroupActions(contactGroupInSharedFolder), {
-					store
-				});
+				const { result } = setupHook(() => useContactGroupActions(contactGroupInSharedFolder));
 
 				expect(result.current).toHaveLength(1);
 				expect(result.current[0].id).toBe(SEND_EMAIL_ACTION.ID);
@@ -238,7 +232,7 @@ describe('useContactGroupActions', () => {
 					}
 				});
 				const contactGroup = buildContactGroup({ parent: SHARED_ACCOUNT_TRASH_FOLDER });
-				const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
+				const { result } = setupHook(() => useContactGroupActions(contactGroup));
 
 				expect(result.current).toHaveLength(2);
 				expect(result.current[0]).toEqual({
@@ -265,7 +259,7 @@ describe('useContactGroupActions', () => {
 					}
 				});
 				const contactGroup = buildContactGroup({ parent: SHARED_ACCOUNT_TRASH_FOLDER });
-				const { result } = setupHook(() => useContactGroupActions(contactGroup), { store });
+				const { result } = setupHook(() => useContactGroupActions(contactGroup));
 
 				expect(result.current).toHaveLength(0);
 			});

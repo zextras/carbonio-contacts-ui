@@ -18,8 +18,6 @@ import { JEST_MOCKED_ERROR, TESTID_SELECTORS } from '../../../constants/tests';
 import { buildSoapError } from '../../../tests/utils';
 import * as modifyContactApi from '../../store/actions/modify-contact';
 import { addContactsToStore } from '../../store/contacts';
-import { generateStore } from '../../tests/generators/store';
-import { State } from '../../types/store';
 
 describe('Detail panel', () => {
 	describe('Contacts', () => {
@@ -76,10 +74,9 @@ describe('Detail panel', () => {
 					})
 				)
 			);
-			const store = generateStore();
+
 			const { user } = setupTest(<DetailPanel />, {
-				initialEntries: [`/folder/${folderId}/edit/${contactId}`],
-				store
+				initialEntries: [`/folder/${folderId}/edit/${contactId}`]
 			});
 			await screen.findByText(/edit/i);
 			expect(screen.getByTestId('icon: Edit2Outline')).toBeVisible();
@@ -101,45 +98,35 @@ describe('Detail panel', () => {
 			const folderId = faker.string.uuid();
 			const oldName = faker.string.alpha(10);
 			const newName = faker.string.alpha(10);
-			const preloadedState: Partial<State> = {
-				contacts: {
-					contacts: {
-						[folderId]: [
-							{
-								fileAsStr: oldName,
-								URL: {},
-								address: {},
-								company: faker.company.name(),
-								department: faker.string.alpha(10),
-								email: {},
-								firstName: oldName,
-								id: contactId,
-								image: faker.string.alpha(10),
-								jobTitle: faker.person.jobTitle(),
-								lastName: faker.person.lastName(),
-								middleName: faker.person.middleName(),
-								namePrefix: faker.string.alpha(10),
-								nameSuffix: faker.string.alpha(10),
-								nickName: faker.string.alpha(10),
-								notes: faker.string.alpha(10),
-								parent: folderId,
-								phone: {}
-							}
-						]
-					},
-					status: {},
-					searchedInFolder: {}
+			addContactsToStore([
+				{
+					fileAsStr: oldName,
+					URL: {},
+					address: {},
+					company: faker.company.name(),
+					department: faker.string.alpha(10),
+					email: {},
+					firstName: oldName,
+					id: contactId,
+					image: faker.string.alpha(10),
+					jobTitle: faker.person.jobTitle(),
+					lastName: faker.person.lastName(),
+					middleName: faker.person.middleName(),
+					namePrefix: faker.string.alpha(10),
+					nameSuffix: faker.string.alpha(10),
+					nickName: faker.string.alpha(10),
+					notes: faker.string.alpha(10),
+					parent: folderId,
+					phone: {}
 				}
-			};
+			]);
 			getSetupServer().use(
 				http.post('/service/soap/ModifyContactRequest', async () =>
 					HttpResponse.json(buildSoapError(JEST_MOCKED_ERROR), { status: 500 })
 				)
 			);
-			const store = generateStore(preloadedState);
 			const { user } = setupTest(<DetailPanel />, {
-				initialEntries: [`/folder/${folderId}/edit/${contactId}`],
-				store
+				initialEntries: [`/folder/${folderId}/edit/${contactId}`]
 			});
 			await screen.findByText(/edit/i);
 			expect(screen.getByTestId(TESTID_SELECTORS.icons.edit)).toBeVisible();

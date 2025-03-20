@@ -13,7 +13,6 @@ import { createSoapAPIInterceptor } from '../../../../../carbonio-ui-commons/tes
 import { screen, setupTest } from '../../../../../carbonio-ui-commons/test/test-setup';
 import { EMPTY_LIST_HINT } from '../../../../../constants/tests';
 import { buildContact } from '../../../../../tests/model-builder';
-import { generateStore } from '../../../../tests/generators/store';
 import { Contact, ContactOrGroup } from '../../../../types/contact';
 import { ContactsList } from '../contacts-list';
 
@@ -29,7 +28,6 @@ function setupContactsList({
 	currentFolderId?: string;
 	contacts?: ContactOrGroup[];
 } = {}): ReturnType<typeof setupTest> {
-	const store = generateStore();
 	return setupTest(
 		<ContactsList
 			folderId={currentFolderId}
@@ -37,8 +35,7 @@ function setupContactsList({
 			isSelecting={false}
 			contacts={contacts}
 			toggle={noop}
-		/>,
-		{ store }
+		/>
 	);
 }
 

@@ -9,7 +9,6 @@ import * as shell from '@zextras/carbonio-shell-ui';
 import { useGetContactGroupFromBoardId } from './use-get-contact-group-from-board-id';
 import { setupHook } from '../carbonio-ui-commons/test/test-setup';
 import { addContactsToStore } from '../legacy/store/contacts';
-import { generateStore } from '../legacy/tests/generators/store';
 import { buildContactGroup } from '../tests/model-builder';
 
 function spyMockUseBoard(contactGroupId: string, folderId: string): void {
@@ -30,11 +29,10 @@ describe('Use get contact group from board id', () => {
 		addContactsToStore([contactGroup]);
 	});
 
-	const store = generateStore();
 	it('should return the contact group if is in the store', () => {
 		spyMockUseBoard(contactGroup.id, folderId);
 
-		const { result } = setupHook(useGetContactGroupFromBoardId, { store });
+		const { result } = setupHook(useGetContactGroupFromBoardId);
 
 		expect(result.current).toEqual(contactGroup);
 	});
@@ -42,7 +40,7 @@ describe('Use get contact group from board id', () => {
 	it('should return undefined when requesting a contact that is not stored in an existing folder', () => {
 		spyMockUseBoard('non-existing-contact-group-id', folderId);
 
-		const { result } = setupHook(useGetContactGroupFromBoardId, { store });
+		const { result } = setupHook(useGetContactGroupFromBoardId);
 
 		expect(result.current).toBeUndefined();
 	});

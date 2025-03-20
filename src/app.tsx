@@ -10,7 +10,6 @@ import { FoldersSynchronizator } from './app/folders-syncronization';
 import { IntegrationsRegistration } from './app/integrations-registration';
 import { ViewsRegistration } from './app/views-registration';
 import { InitializeTags } from './components/initialize-tags';
-import { StoreProvider } from './legacy/store/redux';
 import { SyncDataHandler } from './legacy/views/secondary-bar/sync-data-handler';
 
 const App = (): React.JSX.Element => (
@@ -19,9 +18,8 @@ const App = (): React.JSX.Element => (
 		<InitializeTags />
 		<ViewsRegistration />
 		<IntegrationsRegistration />
-		<StoreProvider>
-			<SyncDataHandler />
-		</StoreProvider>
+
+		<SyncDataHandler />
 	</AuthGuard>
 );
 

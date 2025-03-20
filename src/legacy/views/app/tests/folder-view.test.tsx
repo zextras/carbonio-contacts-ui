@@ -40,7 +40,6 @@ import {
 	createSoapContact,
 	createSoapContactGroupV2
 } from '../../../../tests/utils';
-import { generateStore } from '../../../tests/generators/store';
 import { FolderView } from '../folder-view';
 import { createContactsApiInterceptor, findContactListItem } from './utils';
 
@@ -63,27 +62,23 @@ function MockedButton(props: { routeTo: string; initialRoute: string }): React.J
 function setupFolderView(
 	folderId: string,
 	navigateTo = `/folder/${folderId}`,
-	store = generateStore(),
 	initialRoute = `/folder/${folderId}`
 ): ReturnType<typeof setupTest> {
 	return setupTest(<MockedButton routeTo={navigateTo} initialRoute={initialRoute} />, {
-		initialEntries: [initialRoute],
-		store
+		initialEntries: [initialRoute]
 	});
 }
 
 function setupFolderViewV2({
 	folderId,
 	navigateTo = `/folder/${folderId}`,
-	store = generateStore(),
 	initialRoute = `/folder/${folderId}`
 }: {
 	folderId: string;
 	navigateTo?: string;
-	store?: ReturnType<typeof generateStore>;
 	initialRoute?: string;
 }): ReturnType<typeof setupTest> {
-	return setupFolderView(folderId, navigateTo, store, initialRoute);
+	return setupFolderView(folderId, navigateTo, initialRoute);
 }
 
 describe('folder-view', () => {
@@ -215,7 +210,6 @@ describe('folder-view', () => {
 		it('should delete a contact (move to trash)', async () => {
 			populateFoldersStore();
 
-			const store = generateStore();
 			const deleteContactInterceptor = createSoapAPIInterceptor<
 				ContactActionRequest,
 				ContactActionResponse
@@ -230,7 +224,6 @@ describe('folder-view', () => {
 			const { user } = setupFolderView(
 				folder.id,
 				`/folder/${folder.id}`,
-				store,
 				`/folder/${folder.id}/contacts/${contact.id}`
 			);
 
@@ -263,12 +256,10 @@ describe('folder-view', () => {
 			populateFoldersStore({
 				customFolders: [anotherFolder]
 			});
-			const store = generateStore();
 
 			const { user } = setupFolderView(
 				folder.id,
 				`/folder/${folder.id}`,
-				store,
 				`/folder/${folder.id}/contacts/${contact.id}`
 			);
 
@@ -314,12 +305,9 @@ describe('folder-view', () => {
 			const mailTo = { id: 'mail-to', label: 'action.send_msg', execute: jest.fn() };
 			jest.spyOn(shell, 'getAction').mockReturnValueOnce([mailTo, true]);
 
-			const store = generateStore();
-
 			const { user } = setupFolderView(
 				folder.id,
 				`/folder/${folder.id}`,
-				store,
 				`/folder/${folder.id}/contacts/${contact.id}`
 			);
 
@@ -347,12 +335,10 @@ describe('folder-view', () => {
 				more: false
 			});
 			useTagStore.setState({ tags: { '1': { id: '1', name: 'testTag' } } });
-			const store = generateStore();
 
 			const { user } = setupFolderView(
 				folder.id,
 				`/folder/${folder.id}`,
-				store,
 				`/folder/${folder.id}/contacts/${soapContact.id}`
 			);
 
@@ -381,12 +367,10 @@ describe('folder-view', () => {
 			useTagStore.setState({
 				tags: { '1': { id: '1', name: 'testTag1' }, '2': { id: '2', name: 'testTag2' } }
 			});
-			const store = generateStore();
 
 			const { user } = setupFolderView(
 				folder.id,
 				`/folder/${folder.id}`,
-				store,
 				`/folder/${folder.id}/contacts/${soapContact.id}`
 			);
 

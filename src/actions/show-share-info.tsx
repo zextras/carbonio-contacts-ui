@@ -13,7 +13,6 @@ import { isLink } from '../carbonio-ui-commons/helpers/folders';
 import { Folder } from '../carbonio-ui-commons/types/folder';
 import { ShareInfoModal } from '../components/modals/share-info-modal';
 import { ACTION_IDS } from '../constants';
-import { StoreProvider } from '../legacy/store/redux';
 
 export type ShowShareInfoAction = UIAction<Folder, Folder>;
 
@@ -48,9 +47,7 @@ export const useActionShowShareInfo = (): ShowShareInfoAction => {
 					id: modalId,
 					maxHeight: '90vh',
 					children: (
-						<StoreProvider>
-							<ShareInfoModal addressBook={addressBook} onClose={(): void => closeModal(modalId)} />
-						</StoreProvider>
+						<ShareInfoModal addressBook={addressBook} onClose={(): void => closeModal(modalId)} />
 					)
 				},
 				true

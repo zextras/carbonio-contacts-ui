@@ -13,7 +13,7 @@ import {
 	TESTID_SELECTORS,
 	TIMERS
 } from '../../../../constants/tests';
-import { generateStore } from '../../../../legacy/tests/generators/store';
+import { addContactsToStore } from '../../../../legacy/store/contacts';
 import { ContactOrGroup } from '../../../../legacy/types/contact';
 import { buildContactGroup, buildMembers } from '../../../../tests/model-builder';
 import { registerDeleteContactHandler } from '../../../../tests/msw-handlers/delete-contact';
@@ -41,12 +41,9 @@ describe('useContactGroupDeleteAction', () => {
 	const contactGroupWithMembers = buildContactGroup({ members: buildMembers(membersCount) });
 	const contactGroupNoMembers = { ...contactGroupWithMembers, members: [] };
 
-	const defaultStore = generateStore();
-
 	it('should return an action with the specific data', () => {
 		const { result } = setupHook(useContactGroupDeleteAction, {
-			initialProps: [contactGroupWithMembers],
-			store: defaultStore
+			initialProps: [contactGroupWithMembers]
 		});
 		expect(result.current).toEqual(
 			expect.objectContaining({
@@ -61,8 +58,7 @@ describe('useContactGroupDeleteAction', () => {
 
 	it('should return an execute field which opens a modal with the CG name', async () => {
 		const { result } = setupHook(useContactGroupDeleteAction, {
-			initialProps: [contactGroupWithMembers],
-			store: defaultStore
+			initialProps: [contactGroupWithMembers]
 		});
 		const action = result.current;
 		act(() => {
@@ -79,8 +75,7 @@ describe('useContactGroupDeleteAction', () => {
 
 	it('should return an execute field which opens a modal with an instruction text', async () => {
 		const { result } = setupHook(useContactGroupDeleteAction, {
-			initialProps: [contactGroupWithMembers],
-			store: defaultStore
+			initialProps: [contactGroupWithMembers]
 		});
 		const action = result.current;
 		act(() => {
@@ -98,8 +93,7 @@ describe('useContactGroupDeleteAction', () => {
 
 	it('should return an execute field which opens a modal with a close icon', async () => {
 		const { result } = setupHook(useContactGroupDeleteAction, {
-			initialProps: [contactGroupWithMembers],
-			store: defaultStore
+			initialProps: [contactGroupWithMembers]
 		});
 		const action = result.current;
 		act(() => {
@@ -119,8 +113,7 @@ describe('useContactGroupDeleteAction', () => {
 
 	it('should return an execute field which opens a modal with a delete action button', async () => {
 		const { result } = setupHook(useContactGroupDeleteAction, {
-			initialProps: [contactGroupWithMembers],
-			store: defaultStore
+			initialProps: [contactGroupWithMembers]
 		});
 		const action = result.current;
 		act(() => {
@@ -138,8 +131,7 @@ describe('useContactGroupDeleteAction', () => {
 
 	it('should close the UI if the user clicks on the close icon on the header', async () => {
 		const { result, user } = setupHook(useContactGroupDeleteAction, {
-			initialProps: [contactGroupWithMembers],
-			store: defaultStore
+			initialProps: [contactGroupWithMembers]
 		});
 		const action = result.current;
 		act(() => {
@@ -159,16 +151,11 @@ describe('useContactGroupDeleteAction', () => {
 	});
 
 	it('should show a success snackbar if the user clicks on the delete action button and the process completes successfully', async () => {
-		const store = generateStore(
-			createStoreInitialData({
-				'1': [contactGroupWithMembers]
-			})
-		);
+		addContactsToStore([contactGroupWithMembers]);
 		registerDeleteContactHandler(contactGroupWithMembers.id);
 
 		const { result, user } = setupHook(useContactGroupDeleteAction, {
-			initialProps: [contactGroupWithMembers],
-			store
+			initialProps: [contactGroupWithMembers]
 		});
 
 		const action = result.current;
@@ -189,8 +176,7 @@ describe('useContactGroupDeleteAction', () => {
 		jest.spyOn(console, 'warn').mockImplementation();
 		registerDeleteContactHandler(contactGroupNoMembers.id, JEST_MOCKED_ERROR);
 		const { result, user } = setupHook(useContactGroupDeleteAction, {
-			initialProps: [contactGroupWithMembers],
-			store: defaultStore
+			initialProps: [contactGroupWithMembers]
 		});
 		const action = result.current;
 		act(() => {
@@ -206,16 +192,11 @@ describe('useContactGroupDeleteAction', () => {
 	});
 
 	it('should call the API if the user clicks on the delete action button', async () => {
-		const store = generateStore(
-			createStoreInitialData({
-				'1': [contactGroupWithMembers]
-			})
-		);
+		addContactsToStore([contactGroupWithMembers]);
 		const handler = registerDeleteContactHandler(contactGroupWithMembers.id);
 
 		const { result, user } = setupHook(useContactGroupDeleteAction, {
-			initialProps: [contactGroupWithMembers],
-			store
+			initialProps: [contactGroupWithMembers]
 		});
 		const action = result.current;
 		act(() => {
@@ -235,16 +216,11 @@ describe('useContactGroupDeleteAction', () => {
 	});
 
 	it('should close the modal if the user clicks on the delete action button', async () => {
-		const store = generateStore(
-			createStoreInitialData({
-				'1': [contactGroupWithMembers]
-			})
-		);
+		addContactsToStore([contactGroupWithMembers]);
 		registerDeleteContactHandler(contactGroupWithMembers.id);
 
 		const { result, user } = setupHook(useContactGroupDeleteAction, {
-			initialProps: [contactGroupWithMembers],
-			store
+			initialProps: [contactGroupWithMembers]
 		});
 
 		const action = result.current;

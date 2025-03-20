@@ -11,7 +11,6 @@ import { useTranslation } from 'react-i18next';
 import { UIAction } from './types';
 import { SharedAddressBooksAddModal } from '../components/modals/shared-address-books-add/shared-address-books-add-modal';
 import { ACTION_IDS } from '../constants';
-import { StoreProvider } from '../legacy/store/redux';
 
 export type AddSharedAddressBooksAction = UIAction<never, never>;
 
@@ -27,11 +26,7 @@ export const useActionAddSharedAddressBooks = (): AddSharedAddressBooksAction =>
 			{
 				id: modalId,
 				maxHeight: '90vh',
-				children: (
-					<StoreProvider>
-						<SharedAddressBooksAddModal onClose={(): void => closeModal(modalId)} />
-					</StoreProvider>
-				)
+				children: <SharedAddressBooksAddModal onClose={(): void => closeModal(modalId)} />
 			},
 			true
 		);

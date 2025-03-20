@@ -14,7 +14,6 @@ import { isNestedInTrash } from '../carbonio-ui-commons/store/zustand/folder/uti
 import { Folder } from '../carbonio-ui-commons/types/folder';
 import { ContactsImportModal } from '../components/modals/contacts-import-modal';
 import { ACTION_IDS } from '../constants';
-import { StoreProvider } from '../legacy/store/redux';
 
 export type ImportContactsAction = UIAction<Folder, Folder>;
 
@@ -79,13 +78,11 @@ export const useActionImportContacts = (): ImportContactsAction => {
 						id: modalId,
 						maxHeight: '90vh',
 						children: (
-							<StoreProvider>
-								<ContactsImportModal
-									addressBook={addressBook}
-									file={file}
-									closeCallback={(): void => closeModal(modalId)}
-								/>
-							</StoreProvider>
+							<ContactsImportModal
+								addressBook={addressBook}
+								file={file}
+								closeCallback={(): void => closeModal(modalId)}
+							/>
 						)
 					},
 					true

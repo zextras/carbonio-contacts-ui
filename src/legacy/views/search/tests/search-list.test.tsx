@@ -9,7 +9,6 @@ import React from 'react';
 import { screen } from '@testing-library/react';
 
 import { makeListItemsVisible, setupTest } from '../../../../carbonio-ui-commons/test/test-setup';
-import { generateStore } from '../../../tests/generators/store';
 import { Contact } from '../../../types/contact';
 import { SearchList } from '../search-list';
 
@@ -39,14 +38,8 @@ const mockContacts: Array<Contact> = [
 ];
 describe('SearchList', () => {
 	it('should render the SearchList with no results', () => {
-		const store = generateStore();
 		setupTest(
-			<SearchList
-				contacts={[]}
-				filterCount={0}
-				setShowAdvanceFilters={mockSetShowAdvanceFilters}
-			/>,
-			{ store }
+			<SearchList contacts={[]} filterCount={0} setShowAdvanceFilters={mockSetShowAdvanceFilters} />
 		);
 
 		expect(screen.getByTestId('ContactsSearchResultListContainer')).toBeInTheDocument();
@@ -68,14 +61,8 @@ describe('SearchList', () => {
 	});
 
 	test('renders no results when search results have no contacts', async () => {
-		const store = generateStore();
 		setupTest(
-			<SearchList
-				contacts={[]}
-				filterCount={0}
-				setShowAdvanceFilters={mockSetShowAdvanceFilters}
-			/>,
-			{ store }
+			<SearchList contacts={[]} filterCount={0} setShowAdvanceFilters={mockSetShowAdvanceFilters} />
 		);
 
 		expect(await screen.findByTestId('displayer-title')).toBeInTheDocument();

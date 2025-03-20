@@ -19,7 +19,6 @@ import { populateFoldersStore } from '../../../carbonio-ui-commons/test/mocks/st
 import { setupTest, screen } from '../../../carbonio-ui-commons/test/test-setup';
 import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../../constants';
 import { PALETTE, TESTID_SELECTORS } from '../../../constants/tests';
-import { generateStore } from '../../../legacy/tests/generators/store';
 import { spyUseBoardHooks } from '../../../tests/utils';
 import { getContactInput } from '../../board/common-contact-group-board.test';
 import * as createContactGroup from '../api/create-contact-group';
@@ -52,8 +51,7 @@ jest.mock('react-router-dom', () => ({
 }));
 
 function setupNewContactGroupBoard(): ReturnType<typeof setupTest> {
-	const store = generateStore();
-	return setupTest(<NewContactGroupBoard />, { store });
+	return setupTest(<NewContactGroupBoard />);
 }
 describe('New contact group board', () => {
 	describe('Save button behaviours', () => {
@@ -153,10 +151,9 @@ describe('New contact group board', () => {
 			);
 
 			const newName = faker.string.alpha(10);
-			const store = generateStore();
+
 			const { user } = setupTest(<NewContactGroupBoard />, {
-				initialEntries: ['/contact-groups'],
-				store
+				initialEntries: ['/contact-groups']
 			});
 			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
 			await user.clear(nameInput);

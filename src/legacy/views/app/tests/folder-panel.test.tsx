@@ -48,7 +48,6 @@ import {
 	registerFindContactGroupsHandler
 } from '../../../../tests/msw-handlers/find-contact-groups';
 import { createSoapContact, createSoapContactGroup } from '../../../../tests/utils';
-import { generateStore } from '../../../tests/generators/store';
 import { FolderPanel } from '../folder-panel';
 import { createContactsApiInterceptor, findContactListItem } from './utils';
 import { SearchContactsRequest, SearchContactsSoapResponse } from '../../../../types';
@@ -71,11 +70,9 @@ const mockMailToAction = (execute = jest.fn()): void => {
 };
 
 function setupFolderPanel(folderId: string): ReturnType<typeof setupTest> {
-	const store = generateStore();
 	return setupTest(<FolderPanel />, {
 		initialEntries: [`/folder/${folderId}`],
-		path: 'folder/:folderId/:type?/:itemId?',
-		store
+		path: 'folder/:folderId/:type?/:itemId?'
 	});
 }
 
@@ -145,11 +142,10 @@ describe('Folder panel', () => {
 				items: [soapContact],
 				more: false
 			});
-			const store = generateStore();
+
 			setupTest(<FolderPanel />, {
 				initialEntries: [`/folder/${folder.id}`],
-				path: `/folder/:folderId/:type?/:itemId?`,
-				store
+				path: `/folder/:folderId/:type?/:itemId?`
 			});
 			await findContactListItem(soapContact);
 			expect(screen.getByText(email)).toBeVisible();
@@ -359,11 +355,10 @@ describe('Folder panel', () => {
 							items: [soapContact],
 							more: false
 						});
-						const store = generateStore();
+
 						const { user } = setupTest(<FolderPanel />, {
 							initialEntries: [`/folder/${folder.id}`],
-							path: `/folder/:folderId/:type?/:itemId?`,
-							store
+							path: `/folder/:folderId/:type?/:itemId?`
 						});
 						await findContactListItem(soapContact);
 
@@ -426,11 +421,10 @@ describe('Folder panel', () => {
 							items: [soapContact],
 							more: false
 						});
-						const store = generateStore();
+
 						const { user } = setupTest(<FolderPanel />, {
 							initialEntries: [`/folder/${folder.id}`],
-							path: `/folder/:folderId/:type?/:itemId?`,
-							store
+							path: `/folder/:folderId/:type?/:itemId?`
 						});
 						await findContactListItem(soapContact);
 
@@ -459,12 +453,11 @@ describe('Folder panel', () => {
 						items: [soapContact],
 						more: false
 					});
-					const store = generateStore();
+
 					useTagStore.setState({ tags: { '1': { id: '1', name: 'testTag' } } });
 					const { user } = setupTest(<FolderPanel />, {
 						initialEntries: [`/folder/${contactsFolder.id}`],
-						path: `/folder/:folderId/:type?/:itemId?`,
-						store
+						path: `/folder/:folderId/:type?/:itemId?`
 					});
 					await findContactListItem(soapContact);
 					const contactListItem = await screen.findByTestId(`contact-list-item-${soapContact.id}`);
@@ -506,11 +499,10 @@ describe('Folder panel', () => {
 						items: contacts,
 						more: false
 					});
-					const store = generateStore();
+
 					const { user } = setupTest(<FolderPanel />, {
 						initialEntries: [`/folder/${folder.id}`],
-						path: `/folder/:folderId/:type?/:itemId?`,
-						store
+						path: `/folder/:folderId/:type?/:itemId?`
 					});
 					await findContactListItem(soapContact1);
 
@@ -556,11 +548,10 @@ describe('Folder panel', () => {
 								more: false
 							});
 							useAppContext.mockReturnValue({ count: 42, setCount: jest.fn() });
-							const store = generateStore();
+
 							const { user } = setupTest(<FolderPanel />, {
 								initialEntries: [`/folder/${folder.id}`],
-								path: `/folder/:folderId/:type?/:itemId?`,
-								store
+								path: `/folder/:folderId/:type?/:itemId?`
 							});
 							await findContactListItem(soapContact1);
 							makeListItemsVisible();

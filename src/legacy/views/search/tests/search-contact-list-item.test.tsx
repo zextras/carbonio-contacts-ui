@@ -12,7 +12,6 @@ import { useNavigate } from 'react-router-dom';
 import { useTags } from '../../../../carbonio-ui-commons/store/zustand/tags';
 import { setupTest } from '../../../../carbonio-ui-commons/test/test-setup';
 import { getTagsArray } from '../../../helpers/tags';
-import { generateStore } from '../../../tests/generators/store';
 import { Contact } from '../../../types/contact';
 import { SearchContactListItem } from '../search-contact-list-item';
 
@@ -60,8 +59,7 @@ describe('SearchContactListItem', () => {
 	});
 
 	it('should render the component with correct structure', async () => {
-		const store = generateStore();
-		setupTest(<SearchContactListItem item={mockItem} />, { store });
+		setupTest(<SearchContactListItem item={mockItem} />);
 		expect(screen.getByTestId('search-contact-list-item')).toBeInTheDocument();
 		expect(screen.getByTestId('avatar')).toBeInTheDocument();
 		expect(await screen.findByText('display name')).toBeInTheDocument();
@@ -71,8 +69,7 @@ describe('SearchContactListItem', () => {
 		const useNavigateSpy = jest.fn();
 		(useNavigate as jest.Mock).mockReturnValue(useNavigateSpy);
 
-		const store = generateStore();
-		const { user } = setupTest(<SearchContactListItem item={mockItem} />, { store });
+		const { user } = setupTest(<SearchContactListItem item={mockItem} />);
 		const container = screen.getByTestId('search-contact-list-item');
 		await act(async () => {
 			await user.click(container);
@@ -81,8 +78,7 @@ describe('SearchContactListItem', () => {
 	});
 
 	it('should pass the correct tags to ItemContent', () => {
-		const store = generateStore();
-		setupTest(<SearchContactListItem item={mockItem} />, { store });
+		setupTest(<SearchContactListItem item={mockItem} />);
 		expect(getTagsArray).toHaveBeenCalledWith(mockTags, mockItem.tags);
 	});
 });
