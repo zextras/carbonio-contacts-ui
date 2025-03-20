@@ -5,18 +5,12 @@
  */
 import React, { useCallback, useState } from 'react';
 
-import {
-	Container,
-	Divider,
-	ModalFooter,
-	ModalHeader,
-	Padding,
-	useModal
-} from '@zextras/carbonio-design-system';
+import { Divider, ModalFooter, ModalHeader, useModal } from '@zextras/carbonio-design-system';
 
 import { Action } from './types';
 import { Folder } from '../carbonio-ui-commons/types';
 import { FolderTreeSelector } from '../components/folder-tree-selector/folder-tree-selector';
+import { ModalWrapper } from '../components/modals/modal-wrapper';
 
 type OnConfirmFn = (targetFolder: Folder, onModalCloseCallbackFn: () => void) => void;
 type UseSelectFolderModalActionProps = {
@@ -50,33 +44,24 @@ const SelectFolderModal = ({
 		targetFolder && onConfirm(targetFolder, onClose);
 	};
 	return (
-		<>
-			<ModalHeader title={modalTitle} onClose={onClose} showCloseIcon />
+		<ModalWrapper>
+			<ModalHeader onClose={onClose} title={modalTitle} showCloseIcon />
 			<Divider />
-			<Padding vertical={'medium'}>
-				<Container
-					gap={'0.5rem'}
-					mainAlignment={'flex-start'}
-					crossAlignment={'flex-start'}
-					height={'fit'}
-				>
-					<FolderTreeSelector
-						onFolderSelected={onFolderSelected}
-						showSharedAccounts
-						showTrashFolder={false}
-						showLinkedFolders
-						allowRootSelection={false}
-						allowFolderCreation={false}
-					/>
-				</Container>
-			</Padding>
-			<Divider />
+			<FolderTreeSelector
+				onFolderSelected={onFolderSelected}
+				showSharedAccounts
+				showTrashFolder={false}
+				showLinkedFolders
+				allowRootSelection={false}
+				allowFolderCreation={false}
+			/>
 			<ModalFooter
 				confirmLabel={confirmLabel}
 				confirmDisabled={!targetFolder}
 				onConfirm={_onConfirm}
 			/>
-		</>
+			<Divider />
+		</ModalWrapper>
 	);
 };
 
