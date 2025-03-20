@@ -14,7 +14,6 @@ import { isNestedInTrash } from '../carbonio-ui-commons/store/zustand/folder/uti
 import { Folder } from '../carbonio-ui-commons/types/folder';
 import { AddressBookEmptyModal } from '../components/modals/address-book-empty/address-book-empty';
 import { ACTION_IDS } from '../constants';
-import { StoreProvider } from '../legacy/store/redux';
 
 export type EmptyTrashAction = UIAction<Folder, Folder>;
 
@@ -64,12 +63,10 @@ export const useActionEmptyTrash = (): EmptyTrashAction => {
 					id: modalId,
 					maxHeight: '90vh',
 					children: (
-						<StoreProvider>
-							<AddressBookEmptyModal
-								addressBook={addressBook}
-								onClose={(): void => closeModal(modalId)}
-							/>
-						</StoreProvider>
+						<AddressBookEmptyModal
+							addressBook={addressBook}
+							onClose={(): void => closeModal(modalId)}
+						/>
 					)
 				},
 				true

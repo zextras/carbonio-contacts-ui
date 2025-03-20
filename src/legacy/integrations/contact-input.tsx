@@ -22,7 +22,6 @@ import { useTranslation } from 'react-i18next';
 
 import { DistributionListChip } from './distribution-list-chip';
 import { isValidEmail } from '../../carbonio-ui-commons/helpers/email-parser';
-import { StoreProvider } from '../store/redux';
 import type { ContactAddressMap } from '../types/contact';
 import type { GetContactsRequest, GetContactsResponse } from '../types/soap';
 import { Loader } from './parts/loader';
@@ -401,7 +400,5 @@ const ContactInputCore: FC<ContactInputProps> = ({
 };
 
 export const ContactInput = (props: ContactInputProps): ReactElement => (
-	<StoreProvider>
-		<ContactInputCore {...props} />
-	</StoreProvider>
+	<ContactInputCore {...props} />
 );

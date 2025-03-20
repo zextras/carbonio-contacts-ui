@@ -25,7 +25,6 @@ import { ZIMBRA_STANDARD_COLORS } from '../../carbonio-ui-commons/constants/util
 import { useTags } from '../../carbonio-ui-commons/store/zustand/tags';
 import { Tag, Tags } from '../../carbonio-ui-commons/types/tags';
 import { contactAction } from '../store/actions/contact-action';
-import { StoreProvider } from '../store/redux';
 import { Contact } from '../types/contact';
 import { TagsActionsType } from '../types/tags';
 import CreateUpdateTagModal from '../views/secondary-bar/parts/tags/create-update-tag-modal';
@@ -74,9 +73,7 @@ export const createAndApplyTag = ({
 			{
 				id: modalId,
 				children: (
-					<StoreProvider>
-						<CreateUpdateTagModal onClose={(): void => closeModal?.(modalId)} contact={contact} />
-					</StoreProvider>
+					<CreateUpdateTagModal onClose={(): void => closeModal?.(modalId)} contact={contact} />
 				)
 			},
 			true
@@ -95,11 +92,7 @@ export const createTag = ({ t, createModal, closeModal }: TagsActionsParams): Ta
 		createModal?.(
 			{
 				id: modalId,
-				children: (
-					<StoreProvider>
-						<CreateUpdateTagModal onClose={(): void => closeModal?.(modalId)} />
-					</StoreProvider>
-				)
+				children: <CreateUpdateTagModal onClose={(): void => closeModal?.(modalId)} />
 			},
 			true
 		);
@@ -119,9 +112,7 @@ export const editTag = ({ t, createModal, closeModal, tag }: TagsActionsParams):
 			{
 				id: modalId,
 				children: (
-					<StoreProvider>
-						<CreateUpdateTagModal onClose={(): void => closeModal?.(modalId)} tag={tag} editMode />
-					</StoreProvider>
+					<CreateUpdateTagModal onClose={(): void => closeModal?.(modalId)} tag={tag} editMode />
 				)
 			},
 			true
@@ -142,11 +133,7 @@ export const deleteTag = ({ t, createModal, closeModal, tag }: TagsActionsParams
 			createModal?.(
 				{
 					id: modalId,
-					children: (
-						<StoreProvider>
-							<DeleteTagModal onClose={(): void => closeModal?.(modalId)} tag={tag} />
-						</StoreProvider>
-					)
+					children: <DeleteTagModal onClose={(): void => closeModal?.(modalId)} tag={tag} />
 				},
 				true
 			);
