@@ -22,6 +22,7 @@ jest.mock('react-router-dom', () => ({
 
 describe('useRestoreSingleContact', () => {
 	it('should return an object with the specific data', () => {
+		(useParams as jest.Mock).mockReturnValue({ folderId: FOLDERS.INBOX });
 		const contact = buildContact({ parent: FOLDERS_DESCRIPTORS.trash.id });
 		const { result } = setupHook(useContactRestoreAction, { initialProps: [contact] });
 		expect(result.current).toEqual<UIAction<unknown, unknown>>(
