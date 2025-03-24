@@ -6,7 +6,9 @@
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
+import { useParams } from 'react-router-dom';
 
+import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { generateFolder } from '../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
 import { createSoapAPIInterceptor } from '../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { populateFoldersStore } from '../../../carbonio-ui-commons/test/mocks/store/folders';
@@ -21,6 +23,11 @@ import { ContactActionRequest, ContactActionResponse } from '../../../network/ap
 import { setupRestoreModal } from '../../../tests/modal-helpers';
 import { buildContact } from '../../../tests/model-builder';
 import { useRestoreContacts } from '../use-restore-contacts';
+
+jest.mock('react-router-dom', () => ({
+	...jest.requireActual('react-router-dom'),
+	useParams: jest.fn()
+}));
 
 function aFailingContactRestore(): any {
 	const response: ErrorSoapBodyResponse = {
@@ -37,6 +44,7 @@ describe('useRestoreContacts', () => {
 	const contacts: Contact[] = [buildContact()];
 	it('should open the restore modal on click', async () => {
 		populateFoldersStore();
+		(useParams as jest.Mock).mockReturnValue({ folderId: FOLDERS.INBOX });
 		const { result } = setupHook(() => useRestoreContacts(contacts, 'My Modal'));
 		const action = result.current;
 		act(() => {
@@ -49,6 +57,8 @@ describe('useRestoreContacts', () => {
 	});
 
 	it('should render a modal with the given title', () => {
+		populateFoldersStore();
+		(useParams as jest.Mock).mockReturnValue({ folderId: FOLDERS.INBOX });
 		const arrayContacts: Array<Contact> = [buildContact()];
 		const { result } = setupHook(() => useRestoreContacts(arrayContacts, 'My Modal'));
 		const action = result.current;
@@ -62,6 +72,8 @@ describe('useRestoreContacts', () => {
 	});
 
 	it('should display a close icon in the modal', () => {
+		populateFoldersStore();
+		(useParams as jest.Mock).mockReturnValue({ folderId: FOLDERS.INBOX });
 		const arrayContacts: Array<Contact> = [buildContact()];
 		const { result } = setupHook(() => useRestoreContacts(arrayContacts, ''));
 		const action = result.current;
@@ -77,6 +89,8 @@ describe('useRestoreContacts', () => {
 	});
 
 	it('should close the modal if the user clicks on the close icon', async () => {
+		populateFoldersStore();
+		(useParams as jest.Mock).mockReturnValue({ folderId: FOLDERS.INBOX });
 		const arrayContacts: Array<Contact> = [buildContact()];
 		const { result, user } = setupHook(() => useRestoreContacts(arrayContacts, ''));
 		const action = result.current;
@@ -92,6 +106,8 @@ describe('useRestoreContacts', () => {
 	});
 
 	it('should call the API with the proper parameters if the user clicks on the "Restore" button', async () => {
+		populateFoldersStore();
+		(useParams as jest.Mock).mockReturnValue({ folderId: FOLDERS.INBOX });
 		const apiInterceptor = aFailingContactRestore();
 		const customFolder = generateFolder({
 			id: '100'
@@ -119,6 +135,8 @@ describe('useRestoreContacts', () => {
 	});
 
 	it('should show a success snackbar and close the modal after receiving a successful result from the API', async () => {
+		populateFoldersStore();
+		(useParams as jest.Mock).mockReturnValue({ folderId: FOLDERS.INBOX });
 		const { selectFolder, confirm } = setupRestoreModal();
 		const contact = buildContact();
 		const contactActionRequestPromise = createSoapAPIInterceptor<
@@ -145,6 +163,8 @@ describe('useRestoreContacts', () => {
 	});
 
 	it('should show an error snackbar and leave the modal open after receiving a failure result from the API', async () => {
+		populateFoldersStore();
+		(useParams as jest.Mock).mockReturnValue({ folderId: FOLDERS.INBOX });
 		aFailingContactRestore();
 		const { selectFolder, confirm } = setupRestoreModal();
 		const arrayContacts: Array<Contact> = [buildContact()];
