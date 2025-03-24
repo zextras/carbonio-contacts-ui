@@ -15,7 +15,6 @@ import {
 } from '@zextras/carbonio-design-system';
 import { filter } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 
 import { ModalContentAndFooterWrapper } from './modal-content-and-footer-wrapper';
 import { ModalWrapper } from './modal-wrapper';
@@ -38,8 +37,7 @@ export const AddressBookCreateModal = ({
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
 	const defaultParent = useFolder(defaultParentId ?? FOLDERS.USER_ROOT);
-	const { folderId } = useParams<{ folderId: string }>();
-	const root = useRoot(folderId as string);
+	const root = useRoot(defaultParent?.id as string);
 
 	const [newAddressBookName, setNewAddressBookName] = useState<string>('');
 	const [parentAddressBook, setParentAddressBook] = useState<Folder | undefined>(defaultParent);
