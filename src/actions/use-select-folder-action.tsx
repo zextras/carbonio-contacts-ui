@@ -9,7 +9,7 @@ import { Divider, ModalFooter, ModalHeader, useModal } from '@zextras/carbonio-d
 import { useParams } from 'react-router-dom';
 
 import { Action } from './types';
-import { useFolder, useRoot } from '../carbonio-ui-commons/store/zustand/folder';
+import { useRoot } from '../carbonio-ui-commons/store/zustand/folder';
 import { Folder } from '../carbonio-ui-commons/types';
 import { FolderTreeSelector } from '../components/folder-tree-selector/folder-tree-selector';
 import { ModalContentAndFooterWrapper } from '../components/modals/modal-content-and-footer-wrapper';
@@ -48,6 +48,7 @@ const SelectFolderModal = ({
 	const _onConfirm = (): void => {
 		targetFolder && onConfirm(targetFolder, onClose);
 	};
+
 	return (
 		<ModalWrapper>
 			<ModalHeader onClose={onClose} title={modalTitle} showCloseIcon />
