@@ -154,7 +154,6 @@ export const FolderTreeSelector = ({
 			/>
 			<Padding vertical="medium" />
 			<ScrollableContainer
-				height={'auto'}
 				orientation="vertical"
 				mainAlignment="flex-start"
 				minHeight="30vh"
