@@ -6,6 +6,7 @@
 import React from 'react';
 
 import { act } from '@testing-library/react';
+import { useParams } from 'react-router-dom';
 
 import { AddressBookMoveModal } from './address-book-move';
 import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
@@ -21,6 +22,12 @@ import {
 } from '../../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../../constants/tests';
 import { getFoldersArray } from '../../tests/utils';
+
+jest.mock('react-router-dom', () => ({
+	...jest.requireActual('react-router-dom'),
+
+	useParams: jest.fn()
+}));
 
 describe('AddressBookMoveModal', () => {
 	const mocksContext = getMocksContext();
@@ -92,22 +99,19 @@ describe('AddressBookMoveModal', () => {
 
 		it('should display the shared accounts roots', () => {
 			populateFoldersStore({ view: 'contact' });
-			const addressBook = getFoldersArray().find(
-				(folder) => folder.view === 'contact' && folder.l === FOLDERS.CONTACTS
-			);
-			if (!addressBook) {
-				return;
-			}
+			const roots = getRootsArray();
+			const addressbookId = roots[1].id;
+			(useParams as jest.Mock).mockReturnValue({ folderId: addressbookId });
 			setupTest(
 				<AddressBookMoveModal
-					addressBookId={addressBook.id}
+					addressBookId={addressbookId}
 					onMove={jest.fn()}
 					onClose={jest.fn()}
 				/>
 			);
 
 			getRootsArray().forEach((root) => {
-				expect(screen.getByTestId(`folder-accordion-root-${root.id}`)).toBeVisible();
+				expect(screen.getByTestId(`folder-accordion-root-${addressbookId}`)).toBeVisible();
 			});
 		});
 

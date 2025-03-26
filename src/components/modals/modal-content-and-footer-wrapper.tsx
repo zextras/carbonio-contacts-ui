@@ -15,9 +15,6 @@ export const ModalContentAndFooterWrapper = ({
 		mainAlignment="center"
 		crossAlignment="flex-start"
 		height="fit"
-		style={{
-			overflowY: 'auto'
-		}}
 	>
 		{children}
 	</Container>

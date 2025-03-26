@@ -138,6 +138,7 @@ const FlatFoldersAccordionFolder: FC<FlatFoldersAccordionFolderProps> = ({
 			height={FOLDER_ROW_HEIGHT}
 			onClick={selectionHandler}
 			wrap="nowrap"
+			style={{ overflow: 'hidden' }}
 			{...rest}
 		>
 			<Row mainAlignment="flex-start" wrap="nowrap" width="fill">

@@ -13,7 +13,9 @@ import {
 	Padding
 } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 
+import { useRoot } from '../../carbonio-ui-commons/store/zustand/folder/hooks';
 import { Folder } from '../../carbonio-ui-commons/types/folder';
 import { ContactOrGroup } from '../../legacy/types/contact';
 import { evaluateParentIds, isGroup } from '../../legacy/utils/helpers';
@@ -34,6 +36,9 @@ export const ContactMoveModal = ({
 }: ContactMoveModalProps): React.JSX.Element => {
 	const [t] = useTranslation();
 	const [parentAddressBook, setParentAddressBook] = useState<Folder | undefined>();
+
+	const { folderId } = useParams() as { folderId: string };
+	const root = useRoot(folderId);
 
 	const evaluateModalTitle = useCallback(
 		(contact: ContactOrGroup) =>
@@ -84,7 +89,6 @@ export const ContactMoveModal = ({
 	const onParentAddressBookSelected = useCallback((addressBook: Folder) => {
 		setParentAddressBook(addressBook);
 	}, []);
-
 	return (
 		<>
 			<ModalHeader title={modalTitle} onClose={onClose} showCloseIcon />
@@ -96,15 +100,16 @@ export const ContactMoveModal = ({
 					crossAlignment={'flex-start'}
 					height={'fit'}
 				>
-					<FolderTreeSelector
-						onFolderSelected={onParentAddressBookSelected}
-						showSharedAccounts
-						showTrashFolder={false}
-						showLinkedFolders
-						excludeIds={excludedAddressBooksIds}
-						allowRootSelection={false}
-						allowFolderCreation={false}
-					/>
+					{root && (
+						<FolderTreeSelector
+							root={root}
+							onFolderSelected={onParentAddressBookSelected}
+							showTrashFolder={false}
+							showLinkedFolders
+							excludeIds={excludedAddressBooksIds}
+							allowRootSelection={false}
+						/>
+					)}
 				</Container>
 			</Padding>
 			<Divider />

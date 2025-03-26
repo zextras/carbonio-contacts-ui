@@ -7,6 +7,8 @@ import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 
+import { useParams } from 'react-router-dom';
+import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { generateFolder } from '../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
 import { createSoapAPIInterceptor } from '../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { populateFoldersStore } from '../../../carbonio-ui-commons/test/mocks/store/folders';
@@ -21,6 +23,11 @@ import { ContactActionRequest, ContactActionResponse } from '../../../network/ap
 import { setupMoveItemModal } from '../../../tests/modal-helpers';
 import { buildContact } from '../../../tests/model-builder';
 import { useMoveContacts } from '../use-move-contacts';
+
+jest.mock('react-router-dom', () => ({
+	...jest.requireActual('react-router-dom'),
+	useParams: jest.fn()
+}));
 
 function aFailingContactMove(): any {
 	const response: ErrorSoapBodyResponse = {
@@ -37,6 +44,7 @@ describe('useMoveContacts', () => {
 	const contacts: Contact[] = [buildContact()];
 	it('should open the move modal on click', async () => {
 		populateFoldersStore();
+		(useParams as jest.Mock).mockReturnValue({ folderId: FOLDERS.INBOX });
 		const { result } = setupHook(() => useMoveContacts(contacts, 'My Modal'));
 		const action = result.current;
 		act(() => {
@@ -49,6 +57,8 @@ describe('useMoveContacts', () => {
 	});
 
 	it('should render a modal with the given title', () => {
+		populateFoldersStore();
+		(useParams as jest.Mock).mockReturnValue({ folderId: FOLDERS.INBOX });
 		const arrayContacts: Array<Contact> = [buildContact()];
 		const { result } = setupHook(() => useMoveContacts(arrayContacts, 'My Modal'));
 		const action = result.current;
@@ -62,6 +72,8 @@ describe('useMoveContacts', () => {
 	});
 
 	it('should display a close icon in the modal', () => {
+		populateFoldersStore();
+		(useParams as jest.Mock).mockReturnValue({ folderId: FOLDERS.INBOX });
 		const arrayContacts: Array<Contact> = [buildContact()];
 		const { result } = setupHook(() => useMoveContacts(arrayContacts, ''));
 		const action = result.current;
@@ -77,6 +89,8 @@ describe('useMoveContacts', () => {
 	});
 
 	it('should close the modal if the user clicks on the close icon', async () => {
+		populateFoldersStore();
+		(useParams as jest.Mock).mockReturnValue({ folderId: FOLDERS.INBOX });
 		const arrayContacts: Array<Contact> = [buildContact()];
 		const { result, user } = setupHook(() => useMoveContacts(arrayContacts, ''));
 		const action = result.current;
@@ -92,6 +106,8 @@ describe('useMoveContacts', () => {
 	});
 
 	it('should call the API with the proper parameters if the user clicks on the "Move" button', async () => {
+		populateFoldersStore();
+		(useParams as jest.Mock).mockReturnValue({ folderId: FOLDERS.INBOX });
 		const apiInterceptor = aFailingContactMove();
 		const customFolder = generateFolder({
 			id: '100'
@@ -119,6 +135,8 @@ describe('useMoveContacts', () => {
 	});
 
 	it('should show a success snackbar and close the modal after receiving a successful result from the API', async () => {
+		populateFoldersStore();
+		(useParams as jest.Mock).mockReturnValue({ folderId: FOLDERS.INBOX });
 		const { selectFolder, confirm } = setupMoveItemModal();
 		const contact = buildContact();
 		const contactActionRequestPromise = createSoapAPIInterceptor<
@@ -145,6 +163,8 @@ describe('useMoveContacts', () => {
 	});
 
 	it('should show an error snackbar and leave the modal open after receiving a failure result from the API', async () => {
+		populateFoldersStore();
+		(useParams as jest.Mock).mockReturnValue({ folderId: FOLDERS.INBOX });
 		aFailingContactMove();
 		const { selectFolder, confirm } = setupMoveItemModal();
 		const arrayContacts: Array<Contact> = [buildContact()];
