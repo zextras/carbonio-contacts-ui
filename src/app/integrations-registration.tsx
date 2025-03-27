@@ -7,7 +7,6 @@ import { FC, useEffect, useMemo } from 'react';
 
 import { useSnackbar } from '@zextras/carbonio-design-system';
 import {
-	ACTION_TYPES,
 	addBoard,
 	NewAction,
 	registerActions,
@@ -71,11 +70,11 @@ export const IntegrationsRegistration: FC = () => {
 			{
 				action: () => newContactAction,
 				id: 'new-contact',
-				type: ACTION_TYPES.NEW
+				type: 'new'
 			},
 			{
 				id: 'new-contact-group',
-				type: ACTION_TYPES.NEW,
+				type: 'new',
 				action: () => newContactGroupAction
 			}
 		);
