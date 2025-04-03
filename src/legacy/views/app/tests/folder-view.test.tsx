@@ -97,7 +97,7 @@ describe('folder-view', () => {
 				findContactGroupsResponse: createFindContactGroupsResponse([]),
 				offset: 0
 			});
-			setupFolderView('1');
+			setupFolderView(folderId);
 
 			expect(await screen.findByText(NO_CONTACT_MESSAGE)).toBeVisible();
 		});
