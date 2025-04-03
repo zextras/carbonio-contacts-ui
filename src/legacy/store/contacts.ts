@@ -91,11 +91,9 @@ export const useContactById = (contactId: string): Contact | undefined =>
 		return undefined;
 	});
 
-export const useCurrentFolderViewList = (folderId: string): Array<ContactOrGroup> =>
+export const useContactsByParent = (parent: string): Array<ContactOrGroup> =>
 	useContactsStore(({ contacts, currentFolderViewList }) =>
 		Array.from(currentFolderViewList)
 			.map((key: string) => contacts[key])
-			.filter((contact) => contact.parent === folderId)
+			.filter((contact) => contact.parent === parent)
 	);
-
-export const useContactsStoreForTesting = useContactsStore;
