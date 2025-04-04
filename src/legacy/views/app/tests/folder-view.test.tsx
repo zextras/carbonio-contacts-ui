@@ -198,6 +198,35 @@ describe('folder-view', () => {
 	});
 
 	describe('Contacts', () => {
+		describe('in a shared account folder', () => {
+			it('should be visible', async () => {
+				const remoteAccountUuId = faker.string.uuid();
+				const remoteFolderId = '789';
+				const folderId = `${remoteAccountUuId}:${remoteFolderId}`;
+				const sharedFolder = generateLinkFolder({
+					folderId,
+					remoteAccountUuId,
+					remoteId: remoteFolderId
+				});
+				useFolderStore.setState({
+					folders: { [folderId]: sharedFolder }
+				});
+				const contactEmail = 'contactofSharedAccount@test.com';
+				const contact = createSoapContact({
+					id: `${remoteAccountUuId}:1`,
+					folderId,
+					email: contactEmail
+				});
+				const searchContacts = createContactsApiInterceptor({
+					items: [contact]
+				});
+
+				setupFolderView(folderId);
+
+				await findContactInList(contact);
+				expect(screen.getByText(contactEmail)).toBeVisible();
+			});
+		});
 		describe('in a folder shared with me', () => {
 			it('should be visible', async () => {
 				const folderId = '100';
