@@ -9,12 +9,16 @@ import { Container, Padding, Text } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { useCurrentFolderViewList } from '../../store/contacts';
+import { useFolder } from '../../../carbonio-ui-commons/store/zustand/folder';
+import { Folder } from '../../../carbonio-ui-commons/types';
+import { useContactsByFolder } from '../../store/contacts';
 
 export default function ContactsEmptyDisplayer(): React.JSX.Element {
 	const [t] = useTranslation();
 	const { folderId } = useParams<{ folderId: string }>();
-	const contacts = useCurrentFolderViewList(folderId as string);
+	const folder = useFolder(folderId as string);
+	// TODO: sorry-not-sorry. We should not end up here if there is no folder
+	const contacts = useContactsByFolder(folder as Folder);
 	const trashMessages = useMemo(
 		() => [
 			{

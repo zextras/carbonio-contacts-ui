@@ -7,6 +7,7 @@
 import React from 'react';
 
 import { ContactGroupDisplayerWrapper } from './contact-group-displayer-wrapper';
+import { populateFoldersStore } from '../../../carbonio-ui-commons/test/mocks/store/folders';
 import { screen, setupTest, within } from '../../../carbonio-ui-commons/test/test-setup';
 import { EMPTY_DISPLAYER_WITH_CONTACTS_HINT, TESTID_SELECTORS } from '../../../constants/tests';
 import { addContactsToStore } from '../../../legacy/store/contacts';
@@ -17,8 +18,8 @@ describe('Contact groups displayer wrapper', () => {
 	const contactGroup = buildContactGroup();
 	const { parent, id } = contactGroup;
 
-	// TODO: check this test as the empty displayer message does not make any sense
 	it('should show empty displayer if no contact group is active but there are contacts groups in the store', async () => {
+		populateFoldersStore();
 		setupTest(<ContactGroupDisplayerWrapper />, {
 			initialEntries: [`/folder/${parent}`],
 			path: `/folder/:folderId/:type?/:id?`

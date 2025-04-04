@@ -14,13 +14,10 @@ import { useParams } from 'react-router-dom';
 import { Breadcrumbs } from './breadcrumbs';
 import { ContactsList } from './folder-panel/contacts-list';
 import { useFolder } from '../../../carbonio-ui-commons/store/zustand/folder';
+import { Folder } from '../../../carbonio-ui-commons/types';
 import { searchContactsHelper } from '../../../views/search-contacts-helper';
 import { useSelection } from '../../hooks/useSelection';
-import {
-	addContactsToStore,
-	setContactsInStore,
-	useCurrentFolderViewList
-} from '../../store/contacts';
+import { addContactsToStore, setContactsInStore, useContactsByFolder } from '../../store/contacts';
 import { isGroup } from '../../utils/helpers';
 import { normalizeContactsFromSoap } from '../../utils/normalizations/normalize-contact-from-soap';
 import { SelectPanelActions } from '../folder/select-panel-actions';
@@ -61,7 +58,7 @@ export const FolderPanel = (): ReactElement => {
 		[]
 	);
 	const [searchResults, setSearchResults] = useState<FolderViewSearchResults>(initialState);
-	const searchContacts = useCurrentFolderViewList(folderId ?? '');
+	const searchContacts = useContactsByFolder(folder as Folder);
 
 	const sortedContacts = useMemo(
 		() =>

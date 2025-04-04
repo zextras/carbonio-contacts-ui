@@ -49,7 +49,7 @@ import {
 } from '../../../../tests/msw-handlers/find-contact-groups';
 import { createSoapContact, createSoapContactGroup } from '../../../../tests/utils';
 import { FolderPanel } from '../folder-panel';
-import { createContactsApiInterceptor, findContactListItem } from './utils';
+import { createContactsApiInterceptor, findContactInList } from './utils';
 import { SearchContactsRequest, SearchContactsSoapResponse } from '../../../../types';
 import { SoapContact } from '../../../types/soap';
 
@@ -147,7 +147,7 @@ describe('Folder panel', () => {
 				initialEntries: [`/folder/${folder.id}`],
 				path: `/folder/:folderId/:type?/:itemId?`
 			});
-			await findContactListItem(soapContact);
+			await findContactInList(soapContact);
 			expect(screen.getByText(email)).toBeVisible();
 			await firstSearchInterceptor;
 		});
@@ -360,7 +360,7 @@ describe('Folder panel', () => {
 							initialEntries: [`/folder/${folder.id}`],
 							path: `/folder/:folderId/:type?/:itemId?`
 						});
-						await findContactListItem(soapContact);
+						await findContactInList(soapContact);
 
 						const listItem = screen.getByText(email);
 						await act(() => user.hover(listItem));
@@ -426,7 +426,7 @@ describe('Folder panel', () => {
 							initialEntries: [`/folder/${folder.id}`],
 							path: `/folder/:folderId/:type?/:itemId?`
 						});
-						await findContactListItem(soapContact);
+						await findContactInList(soapContact);
 
 						const listItem = screen.getByText(email);
 						await act(() => user.rightClick(listItem));
@@ -459,7 +459,7 @@ describe('Folder panel', () => {
 						initialEntries: [`/folder/${contactsFolder.id}`],
 						path: `/folder/:folderId/:type?/:itemId?`
 					});
-					await findContactListItem(soapContact);
+					await findContactInList(soapContact);
 					const contactListItem = await screen.findByTestId(`contact-list-item-${soapContact.id}`);
 					expect(contactListItem).toBeVisible();
 					const contactListItemName = within(contactListItem).getByText(email);
@@ -504,7 +504,7 @@ describe('Folder panel', () => {
 						initialEntries: [`/folder/${folder.id}`],
 						path: `/folder/:folderId/:type?/:itemId?`
 					});
-					await findContactListItem(soapContact1);
+					await findContactInList(soapContact1);
 
 					// Select all the items
 					const listItems = screen.getAllByTestId(TESTID_SELECTORS.contactsListItem);
@@ -553,7 +553,7 @@ describe('Folder panel', () => {
 								initialEntries: [`/folder/${folder.id}`],
 								path: `/folder/:folderId/:type?/:itemId?`
 							});
-							await findContactListItem(soapContact1);
+							await findContactInList(soapContact1);
 							makeListItemsVisible();
 
 							// Select all the items
