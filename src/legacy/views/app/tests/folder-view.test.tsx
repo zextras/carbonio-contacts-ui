@@ -41,7 +41,8 @@ import {
 	createSoapContactGroupV2
 } from '../../../../tests/utils';
 import { FolderView } from '../folder-view';
-import { createContactsApiInterceptor, findContactListItem } from './utils';
+import { createContactsApiInterceptor, findContactInList } from './utils';
+import { generateLinkFolder } from '../../../../views/contact-groups/tests/utils';
 
 jest.mock('../../../../carbonio-ui-commons/integrations/search/use-run-search', () => ({
 	useRunSearchIntegration: jest.fn()
@@ -197,211 +198,242 @@ describe('folder-view', () => {
 	});
 
 	describe('Contacts', () => {
-		const folder = FOLDERS_DESCRIPTORS.contacts;
-		const email = 'test@test.com';
-		const contact = createSoapContact({ id: '10', folderId: folder.id, email });
-		beforeEach(() => {
-			populateFoldersStore();
-			const firstSearchInterceptor = createContactsApiInterceptor({
-				items: [contact],
-				more: false
-			});
-		});
-		it('should delete a contact (move to trash)', async () => {
-			populateFoldersStore();
+		describe('in a folder shared with me', () => {
+			it('should be visible', async () => {
+				const folderId = '100';
+				const remoteAccountUuId = faker.string.uuid();
+				const remoteFolderId = '789';
+				const sharedFolder = generateLinkFolder({
+					folderId,
+					remoteAccountUuId,
+					remoteId: remoteFolderId
+				});
+				useFolderStore.setState({
+					folders: { [folderId]: sharedFolder }
+				});
+				const contactEmail = 'contactInSharedFolder@test.com';
+				const contact = createSoapContact({
+					id: `${remoteAccountUuId}:1`,
+					folderId: `${remoteAccountUuId}:${remoteFolderId}`,
+					email: contactEmail
+				});
+				const searchContacts = createContactsApiInterceptor({
+					items: [contact]
+				});
 
-			const deleteContactInterceptor = createSoapAPIInterceptor<
-				ContactActionRequest,
-				ContactActionResponse
-			>('ContactAction', {
-				_jsns: 'urn:zimbraMail',
-				requestId: '123-456',
-				action: {
-					id: contact.id,
-					op: 'delete'
-				}
-			});
-			const { user } = setupFolderView(
-				folder.id,
-				`/folder/${folder.id}`,
-				`/folder/${folder.id}/contacts/${contact.id}`
-			);
+				setupFolderView(folderId);
 
-			await findContactListItem(contact);
-
-			const displayer = await screen.findByTestId('contact-displayer');
-			expect(displayer).toBeVisible();
-			const deleteContactInDisplayer = await within(displayer).findByTestId(
-				TESTID_SELECTORS.icons.trash
-			);
-			await act(() => user.click(deleteContactInDisplayer));
-			const deleteContactRequest = await deleteContactInterceptor;
-			expect(deleteContactRequest).toEqual({
-				action: {
-					id: contact.id,
-					op: 'trash'
-				}
+				await findContactInList(contact);
+				expect(screen.getByText(contactEmail)).toBeVisible();
 			});
 		});
 
-		it('should call contactsMoveAction when move action is confirmed (displayer)', async () => {
-			const anotherFolder = generateFolder({
-				parent: FOLDERS.USER_ROOT,
-				name: 'anotherContactFolder',
-				id: '500',
-				absFolderPath: '/anotherContactFolder',
-				view: FOLDER_VIEW.contact,
-				children: []
+		describe('in Contacts folder', () => {
+			const folder = FOLDERS_DESCRIPTORS.contacts;
+			const email = 'test@test.com';
+			const contact = createSoapContact({ id: '10', folderId: folder.id, email });
+			beforeEach(() => {
+				populateFoldersStore();
+				const searchInContactsFolderInterceptor = createContactsApiInterceptor({
+					items: [contact],
+					more: false
+				});
 			});
-			populateFoldersStore({
-				customFolders: [anotherFolder]
-			});
+			it('should delete a contact (move to trash)', async () => {
+				populateFoldersStore();
 
-			const { user } = setupFolderView(
-				folder.id,
-				`/folder/${folder.id}`,
-				`/folder/${folder.id}/contacts/${contact.id}`
-			);
+				const deleteContactInterceptor = createSoapAPIInterceptor<
+					ContactActionRequest,
+					ContactActionResponse
+				>('ContactAction', {
+					_jsns: 'urn:zimbraMail',
+					requestId: '123-456',
+					action: {
+						id: contact.id,
+						op: 'delete'
+					}
+				});
+				const { user } = setupFolderView(
+					folder.id,
+					`/folder/${folder.id}`,
+					`/folder/${folder.id}/contacts/${contact.id}`
+				);
 
-			await findContactListItem(contact);
-			const displayer = await screen.findByTestId('contact-displayer');
-			expect(displayer).toBeVisible();
-			const moveButtonInDisplayer = await within(displayer).findByTestId('icon: MoveOutline');
-			await act(() => user.click(moveButtonInDisplayer));
+				await findContactInList(contact);
 
-			act(() => {
-				jest.advanceTimersByTime(1000);
-			});
-
-			const modal = screen.getByTestId('modal');
-			expect(modal).toBeVisible();
-			makeListItemsVisible();
-			await user.click(screen.getByTestId(`folder-accordion-item-${anotherFolder.id}`));
-
-			const contactActionRequestPromise = createSoapAPIInterceptor<
-				ContactActionRequest,
-				ContactActionResponse
-			>('ContactAction', {
-				_jsns: 'urn:zimbraMail',
-				action: { id: contact.id, op: 'move' },
-				requestId: '123'
-			});
-
-			const moveButton = within(modal).getByRole('button', { name: /move/i });
-			expect(moveButton).toBeEnabled();
-			await act(() => user.click(moveButton));
-
-			const contactActionRequest = await contactActionRequestPromise;
-			expect(contactActionRequest).toEqual({
-				action: {
-					id: contact.id,
-					op: 'move',
-					l: anotherFolder.id
-				}
-			});
-		});
-
-		it('should call SendMailAction when Mail icon is clicked in the displayer', async () => {
-			const mailTo = { id: 'mail-to', label: 'action.send_msg', execute: jest.fn() };
-			jest.spyOn(shell, 'getAction').mockReturnValueOnce([mailTo, true]);
-
-			const { user } = setupFolderView(
-				folder.id,
-				`/folder/${folder.id}`,
-				`/folder/${folder.id}/contacts/${contact.id}`
-			);
-
-			await findContactListItem(contact);
-
-			const displayer = await screen.findByTestId('contact-displayer');
-			expect(displayer).toBeVisible();
-			const mailButtonInDisplayer = await within(displayer).findByTestId('icon: MailModOutline');
-			await act(() => user.click(mailButtonInDisplayer));
-
-			expect(mailTo.execute).toHaveBeenCalledWith(
-				expect.objectContaining({
-					id: contact.id
-				})
-			);
-		});
-
-		it('should call search when tag icon is clicked in the displayer', async () => {
-			const runSearch = jest.fn();
-			(useRunSearchIntegration as jest.Mock).mockReturnValue(runSearch);
-
-			const soapContact = createSoapContact({ t: '1', tn: '1', folderId: folder.id });
-			const firstSearchInterceptor = createContactsApiInterceptor({
-				items: [soapContact],
-				more: false
-			});
-			useTagStore.setState({ tags: { '1': { id: '1', name: 'testTag' } } });
-
-			const { user } = setupFolderView(
-				folder.id,
-				`/folder/${folder.id}`,
-				`/folder/${folder.id}/contacts/${soapContact.id}`
-			);
-
-			await findContactListItem(soapContact);
-
-			const displayer = await screen.findByTestId('contact-displayer');
-			expect(displayer).toBeVisible();
-			const tagButtonInDisplayer = await within(displayer).findByTestId('TagIconButton');
-			await user.click(tagButtonInDisplayer);
-
-			expect(runSearch).toHaveBeenCalledWith(
-				[expect.objectContaining({ label: 'tag:testTag', value: 'tag:"testTag"' })],
-				'contacts'
-			);
-		});
-
-		it('should call search when selecting a tag icon inside multitag icon button is clicked in the displayer', async () => {
-			const runSearch = jest.fn();
-			(useRunSearchIntegration as jest.Mock).mockReturnValue(runSearch);
-			const soapContact = createSoapContact({ t: '1,2', tn: '1,2', folderId: folder.id });
-			const firstSearchInterceptor = createContactsApiInterceptor({
-				items: [soapContact],
-				more: false
+				const displayer = await screen.findByTestId('contact-displayer');
+				expect(displayer).toBeVisible();
+				const deleteContactInDisplayer = await within(displayer).findByTestId(
+					TESTID_SELECTORS.icons.trash
+				);
+				await act(() => user.click(deleteContactInDisplayer));
+				const deleteContactRequest = await deleteContactInterceptor;
+				expect(deleteContactRequest).toEqual({
+					action: {
+						id: contact.id,
+						op: 'trash'
+					}
+				});
 			});
 
-			useTagStore.setState({
-				tags: { '1': { id: '1', name: 'testTag1' }, '2': { id: '2', name: 'testTag2' } }
+			it('should call contactsMoveAction when move action is confirmed (displayer)', async () => {
+				const anotherFolder = generateFolder({
+					parent: FOLDERS.USER_ROOT,
+					name: 'anotherContactFolder',
+					id: '500',
+					absFolderPath: '/anotherContactFolder',
+					view: FOLDER_VIEW.contact,
+					children: []
+				});
+				populateFoldersStore({
+					customFolders: [anotherFolder]
+				});
+
+				const { user } = setupFolderView(
+					folder.id,
+					`/folder/${folder.id}`,
+					`/folder/${folder.id}/contacts/${contact.id}`
+				);
+
+				await findContactInList(contact);
+				const displayer = await screen.findByTestId('contact-displayer');
+				expect(displayer).toBeVisible();
+				const moveButtonInDisplayer = await within(displayer).findByTestId('icon: MoveOutline');
+				await act(() => user.click(moveButtonInDisplayer));
+
+				act(() => {
+					jest.advanceTimersByTime(1000);
+				});
+
+				const modal = screen.getByTestId('modal');
+				expect(modal).toBeVisible();
+				makeListItemsVisible();
+				await user.click(screen.getByTestId(`folder-accordion-item-${anotherFolder.id}`));
+
+				const contactActionRequestPromise = createSoapAPIInterceptor<
+					ContactActionRequest,
+					ContactActionResponse
+				>('ContactAction', {
+					_jsns: 'urn:zimbraMail',
+					action: { id: contact.id, op: 'move' },
+					requestId: '123'
+				});
+
+				const moveButton = within(modal).getByRole('button', { name: /move/i });
+				expect(moveButton).toBeEnabled();
+				await act(() => user.click(moveButton));
+
+				const contactActionRequest = await contactActionRequestPromise;
+				expect(contactActionRequest).toEqual({
+					action: {
+						id: contact.id,
+						op: 'move',
+						l: anotherFolder.id
+					}
+				});
 			});
 
-			const { user } = setupFolderView(
-				folder.id,
-				`/folder/${folder.id}`,
-				`/folder/${folder.id}/contacts/${soapContact.id}`
-			);
+			it('should call SendMailAction when Mail icon is clicked in the displayer', async () => {
+				const mailTo = { id: 'mail-to', label: 'action.send_msg', execute: jest.fn() };
+				jest.spyOn(shell, 'getAction').mockReturnValueOnce([mailTo, true]);
 
-			await findContactListItem(soapContact);
-			const displayer = await screen.findByTestId('contact-displayer');
-			expect(displayer).toBeVisible();
-			const tagButtonInDisplayer = await within(displayer).findByTestId('TagIconButton');
-			await user.click(tagButtonInDisplayer);
+				const { user } = setupFolderView(
+					folder.id,
+					`/folder/${folder.id}`,
+					`/folder/${folder.id}/contacts/${contact.id}`
+				);
 
-			const tagsDropdown = await screen.findByTestId('dropdown-popper-list');
+				await findContactInList(contact);
 
-			const testTag1 = within(tagsDropdown).getByText('testTag1');
-			await user.click(testTag1);
-			expect(runSearch).toHaveBeenCalledWith(
-				[expect.objectContaining({ label: 'tag:testTag1', value: 'tag:"testTag1"' })],
-				'contacts'
-			);
+				const displayer = await screen.findByTestId('contact-displayer');
+				expect(displayer).toBeVisible();
+				const mailButtonInDisplayer = await within(displayer).findByTestId('icon: MailModOutline');
+				await act(() => user.click(mailButtonInDisplayer));
 
-			await user.click(tagButtonInDisplayer);
-			const tagsDropdown2 = await screen.findByTestId('dropdown-popper-list');
+				expect(mailTo.execute).toHaveBeenCalledWith(
+					expect.objectContaining({
+						id: contact.id
+					})
+				);
+			});
 
-			const testTag2 = within(tagsDropdown2).getByText('testTag2');
-			await user.click(testTag2);
-			expect(runSearch).toHaveBeenCalledWith(
-				[expect.objectContaining({ label: 'tag:testTag2', value: 'tag:"testTag2"' })],
-				'contacts'
-			);
+			it('should call search when tag icon is clicked in the displayer', async () => {
+				const runSearch = jest.fn();
+				(useRunSearchIntegration as jest.Mock).mockReturnValue(runSearch);
+
+				const soapContact = createSoapContact({ t: '1', tn: '1', folderId: folder.id });
+				const firstSearchInterceptor = createContactsApiInterceptor({
+					items: [soapContact],
+					more: false
+				});
+				useTagStore.setState({ tags: { '1': { id: '1', name: 'testTag' } } });
+
+				const { user } = setupFolderView(
+					folder.id,
+					`/folder/${folder.id}`,
+					`/folder/${folder.id}/contacts/${soapContact.id}`
+				);
+
+				await findContactInList(soapContact);
+
+				const displayer = await screen.findByTestId('contact-displayer');
+				expect(displayer).toBeVisible();
+				const tagButtonInDisplayer = await within(displayer).findByTestId('TagIconButton');
+				await user.click(tagButtonInDisplayer);
+
+				expect(runSearch).toHaveBeenCalledWith(
+					[expect.objectContaining({ label: 'tag:testTag', value: 'tag:"testTag"' })],
+					'contacts'
+				);
+			});
+
+			it('should call search when selecting a tag icon inside multitag icon button is clicked in the displayer', async () => {
+				const runSearch = jest.fn();
+				(useRunSearchIntegration as jest.Mock).mockReturnValue(runSearch);
+				const soapContact = createSoapContact({ t: '1,2', tn: '1,2', folderId: folder.id });
+				const firstSearchInterceptor = createContactsApiInterceptor({
+					items: [soapContact],
+					more: false
+				});
+
+				useTagStore.setState({
+					tags: { '1': { id: '1', name: 'testTag1' }, '2': { id: '2', name: 'testTag2' } }
+				});
+
+				const { user } = setupFolderView(
+					folder.id,
+					`/folder/${folder.id}`,
+					`/folder/${folder.id}/contacts/${soapContact.id}`
+				);
+
+				await findContactInList(soapContact);
+				const displayer = await screen.findByTestId('contact-displayer');
+				expect(displayer).toBeVisible();
+				const tagButtonInDisplayer = await within(displayer).findByTestId('TagIconButton');
+				await user.click(tagButtonInDisplayer);
+
+				const tagsDropdown = await screen.findByTestId('dropdown-popper-list');
+
+				const testTag1 = within(tagsDropdown).getByText('testTag1');
+				await user.click(testTag1);
+				expect(runSearch).toHaveBeenCalledWith(
+					[expect.objectContaining({ label: 'tag:testTag1', value: 'tag:"testTag1"' })],
+					'contacts'
+				);
+
+				await user.click(tagButtonInDisplayer);
+				const tagsDropdown2 = await screen.findByTestId('dropdown-popper-list');
+
+				const testTag2 = within(tagsDropdown2).getByText('testTag2');
+				await user.click(testTag2);
+				expect(runSearch).toHaveBeenCalledWith(
+					[expect.objectContaining({ label: 'tag:testTag2', value: 'tag:"testTag2"' })],
+					'contacts'
+				);
+			});
 		});
 	});
 
-	// This test is a bit messy and complex
 	it('should reload contacts when switching back to initial folder after changing the filter type', async () => {
 		useAppContext.mockReturnValue({ count: 0, setCount: jest.fn() });
 
