@@ -5,15 +5,12 @@
  */
 import React from 'react';
 
-import { Container, FormSubSection, Checkbox } from '@zextras/carbonio-design-system';
-
-import Heading from './components/settings-heading';
+import { FormSubSection, Checkbox, FormSection } from '@zextras/carbonio-design-system';
 
 export default function OptionsSettingsView({ t, settingsObj, updateSettings }) {
 	return (
-		<FormSubSection label={t('label.options', 'Options')}>
-			<Container crossAlignment="baseline" padding={{ all: 'small' }}>
-				<Heading title={t('label.options', 'Options')} />
+		<FormSection label={t('label.options', 'Options')}>
+			<FormSubSection label={t('label.options', 'Options')}>
 				<Checkbox
 					label={t(
 						'settings.contacts.checkbox.add_contact_to_emailed_contacts',
@@ -44,9 +41,8 @@ export default function OptionsSettingsView({ t, settingsObj, updateSettings }) 
 						})
 					}
 				/>
-			</Container>
-			<Container crossAlignment="baseline" padding={{ all: 'small' }}>
-				<Heading title={t('label.autocomplete', 'Autocomplete')} />
+			</FormSubSection>
+			<FormSubSection label={t('label.autocomplete', 'Autocomplete')}>
 				<Checkbox
 					label={t(
 						'settings.contacts.checkbox.incl_addrs_in_glbl_addrs_list',
@@ -98,7 +94,7 @@ export default function OptionsSettingsView({ t, settingsObj, updateSettings }) 
 						})
 					}
 				/>
-			</Container>
-		</FormSubSection>
+			</FormSubSection>
+		</FormSection>
 	);
 }

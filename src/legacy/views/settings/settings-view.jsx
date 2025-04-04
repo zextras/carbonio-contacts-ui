@@ -5,7 +5,7 @@
  */
 import React, { useState, useMemo, useCallback } from 'react';
 
-import { Container, FormSection, useSnackbar } from '@zextras/carbonio-design-system';
+import { Container, useSnackbar } from '@zextras/carbonio-design-system';
 import { useUserSettings, editSettings, SettingsHeader } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
@@ -73,11 +73,11 @@ export default function ContactSettingsView() {
 				mainAlignment="flex-start"
 				crossAlignment="baseline"
 				background="gray5"
+				gap="1rem"
+				padding={{ all: 'medium' }}
 				style={{ overflowY: 'auto' }}
 			>
-				<FormSection width="50%" minWidth="calc(min(100%, 32rem))">
-					<OptionsSettingsView t={t} settingsObj={settingsObj} updateSettings={updateSettings} />
-				</FormSection>
+				<OptionsSettingsView t={t} settingsObj={settingsObj} updateSettings={updateSettings} />
 			</Container>
 		</>
 	);
