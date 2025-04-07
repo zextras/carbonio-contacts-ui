@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ModalContentAndFooterWrapper } from './modal-content-and-footer-wrapper';
 import { ModalWrapper } from './modal-wrapper';
-import { useFolder, useRoot } from '../../carbonio-ui-commons/store/zustand/folder/hooks';
+import { useFolder } from '../../carbonio-ui-commons/store/zustand/folder/hooks';
 import { Folder } from '../../carbonio-ui-commons/types/folder';
 import { FolderTreeSelector } from '../folder-tree-selector/folder-tree-selector';
 
@@ -28,7 +28,7 @@ export const AddressBookMoveModal = ({
 	const [t] = useTranslation();
 	const addressBook = useFolder(addressBookId);
 	const [parentAddressBook, setParentAddressBook] = useState<Folder | undefined>();
-	const root = useRoot(addressBook?.id ?? '');
+
 	const modalTitle = useMemo(
 		() =>
 			t('folder.modal.move.title', {
@@ -54,16 +54,15 @@ export const AddressBookMoveModal = ({
 			<ModalHeader title={modalTitle} onClose={onClose} showCloseIcon />
 			<Divider />
 			<ModalContentAndFooterWrapper>
-				{root && (
-					<FolderTreeSelector
-						root={root}
-						onFolderSelected={onParentAddressBookSelected}
-						showTrashFolder={false}
-						showLinkedFolders
-						excludeIds={addressBook?.parent ? [addressBook?.parent] : []}
-						allowRootSelection
-					/>
-				)}
+				<FolderTreeSelector
+					onFolderSelected={onParentAddressBookSelected}
+					showSharedAccounts
+					showTrashFolder={false}
+					showLinkedFolders
+					excludeIds={addressBook?.parent ? [addressBook?.parent] : []}
+					allowRootSelection
+					allowFolderCreation={false}
+				/>
 				<Divider />
 				<ModalFooter
 					confirmLabel={confirmLabel}
