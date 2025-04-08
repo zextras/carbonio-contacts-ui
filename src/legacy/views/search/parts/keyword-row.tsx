@@ -40,7 +40,7 @@ const KeywordRow: FC<ComponentProps> = ({ compProps }): ReactElement => {
 	return (
 		<Container padding={{ bottom: 'small', top: 'medium' }}>
 			<ChipInput
-				placeholder={t('label.keyword', 'Keyword')}
+				placeholder={t('label.keywords', 'Keywords')}
 				background="gray5"
 				value={otherKeywords}
 				onChange={onChange}
