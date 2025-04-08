@@ -12,7 +12,10 @@ import {
 	Padding,
 	Icon,
 	Tooltip,
-	Text
+	Text,
+	ModalHeader,
+	Divider,
+	ModalFooter
 } from '@zextras/carbonio-design-system';
 import type { SearchViewProps } from '@zextras/carbonio-search-ui';
 import { TFunction } from 'i18next';
@@ -25,8 +28,6 @@ import { useDisabled, useSecondaryDisabled } from './parts/use-disable-hooks';
 import type { Query } from './search-types';
 import { ZIMBRA_STANDARD_COLORS } from '../../../carbonio-ui-commons/constants/utils';
 import { getTags } from '../../../carbonio-ui-commons/store/zustand/tags';
-import ModalFooter from '../secondary-bar/commons/modal-footer';
-import { ModalHeader } from '../secondary-bar/commons/modal-header';
 
 type AdvancedFilterModalProps = {
 	open: boolean;
@@ -154,25 +155,26 @@ const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 	);
 	return (
 		<CustomModal open={open} onClose={onClose} maxHeight="90vh" size="medium">
-			<Container padding={{ bottom: 'medium' }}>
-				<ModalHeader onClose={onClose} title={t('title.advanced_filters', 'Advanced Filters')} />
-				<Container padding={{ horizontal: 'medium', vertical: 'small' }}>
-					<ToggleFilters compProps={toggleFiltersProps} />
-					<KeywordRow compProps={keywordRowProps} />
-					<TagRow compProps={tagRowProps} />
-				</Container>
-				<ModalFooter
-					onConfirm={onConfirm}
-					disabled={disabled}
-					secondaryDisabled={secondaryDisabled}
-					label={t('action.search', 'Search')}
-					secondaryLabel={t('action.reset_filters', 'Reset Filters')}
-					secondaryAction={resetFilters}
-					secondaryBtnType="outlined"
-					secondaryColor="primary"
-					paddingTop="small"
-				/>
+			<ModalHeader
+				onClose={onClose}
+				title={t('title.advanced_filters', 'Advanced Filters')}
+				showCloseIcon
+			/>
+			<Divider />
+			<Container padding={{ horizontal: 'medium', vertical: 'small' }}>
+				<ToggleFilters compProps={toggleFiltersProps} />
+				<KeywordRow compProps={keywordRowProps} />
+				<TagRow compProps={tagRowProps} />
 			</Container>
+			<Divider />
+			<ModalFooter
+				confirmLabel={t('action.search', 'Search')}
+				confirmDisabled={disabled}
+				onConfirm={onConfirm}
+				onSecondaryAction={resetFilters}
+				secondaryActionDisabled={secondaryDisabled}
+				secondaryActionLabel={t('action.reset_filters', 'Reset Filters')}
+			></ModalFooter>
 		</CustomModal>
 	);
 };
