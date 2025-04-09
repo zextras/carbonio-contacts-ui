@@ -182,7 +182,7 @@ export const FolderPanel = (): ReactElement => {
 					/>
 				) : (
 					<Breadcrumbs
-						folderPath={folder?.absFolderPath ?? ''}
+						folderPath={folder?.absFolderPath}
 						data-testid="breadcrumbs-contacts"
 						itemsCount={sortedContacts.length}
 					>

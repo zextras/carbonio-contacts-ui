@@ -15,7 +15,7 @@ export const Breadcrumbs = ({
 	itemsCount,
 	children
 }: {
-	folderPath: string;
+	folderPath: string | undefined;
 	itemsCount: number;
 	children?: React.JSX.Element;
 }): React.JSX.Element => {
