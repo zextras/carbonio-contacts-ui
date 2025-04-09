@@ -15,7 +15,7 @@ export const Breadcrumbs = ({
 	itemsCount,
 	children
 }: {
-	folderPath: string;
+	folderPath: string | undefined;
 	itemsCount: number;
 	children?: React.JSX.Element;
 }): React.JSX.Element => {
@@ -55,7 +55,7 @@ export const Breadcrumbs = ({
 					</Row>
 					<Row mainAlignment="flex-end" padding={{ all: 'small', right: 'medium' }}>
 						<Text size="extrasmall" data-testid="BreadcrumbCount">
-							{itemsCount > 100 ? '100+' : itemsCount}
+							{itemsCount}
 						</Text>
 					</Row>
 					{children}
