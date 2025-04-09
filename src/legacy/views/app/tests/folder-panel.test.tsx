@@ -975,4 +975,33 @@ describe('Folder panel', () => {
 			expect(contactsOnlyRequest.query?._content).toBe(`inid:"${folderId}" and not #type:group`);
 		});
 	});
+
+	describe('Display breadcrumbs', () => {
+		it('should display count and folder path of the folder in breadcrumbs', async () => {
+			const contactGroupName = faker.company.name();
+			const folderId = '7';
+			const soapContactEmail = 'demo@mycontact.com';
+			const soapContact = createSoapContact({ folderId, email: soapContactEmail });
+			const soapContactGroup = createSoapContactGroup(
+				contactGroupName,
+				[faker.internet.email(), faker.internet.email()],
+				'1',
+				folderId
+			);
+			const searchContactsInterceptor = createContactsApiInterceptor({
+				items: [soapContact, soapContactGroup]
+			});
+
+			setupFolderPanel(folderId);
+			const searchContactsRequest = await searchContactsInterceptor;
+
+			expect(searchContactsRequest.query?._content).toBe(`inid:"${folderId}"`);
+			expect(await screen.findByText(contactGroupName)).toBeVisible();
+			makeListItemsVisible();
+			expect(await screen.findByText(soapContactEmail)).toBeVisible();
+
+			expect(screen.getByTestId('BreadcrumbCount')).toHaveTextContent('2');
+			expect(screen.getByTestId('BreadcrumbPath')).toHaveTextContent('/ Contacts');
+		});
+	});
 });
