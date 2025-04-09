@@ -181,7 +181,7 @@ export const FolderPanel = (): ReactElement => {
 						selectedIds={selected}
 					/>
 				) : (
-					<Breadcrumbs folderPath={folder?.absFolderPath ?? ''} itemsCount={folder?.n ?? 0}>
+					<Breadcrumbs folderPath={folder?.absFolderPath ?? ''} itemsCount={sortedContacts.length}>
 						<Row mainAlignment="flex-end">
 							<Tooltip label={t('label.filter_mode', 'Filter mode')} maxWidth="100%">
 								<MultiButton
