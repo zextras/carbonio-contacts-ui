@@ -9,7 +9,6 @@ import { screen } from '@testing-library/react';
 
 import { FolderTreeSelector, FolderTreeSelectorProps } from './folder-tree-selector';
 import { FOLDER_VIEW } from '../../carbonio-ui-commons/constants';
-import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
 import {
 	getFolderOwnerAccountName,
 	isRoot,
@@ -19,23 +18,21 @@ import {
 import {
 	getFolder,
 	getFoldersArrayByRoot,
-	getRoot,
 	getRootsMap
 } from '../../carbonio-ui-commons/store/zustand/folder';
-import { generateFolder } from '../../carbonio-ui-commons/test/mocks/folders/folders-generator';
 import { populateFoldersStore } from '../../carbonio-ui-commons/test/mocks/store/folders';
 import { makeListItemsVisible, setupTest } from '../../carbonio-ui-commons/test/test-setup';
-import { Folder } from '../../carbonio-ui-commons/types';
 import { isEmailedContacts } from '../../helpers/folders';
 import { getFoldersArray } from '../../tests/utils';
+import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
 
 describe('Folder selector', () => {
 	test('The selector is visible', () => {
 		populateFoldersStore();
-		const root = generateFolder({});
 		const props: FolderTreeSelectorProps = {
-			root,
+			allowFolderCreation: false,
 			allowRootSelection: false,
+			showSharedAccounts: false,
 			showTrashFolder: false,
 			selectedFolderId: FOLDERS.CONTACTS,
 			onFolderSelected: jest.fn()
@@ -55,11 +52,11 @@ describe('Folder selector', () => {
 			'Exists a folder accordion item for each folder of the root %s',
 			(rootId) => {
 				populateFoldersStore();
-				const root = getRoot(rootId) as Folder;
 				const folders = getFoldersArrayByRoot(rootId);
 				const props: FolderTreeSelectorProps = {
-					root,
+					allowFolderCreation: false,
 					allowRootSelection: false,
+					showSharedAccounts: true,
 					showTrashFolder: true,
 					selectedFolderId: FOLDERS.CONTACTS,
 					onFolderSelected: jest.fn()
@@ -78,13 +75,13 @@ describe('Folder selector', () => {
 		const rootIds = Object.keys(getRootsMap());
 		test.each(rootIds)('There is a folder accordion item for the root %s', (rootId) => {
 			populateFoldersStore();
-			const root = getRoot(rootId) as Folder;
 			const roots = getRootsMap();
 			const ownerAccountName = getFolderOwnerAccountName(rootId, roots);
 
 			const props: FolderTreeSelectorProps = {
-				root,
+				allowFolderCreation: false,
 				allowRootSelection: false,
+				showSharedAccounts: true,
 				showTrashFolder: false,
 				onFolderSelected: jest.fn()
 			};
@@ -101,10 +98,10 @@ describe('Folder selector', () => {
 				(result, folder) => (isEmailedContacts(folder.id) ? result + 1 : result),
 				0
 			);
-			const roots = getRootsMap();
 			const props: FolderTreeSelectorProps = {
-				root: roots[FOLDERS.USER_ROOT],
+				allowFolderCreation: false,
 				allowRootSelection: false,
+				showSharedAccounts: true,
 				showTrashFolder: false,
 				selectedFolderId: FOLDERS.CONTACTS,
 				onFolderSelected: jest.fn()
@@ -128,10 +125,10 @@ describe('Folder selector', () => {
 				(result, folder) => (isEmailedContacts(folder.id) ? result + 1 : result),
 				0
 			);
-			const roots = getRootsMap();
 			const props: FolderTreeSelectorProps = {
-				root: roots[FOLDERS.USER_ROOT],
+				allowFolderCreation: false,
 				allowRootSelection: false,
+				showSharedAccounts: true,
 				showTrashFolder: false,
 				selectedFolderId: FOLDERS.CONTACTS,
 				onFolderSelected: jest.fn()
@@ -156,10 +153,10 @@ describe('Folder selector', () => {
 				return;
 			}
 			const inboxFirstChild = inboxChildren[0];
-			const roots = getRootsMap();
 			const props: FolderTreeSelectorProps = {
-				root: roots[FOLDERS.USER_ROOT],
+				allowFolderCreation: false,
 				allowRootSelection: false,
+				showSharedAccounts: false,
 				showTrashFolder: false,
 				selectedFolderId: FOLDERS.CONTACTS,
 				onFolderSelected: jest.fn()
@@ -179,10 +176,10 @@ describe('Folder selector', () => {
 			if (!folderInPrimaryAccountOnly) {
 				return;
 			}
-			const roots = getRootsMap();
 			const props: FolderTreeSelectorProps = {
-				root: roots[FOLDERS.USER_ROOT],
+				allowFolderCreation: false,
 				allowRootSelection: false,
+				showSharedAccounts: false,
 				showTrashFolder: false,
 				onFolderSelected: jest.fn()
 			};
@@ -190,6 +187,7 @@ describe('Folder selector', () => {
 			makeListItemsVisible();
 			const filterInput = screen.getByTestId('folder-name-filter');
 			await user.type(filterInput, folderInPrimaryAccountOnly.name);
+			const roots = getRootsMap();
 			const ownerAccountName = getFolderOwnerAccountName(folderInPrimaryAccountOnly.id, roots);
 
 			rootIds.forEach((rootId) => {
@@ -212,8 +210,9 @@ describe('Folder selector', () => {
 			populateFoldersStore();
 			const roots = getRootsMap();
 			const props: FolderTreeSelectorProps = {
-				root: roots[FOLDERS.USER_ROOT],
+				allowFolderCreation: false,
 				allowRootSelection: false,
+				showSharedAccounts: false,
 				showTrashFolder: false,
 				onFolderSelected: jest.fn()
 			};
@@ -231,10 +230,10 @@ describe('Folder selector', () => {
 
 		test('no Trash folder is visible if the showTrashFolder is set to false', () => {
 			populateFoldersStore();
-			const roots = getRootsMap();
 			const props: FolderTreeSelectorProps = {
-				root: roots[FOLDERS.USER_ROOT],
+				allowFolderCreation: false,
 				allowRootSelection: false,
+				showSharedAccounts: false,
 				showTrashFolder: false,
 				onFolderSelected: jest.fn()
 			};
@@ -253,10 +252,10 @@ describe('Folder selector', () => {
 
 		test('Trash folder is visible if the showTrashFolder is set to true', () => {
 			populateFoldersStore();
-			const roots = getRootsMap();
 			const props: FolderTreeSelectorProps = {
-				root: roots[FOLDERS.USER_ROOT],
+				allowFolderCreation: false,
 				allowRootSelection: false,
+				showSharedAccounts: false,
 				showTrashFolder: true,
 				onFolderSelected: jest.fn()
 			};
@@ -273,10 +272,10 @@ describe('Folder selector', () => {
 
 		test('no trashed folder is visible if the showTrashFolder is set to false', () => {
 			populateFoldersStore();
-			const roots = getRootsMap();
 			const props: FolderTreeSelectorProps = {
-				root: roots[FOLDERS.USER_ROOT],
+				allowFolderCreation: false,
 				allowRootSelection: false,
+				showSharedAccounts: false,
 				showTrashFolder: false,
 				onFolderSelected: jest.fn()
 			};
@@ -297,10 +296,10 @@ describe('Folder selector', () => {
 
 		test("doesn't display the Contacts folder if it has been added to the exclusions list", () => {
 			populateFoldersStore();
-			const roots = getRootsMap();
 			const props: FolderTreeSelectorProps = {
-				root: roots[FOLDERS.USER_ROOT],
+				allowFolderCreation: false,
 				allowRootSelection: false,
+				showSharedAccounts: false,
 				showTrashFolder: false,
 				excludeIds: [FOLDERS.CONTACTS],
 				onFolderSelected: jest.fn()

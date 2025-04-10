@@ -12,8 +12,14 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { FlatFoldersAccordion } from './flat-folders-accordion';
-import { isLink, isRoot, isTrash, isTrashed } from '../../carbonio-ui-commons/helpers/folders';
-import { useFolder } from '../../carbonio-ui-commons/store/zustand/folder';
+import {
+	isDefaultAccountRoot,
+	isLink,
+	isRoot,
+	isTrash,
+	isTrashed
+} from '../../carbonio-ui-commons/helpers/folders';
+import { useFolder, useRootsArray } from '../../carbonio-ui-commons/store/zustand/folder';
 import { Folder } from '../../carbonio-ui-commons/types/folder';
 import { sortFolders } from '../../helpers/folders';
 import { getFolderTranslatedName } from '../../legacy/utils/helpers';
@@ -24,14 +30,15 @@ const ScrollableContainer = styled(Container)`
 `;
 
 export type FolderTreeSelectorProps = {
-	root: Folder;
 	inputLabel?: string;
 	onNewFolderClick?: () => void;
 	selectedFolderId?: string;
 	onFolderSelected: (arg: Folder) => void;
-	allowRootSelection: boolean;
+	showSharedAccounts: boolean;
 	showTrashFolder: boolean;
 	showLinkedFolders?: boolean;
+	allowRootSelection: boolean;
+	allowFolderCreation: boolean;
 	excludeIds?: Array<string>;
 };
 
@@ -110,34 +117,41 @@ function filterRoots(roots: Array<Folder>, nameCriteria: string): Array<Folder> 
  * @param selectedFolderId
  * @param onFolderSelected
  * @param allowRootSelection
+ * @param allowFolderCreation
  * @param showTrashFolder - default <code>true</code>
  * @param showSharedAccounts
  * @param showLinkedFolders - default <code>true</code>
  * @constructor
  */
 export const FolderTreeSelector = ({
-	root,
 	inputLabel,
 	onNewFolderClick,
 	selectedFolderId,
 	onFolderSelected,
 	allowRootSelection,
+	allowFolderCreation,
 	showTrashFolder,
+	showSharedAccounts,
 	showLinkedFolders,
 	excludeIds
 }: FolderTreeSelectorProps): React.JSX.Element => {
 	const [t] = useTranslation();
 	const [inputValue, setInputValue] = useState('');
 	const selectedFolder = useFolder(selectedFolderId ?? '');
+	const roots = useRootsArray();
+	const filteredAccountsRoots = useMemo<Array<Folder>>(
+		() => (showSharedAccounts ? roots : roots.filter((root) => isDefaultAccountRoot(root.id))),
+		[roots, showSharedAccounts]
+	);
 
 	const flattenRoots = useMemo(
 		() =>
-			flattenRootsFolders(t, [root], {
+			flattenRootsFolders(t, filteredAccountsRoots, {
 				showTrashFolder,
 				showLinkedFolders,
 				excludeIds
 			}),
-		[excludeIds, root, showLinkedFolders, showTrashFolder, t]
+		[excludeIds, filteredAccountsRoots, showLinkedFolders, showTrashFolder, t]
 	);
 
 	const filteredRoots = filterRoots(flattenRoots, inputValue);
@@ -154,6 +168,7 @@ export const FolderTreeSelector = ({
 			/>
 			<Padding vertical="medium" />
 			<ScrollableContainer
+				height={'auto'}
 				orientation="vertical"
 				mainAlignment="flex-start"
 				minHeight="30vh"

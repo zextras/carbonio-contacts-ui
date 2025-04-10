@@ -6,10 +6,8 @@
 import React, { useCallback, useState } from 'react';
 
 import { Divider, ModalFooter, ModalHeader, useModal } from '@zextras/carbonio-design-system';
-import { useParams } from 'react-router-dom';
 
 import { Action } from './types';
-import { useRoot } from '../carbonio-ui-commons/store/zustand/folder';
 import { Folder } from '../carbonio-ui-commons/types';
 import { FolderTreeSelector } from '../components/folder-tree-selector/folder-tree-selector';
 import { ModalContentAndFooterWrapper } from '../components/modals/modal-content-and-footer-wrapper';
@@ -32,14 +30,12 @@ const SelectFolderModal = ({
 	onClose,
 	onConfirm,
 	modalTitle,
-	confirmLabel,
-	root
+	confirmLabel
 }: {
 	onConfirm: OnConfirmFn;
 	onClose: () => void;
 	modalTitle: string;
 	confirmLabel: string;
-	root: Folder;
 }): React.JSX.Element => {
 	const [targetFolder, setTargetFolder] = useState<Folder | undefined>();
 	const onFolderSelected = useCallback((selectedFolder: Folder) => {
@@ -48,18 +44,18 @@ const SelectFolderModal = ({
 	const _onConfirm = (): void => {
 		targetFolder && onConfirm(targetFolder, onClose);
 	};
-
 	return (
 		<ModalWrapper>
 			<ModalHeader onClose={onClose} title={modalTitle} showCloseIcon />
 			<Divider />
 			<ModalContentAndFooterWrapper>
 				<FolderTreeSelector
-					root={root}
 					onFolderSelected={onFolderSelected}
+					showSharedAccounts
 					showTrashFolder={false}
 					showLinkedFolders
 					allowRootSelection={false}
+					allowFolderCreation={false}
 				/>
 				<Divider />
 				<ModalFooter
@@ -78,8 +74,6 @@ function useSelectFolderModalAction(): ({
 	onConfirm
 }: UseSelectFolderModalActionProps) => Action {
 	const { createModal, closeModal } = useModal();
-	const { folderId } = useParams() as { folderId: string };
-	const root = useRoot(folderId);
 	return ({ actionId, modal, icon, label, onConfirm }): Action => {
 		const openSelectFolderModal = (): void => {
 			const onClose = (): void => closeModal(modal.id);
@@ -88,9 +82,8 @@ function useSelectFolderModalAction(): ({
 					id: modal.id,
 					maxHeight: '90vh',
 					size: 'medium',
-					children: root && (
+					children: (
 						<SelectFolderModal
-							root={root}
 							onClose={onClose}
 							onConfirm={onConfirm}
 							modalTitle={modal.title}

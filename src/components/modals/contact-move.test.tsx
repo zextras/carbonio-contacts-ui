@@ -5,9 +5,8 @@
  */
 import React from 'react';
 
-import { act, waitFor } from '@testing-library/react';
+import { act } from '@testing-library/react';
 import { times } from 'lodash';
-import { useParams } from 'react-router-dom';
 
 import { ContactMoveModal } from './contact-move';
 import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
@@ -24,15 +23,9 @@ import { TESTID_SELECTORS } from '../../constants/tests';
 import { buildContact } from '../../tests/model-builder';
 import { getFoldersArray } from '../../tests/utils';
 
-jest.mock('react-router-dom', () => ({
-	...jest.requireActual('react-router-dom'),
-	useParams: jest.fn()
-}));
-
 describe('ContactMoveModal', () => {
 	describe('Move mode', () => {
 		it('should display a modal with a specific title for a single contact', () => {
-			(useParams as jest.Mock).mockReturnValue({ folderId: FOLDERS.INBOX });
 			const contact = buildContact();
 			setupTest(
 				<ContactMoveModal
@@ -48,7 +41,6 @@ describe('ContactMoveModal', () => {
 		});
 
 		it('should display a modal with a specific title for multiple contacts', () => {
-			(useParams as jest.Mock).mockReturnValue({ folderId: FOLDERS.INBOX });
 			const contacts = times(10, () => buildContact());
 			setupTest(
 				<ContactMoveModal
@@ -63,7 +55,6 @@ describe('ContactMoveModal', () => {
 	});
 
 	describe('Restore mode', () => {
-		(useParams as jest.Mock).mockReturnValue({ folderId: FOLDERS.INBOX });
 		it('should display a modal with a specific title for a single contact', () => {
 			const contact = buildContact();
 			setupTest(
@@ -80,7 +71,6 @@ describe('ContactMoveModal', () => {
 		});
 
 		it('should display a modal with a specific title for multiple contacts', () => {
-			(useParams as jest.Mock).mockReturnValue({ folderId: FOLDERS.INBOX });
 			const contacts = times(10, () => buildContact());
 			setupTest(
 				<ContactMoveModal
@@ -95,7 +85,6 @@ describe('ContactMoveModal', () => {
 	});
 
 	it('should display a close icon', () => {
-		(useParams as jest.Mock).mockReturnValue({ folderId: FOLDERS.INBOX });
 		const contacts = [buildContact()];
 		setupTest(<ContactMoveModal contacts={contacts} onMove={jest.fn()} onClose={jest.fn()} />);
 		expect(
@@ -104,7 +93,6 @@ describe('ContactMoveModal', () => {
 	});
 
 	it('should call the onClose callback when the user clicks the close icon', async () => {
-		(useParams as jest.Mock).mockReturnValue({ folderId: FOLDERS.INBOX });
 		const contacts = [buildContact()];
 		const onClose = jest.fn();
 		const { user } = setupTest(
@@ -116,28 +104,23 @@ describe('ContactMoveModal', () => {
 	});
 
 	describe('Parent address book selector', () => {
-		it('should display the primary account root', async () => {
-			(useParams as jest.Mock).mockReturnValue({ folderId: FOLDERS.INBOX });
+		it('should display the primary account root', () => {
 			populateFoldersStore();
 			const contacts = [buildContact()];
 			setupTest(<ContactMoveModal contacts={contacts} onMove={jest.fn()} onClose={jest.fn()} />);
-			await waitFor(() => {
-				expect(screen.getByTestId(`folder-accordion-root-1`)).toBeVisible();
-			});
+			expect(screen.getByTestId(`folder-accordion-root-1`)).toBeVisible();
 		});
 
 		it('should display the shared accounts roots', () => {
 			populateFoldersStore();
-			const roots = getRootsArray();
-			const sharedFolderId = roots[1].id;
-			(useParams as jest.Mock).mockReturnValue({ folderId: sharedFolderId });
 			const contacts = [buildContact()];
 			setupTest(<ContactMoveModal contacts={contacts} onMove={jest.fn()} onClose={jest.fn()} />);
-			expect(screen.getByTestId(`folder-accordion-root-${sharedFolderId}`)).toBeVisible();
+			getRootsArray().forEach((root) => {
+				expect(screen.getByTestId(`folder-accordion-root-${root.id}`)).toBeVisible();
+			});
 		});
 
 		it('should not display the Trash folder', () => {
-			(useParams as jest.Mock).mockReturnValue({ folderId: FOLDERS.INBOX });
 			populateFoldersStore();
 			const contacts = [buildContact()];
 			setupTest(<ContactMoveModal contacts={contacts} onMove={jest.fn()} onClose={jest.fn()} />);
@@ -147,7 +130,6 @@ describe('ContactMoveModal', () => {
 		});
 
 		it('should not display a folder inside the "Trash" folder', () => {
-			(useParams as jest.Mock).mockReturnValue({ folderId: FOLDERS.INBOX });
 			populateFoldersStore();
 			const contacts = [buildContact()];
 
@@ -165,7 +147,6 @@ describe('ContactMoveModal', () => {
 		});
 
 		it('should display the linked folders', () => {
-			(useParams as jest.Mock).mockReturnValue({ folderId: FOLDERS.INBOX });
 			populateFoldersStore();
 			const contacts = [buildContact()];
 
@@ -182,7 +163,6 @@ describe('ContactMoveModal', () => {
 		});
 
 		it('should not display the current parent address book, if only one contact is passed as parameter', () => {
-			(useParams as jest.Mock).mockReturnValue({ folderId: FOLDERS.INBOX });
 			populateFoldersStore();
 			const parentAddressBookId = FOLDERS.CONTACTS;
 			const contacts = [buildContact({ parent: parentAddressBookId })];
@@ -194,7 +174,6 @@ describe('ContactMoveModal', () => {
 		});
 
 		it('should not display the current parent address book, if multiple contacts of the same address book are passed as parameter', () => {
-			(useParams as jest.Mock).mockReturnValue({ folderId: FOLDERS.INBOX });
 			populateFoldersStore();
 			const parentAddressBookId = FOLDERS.CONTACTS;
 			const contacts = times(10, () => buildContact({ parent: parentAddressBookId }));
@@ -206,7 +185,6 @@ describe('ContactMoveModal', () => {
 		});
 
 		it('should display the current parent address books, if multiple contacts of different address books are passed as parameter', () => {
-			(useParams as jest.Mock).mockReturnValue({ folderId: FOLDERS.INBOX });
 			populateFoldersStore();
 			const contacts = [
 				buildContact({ parent: FOLDERS.CONTACTS }),

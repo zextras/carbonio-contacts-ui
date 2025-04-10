@@ -49,7 +49,7 @@ import {
 } from '../../../../tests/msw-handlers/find-contact-groups';
 import { createSoapContact, createSoapContactGroup } from '../../../../tests/utils';
 import { FolderPanel } from '../folder-panel';
-import { createContactsApiInterceptor, findContactListItem } from './utils';
+import { createContactsApiInterceptor, findContactInList } from './utils';
 import { SearchContactsRequest, SearchContactsSoapResponse } from '../../../../types';
 import { SoapContact } from '../../../types/soap';
 
@@ -147,7 +147,7 @@ describe('Folder panel', () => {
 				initialEntries: [`/folder/${folder.id}`],
 				path: `/folder/:folderId/:type?/:itemId?`
 			});
-			await findContactListItem(soapContact);
+			await findContactInList(soapContact);
 			expect(screen.getByText(email)).toBeVisible();
 			await firstSearchInterceptor;
 		});
@@ -360,7 +360,7 @@ describe('Folder panel', () => {
 							initialEntries: [`/folder/${folder.id}`],
 							path: `/folder/:folderId/:type?/:itemId?`
 						});
-						await findContactListItem(soapContact);
+						await findContactInList(soapContact);
 
 						const listItem = screen.getByText(email);
 						await act(() => user.hover(listItem));
@@ -426,7 +426,7 @@ describe('Folder panel', () => {
 							initialEntries: [`/folder/${folder.id}`],
 							path: `/folder/:folderId/:type?/:itemId?`
 						});
-						await findContactListItem(soapContact);
+						await findContactInList(soapContact);
 
 						const listItem = screen.getByText(email);
 						await act(() => user.rightClick(listItem));
@@ -459,7 +459,7 @@ describe('Folder panel', () => {
 						initialEntries: [`/folder/${contactsFolder.id}`],
 						path: `/folder/:folderId/:type?/:itemId?`
 					});
-					await findContactListItem(soapContact);
+					await findContactInList(soapContact);
 					const contactListItem = await screen.findByTestId(`contact-list-item-${soapContact.id}`);
 					expect(contactListItem).toBeVisible();
 					const contactListItemName = within(contactListItem).getByText(email);
@@ -504,7 +504,7 @@ describe('Folder panel', () => {
 						initialEntries: [`/folder/${folder.id}`],
 						path: `/folder/:folderId/:type?/:itemId?`
 					});
-					await findContactListItem(soapContact1);
+					await findContactInList(soapContact1);
 
 					// Select all the items
 					const listItems = screen.getAllByTestId(TESTID_SELECTORS.contactsListItem);
@@ -553,7 +553,7 @@ describe('Folder panel', () => {
 								initialEntries: [`/folder/${folder.id}`],
 								path: `/folder/:folderId/:type?/:itemId?`
 							});
-							await findContactListItem(soapContact1);
+							await findContactInList(soapContact1);
 							makeListItemsVisible();
 
 							// Select all the items
@@ -973,6 +973,84 @@ describe('Folder panel', () => {
 			expect(await screen.findByText(soapContactEmail)).toBeVisible();
 
 			expect(contactsOnlyRequest.query?._content).toBe(`inid:"${folderId}" and not #type:group`);
+		});
+
+		it('should display contacts and contact groups after selecting all filter', async () => {
+			const contactGroupName = faker.company.name();
+			const folderId = '7';
+			const soapContactEmail = 'test@mycontact.com';
+			const soapContact = createSoapContact({ folderId, email: soapContactEmail });
+			const soapContactGroup = createSoapContactGroup(
+				contactGroupName,
+				[faker.internet.email(), faker.internet.email()],
+				'1',
+				folderId
+			);
+			const searchAllContactsInterceptor = createContactsApiInterceptor({
+				items: [soapContactGroup]
+			});
+
+			const { user } = setupFolderPanel(folderId);
+
+			await searchAllContactsInterceptor;
+			expect(await screen.findByText(contactGroupName)).toBeInTheDocument();
+			const searchOnlyContactsInterceptor = createContactsApiInterceptor({
+				items: [soapContact]
+			});
+			await toggleSelectContactTypeFilter(user);
+			await user.click(await screen.findByText('Contacts'));
+			const contactsOnlyRequest = await searchOnlyContactsInterceptor;
+			expect(
+				await screen.findByTestId(`contact-list-item-invisible-${soapContact.id}`)
+			).toBeInTheDocument();
+			expect(screen.queryByText(contactGroupName)).not.toBeInTheDocument();
+			makeListItemsVisible();
+			expect(await screen.findByText(soapContactEmail)).toBeVisible();
+
+			expect(contactsOnlyRequest.query?._content).toBe(`inid:"${folderId}" and not #type:group`);
+
+			const searchContactsInterceptor = createContactsApiInterceptor({
+				items: [soapContact, soapContactGroup]
+			});
+
+			await toggleSelectContactTypeFilter(user);
+			await user.click(await screen.findByText('All'));
+
+			const searchContactsRequest = await searchContactsInterceptor;
+
+			expect(searchContactsRequest.query?._content).toBe(`inid:"${folderId}"`);
+			expect(await screen.findByText(contactGroupName)).toBeVisible();
+			makeListItemsVisible();
+			expect(await screen.findByText(soapContactEmail)).toBeVisible();
+		});
+	});
+
+	describe('Display breadcrumbs', () => {
+		it('should display count and folder path of the folder in breadcrumbs', async () => {
+			const contactGroupName = faker.company.name();
+			const folderId = '7';
+			const soapContactEmail = 'demo@mycontact.com';
+			const soapContact = createSoapContact({ folderId, email: soapContactEmail });
+			const soapContactGroup = createSoapContactGroup(
+				contactGroupName,
+				[faker.internet.email(), faker.internet.email()],
+				'1',
+				folderId
+			);
+			const searchContactsInterceptor = createContactsApiInterceptor({
+				items: [soapContact, soapContactGroup]
+			});
+
+			setupFolderPanel(folderId);
+			const searchContactsRequest = await searchContactsInterceptor;
+
+			expect(searchContactsRequest.query?._content).toBe(`inid:"${folderId}"`);
+			expect(await screen.findByText(contactGroupName)).toBeVisible();
+			makeListItemsVisible();
+			expect(await screen.findByText(soapContactEmail)).toBeVisible();
+
+			expect(screen.getByTestId('BreadcrumbCount')).toHaveTextContent('2');
+			expect(screen.getByTestId('BreadcrumbPath')).toHaveTextContent('/ Contacts');
 		});
 	});
 });

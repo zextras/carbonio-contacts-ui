@@ -60,7 +60,7 @@ const TagRow: FC<ComponentProps> = ({ compProps }): ReactElement => {
 		[chipOnAdd, tagOptions]
 	);
 
-	const tagPlaceholder = useMemo(() => t('label.tag', 'Tag'), [t]);
+	const tagPlaceholder = useMemo(() => t('label.tags', 'Tags'), [t]);
 	const onTagChange = useCallback(
 		(chip: ChipItem) => {
 			setTag(chip);

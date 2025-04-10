@@ -24,7 +24,7 @@ export function createContactsApiInterceptor({
 	});
 }
 
-export const findContactListItem = async (contact: SoapContact): Promise<void> => {
+export const findContactInList = async (contact: SoapContact): Promise<void> => {
 	await screen.findByTestId(`custom-contact-list-item-${contact.id}`);
 	makeListItemsVisible();
 };

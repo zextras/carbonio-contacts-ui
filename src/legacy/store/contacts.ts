@@ -6,6 +6,7 @@
 import produce, { enableMapSet } from 'immer';
 import { create } from 'zustand';
 
+import { Folder } from '../../carbonio-ui-commons/types';
 import { ContactGroup } from '../../model/contact-group';
 import { Contact, ContactOrGroup } from '../types/contact';
 
@@ -91,11 +92,11 @@ export const useContactById = (contactId: string): Contact | undefined =>
 		return undefined;
 	});
 
-export const useCurrentFolderViewList = (folderId: string): Array<ContactOrGroup> =>
-	useContactsStore(({ contacts, currentFolderViewList }) =>
+export const useContactsByFolder = (folder: Folder): Array<ContactOrGroup> => {
+	const parent = folder.isLink ? `${folder.zid}:${folder.rid}` : folder?.id;
+	return useContactsStore(({ contacts, currentFolderViewList }) =>
 		Array.from(currentFolderViewList)
 			.map((key: string) => contacts[key])
-			.filter((contact) => contact.parent === folderId)
+			.filter((contact) => contact.parent === parent)
 	);
-
-export const useContactsStoreForTesting = useContactsStore;
+};
