@@ -5,95 +5,109 @@
  */
 import React from 'react';
 
-import { FormSubSection, Checkbox, FormSection } from '@zextras/carbonio-design-system';
+import { FormSubSection, Checkbox, FormSection, Container } from '@zextras/carbonio-design-system';
 
 export default function OptionsSettingsView({ t, settingsObj, updateSettings }) {
 	return (
 		<FormSection label={t('label.options', 'Options')}>
 			<FormSubSection label={t('label.options', 'Options')}>
-				<Checkbox
-					label={t(
-						'settings.contacts.checkbox.add_contact_to_emailed_contacts',
-						'Add new contacts to "Emailed Contacts"'
-					)}
-					value={settingsObj.zimbraPrefAutoAddAddressEnabled === 'TRUE'}
-					onClick={() =>
-						updateSettings({
-							target: {
-								name: 'zimbraPrefAutoAddAddressEnabled',
-								value: settingsObj.zimbraPrefAutoAddAddressEnabled === 'TRUE' ? 'FALSE' : 'TRUE'
-							}
-						})
-					}
-				/>
-				<Checkbox
-					label={t(
-						'settings.contacts.checkbox.srch_glbl_addrs_list',
-						'Initially search the Global Address List when using the contact picker'
-					)}
-					value={settingsObj.zimbraPrefGalSearchEnabled === 'TRUE'}
-					onClick={() =>
-						updateSettings({
-							target: {
-								name: 'zimbraPrefGalSearchEnabled',
-								value: settingsObj.zimbraPrefGalSearchEnabled === 'TRUE' ? 'FALSE' : 'TRUE'
-							}
-						})
-					}
-				/>
+				<Container
+					gap={'0.5rem'}
+					mainAlignment={'flex-start'}
+					crossAlignment={'flex-start'}
+					height={'fit'}
+				>
+					<Checkbox
+						label={t(
+							'settings.contacts.checkbox.add_contact_to_emailed_contacts',
+							'Add new contacts to "Emailed Contacts"'
+						)}
+						value={settingsObj.zimbraPrefAutoAddAddressEnabled === 'TRUE'}
+						onClick={() =>
+							updateSettings({
+								target: {
+									name: 'zimbraPrefAutoAddAddressEnabled',
+									value: settingsObj.zimbraPrefAutoAddAddressEnabled === 'TRUE' ? 'FALSE' : 'TRUE'
+								}
+							})
+						}
+					/>
+					<Checkbox
+						label={t(
+							'settings.contacts.checkbox.srch_glbl_addrs_list',
+							'Initially search the Global Address List when using the contact picker'
+						)}
+						value={settingsObj.zimbraPrefGalSearchEnabled === 'TRUE'}
+						onClick={() =>
+							updateSettings({
+								target: {
+									name: 'zimbraPrefGalSearchEnabled',
+									value: settingsObj.zimbraPrefGalSearchEnabled === 'TRUE' ? 'FALSE' : 'TRUE'
+								}
+							})
+						}
+					/>
+				</Container>
 			</FormSubSection>
 			<FormSubSection label={t('label.autocomplete', 'Autocomplete')}>
-				<Checkbox
-					label={t(
-						'settings.contacts.checkbox.incl_addrs_in_glbl_addrs_list',
-						'Include addresses in the Global Address List'
-					)}
-					value={settingsObj.zimbraPrefGalAutoCompleteEnabled === 'TRUE'}
-					onClick={() =>
-						updateSettings({
-							target: {
-								name: 'zimbraPrefGalAutoCompleteEnabled',
-								value: settingsObj.zimbraPrefGalAutoCompleteEnabled === 'TRUE' ? 'FALSE' : 'TRUE'
-							}
-						})
-					}
-				/>
-				<Checkbox
-					label={t(
-						'settings.contacts.checkbox.include_add_in_shared_contact',
-						'Include addresses in shared contacts'
-					)}
-					value={settingsObj.zimbraPrefSharedAddrBookAutoCompleteEnabled === 'TRUE'}
-					onClick={() =>
-						updateSettings({
-							target: {
-								name: 'zimbraPrefSharedAddrBookAutoCompleteEnabled',
-								value:
-									settingsObj.zimbraPrefSharedAddrBookAutoCompleteEnabled === 'TRUE'
-										? 'FALSE'
-										: 'TRUE'
-							}
-						})
-					}
-				/>
-				<Checkbox
-					label={t(
-						'settings.contacts.checkbox.autocomplete_on_comma',
-						'Select autocomplete match when a comma is typed'
-					)}
-					value={settingsObj.zimbraPrefAutoCompleteQuickCompletionOnComma === 'TRUE'}
-					onClick={() =>
-						updateSettings({
-							target: {
-								name: 'zimbraPrefAutoCompleteQuickCompletionOnComma',
-								value:
-									settingsObj.zimbraPrefAutoCompleteQuickCompletionOnComma === 'TRUE'
-										? 'FALSE'
-										: 'TRUE'
-							}
-						})
-					}
-				/>
+				<Container
+					gap={'0.5rem'}
+					mainAlignment={'flex-start'}
+					crossAlignment={'flex-start'}
+					height={'fit'}
+				>
+					<Checkbox
+						label={t(
+							'settings.contacts.checkbox.incl_addrs_in_glbl_addrs_list',
+							'Include addresses in the Global Address List'
+						)}
+						value={settingsObj.zimbraPrefGalAutoCompleteEnabled === 'TRUE'}
+						onClick={() =>
+							updateSettings({
+								target: {
+									name: 'zimbraPrefGalAutoCompleteEnabled',
+									value: settingsObj.zimbraPrefGalAutoCompleteEnabled === 'TRUE' ? 'FALSE' : 'TRUE'
+								}
+							})
+						}
+					/>
+					<Checkbox
+						label={t(
+							'settings.contacts.checkbox.include_add_in_shared_contact',
+							'Include addresses in shared contacts'
+						)}
+						value={settingsObj.zimbraPrefSharedAddrBookAutoCompleteEnabled === 'TRUE'}
+						onClick={() =>
+							updateSettings({
+								target: {
+									name: 'zimbraPrefSharedAddrBookAutoCompleteEnabled',
+									value:
+										settingsObj.zimbraPrefSharedAddrBookAutoCompleteEnabled === 'TRUE'
+											? 'FALSE'
+											: 'TRUE'
+								}
+							})
+						}
+					/>
+					<Checkbox
+						label={t(
+							'settings.contacts.checkbox.autocomplete_on_comma',
+							'Select autocomplete match when a comma is typed'
+						)}
+						value={settingsObj.zimbraPrefAutoCompleteQuickCompletionOnComma === 'TRUE'}
+						onClick={() =>
+							updateSettings({
+								target: {
+									name: 'zimbraPrefAutoCompleteQuickCompletionOnComma',
+									value:
+										settingsObj.zimbraPrefAutoCompleteQuickCompletionOnComma === 'TRUE'
+											? 'FALSE'
+											: 'TRUE'
+								}
+							})
+						}
+					/>
+				</Container>
 			</FormSubSection>
 		</FormSection>
 	);
