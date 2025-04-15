@@ -24,12 +24,12 @@ import { concat, filter, map } from 'lodash';
 import KeywordRow, { KeywordState } from './parts/keyword-row';
 import TagRow from './parts/tag-row';
 import ToggleFilters from './parts/toggle-filters';
-import { useDisabled, useSecondaryDisabled } from './parts/use-disable-hooks';
+import { useDisabled } from './parts/use-disable-hooks';
 import type { Query } from './search-types';
 import { ZIMBRA_STANDARD_COLORS } from '../../../carbonio-ui-commons/constants/utils';
 import { getTags } from '../../../carbonio-ui-commons/store/zustand/tags';
 
-type AdvancedFilterModalProps = {
+export type AdvancedFilterModalProps = {
 	open: boolean;
 	onClose: () => void;
 	t: TFunction;
@@ -39,7 +39,7 @@ type AdvancedFilterModalProps = {
 	setIsSharedFolderIncluded: (arg: boolean) => void;
 };
 
-const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
+export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 	open,
 	onClose,
 	t,
@@ -112,14 +112,17 @@ const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 		isSharedFolderIncluded,
 		isSharedFolderIncludedTobe
 	});
-	const secondaryDisabled = useSecondaryDisabled({
-		tag,
-		totalKeywords
-	});
+
+	const secondaryDisabled = useMemo(
+		() => query.length === 0 && queryToBe.length === 0,
+		[query.length, queryToBe.length]
+	);
+
 	const resetFilters = useCallback(() => {
 		setOtherKeywords([]);
 		setTag([]);
-	}, []);
+		updateQuery([]);
+	}, [updateQuery]);
 
 	const onConfirm = useCallback(() => {
 		const tmp = [...otherKeywords];
