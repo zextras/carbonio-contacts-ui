@@ -24,6 +24,3 @@ export const useDisabled = ({
 					}),
 		[isSharedFolderIncluded, isSharedFolderIncludedTobe, query, queryToBe]
 	);
-
-export const useSecondaryDisabled = ({ tag, totalKeywords }) =>
-	useMemo(() => totalKeywords === 0 && tag.length === 0, [tag.length, totalKeywords]);
