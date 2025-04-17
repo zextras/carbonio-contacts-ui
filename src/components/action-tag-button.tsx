@@ -14,11 +14,11 @@ import {
 	Tooltip,
 	Text
 } from '@zextras/carbonio-design-system';
-import { every, includes, reduce } from 'lodash';
+import { every, find, includes, reduce } from 'lodash';
 
 import { ZIMBRA_STANDARD_COLORS } from '../carbonio-ui-commons/constants';
 import { useRunSearchIntegration } from '../carbonio-ui-commons/integrations/search/use-run-search';
-import { useTags } from '../carbonio-ui-commons/store/zustand/tags';
+import { useSortedTagsArray } from '../carbonio-ui-commons/store/zustand/tags';
 import { Tag } from '../carbonio-ui-commons/types/tags';
 import { Contact } from '../legacy/types/contact';
 import { useTagExist } from '../legacy/ui-actions/tag-actions';
@@ -30,11 +30,10 @@ interface ActionTagButtonProps {
 export const ActionTagButton: React.FC<ActionTagButtonProps> = ({
 	contact
 }): React.JSX.Element | undefined => {
-	const tagsFromStore = useTags();
-	const label = useMemo(
-		() => contact?.tags && tagsFromStore[contact?.tags?.[0]]?.name,
-		[contact?.tags, tagsFromStore]
-	);
+	const tagsFromStore = useSortedTagsArray();
+	const contactTagId = contact?.tags?.[0];
+	const contactTag = find(tagsFromStore, (tag) => tag.name === contactTagId);
+	const label = useMemo(() => contactTag?.name, [contactTag?.name]);
 	const runSearch = useRunSearchIntegration();
 	const triggerTagSearch = useCallback(
 		(tagToSearch: Tag) =>
@@ -98,8 +97,9 @@ export const ActionTagButton: React.FC<ActionTagButtonProps> = ({
 	const color = useMemo(() => (tags.length === 1 ? tags[0].color : 'text'), [tags]);
 
 	const onClick = useCallback(() => {
-		contact?.tags && triggerTagSearch(tagsFromStore?.[contact?.tags[0]]);
-	}, [contact.tags, triggerTagSearch, tagsFromStore]);
+		contact?.tags && triggerTagSearch(contactTag as Tag);
+	}, [contact?.tags, triggerTagSearch, contactTag]);
+
 	const [showDropdown, setShowDropdown] = useState(false);
 	const toggleDropdown = useCallback(
 		(ev: React.MouseEvent<HTMLButtonElement, MouseEvent> | KeyboardEvent) => {
