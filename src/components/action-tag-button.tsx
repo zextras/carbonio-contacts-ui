@@ -32,7 +32,7 @@ export const ActionTagButton: React.FC<ActionTagButtonProps> = ({
 }): React.JSX.Element | undefined => {
 	const tagsFromStore = useSortedTagsArray();
 	const contactTagId = contact?.tags?.[0];
-	const contactTag = find(tagsFromStore, (tag) => tag.name === contactTagId);
+	const contactTag = find(tagsFromStore, (tag) => tag.id === contactTagId);
 	const label = useMemo(() => contactTag?.name, [contactTag?.name]);
 	const runSearch = useRunSearchIntegration();
 	const triggerTagSearch = useCallback(
