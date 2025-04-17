@@ -22,7 +22,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ZIMBRA_STANDARD_COLORS } from '../../carbonio-ui-commons/constants/utils';
 import { useRunSearchIntegration } from '../../carbonio-ui-commons/integrations/search/use-run-search';
-import { useTags } from '../../carbonio-ui-commons/store/zustand/tags';
+import { useSortedTagsArray } from '../../carbonio-ui-commons/store/zustand/tags';
 import { createTag, useGetTagsActions } from '../ui-actions/tag-actions';
 import { ItemType, TagsAccordionItems } from '../views/secondary-bar/parts/tags/types';
 
@@ -97,7 +97,7 @@ export const TagLabel: FC<ItemType> = (props) => {
 };
 
 const useGetTagsAccordion = (): TagsAccordionItems => {
-	const tagsFromStore = useTags();
+	const tagsFromStore = useSortedTagsArray();
 	const [t] = useTranslation();
 
 	return useMemo(
