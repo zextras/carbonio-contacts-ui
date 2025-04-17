@@ -68,7 +68,7 @@
 		"@mui/icons-material": "^6.1.2",
 		"@mui/material": "^6.1.2",
 		"@reduxjs/toolkit": "^2.2.7",
-		"@zextras/carbonio-design-system": "9.0.0",
+		"@zextras/carbonio-design-system": "^10.0.0",
 		"@zextras/carbonio-shell-ui": "10.0.0-devel.1744805695533",
 		"axios": "^1.6.8",
 		"core-js": "^3.36.0",
