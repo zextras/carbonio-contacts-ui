@@ -40,6 +40,12 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 	});
 	const searchContacts = useContactsById(searchResults.contacts);
 
+	useEffect(() => {
+		if (query.length === 0) {
+			setSearchResults({ contacts: [], more: false, offset: 0, sortBy: 'nameAsc', query: '' });
+		}
+	}, [query.length]);
+
 	const loading = useRef(false);
 	const [t] = useTranslation();
 	const [filterCount, setFilterCount] = useState(0);
