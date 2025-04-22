@@ -36,7 +36,7 @@ export type AdvancedFilterModalProps = {
 	updateQuery: ReturnType<SearchViewProps['useQuery']>[1];
 	isSharedFolderIncluded: boolean;
 	setIsSharedFolderIncluded: (arg: boolean) => void;
-	executeSearch: (reset: boolean, abortSignal?: AbortSignal) => void;
+	executeSearch: (abortSignal?: AbortSignal) => void;
 };
 
 export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
@@ -123,7 +123,7 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 			const tmp = [...otherKeywords];
 			updateQuery(tmp);
 			setIsSharedFolderIncluded(isSharedFolderIncludedTobe);
-			executeSearch(true, controller.signal);
+			executeSearch(controller.signal);
 			onClose();
 		} catch (error) {
 			controller.abort();

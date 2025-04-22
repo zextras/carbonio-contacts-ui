@@ -83,26 +83,33 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 		[isSharedFolderIncluded, searchInFolders.length, query, foldersToSearchInQuery]
 	);
 
-	const runSearchFromScratch = useCallback(() => {
-		runSearch({ queryString: queryToString, offset: 0 }).then((r) => {
-			const contacts = r.contacts ?? [];
-			const contactIds = contacts.map((c) => c.id);
-			addContactsToStore(contacts);
-			setSearchResults({
-				more: r.more,
-				offset: r.offset,
-				query: queryToString,
-				sortBy: 'nameAsc',
-				contacts: contactIds
+	const runSearchFromScratch = useCallback(
+		(abortSignal?: AbortSignal) => {
+			runSearch({ queryString: queryToString, offset: 0, abortSignal }).then((r) => {
+				const contacts = r.contacts ?? [];
+				const contactIds = contacts.map((c) => c.id);
+				addContactsToStore(contacts);
+				setSearchResults({
+					more: r.more,
+					offset: r.offset,
+					query: queryToString,
+					sortBy: 'nameAsc',
+					contacts: contactIds
+				});
 			});
-		});
-	}, [queryToString]);
+		},
+		[queryToString]
+	);
 
 	useEffect(() => {
+		const controller = new AbortController();
 		if (query.length > 0) {
 			setFilterCount(query.length);
-			runSearchFromScratch();
+			runSearchFromScratch(controller.signal);
 		}
+		return () => {
+			controller.abort();
+		};
 	}, [query.length, runSearchFromScratch]);
 
 	const loadMore = useCallback(() => {
