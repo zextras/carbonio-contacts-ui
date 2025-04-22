@@ -11,9 +11,13 @@ import type { SearchViewProps, QueryChip } from '@zextras/carbonio-search-ui';
 import { AccountSettings } from '@zextras/carbonio-shell-ui';
 import * as hooks from '@zextras/carbonio-shell-ui';
 import { noop } from 'lodash';
+import { HttpResponse } from 'msw';
 
 import { FOLDERS } from '../../../../carbonio-ui-commons/constants/folders';
-import { createSoapAPIInterceptor } from '../../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
+import {
+	createAPIInterceptor,
+	createSoapAPIInterceptor
+} from '../../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
 import { generateSettings } from '../../../../carbonio-ui-commons/test/mocks/settings/settings-generator';
 import { populateFoldersStore } from '../../../../carbonio-ui-commons/test/mocks/store/folders';
 import {
@@ -99,6 +103,34 @@ describe('SearchView', () => {
 			await screen.findByText('Select one or more results to perform actions or display details.')
 		).toBeInTheDocument();
 	});
+
+	it('does not make search if query is empty', async () => {
+		const customSettings: Partial<AccountSettings> = {
+			prefs: {
+				zimbraPrefIncludeTrashInSearch: 'TRUE',
+				zimbraPrefIncludeSharedItemsInSearch: 'FALSE'
+			}
+		};
+		const settings = generateSettings(customSettings);
+		jest.spyOn(hooks, 'useUserSettings').mockReturnValue(settings);
+		const resultsHeader = (props: { label: string }): ReactElement => <>{props.label}</>;
+		const mockedUseQuery = jest.fn().mockReturnValue([[], noop]);
+		const searchAPIInterceptor = createAPIInterceptor(
+			'post',
+			'/service/soap/SearchRequest',
+			HttpResponse.json({})
+		);
+		const searchViewProps: SearchViewProps = {
+			useQuery: mockedUseQuery,
+			ResultsHeader: resultsHeader,
+			useDisableSearch: (): [boolean, () => void] => [false, noop]
+		};
+
+		setupTest(<SearchView {...searchViewProps} />);
+
+		expect(searchAPIInterceptor.getCalledTimes()).toBe(0);
+	});
+
 	describe('Contacts', () => {
 		it('should display the selected contact in the detail panel', async () => {
 			populateFoldersStore();
