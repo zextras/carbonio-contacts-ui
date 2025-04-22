@@ -7,12 +7,12 @@ import React, { FC, Suspense, useCallback, useEffect, useMemo, useState } from '
 
 import { Container, Spinner } from '@zextras/carbonio-design-system';
 import type { SearchViewProps } from '@zextras/carbonio-search-ui';
-import { soapFetch } from '@zextras/carbonio-shell-ui';
 import { map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { Route, Routes } from 'react-router-dom';
 
 import AdvancedFilterModal from './advance-filter-modal';
+import { runSearch } from './run-search';
 import { SearchContactsEmptyPanel } from './search-contacts-empty-panel';
 import { SearchList } from './search-list';
 import { SearchResults } from './types';
@@ -23,7 +23,6 @@ import { Folder } from '../../../carbonio-ui-commons/types';
 import { usePrefs } from '../../../carbonio-ui-commons/utils/use-prefs';
 import { ContactGroupDisplayerWrapper } from '../../../views/contact-groups/displayer/contact-group-displayer-wrapper';
 import { addContactsToStore, useContactsById } from '../../store/contacts';
-import { normalizeContactsFromSoap } from '../../utils/normalizations/normalize-contact-from-soap';
 import ContactEditPanel from '../edit/contact-edit-panel';
 import { ContactPreviewWrapper } from '../preview/contact-preview-wrapper';
 
@@ -84,84 +83,55 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 		[isSharedFolderIncluded, searchInFolders.length, query, foldersToSearchInQuery]
 	);
 
-	const executeSearchPure = useCallback(
-		({
-			queryString,
-			offset,
-			abortSignal
-		}: {
-			queryString: string;
-			offset: number;
-			abortSignal?: AbortSignal;
-		}) =>
-			soapFetch<any, any>(
-				'Search',
-				{
-					limit: 100,
-					query: queryString,
-					offset,
-					sortBy: 'nameAsc',
-					types: 'contact',
-					_jsns: 'urn:zimbraMail'
-				},
-				undefined,
-				abortSignal
-			).then(({ cn, more }) => ({
-				query: queryString,
-				contacts: [...(normalizeContactsFromSoap(cn) ?? [])],
-				more,
-				offset: offset + 100,
-				sortBy: 'nameAsc'
-			})),
-		[]
-	);
-
-	const executeSearch = useCallback(
-		(reset: boolean, abortSignal?: AbortSignal) => {
-			const offset = reset ? 0 : searchResults.contacts.length;
-			executeSearchPure({
-				offset,
-				queryString: queryToString,
-				abortSignal
-			}).then((r) => {
-				const contacts = [...(reset ? [] : (searchContacts ?? [])), ...(r.contacts ?? [])];
-				const contactIds = contacts.map((c) => c.id);
-				addContactsToStore(contacts);
-				setSearchResults({
-					...r,
-					contacts: contactIds
-				});
+	const runSearchFromScratch = useCallback(() => {
+		runSearch({ queryString: queryToString, offset: 0 }).then((r) => {
+			const contacts = r.contacts ?? [];
+			const contactIds = contacts.map((c) => c.id);
+			addContactsToStore(contacts);
+			setSearchResults({
+				more: r.more,
+				offset: r.offset,
+				query: queryToString,
+				sortBy: 'nameAsc',
+				contacts: contactIds
 			});
-		},
-		[executeSearchPure, queryToString, searchContacts, searchResults.contacts.length]
-	);
+		});
+	}, [queryToString]);
 
 	useEffect(() => {
 		if (query.length > 0) {
 			setFilterCount(query.length);
-			executeSearchPure({ queryString: queryToString, offset: 0 }).then((r) => {
-				const contacts = r.contacts ?? [];
-				const contactIds = contacts.map((c) => c.id);
-				addContactsToStore(contacts);
-				setSearchResults({
-					...r,
-					contacts: contactIds
-				});
-			});
+			runSearchFromScratch();
 		}
-	}, [executeSearchPure, query.length, queryToString]);
+	}, [query.length, runSearchFromScratch]);
 
 	const loadMore = useCallback(() => {
 		const controller = new AbortController();
 
 		if (searchResults?.contacts.length > 0 && searchResults.more) {
-			executeSearch(false, controller.signal);
+			const offset = searchResults.contacts.length;
+			runSearch({
+				offset,
+				queryString: queryToString,
+				abortSignal: controller.signal
+			}).then((r) => {
+				const allContacts = [...(searchContacts ?? []), ...(r.contacts ?? [])];
+				const contactIds = allContacts.map((c) => c.id);
+				setSearchResults({
+					more: r.more,
+					offset: r.offset,
+					query: queryToString,
+					sortBy: 'nameAsc',
+					contacts: contactIds
+				});
+				addContactsToStore(allContacts);
+			});
 		}
 
 		return () => {
 			controller.abort();
 		};
-	}, [executeSearch, searchResults]);
+	}, [queryToString, searchContacts, searchResults.contacts.length, searchResults.more]);
 
 	const canLoadMore = useMemo(
 		() => searchResults && searchResults.contacts.length > 0 && searchResults.more,
@@ -219,7 +189,7 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 				setIsSharedFolderIncluded={setIsSharedFolderIncluded}
 				onClose={(): void => setShowAdvanceFilters(false)}
 				t={t}
-				executeSearch={executeSearch}
+				executeSearch={runSearchFromScratch}
 			/>
 		</Container>
 	);
