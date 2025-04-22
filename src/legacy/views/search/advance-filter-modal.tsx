@@ -24,9 +24,8 @@ import { concat, filter, map } from 'lodash';
 import KeywordRow, { KeywordState } from './parts/keyword-row';
 import TagRow from './parts/tag-row';
 import ToggleFilters from './parts/toggle-filters';
-import { useDisabled } from './parts/use-disable-hooks';
 import type { Query } from './search-types';
-import { ZIMBRA_STANDARD_COLORS } from '../../../carbonio-ui-commons/constants/utils';
+import { ZIMBRA_STANDARD_COLORS } from '../../../carbonio-ui-commons/constants';
 import { getTags } from '../../../carbonio-ui-commons/store/zustand/tags';
 
 export type AdvancedFilterModalProps = {
@@ -37,6 +36,7 @@ export type AdvancedFilterModalProps = {
 	updateQuery: ReturnType<SearchViewProps['useQuery']>[1];
 	isSharedFolderIncluded: boolean;
 	setIsSharedFolderIncluded: (arg: boolean) => void;
+	executeSearch: (reset: boolean, abortSignal?: AbortSignal) => void;
 };
 
 export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
@@ -46,7 +46,8 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 	query,
 	updateQuery,
 	setIsSharedFolderIncluded,
-	isSharedFolderIncluded
+	isSharedFolderIncluded,
+	executeSearch
 }): ReactElement => {
 	const [otherKeywords, setOtherKeywords] = useState<KeywordState>([]);
 	const [tag, setTag] = useState<KeywordState>([]);
@@ -91,8 +92,7 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 
 		setOtherKeywords(updatedQuery);
 	}, [query]);
-
-	const totalKeywords = useMemo(
+	useMemo(
 		() => filter(otherKeywords, (q) => q.isGeneric === true || q.isQueryFilter === true).length,
 		[otherKeywords]
 	);
@@ -106,13 +106,6 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 		[otherKeywords, tag]
 	);
 
-	const disabled = useDisabled({
-		query,
-		queryToBe,
-		isSharedFolderIncluded,
-		isSharedFolderIncludedTobe
-	});
-
 	const secondaryDisabled = useMemo(
 		() => query.length === 0 && queryToBe.length === 0,
 		[query.length, queryToBe.length]
@@ -125,11 +118,27 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 	}, [updateQuery]);
 
 	const onConfirm = useCallback(() => {
-		const tmp = [...otherKeywords];
-		updateQuery(tmp);
-		setIsSharedFolderIncluded(isSharedFolderIncludedTobe);
-		onClose();
-	}, [otherKeywords, updateQuery, setIsSharedFolderIncluded, isSharedFolderIncludedTobe, onClose]);
+		const controller = new AbortController();
+		try {
+			const tmp = [...otherKeywords];
+			updateQuery(tmp);
+			setIsSharedFolderIncluded(isSharedFolderIncludedTobe);
+			executeSearch(true, controller.signal);
+			onClose();
+		} catch (error) {
+			controller.abort();
+		}
+		return () => {
+			controller.abort();
+		};
+	}, [
+		otherKeywords,
+		updateQuery,
+		setIsSharedFolderIncluded,
+		isSharedFolderIncludedTobe,
+		executeSearch,
+		onClose
+	]);
 
 	const keywordRowProps = useMemo(
 		() => ({
@@ -172,7 +181,7 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 			<Divider />
 			<ModalFooter
 				confirmLabel={t('action.search', 'Search')}
-				confirmDisabled={disabled}
+				confirmDisabled={queryToBe.length === 0}
 				onConfirm={onConfirm}
 				onSecondaryAction={resetFilters}
 				secondaryActionDisabled={secondaryDisabled}
