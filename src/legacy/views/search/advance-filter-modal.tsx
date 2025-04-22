@@ -36,10 +36,6 @@ export type AdvancedFilterModalProps = {
 	updateQuery: ReturnType<SearchViewProps['useQuery']>[1];
 	isSharedFolderIncluded: boolean;
 	setIsSharedFolderIncluded: (arg: boolean) => void;
-	// TODO: do we really need to pass it?
-	//  Reason is updateQuery updates the query which triggers the parent useEffect
-	//  I found out if you run the search and again from the Modal, but with a different query, it runs twice
-	executeSearch: (abortSignal?: AbortSignal) => void;
 };
 
 export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
@@ -49,8 +45,7 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 	query,
 	updateQuery,
 	setIsSharedFolderIncluded,
-	isSharedFolderIncluded,
-	executeSearch
+	isSharedFolderIncluded
 }): ReactElement => {
 	const [otherKeywords, setOtherKeywords] = useState<KeywordState>([]);
 	const [tag, setTag] = useState<KeywordState>([]);
@@ -126,7 +121,6 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 			const tmp = [...otherKeywords];
 			updateQuery(tmp);
 			setIsSharedFolderIncluded(isSharedFolderIncludedTobe);
-			executeSearch(controller.signal);
 			onClose();
 		} catch (error) {
 			controller.abort();
@@ -134,14 +128,7 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 		return () => {
 			controller.abort();
 		};
-	}, [
-		otherKeywords,
-		updateQuery,
-		setIsSharedFolderIncluded,
-		isSharedFolderIncludedTobe,
-		executeSearch,
-		onClose
-	]);
+	}, [otherKeywords, updateQuery, setIsSharedFolderIncluded, isSharedFolderIncludedTobe, onClose]);
 
 	const keywordRowProps = useMemo(
 		() => ({

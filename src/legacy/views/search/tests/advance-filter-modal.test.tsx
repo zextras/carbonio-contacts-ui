@@ -8,7 +8,6 @@ import React from 'react';
 
 import { screen, waitFor } from '@testing-library/react';
 import type { TFunction } from 'i18next';
-import { noop } from 'lodash';
 
 import { setupTest } from '../../../../carbonio-ui-commons/test/test-setup';
 import AdvancedFilterModal, { AdvancedFilterModalProps } from '../advance-filter-modal';
@@ -28,7 +27,6 @@ describe('Advanced filter modal', () => {
 		onClose: jest.fn(),
 		t: tMock,
 		query: mockedQuery,
-		executeSearch: noop,
 		updateQuery: updateQueryMock,
 		isSharedFolderIncluded: false,
 		setIsSharedFolderIncluded: jest.fn()
@@ -48,7 +46,6 @@ describe('Advanced filter modal', () => {
 			onClose: jest.fn(),
 			t: tMock,
 			query: [],
-			executeSearch: noop,
 			updateQuery: updateQueryMock,
 			setIsSharedFolderIncluded: jest.fn(),
 			isSharedFolderIncluded: false

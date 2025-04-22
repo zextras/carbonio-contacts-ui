@@ -30,13 +30,17 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 	const [query, updateQuery] = useQuery();
 	useUpdateView();
 
-	const [searchResults, setSearchResults] = useState<SearchResults>({
-		contacts: [],
-		more: false,
-		offset: 0,
-		sortBy: 'nameAsc',
-		query: ''
-	});
+	const initialSearchState = useMemo(
+		() => ({
+			contacts: [],
+			more: false,
+			offset: 0,
+			sortBy: 'nameAsc',
+			query: ''
+		}),
+		[]
+	);
+	const [searchResults, setSearchResults] = useState<SearchResults>(initialSearchState);
 	const searchContacts = useContactsById(searchResults.contacts);
 
 	const [t] = useTranslation();
@@ -85,21 +89,24 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 
 	const runSearchFromScratch = useCallback(
 		(abortSignal?: AbortSignal) => {
+			setSearchResults(initialSearchState);
 			setFilterCount(query.length);
-			runSearch({ queryString: queryToString, offset: 0, abortSignal }).then((r) => {
-				const contacts = r.contacts ?? [];
-				const contactIds = contacts.map((c) => c.id);
-				addContactsToStore(contacts);
-				setSearchResults({
-					more: r.more,
-					offset: r.offset,
-					query: queryToString,
-					sortBy: 'nameAsc',
-					contacts: contactIds
+			if (query.length > 0) {
+				runSearch({ queryString: queryToString, offset: 0, abortSignal }).then((r) => {
+					const contacts = r.contacts ?? [];
+					const contactIds = contacts.map((c) => c.id);
+					addContactsToStore(contacts);
+					setSearchResults({
+						more: r.more,
+						offset: r.offset,
+						query: queryToString,
+						sortBy: 'nameAsc',
+						contacts: contactIds
+					});
 				});
-			});
+			}
 		},
-		[query.length, queryToString]
+		[initialSearchState, query.length, queryToString]
 	);
 
 	useEffect(() => {
@@ -194,7 +201,6 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 				setIsSharedFolderIncluded={setIsSharedFolderIncluded}
 				onClose={(): void => setShowAdvanceFilters(false)}
 				t={t}
-				executeSearch={runSearchFromScratch}
 			/>
 		</Container>
 	);
