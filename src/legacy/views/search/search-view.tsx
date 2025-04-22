@@ -147,7 +147,7 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 
 	return (
 		<Container>
-			<ResultsHeader label={t('label.results_for', 'Results for:')} />
+			<ResultsHeader label={query.length > 0 ? t('label.results_for', 'Results for:') : ''} />
 			<Container
 				orientation="horizontal"
 				background="gray4"
