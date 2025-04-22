@@ -85,15 +85,7 @@ export const SearchList = ({
 					onClick={(): void => setShowAdvanceFilters(true)}
 					type={filterCount > 0 ? 'default' : 'outlined'}
 					width={'fill'}
-					label={
-						filterCount === 0
-							? t('title.advanced_filters', 'Advanced Filters')
-							: t('label.advanced_filter', {
-									count: filterCount,
-									defaultValue_one: '{{count}} Advanced Filter',
-									defaultValue_other: '"{{count}} Advanced Filters'
-								})
-					}
+					label={t('title.advanced_filters', 'Advanced Filters')}
 					icon="Options2Outline"
 				/>
 			</BorderContainer>
