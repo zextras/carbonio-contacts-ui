@@ -10,7 +10,7 @@ import { screen } from '@testing-library/react';
 import type { TFunction } from 'i18next';
 
 import { setupTest } from '../../../../carbonio-ui-commons/test/test-setup';
-import AdvancedFilterModal, { AdvancedFilterModalProps } from '../advance-filter-modal';
+import { AdvancedFilterModal, AdvancedFilterModalProps } from '../advance-filter-modal';
 
 describe('Advanced filter modal', () => {
 	const tMock = ((key: string, _defaultValue?: any) => key) as TFunction<'translation'>;
@@ -28,8 +28,7 @@ describe('Advanced filter modal', () => {
 		t: tMock,
 		query: mockedQuery,
 		onSearchConfirm: onSearchConfirmMock,
-		isSharedFolderIncluded: false,
-		setIsSharedFolderIncluded: jest.fn()
+		isSharedFolderIncludedInitialValue: false
 	};
 	it('reset filters button should be enabled if query is not empty', async () => {
 		setupTest(<AdvancedFilterModal {...properties} />);
@@ -47,8 +46,7 @@ describe('Advanced filter modal', () => {
 			t: tMock,
 			query: [],
 			onSearchConfirm: onSearchConfirmMock,
-			setIsSharedFolderIncluded: jest.fn(),
-			isSharedFolderIncluded: false
+			isSharedFolderIncludedInitialValue: false
 		};
 		setupTest(<AdvancedFilterModal {...properties} />);
 		const fieldLabel = screen.getByText(/title\.advanced_filters/i);

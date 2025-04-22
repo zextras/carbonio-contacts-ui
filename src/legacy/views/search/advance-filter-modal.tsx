@@ -32,9 +32,8 @@ export type AdvancedFilterModalProps = {
 	onClose: () => void;
 	t: TFunction;
 	query: Query;
-	isSharedFolderIncluded: boolean;
-	setIsSharedFolderIncluded: (arg: boolean) => void;
-	onSearchConfirm: (query: Query) => void;
+	isSharedFolderIncludedInitialValue: boolean;
+	onSearchConfirm: (request: { query: Query; includeSharedFolders: boolean }) => void;
 };
 
 export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
@@ -42,9 +41,8 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 	onClose,
 	t,
 	query,
-	setIsSharedFolderIncluded,
 	onSearchConfirm,
-	isSharedFolderIncluded
+	isSharedFolderIncludedInitialValue
 }): ReactElement => {
 	const [otherKeywords, setOtherKeywords] = useState<KeywordState>([]);
 	const [tag, setTag] = useState<KeywordState>([]);
@@ -72,8 +70,9 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 			})),
 		[]
 	);
-	const [isSharedFolderIncludedTobe, setIsSharedFolderIncludedTobe] =
-		useState(isSharedFolderIncluded);
+	const [isSharedFolderIncludedTobe, setIsSharedFolderIncludedTobe] = useState(
+		isSharedFolderIncludedInitialValue
+	);
 
 	useEffect(() => {
 		const updatedQuery = map(
@@ -117,8 +116,7 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 		const controller = new AbortController();
 		try {
 			const tmp = [...otherKeywords];
-			onSearchConfirm(tmp);
-			setIsSharedFolderIncluded(isSharedFolderIncludedTobe);
+			onSearchConfirm({ query: tmp, includeSharedFolders: isSharedFolderIncludedTobe });
 			onClose();
 		} catch (error) {
 			controller.abort();
@@ -126,13 +124,7 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 		return () => {
 			controller.abort();
 		};
-	}, [
-		otherKeywords,
-		onSearchConfirm,
-		setIsSharedFolderIncluded,
-		isSharedFolderIncludedTobe,
-		onClose
-	]);
+	}, [otherKeywords, onSearchConfirm, isSharedFolderIncludedTobe, onClose]);
 
 	const keywordRowProps = useMemo(
 		() => ({

@@ -41,22 +41,21 @@ const setupSearch = ({ contacts }: { contacts: Array<CnItem | SoapContact> }): S
 		id: '0',
 		label: 'test'
 	};
-	const searchInterceptor = createSoapAPIInterceptor<
-		SearchContactsRequest,
-		SearchContactsSoapResponse
-	>('Search', {
+	createSoapAPIInterceptor<SearchContactsRequest, SearchContactsSoapResponse>('Search', {
 		cn: contacts,
 		more: false,
 		offset: 0,
 		sortBy: 'nameAsc'
 	});
 	const resultsHeader = (props: { label: string }): ReactElement => <>{props.label}</>;
+	const mockedUseQuery = jest.fn().mockReturnValue([[queryChip], noop]);
 	return {
-		useQuery: (): [QueryChip[], () => void] => [[queryChip], noop],
+		useQuery: mockedUseQuery,
 		ResultsHeader: resultsHeader,
 		useDisableSearch: (): [boolean, () => void] => [false, noop]
 	};
 };
+
 describe('SearchView', () => {
 	it('should render the basic elements of the view API fulfilled', async () => {
 		const customSettings: Partial<AccountSettings> = {
@@ -83,8 +82,10 @@ describe('SearchView', () => {
 			sortBy: 'nameAsc'
 		});
 		const resultsHeader = (props: { label: string }): ReactElement => <>{props.label}</>;
+
+		const mockedUseQuery = jest.fn().mockReturnValue([[queryChip], noop]);
 		const searchViewProps: SearchViewProps = {
-			useQuery: (): [QueryChip[], () => void] => [[queryChip], noop],
+			useQuery: mockedUseQuery,
 			ResultsHeader: resultsHeader,
 			useDisableSearch: (): [boolean, () => void] => [false, noop]
 		};

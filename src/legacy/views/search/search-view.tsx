@@ -79,6 +79,13 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 		() => `( ${map(searchInFolders, (folder) => `inid:"${folder}"`).join(' OR ')} OR is:local) `,
 		[searchInFolders]
 	);
+	const onModalConfirm = useCallback(
+		(request: { query: Query; includeSharedFolders: boolean }) => {
+			setIsSharedFolderIncluded(request.includeSharedFolders);
+			updateQuery(request.query);
+		},
+		[updateQuery]
+	);
 
 	const evaluateQueryString = useCallback(
 		(queryParam: Query): string =>
@@ -199,9 +206,8 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 			<AdvancedFilterModal
 				query={query}
 				open={showAdvanceFilters}
-				onSearchConfirm={updateQuery}
-				isSharedFolderIncluded={isSharedFolderIncluded}
-				setIsSharedFolderIncluded={setIsSharedFolderIncluded}
+				onSearchConfirm={onModalConfirm}
+				isSharedFolderIncludedInitialValue={isSharedFolderIncluded}
 				onClose={(): void => setShowAdvanceFilters(false)}
 				t={t}
 			/>
