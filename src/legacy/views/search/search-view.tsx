@@ -85,6 +85,7 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 
 	const runSearchFromScratch = useCallback(
 		(abortSignal?: AbortSignal) => {
+			setFilterCount(query.length);
 			runSearch({ queryString: queryToString, offset: 0, abortSignal }).then((r) => {
 				const contacts = r.contacts ?? [];
 				const contactIds = contacts.map((c) => c.id);
@@ -98,19 +99,16 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 				});
 			});
 		},
-		[queryToString]
+		[query.length, queryToString]
 	);
 
 	useEffect(() => {
 		const controller = new AbortController();
-		if (query.length > 0) {
-			setFilterCount(query.length);
-			runSearchFromScratch(controller.signal);
-		}
+		runSearchFromScratch(controller.signal);
 		return () => {
 			controller.abort();
 		};
-	}, [query.length, runSearchFromScratch]);
+	}, [runSearchFromScratch]);
 
 	const loadMore = useCallback(() => {
 		const controller = new AbortController();
