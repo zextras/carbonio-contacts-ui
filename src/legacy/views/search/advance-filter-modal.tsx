@@ -36,6 +36,7 @@ export type AdvancedFilterModalProps = {
 	updateQuery: ReturnType<SearchViewProps['useQuery']>[1];
 	isSharedFolderIncluded: boolean;
 	setIsSharedFolderIncluded: (arg: boolean) => void;
+	// TODO: do we really need to pass it? Reason is updateQuery updates the query which triggers the parent useEffect
 	executeSearch: (abortSignal?: AbortSignal) => void;
 };
 
