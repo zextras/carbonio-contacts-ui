@@ -45,7 +45,6 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 	const searchContacts = useContactsById(searchResults.contacts);
 
 	const [t] = useTranslation();
-	const [filterCount, setFilterCount] = useState(0);
 	const [showAdvanceFilters, setShowAdvanceFilters] = useState(false);
 	const { zimbraPrefIncludeTrashInSearch, zimbraPrefIncludeSharedItemsInSearch } = usePrefs();
 	const [includeTrash, includeSharedFolders] = useMemo(
@@ -176,7 +175,6 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 							<SearchList
 								contacts={searchContacts}
 								onListBottom={canLoadMore ? loadMore : undefined}
-								filterCount={filterCount}
 								setShowAdvanceFilters={setShowAdvanceFilters}
 							/>
 						}
