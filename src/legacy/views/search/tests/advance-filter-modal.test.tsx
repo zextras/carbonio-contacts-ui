@@ -6,7 +6,7 @@
 
 import React from 'react';
 
-import { screen, waitFor } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import type { TFunction } from 'i18next';
 
 import { setupTest } from '../../../../carbonio-ui-commons/test/test-setup';
@@ -14,7 +14,7 @@ import AdvancedFilterModal, { AdvancedFilterModalProps } from '../advance-filter
 
 describe('Advanced filter modal', () => {
 	const tMock = ((key: string, _defaultValue?: any) => key) as TFunction<'translation'>;
-	const updateQueryMock = jest.fn();
+	const onSearchConfirmMock = jest.fn();
 	const mockedQuery = [
 		{
 			id: 'query1',
@@ -27,7 +27,7 @@ describe('Advanced filter modal', () => {
 		onClose: jest.fn(),
 		t: tMock,
 		query: mockedQuery,
-		updateQuery: updateQueryMock,
+		onSearchConfirm: onSearchConfirmMock,
 		isSharedFolderIncluded: false,
 		setIsSharedFolderIncluded: jest.fn()
 	};
@@ -46,7 +46,7 @@ describe('Advanced filter modal', () => {
 			onClose: jest.fn(),
 			t: tMock,
 			query: [],
-			updateQuery: updateQueryMock,
+			onSearchConfirm: onSearchConfirmMock,
 			setIsSharedFolderIncluded: jest.fn(),
 			isSharedFolderIncluded: false
 		};
@@ -60,14 +60,13 @@ describe('Advanced filter modal', () => {
 		expect(actionButton).toBeInTheDocument();
 		expect(actionButton).toBeDisabled();
 	});
-	it('should clear the query when reset filters button is clicked', async () => {
+
+	it('should not clear the global query when reset filters button is clicked', async () => {
 		const { user } = setupTest(<AdvancedFilterModal {...properties} />);
 
 		const resetButton = screen.getByRole('button', { name: /action\.reset_filters/i });
 		expect(resetButton).toBeEnabled();
 		await user.click(resetButton);
-		await waitFor(() => {
-			expect(updateQueryMock).toHaveBeenCalledWith([]);
-		});
+		expect(onSearchConfirmMock).not.toHaveBeenCalled();
 	});
 });

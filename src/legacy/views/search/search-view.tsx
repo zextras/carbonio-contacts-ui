@@ -15,6 +15,7 @@ import AdvancedFilterModal from './advance-filter-modal';
 import { runSearch } from './run-search';
 import { SearchContactsEmptyPanel } from './search-contacts-empty-panel';
 import { SearchList } from './search-list';
+import { Query } from './search-types';
 import { SearchResults } from './types';
 import { isTrash } from '../../../carbonio-ui-commons/helpers/folders';
 import { useUpdateView } from '../../../carbonio-ui-commons/hooks/use-update-view';
@@ -79,43 +80,45 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 		[searchInFolders]
 	);
 
-	const queryToString = useMemo(
-		() =>
+	const evaluateQueryString = useCallback(
+		(queryParam: Query): string =>
 			isSharedFolderIncluded && searchInFolders?.length > 0
-				? `(${query.map((c) => (c.value ? c.value : c.label)).join(' ')}) ${foldersToSearchInQuery}`
-				: `${query.map((c) => (c.value ? c.value : c.label)).join(' ')}`,
-		[isSharedFolderIncluded, searchInFolders.length, query, foldersToSearchInQuery]
+				? `(${queryParam.map((c) => (c.value ? c.value : c.label)).join(' ')}) ${foldersToSearchInQuery}`
+				: `${queryParam.map((c) => (c.value ? c.value : c.label)).join(' ')}`,
+		[foldersToSearchInQuery, isSharedFolderIncluded, searchInFolders?.length]
 	);
 
+	const queryToString = useMemo(() => evaluateQueryString(query), [evaluateQueryString, query]);
+
 	const runSearchFromScratch = useCallback(
-		(abortSignal?: AbortSignal) => {
+		(newQuery: Query, abortSignal?: AbortSignal) => {
 			setSearchResults(initialSearchState);
-			setFilterCount(query.length);
 			if (query.length > 0) {
-				runSearch({ queryString: queryToString, offset: 0, abortSignal }).then((r) => {
+				const queryString = evaluateQueryString(newQuery);
+				runSearch({ queryString, offset: 0, abortSignal }).then((r) => {
 					const contacts = r.contacts ?? [];
 					const contactIds = contacts.map((c) => c.id);
 					addContactsToStore(contacts);
 					setSearchResults({
 						more: r.more,
 						offset: r.offset,
-						query: queryToString,
+						query: queryString,
 						sortBy: 'nameAsc',
 						contacts: contactIds
 					});
 				});
 			}
 		},
-		[initialSearchState, query.length, queryToString]
+		[evaluateQueryString, initialSearchState, query.length]
 	);
 
 	useEffect(() => {
 		const controller = new AbortController();
-		runSearchFromScratch(controller.signal);
+		runSearchFromScratch(query, controller.signal);
 		return () => {
 			controller.abort();
 		};
-	}, [runSearchFromScratch]);
+	}, [query, runSearchFromScratch]);
 
 	const loadMore = useCallback(() => {
 		const controller = new AbortController();
@@ -195,8 +198,8 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 
 			<AdvancedFilterModal
 				query={query}
-				updateQuery={updateQuery}
 				open={showAdvanceFilters}
+				onSearchConfirm={updateQuery}
 				isSharedFolderIncluded={isSharedFolderIncluded}
 				setIsSharedFolderIncluded={setIsSharedFolderIncluded}
 				onClose={(): void => setShowAdvanceFilters(false)}

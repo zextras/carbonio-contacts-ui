@@ -17,7 +17,6 @@ import {
 	Divider,
 	ModalFooter
 } from '@zextras/carbonio-design-system';
-import type { SearchViewProps } from '@zextras/carbonio-search-ui';
 import { TFunction } from 'i18next';
 import { concat, filter, map } from 'lodash';
 
@@ -33,9 +32,9 @@ export type AdvancedFilterModalProps = {
 	onClose: () => void;
 	t: TFunction;
 	query: Query;
-	updateQuery: ReturnType<SearchViewProps['useQuery']>[1];
 	isSharedFolderIncluded: boolean;
 	setIsSharedFolderIncluded: (arg: boolean) => void;
+	onSearchConfirm: (query: Query) => void;
 };
 
 export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
@@ -43,8 +42,8 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 	onClose,
 	t,
 	query,
-	updateQuery,
 	setIsSharedFolderIncluded,
+	onSearchConfirm,
 	isSharedFolderIncluded
 }): ReactElement => {
 	const [otherKeywords, setOtherKeywords] = useState<KeywordState>([]);
@@ -112,14 +111,13 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 	const resetFilters = useCallback(() => {
 		setOtherKeywords([]);
 		setTag([]);
-		updateQuery([]);
-	}, [updateQuery]);
+	}, []);
 
 	const onConfirm = useCallback(() => {
 		const controller = new AbortController();
 		try {
 			const tmp = [...otherKeywords];
-			updateQuery(tmp);
+			onSearchConfirm(tmp);
 			setIsSharedFolderIncluded(isSharedFolderIncludedTobe);
 			onClose();
 		} catch (error) {
@@ -128,7 +126,13 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 		return () => {
 			controller.abort();
 		};
-	}, [otherKeywords, updateQuery, setIsSharedFolderIncluded, isSharedFolderIncludedTobe, onClose]);
+	}, [
+		otherKeywords,
+		onSearchConfirm,
+		setIsSharedFolderIncluded,
+		isSharedFolderIncludedTobe,
+		onClose
+	]);
 
 	const keywordRowProps = useMemo(
 		() => ({
