@@ -70,10 +70,8 @@ describe('Advanced filter modal', () => {
 
 	it('should clear the internal state when reset filters button is clicked', async () => {
 		const { user } = setupTest(<AdvancedFilterModal {...properties} />);
-		screen.logTestingPlaygroundURL();
 
-		const chip = await screen.findByTestId('chip');
-		expect(chip).toBeInTheDocument();
+		expect(await screen.findByTestId('chip')).toBeInTheDocument();
 
 		const resetButton = screen.getByRole('button', { name: /action\.reset_filters/i });
 		await user.click(resetButton);
