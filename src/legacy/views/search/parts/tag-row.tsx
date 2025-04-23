@@ -54,7 +54,7 @@ const TagRow: FC<ComponentProps> = ({ compProps }): ReactElement => {
 				false,
 				true,
 				'Tag',
-				ZIMBRA_STANDARD_COLORS[chipBg.color].hex
+				ZIMBRA_STANDARD_COLORS[chipBg.color ?? 0].hex
 			);
 		},
 		[chipOnAdd, tagOptions]
