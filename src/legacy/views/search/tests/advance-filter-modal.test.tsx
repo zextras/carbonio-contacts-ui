@@ -6,7 +6,7 @@
 
 import React from 'react';
 
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import type { TFunction } from 'i18next';
 
 import { setupTest } from '../../../../carbonio-ui-commons/test/test-setup';
@@ -19,7 +19,7 @@ describe('Advanced filter modal', () => {
 		{
 			id: 'query1',
 			label: 'keywords',
-			value: 'keyword'
+			value: 'testKeyword'
 		}
 	];
 	const properties: AdvancedFilterModalProps = {
@@ -39,7 +39,7 @@ describe('Advanced filter modal', () => {
 
 		expect(actionButton).toBeEnabled();
 	});
-	it('reset filters button should be disable when modal open', () => {
+	it('reset filters button should be disabled when modal has no query', () => {
 		const properties: AdvancedFilterModalProps = {
 			open: true,
 			onClose: jest.fn(),
@@ -66,5 +66,20 @@ describe('Advanced filter modal', () => {
 		expect(resetButton).toBeEnabled();
 		await user.click(resetButton);
 		expect(onSearchConfirmMock).not.toHaveBeenCalled();
+	});
+
+	it('should clear the internal state when reset filters button is clicked', async () => {
+		const { user } = setupTest(<AdvancedFilterModal {...properties} />);
+		screen.logTestingPlaygroundURL();
+
+		const chip = await screen.findByTestId('chip');
+		expect(chip).toBeInTheDocument();
+
+		const resetButton = screen.getByRole('button', { name: /action\.reset_filters/i });
+		await user.click(resetButton);
+
+		await waitFor(() => {
+			expect(screen.queryByTestId('chip')).not.toBeInTheDocument();
+		});
 	});
 });
