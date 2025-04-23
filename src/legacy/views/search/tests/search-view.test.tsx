@@ -15,6 +15,8 @@ import { noop } from 'lodash';
 import { HttpResponse } from 'msw';
 
 import { FOLDERS } from '../../../../carbonio-ui-commons/constants/folders';
+import { useFolderStore } from '../../../../carbonio-ui-commons/store/zustand/folder';
+import { generateFolder } from '../../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
 import {
 	createAPIInterceptor,
 	createSoapAPIInterceptor
@@ -30,7 +32,11 @@ import {
 import { TIMERS } from '../../../../constants/tests';
 import { CnItem } from '../../../../network/api/types';
 import { createSoapContact, createSoapContactGroupV2 } from '../../../../tests/utils';
-import { SearchContactsRequest, SearchContactsSoapResponse } from '../../../../types';
+import {
+	SearchContactsRequest,
+	SearchContactsSoapRequest,
+	SearchContactsSoapResponse
+} from '../../../../types';
 import { type SoapContact } from '../../../types/soap';
 import { Query } from '../search-types';
 import SearchView from '../search-view';
@@ -121,6 +127,60 @@ describe('SearchView', () => {
 		expect(
 			await screen.findByText('Select one or more results to perform actions or display details.')
 		).toBeInTheDocument();
+	});
+
+	it('should include shared folder in query when PrefIncludeSharedItemsInSearch is true', async () => {
+		const sharedFolder = generateFolder({
+			id: '3104093b-2f6d-4f16-b409-afabb10d2e1b:234234',
+			perm: 'rwx'
+		});
+		useFolderStore.setState({
+			folders: {
+				[FOLDERS.USER_ROOT]: generateFolder({
+					id: FOLDERS.USER_ROOT,
+					children: [generateFolder({ id: FOLDERS.CONTACTS })]
+				}),
+				[sharedFolder.id]: sharedFolder
+			}
+		});
+		const customSettings: Partial<AccountSettings> = {
+			prefs: {
+				zimbraPrefIncludeTrashInSearch: 'FALSE',
+				zimbraPrefIncludeSharedItemsInSearch: 'TRUE'
+			}
+		};
+		const settings = generateSettings(customSettings);
+		jest.spyOn(hooks, 'useUserSettings').mockReturnValue(settings);
+		const queryChip: QueryChip = {
+			hasAvatar: false,
+			id: '0',
+			label: 'test'
+		};
+		const soapContact: SoapContact = createSoapContact({});
+		const searchInterceptor = createSoapAPIInterceptor<
+			SearchContactsSoapRequest,
+			SearchContactsSoapResponse
+		>('Search', {
+			cn: [soapContact],
+			more: false,
+			offset: 0,
+			sortBy: 'nameAsc'
+		});
+		const resultsHeader = (props: { label: string }): ReactElement => <>{props.label}</>;
+
+		const mockedUseQuery = jest.fn().mockReturnValue([[queryChip], noop]);
+		const searchViewProps: SearchViewProps = {
+			useQuery: mockedUseQuery,
+			ResultsHeader: resultsHeader,
+			useDisableSearch: (): [boolean, () => void] => [false, noop]
+		};
+
+		setupTest(<SearchView {...searchViewProps} />);
+		const searchContactsRequest = await searchInterceptor;
+
+		expect(searchContactsRequest.query).toEqual(
+			`(${queryChip.label}) ( inid:"${sharedFolder.id}" OR is:local) `
+		);
 	});
 
 	it('does not make search if query is empty', async () => {
