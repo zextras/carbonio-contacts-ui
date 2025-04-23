@@ -18,8 +18,13 @@ describe('Advanced filter modal', () => {
 	const mockedQuery = [
 		{
 			id: 'query1',
-			label: 'keywords',
-			value: 'testKeyword'
+			label: 'testKeyword1',
+			value: 'testKeyword1'
+		},
+		{
+			id: 'query2',
+			label: 'testKeyword2',
+			value: 'testKeyword2'
 		}
 	];
 	const properties: AdvancedFilterModalProps = {
@@ -71,13 +76,25 @@ describe('Advanced filter modal', () => {
 	it('should clear the internal state when reset filters button is clicked', async () => {
 		const { user } = setupTest(<AdvancedFilterModal {...properties} />);
 
-		expect(await screen.findByTestId('chip')).toBeInTheDocument();
+		await screen.findAllByTestId('chip');
 
 		const resetButton = screen.getByRole('button', { name: /action\.reset_filters/i });
 		await user.click(resetButton);
 
 		await waitFor(() => {
-			expect(screen.queryByTestId('chip')).not.toBeInTheDocument();
+			expect(screen.queryAllByTestId('chip').length).toBe(0);
 		});
+	});
+
+	it('should display the provided query in keywords field', async () => {
+		setupTest(<AdvancedFilterModal {...properties} />);
+
+		const chips = await screen.findAllByTestId('chip');
+		// for some reason toHaveValue('') does not work
+		// and with eslint toHaveAttribute('value', 'realValue') is replaced with the above
+		// eslint-disable-next-line
+		expect(chips[0]).toHaveAttribute('value', 'testKeyword1');
+		// eslint-disable-next-line
+		expect(chips[1]).toHaveAttribute('value', 'testKeyword2');
 	});
 });
