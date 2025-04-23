@@ -152,7 +152,13 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 		[query, isSharedFolderIncludedTobe]
 	);
 	return (
-		<CustomModal open={open} onClose={onClose} maxHeight="90vh" size="medium">
+		<CustomModal
+			open={open}
+			onClose={onClose}
+			maxHeight="90vh"
+			size="medium"
+			data-testid={'advanced-filter-modal'}
+		>
 			<ModalHeader
 				onClose={onClose}
 				title={t('title.advanced_filters', 'Advanced Filters')}

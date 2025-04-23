@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useState } from 'react';
 
-import { act } from '@testing-library/react';
-import type { SearchViewProps, QueryChip } from '@zextras/carbonio-search-ui';
+import { act, within } from '@testing-library/react';
+import { SearchViewProps, QueryChip, useQuery } from '@zextras/carbonio-search-ui';
 import { AccountSettings } from '@zextras/carbonio-shell-ui';
 import * as hooks from '@zextras/carbonio-shell-ui';
 import { noop } from 'lodash';
@@ -25,11 +25,23 @@ import {
 	screen,
 	setupTest
 } from '../../../../carbonio-ui-commons/test/test-setup';
+import { TIMERS } from '../../../../constants/tests';
 import { CnItem } from '../../../../network/api/types';
 import { createSoapContact, createSoapContactGroupV2 } from '../../../../tests/utils';
 import { SearchContactsRequest, SearchContactsSoapResponse } from '../../../../types';
 import { type SoapContact } from '../../../types/soap';
+import { Query } from '../search-types';
 import SearchView from '../search-view';
+
+const useMockedUseQuery = (): ReturnType<typeof useQuery> => {
+	const queryChip: QueryChip = {
+		hasAvatar: false,
+		id: '0',
+		label: 'test'
+	};
+	const [query, updateQuery] = useState<Query>([queryChip]);
+	return [query, updateQuery];
+};
 
 const setupSearch = ({ contacts }: { contacts: Array<CnItem | SoapContact> }): SearchViewProps => {
 	const customSettings: Partial<AccountSettings> = {
@@ -40,11 +52,6 @@ const setupSearch = ({ contacts }: { contacts: Array<CnItem | SoapContact> }): S
 	};
 	const settings = generateSettings(customSettings);
 	jest.spyOn(hooks, 'useUserSettings').mockReturnValue(settings);
-	const queryChip: QueryChip = {
-		hasAvatar: false,
-		id: '0',
-		label: 'test'
-	};
 	createSoapAPIInterceptor<SearchContactsRequest, SearchContactsSoapResponse>('Search', {
 		cn: contacts,
 		more: false,
@@ -52,9 +59,9 @@ const setupSearch = ({ contacts }: { contacts: Array<CnItem | SoapContact> }): S
 		sortBy: 'nameAsc'
 	});
 	const resultsHeader = (props: { label: string }): ReactElement => <>{props.label}</>;
-	const mockedUseQuery = jest.fn().mockReturnValue([[queryChip], noop]);
+
 	return {
-		useQuery: mockedUseQuery,
+		useQuery: useMockedUseQuery,
 		ResultsHeader: resultsHeader,
 		useDisableSearch: (): [boolean, () => void] => [false, noop]
 	};
@@ -131,6 +138,55 @@ describe('SearchView', () => {
 		expect(searchAPIInterceptor.getCalledTimes()).toBe(0);
 	});
 
+	describe('Advanced Filter Modal', () => {
+		it('search from modal with same query should re-run the search when search button is pressed', async () => {
+			populateFoldersStore();
+			const soapContact = createSoapContact({
+				id: '1',
+				email: 'testContact1@demo.com',
+				folderId: FOLDERS.CONTACTS
+			});
+			const soapContact2 = createSoapContact({
+				id: '2',
+				email: 'testContact2@demo.com',
+				folderId: FOLDERS.CONTACTS
+			});
+
+			const searchViewProps = setupSearch({ contacts: [soapContact] });
+			const { user } = setupTest(<SearchView {...searchViewProps} />);
+
+			await screen.findByTestId(`search-contact-list-item-${soapContact.id}`);
+
+			const filterButton = await screen.findByRole('button', { name: 'Advanced Filters' });
+			await user.click(filterButton);
+			act(() => {
+				jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+			});
+			const filterModal = await screen.findByTestId('advanced-filter-modal');
+			expect(filterModal).toBeVisible();
+
+			const searchInterceptor = createSoapAPIInterceptor<
+				SearchContactsRequest,
+				SearchContactsSoapResponse
+			>('Search', {
+				cn: [soapContact, soapContact2],
+				more: false,
+				offset: 0,
+				sortBy: 'nameAsc'
+			});
+
+			const searchButton = await within(filterModal).findByRole('button', { name: 'Search' });
+			expect(searchButton).toBeVisible();
+
+			await user.click(searchButton);
+			expect(
+				await screen.findByTestId(`search-contact-list-item-${soapContact2.id}`)
+			).toBeVisible();
+
+			await searchInterceptor;
+		});
+	});
+
 	describe('Contacts', () => {
 		it('should display the selected contact in the detail panel', async () => {
 			populateFoldersStore();
@@ -195,13 +251,13 @@ describe('SearchView', () => {
 		it('should display the actions on hover', async () => {
 			populateFoldersStore();
 			const soapContactGroup = createSoapContactGroupV2({
-				contactGroupName: 'Test Contact Group',
+				contactGroupName: 'Test Contact Group 1',
 				folderId: FOLDERS.CONTACTS
 			});
 
 			const searchViewProps = setupSearch({ contacts: [soapContactGroup] });
 			const { user } = setupTest(<SearchView {...searchViewProps} />);
-			const listItem = await screen.findByText('Test Contact Group');
+			const listItem = await screen.findByText('Test Contact Group 1');
 
 			await act(() => user.hover(listItem));
 			const sendEmailButton = await screen.findByTestId('icon: EmailOutline');
