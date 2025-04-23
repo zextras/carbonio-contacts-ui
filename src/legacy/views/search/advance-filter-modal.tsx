@@ -75,6 +75,8 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 	);
 
 	useEffect(() => {
+		if (!open) return;
+
 		const updatedQuery = map(
 			filter(query, (v) => !/^tag:/.test(v.label ?? '') && !v.isQueryFilter),
 			(q) => ({ ...q, hasAvatar: false })
@@ -84,10 +86,11 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 			filter(query, (v) => /^tag:/.test(v.label ?? '')),
 			(q) => ({ ...q, hasAvatar: true, icon: 'TagOutline' })
 		);
-		setTag(tagFromQuery);
 
+		setTag(tagFromQuery);
 		setOtherKeywords(updatedQuery);
-	}, [query]);
+	}, [query, open]);
+
 	useMemo(
 		() => filter(otherKeywords, (q) => q.isGeneric === true || q.isQueryFilter === true).length,
 		[otherKeywords]
