@@ -6,10 +6,10 @@
 
 import React, { ReactElement, useState } from 'react';
 
-import { act, within } from '@testing-library/react';
-import { SearchViewProps, QueryChip, useQuery } from '@zextras/carbonio-search-ui';
-import { AccountSettings } from '@zextras/carbonio-shell-ui';
+import { act, waitFor, within } from '@testing-library/react';
+import { QueryChip, SearchViewProps, useQuery } from '@zextras/carbonio-search-ui';
 import * as hooks from '@zextras/carbonio-shell-ui';
+import { AccountSettings } from '@zextras/carbonio-shell-ui';
 import { noop } from 'lodash';
 import { HttpResponse } from 'msw';
 
@@ -140,7 +140,6 @@ describe('SearchView', () => {
 
 	describe('Advanced Filter Modal', () => {
 		it('search from modal with same query should re-run the search when search button is pressed', async () => {
-			populateFoldersStore();
 			const soapContact = createSoapContact({
 				id: '1',
 				email: 'testContact1@demo.com',
@@ -152,38 +151,63 @@ describe('SearchView', () => {
 				folderId: FOLDERS.CONTACTS
 			});
 
-			const searchViewProps = setupSearch({ contacts: [soapContact] });
-			const { user } = setupTest(<SearchView {...searchViewProps} />);
+			const { user } = setupTest(<SearchView {...setupSearch({ contacts: [soapContact] })} />);
 
 			await screen.findByTestId(`search-contact-list-item-${soapContact.id}`);
-
-			const filterButton = await screen.findByRole('button', { name: 'Advanced Filters' });
-			await user.click(filterButton);
+			await user.click(await screen.findByRole('button', { name: 'Advanced Filters' }));
 			act(() => {
 				jest.advanceTimersByTime(TIMERS.modal.delayOpen);
 			});
-			const filterModal = await screen.findByTestId('advanced-filter-modal');
-			expect(filterModal).toBeVisible();
 
-			const searchInterceptor = createSoapAPIInterceptor<
-				SearchContactsRequest,
-				SearchContactsSoapResponse
-			>('Search', {
+			createSoapAPIInterceptor<SearchContactsRequest, SearchContactsSoapResponse>('Search', {
 				cn: [soapContact, soapContact2],
 				more: false,
 				offset: 0,
 				sortBy: 'nameAsc'
 			});
 
+			const filterModal = await screen.findByTestId('advanced-filter-modal');
 			const searchButton = await within(filterModal).findByRole('button', { name: 'Search' });
-			expect(searchButton).toBeVisible();
-
 			await user.click(searchButton);
+
 			expect(
 				await screen.findByTestId(`search-contact-list-item-${soapContact2.id}`)
 			).toBeVisible();
+		});
 
-			await searchInterceptor;
+		it('re-running the search should should clear the search list before populating with new results', async () => {
+			const soapContact = createSoapContact({
+				id: '1',
+				email: 'testContact1@demo.com',
+				folderId: FOLDERS.CONTACTS
+			});
+
+			const { user } = setupTest(<SearchView {...setupSearch({ contacts: [soapContact] })} />);
+
+			await screen.findByTestId(`search-contact-list-item-${soapContact.id}`);
+			await user.click(await screen.findByRole('button', { name: 'Advanced Filters' }));
+			act(() => {
+				jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+			});
+			createSoapAPIInterceptor<SearchContactsRequest, SearchContactsSoapResponse>('Search', {
+				cn: [soapContact],
+				more: false,
+				offset: 0,
+				sortBy: 'nameAsc'
+			});
+
+			const filterModal = await screen.findByTestId('advanced-filter-modal');
+			const searchButton = await within(filterModal).findByRole('button', { name: 'Search' });
+			await user.click(searchButton);
+
+			await waitFor(() =>
+				expect(
+					screen.queryByTestId(`search-contact-list-item-${soapContact.id}`)
+				).not.toBeInTheDocument()
+			);
+			expect(
+				await screen.findByTestId(`search-contact-list-item-${soapContact.id}`)
+			).toBeInTheDocument();
 		});
 	});
 
