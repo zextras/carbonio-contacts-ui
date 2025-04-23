@@ -7,6 +7,7 @@
 import React, { ReactElement, useState } from 'react';
 
 import { act, waitFor, within } from '@testing-library/react';
+import { Button } from '@zextras/carbonio-design-system';
 import { QueryChip, SearchViewProps, useQuery } from '@zextras/carbonio-search-ui';
 import * as hooks from '@zextras/carbonio-shell-ui';
 import { AccountSettings } from '@zextras/carbonio-shell-ui';
@@ -41,6 +42,16 @@ const useMockedUseQuery = (): ReturnType<typeof useQuery> => {
 	};
 	const [query, updateQuery] = useState<Query>([queryChip]);
 	return [query, updateQuery];
+};
+
+const TestSearchView = (props: SearchViewProps): React.JSX.Element => {
+	const [query, updateQuery] = useMockedUseQuery();
+	return (
+		<>
+			<Button onClick={(): void => updateQuery([])} data-testid={'clear-search-button'} />
+			<SearchView {...props} useQuery={(): ReturnType<typeof useQuery> => [query, updateQuery]} />
+		</>
+	);
 };
 
 const setupSearch = ({ contacts }: { contacts: Array<CnItem | SoapContact> }): SearchViewProps => {
@@ -136,6 +147,26 @@ describe('SearchView', () => {
 		setupTest(<SearchView {...searchViewProps} />);
 
 		expect(searchAPIInterceptor.getCalledTimes()).toBe(0);
+	});
+
+	it('should clear the search when clear search button is pressed', async () => {
+		const soapContact = createSoapContact({
+			id: '1',
+			email: 'testContact1@demo.com',
+			folderId: FOLDERS.CONTACTS
+		});
+
+		const { user } = setupTest(<TestSearchView {...setupSearch({ contacts: [soapContact] })} />);
+		await screen.findByTestId(`search-contact-list-item-${soapContact.id}`);
+
+		const clearButton = await screen.findByTestId('clear-search-button');
+		await user.click(clearButton);
+
+		await waitFor(() =>
+			expect(
+				screen.queryByTestId(`search-contact-list-item-${soapContact.id}`)
+			).not.toBeInTheDocument()
+		);
 	});
 
 	describe('Advanced Filter Modal', () => {
