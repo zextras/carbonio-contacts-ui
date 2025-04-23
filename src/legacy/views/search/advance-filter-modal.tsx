@@ -113,17 +113,9 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 	}, []);
 
 	const onConfirm = useCallback(() => {
-		const controller = new AbortController();
-		try {
-			const tmp = [...otherKeywords];
-			onSearchConfirm({ query: tmp, includeSharedFolders: isSharedFolderIncludedTobe });
-			onClose();
-		} catch (error) {
-			controller.abort();
-		}
-		return () => {
-			controller.abort();
-		};
+		const tmp = [...otherKeywords];
+		onSearchConfirm({ query: tmp, includeSharedFolders: isSharedFolderIncludedTobe });
+		onClose();
 	}, [otherKeywords, onSearchConfirm, isSharedFolderIncludedTobe, onClose]);
 
 	const keywordRowProps = useMemo(
