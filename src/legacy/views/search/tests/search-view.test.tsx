@@ -183,6 +183,59 @@ describe('SearchView', () => {
 		);
 	});
 
+	it('should include shared trash folder in query when PrefIncludeTrashInSearch and PrefIncludeSharedItemsInSearch is true', async () => {
+		const sharedTrashFolder = generateFolder({
+			id: `3104093b-2f6d-4f16-b409-afabb10d2e1b:${FOLDERS.TRASH}`
+		});
+		useFolderStore.setState({
+			folders: {
+				[FOLDERS.USER_ROOT]: generateFolder({
+					id: FOLDERS.USER_ROOT,
+					children: [generateFolder({ id: FOLDERS.CONTACTS })]
+				}),
+				[sharedTrashFolder.id]: sharedTrashFolder
+			}
+		});
+		const customSettings: Partial<AccountSettings> = {
+			prefs: {
+				zimbraPrefIncludeTrashInSearch: 'TRUE',
+				zimbraPrefIncludeSharedItemsInSearch: 'TRUE'
+			}
+		};
+		const settings = generateSettings(customSettings);
+		jest.spyOn(hooks, 'useUserSettings').mockReturnValue(settings);
+		const queryChip: QueryChip = {
+			hasAvatar: false,
+			id: '0',
+			label: 'test'
+		};
+		const soapContact: SoapContact = createSoapContact({});
+		const searchInterceptor = createSoapAPIInterceptor<
+			SearchContactsSoapRequest,
+			SearchContactsSoapResponse
+		>('Search', {
+			cn: [soapContact],
+			more: false,
+			offset: 0,
+			sortBy: 'nameAsc'
+		});
+		const resultsHeader = (props: { label: string }): ReactElement => <>{props.label}</>;
+
+		const mockedUseQuery = jest.fn().mockReturnValue([[queryChip], noop]);
+		const searchViewProps: SearchViewProps = {
+			useQuery: mockedUseQuery,
+			ResultsHeader: resultsHeader,
+			useDisableSearch: (): [boolean, () => void] => [false, noop]
+		};
+
+		setupTest(<SearchView {...searchViewProps} />);
+		const searchContactsRequest = await searchInterceptor;
+
+		expect(searchContactsRequest.query).toEqual(
+			`(${queryChip.label}) ( inid:"${sharedTrashFolder.id}" OR is:local) `
+		);
+	});
+
 	it('does not make search if query is empty', async () => {
 		const customSettings: Partial<AccountSettings> = {
 			prefs: {
