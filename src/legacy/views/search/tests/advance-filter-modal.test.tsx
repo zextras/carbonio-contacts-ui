@@ -44,7 +44,7 @@ describe('Advanced filter modal', () => {
 		expect(actionButton).toBeEnabled();
 	});
 	it('reset filters button should be disabled when modal has no query', () => {
-		const properties: AdvancedFilterModalProps = {
+		const advancedFilterModalProps: AdvancedFilterModalProps = {
 			open: true,
 			onClose: jest.fn(),
 			t: tMock,
@@ -52,7 +52,7 @@ describe('Advanced filter modal', () => {
 			onSearchConfirm: onSearchConfirmMock,
 			isSharedFolderIncludedInitialValue: false
 		};
-		setupTest(<AdvancedFilterModal {...properties} />);
+		setupTest(<AdvancedFilterModal {...advancedFilterModalProps} />);
 		const fieldLabel = screen.getByText(/title\.advanced_filters/i);
 		expect(fieldLabel).toBeInTheDocument();
 
@@ -112,5 +112,35 @@ describe('Advanced filter modal', () => {
 				expect.objectContaining({ label: 'MyNewKeyword' })
 			]
 		});
+	});
+
+	it('should restore initial query state when modal is reopened', async () => {
+		const onCloseMock = jest.fn();
+		const { user, rerender } = setupTest(
+			<AdvancedFilterModal {...properties} onClose={onCloseMock} />
+		);
+
+		await screen.findAllByTestId('chip');
+		const chips = screen.getAllByTestId('chip');
+		expect(chips).toHaveLength(2);
+
+		const resetButton = screen.getByRole('button', { name: /action\.reset_filters/i });
+		await user.click(resetButton);
+
+		await waitFor(() => {
+			expect(screen.queryAllByTestId('chip')).toHaveLength(0);
+		});
+
+		rerender(<AdvancedFilterModal {...properties} open={false} onClose={onCloseMock} />);
+
+		rerender(<AdvancedFilterModal {...properties} open onClose={onCloseMock} />);
+
+		const restoredChips = await screen.findAllByTestId('chip');
+		expect(restoredChips).toHaveLength(2);
+
+		// eslint-disable-next-line
+		expect(restoredChips[0]).toHaveAttribute('value', 'testKeyword1');
+		// eslint-disable-next-line
+		expect(restoredChips[1]).toHaveAttribute('value', 'testKeyword2');
 	});
 });
