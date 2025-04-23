@@ -24,7 +24,8 @@ import { populateFoldersStore } from '../../../../carbonio-ui-commons/test/mocks
 import {
 	makeListItemsVisible,
 	screen,
-	setupTest
+	setupTest,
+	triggerLoadMore
 } from '../../../../carbonio-ui-commons/test/test-setup';
 import { TIMERS } from '../../../../constants/tests';
 import { CnItem } from '../../../../network/api/types';
@@ -169,6 +170,62 @@ describe('SearchView', () => {
 		);
 	});
 
+	it('should call the search API and append items to existing results when more items are available to load', async () => {
+		const resultsHeader = (props: { label: string }): ReactElement => <>{props.label}</>;
+		const mockedUseQuery = jest.fn().mockReturnValue([
+			[
+				{
+					hasAvatar: false,
+					id: '0',
+					label: 'test'
+				}
+			],
+			noop
+		]);
+		const searchViewProps: SearchViewProps = {
+			useQuery: mockedUseQuery,
+			ResultsHeader: resultsHeader,
+			useDisableSearch: (): [boolean, () => void] => [false, noop]
+		};
+
+		const soapContact = createSoapContact({
+			id: '1',
+			email: 'testContact1@demo.com',
+			folderId: FOLDERS.CONTACTS
+		});
+
+		createSoapAPIInterceptor<SearchContactsRequest, SearchContactsSoapResponse>('Search', {
+			cn: [soapContact],
+			more: true,
+			offset: 0,
+			sortBy: 'nameAsc'
+		});
+
+		setupTest(<SearchView {...searchViewProps} />);
+
+		await screen.findByTestId(`search-contact-list-item-${soapContact.id}`);
+
+		const soapContact2 = createSoapContact({
+			id: '2',
+			email: 'testContact2@demo.com',
+			folderId: FOLDERS.CONTACTS
+		});
+
+		createSoapAPIInterceptor<SearchContactsRequest, SearchContactsSoapResponse>('Search', {
+			cn: [soapContact2],
+			more: true,
+			offset: 0,
+			sortBy: 'nameAsc'
+		});
+		triggerLoadMore();
+
+		expect(
+			await screen.findByTestId(`search-contact-list-item-${soapContact.id}`)
+		).toBeInTheDocument();
+		expect(
+			await screen.findByTestId(`search-contact-list-item-${soapContact2.id}`)
+		).toBeInTheDocument();
+	});
 	describe('Advanced Filter Modal', () => {
 		it('search from modal with same query should re-run the search when search button is pressed', async () => {
 			const soapContact = createSoapContact({

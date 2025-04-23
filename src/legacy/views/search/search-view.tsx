@@ -126,10 +126,15 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 		};
 	}, [query, runSearchFromScratch]);
 
+	const canLoadMore = useMemo(
+		() => searchResults && searchResults.contacts.length > 0 && searchResults.more,
+		[searchResults]
+	);
+
 	const loadMore = useCallback(() => {
 		const controller = new AbortController();
 
-		if (searchResults?.contacts.length > 0 && searchResults.more) {
+		if (canLoadMore) {
 			const offset = searchResults.contacts.length;
 			runSearch({
 				offset,
@@ -152,12 +157,7 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 		return () => {
 			controller.abort();
 		};
-	}, [queryToString, searchContacts, searchResults.contacts.length, searchResults.more]);
-
-	const canLoadMore = useMemo(
-		() => searchResults && searchResults.contacts.length > 0 && searchResults.more,
-		[searchResults]
-	);
+	}, [canLoadMore, queryToString, searchContacts, searchResults.contacts.length]);
 
 	return (
 		<Container>
