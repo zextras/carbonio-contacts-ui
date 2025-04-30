@@ -91,10 +91,6 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 		setOtherKeywords(updatedQuery);
 	}, [query, open]);
 
-	useMemo(
-		() => filter(otherKeywords, (q) => q.isGeneric === true || q.isQueryFilter === true).length,
-		[otherKeywords]
-	);
 	const queryToBe = useMemo(
 		() =>
 			concat(
