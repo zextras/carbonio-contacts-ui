@@ -30,7 +30,9 @@ failOnConsole({
 	silenceMessage: (message): boolean =>
 		message.includes(JEST_MOCKED_ERROR) ||
 		// FIXME: move the duplicated field inside the value of the chip, instead of placing it on the chip itself
-		message.includes('Received `false` for a non-boolean attribute `duplicated`')
+		message.includes('Received `false` for a non-boolean attribute `duplicated`') ||
+		// FIXME: fix the DS ChipInput to not spread all properties to the DOM
+		message.includes('React does not recognize the `isGeneric` prop on a DOM element')
 });
 
 beforeAll(() => {

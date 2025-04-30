@@ -17,16 +17,14 @@ import {
 	Divider,
 	ModalFooter
 } from '@zextras/carbonio-design-system';
-import type { SearchViewProps } from '@zextras/carbonio-search-ui';
 import { TFunction } from 'i18next';
 import { concat, filter, map } from 'lodash';
 
 import KeywordRow, { KeywordState } from './parts/keyword-row';
 import TagRow from './parts/tag-row';
 import ToggleFilters from './parts/toggle-filters';
-import { useDisabled } from './parts/use-disable-hooks';
 import type { Query } from './search-types';
-import { ZIMBRA_STANDARD_COLORS } from '../../../carbonio-ui-commons/constants/utils';
+import { ZIMBRA_STANDARD_COLORS } from '../../../carbonio-ui-commons/constants';
 import { getTags } from '../../../carbonio-ui-commons/store/zustand/tags';
 
 export type AdvancedFilterModalProps = {
@@ -34,9 +32,8 @@ export type AdvancedFilterModalProps = {
 	onClose: () => void;
 	t: TFunction;
 	query: Query;
-	updateQuery: ReturnType<SearchViewProps['useQuery']>[1];
-	isSharedFolderIncluded: boolean;
-	setIsSharedFolderIncluded: (arg: boolean) => void;
+	isSharedFolderIncludedInitialValue: boolean;
+	onSearchConfirm: (request: { query: Query; includeSharedFolders: boolean }) => void;
 };
 
 export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
@@ -44,9 +41,8 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 	onClose,
 	t,
 	query,
-	updateQuery,
-	setIsSharedFolderIncluded,
-	isSharedFolderIncluded
+	onSearchConfirm,
+	isSharedFolderIncludedInitialValue
 }): ReactElement => {
 	const [otherKeywords, setOtherKeywords] = useState<KeywordState>([]);
 	const [tag, setTag] = useState<KeywordState>([]);
@@ -74,10 +70,13 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 			})),
 		[]
 	);
-	const [isSharedFolderIncludedTobe, setIsSharedFolderIncludedTobe] =
-		useState(isSharedFolderIncluded);
+	const [isSharedFolderIncludedTobe, setIsSharedFolderIncludedTobe] = useState(
+		isSharedFolderIncludedInitialValue
+	);
 
 	useEffect(() => {
+		if (!open) return;
+
 		const updatedQuery = map(
 			filter(query, (v) => !/^tag:/.test(v.label ?? '') && !v.isQueryFilter),
 			(q) => ({ ...q, hasAvatar: false })
@@ -87,15 +86,11 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 			filter(query, (v) => /^tag:/.test(v.label ?? '')),
 			(q) => ({ ...q, hasAvatar: true, icon: 'TagOutline' })
 		);
+
 		setTag(tagFromQuery);
-
 		setOtherKeywords(updatedQuery);
-	}, [query]);
+	}, [query, open]);
 
-	const totalKeywords = useMemo(
-		() => filter(otherKeywords, (q) => q.isGeneric === true || q.isQueryFilter === true).length,
-		[otherKeywords]
-	);
 	const queryToBe = useMemo(
 		() =>
 			concat(
@@ -106,13 +101,6 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 		[otherKeywords, tag]
 	);
 
-	const disabled = useDisabled({
-		query,
-		queryToBe,
-		isSharedFolderIncluded,
-		isSharedFolderIncludedTobe
-	});
-
 	const secondaryDisabled = useMemo(
 		() => query.length === 0 && queryToBe.length === 0,
 		[query.length, queryToBe.length]
@@ -121,15 +109,13 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 	const resetFilters = useCallback(() => {
 		setOtherKeywords([]);
 		setTag([]);
-		updateQuery([]);
-	}, [updateQuery]);
+	}, []);
 
 	const onConfirm = useCallback(() => {
 		const tmp = [...otherKeywords];
-		updateQuery(tmp);
-		setIsSharedFolderIncluded(isSharedFolderIncludedTobe);
+		onSearchConfirm({ query: tmp, includeSharedFolders: isSharedFolderIncludedTobe });
 		onClose();
-	}, [otherKeywords, updateQuery, setIsSharedFolderIncluded, isSharedFolderIncludedTobe, onClose]);
+	}, [otherKeywords, onSearchConfirm, isSharedFolderIncludedTobe, onClose]);
 
 	const keywordRowProps = useMemo(
 		() => ({
@@ -157,7 +143,13 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 		[query, isSharedFolderIncludedTobe]
 	);
 	return (
-		<CustomModal open={open} onClose={onClose} maxHeight="90vh" size="medium">
+		<CustomModal
+			open={open}
+			onClose={onClose}
+			maxHeight="90vh"
+			size="medium"
+			data-testid={'advanced-filter-modal'}
+		>
 			<ModalHeader
 				onClose={onClose}
 				title={t('title.advanced_filters', 'Advanced Filters')}
@@ -172,7 +164,7 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 			<Divider />
 			<ModalFooter
 				confirmLabel={t('action.search', 'Search')}
-				confirmDisabled={disabled}
+				confirmDisabled={queryToBe.length === 0}
 				onConfirm={onConfirm}
 				onSecondaryAction={resetFilters}
 				secondaryActionDisabled={secondaryDisabled}

@@ -38,9 +38,7 @@ const mockContacts: Array<Contact> = [
 ];
 describe('SearchList', () => {
 	it('should render the SearchList with no results', () => {
-		setupTest(
-			<SearchList contacts={[]} filterCount={0} setShowAdvanceFilters={mockSetShowAdvanceFilters} />
-		);
+		setupTest(<SearchList contacts={[]} setShowAdvanceFilters={mockSetShowAdvanceFilters} />);
 
 		expect(screen.getByTestId('ContactsSearchResultListContainer')).toBeInTheDocument();
 		expect(screen.getByText('Advanced Filters')).toBeInTheDocument();
@@ -48,11 +46,7 @@ describe('SearchList', () => {
 
 	test('renders contact list items when search results have contacts', () => {
 		setupTest(
-			<SearchList
-				contacts={mockContacts}
-				filterCount={0}
-				setShowAdvanceFilters={mockSetShowAdvanceFilters}
-			/>
+			<SearchList contacts={mockContacts} setShowAdvanceFilters={mockSetShowAdvanceFilters} />
 		);
 		makeListItemsVisible();
 
@@ -61,9 +55,7 @@ describe('SearchList', () => {
 	});
 
 	test('renders no results when search results have no contacts', async () => {
-		setupTest(
-			<SearchList contacts={[]} filterCount={0} setShowAdvanceFilters={mockSetShowAdvanceFilters} />
-		);
+		setupTest(<SearchList contacts={[]} setShowAdvanceFilters={mockSetShowAdvanceFilters} />);
 
 		expect(await screen.findByTestId('displayer-title')).toBeInTheDocument();
 	});

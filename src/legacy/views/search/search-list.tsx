@@ -24,13 +24,11 @@ const BorderContainer = styled(Container)`
 type SearchListProps = {
 	contacts: Array<ContactOrGroup>;
 	onListBottom?: () => void;
-	filterCount: number;
 	setShowAdvanceFilters: (show: boolean) => void;
 };
 export const SearchList = ({
 	contacts,
 	onListBottom,
-	filterCount,
 	setShowAdvanceFilters
 }: SearchListProps): React.JSX.Element => {
 	const [t] = useTranslation();
@@ -83,7 +81,7 @@ export const SearchList = ({
 			<BorderContainer padding="small" height="fit" borderRadius="none">
 				<Button
 					onClick={(): void => setShowAdvanceFilters(true)}
-					type={filterCount > 0 ? 'default' : 'outlined'}
+					type={'outlined'}
 					width={'fill'}
 					label={t('title.advanced_filters', 'Advanced Filters')}
 					icon="Options2Outline"
