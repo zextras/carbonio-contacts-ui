@@ -14,8 +14,6 @@ import { RouteParams } from '../../../constants';
 export const FolderPanelWrapper = (): React.JSX.Element => {
 	const { folderId } = useParams<RouteParams>() as { folderId: string };
 	const folder = useFolder(folderId);
-	if (folder) {
-		return <FolderPanel folder={folder} />;
-	}
-	return <></>;
+	if (!folder) return <></>;
+	return <FolderPanel folder={folder} />;
 };
