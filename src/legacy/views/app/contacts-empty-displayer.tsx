@@ -7,38 +7,9 @@ import React, { useMemo } from 'react';
 
 import { Container, Padding, Text } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
-
-import { useFolder } from '../../../carbonio-ui-commons/store/zustand/folder';
-import { Folder } from '../../../carbonio-ui-commons/types';
-import { useContactsByFolder } from '../../store/contacts';
 
 export default function ContactsEmptyDisplayer(): React.JSX.Element {
 	const [t] = useTranslation();
-	const { folderId } = useParams<{ folderId: string }>();
-	const folder = useFolder(folderId as string);
-	// TODO: sorry-not-sorry. We should not end up here if there is no folder
-	const contacts = useContactsByFolder(folder as Folder);
-	const trashMessages = useMemo(
-		() => [
-			{
-				title: t(`displayer.title9`, 'Click the trash icon to delete a contact.'),
-				description: ''
-			},
-			{
-				title: t(`displayer.title10`, 'Select and restore contacts from the trash'),
-				description: ''
-			}
-		],
-		[t]
-	);
-	const emptyListMessage = useMemo(
-		() => ({
-			title: t(`displayer.title1`, 'Create a new contact by clicking the “NEW” button.'),
-			description: ''
-		}),
-		[t]
-	);
 	const emptyFieldMessage = useMemo(
 		() => ({
 			title: t(`displayer.title5`, 'Select a contact'),
@@ -50,15 +21,6 @@ export default function ContactsEmptyDisplayer(): React.JSX.Element {
 		[t]
 	);
 
-	const folderHasAtLeastOneContact = contacts.length > 0;
-	const displayerMessage = useMemo(() => {
-		if (folderId === '3') {
-			return folderHasAtLeastOneContact ? trashMessages[1] : trashMessages[0];
-		}
-		return folderHasAtLeastOneContact ? emptyFieldMessage : emptyListMessage;
-	}, [folderId, folderHasAtLeastOneContact, emptyFieldMessage, emptyListMessage, trashMessages]);
-	const displayerTitle = displayerMessage ? displayerMessage.title : '';
-	const displayerDescription = displayerMessage ? displayerMessage.description : '';
 	return (
 		<Container background="gray5">
 			<Padding all="medium">
@@ -69,7 +31,7 @@ export default function ContactsEmptyDisplayer(): React.JSX.Element {
 					size="large"
 					style={{ whiteSpace: 'pre-line', textAlign: 'center' }}
 				>
-					{displayerTitle}
+					{emptyFieldMessage.title}
 				</Text>
 			</Padding>
 			<Text
@@ -78,7 +40,7 @@ export default function ContactsEmptyDisplayer(): React.JSX.Element {
 				overflow="break-word"
 				style={{ whiteSpace: 'pre-line', textAlign: 'center' }}
 			>
-				{displayerDescription}
+				{emptyFieldMessage.description}
 			</Text>
 		</Container>
 	);

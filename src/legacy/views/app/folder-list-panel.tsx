@@ -8,7 +8,7 @@ import React, { Suspense } from 'react';
 import { Container } from '@zextras/carbonio-design-system';
 import { Route, Routes } from 'react-router-dom';
 
-import { FolderPanel } from './folder-panel';
+import { FolderPanelWrapper } from './folder-panel-wrapper';
 import { Spinner } from '../../../components/Spinner';
 
 export const FolderListPanel = (): React.JSX.Element => (
@@ -18,7 +18,7 @@ export const FolderListPanel = (): React.JSX.Element => (
 			element={
 				<Container width="40%" borderColor={{ right: 'gray3' }}>
 					<Suspense fallback={<Spinner />}>
-						<FolderPanel />
+						<FolderPanelWrapper />
 					</Suspense>
 				</Container>
 			}
