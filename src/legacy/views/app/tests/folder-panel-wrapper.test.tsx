@@ -107,6 +107,14 @@ describe('Folder panel', () => {
 		expect(await screen.findByText(EMPTY_LIST_HINT)).toBeVisible();
 	});
 
+	it('should return an empty fragment if folder id is not valid', async () => {
+		const folderId = 'a-non-valid-folder-id';
+
+		const { container } = setupFolderPanel(folderId);
+
+		expect(container).toBeEmptyDOMElement();
+	});
+
 	describe('Pagination', () => {
 		it('should load more results when scrolling bottom of the list', async () => {
 			const folderId = FOLDERS.CONTACTS;
