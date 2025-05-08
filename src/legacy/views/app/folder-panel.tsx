@@ -9,11 +9,9 @@ import { Container, MultiButton, Row, Tooltip } from '@zextras/carbonio-design-s
 import { useAppContext } from '@zextras/carbonio-shell-ui';
 import { filter, find, noop, orderBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 
 import { Breadcrumbs } from './breadcrumbs';
 import { ContactsList } from './folder-panel/contacts-list';
-import { useFolder } from '../../../carbonio-ui-commons/store/zustand/folder';
 import { Folder } from '../../../carbonio-ui-commons/types';
 import { searchContactsHelper } from '../../../views/search-contacts-helper';
 import { useSelection } from '../../hooks/useSelection';
@@ -38,14 +36,14 @@ const FILTER_TYPES = {
 } as const;
 
 type ContactFilterType = (typeof FILTER_TYPES)[keyof typeof FILTER_TYPES];
-
-export const FolderPanel = (): ReactElement => {
+type FolderPanelProps = {
+	folder: Folder;
+};
+export const FolderPanel = ({ folder }: FolderPanelProps): ReactElement => {
 	const [t] = useTranslation();
-	const { folderId } = useParams<RouteParams>() as { folderId: string };
-	const folder = useFolder(folderId);
 	const { setCount } = useAppContext<UseAppContextType>();
 	const loading = useRef(false);
-	const { selected, isSelecting, toggle, deselectAll } = useSelection(folderId, setCount);
+	const { selected, isSelecting, toggle, deselectAll } = useSelection(folder.id, setCount);
 	const [activeFilter, setActiveFilter] = useState<ContactFilterType>(FILTER_TYPES.ALL);
 
 	const prevQuery = useRef<string>('');
@@ -58,7 +56,7 @@ export const FolderPanel = (): ReactElement => {
 		[]
 	);
 	const [searchResults, setSearchResults] = useState<FolderViewSearchResults>(initialState);
-	const searchContacts = useContactsByFolder(folder as Folder);
+	const searchContacts = useContactsByFolder(folder);
 
 	const sortedContacts = useMemo(
 		() =>
@@ -106,14 +104,14 @@ export const FolderPanel = (): ReactElement => {
 	);
 
 	const query = useMemo((): string => {
-		let queryContent = `inid:"${folderId}"`;
+		let queryContent = `inid:"${folder.id}"`;
 		if (activeFilter === 'CONTACT') {
 			queryContent += ` and not #type:group`;
 		} else if (activeFilter === 'CONTACT_GROUP') {
 			queryContent += ` and #type:group`;
 		}
 		return queryContent;
-	}, [activeFilter, folderId]);
+	}, [activeFilter, folder.id]);
 
 	useEffect(() => {
 		if (query === prevQuery.current) return;
@@ -175,7 +173,7 @@ export const FolderPanel = (): ReactElement => {
 			<Container mainAlignment="flex-start" borderRadius="none">
 				{isSelecting ? (
 					<SelectPanelActions
-						folderId={folderId ?? ''}
+						folderId={folder.id ?? ''}
 						deselectAll={deselectAll}
 						selectedContacts={selectedContacts}
 						selectedIds={selected}
@@ -203,7 +201,7 @@ export const FolderPanel = (): ReactElement => {
 				)}
 				<ContactsList
 					onListBottom={loadMore}
-					folderId={folderId ?? ''}
+					folderId={folder.id ?? ''}
 					contacts={sortedContacts}
 					selected={selected}
 					isSelecting={isSelecting}

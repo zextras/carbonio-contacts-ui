@@ -10,6 +10,7 @@ import { act, fireEvent } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { forEach } from 'lodash';
 
+import { createContactsApiInterceptor, findContactInList } from './utils';
 import { FOLDER_VIEW } from '../../../../carbonio-ui-commons/constants';
 import { FOLDERS } from '../../../../carbonio-ui-commons/constants/folders';
 import { useTagStore } from '../../../../carbonio-ui-commons/store/zustand/tags';
@@ -48,10 +49,9 @@ import {
 	registerFindContactGroupsHandler
 } from '../../../../tests/msw-handlers/find-contact-groups';
 import { createSoapContact, createSoapContactGroup } from '../../../../tests/utils';
-import { FolderPanel } from '../folder-panel';
-import { createContactsApiInterceptor, findContactInList } from './utils';
 import { SearchContactsRequest, SearchContactsSoapResponse } from '../../../../types';
 import { SoapContact } from '../../../types/soap';
+import { FolderPanelWrapper } from '../folder-panel-wrapper';
 
 const mockMailToAction = (execute = jest.fn()): void => {
 	getActionMock.mockImplementation((type, id) => {
@@ -70,7 +70,7 @@ const mockMailToAction = (execute = jest.fn()): void => {
 };
 
 function setupFolderPanel(folderId: string): ReturnType<typeof setupTest> {
-	return setupTest(<FolderPanel />, {
+	return setupTest(<FolderPanelWrapper />, {
 		initialEntries: [`/folder/${folderId}`],
 		path: 'folder/:folderId/:type?/:itemId?'
 	});
@@ -143,7 +143,7 @@ describe('Folder panel', () => {
 				more: false
 			});
 
-			setupTest(<FolderPanel />, {
+			setupTest(<FolderPanelWrapper />, {
 				initialEntries: [`/folder/${folder.id}`],
 				path: `/folder/:folderId/:type?/:itemId?`
 			});
@@ -356,7 +356,7 @@ describe('Folder panel', () => {
 							more: false
 						});
 
-						const { user } = setupTest(<FolderPanel />, {
+						const { user } = setupTest(<FolderPanelWrapper />, {
 							initialEntries: [`/folder/${folder.id}`],
 							path: `/folder/:folderId/:type?/:itemId?`
 						});
@@ -422,7 +422,7 @@ describe('Folder panel', () => {
 							more: false
 						});
 
-						const { user } = setupTest(<FolderPanel />, {
+						const { user } = setupTest(<FolderPanelWrapper />, {
 							initialEntries: [`/folder/${folder.id}`],
 							path: `/folder/:folderId/:type?/:itemId?`
 						});
@@ -455,7 +455,7 @@ describe('Folder panel', () => {
 					});
 
 					useTagStore.setState({ tags: { '1': { id: '1', name: 'testTag' } } });
-					const { user } = setupTest(<FolderPanel />, {
+					const { user } = setupTest(<FolderPanelWrapper />, {
 						initialEntries: [`/folder/${contactsFolder.id}`],
 						path: `/folder/:folderId/:type?/:itemId?`
 					});
@@ -500,7 +500,7 @@ describe('Folder panel', () => {
 						more: false
 					});
 
-					const { user } = setupTest(<FolderPanel />, {
+					const { user } = setupTest(<FolderPanelWrapper />, {
 						initialEntries: [`/folder/${folder.id}`],
 						path: `/folder/:folderId/:type?/:itemId?`
 					});
@@ -549,7 +549,7 @@ describe('Folder panel', () => {
 							});
 							useAppContext.mockReturnValue({ count: 42, setCount: jest.fn() });
 
-							const { user } = setupTest(<FolderPanel />, {
+							const { user } = setupTest(<FolderPanelWrapper />, {
 								initialEntries: [`/folder/${folder.id}`],
 								path: `/folder/:folderId/:type?/:itemId?`
 							});

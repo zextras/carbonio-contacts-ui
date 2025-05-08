@@ -9,7 +9,7 @@ import React from 'react';
 import { ContactGroupDisplayerWrapper } from './contact-group-displayer-wrapper';
 import { populateFoldersStore } from '../../../carbonio-ui-commons/test/mocks/store/folders';
 import { screen, setupTest, within } from '../../../carbonio-ui-commons/test/test-setup';
-import { EMPTY_DISPLAYER_WITH_CONTACTS_HINT, TESTID_SELECTORS } from '../../../constants/tests';
+import { TESTID_SELECTORS } from '../../../constants/tests';
 import { addContactsToStore } from '../../../legacy/store/contacts';
 import { buildContactGroup } from '../../../tests/model-builder';
 import { CONTACT_GROUPS_PATH } from '../navigation';
@@ -18,20 +18,22 @@ describe('Contact groups displayer wrapper', () => {
 	const contactGroup = buildContactGroup();
 	const { parent, id } = contactGroup;
 
-	it('should show empty displayer if no contact group is active but there are contacts groups in the store', async () => {
+	it('should display empty displayer if no contact group is active but there are contacts groups in the store', async () => {
 		populateFoldersStore();
 		setupTest(<ContactGroupDisplayerWrapper />, {
 			initialEntries: [`/folder/${parent}`],
 			path: `/folder/:folderId/:type?/:id?`
 		});
-		const emptyDisplayerMessage = await screen.findByText(EMPTY_DISPLAYER_WITH_CONTACTS_HINT);
+		const emptyDisplayerMessage = await screen.findByText(
+			'Discover all the ways you can connect with other users.'
+		);
 		expect(emptyDisplayerMessage).toBeVisible();
 		expect(
 			screen.queryByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.closeDisplayer })
 		).not.toBeInTheDocument();
 	});
 
-	it('should show contact group details if a contact group is active', () => {
+	it('should display contact group details if a contact group is active', () => {
 		addContactsToStore([contactGroup]);
 		setupTest(<ContactGroupDisplayerWrapper />, {
 			initialEntries: [`/folder/${parent}/${CONTACT_GROUPS_PATH}/${id}`],
