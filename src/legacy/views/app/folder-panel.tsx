@@ -21,10 +21,6 @@ import { normalizeContactsFromSoap } from '../../utils/normalizations/normalize-
 import { SelectPanelActions } from '../folder/select-panel-actions';
 import { FolderViewSearchResults } from '../search/types';
 
-type RouteParams = {
-	folderId: string;
-};
-
 type UseAppContextType = {
 	setCount: (count: number) => void;
 };
@@ -173,7 +169,7 @@ export const FolderPanel = ({ folder }: FolderPanelProps): ReactElement => {
 			<Container mainAlignment="flex-start" borderRadius="none">
 				{isSelecting ? (
 					<SelectPanelActions
-						folderId={folder.id ?? ''}
+						folderId={folder.id}
 						deselectAll={deselectAll}
 						selectedContacts={selectedContacts}
 						selectedIds={selected}
@@ -201,7 +197,7 @@ export const FolderPanel = ({ folder }: FolderPanelProps): ReactElement => {
 				)}
 				<ContactsList
 					onListBottom={loadMore}
-					folderId={folder.id ?? ''}
+					folderId={folder.id}
 					contacts={sortedContacts}
 					selected={selected}
 					isSelecting={isSelecting}
