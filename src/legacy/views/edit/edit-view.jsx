@@ -27,7 +27,6 @@ import { FoldersSelector } from '../../../carbonio-ui-commons/components/select/
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { ZIMBRA_STANDARD_COLORS } from '../../../carbonio-ui-commons/constants/utils';
 import {
-	getFolderIdParts,
 	isRoot,
 	isSharedAccountFolder,
 	isTrash
@@ -138,10 +137,7 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 	const allFolders = useMemo(
 		() =>
 			map(folderWithWritePerm, (item) => ({
-				label:
-					getFolderIdParts(item.id).id === FOLDERS.CONTACTS
-						? t('folders.contacts', 'Contacts')
-						: item.name,
+				label: getFolderTranslatedName(t, item.id, item.name),
 				value: item.id,
 				color: ZIMBRA_STANDARD_COLORS[item.color || 0].hex
 			})),
