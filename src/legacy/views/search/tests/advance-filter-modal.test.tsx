@@ -121,7 +121,7 @@ describe('Advanced filter modal', () => {
 		});
 	});
 
-	it.only('should run the search with tags', async () => {
+	it('should run the search with tags', async () => {
 		jest.spyOn(console, 'error').mockImplementation();
 		(getTags as jest.Mock).mockImplementation(() => [
 			{
@@ -145,7 +145,19 @@ describe('Advanced filter modal', () => {
 		const searchButton = screen.getByRole('button', { name: /search/i });
 		await user.click(searchButton);
 		expect(onSearchConfirmMock).toHaveBeenCalledWith({
-			query: [expect.objectContaining({ label: 'tag:tag1' })]
+			includeSharedFolders: false,
+			query: [
+				expect.objectContaining({
+					label: 'tag:tag1',
+					avatarBackground: '#000000',
+					avatarIcon: 'Tag',
+					background: 'gray2',
+					hasAvatar: true,
+					isGeneric: false,
+					isQueryFilter: true,
+					value: 'tag:"tag1"'
+				})
+			]
 		});
 	});
 
