@@ -32,7 +32,8 @@ describe('Advanced filter modal', () => {
 		t: tMock,
 		query: mockedQuery,
 		onSearchConfirm: onSearchConfirmMock,
-		isSharedFolderIncludedInitialValue: false
+		isSharedFolderIncludedInitialValue: false,
+		isSharedFolderIncludedDefault: false
 	};
 	it('reset filters button should be enabled if query is not empty', async () => {
 		setupTest(<AdvancedFilterModal {...properties} />);
@@ -50,7 +51,8 @@ describe('Advanced filter modal', () => {
 			t: tMock,
 			query: [],
 			onSearchConfirm: onSearchConfirmMock,
-			isSharedFolderIncludedInitialValue: false
+			isSharedFolderIncludedInitialValue: false,
+			isSharedFolderIncludedDefault: false
 		};
 		setupTest(<AdvancedFilterModal {...advancedFilterModalProps} />);
 		const fieldLabel = screen.getByText(/title\.advanced_filters/i);
@@ -142,5 +144,25 @@ describe('Advanced filter modal', () => {
 		expect(restoredChips[0]).toHaveAttribute('value', 'testKeyword1');
 		// eslint-disable-next-line
 		expect(restoredChips[1]).toHaveAttribute('value', 'testKeyword2');
+	});
+
+	it(`should reset 'include shared folder' toggle when reset button is pressed`, async () => {
+		const { user } = setupTest(<AdvancedFilterModal {...properties} />);
+
+		const isSharedFolderIncludedToggle = screen.getByTestId('isSharedFolderIncludedToggle');
+		expect(isSharedFolderIncludedToggle).toBeInTheDocument();
+		await user.click(isSharedFolderIncludedToggle);
+
+		const resetButton = screen.getByRole('button', {
+			name: /action\.reset/i
+		});
+		expect(resetButton).toBeInTheDocument();
+		expect(resetButton).toBeEnabled();
+
+		await user.click(resetButton);
+
+		await waitFor(() => {
+			expect(resetButton).toBeDisabled();
+		});
 	});
 });
