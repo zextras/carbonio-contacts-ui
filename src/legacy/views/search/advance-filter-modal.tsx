@@ -95,7 +95,6 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 		() =>
 			concat(
 				otherKeywords,
-
 				tag
 			),
 		[otherKeywords, tag]

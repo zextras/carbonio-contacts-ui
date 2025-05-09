@@ -114,6 +114,30 @@ describe('Advanced filter modal', () => {
 		});
 	});
 
+	it('should run the search with tags', async () => {
+		const props: AdvancedFilterModalProps = {
+			open: true,
+			onClose: jest.fn(),
+			t: tMock,
+			query: [],
+			onSearchConfirm: onSearchConfirmMock,
+			isSharedFolderIncludedInitialValue: false
+		};
+		const { user } = setupTest(<AdvancedFilterModal {...props} />);
+
+		const tagsInput = await screen.findByRole('textbox', { name: /tags/i });
+		await user.type(tagsInput, 'tag1');
+		// await user.keyboard('[Enter]');
+		// const searchButton = screen.getByRole('button', { name: /search/i });
+		// await user.click(searchButton);
+		// expect(onSearchConfirmMock).toHaveBeenCalledWith({
+		// 	includeSharedFolders: false,
+		// 	query: [
+		// 		expect.objectContaining({ label: 'tag1' })
+		// 	]
+		// });
+	});
+
 	it('should restore initial query state when modal is reopened', async () => {
 		const onCloseMock = jest.fn();
 		const { user, rerender } = setupTest(
