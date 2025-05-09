@@ -11,6 +11,12 @@ import type { TFunction } from 'i18next';
 
 import { setupTest } from '../../../../carbonio-ui-commons/test/test-setup';
 import { AdvancedFilterModal, AdvancedFilterModalProps } from '../advance-filter-modal';
+import { getTags } from '../../../../carbonio-ui-commons/store/zustand/tags';
+
+jest.mock('../../../../carbonio-ui-commons/store/zustand/tags', () => ({
+	getTags: jest.fn()
+}));
+
 
 describe('Advanced filter modal', () => {
 	const tMock = ((key: string, _defaultValue?: any) => key) as TFunction<'translation'>;
@@ -114,7 +120,11 @@ describe('Advanced filter modal', () => {
 		});
 	});
 
-	it('should run the search with tags', async () => {
+	it.only('should run the search with tags', async () => {
+		jest.spyOn(console, 'error').mockImplementation();
+		(getTags as jest.Mock).mockImplementation(() => [{
+			name:"tag1"
+		}]);
 		const props: AdvancedFilterModalProps = {
 			open: true,
 			onClose: jest.fn(),
@@ -127,15 +137,15 @@ describe('Advanced filter modal', () => {
 
 		const tagsInput = await screen.findByRole('textbox', { name: /tags/i });
 		await user.type(tagsInput, 'tag1');
-		// await user.keyboard('[Enter]');
-		// const searchButton = screen.getByRole('button', { name: /search/i });
-		// await user.click(searchButton);
-		// expect(onSearchConfirmMock).toHaveBeenCalledWith({
-		// 	includeSharedFolders: false,
-		// 	query: [
-		// 		expect.objectContaining({ label: 'tag1' })
-		// 	]
-		// });
+		await user.keyboard('[Enter]');
+		const searchButton = screen.getByRole('button', { name: /search/i });
+		await user.click(searchButton);
+		expect(onSearchConfirmMock).toHaveBeenCalledWith({
+			includeSharedFolders: false,
+			query: [
+				expect.objectContaining({ label: 'tag:tag1' })
+			]
+		});
 	});
 
 	it('should restore initial query state when modal is reopened', async () => {
