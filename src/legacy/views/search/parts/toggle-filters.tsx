@@ -30,7 +30,11 @@ const ToggleFilters: FC<ToggleFiltersProps> = ({ compProps }): ReactElement => {
 			>
 				<Container orientation="horizontal" mainAlignment="flex-start" crossAlignment="center">
 					<Padding right="small">
-						<Switch onClick={toggleSharedFolder} value={isSharedFolderIncludedTobe} />
+						<Switch
+							data-testid="isSharedFolderIncludedToggle"
+							onClick={toggleSharedFolder}
+							value={isSharedFolderIncludedTobe}
+						/>
 					</Padding>
 					<Text size="large" weight="bold">
 						{t('label.include_shared_folders', 'Include shared address books')}
