@@ -206,6 +206,7 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 				open={showAdvanceFilters}
 				onSearchConfirm={onModalConfirm}
 				isSharedFolderIncludedInitialValue={isSharedFolderIncluded}
+				isSharedFolderIncludedDefault={zimbraPrefIncludeSharedItemsInSearch}
 				onClose={(): void => setShowAdvanceFilters(false)}
 				t={t}
 			/>
