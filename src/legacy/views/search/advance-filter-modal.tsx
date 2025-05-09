@@ -112,11 +112,11 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 	}, []);
 
 	const onConfirm = useCallback(() => {
-		const tmp = [...otherKeywords];
+		const tmp = [...otherKeywords, ...tag];
 		onSearchConfirm({ query: tmp, includeSharedFolders: isSharedFolderIncludedTobe });
 		onClose();
-	}, [otherKeywords, onSearchConfirm, isSharedFolderIncludedTobe, onClose]);
-
+	  }, [otherKeywords, tag, onSearchConfirm, isSharedFolderIncludedTobe, onClose]);
+	  
 	const keywordRowProps = useMemo(
 		() => ({
 			otherKeywords,
