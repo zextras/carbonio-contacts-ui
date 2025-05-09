@@ -33,6 +33,7 @@ export type AdvancedFilterModalProps = {
 	t: TFunction;
 	query: Query;
 	isSharedFolderIncludedInitialValue: boolean;
+	isSharedFolderIncludedDefault: boolean;
 	onSearchConfirm: (request: { query: Query; includeSharedFolders: boolean }) => void;
 };
 
@@ -42,7 +43,8 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 	t,
 	query,
 	onSearchConfirm,
-	isSharedFolderIncludedInitialValue
+	isSharedFolderIncludedInitialValue,
+	isSharedFolderIncludedDefault
 }): ReactElement => {
 	const [otherKeywords, setOtherKeywords] = useState<KeywordState>([]);
 	const [tag, setTag] = useState<KeywordState>([]);
@@ -91,24 +93,24 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 		setOtherKeywords(updatedQuery);
 	}, [query, open]);
 
-	const queryToBe = useMemo(
-		() =>
-			concat(
-				otherKeywords,
-				tag
-			),
-		[otherKeywords, tag]
-	);
+	const queryToBe = useMemo(() => concat(otherKeywords, tag), [otherKeywords, tag]);
+
+	useEffect(() => {
+		if (query.length === 0) {
+			setIsSharedFolderIncludedTobe(isSharedFolderIncludedDefault);
+		}
+	}, [query, isSharedFolderIncludedInitialValue, isSharedFolderIncludedDefault]);
 
 	const secondaryDisabled = useMemo(
-		() => query.length === 0 && queryToBe.length === 0,
-		[query.length, queryToBe.length]
+		() => queryToBe.length === 0 && isSharedFolderIncludedTobe === isSharedFolderIncludedDefault,
+		[queryToBe.length, isSharedFolderIncludedTobe, isSharedFolderIncludedDefault]
 	);
 
 	const resetFilters = useCallback(() => {
+		setIsSharedFolderIncludedTobe(isSharedFolderIncludedDefault);
 		setOtherKeywords([]);
 		setTag([]);
-	}, []);
+	}, [isSharedFolderIncludedDefault]);
 
 	const onConfirm = useCallback(() => {
 		const tmp = [...otherKeywords, ...tag];

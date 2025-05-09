@@ -9,14 +9,13 @@ import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import type { TFunction } from 'i18next';
 
+import { getTags } from '../../../../carbonio-ui-commons/store/zustand/tags';
 import { setupTest } from '../../../../carbonio-ui-commons/test/test-setup';
 import { AdvancedFilterModal, AdvancedFilterModalProps } from '../advance-filter-modal';
-import { getTags } from '../../../../carbonio-ui-commons/store/zustand/tags';
 
 jest.mock('../../../../carbonio-ui-commons/store/zustand/tags', () => ({
 	getTags: jest.fn()
 }));
-
 
 describe('Advanced filter modal', () => {
 	const tMock = ((key: string, _defaultValue?: any) => key) as TFunction<'translation'>;
@@ -38,7 +37,8 @@ describe('Advanced filter modal', () => {
 		t: tMock,
 		query: mockedQuery,
 		onSearchConfirm: onSearchConfirmMock,
-		isSharedFolderIncludedInitialValue: false
+		isSharedFolderIncludedInitialValue: false,
+		isSharedFolderIncludedDefault: false
 	};
 	it('reset filters button should be enabled if query is not empty', async () => {
 		setupTest(<AdvancedFilterModal {...properties} />);
@@ -56,7 +56,8 @@ describe('Advanced filter modal', () => {
 			t: tMock,
 			query: [],
 			onSearchConfirm: onSearchConfirmMock,
-			isSharedFolderIncludedInitialValue: false
+			isSharedFolderIncludedInitialValue: false,
+			isSharedFolderIncludedDefault: false
 		};
 		setupTest(<AdvancedFilterModal {...advancedFilterModalProps} />);
 		const fieldLabel = screen.getByText(/title\.advanced_filters/i);
@@ -122,15 +123,18 @@ describe('Advanced filter modal', () => {
 
 	it.only('should run the search with tags', async () => {
 		jest.spyOn(console, 'error').mockImplementation();
-		(getTags as jest.Mock).mockImplementation(() => [{
-			name:"tag1"
-		}]);
+		(getTags as jest.Mock).mockImplementation(() => [
+			{
+				name: 'tag1'
+			}
+		]);
 		const props: AdvancedFilterModalProps = {
 			open: true,
 			onClose: jest.fn(),
 			t: tMock,
 			query: [],
 			onSearchConfirm: onSearchConfirmMock,
+			isSharedFolderIncludedDefault: false,
 			isSharedFolderIncludedInitialValue: false
 		};
 		const { user } = setupTest(<AdvancedFilterModal {...props} />);
@@ -141,10 +145,7 @@ describe('Advanced filter modal', () => {
 		const searchButton = screen.getByRole('button', { name: /search/i });
 		await user.click(searchButton);
 		expect(onSearchConfirmMock).toHaveBeenCalledWith({
-			includeSharedFolders: false,
-			query: [
-				expect.objectContaining({ label: 'tag:tag1' })
-			]
+			query: [expect.objectContaining({ label: 'tag:tag1' })]
 		});
 	});
 
@@ -176,5 +177,25 @@ describe('Advanced filter modal', () => {
 		expect(restoredChips[0]).toHaveAttribute('value', 'testKeyword1');
 		// eslint-disable-next-line
 		expect(restoredChips[1]).toHaveAttribute('value', 'testKeyword2');
+	});
+
+	it(`should reset 'include shared folder' toggle when reset button is pressed`, async () => {
+		const { user } = setupTest(<AdvancedFilterModal {...properties} />);
+
+		const isSharedFolderIncludedToggle = screen.getByTestId('isSharedFolderIncludedToggle');
+		expect(isSharedFolderIncludedToggle).toBeInTheDocument();
+		await user.click(isSharedFolderIncludedToggle);
+
+		const resetButton = screen.getByRole('button', {
+			name: /action\.reset/i
+		});
+		expect(resetButton).toBeInTheDocument();
+		expect(resetButton).toBeEnabled();
+
+		await user.click(resetButton);
+
+		await waitFor(() => {
+			expect(resetButton).toBeDisabled();
+		});
 	});
 });
