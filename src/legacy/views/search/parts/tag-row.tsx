@@ -63,11 +63,11 @@ const TagRow: FC<ComponentProps> = ({ compProps }): ReactElement => {
 	const tagPlaceholder = useMemo(() => t('label.tags', 'Tags'), [t]);
 	const onTagChange = useCallback(
 		(chips: ChipItem[]) => {
-		  setTag(chips);
+			setTag(chips);
 		},
 		[setTag]
-	  );
-	  
+	);
+
 	return (
 		<Container padding={{ bottom: 'small', top: 'medium' }} orientation="horizontal">
 			<ChipInput
