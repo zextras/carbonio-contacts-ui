@@ -63,7 +63,8 @@ const DropDenyOverlayContainer = styled(Container)<{ $folder: Folder }>`
 
 export const AccordionCustomComponent: FC<{ item: Folder }> = ({ item: folder }) => {
 	const [t] = useTranslation();
-	const accountName = useUserAccount().name;
+	const { displayName, name } = useUserAccount();
+	const accountName = displayName ?? name;
 	const moveContactAction = useMoveContactsDragAndDrop();
 	const moveAddressBookAction = useActionMoveAddressBook();
 

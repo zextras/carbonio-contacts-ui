@@ -51,7 +51,8 @@ const AccordionItem = ({ item }: { item: AccordionItemType }): React.JSX.Element
 
 const SecondaryBarView = ({ expanded }: { expanded: boolean }): React.JSX.Element => {
 	const [t] = useTranslation();
-	const { name } = useUserAccount();
+	const { displayName, name } = useUserAccount();
+	const accountName = displayName ?? name;
 	const navigate = useNavigate();
 	const { pathname } = useLocation();
 
@@ -59,7 +60,7 @@ const SecondaryBarView = ({ expanded }: { expanded: boolean }): React.JSX.Elemen
 		(): AccordionItemType[] => [
 			{
 				id: 'id1',
-				label: name,
+				label: accountName,
 				CustomComponent: AccordionItem,
 				open: true,
 				items: [
@@ -101,7 +102,7 @@ const SecondaryBarView = ({ expanded }: { expanded: boolean }): React.JSX.Elemen
 				}
 			}
 		],
-		[name, navigate, pathname, t]
+		[accountName, navigate, pathname, t]
 	);
 
 	const collapsedItems = useMemo(
