@@ -2,6 +2,43 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.16.0](https://github.com/zextras/carbonio-contacts-ui/compare/v1.15.0...v1.16.0) (2025-05-19)
+
+
+### Features
+
+* [CO-1833] align contacts and contact groups detail panel ([#314](https://github.com/zextras/carbonio-contacts-ui/issues/314)) ([abf906f](https://github.com/zextras/carbonio-contacts-ui/commit/abf906f06206637dbf048decbce13c03cd830811))
+* [CO-1834] align contacts and groups actions display order ([#316](https://github.com/zextras/carbonio-contacts-ui/issues/316)) ([245dc88](https://github.com/zextras/carbonio-contacts-ui/commit/245dc882083ca85c325c513ba1411f7d89d9172f))
+* [CO-1835] implement multi-select, trash, move, restore in Contact Groups and align actions based on permissions (read/write) ([#318](https://github.com/zextras/carbonio-contacts-ui/issues/318)) ([ff2547b](https://github.com/zextras/carbonio-contacts-ui/commit/ff2547bdd0a9cb348dc37d54f8618c4dc31d28cf))
+
+
+### Bug Fixes
+
+* [CO-1215] align "Keywords" placeholder with other modules ([418ed14](https://github.com/zextras/carbonio-contacts-ui/commit/418ed14fdf86580a7392761dfaef0684723adda6))
+* [CO-1913] contacts search ([#321](https://github.com/zextras/carbonio-contacts-ui/issues/321)) ([16b40af](https://github.com/zextras/carbonio-contacts-ui/commit/16b40af692004f8bed28274401c1e1707ea0e48a))
+* [CO-1927]move contact modal title should contain "Move" instead of "Restore" ([#324](https://github.com/zextras/carbonio-contacts-ui/issues/324)) ([15bf886](https://github.com/zextras/carbonio-contacts-ui/commit/15bf8863cfcad453ad47ceb40c3e95982fbcc089))
+* [CO-1928] modal text overflow and alignment of restore/move contact + create/move address book to mails module ([#325](https://github.com/zextras/carbonio-contacts-ui/issues/325)) ([3fa15f1](https://github.com/zextras/carbonio-contacts-ui/commit/3fa15f18eae3fa6e3ace86a42d5d819dfe704304))
+* [CO-1969] contacts on folder shared with me are not visible ([#330](https://github.com/zextras/carbonio-contacts-ui/issues/330)) ([a7a308e](https://github.com/zextras/carbonio-contacts-ui/commit/a7a308e4ed151bc0df7d1b6eda4efbefde3d6219))
+* [CO-1998] align reset filters button ([6ee49df](https://github.com/zextras/carbonio-contacts-ui/commit/6ee49dfc7bc4672582ac897e42b2fd8930d6588a))
+* [CO-2006] reset 'Include Shared Folders' toggle to user preference when resetting filters and clearing search results ([7a52977](https://github.com/zextras/carbonio-contacts-ui/commit/7a5297757f72dbcd76041f886f06d0fad2724802))
+* [CO-2040] add translations in edit contact folder and create contact select folder/address book ([#344](https://github.com/zextras/carbonio-contacts-ui/issues/344)) ([9b3035c](https://github.com/zextras/carbonio-contacts-ui/commit/9b3035cb67eac86ac68fc8dc00830edd2e156e83))
+* [CO-2049] allow searching for the same query from search filter modal ([#342](https://github.com/zextras/carbonio-contacts-ui/issues/342)) ([d05342e](https://github.com/zextras/carbonio-contacts-ui/commit/d05342eed1b160895c7fa69f2dea42fc0e669f92))
+* [CO-2050] tag handling in AdvancedFilterModal  ([581355a](https://github.com/zextras/carbonio-contacts-ui/commit/581355abe6bde5a05ba901bea532b4fa24a48a78))
+* [CO-2082] contacts displays "e is undefined" ([#345](https://github.com/zextras/carbonio-contacts-ui/issues/345)) ([7e12cbd](https://github.com/zextras/carbonio-contacts-ui/commit/7e12cbdb1d5ae64a12ae4b63f554a20c972168e3))
+* add tags to search ([7a7886c](https://github.com/zextras/carbonio-contacts-ui/commit/7a7886c70f0a26bb3d1d1bbfc45945fe56c4073c))
+* align reset filters button ([0c6e0ea](https://github.com/zextras/carbonio-contacts-ui/commit/0c6e0eaf851d4c56466c47b55609618f0f179f02))
+* align with other modules ([a7633b3](https://github.com/zextras/carbonio-contacts-ui/commit/a7633b311c7573e5b09d53332dda5fd8e23ba795))
+* correct empty modal title to use translation system folder ([#299](https://github.com/zextras/carbonio-contacts-ui/issues/299)) ([56eac90](https://github.com/zextras/carbonio-contacts-ui/commit/56eac90a439ed6faf0659564c708a653d09df226))
+* count of items in contact list should be updated on user load more items ([#336](https://github.com/zextras/carbonio-contacts-ui/issues/336)) ([8fd0e44](https://github.com/zextras/carbonio-contacts-ui/commit/8fd0e4425e9f1ddb2b955c9655fb5a1e27d62435))
+* make 'Result for' label appear on non empty queries ([40d4576](https://github.com/zextras/carbonio-contacts-ui/commit/40d45761c3159be5c45002bebacdb2ec3997398d))
+* modify-contact.ts is missing API identifier ([#322](https://github.com/zextras/carbonio-contacts-ui/issues/322)) ([d2ab10b](https://github.com/zextras/carbonio-contacts-ui/commit/d2ab10b3ee487b19c987ecd1e265a17bbc44de1c))
+* reset include shared folder to setting default ([a427b91](https://github.com/zextras/carbonio-contacts-ui/commit/a427b914fcd58368b0bbde3c0b3bffa781f8f8b5))
+* revert label name ([db43d85](https://github.com/zextras/carbonio-contacts-ui/commit/db43d856e83c253f4991faeced32fd035bec3ed2))
+* standardise display name and email in sidebar ([008420b](https://github.com/zextras/carbonio-contacts-ui/commit/008420b7201642eaca745fbf80f804840e5d8ba6))
+* tag issue ([9ebadda](https://github.com/zextras/carbonio-contacts-ui/commit/9ebaddad87668b44bab4ee1be542cd22c42069c1))
+* **tests:** update action type in integrations-registration.test.tsx ([#328](https://github.com/zextras/carbonio-contacts-ui/issues/328)) ([72cb926](https://github.com/zextras/carbonio-contacts-ui/commit/72cb926eccc13822b1c01b3b757cc53192e483d5))
+* use sidebar accordion mui from commons (same as mails) ([#317](https://github.com/zextras/carbonio-contacts-ui/issues/317)) ([dcbe586](https://github.com/zextras/carbonio-contacts-ui/commit/dcbe5865d4636a0a9045ccedaacc60c4c4865def))
+
 ## [1.15.0](https://github.com/zextras/carbonio-contacts-ui/compare/v1.14.1...v1.15.0) (2025-02-17)
 
 
