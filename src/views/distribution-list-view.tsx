@@ -4,53 +4,41 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import React, { useMemo } from 'react';
+import React from 'react';
 
-import { ModalManager, ThemeProvider } from '@zextras/carbonio-design-system';
-import { trimEnd } from 'lodash';
-import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
+import { ModalManager } from '@zextras/carbonio-design-system';
+import { Navigate, Route, Routes, useParams } from 'react-router-dom';
 
+import { ROUTES, ROUTES_INTERNAL_PARAMS } from '../constants';
 import { DistributionListsView } from './distribution-list/distribution-lists-view';
-import { RouteParams, ROUTES, ROUTES_INTERNAL_PARAMS } from '../constants';
 
 const AppView = (): React.JSX.Element => {
-	const { path, params, url } = useRouteMatch<RouteParams>();
-
-	const trimmedPath = useMemo(() => trimEnd(path, '/'), [path]);
-
-	const routes = useMemo(
-		() => (
-			<Switch>
-				{params.route === ROUTES_INTERNAL_PARAMS.route.distributionLists && (
-					<Route path={`${trimmedPath}${ROUTES.distributionLists}`}>
-						{({ match }): React.JSX.Element =>
-							match?.params.filter &&
-							Object.values<string>(ROUTES_INTERNAL_PARAMS.filter).includes(match.params.filter) ? (
-								<DistributionListsView />
-							) : (
-								<Redirect to={`${url}/${ROUTES_INTERNAL_PARAMS.filter.member}`} />
-							)
-						}
-					</Route>
-				)}
-			</Switch>
-		),
-		[params.route, trimmedPath, url]
-	);
-
+	const { filter } = useParams();
+	if (
+		filter !== ROUTES_INTERNAL_PARAMS.filter.member &&
+		filter !== ROUTES_INTERNAL_PARAMS.filter.manager
+	) {
+		return (
+			<Navigate
+				to={`../${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${ROUTES_INTERNAL_PARAMS.filter.member}`}
+				replace
+			/>
+		);
+	}
 	return (
-		<ThemeProvider loadDefaultFont={false}>
-			<ModalManager>{routes}</ModalManager>
-		</ThemeProvider>
+		<ModalManager>
+			<DistributionListsView />
+		</ModalManager>
 	);
 };
 
-const MainRouteAppView = (): React.JSX.Element => {
-	const { path } = useRouteMatch();
-
-	const trimmedPath = useMemo(() => trimEnd(path, '/'), [path]);
-
-	return <Route path={`${trimmedPath}${ROUTES.mainRoute}`} component={AppView} />;
-};
+const MainRouteAppView = (): React.JSX.Element => (
+	<Routes>
+		<Route
+			path={`${ROUTES_INTERNAL_PARAMS.route.distributionLists}${ROUTES.distributionLists}`}
+			element={<AppView />}
+		/>
+	</Routes>
+);
 
 export default MainRouteAppView;

@@ -3,9 +3,9 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { ReactElement, useCallback, useMemo, useRef, useState } from 'react';
+import React, { ReactElement, useMemo, useRef, useState } from 'react';
 
-import { List } from '@zextras/carbonio-design-system';
+import { List, ListItem } from '@zextras/carbonio-design-system';
 import { map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -14,10 +14,7 @@ import styled from 'styled-components';
 import { ContactListItem } from './contact-list-item';
 import { DragItems } from './drag-items';
 import { EmptyListPanel } from './empty-list-panel';
-import { CustomListItem } from '../../../../carbonio-ui-commons/components/list/list-item';
-import { ContactGroupListItemWrapper } from '../../../../views/contact-groups/list/contact-group-list-item-wrapper';
-import { useAppSelector } from '../../../hooks/redux';
-import { selectFolderHasMore } from '../../../store/slices/contacts-slice';
+import { ContactGroupListItem } from '../../../../views/contact-groups/list/contact-group-list-item';
 import { ContactOrGroup } from '../../../types/contact';
 import { isGroup } from '../../../utils/helpers';
 
@@ -35,7 +32,7 @@ type ContactsListProps = {
 	isSelecting: boolean;
 	contacts: Array<ContactOrGroup>;
 	toggle: (id: string) => void;
-	onLoadMore?: () => Promise<void>;
+	onListBottom?: () => void;
 };
 export const ContactsList = ({
 	folderId,
@@ -43,10 +40,9 @@ export const ContactsList = ({
 	isSelecting,
 	contacts,
 	toggle,
-	onLoadMore
+	onListBottom
 }: ContactsListProps): React.JSX.Element => {
 	const [t] = useTranslation();
-	const loading = useRef(false);
 	const { itemId } = useParams<{ itemId: string }>();
 	const [isDragging, setIsDragging] = useState(false);
 	const [draggedIds, setDraggedIds] = useState<Record<string, boolean>>();
@@ -66,22 +62,6 @@ export const ContactsList = ({
 		[t]
 	);
 
-	const hasMore = useAppSelector((state) => selectFolderHasMore(state, folderId));
-
-	const searchMoreResults = useCallback(() => {
-		loading.current = true;
-		onLoadMore?.().finally(() => {
-			loading.current = false;
-		});
-	}, [onLoadMore]);
-
-	const loadMore = useCallback(() => {
-		if (contacts.length > 0 && hasMore) {
-			searchMoreResults();
-		}
-	}, [contacts.length, hasMore, searchMoreResults]);
-
-	const canLoadMore = useMemo(() => contacts.length > 0 && hasMore, [contacts.length, hasMore]);
 	const listItems = useMemo(
 		() =>
 			map(contacts, (contact) => {
@@ -89,15 +69,17 @@ export const ContactsList = ({
 				const active = itemId === contact.id;
 				if (isGroup(contact)) {
 					return (
-						<CustomListItem
+						<ListItem
 							key={contact.id}
 							selected={isSelected}
 							active={active}
-							background={active ? 'gray6' : 'gray5'}
 							data-testid={`custom-list-item-${contact.id}`}
 						>
 							{(): React.JSX.Element => (
-								<ContactGroupListItemWrapper
+								<ContactGroupListItem
+									selected={isSelected}
+									selecting={isSelecting}
+									toggle={toggle}
 									contactGroup={contact}
 									setDraggedIds={setDraggedIds}
 									setIsDragging={setIsDragging}
@@ -106,16 +88,16 @@ export const ContactsList = ({
 									key={`contact-group-${contact.id}`}
 								/>
 							)}
-						</CustomListItem>
+						</ListItem>
 					);
 				}
 
 				return (
-					<CustomListItem
+					<ListItem
 						key={contact.id}
 						selected={isSelected}
 						active={active}
-						background={active ? 'gray6' : 'gray5'}
+						data-testid={`custom-contact-list-item-${contact.id}`}
 					>
 						{(visible: boolean): ReactElement =>
 							visible ? (
@@ -138,7 +120,7 @@ export const ContactsList = ({
 								/>
 							)
 						}
-					</CustomListItem>
+					</ListItem>
 				);
 			}),
 		[contacts, folderId, isSelecting, itemId, selected, toggle]
@@ -161,7 +143,7 @@ export const ContactsList = ({
 			) : (
 				<List
 					background={'gray6'}
-					onListBottom={canLoadMore ? loadMore : undefined}
+					onListBottom={onListBottom}
 					data-testid="SearchResultContactsContainer"
 				>
 					{listItems}

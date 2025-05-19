@@ -5,12 +5,7 @@
  */
 import React from 'react';
 
-import {
-	ACTION_TYPES,
-	registerActions,
-	registerComponents,
-	registerFunctions
-} from '@zextras/carbonio-shell-ui';
+import { registerActions, registerComponents, registerFunctions } from '@zextras/carbonio-shell-ui';
 
 import { setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { IntegrationsRegistration } from '../integrations-registration';
@@ -40,12 +35,12 @@ describe('IntegrationsRegistration', () => {
 		expect(registerActions).toHaveBeenCalledWith(
 			{
 				id: 'new-contact',
-				type: ACTION_TYPES.NEW,
+				type: 'new',
 				action: expect.any(Function)
 			},
 			{
 				id: 'new-contact-group',
-				type: ACTION_TYPES.NEW,
+				type: 'new',
 				action: expect.any(Function)
 			}
 		);

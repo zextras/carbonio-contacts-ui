@@ -5,15 +5,11 @@
  */
 import React, { useCallback, useMemo, useState } from 'react';
 
-import {
-	Container,
-	Divider,
-	ModalFooter,
-	ModalHeader,
-	Padding
-} from '@zextras/carbonio-design-system';
+import { Divider, ModalFooter, ModalHeader } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
+import { ModalContentAndFooterWrapper } from './modal-content-and-footer-wrapper';
+import { ModalWrapper } from './modal-wrapper';
 import { useFolder } from '../../carbonio-ui-commons/store/zustand/folder/hooks';
 import { Folder } from '../../carbonio-ui-commons/types/folder';
 import { FolderTreeSelector } from '../folder-tree-selector/folder-tree-selector';
@@ -54,33 +50,26 @@ export const AddressBookMoveModal = ({
 	}, []);
 
 	return (
-		<>
+		<ModalWrapper>
 			<ModalHeader title={modalTitle} onClose={onClose} showCloseIcon />
 			<Divider />
-			<Padding vertical={'medium'}>
-				<Container
-					gap={'0.5rem'}
-					mainAlignment={'flex-start'}
-					crossAlignment={'flex-start'}
-					height={'fit'}
-				>
-					<FolderTreeSelector
-						onFolderSelected={onParentAddressBookSelected}
-						showSharedAccounts
-						showTrashFolder={false}
-						showLinkedFolders
-						excludeIds={addressBook?.parent ? [addressBook?.parent] : []}
-						allowRootSelection
-						allowFolderCreation={false}
-					/>
-				</Container>
-			</Padding>
-			<Divider />
-			<ModalFooter
-				confirmLabel={confirmLabel}
-				confirmDisabled={confirmDisabled}
-				onConfirm={onConfirm}
-			/>
-		</>
+			<ModalContentAndFooterWrapper>
+				<FolderTreeSelector
+					onFolderSelected={onParentAddressBookSelected}
+					showSharedAccounts
+					showTrashFolder={false}
+					showLinkedFolders
+					excludeIds={addressBook?.parent ? [addressBook?.parent] : []}
+					allowRootSelection
+					allowFolderCreation={false}
+				/>
+				<Divider />
+				<ModalFooter
+					confirmLabel={confirmLabel}
+					confirmDisabled={confirmDisabled}
+					onConfirm={onConfirm}
+				/>
+			</ModalContentAndFooterWrapper>
+		</ModalWrapper>
 	);
 };

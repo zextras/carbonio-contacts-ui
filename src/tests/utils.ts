@@ -101,7 +101,8 @@ export async function delayUntil(emitter: EventEmitter, event: string): Promise<
 	});
 }
 
-export const createCnItem = (
+// deprecated: use the object counterpart instead
+export const createSoapContactGroup = (
 	contactGroupName = faker.company.name(),
 	members: string[] = [],
 	id = faker.number.int({ min: 100 }).toString(),
@@ -129,15 +130,31 @@ export const createCnItem = (
 	};
 };
 
+export const createSoapContactGroupV2 = ({
+	contactGroupName = faker.company.name(),
+	members = [],
+	id = faker.number.int({ min: 100 }).toString(),
+	folderId = '7'
+}: {
+	contactGroupName?: string;
+	members?: Array<string>;
+	id?: string;
+	folderId?: string;
+}): CnItem => createSoapContactGroup(contactGroupName, members, id, folderId);
+
 export function createSoapContact({
 	id = faker.number.int({ min: 100 }).toString(),
 	email = faker.internet.email(),
-	folderId = '7'
+	folderId = '7',
+	tn,
+	t
 }: {
 	id?: string;
 	email?: string;
 	folderId?: string;
-}): SoapContact {
+	tn?: string;
+	t?: string;
+} = {}): SoapContact {
 	return {
 		id,
 		l: folderId,
@@ -148,7 +165,9 @@ export function createSoapContact({
 			nickname: faker.word.noun(),
 			fullName: faker.person.fullName(),
 			email
-		}
+		},
+		tn,
+		t
 	};
 }
 

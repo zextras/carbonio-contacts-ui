@@ -11,21 +11,20 @@ import {
 	Padding,
 	Icon,
 	Checkbox,
-	Button,
 	useModal,
-	useSnackbar
+	useSnackbar,
+	Action
 } from '@zextras/carbonio-design-system';
-import { replaceHistory } from '@zextras/carbonio-shell-ui';
 import { TFunction } from 'i18next';
-import { every, find, includes, map, reduce } from 'lodash';
+import { every, find, includes, map, noop, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
+import { TaggableItem } from '../../actions/types';
 import { ZIMBRA_STANDARD_COLORS } from '../../carbonio-ui-commons/constants/utils';
 import { useTags } from '../../carbonio-ui-commons/store/zustand/tags';
 import { Tag, Tags } from '../../carbonio-ui-commons/types/tags';
-import { useAppDispatch } from '../hooks/redux';
 import { contactAction } from '../store/actions/contact-action';
-import { StoreProvider } from '../store/redux';
 import { Contact } from '../types/contact';
 import { TagsActionsType } from '../types/tags';
 import CreateUpdateTagModal from '../views/secondary-bar/parts/tags/create-update-tag-modal';
@@ -44,8 +43,6 @@ export type TagsActions = {
 		label: string;
 	}>;
 };
-
-export type TagsFromStoreType = Record<string, Tag>;
 
 export type TagsActionsParams = {
 	t: TFunction;
@@ -76,9 +73,7 @@ export const createAndApplyTag = ({
 			{
 				id: modalId,
 				children: (
-					<StoreProvider>
-						<CreateUpdateTagModal onClose={(): void => closeModal?.(modalId)} contact={contact} />
-					</StoreProvider>
+					<CreateUpdateTagModal onClose={(): void => closeModal?.(modalId)} contact={contact} />
 				)
 			},
 			true
@@ -97,11 +92,7 @@ export const createTag = ({ t, createModal, closeModal }: TagsActionsParams): Ta
 		createModal?.(
 			{
 				id: modalId,
-				children: (
-					<StoreProvider>
-						<CreateUpdateTagModal onClose={(): void => closeModal?.(modalId)} />
-					</StoreProvider>
-				)
+				children: <CreateUpdateTagModal onClose={(): void => closeModal?.(modalId)} />
 			},
 			true
 		);
@@ -121,9 +112,7 @@ export const editTag = ({ t, createModal, closeModal, tag }: TagsActionsParams):
 			{
 				id: modalId,
 				children: (
-					<StoreProvider>
-						<CreateUpdateTagModal onClose={(): void => closeModal?.(modalId)} tag={tag} editMode />
-					</StoreProvider>
+					<CreateUpdateTagModal onClose={(): void => closeModal?.(modalId)} tag={tag} editMode />
 				)
 			},
 			true
@@ -140,17 +129,14 @@ export const deleteTag = ({ t, createModal, closeModal, tag }: TagsActionsParams
 			e.stopPropagation();
 		}
 		const modalId = 'delete-tag';
-		createModal?.(
-			{
-				id: modalId,
-				children: (
-					<StoreProvider>
-						<DeleteTagModal onClose={(): void => closeModal?.(modalId)} tag={tag} />
-					</StoreProvider>
-				)
-			},
-			true
-		);
+		tag &&
+			createModal?.(
+				{
+					id: modalId,
+					children: <DeleteTagModal onClose={(): void => closeModal?.(modalId)} tag={tag} />
+				},
+				true
+			);
 	}
 });
 
@@ -163,38 +149,37 @@ export const TagsDropdownItem = ({
 }): ReactElement => {
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
-	const dispatch = useAppDispatch();
 	const [checked, setChecked] = useState(includes(contact.tags, tag.id));
 	const [isHovering, setIsHovering] = useState(false);
 	const toggleCheck = useCallback(
 		(value: boolean) => {
 			setChecked((c) => !c);
-			dispatch(
-				contactAction({
-					op: value ? '!tag' : 'tag',
-					contactsIDs: [contact.id],
-					tagName: tag.name
-				})
+			contactAction({
+				op: value ? '!tag' : 'tag',
+				contactsIDs: [contact.id],
+				tagName: tag.name
+			})
 				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-ignore
-			).then((res: any) => {
-				if (res.type.includes('fulfilled')) {
-					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-					// @ts-ignore
+				.then((res: any) => {
 					createSnackbar({
 						key: `tag`,
 						replace: true,
 						hideButton: true,
 						severity: 'info',
 						label: value
-							? t('snackbar.tag_removed', { tag: tag.name, defaultValue: '"{{tag}}" tag removed' })
+							? t('snackbar.tag_removed', {
+									tag: tag.name,
+									defaultValue: '"{{tag}}" tag removed'
+								})
 							: t('snackbar.tag_applied', {
 									tag: tag.name,
 									defaultValue: '"{{tag}}" tag applied'
 								}),
 						autoHideTimeout: 3000
 					});
-				} else {
+				})
+				.catch(() => {
 					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 					// @ts-ignore
 					createSnackbar({
@@ -205,10 +190,9 @@ export const TagsDropdownItem = ({
 						autoHideTimeout: 3000,
 						hideButton: true
 					});
-				}
-			});
+				});
 		},
-		[contact.id, createSnackbar, dispatch, t, tag.name]
+		[contact.id, createSnackbar, t, tag.name]
 	);
 	const tagColor = useMemo(() => ZIMBRA_STANDARD_COLORS[tag.color || 0].hex, [tag.color]);
 	const tagIcon = useMemo(() => (checked ? 'Tag' : 'TagOutline'), [checked]);
@@ -237,16 +221,16 @@ export const TagsDropdownItem = ({
 	);
 };
 
-export const MultiSelectTagsDropdownItem = ({
+const MultiSelectTagsDropdownItem = ({
 	tag,
 	ids,
 	tags,
-	contacts,
+	items,
 	deselectAll,
 	folderId
 }: {
 	tag: Tag;
-	contacts: Array<Contact>;
+	items: Array<TaggableItem>;
 	ids: string[];
 	tags: Tags;
 	multiSelect?: boolean;
@@ -255,13 +239,13 @@ export const MultiSelectTagsDropdownItem = ({
 }): ReactElement => {
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
-	const dispatch = useAppDispatch();
 	const [isHovering, setIsHovering] = useState(false);
+	const navigate = useNavigate();
 
 	const tagsToShow = reduce(
 		tags,
 		(acc: Array<string>, v: Tag) => {
-			const values = map(contacts, (c) => includes(c.tags, v.id));
+			const values = map(items, (c) => includes(c.tags, v.id));
 			if (every(values)) acc.push(v.id);
 			return acc;
 		},
@@ -273,36 +257,32 @@ export const MultiSelectTagsDropdownItem = ({
 	const toggleCheck = useCallback(
 		(value: boolean) => {
 			setChecked((c) => !c);
-			dispatch(
-				contactAction({
-					op: value ? '!tag' : 'tag',
-					contactsIDs: ids,
-					tagName: tag.name
-				})
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
-			).then((res: any) => {
-				if (res.type.includes('fulfilled')) {
+			contactAction({
+				op: value ? '!tag' : 'tag',
+				contactsIDs: ids,
+				tagName: tag.name
+			})
+				.then(() => {
 					deselectAll && deselectAll();
-					replaceHistory(`/folder/${folderId}/`);
-					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-					// @ts-ignore
+					navigate(`../folder/${folderId}/`, { replace: true });
 					createSnackbar({
 						key: `tag`,
 						replace: true,
 						hideButton: true,
 						severity: 'info',
 						label: value
-							? t('snackbar.tag_removed', { tag: tag.name, defaultValue: '"{{tag}}" tag removed' })
+							? t('snackbar.tag_removed', {
+									tag: tag.name,
+									defaultValue: '"{{tag}}" tag removed'
+								})
 							: t('snackbar.tag_applied', {
 									tag: tag.name,
 									defaultValue: '"{{tag}}" tag applied'
 								}),
 						autoHideTimeout: 3000
 					});
-				} else {
-					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-					// @ts-ignore
+				})
+				.catch(() => {
 					createSnackbar({
 						key: `tag`,
 						replace: true,
@@ -311,10 +291,9 @@ export const MultiSelectTagsDropdownItem = ({
 						autoHideTimeout: 3000,
 						hideButton: true
 					});
-				}
-			});
+				});
 		},
-		[dispatch, ids, tag.name, deselectAll, folderId, createSnackbar, t]
+		[ids, tag.name, deselectAll, navigate, folderId, createSnackbar, t]
 	);
 
 	const tagIcon = useMemo(() => (checked ? 'Tag' : 'TagOutline'), [checked]);
@@ -350,17 +329,17 @@ export const applyMultiTag = ({
 	t,
 	tags,
 	ids,
-	contacts,
+	itemsToTag,
 	deselectAll,
 	folderId
 }: {
 	t: TFunction;
-	contacts: Array<Contact>;
+	itemsToTag: Array<TaggableItem>;
 	tags: Tags;
 	ids: string[];
 	deselectAll?: () => void;
 	folderId?: string;
-}): { id: string; items: ItemType[]; customComponent: ReactElement } => {
+}): Action => {
 	const tagItem = reduce(
 		tags,
 		(acc, v: Tag) => {
@@ -374,7 +353,7 @@ export const applyMultiTag = ({
 						tag={v}
 						tags={tags}
 						ids={ids}
-						contacts={contacts}
+						items={itemsToTag}
 						deselectAll={deselectAll}
 						folderId={folderId}
 					/>
@@ -391,80 +370,7 @@ export const applyMultiTag = ({
 	return {
 		id: TagsActionsType.APPLY,
 		items: tagItem,
-		customComponent: (
-			<Row takeAvailableSpace mainAlignment="flex-start">
-				<Padding right="small">
-					<Icon icon="TagsMoreOutline" />
-				</Padding>
-				<Row takeAvailableSpace mainAlignment="space-between">
-					<Padding right="small">
-						<Text>{t('label.tags', 'Tags')}</Text>
-					</Padding>
-				</Row>
-			</Row>
-		)
-	};
-};
-export const applyTag = ({
-	t,
-	contact,
-	tags,
-	createModal,
-	closeModal
-}: {
-	t: TFunction;
-	contact: any;
-	tags: TagsFromStoreType;
-	createModal: ReturnType<typeof useModal>['createModal'];
-	closeModal: ReturnType<typeof useModal>['closeModal'];
-}): {
-	id: string;
-	items: ItemType[];
-	customComponent: ReactElement;
-	label?: string;
-	icon?: string;
-} => {
-	const tagItem = reduce(
-		tags,
-		(acc, v) => {
-			const item = {
-				id: v.id,
-				label: v.name,
-				icon: 'TagOutline',
-				keepOpen: true,
-				customComponent: <TagsDropdownItem tag={v} contact={contact} />
-			};
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
-			acc.push(item);
-			return acc;
-		},
-		[]
-	);
-	const newTag = {
-		id: 'new_tag',
-		keepOpen: true,
-		customComponent: (
-			<Button
-				label={t('label.new_tag', 'New Tag')}
-				type="outlined"
-				width="fill"
-				size="small"
-				onClick={(ev): void => {
-					createAndApplyTag({ t, contact, createModal, closeModal }).onClick?.(ev);
-				}}
-			/>
-		)
-	};
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
-	tagItem.push(newTag);
-
-	return {
-		id: TagsActionsType.APPLY,
-		items: tagItem,
-		label: t('label.tag', 'Tag'),
-		icon: 'TagsMoreOutline',
+		onClick: noop,
 		customComponent: (
 			<Row takeAvailableSpace mainAlignment="flex-start">
 				<Padding right="small">

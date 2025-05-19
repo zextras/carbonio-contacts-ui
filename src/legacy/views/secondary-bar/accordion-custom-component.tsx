@@ -18,20 +18,22 @@ import {
 	Row,
 	Tooltip
 } from '@zextras/carbonio-design-system';
-import { AppLink, useUserAccount } from '@zextras/carbonio-shell-ui';
+import { useUserAccount } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { useAddressBookContextualMenuItems } from './commons/use-address-book-contextual-menu-items';
 import { useActionMoveAddressBook } from '../../../actions/move-address-book';
-import { useActionMoveContacts } from '../../../actions/move-contacts';
 import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
 import { ROOT_NAME } from '../../../carbonio-ui-commons/constants/utils';
 import { isLink, isRoot } from '../../../carbonio-ui-commons/helpers/folders';
 import { Folder } from '../../../carbonio-ui-commons/types/folder';
 import { DragEnterAction, OnDropActionProps } from '../../../carbonio-ui-commons/types/sidebar';
+import { CONTACTS_ROUTE } from '../../../constants';
 import { getFolderIconColor, getFolderIconName } from '../../../helpers/folders';
 import { Contact } from '../../types/contact';
+import { useMoveContactsDragAndDrop } from '../../ui-actions/use-move-contacts-drag-and-drop';
 import { getFolderTranslatedName } from '../../utils/helpers';
 
 const FittedRow = styled(Row)`
@@ -61,8 +63,9 @@ const DropDenyOverlayContainer = styled(Container)<{ $folder: Folder }>`
 
 export const AccordionCustomComponent: FC<{ item: Folder }> = ({ item: folder }) => {
 	const [t] = useTranslation();
-	const accountName = useUserAccount().name;
-	const moveContactAction = useActionMoveContacts();
+	const { displayName, name } = useUserAccount();
+	const accountName = displayName ?? name;
+	const moveContactAction = useMoveContactsDragAndDrop();
 	const moveAddressBookAction = useActionMoveAddressBook();
 
 	const onDragEnterAction = useCallback(
@@ -205,8 +208,8 @@ export const AccordionCustomComponent: FC<{ item: Folder }> = ({ item: folder })
 					dragDisabled={dragFolderDisable}
 					style={{ display: 'block' }}
 				>
-					<AppLink
-						to={`/folder/${folder.id}`}
+					<Link
+						to={`/${CONTACTS_ROUTE}/folder/${folder.id}`}
 						style={{ width: '100%', height: '100%', textDecoration: 'none' }}
 					>
 						<Dropdown
@@ -228,7 +231,7 @@ export const AccordionCustomComponent: FC<{ item: Folder }> = ({ item: folder })
 								</Tooltip>
 							</Row>
 						</Dropdown>
-					</AppLink>
+					</Link>
 				</Drag>
 			</Drop>
 		</Row>

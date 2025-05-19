@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { Action } from '@zextras/carbonio-design-system';
+import { Action as DSAction } from '@zextras/carbonio-design-system';
 import { DefaultTheme } from 'styled-components';
 
 export type UIAction<ExecArg, CanExecArg> = {
@@ -12,5 +12,25 @@ export type UIAction<ExecArg, CanExecArg> = {
 	icon: keyof DefaultTheme['icons'];
 	execute: (arg?: ExecArg) => void;
 	canExecute: (arg?: CanExecArg) => boolean;
-	color?: Action['color'];
+	color?: DSAction['color'];
+	disabled?: boolean;
+};
+
+export type Action = {
+	id: string;
+	label: string;
+	icon: keyof DefaultTheme['icons'];
+	onClick: () => void;
+	color?: DSAction['color'];
+	disabled?: boolean;
+};
+
+export type DeletableItem = {
+	id: string;
+	parent: string;
+};
+
+export type TaggableItem = {
+	id: string;
+	tags?: Array<string>;
 };

@@ -7,13 +7,12 @@ import React, { useState, useEffect } from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
 import { setAppContext } from '@zextras/carbonio-shell-ui';
-import { Redirect, Route, useRouteMatch } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { useUpdateView } from '../carbonio-ui-commons/hooks/use-update-view';
 import { FolderView } from '../legacy/views/app/folder-view';
 
 const ContactsView = (): React.JSX.Element => {
-	const { path } = useRouteMatch();
 	const [count, setCount] = useState(0);
 	useUpdateView();
 
@@ -23,10 +22,10 @@ const ContactsView = (): React.JSX.Element => {
 
 	return (
 		<Container orientation="horizontal" mainAlignment="flex-start">
-			<Route path={path}>
-				<FolderView />
-				<Redirect strict from={path} to={`${path}/folder/7`} />
-			</Route>
+			<FolderView />
+			<Routes>
+				<Route path="/" element={<Navigate to={'folder/7'} />} />
+			</Routes>
 		</Container>
 	);
 };

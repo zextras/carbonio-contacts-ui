@@ -3,7 +3,6 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ErrorSoapBodyResponse, JSNS, soapFetch } from '@zextras/carbonio-shell-ui';
 
 import { CnItem, GenericSoapPayload } from './types';
@@ -23,7 +22,7 @@ export type ModifyContactResponse = GenericSoapPayload<typeof JSNS.mail> & {
 	cn: Array<CnItem>;
 };
 
-export const modifyContact = ({
+const modifyContact = ({
 	id,
 	addedMembers,
 	removedMembers,
@@ -70,23 +69,25 @@ type ModifyContactGroupRequest = {
 	name?: string;
 };
 
-export const modifyContactGroup = createAsyncThunk<ContactGroup, ModifyContactGroupRequest>(
-	'contacts/modifyContactGroup',
-	async ({ id, addedMembers, removedMembers, name }: ModifyContactGroupRequest) => {
-		const attributes: Array<ModifyContactAttribute> | undefined = name
-			? [
-					{ n: 'fullName', _content: name },
-					{ n: 'fileAs', _content: `8:${name}` },
-					{ n: 'nickname', _content: name }
-				]
-			: undefined;
-		return modifyContact({ id, addedMembers, removedMembers, attributes }).then(
-			(res: ModifyContactResponse) => ({
-				id: res.cn[0].id,
-				parent: res.cn[0].l,
-				title: res.cn[0]._attrs.fullName ?? '',
-				members: res.cn[0].m?.map((value) => value.value) ?? []
-			})
-		);
-	}
-);
+export const modifyContactGroup = async ({
+	id,
+	addedMembers,
+	removedMembers,
+	name
+}: ModifyContactGroupRequest): Promise<ContactGroup> => {
+	const attributes: Array<ModifyContactAttribute> | undefined = name
+		? [
+				{ n: 'fullName', _content: name },
+				{ n: 'fileAs', _content: `8:${name}` },
+				{ n: 'nickname', _content: name }
+			]
+		: undefined;
+	return modifyContact({ id, addedMembers, removedMembers, attributes }).then(
+		(res: ModifyContactResponse) => ({
+			id: res.cn[0].id,
+			parent: res.cn[0].l,
+			title: res.cn[0]._attrs.fullName ?? '',
+			members: res.cn[0].m?.map((value) => value.value) ?? []
+		})
+	);
+};

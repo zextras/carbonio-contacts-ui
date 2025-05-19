@@ -3,25 +3,27 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { createAsyncThunk } from '@reduxjs/toolkit';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
 
+import { ModifyContactResponse } from '../../../network/api/modify-contact';
 import { Contact } from '../../types/contact';
+import { ModifyContactRequest, SoapContact } from '../../types/soap';
 import { normalizeContactToSoap } from '../../utils/normalizations/normalize-contact-to-soap';
 
-export const modifyContact = createAsyncThunk(
-	'contacts/modifyContact',
-	async ({ updatedContact }: { updatedContact: Contact; editContact: Contact }) => {
-		const { cn } = (await soapFetch('ModifyContact', {
-			_jsns: 'urn:zimbraMail',
-			force: '1',
-			replace: '0',
-			cn: {
-				m: [],
-				id: updatedContact.id,
-				a: normalizeContactToSoap(updatedContact)
-			}
-		})) as { cn: any };
-		return cn;
-	}
-);
+export const modifyContact = async ({
+	updatedContact
+}: {
+	updatedContact: Contact;
+}): Promise<SoapContact> => {
+	const { cn } = await soapFetch<ModifyContactRequest, ModifyContactResponse>('ModifyContact', {
+		_jsns: 'urn:zimbraMail',
+		force: '1',
+		replace: '0',
+		cn: {
+			m: [],
+			id: updatedContact.id,
+			a: normalizeContactToSoap(updatedContact)
+		}
+	});
+	return cn[0];
+};

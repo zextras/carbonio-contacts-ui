@@ -13,4 +13,5 @@ export type ContactGroup = {
 	id: string;
 	parent: string;
 	members: Array<string>;
+	tags?: string[];
 };

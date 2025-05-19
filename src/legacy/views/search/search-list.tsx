@@ -3,19 +3,18 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 
-import { Button, Container, List, Padding, Text } from '@zextras/carbonio-design-system';
+import { Button, Container, List, ListItem, Padding, Text } from '@zextras/carbonio-design-system';
 import { map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { SearchContactListItem } from './search-contact-list-item';
-import { type SearchResults } from './search-view';
-import { CustomListItem } from '../../../carbonio-ui-commons/components/list/list-item';
-import { ContactGroupListItemWrapper } from '../../../views/contact-groups/list/contact-group-list-item-wrapper';
+import { ContactGroupListItem } from '../../../views/contact-groups/list/contact-group-list-item';
+import { ContactOrGroup } from '../../types/contact';
 import { isGroup } from '../../utils/helpers';
+import { ContactListItem } from '../app/folder-panel/contact-list-item';
 
 const BorderContainer = styled(Container)`
 	border-bottom: 0.0625rem solid ${({ theme }): string => theme.palette.gray2.regular};
@@ -23,63 +22,51 @@ const BorderContainer = styled(Container)`
 `;
 
 type SearchListProps = {
-	searchResults: SearchResults;
-	search: (folderId: string, reset: boolean) => void;
-	query: string;
-	filterCount: number;
+	contacts: Array<ContactOrGroup>;
+	onListBottom?: () => void;
 	setShowAdvanceFilters: (show: boolean) => void;
 };
 export const SearchList = ({
-	searchResults,
-	search,
-	query,
-	filterCount,
+	contacts,
+	onListBottom,
 	setShowAdvanceFilters
 }: SearchListProps): React.JSX.Element => {
 	const [t] = useTranslation();
 	const { itemId } = useParams<{ itemId: string }>();
-	const loadMore = useCallback(() => {
-		if (searchResults && searchResults.contacts.length > 0 && searchResults.more) {
-			search(query, false);
-		}
-	}, [query, search, searchResults]);
 
-	const canLoadMore = useMemo(
-		() => searchResults && searchResults.contacts.length > 0 && searchResults.more,
-		[searchResults]
-	);
 	const displayerTitle = useMemo(() => {
-		if (searchResults?.contacts.length === 0) {
+		if (contacts.length === 0) {
 			t('displayer.search_list_title1', 'It looks like there are no results. Keep searching!');
 		}
 		return null;
-	}, [t, searchResults?.contacts.length]);
+	}, [t, contacts.length]);
 
 	const listItems = useMemo(
 		() =>
-			map(searchResults.contacts, (contact) => {
+			map(contacts, (contact, index) => {
 				const isActive = itemId === contact.id;
 				if (isGroup(contact)) {
-					return <ContactGroupListItemWrapper contactGroup={contact} />;
+					return (
+						<ContactGroupListItem
+							key={`contact-group-list-item-${contact.id}`}
+							contactGroup={contact}
+						/>
+					);
 				}
 				return (
-					<CustomListItem
+					<ListItem
+						data-testid={`search-contact-list-item-${contact.id}`}
 						selected={false}
 						active={isActive}
 						key={contact.id}
-						background={'transparent'}
 					>
 						{(visible: boolean): React.JSX.Element =>
-							visible ? (
-								<SearchContactListItem item={contact} />
-							) : (
-								<div style={{ height: '4rem' }} />
-							)
+							visible ? <ContactListItem item={contact} /> : <div style={{ height: '4rem' }} />
 						}
-					</CustomListItem>
+					</ListItem>
 				);
 			}),
-		[itemId, searchResults.contacts]
+		[itemId, contacts]
 	);
 
 	return (
@@ -94,32 +81,24 @@ export const SearchList = ({
 			<BorderContainer padding="small" height="fit" borderRadius="none">
 				<Button
 					onClick={(): void => setShowAdvanceFilters(true)}
-					type={filterCount > 0 ? 'default' : 'outlined'}
+					type={'outlined'}
 					width={'fill'}
-					label={
-						filterCount === 0
-							? t('title.advanced_filters', 'Advanced Filters')
-							: t('label.advanced_filter', {
-									count: filterCount,
-									defaultValue_one: '{{count}} Advanced Filter',
-									defaultValue_other: '"{{count}} Advanced Filters'
-								})
-					}
+					label={t('title.advanced_filters', 'Advanced Filters')}
 					icon="Options2Outline"
 				/>
 			</BorderContainer>
-			{searchResults?.contacts.length > 0 && (
+			{contacts.length > 0 && (
 				<Container>
 					<List
 						background="gray6"
-						onListBottom={canLoadMore ? loadMore : undefined}
+						onListBottom={onListBottom}
 						data-testid="SearchResultContactsContainer"
 					>
 						{listItems}
 					</List>
 				</Container>
 			)}
-			{searchResults?.contacts.length === 0 && (
+			{contacts.length === 0 && (
 				<Container>
 					<Padding top="medium">
 						<Text

@@ -15,7 +15,6 @@ import {
 	ColorSelectProps
 } from '../../../../../carbonio-ui-commons/components/select/color-select';
 import { changeTagColor, createTag, renameTag } from '../../../../../carbonio-ui-commons/soap/tags';
-import { useAppDispatch } from '../../../../hooks/redux';
 import { contactAction } from '../../../../store/actions/contact-action';
 import { Contact } from '../../../../types/contact';
 import ModalFooter from '../../commons/modal-footer';
@@ -38,7 +37,6 @@ const CreateUpdateTagModal: FC<ComponentProps> = ({
 	const [t] = useTranslation();
 	const [name, setName] = useState(tag?.name || '');
 	const [color, setColor] = useState(tag?.color || 0);
-	const dispatch = useAppDispatch();
 	const title = useMemo(
 		() =>
 			editMode
@@ -67,14 +65,11 @@ const CreateUpdateTagModal: FC<ComponentProps> = ({
 
 	const applyNewlyCreatedTag = useCallback(
 		({ id, tagName }: { id: string; tagName: string }) => {
-			dispatch(
-				contactAction({
-					op: 'tag',
-					contactsIDs: [id],
-					tagName
-				})
-			) // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
+			contactAction({
+				op: 'tag',
+				contactsIDs: [id],
+				tagName
+			})
 				.then(() => {
 					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 					// @ts-ignore
@@ -91,8 +86,6 @@ const CreateUpdateTagModal: FC<ComponentProps> = ({
 					});
 				})
 				.catch(() => {
-					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-					// @ts-ignore
 					createSnackbar({
 						key: `tag`,
 						replace: true,
@@ -103,7 +96,7 @@ const CreateUpdateTagModal: FC<ComponentProps> = ({
 					});
 				});
 		},
-		[createSnackbar, dispatch, t]
+		[createSnackbar, t]
 	);
 	const onCreate = useCallback(
 		() =>
@@ -135,8 +128,6 @@ const CreateUpdateTagModal: FC<ComponentProps> = ({
 		Promise.all([renameTag(`${tag?.id}`, name), changeTagColor(`${tag?.id}`, Number(color))])
 			.then(() => {
 				onClose();
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
 				createSnackbar({
 					key: `update-tag`,
 					replace: true,
@@ -148,8 +139,6 @@ const CreateUpdateTagModal: FC<ComponentProps> = ({
 			})
 			.catch(() => {
 				onClose();
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
 				createSnackbar({
 					key: `update-tag-error`,
 					replace: true,

@@ -10,24 +10,16 @@ import {
 	IconButton,
 	Row,
 	Responsive,
-	Button,
 	Text,
 	Collapse,
 	Dropdown,
-	Padding,
-	Icon,
-	Tooltip,
 	Link
 } from '@zextras/carbonio-design-system';
-import { runSearch } from '@zextras/carbonio-shell-ui';
-import { every, includes, isEmpty, map, reduce } from 'lodash';
+import { map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { ZIMBRA_STANDARD_COLORS } from '../../../carbonio-ui-commons/constants/utils';
-import { isTrash } from '../../../carbonio-ui-commons/helpers/folders';
-import { useTags } from '../../../carbonio-ui-commons/store/zustand/tags';
+import { DisplayerContent } from '../../../components/displayer/displayer-content';
 import { CompactView } from '../../commons/contact-compact-view';
-import { useTagExist } from '../../ui-actions/tag-actions';
 
 function typeToIcon(type) {
 	switch (type) {
@@ -238,193 +230,21 @@ function ContactMultiValueField({ type, values, width, defaultType, showIcon }) 
 	);
 }
 
-function ContactPreviewContent({ contact, onEdit, onDelete, onMail, onMove }) {
+function ContactPreviewContent({ contact }) {
 	const [open, setOpen] = useState(true);
 	const toggleOpen = useCallback(() => {
 		setOpen(!open);
 	}, [setOpen, open]);
 	const [t] = useTranslation();
-
 	const mailData = useMemo(() => Object.values(contact.email), [contact]);
 	const urlData = useMemo(() => Object.values(contact.URL), [contact]);
 	const phoneData = useMemo(() => Object.values(contact.phone), [contact]);
 	const addressData = useMemo(() => Object.values(contact.address), [contact]);
-
-	const tagsFromStore = useTags();
-	const triggerSearch = useCallback(
-		(tagToSearch) =>
-			runSearch(
-				[
-					{
-						avatarBackground: ZIMBRA_STANDARD_COLORS[tagToSearch?.color ?? 0].hex,
-						avatarIcon: 'Tag',
-						background: 'gray2',
-						hasAvatar: true,
-						isGeneric: false,
-						isQueryFilter: true,
-						label: `tag:${tagToSearch?.name}`,
-						value: `tag:"${tagToSearch?.name}"`
-					}
-				],
-				'contacts'
-			),
-		[]
-	);
-	const tags = useMemo(
-		() =>
-			reduce(
-				tagsFromStore,
-				(acc, v) => {
-					if (includes(contact.tags, v.id))
-						acc.push({
-							...v,
-							color: ZIMBRA_STANDARD_COLORS[v.color ?? 0].hex,
-							label: v.name,
-							onClick: () => triggerSearch(v),
-							customComponent: (
-								<Row takeAvailableSpace mainAlignment="flex-start">
-									<Row takeAvailableSpace mainAlignment="space-between">
-										<Row mainAlignment="flex-end">
-											<Padding right="small">
-												<Icon icon="Tag" color={ZIMBRA_STANDARD_COLORS[v.color ?? 0].hex} />
-											</Padding>
-										</Row>
-										<Row takeAvailableSpace mainAlignment="flex-start">
-											<Text>{v.name}</Text>
-										</Row>
-									</Row>
-								</Row>
-							)
-						});
-					return acc;
-				},
-				[]
-			),
-		[contact.tags, tagsFromStore, triggerSearch]
-	);
-
-	const tagIcon = useMemo(() => (tags.length > 1 ? 'TagsMoreOutline' : 'Tag'), [tags]);
-	const tagIconColor = useMemo(() => (tags.length === 1 ? tags[0].color : undefined), [tags]);
-
-	const isTagInStore = useTagExist(tags);
-
-	const onTagClick = useCallback(() => {
-		triggerSearch(tagsFromStore?.[contact?.tags[0]]);
-	}, [contact.tags, triggerSearch, tagsFromStore]);
-
-	const showMultiTagIcon = useMemo(
-		() => contact.tags?.length > 1 && isTagInStore,
-		[contact.tags?.length, isTagInStore]
-	);
-	const showTagIcon = useMemo(
-		() =>
-			contact.tags &&
-			contact.tags?.length !== 0 &&
-			!showMultiTagIcon &&
-			isTagInStore &&
-			every(contact.tags, (tn) => tn !== ''),
-		[isTagInStore, contact.tags, showMultiTagIcon]
-	);
-
-	const [showDropdown, setShowDropdown] = useState(false);
-	const onIconClick = useCallback((ev) => {
-		ev.stopPropagation();
-		setShowDropdown((o) => !o);
-	}, []);
-
-	const onDropdownClose = useCallback(() => {
-		setShowDropdown(false);
-	}, []);
-
-	const singleTagLabel = useMemo(
-		() => tagsFromStore[contact?.tags?.[0]]?.name,
-		[contact?.tags, tagsFromStore]
-	);
-
 	return (
-		<Row
-			data-testid="PreviewPanel"
-			padding={{ all: 'extrasmall' }}
-			width="100%"
-			mainAlignment="normal"
-			style={{ overflowY: 'auto' }}
-		>
+		<DisplayerContent>
 			<Responsive mode="desktop" target={window.top}>
-				<Container
-					data-testid="contact-preview-content-desktop"
-					background="gray6"
-					height="fit"
-					padding={{ all: 'medium' }}
-				>
-					<Row
-						width="fill"
-						height="fit"
-						takeAvailableSpace
-						mainAlignment="flex-end"
-						padding={{ horizontal: 'extrasmall' }}
-					>
-						{!isTrash(contact.parent) && (
-							<IconButton
-								icon="MailModOutline"
-								onClick={onMail}
-								disabled={isEmpty(contact?.email)}
-							/>
-						)}
-
-						{showTagIcon && (
-							<Padding left="small">
-								<Tooltip label={singleTagLabel} disabled={showMultiTagIcon}>
-									<Button
-										data-testid="TagIcon"
-										type="ghost"
-										size="large"
-										onClick={onTagClick}
-										icon={tagIcon}
-										color={tagIconColor}
-									/>
-								</Tooltip>
-							</Padding>
-						)}
-						{showMultiTagIcon && (
-							<Dropdown items={tags} forceOpen={showDropdown} onClose={onDropdownClose}>
-								<Padding left="small">
-									<IconButton
-										size="large"
-										data-testid="TagIcon"
-										icon={tagIcon}
-										onClick={onIconClick}
-										color={tagIconColor}
-									/>
-								</Padding>
-							</Dropdown>
-						)}
-						<Tooltip
-							label={
-								isTrash(contact.parent) ? t('label.restore', 'Restore') : t('label.move', 'Move')
-							}
-						>
-							<IconButton
-								icon={isTrash(contact.parent) ? 'RestoreOutline' : 'MoveOutline'}
-								onClick={onMove}
-							/>
-						</Tooltip>
-						<Tooltip
-							label={
-								isTrash(contact.parent)
-									? t('tooltip.list_trash.deletePermanently', 'Delete contact permanently')
-									: t('label.delete', 'Delete')
-							}
-						>
-							<IconButton icon="Trash2Outline" onClick={onDelete} />
-						</Tooltip>
-						<Padding right="small" />
-						{!isTrash(contact.parent) && (
-							<Button icon="EditOutline" label={t('label.edit')} onClick={onEdit} />
-						)}
-					</Row>
-					<Container padding={{ all: 'small', top: 'extrasmall' }}>
-						<CompactView contact={contact} open={open} toggleOpen={toggleOpen} />
-					</Container>
+				<Container data-testid="contact-preview-content-desktop" background="gray6" height="fit">
+					<CompactView contact={contact} open={open} toggleOpen={toggleOpen} />
 				</Container>
 				<Collapse orientation="vertical" open={open} crossSize="100%" disableTransition>
 					<Container
@@ -612,7 +432,7 @@ function ContactPreviewContent({ contact, onEdit, onDelete, onMail, onMove }) {
 					</Container>
 				</Collapse>
 			</Responsive>
-		</Row>
+		</DisplayerContent>
 	);
 }
 

@@ -8,7 +8,6 @@ import React, { ReactElement, ReactNode } from 'react';
 import { renderHook } from '@testing-library/react';
 import { SoapNotify, useRefresh } from '@zextras/carbonio-shell-ui';
 import { http } from 'msw';
-import { Provider } from 'react-redux';
 
 import { useFolderStore } from '../../../../carbonio-ui-commons/store/zustand/folder';
 import { getSetupServer } from '../../../../carbonio-ui-commons/test/jest-setup';
@@ -17,14 +16,11 @@ import { generateFolder } from '../../../../carbonio-ui-commons/test/mocks/folde
 import { handleGetFolderRequest } from '../../../../carbonio-ui-commons/test/mocks/network/msw/handle-get-folder';
 import { handleGetShareInfoRequest } from '../../../../carbonio-ui-commons/test/mocks/network/msw/handle-get-share-info';
 import { folderWorker } from '../../../../carbonio-ui-commons/worker';
-import { generateStore } from '../../../tests/generators/store';
 import { useSyncDataHandler } from '../use-sync-data-handler';
 
 function getWrapper() {
 	// eslint-disable-next-line react/display-name
-	return ({ children }: { children: ReactNode }): ReactElement => (
-		<Provider store={generateStore()}>{children}</Provider>
-	);
+	return ({ children }: { children: ReactNode }): ReactElement => <>{children}</>;
 }
 
 function mockSoapRefresh(mailbox: number): void {

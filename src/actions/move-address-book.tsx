@@ -103,6 +103,7 @@ export const useActionMoveAddressBook = (): MoveAddressBookAction => {
 					{
 						id: modalId,
 						maxHeight: '90vh',
+						size: 'medium',
 						children: (
 							<AddressBookMoveModal
 								addressBookId={addressBook.id}

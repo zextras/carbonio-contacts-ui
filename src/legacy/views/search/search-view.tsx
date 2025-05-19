@@ -3,49 +3,48 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { FC, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { FC, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Container, Spinner } from '@zextras/carbonio-design-system';
 import type { SearchViewProps } from '@zextras/carbonio-search-ui';
-import { soapFetch } from '@zextras/carbonio-shell-ui';
 import { map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import { Route, Switch, useRouteMatch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import AdvancedFilterModal from './advance-filter-modal';
+import { runSearch } from './run-search';
+import { SearchContactsEmptyPanel } from './search-contacts-empty-panel';
 import { SearchList } from './search-list';
-import SearchPanel from './search-panel';
+import { Query } from './search-types';
+import { SearchResults } from './types';
 import { isTrash } from '../../../carbonio-ui-commons/helpers/folders';
 import { useUpdateView } from '../../../carbonio-ui-commons/hooks/use-update-view';
 import { useFoldersMap } from '../../../carbonio-ui-commons/store/zustand/folder';
-import { Folder } from '../../../carbonio-ui-commons/types/folder';
+import { Folder } from '../../../carbonio-ui-commons/types';
 import { usePrefs } from '../../../carbonio-ui-commons/utils/use-prefs';
-import { ContactOrGroup } from '../../types/contact';
-import { normalizeContactsFromSoap } from '../../utils/normalizations/normalize-contact-from-soap';
-
-export type SearchResults = {
-	contacts: Array<ContactOrGroup>;
-	more: boolean;
-	offset: number;
-	sortBy: string;
-	query: string;
-};
+import { ContactGroupDisplayerWrapper } from '../../../views/contact-groups/displayer/contact-group-displayer-wrapper';
+import { addContactsToStore, useContactsById } from '../../store/contacts';
+import ContactEditPanel from '../edit/contact-edit-panel';
+import { ContactPreviewWrapper } from '../preview/contact-preview-wrapper';
 
 const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 	const [query, updateQuery] = useQuery();
 	useUpdateView();
 
-	const [searchResults, setSearchResults] = useState<SearchResults>({
-		contacts: [],
-		more: false,
-		offset: 0,
-		sortBy: 'nameAsc',
-		query: ''
-	});
+	const initialSearchState = useMemo(
+		() => ({
+			contacts: [],
+			more: false,
+			offset: 0,
+			sortBy: 'nameAsc',
+			query: ''
+		}),
+		[]
+	);
+	const [searchResults, setSearchResults] = useState<SearchResults>(initialSearchState);
+	const searchContacts = useContactsById(searchResults.contacts);
 
-	const loading = useRef(false);
 	const [t] = useTranslation();
-	const [filterCount, setFilterCount] = useState(0);
 	const [showAdvanceFilters, setShowAdvanceFilters] = useState(false);
 	const { zimbraPrefIncludeTrashInSearch, zimbraPrefIncludeSharedItemsInSearch } = usePrefs();
 	const [includeTrash, includeSharedFolders] = useMemo(
@@ -79,88 +78,135 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 		() => `( ${map(searchInFolders, (folder) => `inid:"${folder}"`).join(' OR ')} OR is:local) `,
 		[searchInFolders]
 	);
-
-	const queryToString = useMemo(
-		() =>
-			isSharedFolderIncluded && searchInFolders?.length > 0
-				? `(${query.map((c) => (c.value ? c.value : c.label)).join(' ')}) ${foldersToSearchInQuery}`
-				: `${query.map((c) => (c.value ? c.value : c.label)).join(' ')}`,
-		[isSharedFolderIncluded, searchInFolders.length, query, foldersToSearchInQuery]
+	const onModalConfirm = useCallback(
+		(request: { query: Query; includeSharedFolders: boolean }) => {
+			setIsSharedFolderIncluded(request.includeSharedFolders);
+			updateQuery(request.query);
+		},
+		[updateQuery]
 	);
 
-	const searchQuery = useCallback(
-		(queryStr: string, reset: boolean) => {
-			loading.current = true;
-			soapFetch<any, any>('Search', {
-				limit: 100,
-				query: queryStr,
-				offset: reset ? 0 : searchResults.contacts.length,
-				sortBy: searchResults.sortBy,
-				types: 'contact',
-				_jsns: 'urn:zimbraMail'
-			})
-				.then(
-					({ cn, more, offset, sortBy }): SearchResults => ({
-						query: queryStr,
-						contacts: [
-							...(reset ? [] : (searchResults.contacts ?? [])),
-							...(normalizeContactsFromSoap(cn) ?? [])
-						],
-						more,
-						offset: (offset ?? 0) + 100,
-						sortBy: sortBy ?? 'nameAsc'
-					})
-				)
-				.then((r) => {
-					setSearchResults(r);
-				})
-				.finally(() => {
-					loading.current = false;
+	const evaluateQueryString = useCallback(
+		(queryParam: Query): string =>
+			isSharedFolderIncluded && searchInFolders?.length > 0
+				? `(${queryParam.map((c) => (c.value ? c.value : c.label)).join(' ')}) ${foldersToSearchInQuery}`
+				: `${queryParam.map((c) => (c.value ? c.value : c.label)).join(' ')}`,
+		[foldersToSearchInQuery, isSharedFolderIncluded, searchInFolders?.length]
+	);
+
+	const queryToString = useMemo(() => evaluateQueryString(query), [evaluateQueryString, query]);
+
+	const runSearchFromScratch = useCallback(
+		(newQuery: Query, abortSignal?: AbortSignal) => {
+			setSearchResults(initialSearchState);
+			if (query.length > 0) {
+				const queryString = evaluateQueryString(newQuery);
+				runSearch({ queryString, offset: 0, abortSignal }).then((r) => {
+					const contacts = r.contacts ?? [];
+					const contactIds = contacts.map((c) => c.id);
+					addContactsToStore(contacts);
+					setSearchResults({
+						more: r.more,
+						offset: r.offset,
+						query: queryString,
+						sortBy: 'nameAsc',
+						contacts: contactIds
+					});
 				});
+			}
 		},
-		[searchResults.contacts, searchResults.sortBy]
+		[evaluateQueryString, initialSearchState, query.length]
 	);
 
 	useEffect(() => {
-		if (query && query.length > 0 && queryToString !== searchResults.query && !loading.current) {
-			setFilterCount(query.length);
-			searchQuery(queryToString, true);
-		}
-	}, [query, queryToString, searchQuery, searchResults.query]);
+		const controller = new AbortController();
+		runSearchFromScratch(query, controller.signal);
+		return () => {
+			controller.abort();
+		};
+	}, [query, runSearchFromScratch]);
 
-	const { path } = useRouteMatch();
+	const canLoadMore = useMemo(
+		() => searchResults && searchResults.contacts.length > 0 && searchResults.more,
+		[searchResults]
+	);
+
+	const loadMore = useCallback(() => {
+		const controller = new AbortController();
+
+		if (canLoadMore) {
+			const offset = searchResults.contacts.length;
+			runSearch({
+				offset,
+				queryString: queryToString,
+				abortSignal: controller.signal
+			}).then((r) => {
+				const allContacts = [...(searchContacts ?? []), ...(r.contacts ?? [])];
+				const contactIds = allContacts.map((c) => c.id);
+				setSearchResults({
+					more: r.more,
+					offset: r.offset,
+					query: queryToString,
+					sortBy: 'nameAsc',
+					contacts: contactIds
+				});
+				addContactsToStore(allContacts);
+			});
+		}
+
+		return () => {
+			controller.abort();
+		};
+	}, [canLoadMore, queryToString, searchContacts, searchResults.contacts.length]);
 
 	return (
 		<Container>
-			<ResultsHeader label={t('label.results_for', 'Results for:')} />
+			<ResultsHeader label={query.length > 0 ? t('label.results_for', 'Results for:') : ''} />
 			<Container
 				orientation="horizontal"
 				background="gray4"
 				style={{ overflowY: 'auto' }}
 				mainAlignment="flex-start"
 			>
-				<Switch>
-					<Route path={`${path}/:folder?/:folderId?/:type?/:itemId?`}>
-						<SearchList
-							searchResults={searchResults}
-							search={searchQuery}
-							query={queryToString}
-							filterCount={filterCount}
-							setShowAdvanceFilters={setShowAdvanceFilters}
-						/>
-					</Route>
-				</Switch>
+				<Routes>
+					<Route
+						path={`:folder?/:folderId?/:type?/:itemId?`}
+						element={
+							<SearchList
+								contacts={searchContacts}
+								onListBottom={canLoadMore ? loadMore : undefined}
+								setShowAdvanceFilters={setShowAdvanceFilters}
+							/>
+						}
+					/>
+				</Routes>
 				<Suspense fallback={<Spinner color="gray5" />}>
-					<SearchPanel searchResults={searchResults} query={query} width="75%" />
+					<Container width={'75%'} mainAlignment="flex-start">
+						<Routes>
+							<Route
+								path={`folder/:folderId/contacts/:contactId`}
+								element={<ContactPreviewWrapper />}
+							/>
+							<Route path={`folder/:folderId/edit/:editId`} element={<ContactEditPanel />} />
+							<Route
+								path={'folder/:folderId/contact-groups/:id'}
+								element={<ContactGroupDisplayerWrapper />}
+							/>
+							<Route
+								path={'/'}
+								element={<SearchContactsEmptyPanel searchResults={searchResults} />}
+							/>
+						</Routes>
+					</Container>
 				</Suspense>
 			</Container>
 
 			<AdvancedFilterModal
 				query={query}
-				updateQuery={updateQuery}
 				open={showAdvanceFilters}
-				isSharedFolderIncluded={isSharedFolderIncluded}
-				setIsSharedFolderIncluded={setIsSharedFolderIncluded}
+				onSearchConfirm={onModalConfirm}
+				isSharedFolderIncludedInitialValue={isSharedFolderIncluded}
+				isSharedFolderIncludedDefault={includeSharedFolders}
 				onClose={(): void => setShowAdvanceFilters(false)}
 				t={t}
 			/>

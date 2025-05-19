@@ -9,7 +9,7 @@ import { useIntegratedFunction } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
 import { UIAction } from './types';
-import { ACTION_IDS } from '../constants';
+import { SEND_EMAIL_ACTION } from '../constants/actions';
 
 export type MailComposerRecipient = { email?: string; isGroup?: boolean };
 
@@ -56,9 +56,9 @@ export const useActionSendEmail = (): SendEmailAction => {
 
 	return useMemo(
 		() => ({
-			id: ACTION_IDS.sendEmail,
+			id: SEND_EMAIL_ACTION.ID,
+			icon: SEND_EMAIL_ACTION.ICON,
 			label: t('action.mail', 'Send e-mail'),
-			icon: 'EmailOutline',
 			canExecute,
 			execute: sendEmail
 		}),

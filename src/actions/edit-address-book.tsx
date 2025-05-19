@@ -14,7 +14,6 @@ import { isNestedInTrash } from '../carbonio-ui-commons/store/zustand/folder/uti
 import { Folder } from '../carbonio-ui-commons/types/folder';
 import { AddressBookEditModal } from '../components/modals/address-book-edit/address-book-edit';
 import { ACTION_IDS } from '../constants';
-import { StoreProvider } from '../legacy/store/redux';
 
 export type EditAddressBookAction = UIAction<Folder, Folder>;
 
@@ -56,12 +55,10 @@ export const useActionEditAddressBook = (): EditAddressBookAction => {
 					id: modalId,
 					maxHeight: '90vh',
 					children: (
-						<StoreProvider>
-							<AddressBookEditModal
-								addressBookId={addressBook.id}
-								onClose={(): void => closeModal(modalId)}
-							/>
-						</StoreProvider>
+						<AddressBookEditModal
+							addressBookId={addressBook.id}
+							onClose={(): void => closeModal(modalId)}
+						/>
 					)
 				},
 				true

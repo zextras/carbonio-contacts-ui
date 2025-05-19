@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { NameSpace } from '../../types/utils';
+import { MakeRequired, NameSpace } from '../../types/utils';
 
 export type IFolderView =
 	| 'search folder'
@@ -132,6 +132,8 @@ export type SoapContact = {
 	}>;
 };
 
+export type PartialSoapContactWithId = MakeRequired<Partial<SoapContact>, 'id'>;
+
 type ContactGroupMemberType =
 	/** reference to another contact */
 	| 'C'
@@ -240,6 +242,7 @@ export type CreateContactRequest = {
 export type ModifyContactRequestAttr = CreateContactRequestAttr;
 
 export type ModifyContactRequest = {
+	_jsns: 'urn:zimbraMail';
 	force: '0' | '1'; // Default to '1'
 	replace: '0' | '1'; // Default to '0'
 	cn: {

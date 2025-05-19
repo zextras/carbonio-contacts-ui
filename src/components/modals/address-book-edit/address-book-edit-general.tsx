@@ -27,6 +27,7 @@ import { isAdministerAllowed, isSystemFolder } from '../../../carbonio-ui-common
 import { useFolder } from '../../../carbonio-ui-commons/store/zustand/folder';
 import { Grant } from '../../../carbonio-ui-commons/types/folder';
 import { TIMEOUTS } from '../../../constants';
+import { getFolderTranslatedName } from '../../../legacy/utils/helpers';
 import { apiClient } from '../../../network/api-client';
 
 export type AddressBookEditGeneralModalProps = {
@@ -53,10 +54,10 @@ export const AddressBookEditGeneralModal = ({
 	const modalTitle = useMemo(
 		() =>
 			t('label.edit_folder_properties', {
-				name: addressBook?.name,
+				name: addressBook ? getFolderTranslatedName(t, addressBook.id, addressBook.name) : '',
 				defaultValue: "Edit {{name}}'s properties"
 			}),
-		[addressBook?.name, t]
+		[addressBook, t]
 	);
 
 	const confirmButtonDisabled = useMemo(

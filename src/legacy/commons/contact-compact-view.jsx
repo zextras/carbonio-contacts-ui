@@ -8,7 +8,7 @@ import React, { useMemo } from 'react';
 import {
 	Avatar,
 	Button,
-	Drag,
+	Container,
 	IconButton,
 	Responsive,
 	Row,
@@ -17,6 +17,7 @@ import {
 import { trim } from 'lodash';
 import styled from 'styled-components';
 
+import { CustomIconAvatar } from '../../components/styled-components';
 import { useDisplayName } from '../hooks/use-display-name';
 
 const AvatarMobile = styled(Avatar)`
@@ -54,47 +55,43 @@ export const CompactView = ({ contact, toggleOpen, open }) => {
 	return (
 		<>
 			<Responsive mode="desktop" target={window.top}>
-				<Drag style={{ width: '100%' }}>
-					<Row width="fill" height="fit" mainAlignment="flex-start">
-						<Avatar
-							label={`${contact.firstName} ${contact.lastName}`}
-							picture={contact.image}
-							size="large"
-							fallbackIcon="PeopleOutline"
-						/>
-						<Row
-							orientation="vertical"
-							takeAvailableSpace
-							mainAlignment="center"
-							crossAlignment="flex-start"
-							padding={{ horizontal: 'large', vertical: 'small' }}
-							height="fill"
-						>
-							<Text size="medium" weight="bold">
-								{displayName}
-							</Text>
-							<Text size="small" weight="bold" color="secondary">
-								{trim(
-									`${contact?.jobTitle && `${contact.jobTitle}, `} ${
-										(contact?.department ?? '') && `${contact.department}, `
-									} ${(contact?.company ?? '') && `${contact.company}, `}`,
-									', '
-								)}
-							</Text>
-							<Text size="small" color="secondary">
-								{displayMailAndPhone}
-							</Text>
-						</Row>
+				<Container
+					height={'fit'}
+					orientation={'horizontal'}
+					mainAlignment={'flex-start'}
+					gap={'1rem'}
+				>
+					<CustomIconAvatar
+						label={`${contact.firstName} ${contact.lastName}`}
+						picture={contact.image}
+						size="large"
+						fallbackIcon="PeopleOutline"
+					/>
+					<Container height={'fit'} crossAlignment={'flex-start'} minWidth={0}>
+						<Text size="medium" weight="bold">
+							{displayName}
+						</Text>
+						<Text size="small" weight="bold" color="secondary">
+							{trim(
+								`${contact?.jobTitle && `${contact.jobTitle}, `} ${
+									(contact?.department ?? '') && `${contact.department}, `
+								} ${(contact?.company ?? '') && `${contact.company}, `}`,
+								', '
+							)}
+						</Text>
+						<Text size="small" color="secondary">
+							{displayMailAndPhone}
+						</Text>
+					</Container>
 
-						{toggleOpen && (
-							<IconButton
-								size="medium"
-								onClick={toggleOpen}
-								icon={open ? 'ArrowIosUpward' : 'ArrowIosDownward'}
-							/>
-						)}
-					</Row>
-				</Drag>
+					{toggleOpen && (
+						<IconButton
+							size="medium"
+							onClick={toggleOpen}
+							icon={open ? 'ArrowIosUpward' : 'ArrowIosDownward'}
+						/>
+					)}
+				</Container>
 			</Responsive>
 			<Responsive mode="mobile" target={window.top}>
 				<Row padding={{ vertical: 'large' }} width="90vw" height="fit" mainAlignment="flex-start">

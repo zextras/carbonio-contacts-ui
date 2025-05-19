@@ -10,6 +10,7 @@ import { render, screen } from '@testing-library/react';
 import { times } from 'lodash';
 
 import { setupTest } from '../../../../../carbonio-ui-commons/test/test-setup';
+import { TESTID_SELECTORS } from '../../../../../constants/tests';
 import { buildContact } from '../../../../../tests/model-builder';
 import { Contact } from '../../../../types/contact';
 import { DragItems } from '../drag-items';
@@ -22,7 +23,7 @@ describe('DragItems', () => {
 		expect(container).toBeEmptyDOMElement();
 
 		setupTest(<DragItems contacts={contacts} draggedIds={{}} />);
-		expect(screen.queryByTestId('contact-list-item')).not.toBeInTheDocument();
+		expect(screen.queryByTestId(TESTID_SELECTORS.contactsListItem)).not.toBeInTheDocument();
 	});
 
 	it('renders no items if draggedIds is empty', () => {
@@ -30,7 +31,7 @@ describe('DragItems', () => {
 		expect(container).toBeEmptyDOMElement();
 
 		setupTest(<DragItems contacts={contacts} draggedIds={{}} />);
-		expect(screen.queryByTestId('contact-list-item')).not.toBeInTheDocument();
+		expect(screen.queryByTestId(TESTID_SELECTORS.contactsListItem)).not.toBeInTheDocument();
 	});
 
 	it('renders only the dragged contacts', () => {
@@ -44,7 +45,7 @@ describe('DragItems', () => {
 
 		setupTest(<DragItems contacts={contacts} draggedIds={draggedIds} />);
 
-		const items = screen.getAllByTestId('contact-list-item');
+		const items = screen.getAllByTestId(TESTID_SELECTORS.contactsListItem);
 		expect(items).toHaveLength(2);
 		expect(items[0]).toHaveTextContent(`${con0?.firstName} ${con0?.middleName} ${con0?.lastName}`);
 		expect(items[1]).toHaveTextContent(`${con1?.firstName} ${con1?.middleName} ${con1?.lastName}`);
@@ -53,7 +54,7 @@ describe('DragItems', () => {
 	it('ignores invalid IDs that do not match any contact', () => {
 		setupTest(<DragItems contacts={contacts} draggedIds={{ '999': true, '2': true }} />);
 
-		const items = screen.queryAllByTestId('contact-list-item');
+		const items = screen.queryAllByTestId(TESTID_SELECTORS.contactsListItem);
 		expect(items).toHaveLength(0);
 	});
 });

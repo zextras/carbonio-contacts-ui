@@ -14,7 +14,6 @@ import { isNestedInTrash } from '../carbonio-ui-commons/store/zustand/folder/uti
 import { Folder } from '../carbonio-ui-commons/types/folder';
 import { AddressBookDeleteModal } from '../components/modals/address-book-delete/address-book-delete';
 import { ACTION_IDS } from '../constants';
-import { StoreProvider } from '../legacy/store/redux';
 
 export type DeleteAddressBookAction = UIAction<Folder, Folder>;
 
@@ -57,12 +56,10 @@ export const useActionDeleteAddressBook = (): DeleteAddressBookAction => {
 					id: modalId,
 					maxHeight: '90vh',
 					children: (
-						<StoreProvider>
-							<AddressBookDeleteModal
-								addressBook={addressBook}
-								onClose={(): void => closeModal(modalId)}
-							/>
-						</StoreProvider>
+						<AddressBookDeleteModal
+							addressBook={addressBook}
+							onClose={(): void => closeModal(modalId)}
+						/>
 					)
 				},
 				true

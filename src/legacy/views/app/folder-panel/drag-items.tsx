@@ -9,7 +9,7 @@ import React from 'react';
 import { find, map, reduce } from 'lodash';
 
 import { ContactListItem } from './contact-list-item';
-import { ContactGroupListItemWrapper } from '../../../../views/contact-groups/list/contact-group-list-item-wrapper';
+import { ContactGroupListItem } from '../../../../views/contact-groups/list/contact-group-list-item';
 import { ContactOrGroup } from '../../../types/contact';
 
 export const DragItems = ({
@@ -35,9 +35,9 @@ export const DragItems = ({
 		<>
 			{map(items, (item, index) => {
 				if ('members' in item) {
-					return <ContactGroupListItemWrapper contactGroup={item} />;
+					return <ContactGroupListItem contactGroup={item} key={`${item.id}-${index}`} />;
 				}
-				return <ContactListItem item={item} key={index} />;
+				return <ContactListItem item={item} key={`${item.id}-${index}`} />;
 			})}
 		</>
 	);

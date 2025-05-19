@@ -54,31 +54,30 @@ const TagRow: FC<ComponentProps> = ({ compProps }): ReactElement => {
 				false,
 				true,
 				'Tag',
-				ZIMBRA_STANDARD_COLORS[chipBg.color].hex
+				ZIMBRA_STANDARD_COLORS[chipBg.color ?? 0].hex
 			);
 		},
 		[chipOnAdd, tagOptions]
 	);
 
-	const tagPlaceholder = useMemo(() => t('label.tag', 'Tag'), [t]);
+	const tagPlaceholder = useMemo(() => t('label.tags', 'Tags'), [t]);
 	const onTagChange = useCallback(
-		(chip: ChipItem) => {
-			setTag(chip);
+		(chips: ChipItem[]) => {
+			setTag(chips);
 		},
 		[setTag]
 	);
+
 	return (
 		<Container padding={{ bottom: 'small', top: 'medium' }} orientation="horizontal">
 			<ChipInput
 				placeholder={tagPlaceholder}
 				background="gray5"
-				defaultValue={[]}
 				options={tagOptions}
 				value={tag}
 				onChange={onTagChange as ChipInputProps['onChange']}
 				onAdd={tagChipOnAdd as ChipInputProps['onAdd']}
 				disableOptions={false}
-				disabled
 				requireUniqueChips
 			/>
 		</Container>
