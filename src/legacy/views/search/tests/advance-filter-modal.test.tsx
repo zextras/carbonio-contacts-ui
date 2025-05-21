@@ -210,4 +210,44 @@ describe('Advanced filter modal', () => {
 			expect(resetButton).toBeDisabled();
 		});
 	});
+
+	it('should reset hasPerformedSearch when modal is closed', async () => {
+		const onCloseMock = jest.fn();
+		const { rerender, user } = setupTest(
+			<AdvancedFilterModal {...properties} onClose={onCloseMock} />
+		);
+
+		// Open modal and perform a search
+		const searchButton = screen.getByRole('button', { name: /search/i });
+		await user.click(searchButton);
+
+		// Close the modal
+		rerender(<AdvancedFilterModal {...properties} open={false} onClose={onCloseMock} />);
+
+		// Reopen the modal
+		rerender(<AdvancedFilterModal {...properties} open onClose={onCloseMock} />);
+
+		// Verify that the shared folder toggle is reset to initial value
+		const isSharedFolderIncludedToggle = screen.getByTestId('isSharedFolderIncludedToggle');
+		expect(isSharedFolderIncludedToggle).not.toBeChecked();
+	});
+
+	it('should reset isSharedFolderIncludedTobe when hasPerformedSearch is false', async () => {
+		const { user } = setupTest(<AdvancedFilterModal {...properties} />);
+
+		// Toggle the shared folder inclusion
+		const isSharedFolderIncludedToggle = screen.getByTestId('isSharedFolderIncludedToggle');
+		await user.click(isSharedFolderIncludedToggle);
+		// Check for the presence of the ToggleRight icon (checked state)
+		expect(screen.getByTestId('icon: ToggleRight')).toBeInTheDocument();
+
+		// Reset filters which sets hasPerformedSearch to false
+		const resetButton = screen.getByRole('button', { name: /action\.reset_filters/i });
+		await user.click(resetButton);
+
+		// Verify that the shared folder toggle is reset to initial value (unchecked)
+		await waitFor(() => {
+			expect(screen.getByTestId('icon: ToggleLeftOutline')).toBeInTheDocument();
+		});
+	});
 });
