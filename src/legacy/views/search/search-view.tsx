@@ -55,6 +55,13 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 		[zimbraPrefIncludeTrashInSearch, zimbraPrefIncludeSharedItemsInSearch]
 	);
 	const [isSharedFolderIncluded, setIsSharedFolderIncluded] = useState(includeSharedFolders);
+
+	useEffect(() => {
+		if (query.length === 0) {
+			setIsSharedFolderIncluded(includeSharedFolders);
+		}
+	}, [query.length, includeSharedFolders]);
+
 	const folders = useFoldersMap();
 	const searchInFolders = useMemo(
 		() =>
@@ -205,7 +212,7 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 				query={query}
 				open={showAdvanceFilters}
 				onSearchConfirm={onModalConfirm}
-				isSharedFolderIncludedInitialValue={isSharedFolderIncluded}
+				isSharedFolderIncludedInitialValue={query.length === 0 ? includeSharedFolders : isSharedFolderIncluded}
 				isSharedFolderIncludedDefault={includeSharedFolders}
 				onClose={(): void => setShowAdvanceFilters(false)}
 				t={t}
