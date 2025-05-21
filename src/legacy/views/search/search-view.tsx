@@ -212,7 +212,9 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 				query={query}
 				open={showAdvanceFilters}
 				onSearchConfirm={onModalConfirm}
-				isSharedFolderIncludedInitialValue={query.length === 0 ? includeSharedFolders : isSharedFolderIncluded}
+				isSharedFolderIncludedInitialValue={
+					query.length === 0 ? includeSharedFolders : isSharedFolderIncluded
+				}
 				isSharedFolderIncludedDefault={includeSharedFolders}
 				onClose={(): void => setShowAdvanceFilters(false)}
 				t={t}
