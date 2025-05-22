@@ -180,7 +180,7 @@ describe('Advanced filter modal', () => {
 
 		rerender(<AdvancedFilterModal {...properties} open={false} onClose={onCloseMock} />);
 
-		rerender(<AdvancedFilterModal {...properties} open onClose={onCloseMock} />);
+		rerender(<AdvancedFilterModal {...properties} open />);
 
 		const restoredChips = await screen.findAllByTestId('chip');
 		expect(restoredChips).toHaveLength(2);
@@ -191,23 +191,38 @@ describe('Advanced filter modal', () => {
 		expect(restoredChips[1]).toHaveAttribute('value', 'testKeyword2');
 	});
 
-	it(`should reset 'include shared folder' toggle when reset button is pressed`, async () => {
-		const { user } = setupTest(<AdvancedFilterModal {...properties} />);
+	it('should reset shared folder toggle to initial state when modal is closed without search confirmation', async () => {
+		jest.spyOn(console, 'error').mockImplementation();
+		const onCloseMock = jest.fn();
+		const properties: AdvancedFilterModalProps = {
+			open: true,
+			onClose: onCloseMock,
+			t: tMock,
+			query: [],
+			onSearchConfirm: onSearchConfirmMock,
+			isSharedFolderIncludedInitialValue: false,
+			isSharedFolderIncludedDefault: false
+		};
+		const { user, rerender } = setupTest(<AdvancedFilterModal {...properties} />);
 
+		// Initial state check
 		const isSharedFolderIncludedToggle = screen.getByTestId('isSharedFolderIncludedToggle');
 		expect(isSharedFolderIncludedToggle).toBeInTheDocument();
+		expect(screen.getByTestId('icon: ToggleLeftOutline')).toBeInTheDocument();
+
+		// Toggle the shared folder inclusion
 		await user.click(isSharedFolderIncludedToggle);
+		expect(screen.getByTestId('icon: ToggleRight')).toBeInTheDocument();
 
-		const resetButton = screen.getByRole('button', {
-			name: /action\.reset/i
-		});
-		expect(resetButton).toBeInTheDocument();
-		expect(resetButton).toBeEnabled();
+		// Close the modal
+		rerender(<AdvancedFilterModal {...properties} open={false} />);
 
-		await user.click(resetButton);
+		// Reopen the modal
+		rerender(<AdvancedFilterModal {...properties} open />);
 
+		// Check if the shared folder inclusion state is reset to default
 		await waitFor(() => {
-			expect(resetButton).toBeDisabled();
+			expect(screen.getByTestId('icon: ToggleLeftOutline')).toBeInTheDocument();
 		});
 	});
 });
