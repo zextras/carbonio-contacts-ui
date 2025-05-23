@@ -83,7 +83,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	background = 'gray5',
 	dragAndDropEnabled = false,
 	orderedAccountIds = [],
-	labelFactory,
+	chipLabelFactory,
 	inputRef: propsInputRef = null,
 	...rest
 }) => {
@@ -274,15 +274,15 @@ const ContactInputCore: FC<ContactInputProps> = ({
 
 			return {
 				id: selectedOption.id,
-				label: labelFactory
-					? labelFactory(selectedOption, getContactLabel(selectedOption))
+				label: chipLabelFactory
+					? chipLabelFactory(selectedOption, getContactLabel(selectedOption))
 					: getContactLabel(selectedOption),
 				value: selectedOption,
 				error: !isEmailValid,
 				actions: [editAction]
 			};
 		},
-		[defaults, editChip, getGroupMembers, handleChipOnChange, labelFactory, t]
+		[defaults, editChip, getGroupMembers, handleChipOnChange, chipLabelFactory, t]
 	);
 
 	const onExpandDistributionList = useCallback(
