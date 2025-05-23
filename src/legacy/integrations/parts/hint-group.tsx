@@ -8,7 +8,7 @@ import React, { ReactElement } from 'react';
 
 import { Avatar, Container, Text } from '@zextras/carbonio-design-system';
 
-import { GroupContact } from '../types';
+import { GroupContact } from '../../../carbonio-ui-commons/integrations/types';
 
 export const HintGroup = ({ contact }: { contact: GroupContact }): ReactElement => {
 	const label = contact.display;

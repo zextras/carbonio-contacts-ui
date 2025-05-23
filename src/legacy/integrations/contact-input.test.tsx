@@ -15,6 +15,7 @@ import { ContactInput } from './contact-input';
 import { CONTACT_TYPES } from '../../carbonio-ui-commons/integrations/constants';
 import {
 	ContactInputOnChange,
+	ContactInputProps,
 	ContactInputValue
 } from '../../carbonio-ui-commons/integrations/types';
 import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
@@ -745,16 +746,43 @@ describe('Contact input', () => {
 			);
 		});
 	});
+
+	describe('labelFactory', () => {
+		it('should be called and its return value should be displayed as the chip label', async () => {
+			const first = 'My name is';
+			const label = faker.word.noun();
+			const labelFactory = jest.fn().mockReturnValue(label);
+			createAutocompleteInterceptor([{ email: VALID_EMAIL, first }]);
+
+			const { user } = setupTest(<TestableContactInput labelFactory={labelFactory} />);
+			await typeAndSelectOptionFromDropdown(user, first);
+			const chip = screen.getByTestId(TESTID_SELECTORS.contactInputChip);
+
+			expect(labelFactory).toHaveBeenCalledWith(
+				expect.objectContaining({
+					email: VALID_EMAIL
+				}),
+				expect.any(String)
+			);
+			expect(within(chip).getByText(label)).toBeVisible();
+		});
+	});
 });
 
-function TestableContactInput(): ReactElement {
+function TestableContactInput(props: Partial<ContactInputProps>): ReactElement {
 	const [defaultValue, setDefaultValue] = useState<ContactInputValue>([]);
 
 	const onChange: ContactInputOnChange = (value) => {
 		setDefaultValue([...defaultValue, ...value]);
 	};
 
-	return <ContactInput defaultValue={defaultValue} onChange={onChange} />;
+	return (
+		<ContactInput
+			{...props}
+			defaultValue={props.defaultValue ?? defaultValue}
+			onChange={props.onChange ?? onChange}
+		/>
+	);
 }
 
 async function paste(user: UserEvent, element: HTMLElement, text: string): Promise<void> {

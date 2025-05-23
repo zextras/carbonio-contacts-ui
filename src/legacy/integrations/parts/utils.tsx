@@ -10,17 +10,19 @@ import { map, trim, unescape } from 'lodash';
 
 import { parseEmail } from '../../../carbonio-ui-commons/helpers/email-parser';
 import {
-	GroupContact,
 	ContactInputOptions,
 	RemoteGroupContact,
 	RemoteDistributionListContact,
 	RemoteContactResponse,
-	ContactInputGroup,
-	ContactInputItemInternalValue
+	ContactInputGroup
 } from '../types';
 import { Hint } from './hint';
 import { HintGroup } from './hint-group';
 import { CONTACT_TYPES } from '../../../carbonio-ui-commons/integrations/constants';
+import {
+	ContactInputItemInternalValue,
+	GroupContact
+} from '../../../carbonio-ui-commons/integrations/types';
 import type { FullAutocompleteRequest, SearchContactsResponse } from '../../types/contact';
 
 export function isContactGroup(contact: {

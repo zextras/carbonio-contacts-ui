@@ -10,7 +10,9 @@ import {
 	ContactInputItem,
 	ContactType,
 	UserContact,
-	DistributionListContact
+	DistributionListContact,
+	GroupContact,
+	ContactInputItemInternalValue
 } from '../../carbonio-ui-commons/integrations/types';
 
 export type ContactInputGroup = ContactInputItem &
@@ -66,12 +68,5 @@ export type RemoteContactResponse =
 	| RemoteGroupContact
 	| RemoteDistributionListContact;
 
-export type GroupContact = {
-	id: string;
-	display: string;
-	groupId: string;
-	type: ContactType['GROUP'];
-};
-export type ContactInputItemInternalValue = GroupContact | DistributionListContact | UserContact;
 export type ContactInputItemInternal = ChipItem<ContactInputItemInternalValue>;
 export type ContactInputOptions = DropdownItem & { value?: ContactInputItemInternal };

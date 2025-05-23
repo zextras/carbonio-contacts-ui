@@ -27,14 +27,16 @@ import type { GetContactsRequest, GetContactsResponse } from '../types/soap';
 import { Loader } from './parts/loader';
 import { PasteContextMenu } from './parts/paste-context-menu';
 import { getContactLabel, searchContacts, tryToParseEmail } from './parts/utils';
-import { ContactInputItemInternalValue, ContactInputOptions, GroupContact } from './types';
+import { ContactInputOptions } from './types';
 import { EDIT_ACTION_ID, CONTACT_TYPES } from '../../carbonio-ui-commons/integrations/constants';
 import {
 	ContactInputItem,
 	ContactInputProps,
 	UserContact,
 	DistributionListContact,
-	UserOrDL
+	UserOrDL,
+	ContactInputItemInternalValue,
+	GroupContact
 } from '../../carbonio-ui-commons/integrations/types';
 
 const CHIP_TO_EXCLUDE = 'this-value-represent-a-chip-that-should-not-be-present';
@@ -81,6 +83,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	background = 'gray5',
 	dragAndDropEnabled = false,
 	orderedAccountIds = [],
+	labelFactory,
 	inputRef: propsInputRef = null,
 	...rest
 }) => {
@@ -271,13 +274,15 @@ const ContactInputCore: FC<ContactInputProps> = ({
 
 			return {
 				id: selectedOption.id,
-				label: getContactLabel(selectedOption),
+				label: labelFactory
+					? labelFactory(selectedOption, getContactLabel(selectedOption))
+					: getContactLabel(selectedOption),
 				value: selectedOption,
 				error: !isEmailValid,
 				actions: [editAction]
 			};
 		},
-		[defaults, editChip, getGroupMembers, handleChipOnChange, t]
+		[defaults, editChip, getGroupMembers, handleChipOnChange, labelFactory, t]
 	);
 
 	const onExpandDistributionList = useCallback(
