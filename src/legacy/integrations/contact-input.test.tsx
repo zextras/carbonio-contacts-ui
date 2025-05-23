@@ -747,18 +747,18 @@ describe('Contact input', () => {
 		});
 	});
 
-	describe('labelFactory', () => {
+	describe('chip label factory', () => {
 		it('should be called and its return value should be displayed as the chip label', async () => {
 			const first = 'My name is';
 			const label = faker.word.noun();
-			const labelFactory = jest.fn().mockReturnValue(label);
+			const chipLabelFactory = jest.fn().mockReturnValue(label);
 			createAutocompleteInterceptor([{ email: VALID_EMAIL, first }]);
 
-			const { user } = setupTest(<TestableContactInput labelFactory={labelFactory} />);
+			const { user } = setupTest(<TestableContactInput chipLabelFactory={chipLabelFactory} />);
 			await typeAndSelectOptionFromDropdown(user, first);
 			const chip = screen.getByTestId(TESTID_SELECTORS.contactInputChip);
 
-			expect(labelFactory).toHaveBeenCalledWith(
+			expect(chipLabelFactory).toHaveBeenCalledWith(
 				expect.objectContaining({
 					email: VALID_EMAIL
 				}),
