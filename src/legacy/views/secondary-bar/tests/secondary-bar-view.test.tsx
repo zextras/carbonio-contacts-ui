@@ -8,11 +8,11 @@ import React from 'react';
 import { act, waitFor } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
 
-import { FOLDER_VIEW } from '../../../../carbonio-ui-commons/constants';
-import { FOLDERS } from '../../../../carbonio-ui-commons/constants/folders';
-import { useFolderStore } from '../../../../carbonio-ui-commons/store/zustand/folder';
-import { generateFolder } from '../../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
-import { setupTest, screen } from '../../../../carbonio-ui-commons/test/test-setup';
+import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
+import { FOLDERS } from '@zextras/carbonio-ui-commons';
+import { useFolderStore } from '@zextras/carbonio-ui-commons';
+import { generateFolder } from '@zextras/carbonio-ui-commons';
+import { setupTest, screen } from '@zextras/carbonio-ui-commons';
 import SecondaryBarView from '../secondary-bar-view';
 
 jest.mock('react-router-dom', () => ({

@@ -7,11 +7,11 @@
 import { faker } from '@faker-js/faker';
 import * as shell from '@zextras/carbonio-shell-ui';
 
-import { FOLDERS } from '../../../../carbonio-ui-commons/constants/folders';
-import { useFolderStore } from '../../../../carbonio-ui-commons/store/zustand/folder';
-import { generateFolder } from '../../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
-import { populateFoldersStore } from '../../../../carbonio-ui-commons/test/mocks/store/folders';
-import { setupHook } from '../../../../carbonio-ui-commons/test/test-setup';
+import { FOLDERS } from '@zextras/carbonio-ui-commons';
+import { useFolderStore } from '@zextras/carbonio-ui-commons';
+import { generateFolder } from '@zextras/carbonio-ui-commons';
+import { populateFoldersStore } from '@zextras/carbonio-ui-commons';
+import { setupHook } from '@zextras/carbonio-ui-commons';
 import {
 	EDIT_ACTION,
 	MOVE_ACTION,

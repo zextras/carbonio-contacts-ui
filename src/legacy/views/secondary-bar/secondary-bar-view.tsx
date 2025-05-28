@@ -15,11 +15,11 @@ import { AccordionCustomComponent } from './accordion-custom-component';
 import { CollapsedSideBarFolderItem } from './collapsed-sidebar-folder-item';
 import { FindSharesButton } from './find-shares-button';
 import { TagsAccordion } from './tags-accordion';
-import { SidebarAccordionMui } from '../../../carbonio-ui-commons/components/sidebar/sidebar-accordion-mui';
-import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
-import { useRootsArray } from '../../../carbonio-ui-commons/store/zustand/folder';
-import { themeMui } from '../../../carbonio-ui-commons/theme/theme-mui';
-import { Folder } from '../../../carbonio-ui-commons/types';
+import { SidebarAccordionMui } from '@zextras/carbonio-ui-commons';
+import { FOLDERS } from '@zextras/carbonio-ui-commons';
+import { useRootsArray } from '@zextras/carbonio-ui-commons';
+import { themeMui } from '@zextras/carbonio-ui-commons';
+import { Folder } from '@zextras/carbonio-ui-commons';
 import { LOCAL_STORAGES } from '../../../constants';
 import { sortFolders } from '../../../helpers/folders';
 

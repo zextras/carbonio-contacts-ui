@@ -70,6 +70,7 @@
 		"@reduxjs/toolkit": "^2.2.7",
 		"@zextras/carbonio-design-system": "^10.1.1",
 		"@zextras/carbonio-shell-ui": "11.0.0",
+		"@zextras/carbonio-ui-commons": "github:zextras/carbonio-ui-commons#spikeCO2067",
 		"axios": "^1.6.8",
 		"core-js": "^3.36.0",
 		"i18next": "^22.5.1",

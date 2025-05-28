@@ -10,10 +10,10 @@ import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 
 import { useActionRemoveAddressBookLink } from './remove-address-book-link';
 import { UIAction } from './types';
-import { FOLDER_VIEW } from '../carbonio-ui-commons/constants';
-import { generateFolder } from '../carbonio-ui-commons/test/mocks/folders/folders-generator';
-import { createSoapAPIInterceptor } from '../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { screen, setupHook } from '../carbonio-ui-commons/test/test-setup';
+import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
+import { generateFolder } from '@zextras/carbonio-ui-commons';
+import { createSoapAPIInterceptor } from '@zextras/carbonio-ui-commons';
+import { screen, setupHook } from '@zextras/carbonio-ui-commons';
 import { FolderActionRequest } from '../network/api/folder-action';
 
 describe('useActionRemoveAddressBookLink', () => {

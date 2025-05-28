@@ -8,17 +8,17 @@ import React from 'react';
 import { act } from '@testing-library/react';
 
 import { AddressBookMoveModal } from './address-book-move';
-import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
-import { isLink, isTrashed } from '../../carbonio-ui-commons/helpers/folders';
-import { getRootsArray } from '../../carbonio-ui-commons/store/zustand/folder';
-import { populateFoldersStore } from '../../carbonio-ui-commons/test/mocks/store/folders';
-import { getMocksContext } from '../../carbonio-ui-commons/test/mocks/utils/mocks-context';
+import { FOLDERS } from '@zextras/carbonio-ui-commons';
+import { isLink, isTrashed } from '@zextras/carbonio-ui-commons';
+import { getRootsArray } from '@zextras/carbonio-ui-commons';
+import { populateFoldersStore } from '@zextras/carbonio-ui-commons';
+import { getMocksContext } from '@zextras/carbonio-ui-commons';
 import {
 	makeListItemsVisible,
 	screen,
 	setupTest,
 	within
-} from '../../carbonio-ui-commons/test/test-setup';
+} from '@zextras/carbonio-ui-commons';
 import { TESTID_SELECTORS } from '../../constants/tests';
 import { getFoldersArray } from '../../tests/utils';
 

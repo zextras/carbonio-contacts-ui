@@ -11,7 +11,7 @@ import { times } from 'lodash';
 import { HttpResponse } from 'msw';
 
 import { useGetDistributionListMembers } from './use-get-distribution-list-members';
-import { setupHook } from '../carbonio-ui-commons/test/test-setup';
+import { setupHook } from '@zextras/carbonio-ui-commons';
 import { GetDistributionListMembersResponse } from '../network/api/get-distribution-list-members';
 import { useDistributionListsStore } from '../store/distribution-lists';
 import { registerGetDistributionListMembersHandler } from '../tests/msw-handlers/get-distribution-list-members';

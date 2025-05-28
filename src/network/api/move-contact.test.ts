@@ -8,7 +8,7 @@ import { JSNS } from '@zextras/carbonio-shell-ui';
 
 import { FolderActionRequest } from './folder-action';
 import { moveContact } from './move-contact';
-import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
+import { createSoapAPIInterceptor } from '@zextras/carbonio-ui-commons';
 
 describe('Move contact', () => {
 	it('should call the API with the proper fields', () => {

@@ -6,7 +6,7 @@
 import { JSNS, SoapResponse } from '@zextras/carbonio-shell-ui';
 import { HttpResponse, HttpResponseResolver, http } from 'msw';
 
-import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
+import { getSetupServer } from '@zextras/carbonio-ui-commons';
 import {
 	GetDistributionListMembersRequest,
 	GetDistributionListMembersResponse

@@ -13,10 +13,10 @@ import { HttpResponse } from 'msw';
 
 import { DistributionListChip } from './distribution-list-chip';
 import { clickCollapseDL, clickExpandDL, SELECT_ALL, SHOW_MORE } from './test/mocks';
-import { CONTACT_TYPES } from '../../carbonio-ui-commons/integrations/constants';
-import { mockedAccount } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
-import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
+import { CONTACT_TYPES } from '@zextras/carbonio-ui-commons';
+import { mockedAccount } from '@zextras/carbonio-ui-commons';
+import { createSoapAPIInterceptor } from '@zextras/carbonio-ui-commons';
+import { screen, setupTest } from '@zextras/carbonio-ui-commons';
 import { DL_MEMBERS_LOAD_LIMIT } from '../../constants';
 import { TESTID_SELECTORS, TIMERS } from '../../constants/tests';
 import {

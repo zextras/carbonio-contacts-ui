@@ -7,7 +7,7 @@ import React from 'react';
 
 import { registerActions, registerComponents, registerFunctions } from '@zextras/carbonio-shell-ui';
 
-import { setupTest } from '../../carbonio-ui-commons/test/test-setup';
+import { setupTest } from '@zextras/carbonio-ui-commons';
 import { IntegrationsRegistration } from '../integrations-registration';
 
 describe('IntegrationsRegistration', () => {

@@ -21,9 +21,9 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { TaggableItem } from '../../actions/types';
-import { ZIMBRA_STANDARD_COLORS } from '../../carbonio-ui-commons/constants/utils';
-import { useTags } from '../../carbonio-ui-commons/store/zustand/tags';
-import { Tag, Tags } from '../../carbonio-ui-commons/types/tags';
+import { ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-ui-commons';
+import { useTags } from '@zextras/carbonio-ui-commons';
+import { Tag, Tags } from '@zextras/carbonio-ui-commons';
 import { contactAction } from '../store/actions/contact-action';
 import { Contact } from '../types/contact';
 import { TagsActionsType } from '../types/tags';

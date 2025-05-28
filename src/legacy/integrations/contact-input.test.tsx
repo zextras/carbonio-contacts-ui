@@ -12,13 +12,13 @@ import { act, fireEvent, waitFor, within } from '@testing-library/react';
 import { ChipAction } from '@zextras/carbonio-design-system';
 
 import { ContactInput } from './contact-input';
-import { CONTACT_TYPES } from '../../carbonio-ui-commons/integrations/constants';
+import { CONTACT_TYPES } from '@zextras/carbonio-ui-commons';
 import {
 	ContactInputOnChange,
 	ContactInputValue
-} from '../../carbonio-ui-commons/integrations/types';
-import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { UserEvent, screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
+} from '@zextras/carbonio-ui-commons';
+import { createSoapAPIInterceptor } from '@zextras/carbonio-ui-commons';
+import { UserEvent, screen, setupTest } from '@zextras/carbonio-ui-commons';
 import { TESTID_SELECTORS } from '../../constants/tests';
 import { registerGetDistributionListHandler } from '../../tests/msw-handlers/get-distribution-list';
 import { generateDistributionList } from '../../tests/utils';

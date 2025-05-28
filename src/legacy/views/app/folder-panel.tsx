@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Breadcrumbs } from './breadcrumbs';
 import { ContactsList } from './folder-panel/contacts-list';
-import { Folder } from '../../../carbonio-ui-commons/types';
+import { Folder } from '@zextras/carbonio-ui-commons';
 import { searchContactsHelper } from '../../../views/search-contacts-helper';
 import { useSelection } from '../../hooks/useSelection';
 import { addContactsToStore, setContactsInStore, useContactsByFolder } from '../../store/contacts';

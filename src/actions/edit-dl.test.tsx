@@ -9,7 +9,7 @@ import { times } from 'lodash';
 
 import { useActionEditDL } from './edit-dl';
 import { UIAction } from './types';
-import { setupHook } from '../carbonio-ui-commons/test/test-setup';
+import { setupHook } from '@zextras/carbonio-ui-commons';
 import { EDIT_DL_BOARD_ID } from '../constants';
 import { generateDistributionList } from '../tests/utils';
 

@@ -10,8 +10,8 @@ import { useTranslation } from 'react-i18next';
 
 import { ShowShareInfoAction } from './show-share-info';
 import { UIAction } from './types';
-import { isLink } from '../carbonio-ui-commons/helpers/folders';
-import { Folder } from '../carbonio-ui-commons/types/folder';
+import { isLink } from '@zextras/carbonio-ui-commons';
+import { Folder } from '@zextras/carbonio-ui-commons';
 import { ACTION_IDS, TIMEOUTS } from '../constants';
 import { apiClient } from '../network/api-client';
 

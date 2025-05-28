@@ -8,7 +8,7 @@ import React from 'react';
 import * as shell from '@zextras/carbonio-shell-ui';
 
 import { ManagerList } from './manager-list';
-import { screen, setupTest } from '../carbonio-ui-commons/test/test-setup';
+import { screen, setupTest } from '@zextras/carbonio-ui-commons';
 import { TESTID_SELECTORS } from '../constants/tests';
 
 describe('Manager list', () => {

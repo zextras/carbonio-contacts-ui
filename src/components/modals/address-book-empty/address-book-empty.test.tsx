@@ -10,11 +10,11 @@ import { act } from '@testing-library/react';
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 
 import { AddressBookEmptyModal } from './address-book-empty';
-import { FOLDER_VIEW } from '../../../carbonio-ui-commons/constants';
-import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
-import { generateFolder } from '../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
-import { createSoapAPIInterceptor } from '../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { screen, setupTest } from '../../../carbonio-ui-commons/test/test-setup';
+import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
+import { FOLDERS } from '@zextras/carbonio-ui-commons';
+import { generateFolder } from '@zextras/carbonio-ui-commons';
+import { createSoapAPIInterceptor } from '@zextras/carbonio-ui-commons';
+import { screen, setupTest } from '@zextras/carbonio-ui-commons';
 import { TESTID_SELECTORS } from '../../../constants/tests';
 
 describe('AddressBookEmptyModal', () => {

@@ -9,9 +9,9 @@ import React, { useMemo } from 'react';
 import { t } from '@zextras/carbonio-shell-ui';
 
 import { CollapsedSideBarItem } from './collapsed-sidebar-item';
-import { ZIMBRA_STANDARD_COLORS } from '../../../carbonio-ui-commons/constants';
-import { isLink } from '../../../carbonio-ui-commons/helpers/folders';
-import { Folder } from '../../../carbonio-ui-commons/types';
+import { ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-ui-commons';
+import { isLink } from '@zextras/carbonio-ui-commons';
+import { Folder } from '@zextras/carbonio-ui-commons';
 import { CONTACTS_ROUTE } from '../../../constants';
 import { getFolderTranslatedName } from '../../utils/helpers';
 

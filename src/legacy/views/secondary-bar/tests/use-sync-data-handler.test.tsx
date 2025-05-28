@@ -9,13 +9,13 @@ import { renderHook } from '@testing-library/react';
 import { SoapNotify, useRefresh } from '@zextras/carbonio-shell-ui';
 import { http } from 'msw';
 
-import { useFolderStore } from '../../../../carbonio-ui-commons/store/zustand/folder';
-import { getSetupServer } from '../../../../carbonio-ui-commons/test/jest-setup';
-import { useNotify } from '../../../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
-import { generateFolder } from '../../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
-import { handleGetFolderRequest } from '../../../../carbonio-ui-commons/test/mocks/network/msw/handle-get-folder';
-import { handleGetShareInfoRequest } from '../../../../carbonio-ui-commons/test/mocks/network/msw/handle-get-share-info';
-import { folderWorker } from '../../../../carbonio-ui-commons/worker';
+import { useFolderStore } from '@zextras/carbonio-ui-commons';
+import { getSetupServer } from '@zextras/carbonio-ui-commons';
+import { useNotify } from '@zextras/carbonio-ui-commons';
+import { generateFolder } from '@zextras/carbonio-ui-commons';
+import { handleGetFolderRequest } from '@zextras/carbonio-ui-commons';
+import { handleGetShareInfoRequest } from '@zextras/carbonio-ui-commons';
+import { folderWorker } from '@zextras/carbonio-ui-commons';
 import { useSyncDataHandler } from '../use-sync-data-handler';
 
 function getWrapper() {

@@ -10,17 +10,17 @@ import { ErrorSoapBodyResponse, JSNS } from '@zextras/carbonio-shell-ui';
 import { times } from 'lodash';
 
 import { UIAction } from '../../../actions/types';
-import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
-import { isLink, isSystemFolder } from '../../../carbonio-ui-commons/helpers/folders';
-import { getFolder } from '../../../carbonio-ui-commons/store/zustand/folder';
-import { createSoapAPIInterceptor } from '../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { populateFoldersStore } from '../../../carbonio-ui-commons/test/mocks/store/folders';
+import { FOLDERS } from '@zextras/carbonio-ui-commons';
+import { isLink, isSystemFolder } from '@zextras/carbonio-ui-commons';
+import { getFolder } from '@zextras/carbonio-ui-commons';
+import { createSoapAPIInterceptor } from '@zextras/carbonio-ui-commons';
+import { populateFoldersStore } from '@zextras/carbonio-ui-commons';
 import {
 	setupHook,
 	screen,
 	makeListItemsVisible,
 	within
-} from '../../../carbonio-ui-commons/test/test-setup';
+} from '@zextras/carbonio-ui-commons';
 import { MOVE_ACTION } from '../../../constants/actions';
 import { FOLDERS_DESCRIPTORS, TIMERS } from '../../../constants/tests';
 import { ContactActionResponse } from '../../../network/api/contact-action';

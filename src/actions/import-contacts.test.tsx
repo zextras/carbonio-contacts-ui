@@ -7,10 +7,10 @@ import { faker } from '@faker-js/faker';
 
 import { useActionImportContacts } from './import-contacts';
 import { UIAction } from './types';
-import { FOLDER_VIEW } from '../carbonio-ui-commons/constants';
-import { FOLDERS } from '../carbonio-ui-commons/constants/folders';
-import { generateFolder } from '../carbonio-ui-commons/test/mocks/folders/folders-generator';
-import { setupHook } from '../carbonio-ui-commons/test/test-setup';
+import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
+import { FOLDERS } from '@zextras/carbonio-ui-commons';
+import { generateFolder } from '@zextras/carbonio-ui-commons';
+import { setupHook } from '@zextras/carbonio-ui-commons';
 
 describe('useActionImportContacts', () => {
 	it('should return an object with the specific data', () => {

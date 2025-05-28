@@ -6,7 +6,7 @@
 import produce, { enableMapSet } from 'immer';
 import { create } from 'zustand';
 
-import { Folder } from '../../carbonio-ui-commons/types';
+import { Folder } from '@zextras/carbonio-ui-commons';
 import { ContactGroup } from '../../model/contact-group';
 import { Contact, ContactOrGroup } from '../types/contact';
 

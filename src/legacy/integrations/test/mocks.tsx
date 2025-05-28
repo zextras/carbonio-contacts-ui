@@ -6,10 +6,10 @@
 import { within } from '@testing-library/react';
 import { ChipAction } from '@zextras/carbonio-design-system';
 
-import { EDIT_ACTION_ID, CONTACT_TYPES } from '../../../carbonio-ui-commons/integrations/constants';
-import { ContactInputItem } from '../../../carbonio-ui-commons/integrations/types';
-import { createSoapAPIInterceptor } from '../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { screen, UserEvent } from '../../../carbonio-ui-commons/test/test-setup';
+import { EDIT_ACTION_ID, CONTACT_TYPES } from '@zextras/carbonio-ui-commons';
+import { ContactInputItem } from '@zextras/carbonio-ui-commons';
+import { createSoapAPIInterceptor } from '@zextras/carbonio-ui-commons';
+import { screen, UserEvent } from '@zextras/carbonio-ui-commons';
 import { TESTID_SELECTORS } from '../../../constants/tests';
 import {
 	GetDistributionListRequest,

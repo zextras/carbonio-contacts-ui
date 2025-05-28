@@ -8,9 +8,9 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 
 import EditViewBoardWrapper from './edit-view-board-wrapper';
-import { useBoardHooks } from '../../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
-import { populateFoldersStore } from '../../../carbonio-ui-commons/test/mocks/store/folders';
-import { screen, setupTest } from '../../../carbonio-ui-commons/test/test-setup';
+import { useBoardHooks } from '@zextras/carbonio-ui-commons';
+import { populateFoldersStore } from '@zextras/carbonio-ui-commons';
+import { screen, setupTest } from '@zextras/carbonio-ui-commons';
 import { registerCreateContactHandler } from '../../tests/msw/create-contact';
 
 describe('EditViewBoardWrapper', () => {

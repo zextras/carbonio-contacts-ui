@@ -10,12 +10,12 @@ import { act, waitFor } from '@testing-library/react';
 import { ErrorSoapBodyResponse, JSNS } from '@zextras/carbonio-shell-ui';
 
 import { AddressBookCreateModal } from './address-book-create';
-import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
-import { isLink, isTrashed } from '../../carbonio-ui-commons/helpers/folders';
-import { getRootsArray } from '../../carbonio-ui-commons/store/zustand/folder';
-import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { populateFoldersStore } from '../../carbonio-ui-commons/test/mocks/store/folders';
-import { makeListItemsVisible, screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
+import { FOLDERS } from '@zextras/carbonio-ui-commons';
+import { isLink, isTrashed } from '@zextras/carbonio-ui-commons';
+import { getRootsArray } from '@zextras/carbonio-ui-commons';
+import { createSoapAPIInterceptor } from '@zextras/carbonio-ui-commons';
+import { populateFoldersStore } from '@zextras/carbonio-ui-commons';
+import { makeListItemsVisible, screen, setupTest } from '@zextras/carbonio-ui-commons';
 import { TESTID_SELECTORS } from '../../constants/tests';
 import { CreateFolderRequest, CreateFolderResponse } from '../../network/api/create-folder';
 import { getFoldersArray } from '../../tests/utils';

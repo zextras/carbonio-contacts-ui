@@ -14,7 +14,7 @@ import { HttpResponse } from 'msw';
 import { Link } from 'react-router-dom';
 
 import { DistributionListsView } from './distribution-lists-view';
-import { screen, setupTest, within } from '../../carbonio-ui-commons/test/test-setup';
+import { screen, setupTest, within } from '@zextras/carbonio-ui-commons';
 import { ROUTES, ROUTES_INTERNAL_PARAMS } from '../../constants';
 import {
 	EMPTY_DISPLAYER_NO_CONTACTS_HINT,

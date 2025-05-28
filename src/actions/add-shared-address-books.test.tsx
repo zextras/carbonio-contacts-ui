@@ -8,8 +8,8 @@ import { act } from '@testing-library/react';
 
 import { useActionAddSharedAddressBooks } from './add-shared-address-books';
 import { UIAction } from './types';
-import { createSoapAPIInterceptor } from '../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { screen, setupHook } from '../carbonio-ui-commons/test/test-setup';
+import { createSoapAPIInterceptor } from '@zextras/carbonio-ui-commons';
+import { screen, setupHook } from '@zextras/carbonio-ui-commons';
 import { TIMERS } from '../constants/tests';
 
 describe('useActionAddSharedAddressBooks', () => {

@@ -9,7 +9,7 @@ import { Container } from '@zextras/carbonio-design-system';
 import { noop } from 'lodash';
 import { useNavigate } from 'react-router-dom';
 
-import { useTags } from '../../../carbonio-ui-commons/store/zustand/tags';
+import { useTags } from '@zextras/carbonio-ui-commons';
 import { ListItemAvatar } from '../../../components/list/list-item-avatar';
 import { getTagsArray } from '../../helpers/tags';
 import { Contact } from '../../types/contact';

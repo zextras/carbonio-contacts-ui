@@ -17,7 +17,7 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import { getRoleDescription, getShareFolderRoleOptions } from './shares-utils';
-import { Folder } from '../../carbonio-ui-commons/types/folder';
+import { Folder } from '@zextras/carbonio-ui-commons';
 
 const ShareInfoRow = ({
 	icon,

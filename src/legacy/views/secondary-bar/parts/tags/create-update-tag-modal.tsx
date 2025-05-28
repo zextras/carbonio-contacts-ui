@@ -13,8 +13,8 @@ import { ItemType } from './types';
 import {
 	ColorSelect,
 	ColorSelectProps
-} from '../../../../../carbonio-ui-commons/components/select/color-select';
-import { changeTagColor, createTag, renameTag } from '../../../../../carbonio-ui-commons/soap/tags';
+} from '@zextras/carbonio-ui-commons';
+import { changeTagColor, createTag, renameTag } from '@zextras/carbonio-ui-commons';
 import { contactAction } from '../../../../store/actions/contact-action';
 import { Contact } from '../../../../types/contact';
 import ModalFooter from '../../commons/modal-footer';

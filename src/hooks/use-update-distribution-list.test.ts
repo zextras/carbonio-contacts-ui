@@ -7,7 +7,7 @@
 import { faker } from '@faker-js/faker';
 
 import { useUpdateDistributionList } from './use-update-distribution-list';
-import { screen, setupHook } from '../carbonio-ui-commons/test/test-setup';
+import { screen, setupHook } from '@zextras/carbonio-ui-commons';
 import { JEST_MOCKED_ERROR } from '../constants/tests';
 import { DistributionList } from '../model/distribution-list';
 import { registerDistributionListActionHandler } from '../tests/msw-handlers/distribution-list-action';

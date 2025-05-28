@@ -20,7 +20,7 @@ import { last } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { UsersSharesList } from './users-shares-list';
-import { getFolderIdParts } from '../../../carbonio-ui-commons/helpers/folders';
+import { getFolderIdParts } from '@zextras/carbonio-ui-commons';
 import { TIMEOUTS } from '../../../constants';
 import { getFolderTranslatedName } from '../../../legacy/utils/helpers';
 import { ShareInfo } from '../../../model/share-info';

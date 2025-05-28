@@ -10,8 +10,8 @@ import { useTranslation } from 'react-i18next';
 
 import { ModalContentAndFooterWrapper } from './modal-content-and-footer-wrapper';
 import { ModalWrapper } from './modal-wrapper';
-import { useFolder } from '../../carbonio-ui-commons/store/zustand/folder/hooks';
-import { Folder } from '../../carbonio-ui-commons/types/folder';
+import { useFolder } from '@zextras/carbonio-ui-commons';
+import { Folder } from '@zextras/carbonio-ui-commons';
 import { FolderTreeSelector } from '../folder-tree-selector/folder-tree-selector';
 
 export type AddressBookMoveModalProps = {

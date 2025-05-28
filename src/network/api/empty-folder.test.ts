@@ -8,7 +8,7 @@ import { JSNS } from '@zextras/carbonio-shell-ui';
 
 import { emptyFolder } from './empty-folder';
 import { FolderActionRequest } from './folder-action';
-import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
+import { createSoapAPIInterceptor } from '@zextras/carbonio-ui-commons';
 
 describe('emptyFolder', () => {
 	it('should call the API with the proper fields', () => {

@@ -11,7 +11,7 @@ import { times } from 'lodash';
 import { HttpResponse } from 'msw';
 
 import { DLDisplayerController } from './dl-displayer-controller';
-import { screen, setupTest } from '../carbonio-ui-commons/test/test-setup';
+import { screen, setupTest } from '@zextras/carbonio-ui-commons';
 import {
 	EMPTY_DISPLAYER_NO_CONTACTS_HINT,
 	JEST_MOCKED_ERROR,

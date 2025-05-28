@@ -13,10 +13,10 @@ import * as shell from '@zextras/carbonio-shell-ui';
 import { http, HttpResponse } from 'msw';
 
 import NewContactGroupBoard from './new-contact-group-board';
-import { getSetupServer } from '../../../carbonio-ui-commons/test/jest-setup';
-import { generateFolder } from '../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
-import { populateFoldersStore } from '../../../carbonio-ui-commons/test/mocks/store/folders';
-import { setupTest, screen } from '../../../carbonio-ui-commons/test/test-setup';
+import { getSetupServer } from '@zextras/carbonio-ui-commons';
+import { generateFolder } from '@zextras/carbonio-ui-commons';
+import { populateFoldersStore } from '@zextras/carbonio-ui-commons';
+import { setupTest, screen } from '@zextras/carbonio-ui-commons';
 import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../../constants';
 import { PALETTE, TESTID_SELECTORS } from '../../../constants/tests';
 import { spyUseBoardHooks } from '../../../tests/utils';

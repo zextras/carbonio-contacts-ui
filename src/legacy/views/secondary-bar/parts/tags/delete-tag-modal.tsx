@@ -10,7 +10,7 @@ import { Container, Text, useSnackbar } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
 import { ItemType } from './types';
-import { deleteTag } from '../../../../../carbonio-ui-commons/soap/tags';
+import { deleteTag } from '@zextras/carbonio-ui-commons';
 import ModalFooter from '../../commons/modal-footer';
 import { ModalHeader } from '../../commons/modal-header';
 

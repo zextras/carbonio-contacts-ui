@@ -9,7 +9,7 @@ import type * as SearchUI from '@zextras/carbonio-search-ui';
 import { addBoardView, addRoute, addSettingsView } from '@zextras/carbonio-shell-ui';
 import * as shell from '@zextras/carbonio-shell-ui';
 
-import { setupTest } from '../../carbonio-ui-commons/test/test-setup';
+import { setupTest } from '@zextras/carbonio-ui-commons';
 import {
 	CONTACT_BOARD_ID,
 	CONTACTS_APP_ID,

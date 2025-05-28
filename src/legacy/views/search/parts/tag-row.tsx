@@ -9,7 +9,7 @@ import { Container, ChipInput, ChipInputProps, ChipItem } from '@zextras/carboni
 import { filter } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { ZIMBRA_STANDARD_COLORS } from '../../../../carbonio-ui-commons/constants/utils';
+import { ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-ui-commons';
 
 type ComponentProps = {
 	compProps: {

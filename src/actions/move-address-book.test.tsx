@@ -11,21 +11,21 @@ import { ErrorSoapBodyResponse, JSNS } from '@zextras/carbonio-shell-ui';
 
 import { useActionMoveAddressBook } from './move-address-book';
 import { UIAction } from './types';
-import { FOLDER_VIEW } from '../carbonio-ui-commons/constants';
-import { FOLDERS } from '../carbonio-ui-commons/constants/folders';
-import { getFolder } from '../carbonio-ui-commons/store/zustand/folder';
-import { FOLDERS_DESCRIPTORS } from '../carbonio-ui-commons/test/constants';
-import { generateFolder } from '../carbonio-ui-commons/test/mocks/folders/folders-generator';
-import { createSoapAPIInterceptor } from '../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { populateFoldersStore } from '../carbonio-ui-commons/test/mocks/store/folders';
-import { getMocksContext } from '../carbonio-ui-commons/test/mocks/utils/mocks-context';
+import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
+import { FOLDERS } from '@zextras/carbonio-ui-commons';
+import { getFolder } from '@zextras/carbonio-ui-commons';
+import { FOLDERS_DESCRIPTORS } from '@zextras/carbonio-ui-commons';
+import { generateFolder } from '@zextras/carbonio-ui-commons';
+import { createSoapAPIInterceptor } from '@zextras/carbonio-ui-commons';
+import { populateFoldersStore } from '@zextras/carbonio-ui-commons';
+import { getMocksContext } from '@zextras/carbonio-ui-commons';
 import {
 	setupHook,
 	screen,
 	setupTest,
 	makeListItemsVisible,
 	within
-} from '../carbonio-ui-commons/test/test-setup';
+} from '@zextras/carbonio-ui-commons';
 import { AddressBookMoveModal } from '../components/modals/address-book-move';
 import { TIMERS } from '../constants/tests';
 import { FolderActionRequest, FolderActionResponse } from '../network/api/folder-action';

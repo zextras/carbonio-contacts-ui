@@ -14,7 +14,7 @@ import { useMoveContacts } from '../../../actions/common-contacts-actions/use-mo
 import { useRestoreContacts } from '../../../actions/common-contacts-actions/use-restore-contacts';
 import { useTrashContacts } from '../../../actions/common-contacts-actions/use-trash-contacts';
 import { Action } from '../../../actions/types';
-import { isTrashed } from '../../../carbonio-ui-commons/helpers/folders';
+import { isTrashed } from '@zextras/carbonio-ui-commons';
 import { ContactGroup } from '../../../model/contact-group';
 import { getFolderFromContactGroup } from '../utils';
 

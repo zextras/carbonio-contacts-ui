@@ -18,9 +18,9 @@ import { useTranslation } from 'react-i18next';
 
 import { ModalContentAndFooterWrapper } from './modal-content-and-footer-wrapper';
 import { ModalWrapper } from './modal-wrapper';
-import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
-import { useFolder } from '../../carbonio-ui-commons/store/zustand/folder/hooks';
-import { Folder } from '../../carbonio-ui-commons/types/folder';
+import { FOLDERS } from '@zextras/carbonio-ui-commons';
+import { useFolder } from '@zextras/carbonio-ui-commons';
+import { Folder } from '@zextras/carbonio-ui-commons';
 import { TIMEOUTS } from '../../constants';
 import { apiClient } from '../../network/api-client';
 import { FolderTreeSelector } from '../folder-tree-selector/folder-tree-selector';

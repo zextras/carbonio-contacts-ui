@@ -10,7 +10,7 @@ import { useBoardHooks } from '@zextras/carbonio-shell-ui';
 import 'jest-styled-components';
 
 import { EditDLControllerComponent, EditDLControllerComponentProps } from './edit-dl-controller';
-import { screen, setupTest, within } from '../carbonio-ui-commons/test/test-setup';
+import { screen, setupTest, within } from '@zextras/carbonio-ui-commons';
 import { PALETTE, TESTID_SELECTORS } from '../constants/tests';
 import { DistributionList } from '../model/distribution-list';
 import {

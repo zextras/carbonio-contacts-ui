@@ -6,7 +6,7 @@
 import type { TFunction } from 'i18next';
 import { reduce } from 'lodash';
 
-import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
+import { FOLDERS } from '@zextras/carbonio-ui-commons';
 import { ContactGroup } from '../../model/contact-group';
 import { ContactOrGroup, ContactsFolder } from '../types/contact';
 

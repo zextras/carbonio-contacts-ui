@@ -9,7 +9,7 @@ import { Checkbox, Row } from '@zextras/carbonio-design-system';
 import { last } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { getFolderIdParts } from '../../../carbonio-ui-commons/helpers/folders';
+import { getFolderIdParts } from '@zextras/carbonio-ui-commons';
 import { getFolderTranslatedName } from '../../../legacy/utils/helpers';
 import { ShareInfo } from '../../../model/share-info';
 

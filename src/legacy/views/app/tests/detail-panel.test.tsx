@@ -9,10 +9,10 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import { http, HttpResponse } from 'msw';
 
-import { FOLDERS } from '../../../../carbonio-ui-commons/constants/folders';
-import { getSetupServer } from '../../../../carbonio-ui-commons/test/jest-setup';
-import { populateFoldersStore } from '../../../../carbonio-ui-commons/test/mocks/store/folders';
-import { screen, setupTest } from '../../../../carbonio-ui-commons/test/test-setup';
+import { FOLDERS } from '@zextras/carbonio-ui-commons';
+import { getSetupServer } from '@zextras/carbonio-ui-commons';
+import { populateFoldersStore } from '@zextras/carbonio-ui-commons';
+import { screen, setupTest } from '@zextras/carbonio-ui-commons';
 import { JEST_MOCKED_ERROR, TESTID_SELECTORS } from '../../../../constants/tests';
 import { buildSoapError } from '../../../../tests/utils';
 import * as modifyContactApi from '../../../store/actions/modify-contact';

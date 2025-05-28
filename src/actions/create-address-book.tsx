@@ -9,9 +9,9 @@ import { useModal } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
 import { UIAction } from './types';
-import { isCreateAllowed, isTrash } from '../carbonio-ui-commons/helpers/folders';
-import { isNestedInTrash } from '../carbonio-ui-commons/store/zustand/folder/utils';
-import { Folder } from '../carbonio-ui-commons/types/folder';
+import { isCreateAllowed, isTrash } from '@zextras/carbonio-ui-commons';
+import { isNestedInTrash } from '@zextras/carbonio-ui-commons';
+import { Folder } from '@zextras/carbonio-ui-commons';
 import { AddressBookCreateModal } from '../components/modals/address-book-create';
 import { ACTION_IDS } from '../constants';
 

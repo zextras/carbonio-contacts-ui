@@ -20,9 +20,9 @@ import type { QueryChip } from '@zextras/carbonio-search-ui';
 import { reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { ZIMBRA_STANDARD_COLORS } from '../../carbonio-ui-commons/constants/utils';
-import { useRunSearchIntegration } from '../../carbonio-ui-commons/integrations/search/use-run-search';
-import { useSortedTagsArray } from '../../carbonio-ui-commons/store/zustand/tags';
+import { ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-ui-commons';
+import { useRunSearchIntegration } from '@zextras/carbonio-ui-commons';
+import { useSortedTagsArray } from '@zextras/carbonio-ui-commons';
 import { createTag, useGetTagsActions } from '../ui-actions/tag-actions';
 import { ItemType, TagsAccordionItems } from '../views/secondary-bar/parts/tags/types';
 

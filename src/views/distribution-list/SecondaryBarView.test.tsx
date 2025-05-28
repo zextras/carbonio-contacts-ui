@@ -9,7 +9,7 @@ import React from 'react';
 import 'jest-styled-components';
 
 import SecondaryBarView from './SecondaryBarView';
-import { screen, setupTest, within } from '../../carbonio-ui-commons/test/test-setup';
+import { screen, setupTest, within } from '@zextras/carbonio-ui-commons';
 import { TESTID_SELECTORS } from '../../constants/tests';
 
 // function spyUseNavigation(navigateTo: jest.Mock): void {

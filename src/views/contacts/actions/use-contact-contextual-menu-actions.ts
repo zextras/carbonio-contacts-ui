@@ -13,7 +13,7 @@ import { useContactSendMailAction } from './use-contact-send-mail-action';
 import { useApplyTagsToContact } from '../../../actions/common-contacts-actions/use-apply-tag-contacts';
 import { useDeleteContacts } from '../../../actions/common-contacts-actions/use-delete-contacts';
 import { useTrashContacts } from '../../../actions/common-contacts-actions/use-trash-contacts';
-import { isTrashed } from '../../../carbonio-ui-commons/helpers/folders';
+import { isTrashed } from '@zextras/carbonio-ui-commons';
 import { Contact } from '../../../legacy/types/contact';
 import { getFolderFromParent } from '../../contact-groups/utils';
 

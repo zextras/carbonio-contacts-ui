@@ -9,7 +9,7 @@ import { Drag } from '@zextras/carbonio-design-system';
 import { useNavigate } from 'react-router-dom';
 
 import { ItemContent } from './item-content';
-import { useTags } from '../../../../carbonio-ui-commons/store/zustand/tags';
+import { useTags } from '@zextras/carbonio-ui-commons';
 import { ListActionIconButton } from '../../../../components/list/list-action-icon-button';
 import { ListItemActionsWrapper } from '../../../../components/list/list-item-actions-wrapper';
 import { ListItemAvatar } from '../../../../components/list/list-item-avatar';

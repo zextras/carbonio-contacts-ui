@@ -19,8 +19,8 @@ import { useUserAccount } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
 import { GranteeInfo } from './share-folder-properties';
-import { useFolder } from '../../../carbonio-ui-commons/store/zustand/folder';
-import { Grant } from '../../../carbonio-ui-commons/types/folder';
+import { useFolder } from '@zextras/carbonio-ui-commons';
+import { Grant } from '@zextras/carbonio-ui-commons';
 import { TIMEOUTS } from '../../../constants';
 import { apiClient } from '../../../network/api-client';
 

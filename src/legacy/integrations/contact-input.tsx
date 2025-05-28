@@ -21,21 +21,21 @@ import { filter, find, map, uniqBy, noop, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { DistributionListChip } from './distribution-list-chip';
-import { isValidEmail } from '../../carbonio-ui-commons/helpers/email-parser';
+import { isValidEmail } from '@zextras/carbonio-ui-commons';
 import type { ContactAddressMap } from '../types/contact';
 import type { GetContactsRequest, GetContactsResponse } from '../types/soap';
 import { Loader } from './parts/loader';
 import { PasteContextMenu } from './parts/paste-context-menu';
 import { getContactLabel, searchContacts, tryToParseEmail } from './parts/utils';
 import { ContactInputItemInternalValue, ContactInputOptions, GroupContact } from './types';
-import { EDIT_ACTION_ID, CONTACT_TYPES } from '../../carbonio-ui-commons/integrations/constants';
+import { EDIT_ACTION_ID, CONTACT_TYPES } from '@zextras/carbonio-ui-commons';
 import {
 	ContactInputItem,
 	ContactInputProps,
 	UserContact,
 	DistributionListContact,
 	UserOrDL
-} from '../../carbonio-ui-commons/integrations/types';
+} from '@zextras/carbonio-ui-commons';
 
 const CHIP_TO_EXCLUDE = 'this-value-represent-a-chip-that-should-not-be-present';
 

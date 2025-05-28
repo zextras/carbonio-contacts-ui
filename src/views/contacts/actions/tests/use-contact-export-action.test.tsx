@@ -7,7 +7,7 @@
 import { act } from '@testing-library/react';
 
 import { UIAction } from '../../../../actions/types';
-import { screen, setupHook } from '../../../../carbonio-ui-commons/test/test-setup';
+import { screen, setupHook } from '@zextras/carbonio-ui-commons';
 import { buildContact } from '../../../../tests/model-builder';
 import { registerGetItemHandler } from '../../../../tests/msw-handlers/get-item';
 import { useContactExportAction } from '../use-contact-export-action';

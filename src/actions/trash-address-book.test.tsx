@@ -9,10 +9,10 @@ import { act } from '@testing-library/react';
 
 import { useActionTrashAddressBook } from './trash-address-book';
 import { UIAction } from './types';
-import { FOLDER_VIEW } from '../carbonio-ui-commons/constants';
-import { FOLDERS } from '../carbonio-ui-commons/constants/folders';
-import { generateFolder } from '../carbonio-ui-commons/test/mocks/folders/folders-generator';
-import { screen, setupHook } from '../carbonio-ui-commons/test/test-setup';
+import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
+import { FOLDERS } from '@zextras/carbonio-ui-commons';
+import { generateFolder } from '@zextras/carbonio-ui-commons';
+import { screen, setupHook } from '@zextras/carbonio-ui-commons';
 import { TIMERS } from '../constants/tests';
 
 describe('useActionTrashAddressBooks', () => {

@@ -11,21 +11,21 @@ import { Button, useTheme } from '@zextras/carbonio-design-system';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { useNavigate } from 'react-router-dom';
 
-import { FOLDER_VIEW } from '../../../../carbonio-ui-commons/constants';
-import { FOLDERS } from '../../../../carbonio-ui-commons/constants/folders';
-import { useRunSearchIntegration } from '../../../../carbonio-ui-commons/integrations/search/use-run-search';
-import { useFolderStore } from '../../../../carbonio-ui-commons/store/zustand/folder';
-import { useTagStore } from '../../../../carbonio-ui-commons/store/zustand/tags';
-import { useAppContext } from '../../../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
-import { generateFolder } from '../../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
-import { createSoapAPIInterceptor } from '../../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { populateFoldersStore } from '../../../../carbonio-ui-commons/test/mocks/store/folders';
+import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
+import { FOLDERS } from '@zextras/carbonio-ui-commons';
+import { useRunSearchIntegration } from '@zextras/carbonio-ui-commons';
+import { useFolderStore } from '@zextras/carbonio-ui-commons';
+import { useTagStore } from '@zextras/carbonio-ui-commons';
+import { useAppContext } from '@zextras/carbonio-ui-commons';
+import { generateFolder } from '@zextras/carbonio-ui-commons';
+import { createSoapAPIInterceptor } from '@zextras/carbonio-ui-commons';
+import { populateFoldersStore } from '@zextras/carbonio-ui-commons';
 import {
 	makeListItemsVisible,
 	screen,
 	setupHook,
 	setupTest
-} from '../../../../carbonio-ui-commons/test/test-setup';
+} from '@zextras/carbonio-ui-commons';
 import { FOLDERS_DESCRIPTORS, TESTID_SELECTORS } from '../../../../constants/tests';
 import {
 	ContactActionRequest,

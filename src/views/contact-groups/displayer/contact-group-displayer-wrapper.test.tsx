@@ -7,8 +7,8 @@
 import React from 'react';
 
 import { ContactGroupDisplayerWrapper } from './contact-group-displayer-wrapper';
-import { populateFoldersStore } from '../../../carbonio-ui-commons/test/mocks/store/folders';
-import { screen, setupTest, within } from '../../../carbonio-ui-commons/test/test-setup';
+import { populateFoldersStore } from '@zextras/carbonio-ui-commons';
+import { screen, setupTest, within } from '@zextras/carbonio-ui-commons';
 import { TESTID_SELECTORS } from '../../../constants/tests';
 import { addContactsToStore } from '../../../legacy/store/contacts';
 import { buildContactGroup } from '../../../tests/model-builder';

@@ -7,7 +7,7 @@ import { JSNS, SuccessSoapResponse } from '@zextras/carbonio-shell-ui';
 import { map, size } from 'lodash';
 import { http, HttpResponse, HttpResponseResolver } from 'msw';
 
-import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
+import { getSetupServer } from '@zextras/carbonio-ui-commons';
 import {
 	BatchDistributionListActionRequest,
 	BatchDistributionListActionResponse,

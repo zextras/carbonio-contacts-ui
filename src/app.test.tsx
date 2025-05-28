@@ -9,12 +9,12 @@ import * as shell from '@zextras/carbonio-shell-ui';
 import { HttpResponse } from 'msw';
 
 import App from './app';
-import { ContactInputProps } from './carbonio-ui-commons/integrations/types';
-import { generateFolder } from './carbonio-ui-commons/test/mocks/folders/folders-generator';
+import { ContactInputProps } from '@zextras/carbonio-ui-commons';
+import { generateFolder } from '@zextras/carbonio-ui-commons';
 import {
 	createAPIInterceptor,
 	createSoapAPIInterceptor
-} from './carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
+} from '@zextras/carbonio-ui-commons';
 import { setupTest } from './carbonio-ui-commons/test/test-setup';
 import { CONTACT_BOARD_ID } from './constants';
 import { ContactInput } from './legacy/integrations/contact-input';

@@ -8,8 +8,8 @@ import { ErrorSoapBodyResponse, JSNS } from '@zextras/carbonio-shell-ui';
 import { map } from 'lodash';
 
 import { getShareInfo, GetShareInfoResponse } from './get-share-info';
-import { FOLDER_VIEW } from '../../carbonio-ui-commons/constants';
-import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
+import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
+import { createSoapAPIInterceptor } from '@zextras/carbonio-ui-commons';
 
 describe('GetShareInfo', () => {
 	it('should raise an exception if the response contains a Fault', () => {

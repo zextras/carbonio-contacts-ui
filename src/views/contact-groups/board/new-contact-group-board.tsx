@@ -10,7 +10,7 @@ import { useBoardHooks } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
+import { FOLDERS } from '@zextras/carbonio-ui-commons';
 import { addContactsToStore } from '../../../legacy/store/contacts';
 import {
 	CommonContactGroupBoard,

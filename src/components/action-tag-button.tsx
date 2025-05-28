@@ -16,10 +16,10 @@ import {
 } from '@zextras/carbonio-design-system';
 import { every, find, includes, reduce } from 'lodash';
 
-import { ZIMBRA_STANDARD_COLORS } from '../carbonio-ui-commons/constants';
-import { useRunSearchIntegration } from '../carbonio-ui-commons/integrations/search/use-run-search';
-import { useSortedTagsArray } from '../carbonio-ui-commons/store/zustand/tags';
-import { Tag } from '../carbonio-ui-commons/types/tags';
+import { ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-ui-commons';
+import { useRunSearchIntegration } from '@zextras/carbonio-ui-commons';
+import { useSortedTagsArray } from '@zextras/carbonio-ui-commons';
+import { Tag } from '@zextras/carbonio-ui-commons';
 import { Contact } from '../legacy/types/contact';
 import { useTagExist } from '../legacy/ui-actions/tag-actions';
 

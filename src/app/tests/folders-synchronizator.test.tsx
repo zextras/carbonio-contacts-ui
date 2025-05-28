@@ -7,14 +7,14 @@ import React from 'react';
 
 import { HttpResponse } from 'msw';
 
-import { FOLDER_VIEW } from '../../carbonio-ui-commons/constants';
-import * as commonsHook from '../../carbonio-ui-commons/hooks/use-initialize-folders';
-import { generateFolder } from '../../carbonio-ui-commons/test/mocks/folders/folders-generator';
+import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
+import * as commonsHook from '@zextras/carbonio-ui-commons';
+import { generateFolder } from '@zextras/carbonio-ui-commons';
 import {
 	createAPIInterceptor,
 	createSoapAPIInterceptor
-} from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { setupTest } from '../../carbonio-ui-commons/test/test-setup';
+} from '@zextras/carbonio-ui-commons';
+import { setupTest } from '@zextras/carbonio-ui-commons';
 import { FoldersSynchronizator } from '../folders-syncronization';
 
 // mocking the worker. in commons jest-setup the worker is already mocked, but is improperly defined with wrong types and

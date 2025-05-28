@@ -9,7 +9,7 @@ import { useSnackbar } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
 import { UIAction } from './types';
-import { copyToClipboard } from '../carbonio-ui-commons/utils/clipboard';
+import { copyToClipboard } from '@zextras/carbonio-ui-commons';
 import { ACTION_IDS } from '../constants';
 
 type CopyToClipboardAction = UIAction<string, never>;

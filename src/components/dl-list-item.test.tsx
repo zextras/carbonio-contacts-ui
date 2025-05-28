@@ -10,7 +10,7 @@ import * as shell from '@zextras/carbonio-shell-ui';
 
 import { DLListItem } from './dl-list-item';
 import { OpenMailComposerIntegratedFunction } from '../actions/send-email';
-import { screen, setupTest, within } from '../carbonio-ui-commons/test/test-setup';
+import { screen, setupTest, within } from '@zextras/carbonio-ui-commons';
 import { EDIT_DL_BOARD_ID } from '../constants';
 import { TESTID_SELECTORS } from '../constants/tests';
 import { generateDistributionList } from '../tests/utils';

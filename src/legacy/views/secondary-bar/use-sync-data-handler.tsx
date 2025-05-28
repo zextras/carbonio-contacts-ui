@@ -10,9 +10,9 @@ import { useEffect, useRef, useState } from 'react';
 import { SoapNotify, useNotify } from '@zextras/carbonio-shell-ui';
 import { forEach, isEmpty, sortBy } from 'lodash';
 
-import { useFolderStore } from '../../../carbonio-ui-commons/store/zustand/folder';
-import { useTagStore } from '../../../carbonio-ui-commons/store/zustand/tags';
-import { folderWorker, tagsWorker } from '../../../carbonio-ui-commons/worker';
+import { useFolderStore } from '@zextras/carbonio-ui-commons';
+import { useTagStore } from '@zextras/carbonio-ui-commons';
+import { folderWorker, tagsWorker } from '@zextras/carbonio-ui-commons';
 import {
 	addContactsToStore,
 	removeContactsFromStore,

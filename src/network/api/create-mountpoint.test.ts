@@ -12,8 +12,8 @@ import {
 	CreateMountpointsRequest,
 	CreateMountpointsResponse
 } from './create-mountpoints';
-import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
-import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
+import { FOLDERS } from '@zextras/carbonio-ui-commons';
+import { createSoapAPIInterceptor } from '@zextras/carbonio-ui-commons';
 import { ShareInfo } from '../../model/share-info';
 
 describe('createMountpoints', () => {

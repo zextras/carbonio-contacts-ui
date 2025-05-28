@@ -11,7 +11,7 @@ import {
 	ContactType,
 	UserContact,
 	DistributionListContact
-} from '../../carbonio-ui-commons/integrations/types';
+} from '@zextras/carbonio-ui-commons';
 
 export type ContactInputGroup = ContactInputItem &
 	Required<Pick<ContactInputItem, 'display'>> & {

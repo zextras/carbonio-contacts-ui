@@ -8,7 +8,7 @@ import React from 'react';
 
 import { screen } from '@testing-library/react';
 
-import { makeListItemsVisible, setupTest } from '../../../../carbonio-ui-commons/test/test-setup';
+import { makeListItemsVisible, setupTest } from '@zextras/carbonio-ui-commons';
 import { Contact } from '../../../types/contact';
 import { SearchList } from '../search-list';
 

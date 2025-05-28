@@ -7,7 +7,7 @@ import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 
 import { upload } from './upload';
-import { createFakeFile } from '../../carbonio-ui-commons/test/mocks/utils/file';
+import { createFakeFile } from '@zextras/carbonio-ui-commons';
 import { registerUploadHandler } from '../../tests/msw-handlers/upload';
 
 describe('Upload', () => {

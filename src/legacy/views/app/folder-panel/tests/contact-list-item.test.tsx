@@ -9,7 +9,7 @@ import { screen, fireEvent, act } from '@testing-library/react';
 import { getAction } from '@zextras/carbonio-shell-ui';
 import { useNavigate } from 'react-router-dom';
 
-import { setupTest, UserEvent } from '../../../../../carbonio-ui-commons/test/test-setup';
+import { setupTest, UserEvent } from '@zextras/carbonio-ui-commons';
 import { Contact } from '../../../../types/contact';
 import { ContactListItem } from '../contact-list-item';
 

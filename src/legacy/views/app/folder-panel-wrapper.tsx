@@ -8,7 +8,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 
 import { FolderPanel } from './folder-panel';
-import { useFolder } from '../../../carbonio-ui-commons/store/zustand/folder';
+import { useFolder } from '@zextras/carbonio-ui-commons';
 import { RouteParams } from '../../../constants';
 
 export const FolderPanelWrapper = (): React.JSX.Element => {

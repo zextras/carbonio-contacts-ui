@@ -5,7 +5,7 @@
  */
 import { http, HttpResponse } from 'msw';
 
-import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
+import { getSetupServer } from '@zextras/carbonio-ui-commons';
 
 export const registerUploadHandler = (response?: string): void =>
 	getSetupServer().use(http.post(`/service/upload`, ({ request }) => HttpResponse.text(response)));

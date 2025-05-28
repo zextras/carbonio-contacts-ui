@@ -8,10 +8,10 @@ import { act } from '@testing-library/react';
 
 import { useActionCreateAddressBook } from './create-address-book';
 import { UIAction } from './types';
-import { FOLDER_VIEW } from '../carbonio-ui-commons/constants';
-import { FOLDERS } from '../carbonio-ui-commons/constants/folders';
-import { generateFolder } from '../carbonio-ui-commons/test/mocks/folders/folders-generator';
-import { setupHook, screen } from '../carbonio-ui-commons/test/test-setup';
+import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
+import { FOLDERS } from '@zextras/carbonio-ui-commons';
+import { generateFolder } from '@zextras/carbonio-ui-commons';
+import { setupHook, screen } from '@zextras/carbonio-ui-commons';
 import { TIMERS } from '../constants/tests';
 
 describe('useActionCreateAddressBook', () => {

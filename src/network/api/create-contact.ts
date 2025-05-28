@@ -5,7 +5,7 @@
  */
 
 import { CnItem } from './types';
-import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
+import { FOLDERS } from '@zextras/carbonio-ui-commons';
 
 export const createContactFromVcard = (messageId: string, part: string): Promise<CnItem> =>
 	fetch(`/service/soap/CreateContactRequest`, {

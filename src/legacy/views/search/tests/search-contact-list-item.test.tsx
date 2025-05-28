@@ -9,8 +9,8 @@ import React from 'react';
 import { act, screen } from '@testing-library/react';
 import { useNavigate } from 'react-router-dom';
 
-import { useTags } from '../../../../carbonio-ui-commons/store/zustand/tags';
-import { setupTest } from '../../../../carbonio-ui-commons/test/test-setup';
+import { useTags } from '@zextras/carbonio-ui-commons';
+import { setupTest } from '@zextras/carbonio-ui-commons';
 import { getTagsArray } from '../../../helpers/tags';
 import { Contact } from '../../../types/contact';
 import { SearchContactListItem } from '../search-contact-list-item';

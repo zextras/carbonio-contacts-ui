@@ -23,15 +23,15 @@ import styled from 'styled-components';
 
 import { ContactEditorRow, CustomMultivalueField } from './CustomMultivalueField';
 import reducer, { op } from './form-reducer';
-import { FoldersSelector } from '../../../carbonio-ui-commons/components/select/folders-selector';
-import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
-import { ZIMBRA_STANDARD_COLORS } from '../../../carbonio-ui-commons/constants/utils';
+import { FoldersSelector } from '@zextras/carbonio-ui-commons';
+import { FOLDERS } from '@zextras/carbonio-ui-commons';
+import { ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-ui-commons';
 import {
 	isRoot,
 	isSharedAccountFolder,
 	isTrash
-} from '../../../carbonio-ui-commons/helpers/folders';
-import { useFoldersMap } from '../../../carbonio-ui-commons/store/zustand/folder';
+} from '@zextras/carbonio-ui-commons';
+import { useFoldersMap } from '@zextras/carbonio-ui-commons';
 import { CompactView } from '../../commons/contact-compact-view';
 import { createContact } from '../../store/actions/create-contact';
 import { modifyContact } from '../../store/actions/modify-contact';

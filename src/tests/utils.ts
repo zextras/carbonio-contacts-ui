@@ -9,9 +9,9 @@ import { ErrorSoapResponse, SuccessSoapResponse } from '@zextras/carbonio-shell-
 import { EventEmitter } from 'events';
 import { times } from 'lodash';
 
-import { getFoldersMap } from '../carbonio-ui-commons/store/zustand/folder';
-import { screen, within } from '../carbonio-ui-commons/test/test-setup';
-import { Folder } from '../carbonio-ui-commons/types/folder';
+import { getFoldersMap } from '@zextras/carbonio-ui-commons';
+import { screen, within } from '@zextras/carbonio-ui-commons';
+import { Folder } from '@zextras/carbonio-ui-commons';
 import { TESTID_SELECTORS } from '../constants/tests';
 import { SoapContact } from '../legacy/types/soap';
 import { DistributionList, DistributionListMembersPage } from '../model/distribution-list';

@@ -14,21 +14,21 @@ import { AccountSettings } from '@zextras/carbonio-shell-ui';
 import { noop } from 'lodash';
 import { HttpResponse } from 'msw';
 
-import { FOLDERS } from '../../../../carbonio-ui-commons/constants/folders';
-import { useFolderStore } from '../../../../carbonio-ui-commons/store/zustand/folder';
-import { generateFolder } from '../../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
+import { FOLDERS } from '@zextras/carbonio-ui-commons';
+import { useFolderStore } from '@zextras/carbonio-ui-commons';
+import { generateFolder } from '@zextras/carbonio-ui-commons';
 import {
 	createAPIInterceptor,
 	createSoapAPIInterceptor
-} from '../../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { generateSettings } from '../../../../carbonio-ui-commons/test/mocks/settings/settings-generator';
-import { populateFoldersStore } from '../../../../carbonio-ui-commons/test/mocks/store/folders';
+} from '@zextras/carbonio-ui-commons';
+import { generateSettings } from '@zextras/carbonio-ui-commons';
+import { populateFoldersStore } from '@zextras/carbonio-ui-commons';
 import {
 	makeListItemsVisible,
 	screen,
 	setupTest,
 	triggerLoadMore
-} from '../../../../carbonio-ui-commons/test/test-setup';
+} from '@zextras/carbonio-ui-commons';
 import { TIMERS } from '../../../../constants/tests';
 import { CnItem } from '../../../../network/api/types';
 import { createSoapContact, createSoapContactGroupV2 } from '../../../../tests/utils';

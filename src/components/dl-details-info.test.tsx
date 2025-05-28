@@ -6,8 +6,8 @@
 import React from 'react';
 
 import { DLDetailsInfo } from './dl-details-info';
-import { screen, setupTest, within } from '../carbonio-ui-commons/test/test-setup';
-import * as clipboard from '../carbonio-ui-commons/utils/clipboard';
+import { screen, setupTest, within } from '@zextras/carbonio-ui-commons';
+import * as clipboard from '@zextras/carbonio-ui-commons';
 import { TESTID_SELECTORS } from '../constants/tests';
 import { generateDistributionList } from '../tests/utils';
 

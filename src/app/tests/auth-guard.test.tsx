@@ -6,7 +6,7 @@
 import React from 'react';
 
 import { useAuthenticated } from '../../../__mocks__/@zextras/carbonio-shell-ui';
-import { setupTest, screen } from '../../carbonio-ui-commons/test/test-setup';
+import { setupTest, screen } from '@zextras/carbonio-ui-commons';
 import { AuthGuard } from '../auth-guard';
 
 describe('AuthGuard', () => {

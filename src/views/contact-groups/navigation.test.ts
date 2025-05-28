@@ -9,9 +9,9 @@ import { useNavigate } from 'react-router-dom';
 
 import { useRedirectToContactGroup, useRedirectToContactGroupFolder } from './navigation';
 import { generateLinkFolder } from './tests/utils';
-import { useFolderStore } from '../../carbonio-ui-commons/store/zustand/folder';
-import { generateFolder } from '../../carbonio-ui-commons/test/mocks/folders/folders-generator';
-import { setupHook } from '../../carbonio-ui-commons/test/test-setup';
+import { useFolderStore } from '@zextras/carbonio-ui-commons';
+import { generateFolder } from '@zextras/carbonio-ui-commons';
+import { setupHook } from '@zextras/carbonio-ui-commons';
 import { buildContactGroup } from '../../tests/model-builder';
 
 jest.mock('react-router-dom', () => ({

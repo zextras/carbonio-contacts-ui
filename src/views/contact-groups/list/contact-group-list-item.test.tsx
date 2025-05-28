@@ -9,9 +9,9 @@ import { faker } from '@faker-js/faker';
 import * as shell from '@zextras/carbonio-shell-ui';
 
 import { ContactGroupListItem } from './contact-group-list-item';
-import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
-import { populateFoldersStore } from '../../../carbonio-ui-commons/test/mocks/store/folders';
-import { screen, setupTest } from '../../../carbonio-ui-commons/test/test-setup';
+import { FOLDERS } from '@zextras/carbonio-ui-commons';
+import { populateFoldersStore } from '@zextras/carbonio-ui-commons';
+import { screen, setupTest } from '@zextras/carbonio-ui-commons';
 import { TESTID_SELECTORS } from '../../../constants/tests';
 import { buildContactGroup, buildMembers } from '../../../tests/model-builder';
 

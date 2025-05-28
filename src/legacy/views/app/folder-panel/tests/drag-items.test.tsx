@@ -9,7 +9,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { times } from 'lodash';
 
-import { setupTest } from '../../../../../carbonio-ui-commons/test/test-setup';
+import { setupTest } from '@zextras/carbonio-ui-commons';
 import { TESTID_SELECTORS } from '../../../../../constants/tests';
 import { buildContact } from '../../../../../tests/model-builder';
 import { Contact } from '../../../../types/contact';

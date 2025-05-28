@@ -10,9 +10,9 @@ import { every } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { UIAction } from '../../actions/types';
-import { isRoot, isTrashed, isWriteAllowed } from '../../carbonio-ui-commons/helpers/folders';
-import { getFolder } from '../../carbonio-ui-commons/store/zustand/folder';
-import { Folder } from '../../carbonio-ui-commons/types/folder';
+import { isRoot, isTrashed, isWriteAllowed } from '@zextras/carbonio-ui-commons';
+import { getFolder } from '@zextras/carbonio-ui-commons';
+import { Folder } from '@zextras/carbonio-ui-commons';
 import { ContactMoveModal } from '../../components/modals/contact-move';
 import { TIMEOUTS } from '../../constants';
 import { MOVE_ACTION } from '../../constants/actions';

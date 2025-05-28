@@ -7,7 +7,7 @@ import { faker } from '@faker-js/faker';
 import { waitFor } from '@testing-library/react';
 
 import { REQUIRED_FIELDS, useGetDistributionList } from './use-get-distribution-list';
-import { setupHook } from '../carbonio-ui-commons/test/test-setup';
+import { setupHook } from '@zextras/carbonio-ui-commons';
 import { DistributionList } from '../model/distribution-list';
 import { useDistributionListsStore } from '../store/distribution-lists';
 import { registerGetDistributionListHandler } from '../tests/msw-handlers/get-distribution-list';

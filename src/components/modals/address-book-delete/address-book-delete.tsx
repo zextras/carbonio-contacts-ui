@@ -15,7 +15,7 @@ import {
 } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
-import { Folder } from '../../../carbonio-ui-commons/types/folder';
+import { Folder } from '@zextras/carbonio-ui-commons';
 import { TIMEOUTS } from '../../../constants';
 import { apiClient } from '../../../network/api-client';
 

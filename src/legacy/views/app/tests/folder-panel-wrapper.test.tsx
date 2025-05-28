@@ -11,16 +11,16 @@ import * as shell from '@zextras/carbonio-shell-ui';
 import { forEach } from 'lodash';
 
 import { createContactsApiInterceptor, findContactInList } from './utils';
-import { FOLDER_VIEW } from '../../../../carbonio-ui-commons/constants';
-import { FOLDERS } from '../../../../carbonio-ui-commons/constants/folders';
-import { useTagStore } from '../../../../carbonio-ui-commons/store/zustand/tags';
+import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
+import { FOLDERS } from '@zextras/carbonio-ui-commons';
+import { useTagStore } from '@zextras/carbonio-ui-commons';
 import {
 	getAction as getActionMock,
 	useAppContext
-} from '../../../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
-import { generateFolder } from '../../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
-import { createSoapAPIInterceptor } from '../../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { populateFoldersStore } from '../../../../carbonio-ui-commons/test/mocks/store/folders';
+} from '@zextras/carbonio-ui-commons';
+import { generateFolder } from '@zextras/carbonio-ui-commons';
+import { createSoapAPIInterceptor } from '@zextras/carbonio-ui-commons';
+import { populateFoldersStore } from '@zextras/carbonio-ui-commons';
 import {
 	makeListItemsVisible,
 	screen,
@@ -28,7 +28,7 @@ import {
 	triggerLoadMore,
 	UserEvent,
 	within
-} from '../../../../carbonio-ui-commons/test/test-setup';
+} from '@zextras/carbonio-ui-commons';
 import {
 	ActionDescriptorType,
 	ACTIONS_DESCRIPTORS,

@@ -12,7 +12,7 @@ import { act, waitFor, within } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
 
 import EditContactGroupBoard from './edit-contact-group-board';
-import { setupTest, screen } from '../../../carbonio-ui-commons/test/test-setup';
+import { setupTest, screen } from '@zextras/carbonio-ui-commons';
 import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../../constants';
 import { JEST_MOCKED_ERROR, PALETTE, TESTID_SELECTORS } from '../../../constants/tests';
 import { addContactsToStore } from '../../../legacy/store/contacts';

@@ -20,7 +20,7 @@ import { useActionRemoveAddressBookLink } from '../../../../actions/remove-addre
 import { useActionShowShareInfo } from '../../../../actions/show-share-info';
 import { useActionTrashAddressBook } from '../../../../actions/trash-address-book';
 import { UIAction } from '../../../../actions/types';
-import { Folder } from '../../../../carbonio-ui-commons/types/folder';
+import { Folder } from '@zextras/carbonio-ui-commons';
 
 const generateMenuAction = <T extends UIAction<EP, never>, EP>(
 	uiAction: T,

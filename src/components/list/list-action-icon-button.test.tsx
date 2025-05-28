@@ -9,7 +9,7 @@ import { screen } from '@testing-library/react';
 import { noop } from 'lodash';
 
 import { ListActionIconButton } from './list-action-icon-button';
-import { setupTest } from '../../carbonio-ui-commons/test/test-setup';
+import { setupTest } from '@zextras/carbonio-ui-commons';
 
 describe('List action icon button', () => {
 	it('should render the action as disabled', async () => {

@@ -5,7 +5,7 @@
  */
 
 import { DELETE_PERMANENTLY_ACTION } from './actions';
-import { FOLDERS } from '../carbonio-ui-commons/constants/folders';
+import { FOLDERS } from '@zextras/carbonio-ui-commons';
 
 type TypeOfEnumeration<T> = T[keyof T];
 

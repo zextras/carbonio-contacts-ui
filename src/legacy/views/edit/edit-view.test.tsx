@@ -9,10 +9,10 @@ import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 
 import EditView from './edit-view';
-import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
-import { generateFolder } from '../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
-import { populateFoldersStore } from '../../../carbonio-ui-commons/test/mocks/store/folders';
-import { screen, setupTest } from '../../../carbonio-ui-commons/test/test-setup';
+import { FOLDERS } from '@zextras/carbonio-ui-commons';
+import { generateFolder } from '@zextras/carbonio-ui-commons';
+import { populateFoldersStore } from '@zextras/carbonio-ui-commons';
+import { screen, setupTest } from '@zextras/carbonio-ui-commons';
 import { registerCreateContactHandler } from '../../tests/msw/create-contact';
 import { CreateContactRequest } from '../../types/soap';
 

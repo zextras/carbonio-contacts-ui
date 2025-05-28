@@ -9,8 +9,8 @@ import { Icon, Padding, Row, Text } from '@zextras/carbonio-design-system';
 import { every, includes, noop, reduce } from 'lodash';
 
 import { Action } from '../../../actions/types';
-import { ZIMBRA_STANDARD_COLORS } from '../../../carbonio-ui-commons/constants';
-import { useTags } from '../../../carbonio-ui-commons/store/zustand/tags';
+import { ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-ui-commons';
+import { useTags } from '@zextras/carbonio-ui-commons';
 import { SHOW_TAG_ACTION } from '../../../constants/actions';
 import { Contact } from '../../../legacy/types/contact';
 

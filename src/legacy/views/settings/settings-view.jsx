@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 
 import { differenceObject } from './components/utils';
 import OptionsSettingsView from './options-settings-view';
-import { useUpdateView } from '../../../carbonio-ui-commons/hooks/use-update-view';
+import { useUpdateView } from '@zextras/carbonio-ui-commons';
 
 export default function ContactSettingsView() {
 	const [t] = useTranslation();

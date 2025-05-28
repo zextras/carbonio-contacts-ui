@@ -18,9 +18,9 @@ import {
 	isRoot,
 	isTrash,
 	isTrashed
-} from '../../carbonio-ui-commons/helpers/folders';
-import { useFolder, useRootsArray } from '../../carbonio-ui-commons/store/zustand/folder';
-import { Folder } from '../../carbonio-ui-commons/types/folder';
+} from '@zextras/carbonio-ui-commons';
+import { useFolder, useRootsArray } from '@zextras/carbonio-ui-commons';
+import { Folder } from '@zextras/carbonio-ui-commons';
 import { sortFolders } from '../../helpers/folders';
 import { getFolderTranslatedName } from '../../legacy/utils/helpers';
 

@@ -24,9 +24,9 @@ import { noop } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { StaticBreadcrumbs } from '../../carbonio-ui-commons/components/breadcrumbs/static-breadcrumbs';
-import { isDefaultAccountRoot, isRoot } from '../../carbonio-ui-commons/helpers/folders';
-import { Folder } from '../../carbonio-ui-commons/types/folder';
+import { StaticBreadcrumbs } from '@zextras/carbonio-ui-commons';
+import { isDefaultAccountRoot, isRoot } from '@zextras/carbonio-ui-commons';
+import { Folder } from '@zextras/carbonio-ui-commons';
 import { getFolderIconColor, getFolderIconName } from '../../helpers/folders';
 import { getFolderTranslatedName } from '../../legacy/utils/helpers';
 
