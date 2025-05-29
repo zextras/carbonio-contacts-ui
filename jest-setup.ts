@@ -7,12 +7,11 @@ import '@testing-library/jest-dom';
 import { configure } from '@testing-library/react';
 import failOnConsole from 'jest-fail-on-console';
 import fetchMock from 'jest-fetch-mock';
-
-import { JEST_MOCKED_ERROR } from './src/constants/tests';
-import * as downloadModule from './src/helpers/download';
-import { setupServer, SetupServer } from 'msw/node';
-import { getRestHandlers } from '@test-utils/network/msw/handlers';
 import { noop } from 'lodash';
+import { setupServer, SetupServer } from 'msw/node';
+
+import * as downloadModule from './src/helpers/download';
+import { getRestHandlers } from '@test-utils/network/msw/handlers';
 
 let server: SetupServer;
 
@@ -25,8 +24,9 @@ jest.setTimeout(10000);
 failOnConsole({
 	shouldFailOnError: true,
 	shouldFailOnWarn: false,
+
 	silenceMessage: (message): boolean =>
-		message.includes(JEST_MOCKED_ERROR) ||
+		message.includes('jest mocked error') ||
 		// FIXME: move the duplicated field inside the value of the chip, instead of placing it on the chip itself
 		message.includes('Received `false` for a non-boolean attribute `duplicated`') ||
 		// FIXME: fix the DS ChipInput to not spread all properties to the DOM
@@ -39,7 +39,7 @@ failOnConsole({
 type DefaultBeforeAllTestsProps = {
 	onUnhandledRequest: 'warn' | 'error';
 };
- const defaultBeforeAllTests = (
+const defaultBeforeAllTests = (
 	{ onUnhandledRequest }: DefaultBeforeAllTestsProps = { onUnhandledRequest: 'warn' }
 ): void => {
 	// Do not useFakeTimers with `whatwg-fetch` if using mocked server
@@ -72,7 +72,7 @@ type DefaultBeforeAllTestsProps = {
 beforeAll(() => {
 	defaultBeforeAllTests();
 	fetchMock.doMock();
-	jest.spyOn(downloadModule, 'redirectToBlob').mockImplementation(() => {});
+	jest.spyOn(downloadModule, 'redirectToBlob').mockImplementation(jest.fn());
 });
 
 beforeEach(noop);
@@ -125,6 +125,3 @@ window.ResizeObserver = jest.fn().mockImplementation(() => ({
 	unobserve: jest.fn(),
 	disconnect: jest.fn()
 }));
-
-
-
