@@ -13,12 +13,13 @@ import { AddressBookCreateModal } from './address-book-create';
 import { FOLDERS } from '@zextras/carbonio-ui-commons';
 import { isLink, isTrashed } from '@zextras/carbonio-ui-commons';
 import { getRootsArray } from '@zextras/carbonio-ui-commons';
-import { createSoapAPIInterceptor } from '@zextras/carbonio-ui-commons';
-import { populateFoldersStore } from '@zextras/carbonio-ui-commons';
-import { makeListItemsVisible, screen, setupTest } from '@zextras/carbonio-ui-commons';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
+import { populateFoldersStore } from '@test-utils/store/folders';
+
 import { TESTID_SELECTORS } from '../../constants/tests';
 import { CreateFolderRequest, CreateFolderResponse } from '../../network/api/create-folder';
 import { getFoldersArray } from '../../tests/utils';
+import { makeListItemsVisible, screen, setupTest } from '@test-setup';
 
 describe('AddressBookCreateModal', () => {
 	it('should display a modal with a specific title', () => {

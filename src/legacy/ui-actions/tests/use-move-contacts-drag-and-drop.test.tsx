@@ -13,14 +13,14 @@ import { UIAction } from '../../../actions/types';
 import { FOLDERS } from '@zextras/carbonio-ui-commons';
 import { isLink, isSystemFolder } from '@zextras/carbonio-ui-commons';
 import { getFolder } from '@zextras/carbonio-ui-commons';
-import { createSoapAPIInterceptor } from '@zextras/carbonio-ui-commons';
-import { populateFoldersStore } from '@zextras/carbonio-ui-commons';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
+import { populateFoldersStore } from '@test-utils/store/folders';
 import {
 	setupHook,
 	screen,
 	makeListItemsVisible,
 	within
-} from '@zextras/carbonio-ui-commons';
+}  from '@test-setup';
 import { MOVE_ACTION } from '../../../constants/actions';
 import { FOLDERS_DESCRIPTORS, TIMERS } from '../../../constants/tests';
 import { ContactActionResponse } from '../../../network/api/contact-action';

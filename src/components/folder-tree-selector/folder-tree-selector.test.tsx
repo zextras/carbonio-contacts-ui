@@ -20,11 +20,12 @@ import {
 	getFoldersArrayByRoot,
 	getRootsMap
 } from '@zextras/carbonio-ui-commons';
-import { populateFoldersStore } from '@zextras/carbonio-ui-commons';
-import { makeListItemsVisible, setupTest } from '@zextras/carbonio-ui-commons';
+import { populateFoldersStore } from '@test-utils/store/folders';
+
 import { isEmailedContacts } from '../../helpers/folders';
 import { getFoldersArray } from '../../tests/utils';
 import { FOLDERS } from '@zextras/carbonio-ui-commons';
+import { makeListItemsVisible, setupTest } from '@test-setup';
 
 describe('Folder selector', () => {
 	test('The selector is visible', () => {

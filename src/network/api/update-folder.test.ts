@@ -7,7 +7,7 @@ import { faker } from '@faker-js/faker';
 import { JSNS } from '@zextras/carbonio-shell-ui';
 
 import { updateFolder, UpdateFolderParams } from './update-folder';
-import { createSoapAPIInterceptor } from '@zextras/carbonio-ui-commons';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 describe('updateFolder', () => {
 	it('should call the API with the proper fields', () => {

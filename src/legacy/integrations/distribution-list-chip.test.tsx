@@ -14,9 +14,8 @@ import { HttpResponse } from 'msw';
 import { DistributionListChip } from './distribution-list-chip';
 import { clickCollapseDL, clickExpandDL, SELECT_ALL, SHOW_MORE } from './test/mocks';
 import { CONTACT_TYPES } from '@zextras/carbonio-ui-commons';
-import { mockedAccount } from '@zextras/carbonio-ui-commons';
-import { createSoapAPIInterceptor } from '@zextras/carbonio-ui-commons';
-import { screen, setupTest } from '@zextras/carbonio-ui-commons';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
+import { screen, setupTest }  from '@test-setup';
 import { DL_MEMBERS_LOAD_LIMIT } from '../../constants';
 import { TESTID_SELECTORS, TIMERS } from '../../constants/tests';
 import {
@@ -33,6 +32,7 @@ import {
 	generateDistributionList,
 	generateDistributionListMembersPage
 } from '../../tests/utils';
+import { mockedAccount } from '@test-utils/carbonio-shell-ui/carbonio-shell-ui';
 
 const id = 'dl-1';
 const email = 'dl1@mail.com';

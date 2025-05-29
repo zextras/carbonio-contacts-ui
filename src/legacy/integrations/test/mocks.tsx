@@ -8,8 +8,8 @@ import { ChipAction } from '@zextras/carbonio-design-system';
 
 import { EDIT_ACTION_ID, CONTACT_TYPES } from '@zextras/carbonio-ui-commons';
 import { ContactInputItem } from '@zextras/carbonio-ui-commons';
-import { createSoapAPIInterceptor } from '@zextras/carbonio-ui-commons';
-import { screen, UserEvent } from '@zextras/carbonio-ui-commons';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
+import { screen, UserEvent }  from '@test-setup';
 import { TESTID_SELECTORS } from '../../../constants/tests';
 import {
 	GetDistributionListRequest,

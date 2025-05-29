@@ -6,17 +6,17 @@
 import React, { ReactElement, ReactNode } from 'react';
 
 import { renderHook } from '@testing-library/react';
-import { SoapNotify, useRefresh } from '@zextras/carbonio-shell-ui';
+import { SoapNotify,  useRefresh } from '@zextras/carbonio-shell-ui';
 import { http } from 'msw';
 
 import { useFolderStore } from '@zextras/carbonio-ui-commons';
-import { getSetupServer } from '@zextras/carbonio-ui-commons';
-import { useNotify } from '@zextras/carbonio-ui-commons';
-import { generateFolder } from '@zextras/carbonio-ui-commons';
-import { handleGetFolderRequest } from '@zextras/carbonio-ui-commons';
-import { handleGetShareInfoRequest } from '@zextras/carbonio-ui-commons';
+import { getSetupServer } from '@jest-setup';
+import { generateFolder } from '@test-utils/folders/folders-generator';
 import { folderWorker } from '@zextras/carbonio-ui-commons';
 import { useSyncDataHandler } from '../use-sync-data-handler';
+import { useNotify } from '@test-utils/carbonio-shell-ui/carbonio-shell-ui';
+import { handleGetFolderRequest } from '@test-utils/network/msw/handle-get-folder';
+import { handleGetShareInfoRequest } from '@test-utils/network/msw/handle-get-share-info';
 
 function getWrapper() {
 	// eslint-disable-next-line react/display-name

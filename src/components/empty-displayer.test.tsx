@@ -7,7 +7,7 @@
 import React from 'react';
 
 import { EmptyDisplayer } from './empty-displayer';
-import { screen, setupTest } from '@zextras/carbonio-ui-commons';
+import { screen, setupTest } from '@test-setup';
 import { EMPTY_DISPLAYER_NO_CONTACTS_HINT, TESTID_SELECTORS } from '../constants/tests';
 
 describe('Empty Displayer', () => {

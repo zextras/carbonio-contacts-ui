@@ -7,7 +7,7 @@ import { faker } from '@faker-js/faker';
 import { JSNS } from '@zextras/carbonio-shell-ui';
 
 import { revokeFolderGrant } from './revoke-folder-grant';
-import { createSoapAPIInterceptor } from '@zextras/carbonio-ui-commons';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 describe('revokeFolderGrant', () => {
 	it('should call the API with the proper fields', () => {

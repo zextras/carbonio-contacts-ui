@@ -10,7 +10,7 @@ import { act, waitFor, within } from '@testing-library/react';
 import { times } from 'lodash';
 
 import { EditDLMembersComponent, EditDLComponentProps } from './edit-dl-members';
-import { screen, setupTest } from '@zextras/carbonio-ui-commons';
+import { screen, setupTest } from '@test-setup';
 import { PALETTE, TESTID_SELECTORS } from '../constants/tests';
 import 'jest-styled-components';
 import { registerFullAutocompleteHandler } from '../tests/msw-handlers/full-autocomplete';

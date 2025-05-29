@@ -12,9 +12,9 @@ import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 import { AddressBookEmptyModal } from './address-book-empty';
 import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
 import { FOLDERS } from '@zextras/carbonio-ui-commons';
-import { generateFolder } from '@zextras/carbonio-ui-commons';
-import { createSoapAPIInterceptor } from '@zextras/carbonio-ui-commons';
-import { screen, setupTest } from '@zextras/carbonio-ui-commons';
+import { generateFolder } from '@test-utils/folders/folders-generator';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
+import { screen, setupTest } from '@test-setup';
 import { TESTID_SELECTORS } from '../../../constants/tests';
 
 describe('AddressBookEmptyModal', () => {

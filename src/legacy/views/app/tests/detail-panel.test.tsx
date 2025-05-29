@@ -10,14 +10,14 @@ import { faker } from '@faker-js/faker';
 import { http, HttpResponse } from 'msw';
 
 import { FOLDERS } from '@zextras/carbonio-ui-commons';
-import { getSetupServer } from '@zextras/carbonio-ui-commons';
-import { populateFoldersStore } from '@zextras/carbonio-ui-commons';
-import { screen, setupTest } from '@zextras/carbonio-ui-commons';
+import { populateFoldersStore } from '@test-utils/store/folders';
+import { screen, setupTest } from '@test-setup';
 import { JEST_MOCKED_ERROR, TESTID_SELECTORS } from '../../../../constants/tests';
 import { buildSoapError } from '../../../../tests/utils';
 import * as modifyContactApi from '../../../store/actions/modify-contact';
 import { addContactsToStore } from '../../../store/contacts';
 import { DetailPanel } from '../detail-panel';
+import { getSetupServer } from '@jest-setup';
 
 describe('Detail panel', () => {
 	describe('Contacts', () => {

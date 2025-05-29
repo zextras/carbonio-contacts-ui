@@ -11,8 +11,8 @@ import { useActionEmptyAddressBook } from './empty-address-book';
 import { UIAction } from './types';
 import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
 import { FOLDERS } from '@zextras/carbonio-ui-commons';
-import { generateFolder } from '@zextras/carbonio-ui-commons';
-import { screen, setupHook } from '@zextras/carbonio-ui-commons';
+import { generateFolder } from '@test-utils/folders/folders-generator';
+import { screen, setupHook } from '@test-setup';
 import { TIMERS } from '../constants/tests';
 
 describe('useActionEmptyAddressBook', () => {

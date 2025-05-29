@@ -7,20 +7,17 @@ import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 
-import { generateFolder } from '@zextras/carbonio-ui-commons';
-import { createSoapAPIInterceptor } from '@zextras/carbonio-ui-commons';
-import { populateFoldersStore } from '@zextras/carbonio-ui-commons';
-import {
-	makeListItemsVisible,
-	screen,
-	setupHook
-} from '@zextras/carbonio-ui-commons';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
+import { populateFoldersStore } from '@test-utils/store/folders';
+
 import { TESTID_SELECTORS, TIMERS } from '../../../constants/tests';
 import { Contact } from '../../../legacy/types/contact';
 import { ContactActionRequest, ContactActionResponse } from '../../../network/api/contact-action';
 import { setupMoveItemModal } from '../../../tests/modal-helpers';
 import { buildContact } from '../../../tests/model-builder';
 import { useMoveContacts } from '../use-move-contacts';
+import { generateFolder } from '@test-utils/folders/folders-generator';
+import { makeListItemsVisible, screen, setupHook } from '@test-setup';
 
 function aFailingContactMove(): any {
 	const response: ErrorSoapBodyResponse = {

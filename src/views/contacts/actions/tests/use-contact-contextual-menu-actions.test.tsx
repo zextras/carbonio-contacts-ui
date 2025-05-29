@@ -7,8 +7,8 @@ import { faker } from '@faker-js/faker';
 
 import { FOLDERS } from '@zextras/carbonio-ui-commons';
 import { useFolderStore } from '@zextras/carbonio-ui-commons';
-import { populateFoldersStore } from '@zextras/carbonio-ui-commons';
-import { setupHook } from '@zextras/carbonio-ui-commons';
+import { populateFoldersStore } from '@test-utils/store/folders';
+import { setupHook } from '@test-setup';
 import { buildContact } from '../../../../tests/model-builder';
 import { generateLinkFolder } from '../../../contact-groups/tests/utils';
 import { useContactContextualMenuActions } from '../use-contact-contextual-menu-actions';

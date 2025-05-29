@@ -6,7 +6,7 @@
 import { JSNS, SoapResponse } from '@zextras/carbonio-shell-ui';
 import { HttpResponseResolver, http, HttpResponse } from 'msw';
 
-import { getSetupServer } from '@zextras/carbonio-ui-commons';
+import { getSetupServer } from '@jest-setup';
 import {
 	CONTACT_ACTION_OPERATION,
 	ContactActionRequest,

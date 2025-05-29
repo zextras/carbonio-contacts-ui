@@ -10,8 +10,8 @@ import * as shell from '@zextras/carbonio-shell-ui';
 
 import { ContactGroupListItem } from './contact-group-list-item';
 import { FOLDERS } from '@zextras/carbonio-ui-commons';
-import { populateFoldersStore } from '@zextras/carbonio-ui-commons';
-import { screen, setupTest } from '@zextras/carbonio-ui-commons';
+import { populateFoldersStore } from '@test-utils/store/folders';
+import { screen, setupTest } from '@test-setup';
 import { TESTID_SELECTORS } from '../../../constants/tests';
 import { buildContactGroup, buildMembers } from '../../../tests/model-builder';
 

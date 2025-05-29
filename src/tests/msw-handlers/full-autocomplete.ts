@@ -6,7 +6,7 @@
 import { SoapResponse } from '@zextras/carbonio-shell-ui';
 import { HttpResponseResolver, http, HttpResponse } from 'msw';
 
-import { getSetupServer } from '@zextras/carbonio-ui-commons';
+import { getSetupServer } from '@jest-setup';
 import { FullAutocompleteResponse, Match } from '../../legacy/types/contact';
 import { buildSoapResponse } from '../utils';
 

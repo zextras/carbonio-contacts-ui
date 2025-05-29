@@ -7,7 +7,7 @@ import { faker } from '@faker-js/faker';
 import { ErrorSoapBodyResponse, JSNS } from '@zextras/carbonio-shell-ui';
 
 import { exportContacts, ExportContactsRequest, ExportContactsResponse } from './export-contacts';
-import { createSoapAPIInterceptor } from '@zextras/carbonio-ui-commons';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 describe('exportContacts', () => {
 	it('should call the export contacts API with the correct parameters', async () => {

@@ -9,8 +9,8 @@ import { useActionImportContacts } from './import-contacts';
 import { UIAction } from './types';
 import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
 import { FOLDERS } from '@zextras/carbonio-ui-commons';
-import { generateFolder } from '@zextras/carbonio-ui-commons';
-import { setupHook } from '@zextras/carbonio-ui-commons';
+import { generateFolder } from '@test-utils/folders/folders-generator';
+import { setupHook } from '@test-setup';
 
 describe('useActionImportContacts', () => {
 	it('should return an object with the specific data', () => {

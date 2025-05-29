@@ -10,14 +10,12 @@ import { HttpResponse } from 'msw';
 
 import App from './app';
 import { ContactInputProps } from '@zextras/carbonio-ui-commons';
-import { generateFolder } from '@zextras/carbonio-ui-commons';
-import {
-	createAPIInterceptor,
-	createSoapAPIInterceptor
-} from '@zextras/carbonio-ui-commons';
-import { setupTest } from './carbonio-ui-commons/test/test-setup';
+
 import { CONTACT_BOARD_ID } from './constants';
 import { ContactInput } from './legacy/integrations/contact-input';
+import { setupTest } from '@test-setup';
+import { generateFolder } from '@test-utils/folders/folders-generator';
+import { createAPIInterceptor, createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 describe('App', () => {
 	beforeEach(() => {

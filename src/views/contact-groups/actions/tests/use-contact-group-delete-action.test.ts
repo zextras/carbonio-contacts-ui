@@ -6,7 +6,7 @@
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 
-import { screen, setupHook } from '@zextras/carbonio-ui-commons';
+import { screen, setupHook } from '@test-setup';
 import {
 	DELETE_PERMANENTLY_ACTION_DESCRIPTOR,
 	JEST_MOCKED_ERROR,

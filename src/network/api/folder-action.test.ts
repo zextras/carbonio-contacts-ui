@@ -8,7 +8,7 @@ import { faker } from '@faker-js/faker';
 import { ErrorSoapBodyResponse, JSNS } from '@zextras/carbonio-shell-ui';
 
 import { folderAction, FolderActionOperation, FolderActionParams } from './folder-action';
-import { createSoapAPIInterceptor } from '@zextras/carbonio-ui-commons';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 describe('Folder action', () => {
 	it('should raise an exception if the response contains a Fault', () => {

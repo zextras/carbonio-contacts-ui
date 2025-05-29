@@ -9,7 +9,7 @@ import { waitFor } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
 
 import { MemberList } from './member-list';
-import { screen, setupTest, within } from '@zextras/carbonio-ui-commons';
+import { screen, setupTest, within } from '@test-setup';
 import { TESTID_SELECTORS } from '../constants/tests';
 
 describe('Member list', () => {

@@ -13,7 +13,7 @@ import {
 	ImportContactsResponse,
 	ImportContactsResult
 } from './import-contacts';
-import { createSoapAPIInterceptor } from '@zextras/carbonio-ui-commons';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 describe('importAddressBook', () => {
 	const folderId = 'testFolderId';

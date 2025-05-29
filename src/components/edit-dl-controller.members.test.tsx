@@ -10,7 +10,7 @@ import { act, waitFor } from '@testing-library/react';
 import { times } from 'lodash';
 
 import { EditDLControllerComponent, EditDLControllerComponentProps } from './edit-dl-controller';
-import { screen, setupTest, within } from '@zextras/carbonio-ui-commons';
+import { screen, setupTest, within } from '@test-setup';
 import { TESTID_SELECTORS } from '../constants/tests';
 import { DistributionList } from '../model/distribution-list';
 import {

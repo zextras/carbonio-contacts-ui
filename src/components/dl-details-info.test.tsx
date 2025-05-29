@@ -6,7 +6,7 @@
 import React from 'react';
 
 import { DLDetailsInfo } from './dl-details-info';
-import { screen, setupTest, within } from '@zextras/carbonio-ui-commons';
+import { screen, setupTest, within } from '@test-setup';
 import * as clipboard from '@zextras/carbonio-ui-commons';
 import { TESTID_SELECTORS } from '../constants/tests';
 import { generateDistributionList } from '../tests/utils';

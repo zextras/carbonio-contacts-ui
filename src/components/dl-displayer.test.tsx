@@ -11,7 +11,7 @@ import { times } from 'lodash';
 
 import { DistributionListDisplayer } from './dl-displayer';
 import { OpenMailComposerIntegratedFunction } from '../actions/send-email';
-import { screen, setupTest, within } from '@zextras/carbonio-ui-commons';
+import { screen, setupTest, within } from '@test-setup';
 import { EDIT_DL_BOARD_ID } from '../constants';
 import { TESTID_SELECTORS } from '../constants/tests';
 import { DistributionList } from '../model/distribution-list';

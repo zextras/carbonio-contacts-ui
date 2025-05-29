@@ -9,9 +9,9 @@ import { act } from '@testing-library/react';
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 
 import { FOLDERS } from '@zextras/carbonio-ui-commons';
-import { createSoapAPIInterceptor } from '@zextras/carbonio-ui-commons';
-import { populateFoldersStore } from '@zextras/carbonio-ui-commons';
-import { screen, setupHook } from '@zextras/carbonio-ui-commons';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
+import { populateFoldersStore } from '@test-utils/store/folders';
+import { screen, setupHook } from '@test-setup';
 import { TRASH_ACTION } from '../../../constants/actions';
 import { Contact } from '../../../legacy/types/contact';
 import { buildContact } from '../../../tests/model-builder';

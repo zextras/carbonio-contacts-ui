@@ -14,22 +14,19 @@ import { UIAction } from './types';
 import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
 import { FOLDERS } from '@zextras/carbonio-ui-commons';
 import { getFolder } from '@zextras/carbonio-ui-commons';
-import { FOLDERS_DESCRIPTORS } from '@zextras/carbonio-ui-commons';
-import { generateFolder } from '@zextras/carbonio-ui-commons';
-import { createSoapAPIInterceptor } from '@zextras/carbonio-ui-commons';
-import { populateFoldersStore } from '@zextras/carbonio-ui-commons';
-import { getMocksContext } from '@zextras/carbonio-ui-commons';
-import {
-	setupHook,
-	screen,
-	setupTest,
-	makeListItemsVisible,
-	within
-} from '@zextras/carbonio-ui-commons';
+
+import { generateFolder } from '@test-utils/folders/folders-generator';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
+import { populateFoldersStore } from '@test-utils/store/folders';
+
+
 import { AddressBookMoveModal } from '../components/modals/address-book-move';
 import { TIMERS } from '../constants/tests';
 import { FolderActionRequest, FolderActionResponse } from '../network/api/folder-action';
 import { getFoldersArray } from '../tests/utils';
+import { makeListItemsVisible, screen, setupHook, setupTest, within } from '@test-setup';
+import { FOLDERS_DESCRIPTORS } from '__test__/constants';
+import { getMocksContext } from '@test-utils/utils/mocks-context';
 
 describe('useActionMoveAddressBook', () => {
 	it('should return an object with the specific data', () => {

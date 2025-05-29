@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { modifyContact } from './modify-contact';
-import { createSoapAPIInterceptor } from '@zextras/carbonio-ui-commons';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 import { buildContact } from '../../../tests/model-builder';
 import { createSoapContact } from '../../../tests/utils';
 

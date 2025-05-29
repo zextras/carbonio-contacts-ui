@@ -6,12 +6,12 @@
 import { JSNS, SoapResponse } from '@zextras/carbonio-shell-ui';
 import { HttpResponse, HttpResponseResolver, http } from 'msw';
 
-import { getSetupServer } from '@zextras/carbonio-ui-commons';
 import {
 	GetDistributionListMembersRequest,
 	GetDistributionListMembersResponse
 } from '../../network/api/get-distribution-list-members';
 import { buildSoapError, buildSoapResponse } from '../utils';
+import { getSetupServer } from '@jest-setup';
 
 type GetDistributionListMembersHandler = HttpResponseResolver<
 	never,

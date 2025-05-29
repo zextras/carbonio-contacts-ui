@@ -10,7 +10,7 @@ import { screen, waitFor } from '@testing-library/react';
 import type { TFunction } from 'i18next';
 
 import { getTags } from '@zextras/carbonio-ui-commons';
-import { setupTest } from '@zextras/carbonio-ui-commons';
+import { setupTest } from '@test-setup';
 import { AdvancedFilterModal, AdvancedFilterModalProps } from '../advance-filter-modal';
 
 jest.mock('../../../../carbonio-ui-commons/store/zustand/tags', () => ({

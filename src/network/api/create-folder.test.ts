@@ -9,7 +9,7 @@ import { ErrorSoapBodyResponse, JSNS } from '@zextras/carbonio-shell-ui';
 
 import { createFolder, CreateFolderParams } from './create-folder';
 import { FOLDERS } from '@zextras/carbonio-ui-commons';
-import { createSoapAPIInterceptor } from '@zextras/carbonio-ui-commons';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 describe('Create folder', () => {
 	it('should raise an exception if the response contains a Fault', () => {

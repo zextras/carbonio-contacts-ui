@@ -12,7 +12,7 @@ import { EventEmitter } from 'events';
 import { HttpResponse } from 'msw';
 
 import EditDLBoard, { EditDLBoardContext } from './edit-dl-board';
-import { screen, setupTest, within } from '@zextras/carbonio-ui-commons';
+import { screen, setupTest, within } from '@test-setup';
 import { ROUTES, ROUTES_INTERNAL_PARAMS } from '../../constants';
 import { JEST_MOCKED_ERROR, TESTID_SELECTORS } from '../../constants/tests';
 import { DistributionList } from '../../model/distribution-list';

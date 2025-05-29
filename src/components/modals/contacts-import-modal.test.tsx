@@ -12,14 +12,14 @@ import { JSNS } from '@zextras/carbonio-shell-ui';
 
 import { ContactsImportModal, ContactsImportModalProps } from './contacts-import-modal';
 import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
-import { generateFolder } from '@zextras/carbonio-ui-commons';
-import { createSoapAPIInterceptor } from '@zextras/carbonio-ui-commons';
-import { createFakeFile } from '@zextras/carbonio-ui-commons';
-import { screen, setupTest } from '@zextras/carbonio-ui-commons';
+import { generateFolder } from '@test-utils/folders/folders-generator';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
+import { screen, setupTest }  from '@test-setup';
 import { TESTID_SELECTORS } from '../../constants/tests';
 import { ImportContactsRequest, ImportContactsResponse } from '../../network/api/import-contacts';
 import { UploadResponseFileInfo } from '../../network/api/upload';
 import { registerUploadHandler } from '../../tests/msw-handlers/upload';
+import { createFakeFile } from '@test-utils/utils/file';
 /**
  * Test the import contacts modal
  */

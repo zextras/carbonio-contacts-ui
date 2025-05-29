@@ -11,16 +11,16 @@ import { AddressBookMoveModal } from './address-book-move';
 import { FOLDERS } from '@zextras/carbonio-ui-commons';
 import { isLink, isTrashed } from '@zextras/carbonio-ui-commons';
 import { getRootsArray } from '@zextras/carbonio-ui-commons';
-import { populateFoldersStore } from '@zextras/carbonio-ui-commons';
-import { getMocksContext } from '@zextras/carbonio-ui-commons';
+import { populateFoldersStore } from '@test-utils/store/folders';
 import {
 	makeListItemsVisible,
 	screen,
 	setupTest,
 	within
-} from '@zextras/carbonio-ui-commons';
+} from '@test-setup';
 import { TESTID_SELECTORS } from '../../constants/tests';
 import { getFoldersArray } from '../../tests/utils';
+import { getMocksContext } from '@test-utils/utils/mocks-context';
 
 describe('AddressBookMoveModal', () => {
 	const mocksContext = getMocksContext();

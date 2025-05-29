@@ -9,9 +9,10 @@ import { screen, fireEvent, act } from '@testing-library/react';
 import { getAction } from '@zextras/carbonio-shell-ui';
 import { useNavigate } from 'react-router-dom';
 
-import { setupTest, UserEvent } from '@zextras/carbonio-ui-commons';
+
 import { Contact } from '../../../../types/contact';
 import { ContactListItem } from '../contact-list-item';
+import { setupTest, UserEvent } from '@test-setup';
 
 jest.mock('@zextras/carbonio-shell-ui', () => ({
 	useTags: jest.fn(() => []),

@@ -9,8 +9,8 @@ import { act } from '@testing-library/react';
 import { useActionShowShareInfo } from './show-share-info';
 import { UIAction } from './types';
 import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
-import { generateFolder } from '@zextras/carbonio-ui-commons';
-import { screen, setupHook } from '@zextras/carbonio-ui-commons';
+import { generateFolder } from '@test-utils/folders/folders-generator';
+import { screen, setupHook } from '@test-setup';
 import { TIMERS } from '../constants/tests';
 
 describe('useActionShareInfo', () => {

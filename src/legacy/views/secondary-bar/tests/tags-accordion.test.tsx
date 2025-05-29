@@ -10,11 +10,12 @@ import { HttpResponse } from 'msw';
 
 import { useRunSearchIntegration } from '@zextras/carbonio-ui-commons';
 import { useTagStore } from '@zextras/carbonio-ui-commons';
-import { createAPIInterceptor } from '@zextras/carbonio-ui-commons';
-import { buildSoapResponse } from '@zextras/carbonio-ui-commons';
-import { screen, setupTest } from '@zextras/carbonio-ui-commons';
+
+import { screen, setupTest }  from '@test-setup';
 import { TESTID_SELECTORS, TIMERS } from '../../../../constants/tests';
 import { TagsAccordion } from '../tags-accordion';
+import { createAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
+import { buildSoapResponse } from 'tests/utils';
 
 jest.mock('../../../../carbonio-ui-commons/integrations/search/use-run-search', () => ({
 	useRunSearchIntegration: jest.fn()

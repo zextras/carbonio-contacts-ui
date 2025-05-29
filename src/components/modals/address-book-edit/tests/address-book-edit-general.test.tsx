@@ -7,7 +7,7 @@ import React from 'react';
 
 import { screen } from '@testing-library/react';
 
-import { setupTest } from '@zextras/carbonio-ui-commons';
+import { setupTest } from '@test-setup';
 import { AddressBookEditGeneralModal } from '../address-book-edit-general';
 
 describe('AddressBookEditGeneralModal', () => {

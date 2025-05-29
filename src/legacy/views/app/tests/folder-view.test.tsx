@@ -16,16 +16,15 @@ import { FOLDERS } from '@zextras/carbonio-ui-commons';
 import { useRunSearchIntegration } from '@zextras/carbonio-ui-commons';
 import { useFolderStore } from '@zextras/carbonio-ui-commons';
 import { useTagStore } from '@zextras/carbonio-ui-commons';
-import { useAppContext } from '@zextras/carbonio-ui-commons';
-import { generateFolder } from '@zextras/carbonio-ui-commons';
-import { createSoapAPIInterceptor } from '@zextras/carbonio-ui-commons';
-import { populateFoldersStore } from '@zextras/carbonio-ui-commons';
+import { generateFolder } from '@test-utils/folders/folders-generator';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
+import { populateFoldersStore } from '@test-utils/store/folders';
 import {
 	makeListItemsVisible,
 	screen,
 	setupHook,
 	setupTest
-} from '@zextras/carbonio-ui-commons';
+}  from '@test-setup';
 import { FOLDERS_DESCRIPTORS, TESTID_SELECTORS } from '../../../../constants/tests';
 import {
 	ContactActionRequest,
@@ -43,6 +42,7 @@ import {
 import { FolderView } from '../folder-view';
 import { createContactsApiInterceptor, findContactInList } from './utils';
 import { generateLinkFolder } from '../../../../views/contact-groups/tests/utils';
+import { useAppContext } from '@test-utils/carbonio-shell-ui/carbonio-shell-ui';
 
 jest.mock('../../../../carbonio-ui-commons/integrations/search/use-run-search', () => ({
 	useRunSearchIntegration: jest.fn()

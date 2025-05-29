@@ -9,7 +9,7 @@ import { faker } from '@faker-js/faker';
 import { noop } from 'lodash';
 
 import { DisplayerHeader } from './displayer-header';
-import { screen, setupTest } from '@zextras/carbonio-ui-commons';
+import { screen, setupTest } from '@test-setup';
 import { TESTID_SELECTORS } from '../../constants/tests';
 
 describe('Displayer header', () => {

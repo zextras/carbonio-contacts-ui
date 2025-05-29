@@ -11,9 +11,9 @@ import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 import { useActionRemoveAddressBookLink } from './remove-address-book-link';
 import { UIAction } from './types';
 import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
-import { generateFolder } from '@zextras/carbonio-ui-commons';
-import { createSoapAPIInterceptor } from '@zextras/carbonio-ui-commons';
-import { screen, setupHook } from '@zextras/carbonio-ui-commons';
+import { generateFolder } from '@test-utils/folders/folders-generator';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
+import { screen, setupHook } from '@test-setup';
 import { FolderActionRequest } from '../network/api/folder-action';
 
 describe('useActionRemoveAddressBookLink', () => {

@@ -12,13 +12,13 @@ import { ContactMoveModal } from './contact-move';
 import { FOLDERS } from '@zextras/carbonio-ui-commons';
 import { isLink, isTrashed } from '@zextras/carbonio-ui-commons';
 import { getRootsArray } from '@zextras/carbonio-ui-commons';
-import { populateFoldersStore } from '@zextras/carbonio-ui-commons';
+import { populateFoldersStore } from '@test-utils/store/folders';
 import {
 	makeListItemsVisible,
 	screen,
 	setupTest,
 	within
-} from '@zextras/carbonio-ui-commons';
+}  from '@test-setup';
 import { TESTID_SELECTORS } from '../../constants/tests';
 import { buildContact } from '../../tests/model-builder';
 import { getFoldersArray } from '../../tests/utils';

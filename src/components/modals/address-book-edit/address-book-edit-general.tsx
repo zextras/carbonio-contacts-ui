@@ -25,10 +25,11 @@ import {
 } from '@zextras/carbonio-ui-commons';
 import { isAdministerAllowed, isSystemFolder } from '@zextras/carbonio-ui-commons';
 import { useFolder } from '@zextras/carbonio-ui-commons';
-import { Grant } from '@zextras/carbonio-ui-commons';
+
 import { TIMEOUTS } from '../../../constants';
 import { getFolderTranslatedName } from '../../../legacy/utils/helpers';
 import { apiClient } from '../../../network/api-client';
+import { Grant } from '@zextras/carbonio-ui-commons';
 
 export type AddressBookEditGeneralModalProps = {
 	addressBookId: string;

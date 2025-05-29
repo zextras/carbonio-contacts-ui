@@ -6,7 +6,7 @@
 import { waitFor } from '@testing-library/react';
 
 import { useFindDistributionLists } from './use-find-distribution-lists';
-import { setupHook } from '@zextras/carbonio-ui-commons';
+import { setupHook } from '@test-setup';
 import { registerGetAccountDistributionListsHandler } from '../tests/msw-handlers/get-account-distribution-lists';
 import { generateDistributionList } from '../tests/utils';
 

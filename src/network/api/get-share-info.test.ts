@@ -9,7 +9,7 @@ import { map } from 'lodash';
 
 import { getShareInfo, GetShareInfoResponse } from './get-share-info';
 import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
-import { createSoapAPIInterceptor } from '@zextras/carbonio-ui-commons';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 describe('GetShareInfo', () => {
 	it('should raise an exception if the response contains a Fault', () => {

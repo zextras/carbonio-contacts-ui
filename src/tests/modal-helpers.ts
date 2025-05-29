@@ -8,9 +8,9 @@ import { UserEvent } from '@testing-library/user-event';
 
 import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
 import { FOLDERS } from '@zextras/carbonio-ui-commons';
-import { generateFolder } from '@zextras/carbonio-ui-commons';
-import { populateFoldersStore } from '@zextras/carbonio-ui-commons';
-import { makeListItemsVisible, screen } from '@zextras/carbonio-ui-commons';
+import { generateFolder } from '@test-utils/folders/folders-generator';
+import { populateFoldersStore } from '@test-utils/store/folders';
+import { makeListItemsVisible, screen }  from '@test-setup';
 
 export const setupMoveItemModal = (
 	folder = generateFolder({

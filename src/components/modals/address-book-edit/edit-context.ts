@@ -5,7 +5,7 @@
  */
 import { createContext } from 'react';
 
-import { Grant } from '@zextras/carbonio-ui-commons';
+import { Grant } from '@zextras/carbonio-shell-ui';
 
 export const Context = createContext<{
 	setActiveGrant?: (grant: Grant) => void;

@@ -1,4 +1,4 @@
-import { generateFolder } from '@zextras/carbonio-ui-commons';
+import { generateFolder } from '@test-utils/folders/folders-generator';
 import { Folder } from '@zextras/carbonio-ui-commons';
 
 /*

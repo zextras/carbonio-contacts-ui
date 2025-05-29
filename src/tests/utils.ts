@@ -10,7 +10,7 @@ import { EventEmitter } from 'events';
 import { times } from 'lodash';
 
 import { getFoldersMap } from '@zextras/carbonio-ui-commons';
-import { screen, within } from '@zextras/carbonio-ui-commons';
+import { screen, within }  from '@test-setup';
 import { Folder } from '@zextras/carbonio-ui-commons';
 import { TESTID_SELECTORS } from '../constants/tests';
 import { SoapContact } from '../legacy/types/soap';

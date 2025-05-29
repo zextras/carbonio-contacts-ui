@@ -15,7 +15,7 @@ import {
 	CommonContactGroupBoard,
 	CommonContactGroupBoardProps
 } from './common-contact-group-board';
-import { setupTest, screen } from '@zextras/carbonio-ui-commons';
+import { setupTest, screen } from '@test-setup';
 import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../constants';
 import { PALETTE, TESTID_SELECTORS } from '../../constants/tests';
 import { buildContactGroup } from '../../tests/model-builder';

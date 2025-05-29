@@ -11,8 +11,8 @@ import * as shell from '@zextras/carbonio-shell-ui';
 import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
 import { FOLDERS } from '@zextras/carbonio-ui-commons';
 import { useFolderStore } from '@zextras/carbonio-ui-commons';
-import { generateFolder } from '@zextras/carbonio-ui-commons';
-import { setupTest, screen } from '@zextras/carbonio-ui-commons';
+import { generateFolder } from '@test-utils/folders/folders-generator';
+import { setupTest, screen } from '@test-setup';
 import SecondaryBarView from '../secondary-bar-view';
 
 jest.mock('react-router-dom', () => ({

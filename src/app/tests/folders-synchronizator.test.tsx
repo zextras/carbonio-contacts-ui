@@ -9,13 +9,11 @@ import { HttpResponse } from 'msw';
 
 import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
 import * as commonsHook from '@zextras/carbonio-ui-commons';
-import { generateFolder } from '@zextras/carbonio-ui-commons';
-import {
-	createAPIInterceptor,
-	createSoapAPIInterceptor
-} from '@zextras/carbonio-ui-commons';
-import { setupTest } from '@zextras/carbonio-ui-commons';
+import { generateFolder } from '@test-utils/folders/folders-generator';
+
+import { setupTest } from '@test-setup';
 import { FoldersSynchronizator } from '../folders-syncronization';
+import { createAPIInterceptor, createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 // mocking the worker. in commons jest-setup the worker is already mocked, but is improperly defined with wrong types and
 // is causing a call to "onMessage", which tries to alter the folders store and overrides the folders, breaking the test.

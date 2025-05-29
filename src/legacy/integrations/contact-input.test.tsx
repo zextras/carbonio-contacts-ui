@@ -17,8 +17,8 @@ import {
 	ContactInputOnChange,
 	ContactInputValue
 } from '@zextras/carbonio-ui-commons';
-import { createSoapAPIInterceptor } from '@zextras/carbonio-ui-commons';
-import { UserEvent, screen, setupTest } from '@zextras/carbonio-ui-commons';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
+import { UserEvent, screen, setupTest }  from '@test-setup';
 import { TESTID_SELECTORS } from '../../constants/tests';
 import { registerGetDistributionListHandler } from '../../tests/msw-handlers/get-distribution-list';
 import { generateDistributionList } from '../../tests/utils';

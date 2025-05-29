@@ -8,7 +8,7 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 
 import { ContactGroupDisplayerDetails } from './contact-group-displayer-details';
-import { screen, setupTest } from '@zextras/carbonio-ui-commons';
+import { screen, setupTest } from '@test-setup';
 import { TESTID_SELECTORS } from '../../../constants/tests';
 import { buildContactGroup, buildMembers } from '../../../tests/model-builder';
 

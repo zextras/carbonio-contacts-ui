@@ -3,8 +3,8 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { createSoapAPIInterceptor } from '@zextras/carbonio-ui-commons';
-import { makeListItemsVisible, screen } from '@zextras/carbonio-ui-commons';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
+import { makeListItemsVisible, screen }  from '@test-setup';
 import { CnItem } from '../../../../network/api/types';
 import { SearchContactsSoapRequest } from '../../../../types';
 import { SoapContact } from '../../../types/soap';

@@ -8,7 +8,7 @@ import { faker } from '@faker-js/faker';
 import { JSNS, SoapResponse } from '@zextras/carbonio-shell-ui';
 import { http, HttpResponse, HttpResponseResolver } from 'msw';
 
-import { getSetupServer } from '@zextras/carbonio-ui-commons';
+import { getSetupServer } from '@jest-setup';
 import { GenericSoapPayload } from '../../../network/api/types';
 import { buildSoapError, buildSoapResponse } from '../../../tests/utils';
 

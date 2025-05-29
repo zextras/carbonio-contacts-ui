@@ -10,11 +10,12 @@ import { act } from '@testing-library/react';
 
 import EditView from './edit-view';
 import { FOLDERS } from '@zextras/carbonio-ui-commons';
-import { generateFolder } from '@zextras/carbonio-ui-commons';
-import { populateFoldersStore } from '@zextras/carbonio-ui-commons';
-import { screen, setupTest } from '@zextras/carbonio-ui-commons';
+
 import { registerCreateContactHandler } from '../../tests/msw/create-contact';
 import { CreateContactRequest } from '../../types/soap';
+import { populateFoldersStore } from '@test-utils/store/folders';
+import { screen, setupTest } from '@test-setup';
+import { generateFolder } from '@test-utils/folders/folders-generator';
 
 describe('Edit view', () => {
 	it('should not show the destination folder select while editing a contact', () => {

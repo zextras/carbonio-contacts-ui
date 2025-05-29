@@ -6,7 +6,7 @@
 import { JSNS, SoapResponse } from '@zextras/carbonio-shell-ui';
 import { http, HttpResponse, HttpResponseResolver } from 'msw';
 
-import { getSetupServer } from '@zextras/carbonio-ui-commons';
+import { getSetupServer } from '@jest-setup';
 import { CnItem, GenericSoapPayload } from '../../network/api/types';
 import { buildSoapResponse, createSoapContactGroup } from '../utils';
 

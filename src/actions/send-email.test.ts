@@ -9,7 +9,7 @@ import { times } from 'lodash';
 
 import { useActionSendEmail } from './send-email';
 import { UIAction } from './types';
-import { setupHook } from '@zextras/carbonio-ui-commons';
+import { setupHook } from '@test-setup';
 
 describe('useActionSendEmail', () => {
 	it('should return an action with the specific data', () => {

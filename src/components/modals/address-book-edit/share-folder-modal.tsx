@@ -24,9 +24,9 @@ import { replace, split } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { GranteeInfo } from './share-folder-properties';
-import { ContactInputValue } from '@zextras/carbonio-ui-commons';
+import { ContactInputValue, Grant } from '@zextras/carbonio-ui-commons';
 import { useFolder } from '@zextras/carbonio-ui-commons';
-import { Grant } from '@zextras/carbonio-ui-commons';
+
 import { OnChangeSelect } from '@zextras/carbonio-ui-commons';
 import { TIMEOUTS } from '../../../constants';
 import { ContactInput } from '../../../legacy/integrations/contact-input';

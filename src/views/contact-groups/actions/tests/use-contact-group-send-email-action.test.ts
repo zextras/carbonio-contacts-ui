@@ -6,7 +6,7 @@
 import { faker } from '@faker-js/faker';
 import * as shell from '@zextras/carbonio-shell-ui';
 
-import { setupHook } from '@zextras/carbonio-ui-commons';
+import { setupHook } from '@test-setup';
 import { SEND_EMAIL_ACTION } from '../../../../constants/actions';
 import { buildContactGroup, buildMembers } from '../../../../tests/model-builder';
 import { useContactGroupSendEmailAction } from '../use-contact-group-send-email-action';

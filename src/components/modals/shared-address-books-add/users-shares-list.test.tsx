@@ -14,7 +14,7 @@ import {
 	makeListItemsVisible,
 	screen,
 	setupTest
-} from '@zextras/carbonio-ui-commons';
+}  from '@test-setup';
 import { TESTID_SELECTORS } from '../../../constants/tests';
 import { ShareInfo } from '../../../model/share-info';
 import { buildShareInfo } from '../../../tests/model-builder';

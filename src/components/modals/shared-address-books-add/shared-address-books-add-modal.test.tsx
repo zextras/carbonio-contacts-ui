@@ -11,13 +11,13 @@ import { ErrorSoapBodyResponse, JSNS } from '@zextras/carbonio-shell-ui';
 import { times } from 'lodash';
 
 import { SharedAddressBooksAddModal } from './shared-address-books-add-modal';
-import { createSoapAPIInterceptor } from '@zextras/carbonio-ui-commons';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 import {
 	makeListItemsVisible,
 	screen,
 	setupTest,
 	within
-} from '@zextras/carbonio-ui-commons';
+}  from '@test-setup';
 import { TESTID_SELECTORS } from '../../../constants/tests';
 import { CreateMountpointsRequest } from '../../../network/api/create-mountpoints';
 import { GetShareInfoRequest, GetShareInfoResponse } from '../../../network/api/get-share-info';

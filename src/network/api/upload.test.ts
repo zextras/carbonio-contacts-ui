@@ -7,8 +7,8 @@ import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 
 import { upload } from './upload';
-import { createFakeFile } from '@zextras/carbonio-ui-commons';
 import { registerUploadHandler } from '../../tests/msw-handlers/upload';
+import { createFakeFile } from '@test-utils/utils/file';
 
 describe('Upload', () => {
 	it('should raise an exception if the response is not valid', () => {
