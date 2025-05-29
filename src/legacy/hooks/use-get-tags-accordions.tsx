@@ -17,12 +17,14 @@ import {
 	DropdownItem
 } from '@zextras/carbonio-design-system';
 import type { QueryChip } from '@zextras/carbonio-search-ui';
+import {
+	ZIMBRA_STANDARD_COLORS,
+	useRunSearchIntegration,
+	useSortedTagsArray
+} from '@zextras/carbonio-ui-commons';
 import { reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-ui-commons';
-import { useRunSearchIntegration } from '@zextras/carbonio-ui-commons';
-import { useSortedTagsArray } from '@zextras/carbonio-ui-commons';
 import { createTag, useGetTagsActions } from '../ui-actions/tag-actions';
 import { ItemType, TagsAccordionItems } from '../views/secondary-bar/parts/tags/types';
 

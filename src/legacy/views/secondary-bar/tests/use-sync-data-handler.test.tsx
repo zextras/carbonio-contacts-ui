@@ -6,15 +6,14 @@
 import React, { ReactElement, ReactNode } from 'react';
 
 import { renderHook } from '@testing-library/react';
-import { SoapNotify,  useRefresh } from '@zextras/carbonio-shell-ui';
+import { SoapNotify, useRefresh } from '@zextras/carbonio-shell-ui';
+import { useFolderStore, folderWorker } from '@zextras/carbonio-ui-commons';
 import { http } from 'msw';
 
-import { useFolderStore } from '@zextras/carbonio-ui-commons';
-import { getSetupServer } from '@jest-setup';
-import { generateFolder } from '@test-utils/folders/folders-generator';
-import { folderWorker } from '@zextras/carbonio-ui-commons';
 import { useSyncDataHandler } from '../use-sync-data-handler';
+import { getSetupServer } from '@jest-setup';
 import { useNotify } from '@test-utils/carbonio-shell-ui/carbonio-shell-ui';
+import { generateFolder } from '@test-utils/folders/folders-generator';
 import { handleGetFolderRequest } from '@test-utils/network/msw/handle-get-folder';
 import { handleGetShareInfoRequest } from '@test-utils/network/msw/handle-get-share-info';
 

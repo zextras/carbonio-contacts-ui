@@ -4,13 +4,12 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { faker } from '@faker-js/faker';
+import { FOLDER_VIEW, FOLDERS } from '@zextras/carbonio-ui-commons';
 
 import { useActionImportContacts } from './import-contacts';
 import { UIAction } from './types';
-import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
-import { FOLDERS } from '@zextras/carbonio-ui-commons';
-import { generateFolder } from '@test-utils/folders/folders-generator';
 import { setupHook } from '@test-setup';
+import { generateFolder } from '@test-utils/folders/folders-generator';
 
 describe('useActionImportContacts', () => {
 	it('should return an object with the specific data', () => {

@@ -7,11 +7,11 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import * as shell from '@zextras/carbonio-shell-ui';
+import * as clipboard from '@zextras/carbonio-ui-commons';
 
 import { MemberDisplayerListItemComponent } from './member-displayer-list-item';
-import { screen, setupTest, within } from '@test-setup';
-import * as clipboard from '@zextras/carbonio-ui-commons';
 import { TESTID_SELECTORS } from '../constants/tests';
+import { screen, setupTest, within } from '@test-setup';
 
 describe('Member displayer item', () => {
 	it('should show the email of the member', () => {

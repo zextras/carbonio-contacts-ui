@@ -11,20 +11,10 @@ import { Button } from '@zextras/carbonio-design-system';
 import { QueryChip, SearchViewProps, useQuery } from '@zextras/carbonio-search-ui';
 import * as hooks from '@zextras/carbonio-shell-ui';
 import { AccountSettings } from '@zextras/carbonio-shell-ui';
+import { FOLDERS, useFolderStore } from '@zextras/carbonio-ui-commons';
 import { noop } from 'lodash';
 import { HttpResponse } from 'msw';
 
-import { FOLDERS } from '@zextras/carbonio-ui-commons';
-import { useFolderStore } from '@zextras/carbonio-ui-commons';
-import { generateFolder } from '@test-utils/folders/folders-generator';
-
-import { populateFoldersStore } from '@test-utils/store/folders';
-import {
-	makeListItemsVisible,
-	screen,
-	setupTest,
-	triggerLoadMore
-}  from '@test-setup';
 import { TIMERS } from '../../../../constants/tests';
 import { CnItem } from '../../../../network/api/types';
 import { createSoapContact, createSoapContactGroupV2 } from '../../../../tests/utils';
@@ -36,8 +26,14 @@ import {
 import { type SoapContact } from '../../../types/soap';
 import { Query } from '../search-types';
 import SearchView from '../search-view';
+import { makeListItemsVisible, screen, setupTest, triggerLoadMore } from '@test-setup';
+import { generateFolder } from '@test-utils/folders/folders-generator';
+import {
+	createAPIInterceptor,
+	createSoapAPIInterceptor
+} from '@test-utils/network/msw/create-api-interceptor';
 import { generateSettings } from '@test-utils/settings/settings-generator';
-import { createAPIInterceptor, createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
+import { populateFoldersStore } from '@test-utils/store/folders';
 
 const useMockedUseQuery = (): ReturnType<typeof useQuery> => {
 	const queryChip: QueryChip = {

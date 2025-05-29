@@ -9,8 +9,8 @@ import { faker } from '@faker-js/faker';
 import { noop } from 'lodash';
 
 import { DisplayerHeader } from './displayer-header';
-import { screen, setupTest } from '@test-setup';
 import { TESTID_SELECTORS } from '../../constants/tests';
+import { screen, setupTest } from '@test-setup';
 
 describe('Displayer header', () => {
 	it('should display the icon', () => {

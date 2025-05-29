@@ -8,25 +8,20 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 import { ErrorSoapBodyResponse, JSNS } from '@zextras/carbonio-shell-ui';
+import { FOLDER_VIEW, FOLDERS, getFolder } from '@zextras/carbonio-ui-commons';
 
 import { useActionMoveAddressBook } from './move-address-book';
 import { UIAction } from './types';
-import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
-import { FOLDERS } from '@zextras/carbonio-ui-commons';
-import { getFolder } from '@zextras/carbonio-ui-commons';
-
-import { generateFolder } from '@test-utils/folders/folders-generator';
-import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
-import { populateFoldersStore } from '@test-utils/store/folders';
-
-
 import { AddressBookMoveModal } from '../components/modals/address-book-move';
 import { TIMERS } from '../constants/tests';
 import { FolderActionRequest, FolderActionResponse } from '../network/api/folder-action';
 import { getFoldersArray } from '../tests/utils';
 import { makeListItemsVisible, screen, setupHook, setupTest, within } from '@test-setup';
-import { FOLDERS_DESCRIPTORS } from '__test__/constants';
+import { generateFolder } from '@test-utils/folders/folders-generator';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
+import { populateFoldersStore } from '@test-utils/store/folders';
 import { getMocksContext } from '@test-utils/utils/mocks-context';
+import { FOLDERS_DESCRIPTORS } from '__test__/constants';
 
 describe('useActionMoveAddressBook', () => {
 	it('should return an object with the specific data', () => {

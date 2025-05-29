@@ -6,12 +6,10 @@
 import React, { useCallback, useMemo } from 'react';
 
 import { useModal } from '@zextras/carbonio-design-system';
+import { isLink, isTrash, isNestedInTrash, Folder } from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 
 import { UIAction } from './types';
-import { isLink, isTrash } from '@zextras/carbonio-ui-commons';
-import { isNestedInTrash } from '@zextras/carbonio-ui-commons';
-import { Folder } from '@zextras/carbonio-ui-commons';
 import { ContactsImportModal } from '../components/modals/contacts-import-modal';
 import { ACTION_IDS } from '../constants';
 

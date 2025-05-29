@@ -4,8 +4,9 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { CnItem } from './types';
 import { FOLDERS } from '@zextras/carbonio-ui-commons';
+
+import { CnItem } from './types';
 
 export const createContactFromVcard = (messageId: string, part: string): Promise<CnItem> =>
 	fetch(`/service/soap/CreateContactRequest`, {

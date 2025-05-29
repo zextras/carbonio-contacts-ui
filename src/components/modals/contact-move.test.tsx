@@ -6,22 +6,15 @@
 import React from 'react';
 
 import { act } from '@testing-library/react';
+import { FOLDERS, isLink, isTrashed, getRootsArray } from '@zextras/carbonio-ui-commons';
 import { times } from 'lodash';
 
 import { ContactMoveModal } from './contact-move';
-import { FOLDERS } from '@zextras/carbonio-ui-commons';
-import { isLink, isTrashed } from '@zextras/carbonio-ui-commons';
-import { getRootsArray } from '@zextras/carbonio-ui-commons';
-import { populateFoldersStore } from '@test-utils/store/folders';
-import {
-	makeListItemsVisible,
-	screen,
-	setupTest,
-	within
-}  from '@test-setup';
 import { TESTID_SELECTORS } from '../../constants/tests';
 import { buildContact } from '../../tests/model-builder';
 import { getFoldersArray } from '../../tests/utils';
+import { makeListItemsVisible, screen, setupTest, within } from '@test-setup';
+import { populateFoldersStore } from '@test-utils/store/folders';
 
 describe('ContactMoveModal', () => {
 	describe('Move mode', () => {

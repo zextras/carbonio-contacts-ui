@@ -5,10 +5,10 @@
  */
 import React from 'react';
 
+import { useFolder } from '@zextras/carbonio-ui-commons';
 import { useParams } from 'react-router-dom';
 
 import { FolderPanel } from './folder-panel';
-import { useFolder } from '@zextras/carbonio-ui-commons';
 import { RouteParams } from '../../../constants';
 
 export const FolderPanelWrapper = (): React.JSX.Element => {

@@ -7,11 +7,9 @@
 import React, { useMemo } from 'react';
 
 import { t } from '@zextras/carbonio-shell-ui';
+import { ZIMBRA_STANDARD_COLORS, isLink, Folder } from '@zextras/carbonio-ui-commons';
 
 import { CollapsedSideBarItem } from './collapsed-sidebar-item';
-import { ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-ui-commons';
-import { isLink } from '@zextras/carbonio-ui-commons';
-import { Folder } from '@zextras/carbonio-ui-commons';
 import { CONTACTS_ROUTE } from '../../../constants';
 import { getFolderTranslatedName } from '../../utils/helpers';
 

@@ -5,7 +5,6 @@
  */
 
 import { ChipItem, type DropdownItem } from '@zextras/carbonio-design-system';
-
 import {
 	ContactInputItem,
 	ContactType,

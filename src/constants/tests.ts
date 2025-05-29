@@ -4,8 +4,9 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { DELETE_PERMANENTLY_ACTION } from './actions';
 import { FOLDERS } from '@zextras/carbonio-ui-commons';
+
+import { DELETE_PERMANENTLY_ACTION } from './actions';
 
 type TypeOfEnumeration<T> = T[keyof T];
 

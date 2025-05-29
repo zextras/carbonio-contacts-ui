@@ -13,6 +13,7 @@ import React, {
 } from 'react';
 
 import { type ChipAction, Container, Input, List, Row } from '@zextras/carbonio-design-system';
+import { ContactInputValue } from '@zextras/carbonio-ui-commons';
 import { reduce, uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
@@ -20,7 +21,6 @@ import { FilterMembersIcon } from './filter-members-icon';
 import { loadingItems } from './loading-items';
 import { MemberListItemComponent } from './member-list-item';
 import { Text } from './Text';
-import { ContactInputValue } from '@zextras/carbonio-ui-commons';
 import { ContactInput } from '../legacy/integrations/contact-input';
 
 const DUPLICATED_MEMBER_ACTION_ID = 'duplicated';

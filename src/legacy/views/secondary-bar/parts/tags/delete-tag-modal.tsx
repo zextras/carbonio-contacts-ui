@@ -7,10 +7,10 @@
 import React, { FC, ReactElement, useCallback, useMemo } from 'react';
 
 import { Container, Text, useSnackbar } from '@zextras/carbonio-design-system';
+import { deleteTag } from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 
 import { ItemType } from './types';
-import { deleteTag } from '@zextras/carbonio-ui-commons';
 import ModalFooter from '../../commons/modal-footer';
 import { ModalHeader } from '../../commons/modal-header';
 

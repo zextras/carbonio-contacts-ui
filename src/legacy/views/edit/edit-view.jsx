@@ -16,6 +16,15 @@ import {
 	useSnackbar
 } from '@zextras/carbonio-design-system';
 import { report } from '@zextras/carbonio-shell-ui';
+import {
+	FoldersSelector,
+	FOLDERS,
+	ZIMBRA_STANDARD_COLORS,
+	isRoot,
+	isSharedAccountFolder,
+	isTrash,
+	useFoldersMap
+} from '@zextras/carbonio-ui-commons';
 import { filter, find, map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -23,15 +32,6 @@ import styled from 'styled-components';
 
 import { ContactEditorRow, CustomMultivalueField } from './CustomMultivalueField';
 import reducer, { op } from './form-reducer';
-import { FoldersSelector } from '@zextras/carbonio-ui-commons';
-import { FOLDERS } from '@zextras/carbonio-ui-commons';
-import { ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-ui-commons';
-import {
-	isRoot,
-	isSharedAccountFolder,
-	isTrash
-} from '@zextras/carbonio-ui-commons';
-import { useFoldersMap } from '@zextras/carbonio-ui-commons';
 import { CompactView } from '../../commons/contact-compact-view';
 import { createContact } from '../../store/actions/create-contact';
 import { modifyContact } from '../../store/actions/modify-contact';

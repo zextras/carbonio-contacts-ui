@@ -9,9 +9,9 @@ import { times } from 'lodash';
 
 import { useActionEditDL } from './edit-dl';
 import { UIAction } from './types';
-import { setupHook } from '@test-setup';
 import { EDIT_DL_BOARD_ID } from '../constants';
 import { generateDistributionList } from '../tests/utils';
+import { setupHook } from '@test-setup';
 
 describe('useActionEditDL', () => {
 	it('should return an object with the specific data', () => {

@@ -6,17 +6,16 @@
 import { faker } from '@faker-js/faker';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { ErrorSoapResponse, SuccessSoapResponse } from '@zextras/carbonio-shell-ui';
+import { getFoldersMap, Folder } from '@zextras/carbonio-ui-commons';
 import { EventEmitter } from 'events';
 import { times } from 'lodash';
 
-import { getFoldersMap } from '@zextras/carbonio-ui-commons';
-import { screen, within }  from '@test-setup';
-import { Folder } from '@zextras/carbonio-ui-commons';
 import { TESTID_SELECTORS } from '../constants/tests';
 import { SoapContact } from '../legacy/types/soap';
 import { DistributionList, DistributionListMembersPage } from '../model/distribution-list';
 import { CnItem } from '../network/api/types';
 import { MakeRequired } from '../types/utils';
+import { screen, within } from '@test-setup';
 
 export const getDLContactInput = (): {
 	container: HTMLElement;

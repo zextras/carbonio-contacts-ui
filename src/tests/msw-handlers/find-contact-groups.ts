@@ -6,9 +6,9 @@
 import { JSNS, SoapResponse } from '@zextras/carbonio-shell-ui';
 import { http, HttpResponse, HttpResponseResolver } from 'msw';
 
-import { getSetupServer } from '@jest-setup';
 import { CnItem, GenericSoapPayload } from '../../network/api/types';
 import { buildSoapResponse, createSoapContactGroup } from '../utils';
+import { getSetupServer } from '@jest-setup';
 
 interface FindContactGroupsSoapApiRequest extends GenericSoapPayload<typeof JSNS.mail> {
 	limit: number;

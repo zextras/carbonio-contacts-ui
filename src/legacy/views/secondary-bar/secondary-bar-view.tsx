@@ -8,6 +8,13 @@ import React, { FC, ReactElement, useMemo } from 'react';
 import { ThemeProvider } from '@mui/material';
 import { Container, Divider } from '@zextras/carbonio-design-system';
 import { SecondaryBarComponentProps } from '@zextras/carbonio-shell-ui';
+import {
+	SidebarAccordionMui,
+	FOLDERS,
+	useRootsArray,
+	themeMui,
+	Folder
+} from '@zextras/carbonio-ui-commons';
 import { map } from 'lodash';
 import { Route, Routes, useParams } from 'react-router-dom';
 
@@ -15,11 +22,6 @@ import { AccordionCustomComponent } from './accordion-custom-component';
 import { CollapsedSideBarFolderItem } from './collapsed-sidebar-folder-item';
 import { FindSharesButton } from './find-shares-button';
 import { TagsAccordion } from './tags-accordion';
-import { SidebarAccordionMui } from '@zextras/carbonio-ui-commons';
-import { FOLDERS } from '@zextras/carbonio-ui-commons';
-import { useRootsArray } from '@zextras/carbonio-ui-commons';
-import { themeMui } from '@zextras/carbonio-ui-commons';
-import { Folder } from '@zextras/carbonio-ui-commons';
 import { LOCAL_STORAGES } from '../../../constants';
 import { sortFolders } from '../../../helpers/folders';
 

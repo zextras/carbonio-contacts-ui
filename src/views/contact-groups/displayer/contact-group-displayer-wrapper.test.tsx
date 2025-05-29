@@ -7,12 +7,12 @@
 import React from 'react';
 
 import { ContactGroupDisplayerWrapper } from './contact-group-displayer-wrapper';
-import { populateFoldersStore } from '@test-utils/store/folders';
-import { screen, setupTest, within } from '@test-setup';
 import { TESTID_SELECTORS } from '../../../constants/tests';
 import { addContactsToStore } from '../../../legacy/store/contacts';
 import { buildContactGroup } from '../../../tests/model-builder';
 import { CONTACT_GROUPS_PATH } from '../navigation';
+import { screen, setupTest, within } from '@test-setup';
+import { populateFoldersStore } from '@test-utils/store/folders';
 
 describe('Contact groups displayer wrapper', () => {
 	const contactGroup = buildContactGroup();

@@ -5,10 +5,10 @@
  */
 import { faker } from '@faker-js/faker';
 import { ErrorSoapBodyResponse, JSNS } from '@zextras/carbonio-shell-ui';
+import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
 import { map } from 'lodash';
 
 import { getShareInfo, GetShareInfoResponse } from './get-share-info';
-import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 describe('GetShareInfo', () => {

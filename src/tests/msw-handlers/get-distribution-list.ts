@@ -7,13 +7,13 @@ import { JSNS, SoapResponse } from '@zextras/carbonio-shell-ui';
 import { map } from 'lodash';
 import { http, HttpResponse, HttpResponseResolver } from 'msw';
 
-import { getSetupServer } from '@jest-setup';
 import { DistributionList } from '../../model/distribution-list';
 import {
 	GetDistributionListRequest,
 	GetDistributionListResponse
 } from '../../network/api/get-distribution-list';
 import { buildSoapError, buildSoapResponse } from '../utils';
+import { getSetupServer } from '@jest-setup';
 
 type GetDistributionListHandler = HttpResponseResolver<
 	never,

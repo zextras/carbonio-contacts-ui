@@ -6,26 +6,23 @@
 import React from 'react';
 
 import { screen } from '@testing-library/react';
-
-import { FolderTreeSelector, FolderTreeSelectorProps } from './folder-tree-selector';
-import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
 import {
+	FOLDER_VIEW,
 	getFolderOwnerAccountName,
 	isRoot,
 	isTrash,
-	isTrashed
-} from '@zextras/carbonio-ui-commons';
-import {
+	isTrashed,
 	getFolder,
 	getFoldersArrayByRoot,
-	getRootsMap
+	getRootsMap,
+	FOLDERS
 } from '@zextras/carbonio-ui-commons';
-import { populateFoldersStore } from '@test-utils/store/folders';
 
+import { FolderTreeSelector, FolderTreeSelectorProps } from './folder-tree-selector';
 import { isEmailedContacts } from '../../helpers/folders';
 import { getFoldersArray } from '../../tests/utils';
-import { FOLDERS } from '@zextras/carbonio-ui-commons';
 import { makeListItemsVisible, setupTest } from '@test-setup';
+import { populateFoldersStore } from '@test-utils/store/folders';
 
 describe('Folder selector', () => {
 	test('The selector is visible', () => {

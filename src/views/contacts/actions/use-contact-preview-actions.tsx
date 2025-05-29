@@ -5,6 +5,7 @@
  */
 
 import type { Action as DSAction } from '@zextras/carbonio-design-system';
+import { isTrashed } from '@zextras/carbonio-ui-commons';
 
 import { useContactEditAction } from './use-contact-edit-actions';
 import { useContactMoveAction } from './use-contact-move-action';
@@ -13,7 +14,6 @@ import { useContactSendMailAction } from './use-contact-send-mail-action';
 import { useContactShowTagAction } from './use-contact-show-tag-action';
 import { useDeleteContacts } from '../../../actions/common-contacts-actions/use-delete-contacts';
 import { useTrashContacts } from '../../../actions/common-contacts-actions/use-trash-contacts';
-import { isTrashed } from '@zextras/carbonio-ui-commons';
 import { Contact } from '../../../legacy/types/contact';
 import { getFolderFromParent } from '../../contact-groups/utils';
 

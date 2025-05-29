@@ -7,13 +7,13 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import * as shell from '@zextras/carbonio-shell-ui';
+import { FOLDERS } from '@zextras/carbonio-ui-commons';
 
 import { ContactGroupListItem } from './contact-group-list-item';
-import { FOLDERS } from '@zextras/carbonio-ui-commons';
-import { populateFoldersStore } from '@test-utils/store/folders';
-import { screen, setupTest } from '@test-setup';
 import { TESTID_SELECTORS } from '../../../constants/tests';
 import { buildContactGroup, buildMembers } from '../../../tests/model-builder';
+import { screen, setupTest } from '@test-setup';
+import { populateFoldersStore } from '@test-utils/store/folders';
 
 jest.mock('react-router-dom', () => ({
 	...jest.requireActual('react-router-dom'),

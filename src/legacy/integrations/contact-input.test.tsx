@@ -10,15 +10,13 @@ import React, { ReactElement, useState } from 'react';
 import { faker } from '@faker-js/faker';
 import { act, fireEvent, waitFor, within } from '@testing-library/react';
 import { ChipAction } from '@zextras/carbonio-design-system';
-
-import { ContactInput } from './contact-input';
-import { CONTACT_TYPES } from '@zextras/carbonio-ui-commons';
 import {
+	CONTACT_TYPES,
 	ContactInputOnChange,
 	ContactInputValue
 } from '@zextras/carbonio-ui-commons';
-import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
-import { UserEvent, screen, setupTest }  from '@test-setup';
+
+import { ContactInput } from './contact-input';
 import { TESTID_SELECTORS } from '../../constants/tests';
 import { registerGetDistributionListHandler } from '../../tests/msw-handlers/get-distribution-list';
 import { generateDistributionList } from '../../tests/utils';
@@ -43,6 +41,8 @@ import {
 } from '../../network/api/get-distribution-list';
 import { registerFullAutocompleteHandler } from '../../tests/msw-handlers/full-autocomplete';
 import { registerGetDistributionListMembersHandler } from '../../tests/msw-handlers/get-distribution-list-members';
+import { UserEvent, screen, setupTest } from '@test-setup';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 const VALID_EMAIL = 'valid@email.it';
 const INVALID_EMAIL = 'invalid@email';

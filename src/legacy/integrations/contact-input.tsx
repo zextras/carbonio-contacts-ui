@@ -16,26 +16,27 @@ import {
 	Chip
 } from '@zextras/carbonio-design-system';
 import { soapFetch } from '@zextras/carbonio-shell-ui';
-import { TFunction } from 'i18next';
-import { filter, find, map, uniqBy, noop, reduce } from 'lodash';
-import { useTranslation } from 'react-i18next';
-
-import { DistributionListChip } from './distribution-list-chip';
-import { isValidEmail } from '@zextras/carbonio-ui-commons';
-import type { ContactAddressMap } from '../types/contact';
-import type { GetContactsRequest, GetContactsResponse } from '../types/soap';
-import { Loader } from './parts/loader';
-import { PasteContextMenu } from './parts/paste-context-menu';
-import { getContactLabel, searchContacts, tryToParseEmail } from './parts/utils';
-import { ContactInputItemInternalValue, ContactInputOptions, GroupContact } from './types';
-import { EDIT_ACTION_ID, CONTACT_TYPES } from '@zextras/carbonio-ui-commons';
 import {
+	isValidEmail,
+	EDIT_ACTION_ID,
+	CONTACT_TYPES,
 	ContactInputItem,
 	ContactInputProps,
 	UserContact,
 	DistributionListContact,
 	UserOrDL
 } from '@zextras/carbonio-ui-commons';
+import { TFunction } from 'i18next';
+import { filter, find, map, uniqBy, noop, reduce } from 'lodash';
+import { useTranslation } from 'react-i18next';
+
+import { DistributionListChip } from './distribution-list-chip';
+import type { ContactAddressMap } from '../types/contact';
+import type { GetContactsRequest, GetContactsResponse } from '../types/soap';
+import { Loader } from './parts/loader';
+import { PasteContextMenu } from './parts/paste-context-menu';
+import { getContactLabel, searchContacts, tryToParseEmail } from './parts/utils';
+import { ContactInputItemInternalValue, ContactInputOptions, GroupContact } from './types';
 
 const CHIP_TO_EXCLUDE = 'this-value-represent-a-chip-that-should-not-be-present';
 

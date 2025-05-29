@@ -15,15 +15,13 @@ import {
 	useSnackbar,
 	Action
 } from '@zextras/carbonio-design-system';
+import { ZIMBRA_STANDARD_COLORS, useTags, Tag, Tags } from '@zextras/carbonio-ui-commons';
 import { TFunction } from 'i18next';
 import { every, find, includes, map, noop, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { TaggableItem } from '../../actions/types';
-import { ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-ui-commons';
-import { useTags } from '@zextras/carbonio-ui-commons';
-import { Tag, Tags } from '@zextras/carbonio-ui-commons';
 import { contactAction } from '../store/actions/contact-action';
 import { Contact } from '../types/contact';
 import { TagsActionsType } from '../types/tags';

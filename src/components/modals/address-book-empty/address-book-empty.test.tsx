@@ -8,14 +8,13 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
+import { FOLDER_VIEW, FOLDERS } from '@zextras/carbonio-ui-commons';
 
 import { AddressBookEmptyModal } from './address-book-empty';
-import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
-import { FOLDERS } from '@zextras/carbonio-ui-commons';
+import { TESTID_SELECTORS } from '../../../constants/tests';
+import { screen, setupTest } from '@test-setup';
 import { generateFolder } from '@test-utils/folders/folders-generator';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
-import { screen, setupTest } from '@test-setup';
-import { TESTID_SELECTORS } from '../../../constants/tests';
 
 describe('AddressBookEmptyModal', () => {
 	it('should render a modal with a specific title', () => {

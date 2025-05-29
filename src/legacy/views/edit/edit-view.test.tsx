@@ -7,15 +7,14 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
-
-import EditView from './edit-view';
 import { FOLDERS } from '@zextras/carbonio-ui-commons';
 
+import EditView from './edit-view';
 import { registerCreateContactHandler } from '../../tests/msw/create-contact';
 import { CreateContactRequest } from '../../types/soap';
-import { populateFoldersStore } from '@test-utils/store/folders';
 import { screen, setupTest } from '@test-setup';
 import { generateFolder } from '@test-utils/folders/folders-generator';
+import { populateFoldersStore } from '@test-utils/store/folders';
 
 describe('Edit view', () => {
 	it('should not show the destination folder select while editing a contact', () => {

@@ -6,12 +6,15 @@
 import React, { useCallback, useMemo } from 'react';
 
 import { useModal } from '@zextras/carbonio-design-system';
+import {
+	isDeleteAllowed,
+	isSystemFolder,
+	isNestedInTrash,
+	Folder
+} from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 
 import { UIAction } from './types';
-import { isDeleteAllowed, isSystemFolder } from '@zextras/carbonio-ui-commons';
-import { isNestedInTrash } from '@zextras/carbonio-ui-commons';
-import { Folder } from '@zextras/carbonio-ui-commons';
 import { AddressBookDeleteModal } from '../components/modals/address-book-delete/address-book-delete';
 import { ACTION_IDS } from '../constants';
 

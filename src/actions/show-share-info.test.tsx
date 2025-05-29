@@ -5,13 +5,13 @@
  */
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
+import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
 
 import { useActionShowShareInfo } from './show-share-info';
 import { UIAction } from './types';
-import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
-import { generateFolder } from '@test-utils/folders/folders-generator';
-import { screen, setupHook } from '@test-setup';
 import { TIMERS } from '../constants/tests';
+import { screen, setupHook } from '@test-setup';
+import { generateFolder } from '@test-utils/folders/folders-generator';
 
 describe('useActionShareInfo', () => {
 	it('should return an object with the specific data', () => {

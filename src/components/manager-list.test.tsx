@@ -8,8 +8,8 @@ import React from 'react';
 import * as shell from '@zextras/carbonio-shell-ui';
 
 import { ManagerList } from './manager-list';
-import { screen, setupTest } from '@test-setup';
 import { TESTID_SELECTORS } from '../constants/tests';
+import { screen, setupTest } from '@test-setup';
 
 describe('Manager list', () => {
 	it('should render Manager list text with the counter of managers', () => {

@@ -6,9 +6,7 @@
 import React from 'react';
 
 import { ModalManager } from '@zextras/carbonio-design-system';
-
-import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
-import { useInitializeFolders } from '@zextras/carbonio-ui-commons';
+import { FOLDER_VIEW, useInitializeFolders } from '@zextras/carbonio-ui-commons';
 
 const FoldersSynchronizatorLogic: React.FC = () => {
 	useInitializeFolders(FOLDER_VIEW.contact);

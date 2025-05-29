@@ -7,9 +7,9 @@ import React, { useState, useEffect } from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
 import { setAppContext } from '@zextras/carbonio-shell-ui';
+import { useUpdateView } from '@zextras/carbonio-ui-commons';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-import { useUpdateView } from '@zextras/carbonio-ui-commons';
 import { FolderView } from '../legacy/views/app/folder-view';
 
 const ContactsView = (): React.JSX.Element => {

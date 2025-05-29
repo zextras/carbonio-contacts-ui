@@ -6,9 +6,9 @@
 import { useCallback } from 'react';
 
 import { useSnackbar } from '@zextras/carbonio-design-system';
+import { Folder } from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 
-import { Folder } from '@zextras/carbonio-ui-commons';
 import { TIMEOUTS } from '../../constants';
 import { MOVE_ACTION } from '../../constants/actions';
 import { ContactOrGroup } from '../../legacy/types/contact';

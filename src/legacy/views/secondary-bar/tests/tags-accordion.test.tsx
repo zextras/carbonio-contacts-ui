@@ -6,14 +6,12 @@
 import React from 'react';
 
 import { act, fireEvent, waitFor } from '@testing-library/react';
+import { useRunSearchIntegration, useTagStore } from '@zextras/carbonio-ui-commons';
 import { HttpResponse } from 'msw';
 
-import { useRunSearchIntegration } from '@zextras/carbonio-ui-commons';
-import { useTagStore } from '@zextras/carbonio-ui-commons';
-
-import { screen, setupTest }  from '@test-setup';
 import { TESTID_SELECTORS, TIMERS } from '../../../../constants/tests';
 import { TagsAccordion } from '../tags-accordion';
+import { screen, setupTest } from '@test-setup';
 import { createAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 import { buildSoapResponse } from 'tests/utils';
 

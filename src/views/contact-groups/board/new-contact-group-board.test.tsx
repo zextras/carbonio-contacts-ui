@@ -13,9 +13,6 @@ import * as shell from '@zextras/carbonio-shell-ui';
 import { http, HttpResponse } from 'msw';
 
 import NewContactGroupBoard from './new-contact-group-board';
-import { generateFolder } from '@test-utils/folders/folders-generator';
-import { populateFoldersStore } from '@test-utils/store/folders';
-import { setupTest, screen } from '@test-setup';
 import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../../constants';
 import { PALETTE, TESTID_SELECTORS } from '../../../constants/tests';
 import { spyUseBoardHooks } from '../../../tests/utils';
@@ -23,6 +20,9 @@ import { getContactInput } from '../../board/common-contact-group-board.test';
 import * as createContactGroup from '../api/create-contact-group';
 import { CONTACT_GROUPS_PATH } from '../navigation';
 import { getSetupServer } from '@jest-setup';
+import { setupTest, screen } from '@test-setup';
+import { generateFolder } from '@test-utils/folders/folders-generator';
+import { populateFoldersStore } from '@test-utils/store/folders';
 
 function spyUseBoard(navigateTo?: jest.Mock): void {
 	jest.spyOn(shell, 'useBoard').mockReturnValue({

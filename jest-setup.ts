@@ -16,41 +16,6 @@ import { noop } from 'lodash';
 
 let server: SetupServer;
 
-
-/**
- * Mocks the Worker class
- */
-
-type MessageHandler = (msg: string) => void;
-
-class Worker {
-	url: string;
-
-	onmessage: MessageHandler;
-
-	constructor(stringUrl: string) {
-		this.url = stringUrl;
-		this.onmessage = noop;
-	}
-
-	postMessage(msg: string): void {
-		this.onmessage(msg);
-	}
-}
-
-Object.defineProperty(window, 'Worker', {
-	writable: true,
-	value: Worker
-});
-
-export const getSetupServer = (): SetupServer => server;
-
-window.ResizeObserver = jest.fn().mockImplementation(() => ({
-	observe: jest.fn(),
-	unobserve: jest.fn(),
-	disconnect: jest.fn()
-}));
-
 configure({
 	asyncUtilTimeout: 2000
 });
@@ -126,5 +91,40 @@ Object.defineProperty(window.crypto, 'randomUUID', {
 	writable: true,
 	value: jest.fn(() => Math.random().toString())
 });
+
+/**
+ * Mocks the Worker class
+ */
+
+type MessageHandler = (msg: string) => void;
+
+class Worker {
+	url: string;
+
+	onmessage: MessageHandler;
+
+	constructor(stringUrl: string) {
+		this.url = stringUrl;
+		this.onmessage = noop;
+	}
+
+	postMessage(msg: string): void {
+		this.onmessage(msg);
+	}
+}
+
+Object.defineProperty(window, 'Worker', {
+	writable: true,
+	value: Worker
+});
+
+export const getSetupServer = (): SetupServer => server;
+
+window.ResizeObserver = jest.fn().mockImplementation(() => ({
+	observe: jest.fn(),
+	unobserve: jest.fn(),
+	disconnect: jest.fn()
+}));
+
 
 

@@ -4,12 +4,16 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { sortBy } from 'lodash';
-
-import { ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-ui-commons';
-import { FOLDERS } from '@zextras/carbonio-ui-commons';
-import { getFolderIdParts, isA, isLink, isRoot } from '@zextras/carbonio-ui-commons';
+import {
+	ZIMBRA_STANDARD_COLORS,
+	FOLDERS,
+	getFolderIdParts,
+	isA,
+	isLink,
+	isRoot
+} from '@zextras/carbonio-ui-commons';
 import type { Folder } from '@zextras/carbonio-ui-commons';
+import { sortBy } from 'lodash';
 
 /**
  * Tells if a folder with the given id is the Contacts folder

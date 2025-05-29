@@ -5,11 +5,8 @@
  */
 import { within } from '@testing-library/react';
 import { ChipAction } from '@zextras/carbonio-design-system';
+import { EDIT_ACTION_ID, CONTACT_TYPES, ContactInputItem } from '@zextras/carbonio-ui-commons';
 
-import { EDIT_ACTION_ID, CONTACT_TYPES } from '@zextras/carbonio-ui-commons';
-import { ContactInputItem } from '@zextras/carbonio-ui-commons';
-import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
-import { screen, UserEvent }  from '@test-setup';
 import { TESTID_SELECTORS } from '../../../constants/tests';
 import {
 	GetDistributionListRequest,
@@ -17,6 +14,8 @@ import {
 } from '../../../network/api/get-distribution-list';
 import { FullAutocompleteRequest, FullAutocompleteResponse } from '../../types/contact';
 import { GetContactsRequest, GetContactsResponse } from '../../types/soap';
+import { screen, UserEvent } from '@test-setup';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 export const SHOW_MORE = /show more/i;
 export const SELECT_ALL = /Select address|Select all \d+ addresses/;

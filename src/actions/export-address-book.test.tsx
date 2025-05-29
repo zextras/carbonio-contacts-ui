@@ -6,14 +6,13 @@
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
+import { FOLDER_VIEW, FOLDERS } from '@zextras/carbonio-ui-commons';
 
 import { useActionExportAddressBook } from './export-address-book';
 import { UIAction } from './types';
-import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
-import { FOLDERS } from '@zextras/carbonio-ui-commons';
+import { screen, setupHook } from '@test-setup';
 import { generateFolder } from '@test-utils/folders/folders-generator';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
-import { screen, setupHook } from '@test-setup';
 
 describe('useActionExportAddressBook', () => {
 	it('should return an object with the specific data', () => {

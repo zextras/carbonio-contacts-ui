@@ -10,13 +10,9 @@ import { act } from '@testing-library/react';
 import { times } from 'lodash';
 
 import { UsersSharesListItem } from './users-shares-list-item';
-import {
-	makeListItemsVisible,
-	screen,
-	setupTest
-}  from '@test-setup';
 import { TESTID_SELECTORS } from '../../../constants/tests';
 import { buildShareInfo } from '../../../tests/model-builder';
+import { makeListItemsVisible, screen, setupTest } from '@test-setup';
 
 describe('UsersSharesListItem', () => {
 	it('should display an expanded accordion', () => {

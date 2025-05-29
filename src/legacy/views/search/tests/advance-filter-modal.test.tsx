@@ -7,11 +7,11 @@
 import React from 'react';
 
 import { screen, waitFor } from '@testing-library/react';
+import { getTags } from '@zextras/carbonio-ui-commons';
 import type { TFunction } from 'i18next';
 
-import { getTags } from '@zextras/carbonio-ui-commons';
-import { setupTest } from '@test-setup';
 import { AdvancedFilterModal, AdvancedFilterModalProps } from '../advance-filter-modal';
+import { setupTest } from '@test-setup';
 
 jest.mock('../../../../carbonio-ui-commons/store/zustand/tags', () => ({
 	getTags: jest.fn()

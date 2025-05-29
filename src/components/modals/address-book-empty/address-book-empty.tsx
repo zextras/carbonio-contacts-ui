@@ -13,10 +13,9 @@ import {
 	Text,
 	useSnackbar
 } from '@zextras/carbonio-design-system';
+import { isTrash, Folder } from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 
-import { isTrash } from '@zextras/carbonio-ui-commons';
-import { Folder } from '@zextras/carbonio-ui-commons';
 import { TIMEOUTS } from '../../../constants';
 import { getFolderTranslatedNameByName } from '../../../legacy/utils/helpers';
 import { apiClient } from '../../../network/api-client';

@@ -10,7 +10,6 @@ import { act, waitFor } from '@testing-library/react';
 import { JSNS } from '@zextras/carbonio-shell-ui';
 
 import { EditDLControllerComponent, EditDLControllerComponentProps } from './edit-dl-controller';
-import { screen, setupTest, within } from '@test-setup';
 import { JEST_MOCKED_ERROR, TESTID_SELECTORS } from '../constants/tests';
 import { DistributionList } from '../model/distribution-list';
 import {
@@ -25,6 +24,7 @@ import {
 	getDLContactInput,
 	spyUseBoardHooks
 } from '../tests/utils';
+import { screen, setupTest, within } from '@test-setup';
 
 beforeEach(() => {
 	spyUseBoardHooks();

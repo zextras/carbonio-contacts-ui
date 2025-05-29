@@ -19,17 +19,21 @@ import {
 	Tooltip
 } from '@zextras/carbonio-design-system';
 import { useUserAccount } from '@zextras/carbonio-shell-ui';
+import {
+	FOLDERS,
+	ROOT_NAME,
+	isLink,
+	isRoot,
+	Folder,
+	DragEnterAction,
+	OnDropActionProps
+} from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { useAddressBookContextualMenuItems } from './commons/use-address-book-contextual-menu-items';
 import { useActionMoveAddressBook } from '../../../actions/move-address-book';
-import { FOLDERS } from '@zextras/carbonio-ui-commons';
-import { ROOT_NAME } from '@zextras/carbonio-ui-commons';
-import { isLink, isRoot } from '@zextras/carbonio-ui-commons';
-import { Folder } from '@zextras/carbonio-ui-commons';
-import { DragEnterAction, OnDropActionProps } from '@zextras/carbonio-ui-commons';
 import { CONTACTS_ROUTE } from '../../../constants';
 import { getFolderIconColor, getFolderIconName } from '../../../helpers/folders';
 import { Contact } from '../../types/contact';

@@ -8,11 +8,14 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { SoapNotify, useNotify } from '@zextras/carbonio-shell-ui';
+import {
+	useFolderStore,
+	useTagStore,
+	folderWorker,
+	tagsWorker
+} from '@zextras/carbonio-ui-commons';
 import { forEach, isEmpty, sortBy } from 'lodash';
 
-import { useFolderStore } from '@zextras/carbonio-ui-commons';
-import { useTagStore } from '@zextras/carbonio-ui-commons';
-import { folderWorker, tagsWorker } from '@zextras/carbonio-ui-commons';
 import {
 	addContactsToStore,
 	removeContactsFromStore,

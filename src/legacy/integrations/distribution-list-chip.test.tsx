@@ -8,14 +8,12 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import { act, waitFor } from '@testing-library/react';
 import { JSNS } from '@zextras/carbonio-shell-ui';
+import { CONTACT_TYPES } from '@zextras/carbonio-ui-commons';
 import { times } from 'lodash';
 import { HttpResponse } from 'msw';
 
 import { DistributionListChip } from './distribution-list-chip';
 import { clickCollapseDL, clickExpandDL, SELECT_ALL, SHOW_MORE } from './test/mocks';
-import { CONTACT_TYPES } from '@zextras/carbonio-ui-commons';
-import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
-import { screen, setupTest }  from '@test-setup';
 import { DL_MEMBERS_LOAD_LIMIT } from '../../constants';
 import { TESTID_SELECTORS, TIMERS } from '../../constants/tests';
 import {
@@ -32,7 +30,9 @@ import {
 	generateDistributionList,
 	generateDistributionListMembersPage
 } from '../../tests/utils';
+import { screen, setupTest } from '@test-setup';
 import { mockedAccount } from '@test-utils/carbonio-shell-ui/carbonio-shell-ui';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 const id = 'dl-1';
 const email = 'dl1@mail.com';

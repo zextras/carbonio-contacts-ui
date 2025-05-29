@@ -6,13 +6,11 @@
 import React, { useCallback, useMemo } from 'react';
 
 import { useModal, useSnackbar } from '@zextras/carbonio-design-system';
+import { isRoot, isTrashed, isWriteAllowed, getFolder, Folder } from '@zextras/carbonio-ui-commons';
 import { every } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { UIAction } from '../../actions/types';
-import { isRoot, isTrashed, isWriteAllowed } from '@zextras/carbonio-ui-commons';
-import { getFolder } from '@zextras/carbonio-ui-commons';
-import { Folder } from '@zextras/carbonio-ui-commons';
 import { ContactMoveModal } from '../../components/modals/contact-move';
 import { TIMEOUTS } from '../../constants';
 import { MOVE_ACTION } from '../../constants/actions';

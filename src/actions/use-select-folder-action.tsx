@@ -6,9 +6,9 @@
 import React, { useCallback, useState } from 'react';
 
 import { Divider, ModalFooter, ModalHeader, useModal } from '@zextras/carbonio-design-system';
+import { Folder } from '@zextras/carbonio-ui-commons';
 
 import { Action } from './types';
-import { Folder } from '@zextras/carbonio-ui-commons';
 import { FolderTreeSelector } from '../components/folder-tree-selector/folder-tree-selector';
 import { ModalContentAndFooterWrapper } from '../components/modals/modal-content-and-footer-wrapper';
 import { ModalWrapper } from '../components/modals/modal-wrapper';

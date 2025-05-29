@@ -8,22 +8,10 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import { act, fireEvent } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
+import { FOLDER_VIEW, FOLDERS, useTagStore } from '@zextras/carbonio-ui-commons';
 import { forEach } from 'lodash';
 
 import { createContactsApiInterceptor, findContactInList } from './utils';
-import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
-import { FOLDERS } from '@zextras/carbonio-ui-commons';
-import { useTagStore } from '@zextras/carbonio-ui-commons';
-import { getAction  as getActionMock, useAppContext } from '@test-utils/carbonio-shell-ui/carbonio-shell-ui';
-
-import {
-	makeListItemsVisible,
-	screen,
-	setupTest,
-	triggerLoadMore,
-	UserEvent,
-	within
-}  from '@test-setup';
 import {
 	ActionDescriptorType,
 	ACTIONS_DESCRIPTORS,
@@ -47,10 +35,21 @@ import { createSoapContact, createSoapContactGroup } from '../../../../tests/uti
 import { SearchContactsRequest, SearchContactsSoapResponse } from '../../../../types';
 import { SoapContact } from '../../../types/soap';
 import { FolderPanelWrapper } from '../folder-panel-wrapper';
+import {
+	makeListItemsVisible,
+	screen,
+	setupTest,
+	triggerLoadMore,
+	UserEvent,
+	within
+} from '@test-setup';
+import {
+	getAction as getActionMock,
+	useAppContext
+} from '@test-utils/carbonio-shell-ui/carbonio-shell-ui';
+import { generateFolder } from '@test-utils/folders/folders-generator';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 import { populateFoldersStore } from '@test-utils/store/folders';
-import { generateFolder } from '@test-utils/folders/folders-generator';
-
 
 const mockMailToAction = (execute = jest.fn()): void => {
 	getActionMock.mockImplementation((type, id) => {

@@ -5,14 +5,14 @@
  */
 
 import { faker } from '@faker-js/faker';
+import { useFolderStore } from '@zextras/carbonio-ui-commons';
 import { useNavigate } from 'react-router-dom';
 
 import { useRedirectToContactGroup, useRedirectToContactGroupFolder } from './navigation';
 import { generateLinkFolder } from './tests/utils';
-import { useFolderStore } from '@zextras/carbonio-ui-commons';
-import { generateFolder } from '@test-utils/folders/folders-generator';
-import { setupHook } from '@test-setup';
 import { buildContactGroup } from '../../tests/model-builder';
+import { setupHook } from '@test-setup';
+import { generateFolder } from '@test-utils/folders/folders-generator';
 
 jest.mock('react-router-dom', () => ({
 	...jest.requireActual('react-router-dom'),

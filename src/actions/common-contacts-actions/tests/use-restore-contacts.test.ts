@@ -7,16 +7,16 @@ import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 
-import { generateFolder } from '@test-utils/folders/folders-generator';
-import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
-import { populateFoldersStore } from '@test-utils/store/folders';
-import { makeListItemsVisible, screen, setupHook } from '@test-setup';
 import { TESTID_SELECTORS, TIMERS } from '../../../constants/tests';
 import { Contact } from '../../../legacy/types/contact';
 import { ContactActionRequest, ContactActionResponse } from '../../../network/api/contact-action';
 import { setupRestoreModal } from '../../../tests/modal-helpers';
 import { buildContact } from '../../../tests/model-builder';
 import { useRestoreContacts } from '../use-restore-contacts';
+import { makeListItemsVisible, screen, setupHook } from '@test-setup';
+import { generateFolder } from '@test-utils/folders/folders-generator';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
+import { populateFoldersStore } from '@test-utils/store/folders';
 
 function aFailingContactRestore(): any {
 	const response: ErrorSoapBodyResponse = {

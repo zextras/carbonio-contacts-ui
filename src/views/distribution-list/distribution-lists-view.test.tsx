@@ -14,7 +14,6 @@ import { HttpResponse } from 'msw';
 import { Link } from 'react-router-dom';
 
 import { DistributionListsView } from './distribution-lists-view';
-import { screen, setupTest, within } from '@test-setup';
 import { ROUTES, ROUTES_INTERNAL_PARAMS } from '../../constants';
 import {
 	EMPTY_DISPLAYER_NO_CONTACTS_HINT,
@@ -39,6 +38,7 @@ import {
 	generateDistributionLists
 } from '../../tests/utils';
 import GroupsAppView from '../distribution-list-view';
+import { screen, setupTest, within } from '@test-setup';
 
 describe('Distribution Lists View', () => {
 	it('should show the list of distribution lists', async () => {

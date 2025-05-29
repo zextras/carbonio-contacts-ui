@@ -4,9 +4,8 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { getFolderIdParts } from '@zextras/carbonio-ui-commons';
-import { getFolder, getFoldersMap } from '@zextras/carbonio-ui-commons';
-import { Folder } from '@zextras/carbonio-ui-commons';
+import { getFolderIdParts, getFolder, getFoldersMap, Folder } from '@zextras/carbonio-ui-commons';
+
 import { ContactGroup } from '../../../model/contact-group';
 
 export function getFolderFromContactGroup(contactGroup: ContactGroup): Folder | undefined {

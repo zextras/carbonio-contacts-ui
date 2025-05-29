@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { ErrorSoapBodyResponse, JSNS, soapFetch } from '@zextras/carbonio-shell-ui';
+import { FolderView } from '@zextras/carbonio-ui-commons';
 import { filter, isEqual, map, uniqWith } from 'lodash';
 
 import { GenericSoapPayload } from './types';
-import { FolderView } from '@zextras/carbonio-ui-commons';
 import { ShareInfo } from '../../model/share-info';
 
 export interface GetShareInfoRequest extends GenericSoapPayload<typeof JSNS.account> {

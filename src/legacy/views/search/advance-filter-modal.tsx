@@ -17,6 +17,7 @@ import {
 	Divider,
 	ModalFooter
 } from '@zextras/carbonio-design-system';
+import { ZIMBRA_STANDARD_COLORS, getTags } from '@zextras/carbonio-ui-commons';
 import { TFunction } from 'i18next';
 import { concat, filter, map } from 'lodash';
 
@@ -24,8 +25,6 @@ import KeywordRow, { KeywordState } from './parts/keyword-row';
 import TagRow from './parts/tag-row';
 import ToggleFilters from './parts/toggle-filters';
 import type { Query } from './search-types';
-import { ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-ui-commons';
-import { getTags } from '@zextras/carbonio-ui-commons';
 
 export type AdvancedFilterModalProps = {
 	open: boolean;

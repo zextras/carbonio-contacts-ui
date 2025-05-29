@@ -6,10 +6,10 @@
 import React, { MouseEventHandler, useCallback, useMemo } from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
+import { useTags } from '@zextras/carbonio-ui-commons';
 import { noop } from 'lodash';
 import { useNavigate } from 'react-router-dom';
 
-import { useTags } from '@zextras/carbonio-ui-commons';
 import { ListItemAvatar } from '../../../components/list/list-item-avatar';
 import { getTagsArray } from '../../helpers/tags';
 import { Contact } from '../../types/contact';

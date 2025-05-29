@@ -7,14 +7,16 @@
 import React, { FC, ReactElement, useCallback, useMemo, useState } from 'react';
 
 import { Input, Padding, Text, useSnackbar } from '@zextras/carbonio-design-system';
+import {
+	ColorSelect,
+	ColorSelectProps,
+	changeTagColor,
+	createTag,
+	renameTag
+} from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 
 import { ItemType } from './types';
-import {
-	ColorSelect,
-	ColorSelectProps
-} from '@zextras/carbonio-ui-commons';
-import { changeTagColor, createTag, renameTag } from '@zextras/carbonio-ui-commons';
 import { contactAction } from '../../../../store/actions/contact-action';
 import { Contact } from '../../../../types/contact';
 import ModalFooter from '../../commons/modal-footer';

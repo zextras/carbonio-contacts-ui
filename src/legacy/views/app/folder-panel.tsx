@@ -7,12 +7,12 @@ import React, { ReactElement, useCallback, useEffect, useMemo, useRef, useState 
 
 import { Container, MultiButton, Row, Tooltip } from '@zextras/carbonio-design-system';
 import { useAppContext } from '@zextras/carbonio-shell-ui';
+import { Folder } from '@zextras/carbonio-ui-commons';
 import { filter, find, noop, orderBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { Breadcrumbs } from './breadcrumbs';
 import { ContactsList } from './folder-panel/contacts-list';
-import { Folder } from '@zextras/carbonio-ui-commons';
 import { searchContactsHelper } from '../../../views/search-contacts-helper';
 import { useSelection } from '../../hooks/useSelection';
 import { addContactsToStore, setContactsInStore, useContactsByFolder } from '../../store/contacts';

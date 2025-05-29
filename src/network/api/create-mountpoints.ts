@@ -4,11 +4,10 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { ErrorSoapBodyResponse, JSNS, soapFetch } from '@zextras/carbonio-shell-ui';
+import { FOLDERS, SoapLink } from '@zextras/carbonio-ui-commons';
 import { map } from 'lodash';
 
 import { GenericSoapPayload } from './types';
-import { FOLDERS } from '@zextras/carbonio-ui-commons';
-import { SoapLink } from '@zextras/carbonio-ui-commons';
 import { ShareInfo } from '../../model/share-info';
 
 export type CreateMountpointsRequest = GenericSoapPayload<typeof JSNS.all> & {

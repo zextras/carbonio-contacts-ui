@@ -7,6 +7,13 @@ import React, { FC, Suspense, useCallback, useEffect, useMemo, useState } from '
 
 import { Container, Spinner } from '@zextras/carbonio-design-system';
 import type { SearchViewProps } from '@zextras/carbonio-search-ui';
+import {
+	isTrash,
+	useUpdateView,
+	useFoldersMap,
+	Folder,
+	usePrefs
+} from '@zextras/carbonio-ui-commons';
 import { map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { Route, Routes } from 'react-router-dom';
@@ -17,11 +24,6 @@ import { SearchContactsEmptyPanel } from './search-contacts-empty-panel';
 import { SearchList } from './search-list';
 import { Query } from './search-types';
 import { SearchResults } from './types';
-import { isTrash } from '@zextras/carbonio-ui-commons';
-import { useUpdateView } from '@zextras/carbonio-ui-commons';
-import { useFoldersMap } from '@zextras/carbonio-ui-commons';
-import { Folder } from '@zextras/carbonio-ui-commons';
-import { usePrefs } from '@zextras/carbonio-ui-commons';
 import { ContactGroupDisplayerWrapper } from '../../../views/contact-groups/displayer/contact-group-displayer-wrapper';
 import { addContactsToStore, useContactsById } from '../../store/contacts';
 import ContactEditPanel from '../edit/contact-edit-panel';

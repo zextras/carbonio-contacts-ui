@@ -8,8 +8,8 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 
 import { MemberListItemComponent, MemberListItemComponentProps } from './member-list-item';
-import { setupTest, screen } from '@test-setup';
 import { TESTID_SELECTORS } from '../constants/tests';
+import { setupTest, screen } from '@test-setup';
 
 const buildProps = ({
 	email = '',

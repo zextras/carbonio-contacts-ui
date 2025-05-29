@@ -7,10 +7,10 @@ import React, { useCallback, useState } from 'react';
 
 import { useSnackbar } from '@zextras/carbonio-design-system';
 import { useBoardHooks } from '@zextras/carbonio-shell-ui';
+import { FOLDERS } from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { FOLDERS } from '@zextras/carbonio-ui-commons';
 import { addContactsToStore } from '../../../legacy/store/contacts';
 import {
 	CommonContactGroupBoard,

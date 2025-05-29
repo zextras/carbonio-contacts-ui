@@ -16,20 +16,20 @@ import {
 	ModalHeader,
 	ModalFooter
 } from '@zextras/carbonio-design-system';
+import {
+	ColorSelect,
+	ColorSelectProps,
+	isAdministerAllowed,
+	isSystemFolder,
+	useFolder,
+	Grant
+} from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 
 import { ShareFolderProperties } from './share-folder-properties';
-import {
-	ColorSelect,
-	ColorSelectProps
-} from '@zextras/carbonio-ui-commons';
-import { isAdministerAllowed, isSystemFolder } from '@zextras/carbonio-ui-commons';
-import { useFolder } from '@zextras/carbonio-ui-commons';
-
 import { TIMEOUTS } from '../../../constants';
 import { getFolderTranslatedName } from '../../../legacy/utils/helpers';
 import { apiClient } from '../../../network/api-client';
-import { Grant } from '@zextras/carbonio-ui-commons';
 
 export type AddressBookEditGeneralModalProps = {
 	addressBookId: string;

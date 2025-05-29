@@ -7,13 +7,13 @@
 import React from 'react';
 
 import { act, screen } from '@testing-library/react';
+import { useTags } from '@zextras/carbonio-ui-commons';
 import { useNavigate } from 'react-router-dom';
 
-import { useTags } from '@zextras/carbonio-ui-commons';
-import { setupTest } from '@test-setup';
 import { getTagsArray } from '../../../helpers/tags';
 import { Contact } from '../../../types/contact';
 import { SearchContactListItem } from '../search-contact-list-item';
+import { setupTest } from '@test-setup';
 
 jest.mock('../../../../carbonio-ui-commons/store/zustand/tags', () => ({
 	useTags: jest.fn()

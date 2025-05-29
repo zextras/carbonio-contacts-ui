@@ -13,14 +13,12 @@ import {
 	ModalHeader,
 	useSnackbar
 } from '@zextras/carbonio-design-system';
+import { FOLDERS, useFolder, Folder } from '@zextras/carbonio-ui-commons';
 import { filter } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { ModalContentAndFooterWrapper } from './modal-content-and-footer-wrapper';
 import { ModalWrapper } from './modal-wrapper';
-import { FOLDERS } from '@zextras/carbonio-ui-commons';
-import { useFolder } from '@zextras/carbonio-ui-commons';
-import { Folder } from '@zextras/carbonio-ui-commons';
 import { TIMEOUTS } from '../../constants';
 import { apiClient } from '../../network/api-client';
 import { FolderTreeSelector } from '../folder-tree-selector/folder-tree-selector';

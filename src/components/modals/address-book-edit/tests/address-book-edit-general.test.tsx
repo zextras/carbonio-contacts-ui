@@ -7,8 +7,8 @@ import React from 'react';
 
 import { screen } from '@testing-library/react';
 
-import { setupTest } from '@test-setup';
 import { AddressBookEditGeneralModal } from '../address-book-edit-general';
+import { setupTest } from '@test-setup';
 
 describe('AddressBookEditGeneralModal', () => {
 	it('should render an empty modal title when the address book does not exist', () => {

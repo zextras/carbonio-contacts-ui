@@ -7,7 +7,6 @@ import { JSNS, SuccessSoapResponse } from '@zextras/carbonio-shell-ui';
 import { map, size } from 'lodash';
 import { http, HttpResponse, HttpResponseResolver } from 'msw';
 
-import { getSetupServer } from '@jest-setup';
 import {
 	BatchDistributionListActionRequest,
 	BatchDistributionListActionResponse,
@@ -15,6 +14,7 @@ import {
 } from '../../network/api/distribution-list-action';
 import { SoapFault } from '../../types/utils';
 import { buildSoapResponse } from '../utils';
+import { getSetupServer } from '@jest-setup';
 
 type DistributionListActionHandlerResponseResolver = HttpResponseResolver<
 	never,

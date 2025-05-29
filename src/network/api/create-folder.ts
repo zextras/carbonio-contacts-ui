@@ -5,10 +5,9 @@
  */
 
 import { ErrorSoapBodyResponse, JSNS, soapFetch } from '@zextras/carbonio-shell-ui';
+import { FOLDER_VIEW, FolderView, SoapFolder } from '@zextras/carbonio-ui-commons';
 
 import { GenericSoapPayload } from './types';
-import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
-import { FolderView, SoapFolder } from '@zextras/carbonio-ui-commons';
 
 export interface CreateFolderRequest extends GenericSoapPayload<typeof JSNS.mail> {
 	folder: {

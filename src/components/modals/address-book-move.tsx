@@ -6,12 +6,11 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
 import { Divider, ModalFooter, ModalHeader } from '@zextras/carbonio-design-system';
+import { useFolder, Folder } from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 
 import { ModalContentAndFooterWrapper } from './modal-content-and-footer-wrapper';
 import { ModalWrapper } from './modal-wrapper';
-import { useFolder } from '@zextras/carbonio-ui-commons';
-import { Folder } from '@zextras/carbonio-ui-commons';
 import { FolderTreeSelector } from '../folder-tree-selector/folder-tree-selector';
 
 export type AddressBookMoveModalProps = {

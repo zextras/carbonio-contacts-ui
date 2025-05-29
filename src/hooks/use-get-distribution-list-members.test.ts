@@ -11,7 +11,6 @@ import { times } from 'lodash';
 import { HttpResponse } from 'msw';
 
 import { useGetDistributionListMembers } from './use-get-distribution-list-members';
-import { setupHook } from '@test-setup';
 import { GetDistributionListMembersResponse } from '../network/api/get-distribution-list-members';
 import { useDistributionListsStore } from '../store/distribution-lists';
 import { registerGetDistributionListMembersHandler } from '../tests/msw-handlers/get-distribution-list-members';
@@ -20,6 +19,7 @@ import {
 	generateDistributionList,
 	generateDistributionListMembersPage
 } from '../tests/utils';
+import { setupHook } from '@test-setup';
 
 describe('Use get distribution list members hook', () => {
 	it('should request members to the network if members are not stored', async () => {

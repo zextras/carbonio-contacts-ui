@@ -9,12 +9,12 @@ import { faker } from '@faker-js/faker';
 import { noop } from 'lodash';
 import { useParams } from 'react-router-dom';
 
-import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
-import { screen, setupTest }  from '@test-setup';
 import { EMPTY_LIST_HINT } from '../../../../../constants/tests';
 import { buildContact } from '../../../../../tests/model-builder';
 import { Contact, ContactOrGroup } from '../../../../types/contact';
 import { ContactsList } from '../contacts-list';
+import { screen, setupTest } from '@test-setup';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 jest.mock('react-router-dom', () => ({
 	...jest.requireActual('react-router-dom'),

@@ -17,19 +17,22 @@ import {
 	List as DSList
 } from '@zextras/carbonio-design-system';
 import { useBoardHooks } from '@zextras/carbonio-shell-ui';
+import {
+	FoldersSelector,
+	ZIMBRA_STANDARD_COLORS,
+	FOLDERS,
+	getFolderIdParts,
+	isSharedAccountFolder,
+	ContactInputItem,
+	useFolder,
+	getFlatChildrenFolders,
+	Folders,
+	FolderSelectorItem
+} from '@zextras/carbonio-ui-commons';
 import { map, reduce, remove, some, uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { FoldersSelector } from '@zextras/carbonio-ui-commons';
-import { ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-ui-commons';
-import { FOLDERS } from '@zextras/carbonio-ui-commons';
-import { getFolderIdParts, isSharedAccountFolder } from '@zextras/carbonio-ui-commons';
-import { ContactInputItem } from '@zextras/carbonio-ui-commons';
-import { useFolder } from '@zextras/carbonio-ui-commons';
-import { getFlatChildrenFolders } from '@zextras/carbonio-ui-commons';
-import { Folders } from '@zextras/carbonio-ui-commons';
-import { FolderSelectorItem } from '@zextras/carbonio-ui-commons';
 import { MemberListItemComponent } from '../../components/member-list-item';
 import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../constants';
 import { ContactInput } from '../../legacy/integrations/contact-input';

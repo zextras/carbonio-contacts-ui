@@ -10,7 +10,6 @@ import { useBoardHooks } from '@zextras/carbonio-shell-ui';
 import 'jest-styled-components';
 
 import { EditDLControllerComponent, EditDLControllerComponentProps } from './edit-dl-controller';
-import { screen, setupTest, within } from '@test-setup';
 import { PALETTE, TESTID_SELECTORS } from '../constants/tests';
 import { DistributionList } from '../model/distribution-list';
 import {
@@ -18,6 +17,7 @@ import {
 	generateDistributionListMembersPage,
 	spyUseBoardHooks
 } from '../tests/utils';
+import { screen, setupTest, within } from '@test-setup';
 
 beforeEach(() => {
 	spyUseBoardHooks();

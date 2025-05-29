@@ -6,10 +6,10 @@
 import { JSNS, SoapResponse } from '@zextras/carbonio-shell-ui';
 import { HttpResponse, HttpResponseResolver, http } from 'msw';
 
-import { getSetupServer } from '@jest-setup';
 import { ModifyContactRequest, ModifyContactResponse } from '../../network/api/modify-contact';
 import { CnItem } from '../../network/api/types';
 import { buildSoapError, buildSoapResponse, createSoapContactGroup } from '../utils';
+import { getSetupServer } from '@jest-setup';
 
 type ModifyContactGroupHandler = HttpResponseResolver<
 	never,

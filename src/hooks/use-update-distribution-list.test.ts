@@ -7,11 +7,11 @@
 import { faker } from '@faker-js/faker';
 
 import { useUpdateDistributionList } from './use-update-distribution-list';
-import { screen, setupHook } from '@test-setup';
 import { JEST_MOCKED_ERROR } from '../constants/tests';
 import { DistributionList } from '../model/distribution-list';
 import { registerDistributionListActionHandler } from '../tests/msw-handlers/distribution-list-action';
 import { generateDistributionList } from '../tests/utils';
+import { screen, setupHook } from '@test-setup';
 
 describe('Use update distribution list hook', () => {
 	it('should show success snackbar when there are no errors', async () => {

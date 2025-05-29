@@ -5,14 +5,13 @@
  */
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
+import { FOLDER_VIEW, FOLDERS } from '@zextras/carbonio-ui-commons';
 
 import { useActionCreateAddressBook } from './create-address-book';
 import { UIAction } from './types';
-import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
-import { FOLDERS } from '@zextras/carbonio-ui-commons';
-import { generateFolder } from '@test-utils/folders/folders-generator';
-import { screen, setupHook } from '@test-setup';
 import { TIMERS } from '../constants/tests';
+import { screen, setupHook } from '@test-setup';
+import { generateFolder } from '@test-utils/folders/folders-generator';
 
 describe('useActionCreateAddressBook', () => {
 	it('should return an object with the specific data', () => {

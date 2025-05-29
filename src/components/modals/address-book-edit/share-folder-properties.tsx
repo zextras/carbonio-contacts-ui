@@ -14,11 +14,10 @@ import {
 	Tooltip,
 	useSnackbar
 } from '@zextras/carbonio-design-system';
-import {  useUserAccount } from '@zextras/carbonio-shell-ui';
+import { useUserAccount } from '@zextras/carbonio-shell-ui';
+import { Grant, useFolder } from '@zextras/carbonio-ui-commons';
 import { map } from 'lodash';
 import { useTranslation } from 'react-i18next';
-
-import { Grant, useFolder } from '@zextras/carbonio-ui-commons';
 
 import { TIMEOUTS } from '../../../constants';
 import { apiClient } from '../../../network/api-client';

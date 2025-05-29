@@ -6,12 +6,10 @@
 import React, { useCallback, useMemo } from 'react';
 
 import { useModal } from '@zextras/carbonio-design-system';
+import { isCreateAllowed, isTrash, isNestedInTrash, Folder } from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 
 import { UIAction } from './types';
-import { isCreateAllowed, isTrash } from '@zextras/carbonio-ui-commons';
-import { isNestedInTrash } from '@zextras/carbonio-ui-commons';
-import { Folder } from '@zextras/carbonio-ui-commons';
 import { AddressBookCreateModal } from '../components/modals/address-book-create';
 import { ACTION_IDS } from '../constants';
 

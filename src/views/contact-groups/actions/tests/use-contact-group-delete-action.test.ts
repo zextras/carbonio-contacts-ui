@@ -6,7 +6,6 @@
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 
-import { screen, setupHook } from '@test-setup';
 import {
 	DELETE_PERMANENTLY_ACTION_DESCRIPTOR,
 	JEST_MOCKED_ERROR,
@@ -18,6 +17,7 @@ import { ContactOrGroup } from '../../../../legacy/types/contact';
 import { buildContactGroup, buildMembers } from '../../../../tests/model-builder';
 import { registerDeleteContactHandler } from '../../../../tests/msw-handlers/delete-contact';
 import { useContactGroupDeleteAction } from '../use-contact-group-delete-action';
+import { screen, setupHook } from '@test-setup';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function createStoreInitialData(data: Record<string, ContactOrGroup[]>) {

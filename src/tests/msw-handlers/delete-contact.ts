@@ -6,13 +6,13 @@
 import { JSNS, SoapResponse } from '@zextras/carbonio-shell-ui';
 import { HttpResponseResolver, http, HttpResponse } from 'msw';
 
-import { getSetupServer } from '@jest-setup';
 import {
 	CONTACT_ACTION_OPERATION,
 	ContactActionRequest,
 	ContactActionResponse
 } from '../../network/api/contact-action';
 import { buildSoapError, buildSoapResponse } from '../utils';
+import { getSetupServer } from '@jest-setup';
 
 type DeleteContactHandler = HttpResponseResolver<
 	never,

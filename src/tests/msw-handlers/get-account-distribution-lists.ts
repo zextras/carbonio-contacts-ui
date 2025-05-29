@@ -6,13 +6,13 @@
 import { JSNS, SoapResponse } from '@zextras/carbonio-shell-ui';
 import { http, HttpResponse, HttpResponseResolver } from 'msw';
 
-import { getSetupServer } from '@jest-setup';
 import { DistributionList } from '../../model/distribution-list';
 import type {
 	GetAccountDistributionListsRequest,
 	GetAccountDistributionListsResponse
 } from '../../network/api/get-account-distribution-lists';
 import { buildSoapError, buildSoapResponse } from '../utils';
+import { getSetupServer } from '@jest-setup';
 
 type GetAccountDistributionListsHandler = HttpResponseResolver<
 	never,
