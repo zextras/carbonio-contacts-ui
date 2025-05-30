@@ -54,7 +54,7 @@ describe('importAddressBook', () => {
 
 		createSoapAPIInterceptor<ImportContactsRequest, ImportContactsResponse>(
 			'ImportContacts',
-			soapResponse
+			soapResponse as ImportContactsResponse
 		);
 
 		const apiResponse: ImportContactsResult = {
@@ -77,7 +77,7 @@ describe('importAddressBook', () => {
 
 		createSoapAPIInterceptor<ImportContactsRequest, ImportContactsResponse>(
 			'ImportContacts',
-			response
+			response as ImportContactsResponse
 		);
 		await expect(importContacts(importParams)).resolves.toEqual(result);
 	});

@@ -39,7 +39,7 @@ describe('exportContacts', () => {
 
 		createSoapAPIInterceptor<ExportContactsRequest, ExportContactsResponse>(
 			'ExportContacts',
-			response
+			response as ExportContactsResponse
 		);
 		await expect(exportContacts(faker.string.uuid())).resolves.toEqual(content);
 	});
