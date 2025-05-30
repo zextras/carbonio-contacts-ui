@@ -7,8 +7,8 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { act, waitFor } from '@testing-library/react';
-import { ErrorSoapBodyResponse, JSNS } from '@zextras/carbonio-shell-ui';
-import { FOLDERS, isLink, isTrashed, getRootsArray } from '@zextras/carbonio-ui-commons';
+import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
+import { FOLDERS, isLink, isTrashed, getRootsArray, JSNS } from '@zextras/carbonio-ui-commons';
 
 import { AddressBookCreateModal } from './address-book-create';
 import { TESTID_SELECTORS } from '../../constants/tests';
@@ -218,7 +218,7 @@ describe('AddressBookCreateModal', () => {
 					recursive: false,
 					deletable: true
 				},
-				_jsns: JSNS.mail
+				_jsns: JSNS.MAIL
 			});
 			const { user } = setupTest(
 				<AddressBookCreateModal defaultParentId={parentAddressBookId} onClose={jest.fn()} />
@@ -244,7 +244,7 @@ describe('AddressBookCreateModal', () => {
 					recursive: false,
 					deletable: true
 				},
-				_jsns: JSNS.mail
+				_jsns: JSNS.MAIL
 			});
 			const onClose = jest.fn();
 			const { user } = setupTest(

@@ -6,8 +6,8 @@
 
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
-import { ErrorSoapBodyResponse, JSNS } from '@zextras/carbonio-shell-ui';
-import { FOLDERS, isLink, isSystemFolder, getFolder } from '@zextras/carbonio-ui-commons';
+import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
+import { FOLDERS, isLink, isSystemFolder, getFolder, JSNS } from '@zextras/carbonio-ui-commons';
 import { times } from 'lodash';
 
 import { UIAction } from '../../../actions/types';
@@ -201,7 +201,7 @@ describe('useActionMoveContacts', () => {
 						id: contact.id,
 						op: 'move'
 					},
-					_jsns: JSNS.mail
+					_jsns: JSNS.MAIL
 				};
 
 				createSoapAPIInterceptor<ContactActionRequest, ContactActionResponse>(

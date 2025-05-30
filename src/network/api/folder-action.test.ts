@@ -5,7 +5,8 @@
  */
 
 import { faker } from '@faker-js/faker';
-import { ErrorSoapBodyResponse, JSNS } from '@zextras/carbonio-shell-ui';
+import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
+import { JSNS } from '@zextras/carbonio-ui-commons';
 
 import { folderAction, FolderActionOperation, FolderActionParams } from './folder-action';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
@@ -45,7 +46,7 @@ describe('Folder action', () => {
 				name: params.name,
 				color: params.color
 			},
-			_jsns: JSNS.mail
+			_jsns: JSNS.MAIL
 		});
 	});
 
@@ -61,7 +62,7 @@ describe('Folder action', () => {
 				id: params.folderId,
 				op: params.operation
 			},
-			_jsns: JSNS.mail
+			_jsns: JSNS.MAIL
 		});
 	});
 });

@@ -8,8 +8,7 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
-import { JSNS } from '@zextras/carbonio-shell-ui';
-import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
+import { FOLDER_VIEW, JSNS } from '@zextras/carbonio-ui-commons';
 
 import { ContactsImportModal, ContactsImportModalProps } from './contacts-import-modal';
 import { TESTID_SELECTORS } from '../../constants/tests';
@@ -93,7 +92,7 @@ describe('Import contacts modal', () => {
 					ids: '8374'
 				}
 			],
-			_jsns: JSNS.mail
+			_jsns: JSNS.MAIL
 		};
 		createSoapAPIInterceptor<ImportContactsRequest, ImportContactsResponse>(
 			'ImportContacts',

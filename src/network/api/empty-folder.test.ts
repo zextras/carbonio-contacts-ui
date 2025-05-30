@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { faker } from '@faker-js/faker';
-import { JSNS } from '@zextras/carbonio-shell-ui';
+import { JSNS } from '@zextras/carbonio-ui-commons';
 
 import { emptyFolder } from './empty-folder';
 import { FolderActionRequest } from './folder-action';
@@ -22,7 +22,7 @@ describe('emptyFolder', () => {
 				recursive: true,
 				type: 'contacts'
 			},
-			_jsns: JSNS.mail
+			_jsns: JSNS.MAIL
 		});
 	});
 });

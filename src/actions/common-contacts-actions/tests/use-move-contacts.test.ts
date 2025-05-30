@@ -6,6 +6,7 @@
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
+import { JSNS } from '@zextras/carbonio-ui-commons';
 
 import { TESTID_SELECTORS, TIMERS } from '../../../constants/tests';
 import { Contact } from '../../../legacy/types/contact';
@@ -121,7 +122,7 @@ describe('useMoveContacts', () => {
 			ContactActionRequest,
 			ContactActionResponse
 		>('ContactAction', {
-			_jsns: 'urn:zimbraMail',
+			_jsns: JSNS.MAIL,
 			action: { id: contact.id, op: 'move' },
 			requestId: '123'
 		});

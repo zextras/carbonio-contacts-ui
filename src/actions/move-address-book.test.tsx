@@ -7,13 +7,13 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
-import { ErrorSoapBodyResponse, JSNS } from '@zextras/carbonio-shell-ui';
-import { FOLDER_VIEW, FOLDERS, getFolder } from '@zextras/carbonio-ui-commons';
+import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
+import { FOLDER_VIEW, FOLDERS, getFolder, JSNS } from '@zextras/carbonio-ui-commons';
 
 import { useActionMoveAddressBook } from './move-address-book';
 import { UIAction } from './types';
 import { AddressBookMoveModal } from '../components/modals/address-book-move';
-import { TIMERS } from '../constants/tests';
+import { FOLDERS_DESCRIPTORS, TIMERS } from '../constants/tests';
 import { FolderActionRequest, FolderActionResponse } from '../network/api/folder-action';
 import { getFoldersArray } from '../tests/utils';
 import { makeListItemsVisible, screen, setupHook, setupTest, within } from '@test-setup';
@@ -21,7 +21,6 @@ import { generateFolder } from '@test-utils/folders/folders-generator';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 import { populateFoldersStore } from '@test-utils/store/folders';
 import { getMocksContext } from '@test-utils/utils/mocks-context';
-import { FOLDERS_DESCRIPTORS } from '__test__/constants';
 
 describe('useActionMoveAddressBook', () => {
 	it('should return an object with the specific data', () => {
@@ -382,7 +381,7 @@ describe('useActionMoveAddressBook', () => {
 					id: addressBook.id,
 					op: 'move'
 				},
-				_jsns: JSNS.mail
+				_jsns: JSNS.MAIL
 			};
 
 			createSoapAPIInterceptor<FolderActionRequest, FolderActionResponse>('FolderAction', response);
@@ -410,7 +409,7 @@ describe('useActionMoveAddressBook', () => {
 					id: addressBook.id,
 					op: 'move'
 				},
-				_jsns: JSNS.mail
+				_jsns: JSNS.MAIL
 			};
 
 			createSoapAPIInterceptor<FolderActionRequest, FolderActionResponse>('FolderAction', response);

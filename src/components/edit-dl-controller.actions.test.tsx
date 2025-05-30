@@ -7,7 +7,7 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { act, waitFor } from '@testing-library/react';
-import { JSNS } from '@zextras/carbonio-shell-ui';
+import { JSNS } from '@zextras/carbonio-ui-commons';
 
 import { EditDLControllerComponent, EditDLControllerComponentProps } from './edit-dl-controller';
 import { JEST_MOCKED_ERROR, TESTID_SELECTORS } from '../constants/tests';
@@ -219,7 +219,7 @@ describe('EditDLControllerComponent', () => {
 					}>({
 						Body: {
 							BatchRequest: {
-								_jsns: JSNS.all,
+								_jsns: JSNS.ALL,
 								DistributionListActionRequest: [
 									expect.objectContaining<Partial<DistributionListActionRequest>>({
 										action: {

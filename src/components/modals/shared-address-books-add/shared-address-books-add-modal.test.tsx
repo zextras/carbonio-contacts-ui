@@ -7,7 +7,8 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { act, waitFor, waitForElementToBeRemoved } from '@testing-library/react';
-import { ErrorSoapBodyResponse, JSNS } from '@zextras/carbonio-shell-ui';
+import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
+import { JSNS } from '@zextras/carbonio-ui-commons';
 import { times } from 'lodash';
 
 import { SharedAddressBooksAddModal } from './shared-address-books-add-modal';
@@ -40,7 +41,7 @@ const registerDefaultGetShareInfoHandler = (sharesInfo: GetShareInfoResponse['sh
 	// Create an API interceptor that returns the list of shares
 	createSoapAPIInterceptor<GetShareInfoRequest, GetShareInfoResponse>('GetShareInfo', {
 		share: sharesInfo,
-		_jsns: JSNS.account
+		_jsns: JSNS.ACCOUNT
 	});
 };
 

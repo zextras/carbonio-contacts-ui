@@ -13,7 +13,8 @@ import { ChipAction } from '@zextras/carbonio-design-system';
 import {
 	CONTACT_TYPES,
 	ContactInputOnChange,
-	ContactInputValue
+	ContactInputValue,
+	JSNS
 } from '@zextras/carbonio-ui-commons';
 
 import { ContactInput } from './contact-input';
@@ -447,7 +448,7 @@ describe('Contact input', () => {
 				GetDistributionListRequest,
 				GetDistributionListResponse
 			>('GetDistributionList', {
-				_jsns: 'urn:zimbraAccount',
+				_jsns: JSNS.ACCOUNT,
 				dl: [{ id: '123', name: 'dl@dl.test' }],
 				requestId: ''
 			});

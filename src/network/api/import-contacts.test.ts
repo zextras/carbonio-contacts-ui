@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { faker } from '@faker-js/faker';
-import { ErrorSoapBodyResponse, JSNS } from '@zextras/carbonio-shell-ui';
+import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
+import { JSNS } from '@zextras/carbonio-ui-commons';
 
 import {
 	importContacts,
@@ -22,7 +23,7 @@ describe('importAddressBook', () => {
 
 	it('api is called with the correct parameters', async () => {
 		const expectedRequest = {
-			_jsns: JSNS.mail,
+			_jsns: JSNS.MAIL,
 			content: {
 				aid: 'testAid'
 			},
@@ -48,7 +49,7 @@ describe('importAddressBook', () => {
 					ids: ids.join(',')
 				}
 			],
-			_jsns: JSNS.mail
+			_jsns: JSNS.MAIL
 		};
 
 		createSoapAPIInterceptor<ImportContactsRequest, ImportContactsResponse>(
@@ -71,7 +72,7 @@ describe('importAddressBook', () => {
 		};
 		const response = {
 			cn: [],
-			_jsns: JSNS.mail
+			_jsns: JSNS.MAIL
 		};
 
 		createSoapAPIInterceptor<ImportContactsRequest, ImportContactsResponse>(

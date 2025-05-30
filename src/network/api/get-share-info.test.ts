@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { faker } from '@faker-js/faker';
-import { ErrorSoapBodyResponse, JSNS } from '@zextras/carbonio-shell-ui';
-import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
+import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
+import { FOLDER_VIEW, JSNS } from '@zextras/carbonio-ui-commons';
 import { map } from 'lodash';
 
 import { getShareInfo, GetShareInfoResponse } from './get-share-info';
@@ -32,7 +32,7 @@ describe('GetShareInfo', () => {
 		const request = await interceptor;
 		expect(request).toEqual({
 			includeSelf: 0,
-			_jsns: JSNS.account
+			_jsns: JSNS.ACCOUNT
 		});
 	});
 
@@ -50,7 +50,7 @@ describe('GetShareInfo', () => {
 					view: FOLDER_VIEW.contact
 				}
 			],
-			_jsns: JSNS.account
+			_jsns: JSNS.ACCOUNT
 		};
 		createSoapAPIInterceptor('GetShareInfo', response);
 		const shares = await getShareInfo();
@@ -101,7 +101,7 @@ describe('GetShareInfo', () => {
 
 		const response: GetShareInfoResponse = {
 			share: [contactShare, ...otherShares],
-			_jsns: JSNS.account
+			_jsns: JSNS.ACCOUNT
 		};
 		createSoapAPIInterceptor('GetShareInfo', response);
 		const shares = await getShareInfo();

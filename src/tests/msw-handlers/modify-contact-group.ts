@@ -3,7 +3,8 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { JSNS, SoapResponse } from '@zextras/carbonio-shell-ui';
+import { SoapResponse } from '@zextras/carbonio-shell-ui';
+import { JSNS } from '@zextras/carbonio-ui-commons';
 import { HttpResponse, HttpResponseResolver, http } from 'msw';
 
 import { ModifyContactRequest, ModifyContactResponse } from '../../network/api/modify-contact';
@@ -31,7 +32,7 @@ export const registerModifyContactGroupHandler = (
 			buildSoapResponse<ModifyContactResponse>({
 				ModifyContactResponse: {
 					cn: [cnItem],
-					_jsns: JSNS.mail
+					_jsns: JSNS.MAIL
 				}
 			})
 		);

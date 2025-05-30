@@ -3,7 +3,8 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { JSNS } from '@zextras/carbonio-shell-ui';
+
+import { JSNS } from '@zextras/carbonio-ui-commons';
 
 import { FolderActionRequest } from './folder-action';
 import { trashContacts } from './trash-contacts';
@@ -19,7 +20,7 @@ describe('Trash contacts', () => {
 				id: contactsIds.join(','),
 				op: 'trash'
 			},
-			_jsns: JSNS.mail
+			_jsns: JSNS.MAIL
 		});
 	});
 });

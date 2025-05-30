@@ -5,7 +5,12 @@
  */
 import { within } from '@testing-library/react';
 import { ChipAction } from '@zextras/carbonio-design-system';
-import { EDIT_ACTION_ID, CONTACT_TYPES, ContactInputItem } from '@zextras/carbonio-ui-commons';
+import {
+	EDIT_ACTION_ID,
+	CONTACT_TYPES,
+	ContactInputItem,
+	JSNS
+} from '@zextras/carbonio-ui-commons';
 
 import { TESTID_SELECTORS } from '../../../constants/tests';
 import {
@@ -104,7 +109,7 @@ export const createGetDistributionListInterceptor = (
 	createSoapAPIInterceptor<GetDistributionListRequest, GetDistributionListResponse>(
 		'GetDistributionList',
 		{
-			_jsns: 'urn:zimbraAccount',
+			_jsns: JSNS.ACCOUNT,
 			dl
 		}
 	);

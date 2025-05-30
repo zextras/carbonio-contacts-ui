@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { ErrorSoapBodyResponse, JSNS, soapFetch } from '@zextras/carbonio-shell-ui';
+import { ErrorSoapBodyResponse, soapFetch } from '@zextras/carbonio-shell-ui';
+import { JSNS } from '@zextras/carbonio-ui-commons';
 
 import { GenericSoapPayload } from './types';
 
@@ -33,7 +34,7 @@ export type FolderActionOperation =
 	| '!disableactivesync'
 	| 'webofflinesyncdays';
 
-export interface FolderActionRequest extends GenericSoapPayload<typeof JSNS.mail> {
+export interface FolderActionRequest extends GenericSoapPayload<typeof JSNS.MAIL> {
 	action: {
 		id: string;
 		op: FolderActionOperation;
@@ -46,7 +47,7 @@ export interface FolderActionRequest extends GenericSoapPayload<typeof JSNS.mail
 	};
 }
 
-export type FolderActionResponse = GenericSoapPayload<typeof JSNS.mail> & {
+export type FolderActionResponse = GenericSoapPayload<typeof JSNS.MAIL> & {
 	action: {
 		zid?: string; // Grantee ID
 		d?: string; // Display name
@@ -88,7 +89,7 @@ export const folderAction = (params: FolderActionParams): Promise<void> => {
 			...(params.granteeId !== undefined && { zid: params.granteeId }),
 			...(params.type !== undefined && { type: params.type })
 		},
-		_jsns: JSNS.mail
+		_jsns: JSNS.MAIL
 	};
 	return soapFetch<FolderActionRequest, FolderActionResponse | ErrorSoapBodyResponse>(
 		'FolderAction',

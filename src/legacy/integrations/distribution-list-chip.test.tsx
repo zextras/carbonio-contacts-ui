@@ -7,8 +7,7 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { act, waitFor } from '@testing-library/react';
-import { JSNS } from '@zextras/carbonio-shell-ui';
-import { CONTACT_TYPES } from '@zextras/carbonio-ui-commons';
+import { CONTACT_TYPES, JSNS } from '@zextras/carbonio-ui-commons';
 import { times } from 'lodash';
 import { HttpResponse } from 'msw';
 
@@ -71,7 +70,7 @@ describe('Distribution ListChip', () => {
 				GetDistributionListRequest,
 				GetDistributionListResponse
 			>('GetDistributionList', {
-				_jsns: 'urn:zimbraAccount',
+				_jsns: JSNS.ACCOUNT,
 				dl: [{ id: distributionListChip.id, name: distributionListChip.value.email }],
 				requestId: ''
 			});
@@ -205,7 +204,7 @@ describe('Distribution ListChip', () => {
 				return HttpResponse.json(
 					buildSoapResponse<GetDistributionListMembersResponse>({
 						GetDistributionListMembersResponse: {
-							_jsns: JSNS.account,
+							_jsns: JSNS.ACCOUNT,
 							...response
 						}
 					})
@@ -268,7 +267,7 @@ describe('Distribution ListChip', () => {
 				return HttpResponse.json(
 					buildSoapResponse<GetDistributionListMembersResponse>({
 						GetDistributionListMembersResponse: {
-							_jsns: JSNS.account,
+							_jsns: JSNS.ACCOUNT,
 							...response
 						}
 					})

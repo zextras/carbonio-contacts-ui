@@ -8,7 +8,7 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import { act, fireEvent } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
-import { FOLDER_VIEW, FOLDERS, useTagStore } from '@zextras/carbonio-ui-commons';
+import { FOLDER_VIEW, FOLDERS, JSNS, useTagStore } from '@zextras/carbonio-ui-commons';
 import { forEach } from 'lodash';
 
 import { createContactsApiInterceptor, findContactInList } from './utils';
@@ -209,7 +209,7 @@ describe('Folder panel', () => {
 							ContactActionRequest,
 							ContactActionResponse
 						>('ContactAction', {
-							_jsns: 'urn:zimbraMail',
+							_jsns: JSNS.MAIL,
 							action: { id: soapContact.id, op: 'move' },
 							requestId: '123'
 						});
@@ -255,7 +255,7 @@ describe('Folder panel', () => {
 							ContactActionRequest,
 							ContactActionResponse
 						>('ContactAction', {
-							_jsns: 'urn:zimbraMail',
+							_jsns: JSNS.MAIL,
 							action: { id: soapContact.id, op: 'trash' },
 							requestId: ''
 						});
@@ -293,7 +293,7 @@ describe('Folder panel', () => {
 							ContactActionRequest,
 							ContactActionResponse
 						>('ContactAction', {
-							_jsns: 'urn:zimbraMail',
+							_jsns: JSNS.MAIL,
 							action: { id: soapContact1.id, op: 'delete' },
 							requestId: ''
 						});
@@ -480,7 +480,7 @@ describe('Folder panel', () => {
 						ContactActionRequest,
 						ContactActionResponse
 					>('ContactAction', {
-						_jsns: 'urn:zimbraMail',
+						_jsns: JSNS.MAIL,
 						action: {
 							op: 'tag',
 							id: soapContact.id
@@ -715,7 +715,7 @@ describe('Folder panel', () => {
 							ContactActionRequest,
 							ContactActionResponse
 						>('ContactAction', {
-							_jsns: 'urn:zimbraMail',
+							_jsns: JSNS.MAIL,
 							action: { id: cnItem1.id, op: 'move' },
 							requestId: '123'
 						});
@@ -764,7 +764,7 @@ describe('Folder panel', () => {
 							ContactActionRequest,
 							ContactActionResponse
 						>('ContactAction', {
-							_jsns: 'urn:zimbraMail',
+							_jsns: JSNS.MAIL,
 							action: { id: cnItem1.id, op: 'trash' },
 							requestId: ''
 						});

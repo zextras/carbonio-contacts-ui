@@ -14,7 +14,8 @@ import {
 	FOLDERS,
 	useRunSearchIntegration,
 	useFolderStore,
-	useTagStore
+	useTagStore,
+	JSNS
 } from '@zextras/carbonio-ui-commons';
 import { useNavigate } from 'react-router-dom';
 
@@ -272,7 +273,7 @@ describe('folder-view', () => {
 					ContactActionRequest,
 					ContactActionResponse
 				>('ContactAction', {
-					_jsns: 'urn:zimbraMail',
+					_jsns: JSNS.MAIL,
 					requestId: '123-456',
 					action: {
 						id: contact.id,
@@ -340,7 +341,7 @@ describe('folder-view', () => {
 					ContactActionRequest,
 					ContactActionResponse
 				>('ContactAction', {
-					_jsns: 'urn:zimbraMail',
+					_jsns: JSNS.MAIL,
 					action: { id: contact.id, op: 'move' },
 					requestId: '123'
 				});

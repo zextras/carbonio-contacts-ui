@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { JSNS } from '@zextras/carbonio-shell-ui';
+import { JSNS } from '@zextras/carbonio-ui-commons';
 
 import { deleteContact } from './delete-contact';
 import { FolderActionRequest } from './folder-action';
@@ -20,7 +20,7 @@ describe('Delete contact', () => {
 				id: contactsIds.join(','),
 				op: 'delete'
 			},
-			_jsns: JSNS.mail
+			_jsns: JSNS.MAIL
 		});
 	});
 });
