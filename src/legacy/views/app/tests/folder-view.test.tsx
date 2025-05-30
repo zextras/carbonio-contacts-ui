@@ -42,7 +42,8 @@ import { generateFolder } from '@test-utils/folders/folders-generator';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 import { populateFoldersStore } from '@test-utils/store/folders';
 
-jest.mock('../../../../carbonio-ui-commons/integrations/search/use-run-search', () => ({
+jest.mock('@zextras/carbonio-ui-commons', () => ({
+	...jest.requireActual('@zextras/carbonio-ui-commons'),
 	useRunSearchIntegration: jest.fn()
 }));
 
@@ -296,6 +297,7 @@ describe('folder-view', () => {
 				await act(() => user.click(deleteContactInDisplayer));
 				const deleteContactRequest = await deleteContactInterceptor;
 				expect(deleteContactRequest).toEqual({
+					_jsns: JSNS.MAIL,
 					action: {
 						id: contact.id,
 						op: 'trash'
@@ -352,6 +354,7 @@ describe('folder-view', () => {
 
 				const contactActionRequest = await contactActionRequestPromise;
 				expect(contactActionRequest).toEqual({
+					_jsns: JSNS.MAIL,
 					action: {
 						id: contact.id,
 						op: 'move',

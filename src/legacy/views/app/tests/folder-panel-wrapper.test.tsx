@@ -237,6 +237,7 @@ describe('Folder panel', () => {
 
 						const contactActionRequest = await restoreInterceptor;
 						expect(contactActionRequest).toEqual({
+							_jsns: JSNS.MAIL,
 							action: {
 								id: soapContact.id,
 								op: 'move',
@@ -274,6 +275,7 @@ describe('Folder panel', () => {
 
 						const trashRequest = await moveToTrashSoapInterceptor;
 						expect(trashRequest).toEqual({
+							_jsns: JSNS.MAIL,
 							action: {
 								id: soapContact.id,
 								op: 'trash'
@@ -316,6 +318,7 @@ describe('Folder panel', () => {
 						await screen.findByText('Contact permanently deleted');
 						const deletePermanentlyRequest = await deletePermanentlySoapInterceptor;
 						expect(deletePermanentlyRequest).toEqual({
+							_jsns: JSNS.MAIL,
 							action: {
 								id: soapContact1.id,
 								op: 'delete'
@@ -742,6 +745,7 @@ describe('Folder panel', () => {
 
 						const contactActionRequest = await restoreInterceptor;
 						expect(contactActionRequest).toEqual({
+							_jsns: JSNS.MAIL,
 							action: {
 								id: cnItem1.id,
 								op: 'move',
@@ -781,6 +785,7 @@ describe('Folder panel', () => {
 
 						const trashRequest = await moveToTrashSoapInterceptor;
 						expect(trashRequest).toEqual({
+							_jsns: JSNS.MAIL,
 							action: {
 								id: cnItem1.id,
 								op: 'trash'

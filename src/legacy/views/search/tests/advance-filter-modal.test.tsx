@@ -13,7 +13,8 @@ import type { TFunction } from 'i18next';
 import { AdvancedFilterModal, AdvancedFilterModalProps } from '../advance-filter-modal';
 import { setupTest } from '@test-setup';
 
-jest.mock('../../../../carbonio-ui-commons/store/zustand/tags', () => ({
+jest.mock('@zextras/carbonio-ui-commons', () => ({
+	...jest.requireActual('@zextras/carbonio-ui-commons'),
 	getTags: jest.fn()
 }));
 

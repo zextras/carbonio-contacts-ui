@@ -13,9 +13,10 @@ import { TESTID_SELECTORS, TIMERS } from '../../../../constants/tests';
 import { TagsAccordion } from '../tags-accordion';
 import { screen, setupTest } from '@test-setup';
 import { createAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
-import { buildSoapResponse } from 'tests/utils';
+import { buildSoapResponse } from '@test-utils/utils/soap';
 
-jest.mock('../../../../carbonio-ui-commons/integrations/search/use-run-search', () => ({
+jest.mock('@zextras/carbonio-ui-commons', () => ({
+	...jest.requireActual('@zextras/carbonio-ui-commons'),
 	useRunSearchIntegration: jest.fn()
 }));
 
