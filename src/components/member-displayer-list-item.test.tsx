@@ -13,6 +13,11 @@ import { MemberDisplayerListItemComponent } from './member-displayer-list-item';
 import { TESTID_SELECTORS } from '../constants/tests';
 import { screen, setupTest, within } from '@test-setup';
 
+jest.mock('@zextras/carbonio-ui-commons', () => ({
+	...jest.requireActual('@zextras/carbonio-ui-commons'),
+	copyToClipboard: jest.fn()
+}));
+
 describe('Member displayer item', () => {
 	it('should show the email of the member', () => {
 		const email = faker.internet.email();

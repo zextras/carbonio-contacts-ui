@@ -28,7 +28,8 @@ jest.mock('@zextras/carbonio-ui-commons', () => ({
 	},
 	tagsWorker: {
 		postMessage: jest.fn()
-	}
+	},
+	useInitializeFolders: jest.fn()
 }));
 
 describe('FoldersSynchronizator', () => {

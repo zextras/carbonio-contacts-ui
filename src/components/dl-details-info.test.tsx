@@ -12,6 +12,11 @@ import { TESTID_SELECTORS } from '../constants/tests';
 import { generateDistributionList } from '../tests/utils';
 import { screen, setupTest, within } from '@test-setup';
 
+jest.mock('@zextras/carbonio-ui-commons', () => ({
+	...jest.requireActual('@zextras/carbonio-ui-commons'),
+	copyToClipboard: jest.fn()
+}));
+
 describe('Distribution list details', () => {
 	it('should show the display name', () => {
 		const dl = generateDistributionList();
