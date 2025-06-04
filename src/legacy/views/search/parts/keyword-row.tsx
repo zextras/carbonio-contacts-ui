@@ -46,6 +46,7 @@ const KeywordRow: FC<ComponentProps> = ({ compProps }): ReactElement => {
 				onChange={onChange}
 				onAdd={keywordChipOnAdd}
 				defaultValue={query}
+				requireUniqueChips
 			/>
 		</Container>
 	);

@@ -45,6 +45,11 @@ const TagRow: FC<ComponentProps> = ({ compProps }): ReactElement => {
 
 	const tagChipOnAdd = useCallback(
 		(label: string): any => {
+			// Check if tag already exists by comparing the base name
+			const tagExists = tag.some((existingTag) => existingTag.label === `tag:${label}`);
+			if (tagExists) {
+				return undefined; // Return undefined to prevent adding duplicate
+			}
 			const chipBg = filter(tagOptions, { label })[0];
 			return chipOnAdd(
 				label,
@@ -56,13 +61,15 @@ const TagRow: FC<ComponentProps> = ({ compProps }): ReactElement => {
 				ZIMBRA_STANDARD_COLORS[chipBg.color ?? 0].hex
 			);
 		},
-		[chipOnAdd, tagOptions]
+		[chipOnAdd, tagOptions, tag]
 	);
 
 	const tagPlaceholder = useMemo(() => t('label.tags', 'Tags'), [t]);
 	const onTagChange = useCallback(
 		(chips: ChipItem[]) => {
-			setTag(chips);
+			// Filter out any undefined values that might have been added
+			const validChips = chips.filter((chip): chip is ChipItem => chip !== undefined);
+			setTag(validChips);
 		},
 		[setTag]
 	);
