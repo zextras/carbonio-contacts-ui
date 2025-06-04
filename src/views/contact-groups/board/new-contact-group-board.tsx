@@ -27,7 +27,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 	const createSnackbar = useSnackbar();
 	const navigate = useNavigate();
 	const initialName = t('board.newContactGroup.name', 'New Group');
-	const [folderId, setFolderId] = useState(FOLDERS.CONTACTS);
+	const [folderId, setFolderId] = useState<string>(FOLDERS.CONTACTS);
 	const [nameValue, setNameValue] = useState(initialName);
 
 	const [memberListEmails, setMemberListEmails] = useState<string[]>([]);
