@@ -3,9 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { getFolderIdParts } from '@zextras/carbonio-ui-commons';
-import { getFolder, getFoldersMap } from '@zextras/carbonio-ui-commons';
-import { Folder } from '@zextras/carbonio-ui-commons';
+import { Folder, getFolder, getFolderIdParts, getFoldersMap } from '@zextras/carbonio-ui-commons';
 
 // return the folder based on the item parent from the folders store. Checks for link folders also
 export function getParentFolder(item: { parent: string }): Folder | undefined {
