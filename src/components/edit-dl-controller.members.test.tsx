@@ -10,7 +10,6 @@ import { act, waitFor } from '@testing-library/react';
 import { times } from 'lodash';
 
 import { EditDLControllerComponent, EditDLControllerComponentProps } from './edit-dl-controller';
-import { screen, setupTest, within } from '../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../constants/tests';
 import { DistributionList } from '../model/distribution-list';
 import {
@@ -19,6 +18,7 @@ import {
 	getDLContactInput,
 	spyUseBoardHooks
 } from '../tests/utils';
+import { screen, setupTest, within } from '@test-setup';
 
 beforeEach(() => {
 	spyUseBoardHooks();

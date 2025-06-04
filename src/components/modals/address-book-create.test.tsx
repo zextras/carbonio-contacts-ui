@@ -7,18 +7,16 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { act, waitFor } from '@testing-library/react';
-import { ErrorSoapBodyResponse, JSNS } from '@zextras/carbonio-shell-ui';
+import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
+import { FOLDERS, isLink, isTrashed, getRootsArray, JSNS } from '@zextras/carbonio-ui-commons';
 
 import { AddressBookCreateModal } from './address-book-create';
-import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
-import { isLink, isTrashed } from '../../carbonio-ui-commons/helpers/folders';
-import { getRootsArray } from '../../carbonio-ui-commons/store/zustand/folder';
-import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { populateFoldersStore } from '../../carbonio-ui-commons/test/mocks/store/folders';
-import { makeListItemsVisible, screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../../constants/tests';
 import { CreateFolderRequest, CreateFolderResponse } from '../../network/api/create-folder';
 import { getFoldersArray } from '../../tests/utils';
+import { makeListItemsVisible, screen, setupTest } from '@test-setup';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
+import { populateFoldersStore } from '@test-utils/store/folders';
 
 describe('AddressBookCreateModal', () => {
 	it('should display a modal with a specific title', () => {
@@ -220,7 +218,7 @@ describe('AddressBookCreateModal', () => {
 					recursive: false,
 					deletable: true
 				},
-				_jsns: JSNS.mail
+				_jsns: JSNS.MAIL
 			});
 			const { user } = setupTest(
 				<AddressBookCreateModal defaultParentId={parentAddressBookId} onClose={jest.fn()} />
@@ -246,7 +244,7 @@ describe('AddressBookCreateModal', () => {
 					recursive: false,
 					deletable: true
 				},
-				_jsns: JSNS.mail
+				_jsns: JSNS.MAIL
 			});
 			const onClose = jest.fn();
 			const { user } = setupTest(

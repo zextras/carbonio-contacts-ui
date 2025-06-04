@@ -6,9 +6,9 @@
 import React from 'react';
 
 import { soapFetch } from '@zextras/carbonio-shell-ui';
+import { parseEmail, CONTACT_TYPES } from '@zextras/carbonio-ui-commons';
 import { map, trim, unescape } from 'lodash';
 
-import { parseEmail } from '../../../carbonio-ui-commons/helpers/email-parser';
 import {
 	GroupContact,
 	ContactInputOptions,
@@ -20,7 +20,6 @@ import {
 } from '../types';
 import { Hint } from './hint';
 import { HintGroup } from './hint-group';
-import { CONTACT_TYPES } from '../../../carbonio-ui-commons/integrations/constants';
 import type { FullAutocompleteRequest, SearchContactsResponse } from '../../types/contact';
 
 export function isContactGroup(contact: {

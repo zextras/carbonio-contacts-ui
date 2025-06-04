@@ -8,9 +8,9 @@ import React from 'react';
 
 import { screen } from '@testing-library/react';
 
-import { makeListItemsVisible, setupTest } from '../../../../carbonio-ui-commons/test/test-setup';
 import { Contact } from '../../../types/contact';
 import { SearchList } from '../search-list';
+import { makeListItemsVisible, setupTest } from '@test-setup';
 
 const mockSetShowAdvanceFilters = jest.fn();
 

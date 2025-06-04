@@ -5,14 +5,13 @@
  */
 import { faker } from '@faker-js/faker';
 import * as shell from '@zextras/carbonio-shell-ui';
+import { FOLDERS, useFolderStore } from '@zextras/carbonio-ui-commons';
 
-import { FOLDERS } from '../../../../carbonio-ui-commons/constants/folders';
-import { useFolderStore } from '../../../../carbonio-ui-commons/store/zustand/folder';
-import { populateFoldersStore } from '../../../../carbonio-ui-commons/test/mocks/store/folders';
-import { setupHook } from '../../../../carbonio-ui-commons/test/test-setup';
 import { buildContact } from '../../../../tests/model-builder';
 import { generateLinkFolder } from '../../../contact-groups/tests/utils';
 import { useContactHoverActions } from '../use-contact-hover-actions';
+import { setupHook } from '@test-setup';
+import { populateFoldersStore } from '@test-utils/store/folders';
 
 describe('useContactHoverActions', () => {
 	beforeAll(() => {

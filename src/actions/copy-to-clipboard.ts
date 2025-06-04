@@ -6,10 +6,10 @@
 import { useCallback, useMemo } from 'react';
 
 import { useSnackbar } from '@zextras/carbonio-design-system';
+import { copyToClipboard } from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 
 import { UIAction } from './types';
-import { copyToClipboard } from '../carbonio-ui-commons/utils/clipboard';
 import { ACTION_IDS } from '../constants';
 
 type CopyToClipboardAction = UIAction<string, never>;

@@ -5,7 +5,7 @@
  */
 import shell from '@zextras/carbonio-shell-ui';
 
-export * from '../../src/carbonio-ui-commons/test/mocks/carbonio-shell-ui';
+export * from '../../src/__test__/mocks/carbonio-shell-ui/carbonio-shell-ui';
 
 // TODO move it in the Commons submodule
 export const useAuthenticated = jest

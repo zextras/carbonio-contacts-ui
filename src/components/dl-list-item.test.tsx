@@ -10,10 +10,10 @@ import * as shell from '@zextras/carbonio-shell-ui';
 
 import { DLListItem } from './dl-list-item';
 import { OpenMailComposerIntegratedFunction } from '../actions/send-email';
-import { screen, setupTest, within } from '../carbonio-ui-commons/test/test-setup';
 import { EDIT_DL_BOARD_ID } from '../constants';
 import { TESTID_SELECTORS } from '../constants/tests';
 import { generateDistributionList } from '../tests/utils';
+import { screen, setupTest, within } from '@test-setup';
 
 describe('DL list item', () => {
 	it('should show avatar', () => {

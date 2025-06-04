@@ -8,13 +8,13 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { act, waitFor } from '@testing-library/react';
-import { ErrorSoapResponse, JSNS } from '@zextras/carbonio-shell-ui';
+import { ErrorSoapResponse } from '@zextras/carbonio-shell-ui';
+import { JSNS } from '@zextras/carbonio-ui-commons';
 import { times } from 'lodash';
 import { HttpResponse } from 'msw';
 import { Link } from 'react-router-dom';
 
 import { DistributionListsView } from './distribution-lists-view';
-import { screen, setupTest, within } from '../../carbonio-ui-commons/test/test-setup';
 import { ROUTES, ROUTES_INTERNAL_PARAMS } from '../../constants';
 import {
 	EMPTY_DISPLAYER_NO_CONTACTS_HINT,
@@ -39,6 +39,7 @@ import {
 	generateDistributionLists
 } from '../../tests/utils';
 import GroupsAppView from '../distribution-list-view';
+import { screen, setupTest, within } from '@test-setup';
 
 describe('Distribution Lists View', () => {
 	it('should show the list of distribution lists', async () => {
@@ -96,7 +97,7 @@ describe('Distribution Lists View', () => {
 			return HttpResponse.json(
 				buildSoapResponse<GetAccountDistributionListsResponse>({
 					GetAccountDistributionListsResponse: {
-						_jsns: JSNS.account,
+						_jsns: JSNS.ACCOUNT,
 						dl: resData.map((item) => ({
 							id: item.id,
 							name: item.email,
@@ -267,7 +268,7 @@ describe('Distribution Lists View', () => {
 				return HttpResponse.json(
 					buildSoapResponse<GetDistributionListMembersResponse>({
 						GetDistributionListMembersResponse: {
-							_jsns: JSNS.account,
+							_jsns: JSNS.ACCOUNT,
 							dlm: data.map((item) => ({ _content: item })),
 							more: false,
 							total: data.length

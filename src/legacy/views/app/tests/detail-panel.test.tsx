@@ -7,17 +7,17 @@
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
+import { FOLDERS } from '@zextras/carbonio-ui-commons';
 import { http, HttpResponse } from 'msw';
 
-import { FOLDERS } from '../../../../carbonio-ui-commons/constants/folders';
-import { getSetupServer } from '../../../../carbonio-ui-commons/test/jest-setup';
-import { populateFoldersStore } from '../../../../carbonio-ui-commons/test/mocks/store/folders';
-import { screen, setupTest } from '../../../../carbonio-ui-commons/test/test-setup';
 import { JEST_MOCKED_ERROR, TESTID_SELECTORS } from '../../../../constants/tests';
 import { buildSoapError } from '../../../../tests/utils';
 import * as modifyContactApi from '../../../store/actions/modify-contact';
 import { addContactsToStore } from '../../../store/contacts';
 import { DetailPanel } from '../detail-panel';
+import { getSetupServer } from '@jest-setup';
+import { screen, setupTest } from '@test-setup';
+import { populateFoldersStore } from '@test-utils/store/folders';
 
 describe('Detail panel', () => {
 	describe('Contacts', () => {

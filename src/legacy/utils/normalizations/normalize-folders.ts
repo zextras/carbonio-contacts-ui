@@ -3,9 +3,9 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+import { isTrash } from '@zextras/carbonio-ui-commons';
 import { reduce } from 'lodash';
 
-import { isTrash } from '../../../carbonio-ui-commons/helpers/folders';
 import { ISoapFolderObj } from '../../types/soap';
 
 export const extractFolders = (accordions: ISoapFolderObj[]): ISoapFolderObj[] =>

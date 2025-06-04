@@ -4,13 +4,12 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { ErrorSoapBodyResponse, JSNS, soapFetch } from '@zextras/carbonio-shell-ui';
+import { ErrorSoapBodyResponse, soapFetch } from '@zextras/carbonio-shell-ui';
+import { FOLDER_VIEW, FolderView, JSNS, SoapFolder } from '@zextras/carbonio-ui-commons';
 
 import { GenericSoapPayload } from './types';
-import { FOLDER_VIEW } from '../../carbonio-ui-commons/constants';
-import { FolderView, SoapFolder } from '../../carbonio-ui-commons/types/folder';
 
-export interface CreateFolderRequest extends GenericSoapPayload<typeof JSNS.mail> {
+export interface CreateFolderRequest extends GenericSoapPayload<typeof JSNS.MAIL> {
 	folder: {
 		view: FolderView;
 		l: string;
@@ -18,7 +17,7 @@ export interface CreateFolderRequest extends GenericSoapPayload<typeof JSNS.mail
 	};
 }
 
-export type CreateFolderResponse = GenericSoapPayload<typeof JSNS.mail> & {
+export type CreateFolderResponse = GenericSoapPayload<typeof JSNS.MAIL> & {
 	folder: SoapFolder;
 };
 
@@ -34,7 +33,7 @@ export const createFolder = (params: CreateFolderParams): Promise<void> => {
 			l: params.parentFolderId,
 			name: params.name
 		},
-		_jsns: JSNS.mail
+		_jsns: JSNS.MAIL
 	};
 	return soapFetch<CreateFolderRequest, CreateFolderResponse | ErrorSoapBodyResponse>(
 		'CreateFolder',

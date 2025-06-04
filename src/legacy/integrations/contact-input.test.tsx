@@ -10,15 +10,14 @@ import React, { ReactElement, useState } from 'react';
 import { faker } from '@faker-js/faker';
 import { act, fireEvent, waitFor, within } from '@testing-library/react';
 import { ChipAction } from '@zextras/carbonio-design-system';
+import {
+	CONTACT_TYPES,
+	ContactInputOnChange,
+	ContactInputValue,
+	JSNS
+} from '@zextras/carbonio-ui-commons';
 
 import { ContactInput } from './contact-input';
-import { CONTACT_TYPES } from '../../carbonio-ui-commons/integrations/constants';
-import {
-	ContactInputOnChange,
-	ContactInputValue
-} from '../../carbonio-ui-commons/integrations/types';
-import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { UserEvent, screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../../constants/tests';
 import { registerGetDistributionListHandler } from '../../tests/msw-handlers/get-distribution-list';
 import { generateDistributionList } from '../../tests/utils';
@@ -43,6 +42,8 @@ import {
 } from '../../network/api/get-distribution-list';
 import { registerFullAutocompleteHandler } from '../../tests/msw-handlers/full-autocomplete';
 import { registerGetDistributionListMembersHandler } from '../../tests/msw-handlers/get-distribution-list-members';
+import { UserEvent, screen, setupTest } from '@test-setup';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 const VALID_EMAIL = 'valid@email.it';
 const INVALID_EMAIL = 'invalid@email';
@@ -447,7 +448,7 @@ describe('Contact input', () => {
 				GetDistributionListRequest,
 				GetDistributionListResponse
 			>('GetDistributionList', {
-				_jsns: 'urn:zimbraAccount',
+				_jsns: JSNS.ACCOUNT,
 				dl: [{ id: '123', name: 'dl@dl.test' }],
 				requestId: ''
 			});

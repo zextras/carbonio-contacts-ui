@@ -5,14 +5,14 @@
  */
 
 import { act } from '@testing-library/react';
+import { FOLDERS } from '@zextras/carbonio-ui-commons';
 
 import { UIAction } from '../../../../actions/types';
-import { FOLDERS } from '../../../../carbonio-ui-commons/constants/folders';
-import { populateFoldersStore } from '../../../../carbonio-ui-commons/test/mocks/store/folders';
-import { setupHook, screen } from '../../../../carbonio-ui-commons/test/test-setup';
 import { FOLDERS_DESCRIPTORS, TIMERS } from '../../../../constants/tests';
 import { buildContact } from '../../../../tests/model-builder';
 import { useContactRestoreAction } from '../use-contact-restore-action';
+import { setupHook, screen } from '@test-setup';
+import { populateFoldersStore } from '@test-utils/store/folders';
 
 describe('useRestoreSingleContact', () => {
 	it('should return an object with the specific data', () => {

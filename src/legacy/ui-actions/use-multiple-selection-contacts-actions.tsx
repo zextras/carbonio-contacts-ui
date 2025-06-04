@@ -5,14 +5,12 @@
  */
 
 import { type Action as DSAction } from '@zextras/carbonio-design-system';
+import { FOLDERS, getFolderIdParts, useTags } from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 
 import { applyMultiTag } from './tag-actions';
 import { useDeleteContacts } from '../../actions/common-contacts-actions/use-delete-contacts';
 import { useTrashContacts } from '../../actions/common-contacts-actions/use-trash-contacts';
-import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
-import { getFolderIdParts } from '../../carbonio-ui-commons/helpers/folders';
-import { useTags } from '../../carbonio-ui-commons/store/zustand/tags';
 import { ContactOrGroup } from '../types/contact';
 
 type SecondaryActionsProps = {

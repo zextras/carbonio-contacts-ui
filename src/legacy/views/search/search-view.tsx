@@ -7,6 +7,13 @@ import React, { FC, Suspense, useCallback, useEffect, useMemo, useState } from '
 
 import { Container, Spinner } from '@zextras/carbonio-design-system';
 import type { SearchViewProps } from '@zextras/carbonio-search-ui';
+import {
+	isTrash,
+	useUpdateView,
+	useFoldersMap,
+	Folder,
+	usePrefs
+} from '@zextras/carbonio-ui-commons';
 import { map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { Route, Routes } from 'react-router-dom';
@@ -17,11 +24,6 @@ import { SearchContactsEmptyPanel } from './search-contacts-empty-panel';
 import { SearchList } from './search-list';
 import { Query } from './search-types';
 import { SearchResults } from './types';
-import { isTrash } from '../../../carbonio-ui-commons/helpers/folders';
-import { useUpdateView } from '../../../carbonio-ui-commons/hooks/use-update-view';
-import { useFoldersMap } from '../../../carbonio-ui-commons/store/zustand/folder';
-import { Folder } from '../../../carbonio-ui-commons/types';
-import { usePrefs } from '../../../carbonio-ui-commons/utils/use-prefs';
 import { ContactGroupDisplayerWrapper } from '../../../views/contact-groups/displayer/contact-group-displayer-wrapper';
 import { addContactsToStore, useContactsById } from '../../store/contacts';
 import ContactEditPanel from '../edit/contact-edit-panel';

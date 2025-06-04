@@ -10,14 +10,10 @@ import { act } from '@testing-library/react';
 import { times } from 'lodash';
 
 import { UsersSharesList } from './users-shares-list';
-import {
-	makeListItemsVisible,
-	screen,
-	setupTest
-} from '../../../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../../../constants/tests';
 import { ShareInfo } from '../../../model/share-info';
 import { buildShareInfo } from '../../../tests/model-builder';
+import { makeListItemsVisible, screen, setupTest } from '@test-setup';
 
 describe('UsersSharesList', () => {
 	it('should display an item for each owner of the shares list', async () => {

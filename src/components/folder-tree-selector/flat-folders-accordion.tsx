@@ -20,13 +20,16 @@ import {
 	Tooltip
 } from '@zextras/carbonio-design-system';
 import { useUserAccount } from '@zextras/carbonio-shell-ui';
+import {
+	StaticBreadcrumbs,
+	isDefaultAccountRoot,
+	isRoot,
+	Folder
+} from '@zextras/carbonio-ui-commons';
 import { noop } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { StaticBreadcrumbs } from '../../carbonio-ui-commons/components/breadcrumbs/static-breadcrumbs';
-import { isDefaultAccountRoot, isRoot } from '../../carbonio-ui-commons/helpers/folders';
-import { Folder } from '../../carbonio-ui-commons/types/folder';
 import { getFolderIconColor, getFolderIconName } from '../../helpers/folders';
 import { getFolderTranslatedName } from '../../legacy/utils/helpers';
 

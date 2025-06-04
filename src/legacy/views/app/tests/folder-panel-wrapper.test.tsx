@@ -8,27 +8,10 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import { act, fireEvent } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
+import { FOLDER_VIEW, FOLDERS, JSNS, useTagStore } from '@zextras/carbonio-ui-commons';
 import { forEach } from 'lodash';
 
 import { createContactsApiInterceptor, findContactInList } from './utils';
-import { FOLDER_VIEW } from '../../../../carbonio-ui-commons/constants';
-import { FOLDERS } from '../../../../carbonio-ui-commons/constants/folders';
-import { useTagStore } from '../../../../carbonio-ui-commons/store/zustand/tags';
-import {
-	getAction as getActionMock,
-	useAppContext
-} from '../../../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
-import { generateFolder } from '../../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
-import { createSoapAPIInterceptor } from '../../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { populateFoldersStore } from '../../../../carbonio-ui-commons/test/mocks/store/folders';
-import {
-	makeListItemsVisible,
-	screen,
-	setupTest,
-	triggerLoadMore,
-	UserEvent,
-	within
-} from '../../../../carbonio-ui-commons/test/test-setup';
 import {
 	ActionDescriptorType,
 	ACTIONS_DESCRIPTORS,
@@ -52,6 +35,21 @@ import { createSoapContact, createSoapContactGroup } from '../../../../tests/uti
 import { SearchContactsRequest, SearchContactsSoapResponse } from '../../../../types';
 import { SoapContact } from '../../../types/soap';
 import { FolderPanelWrapper } from '../folder-panel-wrapper';
+import {
+	makeListItemsVisible,
+	screen,
+	setupTest,
+	triggerLoadMore,
+	UserEvent,
+	within
+} from '@test-setup';
+import {
+	getAction as getActionMock,
+	useAppContext
+} from '@test-utils/carbonio-shell-ui/carbonio-shell-ui';
+import { generateFolder } from '@test-utils/folders/folders-generator';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
+import { populateFoldersStore } from '@test-utils/store/folders';
 
 const mockMailToAction = (execute = jest.fn()): void => {
 	getActionMock.mockImplementation((type, id) => {
@@ -211,7 +209,7 @@ describe('Folder panel', () => {
 							ContactActionRequest,
 							ContactActionResponse
 						>('ContactAction', {
-							_jsns: 'urn:zimbraMail',
+							_jsns: JSNS.MAIL,
 							action: { id: soapContact.id, op: 'move' },
 							requestId: '123'
 						});
@@ -239,6 +237,7 @@ describe('Folder panel', () => {
 
 						const contactActionRequest = await restoreInterceptor;
 						expect(contactActionRequest).toEqual({
+							_jsns: JSNS.MAIL,
 							action: {
 								id: soapContact.id,
 								op: 'move',
@@ -257,7 +256,7 @@ describe('Folder panel', () => {
 							ContactActionRequest,
 							ContactActionResponse
 						>('ContactAction', {
-							_jsns: 'urn:zimbraMail',
+							_jsns: JSNS.MAIL,
 							action: { id: soapContact.id, op: 'trash' },
 							requestId: ''
 						});
@@ -276,6 +275,7 @@ describe('Folder panel', () => {
 
 						const trashRequest = await moveToTrashSoapInterceptor;
 						expect(trashRequest).toEqual({
+							_jsns: JSNS.MAIL,
 							action: {
 								id: soapContact.id,
 								op: 'trash'
@@ -295,7 +295,7 @@ describe('Folder panel', () => {
 							ContactActionRequest,
 							ContactActionResponse
 						>('ContactAction', {
-							_jsns: 'urn:zimbraMail',
+							_jsns: JSNS.MAIL,
 							action: { id: soapContact1.id, op: 'delete' },
 							requestId: ''
 						});
@@ -318,6 +318,7 @@ describe('Folder panel', () => {
 						await screen.findByText('Contact permanently deleted');
 						const deletePermanentlyRequest = await deletePermanentlySoapInterceptor;
 						expect(deletePermanentlyRequest).toEqual({
+							_jsns: JSNS.MAIL,
 							action: {
 								id: soapContact1.id,
 								op: 'delete'
@@ -482,7 +483,7 @@ describe('Folder panel', () => {
 						ContactActionRequest,
 						ContactActionResponse
 					>('ContactAction', {
-						_jsns: 'urn:zimbraMail',
+						_jsns: JSNS.MAIL,
 						action: {
 							op: 'tag',
 							id: soapContact.id
@@ -717,7 +718,7 @@ describe('Folder panel', () => {
 							ContactActionRequest,
 							ContactActionResponse
 						>('ContactAction', {
-							_jsns: 'urn:zimbraMail',
+							_jsns: JSNS.MAIL,
 							action: { id: cnItem1.id, op: 'move' },
 							requestId: '123'
 						});
@@ -744,6 +745,7 @@ describe('Folder panel', () => {
 
 						const contactActionRequest = await restoreInterceptor;
 						expect(contactActionRequest).toEqual({
+							_jsns: JSNS.MAIL,
 							action: {
 								id: cnItem1.id,
 								op: 'move',
@@ -766,7 +768,7 @@ describe('Folder panel', () => {
 							ContactActionRequest,
 							ContactActionResponse
 						>('ContactAction', {
-							_jsns: 'urn:zimbraMail',
+							_jsns: JSNS.MAIL,
 							action: { id: cnItem1.id, op: 'trash' },
 							requestId: ''
 						});
@@ -783,6 +785,7 @@ describe('Folder panel', () => {
 
 						const trashRequest = await moveToTrashSoapInterceptor;
 						expect(trashRequest).toEqual({
+							_jsns: JSNS.MAIL,
 							action: {
 								id: cnItem1.id,
 								op: 'trash'

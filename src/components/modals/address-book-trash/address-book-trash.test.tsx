@@ -8,13 +8,13 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
+import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
 
 import { AddressBookTrashModal } from './address-book-trash';
-import { FOLDER_VIEW } from '../../../carbonio-ui-commons/constants';
-import { generateFolder } from '../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
-import { createSoapAPIInterceptor } from '../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { screen, setupTest } from '../../../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../../../constants/tests';
+import { screen, setupTest } from '@test-setup';
+import { generateFolder } from '@test-utils/folders/folders-generator';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 describe('AddressBookTrashModal', () => {
 	it('should render a modal with a specific title', () => {

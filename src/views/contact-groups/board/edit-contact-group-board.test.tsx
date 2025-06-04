@@ -12,7 +12,6 @@ import { act, waitFor, within } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
 
 import EditContactGroupBoard from './edit-contact-group-board';
-import { setupTest, screen } from '../../../carbonio-ui-commons/test/test-setup';
 import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../../constants';
 import { JEST_MOCKED_ERROR, PALETTE, TESTID_SELECTORS } from '../../../constants/tests';
 import { addContactsToStore } from '../../../legacy/store/contacts';
@@ -21,6 +20,7 @@ import { buildContactGroup } from '../../../tests/model-builder';
 import { registerModifyContactGroupHandler } from '../../../tests/msw-handlers/modify-contact-group';
 import { createSoapContactGroup, spyUseBoardHooks } from '../../../tests/utils';
 import { getContactInput } from '../../board/common-contact-group-board.test';
+import { setupTest, screen } from '@test-setup';
 
 function spyUseBoard(contactGroupId: string, folderId: string): void {
 	jest.spyOn(shell, 'useBoard').mockReturnValue({

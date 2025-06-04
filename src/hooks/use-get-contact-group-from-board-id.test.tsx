@@ -7,9 +7,9 @@
 import * as shell from '@zextras/carbonio-shell-ui';
 
 import { useGetContactGroupFromBoardId } from './use-get-contact-group-from-board-id';
-import { setupHook } from '../carbonio-ui-commons/test/test-setup';
 import { addContactsToStore } from '../legacy/store/contacts';
 import { buildContactGroup } from '../tests/model-builder';
+import { setupHook } from '@test-setup';
 
 function spyMockUseBoard(contactGroupId: string, folderId: string): void {
 	jest.spyOn(shell, 'useBoard').mockReturnValue({

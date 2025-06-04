@@ -6,18 +6,18 @@
 import React from 'react';
 
 import * as shell from '@zextras/carbonio-shell-ui';
+import { ContactInputProps } from '@zextras/carbonio-ui-commons';
 import { HttpResponse } from 'msw';
 
 import App from './app';
-import { ContactInputProps } from './carbonio-ui-commons/integrations/types';
-import { generateFolder } from './carbonio-ui-commons/test/mocks/folders/folders-generator';
+import { CONTACT_BOARD_ID } from './constants';
+import { ContactInput } from './legacy/integrations/contact-input';
+import { setupTest } from '@test-setup';
+import { generateFolder } from '@test-utils/folders/folders-generator';
 import {
 	createAPIInterceptor,
 	createSoapAPIInterceptor
-} from './carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { setupTest } from './carbonio-ui-commons/test/test-setup';
-import { CONTACT_BOARD_ID } from './constants';
-import { ContactInput } from './legacy/integrations/contact-input';
+} from '@test-utils/network/msw/create-api-interceptor';
 
 describe('App', () => {
 	beforeEach(() => {

@@ -12,9 +12,9 @@ import {
 	ModalHeader,
 	Padding
 } from '@zextras/carbonio-design-system';
+import { Folder } from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 
-import { Folder } from '../../carbonio-ui-commons/types/folder';
 import { ContactOrGroup } from '../../legacy/types/contact';
 import { evaluateParentIds, isGroup } from '../../legacy/utils/helpers';
 import { FolderTreeSelector } from '../folder-tree-selector/folder-tree-selector';

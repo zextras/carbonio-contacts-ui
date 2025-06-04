@@ -9,9 +9,9 @@ import { act } from '@testing-library/react';
 import { last } from 'lodash';
 
 import { SharesListItem } from './shares-list-item';
-import { screen, setupTest } from '../../../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../../../constants/tests';
 import { buildShareInfo } from '../../../tests/model-builder';
+import { screen, setupTest } from '@test-setup';
 
 describe('SharesListItem', () => {
 	it('should display an uncheck checkbox', () => {

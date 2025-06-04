@@ -7,16 +7,12 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { act, waitFor } from '@testing-library/react';
-import { JSNS } from '@zextras/carbonio-shell-ui';
+import { CONTACT_TYPES, JSNS } from '@zextras/carbonio-ui-commons';
 import { times } from 'lodash';
 import { HttpResponse } from 'msw';
 
 import { DistributionListChip } from './distribution-list-chip';
 import { clickCollapseDL, clickExpandDL, SELECT_ALL, SHOW_MORE } from './test/mocks';
-import { CONTACT_TYPES } from '../../carbonio-ui-commons/integrations/constants';
-import { mockedAccount } from '../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
-import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { DL_MEMBERS_LOAD_LIMIT } from '../../constants';
 import { TESTID_SELECTORS, TIMERS } from '../../constants/tests';
 import {
@@ -33,6 +29,9 @@ import {
 	generateDistributionList,
 	generateDistributionListMembersPage
 } from '../../tests/utils';
+import { screen, setupTest } from '@test-setup';
+import { mockedAccount } from '@test-utils/carbonio-shell-ui/carbonio-shell-ui';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 const id = 'dl-1';
 const email = 'dl1@mail.com';
@@ -71,7 +70,7 @@ describe('Distribution ListChip', () => {
 				GetDistributionListRequest,
 				GetDistributionListResponse
 			>('GetDistributionList', {
-				_jsns: 'urn:zimbraAccount',
+				_jsns: JSNS.ACCOUNT,
 				dl: [{ id: distributionListChip.id, name: distributionListChip.value.email }],
 				requestId: ''
 			});
@@ -205,7 +204,7 @@ describe('Distribution ListChip', () => {
 				return HttpResponse.json(
 					buildSoapResponse<GetDistributionListMembersResponse>({
 						GetDistributionListMembersResponse: {
-							_jsns: JSNS.account,
+							_jsns: JSNS.ACCOUNT,
 							...response
 						}
 					})
@@ -268,7 +267,7 @@ describe('Distribution ListChip', () => {
 				return HttpResponse.json(
 					buildSoapResponse<GetDistributionListMembersResponse>({
 						GetDistributionListMembersResponse: {
-							_jsns: JSNS.account,
+							_jsns: JSNS.ACCOUNT,
 							...response
 						}
 					})

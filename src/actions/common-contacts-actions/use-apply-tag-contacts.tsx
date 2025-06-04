@@ -14,10 +14,10 @@ import {
 	Text,
 	useModal
 } from '@zextras/carbonio-design-system';
+import { useSortedTagsArray } from '@zextras/carbonio-ui-commons';
 import { noop, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { useSortedTagsArray } from '../../carbonio-ui-commons/store/zustand/tags';
 import { APPLY_TAG_ACTION } from '../../constants/actions';
 import { Contact } from '../../legacy/types/contact';
 import { createAndApplyTag, TagsDropdownItem } from '../../legacy/ui-actions/tag-actions';

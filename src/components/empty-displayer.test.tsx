@@ -7,8 +7,8 @@
 import React from 'react';
 
 import { EmptyDisplayer } from './empty-displayer';
-import { screen, setupTest } from '../carbonio-ui-commons/test/test-setup';
 import { EMPTY_DISPLAYER_NO_CONTACTS_HINT, TESTID_SELECTORS } from '../constants/tests';
+import { screen, setupTest } from '@test-setup';
 
 describe('Empty Displayer', () => {
 	it('should render empty displayer messages', () => {

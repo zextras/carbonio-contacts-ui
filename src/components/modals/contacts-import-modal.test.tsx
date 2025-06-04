@@ -8,18 +8,17 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
-import { JSNS } from '@zextras/carbonio-shell-ui';
+import { FOLDER_VIEW, JSNS } from '@zextras/carbonio-ui-commons';
 
 import { ContactsImportModal, ContactsImportModalProps } from './contacts-import-modal';
-import { FOLDER_VIEW } from '../../carbonio-ui-commons/constants';
-import { generateFolder } from '../../carbonio-ui-commons/test/mocks/folders/folders-generator';
-import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { createFakeFile } from '../../carbonio-ui-commons/test/mocks/utils/file';
-import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import { TESTID_SELECTORS } from '../../constants/tests';
 import { ImportContactsRequest, ImportContactsResponse } from '../../network/api/import-contacts';
 import { UploadResponseFileInfo } from '../../network/api/upload';
 import { registerUploadHandler } from '../../tests/msw-handlers/upload';
+import { screen, setupTest } from '@test-setup';
+import { generateFolder } from '@test-utils/folders/folders-generator';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
+import { createFakeFile } from '@test-utils/utils/file';
 /**
  * Test the import contacts modal
  */
@@ -93,7 +92,7 @@ describe('Import contacts modal', () => {
 					ids: '8374'
 				}
 			],
-			_jsns: JSNS.mail
+			_jsns: JSNS.MAIL
 		};
 		createSoapAPIInterceptor<ImportContactsRequest, ImportContactsResponse>(
 			'ImportContacts',

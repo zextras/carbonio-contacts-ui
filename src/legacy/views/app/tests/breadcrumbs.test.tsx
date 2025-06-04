@@ -7,9 +7,9 @@ import React from 'react';
 
 import { screen } from '@testing-library/react';
 
-import { setupTest } from '../../../../carbonio-ui-commons/test/test-setup';
 import { getFolderTranslatedNameByName } from '../../../utils/helpers';
 import { Breadcrumbs } from '../breadcrumbs';
+import { setupTest } from '@test-setup';
 
 jest.mock('../../../utils/helpers', () => ({
 	getFolderTranslatedNameByName: jest.fn()

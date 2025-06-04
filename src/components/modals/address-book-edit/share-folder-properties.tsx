@@ -15,11 +15,10 @@ import {
 	useSnackbar
 } from '@zextras/carbonio-design-system';
 import { useUserAccount } from '@zextras/carbonio-shell-ui';
+import { Grant, useFolder } from '@zextras/carbonio-ui-commons';
 import { map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { useFolder } from '../../../carbonio-ui-commons/store/zustand/folder';
-import { Grant } from '../../../carbonio-ui-commons/types/folder';
 import { TIMEOUTS } from '../../../constants';
 import { apiClient } from '../../../network/api-client';
 import { getRoleDescription } from '../shares-utils';

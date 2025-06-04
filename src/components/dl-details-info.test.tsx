@@ -5,11 +5,17 @@
  */
 import React from 'react';
 
+import * as clipboard from '@zextras/carbonio-ui-commons';
+
 import { DLDetailsInfo } from './dl-details-info';
-import { screen, setupTest, within } from '../carbonio-ui-commons/test/test-setup';
-import * as clipboard from '../carbonio-ui-commons/utils/clipboard';
 import { TESTID_SELECTORS } from '../constants/tests';
 import { generateDistributionList } from '../tests/utils';
+import { screen, setupTest, within } from '@test-setup';
+
+jest.mock('@zextras/carbonio-ui-commons', () => ({
+	...jest.requireActual('@zextras/carbonio-ui-commons'),
+	copyToClipboard: jest.fn()
+}));
 
 describe('Distribution list details', () => {
 	it('should show the display name', () => {

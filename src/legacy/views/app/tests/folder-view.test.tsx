@@ -9,23 +9,16 @@ import { faker } from '@faker-js/faker';
 import { act, waitFor, within } from '@testing-library/react';
 import { Button, useTheme } from '@zextras/carbonio-design-system';
 import * as shell from '@zextras/carbonio-shell-ui';
+import {
+	FOLDER_VIEW,
+	FOLDERS,
+	useRunSearchIntegration,
+	useFolderStore,
+	useTagStore,
+	JSNS
+} from '@zextras/carbonio-ui-commons';
 import { useNavigate } from 'react-router-dom';
 
-import { FOLDER_VIEW } from '../../../../carbonio-ui-commons/constants';
-import { FOLDERS } from '../../../../carbonio-ui-commons/constants/folders';
-import { useRunSearchIntegration } from '../../../../carbonio-ui-commons/integrations/search/use-run-search';
-import { useFolderStore } from '../../../../carbonio-ui-commons/store/zustand/folder';
-import { useTagStore } from '../../../../carbonio-ui-commons/store/zustand/tags';
-import { useAppContext } from '../../../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
-import { generateFolder } from '../../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
-import { createSoapAPIInterceptor } from '../../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { populateFoldersStore } from '../../../../carbonio-ui-commons/test/mocks/store/folders';
-import {
-	makeListItemsVisible,
-	screen,
-	setupHook,
-	setupTest
-} from '../../../../carbonio-ui-commons/test/test-setup';
 import { FOLDERS_DESCRIPTORS, TESTID_SELECTORS } from '../../../../constants/tests';
 import {
 	ContactActionRequest,
@@ -43,8 +36,14 @@ import {
 import { FolderView } from '../folder-view';
 import { createContactsApiInterceptor, findContactInList } from './utils';
 import { generateLinkFolder } from '../../../../views/contact-groups/tests/utils';
+import { makeListItemsVisible, screen, setupHook, setupTest } from '@test-setup';
+import { useAppContext } from '@test-utils/carbonio-shell-ui/carbonio-shell-ui';
+import { generateFolder } from '@test-utils/folders/folders-generator';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
+import { populateFoldersStore } from '@test-utils/store/folders';
 
-jest.mock('../../../../carbonio-ui-commons/integrations/search/use-run-search', () => ({
+jest.mock('@zextras/carbonio-ui-commons', () => ({
+	...jest.requireActual('@zextras/carbonio-ui-commons'),
 	useRunSearchIntegration: jest.fn()
 }));
 
@@ -275,7 +274,7 @@ describe('folder-view', () => {
 					ContactActionRequest,
 					ContactActionResponse
 				>('ContactAction', {
-					_jsns: 'urn:zimbraMail',
+					_jsns: JSNS.MAIL,
 					requestId: '123-456',
 					action: {
 						id: contact.id,
@@ -298,6 +297,7 @@ describe('folder-view', () => {
 				await act(() => user.click(deleteContactInDisplayer));
 				const deleteContactRequest = await deleteContactInterceptor;
 				expect(deleteContactRequest).toEqual({
+					_jsns: JSNS.MAIL,
 					action: {
 						id: contact.id,
 						op: 'trash'
@@ -343,7 +343,7 @@ describe('folder-view', () => {
 					ContactActionRequest,
 					ContactActionResponse
 				>('ContactAction', {
-					_jsns: 'urn:zimbraMail',
+					_jsns: JSNS.MAIL,
 					action: { id: contact.id, op: 'move' },
 					requestId: '123'
 				});
@@ -354,6 +354,7 @@ describe('folder-view', () => {
 
 				const contactActionRequest = await contactActionRequestPromise;
 				expect(contactActionRequest).toEqual({
+					_jsns: JSNS.MAIL,
 					action: {
 						id: contact.id,
 						op: 'move',

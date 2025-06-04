@@ -3,7 +3,8 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { ErrorSoapBodyResponse, JSNS, soapFetch } from '@zextras/carbonio-shell-ui';
+import { ErrorSoapBodyResponse, soapFetch } from '@zextras/carbonio-shell-ui';
+import { JSNS } from '@zextras/carbonio-ui-commons';
 
 import { GenericSoapPayload } from './types';
 
@@ -19,7 +20,7 @@ export const CONTACT_ACTION_OPERATION = {
 type ContactActionOperation =
 	(typeof CONTACT_ACTION_OPERATION)[keyof typeof CONTACT_ACTION_OPERATION];
 
-export interface ContactActionRequest extends GenericSoapPayload<typeof JSNS.mail> {
+export interface ContactActionRequest extends GenericSoapPayload<typeof JSNS.MAIL> {
 	action: {
 		op: ContactActionOperation;
 		id: string;
@@ -27,7 +28,7 @@ export interface ContactActionRequest extends GenericSoapPayload<typeof JSNS.mai
 	};
 }
 
-export type ContactActionResponse = GenericSoapPayload<typeof JSNS.mail> & {
+export type ContactActionResponse = GenericSoapPayload<typeof JSNS.MAIL> & {
 	action: {
 		op: ContactActionOperation;
 		id: string;
@@ -52,7 +53,7 @@ export const contactAction = ({
 			id: contactsIds.join(','),
 			...(folderId !== undefined && { l: folderId })
 		},
-		_jsns: JSNS.mail
+		_jsns: JSNS.MAIL
 	};
 
 	return soapFetch<ContactActionRequest, ContactActionResponse | ErrorSoapBodyResponse>(

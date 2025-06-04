@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { faker } from '@faker-js/faker';
-import { JSNS } from '@zextras/carbonio-shell-ui';
+import { JSNS } from '@zextras/carbonio-ui-commons';
 import { times } from 'lodash';
 
 import {
@@ -32,7 +32,7 @@ describe('Distribution list action', () => {
 			}>({
 				Body: {
 					BatchRequest: {
-						_jsns: JSNS.all,
+						_jsns: JSNS.ALL,
 						DistributionListActionRequest: [
 							{
 								action: {
@@ -43,7 +43,7 @@ describe('Distribution list action', () => {
 									by: 'name',
 									_content: dlEmail
 								},
-								_jsns: JSNS.account,
+								_jsns: JSNS.ACCOUNT,
 								requestId: 'removeMembers'
 							}
 						]
@@ -64,7 +64,7 @@ describe('Distribution list action', () => {
 			}>({
 				Body: {
 					BatchRequest: {
-						_jsns: JSNS.all,
+						_jsns: JSNS.ALL,
 						DistributionListActionRequest: [
 							{
 								action: {
@@ -75,7 +75,7 @@ describe('Distribution list action', () => {
 									by: 'name',
 									_content: dlEmail
 								},
-								_jsns: JSNS.account,
+								_jsns: JSNS.ACCOUNT,
 								requestId: 'addMembers'
 							}
 						]
@@ -96,7 +96,7 @@ describe('Distribution list action', () => {
 			}>({
 				Body: {
 					BatchRequest: {
-						_jsns: JSNS.all,
+						_jsns: JSNS.ALL,
 						DistributionListActionRequest: [
 							{
 								action: {
@@ -107,7 +107,7 @@ describe('Distribution list action', () => {
 									by: 'name',
 									_content: dlEmail
 								},
-								_jsns: JSNS.account,
+								_jsns: JSNS.ACCOUNT,
 								requestId: 'modify'
 							}
 						]
@@ -128,7 +128,7 @@ describe('Distribution list action', () => {
 			}>({
 				Body: {
 					BatchRequest: {
-						_jsns: JSNS.all,
+						_jsns: JSNS.ALL,
 						DistributionListActionRequest: [
 							{
 								action: {
@@ -139,7 +139,7 @@ describe('Distribution list action', () => {
 									by: 'name',
 									_content: dlEmail
 								},
-								_jsns: JSNS.account,
+								_jsns: JSNS.ACCOUNT,
 								requestId: 'modify'
 							}
 						]
@@ -160,7 +160,7 @@ describe('Distribution list action', () => {
 			}>({
 				Body: {
 					BatchRequest: {
-						_jsns: JSNS.all,
+						_jsns: JSNS.ALL,
 						DistributionListActionRequest: [
 							{
 								action: {
@@ -174,7 +174,7 @@ describe('Distribution list action', () => {
 									by: 'name',
 									_content: dlEmail
 								},
-								_jsns: JSNS.account,
+								_jsns: JSNS.ACCOUNT,
 								requestId: 'modify'
 							}
 						]
@@ -202,7 +202,7 @@ describe('Distribution list action', () => {
 			}>({
 				Body: {
 					BatchRequest: {
-						_jsns: JSNS.all,
+						_jsns: JSNS.ALL,
 						DistributionListActionRequest: [
 							{
 								action: {
@@ -216,7 +216,7 @@ describe('Distribution list action', () => {
 									by: 'name',
 									_content: dlEmail
 								},
-								_jsns: JSNS.account,
+								_jsns: JSNS.ACCOUNT,
 								requestId: 'modify'
 							},
 							{
@@ -228,7 +228,7 @@ describe('Distribution list action', () => {
 									by: 'name',
 									_content: dlEmail
 								},
-								_jsns: JSNS.account,
+								_jsns: JSNS.ACCOUNT,
 								requestId: 'addMembers'
 							},
 							{
@@ -240,7 +240,7 @@ describe('Distribution list action', () => {
 									by: 'name',
 									_content: dlEmail
 								},
-								_jsns: JSNS.account,
+								_jsns: JSNS.ACCOUNT,
 								requestId: 'removeMembers'
 							}
 						]

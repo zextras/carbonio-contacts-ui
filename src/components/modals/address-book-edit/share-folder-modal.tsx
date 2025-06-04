@@ -20,14 +20,11 @@ import {
 	SelectItem
 } from '@zextras/carbonio-design-system';
 import { useUserAccount } from '@zextras/carbonio-shell-ui';
+import { ContactInputValue, Grant, useFolder, OnChangeSelect } from '@zextras/carbonio-ui-commons';
 import { replace, split } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { GranteeInfo } from './share-folder-properties';
-import { ContactInputValue } from '../../../carbonio-ui-commons/integrations/types';
-import { useFolder } from '../../../carbonio-ui-commons/store/zustand/folder';
-import { Grant } from '../../../carbonio-ui-commons/types/folder';
-import { OnChangeSelect } from '../../../carbonio-ui-commons/types/select';
 import { TIMEOUTS } from '../../../constants';
 import { ContactInput } from '../../../legacy/integrations/contact-input';
 import { capitalise } from '../../../legacy/views/secondary-bar/utils';

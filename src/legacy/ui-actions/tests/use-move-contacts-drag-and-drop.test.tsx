@@ -6,21 +6,11 @@
 
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
-import { ErrorSoapBodyResponse, JSNS } from '@zextras/carbonio-shell-ui';
+import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
+import { FOLDERS, isLink, isSystemFolder, getFolder, JSNS } from '@zextras/carbonio-ui-commons';
 import { times } from 'lodash';
 
 import { UIAction } from '../../../actions/types';
-import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
-import { isLink, isSystemFolder } from '../../../carbonio-ui-commons/helpers/folders';
-import { getFolder } from '../../../carbonio-ui-commons/store/zustand/folder';
-import { createSoapAPIInterceptor } from '../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { populateFoldersStore } from '../../../carbonio-ui-commons/test/mocks/store/folders';
-import {
-	setupHook,
-	screen,
-	makeListItemsVisible,
-	within
-} from '../../../carbonio-ui-commons/test/test-setup';
 import { MOVE_ACTION } from '../../../constants/actions';
 import { FOLDERS_DESCRIPTORS, TIMERS } from '../../../constants/tests';
 import { ContactActionResponse } from '../../../network/api/contact-action';
@@ -29,6 +19,9 @@ import { getFoldersArray } from '../../../tests/utils';
 import { Contact } from '../../types/contact';
 import { ContactActionRequest } from '../../types/soap';
 import { useMoveContactsDragAndDrop } from '../use-move-contacts-drag-and-drop';
+import { setupHook, screen, makeListItemsVisible, within } from '@test-setup';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
+import { populateFoldersStore } from '@test-utils/store/folders';
 
 describe('useActionMoveContacts', () => {
 	it('should return an object with the specific data', () => {
@@ -208,7 +201,7 @@ describe('useActionMoveContacts', () => {
 						id: contact.id,
 						op: 'move'
 					},
-					_jsns: JSNS.mail
+					_jsns: JSNS.MAIL
 				};
 
 				createSoapAPIInterceptor<ContactActionRequest, ContactActionResponse>(

@@ -6,21 +6,22 @@
 import React, { ChangeEvent, useMemo, useState } from 'react';
 
 import { Button, Container, Input, Padding } from '@zextras/carbonio-design-system';
+import {
+	isDefaultAccountRoot,
+	isLink,
+	isRoot,
+	isTrash,
+	isTrashed,
+	useFolder,
+	useRootsArray,
+	Folder
+} from '@zextras/carbonio-ui-commons';
 import { TFunction } from 'i18next';
 import { filter, startsWith } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { FlatFoldersAccordion } from './flat-folders-accordion';
-import {
-	isDefaultAccountRoot,
-	isLink,
-	isRoot,
-	isTrash,
-	isTrashed
-} from '../../carbonio-ui-commons/helpers/folders';
-import { useFolder, useRootsArray } from '../../carbonio-ui-commons/store/zustand/folder';
-import { Folder } from '../../carbonio-ui-commons/types/folder';
 import { sortFolders } from '../../helpers/folders';
 import { getFolderTranslatedName } from '../../legacy/utils/helpers';
 

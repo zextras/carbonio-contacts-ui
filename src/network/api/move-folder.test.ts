@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { faker } from '@faker-js/faker';
-import { JSNS } from '@zextras/carbonio-shell-ui';
+import { JSNS } from '@zextras/carbonio-ui-commons';
 
 import { moveFolder } from './move-folder';
-import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 describe('moveFolder', () => {
 	it('should call the API with the proper fields', () => {
@@ -21,7 +21,7 @@ describe('moveFolder', () => {
 				op: 'move',
 				l: parentId
 			},
-			_jsns: JSNS.mail
+			_jsns: JSNS.MAIL
 		});
 	});
 });

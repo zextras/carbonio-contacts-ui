@@ -3,10 +3,10 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+import { FOLDERS } from '@zextras/carbonio-ui-commons';
 import type { TFunction } from 'i18next';
 import { reduce } from 'lodash';
 
-import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
 import { ContactGroup } from '../../model/contact-group';
 import { ContactOrGroup, ContactsFolder } from '../types/contact';
 

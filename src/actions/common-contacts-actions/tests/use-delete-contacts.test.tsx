@@ -7,11 +7,8 @@
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
+import { FOLDERS } from '@zextras/carbonio-ui-commons';
 
-import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
-import { createSoapAPIInterceptor } from '../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { populateFoldersStore } from '../../../carbonio-ui-commons/test/mocks/store/folders';
-import { screen, setupHook } from '../../../carbonio-ui-commons/test/test-setup';
 import {
 	DELETE_PERMANENTLY_ACTION_DESCRIPTOR,
 	TESTID_SELECTORS,
@@ -20,6 +17,9 @@ import {
 import { Contact } from '../../../legacy/types/contact';
 import { buildContact } from '../../../tests/model-builder';
 import { useDeleteContacts } from '../use-delete-contacts';
+import { screen, setupHook } from '@test-setup';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
+import { populateFoldersStore } from '@test-utils/store/folders';
 
 describe('Delete-contacts', () => {
 	describe("Delete-contacts' actions", () => {
