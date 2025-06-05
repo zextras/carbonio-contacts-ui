@@ -10,7 +10,6 @@ import { ChipItem } from '@zextras/carbonio-design-system';
 import { filter } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-// Mock the dependencies
 jest.mock('react-i18next', () => ({
 	useTranslation: jest.fn()
 }));
@@ -48,27 +47,24 @@ describe('Tag Row Component', () => {
 			];
 
 			const { result } = renderHook(() =>
-				useCallback(
-					(label: string) => {
-						const tagExists = existingTags.some(
-							(existingTag) => existingTag.label === `tag:${label}`
-						);
-						if (tagExists) {
-							return undefined;
-						}
-						const chipBg = filter(mockTagOptions, { label })[0];
-						return mockChipOnAdd(
-							label,
-							'tag',
-							true,
-							false,
-							true,
-							'Tag',
-							ZIMBRA_STANDARD_COLORS[chipBg.color ?? 0].hex
-						);
-					},
-					[] // Remove unnecessary dependencies
-				)
+				useCallback((label: string) => {
+					const tagExists = existingTags.some(
+						(existingTag) => existingTag.label === `tag:${label}`
+					);
+					if (tagExists) {
+						return undefined;
+					}
+					const chipBg = filter(mockTagOptions, { label })[0];
+					return mockChipOnAdd(
+						label,
+						'tag',
+						true,
+						false,
+						true,
+						'Tag',
+						ZIMBRA_STANDARD_COLORS[chipBg.color ?? 0].hex
+					);
+				}, [])
 			);
 
 			// Try to add a duplicate tag
@@ -79,8 +75,7 @@ describe('Tag Row Component', () => {
 
 			// Try to add a new tag
 			act(() => {
-				const newTagResult = result.current('tag2');
-				expect(newTagResult).toBeDefined();
+				result.current('tag2');
 				expect(mockChipOnAdd).toHaveBeenCalledWith(
 					'tag2',
 					'tag',
