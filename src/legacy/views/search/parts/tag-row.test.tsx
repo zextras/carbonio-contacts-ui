@@ -1,8 +1,14 @@
-import { renderHook, act } from '@testing-library/react';
+/*
+ * SPDX-FileCopyrightText: 2025 Zextras <https://www.zextras.com>
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only
+ */
 import { useCallback } from 'react';
+
+import { renderHook, act } from '@testing-library/react';
 import { ChipItem } from '@zextras/carbonio-design-system';
-import { useTranslation } from 'react-i18next';
 import { filter } from 'lodash';
+import { useTranslation } from 'react-i18next';
 
 // Mock the dependencies
 jest.mock('react-i18next', () => ({
@@ -10,10 +16,9 @@ jest.mock('react-i18next', () => ({
 }));
 
 // Mock ZIMBRA_STANDARD_COLORS since it's not exported
-const ZIMBRA_STANDARD_COLORS = [
-	{ hex: '#000000' },
-	{ hex: '#FFFFFF' }
-];
+const ZIMBRA_STANDARD_COLORS = [{ hex: '#000000' }, { hex: '#FFFFFF' }];
+
+const TRANSLATION_KEY = 'label.tags';
 
 describe('Tag Row Component', () => {
 	const mockT = jest.fn((key) => key);
@@ -45,7 +50,9 @@ describe('Tag Row Component', () => {
 			const { result } = renderHook(() =>
 				useCallback(
 					(label: string) => {
-						const tagExists = existingTags.some((existingTag) => existingTag.label === `tag:${label}`);
+						const tagExists = existingTags.some(
+							(existingTag) => existingTag.label === `tag:${label}`
+						);
 						if (tagExists) {
 							return undefined;
 						}
@@ -60,7 +67,7 @@ describe('Tag Row Component', () => {
 							ZIMBRA_STANDARD_COLORS[chipBg.color ?? 0].hex
 						);
 					},
-					[mockChipOnAdd, mockTagOptions, existingTags]
+					[] // Remove unnecessary dependencies
 				)
 			);
 
@@ -73,6 +80,7 @@ describe('Tag Row Component', () => {
 			// Try to add a new tag
 			act(() => {
 				const newTagResult = result.current('tag2');
+				expect(newTagResult).toBeDefined();
 				expect(mockChipOnAdd).toHaveBeenCalledWith(
 					'tag2',
 					'tag',
@@ -94,7 +102,7 @@ describe('Tag Row Component', () => {
 						const validChips = chips.filter((chip): chip is ChipItem => chip !== undefined);
 						mockSetTag(validChips);
 					},
-					[mockSetTag]
+					[] // Remove unnecessary dependency
 				)
 			);
 
@@ -147,11 +155,11 @@ describe('Tag Row Component', () => {
 		it('should return translated placeholder text', () => {
 			const { result } = renderHook(() => {
 				const [t] = useTranslation();
-				return useCallback(() => t('label.tags', 'Tags'), [t])();
+				return useCallback(() => t(TRANSLATION_KEY, 'Tags'), [t])();
 			});
 
-			expect(mockT).toHaveBeenCalledWith('label.tags', 'Tags');
-			expect(result.current).toBe('label.tags');
+			expect(mockT).toHaveBeenCalledWith(TRANSLATION_KEY, 'Tags');
+			expect(result.current).toBe(TRANSLATION_KEY);
 		});
 	});
-}); 
+});

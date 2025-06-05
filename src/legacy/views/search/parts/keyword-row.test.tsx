@@ -1,5 +1,11 @@
-import { renderHook, act } from '@testing-library/react';
+/*
+ * SPDX-FileCopyrightText: 2025 Zextras <https://www.zextras.com>
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only
+ */
 import { useCallback } from 'react';
+
+import { renderHook, act } from '@testing-library/react';
 import { ChipItem } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
@@ -7,6 +13,8 @@ import { useTranslation } from 'react-i18next';
 jest.mock('react-i18next', () => ({
 	useTranslation: jest.fn()
 }));
+
+const TRANSLATION_KEY = 'label.keyword';
 
 describe('Keyword Row Component', () => {
 	const mockT = jest.fn((key) => key);
@@ -34,21 +42,15 @@ describe('Keyword Row Component', () => {
 			const { result } = renderHook(() =>
 				useCallback(
 					(label: string) => {
-						const keywordExists = existingKeywords.some((existingKeyword) => existingKeyword.label === label);
+						const keywordExists = existingKeywords.some(
+							(existingKeyword) => existingKeyword.label === label
+						);
 						if (keywordExists) {
 							return undefined;
 						}
-						return mockChipOnAdd(
-							label,
-							'keyword',
-							true,
-							false,
-							true,
-							'Search',
-							'gray2'
-						);
+						return mockChipOnAdd(label, 'keyword', true, false, true, 'Search', 'gray2');
 					},
-					[mockChipOnAdd, existingKeywords]
+					[] // Remove unnecessary dependencies
 				)
 			);
 
@@ -61,6 +63,7 @@ describe('Keyword Row Component', () => {
 			// Try to add a new keyword
 			act(() => {
 				const newKeywordResult = result.current('keyword2');
+				expect(newKeywordResult).toBeDefined();
 				expect(mockChipOnAdd).toHaveBeenCalledWith(
 					'keyword2',
 					'keyword',
@@ -82,7 +85,7 @@ describe('Keyword Row Component', () => {
 						const validChips = chips.filter((chip): chip is ChipItem => chip !== undefined);
 						mockSetOtherKeywords(validChips);
 					},
-					[mockSetOtherKeywords]
+					[] // Remove unnecessary dependency
 				)
 			);
 
@@ -135,11 +138,11 @@ describe('Keyword Row Component', () => {
 		it('should return translated placeholder text', () => {
 			const { result } = renderHook(() => {
 				const [t] = useTranslation();
-				return useCallback(() => t('label.keyword', 'Keywords'), [t])();
+				return useCallback(() => t(TRANSLATION_KEY, 'Keywords'), [t])();
 			});
 
-			expect(mockT).toHaveBeenCalledWith('label.keyword', 'Keywords');
-			expect(result.current).toBe('label.keyword');
+			expect(mockT).toHaveBeenCalledWith(TRANSLATION_KEY, 'Keywords');
+			expect(result.current).toBe(TRANSLATION_KEY);
 		});
 	});
-}); 
+});
