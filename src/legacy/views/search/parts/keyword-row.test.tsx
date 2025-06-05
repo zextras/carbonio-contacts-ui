@@ -9,7 +9,6 @@ import { renderHook, act } from '@testing-library/react';
 import { ChipItem } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
-// Mock the dependencies
 jest.mock('react-i18next', () => ({
 	useTranslation: jest.fn()
 }));
@@ -40,18 +39,15 @@ describe('Keyword Row Component', () => {
 			];
 
 			const { result } = renderHook(() =>
-				useCallback(
-					(label: string) => {
-						const keywordExists = existingKeywords.some(
-							(existingKeyword) => existingKeyword.label === label
-						);
-						if (keywordExists) {
-							return undefined;
-						}
-						return mockChipOnAdd(label, 'keyword', true, false, true, 'Search', 'gray2');
-					},
-					[] // Remove unnecessary dependencies
-				)
+				useCallback((label: string) => {
+					const keywordExists = existingKeywords.some(
+						(existingKeyword) => existingKeyword.label === label
+					);
+					if (keywordExists) {
+						return undefined;
+					}
+					return mockChipOnAdd(label, 'keyword', true, false, true, 'Search', 'gray2');
+				}, [])
 			);
 
 			// Try to add a duplicate keyword
@@ -62,8 +58,7 @@ describe('Keyword Row Component', () => {
 
 			// Try to add a new keyword
 			act(() => {
-				const newKeywordResult = result.current('keyword2');
-				expect(newKeywordResult).toBeDefined();
+				result.current('keyword2');
 				expect(mockChipOnAdd).toHaveBeenCalledWith(
 					'keyword2',
 					'keyword',
