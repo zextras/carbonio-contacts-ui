@@ -17,51 +17,34 @@ type ComponentProps = {
 		setTag: (arg: any) => void;
 	};
 };
+
+const tagPrefix = 'tag';
+
 const TagRow: FC<ComponentProps> = ({ compProps }): ReactElement => {
 	const [t] = useTranslation();
 	const { tagOptions, tag, setTag } = compProps;
 
-	const chipOnAdd = useCallback(
-		(
-			label: string,
-			preText: string,
-			hasAvatar: boolean,
-			isGeneric: boolean,
-			isQueryFilter: boolean,
-			avatarIcon: string,
-			avatarBackground: string
-		) => ({
-			label: `${preText}:${label}`,
-			hasAvatar,
-			isGeneric,
-			avatarIcon,
-			background: 'gray2',
-			avatarBackground: avatarBackground || 'gray2',
-			isQueryFilter,
-			value: `${preText}:"${label}"`
-		}),
-		[]
-	);
-
 	const tagChipOnAdd = useCallback(
 		(label: string): any => {
 			// Check if tag already exists by comparing the base name
-			const tagExists = tag.some((existingTag) => existingTag.label === `tag:${label}`);
+			const tagLabel = `${tagPrefix}:${label}`;
+			const tagExists = tag.some((existingTag) => existingTag.label === tagLabel);
 			if (tagExists) {
 				return undefined; // Return undefined to prevent adding duplicate
 			}
 			const chipBg = filter(tagOptions, { label })[0];
-			return chipOnAdd(
-				label,
-				'tag',
-				true,
-				false,
-				true,
-				'Tag',
-				ZIMBRA_STANDARD_COLORS[chipBg.color ?? 0].hex
-			);
+			return {
+				label: tagLabel,
+				hasAvatar: true,
+				isGeneric: false,
+				avatarIcon: 'Tag',
+				background: 'gray2',
+				isQueryFilter: true,
+				value: `${tagPrefix}:"${label}"`,
+				avatarBackground: ZIMBRA_STANDARD_COLORS[chipBg.color ?? 0].hex || 'gray2'
+			};
 		},
-		[chipOnAdd, tagOptions, tag]
+		[tagOptions, tag]
 	);
 
 	const tagPlaceholder = useMemo(() => t('label.tags', 'Tags'), [t]);
