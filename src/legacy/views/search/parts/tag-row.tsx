@@ -26,11 +26,10 @@ const TagRow: FC<ComponentProps> = ({ compProps }): ReactElement => {
 
 	const tagChipOnAdd = useCallback(
 		(label: string): any => {
-			// Check if tag already exists by comparing the base name
 			const tagLabel = `${tagPrefix}:${label}`;
 			const tagExists = tag.some((existingTag) => existingTag.label === tagLabel);
 			if (tagExists) {
-				return undefined; // Return undefined to prevent adding duplicate
+				return undefined;
 			}
 			const chipBg = filter(tagOptions, { label })[0];
 			return {
@@ -50,7 +49,6 @@ const TagRow: FC<ComponentProps> = ({ compProps }): ReactElement => {
 	const tagPlaceholder = useMemo(() => t('label.tags', 'Tags'), [t]);
 	const onTagChange = useCallback(
 		(chips: ChipItem[]) => {
-			// Filter out any undefined values that might have been added
 			const validChips = chips.filter((chip): chip is ChipItem => chip !== undefined);
 			setTag(validChips);
 		},
