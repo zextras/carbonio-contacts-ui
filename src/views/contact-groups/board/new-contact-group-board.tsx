@@ -11,14 +11,14 @@ import { FOLDERS } from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { addContactsToStore } from '../../../legacy/store/contacts';
+import { addContactsToStore } from 'legacy/store/contacts';
 import {
 	CommonContactGroupBoard,
 	isContactGroupNameInvalid
-} from '../../board/common-contact-group-board';
-import { createContactGroup } from '../api/create-contact-group';
-import { CONTACT_GROUPS_PATH } from '../navigation';
-import { getFolderFromContactGroup } from '../utils';
+} from 'views/board/common-contact-group-board';
+import { createContactGroup } from 'views/contact-groups/api/create-contact-group';
+import { CONTACT_GROUPS_PATH } from 'views/contact-groups/navigation';
+import { getFolderFromContactGroup } from 'views/contact-groups/utils';
 
 const NewContactGroupBoard = (): React.JSX.Element => {
 	const [t] = useTranslation();

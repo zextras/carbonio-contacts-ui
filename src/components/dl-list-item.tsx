@@ -7,13 +7,13 @@ import React, { useCallback } from 'react';
 
 import { Action as DSAction, Container } from '@zextras/carbonio-design-system';
 
-import { ContextualMenu } from './contextual-menu';
-import { ListItemHoverBar } from './ListItemHoverBar';
-import { CustomIconAvatar, HoverContainer, ListItemContainer } from './styled-components';
-import { Text } from './Text';
-import { LIST_ITEM_HEIGHT } from '../constants';
-import { useDLActions } from '../hooks/use-dl-actions';
-import { DistributionList } from '../model/distribution-list';
+import { ContextualMenu } from 'components/contextual-menu';
+import { ListItemHoverBar } from 'components/ListItemHoverBar';
+import { CustomIconAvatar, HoverContainer, ListItemContainer } from 'components/styled-components';
+import { Text } from 'components/Text';
+import { LIST_ITEM_HEIGHT } from 'constants/index';
+import { useDLActions } from 'hooks/use-dl-actions';
+import { DistributionList } from 'model/distribution-list';
 
 type DLListItemContentProps = {
 	onClick?: (id: string) => void;

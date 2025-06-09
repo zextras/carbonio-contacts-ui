@@ -9,10 +9,10 @@ import { Action } from '@zextras/carbonio-design-system';
 import { addBoard, getBoardById, reopenBoards, setCurrentBoard } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
-import { getParentFolder } from '../../../actions/folder-utils';
-import { EDIT_CONTACT_GROUP_BOARD_ID } from '../../../constants';
-import { EDIT_ACTION } from '../../../constants/actions';
-import { ContactGroup } from '../../../model/contact-group';
+import { getParentFolder } from 'actions/folder-utils';
+import { EDIT_CONTACT_GROUP_BOARD_ID } from 'constants/index';
+import { EDIT_ACTION } from 'constants/actions';
+import { ContactGroup } from 'model/contact-group';
 
 export const useContactGroupEditAction = (contactGroup: ContactGroup): Action => {
 	const [t] = useTranslation();

@@ -6,16 +6,16 @@
 import { faker } from '@faker-js/faker';
 import { times } from 'lodash';
 
-import { FOLDERS_DESCRIPTORS } from '../constants/tests';
+import { FOLDERS_DESCRIPTORS } from 'constants/tests';
 import {
 	Contact,
 	ContactAddress,
 	ContactAddressType,
 	ContactPhoneType,
 	ContactUrlType
-} from '../legacy/types/contact';
-import { ContactGroup } from '../model/contact-group';
-import { ShareInfo } from '../model/share-info';
+} from 'legacy/types/contact';
+import { ContactGroup } from 'model/contact-group';
+import { ShareInfo } from 'model/share-info';
 
 export const buildContactGroup = ({
 	title = faker.company.name(),

@@ -6,8 +6,8 @@
 
 import { JSNS } from '@zextras/carbonio-ui-commons';
 
-import { deleteContact } from './delete-contact';
-import { FolderActionRequest } from './folder-action';
+import { deleteContact } from 'network/api/delete-contact';
+import { FolderActionRequest } from 'network/api/folder-action';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 describe('Delete contact', () => {

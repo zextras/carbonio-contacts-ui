@@ -6,8 +6,8 @@
 import { faker } from '@faker-js/faker';
 import { times } from 'lodash';
 
-import { StoredDistributionList, useDistributionListsStore } from './distribution-lists';
-import { generateDistributionList, generateDistributionListMembersPage } from '../tests/utils';
+import { StoredDistributionList, useDistributionListsStore } from 'store/distribution-lists';
+import { generateDistributionList, generateDistributionListMembersPage } from 'tests/utils';
 
 describe('Distribution lists store', () => {
 	it('should return an undefined list if no value has been set', () => {

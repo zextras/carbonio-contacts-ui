@@ -15,9 +15,9 @@ import {
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
-import { CONTACT_BOARD_ID, CONTACTS_APP_ID, NEW_CONTACT_GROUP_BOARD_ID } from '../constants';
-import { ContactInput } from '../legacy/integrations/contact-input';
-import createContactIntegration from '../legacy/integrations/create-contact';
+import { CONTACT_BOARD_ID, CONTACTS_APP_ID, NEW_CONTACT_GROUP_BOARD_ID } from 'constants/index';
+import { ContactInput } from 'legacy/integrations/contact-input';
+import createContactIntegration from 'legacy/integrations/create-contact';
 
 export const IntegrationsRegistration: FC = () => {
 	const [t] = useTranslation();

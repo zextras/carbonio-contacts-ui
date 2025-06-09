@@ -9,9 +9,9 @@ import { useModal } from '@zextras/carbonio-design-system';
 import { isTrash, isNestedInTrash, Folder } from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 
-import { UIAction } from './types';
-import { AddressBookEditModal } from '../components/modals/address-book-edit/address-book-edit';
-import { ACTION_IDS } from '../constants';
+import { UIAction } from 'actions/types';
+import { AddressBookEditModal } from 'components/modals/address-book-edit/address-book-edit';
+import { ACTION_IDS } from 'constants/index';
 
 export type EditAddressBookAction = UIAction<Folder, Folder>;
 

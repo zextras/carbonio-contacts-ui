@@ -8,9 +8,9 @@ import React from 'react';
 import { act } from '@testing-library/react';
 import { last } from 'lodash';
 
-import { SharesListItem } from './shares-list-item';
-import { TESTID_SELECTORS } from '../../../constants/tests';
-import { buildShareInfo } from '../../../tests/model-builder';
+import { SharesListItem } from 'components/modals/shared-address-books-add/shares-list-item';
+import { TESTID_SELECTORS } from 'constants/tests';
+import { buildShareInfo } from 'tests/model-builder';
 import { screen, setupTest } from '@test-setup';
 
 describe('SharesListItem', () => {

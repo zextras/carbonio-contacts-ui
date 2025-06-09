@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { CONTACT_ACTION_OPERATION, contactAction, ContactActionResponse } from './contact-action';
+import { CONTACT_ACTION_OPERATION, contactAction, ContactActionResponse } from 'network/api/contact-action';
 
 export const deleteContact = (contactsIds: Array<string>): Promise<ContactActionResponse> =>
 	contactAction({ operation: CONTACT_ACTION_OPERATION.delete, contactsIds });

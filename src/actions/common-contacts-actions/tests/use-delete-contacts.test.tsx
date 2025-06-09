@@ -13,10 +13,10 @@ import {
 	DELETE_PERMANENTLY_ACTION_DESCRIPTOR,
 	TESTID_SELECTORS,
 	TIMERS
-} from '../../../constants/tests';
-import { Contact } from '../../../legacy/types/contact';
-import { buildContact } from '../../../tests/model-builder';
-import { useDeleteContacts } from '../use-delete-contacts';
+} from 'constants/tests';
+import { Contact } from 'legacy/types/contact';
+import { buildContact } from 'tests/model-builder';
+import { useDeleteContacts } from 'actions/common-contacts-actions/use-delete-contacts';
 import { screen, setupHook } from '@test-setup';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 import { populateFoldersStore } from '@test-utils/store/folders';

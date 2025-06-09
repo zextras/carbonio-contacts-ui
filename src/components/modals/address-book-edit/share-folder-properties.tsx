@@ -19,9 +19,9 @@ import { Grant, useFolder } from '@zextras/carbonio-ui-commons';
 import { map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { TIMEOUTS } from '../../../constants';
-import { apiClient } from '../../../network/api-client';
-import { getRoleDescription } from '../shares-utils';
+import { TIMEOUTS } from 'constants/index';
+import { apiClient } from 'network/api-client';
+import { getRoleDescription } from 'components/modals/shares-utils';
 
 type GranteeInfoProps = {
 	grant: Grant;

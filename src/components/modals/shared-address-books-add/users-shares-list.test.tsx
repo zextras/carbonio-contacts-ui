@@ -9,10 +9,10 @@ import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 import { times } from 'lodash';
 
-import { UsersSharesList } from './users-shares-list';
-import { TESTID_SELECTORS } from '../../../constants/tests';
-import { ShareInfo } from '../../../model/share-info';
-import { buildShareInfo } from '../../../tests/model-builder';
+import { UsersSharesList } from 'components/modals/shared-address-books-add/users-shares-list';
+import { TESTID_SELECTORS } from 'constants/tests';
+import { ShareInfo } from 'model/share-info';
+import { buildShareInfo } from 'tests/model-builder';
 import { makeListItemsVisible, screen, setupTest } from '@test-setup';
 
 describe('UsersSharesList', () => {

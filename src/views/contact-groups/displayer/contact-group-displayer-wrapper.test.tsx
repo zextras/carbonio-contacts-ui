@@ -6,11 +6,11 @@
 
 import React from 'react';
 
-import { ContactGroupDisplayerWrapper } from './contact-group-displayer-wrapper';
-import { TESTID_SELECTORS } from '../../../constants/tests';
-import { addContactsToStore } from '../../../legacy/store/contacts';
-import { buildContactGroup } from '../../../tests/model-builder';
-import { CONTACT_GROUPS_PATH } from '../navigation';
+import { ContactGroupDisplayerWrapper } from 'views/contact-groups/displayer/contact-group-displayer-wrapper';
+import { TESTID_SELECTORS } from 'constants/tests';
+import { addContactsToStore } from 'legacy/store/contacts';
+import { buildContactGroup } from 'tests/model-builder';
+import { CONTACT_GROUPS_PATH } from 'views/contact-groups/navigation';
 import { screen, setupTest, within } from '@test-setup';
 import { populateFoldersStore } from '@test-utils/store/folders';
 

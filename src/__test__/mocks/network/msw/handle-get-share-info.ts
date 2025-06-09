@@ -7,7 +7,7 @@ import { faker } from '@faker-js/faker';
 import { map } from 'lodash';
 import { HttpResponse, HttpResponseResolver } from 'msw';
 
-import { getRandomView } from '../../folders/soap-roots-generator';
+import { getRandomView } from '__test__/mocks/folders/soap-roots-generator';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore

@@ -9,7 +9,7 @@ import { t } from '@zextras/carbonio-shell-ui';
 import { trim } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { Contact } from '../types/contact';
+import { Contact } from 'legacy/types/contact';
 
 /*
  * Returns the Display name

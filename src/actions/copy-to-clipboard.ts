@@ -9,8 +9,8 @@ import { useSnackbar } from '@zextras/carbonio-design-system';
 import { copyToClipboard } from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 
-import { UIAction } from './types';
-import { ACTION_IDS } from '../constants';
+import { UIAction } from 'actions/types';
+import { ACTION_IDS } from 'constants/index';
 
 type CopyToClipboardAction = UIAction<string, never>;
 export const useActionCopyToClipboard = (): CopyToClipboardAction => {

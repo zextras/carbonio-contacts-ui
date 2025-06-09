@@ -5,8 +5,8 @@
  */
 import { faker } from '@faker-js/faker';
 
-import { getItem } from './get-item';
-import { registerGetItemHandler } from '../../tests/msw-handlers/get-item';
+import { getItem } from 'network/api/get-item';
+import { registerGetItemHandler } from 'tests/msw-handlers/get-item';
 
 describe('getItem', () => {
 	it('should call the Get Item API with the correct parameters', async () => {

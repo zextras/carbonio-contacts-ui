@@ -13,7 +13,7 @@ import {
 	ImportContactsRequest,
 	ImportContactsResponse,
 	ImportContactsResult
-} from './import-contacts';
+} from 'network/api/import-contacts';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 describe('importAddressBook', () => {

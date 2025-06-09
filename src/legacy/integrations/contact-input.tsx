@@ -30,13 +30,13 @@ import { TFunction } from 'i18next';
 import { filter, find, map, uniqBy, noop, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { DistributionListChip } from './distribution-list-chip';
-import type { ContactAddressMap } from '../types/contact';
-import type { GetContactsRequest, GetContactsResponse } from '../types/soap';
-import { Loader } from './parts/loader';
-import { PasteContextMenu } from './parts/paste-context-menu';
-import { getContactLabel, searchContacts, tryToParseEmail } from './parts/utils';
-import { ContactInputItemInternalValue, ContactInputOptions, GroupContact } from './types';
+import { DistributionListChip } from 'legacy/integrations/distribution-list-chip';
+import type { ContactAddressMap } from 'legacy/types/contact';
+import type { GetContactsRequest, GetContactsResponse } from 'legacy/types/soap';
+import { Loader } from 'legacy/integrations/parts/loader';
+import { PasteContextMenu } from 'legacy/integrations/parts/paste-context-menu';
+import { getContactLabel, searchContacts, tryToParseEmail } from 'legacy/integrations/parts/utils';
+import { ContactInputItemInternalValue, ContactInputOptions, GroupContact } from 'legacy/integrations/types';
 
 const CHIP_TO_EXCLUDE = 'this-value-represent-a-chip-that-should-not-be-present';
 

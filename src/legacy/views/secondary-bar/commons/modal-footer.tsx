@@ -17,7 +17,7 @@ import {
 	AnyColor
 } from '@zextras/carbonio-design-system';
 
-import { ModalFooterProps } from '../../../types/commons';
+import { ModalFooterProps } from 'legacy/types/commons';
 
 const ModalFooter: FC<ModalFooterProps> = ({
 	mainAlignment = 'center',

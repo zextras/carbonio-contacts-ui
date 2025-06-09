@@ -10,11 +10,11 @@ import { getFoldersMap, Folder } from '@zextras/carbonio-ui-commons';
 import { EventEmitter } from 'events';
 import { times } from 'lodash';
 
-import { TESTID_SELECTORS } from '../constants/tests';
-import { SoapContact } from '../legacy/types/soap';
-import { DistributionList, DistributionListMembersPage } from '../model/distribution-list';
-import { CnItem } from '../network/api/types';
-import { MakeRequired } from '../types/utils';
+import { TESTID_SELECTORS } from 'constants/tests';
+import { SoapContact } from 'legacy/types/soap';
+import { DistributionList, DistributionListMembersPage } from 'model/distribution-list';
+import { CnItem } from 'network/api/types';
+import { MakeRequired } from 'types/utils';
 import { screen, within } from '@test-setup';
 
 export const getDLContactInput = (): {

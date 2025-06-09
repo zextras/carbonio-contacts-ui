@@ -5,9 +5,9 @@
  */
 import { useTranslation } from 'react-i18next';
 
-import { useRestoreContacts } from '../../../actions/common-contacts-actions/use-restore-contacts';
-import { Action } from '../../../actions/types';
-import { Contact } from '../../../legacy/types/contact';
+import { useRestoreContacts } from 'actions/common-contacts-actions/use-restore-contacts';
+import { Action } from 'actions/types';
+import { Contact } from 'legacy/types/contact';
 
 export const useContactRestoreAction = (contact: Contact): Action => {
 	const [t] = useTranslation();

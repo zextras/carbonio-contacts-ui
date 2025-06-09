@@ -8,9 +8,9 @@ import React from 'react';
 import { renderHook } from '@testing-library/react';
 import { useParams } from 'react-router-dom';
 
-import { useGetContactGroupFromPath } from './useGetContactGroupFromPath';
-import { addContactsToStore } from '../legacy/store/contacts';
-import { buildContactGroup } from '../tests/model-builder';
+import { useGetContactGroupFromPath } from 'hooks/useGetContactGroupFromPath';
+import { addContactsToStore } from 'legacy/store/contacts';
+import { buildContactGroup } from 'tests/model-builder';
 
 jest.mock('react-router-dom', () => ({
 	...jest.requireActual('react-router-dom'),

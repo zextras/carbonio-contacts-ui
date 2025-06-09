@@ -6,7 +6,7 @@
 import { ErrorSoapBodyResponse, soapFetch } from '@zextras/carbonio-shell-ui';
 import { JSNS } from '@zextras/carbonio-ui-commons';
 
-import { GenericSoapPayload } from './types';
+import { GenericSoapPayload } from 'network/api/types';
 
 export const CONTACT_ACTION_OPERATION = {
 	move: 'move',

@@ -6,8 +6,8 @@
 import { faker } from '@faker-js/faker';
 import { JSNS } from '@zextras/carbonio-ui-commons';
 
-import { FolderActionRequest } from './folder-action';
-import { moveContact } from './move-contact';
+import { FolderActionRequest } from 'network/api/folder-action';
+import { moveContact } from 'network/api/move-contact';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 describe('Move contact', () => {

@@ -8,7 +8,7 @@ import { faker } from '@faker-js/faker';
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 import { JSNS } from '@zextras/carbonio-ui-commons';
 
-import { folderAction, FolderActionOperation, FolderActionParams } from './folder-action';
+import { folderAction, FolderActionOperation, FolderActionParams } from 'network/api/folder-action';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 describe('Folder action', () => {

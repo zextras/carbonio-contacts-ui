@@ -12,9 +12,9 @@ import {
 	BatchDistributionListActionRequest,
 	BatchDistributionListActionResponse,
 	DistributionListActionResponse
-} from '../../network/api/distribution-list-action';
-import { SoapFault } from '../../types/utils';
-import { buildSoapResponse } from '../utils';
+} from 'network/api/distribution-list-action';
+import { SoapFault } from 'types/utils';
+import { buildSoapResponse } from 'tests/utils';
 import { getSetupServer } from '@jest-setup';
 
 type DistributionListActionHandlerResponseResolver = HttpResponseResolver<

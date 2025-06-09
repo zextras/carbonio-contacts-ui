@@ -6,7 +6,7 @@
 import { faker } from '@faker-js/faker';
 import { JSNS } from '@zextras/carbonio-ui-commons';
 
-import { moveFolder } from './move-folder';
+import { moveFolder } from 'network/api/move-folder';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 describe('moveFolder', () => {

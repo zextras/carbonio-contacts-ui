@@ -6,9 +6,9 @@
 
 import { act } from '@testing-library/react';
 
-import { useActionAddSharedAddressBooks } from './add-shared-address-books';
-import { UIAction } from './types';
-import { TIMERS } from '../constants/tests';
+import { useActionAddSharedAddressBooks } from 'actions/add-shared-address-books';
+import { UIAction } from 'actions/types';
+import { TIMERS } from 'constants/tests';
 import { screen, setupHook } from '@test-setup';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 

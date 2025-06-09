@@ -15,8 +15,8 @@ import {
 } from '@zextras/carbonio-design-system';
 import { map, noop } from 'lodash';
 
-import { ContactOrGroup } from '../../types/contact';
-import { useMultipleSelectionContactsActions } from '../../ui-actions/use-multiple-selection-contacts-actions';
+import { ContactOrGroup } from 'legacy/types/contact';
+import { useMultipleSelectionContactsActions } from 'legacy/ui-actions/use-multiple-selection-contacts-actions';
 
 interface SelectPanelActionsProps {
 	folderId: string;

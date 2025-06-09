@@ -10,15 +10,15 @@ import { JSNS } from '@zextras/carbonio-ui-commons';
 import { times } from 'lodash';
 import { HttpResponse } from 'msw';
 
-import { useGetDistributionListMembers } from './use-get-distribution-list-members';
-import { GetDistributionListMembersResponse } from '../network/api/get-distribution-list-members';
-import { useDistributionListsStore } from '../store/distribution-lists';
-import { registerGetDistributionListMembersHandler } from '../tests/msw-handlers/get-distribution-list-members';
+import { useGetDistributionListMembers } from 'hooks/use-get-distribution-list-members';
+import { GetDistributionListMembersResponse } from 'network/api/get-distribution-list-members';
+import { useDistributionListsStore } from 'store/distribution-lists';
+import { registerGetDistributionListMembersHandler } from 'tests/msw-handlers/get-distribution-list-members';
 import {
 	buildSoapResponse,
 	generateDistributionList,
 	generateDistributionListMembersPage
-} from '../tests/utils';
+} from 'tests/utils';
 import { setupHook } from '@test-setup';
 
 describe('Use get distribution list members hook', () => {

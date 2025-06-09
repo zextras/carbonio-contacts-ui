@@ -9,11 +9,11 @@ import { Container } from '@zextras/carbonio-design-system';
 import { useBoard } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
-import { EditDLControllerComponent } from '../../components/edit-dl-controller';
-import { Text } from '../../components/Text';
-import { useGetDistributionList } from '../../hooks/use-get-distribution-list';
-import { useGetDistributionListMembers } from '../../hooks/use-get-distribution-list-members';
-import { DistributionList } from '../../model/distribution-list';
+import { EditDLControllerComponent } from 'components/edit-dl-controller';
+import { Text } from 'components/Text';
+import { useGetDistributionList } from 'hooks/use-get-distribution-list';
+import { useGetDistributionListMembers } from 'hooks/use-get-distribution-list-members';
+import { DistributionList } from 'model/distribution-list';
 
 export type EditDLBoardContext = Pick<DistributionList, 'id'>;
 

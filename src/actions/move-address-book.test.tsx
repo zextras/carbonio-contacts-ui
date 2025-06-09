@@ -10,12 +10,12 @@ import { act } from '@testing-library/react';
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 import { FOLDER_VIEW, FOLDERS, getFolder, JSNS } from '@zextras/carbonio-ui-commons';
 
-import { useActionMoveAddressBook } from './move-address-book';
-import { UIAction } from './types';
-import { AddressBookMoveModal } from '../components/modals/address-book-move';
-import { FOLDERS_DESCRIPTORS, TIMERS } from '../constants/tests';
-import { FolderActionRequest, FolderActionResponse } from '../network/api/folder-action';
-import { getFoldersArray } from '../tests/utils';
+import { useActionMoveAddressBook } from 'actions/move-address-book';
+import { UIAction } from 'actions/types';
+import { AddressBookMoveModal } from 'components/modals/address-book-move';
+import { FOLDERS_DESCRIPTORS, TIMERS } from 'constants/tests';
+import { FolderActionRequest, FolderActionResponse } from 'network/api/folder-action';
+import { getFoldersArray } from 'tests/utils';
 import { makeListItemsVisible, screen, setupHook, setupTest, within } from '@test-setup';
 import { generateFolder } from '@test-utils/folders/folders-generator';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';

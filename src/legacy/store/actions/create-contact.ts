@@ -5,9 +5,9 @@
  */
 import { soapFetch } from '@zextras/carbonio-shell-ui';
 
-import { Contact } from '../../types/contact';
-import { SoapContact } from '../../types/soap';
-import { normalizeContactToSoap } from '../../utils/normalizations/normalize-contact-to-soap';
+import { Contact } from 'legacy/types/contact';
+import { SoapContact } from 'legacy/types/soap';
+import { normalizeContactToSoap } from 'legacy/utils/normalizations/normalize-contact-to-soap';
 
 export const createContact = async (contact: Contact): Promise<SoapContact> => {
 	const cnt = { ...contact, fileAsStr: contact.firstName };

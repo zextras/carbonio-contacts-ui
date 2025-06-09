@@ -8,8 +8,8 @@ import { useCallback, useMemo } from 'react';
 import { useIntegratedFunction } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
-import { UIAction } from './types';
-import { SEND_EMAIL_ACTION } from '../constants/actions';
+import { UIAction } from 'actions/types';
+import { SEND_EMAIL_ACTION } from 'constants/actions';
 
 export type MailComposerRecipient = { email?: string; isGroup?: boolean };
 

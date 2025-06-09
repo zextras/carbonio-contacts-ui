@@ -6,8 +6,8 @@
 
 import { useBoard } from '@zextras/carbonio-shell-ui';
 
-import { useContactGroupById } from '../legacy/store/contacts';
-import { ContactGroup } from '../model/contact-group';
+import { useContactGroupById } from 'legacy/store/contacts';
+import { ContactGroup } from 'model/contact-group';
 
 export const useGetContactGroupFromBoardId = (): ContactGroup | undefined => {
 	const { context } = useBoard<{ contactGroupId: string; folderId: string }>();

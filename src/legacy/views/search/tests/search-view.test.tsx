@@ -15,17 +15,17 @@ import { FOLDERS, useFolderStore } from '@zextras/carbonio-ui-commons';
 import { noop } from 'lodash';
 import { HttpResponse } from 'msw';
 
-import { TIMERS } from '../../../../constants/tests';
-import { CnItem } from '../../../../network/api/types';
-import { createSoapContact, createSoapContactGroupV2 } from '../../../../tests/utils';
+import { TIMERS } from 'constants/tests';
+import { CnItem } from 'network/api/types';
+import { createSoapContact, createSoapContactGroupV2 } from 'tests/utils';
 import {
 	SearchContactsRequest,
 	SearchContactsSoapRequest,
 	SearchContactsSoapResponse
-} from '../../../../types';
-import { type SoapContact } from '../../../types/soap';
-import { Query } from '../search-types';
-import SearchView from '../search-view';
+} from 'types';
+import { type SoapContact } from 'legacy/types/soap';
+import { Query } from 'legacy/views/search/search-types';
+import SearchView from 'legacy/views/search/search-view';
 import { makeListItemsVisible, screen, setupTest, triggerLoadMore } from '@test-setup';
 import { generateFolder } from '@test-utils/folders/folders-generator';
 import {

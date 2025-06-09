@@ -7,10 +7,10 @@ import React from 'react';
 
 import { waitFor } from '@testing-library/react';
 
-import DistributionListAppView from './distribution-list-view';
-import { ROUTES_INTERNAL_PARAMS } from '../constants';
-import { registerGetAccountDistributionListsHandler } from '../tests/msw-handlers/get-account-distribution-lists';
-import { generateDistributionList } from '../tests/utils';
+import DistributionListAppView from 'views/distribution-list-view';
+import { ROUTES_INTERNAL_PARAMS } from 'constants/index';
+import { registerGetAccountDistributionListsHandler } from 'tests/msw-handlers/get-account-distribution-lists';
+import { generateDistributionList } from 'tests/utils';
 import { screen, setupTest } from '@test-setup';
 
 describe('App view', () => {

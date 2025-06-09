@@ -8,9 +8,9 @@ import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 import { FOLDER_VIEW, FOLDERS } from '@zextras/carbonio-ui-commons';
 
-import { useActionEmptyTrash } from './empty-trash';
-import { UIAction } from './types';
-import { TIMERS } from '../constants/tests';
+import { useActionEmptyTrash } from 'actions/empty-trash';
+import { UIAction } from 'actions/types';
+import { TIMERS } from 'constants/tests';
 import { screen, setupHook } from '@test-setup';
 import { generateFolder } from '@test-utils/folders/folders-generator';
 

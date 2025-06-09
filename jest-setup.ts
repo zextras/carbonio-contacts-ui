@@ -10,7 +10,7 @@ import fetchMock from 'jest-fetch-mock';
 import { noop } from 'lodash';
 import { setupServer, SetupServer } from 'msw/node';
 
-import * as downloadModule from './src/helpers/download';
+import * as downloadModule from 'helpers/download';
 import { getRestHandlers } from '@test-utils/network/msw/handlers';
 
 let server: SetupServer;

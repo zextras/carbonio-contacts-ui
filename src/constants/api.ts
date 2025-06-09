@@ -5,7 +5,7 @@
  */
 // TODO move into Shell
 
-import { NameSpace } from '../types/utils';
+import { NameSpace } from 'types/utils';
 
 export const NAMESPACES = {
 	account: 'urn:zimbraAccount',

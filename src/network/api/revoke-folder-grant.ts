@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { folderAction } from './folder-action';
+import { folderAction } from 'network/api/folder-action';
 
 export const revokeFolderGrant = (folderId: string, granteeId: string): Promise<void> =>
 	folderAction({ folderId, operation: '!grant', granteeId });

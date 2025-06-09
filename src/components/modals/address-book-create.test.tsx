@@ -10,10 +10,10 @@ import { act, waitFor } from '@testing-library/react';
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 import { FOLDERS, isLink, isTrashed, getRootsArray, JSNS } from '@zextras/carbonio-ui-commons';
 
-import { AddressBookCreateModal } from './address-book-create';
-import { TESTID_SELECTORS } from '../../constants/tests';
-import { CreateFolderRequest, CreateFolderResponse } from '../../network/api/create-folder';
-import { getFoldersArray } from '../../tests/utils';
+import { AddressBookCreateModal } from 'components/modals/address-book-create';
+import { TESTID_SELECTORS } from 'constants/tests';
+import { CreateFolderRequest, CreateFolderResponse } from 'network/api/create-folder';
+import { getFoldersArray } from 'tests/utils';
 import { makeListItemsVisible, screen, setupTest } from '@test-setup';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 import { populateFoldersStore } from '@test-utils/store/folders';

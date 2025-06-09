@@ -6,7 +6,7 @@
 
 import { soapFetch } from '@zextras/carbonio-shell-ui';
 
-import { SoapSearchResults } from '../legacy/views/search/types';
+import { SoapSearchResults } from 'legacy/views/search/types';
 
 export const searchContactsHelper = ({
 	query,

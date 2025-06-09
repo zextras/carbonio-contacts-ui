@@ -18,12 +18,12 @@ import {
 import { map } from 'lodash';
 import { Route, Routes, useParams } from 'react-router-dom';
 
-import { AccordionCustomComponent } from './accordion-custom-component';
-import { CollapsedSideBarFolderItem } from './collapsed-sidebar-folder-item';
-import { FindSharesButton } from './find-shares-button';
-import { TagsAccordion } from './tags-accordion';
-import { LOCAL_STORAGES } from '../../../constants';
-import { sortFolders } from '../../../helpers/folders';
+import { AccordionCustomComponent } from 'legacy/views/secondary-bar/accordion-custom-component';
+import { CollapsedSideBarFolderItem } from 'legacy/views/secondary-bar/collapsed-sidebar-folder-item';
+import { FindSharesButton } from 'legacy/views/secondary-bar/find-shares-button';
+import { TagsAccordion } from 'legacy/views/secondary-bar/tags-accordion';
+import { LOCAL_STORAGES } from 'constants/index';
+import { sortFolders } from 'helpers/folders';
 
 /**
  * Item component for the collapsed secondary bar

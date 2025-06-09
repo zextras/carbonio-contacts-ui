@@ -21,13 +21,13 @@ import { every, find, includes, map, noop, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { TaggableItem } from '../../actions/types';
-import { contactAction } from '../store/actions/contact-action';
-import { Contact } from '../types/contact';
-import { TagsActionsType } from '../types/tags';
-import CreateUpdateTagModal from '../views/secondary-bar/parts/tags/create-update-tag-modal';
-import DeleteTagModal from '../views/secondary-bar/parts/tags/delete-tag-modal';
-import { ItemType } from '../views/secondary-bar/parts/tags/types';
+import { TaggableItem } from 'actions/types';
+import { contactAction } from 'legacy/store/actions/contact-action';
+import { Contact } from 'legacy/types/contact';
+import { TagsActionsType } from 'legacy/types/tags';
+import CreateUpdateTagModal from 'legacy/views/secondary-bar/parts/tags/create-update-tag-modal';
+import DeleteTagModal from 'legacy/views/secondary-bar/parts/tags/delete-tag-modal';
+import { ItemType } from 'legacy/views/secondary-bar/parts/tags/types';
 
 export type TagsActions = {
 	id: string;

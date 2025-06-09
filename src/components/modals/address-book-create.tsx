@@ -17,11 +17,11 @@ import { FOLDERS, useFolder, Folder } from '@zextras/carbonio-ui-commons';
 import { filter } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { ModalContentAndFooterWrapper } from './modal-content-and-footer-wrapper';
-import { ModalWrapper } from './modal-wrapper';
-import { TIMEOUTS } from '../../constants';
-import { apiClient } from '../../network/api-client';
-import { FolderTreeSelector } from '../folder-tree-selector/folder-tree-selector';
+import { ModalContentAndFooterWrapper } from 'components/modals/modal-content-and-footer-wrapper';
+import { ModalWrapper } from 'components/modals/modal-wrapper';
+import { TIMEOUTS } from 'constants/index';
+import { apiClient } from 'network/api-client';
+import { FolderTreeSelector } from 'components/folder-tree-selector/folder-tree-selector';
 
 export type AddressBookCreateModalProps = {
 	defaultParentId?: string;

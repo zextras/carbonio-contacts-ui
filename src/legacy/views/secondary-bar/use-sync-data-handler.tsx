@@ -20,12 +20,12 @@ import {
 	addContactsToStore,
 	removeContactsFromStore,
 	updateContactsInStore
-} from '../../store/contacts';
-import { PartialSoapContactWithId, SoapContact } from '../../types/soap';
+} from 'legacy/store/contacts';
+import { PartialSoapContactWithId, SoapContact } from 'legacy/types/soap';
 import {
 	normalizeContactsFromSoap,
 	normalizeSyncContactsFromSoap
-} from '../../utils/normalizations/normalize-contact-from-soap';
+} from 'legacy/utils/normalizations/normalize-contact-from-soap';
 
 function handleFoldersNotify(
 	seq: number,

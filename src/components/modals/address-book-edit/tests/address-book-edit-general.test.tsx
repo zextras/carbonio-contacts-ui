@@ -7,7 +7,7 @@ import React from 'react';
 
 import { screen } from '@testing-library/react';
 
-import { AddressBookEditGeneralModal } from '../address-book-edit-general';
+import { AddressBookEditGeneralModal } from 'components/modals/address-book-edit/address-book-edit-general';
 import { setupTest } from '@test-setup';
 
 describe('AddressBookEditGeneralModal', () => {

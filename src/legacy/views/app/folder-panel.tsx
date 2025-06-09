@@ -11,15 +11,15 @@ import { Folder } from '@zextras/carbonio-ui-commons';
 import { filter, find, noop, orderBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { Breadcrumbs } from './breadcrumbs';
-import { ContactsList } from './folder-panel/contacts-list';
-import { searchContactsHelper } from '../../../views/search-contacts-helper';
-import { useSelection } from '../../hooks/useSelection';
-import { addContactsToStore, setContactsInStore, useContactsByFolder } from '../../store/contacts';
-import { isGroup } from '../../utils/helpers';
-import { normalizeContactsFromSoap } from '../../utils/normalizations/normalize-contact-from-soap';
-import { SelectPanelActions } from '../folder/select-panel-actions';
-import { FolderViewSearchResults } from '../search/types';
+import { Breadcrumbs } from 'legacy/views/app/breadcrumbs';
+import { ContactsList } from 'legacy/views/app/folder-panel/contacts-list';
+import { searchContactsHelper } from 'views/search-contacts-helper';
+import { useSelection } from 'legacy/hooks/useSelection';
+import { addContactsToStore, setContactsInStore, useContactsByFolder } from 'legacy/store/contacts';
+import { isGroup } from 'legacy/utils/helpers';
+import { normalizeContactsFromSoap } from 'legacy/utils/normalizations/normalize-contact-from-soap';
+import { SelectPanelActions } from 'legacy/views/folder/select-panel-actions';
+import { FolderViewSearchResults } from 'legacy/views/search/types';
 
 type UseAppContextType = {
 	setCount: (count: number) => void;

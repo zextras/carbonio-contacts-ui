@@ -14,13 +14,13 @@ import {
 	PopulateFoldersStoreOptions
 } from '@zextras/carbonio-ui-commons';
 
-import { FakeIdentity } from '../accounts/fakeAccounts';
+import { FakeIdentity } from '__test__/mocks/accounts/fakeAccounts';
 import {
 	getMocksContext,
 	getRandomIdentities,
 	getRandomIdentity,
 	MocksContextIdentity
-} from '../utils/mocks-context';
+} from '__test__/mocks/utils/mocks-context';
 
 let userFolderIdSequence = 100;
 const getNextFolderId = (zid?: string): string => {

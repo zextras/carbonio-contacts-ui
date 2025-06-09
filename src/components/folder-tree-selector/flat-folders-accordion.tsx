@@ -30,8 +30,8 @@ import { noop } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { getFolderIconColor, getFolderIconName } from '../../helpers/folders';
-import { getFolderTranslatedName } from '../../legacy/utils/helpers';
+import { getFolderIconColor, getFolderIconName } from 'helpers/folders';
+import { getFolderTranslatedName } from 'legacy/utils/helpers';
 
 const FOLDER_ROW_HEIGHT = '2.6rem';
 

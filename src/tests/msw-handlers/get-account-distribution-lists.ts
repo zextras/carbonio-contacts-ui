@@ -7,12 +7,12 @@ import { SoapResponse } from '@zextras/carbonio-shell-ui';
 import { JSNS } from '@zextras/carbonio-ui-commons';
 import { http, HttpResponse, HttpResponseResolver } from 'msw';
 
-import { DistributionList } from '../../model/distribution-list';
+import { DistributionList } from 'model/distribution-list';
 import type {
 	GetAccountDistributionListsRequest,
 	GetAccountDistributionListsResponse
-} from '../../network/api/get-account-distribution-lists';
-import { buildSoapError, buildSoapResponse } from '../utils';
+} from 'network/api/get-account-distribution-lists';
+import { buildSoapError, buildSoapResponse } from 'tests/utils';
 import { getSetupServer } from '@jest-setup';
 
 type GetAccountDistributionListsHandler = HttpResponseResolver<

@@ -9,14 +9,14 @@ import { faker } from '@faker-js/faker';
 import { useBoardHooks } from '@zextras/carbonio-shell-ui';
 import 'jest-styled-components';
 
-import { EditDLControllerComponent, EditDLControllerComponentProps } from './edit-dl-controller';
-import { PALETTE, TESTID_SELECTORS } from '../constants/tests';
-import { DistributionList } from '../model/distribution-list';
+import { EditDLControllerComponent, EditDLControllerComponentProps } from 'components/edit-dl-controller';
+import { PALETTE, TESTID_SELECTORS } from 'constants/tests';
+import { DistributionList } from 'model/distribution-list';
 import {
 	generateDistributionList,
 	generateDistributionListMembersPage,
 	spyUseBoardHooks
-} from '../tests/utils';
+} from 'tests/utils';
 import { screen, setupTest, within } from '@test-setup';
 
 beforeEach(() => {

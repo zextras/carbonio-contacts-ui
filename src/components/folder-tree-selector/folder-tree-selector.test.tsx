@@ -18,9 +18,9 @@ import {
 	FOLDERS
 } from '@zextras/carbonio-ui-commons';
 
-import { FolderTreeSelector, FolderTreeSelectorProps } from './folder-tree-selector';
-import { isEmailedContacts } from '../../helpers/folders';
-import { getFoldersArray } from '../../tests/utils';
+import { FolderTreeSelector, FolderTreeSelectorProps } from 'components/folder-tree-selector/folder-tree-selector';
+import { isEmailedContacts } from 'helpers/folders';
+import { getFoldersArray } from 'tests/utils';
 import { makeListItemsVisible, setupTest } from '@test-setup';
 import { populateFoldersStore } from '@test-utils/store/folders';
 

@@ -7,8 +7,8 @@ import { Folder } from '@zextras/carbonio-ui-commons';
 import produce, { enableMapSet } from 'immer';
 import { create } from 'zustand';
 
-import { ContactGroup } from '../../model/contact-group';
-import { Contact, ContactOrGroup } from '../types/contact';
+import { ContactGroup } from 'model/contact-group';
+import { Contact, ContactOrGroup } from 'legacy/types/contact';
 
 type ContactsStoreState = {
 	contacts: Record<string, ContactOrGroup>;

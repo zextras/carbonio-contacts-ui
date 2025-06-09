@@ -18,8 +18,8 @@ import {
 import { map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { DisplayerContent } from '../../../components/displayer/displayer-content';
-import { CompactView } from '../../commons/contact-compact-view';
+import { DisplayerContent } from 'components/displayer/displayer-content';
+import { CompactView } from 'legacy/commons/contact-compact-view';
 
 function typeToIcon(type) {
 	switch (type) {

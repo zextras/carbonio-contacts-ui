@@ -9,9 +9,9 @@ import * as shell from '@zextras/carbonio-shell-ui';
 import { ContactInputProps } from '@zextras/carbonio-ui-commons';
 import { HttpResponse } from 'msw';
 
-import App from './app';
-import { CONTACT_BOARD_ID } from './constants';
-import { ContactInput } from './legacy/integrations/contact-input';
+import App from 'app';
+import { CONTACT_BOARD_ID } from 'constants/index';
+import { ContactInput } from 'legacy/integrations/contact-input';
 import { setupTest } from '@test-setup';
 import { generateFolder } from '@test-utils/folders/folders-generator';
 import {

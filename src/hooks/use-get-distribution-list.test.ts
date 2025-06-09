@@ -6,10 +6,10 @@
 import { faker } from '@faker-js/faker';
 import { waitFor } from '@testing-library/react';
 
-import { REQUIRED_FIELDS, useGetDistributionList } from './use-get-distribution-list';
-import { DistributionList } from '../model/distribution-list';
-import { useDistributionListsStore } from '../store/distribution-lists';
-import { registerGetDistributionListHandler } from '../tests/msw-handlers/get-distribution-list';
+import { REQUIRED_FIELDS, useGetDistributionList } from 'hooks/use-get-distribution-list';
+import { DistributionList } from 'model/distribution-list';
+import { useDistributionListsStore } from 'store/distribution-lists';
+import { registerGetDistributionListHandler } from 'tests/msw-handlers/get-distribution-list';
 import { setupHook } from '@test-setup';
 
 const dlDetails: Required<Omit<DistributionList, 'members'>> = {

@@ -6,8 +6,8 @@
 import { SoapResponse } from '@zextras/carbonio-shell-ui';
 import { HttpResponseResolver, http, HttpResponse } from 'msw';
 
-import { FullAutocompleteResponse, Match } from '../../legacy/types/contact';
-import { buildSoapResponse } from '../utils';
+import { FullAutocompleteResponse, Match } from 'legacy/types/contact';
+import { buildSoapResponse } from 'tests/utils';
 import { getSetupServer } from '@jest-setup';
 
 const createAutocompleteResponse = (match: Array<Match>): FullAutocompleteResponse => {

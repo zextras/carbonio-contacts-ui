@@ -9,18 +9,18 @@ import React, { useCallback, useMemo } from 'react';
 import { Button, Container, Divider, Row, TabBar } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
-import { DisplayerActionsHeader } from './displayer/displayer-actions-header';
-import { DisplayerHeader } from './displayer/displayer-header';
-import { DLDetailsInfo } from './dl-details-info';
-import { ManagerList } from './manager-list';
-import { MemberList } from './member-list';
-import { ScrollableContainer } from './styled-components';
-import { Text } from './Text';
-import { DL_TABS } from '../constants';
-import { useDLActions } from '../hooks/use-dl-actions';
-import { useDLTabs } from '../hooks/use-dl-tabs';
-import { useActiveItem } from '../hooks/useActiveItem';
-import { DistributionList } from '../model/distribution-list';
+import { DisplayerActionsHeader } from 'components/displayer/displayer-actions-header';
+import { DisplayerHeader } from 'components/displayer/displayer-header';
+import { DLDetailsInfo } from 'components/dl-details-info';
+import { ManagerList } from 'components/manager-list';
+import { MemberList } from 'components/member-list';
+import { ScrollableContainer } from 'components/styled-components';
+import { Text } from 'components/Text';
+import { DL_TABS } from 'constants/index';
+import { useDLActions } from 'hooks/use-dl-actions';
+import { useDLTabs } from 'hooks/use-dl-tabs';
+import { useActiveItem } from 'hooks/useActiveItem';
+import { DistributionList } from 'model/distribution-list';
 
 interface DistributionListDisplayerProps {
 	members: Array<string>;

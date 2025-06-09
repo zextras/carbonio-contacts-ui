@@ -5,8 +5,8 @@
  */
 import { soapFetch } from '@zextras/carbonio-shell-ui';
 
-import { RunSearchResults } from './types';
-import { normalizeContactsFromSoap } from '../../utils/normalizations/normalize-contact-from-soap';
+import { RunSearchResults } from 'legacy/views/search/types';
+import { normalizeContactsFromSoap } from 'legacy/utils/normalizations/normalize-contact-from-soap';
 
 export const runSearch = ({
 	queryString,

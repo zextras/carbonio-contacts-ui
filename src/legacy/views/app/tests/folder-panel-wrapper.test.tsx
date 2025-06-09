@@ -11,7 +11,7 @@ import * as shell from '@zextras/carbonio-shell-ui';
 import { FOLDER_VIEW, FOLDERS, JSNS, useTagStore } from '@zextras/carbonio-ui-commons';
 import { forEach } from 'lodash';
 
-import { createContactsApiInterceptor, findContactInList } from './utils';
+import { createContactsApiInterceptor, findContactInList } from 'legacy/views/app/tests/utils';
 import {
 	ActionDescriptorType,
 	ACTIONS_DESCRIPTORS,
@@ -21,20 +21,20 @@ import {
 	FolderDescriptorType,
 	FOLDERS_DESCRIPTORS,
 	TESTID_SELECTORS
-} from '../../../../constants/tests';
+} from 'constants/tests';
 import {
 	ContactActionRequest,
 	ContactActionResponse
-} from '../../../../network/api/contact-action';
-import { registerDeleteContactHandler } from '../../../../tests/msw-handlers/delete-contact';
+} from 'network/api/contact-action';
+import { registerDeleteContactHandler } from 'tests/msw-handlers/delete-contact';
 import {
 	createFindContactGroupsResponse,
 	registerFindContactGroupsHandler
-} from '../../../../tests/msw-handlers/find-contact-groups';
-import { createSoapContact, createSoapContactGroup } from '../../../../tests/utils';
-import { SearchContactsRequest, SearchContactsSoapResponse } from '../../../../types';
-import { SoapContact } from '../../../types/soap';
-import { FolderPanelWrapper } from '../folder-panel-wrapper';
+} from 'tests/msw-handlers/find-contact-groups';
+import { createSoapContact, createSoapContactGroup } from 'tests/utils';
+import { SearchContactsRequest, SearchContactsSoapResponse } from 'types';
+import { SoapContact } from 'legacy/types/soap';
+import { FolderPanelWrapper } from 'legacy/views/app/folder-panel-wrapper';
 import {
 	makeListItemsVisible,
 	screen,

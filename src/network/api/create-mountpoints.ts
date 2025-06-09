@@ -7,8 +7,8 @@ import { ErrorSoapBodyResponse, soapFetch } from '@zextras/carbonio-shell-ui';
 import { FOLDERS, JSNS, SoapLink } from '@zextras/carbonio-ui-commons';
 import { map } from 'lodash';
 
-import { GenericSoapPayload } from './types';
-import { ShareInfo } from '../../model/share-info';
+import { GenericSoapPayload } from 'network/api/types';
+import { ShareInfo } from 'model/share-info';
 
 export type CreateMountpointsRequest = GenericSoapPayload<typeof JSNS.ALL> & {
 	CreateMountpointRequest: Array<{

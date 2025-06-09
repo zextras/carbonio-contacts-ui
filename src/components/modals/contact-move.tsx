@@ -15,9 +15,9 @@ import {
 import { Folder } from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 
-import { ContactOrGroup } from '../../legacy/types/contact';
-import { evaluateParentIds, isGroup } from '../../legacy/utils/helpers';
-import { FolderTreeSelector } from '../folder-tree-selector/folder-tree-selector';
+import { ContactOrGroup } from 'legacy/types/contact';
+import { evaluateParentIds, isGroup } from 'legacy/utils/helpers';
+import { FolderTreeSelector } from 'components/folder-tree-selector/folder-tree-selector';
 
 export type ContactMoveModalProps = {
 	mode?: 'move' | 'restore';

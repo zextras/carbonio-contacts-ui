@@ -11,10 +11,10 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { ContactGroupListItem } from '../../../views/contact-groups/list/contact-group-list-item';
-import { ContactOrGroup } from '../../types/contact';
-import { isGroup } from '../../utils/helpers';
-import { ContactListItem } from '../app/folder-panel/contact-list-item';
+import { ContactGroupListItem } from 'views/contact-groups/list/contact-group-list-item';
+import { ContactOrGroup } from 'legacy/types/contact';
+import { isGroup } from 'legacy/utils/helpers';
+import { ContactListItem } from 'legacy/views/app/folder-panel/contact-list-item';
 
 const BorderContainer = styled(Container)`
 	border-bottom: 0.0625rem solid ${({ theme }): string => theme.palette.gray2.regular};
