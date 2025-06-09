@@ -12,7 +12,12 @@ import { times } from 'lodash';
 import { HttpResponse } from 'msw';
 
 import { DistributionListChip } from 'legacy/integrations/distribution-list-chip';
-import { clickCollapseDL, clickExpandDL, SELECT_ALL, SHOW_MORE } from 'legacy/integrations/test/mocks';
+import {
+	clickCollapseDL,
+	clickExpandDL,
+	SELECT_ALL,
+	SHOW_MORE
+} from 'legacy/integrations/test/mocks';
 import { DL_MEMBERS_LOAD_LIMIT } from 'constants/index';
 import { TESTID_SELECTORS, TIMERS } from 'constants/tests';
 import {

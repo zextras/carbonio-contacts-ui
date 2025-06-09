@@ -8,7 +8,10 @@ import { faker } from '@faker-js/faker';
 import { useFolderStore } from '@zextras/carbonio-ui-commons';
 import { useNavigate } from 'react-router-dom';
 
-import { useRedirectToContactGroup, useRedirectToContactGroupFolder } from 'views/contact-groups/navigation';
+import {
+	useRedirectToContactGroup,
+	useRedirectToContactGroupFolder
+} from 'views/contact-groups/navigation';
 import { generateLinkFolder } from 'views/contact-groups/tests/utils';
 import { buildContactGroup } from 'tests/model-builder';
 import { setupHook } from '@test-setup';

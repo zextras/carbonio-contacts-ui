@@ -20,19 +20,12 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 import { FOLDERS_DESCRIPTORS, TESTID_SELECTORS } from 'constants/tests';
-import {
-	ContactActionRequest,
-	ContactActionResponse
-} from 'network/api/contact-action';
+import { ContactActionRequest, ContactActionResponse } from 'network/api/contact-action';
 import {
 	createFindContactGroupsResponse,
 	registerFindContactGroupsHandler
 } from 'tests/msw-handlers/find-contact-groups';
-import {
-	createSoapContactGroup,
-	createSoapContact,
-	createSoapContactGroupV2
-} from 'tests/utils';
+import { createSoapContactGroup, createSoapContact, createSoapContactGroupV2 } from 'tests/utils';
 import { FolderView } from 'legacy/views/app/folder-view';
 import { createContactsApiInterceptor, findContactInList } from 'legacy/views/app/tests/utils';
 import { generateLinkFolder } from 'views/contact-groups/tests/utils';

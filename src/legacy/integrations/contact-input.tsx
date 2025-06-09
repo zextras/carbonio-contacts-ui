@@ -36,7 +36,11 @@ import type { GetContactsRequest, GetContactsResponse } from 'legacy/types/soap'
 import { Loader } from 'legacy/integrations/parts/loader';
 import { PasteContextMenu } from 'legacy/integrations/parts/paste-context-menu';
 import { getContactLabel, searchContacts, tryToParseEmail } from 'legacy/integrations/parts/utils';
-import { ContactInputItemInternalValue, ContactInputOptions, GroupContact } from 'legacy/integrations/types';
+import {
+	ContactInputItemInternalValue,
+	ContactInputOptions,
+	GroupContact
+} from 'legacy/integrations/types';
 
 const CHIP_TO_EXCLUDE = 'this-value-represent-a-chip-that-should-not-be-present';
 

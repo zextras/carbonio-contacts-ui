@@ -9,7 +9,10 @@ import { faker } from '@faker-js/faker';
 import { act, waitFor } from '@testing-library/react';
 import { times } from 'lodash';
 
-import { EditDLControllerComponent, EditDLControllerComponentProps } from 'components/edit-dl-controller';
+import {
+	EditDLControllerComponent,
+	EditDLControllerComponentProps
+} from 'components/edit-dl-controller';
 import { TESTID_SELECTORS } from 'constants/tests';
 import { DistributionList } from 'model/distribution-list';
 import {

@@ -3,7 +3,11 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { CONTACT_ACTION_OPERATION, contactAction, ContactActionResponse } from 'network/api/contact-action';
+import {
+	CONTACT_ACTION_OPERATION,
+	contactAction,
+	ContactActionResponse
+} from 'network/api/contact-action';
 
 export const moveContact = (
 	contactsIds: Array<string>,

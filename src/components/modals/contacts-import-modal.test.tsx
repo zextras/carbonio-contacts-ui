@@ -10,7 +10,10 @@ import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 import { FOLDER_VIEW, JSNS } from '@zextras/carbonio-ui-commons';
 
-import { ContactsImportModal, ContactsImportModalProps } from 'components/modals/contacts-import-modal';
+import {
+	ContactsImportModal,
+	ContactsImportModalProps
+} from 'components/modals/contacts-import-modal';
 import { TESTID_SELECTORS } from 'constants/tests';
 import { ImportContactsRequest, ImportContactsResponse } from 'network/api/import-contacts';
 import { UploadResponseFileInfo } from 'network/api/upload';

@@ -22,10 +22,7 @@ import {
 	FOLDERS_DESCRIPTORS,
 	TESTID_SELECTORS
 } from 'constants/tests';
-import {
-	ContactActionRequest,
-	ContactActionResponse
-} from 'network/api/contact-action';
+import { ContactActionRequest, ContactActionResponse } from 'network/api/contact-action';
 import { registerDeleteContactHandler } from 'tests/msw-handlers/delete-contact';
 import {
 	createFindContactGroupsResponse,

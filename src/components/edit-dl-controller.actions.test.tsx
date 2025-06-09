@@ -9,7 +9,10 @@ import { faker } from '@faker-js/faker';
 import { act, waitFor } from '@testing-library/react';
 import { JSNS } from '@zextras/carbonio-ui-commons';
 
-import { EditDLControllerComponent, EditDLControllerComponentProps } from 'components/edit-dl-controller';
+import {
+	EditDLControllerComponent,
+	EditDLControllerComponentProps
+} from 'components/edit-dl-controller';
 import { JEST_MOCKED_ERROR, TESTID_SELECTORS } from 'constants/tests';
 import { DistributionList } from 'model/distribution-list';
 import {

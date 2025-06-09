@@ -9,11 +9,7 @@ import { act } from '@testing-library/react';
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 import { FOLDERS } from '@zextras/carbonio-ui-commons';
 
-import {
-	DELETE_PERMANENTLY_ACTION_DESCRIPTOR,
-	TESTID_SELECTORS,
-	TIMERS
-} from 'constants/tests';
+import { DELETE_PERMANENTLY_ACTION_DESCRIPTOR, TESTID_SELECTORS, TIMERS } from 'constants/tests';
 import { Contact } from 'legacy/types/contact';
 import { buildContact } from 'tests/model-builder';
 import { useDeleteContacts } from 'actions/common-contacts-actions/use-delete-contacts';
