@@ -74,7 +74,7 @@ describe('New contact group board', () => {
 				).toBeDisabled();
 			});
 
-			it.only('should disable save button when name input length is greater than 256', async () => {
+			it('should disable save button when name input length is greater than 256', async () => {
 				const newName = faker.string.alphanumeric(CONTACT_GROUP_NAME_MAX_LENGTH + 1);
 				const { user } = setupNewContactGroupBoard();
 				const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
