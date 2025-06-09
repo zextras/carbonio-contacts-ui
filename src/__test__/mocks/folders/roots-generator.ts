@@ -6,7 +6,7 @@
 import { faker } from '@faker-js/faker';
 import { Folder } from '@zextras/carbonio-ui-commons';
 
-import { getMocksContext, MocksContextIdentity } from '__test__/mocks/utils/mocks-context';
+import { getMocksContext, MocksContextIdentity } from '@test-utils/utils/mocks-context';
 
 /**
  *

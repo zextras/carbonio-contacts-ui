@@ -9,9 +9,9 @@ import { BaseFolder, FolderView } from '@zextras/carbonio-ui-commons';
 import { filter } from 'lodash';
 import { HttpResponse, HttpResponseResolver } from 'msw';
 
-import { generateSoapRoot } from '__test__/mocks/folders/soap-roots-generator';
-import { getRandomFolderFlags } from '__test__/mocks/utils/folder';
-import { getMocksContext } from '__test__/mocks/utils/mocks-context';
+import { generateSoapRoot } from '@test-utils/folders/soap-roots-generator';
+import { getRandomFolderFlags } from '@test-utils/utils/folder';
+import { getMocksContext } from '@test-utils/utils/mocks-context';
 
 // todo: create getFolder return type
 type Response = { Header: any; Body: any };

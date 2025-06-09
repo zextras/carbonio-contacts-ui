@@ -13,7 +13,7 @@ import {
 } from '@zextras/carbonio-ui-commons';
 import { map, orderBy } from 'lodash';
 
-import { getMocksContext } from '__test__/mocks/utils/mocks-context';
+import { getMocksContext } from '@test-utils/utils/mocks-context';
 
 let luuid: string | undefined = '';
 const ids: Array<number> = [];
