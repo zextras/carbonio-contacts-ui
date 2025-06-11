@@ -10,8 +10,8 @@ import { getFolderIdParts } from '@zextras/carbonio-ui-commons';
 import { last } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { getFolderTranslatedName } from '../../../legacy/utils/helpers';
-import { ShareInfo } from '../../../model/share-info';
+import { getFolderTranslatedName } from 'legacy/utils/helpers';
+import { ShareInfo } from 'model/share-info';
 
 export type SharesListItemProps = {
 	share: ShareInfo;

@@ -5,12 +5,12 @@
  */
 import React from 'react';
 
-import { AuthGuard } from './app/auth-guard';
-import { FoldersSynchronizator } from './app/folders-syncronization';
-import { IntegrationsRegistration } from './app/integrations-registration';
-import { ViewsRegistration } from './app/views-registration';
-import { InitializeTags } from './components/initialize-tags';
-import { SyncDataHandler } from './legacy/views/secondary-bar/sync-data-handler';
+import { AuthGuard } from 'app/auth-guard';
+import { FoldersSynchronizator } from 'app/folders-syncronization';
+import { IntegrationsRegistration } from 'app/integrations-registration';
+import { ViewsRegistration } from 'app/views-registration';
+import { InitializeTags } from 'components/initialize-tags';
+import { SyncDataHandler } from 'legacy/views/secondary-bar/sync-data-handler';
 
 const App = (): React.JSX.Element => (
 	<AuthGuard>

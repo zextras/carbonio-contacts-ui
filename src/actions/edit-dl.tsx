@@ -8,10 +8,10 @@ import { useCallback, useMemo } from 'react';
 import { addBoard, getBoardById, reopenBoards, setCurrentBoard } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
-import { UIAction } from './types';
-import { ACTION_IDS, EDIT_DL_BOARD_ID } from '../constants';
-import { DistributionList } from '../model/distribution-list';
-import { EditDLBoardContext } from '../views/board/edit-dl-board';
+import { UIAction } from 'actions/types';
+import { ACTION_IDS, EDIT_DL_BOARD_ID } from 'constants/index';
+import { DistributionList } from 'model/distribution-list';
+import { EditDLBoardContext } from 'views/board/edit-dl-board';
 
 export type EditDLAction = UIAction<
 	Pick<DistributionList, 'email' | 'displayName' | 'id'>,

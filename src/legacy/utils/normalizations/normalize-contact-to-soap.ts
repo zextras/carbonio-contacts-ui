@@ -12,8 +12,8 @@ import {
 	ContactEmailMap,
 	ContactPhoneMap,
 	ContactUrlMap
-} from '../../types/contact';
-import { CreateContactRequestAttr, ModifyContactRequestAttr } from '../../types/soap';
+} from 'legacy/types/contact';
+import { CreateContactRequestAttr, ModifyContactRequestAttr } from 'legacy/types/soap';
 
 export function normalizeContactMailsToSoapOp(mails: ContactEmailMap): any {
 	return reduce(

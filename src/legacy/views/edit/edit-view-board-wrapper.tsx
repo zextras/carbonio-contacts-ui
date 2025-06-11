@@ -7,8 +7,8 @@ import React, { FC, useCallback } from 'react';
 
 import { useBoardHooks } from '@zextras/carbonio-shell-ui';
 
-import EditView from './edit-view';
-import { EditViewProps } from '../../types/views/edit-view';
+import EditView from 'legacy/views/edit/edit-view';
+import { EditViewProps } from 'legacy/types/views/edit-view';
 
 const EditViewBoardWrapper: FC = () => {
 	const boardUtilities = useBoardHooks();

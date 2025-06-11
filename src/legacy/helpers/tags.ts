@@ -7,7 +7,7 @@
 import { ZIMBRA_STANDARD_COLORS, Tag, Tags } from '@zextras/carbonio-ui-commons';
 import { includes, reduce } from 'lodash';
 
-import { Contact } from '../types/contact';
+import { Contact } from 'legacy/types/contact';
 
 export function getTagsArray(tagsMap: Tags, itemTags: Contact['tags']): Array<Tag> {
 	return reduce(

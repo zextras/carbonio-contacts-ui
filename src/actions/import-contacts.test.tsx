@@ -6,8 +6,8 @@
 import { faker } from '@faker-js/faker';
 import { FOLDER_VIEW, FOLDERS } from '@zextras/carbonio-ui-commons';
 
-import { useActionImportContacts } from './import-contacts';
-import { UIAction } from './types';
+import { useActionImportContacts } from 'actions/import-contacts';
+import { UIAction } from 'actions/types';
 import { setupHook } from '@test-setup';
 import { generateFolder } from '@test-utils/folders/folders-generator';
 

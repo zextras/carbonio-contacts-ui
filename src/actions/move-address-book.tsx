@@ -9,10 +9,10 @@ import { useModal, useSnackbar } from '@zextras/carbonio-design-system';
 import { isLink, isSystemFolder, isWriteAllowed, Folder } from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 
-import { UIAction } from './types';
-import { AddressBookMoveModal } from '../components/modals/address-book-move';
-import { ACTION_IDS, TIMEOUTS } from '../constants';
-import { apiClient } from '../network/api-client';
+import { UIAction } from 'actions/types';
+import { AddressBookMoveModal } from 'components/modals/address-book-move';
+import { ACTION_IDS, TIMEOUTS } from 'constants/index';
+import { apiClient } from 'network/api-client';
 
 export type MoveAddressBookAction = UIAction<
 	{ addressBook?: Folder; newParentAddressBook?: Folder },

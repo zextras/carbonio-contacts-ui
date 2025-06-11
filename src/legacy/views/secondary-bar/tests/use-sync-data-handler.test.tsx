@@ -10,7 +10,7 @@ import { SoapNotify, useRefresh } from '@zextras/carbonio-shell-ui';
 import { useFolderStore, folderWorker } from '@zextras/carbonio-ui-commons';
 import { http } from 'msw';
 
-import { useSyncDataHandler } from '../use-sync-data-handler';
+import { useSyncDataHandler } from 'legacy/views/secondary-bar/use-sync-data-handler';
 import { getSetupServer } from '@jest-setup';
 import { useNotify } from '@test-utils/carbonio-shell-ui/carbonio-shell-ui';
 import { generateFolder } from '@test-utils/folders/folders-generator';

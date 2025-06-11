@@ -9,14 +9,14 @@ import { useSnackbar } from '@zextras/carbonio-design-system';
 import { difference, xor } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { useGetContactGroupFromBoardId } from '../../../hooks/use-get-contact-group-from-board-id';
-import { addContactsToStore } from '../../../legacy/store/contacts';
-import { ContactGroup } from '../../../model/contact-group';
-import { modifyContactGroup } from '../../../network/api/modify-contact';
+import { useGetContactGroupFromBoardId } from 'hooks/use-get-contact-group-from-board-id';
+import { addContactsToStore } from 'legacy/store/contacts';
+import { ContactGroup } from 'model/contact-group';
+import { modifyContactGroup } from 'network/api/modify-contact';
 import {
 	CommonContactGroupBoard,
 	isContactGroupNameInvalid
-} from '../../board/common-contact-group-board';
+} from 'views/board/common-contact-group-board';
 
 const InnerEditContactGroupBoard = ({
 	contactGroup

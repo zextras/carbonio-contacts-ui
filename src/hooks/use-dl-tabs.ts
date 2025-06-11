@@ -8,7 +8,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { TabBarProps } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
-import { DL_TABS } from '../constants';
+import { DL_TABS } from 'constants/index';
 
 type UseDLTabsReturnType = {
 	items: TabBarProps['items'];

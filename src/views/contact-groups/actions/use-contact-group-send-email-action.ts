@@ -7,10 +7,10 @@ import { useCallback, useMemo } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { useActionSendEmail } from '../../../actions/send-email';
-import { Action } from '../../../actions/types';
-import { SEND_EMAIL_ACTION } from '../../../constants/actions';
-import { ContactGroup } from '../../../model/contact-group';
+import { useActionSendEmail } from 'actions/send-email';
+import { Action } from 'actions/types';
+import { SEND_EMAIL_ACTION } from 'constants/actions';
+import { ContactGroup } from 'model/contact-group';
 
 export const useContactGroupSendEmailAction = (contactGroup: ContactGroup): Action => {
 	const [t] = useTranslation();

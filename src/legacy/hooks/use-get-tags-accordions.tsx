@@ -25,8 +25,8 @@ import {
 import { reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { createTag, useGetTagsActions } from '../ui-actions/tag-actions';
-import { ItemType, TagsAccordionItems } from '../views/secondary-bar/parts/tags/types';
+import { createTag, useGetTagsActions } from 'legacy/ui-actions/tag-actions';
+import { ItemType, TagsAccordionItems } from 'legacy/views/secondary-bar/parts/tags/types';
 
 type ItemProps = {
 	item: ItemType;

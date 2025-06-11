@@ -16,11 +16,11 @@ import {
 } from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 
-import { ItemType } from './types';
-import { contactAction } from '../../../../store/actions/contact-action';
-import { Contact } from '../../../../types/contact';
-import ModalFooter from '../../commons/modal-footer';
-import { ModalHeader } from '../../commons/modal-header';
+import { ItemType } from 'legacy/views/secondary-bar/parts/tags/types';
+import { contactAction } from 'legacy/store/actions/contact-action';
+import { Contact } from 'legacy/types/contact';
+import ModalFooter from 'legacy/views/secondary-bar/commons/modal-footer';
+import { ModalHeader } from 'legacy/views/secondary-bar/commons/modal-header';
 
 type ComponentProps = {
 	onClose: () => void;

@@ -17,10 +17,10 @@ import {
 	RemoteContactResponse,
 	ContactInputGroup,
 	ContactInputItemInternalValue
-} from '../types';
-import { Hint } from './hint';
-import { HintGroup } from './hint-group';
-import type { FullAutocompleteRequest, SearchContactsResponse } from '../../types/contact';
+} from 'legacy/integrations/types';
+import { Hint } from 'legacy/integrations/parts/hint';
+import { HintGroup } from 'legacy/integrations/parts/hint-group';
+import type { FullAutocompleteRequest, SearchContactsResponse } from 'legacy/types/contact';
 
 export function isContactGroup(contact: {
 	isGroup?: boolean;

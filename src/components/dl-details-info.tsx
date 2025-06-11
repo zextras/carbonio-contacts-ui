@@ -7,10 +7,10 @@ import React, { useCallback } from 'react';
 
 import { Container, ContainerProps, IconButton, Row } from '@zextras/carbonio-design-system';
 
-import { CustomIconAvatar } from './styled-components';
-import { Text } from './Text';
-import { useActionCopyToClipboard } from '../actions/copy-to-clipboard';
-import { DistributionList } from '../model/distribution-list';
+import { CustomIconAvatar } from 'components/styled-components';
+import { Text } from 'components/Text';
+import { useActionCopyToClipboard } from 'actions/copy-to-clipboard';
+import { DistributionList } from 'model/distribution-list';
 
 export const DLDetailsInfo = ({
 	displayName,

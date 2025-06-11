@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { MakeRequired, NameSpace } from '../../types/utils';
+import { MakeRequired, NameSpace } from 'types/utils';
 
 export type IFolderView =
 	| 'search folder'

@@ -9,12 +9,12 @@ import { useSnackbar } from '@zextras/carbonio-design-system';
 import { Folder } from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 
-import { TIMEOUTS } from '../../constants';
-import { MOVE_ACTION } from '../../constants/actions';
-import { ContactOrGroup } from '../../legacy/types/contact';
-import { apiClient } from '../../network/api-client';
-import { Action } from '../types';
-import { useSelectFolderAction } from '../use-select-folder-action';
+import { TIMEOUTS } from 'constants/index';
+import { MOVE_ACTION } from 'constants/actions';
+import { ContactOrGroup } from 'legacy/types/contact';
+import { apiClient } from 'network/api-client';
+import { Action } from 'actions/types';
+import { useSelectFolderAction } from 'actions/use-select-folder-action';
 
 export const useMoveContacts = (contacts: Array<ContactOrGroup>, modalTitle: string): Action => {
 	const [t] = useTranslation();

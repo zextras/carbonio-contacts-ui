@@ -7,8 +7,8 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 
-import EditViewBoardWrapper from './edit-view-board-wrapper';
-import { registerCreateContactHandler } from '../../tests/msw/create-contact';
+import EditViewBoardWrapper from 'legacy/views/edit/edit-view-board-wrapper';
+import { registerCreateContactHandler } from 'legacy/tests/msw/create-contact';
 import { screen, setupTest } from '@test-setup';
 import { useBoardHooks } from '@test-utils/carbonio-shell-ui/carbonio-shell-ui';
 import { populateFoldersStore } from '@test-utils/store/folders';

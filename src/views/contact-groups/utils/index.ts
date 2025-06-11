@@ -6,7 +6,7 @@
 
 import { getFolderIdParts, getFolder, getFoldersMap, Folder } from '@zextras/carbonio-ui-commons';
 
-import { ContactGroup } from '../../../model/contact-group';
+import { ContactGroup } from 'model/contact-group';
 
 export function getFolderFromContactGroup(contactGroup: ContactGroup): Folder | undefined {
 	const foldersMap = getFoldersMap();

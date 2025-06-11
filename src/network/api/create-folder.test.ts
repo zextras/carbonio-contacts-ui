@@ -8,7 +8,7 @@ import { faker } from '@faker-js/faker';
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 import { FOLDERS, JSNS } from '@zextras/carbonio-ui-commons';
 
-import { createFolder, CreateFolderParams } from './create-folder';
+import { createFolder, CreateFolderParams } from 'network/api/create-folder';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 describe('Create folder', () => {

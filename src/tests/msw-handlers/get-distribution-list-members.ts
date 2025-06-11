@@ -10,8 +10,8 @@ import { HttpResponse, HttpResponseResolver, http } from 'msw';
 import {
 	GetDistributionListMembersRequest,
 	GetDistributionListMembersResponse
-} from '../../network/api/get-distribution-list-members';
-import { buildSoapError, buildSoapResponse } from '../utils';
+} from 'network/api/get-distribution-list-members';
+import { buildSoapError, buildSoapResponse } from 'tests/utils';
 import { getSetupServer } from '@jest-setup';
 
 type GetDistributionListMembersHandler = HttpResponseResolver<

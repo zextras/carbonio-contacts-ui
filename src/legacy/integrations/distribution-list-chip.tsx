@@ -16,11 +16,11 @@ import { debounce, DebouncedFuncLeading, map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { ContactInputDistributionList } from './types';
-import { ACTION_IDS, DL_MEMBERS_LOAD_LIMIT } from '../../constants';
-import { useGetDistributionList } from '../../hooks/use-get-distribution-list';
-import { useGetDistributionListMembers } from '../../hooks/use-get-distribution-list-members';
-import type { DistributionListMembersPage } from '../../model/distribution-list';
+import { ContactInputDistributionList } from 'legacy/integrations/types';
+import { ACTION_IDS, DL_MEMBERS_LOAD_LIMIT } from 'constants/index';
+import { useGetDistributionList } from 'hooks/use-get-distribution-list';
+import { useGetDistributionListMembers } from 'hooks/use-get-distribution-list-members';
+import type { DistributionListMembersPage } from 'model/distribution-list';
 
 const StyledChip = styled(Chip)`
 	cursor: default;

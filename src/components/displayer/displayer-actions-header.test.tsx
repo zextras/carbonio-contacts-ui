@@ -9,7 +9,7 @@ import { faker } from '@faker-js/faker';
 import { Button } from '@zextras/carbonio-design-system';
 import { times } from 'lodash';
 
-import { DisplayerActionsHeader } from './displayer-actions-header';
+import { DisplayerActionsHeader } from 'components/displayer/displayer-actions-header';
 import { screen, setupTest } from '@test-setup';
 
 describe('Contact group displayer header actions', () => {

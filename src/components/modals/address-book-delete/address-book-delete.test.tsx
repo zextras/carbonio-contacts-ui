@@ -10,8 +10,8 @@ import { act } from '@testing-library/react';
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
 
-import { AddressBookDeleteModal } from './address-book-delete';
-import { TESTID_SELECTORS } from '../../../constants/tests';
+import { AddressBookDeleteModal } from 'components/modals/address-book-delete/address-book-delete';
+import { TESTID_SELECTORS } from 'constants/tests';
 import { screen, setupTest } from '@test-setup';
 import { generateFolder } from '@test-utils/folders/folders-generator';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';

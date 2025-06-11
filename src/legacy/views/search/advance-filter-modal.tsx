@@ -21,10 +21,10 @@ import { ZIMBRA_STANDARD_COLORS, getTags } from '@zextras/carbonio-ui-commons';
 import { TFunction } from 'i18next';
 import { concat, filter, map } from 'lodash';
 
-import KeywordRow, { KeywordState } from './parts/keyword-row';
-import TagRow from './parts/tag-row';
-import ToggleFilters from './parts/toggle-filters';
-import type { Query } from './search-types';
+import KeywordRow, { KeywordState } from 'legacy/views/search/parts/keyword-row';
+import TagRow from 'legacy/views/search/parts/tag-row';
+import ToggleFilters from 'legacy/views/search/parts/toggle-filters';
+import type { Query } from 'legacy/views/search/search-types';
 
 export type AdvancedFilterModalProps = {
 	open: boolean;

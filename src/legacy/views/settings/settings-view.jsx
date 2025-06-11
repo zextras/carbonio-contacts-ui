@@ -10,8 +10,8 @@ import { useUserSettings, editSettings, SettingsHeader } from '@zextras/carbonio
 import { useUpdateView } from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 
-import { differenceObject } from './components/utils';
-import OptionsSettingsView from './options-settings-view';
+import { differenceObject } from 'legacy/views/settings/components/utils';
+import OptionsSettingsView from 'legacy/views/settings/options-settings-view';
 
 export default function ContactSettingsView() {
 	const [t] = useTranslation();

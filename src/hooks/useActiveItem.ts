@@ -7,7 +7,7 @@ import { useCallback, useEffect, useRef } from 'react';
 
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { RouteParams, ROUTES_INTERNAL_PARAMS } from '../constants';
+import { RouteParams, ROUTES_INTERNAL_PARAMS } from 'constants/index';
 
 export type UseActiveItemReturnType = {
 	activeItem: string | undefined;

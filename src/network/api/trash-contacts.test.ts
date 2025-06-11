@@ -6,8 +6,8 @@
 
 import { JSNS } from '@zextras/carbonio-ui-commons';
 
-import { FolderActionRequest } from './folder-action';
-import { trashContacts } from './trash-contacts';
+import { FolderActionRequest } from 'network/api/folder-action';
+import { trashContacts } from 'network/api/trash-contacts';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 describe('Trash contacts', () => {

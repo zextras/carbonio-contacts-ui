@@ -9,7 +9,7 @@ import React from 'react';
 import { Container, Icon, Padding } from '@zextras/carbonio-design-system';
 import styled from 'styled-components';
 
-import { Text } from './Text';
+import { Text } from 'components/Text';
 
 type EmptyDisplayerProps = {
 	icon?: string;

@@ -7,8 +7,8 @@ import { FOLDERS } from '@zextras/carbonio-ui-commons';
 import type { TFunction } from 'i18next';
 import { reduce } from 'lodash';
 
-import { ContactGroup } from '../../model/contact-group';
-import { ContactOrGroup, ContactsFolder } from '../types/contact';
+import { ContactGroup } from 'model/contact-group';
+import { ContactOrGroup, ContactsFolder } from 'legacy/types/contact';
 
 const folderIdRegex = /^(.+:)*(\d+)$/;
 

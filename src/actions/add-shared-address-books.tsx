@@ -8,9 +8,9 @@ import React, { useCallback, useMemo } from 'react';
 import { useModal } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
-import { UIAction } from './types';
-import { SharedAddressBooksAddModal } from '../components/modals/shared-address-books-add/shared-address-books-add-modal';
-import { ACTION_IDS } from '../constants';
+import { UIAction } from 'actions/types';
+import { SharedAddressBooksAddModal } from 'components/modals/shared-address-books-add/shared-address-books-add-modal';
+import { ACTION_IDS } from 'constants/index';
 
 export type AddSharedAddressBooksAction = UIAction<never, never>;
 

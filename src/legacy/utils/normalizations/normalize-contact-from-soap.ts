@@ -15,7 +15,7 @@ import {
 	filter
 } from 'lodash';
 
-import { ContactGroup } from '../../../model/contact-group';
+import { ContactGroup } from 'model/contact-group';
 import {
 	Contact,
 	ContactAddress,
@@ -27,8 +27,8 @@ import {
 	ContactPhoneType,
 	ContactUrlMap,
 	ContactUrlType
-} from '../../types/contact';
-import { PartialSoapContactWithId, SoapContact } from '../../types/soap';
+} from 'legacy/types/contact';
+import { PartialSoapContactWithId, SoapContact } from 'legacy/types/soap';
 
 const MAIL_REG = /^email(\d*)$/;
 const PHONE_REG = /^(.*)Phone(\d*)$/;

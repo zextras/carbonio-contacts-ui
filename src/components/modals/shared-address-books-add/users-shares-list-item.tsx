@@ -18,9 +18,9 @@ import {
 } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
-import { SharesListItem } from './shares-list-item';
-import { ShareInfo } from '../../../model/share-info';
-import { HoverRow } from '../../styled-components';
+import { SharesListItem } from 'components/modals/shared-address-books-add/shares-list-item';
+import { ShareInfo } from 'model/share-info';
+import { HoverRow } from 'components/styled-components';
 
 export type UsersSharesListItemProps = {
 	shares: Array<ShareInfo>;

@@ -9,7 +9,7 @@ import React from 'react';
 import { testUtils } from '@zextras/carbonio-shell-ui';
 
 // import { populateContact } from '../../mocks/populate-contact';
-import ContactPreviewContent from './contact-preview-content';
+import ContactPreviewContent from 'legacy/views/preview/contact-preview-content';
 
 describe('Contact Preview Content', () => {
 	let prevWidth;

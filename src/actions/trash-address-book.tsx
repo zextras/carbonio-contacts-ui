@@ -9,9 +9,9 @@ import { useModal } from '@zextras/carbonio-design-system';
 import { isLink, isSystemFolder, isNestedInTrash, Folder } from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 
-import { UIAction } from './types';
-import { AddressBookTrashModal } from '../components/modals/address-book-trash/address-book-trash';
-import { ACTION_IDS } from '../constants';
+import { UIAction } from 'actions/types';
+import { AddressBookTrashModal } from 'components/modals/address-book-trash/address-book-trash';
+import { ACTION_IDS } from 'constants/index';
 
 export type TrashAddressBookAction = UIAction<Folder, Folder>;
 

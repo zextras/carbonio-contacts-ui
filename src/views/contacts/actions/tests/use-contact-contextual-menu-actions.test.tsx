@@ -14,10 +14,10 @@ import {
 	RESTORE_ACTION,
 	SEND_EMAIL_ACTION,
 	TRASH_ACTION
-} from '../../../../constants/actions';
-import { buildContact } from '../../../../tests/model-builder';
-import { generateLinkFolder } from '../../../contact-groups/tests/utils';
-import { useContactContextualMenuActions } from '../use-contact-contextual-menu-actions';
+} from 'constants/actions';
+import { buildContact } from 'tests/model-builder';
+import { generateLinkFolder } from 'views/contact-groups/tests/utils';
+import { useContactContextualMenuActions } from 'views/contacts/actions/use-contact-contextual-menu-actions';
 import { setupHook } from '@test-setup';
 import { populateFoldersStore } from '@test-utils/store/folders';
 

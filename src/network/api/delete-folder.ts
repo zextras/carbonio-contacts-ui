@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { folderAction } from './folder-action';
+import { folderAction } from 'network/api/folder-action';
 
 export const deleteFolder = (folderId: string): Promise<void> =>
 	folderAction({ folderId, operation: 'delete' });

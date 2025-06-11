@@ -6,8 +6,8 @@
 import { ErrorSoapBodyResponse, soapFetch } from '@zextras/carbonio-shell-ui';
 import { JSNS } from '@zextras/carbonio-ui-commons';
 
-import { CnItem, GenericSoapPayload } from './types';
-import { ContactGroup } from '../../model/contact-group';
+import { CnItem, GenericSoapPayload } from 'network/api/types';
+import { ContactGroup } from 'model/contact-group';
 
 export type ModifyContactAttribute = { n: 'fullName' | 'nickname' | 'fileAs'; _content: string };
 

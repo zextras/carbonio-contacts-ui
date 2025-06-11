@@ -8,12 +8,12 @@ import { JSNS } from '@zextras/carbonio-ui-commons';
 import { map } from 'lodash';
 import { http, HttpResponse, HttpResponseResolver } from 'msw';
 
-import { DistributionList } from '../../model/distribution-list';
+import { DistributionList } from 'model/distribution-list';
 import {
 	GetDistributionListRequest,
 	GetDistributionListResponse
-} from '../../network/api/get-distribution-list';
-import { buildSoapError, buildSoapResponse } from '../utils';
+} from 'network/api/get-distribution-list';
+import { buildSoapError, buildSoapResponse } from 'tests/utils';
 import { getSetupServer } from '@jest-setup';
 
 type GetDistributionListHandler = HttpResponseResolver<

@@ -12,13 +12,13 @@ import {
 	JSNS
 } from '@zextras/carbonio-ui-commons';
 
-import { TESTID_SELECTORS } from '../../../constants/tests';
+import { TESTID_SELECTORS } from 'constants/tests';
 import {
 	GetDistributionListRequest,
 	GetDistributionListResponse
-} from '../../../network/api/get-distribution-list';
-import { FullAutocompleteRequest, FullAutocompleteResponse } from '../../types/contact';
-import { GetContactsRequest, GetContactsResponse } from '../../types/soap';
+} from 'network/api/get-distribution-list';
+import { FullAutocompleteRequest, FullAutocompleteResponse } from 'legacy/types/contact';
+import { GetContactsRequest, GetContactsResponse } from 'legacy/types/soap';
 import { screen, UserEvent } from '@test-setup';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 

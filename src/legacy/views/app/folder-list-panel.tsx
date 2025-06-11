@@ -8,8 +8,8 @@ import React, { Suspense } from 'react';
 import { Container } from '@zextras/carbonio-design-system';
 import { Route, Routes } from 'react-router-dom';
 
-import { FolderPanelWrapper } from './folder-panel-wrapper';
-import { Spinner } from '../../../components/Spinner';
+import { FolderPanelWrapper } from 'legacy/views/app/folder-panel-wrapper';
+import { Spinner } from 'components/Spinner';
 
 export const FolderListPanel = (): React.JSX.Element => (
 	<Routes>

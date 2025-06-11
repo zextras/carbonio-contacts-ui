@@ -6,7 +6,7 @@
 import { faker } from '@faker-js/faker';
 import { JSNS } from '@zextras/carbonio-ui-commons';
 
-import { updateFolder, UpdateFolderParams } from './update-folder';
+import { updateFolder, UpdateFolderParams } from 'network/api/update-folder';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 describe('updateFolder', () => {

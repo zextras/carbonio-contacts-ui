@@ -7,10 +7,10 @@
 import { act } from '@testing-library/react';
 import { FOLDERS } from '@zextras/carbonio-ui-commons';
 
-import { UIAction } from '../../../../actions/types';
-import { FOLDERS_DESCRIPTORS, TIMERS } from '../../../../constants/tests';
-import { buildContact } from '../../../../tests/model-builder';
-import { useContactRestoreAction } from '../use-contact-restore-action';
+import { UIAction } from 'actions/types';
+import { FOLDERS_DESCRIPTORS, TIMERS } from 'constants/tests';
+import { buildContact } from 'tests/model-builder';
+import { useContactRestoreAction } from 'views/contacts/actions/use-contact-restore-action';
 import { setupHook, screen } from '@test-setup';
 import { populateFoldersStore } from '@test-utils/store/folders';
 

@@ -9,7 +9,7 @@ import React, { useMemo } from 'react';
 import { type Action as DSAction, CollapsingActions } from '@zextras/carbonio-design-system';
 import { map } from 'lodash';
 
-import { HoverBarContainer } from './styled-components';
+import { HoverBarContainer } from 'components/styled-components';
 
 interface ListItemHoverBarProps extends React.ComponentPropsWithoutRef<typeof HoverBarContainer> {
 	actions?: DSAction[];

@@ -6,7 +6,7 @@
 import { faker } from '@faker-js/faker';
 import { JSNS } from '@zextras/carbonio-ui-commons';
 
-import { trashFolder } from './trash-folder';
+import { trashFolder } from 'network/api/trash-folder';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 describe('trashFolder', () => {

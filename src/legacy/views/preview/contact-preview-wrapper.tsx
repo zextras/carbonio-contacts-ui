@@ -7,9 +7,9 @@ import React from 'react';
 
 import { useParams } from 'react-router-dom';
 
-import { ContactPreviewPanel } from './contact-preview-panel';
-import { useContactById } from '../../store/contacts';
-import ContactsEmptyDisplayer from '../app/contacts-empty-displayer';
+import { ContactPreviewPanel } from 'legacy/views/preview/contact-preview-panel';
+import { useContactById } from 'legacy/store/contacts';
+import ContactsEmptyDisplayer from 'legacy/views/app/contacts-empty-displayer';
 
 export const ContactPreviewWrapper = (): React.JSX.Element => {
 	const { contactId } = useParams<{ folderId: string; contactId: string }>();

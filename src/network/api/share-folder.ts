@@ -7,9 +7,9 @@ import { soapFetch } from '@zextras/carbonio-shell-ui';
 import { JSNS } from '@zextras/carbonio-ui-commons';
 import { isArray } from 'lodash';
 
-import { FolderActionRequest, FolderActionResponse } from './folder-action';
-import { GenericSoapPayload } from './types';
-import { SoapFault } from '../../types/utils';
+import { FolderActionRequest, FolderActionResponse } from 'network/api/folder-action';
+import { GenericSoapPayload } from 'network/api/types';
+import { SoapFault } from 'types/utils';
 
 export interface BatchShareFolderRequest extends GenericSoapPayload<typeof JSNS.ALL> {
 	FolderActionRequest: Array<FolderActionRequest>;

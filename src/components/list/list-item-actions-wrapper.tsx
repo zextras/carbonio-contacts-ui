@@ -8,7 +8,7 @@ import React, { ReactNode, useCallback } from 'react';
 import { Action, Container } from '@zextras/carbonio-design-system';
 import styled from 'styled-components';
 
-import { ContextualMenu } from '../contextual-menu';
+import { ContextualMenu } from 'components/contextual-menu';
 
 export const HoverBarContainer = styled(Container)`
 	top: 0;

@@ -9,10 +9,10 @@ import { act } from '@testing-library/react';
 import { FOLDERS, isLink, isTrashed, getRootsArray } from '@zextras/carbonio-ui-commons';
 import { times } from 'lodash';
 
-import { ContactMoveModal } from './contact-move';
-import { TESTID_SELECTORS } from '../../constants/tests';
-import { buildContact } from '../../tests/model-builder';
-import { getFoldersArray } from '../../tests/utils';
+import { ContactMoveModal } from 'components/modals/contact-move';
+import { TESTID_SELECTORS } from 'constants/tests';
+import { buildContact } from 'tests/model-builder';
+import { getFoldersArray } from 'tests/utils';
 import { makeListItemsVisible, screen, setupTest, within } from '@test-setup';
 import { populateFoldersStore } from '@test-utils/store/folders';
 

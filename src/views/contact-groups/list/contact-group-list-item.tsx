@@ -8,14 +8,14 @@ import React, { DragEvent, useCallback, useMemo } from 'react';
 import { Drag } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
-import { ListActionIconButton } from '../../../components/list/list-action-icon-button';
-import { ListItemActionsWrapper } from '../../../components/list/list-item-actions-wrapper';
-import { ListItemAvatar } from '../../../components/list/list-item-avatar';
-import { ListItemContent } from '../../../components/list/list-item-content';
-import { Text } from '../../../components/Text';
-import { ContactGroup } from '../../../model/contact-group';
-import { useContactGroupActions } from '../actions/use-contact-group-actions';
-import { useRedirectToContactGroup } from '../navigation';
+import { ListActionIconButton } from 'components/list/list-action-icon-button';
+import { ListItemActionsWrapper } from 'components/list/list-item-actions-wrapper';
+import { ListItemAvatar } from 'components/list/list-item-avatar';
+import { ListItemContent } from 'components/list/list-item-content';
+import { Text } from 'components/Text';
+import { ContactGroup } from 'model/contact-group';
+import { useContactGroupActions } from 'views/contact-groups/actions/use-contact-group-actions';
+import { useRedirectToContactGroup } from 'views/contact-groups/navigation';
 
 type CGListItemProps = {
 	contactGroup: ContactGroup;

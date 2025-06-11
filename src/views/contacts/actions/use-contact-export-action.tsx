@@ -8,13 +8,13 @@ import { useCallback, useMemo } from 'react';
 import { useSnackbar } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
-import { Action } from '../../../actions/types';
-import { TIMEOUTS } from '../../../constants';
-import { EXPORT_CONTACT_ACTION } from '../../../constants/actions';
-import { redirectToBlob } from '../../../helpers/download';
-import { getDisplayName } from '../../../legacy/hooks/use-display-name';
-import { Contact } from '../../../legacy/types/contact';
-import { apiClient } from '../../../network/api-client';
+import { Action } from 'actions/types';
+import { TIMEOUTS } from 'constants/index';
+import { EXPORT_CONTACT_ACTION } from 'constants/actions';
+import { redirectToBlob } from 'helpers/download';
+import { getDisplayName } from 'legacy/hooks/use-display-name';
+import { Contact } from 'legacy/types/contact';
+import { apiClient } from 'network/api-client';
 
 const FILENAME_EXTENSION = 'vcf';
 const MIME_TYPE = 'text/vcard';

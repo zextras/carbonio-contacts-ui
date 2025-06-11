@@ -24,12 +24,12 @@ import { ContactInputValue, Grant, useFolder, OnChangeSelect } from '@zextras/ca
 import { replace, split } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { GranteeInfo } from './share-folder-properties';
-import { TIMEOUTS } from '../../../constants';
-import { ContactInput } from '../../../legacy/integrations/contact-input';
-import { capitalise } from '../../../legacy/views/secondary-bar/utils';
-import { apiClient } from '../../../network/api-client';
-import { getRoleDescription, getShareFolderRoleOptions } from '../shares-utils';
+import { GranteeInfo } from 'components/modals/address-book-edit/share-folder-properties';
+import { TIMEOUTS } from 'constants/index';
+import { ContactInput } from 'legacy/integrations/contact-input';
+import { capitalise } from 'legacy/views/secondary-bar/utils';
+import { apiClient } from 'network/api-client';
+import { getRoleDescription, getShareFolderRoleOptions } from 'components/modals/shares-utils';
 
 export type ShareFolderModalProps = {
 	onClose: () => void;

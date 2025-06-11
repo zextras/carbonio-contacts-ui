@@ -9,18 +9,18 @@ import { useMemo } from 'react';
 import { Action } from '@zextras/carbonio-design-system';
 import { Folder } from '@zextras/carbonio-ui-commons';
 
-import { useActionCreateAddressBook } from '../../../../actions/create-address-book';
-import { useActionDeleteAddressBook } from '../../../../actions/delete-address-book';
-import { useActionEditAddressBook } from '../../../../actions/edit-address-book';
-import { useActionEmptyAddressBook } from '../../../../actions/empty-address-book';
-import { useActionEmptyTrash } from '../../../../actions/empty-trash';
-import { useActionExportAddressBook } from '../../../../actions/export-address-book';
-import { useActionImportContacts } from '../../../../actions/import-contacts';
-import { useActionMoveAddressBook } from '../../../../actions/move-address-book';
-import { useActionRemoveAddressBookLink } from '../../../../actions/remove-address-book-link';
-import { useActionShowShareInfo } from '../../../../actions/show-share-info';
-import { useActionTrashAddressBook } from '../../../../actions/trash-address-book';
-import { UIAction } from '../../../../actions/types';
+import { useActionCreateAddressBook } from 'actions/create-address-book';
+import { useActionDeleteAddressBook } from 'actions/delete-address-book';
+import { useActionEditAddressBook } from 'actions/edit-address-book';
+import { useActionEmptyAddressBook } from 'actions/empty-address-book';
+import { useActionEmptyTrash } from 'actions/empty-trash';
+import { useActionExportAddressBook } from 'actions/export-address-book';
+import { useActionImportContacts } from 'actions/import-contacts';
+import { useActionMoveAddressBook } from 'actions/move-address-book';
+import { useActionRemoveAddressBookLink } from 'actions/remove-address-book-link';
+import { useActionShowShareInfo } from 'actions/show-share-info';
+import { useActionTrashAddressBook } from 'actions/trash-address-book';
+import { UIAction } from 'actions/types';
 
 const generateMenuAction = <T extends UIAction<EP, never>, EP>(
 	uiAction: T,

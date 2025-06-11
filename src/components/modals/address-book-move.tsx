@@ -9,9 +9,9 @@ import { Divider, ModalFooter, ModalHeader } from '@zextras/carbonio-design-syst
 import { useFolder, Folder } from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 
-import { ModalContentAndFooterWrapper } from './modal-content-and-footer-wrapper';
-import { ModalWrapper } from './modal-wrapper';
-import { FolderTreeSelector } from '../folder-tree-selector/folder-tree-selector';
+import { ModalContentAndFooterWrapper } from 'components/modals/modal-content-and-footer-wrapper';
+import { ModalWrapper } from 'components/modals/modal-wrapper';
+import { FolderTreeSelector } from 'components/folder-tree-selector/folder-tree-selector';
 
 export type AddressBookMoveModalProps = {
 	addressBookId: string;

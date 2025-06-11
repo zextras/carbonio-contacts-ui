@@ -19,9 +19,9 @@ import { useUserAccount } from '@zextras/carbonio-shell-ui';
 import { useFolder, Grant } from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 
-import { GranteeInfo } from './share-folder-properties';
-import { TIMEOUTS } from '../../../constants';
-import { apiClient } from '../../../network/api-client';
+import { GranteeInfo } from 'components/modals/address-book-edit/share-folder-properties';
+import { TIMEOUTS } from 'constants/index';
+import { apiClient } from 'network/api-client';
 
 export type ShareRevokeModalProps = {
 	addressBookId: string;
