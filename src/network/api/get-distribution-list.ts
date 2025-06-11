@@ -7,8 +7,8 @@ import { BooleanString, ErrorSoapBodyResponse, soapFetch } from '@zextras/carbon
 import { JSNS } from '@zextras/carbonio-ui-commons';
 import { filter, first, flatMap } from 'lodash';
 
-import { GenericSoapPayload } from './types';
-import { DistributionList, DistributionListOwner } from '../../model/distribution-list';
+import { GenericSoapPayload } from 'network/api/types';
+import { DistributionList, DistributionListOwner } from 'model/distribution-list';
 
 export interface GetDistributionListRequest extends GenericSoapPayload<typeof JSNS.ACCOUNT> {
 	dl: {

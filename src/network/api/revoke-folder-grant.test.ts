@@ -6,7 +6,7 @@
 import { faker } from '@faker-js/faker';
 import { JSNS } from '@zextras/carbonio-ui-commons';
 
-import { revokeFolderGrant } from './revoke-folder-grant';
+import { revokeFolderGrant } from 'network/api/revoke-folder-grant';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 describe('revokeFolderGrant', () => {

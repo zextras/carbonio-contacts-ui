@@ -7,9 +7,9 @@ import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
 
-import { useActionShowShareInfo } from './show-share-info';
-import { UIAction } from './types';
-import { TIMERS } from '../constants/tests';
+import { useActionShowShareInfo } from 'actions/show-share-info';
+import { UIAction } from 'actions/types';
+import { TIMERS } from 'constants/tests';
 import { screen, setupHook } from '@test-setup';
 import { generateFolder } from '@test-utils/folders/folders-generator';
 

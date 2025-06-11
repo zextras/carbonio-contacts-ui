@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { ContactGroup } from '../../../model/contact-group';
-import { CnItem } from '../../../network/api/types';
+import { ContactGroup } from 'model/contact-group';
+import { CnItem } from 'network/api/types';
 
 type ResponseJSON = { Body: { CreateContactResponse: { cn: Array<CnItem> } } };
 type ModifyContactRequest = {

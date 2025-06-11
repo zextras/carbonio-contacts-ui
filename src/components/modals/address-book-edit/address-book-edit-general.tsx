@@ -26,10 +26,10 @@ import {
 } from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 
-import { ShareFolderProperties } from './share-folder-properties';
-import { TIMEOUTS } from '../../../constants';
-import { getFolderTranslatedName } from '../../../legacy/utils/helpers';
-import { apiClient } from '../../../network/api-client';
+import { ShareFolderProperties } from 'components/modals/address-book-edit/share-folder-properties';
+import { TIMEOUTS } from 'constants/index';
+import { getFolderTranslatedName } from 'legacy/utils/helpers';
+import { apiClient } from 'network/api-client';
 
 export type AddressBookEditGeneralModalProps = {
 	addressBookId: string;

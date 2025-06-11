@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { ContactOrGroup } from '../../types/contact';
-import { SoapContact } from '../../types/soap';
+import { ContactOrGroup } from 'legacy/types/contact';
+import { SoapContact } from 'legacy/types/soap';
 
 export type SearchResults = {
 	contacts: Array<string>;

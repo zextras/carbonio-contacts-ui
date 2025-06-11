@@ -6,10 +6,10 @@
 
 import { act } from '@testing-library/react';
 
-import { UIAction } from '../../../../actions/types';
-import { buildContact } from '../../../../tests/model-builder';
-import { registerGetItemHandler } from '../../../../tests/msw-handlers/get-item';
-import { useContactExportAction } from '../use-contact-export-action';
+import { UIAction } from 'actions/types';
+import { buildContact } from 'tests/model-builder';
+import { registerGetItemHandler } from 'tests/msw-handlers/get-item';
+import { useContactExportAction } from 'views/contacts/actions/use-contact-export-action';
 import { screen, setupHook } from '@test-setup';
 
 describe('useActionExportContact', () => {

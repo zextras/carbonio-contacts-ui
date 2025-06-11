@@ -3,14 +3,14 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { ContactAddressType, ContactPhoneType, ContactUrlType } from './contact';
+import { ContactAddressType, ContactPhoneType, ContactUrlType } from 'legacy/types/contact';
 import {
 	normalizeContactMailsToSoapOp,
 	normalizeContactPhonesToSoapOp,
 	normalizeContactAddressesToSoapOp,
 	normalizeContactUrlsToSoapOp,
 	normalizeContactToSoap // todo: make new test normalizations
-} from '../utils/normalizations/normalize-contact-to-soap';
+} from 'legacy/utils/normalizations/normalize-contact-to-soap';
 
 describe('SOAP Utils', () => {
 	test('Normalize Contact Mails for SOAP Operation', () => {

@@ -8,7 +8,7 @@ import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 import { FOLDER_VIEW, JSNS } from '@zextras/carbonio-ui-commons';
 import { map } from 'lodash';
 
-import { getShareInfo, GetShareInfoResponse } from './get-share-info';
+import { getShareInfo, GetShareInfoResponse } from 'network/api/get-share-info';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 describe('GetShareInfo', () => {

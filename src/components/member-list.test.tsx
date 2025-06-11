@@ -8,8 +8,8 @@ import React from 'react';
 import { waitFor } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
 
-import { MemberList } from './member-list';
-import { TESTID_SELECTORS } from '../constants/tests';
+import { MemberList } from 'components/member-list';
+import { TESTID_SELECTORS } from 'constants/tests';
 import { screen, setupTest, within } from '@test-setup';
 
 describe('Member list', () => {

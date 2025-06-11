@@ -21,9 +21,9 @@ import { filter, startsWith } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { FlatFoldersAccordion } from './flat-folders-accordion';
-import { sortFolders } from '../../helpers/folders';
-import { getFolderTranslatedName } from '../../legacy/utils/helpers';
+import { FlatFoldersAccordion } from 'components/folder-tree-selector/flat-folders-accordion';
+import { sortFolders } from 'helpers/folders';
+import { getFolderTranslatedName } from 'legacy/utils/helpers';
 
 const ScrollableContainer = styled(Container)`
 	overflow-y: auto;

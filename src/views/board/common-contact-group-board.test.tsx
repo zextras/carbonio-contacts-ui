@@ -14,12 +14,12 @@ import { first, forEach, last, noop } from 'lodash';
 import {
 	CommonContactGroupBoard,
 	CommonContactGroupBoardProps
-} from './common-contact-group-board';
-import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../constants';
-import { PALETTE, TESTID_SELECTORS } from '../../constants/tests';
-import { buildContactGroup } from '../../tests/model-builder';
-import { registerFullAutocompleteHandler } from '../../tests/msw-handlers/full-autocomplete';
-import { spyUseBoardHooks } from '../../tests/utils';
+} from 'views/board/common-contact-group-board';
+import { CONTACT_GROUP_NAME_MAX_LENGTH } from 'constants/index';
+import { PALETTE, TESTID_SELECTORS } from 'constants/tests';
+import { buildContactGroup } from 'tests/model-builder';
+import { registerFullAutocompleteHandler } from 'tests/msw-handlers/full-autocomplete';
+import { spyUseBoardHooks } from 'tests/utils';
 import { setupTest, screen } from '@test-setup';
 
 export function getContactInput(): HTMLElement {

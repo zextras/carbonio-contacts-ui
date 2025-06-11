@@ -5,7 +5,7 @@
  */
 import { FOLDERS } from '@zextras/carbonio-ui-commons';
 
-import { isContacts, isEmailedContacts } from './folders';
+import { isContacts, isEmailedContacts } from 'helpers/folders';
 
 describe('Folders helpers', () => {
 	describe('isContacts', () => {

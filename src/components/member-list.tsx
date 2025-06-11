@@ -10,9 +10,9 @@ import { Container, Input, List, Text } from '@zextras/carbonio-design-system';
 import { filter, map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { FilterMembersIcon } from './filter-members-icon';
-import { loadingItems } from './loading-items';
-import { MemberDisplayerListItemComponent } from './member-displayer-list-item';
+import { FilterMembersIcon } from 'components/filter-members-icon';
+import { loadingItems } from 'components/loading-items';
+import { MemberDisplayerListItemComponent } from 'components/member-displayer-list-item';
 
 type MemberListProps = {
 	members: Array<string>;

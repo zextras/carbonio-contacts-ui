@@ -33,9 +33,9 @@ import { map, reduce, remove, some, uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { MemberListItemComponent } from '../../components/member-list-item';
-import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../constants';
-import { ContactInput } from '../../legacy/integrations/contact-input';
+import { MemberListItemComponent } from 'components/member-list-item';
+import { CONTACT_GROUP_NAME_MAX_LENGTH } from 'constants/index';
+import { ContactInput } from 'legacy/integrations/contact-input';
 
 export function isContactGroupNameInvalid(nameValue: string): boolean {
 	return nameValue.trim().length === 0 || nameValue.length > CONTACT_GROUP_NAME_MAX_LENGTH;

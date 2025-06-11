@@ -20,12 +20,12 @@ import { getFolderIdParts } from '@zextras/carbonio-ui-commons';
 import { last } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { UsersSharesList } from './users-shares-list';
-import { TIMEOUTS } from '../../../constants';
-import { getFolderTranslatedName } from '../../../legacy/utils/helpers';
-import { ShareInfo } from '../../../model/share-info';
-import { apiClient } from '../../../network/api-client';
-import { ScrollableContainer } from '../../styled-components';
+import { UsersSharesList } from 'components/modals/shared-address-books-add/users-shares-list';
+import { TIMEOUTS } from 'constants/index';
+import { getFolderTranslatedName } from 'legacy/utils/helpers';
+import { ShareInfo } from 'model/share-info';
+import { apiClient } from 'network/api-client';
+import { ScrollableContainer } from 'components/styled-components';
 
 export type SharesModalProps = {
 	onClose: () => void;

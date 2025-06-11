@@ -10,10 +10,10 @@ import { useTags } from '@zextras/carbonio-ui-commons';
 import { noop } from 'lodash';
 import { useNavigate } from 'react-router-dom';
 
-import { ListItemAvatar } from '../../../components/list/list-item-avatar';
-import { getTagsArray } from '../../helpers/tags';
-import { Contact } from '../../types/contact';
-import { ItemContent } from '../app/folder-panel/item-content';
+import { ListItemAvatar } from 'components/list/list-item-avatar';
+import { getTagsArray } from 'legacy/helpers/tags';
+import { Contact } from 'legacy/types/contact';
+import { ItemContent } from 'legacy/views/app/folder-panel/item-content';
 
 export const SearchContactListItem = ({ item }: { item: Contact }): React.JSX.Element => {
 	const tagsFromStore = useTags();

@@ -7,7 +7,7 @@ import React from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
 
-import { DisplayerHeader } from './displayer-header';
+import { DisplayerHeader } from 'components/displayer/displayer-header';
 
 type DisplayerProps = React.PropsWithChildren & {
 	title: string;

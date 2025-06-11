@@ -7,9 +7,9 @@ import React from 'react';
 
 import * as clipboard from '@zextras/carbonio-ui-commons';
 
-import { DLDetailsInfo } from './dl-details-info';
-import { TESTID_SELECTORS } from '../constants/tests';
-import { generateDistributionList } from '../tests/utils';
+import { DLDetailsInfo } from 'components/dl-details-info';
+import { TESTID_SELECTORS } from 'constants/tests';
+import { generateDistributionList } from 'tests/utils';
 import { screen, setupTest, within } from '@test-setup';
 
 jest.mock('@zextras/carbonio-ui-commons', () => ({

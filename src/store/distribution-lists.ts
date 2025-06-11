@@ -6,8 +6,8 @@
 import { sortBy, toLower } from 'lodash';
 import { create } from 'zustand';
 
-import { DistributionList } from '../model/distribution-list';
-import { MakeOptional } from '../types/utils';
+import { DistributionList } from 'model/distribution-list';
+import { MakeOptional } from 'types/utils';
 
 export type StoredDistributionList = MakeOptional<DistributionList, 'id'>;
 type State = {

@@ -10,7 +10,7 @@ import { setAppContext } from '@zextras/carbonio-shell-ui';
 import { useUpdateView } from '@zextras/carbonio-ui-commons';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-import { FolderView } from '../legacy/views/app/folder-view';
+import { FolderView } from 'legacy/views/app/folder-view';
 
 const ContactsView = (): React.JSX.Element => {
 	const [count, setCount] = useState(0);

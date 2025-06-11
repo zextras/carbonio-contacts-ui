@@ -8,8 +8,8 @@ import React, { useMemo } from 'react';
 import { Container, Padding, Text } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
-import { SearchResults } from './types';
-import { EmptyFieldMessages, EmptyListMessages } from './utils';
+import { SearchResults } from 'legacy/views/search/types';
+import { EmptyFieldMessages, EmptyListMessages } from 'legacy/views/search/utils';
 
 export const SearchContactsEmptyPanel = ({
 	searchResults

@@ -14,9 +14,9 @@ import {
 } from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 
-import { UIAction } from './types';
-import { AddressBookDeleteModal } from '../components/modals/address-book-delete/address-book-delete';
-import { ACTION_IDS } from '../constants';
+import { UIAction } from 'actions/types';
+import { AddressBookDeleteModal } from 'components/modals/address-book-delete/address-book-delete';
+import { ACTION_IDS } from 'constants/index';
 
 export type DeleteAddressBookAction = UIAction<Folder, Folder>;
 

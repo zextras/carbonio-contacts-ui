@@ -5,10 +5,10 @@
  */
 import { soapFetch } from '@zextras/carbonio-shell-ui';
 
-import { ModifyContactResponse } from '../../../network/api/modify-contact';
-import { Contact } from '../../types/contact';
-import { ModifyContactRequest, SoapContact } from '../../types/soap';
-import { normalizeContactToSoap } from '../../utils/normalizations/normalize-contact-to-soap';
+import { ModifyContactResponse } from 'network/api/modify-contact';
+import { Contact } from 'legacy/types/contact';
+import { ModifyContactRequest, SoapContact } from 'legacy/types/soap';
+import { normalizeContactToSoap } from 'legacy/utils/normalizations/normalize-contact-to-soap';
 
 export const modifyContact = async ({
 	updatedContact

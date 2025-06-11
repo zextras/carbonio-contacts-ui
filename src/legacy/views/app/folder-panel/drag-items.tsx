@@ -8,9 +8,9 @@ import React from 'react';
 
 import { find, map, reduce } from 'lodash';
 
-import { ContactListItem } from './contact-list-item';
-import { ContactGroupListItem } from '../../../../views/contact-groups/list/contact-group-list-item';
-import { ContactOrGroup } from '../../../types/contact';
+import { ContactListItem } from 'legacy/views/app/folder-panel/contact-list-item';
+import { ContactGroupListItem } from 'views/contact-groups/list/contact-group-list-item';
+import { ContactOrGroup } from 'legacy/types/contact';
 
 export const DragItems = ({
 	contacts,

@@ -7,9 +7,9 @@ import { useMemo } from 'react';
 
 import { Action as DSAction } from '@zextras/carbonio-design-system';
 
-import { useActionEditDL } from '../actions/edit-dl';
-import { useActionSendEmail } from '../actions/send-email';
-import { DistributionList } from '../model/distribution-list';
+import { useActionEditDL } from 'actions/edit-dl';
+import { useActionSendEmail } from 'actions/send-email';
+import { DistributionList } from 'model/distribution-list';
 
 export const useDLActions = (
 	distributionList: Pick<DistributionList, 'email' | 'displayName' | 'id' | 'isOwner'> | undefined

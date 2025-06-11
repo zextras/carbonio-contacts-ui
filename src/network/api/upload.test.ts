@@ -6,8 +6,8 @@
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 
-import { upload } from './upload';
-import { registerUploadHandler } from '../../tests/msw-handlers/upload';
+import { upload } from 'network/api/upload';
+import { registerUploadHandler } from 'tests/msw-handlers/upload';
 import { createFakeFile } from '@test-utils/utils/file';
 
 describe('Upload', () => {

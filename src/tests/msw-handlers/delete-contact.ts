@@ -11,8 +11,8 @@ import {
 	CONTACT_ACTION_OPERATION,
 	ContactActionRequest,
 	ContactActionResponse
-} from '../../network/api/contact-action';
-import { buildSoapError, buildSoapResponse } from '../utils';
+} from 'network/api/contact-action';
+import { buildSoapError, buildSoapResponse } from 'tests/utils';
 import { getSetupServer } from '@jest-setup';
 
 type DeleteContactHandler = HttpResponseResolver<

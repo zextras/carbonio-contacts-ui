@@ -5,7 +5,7 @@
  */
 import React from 'react';
 
-import { useSyncDataHandler } from './use-sync-data-handler';
+import { useSyncDataHandler } from 'legacy/views/secondary-bar/use-sync-data-handler';
 
 export const SyncDataHandler = (): React.JSX.Element => {
 	useSyncDataHandler();

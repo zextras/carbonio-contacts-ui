@@ -6,7 +6,7 @@
 import { isTrash } from '@zextras/carbonio-ui-commons';
 import { reduce } from 'lodash';
 
-import { ISoapFolderObj } from '../../types/soap';
+import { ISoapFolderObj } from 'legacy/types/soap';
 
 export const extractFolders = (accordions: ISoapFolderObj[]): ISoapFolderObj[] =>
 	reduce(

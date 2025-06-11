@@ -18,16 +18,16 @@ import { map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { Route, Routes } from 'react-router-dom';
 
-import AdvancedFilterModal from './advance-filter-modal';
-import { runSearch } from './run-search';
-import { SearchContactsEmptyPanel } from './search-contacts-empty-panel';
-import { SearchList } from './search-list';
-import { Query } from './search-types';
-import { SearchResults } from './types';
-import { ContactGroupDisplayerWrapper } from '../../../views/contact-groups/displayer/contact-group-displayer-wrapper';
-import { addContactsToStore, useContactsById } from '../../store/contacts';
-import ContactEditPanel from '../edit/contact-edit-panel';
-import { ContactPreviewWrapper } from '../preview/contact-preview-wrapper';
+import AdvancedFilterModal from 'legacy/views/search/advance-filter-modal';
+import { runSearch } from 'legacy/views/search/run-search';
+import { SearchContactsEmptyPanel } from 'legacy/views/search/search-contacts-empty-panel';
+import { SearchList } from 'legacy/views/search/search-list';
+import { Query } from 'legacy/views/search/search-types';
+import { SearchResults } from 'legacy/views/search/types';
+import { ContactGroupDisplayerWrapper } from 'views/contact-groups/displayer/contact-group-displayer-wrapper';
+import { addContactsToStore, useContactsById } from 'legacy/store/contacts';
+import ContactEditPanel from 'legacy/views/edit/contact-edit-panel';
+import { ContactPreviewWrapper } from 'legacy/views/preview/contact-preview-wrapper';
 
 const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 	const [query, updateQuery] = useQuery();

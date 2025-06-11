@@ -16,8 +16,8 @@ import {
 import { Folder } from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 
-import { TIMEOUTS } from '../../../constants';
-import { apiClient } from '../../../network/api-client';
+import { TIMEOUTS } from 'constants/index';
+import { apiClient } from 'network/api-client';
 
 export type AddressBookDeleteModalProps = {
 	addressBook: Folder;

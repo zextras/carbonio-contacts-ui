@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { encodeNonAsciiAndQuotesToDecimal } from '../../legacy/helpers/file';
+import { encodeNonAsciiAndQuotesToDecimal } from 'legacy/helpers/file';
 
 export type UploadResponseFileInfo = [
 	number,

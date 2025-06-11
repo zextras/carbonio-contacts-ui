@@ -7,9 +7,9 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 
-import { ContactGroupDisplayerDetails } from './contact-group-displayer-details';
-import { TESTID_SELECTORS } from '../../../constants/tests';
-import { buildContactGroup, buildMembers } from '../../../tests/model-builder';
+import { ContactGroupDisplayerDetails } from 'views/contact-groups/displayer/contact-group-displayer-details';
+import { TESTID_SELECTORS } from 'constants/tests';
+import { buildContactGroup, buildMembers } from 'tests/model-builder';
 import { screen, setupTest } from '@test-setup';
 
 describe('Contact group displayer details', () => {

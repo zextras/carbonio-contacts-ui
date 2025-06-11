@@ -10,7 +10,10 @@ import { screen, waitFor } from '@testing-library/react';
 import { getTags } from '@zextras/carbonio-ui-commons';
 import type { TFunction } from 'i18next';
 
-import { AdvancedFilterModal, AdvancedFilterModalProps } from '../advance-filter-modal';
+import {
+	AdvancedFilterModal,
+	AdvancedFilterModalProps
+} from 'legacy/views/search/advance-filter-modal';
 import { setupTest } from '@test-setup';
 
 jest.mock('@zextras/carbonio-ui-commons', () => ({

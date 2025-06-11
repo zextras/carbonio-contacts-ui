@@ -7,8 +7,8 @@ import { BooleanString, ErrorSoapBodyResponse, soapFetch } from '@zextras/carbon
 import { JSNS } from '@zextras/carbonio-ui-commons';
 import { map } from 'lodash';
 
-import { GenericSoapPayload } from './types';
-import { DistributionList } from '../../model/distribution-list';
+import { GenericSoapPayload } from 'network/api/types';
+import { DistributionList } from 'model/distribution-list';
 
 type Attributes = {
 	description?: string;

@@ -9,9 +9,9 @@ import { useModal } from '@zextras/carbonio-design-system';
 import { isLink, isTrash, isNestedInTrash, Folder } from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 
-import { UIAction } from './types';
-import { ContactsImportModal } from '../components/modals/contacts-import-modal';
-import { ACTION_IDS } from '../constants';
+import { UIAction } from 'actions/types';
+import { ContactsImportModal } from 'components/modals/contacts-import-modal';
+import { ACTION_IDS } from 'constants/index';
 
 export type ImportContactsAction = UIAction<Folder, Folder>;
 

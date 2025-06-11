@@ -7,8 +7,8 @@ import { ErrorSoapBodyResponse, soapFetch } from '@zextras/carbonio-shell-ui';
 import { FolderView, JSNS } from '@zextras/carbonio-ui-commons';
 import { filter, isEqual, map, uniqWith } from 'lodash';
 
-import { GenericSoapPayload } from './types';
-import { ShareInfo } from '../../model/share-info';
+import { GenericSoapPayload } from 'network/api/types';
+import { ShareInfo } from 'model/share-info';
 
 export interface GetShareInfoRequest extends GenericSoapPayload<typeof JSNS.ACCOUNT> {
 	includeSelf?: 0 | 1;

@@ -12,8 +12,8 @@ import {
 	createMountpoints,
 	CreateMountpointsRequest,
 	CreateMountpointsResponse
-} from './create-mountpoints';
-import { ShareInfo } from '../../model/share-info';
+} from 'network/api/create-mountpoints';
+import { ShareInfo } from 'model/share-info';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 describe('createMountpoints', () => {

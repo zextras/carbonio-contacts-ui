@@ -10,10 +10,10 @@ import { Container, List, Row } from '@zextras/carbonio-design-system';
 import { map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { loadingItems } from './loading-items';
-import { MemberDisplayerListItemComponent } from './member-displayer-list-item';
-import { Text } from './Text';
-import { DistributionList, DistributionListOwner } from '../model/distribution-list';
+import { loadingItems } from 'components/loading-items';
+import { MemberDisplayerListItemComponent } from 'components/member-displayer-list-item';
+import { Text } from 'components/Text';
+import { DistributionList, DistributionListOwner } from 'model/distribution-list';
 
 type ManagerListProps = {
 	managers: DistributionList['owners'];

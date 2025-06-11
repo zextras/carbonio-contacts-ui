@@ -7,7 +7,11 @@ import { faker } from '@faker-js/faker';
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 import { JSNS } from '@zextras/carbonio-ui-commons';
 
-import { exportContacts, ExportContactsRequest, ExportContactsResponse } from './export-contacts';
+import {
+	exportContacts,
+	ExportContactsRequest,
+	ExportContactsResponse
+} from 'network/api/export-contacts';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 describe('exportContacts', () => {

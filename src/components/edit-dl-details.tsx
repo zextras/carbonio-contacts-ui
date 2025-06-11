@@ -14,7 +14,7 @@ import {
 } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
-import { DistributionList } from '../model/distribution-list';
+import { DistributionList } from 'model/distribution-list';
 
 export type EditDLDetailsProps = {
 	name: string;

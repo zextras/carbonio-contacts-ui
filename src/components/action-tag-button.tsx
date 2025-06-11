@@ -22,8 +22,8 @@ import {
 } from '@zextras/carbonio-ui-commons';
 import { every, find, includes, reduce } from 'lodash';
 
-import { Contact } from '../legacy/types/contact';
-import { useTagExist } from '../legacy/ui-actions/tag-actions';
+import { Contact } from 'legacy/types/contact';
+import { useTagExist } from 'legacy/ui-actions/tag-actions';
 
 interface ActionTagButtonProps {
 	contact: Contact;

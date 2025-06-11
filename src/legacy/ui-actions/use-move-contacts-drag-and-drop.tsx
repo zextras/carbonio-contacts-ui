@@ -10,13 +10,13 @@ import { isRoot, isTrashed, isWriteAllowed, getFolder, Folder } from '@zextras/c
 import { every } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { UIAction } from '../../actions/types';
-import { ContactMoveModal } from '../../components/modals/contact-move';
-import { TIMEOUTS } from '../../constants';
-import { MOVE_ACTION } from '../../constants/actions';
-import { apiClient } from '../../network/api-client';
-import { ContactOrGroup } from '../types/contact';
-import { evaluateParentIds } from '../utils/helpers';
+import { UIAction } from 'actions/types';
+import { ContactMoveModal } from 'components/modals/contact-move';
+import { TIMEOUTS } from 'constants/index';
+import { MOVE_ACTION } from 'constants/actions';
+import { apiClient } from 'network/api-client';
+import { ContactOrGroup } from 'legacy/types/contact';
+import { evaluateParentIds } from 'legacy/utils/helpers';
 
 export type MoveContactsAction = UIAction<
 	{ contacts?: Array<ContactOrGroup>; newParentAddressBook?: Folder },

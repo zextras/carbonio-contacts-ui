@@ -7,15 +7,15 @@
 import type { Action as DSAction } from '@zextras/carbonio-design-system';
 import { isTrashed } from '@zextras/carbonio-ui-commons';
 
-import { useContactEditAction } from './use-contact-edit-actions';
-import { useContactMoveAction } from './use-contact-move-action';
-import { useContactRestoreAction } from './use-contact-restore-action';
-import { useContactSendMailAction } from './use-contact-send-mail-action';
-import { useContactShowTagAction } from './use-contact-show-tag-action';
-import { useDeleteContacts } from '../../../actions/common-contacts-actions/use-delete-contacts';
-import { useTrashContacts } from '../../../actions/common-contacts-actions/use-trash-contacts';
-import { Contact } from '../../../legacy/types/contact';
-import { getFolderFromParent } from '../../contact-groups/utils';
+import { useContactEditAction } from 'views/contacts/actions/use-contact-edit-actions';
+import { useContactMoveAction } from 'views/contacts/actions/use-contact-move-action';
+import { useContactRestoreAction } from 'views/contacts/actions/use-contact-restore-action';
+import { useContactSendMailAction } from 'views/contacts/actions/use-contact-send-mail-action';
+import { useContactShowTagAction } from 'views/contacts/actions/use-contact-show-tag-action';
+import { useDeleteContacts } from 'actions/common-contacts-actions/use-delete-contacts';
+import { useTrashContacts } from 'actions/common-contacts-actions/use-trash-contacts';
+import { Contact } from 'legacy/types/contact';
+import { getFolderFromParent } from 'views/contact-groups/utils';
 
 export function useContactPreviewActions(contact: Contact): DSAction[] {
 	const sendMailAction = useContactSendMailAction(contact);

@@ -10,15 +10,15 @@ import { useBoardHooks } from '@zextras/carbonio-shell-ui';
 import { pickBy, some, xor } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { DLDetailsInfo } from './dl-details-info';
-import { EditDLDetails, EditDLDetailsProps } from './edit-dl-details';
-import { EditDLMembersComponent, ResetMembers } from './edit-dl-members';
-import { ManagerList } from './manager-list';
-import { ScrollableContainer } from './styled-components';
-import { DL_NAME_MAX_LENGTH, DL_TABS } from '../constants';
-import { useDLTabs } from '../hooks/use-dl-tabs';
-import { useUpdateDistributionList } from '../hooks/use-update-distribution-list';
-import { DistributionList } from '../model/distribution-list';
+import { DLDetailsInfo } from 'components/dl-details-info';
+import { EditDLDetails, EditDLDetailsProps } from 'components/edit-dl-details';
+import { EditDLMembersComponent, ResetMembers } from 'components/edit-dl-members';
+import { ManagerList } from 'components/manager-list';
+import { ScrollableContainer } from 'components/styled-components';
+import { DL_NAME_MAX_LENGTH, DL_TABS } from 'constants/index';
+import { useDLTabs } from 'hooks/use-dl-tabs';
+import { useUpdateDistributionList } from 'hooks/use-update-distribution-list';
+import { DistributionList } from 'model/distribution-list';
 
 export type EditDLControllerComponentProps = {
 	email: DistributionList['email'];

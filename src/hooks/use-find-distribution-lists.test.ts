@@ -5,9 +5,9 @@
  */
 import { waitFor } from '@testing-library/react';
 
-import { useFindDistributionLists } from './use-find-distribution-lists';
-import { registerGetAccountDistributionListsHandler } from '../tests/msw-handlers/get-account-distribution-lists';
-import { generateDistributionList } from '../tests/utils';
+import { useFindDistributionLists } from 'hooks/use-find-distribution-lists';
+import { registerGetAccountDistributionListsHandler } from 'tests/msw-handlers/get-account-distribution-lists';
+import { generateDistributionList } from 'tests/utils';
 import { setupHook } from '@test-setup';
 
 const dlMemberOnly = generateDistributionList({ isMember: true, isOwner: false });

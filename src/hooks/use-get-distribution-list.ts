@@ -9,10 +9,10 @@ import { useSnackbar } from '@zextras/carbonio-design-system';
 import { some } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { DistributionList } from '../model/distribution-list';
-import { apiClient } from '../network/api-client';
-import { StoredDistributionList, useDistributionListsStore } from '../store/distribution-lists';
-import { OptionalPropertyOf } from '../types/utils';
+import { DistributionList } from 'model/distribution-list';
+import { apiClient } from 'network/api-client';
+import { StoredDistributionList, useDistributionListsStore } from 'store/distribution-lists';
+import { OptionalPropertyOf } from 'types/utils';
 
 export const REQUIRED_FIELDS: Array<OptionalPropertyOf<StoredDistributionList>> = [
 	'id',

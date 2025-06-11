@@ -30,15 +30,15 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { ContactEditorRow, CustomMultivalueField } from './CustomMultivalueField';
-import reducer, { op } from './form-reducer';
-import { CompactView } from '../../commons/contact-compact-view';
-import { createContact } from '../../store/actions/create-contact';
-import { modifyContact } from '../../store/actions/modify-contact';
-import { addContactsToStore, useContactById } from '../../store/contacts';
-import { getFolderTranslatedName } from '../../utils/helpers';
-import { normalizeContactsFromSoap } from '../../utils/normalizations/normalize-contact-from-soap';
-import { differenceObject } from '../settings/components/utils';
+import { ContactEditorRow, CustomMultivalueField } from 'legacy/views/edit/CustomMultivalueField';
+import reducer, { op } from 'legacy/views/edit/form-reducer';
+import { CompactView } from 'legacy/commons/contact-compact-view';
+import { createContact } from 'legacy/store/actions/create-contact';
+import { modifyContact } from 'legacy/store/actions/modify-contact';
+import { addContactsToStore, useContactById } from 'legacy/store/contacts';
+import { getFolderTranslatedName } from 'legacy/utils/helpers';
+import { normalizeContactsFromSoap } from 'legacy/utils/normalizations/normalize-contact-from-soap';
+import { differenceObject } from 'legacy/views/settings/components/utils';
 
 const ItalicText = styled(Text)`
 	font-style: italic;

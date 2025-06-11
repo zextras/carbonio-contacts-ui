@@ -7,7 +7,7 @@ import React from 'react';
 
 import { Accordion } from '@zextras/carbonio-design-system';
 
-import useGetTagsAccordion from '../../hooks/use-get-tags-accordions';
+import useGetTagsAccordion from 'legacy/hooks/use-get-tags-accordions';
 
 export const TagsAccordion = (): React.JSX.Element => {
 	const tagsAccordionItems = useGetTagsAccordion();

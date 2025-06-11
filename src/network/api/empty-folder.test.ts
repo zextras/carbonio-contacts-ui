@@ -6,8 +6,8 @@
 import { faker } from '@faker-js/faker';
 import { JSNS } from '@zextras/carbonio-ui-commons';
 
-import { emptyFolder } from './empty-folder';
-import { FolderActionRequest } from './folder-action';
+import { emptyFolder } from 'network/api/empty-folder';
+import { FolderActionRequest } from 'network/api/folder-action';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 describe('emptyFolder', () => {

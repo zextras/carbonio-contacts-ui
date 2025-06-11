@@ -6,8 +6,8 @@
 import { soapFetch } from '@zextras/carbonio-shell-ui';
 import { JSNS } from '@zextras/carbonio-ui-commons';
 
-import { GenericSoapPayload } from './types';
-import { SoapFault } from '../../types/utils';
+import { GenericSoapPayload } from 'network/api/types';
+import { SoapFault } from 'types/utils';
 
 export type DistributionListActionOperationMembers = 'addMembers' | 'removeMembers';
 export type DistributionListActionOperationModify = 'modify';

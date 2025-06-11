@@ -9,9 +9,9 @@ import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 import { FOLDERS } from '@zextras/carbonio-ui-commons';
 
-import EditView from './edit-view';
-import { registerCreateContactHandler } from '../../tests/msw/create-contact';
-import { CreateContactRequest } from '../../types/soap';
+import EditView from 'legacy/views/edit/edit-view';
+import { registerCreateContactHandler } from 'legacy/tests/msw/create-contact';
+import { CreateContactRequest } from 'legacy/types/soap';
 import { screen, setupTest } from '@test-setup';
 import { generateFolder } from '@test-utils/folders/folders-generator';
 import { populateFoldersStore } from '@test-utils/store/folders';

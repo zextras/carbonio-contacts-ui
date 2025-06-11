@@ -8,7 +8,7 @@ import React from 'react';
 import { screen } from '@testing-library/react';
 import { noop } from 'lodash';
 
-import { ListActionIconButton } from './list-action-icon-button';
+import { ListActionIconButton } from 'components/list/list-action-icon-button';
 import { setupTest } from '@test-setup';
 
 describe('List action icon button', () => {
