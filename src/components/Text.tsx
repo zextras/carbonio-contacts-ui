@@ -11,7 +11,6 @@ import {
 	Tooltip,
 	TooltipProps
 } from '@zextras/carbonio-design-system';
-import styled from 'styled-components';
 
 import { MakeOptional } from 'types/utils';
 
@@ -38,11 +37,6 @@ const TextWithOptionalTooltip = ({
 		<DSText {...rest}>{children}</DSText>
 	);
 
-const StyledText = styled(TextWithOptionalTooltip)<{ $width?: string; $inline?: boolean }>`
-	width: ${({ $width }): string | undefined => $width};
-	display: ${({ $inline }): string | undefined | false => $inline && 'inline'};
-`;
-
 export const Text = ({
 	width,
 	centered,
@@ -51,9 +45,11 @@ export const Text = ({
 	withTooltip = false,
 	...dsProps
 }: TextExtendedProps & TextWithOptionalTooltipProps): React.JSX.Element => (
-	<StyledText
-		$width={width}
-		$inline={inline}
+	<TextWithOptionalTooltip
+		style={{
+			width: `${width || ''}`,
+			display: `${inline ? 'inline' : ''}`
+		}}
 		textAlign={(centered && 'center') || undefined}
 		lineHeight={lineHeight}
 		withTooltip={withTooltip}
