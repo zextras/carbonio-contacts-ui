@@ -13,7 +13,8 @@ import {
 	Row,
 	Text,
 	Tooltip,
-	useSnackbar
+	useSnackbar,
+	useTheme
 } from '@zextras/carbonio-design-system';
 import { report } from '@zextras/carbonio-shell-ui';
 import {
@@ -28,23 +29,24 @@ import {
 import { filter, find, map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import styled from 'styled-components';
 
-import { ContactEditorRow, CustomMultivalueField } from 'legacy/views/edit/CustomMultivalueField';
-import reducer, { op } from 'legacy/views/edit/form-reducer';
 import { CompactView } from 'legacy/commons/contact-compact-view';
 import { createContact } from 'legacy/store/actions/create-contact';
 import { modifyContact } from 'legacy/store/actions/modify-contact';
 import { addContactsToStore, useContactById } from 'legacy/store/contacts';
 import { getFolderTranslatedName } from 'legacy/utils/helpers';
 import { normalizeContactsFromSoap } from 'legacy/utils/normalizations/normalize-contact-from-soap';
+import { ContactEditorRow, CustomMultivalueField } from 'legacy/views/edit/CustomMultivalueField';
+import reducer, { op } from 'legacy/views/edit/form-reducer';
 import { differenceObject } from 'legacy/views/settings/components/utils';
 
-const ItalicText = styled(Text)`
-	font-style: italic;
-	color: ${({ theme }) => theme.palette.gray1.regular};
-	padding-right: 0.5rem;
-`;
+function getItalicTextStyle(theme) {
+	return {
+		fontStyle: 'italic',
+		color: theme.palette.gray1.regular,
+		paddingRight: '0.5rem'
+	};
+}
 
 const filterEmptyValues = (values) =>
 	reduce(
@@ -89,6 +91,7 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 	const keys = Object.keys(existingContact ?? {});
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
+	const theme = useTheme();
 
 	useEffect(() => {
 		if (!compareToContact && keys?.length > 0) setCompareToContact(existingContact);
@@ -252,12 +255,12 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 				<Row orientation="horizontal" mainAlignment="space-between" width="fill">
 					<Container height="fit" width="fit">
 						{!editId && (
-							<ItalicText>
+							<Text style={getItalicTextStyle(theme)}>
 								{t('label.contact_created_in_folder', {
 									name: selectedFolderName,
 									defaultValue: 'This contact will be created in the "{{name}}" folder'
 								})}
-							</ItalicText>
+							</Text>
 						)}
 					</Container>
 					<Tooltip

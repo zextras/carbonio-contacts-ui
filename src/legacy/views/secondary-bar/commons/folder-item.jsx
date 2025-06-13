@@ -7,24 +7,19 @@ import React from 'react';
 
 import { Container, Text, Accordion } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
-
-const ContainerEl = styled(Container)`
-	overflow-y: auto;
-	display: block;
-`;
 
 const FolderItem = ({ folders }) => {
 	const [t] = useTranslation();
 	return folders.length ? (
-		<ContainerEl
+		<Container
+			style={{ overflowY: 'auto', display: 'block' }}
 			orientation="vertical"
 			mainAlignment="flex-start"
 			minHeight="30vh"
 			maxHeight="60vh"
 		>
 			<Accordion items={folders} background="gray6" />
-		</ContainerEl>
+		</Container>
 	) : (
 		<Container padding={{ all: 'small' }}>
 			<Text size="large"> {t('folder.modal.item.empty', 'No items available')} </Text>

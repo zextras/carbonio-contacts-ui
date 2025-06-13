@@ -20,15 +20,20 @@ import { useUserAccount } from '@zextras/carbonio-shell-ui';
 import { noop } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
 
 import { ROUTES_INTERNAL_PARAMS } from 'constants/index';
 
-const StyledText = styled(Text)`
-	min-width: 0;
-	flex-basis: 0;
-	flex-grow: 1;
-`;
+type TextProps = {
+	minWidth?: string;
+	flexBasis?: string;
+	flexGrow?: number;
+};
+
+const getTextStyle = (): TextProps => ({
+	minWidth: '0',
+	flexBasis: '0',
+	flexGrow: 1
+});
 
 const AccordionItem = ({ item }: { item: AccordionItemType }): React.JSX.Element => (
 	<Container
@@ -42,9 +47,9 @@ const AccordionItem = ({ item }: { item: AccordionItemType }): React.JSX.Element
 			<Avatar label={item.label ?? ''} />
 		</Padding>
 		{item.label && (
-			<StyledText size="medium" {...item.textProps}>
+			<Text size="medium" {...item.textProps} style={getTextStyle()}>
 				{item.label}
-			</StyledText>
+			</Text>
 		)}
 	</Container>
 );

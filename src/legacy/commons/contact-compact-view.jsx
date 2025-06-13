@@ -20,11 +20,6 @@ import styled from 'styled-components';
 import { CustomIconAvatar } from 'components/styled-components';
 import { useDisplayName } from 'legacy/hooks/use-display-name';
 
-const AvatarMobile = styled(Avatar)`
-	position: relative;
-	top: 0.9375rem;
-`;
-
 const AvatarHeader = styled(Row)`
 	background: linear-gradient(
 		to right,
@@ -102,7 +97,8 @@ export const CompactView = ({ contact, toggleOpen, open }) => {
 						$bg2={calcColor(`${contact.firstName}${contact.lastName}`)}
 						// mainAlignment='center'
 					>
-						<AvatarMobile
+						<Avatar
+							style={{ position: 'relative', top: '0.9375rem' }}
 							label={`${contact.firstName} ${contact.lastName}`}
 							picture={contact.image}
 							size="large"

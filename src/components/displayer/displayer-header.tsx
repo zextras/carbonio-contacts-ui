@@ -6,7 +6,7 @@
 import React from 'react';
 
 import { Container, Divider, Icon, IconButton } from '@zextras/carbonio-design-system';
-import styled, { DefaultTheme } from 'styled-components';
+import { DefaultTheme } from 'styled-components';
 
 import { Text } from 'components/Text';
 
@@ -15,11 +15,6 @@ interface DisplayerHeaderProps {
 	icon: keyof DefaultTheme['icons'];
 	closeDisplayer?: () => void;
 }
-
-const CustomIcon = styled(Icon)`
-	width: 1.125rem;
-	height: 1.125rem;
-`;
 
 export const DisplayerHeader = ({
 	title,
@@ -46,7 +41,7 @@ export const DisplayerHeader = ({
 				minWidth={'fit-content'}
 				minHeight={'fit-content'}
 			>
-				<CustomIcon icon={icon} />
+				<Icon icon={icon} style={{ width: '1.125rem', height: '1.125rem' }} />
 			</Container>
 			<Text withTooltip>{title}</Text>
 			<Container margin={{ left: 'auto' }} width={'fit'} height={'fit'} flexShrink={0}>

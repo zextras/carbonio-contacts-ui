@@ -19,16 +19,10 @@ import {
 import { TFunction } from 'i18next';
 import { filter, startsWith } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
 
 import { FlatFoldersAccordion } from 'components/folder-tree-selector/flat-folders-accordion';
 import { sortFolders } from 'helpers/folders';
 import { getFolderTranslatedName } from 'legacy/utils/helpers';
-
-const ScrollableContainer = styled(Container)`
-	overflow-y: auto;
-	display: block;
-`;
 
 export type FolderTreeSelectorProps = {
 	inputLabel?: string;
@@ -168,7 +162,8 @@ export const FolderTreeSelector = ({
 				onChange={(e: ChangeEvent<HTMLInputElement>): void => setInputValue(e.target.value)}
 			/>
 			<Padding vertical="medium" />
-			<ScrollableContainer
+			<Container
+				style={{ overflowY: 'auto', display: 'block' }}
 				height={'auto'}
 				orientation="vertical"
 				mainAlignment="flex-start"
@@ -181,7 +176,7 @@ export const FolderTreeSelector = ({
 					selectedFolderId={selectedFolderId}
 					allowRootSelection={allowRootSelection}
 				/>
-			</ScrollableContainer>
+			</Container>
 			{onNewFolderClick && (
 				<Container
 					padding={{ top: 'medium', bottom: 'medium' }}

@@ -31,7 +31,6 @@ import {
 } from '@zextras/carbonio-ui-commons';
 import { map, reduce, remove, some, uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
 
 import { MemberListItemComponent } from 'components/member-list-item';
 import { CONTACT_GROUP_NAME_MAX_LENGTH } from 'constants/index';
@@ -59,10 +58,6 @@ function cleanupDuplicates(
 		actions
 	};
 }
-
-const List = styled(DSList)`
-	min-height: 0;
-`;
 
 export type EnhancedChipItem = ContactInputItem & {
 	duplicated: boolean;
@@ -379,7 +374,9 @@ export const CommonContactGroupBoard = ({
 						hasError={contactInputValue.length > 0 && noValidChip}
 					/>
 				</Container>
-				<List data-testid={'members-list'}>{listItems}</List>
+				<DSList data-testid={'members-list'} style={{ minHeight: 0 }}>
+					{listItems}
+				</DSList>
 			</Container>
 		</Container>
 	);

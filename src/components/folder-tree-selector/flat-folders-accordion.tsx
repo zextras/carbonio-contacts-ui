@@ -39,10 +39,6 @@ const FolderAccordionPlaceholder = styled.div`
 	height: ${FOLDER_ROW_HEIGHT};
 `;
 
-const RootAccordion = styled(Row)`
-	cursor: pointer;
-`;
-
 const CustomContainer = styled(Container)<{ $active?: boolean }>`
 	&:hover {
 		background-color: ${({ theme, $active }): string =>
@@ -193,7 +189,11 @@ const FlatFoldersAccordionRoot: FC<FlatFoldersAccordionRootProps> = ({
 		[open, allowRootSelection, onFolderSelected, folder]
 	);
 	return (
-		<RootAccordion width="fill" data-testid={`folder-accordion-root-${folder.id}`}>
+		<Row
+			width="fill"
+			data-testid={`folder-accordion-root-${folder.id}`}
+			style={{ cursor: 'pointer' }}
+		>
 			<CustomContainer
 				orientation="horizontal"
 				width="fill"
@@ -244,7 +244,7 @@ const FlatFoldersAccordionRoot: FC<FlatFoldersAccordionRootProps> = ({
 					))}
 				</List>
 			</Collapse>
-		</RootAccordion>
+		</Row>
 	);
 };
 
