@@ -5,6 +5,7 @@
  */
 import React, { useMemo } from 'react';
 
+import styled from '@emotion/styled';
 import {
 	Avatar,
 	Button,
@@ -15,7 +16,6 @@ import {
 	Text
 } from '@zextras/carbonio-design-system';
 import { trim } from 'lodash';
-import styled from 'styled-components';
 
 import { CustomIconAvatar } from 'components/styled-components';
 import { useDisplayName } from 'legacy/hooks/use-display-name';

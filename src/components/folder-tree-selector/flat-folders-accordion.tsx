@@ -6,6 +6,7 @@
 
 import React, { FC, ReactElement, useCallback, useMemo, useState } from 'react';
 
+import styled from '@emotion/styled';
 import {
 	Avatar,
 	Collapse,
@@ -28,16 +29,11 @@ import {
 } from '@zextras/carbonio-ui-commons';
 import { noop } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
 
 import { getFolderIconColor, getFolderIconName } from 'helpers/folders';
 import { getFolderTranslatedName } from 'legacy/utils/helpers';
 
 const FOLDER_ROW_HEIGHT = '2.6rem';
-
-const FolderAccordionPlaceholder = styled.div`
-	height: ${FOLDER_ROW_HEIGHT};
-`;
 
 const CustomContainer = styled(Container)<{ $active?: boolean }>`
 	&:hover {
@@ -45,12 +41,6 @@ const CustomContainer = styled(Container)<{ $active?: boolean }>`
 			$active ? theme.palette.highlight.active : theme.palette.gray6.hover};
 	}
 `;
-
-export const CustomListItem = styled(ListItem).attrs({
-	background: 'gray6',
-	activeBackground: 'highlight',
-	selectedBackground: 'gray5'
-})``;
 
 type FlatFoldersAccordionFolderProps = {
 	folder: Folder;
@@ -224,10 +214,13 @@ const FlatFoldersAccordionRoot: FC<FlatFoldersAccordionRootProps> = ({
 			<Collapse crossSize="100%" orientation="vertical" open={open} disableTransition={false}>
 				<List>
 					{childrenFolders.map<ReactElement>((childFolder) => (
-						<CustomListItem
+						<ListItem
 							key={childFolder.id}
 							selected={selectedFolderId === childFolder.id}
 							active={selectedFolderId === childFolder.id}
+							background="gray6"
+							activeBackground="highlight"
+							selectedBackground="gray5"
 						>
 							{(visible: boolean): ReactElement =>
 								visible ? (
@@ -237,10 +230,10 @@ const FlatFoldersAccordionRoot: FC<FlatFoldersAccordionRootProps> = ({
 										onFolderSelected={onFolderSelected}
 									/>
 								) : (
-									<FolderAccordionPlaceholder />
+									<div style={{ height: FOLDER_ROW_HEIGHT }} />
 								)
 							}
-						</CustomListItem>
+						</ListItem>
 					))}
 				</List>
 			</Collapse>
