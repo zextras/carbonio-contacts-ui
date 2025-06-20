@@ -30,9 +30,8 @@ import { TFunction } from 'i18next';
 import { filter, find, map, uniqBy, noop, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
+import { EmotionThemeProvider } from 'emotion-theme-provider';
 import { DistributionListChip } from 'legacy/integrations/distribution-list-chip';
-import type { ContactAddressMap } from 'legacy/types/contact';
-import type { GetContactsRequest, GetContactsResponse } from 'legacy/types/soap';
 import { Loader } from 'legacy/integrations/parts/loader';
 import { PasteContextMenu } from 'legacy/integrations/parts/paste-context-menu';
 import { getContactLabel, searchContacts, tryToParseEmail } from 'legacy/integrations/parts/utils';
@@ -41,6 +40,8 @@ import {
 	ContactInputOptions,
 	GroupContact
 } from 'legacy/integrations/types';
+import type { ContactAddressMap } from 'legacy/types/contact';
+import type { GetContactsRequest, GetContactsResponse } from 'legacy/types/soap';
 
 const CHIP_TO_EXCLUDE = 'this-value-represent-a-chip-that-should-not-be-present';
 
@@ -370,37 +371,39 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	);
 
 	return (
-		<Container width="100%" onDrop={onDrop} height="100%">
-			<PasteContextMenu elementReceivingPaste={inputRef.current}>
-				<ChipInput<UserOrDL>
-					data-testid={'contact-input'}
-					disableOptions
-					placeholder={placeholder}
-					confirmChipOnBlur
-					inputRef={inputRef}
-					onInputType={onInputType}
-					onChange={handleChipOnChange}
-					options={options}
-					value={contactInputValue}
-					background={background}
-					onAdd={onAdd}
-					requireUniqueChips
-					createChipOnPaste
-					pasteSeparators={[',', ';', '\n']}
-					separators={[
-						{ code: 'Enter', ctrlKey: false },
-						{ code: 'NumpadEnter', ctrlKey: false },
-						{ key: ',', ctrlKey: false },
-						{ key: ';', ctrlKey: false }
-					]}
-					ChipComponent={ChipComponent}
-					onDragEnter={dragAndDropEnabled ? onDragEnter : noop}
-					onDragOver={dragAndDropEnabled ? onDragEnter : noop}
-					onDragEnd={dragAndDropEnabled ? onDragEnd : noop}
-					{...rest}
-				/>
-			</PasteContextMenu>
-		</Container>
+		<EmotionThemeProvider>
+			<Container width="100%" onDrop={onDrop} height="100%">
+				<PasteContextMenu elementReceivingPaste={inputRef.current}>
+					<ChipInput<UserOrDL>
+						data-testid={'contact-input'}
+						disableOptions
+						placeholder={placeholder}
+						confirmChipOnBlur
+						inputRef={inputRef}
+						onInputType={onInputType}
+						onChange={handleChipOnChange}
+						options={options}
+						value={contactInputValue}
+						background={background}
+						onAdd={onAdd}
+						requireUniqueChips
+						createChipOnPaste
+						pasteSeparators={[',', ';', '\n']}
+						separators={[
+							{ code: 'Enter', ctrlKey: false },
+							{ code: 'NumpadEnter', ctrlKey: false },
+							{ key: ',', ctrlKey: false },
+							{ key: ';', ctrlKey: false }
+						]}
+						ChipComponent={ChipComponent}
+						onDragEnter={dragAndDropEnabled ? onDragEnter : noop}
+						onDragOver={dragAndDropEnabled ? onDragEnter : noop}
+						onDragEnd={dragAndDropEnabled ? onDragEnd : noop}
+						{...rest}
+					/>
+				</PasteContextMenu>
+			</Container>
+		</EmotionThemeProvider>
 	);
 };
 

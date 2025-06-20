@@ -21,11 +21,12 @@ import { last } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { UsersSharesList } from 'components/modals/shared-address-books-add/users-shares-list';
+import { ScrollableContainer } from 'components/styled-components';
 import { TIMEOUTS } from 'constants/index';
+import { EmotionThemeProvider } from 'emotion-theme-provider';
 import { getFolderTranslatedName } from 'legacy/utils/helpers';
 import { ShareInfo } from 'model/share-info';
 import { apiClient } from 'network/api-client';
-import { ScrollableContainer } from 'components/styled-components';
 
 export type SharesModalProps = {
 	onClose: () => void;
@@ -122,7 +123,7 @@ export const SharedAddressBooksAddModal: FC<SharesModalProps> = ({ onClose }) =>
 	);
 
 	return (
-		<>
+		<EmotionThemeProvider>
 			<ModalHeader
 				title={t('share.find_contact_shares', 'Find Contact Shares')}
 				showCloseIcon
@@ -158,6 +159,6 @@ export const SharedAddressBooksAddModal: FC<SharesModalProps> = ({ onClose }) =>
 				confirmLabel={t('share.add', 'Add')}
 				confirmDisabled={isAddButtonDisabled}
 			/>
-		</>
+		</EmotionThemeProvider>
 	);
 };

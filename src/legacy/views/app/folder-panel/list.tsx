@@ -5,6 +5,9 @@
  */
 import React, { useEffect, useMemo, useRef } from 'react';
 
+import { Theme } from '@emotion/react';
+import type { Theme as DefaultTheme } from '@emotion/react';
+import styled from '@emotion/styled';
 import {
 	Container,
 	ContainerProps,
@@ -16,7 +19,6 @@ import {
 	useKeyboard
 } from '@zextras/carbonio-design-system';
 import { map, some } from 'lodash';
-import styled, { DefaultTheme } from 'styled-components';
 
 const StyledContainer = styled(Container)`
 	overflow-y: auto;
@@ -37,9 +39,9 @@ const StyledContainer = styled(Container)`
 `;
 
 const StyledDiv = styled.div<{
-	$background: keyof DefaultTheme['palette'];
-	$selectedBackground: keyof DefaultTheme['palette'];
-	$activeBackground: keyof DefaultTheme['palette'];
+	$background: keyof Theme['palette'];
+	$selectedBackground: keyof Theme['palette'];
+	$activeBackground: keyof Theme['palette'];
 	$selected: boolean;
 	$active: boolean;
 }>`
@@ -64,7 +66,7 @@ const StyledDiv = styled.div<{
 		$activeBackground,
 		$active,
 		$selected
-	}): ReturnType<typeof pseudoClasses> =>
+	}): ReturnType<typeof pseudoClasses> | any =>
 		pseudoClasses(
 			theme,
 			($active && $activeBackground) || ($selected && $selectedBackground) || $background

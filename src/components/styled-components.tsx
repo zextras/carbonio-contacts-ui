@@ -6,6 +6,8 @@
 
 import React from 'react';
 
+import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 import {
 	AnyColor,
 	Avatar,
@@ -16,7 +18,6 @@ import {
 	pseudoClasses,
 	Row
 } from '@zextras/carbonio-design-system';
-import styled, { css } from 'styled-components';
 
 export const HoverRow = styled(Row)`
 	position: relative;
@@ -53,7 +54,7 @@ export const ListItemContainer = styled(Container)`
 `;
 
 const StyledListItem = styled(ListItem)<{ $backgroundColor: AnyColor | undefined }>`
-	${({ $backgroundColor, theme }): undefined | ReturnType<typeof pseudoClasses> =>
+	${({ $backgroundColor, theme }): any | ReturnType<typeof pseudoClasses> =>
 		$backgroundColor && pseudoClasses(theme, $backgroundColor, 'color')}
 	transition: none;
 

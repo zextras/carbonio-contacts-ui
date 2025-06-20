@@ -5,14 +5,14 @@
  */
 import React from 'react';
 
+import type { Theme } from '@emotion/react';
 import { Container, Divider, Icon, IconButton } from '@zextras/carbonio-design-system';
-import { DefaultTheme } from 'styled-components';
 
 import { Text } from 'components/Text';
 
 interface DisplayerHeaderProps {
 	title: string;
-	icon: keyof DefaultTheme['icons'];
+	icon: keyof Theme['icons'];
 	closeDisplayer?: () => void;
 }
 
