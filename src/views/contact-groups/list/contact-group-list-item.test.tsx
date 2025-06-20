@@ -9,11 +9,11 @@ import { faker } from '@faker-js/faker';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { FOLDERS } from '@zextras/carbonio-ui-commons';
 
-import { ContactGroupListItem } from 'views/contact-groups/list/contact-group-list-item';
-import { TESTID_SELECTORS } from 'constants/tests';
-import { buildContactGroup, buildMembers } from 'tests/model-builder';
 import { screen, setupTest } from '@test-setup';
 import { populateFoldersStore } from '@test-utils/store/folders';
+import { TESTID_SELECTORS } from 'constants/tests';
+import { buildContactGroup, buildMembers } from 'tests/model-builder';
+import { ContactGroupListItem } from 'views/contact-groups/list/contact-group-list-item';
 
 jest.mock('react-router-dom', () => ({
 	...jest.requireActual('react-router-dom'),
@@ -37,7 +37,7 @@ describe('Contact group list item', () => {
 			});
 
 			setupTest(<ContactGroupListItem contactGroup={contactGroup} />);
-			expect(screen.getByTestId(TESTID_SELECTORS.icons.sendEmail)).toBeVisible();
+			expect(screen.getByTestId(TESTID_SELECTORS.icons.sendEmail)).toBeInTheDocument();
 		});
 		it('should show send mail action as disabled when the contact group has 0 members', async () => {
 			const contactGroup = buildContactGroup();

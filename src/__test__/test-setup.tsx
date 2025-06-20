@@ -28,8 +28,9 @@ import { Provider } from 'react-redux';
 import { MemoryRouter, MemoryRouterProps, Route, RouteProps, Routes } from 'react-router-dom';
 import { Store } from 'redux';
 
-import { getAppI18n } from '__test__/i18n/i18n-test-factory';
 import { previewContextMock, PreviewsManagerContext } from '@test-utils/carbonio-ui-preview';
+import { getAppI18n } from '__test__/i18n/i18n-test-factory';
+import { EmotionThemeProvider } from 'emotion-theme-provider';
 
 type ByRoleWithIconOptions = ByRoleOptions & {
 	icon: string | RegExp;
@@ -111,28 +112,30 @@ export const ProvidersWrapper = ({
 
 	return (
 		<ThemeProvider>
-			<MemoryRouter
-				future={{ v7_startTransition: false, v7_relativeSplatPath: false }}
-				initialEntries={initialEntries}
-				initialIndex={(initialEntries?.length || 1) - 1}
-			>
-				<Routes>
-					<Route
-						path={path}
-						element={
-							<StoreProvider store={store}>
-								<I18nextProvider i18n={i18n}>
-									<SnackbarManager>
-										<PreviewsManagerContext.Provider value={previewContextMock}>
-											<ModalManager>{children}</ModalManager>
-										</PreviewsManagerContext.Provider>
-									</SnackbarManager>
-								</I18nextProvider>
-							</StoreProvider>
-						}
-					/>
-				</Routes>
-			</MemoryRouter>
+			<EmotionThemeProvider>
+				<MemoryRouter
+					future={{ v7_startTransition: false, v7_relativeSplatPath: false }}
+					initialEntries={initialEntries}
+					initialIndex={(initialEntries?.length || 1) - 1}
+				>
+					<Routes>
+						<Route
+							path={path}
+							element={
+								<StoreProvider store={store}>
+									<I18nextProvider i18n={i18n}>
+										<SnackbarManager>
+											<PreviewsManagerContext.Provider value={previewContextMock}>
+												<ModalManager>{children}</ModalManager>
+											</PreviewsManagerContext.Provider>
+										</SnackbarManager>
+									</I18nextProvider>
+								</StoreProvider>
+							}
+						/>
+					</Routes>
+				</MemoryRouter>
+			</EmotionThemeProvider>
 		</ThemeProvider>
 	);
 };
