@@ -47,7 +47,7 @@ export const Text = ({
 }: TextExtendedProps & TextWithOptionalTooltipProps): React.JSX.Element => (
 	<TextWithOptionalTooltip
 		style={{
-			width: `${width || ''}`,
+			width: `${width ?? ''}`,
 			display: `${inline ? 'inline' : ''}`
 		}}
 		textAlign={(centered && 'center') || undefined}
