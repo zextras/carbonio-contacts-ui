@@ -6,7 +6,7 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 
 import { Theme } from '@emotion/react';
-import type { Theme as DefaultTheme } from '@emotion/react';
+import type { Theme as DefaultTheme, Interpolation } from '@emotion/react';
 import styled from '@emotion/styled';
 import {
 	Container,
@@ -42,8 +42,8 @@ const StyledDiv = styled.div<{
 	$background: keyof Theme['palette'];
 	$selectedBackground: keyof Theme['palette'];
 	$activeBackground: keyof Theme['palette'];
-	$selected: boolean;
 	$active: boolean;
+	$selected: boolean;
 }>`
 	user-select: none;
 	outline: none;
@@ -66,11 +66,11 @@ const StyledDiv = styled.div<{
 		$activeBackground,
 		$active,
 		$selected
-	}): ReturnType<typeof pseudoClasses> | any =>
+	}): Interpolation<{ theme: Theme }> =>
 		pseudoClasses(
 			theme,
 			($active && $activeBackground) || ($selected && $selectedBackground) || $background
-		)};
+		) as Interpolation<{ theme: Theme }>}
 `;
 
 interface ItemType {
