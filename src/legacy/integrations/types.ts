@@ -5,12 +5,11 @@
  */
 
 import { ChipItem, type DropdownItem } from '@zextras/carbonio-design-system';
-
 import {
 	ContactInputItem,
 	DistributionListContact,
 	ContactInputItemInternalValue
-} from '../../carbonio-ui-commons/integrations/types';
+} from '@zextras/carbonio-ui-commons';
 
 export type ContactInputGroup = ContactInputItem &
 	Required<Pick<ContactInputItem, 'display'>> & {

@@ -6,13 +6,12 @@
 import React, { useCallback, useMemo } from 'react';
 
 import { Icon, Padding, Row, Text } from '@zextras/carbonio-design-system';
+import { ZIMBRA_STANDARD_COLORS, useTags } from '@zextras/carbonio-ui-commons';
 import { every, includes, noop, reduce } from 'lodash';
 
-import { Action } from '../../../actions/types';
-import { ZIMBRA_STANDARD_COLORS } from '../../../carbonio-ui-commons/constants';
-import { useTags } from '../../../carbonio-ui-commons/store/zustand/tags';
-import { SHOW_TAG_ACTION } from '../../../constants/actions';
-import { Contact } from '../../../legacy/types/contact';
+import { Action } from 'actions/types';
+import { SHOW_TAG_ACTION } from 'constants/actions';
+import { Contact } from 'legacy/types/contact';
 
 export const useContactShowTagAction = (contact: Contact): Action | undefined => {
 	const tagsFromStore = useTags();

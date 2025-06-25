@@ -5,18 +5,18 @@
  */
 
 import { type Action as DSAction } from '@zextras/carbonio-design-system';
+import { isTrashed } from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 
-import { useContactGroupDeleteAction } from './use-contact-group-delete-action';
-import { useContactGroupEditAction } from './use-contact-group-edit-action';
-import { useContactGroupSendEmailAction } from './use-contact-group-send-email-action';
-import { useMoveContacts } from '../../../actions/common-contacts-actions/use-move-contacts';
-import { useRestoreContacts } from '../../../actions/common-contacts-actions/use-restore-contacts';
-import { useTrashContacts } from '../../../actions/common-contacts-actions/use-trash-contacts';
-import { Action } from '../../../actions/types';
-import { isTrashed } from '../../../carbonio-ui-commons/helpers/folders';
-import { ContactGroup } from '../../../model/contact-group';
-import { getFolderFromContactGroup } from '../utils';
+import { useContactGroupDeleteAction } from 'views/contact-groups/actions/use-contact-group-delete-action';
+import { useContactGroupEditAction } from 'views/contact-groups/actions/use-contact-group-edit-action';
+import { useContactGroupSendEmailAction } from 'views/contact-groups/actions/use-contact-group-send-email-action';
+import { useMoveContacts } from 'actions/common-contacts-actions/use-move-contacts';
+import { useRestoreContacts } from 'actions/common-contacts-actions/use-restore-contacts';
+import { useTrashContacts } from 'actions/common-contacts-actions/use-trash-contacts';
+import { Action } from 'actions/types';
+import { ContactGroup } from 'model/contact-group';
+import { getFolderFromContactGroup } from 'views/contact-groups/utils';
 
 const useMoveContactGroups = (contactGroup: ContactGroup): Action => {
 	const [t] = useTranslation();

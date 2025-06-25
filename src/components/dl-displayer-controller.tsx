@@ -9,10 +9,10 @@ import React from 'react';
 import { Container } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
-import { DistributionListDisplayer } from './dl-displayer';
-import { EmptyDisplayer } from './empty-displayer';
-import { useGetDistributionList } from '../hooks/use-get-distribution-list';
-import { useGetDistributionListMembers } from '../hooks/use-get-distribution-list-members';
+import { DistributionListDisplayer } from 'components/dl-displayer';
+import { EmptyDisplayer } from 'components/empty-displayer';
+import { useGetDistributionList } from 'hooks/use-get-distribution-list';
+import { useGetDistributionListMembers } from 'hooks/use-get-distribution-list-members';
 
 type DLDisplayerControllerProps = {
 	id: string | undefined;

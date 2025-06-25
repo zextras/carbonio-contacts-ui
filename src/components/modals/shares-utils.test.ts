@@ -5,8 +5,8 @@
  */
 import { useTranslation } from 'react-i18next';
 
-import { getRoleDescription } from './shares-utils';
-import { setupHook } from '../../carbonio-ui-commons/test/test-setup';
+import { getRoleDescription } from 'components/modals/shares-utils';
+import { setupHook } from '@test-setup';
 
 describe('getRoleDescription', () => {
 	const {

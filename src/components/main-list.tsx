@@ -7,8 +7,8 @@ import React from 'react';
 
 import { Container, Divider, List, ListProps, Row } from '@zextras/carbonio-design-system';
 
-import { Text } from './Text';
-import { LIST_WIDTH } from '../constants';
+import { Text } from 'components/Text';
+import { LIST_WIDTH } from 'constants/index';
 
 type MainListProps = {
 	onListBottom?: () => void;

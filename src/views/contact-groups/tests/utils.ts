@@ -1,5 +1,6 @@
-import { generateFolder } from '../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
-import { Folder } from '../../../carbonio-ui-commons/types';
+import { Folder } from '@zextras/carbonio-ui-commons';
+
+import { generateFolder } from '@test-utils/folders/folders-generator';
 
 /*
  * SPDX-FileCopyrightText: 2025 Zextras <https://www.zextras.com>

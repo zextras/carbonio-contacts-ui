@@ -7,11 +7,11 @@ import React, { useState, useMemo, useCallback } from 'react';
 
 import { Container, useSnackbar } from '@zextras/carbonio-design-system';
 import { useUserSettings, editSettings, SettingsHeader } from '@zextras/carbonio-shell-ui';
+import { useUpdateView } from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 
-import { differenceObject } from './components/utils';
-import OptionsSettingsView from './options-settings-view';
-import { useUpdateView } from '../../../carbonio-ui-commons/hooks/use-update-view';
+import { differenceObject } from 'legacy/views/settings/components/utils';
+import OptionsSettingsView from 'legacy/views/settings/options-settings-view';
 
 export default function ContactSettingsView() {
 	const [t] = useTranslation();

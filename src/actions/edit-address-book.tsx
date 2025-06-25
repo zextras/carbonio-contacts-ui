@@ -6,14 +6,12 @@
 import React, { useCallback, useMemo } from 'react';
 
 import { useModal } from '@zextras/carbonio-design-system';
+import { isTrash, isNestedInTrash, Folder } from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 
-import { UIAction } from './types';
-import { isTrash } from '../carbonio-ui-commons/helpers/folders';
-import { isNestedInTrash } from '../carbonio-ui-commons/store/zustand/folder/utils';
-import { Folder } from '../carbonio-ui-commons/types/folder';
-import { AddressBookEditModal } from '../components/modals/address-book-edit/address-book-edit';
-import { ACTION_IDS } from '../constants';
+import { UIAction } from 'actions/types';
+import { AddressBookEditModal } from 'components/modals/address-book-edit/address-book-edit';
+import { ACTION_IDS } from 'constants/index';
 
 export type EditAddressBookAction = UIAction<Folder, Folder>;
 

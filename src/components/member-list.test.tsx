@@ -8,9 +8,9 @@ import React from 'react';
 import { waitFor } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
 
-import { MemberList } from './member-list';
-import { screen, setupTest, within } from '../carbonio-ui-commons/test/test-setup';
-import { TESTID_SELECTORS } from '../constants/tests';
+import { MemberList } from 'components/member-list';
+import { TESTID_SELECTORS } from 'constants/tests';
+import { screen, setupTest, within } from '@test-setup';
 
 describe('Member list', () => {
 	it('should render Member list text with the counter of managers', () => {

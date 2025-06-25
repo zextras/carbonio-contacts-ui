@@ -14,14 +14,16 @@ import {
 	Tooltip,
 	Text
 } from '@zextras/carbonio-design-system';
+import {
+	ZIMBRA_STANDARD_COLORS,
+	useRunSearchIntegration,
+	useSortedTagsArray,
+	Tag
+} from '@zextras/carbonio-ui-commons';
 import { every, find, includes, reduce } from 'lodash';
 
-import { ZIMBRA_STANDARD_COLORS } from '../carbonio-ui-commons/constants';
-import { useRunSearchIntegration } from '../carbonio-ui-commons/integrations/search/use-run-search';
-import { useSortedTagsArray } from '../carbonio-ui-commons/store/zustand/tags';
-import { Tag } from '../carbonio-ui-commons/types/tags';
-import { Contact } from '../legacy/types/contact';
-import { useTagExist } from '../legacy/ui-actions/tag-actions';
+import { Contact } from 'legacy/types/contact';
+import { useTagExist } from 'legacy/ui-actions/tag-actions';
 
 interface ActionTagButtonProps {
 	contact: Contact;

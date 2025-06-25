@@ -9,7 +9,6 @@ import type * as SearchUI from '@zextras/carbonio-search-ui';
 import { addBoardView, addRoute, addSettingsView } from '@zextras/carbonio-shell-ui';
 import * as shell from '@zextras/carbonio-shell-ui';
 
-import { setupTest } from '../../carbonio-ui-commons/test/test-setup';
 import {
 	CONTACT_BOARD_ID,
 	CONTACTS_APP_ID,
@@ -18,8 +17,9 @@ import {
 	EDIT_DL_BOARD_ID,
 	GROUPS_ROUTE,
 	NEW_CONTACT_GROUP_BOARD_ID
-} from '../../constants';
-import { ViewsRegistration } from '../views-registration';
+} from 'constants/index';
+import { ViewsRegistration } from 'app/views-registration';
+import { setupTest } from '@test-setup';
 
 describe('ViewsRegistration', () => {
 	it('should register the main route', () => {

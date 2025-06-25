@@ -7,15 +7,15 @@
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
+import { FOLDERS } from '@zextras/carbonio-ui-commons';
 
-import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
-import { createSoapAPIInterceptor } from '../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { populateFoldersStore } from '../../../carbonio-ui-commons/test/mocks/store/folders';
-import { screen, setupHook } from '../../../carbonio-ui-commons/test/test-setup';
-import { TRASH_ACTION } from '../../../constants/actions';
-import { Contact } from '../../../legacy/types/contact';
-import { buildContact } from '../../../tests/model-builder';
-import { useTrashContacts } from '../use-trash-contacts';
+import { TRASH_ACTION } from 'constants/actions';
+import { Contact } from 'legacy/types/contact';
+import { buildContact } from 'tests/model-builder';
+import { useTrashContacts } from 'actions/common-contacts-actions/use-trash-contacts';
+import { screen, setupHook } from '@test-setup';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
+import { populateFoldersStore } from '@test-utils/store/folders';
 
 describe('useTrashContacts', () => {
 	it('should return trash label and icon when action is correctly initialized', () => {

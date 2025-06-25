@@ -3,13 +3,14 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { BooleanString, ErrorSoapBodyResponse, JSNS, soapFetch } from '@zextras/carbonio-shell-ui';
+import { BooleanString, ErrorSoapBodyResponse, soapFetch } from '@zextras/carbonio-shell-ui';
+import { JSNS } from '@zextras/carbonio-ui-commons';
 import { filter, first, flatMap } from 'lodash';
 
-import { GenericSoapPayload } from './types';
-import { DistributionList, DistributionListOwner } from '../../model/distribution-list';
+import { GenericSoapPayload } from 'network/api/types';
+import { DistributionList, DistributionListOwner } from 'model/distribution-list';
 
-export interface GetDistributionListRequest extends GenericSoapPayload<typeof JSNS.account> {
+export interface GetDistributionListRequest extends GenericSoapPayload<typeof JSNS.ACCOUNT> {
 	dl: {
 		by: 'name' | 'id';
 		_content: string;
@@ -17,7 +18,7 @@ export interface GetDistributionListRequest extends GenericSoapPayload<typeof JS
 	needOwners?: boolean;
 }
 
-export type GetDistributionListResponse = GenericSoapPayload<typeof JSNS.account> & {
+export type GetDistributionListResponse = GenericSoapPayload<typeof JSNS.ACCOUNT> & {
 	dl: Array<{
 		id: string;
 		name: string;
@@ -79,7 +80,7 @@ export const getDistributionList = ({
 	return soapFetch<GetDistributionListRequest, GetDistributionListResponse | ErrorSoapBodyResponse>(
 		'GetDistributionList',
 		{
-			_jsns: JSNS.account,
+			_jsns: JSNS.ACCOUNT,
 			dl: request,
 			needOwners: true
 		}

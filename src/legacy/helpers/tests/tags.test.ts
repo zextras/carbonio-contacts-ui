@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { ZIMBRA_STANDARD_COLORS } from '../../../carbonio-ui-commons/constants';
-import { Tags } from '../../../carbonio-ui-commons/types/tags';
-import { Contact } from '../../types/contact';
-import { getTagsArray } from '../tags';
+import { ZIMBRA_STANDARD_COLORS, Tags } from '@zextras/carbonio-ui-commons';
+
+import { Contact } from 'legacy/types/contact';
+import { getTagsArray } from 'legacy/helpers/tags';
 
 describe('getTagsArray', () => {
 	const tagsMap: Tags = {

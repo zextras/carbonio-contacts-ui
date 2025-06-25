@@ -8,7 +8,7 @@ import React, { FC, ReactElement, useCallback } from 'react';
 import { Container, ChipInput } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
-import { Query } from '../search-types';
+import { Query } from 'legacy/views/search/search-types';
 
 export type KeywordState = Query;
 
@@ -46,6 +46,7 @@ const KeywordRow: FC<ComponentProps> = ({ compProps }): ReactElement => {
 				onChange={onChange}
 				onAdd={keywordChipOnAdd}
 				defaultValue={query}
+				requireUniqueChips
 			/>
 		</Container>
 	);

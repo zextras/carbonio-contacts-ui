@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { SoapContact } from '../../legacy/types/soap';
+import { SoapContact } from 'legacy/types/soap';
 
 export type SortBy =
 	| 'dateDesc'

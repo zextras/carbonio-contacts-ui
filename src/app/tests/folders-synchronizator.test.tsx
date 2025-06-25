@@ -5,29 +5,31 @@
  */
 import React from 'react';
 
+import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
+import * as commonsHook from '@zextras/carbonio-ui-commons';
 import { HttpResponse } from 'msw';
 
-import { FOLDER_VIEW } from '../../carbonio-ui-commons/constants';
-import * as commonsHook from '../../carbonio-ui-commons/hooks/use-initialize-folders';
-import { generateFolder } from '../../carbonio-ui-commons/test/mocks/folders/folders-generator';
+import { FoldersSynchronizator } from 'app/folders-syncronization';
+import { setupTest } from '@test-setup';
+import { generateFolder } from '@test-utils/folders/folders-generator';
 import {
 	createAPIInterceptor,
 	createSoapAPIInterceptor
-} from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { setupTest } from '../../carbonio-ui-commons/test/test-setup';
-import { FoldersSynchronizator } from '../folders-syncronization';
+} from '@test-utils/network/msw/create-api-interceptor';
 
 // mocking the worker. in commons jest-setup the worker is already mocked, but is improperly defined with wrong types and
 // is causing a call to "onMessage", which tries to alter the folders store and overrides the folders, breaking the test.
 // It also causes warning/errors due the fact it tries to set an "undefined" in the folders.
 // I think we should consider removing that mock or redefine it or make it configurable
-jest.mock('../../carbonio-ui-commons/worker', () => ({
+jest.mock('@zextras/carbonio-ui-commons', () => ({
+	...jest.requireActual('@zextras/carbonio-ui-commons'),
 	folderWorker: {
 		postMessage: jest.fn()
 	},
 	tagsWorker: {
 		postMessage: jest.fn()
-	}
+	},
+	useInitializeFolders: jest.fn()
 }));
 
 describe('FoldersSynchronizator', () => {

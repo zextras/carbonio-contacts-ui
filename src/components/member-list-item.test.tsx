@@ -7,9 +7,9 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 
-import { MemberListItemComponent, MemberListItemComponentProps } from './member-list-item';
-import { setupTest, screen } from '../carbonio-ui-commons/test/test-setup';
-import { TESTID_SELECTORS } from '../constants/tests';
+import { MemberListItemComponent, MemberListItemComponentProps } from 'components/member-list-item';
+import { TESTID_SELECTORS } from 'constants/tests';
+import { setupTest, screen } from '@test-setup';
 
 const buildProps = ({
 	email = '',

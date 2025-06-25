@@ -6,10 +6,9 @@
 import React, { FC, ReactElement, useCallback, useMemo } from 'react';
 
 import { Container, ChipInput, ChipInputProps, ChipItem } from '@zextras/carbonio-design-system';
+import { ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-ui-commons';
 import { filter } from 'lodash';
 import { useTranslation } from 'react-i18next';
-
-import { ZIMBRA_STANDARD_COLORS } from '../../../../carbonio-ui-commons/constants/utils';
 
 type ComponentProps = {
 	compProps: {
@@ -18,52 +17,40 @@ type ComponentProps = {
 		setTag: (arg: any) => void;
 	};
 };
+
+const tagPrefix = 'tag';
+
 const TagRow: FC<ComponentProps> = ({ compProps }): ReactElement => {
 	const [t] = useTranslation();
 	const { tagOptions, tag, setTag } = compProps;
 
-	const chipOnAdd = useCallback(
-		(
-			label: string,
-			preText: string,
-			hasAvatar: boolean,
-			isGeneric: boolean,
-			isQueryFilter: boolean,
-			avatarIcon: string,
-			avatarBackground: string
-		) => ({
-			label: `${preText}:${label}`,
-			hasAvatar,
-			isGeneric,
-			avatarIcon,
-			background: 'gray2',
-			avatarBackground: avatarBackground || 'gray2',
-			isQueryFilter,
-			value: `${preText}:"${label}"`
-		}),
-		[]
-	);
-
 	const tagChipOnAdd = useCallback(
 		(label: string): any => {
+			const tagLabel = `${tagPrefix}:${label}`;
+			const tagExists = tag.some((existingTag) => existingTag.label === tagLabel);
+			if (tagExists) {
+				return undefined;
+			}
 			const chipBg = filter(tagOptions, { label })[0];
-			return chipOnAdd(
-				label,
-				'tag',
-				true,
-				false,
-				true,
-				'Tag',
-				ZIMBRA_STANDARD_COLORS[chipBg.color ?? 0].hex
-			);
+			return {
+				label: tagLabel,
+				hasAvatar: true,
+				isGeneric: false,
+				avatarIcon: 'Tag',
+				background: 'gray2',
+				isQueryFilter: true,
+				value: `${tagPrefix}:"${label}"`,
+				avatarBackground: ZIMBRA_STANDARD_COLORS[chipBg.color ?? 0].hex || 'gray2'
+			};
 		},
-		[chipOnAdd, tagOptions]
+		[tagOptions, tag]
 	);
 
 	const tagPlaceholder = useMemo(() => t('label.tags', 'Tags'), [t]);
 	const onTagChange = useCallback(
 		(chips: ChipItem[]) => {
-			setTag(chips);
+			const validChips = chips.filter((chip): chip is ChipItem => chip !== undefined);
+			setTag(validChips);
 		},
 		[setTag]
 	);

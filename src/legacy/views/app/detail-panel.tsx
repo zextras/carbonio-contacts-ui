@@ -8,10 +8,10 @@ import React from 'react';
 import { Container } from '@zextras/carbonio-design-system';
 import { Route, Routes } from 'react-router-dom';
 
-import ContactsEmptyDisplayer from './contacts-empty-displayer';
-import { ContactGroupDisplayerWrapper } from '../../../views/contact-groups/displayer/contact-group-displayer-wrapper';
-import ContactEditPanel from '../edit/contact-edit-panel';
-import { ContactPreviewWrapper } from '../preview/contact-preview-wrapper';
+import ContactsEmptyDisplayer from 'legacy/views/app/contacts-empty-displayer';
+import { ContactGroupDisplayerWrapper } from 'views/contact-groups/displayer/contact-group-displayer-wrapper';
+import ContactEditPanel from 'legacy/views/edit/contact-edit-panel';
+import { ContactPreviewWrapper } from 'legacy/views/preview/contact-preview-wrapper';
 
 export const DetailPanel = (): React.JSX.Element => (
 	<Routes>

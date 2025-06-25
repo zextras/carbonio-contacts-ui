@@ -7,25 +7,27 @@ import React, { FC, Suspense, useCallback, useEffect, useMemo, useState } from '
 
 import { Container, Spinner } from '@zextras/carbonio-design-system';
 import type { SearchViewProps } from '@zextras/carbonio-search-ui';
+import {
+	isTrash,
+	useUpdateView,
+	useFoldersMap,
+	Folder,
+	usePrefs
+} from '@zextras/carbonio-ui-commons';
 import { map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { Route, Routes } from 'react-router-dom';
 
-import AdvancedFilterModal from './advance-filter-modal';
-import { runSearch } from './run-search';
-import { SearchContactsEmptyPanel } from './search-contacts-empty-panel';
-import { SearchList } from './search-list';
-import { Query } from './search-types';
-import { SearchResults } from './types';
-import { isTrash } from '../../../carbonio-ui-commons/helpers/folders';
-import { useUpdateView } from '../../../carbonio-ui-commons/hooks/use-update-view';
-import { useFoldersMap } from '../../../carbonio-ui-commons/store/zustand/folder';
-import { Folder } from '../../../carbonio-ui-commons/types';
-import { usePrefs } from '../../../carbonio-ui-commons/utils/use-prefs';
-import { ContactGroupDisplayerWrapper } from '../../../views/contact-groups/displayer/contact-group-displayer-wrapper';
-import { addContactsToStore, useContactsById } from '../../store/contacts';
-import ContactEditPanel from '../edit/contact-edit-panel';
-import { ContactPreviewWrapper } from '../preview/contact-preview-wrapper';
+import AdvancedFilterModal from 'legacy/views/search/advance-filter-modal';
+import { runSearch } from 'legacy/views/search/run-search';
+import { SearchContactsEmptyPanel } from 'legacy/views/search/search-contacts-empty-panel';
+import { SearchList } from 'legacy/views/search/search-list';
+import { Query } from 'legacy/views/search/search-types';
+import { SearchResults } from 'legacy/views/search/types';
+import { ContactGroupDisplayerWrapper } from 'views/contact-groups/displayer/contact-group-displayer-wrapper';
+import { addContactsToStore, useContactsById } from 'legacy/store/contacts';
+import ContactEditPanel from 'legacy/views/edit/contact-edit-panel';
+import { ContactPreviewWrapper } from 'legacy/views/preview/contact-preview-wrapper';
 
 const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 	const [query, updateQuery] = useQuery();

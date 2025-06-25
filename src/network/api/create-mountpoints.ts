@@ -3,15 +3,14 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { ErrorSoapBodyResponse, JSNS, soapFetch } from '@zextras/carbonio-shell-ui';
+import { ErrorSoapBodyResponse, soapFetch } from '@zextras/carbonio-shell-ui';
+import { FOLDERS, JSNS, SoapLink } from '@zextras/carbonio-ui-commons';
 import { map } from 'lodash';
 
-import { GenericSoapPayload } from './types';
-import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
-import { SoapLink } from '../../carbonio-ui-commons/types/folder';
-import { ShareInfo } from '../../model/share-info';
+import { GenericSoapPayload } from 'network/api/types';
+import { ShareInfo } from 'model/share-info';
 
-export type CreateMountpointsRequest = GenericSoapPayload<typeof JSNS.all> & {
+export type CreateMountpointsRequest = GenericSoapPayload<typeof JSNS.ALL> & {
 	CreateMountpointRequest: Array<{
 		link: {
 			l: string;
@@ -24,8 +23,8 @@ export type CreateMountpointsRequest = GenericSoapPayload<typeof JSNS.all> & {
 	}>;
 };
 
-export type CreateMountpointsResponse = GenericSoapPayload<typeof JSNS.all> & {
-	CreateMountpointResponse: Array<{ link: Array<SoapLink & { _jsns: typeof JSNS.mail }> }>;
+export type CreateMountpointsResponse = GenericSoapPayload<typeof JSNS.ALL> & {
+	CreateMountpointResponse: Array<{ link: Array<SoapLink & { _jsns: typeof JSNS.MAIL }> }>;
 };
 
 /**
@@ -49,7 +48,7 @@ export const createMountpoints = (
 			},
 			_jsns: 'urn:zimbraMail'
 		})),
-		_jsns: JSNS.all
+		_jsns: JSNS.ALL
 	}).then((response) => {
 		if ('Fault' in response) {
 			throw new Error(response.Fault.Reason.Text, { cause: response.Fault });

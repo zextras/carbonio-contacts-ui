@@ -17,8 +17,8 @@ import {
 import { trim } from 'lodash';
 import styled from 'styled-components';
 
-import { CustomIconAvatar } from '../../components/styled-components';
-import { useDisplayName } from '../hooks/use-display-name';
+import { CustomIconAvatar } from 'components/styled-components';
+import { useDisplayName } from 'legacy/hooks/use-display-name';
 
 const AvatarMobile = styled(Avatar)`
 	position: relative;

@@ -5,9 +5,9 @@
  */
 import { useTranslation } from 'react-i18next';
 
-import { useMoveContacts } from '../../../actions/common-contacts-actions/use-move-contacts';
-import { Action } from '../../../actions/types';
-import { Contact } from '../../../legacy/types/contact';
+import { useMoveContacts } from 'actions/common-contacts-actions/use-move-contacts';
+import { Action } from 'actions/types';
+import { Contact } from 'legacy/types/contact';
 
 export const useContactMoveAction = (contact: Contact): Action => {
 	const [t] = useTranslation();

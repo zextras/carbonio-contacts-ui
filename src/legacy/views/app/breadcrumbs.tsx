@@ -8,7 +8,7 @@ import React, { useMemo } from 'react';
 import { Container, Row, Text, Divider } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
-import { getFolderTranslatedNameByName } from '../../utils/helpers';
+import { getFolderTranslatedNameByName } from 'legacy/utils/helpers';
 
 export const Breadcrumbs = ({
 	folderPath,

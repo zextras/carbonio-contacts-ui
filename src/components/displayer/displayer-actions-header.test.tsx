@@ -9,8 +9,8 @@ import { faker } from '@faker-js/faker';
 import { Button } from '@zextras/carbonio-design-system';
 import { times } from 'lodash';
 
-import { DisplayerActionsHeader } from './displayer-actions-header';
-import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
+import { DisplayerActionsHeader } from 'components/displayer/displayer-actions-header';
+import { screen, setupTest } from '@test-setup';
 
 describe('Contact group displayer header actions', () => {
 	it('should display no buttons if no children is passed', () => {

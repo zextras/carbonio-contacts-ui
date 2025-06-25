@@ -7,8 +7,8 @@ import React, { useCallback, useMemo } from 'react';
 
 import { Avatar, Button, Row, Tooltip, Text } from '@zextras/carbonio-design-system';
 
-import { useActionCopyToClipboard } from '../actions/copy-to-clipboard';
-import { useActionSendEmail } from '../actions/send-email';
+import { useActionCopyToClipboard } from 'actions/copy-to-clipboard';
+import { useActionSendEmail } from 'actions/send-email';
 
 export type MemberDisplayerListItemComponentProps = {
 	email: string;

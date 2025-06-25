@@ -8,7 +8,7 @@ import React from 'react';
 import { Button, Container } from '@zextras/carbonio-design-system';
 import { t } from '@zextras/carbonio-shell-ui';
 
-import { useActionAddSharedAddressBooks } from '../../../actions/add-shared-address-books';
+import { useActionAddSharedAddressBooks } from 'actions/add-shared-address-books';
 
 export const FindSharesButton = (): React.JSX.Element => {
 	const addSharesAction = useActionAddSharedAddressBooks();

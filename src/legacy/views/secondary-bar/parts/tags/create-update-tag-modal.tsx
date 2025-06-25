@@ -7,18 +7,20 @@
 import React, { FC, ReactElement, useCallback, useMemo, useState } from 'react';
 
 import { Input, Padding, Text, useSnackbar } from '@zextras/carbonio-design-system';
-import { useTranslation } from 'react-i18next';
-
-import { ItemType } from './types';
 import {
 	ColorSelect,
-	ColorSelectProps
-} from '../../../../../carbonio-ui-commons/components/select/color-select';
-import { changeTagColor, createTag, renameTag } from '../../../../../carbonio-ui-commons/soap/tags';
-import { contactAction } from '../../../../store/actions/contact-action';
-import { Contact } from '../../../../types/contact';
-import ModalFooter from '../../commons/modal-footer';
-import { ModalHeader } from '../../commons/modal-header';
+	ColorSelectProps,
+	changeTagColor,
+	createTag,
+	renameTag
+} from '@zextras/carbonio-ui-commons';
+import { useTranslation } from 'react-i18next';
+
+import { ItemType } from 'legacy/views/secondary-bar/parts/tags/types';
+import { contactAction } from 'legacy/store/actions/contact-action';
+import { Contact } from 'legacy/types/contact';
+import ModalFooter from 'legacy/views/secondary-bar/commons/modal-footer';
+import { ModalHeader } from 'legacy/views/secondary-bar/commons/modal-header';
 
 type ComponentProps = {
 	onClose: () => void;

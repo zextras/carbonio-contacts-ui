@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { NameSpace } from '../../types/utils';
+import { NameSpace } from 'types/utils';
 
 export type GenericSoapPayload<NS extends NameSpace> = {
 	_jsns: NS;

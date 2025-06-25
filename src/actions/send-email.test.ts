@@ -7,9 +7,9 @@ import { faker } from '@faker-js/faker';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { times } from 'lodash';
 
-import { useActionSendEmail } from './send-email';
-import { UIAction } from './types';
-import { setupHook } from '../carbonio-ui-commons/test/test-setup';
+import { useActionSendEmail } from 'actions/send-email';
+import { UIAction } from 'actions/types';
+import { setupHook } from '@test-setup';
 
 describe('useActionSendEmail', () => {
 	it('should return an action with the specific data', () => {

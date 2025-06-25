@@ -8,21 +8,24 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { SoapNotify, useNotify } from '@zextras/carbonio-shell-ui';
+import {
+	useFolderStore,
+	useTagStore,
+	folderWorker,
+	tagsWorker
+} from '@zextras/carbonio-ui-commons';
 import { forEach, isEmpty, sortBy } from 'lodash';
 
-import { useFolderStore } from '../../../carbonio-ui-commons/store/zustand/folder';
-import { useTagStore } from '../../../carbonio-ui-commons/store/zustand/tags';
-import { folderWorker, tagsWorker } from '../../../carbonio-ui-commons/worker';
 import {
 	addContactsToStore,
 	removeContactsFromStore,
 	updateContactsInStore
-} from '../../store/contacts';
-import { PartialSoapContactWithId, SoapContact } from '../../types/soap';
+} from 'legacy/store/contacts';
+import { PartialSoapContactWithId, SoapContact } from 'legacy/types/soap';
 import {
 	normalizeContactsFromSoap,
 	normalizeSyncContactsFromSoap
-} from '../../utils/normalizations/normalize-contact-from-soap';
+} from 'legacy/utils/normalizations/normalize-contact-from-soap';
 
 function handleFoldersNotify(
 	seq: number,

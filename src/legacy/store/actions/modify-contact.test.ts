@@ -3,10 +3,10 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { modifyContact } from './modify-contact';
-import { createSoapAPIInterceptor } from '../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { buildContact } from '../../../tests/model-builder';
-import { createSoapContact } from '../../../tests/utils';
+import { modifyContact } from 'legacy/store/actions/modify-contact';
+import { buildContact } from 'tests/model-builder';
+import { createSoapContact } from 'tests/utils';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 describe('ModifyContact', () => {
 	it('should call API with _jsns:zimbraMail', async () => {

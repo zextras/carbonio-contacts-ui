@@ -17,7 +17,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import EditView from './edit-view';
+import EditView from 'legacy/views/edit/edit-view';
 
 type ContactEditProps = {
 	editId: string;

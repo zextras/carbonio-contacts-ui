@@ -9,14 +9,10 @@ import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 import { times } from 'lodash';
 
-import { UsersSharesListItem } from './users-shares-list-item';
-import {
-	makeListItemsVisible,
-	screen,
-	setupTest
-} from '../../../carbonio-ui-commons/test/test-setup';
-import { TESTID_SELECTORS } from '../../../constants/tests';
-import { buildShareInfo } from '../../../tests/model-builder';
+import { UsersSharesListItem } from 'components/modals/shared-address-books-add/users-shares-list-item';
+import { TESTID_SELECTORS } from 'constants/tests';
+import { buildShareInfo } from 'tests/model-builder';
+import { makeListItemsVisible, screen, setupTest } from '@test-setup';
 
 describe('UsersSharesListItem', () => {
 	it('should display an expanded accordion', () => {

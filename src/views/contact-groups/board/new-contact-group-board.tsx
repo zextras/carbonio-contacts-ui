@@ -7,18 +7,18 @@ import React, { useCallback, useState } from 'react';
 
 import { useSnackbar } from '@zextras/carbonio-design-system';
 import { useBoardHooks } from '@zextras/carbonio-shell-ui';
+import { FOLDERS } from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
-import { addContactsToStore } from '../../../legacy/store/contacts';
+import { addContactsToStore } from 'legacy/store/contacts';
 import {
 	CommonContactGroupBoard,
 	isContactGroupNameInvalid
-} from '../../board/common-contact-group-board';
-import { createContactGroup } from '../api/create-contact-group';
-import { CONTACT_GROUPS_PATH } from '../navigation';
-import { getFolderFromContactGroup } from '../utils';
+} from 'views/board/common-contact-group-board';
+import { createContactGroup } from 'views/contact-groups/api/create-contact-group';
+import { CONTACT_GROUPS_PATH } from 'views/contact-groups/navigation';
+import { getFolderFromContactGroup } from 'views/contact-groups/utils';
 
 const NewContactGroupBoard = (): React.JSX.Element => {
 	const [t] = useTranslation();
@@ -27,7 +27,7 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 	const createSnackbar = useSnackbar();
 	const navigate = useNavigate();
 	const initialName = t('board.newContactGroup.name', 'New Group');
-	const [folderId, setFolderId] = useState(FOLDERS.CONTACTS);
+	const [folderId, setFolderId] = useState<string>(FOLDERS.CONTACTS);
 	const [nameValue, setNameValue] = useState(initialName);
 
 	const [memberListEmails, setMemberListEmails] = useState<string[]>([]);

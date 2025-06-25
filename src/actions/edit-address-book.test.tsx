@@ -6,15 +6,14 @@
 
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
+import { FOLDER_VIEW, FOLDERS } from '@zextras/carbonio-ui-commons';
 
-import { useActionEditAddressBook } from './edit-address-book';
-import { UIAction } from './types';
-import { FOLDER_VIEW } from '../carbonio-ui-commons/constants';
-import { FOLDERS } from '../carbonio-ui-commons/constants/folders';
-import { generateFolder } from '../carbonio-ui-commons/test/mocks/folders/folders-generator';
-import { populateFoldersStore } from '../carbonio-ui-commons/test/mocks/store/folders';
-import { screen, setupHook } from '../carbonio-ui-commons/test/test-setup';
-import { TIMERS } from '../constants/tests';
+import { useActionEditAddressBook } from 'actions/edit-address-book';
+import { UIAction } from 'actions/types';
+import { TIMERS } from 'constants/tests';
+import { screen, setupHook } from '@test-setup';
+import { generateFolder } from '@test-utils/folders/folders-generator';
+import { populateFoldersStore } from '@test-utils/store/folders';
 
 describe('useActionEditAddressBook', () => {
 	it('should return an object with the specific data', () => {

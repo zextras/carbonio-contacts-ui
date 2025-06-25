@@ -6,21 +6,14 @@
 import React from 'react';
 
 import { act } from '@testing-library/react';
+import { FOLDERS, isLink, isTrashed, getRootsArray } from '@zextras/carbonio-ui-commons';
 
-import { AddressBookMoveModal } from './address-book-move';
-import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
-import { isLink, isTrashed } from '../../carbonio-ui-commons/helpers/folders';
-import { getRootsArray } from '../../carbonio-ui-commons/store/zustand/folder';
-import { populateFoldersStore } from '../../carbonio-ui-commons/test/mocks/store/folders';
-import { getMocksContext } from '../../carbonio-ui-commons/test/mocks/utils/mocks-context';
-import {
-	makeListItemsVisible,
-	screen,
-	setupTest,
-	within
-} from '../../carbonio-ui-commons/test/test-setup';
-import { TESTID_SELECTORS } from '../../constants/tests';
-import { getFoldersArray } from '../../tests/utils';
+import { AddressBookMoveModal } from 'components/modals/address-book-move';
+import { TESTID_SELECTORS } from 'constants/tests';
+import { getFoldersArray } from 'tests/utils';
+import { makeListItemsVisible, screen, setupTest, within } from '@test-setup';
+import { populateFoldersStore } from '@test-utils/store/folders';
+import { getMocksContext } from '@test-utils/utils/mocks-context';
 
 describe('AddressBookMoveModal', () => {
 	const mocksContext = getMocksContext();

@@ -11,23 +11,22 @@ import * as shell from '@zextras/carbonio-shell-ui';
 import { EventEmitter } from 'events';
 import { HttpResponse } from 'msw';
 
-import EditDLBoard, { EditDLBoardContext } from './edit-dl-board';
-import { screen, setupTest, within } from '../../carbonio-ui-commons/test/test-setup';
-import { ROUTES, ROUTES_INTERNAL_PARAMS } from '../../constants';
-import { JEST_MOCKED_ERROR, TESTID_SELECTORS } from '../../constants/tests';
-import { DistributionList } from '../../model/distribution-list';
-import { GetDistributionListResponse } from '../../network/api/get-distribution-list';
-import { GetDistributionListMembersResponse } from '../../network/api/get-distribution-list-members';
-import { useDistributionListsStore } from '../../store/distribution-lists';
-import { registerDistributionListActionHandler } from '../../tests/msw-handlers/distribution-list-action';
+import EditDLBoard, { EditDLBoardContext } from 'views/board/edit-dl-board';
+import { ROUTES, ROUTES_INTERNAL_PARAMS } from 'constants/index';
+import { JEST_MOCKED_ERROR, TESTID_SELECTORS } from 'constants/tests';
+import { DistributionList } from 'model/distribution-list';
+import { GetDistributionListResponse } from 'network/api/get-distribution-list';
+import { GetDistributionListMembersResponse } from 'network/api/get-distribution-list-members';
+import { useDistributionListsStore } from 'store/distribution-lists';
+import { registerDistributionListActionHandler } from 'tests/msw-handlers/distribution-list-action';
 import {
 	buildGetDistributionListResponse,
 	registerGetDistributionListHandler
-} from '../../tests/msw-handlers/get-distribution-list';
+} from 'tests/msw-handlers/get-distribution-list';
 import {
 	buildGetDistributionListMembersResponse,
 	registerGetDistributionListMembersHandler
-} from '../../tests/msw-handlers/get-distribution-list-members';
+} from 'tests/msw-handlers/get-distribution-list-members';
 import {
 	buildSoapResponse,
 	delayUntil,
@@ -35,8 +34,9 @@ import {
 	generateDistributionListMembersPage,
 	getDLContactInput,
 	spyUseBoardHooks
-} from '../../tests/utils';
-import { DistributionListsView } from '../distribution-list/distribution-lists-view';
+} from 'tests/utils';
+import { DistributionListsView } from 'views/distribution-list/distribution-lists-view';
+import { screen, setupTest, within } from '@test-setup';
 
 const spyUseBoard = (dl: DistributionList | undefined): void => {
 	jest.spyOn(shell, 'useBoard').mockReturnValue({

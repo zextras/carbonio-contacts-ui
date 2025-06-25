@@ -7,24 +7,27 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { act, waitFor } from '@testing-library/react';
-import { JSNS } from '@zextras/carbonio-shell-ui';
+import { JSNS } from '@zextras/carbonio-ui-commons';
 
-import { EditDLControllerComponent, EditDLControllerComponentProps } from './edit-dl-controller';
-import { screen, setupTest, within } from '../carbonio-ui-commons/test/test-setup';
-import { JEST_MOCKED_ERROR, TESTID_SELECTORS } from '../constants/tests';
-import { DistributionList } from '../model/distribution-list';
+import {
+	EditDLControllerComponent,
+	EditDLControllerComponentProps
+} from 'components/edit-dl-controller';
+import { JEST_MOCKED_ERROR, TESTID_SELECTORS } from 'constants/tests';
+import { DistributionList } from 'model/distribution-list';
 import {
 	BatchDistributionListActionRequest,
 	DistributionListActionRequest
-} from '../network/api/distribution-list-action';
-import { registerDistributionListActionHandler } from '../tests/msw-handlers/distribution-list-action';
-import { registerFullAutocompleteHandler } from '../tests/msw-handlers/full-autocomplete';
+} from 'network/api/distribution-list-action';
+import { registerDistributionListActionHandler } from 'tests/msw-handlers/distribution-list-action';
+import { registerFullAutocompleteHandler } from 'tests/msw-handlers/full-autocomplete';
 import {
 	generateDistributionList,
 	generateDistributionListMembersPage,
 	getDLContactInput,
 	spyUseBoardHooks
-} from '../tests/utils';
+} from 'tests/utils';
+import { screen, setupTest, within } from '@test-setup';
 
 beforeEach(() => {
 	spyUseBoardHooks();
@@ -219,7 +222,7 @@ describe('EditDLControllerComponent', () => {
 					}>({
 						Body: {
 							BatchRequest: {
-								_jsns: JSNS.all,
+								_jsns: JSNS.ALL,
 								DistributionListActionRequest: [
 									expect.objectContaining<Partial<DistributionListActionRequest>>({
 										action: {

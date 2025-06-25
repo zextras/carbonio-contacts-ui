@@ -3,11 +3,12 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { JSNS } from '@zextras/carbonio-shell-ui';
 
-import { FolderActionRequest } from './folder-action';
-import { trashContacts } from './trash-contacts';
-import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
+import { JSNS } from '@zextras/carbonio-ui-commons';
+
+import { FolderActionRequest } from 'network/api/folder-action';
+import { trashContacts } from 'network/api/trash-contacts';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 describe('Trash contacts', () => {
 	it('should call the API with the proper fields', () => {
@@ -19,7 +20,7 @@ describe('Trash contacts', () => {
 				id: contactsIds.join(','),
 				op: 'trash'
 			},
-			_jsns: JSNS.mail
+			_jsns: JSNS.MAIL
 		});
 	});
 });

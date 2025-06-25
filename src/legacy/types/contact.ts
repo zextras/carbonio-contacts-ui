@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { ContactGroup } from '../../model/contact-group';
-import { NameSpace } from '../../types/utils';
-import { RemoteContactResponse } from '../integrations/types';
+import { ContactGroup } from 'model/contact-group';
+import { NameSpace } from 'types/utils';
+import { RemoteContactResponse } from 'legacy/integrations/types';
 
 export enum ContactPhoneType {
 	MOBILE = 'mobile',

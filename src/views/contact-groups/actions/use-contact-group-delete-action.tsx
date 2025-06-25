@@ -9,13 +9,13 @@ import { useSnackbar } from '@zextras/carbonio-design-system';
 import { closeBoard, getBoardById } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
-import { Action } from '../../../actions/types';
-import { useDeleteAction } from '../../../actions/use-delete-action';
-import { EDIT_CONTACT_GROUP_BOARD_ID } from '../../../constants';
-import { useGetContactGroupFromPath } from '../../../hooks/useGetContactGroupFromPath';
-import { ContactGroup } from '../../../model/contact-group';
-import { apiClient } from '../../../network/api-client';
-import { useRedirectToContactGroupFolder } from '../navigation';
+import { Action } from 'actions/types';
+import { useDeleteAction } from 'actions/use-delete-action';
+import { EDIT_CONTACT_GROUP_BOARD_ID } from 'constants/index';
+import { useGetContactGroupFromPath } from 'hooks/useGetContactGroupFromPath';
+import { ContactGroup } from 'model/contact-group';
+import { apiClient } from 'network/api-client';
+import { useRedirectToContactGroupFolder } from 'views/contact-groups/navigation';
 
 type DeleteContactGroupActionReturn = {
 	contactGroupId: string;

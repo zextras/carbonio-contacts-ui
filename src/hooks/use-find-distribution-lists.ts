@@ -9,9 +9,9 @@ import { useSnackbar } from '@zextras/carbonio-design-system';
 import { filter } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { DistributionList } from '../model/distribution-list';
-import { apiClient } from '../network/api-client';
-import { useDistributionListsStore } from '../store/distribution-lists';
+import { DistributionList } from 'model/distribution-list';
+import { apiClient } from 'network/api-client';
+import { useDistributionListsStore } from 'store/distribution-lists';
 
 export const useFindDistributionLists = ({
 	ownerOf,

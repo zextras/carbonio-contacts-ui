@@ -3,17 +3,18 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { JSNS, SoapResponse } from '@zextras/carbonio-shell-ui';
+import { SoapResponse } from '@zextras/carbonio-shell-ui';
+import { JSNS } from '@zextras/carbonio-ui-commons';
 import { map } from 'lodash';
 import { http, HttpResponse, HttpResponseResolver } from 'msw';
 
-import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
-import { DistributionList } from '../../model/distribution-list';
+import { DistributionList } from 'model/distribution-list';
 import {
 	GetDistributionListRequest,
 	GetDistributionListResponse
-} from '../../network/api/get-distribution-list';
-import { buildSoapError, buildSoapResponse } from '../utils';
+} from 'network/api/get-distribution-list';
+import { buildSoapError, buildSoapResponse } from 'tests/utils';
+import { getSetupServer } from '@jest-setup';
 
 type GetDistributionListHandler = HttpResponseResolver<
 	never,
@@ -38,7 +39,7 @@ export const buildGetDistributionListResponse = (
 			isMember: dl.isMember
 		}
 	],
-	_jsns: JSNS.account
+	_jsns: JSNS.ACCOUNT
 });
 
 export const registerGetDistributionListHandler = (

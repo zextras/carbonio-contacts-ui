@@ -10,20 +10,18 @@ import React, { ReactElement, useState } from 'react';
 import { faker } from '@faker-js/faker';
 import { act, fireEvent, waitFor, within } from '@testing-library/react';
 import { ChipAction } from '@zextras/carbonio-design-system';
-
-import { ContactInput } from './contact-input';
-import { CONTACT_TYPES } from '../../carbonio-ui-commons/integrations/constants';
 import {
+	CONTACT_TYPES,
 	ContactInputOnChange,
 	ContactInputProps,
-	ContactInputValue
-} from '../../carbonio-ui-commons/integrations/types';
-import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { UserEvent, screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
-import { TESTID_SELECTORS } from '../../constants/tests';
-import { registerGetDistributionListHandler } from '../../tests/msw-handlers/get-distribution-list';
-import { generateDistributionList } from '../../tests/utils';
-import { FullAutocompleteRequest, FullAutocompleteResponse } from '../types/contact';
+	ContactInputValue,
+	JSNS
+} from '@zextras/carbonio-ui-commons';
+
+import { UserEvent, screen, setupTest } from '@test-setup';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
+import { TESTID_SELECTORS } from 'constants/tests';
+import { ContactInput } from 'legacy/integrations/contact-input';
 import {
 	clickExpandDL,
 	createAutocompleteInterceptor,
@@ -37,13 +35,16 @@ import {
 	selectAllMembersInDL,
 	SELECT_ALL,
 	typeAndSelectOptionFromDropdown
-} from './test/mocks';
+} from 'legacy/integrations/test/mocks';
+import { FullAutocompleteRequest, FullAutocompleteResponse } from 'legacy/types/contact';
 import {
 	GetDistributionListRequest,
 	GetDistributionListResponse
-} from '../../network/api/get-distribution-list';
-import { registerFullAutocompleteHandler } from '../../tests/msw-handlers/full-autocomplete';
-import { registerGetDistributionListMembersHandler } from '../../tests/msw-handlers/get-distribution-list-members';
+} from 'network/api/get-distribution-list';
+import { registerFullAutocompleteHandler } from 'tests/msw-handlers/full-autocomplete';
+import { registerGetDistributionListHandler } from 'tests/msw-handlers/get-distribution-list';
+import { registerGetDistributionListMembersHandler } from 'tests/msw-handlers/get-distribution-list-members';
+import { generateDistributionList } from 'tests/utils';
 
 const VALID_EMAIL = 'valid@email.it';
 const INVALID_EMAIL = 'invalid@email';
@@ -448,7 +449,7 @@ describe('Contact input', () => {
 				GetDistributionListRequest,
 				GetDistributionListResponse
 			>('GetDistributionList', {
-				_jsns: 'urn:zimbraAccount',
+				_jsns: JSNS.ACCOUNT,
 				dl: [{ id: '123', name: 'dl@dl.test' }],
 				requestId: ''
 			});

@@ -6,20 +6,20 @@
 
 import { faker } from '@faker-js/faker';
 import { act, waitFor } from '@testing-library/react';
-import { JSNS } from '@zextras/carbonio-shell-ui';
+import { JSNS } from '@zextras/carbonio-ui-commons';
 import { times } from 'lodash';
 import { HttpResponse } from 'msw';
 
-import { useGetDistributionListMembers } from './use-get-distribution-list-members';
-import { setupHook } from '../carbonio-ui-commons/test/test-setup';
-import { GetDistributionListMembersResponse } from '../network/api/get-distribution-list-members';
-import { useDistributionListsStore } from '../store/distribution-lists';
-import { registerGetDistributionListMembersHandler } from '../tests/msw-handlers/get-distribution-list-members';
+import { useGetDistributionListMembers } from 'hooks/use-get-distribution-list-members';
+import { GetDistributionListMembersResponse } from 'network/api/get-distribution-list-members';
+import { useDistributionListsStore } from 'store/distribution-lists';
+import { registerGetDistributionListMembersHandler } from 'tests/msw-handlers/get-distribution-list-members';
 import {
 	buildSoapResponse,
 	generateDistributionList,
 	generateDistributionListMembersPage
-} from '../tests/utils';
+} from 'tests/utils';
+import { setupHook } from '@test-setup';
 
 describe('Use get distribution list members hook', () => {
 	it('should request members to the network if members are not stored', async () => {
@@ -76,7 +76,7 @@ describe('Use get distribution list members hook', () => {
 				return HttpResponse.json(
 					buildSoapResponse<GetDistributionListMembersResponse>({
 						GetDistributionListMembersResponse: {
-							_jsns: JSNS.account,
+							_jsns: JSNS.ACCOUNT,
 							dlm: result.map((member) => ({ _content: member })),
 							more: offset === 0,
 							total: firstPage.length + secondPage.length

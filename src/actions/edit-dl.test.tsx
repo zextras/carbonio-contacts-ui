@@ -7,11 +7,11 @@ import { faker } from '@faker-js/faker';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { times } from 'lodash';
 
-import { useActionEditDL } from './edit-dl';
-import { UIAction } from './types';
-import { setupHook } from '../carbonio-ui-commons/test/test-setup';
-import { EDIT_DL_BOARD_ID } from '../constants';
-import { generateDistributionList } from '../tests/utils';
+import { useActionEditDL } from 'actions/edit-dl';
+import { UIAction } from 'actions/types';
+import { EDIT_DL_BOARD_ID } from 'constants/index';
+import { generateDistributionList } from 'tests/utils';
+import { setupHook } from '@test-setup';
 
 describe('useActionEditDL', () => {
 	it('should return an object with the specific data', () => {

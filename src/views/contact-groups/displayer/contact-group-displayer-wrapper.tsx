@@ -7,9 +7,9 @@ import React from 'react';
 
 import { useParams } from 'react-router-dom';
 
-import { ContactGroupDisplayer } from './contact-group-displayer';
-import { useContactGroupById } from '../../../legacy/store/contacts';
-import ContactsEmptyDisplayer from '../../../legacy/views/app/contacts-empty-displayer';
+import { ContactGroupDisplayer } from 'views/contact-groups/displayer/contact-group-displayer';
+import { useContactGroupById } from 'legacy/store/contacts';
+import ContactsEmptyDisplayer from 'legacy/views/app/contacts-empty-displayer';
 
 export const ContactGroupDisplayerWrapper = (): React.JSX.Element => {
 	const { id } = useParams();

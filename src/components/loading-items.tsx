@@ -7,7 +7,7 @@ import React from 'react';
 
 import { times } from 'lodash';
 
-import { ShimmedDisplayerListItem } from './shimmed-displayer-list-item';
+import { ShimmedDisplayerListItem } from 'components/shimmed-displayer-list-item';
 
 export const loadingItems = (count: number): React.JSX.Element[] =>
 	times(count, (index) => <ShimmedDisplayerListItem key={index} />);

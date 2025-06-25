@@ -7,13 +7,17 @@
 import React from 'react';
 
 import { screen, waitFor } from '@testing-library/react';
+import { getTags } from '@zextras/carbonio-ui-commons';
 import type { TFunction } from 'i18next';
 
-import { getTags } from '../../../../carbonio-ui-commons/store/zustand/tags';
-import { setupTest } from '../../../../carbonio-ui-commons/test/test-setup';
-import { AdvancedFilterModal, AdvancedFilterModalProps } from '../advance-filter-modal';
+import {
+	AdvancedFilterModal,
+	AdvancedFilterModalProps
+} from 'legacy/views/search/advance-filter-modal';
+import { setupTest } from '@test-setup';
 
-jest.mock('../../../../carbonio-ui-commons/store/zustand/tags', () => ({
+jest.mock('@zextras/carbonio-ui-commons', () => ({
+	...jest.requireActual('@zextras/carbonio-ui-commons'),
 	getTags: jest.fn()
 }));
 

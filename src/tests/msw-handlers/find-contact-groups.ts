@@ -3,14 +3,15 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { JSNS, SoapResponse } from '@zextras/carbonio-shell-ui';
+import { SoapResponse } from '@zextras/carbonio-shell-ui';
+import { JSNS } from '@zextras/carbonio-ui-commons';
 import { http, HttpResponse, HttpResponseResolver } from 'msw';
 
-import { getSetupServer } from '../../carbonio-ui-commons/test/jest-setup';
-import { CnItem, GenericSoapPayload } from '../../network/api/types';
-import { buildSoapResponse, createSoapContactGroup } from '../utils';
+import { CnItem, GenericSoapPayload } from 'network/api/types';
+import { buildSoapResponse, createSoapContactGroup } from 'tests/utils';
+import { getSetupServer } from '@jest-setup';
 
-interface FindContactGroupsSoapApiRequest extends GenericSoapPayload<typeof JSNS.mail> {
+interface FindContactGroupsSoapApiRequest extends GenericSoapPayload<typeof JSNS.MAIL> {
 	limit: number;
 	offset: number;
 	sortBy: string;
@@ -18,7 +19,7 @@ interface FindContactGroupsSoapApiRequest extends GenericSoapPayload<typeof JSNS
 	query: string;
 }
 
-interface FindContactGroupsSoapApiResponse extends GenericSoapPayload<typeof JSNS.mail> {
+interface FindContactGroupsSoapApiResponse extends GenericSoapPayload<typeof JSNS.MAIL> {
 	cn?: Array<CnItem>;
 	sortBy: string;
 	offset: number;
@@ -32,7 +33,7 @@ export const createFindContactGroupsResponse = (
 	offset: 0,
 	cn,
 	more,
-	_jsns: 'urn:zimbraMail'
+	_jsns: JSNS.MAIL
 });
 type FindContactGroupsHandler = HttpResponseResolver<
 	never,
