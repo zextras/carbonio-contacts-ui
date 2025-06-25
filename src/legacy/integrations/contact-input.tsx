@@ -24,23 +24,21 @@ import {
 	ContactInputProps,
 	UserContact,
 	DistributionListContact,
-	UserOrDL
+	UserOrDL,
+	GroupContact,
+	ContactInputItemInternalValue
 } from '@zextras/carbonio-ui-commons';
 import { TFunction } from 'i18next';
 import { filter, find, map, uniqBy, noop, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { DistributionListChip } from 'legacy/integrations/distribution-list-chip';
-import type { ContactAddressMap } from 'legacy/types/contact';
-import type { GetContactsRequest, GetContactsResponse } from 'legacy/types/soap';
 import { Loader } from 'legacy/integrations/parts/loader';
 import { PasteContextMenu } from 'legacy/integrations/parts/paste-context-menu';
 import { getContactLabel, searchContacts, tryToParseEmail } from 'legacy/integrations/parts/utils';
-import {
-	ContactInputItemInternalValue,
-	ContactInputOptions,
-	GroupContact
-} from 'legacy/integrations/types';
+import { ContactInputOptions } from 'legacy/integrations/types';
+import type { ContactAddressMap } from 'legacy/types/contact';
+import type { GetContactsRequest, GetContactsResponse } from 'legacy/types/soap';
 
 const CHIP_TO_EXCLUDE = 'this-value-represent-a-chip-that-should-not-be-present';
 
@@ -86,6 +84,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	background = 'gray5',
 	dragAndDropEnabled = false,
 	orderedAccountIds = [],
+	chipLabelFactory,
 	inputRef: propsInputRef = null,
 	...rest
 }) => {
@@ -276,13 +275,15 @@ const ContactInputCore: FC<ContactInputProps> = ({
 
 			return {
 				id: selectedOption.id,
-				label: getContactLabel(selectedOption),
+				label: chipLabelFactory
+					? chipLabelFactory(selectedOption, getContactLabel(selectedOption))
+					: getContactLabel(selectedOption),
 				value: selectedOption,
 				error: !isEmailValid,
 				actions: [editAction]
 			};
 		},
-		[defaults, editChip, getGroupMembers, handleChipOnChange, t]
+		[defaults, editChip, getGroupMembers, handleChipOnChange, chipLabelFactory, t]
 	);
 
 	const onExpandDistributionList = useCallback(
