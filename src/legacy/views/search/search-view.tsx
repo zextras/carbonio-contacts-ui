@@ -29,7 +29,31 @@ import { addContactsToStore, useContactsById } from 'legacy/store/contacts';
 import ContactEditPanel from 'legacy/views/edit/contact-edit-panel';
 import { ContactPreviewWrapper } from 'legacy/views/preview/contact-preview-wrapper';
 
-const specialChars = ["~","'","!","#","$","%","^","&","(",")","_","?","/","{","}","[","]",";",":","-","+","<",">"];
+const specialChars = [
+	'~',
+	"'",
+	'!',
+	'#',
+	'$',
+	'%',
+	'^',
+	'&',
+	'(',
+	')',
+	'_',
+	'?',
+	'/',
+	'{',
+	'}',
+	'[',
+	']',
+	';',
+	':',
+	'-',
+	'+',
+	'<',
+	'>'
+];
 
 const containsSpecialCharacters = (value: string): boolean => {
 	const text = value.startsWith('tag:') ? value.substring(4) : value;
@@ -114,11 +138,15 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 
 	const containsSpecialCharacter = useMemo(() => {
 		if (query.length === 0) return false;
-		return query.some((item) => containsSpecialCharacters((item.value || item.label) || ''));
+		return query.some((item) => containsSpecialCharacters(item.value || item.label || ''));
 	}, [query]);
 
 	const invalidQueryTooltip = useMemo(
-		() => t('label.invalid_query', 'Special characters like :, ", -, !, etc., are ignored in the search. This may lead to unexpected results.'),
+		() =>
+			t(
+				'label.invalid_query',
+				'Special characters like :, ", -, !, etc., are ignored in the search. This may lead to unexpected results.'
+			),
 		[t]
 	);
 
@@ -195,10 +223,7 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 
 	return (
 		<Container>
-			<ResultsHeader 
-				label={resultLabel} 
-				labelType={resultLabelType}
-			/>
+			<ResultsHeader label={resultLabel} labelType={resultLabelType} />
 			<Container
 				orientation="horizontal"
 				background="gray4"
