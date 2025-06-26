@@ -238,6 +238,7 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 								contacts={searchContacts}
 								onListBottom={canLoadMore ? loadMore : undefined}
 								setShowAdvanceFilters={setShowAdvanceFilters}
+								query={query}
 							/>
 						}
 					/>
