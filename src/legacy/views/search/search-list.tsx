@@ -38,7 +38,10 @@ export const SearchList = ({
 
 	const displayerTitle = useMemo(() => {
 		if (contacts.length === 0 && query.length > 0) {
-			return t('displayer.search_list_title1', 'It looks like there are no results. Keep searching!');
+			return t(
+				'displayer.search_list_title1',
+				'It looks like there are no results. Keep searching!'
+			);
 		}
 		return null;
 	}, [t, contacts.length, query.length]);
