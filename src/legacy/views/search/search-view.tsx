@@ -29,6 +29,37 @@ import { addContactsToStore, useContactsById } from 'legacy/store/contacts';
 import ContactEditPanel from 'legacy/views/edit/contact-edit-panel';
 import { ContactPreviewWrapper } from 'legacy/views/preview/contact-preview-wrapper';
 
+const specialChars = [
+	'~',
+	"'",
+	'!',
+	'#',
+	'$',
+	'%',
+	'^',
+	'&',
+	'(',
+	')',
+	'_',
+	'?',
+	'/',
+	'{',
+	'}',
+	'[',
+	']',
+	';',
+	':',
+	'-',
+	'+',
+	'<',
+	'>'
+];
+
+const containsSpecialCharacters = (value: string): boolean => {
+	const text = value.startsWith('tag:') ? value.substring(4) : value;
+	return specialChars.some((specialChar) => text.includes(specialChar));
+};
+
 const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 	const [query, updateQuery] = useQuery();
 	useUpdateView();
@@ -105,6 +136,28 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 
 	const queryToString = useMemo(() => evaluateQueryString(query), [evaluateQueryString, query]);
 
+	const containsSpecialCharacter = useMemo(() => {
+		if (query.length === 0) return false;
+		return query.some((item) => containsSpecialCharacters(item.value ?? item.label ?? ''));
+	}, [query]);
+
+	const invalidQueryTooltip = useMemo(
+		() =>
+			t(
+				'label.invalid_query',
+				'Special characters like :, ", -, !, etc., are ignored in the search. This may lead to unexpected results for:'
+			),
+		[t]
+	);
+
+	const resultLabelType = containsSpecialCharacter ? 'warning' : undefined;
+	const resultLabel = useMemo(() => {
+		if (containsSpecialCharacter) {
+			return invalidQueryTooltip;
+		}
+		return query.length > 0 ? t('label.results_for', 'Results for:') : '';
+	}, [containsSpecialCharacter, invalidQueryTooltip, query.length, t]);
+
 	const runSearchFromScratch = useCallback(
 		(newQuery: Query, abortSignal?: AbortSignal) => {
 			setSearchResults(initialSearchState);
@@ -170,7 +223,7 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 
 	return (
 		<Container>
-			<ResultsHeader label={query.length > 0 ? t('label.results_for', 'Results for:') : ''} />
+			<ResultsHeader label={resultLabel} labelType={resultLabelType} />
 			<Container
 				orientation="horizontal"
 				background="gray4"
@@ -185,6 +238,7 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 								contacts={searchContacts}
 								onListBottom={canLoadMore ? loadMore : undefined}
 								setShowAdvanceFilters={setShowAdvanceFilters}
+								query={query}
 							/>
 						}
 					/>

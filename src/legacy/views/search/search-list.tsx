@@ -25,21 +25,26 @@ type SearchListProps = {
 	contacts: Array<ContactOrGroup>;
 	onListBottom?: () => void;
 	setShowAdvanceFilters: (show: boolean) => void;
+	query?: Array<any>;
 };
 export const SearchList = ({
 	contacts,
 	onListBottom,
-	setShowAdvanceFilters
+	setShowAdvanceFilters,
+	query = []
 }: SearchListProps): React.JSX.Element => {
 	const [t] = useTranslation();
 	const { itemId } = useParams<{ itemId: string }>();
 
 	const displayerTitle = useMemo(() => {
-		if (contacts.length === 0) {
-			t('displayer.search_list_title1', 'It looks like there are no results. Keep searching!');
+		if (contacts.length === 0 && query.length > 0) {
+			return t(
+				'displayer.search_list_title1',
+				'It looks like there are no results. Keep searching!'
+			);
 		}
 		return null;
-	}, [t, contacts.length]);
+	}, [t, contacts.length, query.length]);
 
 	const listItems = useMemo(
 		() =>
