@@ -18,6 +18,9 @@ import { map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { Route, Routes } from 'react-router-dom';
 
+import { addContactsToStore, useContactsById } from 'legacy/store/contacts';
+import ContactEditPanel from 'legacy/views/edit/contact-edit-panel';
+import { ContactPreviewWrapper } from 'legacy/views/preview/contact-preview-wrapper';
 import AdvancedFilterModal from 'legacy/views/search/advance-filter-modal';
 import { runSearch } from 'legacy/views/search/run-search';
 import { SearchContactsEmptyPanel } from 'legacy/views/search/search-contacts-empty-panel';
@@ -25,9 +28,6 @@ import { SearchList } from 'legacy/views/search/search-list';
 import { Query } from 'legacy/views/search/search-types';
 import { SearchResults } from 'legacy/views/search/types';
 import { ContactGroupDisplayerWrapper } from 'views/contact-groups/displayer/contact-group-displayer-wrapper';
-import { addContactsToStore, useContactsById } from 'legacy/store/contacts';
-import ContactEditPanel from 'legacy/views/edit/contact-edit-panel';
-import { ContactPreviewWrapper } from 'legacy/views/preview/contact-preview-wrapper';
 
 const specialChars = [
 	'~',
@@ -55,8 +55,9 @@ const specialChars = [
 	'>'
 ];
 
-const containsSpecialCharacters = (value: string): boolean => {
-	const text = value.startsWith('tag:') ? value.substring(4) : value;
+const containsSpecialCharacters = (value: string | boolean): boolean => {
+	const stringValue = typeof value === 'string' ? value : '';
+	const text = stringValue.startsWith('tag:') ? stringValue.substring(4) : stringValue;
 	return specialChars.some((specialChar) => text.includes(specialChar));
 };
 
