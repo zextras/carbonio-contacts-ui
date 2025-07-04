@@ -55,7 +55,7 @@ const specialChars = [
 	'>'
 ];
 
-const containsSpecialCharacters = (value: string | boolean): boolean => {
+export const containsSpecialCharacters = (value: string | boolean): boolean => {
 	const stringValue = typeof value === 'string' ? value : '';
 	const text = stringValue.startsWith('tag:') ? stringValue.substring(4) : stringValue;
 	return specialChars.some((specialChar) => text.includes(specialChar));
