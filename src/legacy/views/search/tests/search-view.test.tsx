@@ -489,4 +489,108 @@ describe('SearchView', () => {
 			expect(editEmailButton).toBeVisible();
 		});
 	});
+
+	describe('Special characters detection', () => {
+		it('should detect special characters in regular keywords', async () => {
+			const queryChipWithSpecialChars: QueryChip = {
+				hasAvatar: false,
+				id: '0',
+				label: 'test:keyword',
+				value: 'test:keyword'
+			};
+			const mockedUseQuery = jest.fn().mockReturnValue([[queryChipWithSpecialChars], noop]);
+			const resultsHeader = (props: { label: string }): ReactElement => <>{props.label}</>;
+
+			const searchViewProps: SearchViewProps = {
+				useQuery: mockedUseQuery,
+				ResultsHeader: resultsHeader,
+				useDisableSearch: (): [boolean, () => void] => [false, noop]
+			};
+
+			setupTest(<SearchView {...searchViewProps} />);
+
+			expect(await screen.findByText(/Special characters like :, ", -, !, etc., are ignored in the search/)).toBeInTheDocument();
+		});
+
+		it('should not detect special characters in advanced search chips from files-ui', async () => {
+			const advancedSearchChip = {
+				hasAvatar: false,
+				id: '0',
+				label: 'flagged:true',
+				value: 'flagged:true',
+				queryChipsToAdvancedFiltersValue: { flagged: true }
+			} as QueryChip & { queryChipsToAdvancedFiltersValue: any };
+			const mockedUseQuery = jest.fn().mockReturnValue([[advancedSearchChip], noop]);
+			const resultsHeader = (props: { label: string }): ReactElement => <>{props.label}</>;
+
+			const searchViewProps: SearchViewProps = {
+				useQuery: mockedUseQuery,
+				ResultsHeader: resultsHeader,
+				useDisableSearch: (): [boolean, () => void] => [false, noop]
+			};
+
+			setupTest(<SearchView {...searchViewProps} />);
+
+			expect(screen.queryByText(/Special characters like :, ", -, !, etc., are ignored in the search/)).not.toBeInTheDocument();
+		});
+
+		it('should detect special characters in mixed query but exclude advanced search chips', async () => {
+			const advancedSearchChip = {
+				hasAvatar: false,
+				id: '0',
+				label: 'flagged:true',
+				value: 'flagged:true',
+				queryChipsToAdvancedFiltersValue: { flagged: true }
+			} as QueryChip & { queryChipsToAdvancedFiltersValue: any };
+			const regularKeywordWithSpecialChars: QueryChip = {
+				hasAvatar: false,
+				id: '1',
+				label: 'test:keyword',
+				value: 'test:keyword'
+			};
+			const mixedQuery = [advancedSearchChip, regularKeywordWithSpecialChars];
+			const mockedUseQuery = jest.fn().mockReturnValue([mixedQuery, noop]);
+			const resultsHeader = (props: { label: string }): ReactElement => <>{props.label}</>;
+
+			const searchViewProps: SearchViewProps = {
+				useQuery: mockedUseQuery,
+				ResultsHeader: resultsHeader,
+				useDisableSearch: (): [boolean, () => void] => [false, noop]
+			};
+
+			setupTest(<SearchView {...searchViewProps} />);
+
+			expect(await screen.findByText(/Special characters like :, ", -, !, etc., are ignored in the search/)).toBeInTheDocument();
+		});
+
+		it('should not detect special characters when query contains only advanced search chips', async () => {
+			const advancedSearchChip1 = {
+				hasAvatar: false,
+				id: '0',
+				label: 'flagged:true',
+				value: 'flagged:true',
+				queryChipsToAdvancedFiltersValue: { flagged: true }
+			} as QueryChip & { queryChipsToAdvancedFiltersValue: any };
+			const advancedSearchChip2 = {
+				hasAvatar: false,
+				id: '1',
+				label: 'shared:true',
+				value: 'shared:true',
+				queryChipsToAdvancedFiltersValue: { shared: true }
+			} as QueryChip & { queryChipsToAdvancedFiltersValue: any };
+			const queryWithOnlyAdvancedChips = [advancedSearchChip1, advancedSearchChip2];
+			const mockedUseQuery = jest.fn().mockReturnValue([queryWithOnlyAdvancedChips, noop]);
+			const resultsHeader = (props: { label: string }): ReactElement => <>{props.label}</>;
+
+			const searchViewProps: SearchViewProps = {
+				useQuery: mockedUseQuery,
+				ResultsHeader: resultsHeader,
+				useDisableSearch: (): [boolean, () => void] => [false, noop]
+			};
+
+			setupTest(<SearchView {...searchViewProps} />);
+
+			expect(screen.queryByText(/Special characters like :, ", -, !, etc., are ignored in the search/)).not.toBeInTheDocument();
+		});
+	});
 });

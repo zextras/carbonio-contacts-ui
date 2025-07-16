@@ -89,7 +89,15 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 		if (!open) return;
 
 		const updatedQuery = map(
-			filter(query, (v) => !/^tag:/.test(v.label ?? '') && !v.isQueryFilter),
+			filter(query, (v) => {
+				if ('queryChipsToAdvancedFiltersValue' in v) {
+					return false;
+				}
+				if (v.isQueryFilter || /^tag:/.test(v.label ?? '')) {
+					return false;
+				}
+				return true;
+			}),
 			(q) => ({ ...q, hasAvatar: false })
 		);
 
