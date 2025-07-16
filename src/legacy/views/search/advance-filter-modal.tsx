@@ -93,7 +93,7 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 				if ('queryChipsToAdvancedFiltersValue' in v) {
 					return false;
 				}
-				if (v.isQueryFilter || /^tag:/.test(v.label ?? '')) {
+				if (v.isQueryFilter || (v.label ?? '').startsWith('tag:')) {
 					return false;
 				}
 				return true;
@@ -102,7 +102,7 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 		);
 
 		const tagFromQuery = map(
-			filter(query, (v) => /^tag:/.test(v.label ?? '')),
+			filter(query, (v) => (v.label ?? '').startsWith('tag:')),
 			(q) => ({ ...q, hasAvatar: true, icon: 'TagOutline' })
 		);
 
