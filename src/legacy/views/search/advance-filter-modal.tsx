@@ -21,6 +21,11 @@ import { ZIMBRA_STANDARD_COLORS, getTags } from '@zextras/carbonio-ui-commons';
 import { TFunction } from 'i18next';
 import { concat, filter, map } from 'lodash';
 
+import CompanyNameRow from './parts/company-row';
+import EmailAddressRow from './parts/email-address-row';
+import JobRoleRow from './parts/job-role-row';
+import NameRow from './parts/name-row';
+import PhoneNumberRow from './parts/phone-number-row';
 import KeywordRow, { KeywordState } from 'legacy/views/search/parts/keyword-row';
 import TagRow from 'legacy/views/search/parts/tag-row';
 import ToggleFilters from 'legacy/views/search/parts/toggle-filters';
@@ -46,6 +51,12 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 	isSharedFolderIncludedDefault
 }): ReactElement => {
 	const [otherKeywords, setOtherKeywords] = useState<KeywordState>([]);
+	const [firstName, setFirstName] = useState<string>('');
+	const [lastName, setLastName] = useState<string>('');
+	const [companyName, setCompanyName] = useState<string>('');
+	const [jobRole, setJobRole] = useState<string>('');
+	const [emailAddress, setEmailAddress] = useState<string>('');
+	const [phoneNumber, setPhoneNumber] = useState<string>('');
 	const [tag, setTag] = useState<KeywordState>([]);
 	const [hasPerformedSearch, setHasPerformedSearch] = useState(false);
 	const tagOptions = useMemo(
@@ -98,30 +109,96 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 			(q) => ({ ...q, hasAvatar: true, icon: 'TagOutline' })
 		);
 
+		const firstNameQuery =
+			query.find((v) => /^FirstName:/.test(v.label ?? ''))?.label?.replace('firstName:', '') || '';
+		const lastNameQuery =
+			query.find((v) => /^LastName:/.test(v.label ?? ''))?.label?.replace('lastName:', '') || '';
+
+		setFirstName(firstNameQuery);
+		setLastName(lastNameQuery);
 		setTag(tagFromQuery);
 		setOtherKeywords(updatedQuery);
 	}, [query, open]);
-
-	const queryToBe = useMemo(() => concat(otherKeywords, tag), [otherKeywords, tag]);
+	const queryToBe = useMemo(() => {
+		const nameQuery = [];
+		if (firstName) {
+			nameQuery.push({ label: `firstName:"${firstName}"`, hasAvatar: false });
+		}
+		if (lastName) {
+			nameQuery.push({ label: `lastName:"${lastName}"`, hasAvatar: false });
+		}
+		return concat(otherKeywords, tag, nameQuery);
+	}, [otherKeywords, tag, firstName, lastName]);
 
 	const secondaryDisabled = useMemo(
 		() => queryToBe.length === 0 && isSharedFolderIncludedTobe === isSharedFolderIncludedDefault,
 		[queryToBe.length, isSharedFolderIncludedTobe, isSharedFolderIncludedDefault]
 	);
 
+	// Reset all filters to default values
 	const resetFilters = useCallback(() => {
 		setIsSharedFolderIncludedTobe(isSharedFolderIncludedDefault);
 		setOtherKeywords([]);
 		setTag([]);
+		setFirstName('');
+		setLastName('');
 		setHasPerformedSearch(false);
 	}, [isSharedFolderIncludedDefault]);
 
+	// Handle search confirmation
 	const onConfirm = useCallback(() => {
-		const tmp = [...otherKeywords, ...tag];
 		setHasPerformedSearch(true);
-		onSearchConfirm({ query: tmp, includeSharedFolders: isSharedFolderIncludedTobe });
+		onSearchConfirm({ query: queryToBe, includeSharedFolders: isSharedFolderIncludedTobe });
 		onClose();
-	}, [otherKeywords, tag, onSearchConfirm, isSharedFolderIncludedTobe, onClose]);
+	}, [queryToBe, onSearchConfirm, isSharedFolderIncludedTobe, onClose]);
+
+	// Props for child components
+	const nameRowProps = useMemo(
+		() => ({
+			query,
+			firstName,
+			lastName,
+			setFirstName,
+			setLastName
+		}),
+		[firstName, lastName, query]
+	);
+
+	const companyNameRowProps = useMemo(
+		() => ({
+			query,
+			companyName,
+			setCompanyName
+		}),
+		[companyName, query]
+	);
+
+	const jobRoleRowProps = useMemo(
+		() => ({
+			query,
+			jobRole,
+			setJobRole
+		}),
+		[jobRole, query]
+	);
+
+	const emailAddressRowProps = useMemo(
+		() => ({
+			query,
+			emailAddress,
+			setEmailAddress
+		}),
+		[emailAddress, query]
+	);
+
+	const phoneNumberRowProps = useMemo(
+		() => ({
+			query,
+			phoneNumber,
+			setPhoneNumber
+		}),
+		[phoneNumber, query]
+	);
 
 	const keywordRowProps = useMemo(
 		() => ({
@@ -131,13 +208,14 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 		}),
 		[otherKeywords, query]
 	);
+
 	const tagRowProps = useMemo(
 		() => ({
 			tagOptions,
 			tag,
 			setTag
 		}),
-		[tagOptions, tag, setTag]
+		[tagOptions, tag]
 	);
 
 	const toggleFiltersProps = useMemo(
@@ -148,6 +226,7 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 		}),
 		[query, isSharedFolderIncludedTobe]
 	);
+
 	return (
 		<CustomModal
 			open={open}
@@ -165,6 +244,11 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 			<Container padding={{ horizontal: 'medium', vertical: 'small' }}>
 				<ToggleFilters compProps={toggleFiltersProps} />
 				<KeywordRow compProps={keywordRowProps} />
+				<NameRow compProps={nameRowProps} />
+				<CompanyNameRow compProps={companyNameRowProps} />
+				<JobRoleRow compProps={jobRoleRowProps} />
+				<EmailAddressRow compProps={emailAddressRowProps} />
+				<PhoneNumberRow compProps={phoneNumberRowProps} />
 				<TagRow compProps={tagRowProps} />
 			</Container>
 			<Divider />
