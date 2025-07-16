@@ -140,7 +140,12 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 	const containsSpecialCharacter = useMemo(() => {
 		if (query.length === 0) return false;
 		return query.some((item) => {
+			// Skip advanced search chips from other modules
 			if ('queryChipsToAdvancedFiltersValue' in item) {
+				return false;
+			}
+			// Skip query filter chips
+			if ('isQueryFilter' in item && item.isQueryFilter) {
 				return false;
 			}
 			return containsSpecialCharacters(item.value ?? item.label ?? '');
