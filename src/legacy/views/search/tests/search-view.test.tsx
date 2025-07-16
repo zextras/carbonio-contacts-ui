@@ -509,7 +509,11 @@ describe('SearchView', () => {
 
 			setupTest(<SearchView {...searchViewProps} />);
 
-			expect(await screen.findByText(/Special characters like :, ", -, !, etc., are ignored in the search/)).toBeInTheDocument();
+			expect(
+				await screen.findByText(
+					/Special characters like :, ", -, !, etc., are ignored in the search/
+				)
+			).toBeInTheDocument();
 		});
 
 		it('should not detect special characters in advanced search chips from files-ui', async () => {
@@ -531,7 +535,9 @@ describe('SearchView', () => {
 
 			setupTest(<SearchView {...searchViewProps} />);
 
-			expect(screen.queryByText(/Special characters like :, ", -, !, etc., are ignored in the search/)).not.toBeInTheDocument();
+			expect(
+				screen.queryByText(/Special characters like :, ", -, !, etc., are ignored in the search/)
+			).not.toBeInTheDocument();
 		});
 
 		it('should detect special characters in mixed query but exclude advanced search chips', async () => {
@@ -560,7 +566,11 @@ describe('SearchView', () => {
 
 			setupTest(<SearchView {...searchViewProps} />);
 
-			expect(await screen.findByText(/Special characters like :, ", -, !, etc., are ignored in the search/)).toBeInTheDocument();
+			expect(
+				await screen.findByText(
+					/Special characters like :, ", -, !, etc., are ignored in the search/
+				)
+			).toBeInTheDocument();
 		});
 
 		it('should not detect special characters when query contains only advanced search chips', async () => {
@@ -590,7 +600,9 @@ describe('SearchView', () => {
 
 			setupTest(<SearchView {...searchViewProps} />);
 
-			expect(screen.queryByText(/Special characters like :, ", -, !, etc., are ignored in the search/)).not.toBeInTheDocument();
+			expect(
+				screen.queryByText(/Special characters like :, ", -, !, etc., are ignored in the search/)
+			).not.toBeInTheDocument();
 		});
 	});
 });

@@ -260,10 +260,10 @@ describe('Advanced filter modal', () => {
 		setupTest(<AdvancedFilterModal {...props} />);
 
 		const keywordChips = await screen.findAllByTestId('chip');
-		const keywordChip = keywordChips.find(chip => chip.getAttribute('value') === 'test keyword');
+		const keywordChip = keywordChips.find((chip) => chip.getAttribute('value') === 'test keyword');
 		expect(keywordChip).toBeInTheDocument();
-		
-		const advancedChip = keywordChips.find(chip => chip.getAttribute('value') === 'flagged:true');
+
+		const advancedChip = keywordChips.find((chip) => chip.getAttribute('value') === 'flagged:true');
 		expect(advancedChip).toBeUndefined();
 	});
 
@@ -338,11 +338,11 @@ describe('Advanced filter modal', () => {
 		setupTest(<AdvancedFilterModal {...props} />);
 
 		const keywordChips = await screen.findAllByTestId('chip');
-		const keywordChip = keywordChips.find(chip => chip.getAttribute('value') === 'john');
+		const keywordChip = keywordChips.find((chip) => chip.getAttribute('value') === 'john');
 		expect(keywordChip).toBeInTheDocument();
-		
-		const advancedChip = keywordChips.find(chip => chip.getAttribute('value') === 'shared:true');
-		const filterChip = keywordChips.find(chip => chip.getAttribute('value') === 'folder:inbox');
+
+		const advancedChip = keywordChips.find((chip) => chip.getAttribute('value') === 'shared:true');
+		const filterChip = keywordChips.find((chip) => chip.getAttribute('value') === 'folder:inbox');
 		expect(advancedChip).toBeUndefined();
 		expect(filterChip).toBeUndefined();
 	});
