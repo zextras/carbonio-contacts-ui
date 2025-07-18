@@ -139,7 +139,15 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 
 	const containsSpecialCharacter = useMemo(() => {
 		if (query.length === 0) return false;
-		return query.some((item) => containsSpecialCharacters(item.value ?? item.label ?? ''));
+		return query.some((item) => {
+			if ('queryChipsToAdvancedFiltersValue' in item) {
+				return false;
+			}
+			if ('isQueryFilter' in item && item.isQueryFilter) {
+				return false;
+			}
+			return containsSpecialCharacters(item.value ?? item.label ?? '');
+		});
 	}, [query]);
 
 	const invalidQueryTooltip = useMemo(
