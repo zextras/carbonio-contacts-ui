@@ -3,12 +3,13 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { BooleanString, ErrorSoapBodyResponse, soapFetch } from '@zextras/carbonio-shell-ui';
+import { BooleanString } from '@zextras/carbonio-shell-ui';
 import { JSNS } from '@zextras/carbonio-ui-commons';
+import { ErrorSoapBodyResponse, legacySoapFetch } from '@zextras/carbonio-ui-soap-lib';
 import { filter, first, flatMap } from 'lodash';
 
-import { GenericSoapPayload } from 'network/api/types';
 import { DistributionList, DistributionListOwner } from 'model/distribution-list';
+import { GenericSoapPayload } from 'network/api/types';
 
 export interface GetDistributionListRequest extends GenericSoapPayload<typeof JSNS.ACCOUNT> {
 	dl: {
@@ -77,14 +78,14 @@ export const getDistributionList = ({
 			_content: id
 		};
 	}
-	return soapFetch<GetDistributionListRequest, GetDistributionListResponse | ErrorSoapBodyResponse>(
-		'GetDistributionList',
-		{
-			_jsns: JSNS.ACCOUNT,
-			dl: request,
-			needOwners: true
-		}
-	).then((response) => {
+	return legacySoapFetch<
+		GetDistributionListRequest,
+		GetDistributionListResponse | ErrorSoapBodyResponse
+	>('GetDistributionList', {
+		_jsns: JSNS.ACCOUNT,
+		dl: request,
+		needOwners: true
+	}).then((response) => {
 		if ('Fault' in response) {
 			throw new Error(response.Fault.Reason.Text, { cause: response.Fault });
 		}

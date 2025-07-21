@@ -3,12 +3,13 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { BooleanString, ErrorSoapBodyResponse, soapFetch } from '@zextras/carbonio-shell-ui';
+import { BooleanString } from '@zextras/carbonio-shell-ui';
 import { JSNS } from '@zextras/carbonio-ui-commons';
+import { ErrorSoapBodyResponse, legacySoapFetch } from '@zextras/carbonio-ui-soap-lib';
 import { map } from 'lodash';
 
-import { GenericSoapPayload } from 'network/api/types';
 import { DistributionList } from 'model/distribution-list';
+import { GenericSoapPayload } from 'network/api/types';
 
 type Attributes = {
 	description?: string;
@@ -51,7 +52,7 @@ export const getAccountDistributionLists = (options: {
 	ownerOf: boolean;
 	memberOf: boolean;
 }): Promise<Array<DistributionList>> =>
-	soapFetch<
+	legacySoapFetch<
 		GetAccountDistributionListsRequest,
 		GetAccountDistributionListsResponse | ErrorSoapBodyResponse
 	>('GetAccountDistributionLists', {

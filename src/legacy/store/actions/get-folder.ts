@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { soapFetch } from '@zextras/carbonio-shell-ui';
+import { legacySoapFetch } from '@zextras/carbonio-ui-soap-lib';
 
 export const getFolder = createAsyncThunk(
 	'folders/search_folder',
 	async (folderId: string): Promise<any> =>
-		soapFetch('GetFolder', {
+		legacySoapFetch('GetFolder', {
 			_jsns: 'urn:zimbraMail',
 			folder: folderId ?? {},
 			tr: true
