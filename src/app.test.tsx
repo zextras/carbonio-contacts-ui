@@ -9,15 +9,15 @@ import * as shell from '@zextras/carbonio-shell-ui';
 import { ContactInputProps } from '@zextras/carbonio-ui-commons';
 import { HttpResponse } from 'msw';
 
-import App from 'app';
-import { CONTACT_BOARD_ID } from 'constants/index';
-import { ContactInput } from 'legacy/integrations/contact-input';
 import { setupTest } from '@test-setup';
 import { generateFolder } from '@test-utils/folders/folders-generator';
 import {
 	createAPIInterceptor,
 	createSoapAPIInterceptor
 } from '@test-utils/network/msw/create-api-interceptor';
+import App from 'app';
+import { CONTACT_BOARD_ID } from 'constants/index';
+import { ContactInput } from 'legacy/integrations/contact-input';
 
 describe('App', () => {
 	beforeEach(() => {
@@ -26,7 +26,6 @@ describe('App', () => {
 			folder: [generateFolder({ name: 'Inbox' })]
 		});
 		createSoapAPIInterceptor('GetShareInfo', { result: { share: [] } });
-		jest.clearAllMocks();
 	});
 
 	it('should register a "contacts" route accessible from the primary bar with specific position, name and icon', () => {

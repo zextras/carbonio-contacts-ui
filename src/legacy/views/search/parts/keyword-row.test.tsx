@@ -21,7 +21,6 @@ describe('Keyword Row Component', () => {
 	const mockChipOnAdd = jest.fn();
 
 	beforeEach(() => {
-		jest.clearAllMocks();
 		(useTranslation as jest.Mock).mockReturnValue([mockT]);
 	});
 
