@@ -15,6 +15,7 @@ import { FOLDERS, useFolderStore } from '@zextras/carbonio-ui-commons';
 import { noop } from 'lodash';
 import { HttpResponse } from 'msw';
 
+import { Query, SearchQueryItem } from '../types';
 import { makeListItemsVisible, screen, setupTest, triggerLoadMore } from '@test-setup';
 import { generateFolder } from '@test-utils/folders/folders-generator';
 import {
@@ -25,7 +26,6 @@ import { generateSettings } from '@test-utils/settings/settings-generator';
 import { populateFoldersStore } from '@test-utils/store/folders';
 import { TIMERS } from 'constants/tests';
 import { type SoapContact } from 'legacy/types/soap';
-import { Query } from 'legacy/views/search/search-types';
 import SearchView from 'legacy/views/search/search-view';
 import { CnItem } from 'network/api/types';
 import { createSoapContact, createSoapContactGroupV2 } from 'tests/utils';
@@ -36,7 +36,7 @@ import {
 } from 'types';
 
 const useMockedUseQuery = (): ReturnType<typeof useQuery> => {
-	const queryChip: QueryChip = {
+	const queryChip: SearchQueryItem = {
 		hasAvatar: false,
 		id: '0',
 		label: 'test'

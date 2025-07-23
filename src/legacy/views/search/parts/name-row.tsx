@@ -3,63 +3,80 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { FC, ReactElement, useCallback } from 'react';
+import React, { ReactElement, useCallback } from 'react';
 
-import { Container, Input, InputProps } from '@zextras/carbonio-design-system';
+import { ChipInput, Container } from '@zextras/carbonio-design-system';
+import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { Query } from 'legacy/views/search/search-types';
+import { FormValuesControlProps } from '../types';
 
-export type KeywordState = Query;
-
-type ComponentProps = {
-	compProps: {
-		query: Query;
-		firstName: string;
-		setFirstName: (arg: string) => void;
-		lastName: string;
-		setLastName: (arg: string) => void;
-	};
-};
-const NameRow: FC<ComponentProps> = ({ compProps }): ReactElement => {
-	const { query, firstName, lastName, setFirstName, setLastName } = compProps;
+export const NameRow = ({ control }: FormValuesControlProps): ReactElement => {
 	const [t] = useTranslation();
-
-	const onChangeFirstName = useCallback<NonNullable<InputProps['onChange']>>(
-		(ev) => {
-			setFirstName(ev.currentTarget.value);
-		},
-		[setFirstName]
+	const firstNamePrefix = 'field[firstName]';
+	const lastNamePrefix = 'field[lastName]';
+	const chipOnAdd = useCallback(
+		(
+			label: string,
+			preText: string,
+			hasAvatar: boolean,
+			isGeneric: boolean,
+			isQueryFilter: boolean
+		) => ({
+			label: `${preText}:${label}`,
+			hasAvatar,
+			isGeneric,
+			isQueryFilter,
+			value: `${preText}:${label}`
+		}),
+		[]
 	);
 
-	const onChangeLastName = useCallback<NonNullable<InputProps['onChange']>>(
-		(ev) => {
-			setLastName(ev.currentTarget.value);
-		},
-		[setLastName]
+	const firstNameChipOnAdd = useCallback(
+		(label: unknown): any => chipOnAdd(label as string, firstNamePrefix, false, false, true),
+		[chipOnAdd]
+	);
+
+	const lastNameChipOnAdd = useCallback(
+		(label: unknown): any => chipOnAdd(label as string, lastNamePrefix, false, false, true),
+		[chipOnAdd]
 	);
 
 	return (
 		<Container padding={{ bottom: 'small', top: 'medium' }} orientation="horizontal">
 			<Container padding={{ right: 'extrasmall' }} maxWidth="50%">
-				<Input
-					label={t('label.firstName', 'First Name')}
-					background="gray5"
-					value={firstName}
-					onChange={onChangeFirstName}
-					defaultValue={firstName}
+				<Controller
+					control={control}
+					name={'firstNameInput'}
+					render={({ field: { onChange, value } }): React.JSX.Element => (
+						<ChipInput
+							placeholder={t('label.firstName', 'First Name')}
+							background="gray5"
+							value={value}
+							onChange={onChange}
+							onAdd={firstNameChipOnAdd}
+							// maxChips={1}
+							requireUniqueChips
+						/>
+					)}
 				/>
 			</Container>
 			<Container padding={{ left: 'extrasmall' }} maxWidth="50%">
-				<Input
-					label={t('label.lastName', 'Last Name')}
-					background="gray5"
-					value={lastName}
-					onChange={onChangeLastName}
-					defaultValue={lastName}
+				<Controller
+					control={control}
+					name={'lastNameInput'}
+					render={({ field: { onChange, value } }): React.JSX.Element => (
+						<ChipInput
+							placeholder={t('label.lastName', 'Last Name')}
+							background="gray5"
+							value={value}
+							onChange={onChange}
+							onAdd={lastNameChipOnAdd}
+							requireUniqueChips
+						/>
+					)}
 				/>
 			</Container>
 		</Container>
 	);
 };
-export default NameRow;

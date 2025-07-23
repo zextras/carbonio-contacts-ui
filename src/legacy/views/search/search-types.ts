@@ -3,11 +3,21 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import type { QueryChip } from '@zextras/carbonio-search-ui';
 
-export type Query = Array<
-	QueryChip & {
-		isGeneric?: boolean;
-		isQueryFilter?: boolean;
-	}
->;
+// export type Query = Array<
+// 	QueryChip & {
+// 		isGeneric?: boolean;
+// 		isQueryFilter?: boolean;
+// 	}
+// >;
+
+// export type SearchQueryItem = {
+// 	id: string;
+// 	label: string;
+// 	value?: string;
+// 	hasAvatar?: boolean;
+// 	isGeneric?: boolean;
+// 	isQueryFilter?: boolean;
+// };
+
+// export type Query = Array<SearchQueryItem>;
