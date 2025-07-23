@@ -6,16 +6,16 @@
 import React, { ReactElement, ReactNode } from 'react';
 
 import { renderHook } from '@testing-library/react';
-import { SoapNotify, useRefresh } from '@zextras/carbonio-shell-ui';
 import { useFolderStore, folderWorker } from '@zextras/carbonio-ui-commons';
+import { SoapNotify } from '@zextras/carbonio-ui-soap-lib';
 import { http } from 'msw';
 
-import { useSyncDataHandler } from 'legacy/views/secondary-bar/use-sync-data-handler';
+import { useInfoRefresh, useSync } from '../../../../../__mocks__/@zextras/carbonio-ui-soap-lib';
 import { getSetupServer } from '@jest-setup';
-import { useNotify } from '@test-utils/carbonio-shell-ui/carbonio-shell-ui';
 import { generateFolder } from '@test-utils/folders/folders-generator';
 import { handleGetFolderRequest } from '@test-utils/network/msw/handle-get-folder';
 import { handleGetShareInfoRequest } from '@test-utils/network/msw/handle-get-share-info';
+import { useSyncDataHandler } from 'legacy/views/secondary-bar/use-sync-data-handler';
 
 function getWrapper() {
 	// eslint-disable-next-line react/display-name
@@ -23,9 +23,14 @@ function getWrapper() {
 }
 
 function mockSoapRefresh(mailbox: number): void {
-	(useRefresh as jest.Mock).mockReturnValue({
-		mbx: [{ s: mailbox }]
-	});
+	const result = {
+		mbx: [{ s: mailbox }] satisfies [{ s: number }]
+	};
+	jest.mocked(useInfoRefresh).mockReturnValue(result);
+}
+
+function mockSoapSync(notify: Array<SoapNotify>): void {
+	jest.mocked(useSync).mockReturnValue(notify);
 }
 
 function generateSoapAction(partial?: Partial<SoapNotify>): SoapNotify {
@@ -41,7 +46,7 @@ function mockSoapDelete(mailboxNumber: number, deletedIds: Array<string>): void 
 	const soapNotify = generateSoapAction({
 		deleted: deletedIds
 	});
-	(useNotify as jest.Mock).mockReturnValue([soapNotify]);
+	mockSoapSync([soapNotify]);
 }
 
 describe('sync data handler', () => {
@@ -59,7 +64,7 @@ describe('sync data handler', () => {
 				http.post('/service/soap/GetShareInfoRequest', handleGetShareInfoRequest)
 			);
 
-			useNotify.mockReturnValueOnce([notify]);
+			mockSoapSync([notify]);
 			renderHook(() => useSyncDataHandler(), {
 				wrapper: getWrapper()
 			});
