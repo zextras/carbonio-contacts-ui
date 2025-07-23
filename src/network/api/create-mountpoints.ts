@@ -34,7 +34,9 @@ export type CreateMountpointsResponse = GenericSoapPayload<typeof JSNS.ALL> & {
  *
  * @param shares
  */
-export const createMountpoints = (shares: Array<ShareInfo & { mountpointName: string }>): Promise<void> =>
+export const createMountpoints = (
+	shares: Array<ShareInfo & { mountpointName: string }>
+): Promise<void> =>
 	legacySoapFetch<CreateMountpointsRequest, CreateMountpointsResponse | ErrorSoapBodyResponse>(
 		'Batch',
 		{
