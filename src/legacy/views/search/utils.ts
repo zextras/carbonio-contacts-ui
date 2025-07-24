@@ -146,7 +146,7 @@ function getJobRoleInputDefaultValue(query: Query): KeywordState {
 }
 
 function getPhoneNumberInputDefaultValue(query: Query): KeywordState {
-	return filter(query, (queryItem) => queryItem.label.startsWith('PhoneNumber:'));
+	return filter(query, (queryItem) => queryItem.label.startsWith('Phone:'));
 }
 
 function getTagInQueryDefaultValue(query: Query): KeywordState {

@@ -13,7 +13,7 @@ import { FormValuesControlProps } from '../types';
 
 export const PhoneNumberRow = ({ control }: FormValuesControlProps): ReactElement => {
 	const [t] = useTranslation();
-	const phoneNumberLabelPrefix = 'PhoneNumber';
+	const phoneNumberLabelPrefix = 'Phone';
 
 	const phoneNumberChipOnAdd = useCallback((label: string | unknown) => {
 		const phoneValue = `field[homePhone]:${label} OR field[mobilePhone]:${label} OR field[workPhone]:${label} OR field[otherPhone]:${label}`;
