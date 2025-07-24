@@ -33,7 +33,7 @@ export const PhoneNumberRow = ({ control }: FormValuesControlProps): ReactElemen
 				name={'phoneNumberInput'}
 				render={({ field: { onChange, value } }): React.JSX.Element => (
 					<ChipInput
-						placeholder={t('label.phone_number', 'Phone Number')}
+						placeholder={t('advancedFilters.phoneNumber', 'Phone Number')}
 						data-testid={'phone-number-input'}
 						background="gray5"
 						value={value}

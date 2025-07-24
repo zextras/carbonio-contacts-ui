@@ -10,7 +10,8 @@ import { concat, filter, map } from 'lodash';
 import { AdvancedFilterModalFormValues, KeywordState, Query, SearchQueryItem } from './types';
 
 const excludeLabels = ['has:attachment', 'is:flagged', 'is:unread'];
-
+const emailFilterPrefix = 'field[email]';
+const emailFilterLabelPrefix = 'email';
 const excludePrefixes = [
 	'Subject:',
 	'Attachment:',
@@ -24,7 +25,8 @@ const excludePrefixes = [
 	'date:',
 	'tag:',
 	'to:',
-	'from:'
+	'from:',
+	'email:'
 ];
 
 export const EmptyListMessages = (
@@ -82,9 +84,9 @@ export function getQueryToBe(formValues: AdvancedFilterModalFormValues): Query {
 		emailAddress.map((item) => ({
 			...item,
 			id: item.value.email,
-			label: item.value.email,
+			label: `${emailFilterLabelPrefix}:${item.value.email}` || item.value.email,
 			actions: [],
-			value: item.value.email,
+			value: `${emailFilterPrefix}:${item.value.email}`,
 			avatarBackground: item.background,
 			error: false
 		})),
@@ -97,10 +99,10 @@ export function getQueryToBe(formValues: AdvancedFilterModalFormValues): Query {
 }
 
 function toContactInput(item: SearchQueryItem): ContactInputItem {
-	const email = item.value ?? '';
+	const email = item.value?.replace(emailFilterPrefix, '') ?? '';
 	return {
 		id: email,
-		label: email,
+		label: item.label.replace(emailFilterLabelPrefix, '') ?? email,
 		value: {
 			id: email,
 			email,
@@ -132,9 +134,9 @@ function getLastNameInputDefaultValue(query: Query): KeywordState {
 }
 
 function getEmailDefaultValue(query: Query): Array<ContactInputItem> {
-	return query
-		.filter((queryItem) => queryItem.label.startsWith('email:'))
-		.map((item) => toContactInput(item));
+	return filter(query, (queryItem) => queryItem.label.startsWith('email:')).map((item) =>
+		toContactInput(item)
+	);
 }
 
 function getCompanyInputDefaultValue(query: Query): KeywordState {

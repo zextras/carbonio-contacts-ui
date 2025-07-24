@@ -95,7 +95,7 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 		>
 			<ModalHeader
 				onClose={onCloseCallback}
-				title={t('label.single_advanced_filter', 'Advanced Filters')}
+				title={t('advancedFilters.title', 'Advanced Filters')}
 				showCloseIcon
 			/>
 			<Divider />

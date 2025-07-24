@@ -35,7 +35,7 @@ export const EmailAddressRow = ({ control }: FormValuesControlProps): React.JSX.
 				render={({ field: { onChange, value } }): React.JSX.Element => (
 					<ContactInput
 						data-testid={'email-address-input'}
-						placeholder={t('label.email_address', 'Email Address')}
+						placeholder={t('advancedFilters.emailAddress', 'Email Address')}
 						onChange={onChange}
 						defaultValue={value}
 						chipLabelFactory={chipLabelFactory}

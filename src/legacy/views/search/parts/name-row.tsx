@@ -56,7 +56,7 @@ export const NameRow = ({ control }: FormValuesControlProps): ReactElement => {
 					name={'firstNameInput'}
 					render={({ field: { onChange, value } }): React.JSX.Element => (
 						<ChipInput
-							placeholder={t('label.firstName', 'First Name')}
+							placeholder={t('name.first_name', 'First Name')}
 							background="gray5"
 							value={value}
 							onChange={onChange}
@@ -73,7 +73,7 @@ export const NameRow = ({ control }: FormValuesControlProps): ReactElement => {
 					name={'lastNameInput'}
 					render={({ field: { onChange, value } }): React.JSX.Element => (
 						<ChipInput
-							placeholder={t('label.lastName', 'Last Name')}
+							placeholder={t('name.last_name', 'Last Name')}
 							background="gray5"
 							value={value}
 							onChange={onChange}

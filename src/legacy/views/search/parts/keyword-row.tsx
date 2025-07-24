@@ -29,7 +29,7 @@ export const KeywordRow = ({ control }: FormValuesControlProps): ReactElement =>
 				name={'keywordInput'}
 				render={({ field: { onChange, value } }): React.JSX.Element => (
 					<ChipInput
-						placeholder={t('label.keywords', 'Keywords')}
+						placeholder={t('advancedFilters.keywords', 'Keywords')}
 						data-testid={'keywords-input'}
 						background="gray5"
 						value={value}

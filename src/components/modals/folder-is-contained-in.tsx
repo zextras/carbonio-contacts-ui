@@ -57,7 +57,7 @@ export const FolderIsContainedInModal = ({
 				/>
 				<Divider />
 				<ModalFooter
-					confirmLabel={t('label.move', 'Move')}
+					confirmLabel={t('advancedFilters.isContainedIn.chooseFolder', 'Choose folder')}
 					confirmDisabled={confirmDisabled}
 					onConfirm={onConfirm}
 					secondaryActionLabel={t('label.cancel', 'Cancel')}

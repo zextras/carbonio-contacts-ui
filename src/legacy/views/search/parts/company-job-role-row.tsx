@@ -71,7 +71,7 @@ export const CompanyJobRoleRow = ({ control }: FormValuesControlProps): ReactEle
 					name={'companyInput'}
 					render={({ field: { onChange, value } }): React.JSX.Element => (
 						<ChipInput
-							placeholder={t('label.company', 'Company')}
+							placeholder={t('job.company', 'Company')}
 							background="gray5"
 							value={value}
 							onChange={onChange}
@@ -88,7 +88,7 @@ export const CompanyJobRoleRow = ({ control }: FormValuesControlProps): ReactEle
 					name={'jobRoleInput'}
 					render={({ field: { onChange, value } }): React.JSX.Element => (
 						<ChipInput
-							placeholder={t('label.job_role', 'Job Role')}
+							placeholder={t('job.title', 'Job Role')}
 							background="gray5"
 							value={value}
 							onChange={onChange}
