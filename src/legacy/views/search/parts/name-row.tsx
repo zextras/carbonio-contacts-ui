@@ -13,17 +13,21 @@ import { FormValuesControlProps } from '../types';
 
 export const NameRow = ({ control }: FormValuesControlProps): ReactElement => {
 	const [t] = useTranslation();
+	const firstNameLabelPrefix = 'FirstName';
 	const firstNamePrefix = 'field[firstName]';
+
+	const lastNameLabelPrefix = 'LastName';
 	const lastNamePrefix = 'field[lastName]';
 	const chipOnAdd = useCallback(
 		(
 			label: string,
+			preLabelText: string,
 			preText: string,
 			hasAvatar: boolean,
 			isGeneric: boolean,
 			isQueryFilter: boolean
 		) => ({
-			label: `${preText}:${label}`,
+			label: `${preLabelText}:${label}`,
 			hasAvatar,
 			isGeneric,
 			isQueryFilter,
@@ -33,12 +37,14 @@ export const NameRow = ({ control }: FormValuesControlProps): ReactElement => {
 	);
 
 	const firstNameChipOnAdd = useCallback(
-		(label: unknown): any => chipOnAdd(label as string, firstNamePrefix, false, false, true),
+		(label: unknown): any =>
+			chipOnAdd(label as string, firstNameLabelPrefix, firstNamePrefix, false, false, true),
 		[chipOnAdd]
 	);
 
 	const lastNameChipOnAdd = useCallback(
-		(label: unknown): any => chipOnAdd(label as string, lastNamePrefix, false, false, true),
+		(label: unknown): any =>
+			chipOnAdd(label as string, lastNameLabelPrefix, lastNamePrefix, false, false, true),
 		[chipOnAdd]
 	);
 
@@ -55,7 +61,7 @@ export const NameRow = ({ control }: FormValuesControlProps): ReactElement => {
 							value={value}
 							onChange={onChange}
 							onAdd={firstNameChipOnAdd}
-							// maxChips={1}
+							maxChips={1}
 							requireUniqueChips
 						/>
 					)}
@@ -72,6 +78,7 @@ export const NameRow = ({ control }: FormValuesControlProps): ReactElement => {
 							value={value}
 							onChange={onChange}
 							onAdd={lastNameChipOnAdd}
+							maxChips={1}
 							requireUniqueChips
 						/>
 					)}

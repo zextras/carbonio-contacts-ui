@@ -22,11 +22,9 @@ import { AdvancedFilterModal } from './advance-filter-modal';
 import { addContactsToStore, useContactsById } from 'legacy/store/contacts';
 import ContactEditPanel from 'legacy/views/edit/contact-edit-panel';
 import { ContactPreviewWrapper } from 'legacy/views/preview/contact-preview-wrapper';
-// import AdvancedFilterModal from 'legacy/views/search/advance-filter-modal';
 import { runSearch } from 'legacy/views/search/run-search';
 import { SearchContactsEmptyPanel } from 'legacy/views/search/search-contacts-empty-panel';
 import { SearchList } from 'legacy/views/search/search-list';
-// import { Query } from 'legacy/views/search/search-types';
 import { Query, SearchResults } from 'legacy/views/search/types';
 import { ContactGroupDisplayerWrapper } from 'views/contact-groups/displayer/contact-group-displayer-wrapper';
 
@@ -273,9 +271,7 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 				isSharedFolderIncludedInitialValue={
 					query.length === 0 ? includeSharedFolders : isSharedFolderIncluded
 				}
-				// isSharedFolderIncludedDefault={includeSharedFolders}
 				onClose={(): void => setShowAdvanceFilters(false)}
-				// t={t}
 			/>
 		</Container>
 	);

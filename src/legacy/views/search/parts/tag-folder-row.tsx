@@ -8,6 +8,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import {
 	ChipInput,
 	Container,
+	CustomModal,
 	Icon,
 	Padding,
 	Row,
@@ -15,11 +16,19 @@ import {
 	Tooltip
 } from '@zextras/carbonio-design-system';
 import { t } from '@zextras/carbonio-shell-ui';
-import { getTags, Tag, ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-ui-commons';
+import {
+	Folder,
+	getTags,
+	isSharedAccountFolder,
+	Tag,
+	ZIMBRA_STANDARD_COLORS
+} from '@zextras/carbonio-ui-commons';
 import { map } from 'lodash';
 import { Controller, UseFormSetValue } from 'react-hook-form';
 
 import { AdvancedFilterModalFormValues, FormValuesControlProps, KeywordState } from '../types';
+import { FolderIsContainedInModal } from 'components/modals/folder-is-contained-in';
+import { getFolderIconColor } from 'helpers/folders';
 
 type TagFolderRowControlProps = FormValuesControlProps & {
 	setValue: UseFormSetValue<AdvancedFilterModalFormValues>;
@@ -105,40 +114,29 @@ export const TagFolderRow = ({
 		[chipOnAdd, tagOptions]
 	);
 
-	// const headerTitle = t('share.is_contained_in', 'Is contained in');
-	// const actionLabel = t('label.choose_folder', 'Choose folder');
-	// const inputLabel = t(
-	// 	'share.filter_folder_message',
-	// 	'Select a folder where to start your advanced search'
-	// );
-
-	// const confirmAction = useCallback(
-	// 	(
-	// 		folderDestination: Folder | undefined,
-	// 		_setFolderDestination: (_folder: Folder | undefined) => void,
-	// 		_onClose: () => void
-	// 	) => {
-	// 		folderDestination &&
-	// 			setValue('folderInput', [
-	// 				{
-	// 					id: '',
-	// 					label: `in:${folderDestination?.absFolderPath}`,
-	// 					hasAvatar: true,
-	// 					maxWidth: '12.5rem',
-	// 					isGeneric: false,
-	// 					background: 'gray2',
-	// 					avatarBackground: getFolderIconColor(folderDestination),
-	// 					avatarIcon: 'FolderOutline',
-	// 					isQueryFilter: true,
-	// 					value: isSharedAccountFolder(folderDestination?.id)
-	// 						? `inid:"${folderDestination?.id}"`
-	// 						: `in:"${folderDestination?.absFolderPath}"`
-	// 				}
-	// 			]);
-	// 		_onClose();
-	// 	},
-	// 	[setValue]
-	// );
+	const confirmAction = useCallback(
+		(folderDestination: Folder | undefined, _onClose: () => void) => {
+			folderDestination &&
+				setValue('folderInput', [
+					{
+						id: '',
+						label: `in:${folderDestination?.absFolderPath}`,
+						hasAvatar: true,
+						maxWidth: '12.5rem',
+						isGeneric: false,
+						background: 'gray2',
+						avatarBackground: getFolderIconColor(folderDestination),
+						avatarIcon: 'FolderOutline',
+						isQueryFilter: true,
+						value: isSharedAccountFolder(folderDestination?.id)
+							? `inid:"${folderDestination?.id}"`
+							: `in:"${folderDestination?.absFolderPath}"`
+					}
+				]);
+			_onClose();
+		},
+		[setValue]
+	);
 
 	return (
 		<Container padding={{ bottom: 'small', top: 'medium' }} orientation="horizontal">
@@ -191,21 +189,9 @@ export const TagFolderRow = ({
 						/>
 					)}
 				/>
-				{/* <CustomModal open={open} onClose={onClose} maxHeight="90vh" size={'medium'}>
-					<SelectFolderModal
-						onClose={onClose}
-						headerTitle={headerTitle}
-						actionLabel={actionLabel}
-						inputLabel={inputLabel}
-						confirmAction={confirmAction}
-						allowRootSelection={false}
-						allowFolderCreation={false}
-						showSharedAccounts
-						showTrashFolder
-						showSpamFolder
-						data-testid="selectFolderModal"
-					/>
-				</CustomModal> */}
+				<CustomModal open={open} onClose={onClose} maxHeight="90vh" size={'medium'}>
+					<FolderIsContainedInModal onClose={onClose} confirmAction={confirmAction} />
+				</CustomModal>
 			</Container>
 		</Container>
 	);
