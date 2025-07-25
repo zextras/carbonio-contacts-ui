@@ -14,18 +14,15 @@ import { ModalContentAndFooterWrapper } from 'components/modals/modal-content-an
 import { ModalWrapper } from 'components/modals/modal-wrapper';
 
 export type FolderIsContainedInModalProps = {
-	// addressBookId: string;
 	onClose: () => void;
 	confirmAction: (parentAddressBookId: Folder, _onClose: () => void) => void;
 };
 
 export const FolderIsContainedInModal = ({
-	// addressBookId,
 	onClose,
 	confirmAction
 }: FolderIsContainedInModalProps): React.JSX.Element => {
 	const [t] = useTranslation();
-	// const addressBook = useFolder(addressBookId);
 	const [parentAddressBook, setParentAddressBook] = useState<Folder | undefined>();
 
 	const confirmDisabled = useMemo(() => parentAddressBook === undefined, [parentAddressBook]);
@@ -52,7 +49,7 @@ export const FolderIsContainedInModal = ({
 					showSharedAccounts
 					showTrashFolder
 					showLinkedFolders
-					allowRootSelection
+					allowRootSelection={false}
 					allowFolderCreation={false}
 				/>
 				<Divider />

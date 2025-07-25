@@ -10,24 +10,9 @@ import { concat, filter, map } from 'lodash';
 import { AdvancedFilterModalFormValues, KeywordState, Query, SearchQueryItem } from './types';
 
 const excludeLabels = ['has:attachment', 'is:flagged', 'is:unread'];
-const emailFilterPrefix = 'field[email]';
-const emailFilterLabelPrefix = 'email';
-const excludePrefixes = [
-	'Subject:',
-	'Attachment:',
-	'Is:',
-	'Smaller:',
-	'Larger:',
-	'subject:',
-	'in:',
-	'before:',
-	'after:',
-	'date:',
-	'tag:',
-	'to:',
-	'from:',
-	'email:'
-];
+const emailFilterPrefix = 'field[email]:';
+const emailFilterLabelPrefix = 'email:';
+const excludePrefixes = ['to:', 'from:'];
 
 export const EmptyListMessages = (
 	t: TFunction<'translation', undefined, 'translation'>
@@ -84,11 +69,12 @@ export function getQueryToBe(formValues: AdvancedFilterModalFormValues): Query {
 		emailAddress.map((item) => ({
 			...item,
 			id: item.value.email,
-			label: `${emailFilterLabelPrefix}:${item.value.email}` || item.value.email,
+			label: `${emailFilterLabelPrefix}${item.value.email}` || item.value.email,
 			actions: [],
-			value: `${emailFilterPrefix}:${item.value.email}`,
+			value: `${emailFilterPrefix}${item.value.email}`,
 			avatarBackground: item.background,
-			error: false
+			error: false,
+			isQueryFilter: true
 		})),
 		companyInput,
 		jobRoleInput,
