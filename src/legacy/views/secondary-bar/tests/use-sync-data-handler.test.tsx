@@ -10,7 +10,7 @@ import { useFolderStore, folderWorker } from '@zextras/carbonio-ui-commons';
 import { SoapNotify } from '@zextras/carbonio-ui-soap-lib';
 import { http } from 'msw';
 
-import { useInfoRefresh, useSync } from '../../../../../__mocks__/@zextras/carbonio-ui-soap-lib';
+import { useSync } from '../../../../../__mocks__/@zextras/carbonio-ui-soap-lib';
 import { getSetupServer } from '@jest-setup';
 import { generateFolder } from '@test-utils/folders/folders-generator';
 import { handleGetFolderRequest } from '@test-utils/network/msw/handle-get-folder';
@@ -22,11 +22,10 @@ function getWrapper() {
 	return ({ children }: { children: ReactNode }): ReactElement => <>{children}</>;
 }
 
-function mockSoapRefresh(mailbox: number): void {
-	const result = {
+function mockSoapRefresh(mailbox: number): { mbx: Array<{ s: number }> } {
+	return {
 		mbx: [{ s: mailbox }] satisfies [{ s: number }]
 	};
-	jest.mocked(useInfoRefresh).mockReturnValue(result);
 }
 
 function mockSoapSync(notify: Array<SoapNotify>): void {
@@ -64,7 +63,6 @@ describe('sync data handler', () => {
 				http.post('/service/soap/GetShareInfoRequest', handleGetShareInfoRequest)
 			);
 
-			mockSoapSync([notify]);
 			renderHook(() => useSyncDataHandler(), {
 				wrapper: getWrapper()
 			});
