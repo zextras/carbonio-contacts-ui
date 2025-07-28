@@ -103,7 +103,8 @@ function getOtherKeywordsDefaultValue(query: Query): KeywordState {
 			const isExcluded =
 				excludeLabels.includes(queryItem.label) ||
 				excludePrefixes.some((prefix) => queryItem.label.startsWith(prefix)) ||
-				queryItem.isQueryFilter;
+				queryItem.isQueryFilter ||
+				'queryChipsToAdvancedFiltersValue' in queryItem;
 
 			return !isExcluded;
 		}),
