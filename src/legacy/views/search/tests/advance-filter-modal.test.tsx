@@ -198,35 +198,184 @@ describe('Advanced filter modal', () => {
 	it('should reset shared folder toggle to initial state when modal is closed without search confirmation', async () => {
 		jest.spyOn(console, 'error').mockImplementation();
 		const onCloseMock = jest.fn();
-		const properties: AdvancedFilterModalProps = {
+		const { user, rerender } = setupTest(
+			<AdvancedFilterModal {...properties} onClose={onCloseMock} />
+		);
+
+		await screen.findAllByTestId('chip');
+		const chips = screen.getAllByTestId('chip');
+		expect(chips).toHaveLength(2);
+
+		const resetButton = screen.getByRole('button', { name: /action\.reset_filters/i });
+		await user.click(resetButton);
+
+		await waitFor(() => {
+			expect(screen.queryAllByTestId('chip')).toHaveLength(0);
+		});
+
+		rerender(<AdvancedFilterModal {...properties} open={false} onClose={onCloseMock} />);
+
+		rerender(<AdvancedFilterModal {...properties} open />);
+
+		const restoredChips = await screen.findAllByTestId('chip');
+		expect(restoredChips).toHaveLength(2);
+
+		// eslint-disable-next-line
+		expect(restoredChips[0]).toHaveAttribute('value', 'testKeyword1');
+		// eslint-disable-next-line
+		expect(restoredChips[1]).toHaveAttribute('value', 'testKeyword2');
+	});
+
+	it('should filter out advanced search chips from files-ui when switching modules', async () => {
+		jest.spyOn(console, 'error').mockImplementation();
+		const advancedSearchChip = {
+			id: 'advanced1',
+			label: 'flagged:true',
+			value: 'flagged:true',
+			queryChipsToAdvancedFiltersValue: { flagged: true }
+		};
+		const regularKeywordChip = {
+			id: 'keyword1',
+			label: 'test keyword',
+			value: 'test keyword'
+		};
+		const tagChip = {
+			id: 'tag1',
+			label: 'tag:important',
+			value: 'tag:"important"',
+			isQueryFilter: true
+		};
+		const queryWithAdvancedChips = [advancedSearchChip, regularKeywordChip, tagChip];
+
+		const props: AdvancedFilterModalProps = {
 			open: true,
-			onClose: onCloseMock,
+			onClose: jest.fn(),
 			t: tMock,
-			query: [],
+			query: queryWithAdvancedChips,
 			onSearchConfirm: onSearchConfirmMock,
 			isSharedFolderIncludedInitialValue: false,
 			isSharedFolderIncludedDefault: false
 		};
-		const { user, rerender } = setupTest(<AdvancedFilterModal {...properties} />);
 
-		// Initial state check
-		const isSharedFolderIncludedToggle = screen.getByTestId('isSharedFolderIncludedToggle');
-		expect(isSharedFolderIncludedToggle).toBeInTheDocument();
-		expect(screen.getByTestId('icon: ToggleLeftOutline')).toBeInTheDocument();
+		setupTest(<AdvancedFilterModal {...props} />);
 
-		// Toggle the shared folder inclusion
-		await user.click(isSharedFolderIncludedToggle);
-		expect(screen.getByTestId('icon: ToggleRight')).toBeInTheDocument();
+		const keywordChips = await screen.findAllByTestId('chip');
+		const keywordChip = keywordChips.find((chip) => chip.getAttribute('value') === 'test keyword');
+		expect(keywordChip).toBeInTheDocument();
 
-		// Close the modal
-		rerender(<AdvancedFilterModal {...properties} open={false} />);
+		const advancedChip = keywordChips.find((chip) => chip.getAttribute('value') === 'flagged:true');
+		expect(advancedChip).toBeUndefined();
+	});
 
-		// Reopen the modal
-		rerender(<AdvancedFilterModal {...properties} open />);
+	it('should filter out query filter chips from keywords field', async () => {
+		const queryFilterChip = {
+			id: 'filter1',
+			label: 'type:contact',
+			value: 'type:contact',
+			isQueryFilter: true
+		};
+		const regularKeywordChip = {
+			id: 'keyword1',
+			label: 'john doe',
+			value: 'john doe'
+		};
+		const queryWithFilterChips = [queryFilterChip, regularKeywordChip];
 
-		// Check if the shared folder inclusion state is reset to default
-		await waitFor(() => {
-			expect(screen.getByTestId('icon: ToggleLeftOutline')).toBeInTheDocument();
-		});
+		const props: AdvancedFilterModalProps = {
+			open: true,
+			onClose: jest.fn(),
+			t: tMock,
+			query: queryWithFilterChips,
+			onSearchConfirm: onSearchConfirmMock,
+			isSharedFolderIncludedInitialValue: false,
+			isSharedFolderIncludedDefault: false
+		};
+
+		setupTest(<AdvancedFilterModal {...props} />);
+
+		const chips = await screen.findAllByTestId('chip');
+		expect(chips).toHaveLength(1);
+		// eslint-disable-next-line
+		expect(chips[0]).toHaveAttribute('value', 'john doe');
+	});
+
+	it('should handle mixed query with advanced chips, regular keywords, and tags', async () => {
+		jest.spyOn(console, 'error').mockImplementation();
+		const advancedSearchChip = {
+			id: 'advanced1',
+			label: 'shared:true',
+			value: 'shared:true',
+			queryChipsToAdvancedFiltersValue: { shared: true }
+		};
+		const regularKeywordChip = {
+			id: 'keyword1',
+			label: 'john',
+			value: 'john'
+		};
+		const tagChip = {
+			id: 'tag1',
+			label: 'tag:important',
+			value: 'tag:"important"'
+		};
+		const queryFilterChip = {
+			id: 'filter1',
+			label: 'folder:inbox',
+			value: 'folder:inbox',
+			isQueryFilter: true
+		};
+		const mixedQuery = [advancedSearchChip, regularKeywordChip, tagChip, queryFilterChip];
+
+		const props: AdvancedFilterModalProps = {
+			open: true,
+			onClose: jest.fn(),
+			t: tMock,
+			query: mixedQuery,
+			onSearchConfirm: onSearchConfirmMock,
+			isSharedFolderIncludedInitialValue: false,
+			isSharedFolderIncludedDefault: false
+		};
+
+		setupTest(<AdvancedFilterModal {...props} />);
+
+		const keywordChips = await screen.findAllByTestId('chip');
+		const keywordChip = keywordChips.find((chip) => chip.getAttribute('value') === 'john');
+		expect(keywordChip).toBeInTheDocument();
+
+		const advancedChip = keywordChips.find((chip) => chip.getAttribute('value') === 'shared:true');
+		const filterChip = keywordChips.find((chip) => chip.getAttribute('value') === 'folder:inbox');
+		expect(advancedChip).toBeUndefined();
+		expect(filterChip).toBeUndefined();
+	});
+
+	it('should not show any chips when query contains only advanced search chips', async () => {
+		jest.spyOn(console, 'error').mockImplementation();
+		const advancedSearchChip1 = {
+			id: 'advanced1',
+			label: 'flagged:true',
+			value: 'flagged:true',
+			queryChipsToAdvancedFiltersValue: { flagged: true }
+		};
+		const advancedSearchChip2 = {
+			id: 'advanced2',
+			label: 'shared:true',
+			value: 'shared:true',
+			queryChipsToAdvancedFiltersValue: { shared: true }
+		};
+		const queryWithOnlyAdvancedChips = [advancedSearchChip1, advancedSearchChip2];
+
+		const props: AdvancedFilterModalProps = {
+			open: true,
+			onClose: jest.fn(),
+			t: tMock,
+			query: queryWithOnlyAdvancedChips,
+			onSearchConfirm: onSearchConfirmMock,
+			isSharedFolderIncludedInitialValue: false,
+			isSharedFolderIncludedDefault: false
+		};
+
+		setupTest(<AdvancedFilterModal {...props} />);
+
+		const chips = screen.queryAllByTestId('chip');
+		expect(chips).toHaveLength(0);
 	});
 });
