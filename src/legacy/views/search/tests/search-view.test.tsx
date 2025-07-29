@@ -42,7 +42,10 @@ const useMockedUseQuery = (): ReturnType<typeof useQuery> => {
 		label: 'test'
 	};
 	const [query, updateQuery] = useState<Query>([queryChip]);
-	return [query, updateQuery];
+	const wrappedUpdateQuery = (value: QueryChip[] | ((q: QueryChip[]) => QueryChip[])): void => {
+		updateQuery(value as Query);
+	};
+	return [query, wrappedUpdateQuery];
 };
 
 const TestSearchView = (props: SearchViewProps): React.JSX.Element => {

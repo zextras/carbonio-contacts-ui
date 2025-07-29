@@ -134,7 +134,10 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 		[foldersToSearchInQuery, isSharedFolderIncluded, searchInFolders?.length]
 	);
 
-	const queryToString = useMemo(() => evaluateQueryString(query), [evaluateQueryString, query]);
+	const queryToString = useMemo(
+		() => evaluateQueryString(query.filter((item) => typeof item.id === 'string') as Query),
+		[evaluateQueryString, query]
+	);
 
 	const containsSpecialCharacter = useMemo(() => {
 		if (query.length === 0) return false;
@@ -190,7 +193,10 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 
 	useEffect(() => {
 		const controller = new AbortController();
-		runSearchFromScratch(query, controller.signal);
+		runSearchFromScratch(
+			query.filter((item) => typeof item.id === 'string') as Query,
+			controller.signal
+		);
 		return () => {
 			controller.abort();
 		};
