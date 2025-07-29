@@ -88,7 +88,7 @@ export const TagFolderRow = ({
 		[]
 	);
 	const folderChipOnAdd = useCallback(
-		(label: unknown) => chipOnAdd(label as string, 'in', true, false, true, 'FolderOutline', ''),
+		(label: unknown) => chipOnAdd(label, 'in', true, false, true, 'FolderOutline', ''),
 		[chipOnAdd]
 	);
 
@@ -102,7 +102,7 @@ export const TagFolderRow = ({
 			}
 			const chipBg = tagOptions.filter((tag) => tag.label === label);
 			return chipOnAdd(
-				label as string,
+				label,
 				'tag',
 				true,
 				false,
