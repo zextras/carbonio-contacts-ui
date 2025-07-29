@@ -73,6 +73,7 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 			onClose();
 		} catch (error) {
 			controller.abort();
+			throw error;
 		}
 		return () => {
 			controller.abort();

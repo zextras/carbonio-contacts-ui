@@ -15,7 +15,8 @@ export const PhoneNumberRow = ({ control }: FormValuesControlProps): ReactElemen
 	const [t] = useTranslation();
 	const phoneNumberLabelPrefix = 'Phone';
 
-	const phoneNumberChipOnAdd = useCallback((label: string | unknown) => {
+	const phoneNumberChipOnAdd = useCallback((value: unknown) => {
+		const label = typeof value === 'string' ? value : String(value);
 		const phoneValue = `field[homePhone]:${label} OR field[mobilePhone]:${label} OR field[workPhone]:${label} OR field[otherPhone]:${label}`;
 		return {
 			label: `${phoneNumberLabelPrefix}:${label}`,
