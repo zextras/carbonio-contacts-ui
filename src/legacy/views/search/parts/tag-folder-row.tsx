@@ -7,6 +7,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 
 import {
 	ChipInput,
+	ChipInputProps,
 	Container,
 	CustomModal,
 	Icon,
@@ -88,7 +89,12 @@ export const TagFolderRow = ({
 		[]
 	);
 	const folderChipOnAdd = useCallback(
-		(label: unknown) => chipOnAdd(label, 'in', true, false, true, 'FolderOutline', ''),
+		(label: unknown) => {
+			if (typeof label !== 'string') {
+				return undefined;
+			}
+			return chipOnAdd(label, 'in', true, false, true, 'FolderOutline', '');
+		},
 		[chipOnAdd]
 	);
 
@@ -156,14 +162,14 @@ export const TagFolderRow = ({
 								const validChips = chips.filter((chip) => chip !== undefined);
 								onChange(validChips);
 							}}
-							// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-							onAdd={(label) => {
-								if (typeof label !== 'string') {
-									return undefined;
-								}
-								// fix typings on DS
-								return tagChipOnAdd(label, value) as any;
-							}}
+							onAdd={
+								((label) => {
+									if (typeof label !== 'string') {
+										return undefined;
+									}
+									return tagChipOnAdd(label, value);
+								}) as ChipInputProps['onAdd']
+							}
 							disableOptions={false}
 							disabled
 							data-testid="tagInput"
@@ -182,7 +188,7 @@ export const TagFolderRow = ({
 							placeholder={t('share.is_contained_in', 'Is contained in')}
 							value={value}
 							onChange={onChange}
-							onAdd={folderChipOnAdd}
+							onAdd={folderChipOnAdd as ChipInputProps['onAdd']}
 							disabled
 							iconAction={openFolderModal}
 							data-testid="folderInput"
