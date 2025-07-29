@@ -22,12 +22,6 @@ function getWrapper() {
 	return ({ children }: { children: ReactNode }): ReactElement => <>{children}</>;
 }
 
-function mockSoapRefresh(mailbox: number): { mbx: Array<{ s: number }> } {
-	return {
-		mbx: [{ s: mailbox }] satisfies [{ s: number }]
-	};
-}
-
 function mockSoapSync(notify: Array<SoapNotify>): void {
 	jest.mocked(useSync).mockReturnValue(notify);
 }
@@ -41,7 +35,6 @@ function generateSoapAction(partial?: Partial<SoapNotify>): SoapNotify {
 }
 
 function mockSoapDelete(mailboxNumber: number, deletedIds: Array<string>): void {
-	mockSoapRefresh(mailboxNumber);
 	const soapNotify = generateSoapAction({
 		deleted: deletedIds
 	});
