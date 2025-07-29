@@ -6,7 +6,7 @@
 import React, { FC, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Container, Spinner } from '@zextras/carbonio-design-system';
-import type { SearchViewProps } from '@zextras/carbonio-search-ui';
+import type { QueryChip, SearchViewProps } from '@zextras/carbonio-search-ui';
 import {
 	isTrash,
 	useUpdateView,
@@ -127,17 +127,14 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 	);
 
 	const evaluateQueryString = useCallback(
-		(queryParam: Query): string =>
+		(queryParam: QueryChip[]): string =>
 			isSharedFolderIncluded && searchInFolders?.length > 0
 				? `(${queryParam.map((c) => (c.value ? c.value : c.label)).join(' ')}) ${foldersToSearchInQuery}`
 				: `${queryParam.map((c) => (c.value ? c.value : c.label)).join(' ')}`,
 		[foldersToSearchInQuery, isSharedFolderIncluded, searchInFolders?.length]
 	);
 
-	const queryToString = useMemo(
-		() => evaluateQueryString(query.filter((item) => typeof item.id === 'string') as Query),
-		[evaluateQueryString, query]
-	);
+	const queryToString = useMemo(() => evaluateQueryString(query), [evaluateQueryString, query]);
 
 	const containsSpecialCharacter = useMemo(() => {
 		if (query.length === 0) return false;
@@ -170,7 +167,7 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 	}, [containsSpecialCharacter, invalidQueryTooltip, query.length, t]);
 
 	const runSearchFromScratch = useCallback(
-		(newQuery: Query, abortSignal?: AbortSignal) => {
+		(newQuery: QueryChip[], abortSignal?: AbortSignal) => {
 			setSearchResults(initialSearchState);
 			if (query.length > 0) {
 				const queryString = evaluateQueryString(newQuery);
@@ -193,10 +190,7 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 
 	useEffect(() => {
 		const controller = new AbortController();
-		runSearchFromScratch(
-			query.filter((item) => typeof item.id === 'string') as Query,
-			controller.signal
-		);
+		runSearchFromScratch(query, controller.signal);
 		return () => {
 			controller.abort();
 		};
