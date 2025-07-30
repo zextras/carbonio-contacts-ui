@@ -7,13 +7,13 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-import { SoapNotify, useNotify } from '@zextras/carbonio-shell-ui';
 import {
 	useFolderStore,
 	useTagStore,
 	folderWorker,
 	tagsWorker
 } from '@zextras/carbonio-ui-commons';
+import { SoapNotify, useSync } from '@zextras/carbonio-ui-soap-lib';
 import { forEach, isEmpty, sortBy } from 'lodash';
 
 import {
@@ -113,7 +113,7 @@ function processNotification(
 }
 
 export const useSyncDataHandler = (): void => {
-	const notifyList = useNotify();
+	const notifyList = useSync();
 	const [seq, setSeq] = useState(-1);
 
 	const processedNotify = useRef<number>(-1);

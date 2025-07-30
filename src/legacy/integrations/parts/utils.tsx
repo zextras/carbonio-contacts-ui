@@ -5,13 +5,13 @@
  */
 import React from 'react';
 
-import { soapFetch } from '@zextras/carbonio-shell-ui';
 import {
 	parseEmail,
 	CONTACT_TYPES,
 	ContactInputItemInternalValue,
 	GroupContact
 } from '@zextras/carbonio-ui-commons';
+import { legacySoapFetch } from '@zextras/carbonio-ui-soap-lib';
 import { map, trim, unescape } from 'lodash';
 
 import { Hint } from 'legacy/integrations/parts/hint';
@@ -125,7 +125,7 @@ export const searchContacts = (
 	textToSearch: string,
 	orderedAccountIds: Array<string>
 ): Promise<Array<ContactInputOptions>> =>
-	soapFetch<FullAutocompleteRequest, SearchContactsResponse>('FullAutocomplete', {
+	legacySoapFetch<FullAutocompleteRequest, SearchContactsResponse>('FullAutocomplete', {
 		...(orderedAccountIds?.length > 0 && {
 			orderedAccountIds: orderedAccountIds.toString()
 		}),

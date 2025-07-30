@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { soapFetch } from '@zextras/carbonio-shell-ui';
+import { legacySoapFetch } from '@zextras/carbonio-ui-soap-lib';
 
 import { SoapSearchResults } from 'legacy/views/search/types';
 
@@ -17,7 +17,7 @@ export const searchContactsHelper = ({
 	offset: number;
 	sortBy: string;
 }): Promise<SoapSearchResults> =>
-	soapFetch<any, any>('Search', {
+	legacySoapFetch<any, any>('Search', {
 		limit: 100,
 		query,
 		offset,

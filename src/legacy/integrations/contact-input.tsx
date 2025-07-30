@@ -15,7 +15,6 @@ import {
 	ChipItem,
 	Chip
 } from '@zextras/carbonio-design-system';
-import { soapFetch } from '@zextras/carbonio-shell-ui';
 import {
 	isValidEmail,
 	EDIT_ACTION_ID,
@@ -28,6 +27,7 @@ import {
 	GroupContact,
 	ContactInputItemInternalValue
 } from '@zextras/carbonio-ui-commons';
+import { legacySoapFetch } from '@zextras/carbonio-ui-soap-lib';
 import { TFunction } from 'i18next';
 import { filter, find, map, uniqBy, noop, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
@@ -212,7 +212,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 
 	const getGroupMembers = useCallback(
 		(contactGroup: GroupContact): Promise<UserContact[]> =>
-			soapFetch<GetContactsRequest, GetContactsResponse>('GetContacts', {
+			legacySoapFetch<GetContactsRequest, GetContactsResponse>('GetContacts', {
 				_jsns: 'urn:zimbraMail',
 				cn: {
 					id: contactGroup.groupId

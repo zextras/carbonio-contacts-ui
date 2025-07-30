@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { ErrorSoapBodyResponse, soapFetch } from '@zextras/carbonio-shell-ui';
 import { FOLDER_VIEW, FolderView, JSNS, SoapFolder } from '@zextras/carbonio-ui-commons';
+import { ErrorSoapBodyResponse, legacySoapFetch } from '@zextras/carbonio-ui-soap-lib';
 
 import { GenericSoapPayload } from 'network/api/types';
 
@@ -35,7 +35,7 @@ export const createFolder = (params: CreateFolderParams): Promise<void> => {
 		},
 		_jsns: JSNS.MAIL
 	};
-	return soapFetch<CreateFolderRequest, CreateFolderResponse | ErrorSoapBodyResponse>(
+	return legacySoapFetch<CreateFolderRequest, CreateFolderResponse | ErrorSoapBodyResponse>(
 		'CreateFolder',
 		request
 	).then((response) => {
