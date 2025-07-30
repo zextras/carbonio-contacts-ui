@@ -443,7 +443,7 @@ describe('TagFolderRow', () => {
 			const colorIndex = chipBg[0]?.color ?? 0;
 
 			expect(chipBg).toHaveLength(0);
-			expect(colorIndex).toBe(0); // Should fallback to 0
+			expect(colorIndex).toBe(0);
 		});
 	});
 

@@ -5,13 +5,12 @@
  */
 import React, { useCallback, useMemo, useState } from 'react';
 
-import { Divider, ModalFooter, ModalHeader } from '@zextras/carbonio-design-system';
+import { Container, Divider, ModalFooter, ModalHeader } from '@zextras/carbonio-design-system';
 import { Folder } from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 
 import { FolderTreeSelector } from 'components/folder-tree-selector/folder-tree-selector';
 import { ModalContentAndFooterWrapper } from 'components/modals/modal-content-and-footer-wrapper';
-import { ModalWrapper } from 'components/modals/modal-wrapper';
 
 export type FolderIsContainedInModalProps = {
 	onClose: () => void;
@@ -36,7 +35,14 @@ export const FolderIsContainedInModal = ({
 	}, []);
 
 	return (
-		<ModalWrapper>
+		<Container
+			mainAlignment="center"
+			crossAlignment="flex-start"
+			height="100%"
+			style={{
+				overflowY: 'auto'
+			}}
+		>
 			<ModalHeader
 				title={t('share.is_contained_in', 'Is contained in')}
 				onClose={onClose}
@@ -44,14 +50,24 @@ export const FolderIsContainedInModal = ({
 			/>
 			<Divider />
 			<ModalContentAndFooterWrapper>
-				<FolderTreeSelector
-					onFolderSelected={onParentAddressBookSelected}
-					showSharedAccounts
-					showTrashFolder
-					showLinkedFolders
-					allowRootSelection={false}
-					allowFolderCreation={false}
-				/>
+				<Container
+					mainAlignment={'flex-start'}
+					crossAlignment="flex-start"
+					height="fit"
+					minHeight={'50vh'}
+					style={{
+						overflowY: 'auto'
+					}}
+				>
+					<FolderTreeSelector
+						onFolderSelected={onParentAddressBookSelected}
+						showSharedAccounts
+						showTrashFolder
+						showLinkedFolders
+						allowRootSelection={false}
+						allowFolderCreation={false}
+					/>
+				</Container>
 				<Divider />
 				<ModalFooter
 					confirmLabel={t('advancedFilters.isContainedIn.chooseFolder', 'Choose folder')}
@@ -61,6 +77,6 @@ export const FolderIsContainedInModal = ({
 					onSecondaryAction={onClose}
 				/>
 			</ModalContentAndFooterWrapper>
-		</ModalWrapper>
+		</Container>
 	);
 };

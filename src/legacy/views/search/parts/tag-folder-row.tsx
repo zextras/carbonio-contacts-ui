@@ -195,7 +195,7 @@ export const TagFolderRow = ({
 						/>
 					)}
 				/>
-				<CustomModal open={open} onClose={onClose} maxHeight="90vh" size={'medium'}>
+				<CustomModal open={open} onClose={onClose} maxHeight="70vh" minHeight="70vh" size="medium">
 					<FolderIsContainedInModal onClose={onClose} confirmAction={confirmAction} />
 				</CustomModal>
 			</Container>
