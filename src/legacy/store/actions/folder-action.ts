@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { soapFetch } from '@zextras/carbonio-shell-ui';
+import { legacySoapFetch } from '@zextras/carbonio-ui-soap-lib';
 import { isNil, omitBy } from 'lodash';
 
 import { ContactsFolder } from 'legacy/types/contact';
@@ -28,7 +28,7 @@ export const folderAction = createAsyncThunk(
 		color?: number;
 		zid?: string;
 	}) =>
-		soapFetch('FolderAction', {
+		legacySoapFetch('FolderAction', {
 			action: omitBy(
 				{
 					id: folder.id,

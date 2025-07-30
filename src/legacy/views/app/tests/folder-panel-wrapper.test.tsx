@@ -11,27 +11,6 @@ import * as shell from '@zextras/carbonio-shell-ui';
 import { FOLDER_VIEW, FOLDERS, JSNS, useTagStore } from '@zextras/carbonio-ui-commons';
 import { forEach } from 'lodash';
 
-import { createContactsApiInterceptor, findContactInList } from 'legacy/views/app/tests/utils';
-import {
-	ActionDescriptorType,
-	ACTIONS_DESCRIPTORS,
-	DISPLAY_ASSERTION,
-	DisplayAssertionType,
-	EMPTY_LIST_HINT,
-	FolderDescriptorType,
-	FOLDERS_DESCRIPTORS,
-	TESTID_SELECTORS
-} from 'constants/tests';
-import { ContactActionRequest, ContactActionResponse } from 'network/api/contact-action';
-import { registerDeleteContactHandler } from 'tests/msw-handlers/delete-contact';
-import {
-	createFindContactGroupsResponse,
-	registerFindContactGroupsHandler
-} from 'tests/msw-handlers/find-contact-groups';
-import { createSoapContact, createSoapContactGroup } from 'tests/utils';
-import { SearchContactsRequest, SearchContactsSoapResponse } from 'types';
-import { SoapContact } from 'legacy/types/soap';
-import { FolderPanelWrapper } from 'legacy/views/app/folder-panel-wrapper';
 import {
 	makeListItemsVisible,
 	screen,
@@ -47,6 +26,27 @@ import {
 import { generateFolder } from '@test-utils/folders/folders-generator';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 import { populateFoldersStore } from '@test-utils/store/folders';
+import {
+	ActionDescriptorType,
+	ACTIONS_DESCRIPTORS,
+	DISPLAY_ASSERTION,
+	DisplayAssertionType,
+	EMPTY_LIST_HINT,
+	FolderDescriptorType,
+	FOLDERS_DESCRIPTORS,
+	TESTID_SELECTORS
+} from 'constants/tests';
+import { SoapContact } from 'legacy/types/soap';
+import { FolderPanelWrapper } from 'legacy/views/app/folder-panel-wrapper';
+import { createContactsApiInterceptor, findContactInList } from 'legacy/views/app/tests/utils';
+import { ContactActionRequest, ContactActionResponse } from 'network/api/contact-action';
+import { registerDeleteContactHandler } from 'tests/msw-handlers/delete-contact';
+import {
+	createFindContactGroupsResponse,
+	registerFindContactGroupsHandler
+} from 'tests/msw-handlers/find-contact-groups';
+import { createSoapContact, createSoapContactGroup } from 'tests/utils';
+import { SearchContactsRequest, SearchContactsSoapResponse } from 'types';
 
 const mockMailToAction = (execute = jest.fn()): void => {
 	getActionMock.mockImplementation((type, id) => {
@@ -88,7 +88,6 @@ function registerSearchContacts(soapContacts: Array<SoapContact>): void {
 describe('Folder panel', () => {
 	beforeEach(() => {
 		populateFoldersStore();
-		jest.clearAllMocks();
 	});
 	it('should show the empty list message if there is no contact or contact group', async () => {
 		const folderId = '7';

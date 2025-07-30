@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { soapFetch } from '@zextras/carbonio-shell-ui';
+import { legacySoapFetch } from '@zextras/carbonio-ui-soap-lib';
 import { isNil, omitBy } from 'lodash';
 
 export const contactAction = async ({
@@ -19,7 +19,7 @@ export const contactAction = async ({
 }): Promise<unknown> => {
 	const ids = contactsIDs.join(',');
 
-	return soapFetch('ContactAction', {
+	return legacySoapFetch('ContactAction', {
 		_jsns: 'urn:zimbraMail',
 		action: omitBy(
 			{
