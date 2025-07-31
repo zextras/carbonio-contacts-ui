@@ -11,26 +11,31 @@ import { useTranslation } from 'react-i18next';
 
 import { FormValuesControlProps } from '../types';
 
-export const KeywordRow = ({ control }: FormValuesControlProps): ReactElement => {
+export const PhoneNumberRow = ({ control }: FormValuesControlProps): ReactElement => {
 	const [t] = useTranslation();
-	const keywordChipOnAdd = useCallback(
-		(label: unknown) => ({
-			label: label as string,
+	const phoneNumberLabelPrefix = 'Phone';
+
+	const phoneNumberChipOnAdd = useCallback((value: unknown) => {
+		const label = typeof value === 'string' ? value : String(value);
+		const phoneValue = `field[homePhone]:${label} OR field[mobilePhone]:${label} OR field[workPhone]:${label} OR field[otherPhone]:${label}`;
+		return {
+			label: `${phoneNumberLabelPrefix}:${label}`,
 			hasAvatar: false,
-			isGeneric: true
-		}),
-		[]
-	);
+			isGeneric: false,
+			isQueryFilter: true,
+			value: phoneValue
+		};
+	}, []);
 
 	return (
 		<Container padding={{ bottom: 'small', top: 'medium' }} orientation="horizontal">
 			<Controller
 				control={control}
-				name={'keywordInput'}
+				name={'phoneNumberInput'}
 				render={({ field: { onChange, value } }): React.JSX.Element => (
 					<ChipInput
-						placeholder={t('advancedFilters.keywords', 'Keywords')}
-						data-testid={'keywords-input'}
+						placeholder={t('advancedFilters.phoneNumber', 'Phone Number')}
+						data-testid={'phone-number-input'}
 						background="gray5"
 						value={value}
 						separators={[
@@ -38,7 +43,7 @@ export const KeywordRow = ({ control }: FormValuesControlProps): ReactElement =>
 							{ key: ',', ctrlKey: false }
 						]}
 						onChange={onChange}
-						onAdd={keywordChipOnAdd}
+						onAdd={phoneNumberChipOnAdd}
 						requireUniqueChips
 					/>
 				)}

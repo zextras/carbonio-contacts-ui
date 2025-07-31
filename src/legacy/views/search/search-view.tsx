@@ -6,7 +6,7 @@
 import React, { FC, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Container, Spinner } from '@zextras/carbonio-design-system';
-import type { SearchViewProps } from '@zextras/carbonio-search-ui';
+import type { QueryChip, SearchViewProps } from '@zextras/carbonio-search-ui';
 import {
 	isTrash,
 	useUpdateView,
@@ -18,15 +18,14 @@ import { map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { Route, Routes } from 'react-router-dom';
 
+import { AdvancedFilterModal } from './advance-filter-modal';
 import { addContactsToStore, useContactsById } from 'legacy/store/contacts';
 import ContactEditPanel from 'legacy/views/edit/contact-edit-panel';
 import { ContactPreviewWrapper } from 'legacy/views/preview/contact-preview-wrapper';
-import AdvancedFilterModal from 'legacy/views/search/advance-filter-modal';
 import { runSearch } from 'legacy/views/search/run-search';
 import { SearchContactsEmptyPanel } from 'legacy/views/search/search-contacts-empty-panel';
 import { SearchList } from 'legacy/views/search/search-list';
-import { Query } from 'legacy/views/search/search-types';
-import { SearchResults } from 'legacy/views/search/types';
+import { Query, SearchResults } from 'legacy/views/search/types';
 import { ContactGroupDisplayerWrapper } from 'views/contact-groups/displayer/contact-group-displayer-wrapper';
 
 const specialChars = [
@@ -128,7 +127,7 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 	);
 
 	const evaluateQueryString = useCallback(
-		(queryParam: Query): string =>
+		(queryParam: QueryChip[]): string =>
 			isSharedFolderIncluded && searchInFolders?.length > 0
 				? `(${queryParam.map((c) => (c.value ? c.value : c.label)).join(' ')}) ${foldersToSearchInQuery}`
 				: `${queryParam.map((c) => (c.value ? c.value : c.label)).join(' ')}`,
@@ -168,7 +167,7 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 	}, [containsSpecialCharacter, invalidQueryTooltip, query.length, t]);
 
 	const runSearchFromScratch = useCallback(
-		(newQuery: Query, abortSignal?: AbortSignal) => {
+		(newQuery: QueryChip[], abortSignal?: AbortSignal) => {
 			setSearchResults(initialSearchState);
 			if (query.length > 0) {
 				const queryString = evaluateQueryString(newQuery);
@@ -274,15 +273,13 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 			</Container>
 
 			<AdvancedFilterModal
-				query={query}
+				query={query as Query}
 				open={showAdvanceFilters}
 				onSearchConfirm={onModalConfirm}
 				isSharedFolderIncludedInitialValue={
 					query.length === 0 ? includeSharedFolders : isSharedFolderIncluded
 				}
-				isSharedFolderIncludedDefault={includeSharedFolders}
 				onClose={(): void => setShowAdvanceFilters(false)}
-				t={t}
 			/>
 		</Container>
 	);
