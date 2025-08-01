@@ -10,7 +10,6 @@ import { ModalManager } from '@zextras/carbonio-design-system';
 import { Navigate, Route, Routes, useParams } from 'react-router-dom';
 
 import { ROUTES, ROUTES_INTERNAL_PARAMS } from 'constants/index';
-import { EmotionThemeProvider } from 'emotion-theme-provider';
 import { DistributionListsView } from 'views/distribution-list/distribution-lists-view';
 
 const AppView = (): React.JSX.Element => {
@@ -28,9 +27,7 @@ const AppView = (): React.JSX.Element => {
 	}
 	return (
 		<ModalManager>
-			<EmotionThemeProvider>
-				<DistributionListsView />
-			</EmotionThemeProvider>
+			<DistributionListsView />
 		</ModalManager>
 	);
 };

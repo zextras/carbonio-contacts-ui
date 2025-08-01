@@ -10,7 +10,6 @@ import { setAppContext } from '@zextras/carbonio-shell-ui';
 import { useUpdateView } from '@zextras/carbonio-ui-commons';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-import { EmotionThemeProvider } from 'emotion-theme-provider';
 import { FolderView } from 'legacy/views/app/folder-view';
 
 const ContactsView = (): React.JSX.Element => {
@@ -22,14 +21,12 @@ const ContactsView = (): React.JSX.Element => {
 	}, [count]);
 
 	return (
-		<EmotionThemeProvider>
-			<Container orientation="horizontal" mainAlignment="flex-start">
-				<FolderView />
-				<Routes>
-					<Route path="/" element={<Navigate to={'folder/7'} />} />
-				</Routes>
-			</Container>
-		</EmotionThemeProvider>
+		<Container orientation="horizontal" mainAlignment="flex-start">
+			<FolderView />
+			<Routes>
+				<Route path="/" element={<Navigate to={'folder/7'} />} />
+			</Routes>
+		</Container>
 	);
 };
 

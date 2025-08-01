@@ -17,11 +17,10 @@ import {
 	JSNS
 } from '@zextras/carbonio-ui-commons';
 
-import { ContactInput } from 'legacy/integrations/contact-input';
+import { UserEvent, screen, setupTest } from '@test-setup';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 import { TESTID_SELECTORS } from 'constants/tests';
-import { registerGetDistributionListHandler } from 'tests/msw-handlers/get-distribution-list';
-import { generateDistributionList } from 'tests/utils';
-import { FullAutocompleteRequest, FullAutocompleteResponse } from 'legacy/types/contact';
+import { ContactInput } from 'legacy/integrations/contact-input';
 import {
 	clickExpandDL,
 	createAutocompleteInterceptor,
@@ -36,14 +35,15 @@ import {
 	SELECT_ALL,
 	typeAndSelectOptionFromDropdown
 } from 'legacy/integrations/test/mocks';
+import { FullAutocompleteRequest, FullAutocompleteResponse } from 'legacy/types/contact';
 import {
 	GetDistributionListRequest,
 	GetDistributionListResponse
 } from 'network/api/get-distribution-list';
 import { registerFullAutocompleteHandler } from 'tests/msw-handlers/full-autocomplete';
+import { registerGetDistributionListHandler } from 'tests/msw-handlers/get-distribution-list';
 import { registerGetDistributionListMembersHandler } from 'tests/msw-handlers/get-distribution-list-members';
-import { UserEvent, screen, setupTest } from '@test-setup';
-import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
+import { generateDistributionList } from 'tests/utils';
 
 const VALID_EMAIL = 'valid@email.it';
 const INVALID_EMAIL = 'invalid@email';

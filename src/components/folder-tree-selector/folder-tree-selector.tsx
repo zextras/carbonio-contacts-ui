@@ -21,7 +21,6 @@ import { filter, startsWith } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { FlatFoldersAccordion } from 'components/folder-tree-selector/flat-folders-accordion';
-import { EmotionThemeProvider } from 'emotion-theme-provider';
 import { sortFolders } from 'helpers/folders';
 import { getFolderTranslatedName } from 'legacy/utils/helpers';
 
@@ -153,7 +152,7 @@ export const FolderTreeSelector = ({
 	const filteredRoots = filterRoots(flattenRoots, inputValue);
 	const inputName = selectedFolder ? selectedFolder.name : '';
 	return (
-		<EmotionThemeProvider>
+		<>
 			<Input
 				data-testid={'folder-name-filter'}
 				inputName={inputName}
@@ -192,6 +191,6 @@ export const FolderTreeSelector = ({
 					/>
 				</Container>
 			)}
-		</EmotionThemeProvider>
+		</>
 	);
 };
