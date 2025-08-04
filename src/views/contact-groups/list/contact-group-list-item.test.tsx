@@ -6,7 +6,6 @@
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
-import * as shell from '@zextras/carbonio-shell-ui';
 import { FOLDERS } from '@zextras/carbonio-ui-commons';
 
 import { screen, setupTest } from '@test-setup';
@@ -15,23 +14,12 @@ import { TESTID_SELECTORS } from 'constants/tests';
 import { buildContactGroup, buildMembers } from 'tests/model-builder';
 import { ContactGroupListItem } from 'views/contact-groups/list/contact-group-list-item';
 
-jest.mock('react-router-dom', () => ({
-	...jest.requireActual('react-router-dom'),
-	useParams: (): { id: string } => ({ id: '' })
-}));
-
 describe('Contact group list item', () => {
 	beforeEach(() => {
 		populateFoldersStore();
-		jest.clearAllMocks();
 	});
 	describe('Actions', () => {
-		beforeAll(() => {
-			const mailTo = { id: 'mail-to', label: 'action.send_msg', execute: jest.fn() };
-			jest.spyOn(shell, 'getAction').mockReturnValue([mailTo, true]);
-		});
 		it('should show send mail action when the contact group has at least 1 member', () => {
-			jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([jest.fn(), true]);
 			const contactGroup = buildContactGroup({
 				members: buildMembers(faker.number.int({ min: 1, max: 100 }))
 			});
@@ -39,29 +27,41 @@ describe('Contact group list item', () => {
 			setupTest(<ContactGroupListItem contactGroup={contactGroup} />);
 			expect(screen.getByTestId(TESTID_SELECTORS.icons.sendEmail)).toBeInTheDocument();
 		});
+
 		it('should show send mail action as disabled when the contact group has 0 members', async () => {
 			const contactGroup = buildContactGroup();
 
-			setupTest(<ContactGroupListItem contactGroup={contactGroup} />);
-			const mailToActionButton = screen.getByRoleWithIcon('button', {
-				icon: TESTID_SELECTORS.icons.sendEmail
-			});
+			const { user } = setupTest(<ContactGroupListItem contactGroup={contactGroup} />);
+			const actionWrapper = await screen.findByTestId(`contact-group-list-item-${contactGroup.id}`);
+			await user.hover(actionWrapper);
+			const mailToActionButton = await screen.findByTestId('send-email-action');
+
 			expect(mailToActionButton).toBeInTheDocument();
 			expect(mailToActionButton).toBeDisabled();
 		});
-		it('should display trash action', () => {
-			populateFoldersStore();
+
+		it('should display trash action', async () => {
 			const contactGroup = buildContactGroup();
 
-			setupTest(<ContactGroupListItem contactGroup={contactGroup} />);
-			expect(screen.getByTestId(TESTID_SELECTORS.icons.trash)).toBeVisible();
+			const { user } = setupTest(<ContactGroupListItem contactGroup={contactGroup} />);
+			const actionWrapper = await screen.findByTestId(`contact-group-list-item-${contactGroup.id}`);
+			await user.hover(actionWrapper);
+			const trashActionButton = await screen.findByTestId('move-to-trash-action');
+
+			expect(trashActionButton).toBeInTheDocument();
+			expect(trashActionButton).toBeEnabled();
 		});
-		it('should display delete action when contact group is in trash', () => {
-			populateFoldersStore();
+
+		it('should display delete action when contact group is in trash', async () => {
 			const contactGroup = buildContactGroup({ parent: FOLDERS.TRASH });
 
-			setupTest(<ContactGroupListItem contactGroup={contactGroup} />);
-			expect(screen.getByTestId(TESTID_SELECTORS.icons.deletePermanently)).toBeVisible();
+			const { user } = setupTest(<ContactGroupListItem contactGroup={contactGroup} />);
+			const actionWrapper = await screen.findByTestId(`contact-group-list-item-${contactGroup.id}`);
+			await user.hover(actionWrapper);
+			const deletePermanentlyActionButton = await screen.findByTestId('delete-permanently-action');
+
+			expect(deletePermanentlyActionButton).toBeInTheDocument();
+			expect(deletePermanentlyActionButton).toBeEnabled();
 		});
 	});
 });

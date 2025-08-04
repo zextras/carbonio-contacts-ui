@@ -8,11 +8,11 @@ import { useCallback, useMemo } from 'react';
 import { useSnackbar } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
-import { TIMEOUTS } from 'constants/index';
+import { Action } from 'actions/types';
 import { TRASH_ACTION } from 'constants/actions';
+import { TIMEOUTS } from 'constants/index';
 import { ContactOrGroup } from 'legacy/types/contact';
 import { apiClient } from 'network/api-client';
-import { Action } from 'actions/types';
 
 export const useTrashContacts = (contacts: Array<ContactOrGroup>): Action => {
 	const [t] = useTranslation();

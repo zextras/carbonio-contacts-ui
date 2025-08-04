@@ -8,12 +8,12 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import * as shell from '@zextras/carbonio-shell-ui';
 
-import { DLListItem } from 'components/dl-list-item';
+import { screen, setupTest, within } from '@test-setup';
 import { OpenMailComposerIntegratedFunction } from 'actions/send-email';
+import { DLListItem } from 'components/dl-list-item';
 import { EDIT_DL_BOARD_ID } from 'constants/index';
 import { TESTID_SELECTORS } from 'constants/tests';
 import { generateDistributionList } from 'tests/utils';
-import { screen, setupTest, within } from '@test-setup';
 
 describe('DL list item', () => {
 	it('should show avatar', () => {
