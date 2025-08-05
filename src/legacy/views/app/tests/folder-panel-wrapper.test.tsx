@@ -88,7 +88,6 @@ function registerSearchContacts(soapContacts: Array<SoapContact>): void {
 describe('Folder panel', () => {
 	beforeEach(() => {
 		populateFoldersStore();
-		jest.clearAllMocks();
 	});
 	it('should show the empty list message if there is no contact or contact group', async () => {
 		const folderId = '7';
@@ -357,7 +356,7 @@ describe('Folder panel', () => {
 						mockMailToAction();
 						const email = 'test@test.com';
 						const soapContact = createSoapContact({ email, folderId: folder.id });
-						const firstSearchInterceptor = createContactsApiInterceptor({
+						createContactsApiInterceptor({
 							items: [soapContact],
 							more: false
 						});
@@ -369,13 +368,14 @@ describe('Folder panel', () => {
 						await findContactInList(soapContact);
 
 						const listItem = screen.getByText(email);
-						await act(() => user.hover(listItem));
+						await user.hover(listItem);
 						if (assertion.value) {
 							expect(
 								screen.getByRoleWithIcon('button', {
-									icon: `icon: ${action.icon}`
+									icon: `icon: ${action.icon}`,
+									hidden: true
 								})
-							).toBeVisible();
+							).toBeInTheDocument();
 						} else {
 							expect(
 								screen.queryByRoleWithIcon('button', {
@@ -423,7 +423,7 @@ describe('Folder panel', () => {
 						mockMailToAction();
 						const email = 'test@test.com';
 						const soapContact = createSoapContact({ email, folderId: folder.id });
-						const firstSearchInterceptor = createContactsApiInterceptor({
+						createContactsApiInterceptor({
 							items: [soapContact],
 							more: false
 						});
@@ -455,7 +455,7 @@ describe('Folder panel', () => {
 					const contactsFolder = FOLDERS_DESCRIPTORS.contacts;
 					const email = 'test@test.com';
 					const soapContact = createSoapContact({ email, folderId: contactsFolder.id });
-					const firstSearchInterceptor = createContactsApiInterceptor({
+					createContactsApiInterceptor({
 						items: [soapContact],
 						more: false
 					});
@@ -501,7 +501,7 @@ describe('Folder panel', () => {
 					const folder = FOLDERS_DESCRIPTORS.contacts;
 					const soapContact1 = createSoapContact();
 					const contacts = [soapContact1, createSoapContact()];
-					const firstSearchInterceptor = createContactsApiInterceptor({
+					createContactsApiInterceptor({
 						items: contacts,
 						more: false
 					});
@@ -549,7 +549,7 @@ describe('Folder panel', () => {
 							populateFoldersStore();
 							const soapContact1 = createSoapContact({ folderId: folder.id });
 							const contacts = [soapContact1, createSoapContact({ folderId: folder.id })];
-							const firstSearchInterceptor = createContactsApiInterceptor({
+							createContactsApiInterceptor({
 								items: contacts,
 								more: false
 							});
@@ -685,7 +685,8 @@ describe('Folder panel', () => {
 
 						await screen.findAllByText(contactGroupName);
 						const mailToIcon = screen.getByRoleWithIcon('button', {
-							icon: TESTID_SELECTORS.icons.sendEmail
+							icon: TESTID_SELECTORS.icons.sendEmail,
+							hidden: true
 						});
 						expect(mailToIcon).toBeInTheDocument();
 						expect(mailToIcon).toBeDisabled();

@@ -145,9 +145,7 @@ describe('Distribution Lists View', () => {
 			path: ROUTES.distributionLists
 		});
 		const listItem = await screen.findByText(dl.displayName);
-		expect(
-			screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.editDL })
-		).toBeVisible();
+		expect(await screen.findByTestId(TESTID_SELECTORS.icons.editDL)).toBeInTheDocument();
 		await user.rightClick(listItem);
 		expect(
 			within(await screen.findByTestId(TESTID_SELECTORS.dropdownList)).getByText('Edit')

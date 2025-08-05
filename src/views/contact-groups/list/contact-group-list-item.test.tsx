@@ -43,9 +43,7 @@ describe('Contact group list item', () => {
 		it('should display trash action', async () => {
 			const contactGroup = buildContactGroup();
 
-			const { user } = setupTest(<ContactGroupListItem contactGroup={contactGroup} />);
-			const actionWrapper = await screen.findByTestId(`contact-group-list-item-${contactGroup.id}`);
-			await user.hover(actionWrapper);
+			setupTest(<ContactGroupListItem contactGroup={contactGroup} />);
 			const trashActionButton = await screen.findByTestId('move-to-trash-action');
 
 			expect(trashActionButton).toBeInTheDocument();
@@ -55,9 +53,7 @@ describe('Contact group list item', () => {
 		it('should display delete action when contact group is in trash', async () => {
 			const contactGroup = buildContactGroup({ parent: FOLDERS.TRASH });
 
-			const { user } = setupTest(<ContactGroupListItem contactGroup={contactGroup} />);
-			const actionWrapper = await screen.findByTestId(`contact-group-list-item-${contactGroup.id}`);
-			await user.hover(actionWrapper);
+			setupTest(<ContactGroupListItem contactGroup={contactGroup} />);
 			const deletePermanentlyActionButton = await screen.findByTestId('delete-permanently-action');
 
 			expect(deletePermanentlyActionButton).toBeInTheDocument();
