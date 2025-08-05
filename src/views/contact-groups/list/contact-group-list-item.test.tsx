@@ -10,8 +10,6 @@ import { FOLDERS } from '@zextras/carbonio-ui-commons';
 
 import { screen, setupTest } from '@test-setup';
 import { populateFoldersStore } from '@test-utils/store/folders';
-import { screen, setupTest } from '@test-setup';
-import { populateFoldersStore } from '@test-utils/store/folders';
 import { TESTID_SELECTORS } from 'constants/tests';
 import { buildContactGroup, buildMembers } from 'tests/model-builder';
 import { ContactGroupListItem } from 'views/contact-groups/list/contact-group-list-item';

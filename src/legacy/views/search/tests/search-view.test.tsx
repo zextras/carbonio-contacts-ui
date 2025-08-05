@@ -34,17 +34,6 @@ import {
 	SearchContactsSoapRequest,
 	SearchContactsSoapResponse
 } from 'types';
-import { TIMERS } from 'constants/tests';
-import { type SoapContact } from 'legacy/types/soap';
-import { Query } from 'legacy/views/search/search-types';
-import SearchView from 'legacy/views/search/search-view';
-import { CnItem } from 'network/api/types';
-import { createSoapContact, createSoapContactGroupV2 } from 'tests/utils';
-import {
-	SearchContactsRequest,
-	SearchContactsSoapRequest,
-	SearchContactsSoapResponse
-} from 'types';
 
 const useMockedUseQuery = (): ReturnType<typeof useQuery> => {
 	const queryChip: SearchQueryItem = {
