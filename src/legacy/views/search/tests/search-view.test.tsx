@@ -15,6 +15,7 @@ import { FOLDERS, useFolderStore } from '@zextras/carbonio-ui-commons';
 import { noop } from 'lodash';
 import { HttpResponse } from 'msw';
 
+import { Query, SearchQueryItem } from '../types';
 import { makeListItemsVisible, screen, setupTest, triggerLoadMore } from '@test-setup';
 import { generateFolder } from '@test-utils/folders/folders-generator';
 import {
@@ -23,6 +24,16 @@ import {
 } from '@test-utils/network/msw/create-api-interceptor';
 import { generateSettings } from '@test-utils/settings/settings-generator';
 import { populateFoldersStore } from '@test-utils/store/folders';
+import { TIMERS } from 'constants/tests';
+import { type SoapContact } from 'legacy/types/soap';
+import SearchView from 'legacy/views/search/search-view';
+import { CnItem } from 'network/api/types';
+import { createSoapContact, createSoapContactGroupV2 } from 'tests/utils';
+import {
+	SearchContactsRequest,
+	SearchContactsSoapRequest,
+	SearchContactsSoapResponse
+} from 'types';
 import { TIMERS } from 'constants/tests';
 import { type SoapContact } from 'legacy/types/soap';
 import { Query } from 'legacy/views/search/search-types';
@@ -36,13 +47,16 @@ import {
 } from 'types';
 
 const useMockedUseQuery = (): ReturnType<typeof useQuery> => {
-	const queryChip: QueryChip = {
+	const queryChip: SearchQueryItem = {
 		hasAvatar: false,
 		id: '0',
 		label: 'test'
 	};
 	const [query, updateQuery] = useState<Query>([queryChip]);
-	return [query, updateQuery];
+	const wrappedUpdateQuery = (value: QueryChip[] | ((q: QueryChip[]) => QueryChip[])): void => {
+		updateQuery(value as Query);
+	};
+	return [query, wrappedUpdateQuery];
 };
 
 const TestSearchView = (props: SearchViewProps): React.JSX.Element => {
@@ -493,6 +507,122 @@ describe('SearchView', () => {
 			const editEmailButton = await screen.findByTestId('icon: Edit2Outline');
 			expect(editEmailButton).toBeInTheDocument();
 			expect(editEmailButton).toBeEnabled();
+		});
+	});
+
+	describe('Special characters detection', () => {
+		it('should detect special characters in regular keywords', async () => {
+			const queryChipWithSpecialChars: QueryChip = {
+				hasAvatar: false,
+				id: '0',
+				label: 'test:keyword',
+				value: 'test:keyword'
+			};
+			const mockedUseQuery = jest.fn().mockReturnValue([[queryChipWithSpecialChars], noop]);
+			const resultsHeader = (props: { label: string }): ReactElement => <>{props.label}</>;
+
+			const searchViewProps: SearchViewProps = {
+				useQuery: mockedUseQuery,
+				ResultsHeader: resultsHeader,
+				useDisableSearch: (): [boolean, () => void] => [false, noop]
+			};
+
+			setupTest(<SearchView {...searchViewProps} />);
+
+			expect(
+				await screen.findByText(
+					/Special characters like :, ", -, !, etc., are ignored in the search/
+				)
+			).toBeInTheDocument();
+		});
+
+		it('should not detect special characters in advanced search chips from files-ui', async () => {
+			const advancedSearchChip = {
+				hasAvatar: false,
+				id: '0',
+				label: 'flagged:true',
+				value: 'flagged:true',
+				queryChipsToAdvancedFiltersValue: { flagged: true }
+			} as QueryChip & { queryChipsToAdvancedFiltersValue: any };
+			const mockedUseQuery = jest.fn().mockReturnValue([[advancedSearchChip], noop]);
+			const resultsHeader = (props: { label: string }): ReactElement => <>{props.label}</>;
+
+			const searchViewProps: SearchViewProps = {
+				useQuery: mockedUseQuery,
+				ResultsHeader: resultsHeader,
+				useDisableSearch: (): [boolean, () => void] => [false, noop]
+			};
+
+			setupTest(<SearchView {...searchViewProps} />);
+
+			expect(
+				screen.queryByText(/Special characters like :, ", -, !, etc., are ignored in the search/)
+			).not.toBeInTheDocument();
+		});
+
+		it('should detect special characters in mixed query but exclude advanced search chips', async () => {
+			const advancedSearchChip = {
+				hasAvatar: false,
+				id: '0',
+				label: 'flagged:true',
+				value: 'flagged:true',
+				queryChipsToAdvancedFiltersValue: { flagged: true }
+			} as QueryChip & { queryChipsToAdvancedFiltersValue: any };
+			const regularKeywordWithSpecialChars: QueryChip = {
+				hasAvatar: false,
+				id: '1',
+				label: 'test:keyword',
+				value: 'test:keyword'
+			};
+			const mixedQuery = [advancedSearchChip, regularKeywordWithSpecialChars];
+			const mockedUseQuery = jest.fn().mockReturnValue([mixedQuery, noop]);
+			const resultsHeader = (props: { label: string }): ReactElement => <>{props.label}</>;
+
+			const searchViewProps: SearchViewProps = {
+				useQuery: mockedUseQuery,
+				ResultsHeader: resultsHeader,
+				useDisableSearch: (): [boolean, () => void] => [false, noop]
+			};
+
+			setupTest(<SearchView {...searchViewProps} />);
+
+			expect(
+				await screen.findByText(
+					/Special characters like :, ", -, !, etc., are ignored in the search/
+				)
+			).toBeInTheDocument();
+		});
+
+		it('should not detect special characters when query contains only advanced search chips', async () => {
+			const advancedSearchChip1 = {
+				hasAvatar: false,
+				id: '0',
+				label: 'flagged:true',
+				value: 'flagged:true',
+				queryChipsToAdvancedFiltersValue: { flagged: true }
+			} as QueryChip & { queryChipsToAdvancedFiltersValue: any };
+			const advancedSearchChip2 = {
+				hasAvatar: false,
+				id: '1',
+				label: 'shared:true',
+				value: 'shared:true',
+				queryChipsToAdvancedFiltersValue: { shared: true }
+			} as QueryChip & { queryChipsToAdvancedFiltersValue: any };
+			const queryWithOnlyAdvancedChips = [advancedSearchChip1, advancedSearchChip2];
+			const mockedUseQuery = jest.fn().mockReturnValue([queryWithOnlyAdvancedChips, noop]);
+			const resultsHeader = (props: { label: string }): ReactElement => <>{props.label}</>;
+
+			const searchViewProps: SearchViewProps = {
+				useQuery: mockedUseQuery,
+				ResultsHeader: resultsHeader,
+				useDisableSearch: (): [boolean, () => void] => [false, noop]
+			};
+
+			setupTest(<SearchView {...searchViewProps} />);
+
+			expect(
+				screen.queryByText(/Special characters like :, ", -, !, etc., are ignored in the search/)
+			).not.toBeInTheDocument();
 		});
 	});
 });

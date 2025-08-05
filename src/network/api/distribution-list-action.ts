@@ -3,8 +3,8 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { soapFetch } from '@zextras/carbonio-shell-ui';
 import { JSNS } from '@zextras/carbonio-ui-commons';
+import { legacySoapFetch } from '@zextras/carbonio-ui-soap-lib';
 
 import { GenericSoapPayload } from 'network/api/types';
 import { SoapFault } from 'types/utils';
@@ -129,7 +129,7 @@ export const distributionListAction = ({
 		return Promise.resolve();
 	}
 
-	return soapFetch<BatchDistributionListActionRequest, BatchDistributionListActionResponse>(
+	return legacySoapFetch<BatchDistributionListActionRequest, BatchDistributionListActionResponse>(
 		'Batch',
 		{
 			DistributionListActionRequest: actionRequests,

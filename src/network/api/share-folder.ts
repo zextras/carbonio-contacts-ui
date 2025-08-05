@@ -3,8 +3,8 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { soapFetch } from '@zextras/carbonio-shell-ui';
 import { JSNS } from '@zextras/carbonio-ui-commons';
+import { legacySoapFetch } from '@zextras/carbonio-ui-soap-lib';
 import { isArray } from 'lodash';
 
 import { FolderActionRequest, FolderActionResponse } from 'network/api/folder-action';
@@ -40,7 +40,7 @@ export const shareFolder = ({ addresses, folderId, role }: ShareFolderParams): P
 		_jsns: JSNS.MAIL
 	}));
 
-	return soapFetch<BatchShareFolderRequest, BatchShareFolderResponse>('Batch', {
+	return legacySoapFetch<BatchShareFolderRequest, BatchShareFolderResponse>('Batch', {
 		FolderActionRequest: actionRequests,
 		_jsns: JSNS.ALL
 	}).then((response) => {

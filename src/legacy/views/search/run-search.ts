@@ -3,10 +3,11 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { soapFetch } from '@zextras/carbonio-shell-ui';
 
-import { RunSearchResults } from 'legacy/views/search/types';
+import { legacySoapFetch } from '@zextras/carbonio-ui-soap-lib';
+
 import { normalizeContactsFromSoap } from 'legacy/utils/normalizations/normalize-contact-from-soap';
+import { RunSearchResults } from 'legacy/views/search/types';
 
 export const runSearch = ({
 	queryString,
@@ -17,7 +18,7 @@ export const runSearch = ({
 	offset: number;
 	abortSignal?: AbortSignal;
 }): Promise<RunSearchResults> =>
-	soapFetch<any, any>(
+	legacySoapFetch<any, any>(
 		'Search',
 		{
 			limit: 100,

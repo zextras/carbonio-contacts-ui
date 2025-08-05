@@ -3,11 +3,11 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { ErrorSoapBodyResponse, soapFetch } from '@zextras/carbonio-shell-ui';
 import { JSNS } from '@zextras/carbonio-ui-commons';
+import { ErrorSoapBodyResponse, legacySoapFetch } from '@zextras/carbonio-ui-soap-lib';
 
-import { CnItem, GenericSoapPayload } from 'network/api/types';
 import { ContactGroup } from 'model/contact-group';
+import { CnItem, GenericSoapPayload } from 'network/api/types';
 
 export type ModifyContactAttribute = { n: 'fullName' | 'nickname' | 'fileAs'; _content: string };
 
@@ -52,7 +52,7 @@ const modifyContact = ({
 		_jsns: JSNS.MAIL
 	};
 
-	return soapFetch<ModifyContactRequest, ModifyContactResponse | ErrorSoapBodyResponse>(
+	return legacySoapFetch<ModifyContactRequest, ModifyContactResponse | ErrorSoapBodyResponse>(
 		'ModifyContact',
 		modifyContactRequest
 	).then((response) => {

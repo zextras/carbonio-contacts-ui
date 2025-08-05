@@ -3,12 +3,12 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { ErrorSoapBodyResponse, soapFetch } from '@zextras/carbonio-shell-ui';
 import { FolderView, JSNS } from '@zextras/carbonio-ui-commons';
+import { ErrorSoapBodyResponse, legacySoapFetch } from '@zextras/carbonio-ui-soap-lib';
 import { filter, isEqual, map, uniqWith } from 'lodash';
 
-import { GenericSoapPayload } from 'network/api/types';
 import { ShareInfo } from 'model/share-info';
+import { GenericSoapPayload } from 'network/api/types';
 
 export interface GetShareInfoRequest extends GenericSoapPayload<typeof JSNS.ACCOUNT> {
 	includeSelf?: 0 | 1;
@@ -55,10 +55,13 @@ const normalizeResponse = (
 };
 
 export const getShareInfo = (): Promise<Array<ShareInfo> | undefined> =>
-	soapFetch<GetShareInfoRequest, GetShareInfoResponse | ErrorSoapBodyResponse>('GetShareInfo', {
-		includeSelf: 0,
-		_jsns: JSNS.ACCOUNT
-	}).then((response) => {
+	legacySoapFetch<GetShareInfoRequest, GetShareInfoResponse | ErrorSoapBodyResponse>(
+		'GetShareInfo',
+		{
+			includeSelf: 0,
+			_jsns: JSNS.ACCOUNT
+		}
+	).then((response) => {
 		if ('Fault' in response) {
 			throw new Error(response.Fault.Reason.Text, { cause: response.Fault });
 		}

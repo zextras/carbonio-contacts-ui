@@ -3,151 +3,89 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { FC, ReactElement, useState, useCallback, useMemo, useEffect } from 'react';
+import React, { FC, useCallback, useMemo } from 'react';
 
-import {
-	CustomModal,
-	Container,
-	Row,
-	Padding,
-	Icon,
-	Tooltip,
-	Text,
-	ModalHeader,
-	Divider,
-	ModalFooter
-} from '@zextras/carbonio-design-system';
-import { ZIMBRA_STANDARD_COLORS, getTags } from '@zextras/carbonio-ui-commons';
-import { TFunction } from 'i18next';
-import { concat, filter, map } from 'lodash';
+import { CustomModal, Divider, ModalFooter, ModalHeader } from '@zextras/carbonio-design-system';
+import { useUserSettings } from '@zextras/carbonio-shell-ui';
+import { FormProvider, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
-import KeywordRow, { KeywordState } from 'legacy/views/search/parts/keyword-row';
-import TagRow from 'legacy/views/search/parts/tag-row';
-import ToggleFilters from 'legacy/views/search/parts/toggle-filters';
-import type { Query } from 'legacy/views/search/search-types';
+import { CompanyJobRoleRow } from './parts/company-job-role-row';
+import { EmailAddressRow } from './parts/email-address-row';
+import { KeywordRow } from './parts/keyword-row';
+import { NameRow } from './parts/name-row';
+import { PhoneNumberRow } from './parts/phone-number-row';
+import { TagFolderRow } from './parts/tag-folder-row';
+import { ToggleFilters } from './parts/toggle-filters';
+import { AdvancedFilterModalFormValues, Query } from './types';
+import { getAdvancedFiltersDefaultValues, getQueryToBe } from './utils';
+import { ScrollableContainer } from 'components/styled-components';
 
 export type AdvancedFilterModalProps = {
 	open: boolean;
 	onClose: () => void;
-	t: TFunction;
 	query: Query;
 	isSharedFolderIncludedInitialValue: boolean;
-	isSharedFolderIncludedDefault: boolean;
 	onSearchConfirm: (request: { query: Query; includeSharedFolders: boolean }) => void;
 };
 
 export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 	open,
 	onClose,
-	t,
 	query,
 	onSearchConfirm,
-	isSharedFolderIncludedInitialValue,
-	isSharedFolderIncludedDefault
-}): ReactElement => {
-	const [otherKeywords, setOtherKeywords] = useState<KeywordState>([]);
-	const [tag, setTag] = useState<KeywordState>([]);
-	const [hasPerformedSearch, setHasPerformedSearch] = useState(false);
-	const tagOptions = useMemo(
-		() =>
-			map(getTags(), (item) => ({
-				...item,
-				label: item.name,
-				customComponent: (
-					<Row takeAvailableSpace mainAlignment="flex-start">
-						<Row takeAvailableSpace mainAlignment="space-between">
-							<Row mainAlignment="flex-end">
-								<Padding right="small">
-									<Icon icon="Tag" color={ZIMBRA_STANDARD_COLORS[item.color ?? 0].hex} />
-								</Padding>
-							</Row>
-							<Row takeAvailableSpace mainAlignment="flex-start">
-								<Tooltip label={item.name} overflowTooltip>
-									<Text>{item.name}</Text>
-								</Tooltip>
-							</Row>
-						</Row>
-					</Row>
-				)
-			})),
-		[]
-	);
-	const [isSharedFolderIncludedTobe, setIsSharedFolderIncludedTobe] = useState(
-		isSharedFolderIncludedInitialValue
+	isSharedFolderIncludedInitialValue
+}): React.JSX.Element => {
+	const settings = useUserSettings();
+	const [t] = useTranslation();
+	const includeSharedItemsInSearchDefaultPref =
+		settings.prefs.zimbraPrefIncludeSharedItemsInSearch === 'TRUE';
+	const defaultValues: AdvancedFilterModalFormValues = useMemo(
+		() => getAdvancedFiltersDefaultValues(query, isSharedFolderIncludedInitialValue),
+		[query, isSharedFolderIncludedInitialValue]
 	);
 
-	useEffect(() => {
-		if (!open) {
-			setHasPerformedSearch(false);
-		}
-		if (!hasPerformedSearch) {
-			setIsSharedFolderIncludedTobe(isSharedFolderIncludedInitialValue);
-		}
-	}, [open, isSharedFolderIncludedInitialValue, hasPerformedSearch]);
-
-	useEffect(() => {
-		if (!open) return;
-
-		const updatedQuery = map(
-			filter(query, (v) => !/^tag:/.test(v.label ?? '') && !v.isQueryFilter),
-			(q) => ({ ...q, hasAvatar: false })
-		);
-
-		const tagFromQuery = map(
-			filter(query, (v) => /^tag:/.test(v.label ?? '')),
-			(q) => ({ ...q, hasAvatar: true, icon: 'TagOutline' })
-		);
-
-		setTag(tagFromQuery);
-		setOtherKeywords(updatedQuery);
-	}, [query, open]);
-
-	const queryToBe = useMemo(() => concat(otherKeywords, tag), [otherKeywords, tag]);
-
-	const secondaryDisabled = useMemo(
-		() => queryToBe.length === 0 && isSharedFolderIncludedTobe === isSharedFolderIncludedDefault,
-		[queryToBe.length, isSharedFolderIncludedTobe, isSharedFolderIncludedDefault]
-	);
+	const methods = useForm<AdvancedFilterModalFormValues>({ defaultValues });
+	const { watch, setValue, control } = methods;
+	const formValues = watch();
 
 	const resetFilters = useCallback(() => {
-		setIsSharedFolderIncludedTobe(isSharedFolderIncludedDefault);
-		setOtherKeywords([]);
-		setTag([]);
-		setHasPerformedSearch(false);
-	}, [isSharedFolderIncludedDefault]);
+		setValue('keywordInput', []);
+		setValue('firstNameInput', []);
+		setValue('lastNameInput', []);
+		setValue('emailAddress', []);
+		setValue('companyInput', []);
+		setValue('jobRoleInput', []);
+		setValue('phoneNumberInput', []);
+		setValue('folderInput', []);
+		setValue('tagInput', []);
+		setValue('isSharedFolderIncluded', includeSharedItemsInSearchDefaultPref);
+		setValue('tagInput', []);
+		setValue('folderInput', []);
+	}, [setValue, includeSharedItemsInSearchDefaultPref]);
+
+	const queryToBe = getQueryToBe(formValues);
 
 	const onConfirm = useCallback(() => {
-		const tmp = [...otherKeywords, ...tag];
-		setHasPerformedSearch(true);
-		onSearchConfirm({ query: tmp, includeSharedFolders: isSharedFolderIncludedTobe });
+		const controller = new AbortController();
+		try {
+			onSearchConfirm({ query: queryToBe, includeSharedFolders: watch('isSharedFolderIncluded') });
+			onClose();
+		} catch (error) {
+			controller.abort();
+			throw error;
+		}
+		return () => {
+			controller.abort();
+		};
+	}, [onSearchConfirm, queryToBe, onClose, watch]);
+
+	const onCloseCallback = useCallback(() => {
+		resetFilters();
 		onClose();
-	}, [otherKeywords, tag, onSearchConfirm, isSharedFolderIncludedTobe, onClose]);
+	}, [onClose, resetFilters]);
 
-	const keywordRowProps = useMemo(
-		() => ({
-			otherKeywords,
-			setOtherKeywords,
-			query
-		}),
-		[otherKeywords, query]
-	);
-	const tagRowProps = useMemo(
-		() => ({
-			tagOptions,
-			tag,
-			setTag
-		}),
-		[tagOptions, tag, setTag]
-	);
-
-	const toggleFiltersProps = useMemo(
-		() => ({
-			query,
-			setIsSharedFolderIncludedTobe,
-			isSharedFolderIncludedTobe
-		}),
-		[query, isSharedFolderIncludedTobe]
-	);
+	const isSharedFolderIncludedInput = watch('isSharedFolderIncluded');
 	return (
 		<CustomModal
 			open={open}
@@ -157,27 +95,38 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 			data-testid={'advanced-filter-modal'}
 		>
 			<ModalHeader
-				onClose={onClose}
-				title={t('title.advanced_filters', 'Advanced Filters')}
+				onClose={onCloseCallback}
+				title={t('advancedFilters.title', 'Advanced Filters')}
 				showCloseIcon
 			/>
 			<Divider />
-			<Container padding={{ horizontal: 'medium', vertical: 'small' }}>
-				<ToggleFilters compProps={toggleFiltersProps} />
-				<KeywordRow compProps={keywordRowProps} />
-				<TagRow compProps={tagRowProps} />
-			</Container>
+
+			<ScrollableContainer
+				padding={{ horizontal: 'medium', vertical: 'small' }}
+				mainAlignment={'flex-start'}
+			>
+				<FormProvider {...methods}>
+					<ToggleFilters />
+					<KeywordRow control={control} />
+					<NameRow control={control} />
+					<EmailAddressRow control={control} />
+					<CompanyJobRoleRow control={control} />
+					<PhoneNumberRow control={control} />
+					<TagFolderRow control={control} setValue={setValue} />
+				</FormProvider>
+			</ScrollableContainer>
 			<Divider />
 			<ModalFooter
-				confirmLabel={t('action.search', 'Search')}
-				confirmDisabled={queryToBe.length === 0}
 				onConfirm={onConfirm}
-				onSecondaryAction={resetFilters}
-				secondaryActionDisabled={secondaryDisabled}
+				confirmDisabled={queryToBe.length === 0}
+				secondaryActionDisabled={
+					queryToBe.length === 0 &&
+					isSharedFolderIncludedInput === includeSharedItemsInSearchDefaultPref
+				}
+				confirmLabel={t('action.search', 'Search')}
 				secondaryActionLabel={t('action.reset_filters', 'Reset Filters')}
-			></ModalFooter>
+				onSecondaryAction={resetFilters}
+			/>
 		</CustomModal>
 	);
 };
-
-export default AdvancedFilterModal;

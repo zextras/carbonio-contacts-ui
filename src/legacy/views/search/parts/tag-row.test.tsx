@@ -29,7 +29,6 @@ describe('Tag Row Component', () => {
 	];
 
 	beforeEach(() => {
-		jest.clearAllMocks();
 		(useTranslation as jest.Mock).mockReturnValue([mockT]);
 	});
 

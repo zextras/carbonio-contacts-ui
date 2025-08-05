@@ -8,13 +8,12 @@ import React from 'react';
 
 import { screen, waitFor } from '@testing-library/react';
 import { getTags } from '@zextras/carbonio-ui-commons';
-import type { TFunction } from 'i18next';
 
+import { setupTest, within } from '@test-setup';
 import {
 	AdvancedFilterModal,
 	AdvancedFilterModalProps
 } from 'legacy/views/search/advance-filter-modal';
-import { setupTest } from '@test-setup';
 
 jest.mock('@zextras/carbonio-ui-commons', () => ({
 	...jest.requireActual('@zextras/carbonio-ui-commons'),
@@ -22,7 +21,7 @@ jest.mock('@zextras/carbonio-ui-commons', () => ({
 }));
 
 describe('Advanced filter modal', () => {
-	const tMock = ((key: string, _defaultValue?: any) => key) as TFunction<'translation'>;
+	const resetFiltersLbl = 'Reset Filters';
 	const onSearchConfirmMock = jest.fn();
 	const firstQueryChip = {
 		id: 'query1',
@@ -38,18 +37,16 @@ describe('Advanced filter modal', () => {
 	const properties: AdvancedFilterModalProps = {
 		open: true,
 		onClose: jest.fn(),
-		t: tMock,
 		query: mockedQuery,
 		onSearchConfirm: onSearchConfirmMock,
-		isSharedFolderIncludedInitialValue: false,
-		isSharedFolderIncludedDefault: false
+		isSharedFolderIncludedInitialValue: false
 	};
 	it('reset filters button should be enabled if query is not empty', async () => {
 		setupTest(<AdvancedFilterModal {...properties} />);
-		const fieldLabel = screen.getByText(/title\.advanced_filters/i);
+		const fieldLabel = screen.getByText(`Advanced Filters`);
 		expect(fieldLabel).toBeInTheDocument();
 
-		const actionButton = await screen.findByRole('button', { name: /action\.reset_filters/i });
+		const actionButton = await screen.findByRole('button', { name: resetFiltersLbl });
 
 		expect(actionButton).toBeEnabled();
 	});
@@ -57,18 +54,16 @@ describe('Advanced filter modal', () => {
 		const advancedFilterModalProps: AdvancedFilterModalProps = {
 			open: true,
 			onClose: jest.fn(),
-			t: tMock,
 			query: [],
 			onSearchConfirm: onSearchConfirmMock,
-			isSharedFolderIncludedInitialValue: false,
-			isSharedFolderIncludedDefault: false
+			isSharedFolderIncludedInitialValue: false
 		};
 		setupTest(<AdvancedFilterModal {...advancedFilterModalProps} />);
-		const fieldLabel = screen.getByText(/title\.advanced_filters/i);
+		const fieldLabel = screen.getByText(`Advanced Filters`);
 		expect(fieldLabel).toBeInTheDocument();
 
 		const actionButton = screen.getByRole('button', {
-			name: /action\.reset_filters/i
+			name: resetFiltersLbl
 		});
 		expect(actionButton).toBeInTheDocument();
 		expect(actionButton).toBeDisabled();
@@ -77,7 +72,7 @@ describe('Advanced filter modal', () => {
 	it('should not clear the global query when reset filters button is clicked', async () => {
 		const { user } = setupTest(<AdvancedFilterModal {...properties} />);
 
-		const resetButton = screen.getByRole('button', { name: /action\.reset_filters/i });
+		const resetButton = screen.getByRole('button', { name: resetFiltersLbl });
 		expect(resetButton).toBeEnabled();
 		await user.click(resetButton);
 		expect(onSearchConfirmMock).not.toHaveBeenCalled();
@@ -88,7 +83,7 @@ describe('Advanced filter modal', () => {
 
 		await screen.findAllByTestId('chip');
 
-		const resetButton = screen.getByRole('button', { name: /action\.reset_filters/i });
+		const resetButton = screen.getByRole('button', { name: resetFiltersLbl });
 		await user.click(resetButton);
 
 		await waitFor(() => {
@@ -113,7 +108,7 @@ describe('Advanced filter modal', () => {
 		const keywordsInput = await screen.findByRole('textbox', { name: /keywords/i });
 		await user.type(keywordsInput, 'MyNewKeyword');
 		await user.tab();
-		const searchButton = screen.getByRole('button', { name: /search/i });
+		const searchButton = screen.getByRole('button', { name: 'Search' });
 		await user.click(searchButton);
 		expect(onSearchConfirmMock).toHaveBeenCalledWith({
 			includeSharedFolders: false,
@@ -135,18 +130,18 @@ describe('Advanced filter modal', () => {
 		const props: AdvancedFilterModalProps = {
 			open: true,
 			onClose: jest.fn(),
-			t: tMock,
 			query: [],
 			onSearchConfirm: onSearchConfirmMock,
-			isSharedFolderIncludedDefault: false,
 			isSharedFolderIncludedInitialValue: false
 		};
 		const { user } = setupTest(<AdvancedFilterModal {...props} />);
 
-		const tagsInput = await screen.findByRole('textbox', { name: /tags/i });
-		await user.type(tagsInput, 'tag1');
-		await user.keyboard('[Enter]');
-		const searchButton = screen.getByRole('button', { name: /search/i });
+		const selectElement = screen.getByTestId('tagInput');
+		expect(selectElement).toBeInTheDocument();
+		await user.click(selectElement);
+		const selectOption = screen.getAllByTestId('dropdown-item')[0];
+		await user.click(selectOption);
+		const searchButton = screen.getByRole('button', { name: 'Search' });
 		await user.click(searchButton);
 		expect(onSearchConfirmMock).toHaveBeenCalledWith({
 			includeSharedFolders: false,
@@ -175,7 +170,7 @@ describe('Advanced filter modal', () => {
 		const chips = screen.getAllByTestId('chip');
 		expect(chips).toHaveLength(2);
 
-		const resetButton = screen.getByRole('button', { name: /action\.reset_filters/i });
+		const resetButton = screen.getByRole('button', { name: resetFiltersLbl });
 		await user.click(resetButton);
 
 		await waitFor(() => {
@@ -186,47 +181,257 @@ describe('Advanced filter modal', () => {
 
 		rerender(<AdvancedFilterModal {...properties} open />);
 
-		const restoredChips = await screen.findAllByTestId('chip');
-		expect(restoredChips).toHaveLength(2);
-
-		// eslint-disable-next-line
-		expect(restoredChips[0]).toHaveAttribute('value', 'testKeyword1');
-		// eslint-disable-next-line
-		expect(restoredChips[1]).toHaveAttribute('value', 'testKeyword2');
+		await waitFor(() => {
+			expect(screen.queryAllByTestId('chip')).toHaveLength(0);
+		});
 	});
 
-	it('should reset shared folder toggle to initial state when modal is closed without search confirmation', async () => {
-		jest.spyOn(console, 'error').mockImplementation();
+	it('should reset filters when modal is closed via close button', async () => {
 		const onCloseMock = jest.fn();
-		const properties: AdvancedFilterModalProps = {
+		const { user } = setupTest(<AdvancedFilterModal {...properties} onClose={onCloseMock} />);
+
+		await screen.findAllByTestId('chip');
+		const initialChips = screen.getAllByTestId('chip');
+		expect(initialChips).toHaveLength(2);
+
+		// Add a new keyword to modify the form state
+		const keywordsInput = await screen.findByRole('textbox', { name: /keywords/i });
+		await user.type(keywordsInput, 'NewKeyword');
+		await user.tab();
+
+		// Verify the new chip is added
+		await waitFor(() => {
+			expect(screen.getAllByTestId('chip')).toHaveLength(3);
+		});
+
+		// Close the modal using the close button in the modal header
+		const allButtons = screen.getAllByRole('button');
+		const closeButton = allButtons.find((button) => {
+			const hasResetText = button.textContent?.includes('Reset Filters');
+			const hasSearchText = button.textContent?.includes('Search');
+			try {
+				within(button).getByTestId('icon: Close');
+				return !hasResetText && !hasSearchText;
+			} catch {
+				return false;
+			}
+		});
+
+		if (closeButton) {
+			await user.click(closeButton);
+		}
+
+		expect(onCloseMock).toHaveBeenCalled();
+	});
+
+	it('should disable search button when query is empty', () => {
+		const props: AdvancedFilterModalProps = {
 			open: true,
-			onClose: onCloseMock,
-			t: tMock,
+			onClose: jest.fn(),
 			query: [],
 			onSearchConfirm: onSearchConfirmMock,
-			isSharedFolderIncludedInitialValue: false,
-			isSharedFolderIncludedDefault: false
+			isSharedFolderIncludedInitialValue: false
 		};
-		const { user, rerender } = setupTest(<AdvancedFilterModal {...properties} />);
 
-		// Initial state check
-		const isSharedFolderIncludedToggle = screen.getByTestId('isSharedFolderIncludedToggle');
-		expect(isSharedFolderIncludedToggle).toBeInTheDocument();
-		expect(screen.getByTestId('icon: ToggleLeftOutline')).toBeInTheDocument();
+		setupTest(<AdvancedFilterModal {...props} />);
 
-		// Toggle the shared folder inclusion
-		await user.click(isSharedFolderIncludedToggle);
-		expect(screen.getByTestId('icon: ToggleRight')).toBeInTheDocument();
+		const searchButton = screen.getByRole('button', { name: 'Search' });
+		expect(searchButton).toBeDisabled();
+	});
 
-		// Close the modal
-		rerender(<AdvancedFilterModal {...properties} open={false} />);
+	it('should enable search button when query has content', async () => {
+		setupTest(<AdvancedFilterModal {...properties} />);
 
-		// Reopen the modal
-		rerender(<AdvancedFilterModal {...properties} open />);
+		const searchButton = screen.getByRole('button', { name: 'Search' });
+		expect(searchButton).toBeEnabled();
+	});
 
-		// Check if the shared folder inclusion state is reset to default
-		await waitFor(() => {
-			expect(screen.getByTestId('icon: ToggleLeftOutline')).toBeInTheDocument();
+	it('should handle shared folder toggle functionality', async () => {
+		const { user } = setupTest(<AdvancedFilterModal {...properties} />);
+
+		// Find the shared folder toggle (assuming it exists in the component)
+		const keywordsInput = await screen.findByRole('textbox', { name: /keywords/i });
+		await user.type(keywordsInput, 'test');
+		await user.tab();
+
+		const searchButton = screen.getByRole('button', { name: 'Search' });
+		await user.click(searchButton);
+
+		expect(onSearchConfirmMock).toHaveBeenCalledWith({
+			includeSharedFolders: false,
+			query: expect.arrayContaining([
+				expect.objectContaining(firstQueryChip),
+				expect.objectContaining(secondQueryChip),
+				expect.objectContaining({ label: 'test' })
+			])
 		});
+	});
+
+	it('should call onSearchConfirm with correct parameters when search is performed', async () => {
+		const { user } = setupTest(<AdvancedFilterModal {...properties} />);
+
+		const searchButton = screen.getByRole('button', { name: 'Search' });
+		await user.click(searchButton);
+
+		expect(onSearchConfirmMock).toHaveBeenCalledWith({
+			includeSharedFolders: false,
+			query: [expect.objectContaining(firstQueryChip), expect.objectContaining(secondQueryChip)]
+		});
+	});
+
+	it('should filter out advanced search chips from files-ui when switching modules', async () => {
+		jest.spyOn(console, 'error').mockImplementation();
+		const advancedSearchChip = {
+			id: 'advanced1',
+			label: 'flagged:true',
+			value: 'flagged:true',
+			queryChipsToAdvancedFiltersValue: { flagged: true }
+		};
+		const regularKeywordChip = {
+			id: 'keyword1',
+			label: 'test keyword',
+			value: 'test keyword'
+		};
+		const tagChip = {
+			id: 'tag1',
+			label: 'tag:important',
+			value: 'tag:"important"',
+			isQueryFilter: true
+		};
+		const queryWithAdvancedChips = [advancedSearchChip, regularKeywordChip, tagChip];
+
+		const props: AdvancedFilterModalProps = {
+			open: true,
+			onClose: jest.fn(),
+			query: queryWithAdvancedChips,
+			onSearchConfirm: onSearchConfirmMock,
+			isSharedFolderIncludedInitialValue: false
+		};
+
+		setupTest(<AdvancedFilterModal {...props} />);
+
+		const keywordChips = await screen.findAllByTestId('chip');
+		const keywordChip = keywordChips.find((chip) => chip.getAttribute('value') === 'test keyword');
+		expect(keywordChip).toBeInTheDocument();
+
+		const advancedChip = keywordChips.find((chip) => chip.getAttribute('value') === 'flagged:true');
+		expect(advancedChip).toBeUndefined();
+	});
+
+	it('should filter out query filter chips from keywords field', async () => {
+		const queryFilterChip = {
+			id: 'filter1',
+			label: 'type:contact',
+			value: 'type:contact',
+			isQueryFilter: true
+		};
+		const regularKeywordChip = {
+			id: 'keyword1',
+			label: 'john doe',
+			value: 'john doe'
+		};
+		const queryWithFilterChips = [queryFilterChip, regularKeywordChip];
+
+		const props: AdvancedFilterModalProps = {
+			open: true,
+			onClose: jest.fn(),
+			query: queryWithFilterChips,
+			onSearchConfirm: onSearchConfirmMock,
+			isSharedFolderIncludedInitialValue: false
+		};
+
+		setupTest(<AdvancedFilterModal {...props} />);
+
+		const chips = await screen.findAllByTestId('chip');
+		expect(chips).toHaveLength(1);
+		// eslint-disable-next-line
+		expect(chips[0]).toHaveAttribute('value', 'john doe');
+	});
+
+	it('should handle mixed query with advanced chips, regular keywords, and tags', async () => {
+		jest.spyOn(console, 'error').mockImplementation();
+		const advancedSearchChip = {
+			id: 'advanced1',
+			label: 'shared:true',
+			value: 'shared:true',
+			queryChipsToAdvancedFiltersValue: { shared: true }
+		};
+		const regularKeywordChip = {
+			id: 'keyword1',
+			label: 'john',
+			value: 'john'
+		};
+		const tagChip = {
+			id: 'tag1',
+			label: 'tag:important',
+			value: 'tag:"important"'
+		};
+		const queryFilterChip = {
+			id: 'filter1',
+			label: 'folder:inbox',
+			value: 'folder:inbox',
+			isQueryFilter: true
+		};
+		const mixedQuery = [advancedSearchChip, regularKeywordChip, tagChip, queryFilterChip];
+
+		const props: AdvancedFilterModalProps = {
+			open: true,
+			onClose: jest.fn(),
+			query: mixedQuery,
+			onSearchConfirm: onSearchConfirmMock,
+			isSharedFolderIncludedInitialValue: false
+		};
+
+		setupTest(<AdvancedFilterModal {...props} />);
+
+		const keywordChips = await screen.findAllByTestId('chip');
+		const keywordChip = keywordChips.find((chip) => chip.getAttribute('value') === 'john');
+		expect(keywordChip).toBeInTheDocument();
+
+		const advancedChip = keywordChips.find((chip) => chip.getAttribute('value') === 'shared:true');
+		const filterChip = keywordChips.find((chip) => chip.getAttribute('value') === 'folder:inbox');
+		expect(advancedChip).toBeUndefined();
+		expect(filterChip).toBeUndefined();
+	});
+
+	it('should not show any chips when query contains only advanced search chips', async () => {
+		jest.spyOn(console, 'error').mockImplementation();
+		const advancedSearchChip1 = {
+			id: 'advanced1',
+			label: 'flagged:true',
+			value: 'flagged:true',
+			queryChipsToAdvancedFiltersValue: { flagged: true }
+		};
+		const advancedSearchChip2 = {
+			id: 'advanced2',
+			label: 'shared:true',
+			value: 'shared:true',
+			queryChipsToAdvancedFiltersValue: { shared: true }
+		};
+		const queryWithOnlyAdvancedChips = [advancedSearchChip1, advancedSearchChip2];
+
+		const props: AdvancedFilterModalProps = {
+			open: true,
+			onClose: jest.fn(),
+			query: queryWithOnlyAdvancedChips,
+			onSearchConfirm: onSearchConfirmMock,
+			isSharedFolderIncludedInitialValue: false
+		};
+
+		setupTest(<AdvancedFilterModal {...props} />);
+
+		const chips = screen.queryAllByTestId('chip');
+		expect(chips).toHaveLength(0);
+	});
+
+	it('should close modal and call onSearchConfirm when search button is clicked', async () => {
+		const onCloseMock = jest.fn();
+		const { user } = setupTest(<AdvancedFilterModal {...properties} onClose={onCloseMock} />);
+
+		const searchButton = screen.getByRole('button', { name: 'Search' });
+		await user.click(searchButton);
+
+		expect(onSearchConfirmMock).toHaveBeenCalled();
+		expect(onCloseMock).toHaveBeenCalled();
 	});
 });

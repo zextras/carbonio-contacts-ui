@@ -3,12 +3,12 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { ErrorSoapBodyResponse, soapFetch } from '@zextras/carbonio-shell-ui';
 import { JSNS } from '@zextras/carbonio-ui-commons';
+import { ErrorSoapBodyResponse, legacySoapFetch } from '@zextras/carbonio-ui-soap-lib';
 import { map } from 'lodash';
 
-import { GenericSoapPayload } from 'network/api/types';
 import { DistributionListMembersPage } from 'model/distribution-list';
+import { GenericSoapPayload } from 'network/api/types';
 
 export interface GetDistributionListMembersRequest extends GenericSoapPayload<typeof JSNS.ACCOUNT> {
 	dl: {
@@ -37,7 +37,7 @@ export const getDistributionListMembers = (
 	email: string,
 	options: { offset?: number; limit?: number } = {}
 ): Promise<DistributionListMembersPage> =>
-	soapFetch<
+	legacySoapFetch<
 		GetDistributionListMembersRequest,
 		GetDistributionListMembersResponse | ErrorSoapBodyResponse
 	>('GetDistributionListMembers', {

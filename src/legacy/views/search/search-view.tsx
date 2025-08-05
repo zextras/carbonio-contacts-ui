@@ -6,7 +6,7 @@
 import React, { FC, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Container, Spinner } from '@zextras/carbonio-design-system';
-import type { SearchViewProps } from '@zextras/carbonio-search-ui';
+import type { QueryChip, SearchViewProps } from '@zextras/carbonio-search-ui';
 import {
 	isTrash,
 	useUpdateView,
@@ -18,16 +18,47 @@ import { map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { Route, Routes } from 'react-router-dom';
 
-import AdvancedFilterModal from 'legacy/views/search/advance-filter-modal';
-import { runSearch } from 'legacy/views/search/run-search';
-import { SearchContactsEmptyPanel } from 'legacy/views/search/search-contacts-empty-panel';
-import { SearchList } from 'legacy/views/search/search-list';
-import { Query } from 'legacy/views/search/search-types';
-import { SearchResults } from 'legacy/views/search/types';
-import { ContactGroupDisplayerWrapper } from 'views/contact-groups/displayer/contact-group-displayer-wrapper';
+import { AdvancedFilterModal } from './advance-filter-modal';
 import { addContactsToStore, useContactsById } from 'legacy/store/contacts';
 import ContactEditPanel from 'legacy/views/edit/contact-edit-panel';
 import { ContactPreviewWrapper } from 'legacy/views/preview/contact-preview-wrapper';
+import { runSearch } from 'legacy/views/search/run-search';
+import { SearchContactsEmptyPanel } from 'legacy/views/search/search-contacts-empty-panel';
+import { SearchList } from 'legacy/views/search/search-list';
+import { Query, SearchResults } from 'legacy/views/search/types';
+import { ContactGroupDisplayerWrapper } from 'views/contact-groups/displayer/contact-group-displayer-wrapper';
+
+const specialChars = [
+	'~',
+	"'",
+	'!',
+	'#',
+	'$',
+	'%',
+	'^',
+	'&',
+	'(',
+	')',
+	'_',
+	'?',
+	'/',
+	'{',
+	'}',
+	'[',
+	']',
+	';',
+	':',
+	'-',
+	'+',
+	'<',
+	'>'
+];
+
+export const containsSpecialCharacters = (value: string | boolean): boolean => {
+	const stringValue = typeof value === 'string' ? value : '';
+	const text = stringValue.startsWith('tag:') ? stringValue.substring(4) : stringValue;
+	return specialChars.some((specialChar) => text.includes(specialChar));
+};
 
 const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 	const [query, updateQuery] = useQuery();
@@ -96,7 +127,7 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 	);
 
 	const evaluateQueryString = useCallback(
-		(queryParam: Query): string =>
+		(queryParam: QueryChip[]): string =>
 			isSharedFolderIncluded && searchInFolders?.length > 0
 				? `(${queryParam.map((c) => (c.value ? c.value : c.label)).join(' ')}) ${foldersToSearchInQuery}`
 				: `${queryParam.map((c) => (c.value ? c.value : c.label)).join(' ')}`,
@@ -105,8 +136,38 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 
 	const queryToString = useMemo(() => evaluateQueryString(query), [evaluateQueryString, query]);
 
+	const containsSpecialCharacter = useMemo(() => {
+		if (query.length === 0) return false;
+		return query.some((item) => {
+			if ('queryChipsToAdvancedFiltersValue' in item) {
+				return false;
+			}
+			if ('isQueryFilter' in item && item.isQueryFilter) {
+				return false;
+			}
+			return containsSpecialCharacters(item.value ?? item.label ?? '');
+		});
+	}, [query]);
+
+	const invalidQueryTooltip = useMemo(
+		() =>
+			t(
+				'label.invalid_query',
+				'Special characters like :, ", -, !, etc., are ignored in the search. This may lead to unexpected results for:'
+			),
+		[t]
+	);
+
+	const resultLabelType = containsSpecialCharacter ? 'warning' : undefined;
+	const resultLabel = useMemo(() => {
+		if (containsSpecialCharacter) {
+			return invalidQueryTooltip;
+		}
+		return query.length > 0 ? t('label.results_for', 'Results for:') : '';
+	}, [containsSpecialCharacter, invalidQueryTooltip, query.length, t]);
+
 	const runSearchFromScratch = useCallback(
-		(newQuery: Query, abortSignal?: AbortSignal) => {
+		(newQuery: QueryChip[], abortSignal?: AbortSignal) => {
 			setSearchResults(initialSearchState);
 			if (query.length > 0) {
 				const queryString = evaluateQueryString(newQuery);
@@ -170,7 +231,7 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 
 	return (
 		<Container>
-			<ResultsHeader label={query.length > 0 ? t('label.results_for', 'Results for:') : ''} />
+			<ResultsHeader label={resultLabel} labelType={resultLabelType} />
 			<Container
 				orientation="horizontal"
 				background="gray4"
@@ -185,6 +246,7 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 								contacts={searchContacts}
 								onListBottom={canLoadMore ? loadMore : undefined}
 								setShowAdvanceFilters={setShowAdvanceFilters}
+								query={query}
 							/>
 						}
 					/>
@@ -211,15 +273,13 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 			</Container>
 
 			<AdvancedFilterModal
-				query={query}
+				query={query as Query}
 				open={showAdvanceFilters}
 				onSearchConfirm={onModalConfirm}
 				isSharedFolderIncludedInitialValue={
 					query.length === 0 ? includeSharedFolders : isSharedFolderIncluded
 				}
-				isSharedFolderIncludedDefault={includeSharedFolders}
 				onClose={(): void => setShowAdvanceFilters(false)}
-				t={t}
 			/>
 		</Container>
 	);
