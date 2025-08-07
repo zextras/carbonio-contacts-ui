@@ -22,7 +22,11 @@ const CustomIcon = styled(Icon)`
 	height: 2rem;
 `;
 
-export const EmptyDisplayer = ({ title, description, icon }: EmptyDisplayerProps): React.JSX.Element => (
+export const EmptyDisplayer = ({
+	title,
+	description,
+	icon
+}: EmptyDisplayerProps): React.JSX.Element => (
 	<Container>
 		{icon && <CustomIcon icon={icon} color={'secondary'} />}
 		<Padding all="medium">
