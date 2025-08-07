@@ -6,6 +6,7 @@
 
 import React, { useMemo } from 'react';
 
+import styled from '@emotion/styled';
 import {
 	Accordion,
 	type AccordionItemType,
@@ -23,17 +24,11 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { ROUTES_INTERNAL_PARAMS } from 'constants/index';
 
-type TextProps = {
-	minWidth?: string;
-	flexBasis?: string;
-	flexGrow?: number;
-};
-
-const getTextStyle = (): TextProps => ({
-	minWidth: '0',
-	flexBasis: '0',
-	flexGrow: 1
-});
+const StyledText = styled(Text)`
+	min-width: 0;
+	flex-basis: 0;
+	flex-grow: 1;
+`;
 
 const AccordionItem = ({ item }: { item: AccordionItemType }): React.JSX.Element => (
 	<Container
@@ -41,15 +36,14 @@ const AccordionItem = ({ item }: { item: AccordionItemType }): React.JSX.Element
 		mainAlignment="flex-start"
 		padding={{ all: 'small' }}
 		height="2.5rem"
-		style={{ minWidth: 0, flexBasis: 0, flexGrow: 1 }}
 	>
 		<Padding right="small">
 			<Avatar label={item.label ?? ''} />
 		</Padding>
 		{item.label && (
-			<Text size="medium" {...item.textProps} style={getTextStyle()}>
+			<StyledText size="medium" {...item.textProps}>
 				{item.label}
-			</Text>
+			</StyledText>
 		)}
 	</Container>
 );

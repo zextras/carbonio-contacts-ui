@@ -5,6 +5,7 @@
  */
 import React, { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
 
+import styled from '@emotion/styled';
 import {
 	Button,
 	Container,
@@ -13,8 +14,7 @@ import {
 	Row,
 	Text,
 	Tooltip,
-	useSnackbar,
-	useTheme
+	useSnackbar
 } from '@zextras/carbonio-design-system';
 import { report } from '@zextras/carbonio-shell-ui';
 import {
@@ -40,13 +40,9 @@ import { ContactEditorRow, CustomMultivalueField } from 'legacy/views/edit/Custo
 import reducer, { op } from 'legacy/views/edit/form-reducer';
 import { differenceObject } from 'legacy/views/settings/components/utils';
 
-function getItalicTextStyle(theme) {
-	return {
-		fontStyle: 'italic',
-		color: theme.palette.gray1.regular,
-		paddingRight: '0.5rem'
-	};
-}
+const CustomText = styled(Text)`
+	padding-right: 0.5rem;
+`;
 
 const filterEmptyValues = (values) =>
 	reduce(
@@ -91,7 +87,6 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 	const keys = Object.keys(existingContact ?? {});
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
-	const theme = useTheme();
 
 	useEffect(() => {
 		if (!compareToContact && keys?.length > 0) setCompareToContact(existingContact);
@@ -255,12 +250,12 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 				<Row orientation="horizontal" mainAlignment="space-between" width="fill">
 					<Container height="fit" width="fit">
 						{!editId && (
-							<Text style={getItalicTextStyle(theme)}>
+							<CustomText italic color={'gray1'}>
 								{t('label.contact_created_in_folder', {
 									name: selectedFolderName,
 									defaultValue: 'This contact will be created in the "{{name}}" folder'
 								})}
-							</Text>
+							</CustomText>
 						)}
 					</Container>
 					<Tooltip

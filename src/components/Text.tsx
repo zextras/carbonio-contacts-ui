@@ -5,6 +5,7 @@
  */
 import React, { ReactNode } from 'react';
 
+import styled from '@emotion/styled';
 import {
 	Text as DSText,
 	type TextProps,
@@ -37,6 +38,11 @@ const TextWithOptionalTooltip = ({
 		<DSText {...rest}>{children}</DSText>
 	);
 
+const StyledText = styled(TextWithOptionalTooltip)<{ $width?: string; $inline?: boolean }>`
+	width: ${({ $width }): string | undefined => $width};
+	display: ${({ $inline }): string | undefined | false => $inline && 'inline'};
+`;
+
 export const Text = ({
 	width,
 	centered,
@@ -45,11 +51,9 @@ export const Text = ({
 	withTooltip = false,
 	...dsProps
 }: TextExtendedProps & TextWithOptionalTooltipProps): React.JSX.Element => (
-	<TextWithOptionalTooltip
-		style={{
-			width: `${width ?? ''}`,
-			display: `${inline ? 'inline' : ''}`
-		}}
+	<StyledText
+		$width={width}
+		$inline={inline}
 		textAlign={(centered && 'center') || undefined}
 		lineHeight={lineHeight}
 		withTooltip={withTooltip}

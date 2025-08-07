@@ -5,6 +5,7 @@
  */
 import React, { useCallback, useMemo, useState } from 'react';
 
+import styled from '@emotion/styled';
 import {
 	Container,
 	Button,
@@ -58,6 +59,10 @@ function cleanupDuplicates(
 		actions
 	};
 }
+
+const List = styled(DSList)`
+	min-height: 0;
+`;
 
 export type EnhancedChipItem = ContactInputItem & {
 	duplicated: boolean;
@@ -374,9 +379,7 @@ export const CommonContactGroupBoard = ({
 						hasError={contactInputValue.length > 0 && noValidChip}
 					/>
 				</Container>
-				<DSList data-testid={'members-list'} style={{ minHeight: 0 }}>
-					{listItems}
-				</DSList>
+				<List data-testid={'members-list'}>{listItems}</List>
 			</Container>
 		</Container>
 	);

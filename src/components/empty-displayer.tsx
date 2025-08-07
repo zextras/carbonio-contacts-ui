@@ -6,6 +6,7 @@
 
 import React from 'react';
 
+import styled from '@emotion/styled';
 import { Container, Icon, Padding } from '@zextras/carbonio-design-system';
 
 import { Text } from 'components/Text';
@@ -16,13 +17,14 @@ type EmptyDisplayerProps = {
 	description: string;
 };
 
-export const EmptyDisplayer = ({
-	title,
-	description,
-	icon
-}: EmptyDisplayerProps): React.JSX.Element => (
+const CustomIcon = styled(Icon)`
+	width: 2rem;
+	height: 2rem;
+`;
+
+export const EmptyDisplayer = ({ title, description, icon }: EmptyDisplayerProps): React.JSX.Element => (
 	<Container>
-		{icon && <Icon icon={icon} style={{ width: '2rem', height: '2rem' }} color={'secondary'} />}
+		{icon && <CustomIcon icon={icon} color={'secondary'} />}
 		<Padding all="medium">
 			<Text color="gray1" overflow="break-word" weight="bold" size="large" centered>
 				{title}

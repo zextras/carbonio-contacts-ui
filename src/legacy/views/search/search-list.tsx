@@ -5,16 +5,8 @@
  */
 import React, { useMemo } from 'react';
 
-import {
-	Button,
-	Container,
-	List,
-	ListItem,
-	Padding,
-	Text,
-	Theme,
-	useTheme
-} from '@zextras/carbonio-design-system';
+import styled from '@emotion/styled';
+import { Button, Container, List, ListItem, Padding, Text } from '@zextras/carbonio-design-system';
 import { map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -24,17 +16,10 @@ import { isGroup } from 'legacy/utils/helpers';
 import { ContactListItem } from 'legacy/views/app/folder-panel/contact-list-item';
 import { ContactGroupListItem } from 'views/contact-groups/list/contact-group-list-item';
 
-type BorderContainerProps = {
-	borderBottom?: string;
-	borderRight?: string;
-};
-
-function getBorderContainerStyle(theme: Theme): BorderContainerProps {
-	return {
-		borderBottom: `0.0625rem solid ${theme.palette.gray2.regular}`,
-		borderRight: `0.0625rem solid ${theme.palette.gray2.regular}`
-	};
-}
+const BorderContainer = styled(Container)`
+	border-bottom: 0.0625rem solid ${({ theme }): string => theme.palette.gray2.regular};
+	border-right: 0.0625rem solid ${({ theme }): string => theme.palette.gray2.regular};
+`;
 
 type SearchListProps = {
 	contacts: Array<ContactOrGroup>;
@@ -50,7 +35,6 @@ export const SearchList = ({
 }: SearchListProps): React.JSX.Element => {
 	const [t] = useTranslation();
 	const { itemId } = useParams<{ itemId: string }>();
-	const theme = useTheme();
 
 	const displayerTitle = useMemo(() => {
 		if (contacts.length === 0 && query.length > 0) {
@@ -64,7 +48,7 @@ export const SearchList = ({
 
 	const listItems = useMemo(
 		() =>
-			map(contacts, (contact, index) => {
+			map(contacts, (contact) => {
 				const isActive = itemId === contact.id;
 				if (isGroup(contact)) {
 					return (
@@ -99,12 +83,7 @@ export const SearchList = ({
 			mainAlignment="flex-start"
 			data-testid="ContactsSearchResultListContainer"
 		>
-			<Container
-				style={getBorderContainerStyle(theme)}
-				padding="small"
-				height="fit"
-				borderRadius="none"
-			>
+			<BorderContainer padding="small" height="fit" borderRadius="none">
 				<Button
 					onClick={(): void => setShowAdvanceFilters(true)}
 					type={'outlined'}
@@ -112,7 +91,7 @@ export const SearchList = ({
 					label={t('title.advanced_filters', 'Advanced Filters')}
 					icon="Options2Outline"
 				/>
-			</Container>
+			</BorderContainer>
 			{contacts.length > 0 && (
 				<Container>
 					<List

@@ -5,6 +5,7 @@
  */
 import React, { ChangeEvent, useMemo, useState } from 'react';
 
+import styled from '@emotion/styled';
 import { Button, Container, Input, Padding } from '@zextras/carbonio-design-system';
 import {
 	isDefaultAccountRoot,
@@ -23,6 +24,11 @@ import { useTranslation } from 'react-i18next';
 import { FlatFoldersAccordion } from 'components/folder-tree-selector/flat-folders-accordion';
 import { sortFolders } from 'helpers/folders';
 import { getFolderTranslatedName } from 'legacy/utils/helpers';
+
+const ScrollableContainer = styled(Container)`
+	overflow-y: auto;
+	display: block;
+`;
 
 export type FolderTreeSelectorProps = {
 	inputLabel?: string;
@@ -162,8 +168,7 @@ export const FolderTreeSelector = ({
 				onChange={(e: ChangeEvent<HTMLInputElement>): void => setInputValue(e.target.value)}
 			/>
 			<Padding vertical="medium" />
-			<Container
-				style={{ overflowY: 'auto', display: 'block' }}
+			<ScrollableContainer
 				height={'auto'}
 				orientation="vertical"
 				mainAlignment="flex-start"
@@ -176,7 +181,7 @@ export const FolderTreeSelector = ({
 					selectedFolderId={selectedFolderId}
 					allowRootSelection={allowRootSelection}
 				/>
-			</Container>
+			</ScrollableContainer>
 			{onNewFolderClick && (
 				<Container
 					padding={{ top: 'medium', bottom: 'medium' }}

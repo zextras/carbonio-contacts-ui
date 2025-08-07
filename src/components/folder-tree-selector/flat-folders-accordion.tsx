@@ -35,6 +35,14 @@ import { getFolderTranslatedName } from 'legacy/utils/helpers';
 
 const FOLDER_ROW_HEIGHT = '2.6rem';
 
+const FolderAccordionPlaceholder = styled.div`
+	height: ${FOLDER_ROW_HEIGHT};
+`;
+
+const RootAccordion = styled(Row)`
+	cursor: pointer;
+`;
+
 const CustomContainer = styled(Container)<{ $active?: boolean }>`
 	&:hover {
 		background-color: ${({ theme, $active }): string =>
@@ -179,7 +187,7 @@ const FlatFoldersAccordionRoot: FC<FlatFoldersAccordionRootProps> = ({
 		[open, allowRootSelection, onFolderSelected, folder]
 	);
 	return (
-		<Row
+		<RootAccordion
 			width="fill"
 			data-testid={`folder-accordion-root-${folder.id}`}
 			style={{ cursor: 'pointer' }}
@@ -218,9 +226,9 @@ const FlatFoldersAccordionRoot: FC<FlatFoldersAccordionRootProps> = ({
 							key={childFolder.id}
 							selected={selectedFolderId === childFolder.id}
 							active={selectedFolderId === childFolder.id}
-							background="gray6"
-							activeBackground="highlight"
-							selectedBackground="gray5"
+							background={'gray6'}
+							activeBackground={'highlight'}
+							selectedBackground={'gray5'}
 						>
 							{(visible: boolean): ReactElement =>
 								visible ? (
@@ -230,14 +238,14 @@ const FlatFoldersAccordionRoot: FC<FlatFoldersAccordionRootProps> = ({
 										onFolderSelected={onFolderSelected}
 									/>
 								) : (
-									<div style={{ height: FOLDER_ROW_HEIGHT }} />
+									<FolderAccordionPlaceholder />
 								)
 							}
 						</ListItem>
 					))}
 				</List>
 			</Collapse>
-		</Row>
+		</RootAccordion>
 	);
 };
 
@@ -248,7 +256,7 @@ export const FlatFoldersAccordion: FC<FlatFoldersAccordionProps> = ({
 	allowRootSelection
 }) => (
 	<Container orientation={'vertical'} style={{ overflowY: 'auto' }}>
-		{roots.map<ReactElement>((root, index) => (
+		{roots.map<ReactElement>((root) => (
 			<FlatFoldersAccordionRoot
 				key={root.id}
 				folder={root}

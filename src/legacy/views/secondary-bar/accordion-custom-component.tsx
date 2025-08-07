@@ -5,6 +5,7 @@
  */
 import React, { FC, useCallback, useMemo } from 'react';
 
+import styled from '@emotion/styled';
 import {
 	AccordionItem,
 	Avatar,
@@ -16,9 +17,7 @@ import {
 	Icon,
 	Padding,
 	Row,
-	Theme,
-	Tooltip,
-	useTheme
+	Tooltip
 } from '@zextras/carbonio-design-system';
 import { useUserAccount } from '@zextras/carbonio-shell-ui';
 import {
@@ -41,51 +40,30 @@ import { useMoveContactsDragAndDrop } from 'legacy/ui-actions/use-move-contacts-
 import { getFolderTranslatedName } from 'legacy/utils/helpers';
 import { useAddressBookContextualMenuItems } from 'legacy/views/secondary-bar/commons/use-address-book-contextual-menu-items';
 
-type FittedRowProps = {
-	maxWidth?: string;
-	height?: string;
-};
+const FittedRow = styled(Row)`
+	max-width: calc(100% - (2 * ${({ theme }): string => theme.sizes.padding.small}));
+	height: 3rem;
+`;
 
-function getFittedRowStyle(theme: Theme): FittedRowProps {
-	return {
-		maxWidth: `calc(100% - (2 * ${theme.sizes.padding.small}))`,
-		height: '3rem'
-	};
-}
+const DropOverlayContainer = styled(Container)<{ $folder: Folder }>`
+	position: absolute;
+	width: calc(15.5rem - ${(props): number => props.$folder.depth - 2}rem);
+	height: 100%;
+	background: ${(props): string => props.theme.palette.primary.regular};
+	border-radius: 0.25rem;
+	border: 0.25rem solid #d5e3f6;
+	opacity: 0.4;
+`;
 
-type DropOverlayContainerProps = {
-	position?: 'absolute' | 'relative';
-	width?: string;
-	height?: string;
-	background?: string;
-	borderRadius?: string;
-	border?: string;
-	opacity?: number;
-};
-
-function getDropOverlayContainerStyle(theme: Theme, folder: Folder): DropOverlayContainerProps {
-	return {
-		position: 'absolute',
-		width: `calc(15.5rem - ${folder.depth - 2}rem)`,
-		height: '100%',
-		background: theme.palette.primary.regular,
-		borderRadius: '0.25rem',
-		border: '0.25rem solid #d5e3f6',
-		opacity: 0.4
-	};
-}
-
-function getDropDenyOverlayContainerStyle(theme: Theme, folder: Folder): DropOverlayContainerProps {
-	return {
-		position: 'absolute',
-		width: `calc(15.5rem - ${folder.depth - 2}rem)`,
-		height: '100%',
-		background: theme.palette.gray1.regular,
-		borderRadius: '0.25rem',
-		border: '0.25rem solid #d5e3f6',
-		opacity: 0.4
-	};
-}
+const DropDenyOverlayContainer = styled(Container)<{ $folder: Folder }>`
+	position: absolute;
+	width: calc(15.5rem - ${(props): number => props.$folder.depth - 2}rem);
+	height: 100%;
+	background: ${(props): string => props.theme.palette.gray1.regular};
+	border-radius: 0.25rem;
+	border: 0.25rem solid #d5e3f6;
+	opacity: 0.4;
+`;
 
 export const AccordionCustomComponent: FC<{ item: Folder }> = ({ item: folder }) => {
 	const [t] = useTranslation();
@@ -93,7 +71,6 @@ export const AccordionCustomComponent: FC<{ item: Folder }> = ({ item: folder })
 	const accountName = displayName ?? name;
 	const moveContactAction = useMoveContactsDragAndDrop();
 	const moveAddressBookAction = useActionMoveAddressBook();
-	const theme = useTheme();
 
 	const onDragEnterAction = useCallback(
 		(dragInfo: OnDropActionProps<Contact | Folder | unknown>): DragEnterAction => {
@@ -200,14 +177,14 @@ export const AccordionCustomComponent: FC<{ item: Folder }> = ({ item: folder })
 	}
 
 	return isRoot(folder.id) || (folder.isLink && folder.oname === ROOT_NAME) ? (
-		<Row style={getFittedRowStyle(theme)}>
+		<FittedRow>
 			<Padding left="small">
 				<Avatar label={accordionItem.label} colorLabel={accordionItem.iconColor} size="medium" />
 			</Padding>
 			<Tooltip label={accordionItem.label} placement="right" maxWidth="100%">
 				<AccordionItem data-testid={`accordion-folder-item-${folder.id}`} item={accordionItem} />
 			</Tooltip>
-		</Row>
+		</FittedRow>
 	) : (
 		<Row width="fill" minWidth={0}>
 			<Drop
@@ -226,8 +203,8 @@ export const AccordionCustomComponent: FC<{ item: Folder }> = ({ item: folder })
 						event: data.event
 					} as OnDropActionProps)
 				}
-				overlayAcceptComponent={<Container style={getDropOverlayContainerStyle(theme, folder)} />}
-				overlayDenyComponent={<Container style={getDropDenyOverlayContainerStyle(theme, folder)} />}
+				overlayAcceptComponent={<DropOverlayContainer $folder={folder} />}
+				overlayDenyComponent={<DropDenyOverlayContainer $folder={folder} />}
 			>
 				<Drag
 					type="folder"
