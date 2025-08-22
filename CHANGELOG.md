@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.17.0](https://github.com/zextras/carbonio-contacts-ui/compare/v1.16.1...v1.17.0) (2025-08-22)
+
+
+### Features
+
+* **contactinput:** add chip label factory prop ([4079007](https://github.com/zextras/carbonio-contacts-ui/commit/40790071caabe16e09d2c844c998d9a5a4ad7ce9))
+
+
+### Bug Fixes
+
+* [CO-2104] restore 'Include shared folder' toggle state onClose ([f9c2502](https://github.com/zextras/carbonio-contacts-ui/commit/f9c2502cd15cc6d9d862555b4f514dfb1b8dc7c9))
+* [CO-2121] prevent duplications inside Advanced Filters ([f0f413b](https://github.com/zextras/carbonio-contacts-ui/commit/f0f413b533b9bca94a932c25c4814a2a96d6e45b))
+* prevent duplicate tags and keywords in advanced filter modal ([4bf639b](https://github.com/zextras/carbonio-contacts-ui/commit/4bf639b861a2ddfa0b4b0d6a83b3ae51f9c4c93a))
+* reset shared folder toggle to default value when query is empty ([7120c51](https://github.com/zextras/carbonio-contacts-ui/commit/7120c51dd64ec6ea28836ad419fd9fe6b3073042))
+
 ### 1.16.1 (2025-05-30)
 
 ## [1.16.0](https://github.com/zextras/carbonio-contacts-ui/compare/v1.15.0...v1.16.0) (2025-05-19)
