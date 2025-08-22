@@ -5,12 +5,11 @@
  */
 import { act } from '@testing-library/react';
 import { UserEvent } from '@testing-library/user-event';
+import { FOLDER_VIEW, FOLDERS } from '@zextras/carbonio-ui-commons';
 
-import { FOLDER_VIEW } from '../carbonio-ui-commons/constants';
-import { FOLDERS } from '../carbonio-ui-commons/constants/folders';
-import { generateFolder } from '../carbonio-ui-commons/test/mocks/folders/folders-generator';
-import { populateFoldersStore } from '../carbonio-ui-commons/test/mocks/store/folders';
-import { makeListItemsVisible, screen } from '../carbonio-ui-commons/test/test-setup';
+import { makeListItemsVisible, screen } from '@test-setup';
+import { generateFolder } from '@test-utils/folders/folders-generator';
+import { populateFoldersStore } from '@test-utils/store/folders';
 
 export const setupMoveItemModal = (
 	folder = generateFolder({

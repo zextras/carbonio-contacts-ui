@@ -6,8 +6,8 @@
 
 import { useNavigate } from 'react-router-dom';
 
-import { getFolderFromContactGroup } from './utils';
-import { ContactGroup } from '../../model/contact-group';
+import { getFolderFromContactGroup } from 'views/contact-groups/utils';
+import { ContactGroup } from 'model/contact-group';
 
 export const CONTACT_GROUPS_PATH = 'contact-groups';
 export function useRedirectToContactGroup(): (contactGroup: ContactGroup) => void {

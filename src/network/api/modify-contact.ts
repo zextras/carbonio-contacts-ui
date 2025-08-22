@@ -3,14 +3,15 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { ErrorSoapBodyResponse, JSNS, soapFetch } from '@zextras/carbonio-shell-ui';
+import { JSNS } from '@zextras/carbonio-ui-commons';
+import { ErrorSoapBodyResponse, legacySoapFetch } from '@zextras/carbonio-ui-soap-lib';
 
-import { CnItem, GenericSoapPayload } from './types';
-import { ContactGroup } from '../../model/contact-group';
+import { ContactGroup } from 'model/contact-group';
+import { CnItem, GenericSoapPayload } from 'network/api/types';
 
 export type ModifyContactAttribute = { n: 'fullName' | 'nickname' | 'fileAs'; _content: string };
 
-export interface ModifyContactRequest extends GenericSoapPayload<typeof JSNS.mail> {
+export interface ModifyContactRequest extends GenericSoapPayload<typeof JSNS.MAIL> {
 	cn: {
 		id: string;
 		m?: Array<{ type: 'I'; value: string; op: '+' | '-' }>;
@@ -18,7 +19,7 @@ export interface ModifyContactRequest extends GenericSoapPayload<typeof JSNS.mai
 	};
 }
 
-export type ModifyContactResponse = GenericSoapPayload<typeof JSNS.mail> & {
+export type ModifyContactResponse = GenericSoapPayload<typeof JSNS.MAIL> & {
 	cn: Array<CnItem>;
 };
 
@@ -48,10 +49,10 @@ const modifyContact = ({
 					: undefined,
 			a: attributes
 		},
-		_jsns: JSNS.mail
+		_jsns: JSNS.MAIL
 	};
 
-	return soapFetch<ModifyContactRequest, ModifyContactResponse | ErrorSoapBodyResponse>(
+	return legacySoapFetch<ModifyContactRequest, ModifyContactResponse | ErrorSoapBodyResponse>(
 		'ModifyContact',
 		modifyContactRequest
 	).then((response) => {

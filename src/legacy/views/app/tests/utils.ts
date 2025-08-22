@@ -3,11 +3,11 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { createSoapAPIInterceptor } from '../../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { makeListItemsVisible, screen } from '../../../../carbonio-ui-commons/test/test-setup';
-import { CnItem } from '../../../../network/api/types';
-import { SearchContactsSoapRequest } from '../../../../types';
-import { SoapContact } from '../../../types/soap';
+import { CnItem } from 'network/api/types';
+import { SearchContactsSoapRequest } from 'types';
+import { SoapContact } from 'legacy/types/soap';
+import { makeListItemsVisible, screen } from '@test-setup';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 export function createContactsApiInterceptor({
 	items,

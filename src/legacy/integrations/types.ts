@@ -5,13 +5,11 @@
  */
 
 import { ChipItem, type DropdownItem } from '@zextras/carbonio-design-system';
-
 import {
 	ContactInputItem,
-	ContactType,
-	UserContact,
-	DistributionListContact
-} from '../../carbonio-ui-commons/integrations/types';
+	DistributionListContact,
+	ContactInputItemInternalValue
+} from '@zextras/carbonio-ui-commons';
 
 export type ContactInputGroup = ContactInputItem &
 	Required<Pick<ContactInputItem, 'display'>> & {
@@ -66,12 +64,5 @@ export type RemoteContactResponse =
 	| RemoteGroupContact
 	| RemoteDistributionListContact;
 
-export type GroupContact = {
-	id: string;
-	display: string;
-	groupId: string;
-	type: ContactType['GROUP'];
-};
-export type ContactInputItemInternalValue = GroupContact | DistributionListContact | UserContact;
 export type ContactInputItemInternal = ChipItem<ContactInputItemInternalValue>;
 export type ContactInputOptions = DropdownItem & { value?: ContactInputItemInternal };

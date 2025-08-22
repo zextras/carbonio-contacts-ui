@@ -10,19 +10,18 @@ import React, { ReactElement, useState } from 'react';
 import { faker } from '@faker-js/faker';
 import { act, fireEvent, waitFor, within } from '@testing-library/react';
 import { ChipAction } from '@zextras/carbonio-design-system';
-
-import { ContactInput } from './contact-input';
-import { CONTACT_TYPES } from '../../carbonio-ui-commons/integrations/constants';
 import {
+	CONTACT_TYPES,
 	ContactInputOnChange,
-	ContactInputValue
-} from '../../carbonio-ui-commons/integrations/types';
-import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { UserEvent, screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
-import { TESTID_SELECTORS } from '../../constants/tests';
-import { registerGetDistributionListHandler } from '../../tests/msw-handlers/get-distribution-list';
-import { generateDistributionList } from '../../tests/utils';
-import { FullAutocompleteRequest, FullAutocompleteResponse } from '../types/contact';
+	ContactInputProps,
+	ContactInputValue,
+	JSNS
+} from '@zextras/carbonio-ui-commons';
+
+import { UserEvent, screen, setupTest } from '@test-setup';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
+import { TESTID_SELECTORS } from 'constants/tests';
+import { ContactInput } from 'legacy/integrations/contact-input';
 import {
 	clickExpandDL,
 	createAutocompleteInterceptor,
@@ -36,13 +35,16 @@ import {
 	selectAllMembersInDL,
 	SELECT_ALL,
 	typeAndSelectOptionFromDropdown
-} from './test/mocks';
+} from 'legacy/integrations/test/mocks';
+import { FullAutocompleteRequest, FullAutocompleteResponse } from 'legacy/types/contact';
 import {
 	GetDistributionListRequest,
 	GetDistributionListResponse
-} from '../../network/api/get-distribution-list';
-import { registerFullAutocompleteHandler } from '../../tests/msw-handlers/full-autocomplete';
-import { registerGetDistributionListMembersHandler } from '../../tests/msw-handlers/get-distribution-list-members';
+} from 'network/api/get-distribution-list';
+import { registerFullAutocompleteHandler } from 'tests/msw-handlers/full-autocomplete';
+import { registerGetDistributionListHandler } from 'tests/msw-handlers/get-distribution-list';
+import { registerGetDistributionListMembersHandler } from 'tests/msw-handlers/get-distribution-list-members';
+import { generateDistributionList } from 'tests/utils';
 
 const VALID_EMAIL = 'valid@email.it';
 const INVALID_EMAIL = 'invalid@email';
@@ -447,7 +449,7 @@ describe('Contact input', () => {
 				GetDistributionListRequest,
 				GetDistributionListResponse
 			>('GetDistributionList', {
-				_jsns: 'urn:zimbraAccount',
+				_jsns: JSNS.ACCOUNT,
 				dl: [{ id: '123', name: 'dl@dl.test' }],
 				requestId: ''
 			});
@@ -745,16 +747,43 @@ describe('Contact input', () => {
 			);
 		});
 	});
+
+	describe('chip label factory', () => {
+		it('should be called and its return value should be displayed as the chip label', async () => {
+			const first = 'My name is';
+			const label = faker.word.noun();
+			const chipLabelFactory = jest.fn().mockReturnValue(label);
+			createAutocompleteInterceptor([{ email: VALID_EMAIL, first }]);
+
+			const { user } = setupTest(<TestableContactInput chipLabelFactory={chipLabelFactory} />);
+			await typeAndSelectOptionFromDropdown(user, first);
+			const chip = screen.getByTestId(TESTID_SELECTORS.contactInputChip);
+
+			expect(chipLabelFactory).toHaveBeenCalledWith(
+				expect.objectContaining({
+					email: VALID_EMAIL
+				}),
+				expect.any(String)
+			);
+			expect(within(chip).getByText(label)).toBeVisible();
+		});
+	});
 });
 
-function TestableContactInput(): ReactElement {
+function TestableContactInput(props: Partial<ContactInputProps>): ReactElement {
 	const [defaultValue, setDefaultValue] = useState<ContactInputValue>([]);
 
 	const onChange: ContactInputOnChange = (value) => {
 		setDefaultValue([...defaultValue, ...value]);
 	};
 
-	return <ContactInput defaultValue={defaultValue} onChange={onChange} />;
+	return (
+		<ContactInput
+			{...props}
+			defaultValue={props.defaultValue ?? defaultValue}
+			onChange={props.onChange ?? onChange}
+		/>
+	);
 }
 
 async function paste(user: UserEvent, element: HTMLElement, text: string): Promise<void> {

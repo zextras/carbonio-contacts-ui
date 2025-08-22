@@ -7,12 +7,12 @@
 import React, { FC, ReactElement, useCallback, useMemo } from 'react';
 
 import { Container, Text, useSnackbar } from '@zextras/carbonio-design-system';
+import { deleteTag } from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 
-import { ItemType } from './types';
-import { deleteTag } from '../../../../../carbonio-ui-commons/soap/tags';
-import ModalFooter from '../../commons/modal-footer';
-import { ModalHeader } from '../../commons/modal-header';
+import { ItemType } from 'legacy/views/secondary-bar/parts/tags/types';
+import ModalFooter from 'legacy/views/secondary-bar/commons/modal-footer';
+import { ModalHeader } from 'legacy/views/secondary-bar/commons/modal-header';
 
 type ComponentProps = {
 	onClose: () => void;

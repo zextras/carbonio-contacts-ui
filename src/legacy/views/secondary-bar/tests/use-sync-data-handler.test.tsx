@@ -6,27 +6,24 @@
 import React, { ReactElement, ReactNode } from 'react';
 
 import { renderHook } from '@testing-library/react';
-import { SoapNotify, useRefresh } from '@zextras/carbonio-shell-ui';
+import { useFolderStore, folderWorker } from '@zextras/carbonio-ui-commons';
+import { SoapNotify } from '@zextras/carbonio-ui-soap-lib';
 import { http } from 'msw';
 
-import { useFolderStore } from '../../../../carbonio-ui-commons/store/zustand/folder';
-import { getSetupServer } from '../../../../carbonio-ui-commons/test/jest-setup';
-import { useNotify } from '../../../../carbonio-ui-commons/test/mocks/carbonio-shell-ui';
-import { generateFolder } from '../../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
-import { handleGetFolderRequest } from '../../../../carbonio-ui-commons/test/mocks/network/msw/handle-get-folder';
-import { handleGetShareInfoRequest } from '../../../../carbonio-ui-commons/test/mocks/network/msw/handle-get-share-info';
-import { folderWorker } from '../../../../carbonio-ui-commons/worker';
-import { useSyncDataHandler } from '../use-sync-data-handler';
+import { useSync } from '../../../../../__mocks__/@zextras/carbonio-ui-soap-lib';
+import { getSetupServer } from '@jest-setup';
+import { generateFolder } from '@test-utils/folders/folders-generator';
+import { handleGetFolderRequest } from '@test-utils/network/msw/handle-get-folder';
+import { handleGetShareInfoRequest } from '@test-utils/network/msw/handle-get-share-info';
+import { useSyncDataHandler } from 'legacy/views/secondary-bar/use-sync-data-handler';
 
 function getWrapper() {
 	// eslint-disable-next-line react/display-name
 	return ({ children }: { children: ReactNode }): ReactElement => <>{children}</>;
 }
 
-function mockSoapRefresh(mailbox: number): void {
-	(useRefresh as jest.Mock).mockReturnValue({
-		mbx: [{ s: mailbox }]
-	});
+function mockSoapSync(notify: Array<SoapNotify>): void {
+	jest.mocked(useSync).mockReturnValue(notify);
 }
 
 function generateSoapAction(partial?: Partial<SoapNotify>): SoapNotify {
@@ -38,11 +35,10 @@ function generateSoapAction(partial?: Partial<SoapNotify>): SoapNotify {
 }
 
 function mockSoapDelete(mailboxNumber: number, deletedIds: Array<string>): void {
-	mockSoapRefresh(mailboxNumber);
 	const soapNotify = generateSoapAction({
 		deleted: deletedIds
 	});
-	(useNotify as jest.Mock).mockReturnValue([soapNotify]);
+	mockSoapSync([soapNotify]);
 }
 
 describe('sync data handler', () => {
@@ -60,7 +56,6 @@ describe('sync data handler', () => {
 				http.post('/service/soap/GetShareInfoRequest', handleGetShareInfoRequest)
 			);
 
-			useNotify.mockReturnValueOnce([notify]);
 			renderHook(() => useSyncDataHandler(), {
 				wrapper: getWrapper()
 			});

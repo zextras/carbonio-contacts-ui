@@ -17,22 +17,25 @@ import {
 	List as DSList
 } from '@zextras/carbonio-design-system';
 import { useBoardHooks } from '@zextras/carbonio-shell-ui';
+import {
+	FoldersSelector,
+	ZIMBRA_STANDARD_COLORS,
+	FOLDERS,
+	getFolderIdParts,
+	isSharedAccountFolder,
+	ContactInputItem,
+	useFolder,
+	getFlatChildrenFolders,
+	Folders,
+	FolderSelectorItem
+} from '@zextras/carbonio-ui-commons';
 import { map, reduce, remove, some, uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { FoldersSelector } from '../../carbonio-ui-commons/components/select/folders-selector';
-import { ZIMBRA_STANDARD_COLORS } from '../../carbonio-ui-commons/constants';
-import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
-import { getFolderIdParts, isSharedAccountFolder } from '../../carbonio-ui-commons/helpers/folders';
-import { ContactInputItem } from '../../carbonio-ui-commons/integrations/types';
-import { useFolder } from '../../carbonio-ui-commons/store/zustand/folder';
-import { getFlatChildrenFolders } from '../../carbonio-ui-commons/store/zustand/folder/utils';
-import { Folders } from '../../carbonio-ui-commons/types';
-import { FolderSelectorItem } from '../../carbonio-ui-commons/types/select';
-import { MemberListItemComponent } from '../../components/member-list-item';
-import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../constants';
-import { ContactInput } from '../../legacy/integrations/contact-input';
+import { MemberListItemComponent } from 'components/member-list-item';
+import { CONTACT_GROUP_NAME_MAX_LENGTH } from 'constants/index';
+import { ContactInput } from 'legacy/integrations/contact-input';
 
 export function isContactGroupNameInvalid(nameValue: string): boolean {
 	return nameValue.trim().length === 0 || nameValue.length > CONTACT_GROUP_NAME_MAX_LENGTH;

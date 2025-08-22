@@ -5,14 +5,14 @@
  */
 import React, { ReactNode, useCallback, useMemo } from 'react';
 
-import { ContactGroupDisplayerDetails } from './contact-group-displayer-details';
-import { Displayer } from '../../../components/displayer/displayer';
-import { DisplayerActionIconButton } from '../../../components/displayer/displayer-action-icon-button';
-import { DisplayerActionsHeader } from '../../../components/displayer/displayer-actions-header';
-import { DisplayerContent } from '../../../components/displayer/displayer-content';
-import { ContactGroup } from '../../../model/contact-group';
-import { useContactGroupActions } from '../actions/use-contact-group-actions';
-import { useRedirectToContactGroupFolder } from '../navigation';
+import { ContactGroupDisplayerDetails } from 'views/contact-groups/displayer/contact-group-displayer-details';
+import { Displayer } from 'components/displayer/displayer';
+import { DisplayerActionIconButton } from 'components/displayer/displayer-action-icon-button';
+import { DisplayerActionsHeader } from 'components/displayer/displayer-actions-header';
+import { DisplayerContent } from 'components/displayer/displayer-content';
+import { ContactGroup } from 'model/contact-group';
+import { useContactGroupActions } from 'views/contact-groups/actions/use-contact-group-actions';
+import { useRedirectToContactGroupFolder } from 'views/contact-groups/navigation';
 
 export const ContactGroupDisplayer = ({
 	contactGroup

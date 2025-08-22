@@ -3,13 +3,14 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { ErrorSoapBodyResponse, JSNS, soapFetch } from '@zextras/carbonio-shell-ui';
+import { JSNS } from '@zextras/carbonio-ui-commons';
+import { ErrorSoapBodyResponse, legacySoapFetch } from '@zextras/carbonio-ui-soap-lib';
 import { map } from 'lodash';
 
-import { GenericSoapPayload } from './types';
-import { DistributionListMembersPage } from '../../model/distribution-list';
+import { DistributionListMembersPage } from 'model/distribution-list';
+import { GenericSoapPayload } from 'network/api/types';
 
-export interface GetDistributionListMembersRequest extends GenericSoapPayload<typeof JSNS.account> {
+export interface GetDistributionListMembersRequest extends GenericSoapPayload<typeof JSNS.ACCOUNT> {
 	dl: {
 		// get members request works only by passing the email as content of the dl field
 		_content: string;
@@ -18,7 +19,7 @@ export interface GetDistributionListMembersRequest extends GenericSoapPayload<ty
 	offset?: number;
 }
 
-export type GetDistributionListMembersResponse = GenericSoapPayload<typeof JSNS.account> & {
+export type GetDistributionListMembersResponse = GenericSoapPayload<typeof JSNS.ACCOUNT> & {
 	dlm?: Array<{ _content: string }>;
 	more?: boolean;
 	total?: number;
@@ -36,11 +37,11 @@ export const getDistributionListMembers = (
 	email: string,
 	options: { offset?: number; limit?: number } = {}
 ): Promise<DistributionListMembersPage> =>
-	soapFetch<
+	legacySoapFetch<
 		GetDistributionListMembersRequest,
 		GetDistributionListMembersResponse | ErrorSoapBodyResponse
 	>('GetDistributionListMembers', {
-		_jsns: JSNS.account,
+		_jsns: JSNS.ACCOUNT,
 		dl: {
 			_content: email
 		},

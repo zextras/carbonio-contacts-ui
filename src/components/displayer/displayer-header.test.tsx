@@ -8,9 +8,9 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import { noop } from 'lodash';
 
-import { DisplayerHeader } from './displayer-header';
-import { screen, setupTest } from '../../carbonio-ui-commons/test/test-setup';
-import { TESTID_SELECTORS } from '../../constants/tests';
+import { DisplayerHeader } from 'components/displayer/displayer-header';
+import { TESTID_SELECTORS } from 'constants/tests';
+import { screen, setupTest } from '@test-setup';
 
 describe('Displayer header', () => {
 	it('should display the icon', () => {

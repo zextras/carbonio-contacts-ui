@@ -17,7 +17,7 @@ import {
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
-import { Spinner } from '../components/Spinner';
+import { Spinner } from 'components/Spinner';
 import {
 	CONTACT_BOARD_ID,
 	CONTACTS_APP_ID,
@@ -26,7 +26,7 @@ import {
 	EDIT_DL_BOARD_ID,
 	GROUPS_ROUTE,
 	NEW_CONTACT_GROUP_BOARD_ID
-} from '../constants';
+} from 'constants/index';
 
 const LazyContactsView = lazy(
 	() => import(/* webpackChunkName: "contacts-view" */ '../views/contacts-view')

@@ -9,9 +9,9 @@ import { getAction } from '@zextras/carbonio-shell-ui';
 import { isEmpty } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { Action } from '../../../actions/types';
-import { SEND_EMAIL_ACTION } from '../../../constants/actions';
-import { Contact } from '../../../legacy/types/contact';
+import { Action } from 'actions/types';
+import { SEND_EMAIL_ACTION } from 'constants/actions';
+import { Contact } from 'legacy/types/contact';
 
 export const useContactSendMailAction = (contact: Contact): Action => {
 	const [t] = useTranslation();

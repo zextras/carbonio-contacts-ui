@@ -19,22 +19,26 @@ import {
 	Tooltip
 } from '@zextras/carbonio-design-system';
 import { useUserAccount } from '@zextras/carbonio-shell-ui';
+import {
+	FOLDERS,
+	ROOT_NAME,
+	isLink,
+	isRoot,
+	Folder,
+	DragEnterAction,
+	OnDropActionProps
+} from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { useAddressBookContextualMenuItems } from './commons/use-address-book-contextual-menu-items';
-import { useActionMoveAddressBook } from '../../../actions/move-address-book';
-import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
-import { ROOT_NAME } from '../../../carbonio-ui-commons/constants/utils';
-import { isLink, isRoot } from '../../../carbonio-ui-commons/helpers/folders';
-import { Folder } from '../../../carbonio-ui-commons/types/folder';
-import { DragEnterAction, OnDropActionProps } from '../../../carbonio-ui-commons/types/sidebar';
-import { CONTACTS_ROUTE } from '../../../constants';
-import { getFolderIconColor, getFolderIconName } from '../../../helpers/folders';
-import { Contact } from '../../types/contact';
-import { useMoveContactsDragAndDrop } from '../../ui-actions/use-move-contacts-drag-and-drop';
-import { getFolderTranslatedName } from '../../utils/helpers';
+import { useAddressBookContextualMenuItems } from 'legacy/views/secondary-bar/commons/use-address-book-contextual-menu-items';
+import { useActionMoveAddressBook } from 'actions/move-address-book';
+import { CONTACTS_ROUTE } from 'constants/index';
+import { getFolderIconColor, getFolderIconName } from 'helpers/folders';
+import { Contact } from 'legacy/types/contact';
+import { useMoveContactsDragAndDrop } from 'legacy/ui-actions/use-move-contacts-drag-and-drop';
+import { getFolderTranslatedName } from 'legacy/utils/helpers';
 
 const FittedRow = styled(Row)`
 	max-width: calc(100% - (2 * ${({ theme }): string => theme.sizes.padding.small}));

@@ -12,17 +12,17 @@ import { act, waitFor, within } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { http, HttpResponse } from 'msw';
 
-import NewContactGroupBoard from './new-contact-group-board';
-import { getSetupServer } from '../../../carbonio-ui-commons/test/jest-setup';
-import { generateFolder } from '../../../carbonio-ui-commons/test/mocks/folders/folders-generator';
-import { populateFoldersStore } from '../../../carbonio-ui-commons/test/mocks/store/folders';
-import { setupTest, screen } from '../../../carbonio-ui-commons/test/test-setup';
-import { CONTACT_GROUP_NAME_MAX_LENGTH } from '../../../constants';
-import { PALETTE, TESTID_SELECTORS } from '../../../constants/tests';
-import { spyUseBoardHooks } from '../../../tests/utils';
-import { getContactInput } from '../../board/common-contact-group-board.test';
-import * as createContactGroup from '../api/create-contact-group';
-import { CONTACT_GROUPS_PATH } from '../navigation';
+import NewContactGroupBoard from 'views/contact-groups/board/new-contact-group-board';
+import { PALETTE, TESTID_SELECTORS } from 'constants/tests';
+import { spyUseBoardHooks } from 'tests/utils';
+import { getContactInput } from 'views/board/common-contact-group-board.test';
+import * as createContactGroup from 'views/contact-groups/api/create-contact-group';
+import { CONTACT_GROUPS_PATH } from 'views/contact-groups/navigation';
+import { getSetupServer } from '@jest-setup';
+import { setupTest, screen } from '@test-setup';
+import { generateFolder } from '@test-utils/folders/folders-generator';
+import { populateFoldersStore } from '@test-utils/store/folders';
+import { CONTACT_GROUP_NAME_MAX_LENGTH } from 'constants/index';
 
 function spyUseBoard(navigateTo?: jest.Mock): void {
 	jest.spyOn(shell, 'useBoard').mockReturnValue({

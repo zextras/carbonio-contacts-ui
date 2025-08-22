@@ -5,10 +5,11 @@
  */
 import React, { useCallback, useState } from 'react';
 
-import { AddressBookEditGeneralModal } from './address-book-edit-general';
-import { ShareFolderModal } from './share-folder-modal';
-import { ShareRevokeModal } from './share-revoke-modal';
-import { Grant } from '../../../carbonio-ui-commons/types/folder';
+import { Grant } from '@zextras/carbonio-ui-commons';
+
+import { AddressBookEditGeneralModal } from 'components/modals/address-book-edit/address-book-edit-general';
+import { ShareFolderModal } from 'components/modals/address-book-edit/share-folder-modal';
+import { ShareRevokeModal } from 'components/modals/address-book-edit/share-revoke-modal';
 
 export type AddressBookEditModalProps = {
 	addressBookId: string;

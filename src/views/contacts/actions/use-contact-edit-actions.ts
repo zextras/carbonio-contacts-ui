@@ -8,10 +8,10 @@ import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { getParentFolder } from '../../../actions/folder-utils';
-import { Action } from '../../../actions/types';
-import { EDIT_ACTION } from '../../../constants/actions';
-import { Contact } from '../../../legacy/types/contact';
+import { getParentFolder } from 'actions/folder-utils';
+import { Action } from 'actions/types';
+import { EDIT_ACTION } from 'constants/actions';
+import { Contact } from 'legacy/types/contact';
 
 export const useContactEditAction = (contact: Contact): Action => {
 	const [t] = useTranslation();

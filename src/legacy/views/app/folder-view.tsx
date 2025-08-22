@@ -5,8 +5,8 @@
  */
 import React from 'react';
 
-import { DetailPanel } from './detail-panel';
-import { FolderListPanel } from './folder-list-panel';
+import { DetailPanel } from 'legacy/views/app/detail-panel';
+import { FolderListPanel } from 'legacy/views/app/folder-list-panel';
 
 export const FolderView = (): React.JSX.Element => (
 	<>

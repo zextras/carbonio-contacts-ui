@@ -11,12 +11,12 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { ContactListItem } from './contact-list-item';
-import { DragItems } from './drag-items';
-import { EmptyListPanel } from './empty-list-panel';
-import { ContactGroupListItem } from '../../../../views/contact-groups/list/contact-group-list-item';
-import { ContactOrGroup } from '../../../types/contact';
-import { isGroup } from '../../../utils/helpers';
+import { ContactListItem } from 'legacy/views/app/folder-panel/contact-list-item';
+import { DragItems } from 'legacy/views/app/folder-panel/drag-items';
+import { EmptyListPanel } from 'legacy/views/app/folder-panel/empty-list-panel';
+import { ContactGroupListItem } from 'views/contact-groups/list/contact-group-list-item';
+import { ContactOrGroup } from 'legacy/types/contact';
+import { isGroup } from 'legacy/utils/helpers';
 
 const DragImageContainer = styled.div`
 	position: absolute;

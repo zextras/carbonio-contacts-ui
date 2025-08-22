@@ -7,29 +7,20 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
-import { ErrorSoapBodyResponse, JSNS } from '@zextras/carbonio-shell-ui';
+import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
+import { FOLDER_VIEW, FOLDERS, getFolder, JSNS } from '@zextras/carbonio-ui-commons';
 
-import { useActionMoveAddressBook } from './move-address-book';
-import { UIAction } from './types';
-import { FOLDER_VIEW } from '../carbonio-ui-commons/constants';
-import { FOLDERS } from '../carbonio-ui-commons/constants/folders';
-import { getFolder } from '../carbonio-ui-commons/store/zustand/folder';
-import { FOLDERS_DESCRIPTORS } from '../carbonio-ui-commons/test/constants';
-import { generateFolder } from '../carbonio-ui-commons/test/mocks/folders/folders-generator';
-import { createSoapAPIInterceptor } from '../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { populateFoldersStore } from '../carbonio-ui-commons/test/mocks/store/folders';
-import { getMocksContext } from '../carbonio-ui-commons/test/mocks/utils/mocks-context';
-import {
-	setupHook,
-	screen,
-	setupTest,
-	makeListItemsVisible,
-	within
-} from '../carbonio-ui-commons/test/test-setup';
-import { AddressBookMoveModal } from '../components/modals/address-book-move';
-import { TIMERS } from '../constants/tests';
-import { FolderActionRequest, FolderActionResponse } from '../network/api/folder-action';
-import { getFoldersArray } from '../tests/utils';
+import { useActionMoveAddressBook } from 'actions/move-address-book';
+import { UIAction } from 'actions/types';
+import { AddressBookMoveModal } from 'components/modals/address-book-move';
+import { FOLDERS_DESCRIPTORS, TIMERS } from 'constants/tests';
+import { FolderActionRequest, FolderActionResponse } from 'network/api/folder-action';
+import { getFoldersArray } from 'tests/utils';
+import { makeListItemsVisible, screen, setupHook, setupTest, within } from '@test-setup';
+import { generateFolder } from '@test-utils/folders/folders-generator';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
+import { populateFoldersStore } from '@test-utils/store/folders';
+import { getMocksContext } from '@test-utils/utils/mocks-context';
 
 describe('useActionMoveAddressBook', () => {
 	it('should return an object with the specific data', () => {
@@ -390,7 +381,7 @@ describe('useActionMoveAddressBook', () => {
 					id: addressBook.id,
 					op: 'move'
 				},
-				_jsns: JSNS.mail
+				_jsns: JSNS.MAIL
 			};
 
 			createSoapAPIInterceptor<FolderActionRequest, FolderActionResponse>('FolderAction', response);
@@ -418,7 +409,7 @@ describe('useActionMoveAddressBook', () => {
 					id: addressBook.id,
 					op: 'move'
 				},
-				_jsns: JSNS.mail
+				_jsns: JSNS.MAIL
 			};
 
 			createSoapAPIInterceptor<FolderActionRequest, FolderActionResponse>('FolderAction', response);

@@ -7,19 +7,15 @@ import React from 'react';
 
 import { screen } from '@testing-library/react';
 
-import { setupTest } from '../../../../carbonio-ui-commons/test/test-setup';
-import { getFolderTranslatedNameByName } from '../../../utils/helpers';
-import { Breadcrumbs } from '../breadcrumbs';
+import { setupTest } from '@test-setup';
+import { getFolderTranslatedNameByName } from 'legacy/utils/helpers';
+import { Breadcrumbs } from 'legacy/views/app/breadcrumbs';
 
 jest.mock('../../../utils/helpers', () => ({
 	getFolderTranslatedNameByName: jest.fn()
 }));
 
 describe('Breadcrumbs', () => {
-	beforeEach(() => {
-		jest.clearAllMocks();
-	});
-
 	it('should render the breadcrumb path correctly', () => {
 		(getFolderTranslatedNameByName as jest.Mock).mockImplementation((t, token) => token);
 

@@ -4,17 +4,18 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { ErrorSoapBodyResponse, JSNS, soapFetch } from '@zextras/carbonio-shell-ui';
+import { JSNS } from '@zextras/carbonio-ui-commons';
+import { ErrorSoapBodyResponse, legacySoapFetch } from '@zextras/carbonio-ui-soap-lib';
 
-import { GenericSoapPayload } from './types';
+import { GenericSoapPayload } from 'network/api/types';
 
-export interface ExportContactsRequest extends GenericSoapPayload<typeof JSNS.mail> {
+export interface ExportContactsRequest extends GenericSoapPayload<typeof JSNS.MAIL> {
 	ct: 'csv';
 	csvfmt: string;
 	l: string;
 }
 
-export type ExportContactsResponse = GenericSoapPayload<typeof JSNS.mail> & {
+export type ExportContactsResponse = GenericSoapPayload<typeof JSNS.MAIL> & {
 	content: Array<{
 		_content: string;
 	}>;
@@ -25,12 +26,12 @@ const normalizeResponse = (response: ExportContactsResponse): string =>
 
 export const exportContacts = (folderId: string): Promise<string> => {
 	const body = {
-		_jsns: 'urn:zimbraMail',
+		_jsns: JSNS.MAIL,
 		ct: 'csv',
 		csvfmt: 'thunderbird-csv',
 		l: folderId
 	} satisfies ExportContactsRequest;
-	return soapFetch<ExportContactsRequest, ExportContactsResponse | ErrorSoapBodyResponse>(
+	return legacySoapFetch<ExportContactsRequest, ExportContactsResponse | ErrorSoapBodyResponse>(
 		'ExportContacts',
 		body
 	).then((response) => {

@@ -10,20 +10,20 @@ import { BooleanString } from '@zextras/carbonio-shell-ui';
 import { times } from 'lodash';
 import { HttpResponse } from 'msw';
 
-import { DLDisplayerController } from './dl-displayer-controller';
-import { screen, setupTest } from '../carbonio-ui-commons/test/test-setup';
+import { DLDisplayerController } from 'components/dl-displayer-controller';
 import {
 	EMPTY_DISPLAYER_NO_CONTACTS_HINT,
 	JEST_MOCKED_ERROR,
 	TESTID_SELECTORS
-} from '../constants/tests';
-import { DistributionList } from '../model/distribution-list';
+} from 'constants/tests';
+import { DistributionList } from 'model/distribution-list';
 import {
 	buildGetDistributionListResponse,
 	registerGetDistributionListHandler
-} from '../tests/msw-handlers/get-distribution-list';
-import { registerGetDistributionListMembersHandler } from '../tests/msw-handlers/get-distribution-list-members';
-import { buildSoapResponse, generateDistributionList } from '../tests/utils';
+} from 'tests/msw-handlers/get-distribution-list';
+import { registerGetDistributionListMembersHandler } from 'tests/msw-handlers/get-distribution-list-members';
+import { buildSoapResponse, generateDistributionList } from 'tests/utils';
+import { screen, setupTest } from '@test-setup';
 
 beforeEach(() => {
 	registerGetDistributionListMembersHandler();

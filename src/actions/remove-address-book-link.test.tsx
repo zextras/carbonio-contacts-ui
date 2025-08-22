@@ -7,14 +7,14 @@
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
+import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
 
-import { useActionRemoveAddressBookLink } from './remove-address-book-link';
-import { UIAction } from './types';
-import { FOLDER_VIEW } from '../carbonio-ui-commons/constants';
-import { generateFolder } from '../carbonio-ui-commons/test/mocks/folders/folders-generator';
-import { createSoapAPIInterceptor } from '../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { screen, setupHook } from '../carbonio-ui-commons/test/test-setup';
-import { FolderActionRequest } from '../network/api/folder-action';
+import { useActionRemoveAddressBookLink } from 'actions/remove-address-book-link';
+import { UIAction } from 'actions/types';
+import { FolderActionRequest } from 'network/api/folder-action';
+import { screen, setupHook } from '@test-setup';
+import { generateFolder } from '@test-utils/folders/folders-generator';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 describe('useActionRemoveAddressBookLink', () => {
 	it('should return an object with the specific data', () => {

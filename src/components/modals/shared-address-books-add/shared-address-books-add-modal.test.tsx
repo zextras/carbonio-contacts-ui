@@ -7,20 +7,16 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { act, waitFor, waitForElementToBeRemoved } from '@testing-library/react';
-import { ErrorSoapBodyResponse, JSNS } from '@zextras/carbonio-shell-ui';
+import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
+import { JSNS } from '@zextras/carbonio-ui-commons';
 import { times } from 'lodash';
 
-import { SharedAddressBooksAddModal } from './shared-address-books-add-modal';
-import { createSoapAPIInterceptor } from '../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import {
-	makeListItemsVisible,
-	screen,
-	setupTest,
-	within
-} from '../../../carbonio-ui-commons/test/test-setup';
-import { TESTID_SELECTORS } from '../../../constants/tests';
-import { CreateMountpointsRequest } from '../../../network/api/create-mountpoints';
-import { GetShareInfoRequest, GetShareInfoResponse } from '../../../network/api/get-share-info';
+import { SharedAddressBooksAddModal } from 'components/modals/shared-address-books-add/shared-address-books-add-modal';
+import { TESTID_SELECTORS } from 'constants/tests';
+import { CreateMountpointsRequest } from 'network/api/create-mountpoints';
+import { GetShareInfoRequest, GetShareInfoResponse } from 'network/api/get-share-info';
+import { makeListItemsVisible, screen, setupTest, within } from '@test-setup';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 const buildSharesInfo = ({
 	ownersCount = 5,
@@ -45,7 +41,7 @@ const registerDefaultGetShareInfoHandler = (sharesInfo: GetShareInfoResponse['sh
 	// Create an API interceptor that returns the list of shares
 	createSoapAPIInterceptor<GetShareInfoRequest, GetShareInfoResponse>('GetShareInfo', {
 		share: sharesInfo,
-		_jsns: JSNS.account
+		_jsns: JSNS.ACCOUNT
 	});
 };
 

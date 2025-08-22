@@ -15,27 +15,30 @@ import {
 	ChipItem,
 	Chip
 } from '@zextras/carbonio-design-system';
-import { soapFetch } from '@zextras/carbonio-shell-ui';
-import { TFunction } from 'i18next';
-import { filter, find, map, uniqBy, noop, reduce } from 'lodash';
-import { useTranslation } from 'react-i18next';
-
-import { DistributionListChip } from './distribution-list-chip';
-import { isValidEmail } from '../../carbonio-ui-commons/helpers/email-parser';
-import type { ContactAddressMap } from '../types/contact';
-import type { GetContactsRequest, GetContactsResponse } from '../types/soap';
-import { Loader } from './parts/loader';
-import { PasteContextMenu } from './parts/paste-context-menu';
-import { getContactLabel, searchContacts, tryToParseEmail } from './parts/utils';
-import { ContactInputItemInternalValue, ContactInputOptions, GroupContact } from './types';
-import { EDIT_ACTION_ID, CONTACT_TYPES } from '../../carbonio-ui-commons/integrations/constants';
 import {
+	isValidEmail,
+	EDIT_ACTION_ID,
+	CONTACT_TYPES,
 	ContactInputItem,
 	ContactInputProps,
 	UserContact,
 	DistributionListContact,
-	UserOrDL
-} from '../../carbonio-ui-commons/integrations/types';
+	UserOrDL,
+	GroupContact,
+	ContactInputItemInternalValue
+} from '@zextras/carbonio-ui-commons';
+import { legacySoapFetch } from '@zextras/carbonio-ui-soap-lib';
+import { TFunction } from 'i18next';
+import { filter, find, map, uniqBy, noop, reduce } from 'lodash';
+import { useTranslation } from 'react-i18next';
+
+import { DistributionListChip } from 'legacy/integrations/distribution-list-chip';
+import { Loader } from 'legacy/integrations/parts/loader';
+import { PasteContextMenu } from 'legacy/integrations/parts/paste-context-menu';
+import { getContactLabel, searchContacts, tryToParseEmail } from 'legacy/integrations/parts/utils';
+import { ContactInputOptions } from 'legacy/integrations/types';
+import type { ContactAddressMap } from 'legacy/types/contact';
+import type { GetContactsRequest, GetContactsResponse } from 'legacy/types/soap';
 
 const CHIP_TO_EXCLUDE = 'this-value-represent-a-chip-that-should-not-be-present';
 
@@ -81,6 +84,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	background = 'gray5',
 	dragAndDropEnabled = false,
 	orderedAccountIds = [],
+	chipLabelFactory,
 	inputRef: propsInputRef = null,
 	...rest
 }) => {
@@ -208,7 +212,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 
 	const getGroupMembers = useCallback(
 		(contactGroup: GroupContact): Promise<UserContact[]> =>
-			soapFetch<GetContactsRequest, GetContactsResponse>('GetContacts', {
+			legacySoapFetch<GetContactsRequest, GetContactsResponse>('GetContacts', {
 				_jsns: 'urn:zimbraMail',
 				cn: {
 					id: contactGroup.groupId
@@ -271,13 +275,15 @@ const ContactInputCore: FC<ContactInputProps> = ({
 
 			return {
 				id: selectedOption.id,
-				label: getContactLabel(selectedOption),
+				label: chipLabelFactory
+					? chipLabelFactory(selectedOption, getContactLabel(selectedOption))
+					: getContactLabel(selectedOption),
 				value: selectedOption,
 				error: !isEmailValid,
 				actions: [editAction]
 			};
 		},
-		[defaults, editChip, getGroupMembers, handleChipOnChange, t]
+		[defaults, editChip, getGroupMembers, handleChipOnChange, chipLabelFactory, t]
 	);
 
 	const onExpandDistributionList = useCallback(

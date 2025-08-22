@@ -9,15 +9,15 @@ import React, { ReactNode, useCallback, useMemo } from 'react';
 import { includes } from 'lodash';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-import ContactPreviewContent from './contact-preview-content';
-import { ActionTagButton } from '../../../components/action-tag-button';
-import { Displayer } from '../../../components/displayer/displayer';
-import { DisplayerActionIconButton } from '../../../components/displayer/displayer-action-icon-button';
-import { DisplayerActionsHeader } from '../../../components/displayer/displayer-actions-header';
-import { SHOW_TAG_ACTION } from '../../../constants/actions';
-import { useContactPreviewActions } from '../../../views/contacts/actions/use-contact-preview-actions';
-import { useDisplayName } from '../../hooks/use-display-name';
-import { Contact } from '../../types/contact';
+import ContactPreviewContent from 'legacy/views/preview/contact-preview-content';
+import { ActionTagButton } from 'components/action-tag-button';
+import { Displayer } from 'components/displayer/displayer';
+import { DisplayerActionIconButton } from 'components/displayer/displayer-action-icon-button';
+import { DisplayerActionsHeader } from 'components/displayer/displayer-actions-header';
+import { SHOW_TAG_ACTION } from 'constants/actions';
+import { useContactPreviewActions } from 'views/contacts/actions/use-contact-preview-actions';
+import { useDisplayName } from 'legacy/hooks/use-display-name';
+import { Contact } from 'legacy/types/contact';
 
 export const ContactPreviewPanel = ({ contact }: { contact: Contact }): React.JSX.Element => {
 	const urlLocation = useLocation();

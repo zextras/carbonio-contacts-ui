@@ -5,16 +5,16 @@
  */
 import { faker } from '@faker-js/faker';
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
+import { FOLDERS } from '@zextras/carbonio-ui-commons';
 import { times } from 'lodash';
 
 import {
 	createMountpoints,
 	CreateMountpointsRequest,
 	CreateMountpointsResponse
-} from './create-mountpoints';
-import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
-import { createSoapAPIInterceptor } from '../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { ShareInfo } from '../../model/share-info';
+} from 'network/api/create-mountpoints';
+import { ShareInfo } from 'model/share-info';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 describe('createMountpoints', () => {
 	it('should raise an exception if the response contains a Fault', () => {

@@ -15,8 +15,8 @@ import {
 } from '@zextras/carbonio-design-system';
 import { filter, find, map, omit, omitBy, reduce, set } from 'lodash';
 
-import { op } from './form-reducer';
-import FormSection from './form-section';
+import { op } from 'legacy/views/edit/form-reducer';
+import FormSection from 'legacy/views/edit/form-section';
 
 export const ContactEditorRow = ({ children, wrap }) => (
 	<Row

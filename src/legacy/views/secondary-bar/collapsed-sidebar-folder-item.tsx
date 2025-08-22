@@ -7,13 +7,11 @@
 import React, { useMemo } from 'react';
 
 import { t } from '@zextras/carbonio-shell-ui';
+import { ZIMBRA_STANDARD_COLORS, isLink, Folder } from '@zextras/carbonio-ui-commons';
 
-import { CollapsedSideBarItem } from './collapsed-sidebar-item';
-import { ZIMBRA_STANDARD_COLORS } from '../../../carbonio-ui-commons/constants';
-import { isLink } from '../../../carbonio-ui-commons/helpers/folders';
-import { Folder } from '../../../carbonio-ui-commons/types';
-import { CONTACTS_ROUTE } from '../../../constants';
-import { getFolderTranslatedName } from '../../utils/helpers';
+import { CollapsedSideBarItem } from 'legacy/views/secondary-bar/collapsed-sidebar-item';
+import { CONTACTS_ROUTE } from 'constants/index';
+import { getFolderTranslatedName } from 'legacy/utils/helpers';
 
 const folderIconName: Record<number, string> = {
 	7: 'PersonOutline',

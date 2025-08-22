@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { normalizeSyncContactsFromSoap } from './normalize-contact-from-soap';
+import { normalizeSyncContactsFromSoap } from 'legacy/utils/normalizations/normalize-contact-from-soap';
 
 describe('normalizeContactFromSoap', () => {
 	describe('normalizeSyncContactFromSoap', () => {

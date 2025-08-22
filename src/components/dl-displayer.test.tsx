@@ -9,13 +9,13 @@ import { faker } from '@faker-js/faker';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { times } from 'lodash';
 
-import { DistributionListDisplayer } from './dl-displayer';
-import { OpenMailComposerIntegratedFunction } from '../actions/send-email';
-import { screen, setupTest, within } from '../carbonio-ui-commons/test/test-setup';
-import { EDIT_DL_BOARD_ID } from '../constants';
-import { TESTID_SELECTORS } from '../constants/tests';
-import { DistributionList } from '../model/distribution-list';
-import { generateDistributionList } from '../tests/utils';
+import { DistributionListDisplayer } from 'components/dl-displayer';
+import { OpenMailComposerIntegratedFunction } from 'actions/send-email';
+import { EDIT_DL_BOARD_ID } from 'constants/index';
+import { TESTID_SELECTORS } from 'constants/tests';
+import { DistributionList } from 'model/distribution-list';
+import { generateDistributionList } from 'tests/utils';
+import { screen, setupTest, within } from '@test-setup';
 
 describe('Distribution List displayer', () => {
 	it('should show the display name in the title', async () => {

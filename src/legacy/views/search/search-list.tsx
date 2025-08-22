@@ -11,10 +11,10 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { ContactGroupListItem } from '../../../views/contact-groups/list/contact-group-list-item';
-import { ContactOrGroup } from '../../types/contact';
-import { isGroup } from '../../utils/helpers';
-import { ContactListItem } from '../app/folder-panel/contact-list-item';
+import { ContactGroupListItem } from 'views/contact-groups/list/contact-group-list-item';
+import { ContactOrGroup } from 'legacy/types/contact';
+import { isGroup } from 'legacy/utils/helpers';
+import { ContactListItem } from 'legacy/views/app/folder-panel/contact-list-item';
 
 const BorderContainer = styled(Container)`
 	border-bottom: 0.0625rem solid ${({ theme }): string => theme.palette.gray2.regular};
@@ -25,21 +25,26 @@ type SearchListProps = {
 	contacts: Array<ContactOrGroup>;
 	onListBottom?: () => void;
 	setShowAdvanceFilters: (show: boolean) => void;
+	query?: Array<any>;
 };
 export const SearchList = ({
 	contacts,
 	onListBottom,
-	setShowAdvanceFilters
+	setShowAdvanceFilters,
+	query = []
 }: SearchListProps): React.JSX.Element => {
 	const [t] = useTranslation();
 	const { itemId } = useParams<{ itemId: string }>();
 
 	const displayerTitle = useMemo(() => {
-		if (contacts.length === 0) {
-			t('displayer.search_list_title1', 'It looks like there are no results. Keep searching!');
+		if (contacts.length === 0 && query.length > 0) {
+			return t(
+				'displayer.search_list_title1',
+				'It looks like there are no results. Keep searching!'
+			);
 		}
 		return null;
-	}, [t, contacts.length]);
+	}, [t, contacts.length, query.length]);
 
 	const listItems = useMemo(
 		() =>

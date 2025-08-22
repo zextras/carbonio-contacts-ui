@@ -7,7 +7,7 @@
 import { CreateSnackbarFn } from '@zextras/carbonio-design-system';
 import { TFunction } from 'i18next';
 
-import { apiClient } from '../../network/api-client';
+import { apiClient } from 'network/api-client';
 
 type CreateContactContextType = {
 	messageId: string;

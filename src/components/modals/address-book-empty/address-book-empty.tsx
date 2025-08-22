@@ -13,13 +13,12 @@ import {
 	Text,
 	useSnackbar
 } from '@zextras/carbonio-design-system';
+import { isTrash, Folder } from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 
-import { isTrash } from '../../../carbonio-ui-commons/helpers/folders';
-import { Folder } from '../../../carbonio-ui-commons/types/folder';
-import { TIMEOUTS } from '../../../constants';
-import { getFolderTranslatedNameByName } from '../../../legacy/utils/helpers';
-import { apiClient } from '../../../network/api-client';
+import { TIMEOUTS } from 'constants/index';
+import { getFolderTranslatedNameByName } from 'legacy/utils/helpers';
+import { apiClient } from 'network/api-client';
 
 export type AddressBookEmptyModalProps = {
 	addressBook: Folder;

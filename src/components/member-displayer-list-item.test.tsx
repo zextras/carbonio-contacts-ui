@@ -7,11 +7,16 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import * as shell from '@zextras/carbonio-shell-ui';
+import * as clipboard from '@zextras/carbonio-ui-commons';
 
-import { MemberDisplayerListItemComponent } from './member-displayer-list-item';
-import { screen, setupTest, within } from '../carbonio-ui-commons/test/test-setup';
-import * as clipboard from '../carbonio-ui-commons/utils/clipboard';
-import { TESTID_SELECTORS } from '../constants/tests';
+import { MemberDisplayerListItemComponent } from 'components/member-displayer-list-item';
+import { TESTID_SELECTORS } from 'constants/tests';
+import { screen, setupTest, within } from '@test-setup';
+
+jest.mock('@zextras/carbonio-ui-commons', () => ({
+	...jest.requireActual('@zextras/carbonio-ui-commons'),
+	copyToClipboard: jest.fn()
+}));
 
 describe('Member displayer item', () => {
 	it('should show the email of the member', () => {

@@ -8,37 +8,38 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { act, waitFor } from '@testing-library/react';
-import { ErrorSoapResponse, JSNS } from '@zextras/carbonio-shell-ui';
+import { ErrorSoapResponse } from '@zextras/carbonio-shell-ui';
+import { JSNS } from '@zextras/carbonio-ui-commons';
 import { times } from 'lodash';
 import { HttpResponse } from 'msw';
 import { Link } from 'react-router-dom';
 
-import { DistributionListsView } from './distribution-lists-view';
-import { screen, setupTest, within } from '../../carbonio-ui-commons/test/test-setup';
-import { ROUTES, ROUTES_INTERNAL_PARAMS } from '../../constants';
+import { DistributionListsView } from 'views/distribution-list/distribution-lists-view';
+import { ROUTES, ROUTES_INTERNAL_PARAMS } from 'constants/index';
 import {
 	EMPTY_DISPLAYER_NO_CONTACTS_HINT,
 	EMPTY_DISTRIBUTION_LIST_HINT,
 	JEST_MOCKED_ERROR,
 	TESTID_SELECTORS
-} from '../../constants/tests';
-import { DistributionList } from '../../model/distribution-list';
-import { GetAccountDistributionListsResponse } from '../../network/api/get-account-distribution-lists';
-import { GetDistributionListResponse } from '../../network/api/get-distribution-list';
-import { GetDistributionListMembersResponse } from '../../network/api/get-distribution-list-members';
-import { registerGetAccountDistributionListsHandler } from '../../tests/msw-handlers/get-account-distribution-lists';
+} from 'constants/tests';
+import { DistributionList } from 'model/distribution-list';
+import { GetAccountDistributionListsResponse } from 'network/api/get-account-distribution-lists';
+import { GetDistributionListResponse } from 'network/api/get-distribution-list';
+import { GetDistributionListMembersResponse } from 'network/api/get-distribution-list-members';
+import { registerGetAccountDistributionListsHandler } from 'tests/msw-handlers/get-account-distribution-lists';
 import {
 	buildGetDistributionListResponse,
 	registerGetDistributionListHandler
-} from '../../tests/msw-handlers/get-distribution-list';
-import { registerGetDistributionListMembersHandler } from '../../tests/msw-handlers/get-distribution-list-members';
+} from 'tests/msw-handlers/get-distribution-list';
+import { registerGetDistributionListMembersHandler } from 'tests/msw-handlers/get-distribution-list-members';
 import {
 	buildSoapError,
 	buildSoapResponse,
 	generateDistributionList,
 	generateDistributionLists
-} from '../../tests/utils';
-import GroupsAppView from '../distribution-list-view';
+} from 'tests/utils';
+import GroupsAppView from 'views/distribution-list-view';
+import { screen, setupTest, within } from '@test-setup';
 
 describe('Distribution Lists View', () => {
 	it('should show the list of distribution lists', async () => {
@@ -96,7 +97,7 @@ describe('Distribution Lists View', () => {
 			return HttpResponse.json(
 				buildSoapResponse<GetAccountDistributionListsResponse>({
 					GetAccountDistributionListsResponse: {
-						_jsns: JSNS.account,
+						_jsns: JSNS.ACCOUNT,
 						dl: resData.map((item) => ({
 							id: item.id,
 							name: item.email,
@@ -267,7 +268,7 @@ describe('Distribution Lists View', () => {
 				return HttpResponse.json(
 					buildSoapResponse<GetDistributionListMembersResponse>({
 						GetDistributionListMembersResponse: {
-							_jsns: JSNS.account,
+							_jsns: JSNS.ACCOUNT,
 							dlm: data.map((item) => ({ _content: item })),
 							more: false,
 							total: data.length

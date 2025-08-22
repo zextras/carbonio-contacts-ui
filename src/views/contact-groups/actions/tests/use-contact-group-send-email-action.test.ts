@@ -6,10 +6,10 @@
 import { faker } from '@faker-js/faker';
 import * as shell from '@zextras/carbonio-shell-ui';
 
-import { setupHook } from '../../../../carbonio-ui-commons/test/test-setup';
-import { SEND_EMAIL_ACTION } from '../../../../constants/actions';
-import { buildContactGroup, buildMembers } from '../../../../tests/model-builder';
-import { useContactGroupSendEmailAction } from '../use-contact-group-send-email-action';
+import { SEND_EMAIL_ACTION } from 'constants/actions';
+import { buildContactGroup, buildMembers } from 'tests/model-builder';
+import { useContactGroupSendEmailAction } from 'views/contact-groups/actions/use-contact-group-send-email-action';
+import { setupHook } from '@test-setup';
 
 describe('useContactGroupSendEmailAction', () => {
 	const membersCount = faker.number.int({ min: 1, max: 42 });

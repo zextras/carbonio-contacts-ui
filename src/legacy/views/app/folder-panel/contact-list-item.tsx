@@ -6,17 +6,17 @@
 import React, { useCallback, useMemo, DragEvent, ReactNode } from 'react';
 
 import { Drag } from '@zextras/carbonio-design-system';
+import { useTags } from '@zextras/carbonio-ui-commons';
 import { useNavigate } from 'react-router-dom';
 
-import { ItemContent } from './item-content';
-import { useTags } from '../../../../carbonio-ui-commons/store/zustand/tags';
-import { ListActionIconButton } from '../../../../components/list/list-action-icon-button';
-import { ListItemActionsWrapper } from '../../../../components/list/list-item-actions-wrapper';
-import { ListItemAvatar } from '../../../../components/list/list-item-avatar';
-import { useContactContextualMenuActions } from '../../../../views/contacts/actions/use-contact-contextual-menu-actions';
-import { useContactHoverActions } from '../../../../views/contacts/actions/use-contact-hover-actions';
-import { getTagsArray } from '../../../helpers/tags';
-import { Contact } from '../../../types/contact';
+import { ItemContent } from 'legacy/views/app/folder-panel/item-content';
+import { ListActionIconButton } from 'components/list/list-action-icon-button';
+import { ListItemActionsWrapper } from 'components/list/list-item-actions-wrapper';
+import { ListItemAvatar } from 'components/list/list-item-avatar';
+import { useContactContextualMenuActions } from 'views/contacts/actions/use-contact-contextual-menu-actions';
+import { useContactHoverActions } from 'views/contacts/actions/use-contact-hover-actions';
+import { getTagsArray } from 'legacy/helpers/tags';
+import { Contact } from 'legacy/types/contact';
 
 type ContactListItemProps = {
 	item: Contact;

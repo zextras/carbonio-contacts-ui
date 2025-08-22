@@ -9,8 +9,8 @@ import React from 'react';
 import { ModalManager } from '@zextras/carbonio-design-system';
 import { Navigate, Route, Routes, useParams } from 'react-router-dom';
 
-import { ROUTES, ROUTES_INTERNAL_PARAMS } from '../constants';
-import { DistributionListsView } from './distribution-list/distribution-lists-view';
+import { ROUTES, ROUTES_INTERNAL_PARAMS } from 'constants/index';
+import { DistributionListsView } from 'views/distribution-list/distribution-lists-view';
 
 const AppView = (): React.JSX.Element => {
 	const { filter } = useParams();

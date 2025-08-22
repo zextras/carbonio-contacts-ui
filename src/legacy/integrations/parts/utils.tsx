@@ -5,23 +5,25 @@
  */
 import React from 'react';
 
-import { soapFetch } from '@zextras/carbonio-shell-ui';
+import {
+	parseEmail,
+	CONTACT_TYPES,
+	ContactInputItemInternalValue,
+	GroupContact
+} from '@zextras/carbonio-ui-commons';
+import { legacySoapFetch } from '@zextras/carbonio-ui-soap-lib';
 import { map, trim, unescape } from 'lodash';
 
-import { parseEmail } from '../../../carbonio-ui-commons/helpers/email-parser';
+import { Hint } from 'legacy/integrations/parts/hint';
+import { HintGroup } from 'legacy/integrations/parts/hint-group';
 import {
-	GroupContact,
 	ContactInputOptions,
 	RemoteGroupContact,
 	RemoteDistributionListContact,
 	RemoteContactResponse,
-	ContactInputGroup,
-	ContactInputItemInternalValue
-} from '../types';
-import { Hint } from './hint';
-import { HintGroup } from './hint-group';
-import { CONTACT_TYPES } from '../../../carbonio-ui-commons/integrations/constants';
-import type { FullAutocompleteRequest, SearchContactsResponse } from '../../types/contact';
+	ContactInputGroup
+} from 'legacy/integrations/types';
+import type { FullAutocompleteRequest, SearchContactsResponse } from 'legacy/types/contact';
 
 export function isContactGroup(contact: {
 	isGroup?: boolean;
@@ -123,7 +125,7 @@ export const searchContacts = (
 	textToSearch: string,
 	orderedAccountIds: Array<string>
 ): Promise<Array<ContactInputOptions>> =>
-	soapFetch<FullAutocompleteRequest, SearchContactsResponse>('FullAutocomplete', {
+	legacySoapFetch<FullAutocompleteRequest, SearchContactsResponse>('FullAutocomplete', {
 		...(orderedAccountIds?.length > 0 && {
 			orderedAccountIds: orderedAccountIds.toString()
 		}),

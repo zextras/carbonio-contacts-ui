@@ -3,10 +3,11 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { JSNS, soapFetch } from '@zextras/carbonio-shell-ui';
+import { JSNS } from '@zextras/carbonio-ui-commons';
+import { legacySoapFetch } from '@zextras/carbonio-ui-soap-lib';
 
-import { GenericSoapPayload } from './types';
-import { SoapFault } from '../../types/utils';
+import { GenericSoapPayload } from 'network/api/types';
+import { SoapFault } from 'types/utils';
 
 export type DistributionListActionOperationMembers = 'addMembers' | 'removeMembers';
 export type DistributionListActionOperationModify = 'modify';
@@ -27,7 +28,7 @@ type MappedAttributes = NonNullable<
 
 type AttributesArray = Array<MappedAttributes>;
 
-export interface DistributionListActionRequest extends GenericSoapPayload<typeof JSNS.account> {
+export interface DistributionListActionRequest extends GenericSoapPayload<typeof JSNS.ACCOUNT> {
 	dl: {
 		by: 'name';
 		_content: string;
@@ -45,13 +46,13 @@ export interface DistributionListActionRequest extends GenericSoapPayload<typeof
 		  };
 }
 
-export type DistributionListActionResponse = GenericSoapPayload<typeof JSNS.account>;
+export type DistributionListActionResponse = GenericSoapPayload<typeof JSNS.ACCOUNT>;
 
-export type BatchDistributionListActionRequest = GenericSoapPayload<typeof JSNS.all> & {
+export type BatchDistributionListActionRequest = GenericSoapPayload<typeof JSNS.ALL> & {
 	DistributionListActionRequest: Array<DistributionListActionRequest>;
 };
 
-export type BatchDistributionListActionResponse = GenericSoapPayload<typeof JSNS.all> & {
+export type BatchDistributionListActionResponse = GenericSoapPayload<typeof JSNS.ALL> & {
 	DistributionListActionResponse?: Array<DistributionListActionResponse>;
 	Fault?: Array<SoapFault>;
 };
@@ -89,7 +90,7 @@ export const distributionListAction = ({
 				op: 'modify',
 				a: attributes
 			},
-			_jsns: JSNS.account,
+			_jsns: JSNS.ACCOUNT,
 			requestId: 'modify'
 		});
 	}
@@ -104,7 +105,7 @@ export const distributionListAction = ({
 				op: 'addMembers',
 				dlm: membersToAdd.map((member) => ({ _content: member }))
 			},
-			_jsns: JSNS.account,
+			_jsns: JSNS.ACCOUNT,
 			requestId: 'addMembers'
 		});
 	}
@@ -119,7 +120,7 @@ export const distributionListAction = ({
 				op: 'removeMembers',
 				dlm: membersToRemove.map((member) => ({ _content: member }))
 			},
-			_jsns: JSNS.account,
+			_jsns: JSNS.ACCOUNT,
 			requestId: 'removeMembers'
 		});
 	}
@@ -128,11 +129,11 @@ export const distributionListAction = ({
 		return Promise.resolve();
 	}
 
-	return soapFetch<BatchDistributionListActionRequest, BatchDistributionListActionResponse>(
+	return legacySoapFetch<BatchDistributionListActionRequest, BatchDistributionListActionResponse>(
 		'Batch',
 		{
 			DistributionListActionRequest: actionRequests,
-			_jsns: JSNS.all
+			_jsns: JSNS.ALL
 		}
 	).then((response) => {
 		if ('Fault' in response) {

@@ -6,25 +6,26 @@
 import React from 'react';
 
 import { screen } from '@testing-library/react';
-
-import { FolderTreeSelector, FolderTreeSelectorProps } from './folder-tree-selector';
-import { FOLDER_VIEW } from '../../carbonio-ui-commons/constants';
 import {
+	FOLDER_VIEW,
 	getFolderOwnerAccountName,
 	isRoot,
 	isTrash,
-	isTrashed
-} from '../../carbonio-ui-commons/helpers/folders';
-import {
+	isTrashed,
 	getFolder,
 	getFoldersArrayByRoot,
-	getRootsMap
-} from '../../carbonio-ui-commons/store/zustand/folder';
-import { populateFoldersStore } from '../../carbonio-ui-commons/test/mocks/store/folders';
-import { makeListItemsVisible, setupTest } from '../../carbonio-ui-commons/test/test-setup';
-import { isEmailedContacts } from '../../helpers/folders';
-import { getFoldersArray } from '../../tests/utils';
-import { FOLDERS } from '../../carbonio-ui-commons/constants/folders';
+	getRootsMap,
+	FOLDERS
+} from '@zextras/carbonio-ui-commons';
+
+import {
+	FolderTreeSelector,
+	FolderTreeSelectorProps
+} from 'components/folder-tree-selector/folder-tree-selector';
+import { isEmailedContacts } from 'helpers/folders';
+import { getFoldersArray } from 'tests/utils';
+import { makeListItemsVisible, setupTest } from '@test-setup';
+import { populateFoldersStore } from '@test-utils/store/folders';
 
 describe('Folder selector', () => {
 	test('The selector is visible', () => {

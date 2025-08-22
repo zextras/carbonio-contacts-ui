@@ -6,12 +6,12 @@
 import React, { FC, useCallback, useMemo } from 'react';
 
 import { Checkbox, Row } from '@zextras/carbonio-design-system';
+import { getFolderIdParts } from '@zextras/carbonio-ui-commons';
 import { last } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { getFolderIdParts } from '../../../carbonio-ui-commons/helpers/folders';
-import { getFolderTranslatedName } from '../../../legacy/utils/helpers';
-import { ShareInfo } from '../../../model/share-info';
+import { getFolderTranslatedName } from 'legacy/utils/helpers';
+import { ShareInfo } from 'model/share-info';
 
 export type SharesListItemProps = {
 	share: ShareInfo;

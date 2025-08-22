@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { getMembersPartition } from './use-update-distribution-list';
+import { getMembersPartition } from 'hooks/use-update-distribution-list';
 
 describe('getMembersPartition', () => {
 	it("should return an object with empty members if the two parameters don't contain any value", () => {

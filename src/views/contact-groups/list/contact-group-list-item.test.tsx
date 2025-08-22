@@ -7,13 +7,13 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import * as shell from '@zextras/carbonio-shell-ui';
+import { FOLDERS } from '@zextras/carbonio-ui-commons';
 
-import { ContactGroupListItem } from './contact-group-list-item';
-import { FOLDERS } from '../../../carbonio-ui-commons/constants/folders';
-import { populateFoldersStore } from '../../../carbonio-ui-commons/test/mocks/store/folders';
-import { screen, setupTest } from '../../../carbonio-ui-commons/test/test-setup';
-import { TESTID_SELECTORS } from '../../../constants/tests';
-import { buildContactGroup, buildMembers } from '../../../tests/model-builder';
+import { screen, setupTest } from '@test-setup';
+import { populateFoldersStore } from '@test-utils/store/folders';
+import { TESTID_SELECTORS } from 'constants/tests';
+import { buildContactGroup, buildMembers } from 'tests/model-builder';
+import { ContactGroupListItem } from 'views/contact-groups/list/contact-group-list-item';
 
 jest.mock('react-router-dom', () => ({
 	...jest.requireActual('react-router-dom'),
@@ -23,7 +23,6 @@ jest.mock('react-router-dom', () => ({
 describe('Contact group list item', () => {
 	beforeEach(() => {
 		populateFoldersStore();
-		jest.clearAllMocks();
 	});
 	describe('Actions', () => {
 		beforeAll(() => {

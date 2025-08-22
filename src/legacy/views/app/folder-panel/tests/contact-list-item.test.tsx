@@ -9,9 +9,9 @@ import { screen, fireEvent, act } from '@testing-library/react';
 import { getAction } from '@zextras/carbonio-shell-ui';
 import { useNavigate } from 'react-router-dom';
 
-import { setupTest, UserEvent } from '../../../../../carbonio-ui-commons/test/test-setup';
-import { Contact } from '../../../../types/contact';
-import { ContactListItem } from '../contact-list-item';
+import { setupTest, UserEvent } from '@test-setup';
+import { Contact } from 'legacy/types/contact';
+import { ContactListItem } from 'legacy/views/app/folder-panel/contact-list-item';
 
 jest.mock('@zextras/carbonio-shell-ui', () => ({
 	useTags: jest.fn(() => []),
@@ -66,9 +66,6 @@ describe('ContactListItem', () => {
 	beforeAll(() => {
 		const mailTo = { id: 'mail-to', label: 'action.send_msg', execute: jest.fn() };
 		(getAction as jest.Mock).mockReturnValue([mailTo, true]);
-	});
-	afterEach(() => {
-		jest.clearAllMocks();
 	});
 
 	it('renders the contact item with avatar and content', () => {

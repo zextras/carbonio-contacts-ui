@@ -6,17 +6,17 @@
 import React from 'react';
 
 import { act, fireEvent, waitFor } from '@testing-library/react';
+import { useRunSearchIntegration, useTagStore } from '@zextras/carbonio-ui-commons';
 import { HttpResponse } from 'msw';
 
-import { useRunSearchIntegration } from '../../../../carbonio-ui-commons/integrations/search/use-run-search';
-import { useTagStore } from '../../../../carbonio-ui-commons/store/zustand/tags';
-import { createAPIInterceptor } from '../../../../carbonio-ui-commons/test/mocks/network/msw/create-api-interceptor';
-import { buildSoapResponse } from '../../../../carbonio-ui-commons/test/mocks/utils/soap';
-import { screen, setupTest } from '../../../../carbonio-ui-commons/test/test-setup';
-import { TESTID_SELECTORS, TIMERS } from '../../../../constants/tests';
-import { TagsAccordion } from '../tags-accordion';
+import { TESTID_SELECTORS, TIMERS } from 'constants/tests';
+import { TagsAccordion } from 'legacy/views/secondary-bar/tags-accordion';
+import { screen, setupTest } from '@test-setup';
+import { createAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
+import { buildSoapResponse } from '@test-utils/utils/soap';
 
-jest.mock('../../../../carbonio-ui-commons/integrations/search/use-run-search', () => ({
+jest.mock('@zextras/carbonio-ui-commons', () => ({
+	...jest.requireActual('@zextras/carbonio-ui-commons'),
 	useRunSearchIntegration: jest.fn()
 }));
 

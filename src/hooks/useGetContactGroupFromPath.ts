@@ -6,8 +6,8 @@
 
 import { useParams } from 'react-router-dom';
 
-import { useContactGroupById } from '../legacy/store/contacts';
-import { ContactGroup } from '../model/contact-group';
+import { useContactGroupById } from 'legacy/store/contacts';
+import { ContactGroup } from 'model/contact-group';
 
 export const useGetContactGroupFromPath = (): ContactGroup | undefined => {
 	const { id: contactGroupId } = useParams<{ id: string; folderId: string }>();

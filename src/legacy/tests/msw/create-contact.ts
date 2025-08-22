@@ -5,21 +5,22 @@
  */
 
 import { faker } from '@faker-js/faker';
-import { JSNS, SoapResponse } from '@zextras/carbonio-shell-ui';
+import { SoapResponse } from '@zextras/carbonio-shell-ui';
+import { JSNS } from '@zextras/carbonio-ui-commons';
 import { http, HttpResponse, HttpResponseResolver } from 'msw';
 
-import { getSetupServer } from '../../../carbonio-ui-commons/test/jest-setup';
-import { GenericSoapPayload } from '../../../network/api/types';
-import { buildSoapError, buildSoapResponse } from '../../../tests/utils';
+import { GenericSoapPayload } from 'network/api/types';
+import { buildSoapError, buildSoapResponse } from 'tests/utils';
+import { getSetupServer } from '@jest-setup';
 
-interface CreateContactRequest extends GenericSoapPayload<typeof JSNS.mail> {
+interface CreateContactRequest extends GenericSoapPayload<typeof JSNS.MAIL> {
 	cn: {
 		l: string;
 		a: string;
 	};
 }
 
-interface CreateContactResponse extends GenericSoapPayload<typeof JSNS.mail> {
+interface CreateContactResponse extends GenericSoapPayload<typeof JSNS.MAIL> {
 	cn: [
 		{
 			l: string;
@@ -48,7 +49,7 @@ export const registerCreateContactHandler = (
 			return HttpResponse.json(
 				buildSoapResponse<CreateContactResponse>({
 					CreateContactResponse: {
-						_jsns: 'urn:zimbraMail',
+						_jsns: JSNS.MAIL,
 						cn: [
 							{
 								id: contactId ?? faker.string.uuid(),
