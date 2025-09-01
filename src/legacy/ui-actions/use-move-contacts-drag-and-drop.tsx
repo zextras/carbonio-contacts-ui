@@ -115,6 +115,9 @@ export const useMoveContactsDragAndDrop = (): MoveContactsAction => {
 				createModal(
 					{
 						id: modalId,
+                        onClose: () => {
+                            closeModal(modalId);
+                        },
 						children: (
 							<ContactMoveModal
 								contacts={contacts}

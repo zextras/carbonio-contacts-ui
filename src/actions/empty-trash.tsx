@@ -60,6 +60,9 @@ export const useActionEmptyTrash = (): EmptyTrashAction => {
 				{
 					id: modalId,
 					maxHeight: '90vh',
+                    onClose: () => {
+                        closeModal(modalId);
+                    },
 					children: (
 						<AddressBookEmptyModal
 							addressBook={addressBook}
