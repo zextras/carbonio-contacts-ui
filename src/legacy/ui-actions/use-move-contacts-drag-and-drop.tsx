@@ -12,11 +12,11 @@ import { useTranslation } from 'react-i18next';
 
 import { UIAction } from 'actions/types';
 import { ContactMoveModal } from 'components/modals/contact-move';
-import { TIMEOUTS } from 'constants/index';
 import { MOVE_ACTION } from 'constants/actions';
-import { apiClient } from 'network/api-client';
+import { TIMEOUTS } from 'constants/index';
 import { ContactOrGroup } from 'legacy/types/contact';
 import { evaluateParentIds } from 'legacy/utils/helpers';
+import { apiClient } from 'network/api-client';
 
 export type MoveContactsAction = UIAction<
 	{ contacts?: Array<ContactOrGroup>; newParentAddressBook?: Folder },
@@ -115,9 +115,9 @@ export const useMoveContactsDragAndDrop = (): MoveContactsAction => {
 				createModal(
 					{
 						id: modalId,
-                        onClose: () => {
-                            closeModal(modalId);
-                        },
+						onClose: () => {
+							closeModal(modalId);
+						},
 						children: (
 							<ContactMoveModal
 								contacts={contacts}

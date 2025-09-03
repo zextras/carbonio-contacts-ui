@@ -58,9 +58,9 @@ export const useActionDeleteAddressBook = (): DeleteAddressBookAction => {
 				{
 					id: modalId,
 					maxHeight: '90vh',
-                    onClose: () => {
-                        closeModal(modalId);
-                    },
+					onClose: () => {
+						closeModal(modalId);
+					},
 					children: (
 						<AddressBookDeleteModal
 							addressBook={addressBook}

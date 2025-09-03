@@ -26,9 +26,9 @@ export const useActionAddSharedAddressBooks = (): AddSharedAddressBooksAction =>
 			{
 				id: modalId,
 				maxHeight: '90vh',
-                onClose: () => {
-                    closeModal(modalId);
-                },
+				onClose: () => {
+					closeModal(modalId);
+				},
 				children: <SharedAddressBooksAddModal onClose={(): void => closeModal(modalId)} />
 			},
 			true

@@ -60,9 +60,9 @@ export const useActionEmptyAddressBook = (): EmptyAddressBookAction => {
 				{
 					id: modalId,
 					maxHeight: '90vh',
-                    onClose: () => {
-                        closeModal(modalId);
-                    },
+					onClose: () => {
+						closeModal(modalId);
+					},
 					children: (
 						<AddressBookEmptyModal
 							addressBook={addressBook}

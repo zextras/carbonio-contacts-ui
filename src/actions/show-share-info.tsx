@@ -45,9 +45,9 @@ export const useActionShowShareInfo = (): ShowShareInfoAction => {
 				{
 					id: modalId,
 					maxHeight: '90vh',
-                    onClose: () => {
-                        closeModal(modalId);
-                    },
+					onClose: () => {
+						closeModal(modalId);
+					},
 					children: (
 						<ShareInfoModal addressBook={addressBook} onClose={(): void => closeModal(modalId)} />
 					)
