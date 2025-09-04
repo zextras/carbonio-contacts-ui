@@ -23,7 +23,8 @@ import {
 	isRoot,
 	isSharedAccountFolder,
 	isTrash,
-	useFoldersMap
+	useFoldersMap,
+	isValidEmail
 } from '@zextras/carbonio-ui-commons';
 import { filter, find, map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
@@ -154,10 +155,19 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 		const hasName = contact?.firstName || contact?.lastName;
 		const hasEmail = hasAtLeastOneValue(contact?.email);
 
+		const hasValidEmail = (emails) =>
+			emails &&
+			Object.values(emails).some((entry) =>
+				Object.values(entry).some((val) => val && isValidEmail(val))
+			);
+
+		const validEmail = hasValidEmail(contact?.email);
+
 		if (editId && editId !== 'new' && existingContact) {
-			return Object.keys(fieldsToUpdate).length < 1 || !hasName || !hasEmail;
+			return Object.keys(fieldsToUpdate).length < 1 || !hasName || !hasEmail || !validEmail;
 		}
-		return !hasName || !hasEmail;
+
+		return !hasName || !hasEmail || !validEmail;
 	}, [contact, editId, existingContact, fieldsToUpdate]);
 
 	const title = useMemo(
@@ -379,7 +389,7 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 					name="email"
 					label={`${t('section.title.mail', 'E-mail address')}*`}
 					subFields={['mail']}
-					fieldLabels={`${t('label.mail', 'E-mail')}*`}
+					fieldLabels={[t('label.email', 'E-mail')]}
 					value={contact.email}
 					dispatch={dispatch}
 				/>

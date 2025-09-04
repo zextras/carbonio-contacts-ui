@@ -9,12 +9,12 @@ import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 import { FOLDERS } from '@zextras/carbonio-ui-commons';
 
-import EditView from 'legacy/views/edit/edit-view';
-import { registerCreateContactHandler } from 'legacy/tests/msw/create-contact';
-import { CreateContactRequest } from 'legacy/types/soap';
 import { screen, setupTest } from '@test-setup';
 import { generateFolder } from '@test-utils/folders/folders-generator';
 import { populateFoldersStore } from '@test-utils/store/folders';
+import { registerCreateContactHandler } from 'legacy/tests/msw/create-contact';
+import { CreateContactRequest } from 'legacy/types/soap';
+import EditView from 'legacy/views/edit/edit-view';
 
 describe('Edit view', () => {
 	it('should not show the destination folder select while editing a contact', () => {
@@ -47,15 +47,18 @@ describe('Edit view', () => {
 		populateFoldersStore({ customFolders: [addressBook] });
 
 		const handler = registerCreateContactHandler();
-		const newName = faker.person.firstName();
+
 		const { user } = setupTest(<EditView />);
 		const inputName = screen.getByRole('textbox', { name: /first name/i });
+		const inputEmail = screen.getByRole('textbox', { name: /e-mail/i });
 		const saveButton = screen.getByRole('button', { name: /save/i });
 		expect(screen.getByText('Destination address book')).toBeVisible();
 		expect(screen.getByText('Address Book')).toBeVisible();
 		await user.click(screen.getByText('Contacts'));
 		await user.click(await screen.findByText(addressBook.name));
-		await user.type(inputName, newName);
+		await user.type(inputName, faker.person.firstName());
+		await user.type(inputEmail, faker.internet.email());
+
 		await user.click(saveButton);
 		await screen.findByText(/new contact created/i);
 		expect(await handler.mock.lastCall?.[0].request.json()).toEqual(
@@ -85,11 +88,13 @@ describe('Edit view', () => {
 		const handler = registerCreateContactHandler();
 
 		const { user } = setupTest(<EditView />);
-		const newName = faker.person.firstName();
 		const inputName = screen.getByRole('textbox', { name: /first name/i });
+		const inputEmail = screen.getByRole('textbox', { name: /e-mail/i });
+
 		const saveButton = screen.getByRole('button', { name: /save/i });
 		expect(inputName).toBeVisible();
-		await user.type(inputName, newName);
+		await user.type(inputName, faker.person.firstName());
+		await user.type(inputEmail, faker.internet.email());
 		await user.click(saveButton);
 		await screen.findByText(/new contact created/i);
 		// by default the selected folder is 7
@@ -110,11 +115,12 @@ describe('Edit view', () => {
 
 		const onClose = jest.fn();
 		const { user } = setupTest(<EditView onClose={onClose} />);
-		const newName = faker.person.firstName();
 		const inputName = screen.getByRole('textbox', { name: /first name/i });
+		const inputEmail = screen.getByRole('textbox', { name: /e-mail/i });
 		const saveButton = screen.getByRole('button', { name: /save/i });
 		expect(inputName).toBeVisible();
-		await user.type(inputName, newName);
+		await user.type(inputName, faker.person.firstName());
+		await user.type(inputEmail, faker.internet.email());
 		await user.click(saveButton);
 		await screen.findByText(/new contact created/i);
 		expect(onClose).toHaveBeenCalled();
@@ -130,13 +136,13 @@ describe('Edit view', () => {
 			path: 'folder/:folderId/edit/:editId'
 		});
 		const saveButton = screen.getByRole('button', { name: /save/i });
-		expect(saveButton).toBeVisible();
 		expect(saveButton).toBeDisabled();
 
-		const newName = faker.person.firstName();
 		const inputName = screen.getByRole('textbox', { name: /first name/i });
-		expect(inputName).toBeVisible();
-		await user.type(inputName, newName);
+		const inputEmail = screen.getByRole('textbox', { name: /e-mail/i });
+		await user.type(inputName, faker.person.firstName());
+		await user.type(inputEmail, faker.internet.email());
+
 		expect(saveButton).toBeEnabled();
 	});
 });

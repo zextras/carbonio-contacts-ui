@@ -28,13 +28,16 @@ describe('Detail panel', () => {
 			const folderId = FOLDERS.CONTACTS;
 			const oldName = faker.person.firstName();
 			const newName = faker.person.firstName();
+			const oldEmail = faker.internet.email();
+			const newEmail = faker.internet.email();
+
 			const contact = {
 				fileAsStr: oldName,
 				URL: {},
 				address: {},
 				company: faker.company.name(),
 				department: faker.string.alpha(10),
-				email: {},
+				email: { oldEmail },
 				firstName: oldName,
 				id: contactId,
 				image: faker.string.alpha(10),
@@ -66,7 +69,7 @@ describe('Detail panel', () => {
 										rev: 5000,
 										t: '',
 										tn: '',
-										_attrs: { firstName: newName }
+										_attrs: { firstName: newName, email: newEmail }
 									}
 								]
 							}
@@ -83,7 +86,11 @@ describe('Detail panel', () => {
 			const saveButton = screen.getByRole('button', { name: /save/i });
 			expect(saveButton).toBeDisabled();
 			const inputName = screen.getByRole('textbox', { name: /first name/i });
+			const inputEmail = screen.getByRole('textbox', { name: /e-mail/i });
+
 			await user.type(inputName, newName);
+			await user.type(inputEmail, newEmail);
+
 			expect(saveButton).toBeEnabled();
 			await user.click(saveButton);
 			expect(modifyContactSpy).toHaveBeenCalled();
