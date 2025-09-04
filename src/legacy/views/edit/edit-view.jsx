@@ -377,9 +377,9 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 				)}
 				<CustomMultivalueField
 					name="email"
-					label={t('section.title.mail', 'E-mail address')}
+					label={`${t('section.title.mail', 'E-mail address')}*`}
 					subFields={['mail']}
-					fieldLabels={[t('label.email', 'E-mail')]}
+					fieldLabels={`${t('label.mail', 'E-mail')}*`}
 					value={contact.email}
 					dispatch={dispatch}
 				/>
