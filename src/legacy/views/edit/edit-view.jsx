@@ -30,14 +30,14 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { ContactEditorRow, CustomMultivalueField } from 'legacy/views/edit/CustomMultivalueField';
-import reducer, { op } from 'legacy/views/edit/form-reducer';
 import { CompactView } from 'legacy/commons/contact-compact-view';
 import { createContact } from 'legacy/store/actions/create-contact';
 import { modifyContact } from 'legacy/store/actions/modify-contact';
 import { addContactsToStore, useContactById } from 'legacy/store/contacts';
 import { getFolderTranslatedName } from 'legacy/utils/helpers';
 import { normalizeContactsFromSoap } from 'legacy/utils/normalizations/normalize-contact-from-soap';
+import { ContactEditorRow, CustomMultivalueField } from 'legacy/views/edit/CustomMultivalueField';
+import reducer, { op } from 'legacy/views/edit/form-reducer';
 import { differenceObject } from 'legacy/views/settings/components/utils';
 
 const ItalicText = styled(Text)`
@@ -144,12 +144,22 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 		[folderWithWritePerm, t]
 	);
 
+	const hasAtLeastOneValue = (field) =>
+		field &&
+		Object.values(field).some((entry) =>
+			Object.values(entry).some((val) => val && val.trim() !== '' && val !== 'true')
+		);
+
 	const isDisabled = useMemo(() => {
+		const hasName = contact?.firstName || contact?.lastName;
+		const hasEmail = hasAtLeastOneValue(contact?.email);
+
 		if (editId && editId !== 'new' && existingContact) {
-			return Object.keys(fieldsToUpdate).length < 1 || !(contact?.firstName || contact?.lastName);
+			return Object.keys(fieldsToUpdate).length < 1 || !hasName || !hasEmail;
 		}
-		return !(contact?.firstName || contact?.lastName);
-	}, [contact?.firstName, contact?.lastName, editId, existingContact, fieldsToUpdate]);
+		return !hasName || !hasEmail;
+	}, [contact, editId, existingContact, fieldsToUpdate]);
+
 	const title = useMemo(
 		() =>
 			contact?.namePrefix ||

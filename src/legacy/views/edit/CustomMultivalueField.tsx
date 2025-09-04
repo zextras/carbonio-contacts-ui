@@ -1,9 +1,9 @@
 /*
- * SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+ * SPDX-FileCopyrightText: 2025 Zextras <https://www.zextras.com>
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { ReactNode, useCallback, useEffect, useMemo } from 'react';
 
 import {
 	Container,
@@ -13,12 +13,15 @@ import {
 	Row,
 	Select
 } from '@zextras/carbonio-design-system';
-import { filter, find, map, omit, omitBy, reduce, set } from 'lodash';
+import { capitalize, filter, find, map, omit, omitBy, reduce, set } from 'lodash';
 
 import { op } from 'legacy/views/edit/form-reducer';
-import FormSection from 'legacy/views/edit/form-section';
+import { FormSection } from 'legacy/views/edit/form-section';
 
-export const ContactEditorRow = ({ children, wrap }) => (
+export const ContactEditorRow: React.FC<{
+	children: ReactNode;
+	wrap?: 'wrap' | 'nowrap';
+}> = ({ children, wrap }) => (
 	<Row
 		orientation="horizontal"
 		mainAlignment="space-between"
@@ -30,9 +33,28 @@ export const ContactEditorRow = ({ children, wrap }) => (
 	</Row>
 );
 
-const capitalize = (lower) => lower.replace(/^\w/, (c) => c.toUpperCase());
+type FieldValue = Record<string, string | boolean | undefined>;
 
-export const CustomMultivalueField = ({
+type TypeOption = {
+	label: string;
+	value: string;
+};
+
+type CustomMultivalueFieldProps = {
+	name: string;
+	label: string;
+	types?: TypeOption[];
+	typeField?: string;
+	typeLabel?: string;
+	subFields: string[];
+	fieldLabels: string[];
+	wrap?: boolean;
+	value: Record<string, FieldValue>;
+	dispatch: (action: { type: string; payload: any; name: string }) => void;
+	required?: boolean;
+};
+
+export const CustomMultivalueField: React.FC<CustomMultivalueFieldProps> = ({
 	name,
 	label,
 	types,
@@ -50,9 +72,9 @@ export const CustomMultivalueField = ({
 				types,
 				(acc, type) => ({
 					...acc,
-					[type.value]: filter(value, (v) => v[typeLabel] === type.value).length
+					[type.value]: filter(value, (v) => v[typeLabel ?? ''] === type.value).length
 				}),
-				{}
+				{} as Record<string, number>
 			),
 		[value, typeLabel, types]
 	);
@@ -62,15 +84,15 @@ export const CustomMultivalueField = ({
 			reduce(
 				subFields,
 				(acc, val) => set(acc, val, ''),
-				typeField ? { [typeField]: types[0].value } : {}
+				typeField && types && types.length > 0 ? { [typeField]: types[0].value } : {}
 			),
 		[subFields, typeField, types]
 	);
 
 	const generateNewTypedId = useCallback(
-		(type) => {
+		(type: string): string => {
 			const substring = `${type}${capitalize(name)}`;
-			const recursiveIdIncrement = (candidateId, increment) => {
+			const recursiveIdIncrement = (candidateId: string, increment: number): string => {
 				if (value[candidateId]) {
 					return recursiveIdIncrement(`${substring}${increment}`, increment + 1);
 				}
@@ -84,8 +106,8 @@ export const CustomMultivalueField = ({
 		[value, name, typeCounts]
 	);
 
-	const generateNewUntypedId = useCallback(() => {
-		const recursiveIdIncrement = (candidateId, increment) => {
+	const generateNewUntypedId = useCallback((): string => {
+		const recursiveIdIncrement = (candidateId: string, increment: number): string => {
 			if (value[candidateId] || candidateId === 'email1') {
 				return recursiveIdIncrement(`${name}${increment}`, increment + 1);
 			}
@@ -99,14 +121,14 @@ export const CustomMultivalueField = ({
 			type: op.setRowInput,
 			payload: {
 				...value,
-				[types && types[0].value ? generateNewTypedId(types[0].value) : generateNewUntypedId()]:
+				[types && types[0]?.value ? generateNewTypedId(types[0].value) : generateNewUntypedId()]:
 					emptyValue
 			},
 			name
 		});
 	}, [dispatch, emptyValue, generateNewTypedId, generateNewUntypedId, name, types, value]);
 
-	const isLastElement = (mulObj) => {
+	const isLastElement = (mulObj: Record<string, FieldValue>): boolean => {
 		let count = 0;
 		Object.keys(mulObj).forEach((prop) => {
 			if (!mulObj[prop].isRemove) {
@@ -115,13 +137,14 @@ export const CustomMultivalueField = ({
 		});
 		return count === 0;
 	};
+
 	const removeValue = useCallback(
-		(index) => {
+		(index: string) => {
 			const newValue = { ...value };
 			const obj = newValue[index];
-			const updatedObj = { isRemove: 'true' };
+			const updatedObj: FieldValue = { isRemove: 'true' };
 			Object.keys(obj).forEach((prop) => {
-				prop === 'type' ? (updatedObj.type = obj.type) : (updatedObj[prop] = '');
+				prop === 'type' ? (updatedObj.type = obj.type as string) : (updatedObj[prop] = '');
 			});
 			newValue[index] = updatedObj;
 			dispatch({
@@ -134,7 +157,7 @@ export const CustomMultivalueField = ({
 	);
 
 	const updateValue = useCallback(
-		(newString, subField, id) => {
+		(newString: string, subField: string, id: string) => {
 			if (newString === value[id][subField]) return;
 			if (subField === typeField) {
 				dispatch({
@@ -167,6 +190,7 @@ export const CustomMultivalueField = ({
 			addValue();
 		}
 	}, [addValue, value]);
+
 	const filteredValue = omitBy(value, (ele) => ele.isRemove);
 
 	return (
@@ -182,13 +206,14 @@ export const CustomMultivalueField = ({
 						>
 							<Input
 								inputName={name}
-								backgroundColor="gray5"
+								background="gray5"
 								label={fieldLabels[subIndex]}
-								defaultValue={item[subField]}
-								onChange={(ev) =>
+								defaultValue={item[subField] as string}
+								onChange={(ev): void =>
 									dispatch({
 										type: op.setSelect,
-										payload: { ev: ev.target, id, subField }
+										payload: { ev: ev.target, id, subField },
+										name
 									})
 								}
 							/>
@@ -207,7 +232,12 @@ export const CustomMultivalueField = ({
 								<Select
 									items={types}
 									label={typeLabel}
-									onChange={(val) => updateValue(val, typeField, id)}
+									// Only call updateValue if val is not null; the type is fragile
+									onChange={(val): void => {
+										if (val !== null) {
+											updateValue(val, typeField, id);
+										}
+									}}
 									defaultSelection={find(types, ['value', value[id][typeField]])}
 								/>
 							)}
@@ -230,7 +260,7 @@ export const CustomMultivalueField = ({
 											}}
 											iconColor="gray6"
 											backgroundColor="primary"
-											onClick={() => addValue()}
+											onClick={(): void => addValue()}
 										/>
 									</Padding>
 									<IconButton
@@ -241,7 +271,7 @@ export const CustomMultivalueField = ({
 											paddingSize: 'medium'
 										}}
 										backgroundColor="secondary"
-										onClick={() => removeValue(id)}
+										onClick={(): void => removeValue(id)}
 									/>
 								</>
 							) : (
@@ -249,7 +279,7 @@ export const CustomMultivalueField = ({
 									icon="Minus"
 									iconColor="gray6"
 									backgroundColor="secondary"
-									onClick={() => removeValue(id)}
+									onClick={(): void => removeValue(id)}
 								/>
 							)}
 						</Container>
