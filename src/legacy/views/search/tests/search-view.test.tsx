@@ -15,6 +15,16 @@ import { FOLDERS, useFolderStore } from '@zextras/carbonio-ui-commons';
 import { noop } from 'lodash';
 import { HttpResponse } from 'msw';
 
+import { TIMERS } from '../../../../constants/tests';
+import { CnItem } from '../../../../network/api/types';
+import { createSoapContact, createSoapContactGroupV2 } from '../../../../tests/utils';
+import {
+	SearchContactsRequest,
+	SearchContactsSoapRequest,
+	SearchContactsSoapResponse
+} from '../../../../types';
+import { type SoapContact } from '../../../types/soap';
+import SearchView from '../search-view';
 import { Query, SearchQueryItem } from '../types';
 import { makeListItemsVisible, screen, setupTest, triggerLoadMore } from '@test-setup';
 import { generateFolder } from '@test-utils/folders/folders-generator';
@@ -24,16 +34,6 @@ import {
 } from '@test-utils/network/msw/create-api-interceptor';
 import { generateSettings } from '@test-utils/settings/settings-generator';
 import { populateFoldersStore } from '@test-utils/store/folders';
-import { TIMERS } from 'constants/tests';
-import { type SoapContact } from 'legacy/types/soap';
-import SearchView from 'legacy/views/search/search-view';
-import { CnItem } from 'network/api/types';
-import { createSoapContact, createSoapContactGroupV2 } from 'tests/utils';
-import {
-	SearchContactsRequest,
-	SearchContactsSoapRequest,
-	SearchContactsSoapResponse
-} from 'types';
 
 const useMockedUseQuery = (): ReturnType<typeof useQuery> => {
 	const queryChip: SearchQueryItem = {

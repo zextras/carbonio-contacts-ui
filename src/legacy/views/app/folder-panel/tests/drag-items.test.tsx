@@ -9,10 +9,10 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { times } from 'lodash';
 
-import { TESTID_SELECTORS } from 'constants/tests';
-import { buildContact } from 'tests/model-builder';
-import { Contact } from 'legacy/types/contact';
-import { DragItems } from 'legacy/views/app/folder-panel/drag-items';
+import { TESTID_SELECTORS } from '../../../../../constants/tests';
+import { buildContact } from '../../../../../tests/model-builder';
+import { Contact } from '../../../../types/contact';
+import { DragItems } from '../drag-items';
 import { setupTest } from '@test-setup';
 
 const contacts = times(10, () => buildContact());
