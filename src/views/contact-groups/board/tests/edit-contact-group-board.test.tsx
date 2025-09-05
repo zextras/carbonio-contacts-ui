@@ -10,7 +10,6 @@ import { faker } from '@faker-js/faker';
 import { act, waitFor, within } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
 
-import { getContactInput } from '../../../board/tests/common-contact-group-board.test';
 import { setupTest, screen } from '@test-setup';
 import { CONTACT_GROUP_NAME_MAX_LENGTH } from 'constants/index';
 import { JEST_MOCKED_ERROR, PALETTE, TESTID_SELECTORS } from 'constants/tests';
@@ -20,6 +19,12 @@ import { buildContactGroup } from 'tests/model-builder';
 import { registerModifyContactGroupHandler } from 'tests/msw-handlers/modify-contact-group';
 import { createSoapContactGroup, spyUseBoardHooks } from 'tests/utils';
 import EditContactGroupBoard from 'views/contact-groups/board/edit-contact-group-board';
+
+function getContactInput(): HTMLElement {
+	return screen.getByRole('textbox', {
+		name: `Type an address, click ‘+’ to add to the group`
+	});
+}
 
 function spyUseBoard(contactGroupId: string, folderId: string): void {
 	jest.spyOn(shell, 'useBoard').mockReturnValue({

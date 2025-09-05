@@ -21,7 +21,7 @@ import {
 	CommonContactGroupBoardProps
 } from 'views/board/common-contact-group-board';
 
-export function getContactInput(): HTMLElement {
+function getContactInput(): HTMLElement {
 	return screen.getByRole('textbox', {
 		name: `Type an address, click ‘+’ to add to the group`
 	});
