@@ -14,7 +14,7 @@ import { times } from 'lodash';
 import { HttpResponse } from 'msw';
 import { Link } from 'react-router-dom';
 
-import { DistributionListsView } from 'views/distribution-list/distribution-lists-view';
+import { screen, setupTest, within } from '@test-setup';
 import { ROUTES, ROUTES_INTERNAL_PARAMS } from 'constants/index';
 import {
 	EMPTY_DISPLAYER_NO_CONTACTS_HINT,
@@ -38,8 +38,8 @@ import {
 	generateDistributionList,
 	generateDistributionLists
 } from 'tests/utils';
+import { DistributionListsView } from 'views/distribution-list/distribution-lists-view';
 import GroupsAppView from 'views/distribution-list-view';
-import { screen, setupTest, within } from '@test-setup';
 
 describe('Distribution Lists View', () => {
 	it('should show the list of distribution lists', async () => {
@@ -145,9 +145,7 @@ describe('Distribution Lists View', () => {
 			path: ROUTES.distributionLists
 		});
 		const listItem = await screen.findByText(dl.displayName);
-		expect(
-			screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.editDL })
-		).toBeVisible();
+		expect(await screen.findByTestId(TESTID_SELECTORS.icons.editDL)).toBeInTheDocument();
 		await user.rightClick(listItem);
 		expect(
 			within(await screen.findByTestId(TESTID_SELECTORS.dropdownList)).getByText('Edit')

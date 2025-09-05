@@ -5,6 +5,7 @@
  */
 import React, { PropsWithChildren, ReactElement, useMemo } from 'react';
 
+import { matchers } from '@emotion/jest';
 import {
 	act,
 	ByRoleMatcher,
@@ -23,17 +24,20 @@ import {
 } from '@testing-library/react';
 import userEvent, { UserEvent as RTLUserEvent } from '@testing-library/user-event';
 import { ModalManager, SnackbarManager, ThemeProvider } from '@zextras/carbonio-design-system';
+import { themeMuiExtension } from '@zextras/carbonio-ui-commons';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { MemoryRouter, MemoryRouterProps, Route, RouteProps, Routes } from 'react-router-dom';
 import { Store } from 'redux';
 
-import { getAppI18n } from '__test__/i18n/i18n-test-factory';
 import { previewContextMock, PreviewsManagerContext } from '@test-utils/carbonio-ui-preview';
+import { getAppI18n } from '__test__/i18n/i18n-test-factory';
 
 type ByRoleWithIconOptions = ByRoleOptions & {
 	icon: string | RegExp;
 };
+
+expect.extend(matchers);
 
 /**
  * Matcher function to search an icon button through the icon data-testid
@@ -110,7 +114,7 @@ export const ProvidersWrapper = ({
 	const i18n = useMemo(() => getAppI18n(), []);
 
 	return (
-		<ThemeProvider>
+		<ThemeProvider extension={themeMuiExtension}>
 			<MemoryRouter
 				future={{ v7_startTransition: false, v7_relativeSplatPath: false }}
 				initialEntries={initialEntries}

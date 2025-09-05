@@ -6,13 +6,13 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 
+import styled from '@emotion/styled';
 import {
 	Dropdown,
 	type DropdownItem,
 	type DropdownProps,
 	useCombinedRefs
 } from '@zextras/carbonio-design-system';
-import styled from 'styled-components';
 
 export interface ContextualMenuProps extends Omit<DropdownProps, 'items' | 'contextMenu'> {
 	actions: DropdownItem[];
@@ -23,7 +23,6 @@ type ContextualMenuElement = HTMLDivElement & {
 };
 
 const CustomDropdown = styled(Dropdown)`
-	width: 100%;
 	height: 100%;
 `;
 
@@ -79,6 +78,7 @@ export const ContextualMenu = React.forwardRef<HTMLDivElement, ContextualMenuPro
 
 		return (
 			<CustomDropdown
+				width="100%"
 				placement="right-start"
 				contextMenu
 				disabled={disabled}

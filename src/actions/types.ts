@@ -3,13 +3,13 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+import type { Theme } from '@emotion/react';
 import { Action as DSAction } from '@zextras/carbonio-design-system';
-import { DefaultTheme } from 'styled-components';
 
 export type UIAction<ExecArg, CanExecArg> = {
 	id: string;
 	label: string;
-	icon: keyof DefaultTheme['icons'];
+	icon: keyof Theme['icons'];
 	execute: (arg?: ExecArg) => void;
 	canExecute: (arg?: CanExecArg) => boolean;
 	color?: DSAction['color'];
@@ -19,7 +19,7 @@ export type UIAction<ExecArg, CanExecArg> = {
 export type Action = {
 	id: string;
 	label: string;
-	icon: keyof DefaultTheme['icons'];
+	icon: keyof Theme['icons'];
 	onClick: () => void;
 	color?: DSAction['color'];
 	disabled?: boolean;

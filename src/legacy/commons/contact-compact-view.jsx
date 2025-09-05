@@ -5,6 +5,7 @@
  */
 import React, { useMemo } from 'react';
 
+import styled from '@emotion/styled';
 import {
 	Avatar,
 	Button,
@@ -15,7 +16,6 @@ import {
 	Text
 } from '@zextras/carbonio-design-system';
 import { trim } from 'lodash';
-import styled from 'styled-components';
 
 import { CustomIconAvatar } from 'components/styled-components';
 import { useDisplayName } from 'legacy/hooks/use-display-name';
@@ -32,6 +32,7 @@ const AvatarHeader = styled(Row)`
 		${({ theme, $bg2 }) => theme.avatarColors[$bg2]}
 	);
 `;
+
 function calcColor(label) {
 	let sum = 0;
 	// eslint-disable-next-line no-plusplus
@@ -40,6 +41,7 @@ function calcColor(label) {
 	}
 	return `avatar_${(sum % 50) + 1}`;
 }
+
 export const CompactView = ({ contact, toggleOpen, open }) => {
 	const displayName = useDisplayName(contact);
 	const displayMailAndPhone = useMemo(
@@ -100,7 +102,6 @@ export const CompactView = ({ contact, toggleOpen, open }) => {
 						height="fit"
 						$bg={calcColor(`${contact.firstName} ${contact.lastName}`)}
 						$bg2={calcColor(`${contact.firstName}${contact.lastName}`)}
-						// mainAlignment='center'
 					>
 						<AvatarMobile
 							label={`${contact.firstName} ${contact.lastName}`}
