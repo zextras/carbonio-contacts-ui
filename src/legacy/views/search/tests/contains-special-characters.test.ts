@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { containsSpecialCharacters } from '../search-view';
+import { containsSpecialCharacters } from 'legacy/views/search/search-view';
 
 describe('containsSpecialCharacters', () => {
 	describe('should handle boolean values', () => {

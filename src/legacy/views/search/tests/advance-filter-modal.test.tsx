@@ -9,8 +9,11 @@ import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { getTags } from '@zextras/carbonio-ui-commons';
 
-import { AdvancedFilterModal, AdvancedFilterModalProps } from '../advance-filter-modal';
 import { setupTest, within } from '@test-setup';
+import {
+	AdvancedFilterModal,
+	AdvancedFilterModalProps
+} from 'legacy/views/search/advance-filter-modal';
 
 jest.mock('@zextras/carbonio-ui-commons', () => ({
 	...jest.requireActual('@zextras/carbonio-ui-commons'),

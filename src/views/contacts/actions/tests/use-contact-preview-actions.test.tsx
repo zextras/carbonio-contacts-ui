@@ -15,10 +15,10 @@ import {
 	SEND_EMAIL_ACTION,
 	SHOW_TAG_ACTION,
 	TRASH_ACTION
-} from '../../../../constants/actions';
-import { buildContact } from '../../../../tests/model-builder';
-import { generateLinkFolder } from '../../../contact-groups/tests/utils';
-import { useContactPreviewActions } from '../use-contact-preview-actions';
+} from 'constants/actions';
+import { buildContact } from 'tests/model-builder';
+import { generateLinkFolder } from 'views/contact-groups/tests/utils';
+import { useContactPreviewActions } from 'views/contacts/actions/use-contact-preview-actions';
 import { setupHook } from '@test-setup';
 import { populateFoldersStore } from '@test-utils/store/folders';
 

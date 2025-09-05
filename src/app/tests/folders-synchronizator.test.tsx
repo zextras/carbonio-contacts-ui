@@ -9,7 +9,7 @@ import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
 import * as commonsHook from '@zextras/carbonio-ui-commons';
 import { HttpResponse } from 'msw';
 
-import { FoldersSynchronizator } from '../folders-syncronization';
+import { FoldersSynchronizator } from 'app/folders-syncronization';
 import { setupTest } from '@test-setup';
 import { generateFolder } from '@test-utils/folders/folders-generator';
 import {

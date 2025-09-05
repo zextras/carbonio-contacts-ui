@@ -7,9 +7,9 @@ import { faker } from '@faker-js/faker';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { FOLDERS, useFolderStore } from '@zextras/carbonio-ui-commons';
 
-import { buildContact } from '../../../../tests/model-builder';
-import { generateLinkFolder } from '../../../contact-groups/tests/utils';
-import { useContactHoverActions } from '../use-contact-hover-actions';
+import { buildContact } from 'tests/model-builder';
+import { generateLinkFolder } from 'views/contact-groups/tests/utils';
+import { useContactHoverActions } from 'views/contacts/actions/use-contact-hover-actions';
 import { setupHook } from '@test-setup';
 import { populateFoldersStore } from '@test-utils/store/folders';
 
