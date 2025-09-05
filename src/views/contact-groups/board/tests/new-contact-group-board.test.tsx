@@ -11,7 +11,6 @@ import { act, waitFor, within } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { http, HttpResponse } from 'msw';
 
-import { getContactInput } from '../../../board/tests/common-contact-group-board.test';
 import { getSetupServer } from '@jest-setup';
 import { setupTest, screen } from '@test-setup';
 import { generateFolder } from '@test-utils/folders/folders-generator';
@@ -22,6 +21,12 @@ import { spyUseBoardHooks } from 'tests/utils';
 import * as createContactGroup from 'views/contact-groups/api/create-contact-group';
 import NewContactGroupBoard from 'views/contact-groups/board/new-contact-group-board';
 import { CONTACT_GROUPS_PATH } from 'views/contact-groups/navigation';
+
+function getContactInput(): HTMLElement {
+	return screen.getByRole('textbox', {
+		name: `Type an address, click ‘+’ to add to the group`
+	});
+}
 
 function spyUseBoard(navigateTo?: jest.Mock): void {
 	jest.spyOn(shell, 'useBoard').mockReturnValue({
