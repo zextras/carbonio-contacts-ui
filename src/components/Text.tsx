@@ -5,13 +5,13 @@
  */
 import React, { ReactNode } from 'react';
 
+import styled from '@emotion/styled';
 import {
 	Text as DSText,
 	type TextProps,
 	Tooltip,
 	TooltipProps
 } from '@zextras/carbonio-design-system';
-import styled from 'styled-components';
 
 import { MakeOptional } from 'types/utils';
 

@@ -5,6 +5,7 @@
  */
 import React, { FC, useCallback, useMemo } from 'react';
 
+import styled from '@emotion/styled';
 import {
 	AccordionItem,
 	Avatar,
@@ -30,15 +31,14 @@ import {
 } from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
 
-import { useAddressBookContextualMenuItems } from 'legacy/views/secondary-bar/commons/use-address-book-contextual-menu-items';
 import { useActionMoveAddressBook } from 'actions/move-address-book';
 import { CONTACTS_ROUTE } from 'constants/index';
 import { getFolderIconColor, getFolderIconName } from 'helpers/folders';
 import { Contact } from 'legacy/types/contact';
 import { useMoveContactsDragAndDrop } from 'legacy/ui-actions/use-move-contacts-drag-and-drop';
 import { getFolderTranslatedName } from 'legacy/utils/helpers';
+import { useAddressBookContextualMenuItems } from 'legacy/views/secondary-bar/commons/use-address-book-contextual-menu-items';
 
 const FittedRow = styled(Row)`
 	max-width: calc(100% - (2 * ${({ theme }): string => theme.sizes.padding.small}));
