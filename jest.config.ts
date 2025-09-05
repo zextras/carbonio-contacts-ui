@@ -38,7 +38,6 @@ const config: Config = {
 		'^@jest-setup$': '<rootDir>/jest-setup.ts'
 	},
 	reporters: ['default', 'jest-junit'],
-	snapshotSerializers: ['@emotion/jest/serializer'],
 	testEnvironmentOptions: {
 		customExportConditions: ['']
 	},
