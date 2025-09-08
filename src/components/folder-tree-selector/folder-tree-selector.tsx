@@ -5,6 +5,7 @@
  */
 import React, { ChangeEvent, useMemo, useState } from 'react';
 
+import styled from '@emotion/styled';
 import { Button, Container, Input, Padding } from '@zextras/carbonio-design-system';
 import {
 	isDefaultAccountRoot,
@@ -19,7 +20,6 @@ import {
 import { TFunction } from 'i18next';
 import { filter, startsWith } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
 
 import { FlatFoldersAccordion } from 'components/folder-tree-selector/flat-folders-accordion';
 import { sortFolders } from 'helpers/folders';

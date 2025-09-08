@@ -6,6 +6,7 @@
 
 import React, { useMemo } from 'react';
 
+import styled from '@emotion/styled';
 import {
 	Accordion,
 	type AccordionItemType,
@@ -20,7 +21,6 @@ import { useUserAccount } from '@zextras/carbonio-shell-ui';
 import { noop } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
 
 import { ROUTES_INTERNAL_PARAMS } from 'constants/index';
 
@@ -36,7 +36,6 @@ const AccordionItem = ({ item }: { item: AccordionItemType }): React.JSX.Element
 		mainAlignment="flex-start"
 		padding={{ all: 'small' }}
 		height="2.5rem"
-		style={{ minWidth: 0, flexBasis: 0, flexGrow: 1 }}
 	>
 		<Padding right="small">
 			<Avatar label={item.label ?? ''} />

@@ -5,6 +5,7 @@
  */
 import React, { useCallback, useMemo, useState } from 'react';
 
+import styled from '@emotion/styled';
 import {
 	Container,
 	Button,
@@ -31,7 +32,6 @@ import {
 } from '@zextras/carbonio-ui-commons';
 import { map, reduce, remove, some, uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
 
 import { MemberListItemComponent } from 'components/member-list-item';
 import { CONTACT_GROUP_NAME_MAX_LENGTH } from 'constants/index';

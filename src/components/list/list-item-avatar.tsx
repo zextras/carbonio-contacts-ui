@@ -5,9 +5,9 @@
  */
 import React, { SyntheticEvent, useCallback, useMemo } from 'react';
 
+import styled from '@emotion/styled';
 import { Avatar, Container, Tooltip } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
 
 const AvatarElement = styled(Avatar)`
 	width: 2.625rem !important;

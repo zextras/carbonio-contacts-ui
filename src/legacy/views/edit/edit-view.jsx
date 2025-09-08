@@ -5,6 +5,7 @@
  */
 import React, { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
 
+import styled from '@emotion/styled';
 import {
 	Button,
 	Container,
@@ -29,7 +30,6 @@ import {
 import { filter, find, map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import styled from 'styled-components';
 
 import { CompactView } from 'legacy/commons/contact-compact-view';
 import { createContact } from 'legacy/store/actions/create-contact';
@@ -41,9 +41,7 @@ import { CustomMultivalueField } from 'legacy/views/edit/CustomMultivalueField';
 import reducer, { op } from 'legacy/views/edit/form-reducer';
 import { differenceObject } from 'legacy/views/settings/components/utils';
 
-const ItalicText = styled(Text)`
-	font-style: italic;
-	color: ${({ theme }) => theme.palette.gray1.regular};
+const CustomText = styled(Text)`
 	padding-right: 0.5rem;
 `;
 
@@ -284,12 +282,12 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 				<Row orientation="horizontal" mainAlignment="space-between" width="fill">
 					<Container height="fit" width="fit">
 						{!editId && (
-							<ItalicText>
+							<CustomText italic color={'gray1'}>
 								{t('label.contact_created_in_folder', {
 									name: selectedFolderName,
 									defaultValue: 'This contact will be created in the "{{name}}" folder'
 								})}
-							</ItalicText>
+							</CustomText>
 						)}
 					</Container>
 					<Tooltip

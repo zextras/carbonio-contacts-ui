@@ -6,7 +6,7 @@
 
 import React, { ReactElement, useState } from 'react';
 
-import { act, waitFor, within } from '@testing-library/react';
+import { act, within } from '@testing-library/react';
 import { Button } from '@zextras/carbonio-design-system';
 import { QueryChip, SearchViewProps, useQuery } from '@zextras/carbonio-search-ui';
 import * as hooks from '@zextras/carbonio-shell-ui';
@@ -273,11 +273,9 @@ describe('SearchView', () => {
 		const clearButton = await screen.findByTestId('clear-search-button');
 		await user.click(clearButton);
 
-		await waitFor(() =>
-			expect(
-				screen.queryByTestId(`search-contact-list-item-${soapContact.id}`)
-			).not.toBeInTheDocument()
-		);
+		expect(
+			screen.queryByTestId(`search-contact-list-item-${soapContact.id}`)
+		).not.toBeInTheDocument();
 	});
 
 	it('should call the search API and append items to existing results when more items are available to load', async () => {
@@ -336,6 +334,7 @@ describe('SearchView', () => {
 			await screen.findByTestId(`search-contact-list-item-${soapContact2.id}`)
 		).toBeInTheDocument();
 	});
+
 	describe('Advanced Filter Modal', () => {
 		it('search from modal with same query should re-run the search when search button is pressed', async () => {
 			const soapContact = createSoapContact({
@@ -398,11 +397,9 @@ describe('SearchView', () => {
 			const searchButton = await within(filterModal).findByRole('button', { name: 'Search' });
 			await user.click(searchButton);
 
-			await waitFor(() =>
-				expect(
-					screen.queryByTestId(`search-contact-list-item-${soapContact.id}`)
-				).not.toBeInTheDocument()
-			);
+			expect(
+				screen.queryByTestId(`search-contact-list-item-${soapContact.id}`)
+			).not.toBeInTheDocument();
 			expect(
 				await screen.findByTestId(`search-contact-list-item-${soapContact.id}`)
 			).toBeInTheDocument();
@@ -428,6 +425,7 @@ describe('SearchView', () => {
 
 			expect(await screen.findByTestId('contact-displayer')).toBeVisible();
 		});
+
 		it('should display the actions on hover', async () => {
 			populateFoldersStore();
 			const email = 'testContact@demo.com';
@@ -443,15 +441,19 @@ describe('SearchView', () => {
 			makeListItemsVisible();
 			const clickableItem = await screen.findByText(email);
 
-			await act(() => user.hover(clickableItem));
+			await user.hover(clickableItem);
 			const sendEmailButton = await screen.findByTestId('icon: MailModOutline');
-			expect(sendEmailButton).toBeVisible();
+			expect(sendEmailButton).toBeInTheDocument();
+			expect(sendEmailButton).toBeEnabled();
 			const moveEmailButton = await screen.findByTestId('icon: MoveOutline');
-			expect(moveEmailButton).toBeVisible();
+			expect(moveEmailButton).toBeInTheDocument();
+			expect(moveEmailButton).toBeEnabled();
 			const trashEmailButton = await screen.findByTestId('icon: Trash2Outline');
-			expect(trashEmailButton).toBeVisible();
+			expect(trashEmailButton).toBeInTheDocument();
+			expect(trashEmailButton).toBeEnabled();
 			const editEmailButton = await screen.findByTestId('icon: Edit2Outline');
-			expect(editEmailButton).toBeVisible();
+			expect(editEmailButton).toBeInTheDocument();
+			expect(editEmailButton).toBeEnabled();
 		});
 	});
 
@@ -481,15 +483,19 @@ describe('SearchView', () => {
 			const { user } = setupTest(<SearchView {...searchViewProps} />);
 			const listItem = await screen.findByText('Test Contact Group 1');
 
-			await act(() => user.hover(listItem));
+			await user.hover(listItem);
 			const sendEmailButton = await screen.findByTestId('icon: EmailOutline');
-			expect(sendEmailButton).toBeVisible();
+			expect(sendEmailButton).toBeInTheDocument();
+			expect(sendEmailButton).toBeEnabled();
 			const moveEmailButton = await screen.findByTestId('icon: MoveOutline');
-			expect(moveEmailButton).toBeVisible();
+			expect(moveEmailButton).toBeInTheDocument();
+			expect(moveEmailButton).toBeEnabled();
 			const trashEmailButton = await screen.findByTestId('icon: Trash2Outline');
-			expect(trashEmailButton).toBeVisible();
+			expect(trashEmailButton).toBeInTheDocument();
+			expect(trashEmailButton).toBeEnabled();
 			const editEmailButton = await screen.findByTestId('icon: Edit2Outline');
-			expect(editEmailButton).toBeVisible();
+			expect(editEmailButton).toBeInTheDocument();
+			expect(editEmailButton).toBeEnabled();
 		});
 	});
 
