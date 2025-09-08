@@ -37,7 +37,7 @@ import { modifyContact } from 'legacy/store/actions/modify-contact';
 import { addContactsToStore, useContactById } from 'legacy/store/contacts';
 import { getFolderTranslatedName } from 'legacy/utils/helpers';
 import { normalizeContactsFromSoap } from 'legacy/utils/normalizations/normalize-contact-from-soap';
-import { ContactEditorRow, CustomMultivalueField } from 'legacy/views/edit/CustomMultivalueField';
+import { CustomMultivalueField } from 'legacy/views/edit/CustomMultivalueField';
 import reducer, { op } from 'legacy/views/edit/form-reducer';
 import { differenceObject } from 'legacy/views/settings/components/utils';
 
@@ -77,6 +77,18 @@ const CustomStringField = ({ name, label, value, dispatch, autoFocus = false }) 
 			autoFocus={autoFocus}
 		/>
 	</Container>
+);
+
+export const ContactEditorRow = ({ children, wrap }) => (
+	<Row
+		orientation="horizontal"
+		mainAlignment="space-between"
+		crossAlignment="flex-start"
+		width="fill"
+		wrap={wrap || 'nowrap'}
+	>
+		{children}
+	</Row>
 );
 
 /** @type { (props: { panel?: boolean; onClose?: () => void; onTitleChanged?: (title: string) => void }) => React.JSX.Element } */

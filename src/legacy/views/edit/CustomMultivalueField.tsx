@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { ReactNode, useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 
 import {
 	Container,
@@ -17,21 +17,6 @@ import { capitalize, filter, find, map, omit, omitBy, reduce, set } from 'lodash
 
 import { op } from 'legacy/views/edit/form-reducer';
 import { FormSection } from 'legacy/views/edit/form-section';
-
-export const ContactEditorRow: React.FC<{
-	children: ReactNode;
-	wrap?: 'wrap' | 'nowrap';
-}> = ({ children, wrap }) => (
-	<Row
-		orientation="horizontal"
-		mainAlignment="space-between"
-		crossAlignment="flex-start"
-		width="fill"
-		wrap={wrap || 'nowrap'}
-	>
-		{children}
-	</Row>
-);
 
 type FieldValue = Record<string, string | boolean | undefined>;
 
@@ -51,7 +36,6 @@ type CustomMultivalueFieldProps = {
 	wrap?: boolean;
 	value: Record<string, FieldValue>;
 	dispatch: (action: { type: string; payload: any; name: string }) => void;
-	required?: boolean;
 };
 
 export const CustomMultivalueField: React.FC<CustomMultivalueFieldProps> = ({
@@ -117,12 +101,13 @@ export const CustomMultivalueField: React.FC<CustomMultivalueFieldProps> = ({
 	}, [value, name]);
 
 	const addValue = useCallback(() => {
+		const typeValue = types?.[0]?.value;
+
 		dispatch({
 			type: op.setRowInput,
 			payload: {
 				...value,
-				[types && types[0]?.value ? generateNewTypedId(types[0].value) : generateNewUntypedId()]:
-					emptyValue
+				[typeValue ? generateNewTypedId(typeValue) : generateNewUntypedId()]: emptyValue
 			},
 			name
 		});
@@ -144,7 +129,11 @@ export const CustomMultivalueField: React.FC<CustomMultivalueFieldProps> = ({
 			const obj = newValue[index];
 			const updatedObj: FieldValue = { isRemove: 'true' };
 			Object.keys(obj).forEach((prop) => {
-				prop === 'type' ? (updatedObj.type = obj.type as string) : (updatedObj[prop] = '');
+				if (prop === 'type') {
+					updatedObj.type = obj.type as string;
+				} else {
+					updatedObj[prop] = '';
+				}
 			});
 			newValue[index] = updatedObj;
 			dispatch({
@@ -196,7 +185,14 @@ export const CustomMultivalueField: React.FC<CustomMultivalueFieldProps> = ({
 	return (
 		<FormSection label={label}>
 			{map(Object.entries(filteredValue), ([id, item], index) => (
-				<ContactEditorRow wrap={wrap ? 'wrap' : 'nowrap'} key={`${label}${id}`}>
+				<Row
+					orientation="horizontal"
+					mainAlignment="space-between"
+					crossAlignment="flex-start"
+					width="fill"
+					wrap={wrap ? 'wrap' : 'nowrap'}
+					key={`${label}${id}`}
+				>
 					{map(subFields, (subField, subIndex) => (
 						<Padding
 							right="small"
@@ -284,7 +280,7 @@ export const CustomMultivalueField: React.FC<CustomMultivalueFieldProps> = ({
 							)}
 						</Container>
 					</Container>
-				</ContactEditorRow>
+				</Row>
 			))}
 		</FormSection>
 	);
