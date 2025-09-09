@@ -18,10 +18,15 @@ import { populateFoldersStore } from '@test-utils/store/folders';
 import { CONTACT_GROUP_NAME_MAX_LENGTH } from 'constants/index';
 import { PALETTE, TESTID_SELECTORS } from 'constants/tests';
 import { spyUseBoardHooks } from 'tests/utils';
-import { getContactInput } from 'views/board/common-contact-group-board.test';
 import * as createContactGroup from 'views/contact-groups/api/create-contact-group';
 import NewContactGroupBoard from 'views/contact-groups/board/new-contact-group-board';
 import { CONTACT_GROUPS_PATH } from 'views/contact-groups/navigation';
+
+function getContactInput(): HTMLElement {
+	return screen.getByRole('textbox', {
+		name: `Type an address, click ‘+’ to add to the group`
+	});
+}
 
 function spyUseBoard(navigateTo?: jest.Mock): void {
 	jest.spyOn(shell, 'useBoard').mockReturnValue({

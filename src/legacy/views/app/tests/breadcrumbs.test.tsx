@@ -7,9 +7,9 @@ import React from 'react';
 
 import { screen } from '@testing-library/react';
 
+import { getFolderTranslatedNameByName } from '../../../utils/helpers';
+import { Breadcrumbs } from '../breadcrumbs';
 import { setupTest } from '@test-setup';
-import { getFolderTranslatedNameByName } from 'legacy/utils/helpers';
-import { Breadcrumbs } from 'legacy/views/app/breadcrumbs';
 
 jest.mock('../../../utils/helpers', () => ({
 	getFolderTranslatedNameByName: jest.fn()

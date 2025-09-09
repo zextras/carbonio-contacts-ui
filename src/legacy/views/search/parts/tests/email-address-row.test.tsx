@@ -9,8 +9,8 @@ import { waitFor } from '@testing-library/react';
 import { CONTACT_TYPES, ContactInputItem } from '@zextras/carbonio-ui-commons';
 import { useForm } from 'react-hook-form';
 
-import { EmailAddressRow } from './email-address-row';
-import { AdvancedFilterModalFormValues } from '../types';
+import { AdvancedFilterModalFormValues } from '../../types';
+import { EmailAddressRow } from '../email-address-row';
 import { screen, setupTest } from '@test-setup';
 
 const mockContactInput = jest.fn();

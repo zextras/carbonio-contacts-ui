@@ -11,12 +11,12 @@ import {
 	JEST_MOCKED_ERROR,
 	TESTID_SELECTORS,
 	TIMERS
-} from 'constants/tests';
-import { addContactsToStore } from 'legacy/store/contacts';
-import { ContactOrGroup } from 'legacy/types/contact';
-import { buildContactGroup, buildMembers } from 'tests/model-builder';
-import { registerDeleteContactHandler } from 'tests/msw-handlers/delete-contact';
-import { useContactGroupDeleteAction } from 'views/contact-groups/actions/use-contact-group-delete-action';
+} from '../../../../constants/tests';
+import { addContactsToStore } from '../../../../legacy/store/contacts';
+import { ContactOrGroup } from '../../../../legacy/types/contact';
+import { buildContactGroup, buildMembers } from '../../../../tests/model-builder';
+import { registerDeleteContactHandler } from '../../../../tests/msw-handlers/delete-contact';
+import { useContactGroupDeleteAction } from '../use-contact-group-delete-action';
 import { screen, setupHook } from '@test-setup';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
