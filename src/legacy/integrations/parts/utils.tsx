@@ -9,7 +9,8 @@ import {
 	parseEmail,
 	CONTACT_TYPES,
 	ContactInputItemInternalValue,
-	GroupContact
+	GroupContact,
+	DistributionListContact
 } from '@zextras/carbonio-ui-commons';
 import { legacySoapFetch } from '@zextras/carbonio-ui-soap-lib';
 import { map, trim, unescape } from 'lodash';
@@ -42,12 +43,16 @@ export function isContactGroup(contact: {
 export const getContactId = (contact: ContactInputItemInternalValue): string =>
 	contact.type === CONTACT_TYPES.GROUP ? contact.id : contact.email;
 
-export const getContactLabel = (contact: ContactInputItemInternalValue): string => {
+type DistributionListContactWithDisplay = DistributionListContact & { fullName?: string };
+
+export const getContactLabel = (
+	contact: ContactInputItemInternalValue | DistributionListContactWithDisplay
+): string => {
 	switch (contact.type) {
 		case CONTACT_TYPES.GROUP:
 			return contact.display;
 		case CONTACT_TYPES.DISTRIBUTION_LIST:
-			return contact.email;
+			return (contact as DistributionListContactWithDisplay).fullName || contact.email;
 		default:
 			break;
 	}
@@ -89,10 +94,11 @@ export const mapToChipContactOptions = (value: RemoteContactResponse): ContactIn
 	}
 	const parsedEmail = tryToParseEmail(value.email);
 	if (newIsDistributionList(value)) {
-		const distributionList = {
+		const distributionList: DistributionListContactWithDisplay = {
 			id: parsedEmail,
 			email: parsedEmail,
-			type: CONTACT_TYPES.DISTRIBUTION_LIST
+			type: CONTACT_TYPES.DISTRIBUTION_LIST,
+			fullName: value.full
 		};
 		const label = getContactLabel(distributionList);
 		return {
