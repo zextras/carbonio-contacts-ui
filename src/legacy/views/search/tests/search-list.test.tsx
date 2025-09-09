@@ -8,8 +8,8 @@ import React from 'react';
 
 import { screen } from '@testing-library/react';
 
-import { Contact } from 'legacy/types/contact';
-import { SearchList } from 'legacy/views/search/search-list';
+import { Contact } from '../../../types/contact';
+import { SearchList } from '../search-list';
 import { makeListItemsVisible, setupTest } from '@test-setup';
 
 const mockSetShowAdvanceFilters = jest.fn();
