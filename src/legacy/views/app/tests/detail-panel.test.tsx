@@ -37,7 +37,7 @@ describe('Detail panel', () => {
 				address: {},
 				company: faker.company.name(),
 				department: faker.string.alpha(10),
-				email: { oldEmail },
+				email: { work: { address: oldEmail, mail: oldEmail } },
 				firstName: oldName,
 				id: contactId,
 				image: faker.string.alpha(10),
