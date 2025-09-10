@@ -9,7 +9,7 @@ import { Container, ChipInput } from '@zextras/carbonio-design-system';
 import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { FormValuesControlProps } from '../types';
+import { FormValuesControlProps } from 'legacy/views/search/types';
 
 export const PhoneNumberRow = ({ control }: FormValuesControlProps): ReactElement => {
 	const [t] = useTranslation();

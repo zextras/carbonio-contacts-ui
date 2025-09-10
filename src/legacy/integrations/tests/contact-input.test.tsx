@@ -382,6 +382,88 @@ describe('Contact input', () => {
 				expect.objectContaining({ actions: [editValidChipAction] })
 			]);
 		});
+
+		it('should show distribution list display name in autocomplete dropdown when full name is provided', async () => {
+			const distributionListDisplayName = 'MyDistributionList One';
+			const distributionListEmail = 'mydist@demo.test.io';
+			const autocompleteInterceptor = createAutocompleteInterceptor([
+				{
+					email: `"${distributionListDisplayName}" <${distributionListEmail}>`,
+					full: distributionListDisplayName,
+					isGroup: true
+				}
+			]);
+
+			const { user } = setupTest(<ContactInput defaultValue={[]} orderedAccountIds={[]} />);
+
+			const input = screen.getByRole('textbox');
+			await user.type(input, distributionListDisplayName);
+			const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
+			await autocompleteInterceptor;
+
+			expect(await within(dropdown).findByText(distributionListDisplayName)).toBeVisible();
+		});
+
+		it('should create chip with display name label when distribution list is selected from autocomplete', async () => {
+			const onChange = jest.fn();
+			const distributionListDisplayName = 'Sales Team Distribution';
+			const distributionListEmail = 'sales-team@demo.test.io';
+			const autocompleteInterceptor = createAutocompleteInterceptor([
+				{
+					email: `"${distributionListDisplayName}" <${distributionListEmail}>`,
+					full: distributionListDisplayName,
+					isGroup: true
+				}
+			]);
+
+			const { user } = setupTest(
+				<ContactInput defaultValue={[]} orderedAccountIds={[]} onChange={onChange} />
+			);
+
+			await typeAndSelectOptionFromDropdown(user, distributionListDisplayName);
+			await autocompleteInterceptor;
+
+			expect(onChange).toHaveBeenCalledWith([
+				expect.objectContaining({
+					label: distributionListDisplayName,
+					value: expect.objectContaining({
+						type: CONTACT_TYPES.DISTRIBUTION_LIST,
+						email: distributionListEmail,
+						fullName: distributionListDisplayName
+					})
+				})
+			]);
+		});
+
+		it('should fallback to email as label when distribution list has no display name', async () => {
+			const onChange = jest.fn();
+			const distributionListEmail = 'no-display-name@demo.test.io';
+			const autocompleteInterceptor = createAutocompleteInterceptor([
+				{
+					email: distributionListEmail,
+					full: '',
+					isGroup: true
+				}
+			]);
+
+			const { user } = setupTest(
+				<ContactInput defaultValue={[]} orderedAccountIds={[]} onChange={onChange} />
+			);
+
+			await typeAndSelectOptionFromDropdown(user, distributionListEmail);
+			await autocompleteInterceptor;
+
+			expect(onChange).toHaveBeenCalledWith([
+				expect.objectContaining({
+					label: distributionListEmail,
+					value: expect.objectContaining({
+						type: CONTACT_TYPES.DISTRIBUTION_LIST,
+						email: distributionListEmail
+					})
+				})
+			]);
+		});
+
 		it('should show custom action if provided', async () => {
 			setupTest(
 				<ContactInput

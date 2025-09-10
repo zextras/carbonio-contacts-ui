@@ -9,9 +9,9 @@ import { act, waitFor } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { FOLDER_VIEW, FOLDERS, useFolderStore } from '@zextras/carbonio-ui-commons';
 
+import SecondaryBarView from 'legacy/views/secondary-bar/secondary-bar-view';
 import { setupTest, screen } from '@test-setup';
 import { generateFolder } from '@test-utils/folders/folders-generator';
-import SecondaryBarView from 'legacy/views/secondary-bar/secondary-bar-view';
 
 jest.mock('react-router-dom', () => ({
 	...jest.requireActual('react-router-dom'),

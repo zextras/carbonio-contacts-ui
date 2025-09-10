@@ -14,11 +14,11 @@ import {
 	RESTORE_ACTION,
 	SEND_EMAIL_ACTION,
 	TRASH_ACTION
-} from 'constants/actions';
-import { DELETE_PERMANENTLY_ACTION_DESCRIPTOR } from 'constants/tests';
-import { buildContactGroup, buildMembers } from 'tests/model-builder';
-import { generateLinkFolder } from 'views/contact-groups/tests/utils';
-import { useContactGroupActions } from 'views/contact-groups/actions/use-contact-group-actions';
+} from '../../../../constants/actions';
+import { DELETE_PERMANENTLY_ACTION_DESCRIPTOR } from '../../../../constants/tests';
+import { buildContactGroup, buildMembers } from '../../../../tests/model-builder';
+import { generateLinkFolder } from '../../tests/utils';
+import { useContactGroupActions } from '../use-contact-group-actions';
 import { setupHook } from '@test-setup';
 import { generateFolder } from '@test-utils/folders/folders-generator';
 import { populateFoldersStore } from '@test-utils/store/folders';

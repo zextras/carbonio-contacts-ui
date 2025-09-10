@@ -46,7 +46,7 @@ import {
 	registerFindContactGroupsHandler
 } from 'tests/msw-handlers/find-contact-groups';
 import { createSoapContact, createSoapContactGroup } from 'tests/utils';
-import { SearchContactsRequest, SearchContactsSoapResponse } from 'types';
+import { SearchContactsRequest, SearchContactsSoapResponse } from 'types/index.d';
 
 const mockMailToAction = (execute = jest.fn()): void => {
 	getActionMock.mockImplementation((type, id) => {
