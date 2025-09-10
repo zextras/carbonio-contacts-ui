@@ -52,7 +52,10 @@ export const getContactLabel = (
 		case CONTACT_TYPES.GROUP:
 			return contact.display;
 		case CONTACT_TYPES.DISTRIBUTION_LIST:
-			return (contact as DistributionListContactWithDisplay).fullName || contact.email;
+			if ('fullName' in contact && contact.fullName) {
+				return contact.fullName;
+			}
+			return contact.email;
 		default:
 			break;
 	}
