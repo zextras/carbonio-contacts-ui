@@ -9,8 +9,8 @@ import { waitFor, within } from '@testing-library/react';
 import { getTags, ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-ui-commons';
 import { useForm } from 'react-hook-form';
 
-import { AdvancedFilterModalFormValues } from '../../types';
-import { TagFolderRow } from '../tag-folder-row';
+import { AdvancedFilterModalFormValues } from 'legacy/views/search/types';
+import { TagFolderRow } from 'legacy/views/search/parts/tag-folder-row';
 import { screen, setupTest } from '__test__/test-setup';
 
 jest.mock('@zextras/carbonio-ui-commons', () => ({

@@ -27,9 +27,13 @@ import {
 import { map } from 'lodash';
 import { Controller, UseFormSetValue } from 'react-hook-form';
 
-import { AdvancedFilterModalFormValues, FormValuesControlProps, KeywordState } from '../types';
 import { FolderIsContainedInModal } from 'components/modals/folder-is-contained-in';
 import { getFolderIconColor } from 'helpers/folders';
+import {
+	AdvancedFilterModalFormValues,
+	FormValuesControlProps,
+	KeywordState
+} from 'legacy/views/search/types';
 
 type TagFolderRowControlProps = FormValuesControlProps & {
 	setValue: UseFormSetValue<AdvancedFilterModalFormValues>;
