@@ -118,7 +118,8 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 
 	const selectedFolderName = useMemo(() => {
 		const selectedFolder = find(folders, ['id', selectFolderId]);
-		return getFolderTranslatedName(t, selectFolderId, selectedFolder.name);
+		const folderName = selectedFolder?.name || '';
+		return getFolderTranslatedName(t, selectFolderId, folderName);
 	}, [folders, selectFolderId, t]);
 	const folderWithWritePerm = useMemo(
 		() =>
@@ -143,11 +144,26 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 	);
 
 	const isDisabled = useMemo(() => {
-		if (editId && editId !== 'new' && existingContact) {
-			return Object.keys(fieldsToUpdate).length < 1 || !(contact?.firstName || contact?.lastName);
+		const hasName = Boolean(contact?.firstName || contact?.lastName);
+		const hasAtLeastOneEmail = Boolean(
+			contact?.email &&
+				Object.values(contact.email).some(
+					(e) => !e?.isRemove && typeof e?.mail === 'string' && e.mail.trim() !== ''
+				)
+		);
+		if (editId && editId !== 'new') {
+			if (!compareToContact) return !hasName;
+			return Object.keys(fieldsToUpdate).length < 1 || !hasName;
 		}
-		return !(contact?.firstName || contact?.lastName);
-	}, [contact?.firstName, contact?.lastName, editId, existingContact, fieldsToUpdate]);
+		return !hasName || !hasAtLeastOneEmail;
+	}, [
+		contact?.firstName,
+		contact?.lastName,
+		contact?.email,
+		editId,
+		compareToContact,
+		fieldsToUpdate
+	]);
 	const title = useMemo(
 		() =>
 			contact?.namePrefix ||

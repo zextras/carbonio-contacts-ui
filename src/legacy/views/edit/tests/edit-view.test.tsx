@@ -5,6 +5,9 @@
  */
 import React from 'react';
 
+// Increase timeout for heavier full-suite runs
+jest.setTimeout(30000);
+
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 import { FOLDERS } from '@zextras/carbonio-ui-commons';
@@ -50,12 +53,15 @@ describe('Edit view', () => {
 		const newName = faker.person.firstName();
 		const { user } = setupTest(<EditView />);
 		const inputName = screen.getByRole('textbox', { name: /first name/i });
+		const emailInput = screen.getByRole('textbox', { name: /e-mail/i });
 		const saveButton = screen.getByRole('button', { name: /save/i });
 		expect(screen.getByText('Destination address book')).toBeVisible();
 		expect(screen.getByText('Address Book')).toBeVisible();
 		await user.click(screen.getByText('Contacts'));
 		await user.click(await screen.findByText(addressBook.name));
 		await user.type(inputName, newName);
+		await user.type(emailInput, `${newName.toLowerCase()}@example.com`);
+		expect(saveButton).toBeEnabled();
 		await user.click(saveButton);
 		await screen.findByText(/new contact created/i);
 		expect(await handler.mock.lastCall?.[0].request.json()).toEqual(
@@ -87,9 +93,12 @@ describe('Edit view', () => {
 		const { user } = setupTest(<EditView />);
 		const newName = faker.person.firstName();
 		const inputName = screen.getByRole('textbox', { name: /first name/i });
+		const emailInput = screen.getByRole('textbox', { name: /e-mail/i });
 		const saveButton = screen.getByRole('button', { name: /save/i });
 		expect(inputName).toBeVisible();
 		await user.type(inputName, newName);
+		await user.type(emailInput, `${newName.toLowerCase()}@example.com`);
+		expect(saveButton).toBeEnabled();
 		await user.click(saveButton);
 		await screen.findByText(/new contact created/i);
 		// by default the selected folder is 7
@@ -112,9 +121,12 @@ describe('Edit view', () => {
 		const { user } = setupTest(<EditView onClose={onClose} />);
 		const newName = faker.person.firstName();
 		const inputName = screen.getByRole('textbox', { name: /first name/i });
+		const emailInput = screen.getByRole('textbox', { name: /e-mail/i });
 		const saveButton = screen.getByRole('button', { name: /save/i });
 		expect(inputName).toBeVisible();
 		await user.type(inputName, newName);
+		await user.type(emailInput, `${newName.toLowerCase()}@example.com`);
+		expect(saveButton).toBeEnabled();
 		await user.click(saveButton);
 		await screen.findByText(/new contact created/i);
 		expect(onClose).toHaveBeenCalled();

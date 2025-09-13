@@ -19,6 +19,6 @@ export const createContact = async (contact: Contact): Promise<SoapContact> => {
 			l: cnt.parent,
 			a: normalizeContactToSoap(cnt)
 		}
-	})) as { cn: any };
-	return cn;
+	})) as { cn: SoapContact[] };
+	return cn?.[0] as SoapContact;
 };

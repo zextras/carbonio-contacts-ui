@@ -42,9 +42,11 @@ describe('EditViewBoardWrapper', () => {
 		const { user } = setupTest(<EditViewBoardWrapper />);
 		const newName = faker.person.firstName();
 		const inputName = screen.getByRole('textbox', { name: /first name/i });
+		const emailInput = screen.getByRole('textbox', { name: /e-mail/i });
 		const saveButton = screen.getByRole('button', { name: /save/i });
 		expect(inputName).toBeVisible();
 		await user.type(inputName, newName);
+		await user.type(emailInput, `${newName.toLowerCase()}@example.com`);
 		await user.click(saveButton);
 		await screen.findByText(/new contact created/i);
 		expect(closeBoard).toHaveBeenCalled();
