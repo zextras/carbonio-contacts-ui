@@ -20,5 +20,5 @@ export const createContact = async (contact: Contact): Promise<SoapContact> => {
 			a: normalizeContactToSoap(cnt)
 		}
 	})) as { cn: SoapContact[] };
-	return cn?.[0] as SoapContact;
+	return cn?.[0];
 };
