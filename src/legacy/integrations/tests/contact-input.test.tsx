@@ -309,7 +309,7 @@ describe('Contact input', () => {
 
 			expect(onChange).toHaveBeenCalledWith([expect.objectContaining({ label: 'My fullname' })]);
 		});
-		it('calls onChange with label equal to first + middle + last even if fullname present in autocomplete', async () => {
+		it('calls onChange with label equal to fullName even if first + middle + last present in autocomplete', async () => {
 			const interceptor = createAutocompleteInterceptor([
 				{ email: VALID_EMAIL, full: 'My fullname', first: 'first', middle: 'middle', last: 'last' }
 			]);
@@ -320,10 +320,9 @@ describe('Contact input', () => {
 			await typeAndSelectOptionFromDropdown(user, VALID_EMAIL);
 			await interceptor;
 
-			expect(onChange).toHaveBeenCalledWith([
-				expect.objectContaining({ label: 'first middle last' })
-			]);
+			expect(onChange).toHaveBeenCalledWith([expect.objectContaining({ label: 'My fullname' })]);
 		});
+
 		it('calls onChange with a chip with edit action after selecting a simple contact on the dropdown', async () => {
 			const onChange = jest.fn();
 			const autocompleteInterceptor = createAutocompleteInterceptor([
@@ -339,6 +338,107 @@ describe('Contact input', () => {
 				expect.objectContaining({ actions: [editValidChipAction] })
 			]);
 		});
+
+		it('uses display when present, ignoring other name fields', async () => {
+			const interceptor = createAutocompleteInterceptor([
+				{ email: VALID_EMAIL, display: 'Preferred Name', full: 'Full Name', first: 'First' }
+			]);
+			const onChange = jest.fn();
+			const { user } = setupTest(
+				<ContactInput onChange={onChange} defaultValue={[]} orderedAccountIds={[]} />
+			);
+			await typeAndSelectOptionFromDropdown(user, VALID_EMAIL);
+			await interceptor;
+
+			expect(onChange).toHaveBeenCalledWith([expect.objectContaining({ label: 'Preferred Name' })]);
+		});
+
+		it('uses concatenated first + last when no display or fullName', async () => {
+			const interceptor = createAutocompleteInterceptor([
+				{ email: VALID_EMAIL, first: 'First', last: 'Last' }
+			]);
+			const onChange = jest.fn();
+			const { user } = setupTest(
+				<ContactInput onChange={onChange} defaultValue={[]} orderedAccountIds={[]} />
+			);
+			await typeAndSelectOptionFromDropdown(user, VALID_EMAIL);
+			await interceptor;
+
+			expect(onChange).toHaveBeenCalledWith([expect.objectContaining({ label: 'First Last' })]);
+		});
+
+		it('trims whitespace around display before using it', async () => {
+			const interceptor = createAutocompleteInterceptor([
+				{ email: VALID_EMAIL, display: '   My Name   ' }
+			]);
+			const onChange = jest.fn();
+			const { user } = setupTest(
+				<ContactInput onChange={onChange} defaultValue={[]} orderedAccountIds={[]} />
+			);
+			await typeAndSelectOptionFromDropdown(user, VALID_EMAIL);
+			await interceptor;
+
+			expect(onChange).toHaveBeenCalledWith([expect.objectContaining({ label: 'My Name' })]);
+		});
+
+		it('includes middleName in concatenated label', async () => {
+			const interceptor = createAutocompleteInterceptor([
+				{ email: VALID_EMAIL, first: 'First', middle: 'Middle', last: 'Last' }
+			]);
+			const onChange = jest.fn();
+			const { user } = setupTest(
+				<ContactInput onChange={onChange} defaultValue={[]} orderedAccountIds={[]} />
+			);
+			await typeAndSelectOptionFromDropdown(user, VALID_EMAIL);
+			await interceptor;
+
+			expect(onChange).toHaveBeenCalledWith([
+				expect.objectContaining({ label: 'First Middle Last' })
+			]);
+		});
+
+		it('ignores empty string fields when concatenating names', async () => {
+			const interceptor = createAutocompleteInterceptor([
+				{ email: VALID_EMAIL, first: 'First', last: '' }
+			]);
+			const onChange = jest.fn();
+			const { user } = setupTest(
+				<ContactInput onChange={onChange} defaultValue={[]} orderedAccountIds={[]} />
+			);
+			await typeAndSelectOptionFromDropdown(user, VALID_EMAIL);
+			await interceptor;
+
+			expect(onChange).toHaveBeenCalledWith([expect.objectContaining({ label: 'First' })]);
+		});
+
+		it('display email if no display, fullName, or name parts', async () => {
+			const interceptor = createAutocompleteInterceptor([{ email: 'john.doe@example.com' }]);
+			const onChange = jest.fn();
+			const { user } = setupTest(
+				<ContactInput onChange={onChange} defaultValue={[]} orderedAccountIds={[]} />
+			);
+			await typeAndSelectOptionFromDropdown(user, 'john.doe@example.com');
+			await interceptor;
+
+			expect(onChange).toHaveBeenCalledWith([
+				expect.objectContaining({ label: 'john.doe@example.com' })
+			]);
+		});
+
+		it('display name from email if no display, fullName, or name parts', async () => {
+			const interceptor = createAutocompleteInterceptor([
+				{ email: '"John Doe" <john.doe@example.com>' }
+			]);
+			const onChange = jest.fn();
+			const { user } = setupTest(
+				<ContactInput onChange={onChange} defaultValue={[]} orderedAccountIds={[]} />
+			);
+			await typeAndSelectOptionFromDropdown(user, 'john.doe@example.com');
+			await interceptor;
+
+			expect(onChange).toHaveBeenCalledWith([expect.objectContaining({ label: 'John Doe' })]);
+		});
+
 		it('should show display custom action if provided', async () => {
 			const contactChipItem = createSimpleChip();
 			registerGetDistributionListHandler(generateDistributionList(contactChipItem));
