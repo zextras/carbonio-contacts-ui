@@ -74,6 +74,10 @@ function extractDisplayNameFromEmail(email: string): string | undefined {
 	return match ? match[1].trim() : undefined;
 }
 
+function trimValue(val?: string): string {
+	return val?.trim() || '';
+}
+
 /**
  * Generates a human-friendly label for a person contact with the following priority:
  * 1. Use `display` if provided and non-empty.
@@ -93,8 +97,6 @@ function getPersonLabel(
 	},
 	originalContactEmail: string | undefined
 ): string {
-	const trimValue: (val?: string) => string = (val?: string) => val?.trim() || '';
-
 	// 1. Display field
 	const display = trimValue(contact.display);
 	if (display) return display;
@@ -110,7 +112,7 @@ function getPersonLabel(
 	if (nameParts.length > 0) return nameParts.join(' ');
 
 	// 4. Extract from email (before falling back to raw email)
-	const extracted = trimValue(extractDisplayNameFromEmail(originalContactEmail ?? ''));
+	const extracted = extractDisplayNameFromEmail(originalContactEmail ?? '');
 	if (extracted) return extracted;
 
 	// 5. Final fallback: email
