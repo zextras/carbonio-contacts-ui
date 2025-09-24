@@ -425,7 +425,7 @@ describe('Contact input', () => {
 			]);
 		});
 
-		it('display name from email if no display, fullName, or name parts', async () => {
+		it('should display name from email if no display, fullName, or name parts', async () => {
 			const interceptor = createAutocompleteInterceptor([
 				{ email: '"John Doe" <john.doe@example.com>' }
 			]);
