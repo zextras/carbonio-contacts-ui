@@ -70,12 +70,15 @@ function getDistributionListLabel(contact: { fullName?: string; email: string })
  * Returns the display name if found, otherwise returns undefined
  */
 function extractDisplayNameFromEmail(email: string): string | undefined {
-	const match = email.match(/^"([^"]+)"\s*<.+>$/);
+	const match = /^"([^"]+)"\s*<.+>$/.exec(email);
 	return match ? match[1].trim() : undefined;
 }
 
+/**
+ * Trims whitespace from a string value, returning an empty string if the value is undefined or null.
+ */
 function trimValue(val?: string): string {
-	return val?.trim() || '';
+	return val?.trim() ?? '';
 }
 
 /**
