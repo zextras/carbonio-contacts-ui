@@ -41,6 +41,7 @@ export type RemoteUserContact = {
 	middle?: string;
 	full?: string;
 	company?: string;
+	display?: string;
 };
 
 export type RemoteGroupContact = {
