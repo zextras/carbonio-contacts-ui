@@ -411,7 +411,7 @@ describe('Contact input', () => {
 			expect(onChange).toHaveBeenCalledWith([expect.objectContaining({ label: 'First' })]);
 		});
 
-		it('display email if no display, fullName, or name parts', async () => {
+		it('displays email if no display, fullName, or name parts', async () => {
 			const interceptor = createAutocompleteInterceptor([{ email: 'john.doe@example.com' }]);
 			const onChange = jest.fn();
 			const { user } = setupTest(
