@@ -87,7 +87,7 @@ function trimValue(val?: string): string {
  * 2. Use `fullName` if provided and non-empty.
  * 3. Use a concatenation of `firstName`, `middleName`, and `lastName` if available.
  * 4. If none of the above are usable, attempt to extract a display name from the email.
- * 5. Fallback: return the email address itself.
+ * 5. Fallback: return the `email` address itself.
  */
 function getPersonLabel(
 	contact: {
