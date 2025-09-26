@@ -50,7 +50,6 @@ describe('utils', () => {
 			expect(label).toBe('dl@example.com');
 		});
 
-		// New tests for displayName priority logic
 		it('should prioritize displayName(display) over firstName + lastName for person contact', () => {
 			const personContact = {
 				id: '123456',
