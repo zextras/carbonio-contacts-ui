@@ -18,8 +18,13 @@ import * as modifyContactGroup from 'network/api/modify-contact';
 import { buildContactGroup } from 'tests/model-builder';
 import { registerModifyContactGroupHandler } from 'tests/msw-handlers/modify-contact-group';
 import { createSoapContactGroup, spyUseBoardHooks } from 'tests/utils';
-import { getContactInput } from 'views/board/common-contact-group-board.test';
 import EditContactGroupBoard from 'views/contact-groups/board/edit-contact-group-board';
+
+function getContactInput(): HTMLElement {
+	return screen.getByRole('textbox', {
+		name: `Type an address, click ‘+’ to add to the group`
+	});
+}
 
 function spyUseBoard(contactGroupId: string, folderId: string): void {
 	jest.spyOn(shell, 'useBoard').mockReturnValue({

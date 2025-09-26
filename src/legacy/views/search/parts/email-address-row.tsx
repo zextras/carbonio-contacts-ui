@@ -11,7 +11,7 @@ import { CONTACT_TYPES, ContactInputProps, useContactInput } from '@zextras/carb
 import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { FormValuesControlProps } from '../types';
+import { FormValuesControlProps } from 'legacy/views/search/types';
 
 export const EmailAddressRow = ({ control }: FormValuesControlProps): React.JSX.Element => {
 	const ContactInput = useContactInput();

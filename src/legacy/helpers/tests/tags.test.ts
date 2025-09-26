@@ -6,8 +6,8 @@
 
 import { ZIMBRA_STANDARD_COLORS, Tags } from '@zextras/carbonio-ui-commons';
 
-import { Contact } from 'legacy/types/contact';
-import { getTagsArray } from 'legacy/helpers/tags';
+import { Contact } from '../../types/contact';
+import { getTagsArray } from '../tags';
 
 describe('getTagsArray', () => {
 	const tagsMap: Tags = {

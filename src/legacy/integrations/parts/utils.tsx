@@ -9,7 +9,8 @@ import {
 	parseEmail,
 	CONTACT_TYPES,
 	ContactInputItemInternalValue,
-	GroupContact
+	GroupContact,
+	DistributionListContact
 } from '@zextras/carbonio-ui-commons';
 import { legacySoapFetch } from '@zextras/carbonio-ui-soap-lib';
 import { map, trim, unescape } from 'lodash';
@@ -42,19 +43,48 @@ export function isContactGroup(contact: {
 export const getContactId = (contact: ContactInputItemInternalValue): string =>
 	contact.type === CONTACT_TYPES.GROUP ? contact.id : contact.email;
 
-export const getContactLabel = (contact: ContactInputItemInternalValue): string => {
-	switch (contact.type) {
-		case CONTACT_TYPES.GROUP:
-			return contact.display;
-		case CONTACT_TYPES.DISTRIBUTION_LIST:
-			return contact.email;
-		default:
-			break;
-	}
-	if (contact.firstName ?? contact.middleName ?? contact.lastName) {
-		return trim(`${contact.firstName ?? ''} ${contact.middleName ?? ''} ${contact.lastName ?? ''}`);
+type DistributionListContactWithDisplay = DistributionListContact & { fullName?: string };
+
+function isGroupContact(
+	contact: ContactInputItemInternalValue | DistributionListContactWithDisplay
+): contact is ContactInputItemInternalValue & { type: typeof CONTACT_TYPES.GROUP } {
+	return contact.type === CONTACT_TYPES.GROUP;
+}
+
+function isDistributionListContact(
+	contact: ContactInputItemInternalValue | DistributionListContactWithDisplay
+): contact is DistributionListContactWithDisplay {
+	return contact.type === CONTACT_TYPES.DISTRIBUTION_LIST;
+}
+
+function getGroupLabel(contact: { display: string }): string {
+	return contact.display;
+}
+
+function getDistributionListLabel(contact: { fullName?: string; email: string }): string {
+	return contact.fullName?.trim() ? contact.fullName : contact.email;
+}
+
+function getPersonLabel(contact: {
+	firstName?: string;
+	middleName?: string;
+	lastName?: string;
+	fullName?: string;
+	email: string;
+}): string {
+	const nameParts = [contact.firstName, contact.middleName, contact.lastName].filter(Boolean);
+	if (nameParts.length > 0) {
+		return trim(nameParts.join(' '));
 	}
 	return contact.fullName ?? contact.email;
+}
+
+export const getContactLabel = (
+	contact: ContactInputItemInternalValue | DistributionListContactWithDisplay
+): string => {
+	if (isGroupContact(contact)) return getGroupLabel(contact);
+	if (isDistributionListContact(contact)) return getDistributionListLabel(contact);
+	return getPersonLabel(contact);
 };
 
 export function tryToParseEmail(input: string | undefined): string {
@@ -89,10 +119,11 @@ export const mapToChipContactOptions = (value: RemoteContactResponse): ContactIn
 	}
 	const parsedEmail = tryToParseEmail(value.email);
 	if (newIsDistributionList(value)) {
-		const distributionList = {
+		const distributionList: DistributionListContactWithDisplay = {
 			id: parsedEmail,
 			email: parsedEmail,
-			type: CONTACT_TYPES.DISTRIBUTION_LIST
+			type: CONTACT_TYPES.DISTRIBUTION_LIST,
+			fullName: value.full
 		};
 		const label = getContactLabel(distributionList);
 		return {

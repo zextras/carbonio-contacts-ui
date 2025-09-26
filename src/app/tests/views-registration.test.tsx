@@ -17,8 +17,8 @@ import {
 	EDIT_DL_BOARD_ID,
 	GROUPS_ROUTE,
 	NEW_CONTACT_GROUP_BOARD_ID
-} from 'constants/index';
-import { ViewsRegistration } from 'app/views-registration';
+} from '../../constants';
+import { ViewsRegistration } from '../views-registration';
 import { setupTest } from '@test-setup';
 
 describe('ViewsRegistration', () => {
