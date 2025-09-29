@@ -82,6 +82,9 @@ function useSelectFolderModalAction(): ({
 					id: modal.id,
 					maxHeight: '90vh',
 					size: 'medium',
+					onClose: () => {
+						closeModal(modal.id);
+					},
 					children: (
 						<SelectFolderModal
 							onClose={onClose}
