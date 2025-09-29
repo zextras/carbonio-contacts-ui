@@ -13,7 +13,7 @@ import {
 	DistributionListContact
 } from '@zextras/carbonio-ui-commons';
 import { legacySoapFetch } from '@zextras/carbonio-ui-soap-lib';
-import { map, trim, unescape } from 'lodash';
+import { map, unescape } from 'lodash';
 
 import { Hint } from 'legacy/integrations/parts/hint';
 import { HintGroup } from 'legacy/integrations/parts/hint-group';
@@ -65,26 +65,71 @@ function getDistributionListLabel(contact: { fullName?: string; email: string })
 	return contact.fullName?.trim() ? contact.fullName : contact.email;
 }
 
-function getPersonLabel(contact: {
-	firstName?: string;
-	middleName?: string;
-	lastName?: string;
-	fullName?: string;
-	email: string;
-}): string {
-	const nameParts = [contact.firstName, contact.middleName, contact.lastName].filter(Boolean);
-	if (nameParts.length > 0) {
-		return trim(nameParts.join(' '));
-	}
-	return contact.fullName ?? contact.email;
+/**
+ * Extracts display name from email format like "Display Name" <email@domain.com>
+ * Returns the display name if found, otherwise returns undefined
+ */
+function extractDisplayNameFromEmail(email: string): string | undefined {
+	const match = /^"([^"]+)"\s*<.+>$/.exec(email);
+	return match ? match[1].trim() : undefined;
+}
+
+/**
+ * Trims whitespace from a string value, returning an empty string if the value is undefined or null.
+ */
+function trimValue(val?: string): string {
+	return val?.trim() ?? '';
+}
+
+/**
+ * Generates a human-friendly label for a person contact with the following priority:
+ * 1. Use `display` if provided and non-empty.
+ * 2. Use `fullName` if provided and non-empty.
+ * 3. Use a concatenation of `firstName`, `middleName`, and `lastName` if available.
+ * 4. If none of the above are usable, attempt to extract a display name from the email.
+ * 5. Fallback: return the `email` address itself.
+ */
+function getPersonLabel(
+	contact: {
+		firstName?: string;
+		middleName?: string;
+		lastName?: string;
+		fullName?: string;
+		email: string;
+		display?: string;
+	},
+	originalContactEmail: string | undefined
+): string {
+	// 1. Display field
+	const display = trimValue(contact.display);
+	if (display) return display;
+
+	// 2. Full Name field
+	const fullName = trimValue(contact.fullName);
+	if (fullName) return fullName;
+
+	// 3. Constructed name parts
+	const nameParts = [contact.firstName, contact.middleName, contact.lastName]
+		.map(trimValue)
+		.filter(Boolean);
+	if (nameParts.length > 0) return nameParts.join(' ');
+
+	// 4. Extract from email (before falling back to raw email)
+	const extracted = extractDisplayNameFromEmail(originalContactEmail ?? '');
+	if (extracted) return extracted;
+
+	// 5. Final fallback: email
+	return contact.email;
 }
 
 export const getContactLabel = (
-	contact: ContactInputItemInternalValue | DistributionListContactWithDisplay
+	contact: (ContactInputItemInternalValue | DistributionListContactWithDisplay) & {
+		originalContactEmail?: string;
+	}
 ): string => {
 	if (isGroupContact(contact)) return getGroupLabel(contact);
 	if (isDistributionListContact(contact)) return getDistributionListLabel(contact);
-	return getPersonLabel(contact);
+	return getPersonLabel(contact, contact.originalContactEmail);
 };
 
 export function tryToParseEmail(input: string | undefined): string {
@@ -141,7 +186,9 @@ export const mapToChipContactOptions = (value: RemoteContactResponse): ContactIn
 		fullName: value.full,
 		company: value.company,
 		email: parsedEmail,
-		type: CONTACT_TYPES.CONTACT
+		display: value.display,
+		type: CONTACT_TYPES.CONTACT,
+		originalContactEmail: value.email
 	};
 	const label = getContactLabel(contact);
 	return {
