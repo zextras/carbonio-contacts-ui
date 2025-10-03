@@ -6,9 +6,9 @@
 
 import React, { FC, useCallback, useRef } from 'react';
 
+import styled from '@emotion/styled';
 import { Container, ListItem, List } from '@zextras/carbonio-design-system';
 import { groupBy } from 'lodash';
-import styled from 'styled-components';
 
 import { UsersSharesListItem } from 'components/modals/shared-address-books-add/users-shares-list-item';
 import { ShareInfo } from 'model/share-info';

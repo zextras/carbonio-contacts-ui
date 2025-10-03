@@ -5,6 +5,7 @@
  */
 import React, { useCallback, useMemo, useState } from 'react';
 
+import styled from '@emotion/styled';
 import {
 	Button,
 	Chip,
@@ -14,12 +15,11 @@ import {
 } from '@zextras/carbonio-design-system';
 import { debounce, DebouncedFuncLeading, map } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
 
-import { ContactInputDistributionList } from 'legacy/integrations/types';
 import { ACTION_IDS, DL_MEMBERS_LOAD_LIMIT } from 'constants/index';
 import { useGetDistributionList } from 'hooks/use-get-distribution-list';
 import { useGetDistributionListMembers } from 'hooks/use-get-distribution-list-members';
+import { ContactInputDistributionList } from 'legacy/integrations/types';
 import type { DistributionListMembersPage } from 'model/distribution-list';
 
 const StyledChip = styled(Chip)`

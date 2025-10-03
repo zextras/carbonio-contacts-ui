@@ -7,22 +7,21 @@
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
-import 'jest-styled-components';
 import { act, within } from '@testing-library/react';
 import { first, forEach, last, noop } from 'lodash';
 
-import {
-	CommonContactGroupBoard,
-	CommonContactGroupBoardProps
-} from 'views/board/common-contact-group-board';
+import { setupTest, screen } from '@test-setup';
 import { CONTACT_GROUP_NAME_MAX_LENGTH } from 'constants/index';
 import { PALETTE, TESTID_SELECTORS } from 'constants/tests';
 import { buildContactGroup } from 'tests/model-builder';
 import { registerFullAutocompleteHandler } from 'tests/msw-handlers/full-autocomplete';
 import { spyUseBoardHooks } from 'tests/utils';
-import { setupTest, screen } from '@test-setup';
+import {
+	CommonContactGroupBoard,
+	CommonContactGroupBoardProps
+} from 'views/board/common-contact-group-board';
 
-export function getContactInput(): HTMLElement {
+function getContactInput(): HTMLElement {
 	return screen.getByRole('textbox', {
 		name: `Type an address, click ‘+’ to add to the group`
 	});

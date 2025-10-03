@@ -8,8 +8,8 @@ import React from 'react';
 import { waitFor } from '@testing-library/react';
 import { useForm } from 'react-hook-form';
 
-import { PhoneNumberRow } from './phone-number-row';
-import { AdvancedFilterModalFormValues } from '../types';
+import { AdvancedFilterModalFormValues } from 'legacy/views/search/types';
+import { PhoneNumberRow } from 'legacy/views/search/parts/phone-number-row';
 import { screen, setupTest } from '@test-setup';
 
 // Test wrapper component to provide form context

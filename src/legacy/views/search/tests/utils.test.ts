@@ -5,8 +5,8 @@
  */
 import { CONTACT_TYPES } from '@zextras/carbonio-ui-commons';
 
-import { AdvancedFilterModalFormValues } from './types';
-import { getQueryToBe, getAdvancedFiltersDefaultValues } from './utils';
+import { AdvancedFilterModalFormValues } from 'legacy/views/search/types';
+import { getAdvancedFiltersDefaultValues, getQueryToBe } from 'legacy/views/search/utils';
 
 const FIRST_NAME_LABEL = 'FirstName:John';
 const LAST_NAME_LABEL = 'LastName:Doe';

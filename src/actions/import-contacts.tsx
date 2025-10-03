@@ -75,6 +75,9 @@ export const useActionImportContacts = (): ImportContactsAction => {
 					{
 						id: modalId,
 						maxHeight: '90vh',
+						onClose: () => {
+							closeModal(modalId);
+						},
 						children: (
 							<ContactsImportModal
 								addressBook={addressBook}

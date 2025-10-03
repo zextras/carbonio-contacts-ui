@@ -22,6 +22,7 @@ export const ListActionIconButton = ({ action }: ListIconButtonProps): React.JSX
 				action.onClick(ev);
 			}}
 			disabled={action.disabled}
+			data-testid={action.id}
 		/>
 	</Tooltip>
 );

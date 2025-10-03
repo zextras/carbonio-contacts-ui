@@ -9,8 +9,8 @@ import { act, fireEvent, waitFor } from '@testing-library/react';
 import { useRunSearchIntegration, useTagStore } from '@zextras/carbonio-ui-commons';
 import { HttpResponse } from 'msw';
 
-import { TESTID_SELECTORS, TIMERS } from 'constants/tests';
-import { TagsAccordion } from 'legacy/views/secondary-bar/tags-accordion';
+import { TESTID_SELECTORS, TIMERS } from '../../../../constants/tests';
+import { TagsAccordion } from '../tags-accordion';
 import { screen, setupTest } from '@test-setup';
 import { createAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 import { buildSoapResponse } from '@test-utils/utils/soap';
