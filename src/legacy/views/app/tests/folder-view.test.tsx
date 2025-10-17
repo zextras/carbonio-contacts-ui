@@ -120,7 +120,6 @@ describe('folder-view', () => {
 		});
 
 		it('Click on close action closes the displayer', async () => {
-			const EMPTY_BOARD_MESSAGE = 'Create a new contact by clicking the “NEW” button.';
 			const contactGroupId = '111';
 			const contactGroupName = 'My Contact Group';
 			const contactGroup = createSoapContactGroup(contactGroupName, [], contactGroupId, folderId);
@@ -159,7 +158,7 @@ describe('folder-view', () => {
 			const {
 				result: { current: theme }
 			} = setupHook(useTheme);
-			const activeBackground = `background: ${theme.palette.highlight.focus}`;
+			const activeBackground = `background: ${theme.palette.highlight.active}`;
 
 			const { user } = setupFolderView(folderId);
 
