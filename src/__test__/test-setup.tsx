@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React, { PropsWithChildren, ReactElement, useMemo } from 'react';
-import { vi } from 'vitest';
+
 import { matchers } from '@emotion/jest';
 import {
 	act,
@@ -29,9 +29,10 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { MemoryRouter, MemoryRouterProps, Route, RouteProps, Routes } from 'react-router-dom';
 import { Store } from 'redux';
+import { vi } from 'vitest';
 
-import { previewContextMock, PreviewsManagerContext } from '@test-utils/carbonio-ui-preview';
 import { getAppI18n } from './i18n/i18n-test-factory';
+import { previewContextMock, PreviewsManagerContext } from '@test-utils/carbonio-ui-preview';
 
 type ByRoleWithIconOptions = ByRoleOptions & {
 	icon: string | RegExp;
@@ -212,12 +213,7 @@ export function setupHook<TProps extends unknown[], TResult>(
 }
 
 export function makeListItemsVisible(): void {
-	const { calls, instances } = (
-		window.IntersectionObserver as ReturnType<typeof vi.fn><
-			IntersectionObserver,
-			[callback: IntersectionObserverCallback, options?: IntersectionObserverInit]
-		>
-	).mock;
+	const { calls, instances } = (window.IntersectionObserver as ReturnType<typeof vi.fn>).mock;
 	calls.forEach((call, index) => {
 		const [onChange] = call;
 		// trigger the intersection on the observed element

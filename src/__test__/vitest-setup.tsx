@@ -9,19 +9,26 @@ import { noop } from 'lodash';
 import { SetupServer, setupServer } from 'msw/node';
 import { vi, beforeAll, beforeEach, afterEach, afterAll } from 'vitest';
 
+import { mockCarbonioShell } from './mocks/modules/carbonio-shell-ui';
 import { getRestHandlers } from '@test-utils/network/msw/handlers';
 
+// Mock external modules
+mockCarbonioShell();
+
+// Setup MSW mock server
 let server = setupServer();
 
 configure({
 	asyncUtilTimeout: 2000
 });
 
-vi.mock('helpers/download', () => ({
-	redirectToBlob: vi.fn()
-}));
+// TODO check if it is needed
+// vi.mock('helpers/download', () => ({
+// 	redirectToBlob: vi.fn()
+// // }));
 
-vi.mock('../../assets/notification.mp3', () => '');
+// TODO check if it is needed
+// vi.mock('../../assets/notification.mp3', () => '');
 
 /**
  * Default logic to execute before all the tests
