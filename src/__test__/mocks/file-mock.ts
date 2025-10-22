@@ -6,3 +6,5 @@
 module.exports = {
 	play: jest.fn()
 };
+
+export default 'test-file-stub';

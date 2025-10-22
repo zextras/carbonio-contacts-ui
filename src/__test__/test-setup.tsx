@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React, { PropsWithChildren, ReactElement, useMemo } from 'react';
-
+import { vi } from 'vitest';
 import { matchers } from '@emotion/jest';
 import {
 	act,
@@ -31,7 +31,7 @@ import { MemoryRouter, MemoryRouterProps, Route, RouteProps, Routes } from 'reac
 import { Store } from 'redux';
 
 import { previewContextMock, PreviewsManagerContext } from '@test-utils/carbonio-ui-preview';
-import { getAppI18n } from '__test__/i18n/i18n-test-factory';
+import { getAppI18n } from './i18n/i18n-test-factory';
 
 type ByRoleWithIconOptions = ByRoleOptions & {
 	icon: string | RegExp;
@@ -173,7 +173,7 @@ export function setupTest(
 	ui: ReactElement,
 	{ setupOptions, ...customRenderOptions }: SetupOptions = {}
 ): { user: UserEvent } & ReturnType<typeof render> {
-	const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime, ...setupOptions });
+	const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime, ...setupOptions });
 	const rightClick = (target: Element): Promise<void> =>
 		user.pointer({ target, keys: '[MouseRight]' });
 	return {
@@ -207,13 +207,13 @@ export function setupHook<TProps extends unknown[], TResult>(
 		result,
 		unmount,
 		rerender,
-		user: userEvent.setup({ advanceTimers: jest.advanceTimersByTime, ...setupOptions })
+		user: userEvent.setup({ advanceTimers: vi.advanceTimersByTime, ...setupOptions })
 	};
 }
 
 export function makeListItemsVisible(): void {
 	const { calls, instances } = (
-		window.IntersectionObserver as jest.Mock<
+		window.IntersectionObserver as ReturnType<typeof vi.fn><
 			IntersectionObserver,
 			[callback: IntersectionObserverCallback, options?: IntersectionObserverInit]
 		>
@@ -236,8 +236,8 @@ export function makeListItemsVisible(): void {
 }
 
 export function triggerLoadMore(): void {
-	const { calls, instances } = (window.IntersectionObserver as jest.Mock<IntersectionObserver>)
-		.mock;
+	const mockIntersectionObserver = window.IntersectionObserver as ReturnType<typeof vi.fn>;
+	const { calls, instances } = mockIntersectionObserver.mock;
 
 	const [onChange] = calls[calls.length - 1];
 	const instance = instances[instances.length - 1];

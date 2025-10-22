@@ -6,14 +6,11 @@
 		"paths": {
 			"@test-utils/*": ["__test__/mocks/*"],
 			"@test-setup": ["__test__/test-setup.tsx"],
-			"@jest-setup": ["../jest-setup.ts"]
+			"@jest-setup": ["../vitest-setup.tsx"]
 		}
 	},
 	"include": [
-		"**/*",
-		".eslintrc.js",
-		"jest.config.ts",
-		"jest-setup.ts"
+		"**/*"
 	],
 	"exclude": ["./node_modules/*", "./dist/*"]
 }

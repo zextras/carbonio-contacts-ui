@@ -5,33 +5,23 @@
  */
 import '@testing-library/jest-dom';
 import { configure } from '@testing-library/react';
-import failOnConsole from 'jest-fail-on-console';
-import fetchMock from 'jest-fetch-mock';
 import { noop } from 'lodash';
-import { setupServer, SetupServer } from 'msw/node';
+import { SetupServer, setupServer } from 'msw/node';
+import { vi, beforeAll, beforeEach, afterEach, afterAll } from 'vitest';
 
-import * as downloadModule from 'helpers/download';
 import { getRestHandlers } from '@test-utils/network/msw/handlers';
 
-let server: SetupServer;
+let server = setupServer();
 
 configure({
 	asyncUtilTimeout: 2000
 });
 
-jest.setTimeout(10000);
+vi.mock('helpers/download', () => ({
+	redirectToBlob: vi.fn()
+}));
 
-failOnConsole({
-	shouldFailOnError: true,
-	shouldFailOnWarn: false,
-
-	silenceMessage: (message): boolean =>
-		message.includes('jest mocked error') ||
-		// FIXME: move the duplicated field inside the value of the chip, instead of placing it on the chip itself
-		message.includes('Received `false` for a non-boolean attribute `duplicated`') ||
-		// FIXME: fix the DS ChipInput to not spread all properties to the DOM
-		message.includes('React does not recognize the `isGeneric` prop on a DOM element')
-});
+vi.mock('../../assets/notification.mp3', () => '');
 
 /**
  * Default logic to execute before all the tests
@@ -39,6 +29,7 @@ failOnConsole({
 type DefaultBeforeAllTestsProps = {
 	onUnhandledRequest: 'warn' | 'error';
 };
+
 const defaultBeforeAllTests = (
 	{ onUnhandledRequest }: DefaultBeforeAllTestsProps = { onUnhandledRequest: 'warn' }
 ): void => {
@@ -48,7 +39,7 @@ const defaultBeforeAllTests = (
 	// mock a simplified Intersection Observer
 	Object.defineProperty(window, 'IntersectionObserver', {
 		writable: true,
-		value: jest.fn(function intersectionObserverMock(
+		value: vi.fn(function intersectionObserverMock(
 			callback: IntersectionObserverCallback,
 			options: IntersectionObserverInit
 		) {
@@ -56,9 +47,9 @@ const defaultBeforeAllTests = (
 				thresholds: options.threshold,
 				root: options.root,
 				rootMargin: options.rootMargin,
-				observe: jest.fn(),
-				unobserve: jest.fn(),
-				disconnect: jest.fn()
+				observe: vi.fn(),
+				unobserve: vi.fn(),
+				disconnect: vi.fn()
 			};
 		})
 	});
@@ -71,14 +62,14 @@ const defaultBeforeAllTests = (
 
 beforeAll(() => {
 	defaultBeforeAllTests();
-	fetchMock.doMock();
-	jest.spyOn(downloadModule, 'redirectToBlob').mockImplementation(jest.fn());
 });
 
-beforeEach(noop);
+beforeEach(() => {
+	vi.useFakeTimers();
+});
 
 afterEach(() => {
-	jest.clearAllTimers();
+	vi.clearAllTimers();
 });
 
 afterAll(() => {
@@ -89,19 +80,14 @@ afterAll(() => {
 // mock a simplified crypto
 Object.defineProperty(window.crypto, 'randomUUID', {
 	writable: true,
-	value: jest.fn(() => Math.random().toString())
+	value: vi.fn(() => Math.random().toString())
 });
 
-/**
- * Mocks the Worker class
- */
-
-type MessageHandler = (msg: string) => void;
-
+// Mock Worker
 class Worker {
 	url: string;
 
-	onmessage: MessageHandler;
+	onmessage: (msg: string) => void;
 
 	constructor(stringUrl: string) {
 		this.url = stringUrl;
@@ -118,10 +104,11 @@ Object.defineProperty(window, 'Worker', {
 	value: Worker
 });
 
-export const getSetupServer = (): SetupServer => server;
-
-window.ResizeObserver = jest.fn().mockImplementation(() => ({
-	observe: jest.fn(),
-	unobserve: jest.fn(),
-	disconnect: jest.fn()
+// Mock ResizeObserver
+window.ResizeObserver = vi.fn().mockImplementation(() => ({
+	observe: vi.fn(),
+	unobserve: vi.fn(),
+	disconnect: vi.fn()
 }));
+
+export const getSetupServer = (): SetupServer => server;
