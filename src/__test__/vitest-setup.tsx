@@ -3,17 +3,18 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+
 import '@testing-library/jest-dom';
 import { configure } from '@testing-library/react';
 import { noop } from 'lodash';
 import { SetupServer, setupServer } from 'msw/node';
 import { vi, beforeAll, beforeEach, afterEach, afterAll } from 'vitest';
 
-import { mockCarbonioShell } from './mocks/modules/carbonio-shell-ui';
 import { getRestHandlers } from '@test-utils/network/msw/handlers';
 
-// Mock external modules
-mockCarbonioShell();
+vi.mock(import('@zextras/carbonio-shell-ui'));
+vi.mock(import('@zextras/carbonio-ui-soap-lib'));
+vi.mock(import('zustand'));
 
 // Setup MSW mock server
 let server = setupServer();

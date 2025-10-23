@@ -17,20 +17,6 @@ export default defineConfig({
 		globals: true,
 		environment: 'jsdom',
 		setupFiles: ['./src/__test__/vitest-setup.tsx', './src/__test__/setup-browser-env.ts'],
-		// alias: [
-		// 	{
-		// 		find: /@test-utils/,
-		// 		replacement: new URL('./src/__test__/mocks', import.meta.url).pathname
-		// 	},
-		// 	{
-		// 		find: /@test-setup/,
-		// 		replacement: new URL('./src/__test__/test-setup.tsx', import.meta.url).pathname
-		// 	}
-		// 	// '/@test-utils/': new URL('./src/__test__/mocks', import.meta.url).pathname,
-		// 	// '/@test-setup/': new URL('./src/__test__/test-setup.tsx', import.meta.url).pathname,
-		// 	// '.*\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
-		// 	// 	'./__test/__mocks__/file-mock.ts'
-		// ],
 		coverage: {
 			provider: 'v8',
 			reporter: ['text', 'cobertura', 'lcov'],

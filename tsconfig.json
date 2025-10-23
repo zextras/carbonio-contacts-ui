@@ -6,11 +6,9 @@
 		"paths": {
 			"@test-utils/*": ["__test__/mocks/*"],
 			"@test-setup": ["__test__/test-setup.tsx"],
-			"@jest-setup": ["../vitest-setup.tsx"]
+			"@jest-setup": ["__test__/vitest-setup.tsx"]
 		}
 	},
-	"include": [
-		"**/*"
-	],
+	"include": ["**/*"],
 	"exclude": ["./node_modules/*", "./dist/*"]
 }
