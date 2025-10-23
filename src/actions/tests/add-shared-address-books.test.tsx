@@ -11,6 +11,7 @@ import { UIAction } from 'actions/types';
 import { TIMERS } from 'constants/tests';
 import { screen, setupHook } from '@test-setup';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
+import { vi } from 'vitest';
 
 describe('useActionAddSharedAddressBooks', () => {
 	beforeEach(() => {
@@ -41,7 +42,7 @@ describe('useActionAddSharedAddressBooks', () => {
 		});
 
 		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+			vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 
 		expect(screen.getByText('Find Contact Shares')).toBeVisible();

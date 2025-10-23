@@ -6,12 +6,13 @@
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
+import { vi } from 'vitest';
 
+import { screen, setupHook } from '@test-setup';
+import { generateFolder } from '@test-utils/folders/folders-generator';
 import { useActionShowShareInfo } from 'actions/show-share-info';
 import { UIAction } from 'actions/types';
 import { TIMERS } from 'constants/tests';
-import { screen, setupHook } from '@test-setup';
-import { generateFolder } from '@test-utils/folders/folders-generator';
 
 describe('useActionShareInfo', () => {
 	it('should return an object with the specific data', () => {
@@ -66,7 +67,7 @@ describe('useActionShareInfo', () => {
 			});
 
 			act(() => {
-				jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+				vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 			});
 
 			expect(screen.getByText("Shared address book's info")).toBeVisible();
@@ -85,7 +86,7 @@ describe('useActionShareInfo', () => {
 			});
 
 			act(() => {
-				jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+				vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 			});
 
 			expect(screen.queryByText("Shared address book's info")).not.toBeInTheDocument();

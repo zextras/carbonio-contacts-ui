@@ -8,6 +8,7 @@ import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 import { FOLDERS } from '@zextras/carbonio-ui-commons';
+import { vi } from 'vitest';
 
 import { TRASH_ACTION } from '../../../constants/actions';
 import { Contact } from '../../../legacy/types/contact';
@@ -66,13 +67,13 @@ describe('Api Client Actions', () => {
 		createSoapAPIInterceptor('ContactAction', response);
 		const contacts: Array<Contact> = [buildContact({ parent: FOLDERS.CONTACTS })];
 
-		const { result, user } = setupHook(() => useTrashContacts(contacts));
+		const { result } = setupHook(() => useTrashContacts(contacts));
 		const action = result.current;
 		act(() => {
 			action.onClick();
 		});
 		act(() => {
-			jest.advanceTimersByTime(2000);
+			vi.advanceTimersByTime(2000);
 		});
 
 		expect(await screen.findByText('Something went wrong, please try again')).toBeVisible();
@@ -89,7 +90,7 @@ describe('Api Client Actions', () => {
 			action.onClick();
 		});
 		act(() => {
-			jest.advanceTimersByTime(2000);
+			vi.advanceTimersByTime(2000);
 		});
 		const button = await screen.findByRole('button', { name: 'Undo' });
 
@@ -124,7 +125,7 @@ describe('Api Client Actions', () => {
 			action.onClick();
 		});
 		act(() => {
-			jest.advanceTimersByTime(2000);
+			vi.advanceTimersByTime(2000);
 		});
 		const button = await screen.findByRole('button', { name: 'Undo' });
 
