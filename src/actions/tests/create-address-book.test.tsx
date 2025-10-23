@@ -6,12 +6,13 @@
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 import { FOLDER_VIEW, FOLDERS } from '@zextras/carbonio-ui-commons';
+import { vi } from 'vitest';
 
+import { screen, setupHook } from '@test-setup';
+import { generateFolder } from '@test-utils/folders/folders-generator';
 import { useActionCreateAddressBook } from 'actions/create-address-book';
 import { UIAction } from 'actions/types';
 import { TIMERS } from 'constants/tests';
-import { screen, setupHook } from '@test-setup';
-import { generateFolder } from '@test-utils/folders/folders-generator';
 
 describe('useActionCreateAddressBook', () => {
 	it('should return an object with the specific data', () => {
@@ -128,7 +129,7 @@ describe('useActionCreateAddressBook', () => {
 			});
 
 			act(() => {
-				jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+				vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 			});
 
 			expect(screen.getByText(/create new address book/i)).toBeVisible();
@@ -146,7 +147,7 @@ describe('useActionCreateAddressBook', () => {
 			});
 
 			act(() => {
-				jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+				vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 			});
 
 			expect(screen.queryByText(/create new address book/i)).not.toBeInTheDocument();

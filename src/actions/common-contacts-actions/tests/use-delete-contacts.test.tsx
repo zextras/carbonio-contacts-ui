@@ -16,6 +16,7 @@ import { useDeleteContacts } from 'actions/common-contacts-actions/use-delete-co
 import { DELETE_PERMANENTLY_ACTION_DESCRIPTOR, TESTID_SELECTORS, TIMERS } from 'constants/tests';
 import { Contact } from 'legacy/types/contact';
 import { buildContact } from 'tests/model-builder';
+import { vi } from 'vitest';
 
 describe('Delete-contacts', () => {
 	describe("Delete-contacts' actions", () => {
@@ -34,7 +35,7 @@ describe('Delete-contacts', () => {
 			action.onClick();
 		});
 		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+			vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 		expect(screen.getByRole('button', { name: 'Delete Permanently' })).toBeVisible();
 	});
@@ -47,7 +48,7 @@ describe('Delete-contacts', () => {
 			action.onClick();
 		});
 		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+			vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 		expect(screen.getByText('Are you sure to permanently delete this contact?')).toBeVisible();
 	});
@@ -60,7 +61,7 @@ describe('Delete-contacts', () => {
 			action.onClick();
 		});
 		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+			vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 		expect(
 			screen.getByText('Are you sure to permanently delete the selected contacts?')
@@ -75,7 +76,7 @@ describe('Delete-contacts', () => {
 			action.onClick();
 		});
 		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+			vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 		expect(
 			screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.close })
@@ -90,7 +91,7 @@ describe('Delete-contacts', () => {
 			action.onClick();
 		});
 		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+			vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 		const button = screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.close });
 		await user.click(button);
@@ -105,7 +106,7 @@ describe('Delete-contacts', () => {
 			action.onClick();
 		});
 		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+			vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 		expect(
 			screen.getByText(
@@ -126,7 +127,7 @@ describe('Delete-contacts', () => {
 			action.onClick();
 		});
 		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+			vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 		const button = screen.getByRole('button', { name: 'Delete Permanently' });
 		await user.click(button);
@@ -150,7 +151,7 @@ describe('Delete-contacts', () => {
 			action.onClick();
 		});
 		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+			vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 		const button = screen.getByRole('button', { name: 'Delete Permanently' });
 		await user.click(button);
@@ -166,7 +167,7 @@ describe('Delete-contacts', () => {
 			action.onClick();
 		});
 		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+			vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 		const button = screen.getByRole('button', { name: 'Delete Permanently' });
 		await user.click(button);
@@ -190,7 +191,7 @@ describe('Delete-contacts', () => {
 			action.onClick();
 		});
 		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+			vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 		const button = screen.getByRole('button', { name: 'Delete Permanently' });
 		await user.click(button);
@@ -213,7 +214,7 @@ describe('Delete-contacts', () => {
 			action.onClick();
 		});
 		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+			vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 		const button = screen.getByRole('button', { name: 'Delete Permanently' });
 		await user.click(button);
