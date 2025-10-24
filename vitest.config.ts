@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-/* eslint-disable import/no-extraneous-dependencies */
+import react from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { defineConfig } from 'vitest/config';
 
@@ -12,11 +12,20 @@ export default defineConfig({
 	define: {
 		BASE_PATH: JSON.stringify('/test')
 	},
-	plugins: [tsconfigPaths()],
+	plugins: [
+		react({
+			jsxImportSource: '@emotion/react',
+			babel: {
+				plugins: ['@emotion/babel-plugin']
+			}
+		}),
+		tsconfigPaths()
+	],
 	test: {
 		globals: true,
 		environment: 'jsdom',
 		setupFiles: ['./src/__test__/vitest-setup.tsx', './src/__test__/setup-browser-env.ts'],
+		// testTimeout: 20000,
 		coverage: {
 			provider: 'v8',
 			reporter: ['text', 'cobertura', 'lcov'],

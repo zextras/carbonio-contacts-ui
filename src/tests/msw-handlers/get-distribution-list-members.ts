@@ -6,13 +6,14 @@
 import { SoapResponse } from '@zextras/carbonio-shell-ui';
 import { JSNS } from '@zextras/carbonio-ui-commons';
 import { HttpResponse, HttpResponseResolver, http } from 'msw';
+import { vi } from 'vitest';
 
+import { getSetupServer } from '@jest-setup';
 import {
 	GetDistributionListMembersRequest,
 	GetDistributionListMembersResponse
 } from 'network/api/get-distribution-list-members';
 import { buildSoapError, buildSoapResponse } from 'tests/utils';
-import { getSetupServer } from '@jest-setup';
 
 type GetDistributionListMembersHandler = HttpResponseResolver<
 	never,
@@ -39,11 +40,11 @@ export const registerGetDistributionListMembersHandler = (
 	members?: Array<string>,
 	more?: boolean,
 	error?: string
-): jest.Mock<
+): vi.Mock<
 	ReturnType<GetDistributionListMembersHandler>,
 	Parameters<GetDistributionListMembersHandler>
 > => {
-	const handler = jest.fn<
+	const handler = vi.fn<
 		ReturnType<GetDistributionListMembersHandler>,
 		Parameters<GetDistributionListMembersHandler>
 	>(async ({ request }) => {

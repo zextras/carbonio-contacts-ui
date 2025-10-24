@@ -7,12 +7,13 @@ import React from 'react';
 
 import { waitFor } from '@testing-library/react';
 import { Folder } from '@zextras/carbonio-ui-commons';
+import { vi } from 'vitest';
 
-import { FolderIsContainedInModal } from 'components/modals/folder-is-contained-in';
 import { screen, setupTest } from '@test-setup';
+import { FolderIsContainedInModal } from 'components/modals/folder-is-contained-in';
 import { TESTID_SELECTORS } from 'constants/tests';
 
-jest.mock('components/folder-tree-selector/folder-tree-selector', () => ({
+vi.mock('components/folder-tree-selector/folder-tree-selector', () => ({
 	FolderTreeSelector: ({
 		onFolderSelected
 	}: {
@@ -56,11 +57,11 @@ jest.mock('components/folder-tree-selector/folder-tree-selector', () => ({
 }));
 
 describe('FolderIsContainedInModal', () => {
-	const mockOnClose = jest.fn();
-	const mockConfirmAction = jest.fn();
+	const mockOnClose = vi.fn();
+	const mockConfirmAction = vi.fn();
 
 	beforeEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	it('should display the modal with correct title', () => {

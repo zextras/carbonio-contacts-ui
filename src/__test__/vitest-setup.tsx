@@ -44,26 +44,7 @@ const defaultBeforeAllTests = (
 	// Do not useFakeTimers with `whatwg-fetch` if using mocked server
 	// https://github.com/mswjs/msw/issues/448
 
-	// mock a simplified Intersection Observer
-	Object.defineProperty(window, 'IntersectionObserver', {
-		writable: true,
-		value: vi.fn(function intersectionObserverMock(
-			callback: IntersectionObserverCallback,
-			options: IntersectionObserverInit
-		) {
-			return {
-				thresholds: options.threshold,
-				root: options.root,
-				rootMargin: options.rootMargin,
-				observe: vi.fn(),
-				unobserve: vi.fn(),
-				disconnect: vi.fn()
-			};
-		})
-	});
-
 	server?.close();
-
 	server = setupServer(...getRestHandlers());
 	server.listen({ onUnhandledRequest });
 };
@@ -118,5 +99,23 @@ window.ResizeObserver = vi.fn().mockImplementation(() => ({
 	unobserve: vi.fn(),
 	disconnect: vi.fn()
 }));
+
+// mock a simplified Intersection Observer
+Object.defineProperty(window, 'IntersectionObserver', {
+	writable: true,
+	value: vi.fn(function intersectionObserverMock(
+		callback: IntersectionObserverCallback,
+		options: IntersectionObserverInit
+	) {
+		return {
+			thresholds: options.threshold,
+			root: options.root,
+			rootMargin: options.rootMargin,
+			observe: vi.fn(),
+			unobserve: vi.fn(),
+			disconnect: vi.fn()
+		};
+	})
+});
 
 export const getSetupServer = (): SetupServer => server;

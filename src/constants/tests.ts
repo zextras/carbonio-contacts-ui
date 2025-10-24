@@ -329,7 +329,7 @@ export const TIMERS = {
 	dropdown: { registerListeners: 1 }
 } as const;
 
-export const JEST_MOCKED_ERROR = 'jest mocked error';
+export const VITEST_MOCKED_ERROR = 'vitest mocked error';
 export const EMPTY_DISPLAYER_NO_CONTACTS_HINT = 'Stay in touch with your colleagues.';
 export const EMPTY_LIST_HINT = 'It looks like there are no contacts yet';
 

@@ -9,7 +9,12 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 import { FOLDER_VIEW, JSNS } from '@zextras/carbonio-ui-commons';
+import { vi } from 'vitest';
 
+import { screen, setupTest } from '@test-setup';
+import { generateFolder } from '@test-utils/folders/folders-generator';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
+import { createFakeFile } from '@test-utils/utils/file';
 import {
 	ContactsImportModal,
 	ContactsImportModalProps
@@ -18,10 +23,7 @@ import { TESTID_SELECTORS } from 'constants/tests';
 import { ImportContactsRequest, ImportContactsResponse } from 'network/api/import-contacts';
 import { UploadResponseFileInfo } from 'network/api/upload';
 import { registerUploadHandler } from 'tests/msw-handlers/upload';
-import { screen, setupTest } from '@test-setup';
-import { generateFolder } from '@test-utils/folders/folders-generator';
-import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
-import { createFakeFile } from '@test-utils/utils/file';
+
 /**
  * Test the import contacts modal
  */
@@ -30,7 +32,7 @@ const confirmButtonLabel = 'Import';
 
 describe('Import contacts modal', () => {
 	const defaultProps: ContactsImportModalProps = {
-		closeCallback: jest.fn(),
+		closeCallback: vi.fn(),
 		file: createFakeFile({ name: 'testFile.csv' }),
 		addressBook: generateFolder({
 			n: 15,
@@ -102,7 +104,7 @@ describe('Import contacts modal', () => {
 			importResponse
 		);
 
-		const onClose = jest.fn();
+		const onClose = vi.fn();
 		const { user } = setupTest(<ContactsImportModal {...defaultProps} closeCallback={onClose} />);
 		const confirmButton = screen.getByRole('button', {
 			name: confirmButtonLabel

@@ -7,6 +7,7 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { useBoardHooks } from '@zextras/carbonio-shell-ui';
+import { vi } from 'vitest';
 
 import { screen, setupTest, within } from '@test-setup';
 import {
@@ -89,7 +90,7 @@ describe('EditDLControllerComponent', () => {
 			});
 
 			it('should update board title when change', async () => {
-				const updateBoardFn = jest.fn();
+				const updateBoardFn = vi.fn();
 				spyUseBoardHooks(updateBoardFn);
 				const dl = generateDistributionList({
 					displayName: '',
@@ -118,7 +119,7 @@ describe('EditDLControllerComponent', () => {
 		});
 
 		it('should not update board title when description input change', async () => {
-			const updateBoardFn = jest.fn();
+			const updateBoardFn = vi.fn();
 			spyUseBoardHooks(updateBoardFn);
 			const dl = generateDistributionList({
 				displayName: '',

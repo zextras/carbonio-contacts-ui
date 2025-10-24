@@ -7,15 +7,16 @@ import { SuccessSoapResponse } from '@zextras/carbonio-shell-ui';
 import { JSNS } from '@zextras/carbonio-ui-commons';
 import { map, size } from 'lodash';
 import { http, HttpResponse, HttpResponseResolver } from 'msw';
+import { Mock, vi } from 'vitest';
 
+import { getSetupServer } from '@jest-setup';
 import {
 	BatchDistributionListActionRequest,
 	BatchDistributionListActionResponse,
 	DistributionListActionResponse
 } from 'network/api/distribution-list-action';
-import { SoapFault } from 'types/utils';
 import { buildSoapResponse } from 'tests/utils';
-import { getSetupServer } from '@jest-setup';
+import { SoapFault } from 'types/utils';
 
 type DistributionListActionHandlerResponseResolver = HttpResponseResolver<
 	never,
@@ -31,14 +32,8 @@ export const registerDistributionListActionHandler = (
 		description?: string;
 	},
 	errors?: string[]
-): jest.Mock<
-	ReturnType<DistributionListActionHandlerResponseResolver>,
-	Parameters<DistributionListActionHandlerResponseResolver>
-> => {
-	const handler = jest.fn<
-		ReturnType<DistributionListActionHandlerResponseResolver>,
-		Parameters<DistributionListActionHandlerResponseResolver>
-	>(async () => {
+): Mock<DistributionListActionHandlerResponseResolver> => {
+	const handler = vi.fn<DistributionListActionHandlerResponseResolver>(async () => {
 		const responses: Array<DistributionListActionResponse> = [];
 		if (size(data.membersToAdd) > 0) {
 			responses.push({

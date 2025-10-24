@@ -7,14 +7,15 @@ import { SoapResponse } from '@zextras/carbonio-shell-ui';
 import { JSNS } from '@zextras/carbonio-ui-commons';
 import { map } from 'lodash';
 import { http, HttpResponse, HttpResponseResolver } from 'msw';
+import { vi } from 'vitest';
 
+import { getSetupServer } from '@jest-setup';
 import { DistributionList } from 'model/distribution-list';
 import {
 	GetDistributionListRequest,
 	GetDistributionListResponse
 } from 'network/api/get-distribution-list';
 import { buildSoapError, buildSoapResponse } from 'tests/utils';
-import { getSetupServer } from '@jest-setup';
 
 type GetDistributionListHandler = HttpResponseResolver<
 	never,
@@ -45,8 +46,8 @@ export const buildGetDistributionListResponse = (
 export const registerGetDistributionListHandler = (
 	dl: DistributionList,
 	error?: string
-): jest.Mock<ReturnType<GetDistributionListHandler>, Parameters<GetDistributionListHandler>> => {
-	const handler = jest.fn<
+): vi.Mock<ReturnType<GetDistributionListHandler>, Parameters<GetDistributionListHandler>> => {
+	const handler = vi.fn<
 		ReturnType<GetDistributionListHandler>,
 		Parameters<GetDistributionListHandler>
 	>(() => {

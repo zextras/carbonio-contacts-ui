@@ -8,8 +8,8 @@ import React from 'react';
 import { screen } from '@testing-library/react';
 import { noop } from 'lodash';
 
-import { ListActionIconButton } from 'components/list/list-action-icon-button';
 import { setupTest } from '@test-setup';
+import { ListActionIconButton } from 'components/list/list-action-icon-button';
 
 describe('List action icon button', () => {
 	it('should render the action as disabled', async () => {

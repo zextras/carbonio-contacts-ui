@@ -9,9 +9,9 @@ import { SoapResponse } from '@zextras/carbonio-shell-ui';
 import { JSNS } from '@zextras/carbonio-ui-commons';
 import { http, HttpResponse, HttpResponseResolver } from 'msw';
 
+import { getSetupServer } from '@jest-setup';
 import { GenericSoapPayload } from 'network/api/types';
 import { buildSoapError, buildSoapResponse } from 'tests/utils';
-import { getSetupServer } from '@jest-setup';
 
 interface CreateContactRequest extends GenericSoapPayload<typeof JSNS.MAIL> {
 	cn: {
