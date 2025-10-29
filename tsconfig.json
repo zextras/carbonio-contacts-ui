@@ -3,6 +3,7 @@
 	"compilerOptions": {
 		"noUncheckedIndexedAccess": false,
 		"baseUrl": "./src",
+		"types": ["vitest/globals"],
 		"paths": {
 			"@test-utils/*": ["__test__/mocks/*"],
 			"@test-setup": ["__test__/test-setup.tsx"],

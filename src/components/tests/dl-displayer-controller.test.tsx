@@ -45,6 +45,7 @@ describe('Distribution List Displayer Controller', () => {
 		const dl = generateDistributionList({ description });
 		registerGetDistributionListHandler(dl);
 		setupTest(<DLDisplayerController id={dl.id} />);
+		console.log(screen.debug());
 		expect(await screen.findAllByText(dl.displayName)).toHaveLength(2);
 		expect(screen.getByText(description)).toBeVisible();
 	});
@@ -95,6 +96,8 @@ describe('Distribution List Displayer Controller', () => {
 			});
 			registerGetDistributionListMembersHandler(members);
 			const { user } = setupTest(<DLDisplayerController id={dl.id} />);
+			console.log(screen.debug());
+
 			await screen.findAllByText(dl.displayName);
 			await user.click(screen.getByText(/member list/i));
 			expect(await screen.findByText(/member list 10/i)).toBeVisible();

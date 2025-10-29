@@ -5,6 +5,7 @@
  */
 
 import react from '@vitejs/plugin-react';
+import path from 'path';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { defineConfig } from 'vitest/config';
 
@@ -24,8 +25,12 @@ export default defineConfig({
 	test: {
 		globals: true,
 		environment: 'jsdom',
-		setupFiles: ['./src/__test__/vitest-setup.tsx', './src/__test__/setup-browser-env.ts'],
-		// testTimeout: 20000,
+		setupFiles: [
+			path.resolve(__dirname, 'src/__test__/vitest-setup.tsx'),
+			path.resolve(__dirname, 'src/__test__/setup-browser-env.ts')
+		],
+		// clearMocks: true,
+		// mockReset: true,
 		coverage: {
 			provider: 'v8',
 			reporter: ['text', 'cobertura', 'lcov'],

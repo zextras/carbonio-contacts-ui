@@ -50,6 +50,7 @@ const queryAllByRoleWithIcon: GetAllBy<[ByRoleMatcher, ByRoleWithIconOptions]> =
 	rtlWithin(container)
 		.queryAllByRole(role, options)
 		.filter((element) => rtlWithin(element).queryByTestId(icon) !== null);
+
 const getByRoleWithIconMultipleError = (
 	_container: Element | null,
 	role: ByRoleMatcher,
@@ -205,7 +206,7 @@ export function setupHook<TProps extends unknown[], TResult>(
 		result,
 		unmount,
 		rerender,
-		user: userEvent.setup({ advanceTimers: vi.advanceTimersByTime, ...setupOptions })
+		user: userEvent.setup({ ...setupOptions })
 	};
 }
 

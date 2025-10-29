@@ -54,11 +54,12 @@ beforeAll(() => {
 });
 
 beforeEach(() => {
-	vi.useFakeTimers();
+	vi.useFakeTimers({ shouldAdvanceTime: true });
 });
 
 afterEach(() => {
 	vi.clearAllTimers();
+	vi.useRealTimers();
 });
 
 afterAll(() => {
