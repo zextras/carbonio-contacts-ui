@@ -5,14 +5,10 @@
  */
 
 import react from '@vitejs/plugin-react';
-import path from 'path';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
-	define: {
-		BASE_PATH: JSON.stringify('/test')
-	},
 	plugins: [
 		react({
 			jsxImportSource: '@emotion/react',
@@ -25,10 +21,7 @@ export default defineConfig({
 	test: {
 		globals: true,
 		environment: 'jsdom',
-		setupFiles: [
-			path.resolve(__dirname, 'src/__test__/vitest-setup.tsx'),
-			path.resolve(__dirname, 'src/__test__/setup-browser-env.ts')
-		],
+		setupFiles: ['./src/__test__/vitest-setup.tsx', './src/__test__/setup-browser-env.ts'],
 		coverage: {
 			provider: 'v8',
 			reporter: ['text', 'cobertura', 'lcov'],
