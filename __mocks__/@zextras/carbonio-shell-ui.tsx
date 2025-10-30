@@ -67,7 +67,20 @@ export const getAction = vi.fn<typeof shell.getAction>((type, id) => [undefined,
 
 export const useActions = vi.fn<typeof realUseActions>().mockImplementation(() => []);
 
-export const useIntegratedFunction = vi.fn();
+// Integrated functions
+export const getIntegratedFunction: Mock<typeof shell.getIntegratedFunction, any> = vi.fn<
+	ReturnType<typeof shell.getIntegratedFunction>,
+	Parameters<typeof shell.getIntegratedFunction>
+>((id) => [vi.fn(), false]);
+
+export const useIntegratedFunction: Mock<
+	ReturnType<typeof shell.useIntegratedFunction>,
+	Parameters<typeof shell.useIntegratedFunction>,
+	any
+> = vi.fn<
+	ReturnType<typeof shell.useIntegratedFunction>,
+	Parameters<typeof shell.useIntegratedFunction>
+>((id) => [vi.fn(), false]);
 
 export const useAuthenticated: typeof shell.useAuthenticated = vi.fn(() => true);
 

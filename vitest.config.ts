@@ -22,6 +22,8 @@ export default defineConfig({
 		globals: true,
 		environment: 'jsdom',
 		setupFiles: ['./src/__test__/vitest-setup.tsx', './src/__test__/setup-browser-env.ts'],
+		clearMocks: true,
+		restoreMocks: true,
 		coverage: {
 			provider: 'v8',
 			reporter: ['text', 'cobertura', 'lcov'],
