@@ -29,8 +29,6 @@ export default defineConfig({
 			path.resolve(__dirname, 'src/__test__/vitest-setup.tsx'),
 			path.resolve(__dirname, 'src/__test__/setup-browser-env.ts')
 		],
-		// clearMocks: true,
-		// mockReset: true,
 		coverage: {
 			provider: 'v8',
 			reporter: ['text', 'cobertura', 'lcov'],
@@ -43,6 +41,11 @@ export default defineConfig({
 				'src/tests/**',
 				'src/**/test/mocks/**'
 			]
+		},
+		server: {
+			deps: {
+				inline: ['@zextras/carbonio-ui-commons']
+			}
 		}
 	}
 });
