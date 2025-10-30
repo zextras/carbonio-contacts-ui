@@ -8,7 +8,6 @@ import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 import { FOLDERS } from '@zextras/carbonio-ui-commons';
-import { vi } from 'vitest';
 
 import { TRASH_ACTION } from '../../../constants/actions';
 import { Contact } from '../../../legacy/types/contact';
@@ -40,6 +39,7 @@ describe('execute actions', () => {
 		expect(action.label).toBe('Delete');
 	});
 });
+
 describe('Api Client Actions', () => {
 	it('should show a success snackbar after receiving a successful result from the API', async () => {
 		createSoapAPIInterceptor('ContactAction');
@@ -52,7 +52,13 @@ describe('Api Client Actions', () => {
 			action.onClick();
 		});
 
-		expect(await screen.findByText('Contact moved to trash')).toBeVisible();
+		// expect(await screen.findByText('Contact moved to trash')).toBeVisible();
+
+		// const snackbar = await vi.waitFor(() => screen.findByText('Contact moved to trash'));
+		// expect(snackbar).toBeVisible();
+
+		const snackbar = await screen.findByText('Contact moved to trash');
+		await vi.waitFor(() => expect(snackbar).toBeVisible());
 	});
 
 	it('should show an error snackbar after receiving a failure result from the API', async () => {
@@ -72,9 +78,6 @@ describe('Api Client Actions', () => {
 		act(() => {
 			action.onClick();
 		});
-		act(() => {
-			vi.advanceTimersByTime(2000);
-		});
 
 		expect(await screen.findByText('Something went wrong, please try again')).toBeVisible();
 	});
@@ -88,9 +91,6 @@ describe('Api Client Actions', () => {
 		const action = result.current;
 		act(() => {
 			action.onClick();
-		});
-		act(() => {
-			vi.advanceTimersByTime(2000);
 		});
 		const button = await screen.findByRole('button', { name: 'Undo' });
 
@@ -123,9 +123,6 @@ describe('Api Client Actions', () => {
 		const action = result.current;
 		act(() => {
 			action.onClick();
-		});
-		act(() => {
-			vi.advanceTimersByTime(2000);
 		});
 		const button = await screen.findByRole('button', { name: 'Undo' });
 

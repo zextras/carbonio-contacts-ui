@@ -10,18 +10,18 @@ import { act } from '@testing-library/react';
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 import { FOLDER_VIEW, FOLDERS } from '@zextras/carbonio-ui-commons';
 
-import { AddressBookEmptyModal } from 'components/modals/address-book-empty/address-book-empty';
-import { TESTID_SELECTORS } from 'constants/tests';
 import { screen, setupTest } from '@test-setup';
 import { generateFolder } from '@test-utils/folders/folders-generator';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
+import { AddressBookEmptyModal } from 'components/modals/address-book-empty/address-book-empty';
+import { TESTID_SELECTORS } from 'constants/tests';
 
 describe('AddressBookEmptyModal', () => {
 	it('should render a modal with a specific title', () => {
 		const addressBook = generateFolder({
 			view: FOLDER_VIEW.contact
 		});
-		setupTest(<AddressBookEmptyModal addressBook={addressBook} onClose={jest.fn()} />);
+		setupTest(<AddressBookEmptyModal addressBook={addressBook} onClose={vi.fn()} />);
 		expect(screen.getByText(`Empty ${addressBook.name}`)).toBeVisible();
 	});
 
@@ -29,7 +29,7 @@ describe('AddressBookEmptyModal', () => {
 		const addressBook = generateFolder({
 			view: FOLDER_VIEW.contact
 		});
-		setupTest(<AddressBookEmptyModal addressBook={addressBook} onClose={jest.fn()} />);
+		setupTest(<AddressBookEmptyModal addressBook={addressBook} onClose={vi.fn()} />);
 		expect(
 			screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.close })
 		).toBeVisible();
@@ -39,7 +39,7 @@ describe('AddressBookEmptyModal', () => {
 		const addressBook = generateFolder({
 			view: FOLDER_VIEW.contact
 		});
-		const onClose = jest.fn();
+		const onClose = vi.fn();
 		const { user } = setupTest(
 			<AddressBookEmptyModal addressBook={addressBook} onClose={onClose} />
 		);
@@ -55,7 +55,7 @@ describe('AddressBookEmptyModal', () => {
 			absFolderPath: '/Trash',
 			view: FOLDER_VIEW.contact
 		});
-		setupTest(<AddressBookEmptyModal addressBook={addressBook} onClose={jest.fn()} />);
+		setupTest(<AddressBookEmptyModal addressBook={addressBook} onClose={vi.fn()} />);
 		expect(
 			screen.getByText('Do you want to empty the trash?', {
 				exact: false
@@ -67,7 +67,7 @@ describe('AddressBookEmptyModal', () => {
 		const addressBook = generateFolder({
 			view: FOLDER_VIEW.contact
 		});
-		setupTest(<AddressBookEmptyModal addressBook={addressBook} onClose={jest.fn()} />);
+		setupTest(<AddressBookEmptyModal addressBook={addressBook} onClose={vi.fn()} />);
 		expect(
 			screen.getByText('Do you want to empty the selected address book?', {
 				exact: false
@@ -79,7 +79,7 @@ describe('AddressBookEmptyModal', () => {
 		const addressBook = generateFolder({
 			view: FOLDER_VIEW.contact
 		});
-		setupTest(<AddressBookEmptyModal addressBook={addressBook} onClose={jest.fn()} />);
+		setupTest(<AddressBookEmptyModal addressBook={addressBook} onClose={vi.fn()} />);
 		const button = screen.getByRole('button', { name: 'Empty' });
 		expect(button).toBeEnabled();
 		// FIXME
@@ -95,7 +95,7 @@ describe('AddressBookEmptyModal', () => {
 			view: FOLDER_VIEW.contact
 		});
 		const { user } = setupTest(
-			<AddressBookEmptyModal addressBook={addressBook} onClose={jest.fn()} />
+			<AddressBookEmptyModal addressBook={addressBook} onClose={vi.fn()} />
 		);
 		const button = screen.getByRole('button', { name: 'Empty' });
 		await act(() => user.click(button));
@@ -120,7 +120,7 @@ describe('AddressBookEmptyModal', () => {
 			view: FOLDER_VIEW.contact
 		});
 		const { user } = setupTest(
-			<AddressBookEmptyModal addressBook={addressBook} onClose={jest.fn()} />
+			<AddressBookEmptyModal addressBook={addressBook} onClose={vi.fn()} />
 		);
 		const button = screen.getByRole('button', { name: 'Empty' });
 		await act(() => user.click(button));
@@ -133,7 +133,7 @@ describe('AddressBookEmptyModal', () => {
 			view: FOLDER_VIEW.contact
 		});
 		const { user } = setupTest(
-			<AddressBookEmptyModal addressBook={addressBook} onClose={jest.fn()} />
+			<AddressBookEmptyModal addressBook={addressBook} onClose={vi.fn()} />
 		);
 		const button = screen.getByRole('button', { name: 'Empty' });
 		await act(() => user.click(button));
@@ -142,7 +142,7 @@ describe('AddressBookEmptyModal', () => {
 
 	it('should close the modal after a successful result from the API', async () => {
 		createSoapAPIInterceptor('FolderAction');
-		const onClose = jest.fn();
+		const onClose = vi.fn();
 		const addressBook = generateFolder({
 			view: FOLDER_VIEW.contact
 		});
@@ -167,7 +167,7 @@ describe('AddressBookEmptyModal', () => {
 			view: FOLDER_VIEW.contact
 		});
 		const { user } = setupTest(
-			<AddressBookEmptyModal addressBook={addressBook} onClose={jest.fn()} />
+			<AddressBookEmptyModal addressBook={addressBook} onClose={vi.fn()} />
 		);
 		const button = screen.getByRole('button', { name: 'Empty' });
 		await act(() => user.click(button));
@@ -183,7 +183,7 @@ describe('AddressBookEmptyModal', () => {
 			}
 		};
 		createSoapAPIInterceptor('FolderAction', response);
-		const onClose = jest.fn();
+		const onClose = vi.fn();
 		const addressBook = generateFolder({
 			view: FOLDER_VIEW.contact
 		});

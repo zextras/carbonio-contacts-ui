@@ -60,10 +60,6 @@ describe('FolderIsContainedInModal', () => {
 	const mockOnClose = vi.fn();
 	const mockConfirmAction = vi.fn();
 
-	beforeEach(() => {
-		vi.clearAllMocks();
-	});
-
 	it('should display the modal with correct title', () => {
 		setupTest(<FolderIsContainedInModal onClose={mockOnClose} confirmAction={mockConfirmAction} />);
 

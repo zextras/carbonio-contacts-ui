@@ -11,12 +11,12 @@ import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 import { JSNS } from '@zextras/carbonio-ui-commons';
 import { times } from 'lodash';
 
+import { makeListItemsVisible, screen, setupTest, within } from '@test-setup';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 import { SharedAddressBooksAddModal } from 'components/modals/shared-address-books-add/shared-address-books-add-modal';
 import { TESTID_SELECTORS } from 'constants/tests';
 import { CreateMountpointsRequest } from 'network/api/create-mountpoints';
 import { GetShareInfoRequest, GetShareInfoResponse } from 'network/api/get-share-info';
-import { makeListItemsVisible, screen, setupTest, within } from '@test-setup';
-import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 const buildSharesInfo = ({
 	ownersCount = 5,
@@ -48,7 +48,7 @@ const registerDefaultGetShareInfoHandler = (sharesInfo: GetShareInfoResponse['sh
 describe('SharesModal', () => {
 	it('should render the modal with the specific title', async () => {
 		registerDefaultGetShareInfoHandler(buildSharesInfo());
-		const onClose = jest.fn();
+		const onClose = vi.fn();
 		setupTest(<SharedAddressBooksAddModal onClose={onClose} />, {});
 
 		expect(screen.getByText('Find Contact Shares')).toBeVisible();
@@ -57,7 +57,7 @@ describe('SharesModal', () => {
 
 	it('should render a close icon button on the header', async () => {
 		registerDefaultGetShareInfoHandler(buildSharesInfo());
-		const onClose = jest.fn();
+		const onClose = vi.fn();
 		setupTest(<SharedAddressBooksAddModal onClose={onClose} />, {});
 
 		expect(
@@ -69,7 +69,7 @@ describe('SharesModal', () => {
 
 	it('should render a filter field with a placeholder text and an icon', async () => {
 		registerDefaultGetShareInfoHandler(buildSharesInfo());
-		const onClose = jest.fn();
+		const onClose = vi.fn();
 		setupTest(<SharedAddressBooksAddModal onClose={onClose} />, {});
 
 		const placeholder = 'Find users';
@@ -83,7 +83,7 @@ describe('SharesModal', () => {
 
 	it('should render a hint description', async () => {
 		registerDefaultGetShareInfoHandler(buildSharesInfo());
-		const onClose = jest.fn();
+		const onClose = vi.fn();
 		setupTest(<SharedAddressBooksAddModal onClose={onClose} />, {});
 		expect(
 			screen.getByText('Select which address book you want to see in contact’s tree')
@@ -96,7 +96,7 @@ describe('SharesModal', () => {
 		registerDefaultGetShareInfoHandler(responseShares);
 
 		// Instantiate the modal
-		const onClose = jest.fn();
+		const onClose = vi.fn();
 		setupTest(<SharedAddressBooksAddModal onClose={onClose} />, {});
 
 		await act(async () => Promise.resolve());
@@ -119,9 +119,12 @@ describe('SharesModal', () => {
 			}
 		});
 
-		const onClose = jest.fn();
+		const onClose = vi.fn();
 		setupTest(<SharedAddressBooksAddModal onClose={onClose} />, {});
-		expect(await screen.findByText(/something went wrong/i)).toBeVisible();
+		// expect(await screen.findByText(/something went wrong/i)).toBeVisible();
+
+		const snackbar = await screen.findByText(/something went wrong/i);
+		await vi.waitFor(() => expect(snackbar).toBeVisible());
 		await waitForElementToBeRemoved(screen.queryByText(/something went wrong/i), {
 			timeout: 10000
 		});
@@ -149,7 +152,7 @@ describe('SharesModal', () => {
 		registerDefaultGetShareInfoHandler(responseShares);
 
 		// Instantiate the modal
-		const onClose = jest.fn();
+		const onClose = vi.fn();
 		const { user } = setupTest(<SharedAddressBooksAddModal onClose={onClose} />, {});
 
 		await act(async () => Promise.resolve());
@@ -188,7 +191,7 @@ describe('SharesModal', () => {
 		registerDefaultGetShareInfoHandler(responseShares);
 
 		// Instantiate the modal
-		const onClose = jest.fn();
+		const onClose = vi.fn();
 		const { user } = setupTest(<SharedAddressBooksAddModal onClose={onClose} />, {});
 
 		await act(async () => Promise.resolve());
@@ -208,7 +211,7 @@ describe('SharesModal', () => {
 	describe('"Add" button', () => {
 		it('should render a button to add the selected shares', async () => {
 			registerDefaultGetShareInfoHandler(buildSharesInfo());
-			const onClose = jest.fn();
+			const onClose = vi.fn();
 			setupTest(<SharedAddressBooksAddModal onClose={onClose} />, {});
 
 			const button = await screen.findByRole('button', { name: 'Add' });
@@ -217,7 +220,7 @@ describe('SharesModal', () => {
 
 		it('should be disabled when the modal opens', async () => {
 			registerDefaultGetShareInfoHandler(buildSharesInfo());
-			const onClose = jest.fn();
+			const onClose = vi.fn();
 			setupTest(<SharedAddressBooksAddModal onClose={onClose} />, {});
 
 			const button = await screen.findByRole('button', { name: 'Add' });
@@ -229,13 +232,13 @@ describe('SharesModal', () => {
 			registerDefaultGetShareInfoHandler(responseShares);
 
 			// Instantiate the modal
-			const onClose = jest.fn();
+			const onClose = vi.fn();
 			const { user } = setupTest(<SharedAddressBooksAddModal onClose={onClose} />, {});
 
 			await act(async () => Promise.resolve());
 			makeListItemsVisible();
 			makeListItemsVisible();
-			act(() => jest.advanceTimersByTime(1000));
+			act(() => vi.advanceTimersByTime(1000));
 
 			// Check that the modal is displaying the list, with an item for every user
 			const checkboxes = screen.getAllByTestId(TESTID_SELECTORS.checkbox);
@@ -248,13 +251,13 @@ describe('SharesModal', () => {
 			registerDefaultGetShareInfoHandler(responseShares);
 
 			// Instantiate the modal
-			const onClose = jest.fn();
+			const onClose = vi.fn();
 			const { user } = setupTest(<SharedAddressBooksAddModal onClose={onClose} />, {});
 
 			await act(async () => Promise.resolve());
 			makeListItemsVisible();
 			makeListItemsVisible();
-			act(() => jest.advanceTimersByTime(1000));
+			act(() => vi.advanceTimersByTime(1000));
 
 			// Check that the modal is displaying the list, with an item for every user
 			const checkboxes = screen.getAllByTestId(TESTID_SELECTORS.checkbox);
@@ -264,7 +267,7 @@ describe('SharesModal', () => {
 
 			// Deselect the selected share
 			await act(async () => user.click(checkboxes[0]));
-			act(() => jest.advanceTimersByTime(1000));
+			act(() => vi.advanceTimersByTime(1000));
 
 			expect(await screen.findByRole('button', { name: 'Add' })).toBeDisabled();
 		});
@@ -277,12 +280,12 @@ describe('SharesModal', () => {
 			>('Batch');
 
 			// Instantiate the modal
-			const { user } = setupTest(<SharedAddressBooksAddModal onClose={jest.fn()} />, {});
+			const { user } = setupTest(<SharedAddressBooksAddModal onClose={vi.fn()} />, {});
 
 			await act(async () => Promise.resolve());
 			makeListItemsVisible();
 			makeListItemsVisible();
-			act(() => jest.advanceTimersByTime(1000));
+			act(() => vi.advanceTimersByTime(1000));
 
 			const checkboxes = screen.getAllByTestId(TESTID_SELECTORS.checkbox);
 			await act(async () => user.click(checkboxes[0]));
@@ -298,14 +301,14 @@ describe('SharesModal', () => {
 
 			createSoapAPIInterceptor<CreateMountpointsRequest, never>('Batch');
 
-			const onClose = jest.fn();
+			const onClose = vi.fn();
 			// Instantiate the modal
 			const { user } = setupTest(<SharedAddressBooksAddModal onClose={onClose} />, {});
 
 			await act(async () => Promise.resolve());
 			makeListItemsVisible();
 			makeListItemsVisible();
-			act(() => jest.advanceTimersByTime(1000));
+			act(() => vi.advanceTimersByTime(1000));
 
 			const checkboxes = screen.getAllByTestId(TESTID_SELECTORS.checkbox);
 			await act(async () => user.click(checkboxes[0]));
@@ -320,13 +323,13 @@ describe('SharesModal', () => {
 
 			createSoapAPIInterceptor<CreateMountpointsRequest, never>('Batch');
 
-			const onClose = jest.fn();
+			const onClose = vi.fn();
 			const { user } = setupTest(<SharedAddressBooksAddModal onClose={onClose} />, {});
 
 			await act(async () => Promise.resolve());
 			makeListItemsVisible();
 			makeListItemsVisible();
-			act(() => jest.advanceTimersByTime(1000));
+			act(() => vi.advanceTimersByTime(1000));
 
 			const checkboxes = screen.getAllByTestId(TESTID_SELECTORS.checkbox);
 			await act(async () => user.click(checkboxes[0]));
@@ -350,13 +353,13 @@ describe('SharesModal', () => {
 				}
 			});
 
-			const onClose = jest.fn();
+			const onClose = vi.fn();
 			const { user } = setupTest(<SharedAddressBooksAddModal onClose={onClose} />, {});
 
 			await act(async () => Promise.resolve());
 			makeListItemsVisible();
 			makeListItemsVisible();
-			act(() => jest.advanceTimersByTime(1000));
+			act(() => vi.advanceTimersByTime(1000));
 
 			const checkboxes = screen.getAllByTestId(TESTID_SELECTORS.checkbox);
 			await act(async () => user.click(checkboxes[0]));

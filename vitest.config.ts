@@ -23,7 +23,7 @@ export default defineConfig({
 		environment: 'jsdom',
 		setupFiles: ['./src/__test__/vitest-setup.tsx', './src/__test__/setup-browser-env.ts'],
 		clearMocks: true,
-		restoreMocks: true,
+		mockReset: true,
 		coverage: {
 			provider: 'v8',
 			reporter: ['text', 'cobertura', 'lcov'],
