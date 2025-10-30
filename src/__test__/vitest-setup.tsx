@@ -90,11 +90,16 @@ Object.defineProperty(window, 'Worker', {
 });
 
 // Mock ResizeObserver
-window.ResizeObserver = vi.fn().mockImplementation(() => ({
-	observe: vi.fn(),
-	unobserve: vi.fn(),
-	disconnect: vi.fn()
-}));
+Object.defineProperty(window, 'ResizeObserver', {
+	writable: true,
+	value: function ResizeObserverMock(): ResizeObserver {
+		return {
+			observe: (): undefined => undefined,
+			unobserve: (): undefined => undefined,
+			disconnect: (): undefined => undefined
+		};
+	}
+});
 
 // mock a simplified Intersection Observer
 Object.defineProperty(window, 'IntersectionObserver', {
