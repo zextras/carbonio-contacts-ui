@@ -68,19 +68,30 @@ export const getAction = vi.fn<typeof shell.getAction>((type, id) => [undefined,
 export const useActions = vi.fn<typeof realUseActions>().mockImplementation(() => []);
 
 // Integrated functions
-export const getIntegratedFunction: Mock<typeof shell.getIntegratedFunction, any> = vi.fn<
-	ReturnType<typeof shell.getIntegratedFunction>,
-	Parameters<typeof shell.getIntegratedFunction>
->((id) => [vi.fn(), false]);
+// export const getIntegratedFunction: Mock<typeof shell.getIntegratedFunction> = vi.fn<
+// 	typeof shell.getIntegratedFunction
+// >((_id) => [vi.fn(), false]);
 
-export const useIntegratedFunction: Mock<
-	ReturnType<typeof shell.useIntegratedFunction>,
-	Parameters<typeof shell.useIntegratedFunction>,
-	any
-> = vi.fn<
-	ReturnType<typeof shell.useIntegratedFunction>,
-	Parameters<typeof shell.useIntegratedFunction>
->((id) => [vi.fn(), false]);
+// export const useIntegratedFunction: Mock<typeof shell.useIntegratedFunction> = vi.fn<
+// 	typeof shell.useIntegratedFunction
+// >((_id) => [vi.fn<(...args: any[]) => any>(), false]);
+export const getIntegratedFunction: Mock<typeof shell.getIntegratedFunction> = vi.fn(
+	<TFunction extends (...args: any[]) => any = (...args: any[]) => any>(
+		_id: string
+	): [TFunction, boolean] => {
+		const fn: TFunction = ((..._args: any[]) => undefined) as TFunction;
+		return [fn, false];
+	}
+);
+
+export const useIntegratedFunction: Mock<typeof shell.useIntegratedFunction> = vi.fn(
+	<TFunction extends (...args: any[]) => any = (...args: any[]) => any>(
+		_id: string
+	): [TFunction, boolean] => {
+		const fn: TFunction = ((..._args: any[]) => undefined) as TFunction;
+		return [fn, false];
+	}
+);
 
 export const useAuthenticated: typeof shell.useAuthenticated = vi.fn(() => true);
 

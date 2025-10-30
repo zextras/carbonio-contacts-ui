@@ -10,6 +10,7 @@ import { noop } from 'lodash';
 import { SetupServer, setupServer } from 'msw/node';
 import { vi, beforeAll, beforeEach, afterEach, afterAll } from 'vitest';
 
+import { useDistributionListsStore } from '../store/distribution-lists';
 import { getRestHandlers } from '@test-utils/network/msw/handlers';
 
 // vi.mock(import('@zextras/carbonio-ui-soap-lib'));
@@ -48,6 +49,7 @@ beforeAll(() => {
 
 beforeEach(() => {
 	vi.useFakeTimers({ shouldAdvanceTime: true });
+	useDistributionListsStore.getState().reset();
 });
 
 afterEach(() => {

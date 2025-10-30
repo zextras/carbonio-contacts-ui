@@ -3,7 +3,6 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { act } from '@testing-library/react';
 import { vi } from 'vitest';
 import * as zustand from 'zustand';
 
@@ -46,17 +45,3 @@ export const createStore = (<T>(stateCreator: zustand.StateCreator<T>) =>
 	typeof stateCreator === 'function'
 		? createStoreUncurried(stateCreator)
 		: createStoreUncurried) as typeof zustand.createStore;
-
-// reset all stores after each test run
-beforeEach(() => {
-	act(() => {
-		storeResetFns.forEach((resetFn) => {
-			resetFn();
-		});
-	});
-});
-
-// Reset all stores after each test run
-afterEach(() => {
-	act(() => storeResetFns.forEach((resetFn) => resetFn()));
-});
