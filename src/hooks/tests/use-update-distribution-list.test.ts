@@ -6,12 +6,12 @@
 
 import { faker } from '@faker-js/faker';
 
+import { screen, setupHook } from '@test-setup';
+import { VITEST_MOCKED_ERROR } from 'constants/tests';
 import { useUpdateDistributionList } from 'hooks/use-update-distribution-list';
-import { JEST_MOCKED_ERROR } from 'constants/tests';
 import { DistributionList } from 'model/distribution-list';
 import { registerDistributionListActionHandler } from 'tests/msw-handlers/distribution-list-action';
 import { generateDistributionList } from 'tests/utils';
-import { screen, setupHook } from '@test-setup';
 
 describe('Use update distribution list hook', () => {
 	it('should show success snackbar when there are no errors', async () => {
@@ -24,7 +24,7 @@ describe('Use update distribution list hook', () => {
 
 	it('should show an error snackbar if there is an error', async () => {
 		const dl = generateDistributionList();
-		registerDistributionListActionHandler({}, [JEST_MOCKED_ERROR]);
+		registerDistributionListActionHandler({}, [VITEST_MOCKED_ERROR]);
 		const { result } = setupHook(useUpdateDistributionList, { initialProps: [dl] });
 		result.current({
 			email: dl.email,

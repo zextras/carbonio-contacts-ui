@@ -72,7 +72,7 @@ describe('Member displayer item', () => {
 	});
 
 	it('should call copy into clipboard function when user clicks on copy address button', async () => {
-		const copyToClipboard = jest
+		const copyToClipboard = vi
 			.spyOn(clipboard, 'copyToClipboard')
 			.mockImplementation(() => Promise.resolve());
 		const email = faker.internet.email();
