@@ -55,3 +55,8 @@ beforeEach(() => {
 		});
 	});
 });
+
+// Reset all stores after each test run
+afterEach(() => {
+	act(() => storeResetFns.forEach((resetFn) => resetFn()));
+});
