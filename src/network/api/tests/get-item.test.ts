@@ -17,9 +17,9 @@ describe('getItem', () => {
 		expect(apiRequest).toEqual({ id });
 	});
 
-	it('should throw an error if the API responds with a fault', () => {
+	it('should throw an error if the API responds with a fault', async () => {
 		registerGetItemHandler({ error: true });
-		expect(async () => {
+		await expect(async () => {
 			await getItem(faker.number.int().toString());
 		}).rejects.toThrow();
 	});
