@@ -8,19 +8,25 @@ import React from 'react';
 import { waitFor, within } from '@testing-library/react';
 import { getTags, ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-ui-commons';
 import { useForm } from 'react-hook-form';
+import { Mock } from 'vitest';
 
-import { AdvancedFilterModalFormValues } from 'legacy/views/search/types';
-import { TagFolderRow } from 'legacy/views/search/parts/tag-folder-row';
 import { screen, setupTest } from '__test__/test-setup';
+import { TagFolderRow } from 'legacy/views/search/parts/tag-folder-row';
+import { AdvancedFilterModalFormValues } from 'legacy/views/search/types';
 
-jest.mock('@zextras/carbonio-ui-commons', () => ({
-	...jest.requireActual('@zextras/carbonio-ui-commons'),
-	getTags: jest.fn(),
-	isSharedAccountFolder: jest.fn()
-}));
+vi.mock('@zextras/carbonio-ui-commons', async () => {
+	const actual = await vi.importActual<typeof import('@zextras/carbonio-ui-commons')>(
+		'@zextras/carbonio-ui-commons'
+	);
+	return {
+		...actual,
+		getTags: vi.fn(),
+		isSharedAccountFolder: vi.fn()
+	};
+});
 
-jest.mock('components/modals/folder-is-contained-in', () => ({
-	FolderIsContainedInModal: jest.fn(({ onClose, confirmAction }) => (
+vi.mock('components/modals/folder-is-contained-in', () => ({
+	FolderIsContainedInModal: vi.fn(({ onClose, confirmAction }) => (
 		<div data-testid="folder-modal">
 			<button data-testid="close-modal" onClick={onClose}>
 				Close
@@ -44,8 +50,8 @@ jest.mock('components/modals/folder-is-contained-in', () => ({
 	))
 }));
 
-jest.mock('helpers/folders', () => ({
-	getFolderIconColor: jest.fn(() => '#000000')
+vi.mock('helpers/folders', () => ({
+	getFolderIconColor: vi.fn(() => '#000000')
 }));
 
 const mockTags = [
@@ -85,11 +91,11 @@ const TestWrapper = ({
 
 describe('TagFolderRow', () => {
 	beforeEach(() => {
-		(getTags as jest.Mock).mockReturnValue(mockTags);
+		(getTags as Mock).mockReturnValue(mockTags);
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe('Rendering', () => {
@@ -261,7 +267,7 @@ describe('TagFolderRow', () => {
 		});
 
 		it('should handle folder selection and create correct chip', async () => {
-			const consoleSpy = jest.spyOn(console, 'error').mockImplementation(jest.fn());
+			const consoleSpy = vi.spyOn(console, 'error').mockImplementation(vi.fn());
 
 			const { user } = setupTest(<TestWrapper />);
 
@@ -288,8 +294,8 @@ describe('TagFolderRow', () => {
 		it('should handle confirmAction with undefined folder', () => {
 			setupTest(<TestWrapper />);
 
-			const mockOnClose = jest.fn();
-			const mockSetValue = jest.fn();
+			const mockOnClose = vi.fn();
+			const mockSetValue = vi.fn();
 
 			const folderDestination = undefined;
 			const shouldSetValue = folderDestination !== undefined;
@@ -511,7 +517,7 @@ describe('TagFolderRow', () => {
 
 	describe('Edge Cases', () => {
 		it('should handle empty tags list', () => {
-			(getTags as jest.Mock).mockReturnValue([]);
+			(getTags as Mock).mockReturnValue([]);
 
 			setupTest(<TestWrapper />);
 
@@ -526,7 +532,7 @@ describe('TagFolderRow', () => {
 				}
 			];
 
-			(getTags as jest.Mock).mockReturnValue(tagsWithoutColor);
+			(getTags as Mock).mockReturnValue(tagsWithoutColor);
 
 			setupTest(<TestWrapper />);
 
