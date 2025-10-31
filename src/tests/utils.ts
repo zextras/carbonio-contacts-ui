@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { faker } from '@faker-js/faker';
-import * as shell from '@zextras/carbonio-shell-ui';
-import { ErrorSoapResponse, SuccessSoapResponse } from '@zextras/carbonio-shell-ui';
+import { ErrorSoapResponse, SuccessSoapResponse, useBoardHooks } from '@zextras/carbonio-shell-ui';
 import { getFoldersMap, Folder } from '@zextras/carbonio-ui-commons';
 import { EventEmitter } from 'events';
 import { times } from 'lodash';
@@ -172,7 +171,7 @@ export function createSoapContact({
 }
 
 export function spyUseBoardHooks(updateBoardFn?: Mock, closeBoardFn?: Mock): void {
-	vi.spyOn(shell, 'useBoardHooks').mockReturnValue({
+	vi.mocked(useBoardHooks).mockReturnValue({
 		updateBoard: updateBoardFn ?? vi.fn(),
 		setCurrentBoard: vi.fn(),
 		getBoardContext: vi.fn(),
