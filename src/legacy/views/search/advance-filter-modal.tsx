@@ -10,6 +10,7 @@ import { useUserSettings } from '@zextras/carbonio-shell-ui';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import { ScrollableContainer } from 'components/styled-components';
 import { CompanyJobRoleRow } from 'legacy/views/search/parts/company-job-role-row';
 import { EmailAddressRow } from 'legacy/views/search/parts/email-address-row';
 import { KeywordRow } from 'legacy/views/search/parts/keyword-row';
@@ -19,7 +20,6 @@ import { TagFolderRow } from 'legacy/views/search/parts/tag-folder-row';
 import { ToggleFilters } from 'legacy/views/search/parts/toggle-filters';
 import { AdvancedFilterModalFormValues, Query } from 'legacy/views/search/types';
 import { getAdvancedFiltersDefaultValues, getQueryToBe } from 'legacy/views/search/utils';
-import { ScrollableContainer } from 'components/styled-components';
 
 export type AdvancedFilterModalProps = {
 	open: boolean;

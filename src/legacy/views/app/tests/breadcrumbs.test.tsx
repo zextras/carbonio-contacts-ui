@@ -6,18 +6,19 @@
 import React from 'react';
 
 import { screen } from '@testing-library/react';
+import { Mock } from 'vitest';
 
+import { setupTest } from '@test-setup';
 import { getFolderTranslatedNameByName } from 'legacy/utils/helpers';
 import { Breadcrumbs } from 'legacy/views/app/breadcrumbs';
-import { setupTest } from '@test-setup';
 
-jest.mock('../../../utils/helpers', () => ({
-	getFolderTranslatedNameByName: jest.fn()
+vi.mock('../../../utils/helpers', () => ({
+	getFolderTranslatedNameByName: vi.fn()
 }));
 
 describe('Breadcrumbs', () => {
 	it('should render the breadcrumb path correctly', () => {
-		(getFolderTranslatedNameByName as jest.Mock).mockImplementation((t, token) => token);
+		(getFolderTranslatedNameByName as Mock).mockImplementation((t, token) => token);
 
 		setupTest(<Breadcrumbs folderPath="folder1/folder2" itemsCount={5} />);
 		expect(screen.getByTestId('BreadcrumbPath')).toHaveTextContent('folder1 / folder2');
@@ -40,7 +41,7 @@ describe('Breadcrumbs', () => {
 	});
 
 	it('should call getFolderTranslatedNameByName for each folder in the path', () => {
-		(getFolderTranslatedNameByName as jest.Mock).mockImplementation((t, token) => token);
+		(getFolderTranslatedNameByName as Mock).mockImplementation((t, token) => token);
 
 		setupTest(<Breadcrumbs folderPath="folder1/folder2/folder3" itemsCount={500} />);
 		expect(getFolderTranslatedNameByName).toHaveBeenCalledTimes(3);
