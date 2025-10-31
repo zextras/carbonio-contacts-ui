@@ -6,9 +6,9 @@
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 
+import { createFakeFile } from '@test-utils/utils/file';
 import { upload } from 'network/api/upload';
 import { registerUploadHandler } from 'tests/msw-handlers/upload';
-import { createFakeFile } from '@test-utils/utils/file';
 
 describe('Upload', () => {
 	it('should raise an exception if the response is not valid', () => {
@@ -37,7 +37,7 @@ describe('Upload', () => {
 		registerUploadHandler(response);
 
 		act(() => {
-			jest.advanceTimersByTime(1000);
+			vi.advanceTimersByTime(1000);
 		});
 
 		expect(upload(createFakeFile())).resolves.toEqual(
