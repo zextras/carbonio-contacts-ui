@@ -8,10 +8,10 @@ import { type Action as DSAction } from '@zextras/carbonio-design-system';
 import { FOLDERS, getFolderIdParts, useTags } from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 
-import { applyMultiTag } from 'legacy/ui-actions/tag-actions';
 import { useDeleteContacts } from 'actions/common-contacts-actions/use-delete-contacts';
 import { useTrashContacts } from 'actions/common-contacts-actions/use-trash-contacts';
 import { ContactOrGroup } from 'legacy/types/contact';
+import { applyMultiTag } from 'legacy/ui-actions/tag-actions';
 
 type SecondaryActionsProps = {
 	folderId: string;
