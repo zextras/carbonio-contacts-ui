@@ -8,6 +8,7 @@ import React from 'react';
 import { act, fireEvent, waitFor } from '@testing-library/react';
 import { useRunSearchIntegration, useTagStore } from '@zextras/carbonio-ui-commons';
 import { HttpResponse } from 'msw';
+import { Mock } from 'vitest';
 
 import { TESTID_SELECTORS, TIMERS } from '../../../../constants/tests';
 import { TagsAccordion } from '../tags-accordion';
@@ -15,15 +16,20 @@ import { screen, setupTest } from '@test-setup';
 import { createAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 import { buildSoapResponse } from '@test-utils/utils/soap';
 
-jest.mock('@zextras/carbonio-ui-commons', () => ({
-	...jest.requireActual('@zextras/carbonio-ui-commons'),
-	useRunSearchIntegration: jest.fn()
-}));
+vi.mock('@zextras/carbonio-ui-commons', async () => {
+	const actual = await vi.importActual<typeof import('@zextras/carbonio-ui-commons')>(
+		'@zextras/carbonio-ui-commons'
+	);
+	return {
+		...actual,
+		useRunSearchIntegration: vi.fn()
+	};
+});
 
 describe('TagsAccordion', () => {
 	it('performs a search when clicking the tag', async () => {
-		const runSearch = jest.fn();
-		(useRunSearchIntegration as jest.Mock).mockReturnValue(runSearch);
+		const runSearch = vi.fn();
+		(useRunSearchIntegration as Mock).mockReturnValue(runSearch);
 		useTagStore.setState({ tags: { '1': { id: '1', name: 'testTag' } } });
 
 		const { user } = setupTest(<TagsAccordion />);
@@ -33,7 +39,7 @@ describe('TagsAccordion', () => {
 
 		await user.click(screen.getByTestId(TESTID_SELECTORS.icons.accordionExpandAction));
 		act(() => {
-			jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
+			vi.advanceTimersByTime(TIMERS.dropdown.registerListeners);
 		});
 		const testTag = await screen.findByText('testTag');
 		expect(testTag).toBeVisible();
@@ -54,7 +60,7 @@ describe('TagsAccordion', () => {
 
 		await user.click(screen.getByTestId(TESTID_SELECTORS.icons.accordionExpandAction));
 		act(() => {
-			jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
+			vi.advanceTimersByTime(TIMERS.dropdown.registerListeners);
 		});
 		const testTag = await screen.findByText('testTag');
 		expect(testTag).toBeVisible();
@@ -64,7 +70,7 @@ describe('TagsAccordion', () => {
 		expect(deleteTag).toBeVisible();
 		await user.click(deleteTag);
 		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+			vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 
 		const deleteTagButton = screen.getByRole('button', { name: 'Delete' });
@@ -105,7 +111,7 @@ describe('TagsAccordion', () => {
 		const createTag = await screen.findByText(/create tag/i);
 		await user.click(createTag);
 		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+			vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 
 		const modalTitle = await screen.findByText('Create a new Tag');

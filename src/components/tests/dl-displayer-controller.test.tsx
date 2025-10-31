@@ -6,10 +6,10 @@
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
+import { act } from '@testing-library/react';
 import { BooleanString } from '@zextras/carbonio-shell-ui';
 import { times } from 'lodash';
 import { HttpResponse } from 'msw';
-import { vi } from 'vitest';
 
 import { screen, setupTest } from '@test-setup';
 import { DLDisplayerController } from 'components/dl-displayer-controller';
@@ -45,7 +45,6 @@ describe('Distribution List Displayer Controller', () => {
 		const dl = generateDistributionList({ description });
 		registerGetDistributionListHandler(dl);
 		setupTest(<DLDisplayerController id={dl.id} />);
-		console.log(screen.debug());
 		expect(await screen.findAllByText(dl.displayName)).toHaveLength(2);
 		expect(screen.getByText(description)).toBeVisible();
 	});
@@ -96,7 +95,6 @@ describe('Distribution List Displayer Controller', () => {
 			});
 			registerGetDistributionListMembersHandler(members);
 			const { user } = setupTest(<DLDisplayerController id={dl.id} />);
-			console.log(screen.debug());
 
 			await screen.findAllByText(dl.displayName);
 			await user.click(screen.getByText(/member list/i));
@@ -132,10 +130,9 @@ describe('Distribution List Displayer Controller', () => {
 	});
 
 	it('should show an error snackbar if there is a network error while loading the details', async () => {
-		vi.spyOn(console, 'warn').mockImplementation();
 		const dl = generateDistributionList();
 		registerGetDistributionListHandler(dl, VITEST_MOCKED_ERROR);
-		setupTest(<DLDisplayerController id={dl.id} />);
+		await act(() => setupTest(<DLDisplayerController id={dl.id} />));
 		expect(await screen.findByText(/something went wrong/i)).toBeVisible();
 	});
 

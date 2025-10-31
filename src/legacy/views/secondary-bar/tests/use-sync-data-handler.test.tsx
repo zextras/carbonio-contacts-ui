@@ -11,11 +11,11 @@ import { SoapNotify } from '@zextras/carbonio-ui-soap-lib';
 import { http } from 'msw';
 
 import { useSync } from '../../../../../__mocks__/@zextras/carbonio-ui-soap-lib';
-import { useSyncDataHandler } from 'legacy/views/secondary-bar/use-sync-data-handler';
 import { getSetupServer } from '@jest-setup';
 import { generateFolder } from '@test-utils/folders/folders-generator';
 import { handleGetFolderRequest } from '@test-utils/network/msw/handle-get-folder';
 import { handleGetShareInfoRequest } from '@test-utils/network/msw/handle-get-share-info';
+import { useSyncDataHandler } from 'legacy/views/secondary-bar/use-sync-data-handler';
 
 function getWrapper() {
 	// eslint-disable-next-line react/display-name
@@ -23,7 +23,7 @@ function getWrapper() {
 }
 
 function mockSoapSync(notify: Array<SoapNotify>): void {
-	jest.mocked(useSync).mockReturnValue(notify);
+	vi.mocked(useSync).mockReturnValue(notify);
 }
 
 function generateSoapAction(partial?: Partial<SoapNotify>): SoapNotify {
@@ -49,7 +49,7 @@ describe('sync data handler', () => {
 			const folder = generateFolder({ id: '1' });
 			useFolderStore.setState({ folders: { [folder.id]: folder } });
 			const notify = { deleted: ['1'], seq: 0 };
-			const workerSpy = jest.spyOn(folderWorker, 'postMessage');
+			const workerSpy = vi.spyOn(folderWorker, 'postMessage');
 			mockSoapDelete(mailboxNumber, ['1']);
 			getSetupServer().use(http.post('/service/soap/GetFolderRequest', handleGetFolderRequest));
 			getSetupServer().use(
