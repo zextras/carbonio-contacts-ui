@@ -110,7 +110,7 @@ describe('Common contact group board', () => {
 
 	describe('Discard button', () => {
 		it('should call setNameValue with the initial name when click on the discard button', async () => {
-			const setNameValueMock = jest.fn();
+			const setNameValueMock = vi.fn();
 			const { user } = setupTest(
 				<CommonContactGroupBoard
 					{...buildProps({
@@ -140,7 +140,7 @@ describe('Common contact group board', () => {
 		});
 
 		it('should call setMemberListEmails with the initialMemberListEmails when click on the discard button', async () => {
-			const setMemberListEmailsMock = jest.fn();
+			const setMemberListEmailsMock = vi.fn();
 			const initialMemberListEmails = [faker.internet.email()];
 			const { user } = setupTest(
 				<CommonContactGroupBoard
@@ -152,7 +152,7 @@ describe('Common contact group board', () => {
 		});
 
 		it('should reset board title', async () => {
-			const updateBoard = jest.fn();
+			const updateBoard = vi.fn();
 			spyUseBoardHooks(updateBoard);
 
 			const { user } = setupTest(
@@ -173,7 +173,7 @@ describe('Common contact group board', () => {
 
 	describe('Name', () => {
 		it('should call setNameValue when update name', async () => {
-			const setNameValueMock = jest.fn();
+			const setNameValueMock = vi.fn();
 			const newName = faker.string.alpha(5);
 			const { user } = setupTest(
 				<CommonContactGroupBoard
@@ -191,7 +191,7 @@ describe('Common contact group board', () => {
 		});
 
 		it('should update board title', async () => {
-			const updateBoard = jest.fn();
+			const updateBoard = vi.fn();
 			spyUseBoardHooks(updateBoard);
 			const newName = faker.string.alpha(10);
 			const { user } = setupTest(<CommonContactGroupBoard {...buildProps()} />);
@@ -304,7 +304,7 @@ describe('Common contact group board', () => {
 				await user.type(contactInput, email.substring(0, 3));
 				act(() => {
 					// run timers of dropdown
-					jest.runOnlyPendingTimers();
+					vi.runOnlyPendingTimers();
 				});
 				await screen.findByTestId(TESTID_SELECTORS.dropdownList);
 
@@ -334,7 +334,7 @@ describe('Common contact group board', () => {
 			});
 
 			it('should call setMemberListEmailsMock without the email when click on the remove button', async () => {
-				const setMemberListEmailsMock = jest.fn();
+				const setMemberListEmailsMock = vi.fn();
 				const email = faker.internet.email();
 				const { user } = setupTest(
 					<CommonContactGroupBoard
