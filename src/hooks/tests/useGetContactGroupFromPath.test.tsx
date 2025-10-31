@@ -7,15 +7,19 @@ import React from 'react';
 
 import { renderHook } from '@testing-library/react';
 import { useParams } from 'react-router-dom';
+import { Mock } from 'vitest';
 
 import { useGetContactGroupFromPath } from 'hooks/useGetContactGroupFromPath';
 import { addContactsToStore } from 'legacy/store/contacts';
 import { buildContactGroup } from 'tests/model-builder';
 
-jest.mock('react-router-dom', () => ({
-	...jest.requireActual('react-router-dom'),
-	useParams: jest.fn()
-}));
+vi.mock('react-router-dom', async (importOriginal) => {
+	const actual = await importOriginal();
+	return {
+		...actual,
+		useParams: vi.fn()
+	};
+});
 
 function getWrapper(): React.FC {
 	// eslint-disable-next-line react/display-name
@@ -28,7 +32,7 @@ describe('Active Contact Group', () => {
 	it('should return contact group using id parameter', () => {
 		const contactGroup = buildContactGroup();
 		addContactsToStore([contactGroup]);
-		(useParams as jest.Mock).mockReturnValue({ id: contactGroup.id, folderId });
+		(useParams as Mock).mockReturnValue({ id: contactGroup.id, folderId });
 		const wrapper = getWrapper();
 
 		const { result } = renderHook(useGetContactGroupFromPath, { wrapper });
@@ -38,7 +42,7 @@ describe('Active Contact Group', () => {
 
 	it('should return undefined if contact group not present', () => {
 		const wrapper = getWrapper();
-		(useParams as jest.Mock).mockReturnValue({ id: 'non-existing', folderId });
+		(useParams as Mock).mockReturnValue({ id: 'non-existing', folderId });
 
 		const { result } = renderHook(useGetContactGroupFromPath, { wrapper });
 
