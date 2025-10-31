@@ -11,7 +11,6 @@ import { SetupServer, setupServer } from 'msw/node';
 import { vi, beforeAll, beforeEach, afterEach, afterAll } from 'vitest';
 
 import { useDistributionListsStore } from '../store/distribution-lists';
-import { mockWindowLocation } from './mocks/utils/window';
 import { getRestHandlers } from '@test-utils/network/msw/handlers';
 
 // vi.mock(import('@zextras/carbonio-ui-soap-lib'));
@@ -68,9 +67,6 @@ Object.defineProperty(window.crypto, 'randomUUID', {
 	writable: true,
 	value: vi.fn(() => Math.random().toString())
 });
-
-// Mock default location domain
-mockWindowLocation({ href: 'http://localhost/' });
 
 // Mock Worker
 class Worker {
