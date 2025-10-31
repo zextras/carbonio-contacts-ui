@@ -11,6 +11,7 @@ import * as shell from '@zextras/carbonio-shell-ui';
 import { FOLDER_VIEW, FOLDERS, JSNS, useTagStore } from '@zextras/carbonio-ui-commons';
 import { forEach } from 'lodash';
 
+import { getAction, useAppContext } from '../../../../../__mocks__/@zextras/carbonio-shell-ui';
 import {
 	makeListItemsVisible,
 	screen,
@@ -19,10 +20,6 @@ import {
 	UserEvent,
 	within
 } from '@test-setup';
-import {
-	getAction as getActionMock,
-	useAppContext
-} from '@test-utils/carbonio-shell-ui/carbonio-shell-ui';
 import { generateFolder } from '@test-utils/folders/folders-generator';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 import { populateFoldersStore } from '@test-utils/store/folders';
@@ -48,8 +45,8 @@ import {
 import { createSoapContact, createSoapContactGroup } from 'tests/utils';
 import { SearchContactsRequest, SearchContactsSoapResponse } from 'types/index.d';
 
-const mockMailToAction = (execute = jest.fn()): void => {
-	getActionMock.mockImplementation((type, id) => {
+const mockMailToAction = (execute = vi.fn()): void => {
+	getAction.mockImplementation((type, id) => {
 		if (type !== 'contact-list' || id !== 'mail-to') {
 			return [undefined, false];
 		}
@@ -127,7 +124,7 @@ describe('Folder panel', () => {
 			});
 			await screen.findByTestId('list-bottom-element');
 			act(() => {
-				jest.advanceTimersByTime(1000);
+				vi.advanceTimersByTime(1000);
 			});
 			await triggerLoadMore();
 			expect(await screen.findByText('More Contact Group')).toBeVisible();
@@ -156,15 +153,15 @@ describe('Folder panel', () => {
 
 		// remove all warning as the search request is not intercepted
 		// and not needed for the tests
-		jest.spyOn(console, 'warn').mockImplementation();
+		vi.spyOn(console, 'warn').mockImplementation(() => null);
 
 		describe('Actions', () => {
 			describe('hover actions', () => {
 				describe('Send mail action', () => {
 					it('should open the mail board when clicking the action and contact has an address', async () => {
 						const folderId = FOLDERS.CONTACTS;
-						const openMailComposer = jest.fn();
-						jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
+						const openMailComposer = vi.fn();
+						vi.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
 						mockMailToAction(openMailComposer);
 						const soapContact = createSoapContact({ id: '1', folderId, email: 'test123@test.com' });
 						registerSearchContacts([soapContact]);
@@ -222,7 +219,7 @@ describe('Folder panel', () => {
 						);
 						await act(() => user.click(restoreAction));
 						act(() => {
-							jest.advanceTimersByTime(1000);
+							vi.advanceTimersByTime(1000);
 						});
 						const restoreModal = await screen.findByTestId('modal');
 						makeListItemsVisible();
@@ -497,7 +494,7 @@ describe('Folder panel', () => {
 
 			describe('Multiple selection', () => {
 				it('should not display any primary action', async () => {
-					useAppContext.mockReturnValue({ count: 42, setCount: jest.fn() });
+					useAppContext.mockReturnValue({ count: 42, setCount: vi.fn() });
 					const folder = FOLDERS_DESCRIPTORS.contacts;
 					const soapContact1 = createSoapContact();
 					const contacts = [soapContact1, createSoapContact()];
@@ -553,7 +550,7 @@ describe('Folder panel', () => {
 								items: contacts,
 								more: false
 							});
-							useAppContext.mockReturnValue({ count: 42, setCount: jest.fn() });
+							useAppContext.mockReturnValue({ count: 42, setCount: vi.fn() });
 
 							const { user } = setupTest(<FolderPanelWrapper />, {
 								initialEntries: [`/folder/${folder.id}`],
@@ -647,8 +644,8 @@ describe('Folder panel', () => {
 			describe('hover actions', () => {
 				describe('Send mail action', () => {
 					it('should open the mail board when clicking the action and group has at least one member', async () => {
-						const openMailComposer = jest.fn();
-						jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
+						const openMailComposer = vi.fn();
+						vi.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
 						const contactGroupName = faker.company.name();
 						const folderId = '7';
 						const memberEmail = faker.internet.email();
@@ -670,9 +667,9 @@ describe('Folder panel', () => {
 						});
 					});
 					it('should display send mail hover action as disabled when the contact group has 0 members', async () => {
-						const openMailComposer = jest.fn();
+						const openMailComposer = vi.fn();
 						const folderId = '7';
-						jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
+						vi.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
 						const contactGroupName = faker.company.name();
 						registerFindContactGroupsHandler({
 							findContactGroupsResponse: createFindContactGroupsResponse([
@@ -731,7 +728,7 @@ describe('Folder panel', () => {
 						);
 						await act(() => user.click(restoreAction));
 						act(() => {
-							jest.advanceTimersByTime(1000);
+							vi.advanceTimersByTime(1000);
 						});
 						const restoreModal = await screen.findByTestId('modal');
 						await within(restoreModal).findByText(`Restore ${contactGroupName}'s contact`);
@@ -826,7 +823,7 @@ describe('Folder panel', () => {
 						await screen.findByText('Contact group successfully deleted');
 					});
 					it('should not remove deleted contact group when you confirm deletion and api call fail (Hover trigger)', async () => {
-						jest.spyOn(console, 'warn').mockImplementation();
+						vi.spyOn(console, 'warn').mockImplementation(() => null);
 						const folderId = FOLDERS.TRASH;
 						const cnItem1 = createSoapContactGroup('Group 1', [], '11', folderId);
 						const cnItem2 = createSoapContactGroup('Group 2', [], '22', folderId);
@@ -868,9 +865,9 @@ describe('Folder panel', () => {
 			describe('contextual menu actions', () => {
 				describe('Send mail action', () => {
 					it('should open the mail board', async () => {
-						const openMailComposer = jest.fn();
+						const openMailComposer = vi.fn();
 						const folderId = '7';
-						jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
+						vi.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
 						const contactGroupName = faker.company.name();
 						const contactGroupId = '1';
 						const member = faker.internet.email();
