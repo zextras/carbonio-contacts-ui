@@ -166,6 +166,7 @@ type SetupOptions = {
 
 export type UserEvent = ReturnType<(typeof userEvent)['setup']> & {
 	readonly rightClick: (target: Element) => Promise<void>;
+	readonly pasteInto: (target: Element, text: string) => Promise<void>;
 };
 
 export function setupTest(
@@ -175,8 +176,13 @@ export function setupTest(
 	const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime, ...setupOptions });
 	const rightClick = (target: Element): Promise<void> =>
 		user.pointer({ target, keys: '[MouseRight]' });
+	const pasteInto = async (target: Element, text: string): Promise<void> => {
+		await user.click(target);
+		await user.paste(text);
+	};
+
 	return {
-		user: { ...user, rightClick },
+		user: { ...user, rightClick, pasteInto },
 		...customRender(ui, customRenderOptions)
 	};
 }

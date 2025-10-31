@@ -53,7 +53,7 @@ describe('Edit contact group board', () => {
 		describe('Save button disabled', () => {
 			it('should disable the save button when name input is empty string', async () => {
 				const { user } = setupTest(<EditContactGroupBoard />);
-				await user.clear(screen.getByRole('textbox', { name: 'Group name*' }));
+				await act(() => user.clear(screen.getByRole('textbox', { name: 'Group name*' })));
 				expect(
 					screen.getByRoleWithIcon('button', { name: /SAVE/i, icon: TESTID_SELECTORS.icons.save })
 				).toBeDisabled();
@@ -62,8 +62,8 @@ describe('Edit contact group board', () => {
 			it('should disable save button when name input contains only space characters', async () => {
 				const { user } = setupTest(<EditContactGroupBoard />);
 				const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
-				await user.clear(nameInput);
-				await user.type(nameInput, '   ');
+				await act(() => user.clear(nameInput));
+				await act(() => user.pasteInto(nameInput, '   '));
 				expect(
 					screen.getByRoleWithIcon('button', { name: /SAVE/i, icon: TESTID_SELECTORS.icons.save })
 				).toBeDisabled();
@@ -73,8 +73,8 @@ describe('Edit contact group board', () => {
 				const newName = faker.string.alphanumeric(CONTACT_GROUP_NAME_MAX_LENGTH + 1);
 				const { user } = setupTest(<EditContactGroupBoard />);
 				const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
-				act(() => user.clear(nameInput));
-				act(() => user.type(nameInput, newName));
+				await act(() => user.clear(nameInput));
+				await act(() => user.pasteInto(nameInput, newName));
 				expect(
 					screen.getByRoleWithIcon('button', { name: /SAVE/i, icon: TESTID_SELECTORS.icons.save })
 				).toBeDisabled();
