@@ -8,7 +8,7 @@ import { act } from '@testing-library/react';
 
 import {
 	DELETE_PERMANENTLY_ACTION_DESCRIPTOR,
-	JEST_MOCKED_ERROR,
+	VITEST_MOCKED_ERROR,
 	TESTID_SELECTORS,
 	TIMERS
 } from '../../../../constants/tests';
@@ -66,7 +66,7 @@ describe('useContactGroupDeleteAction', () => {
 		});
 
 		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+			vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 
 		const title = `Delete "${contactGroupWithMembers.title}"`;
@@ -83,7 +83,7 @@ describe('useContactGroupDeleteAction', () => {
 		});
 
 		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+			vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 
 		expect(
@@ -101,7 +101,7 @@ describe('useContactGroupDeleteAction', () => {
 		});
 
 		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+			vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 
 		const closeIcon = await screen.findByRoleWithIcon('button', {
@@ -121,7 +121,7 @@ describe('useContactGroupDeleteAction', () => {
 		});
 
 		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+			vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 
 		const button = await findDeletePermanentlyButton();
@@ -139,7 +139,7 @@ describe('useContactGroupDeleteAction', () => {
 		});
 
 		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+			vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 
 		const button = await screen.findByRoleWithIcon('button', {
@@ -164,7 +164,7 @@ describe('useContactGroupDeleteAction', () => {
 		});
 
 		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+			vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 		await screen.findByTestId('modal');
 
@@ -173,8 +173,7 @@ describe('useContactGroupDeleteAction', () => {
 	});
 
 	it('should show an error snackbar if the user clicks on the delete action button and the API call return an error', async () => {
-		jest.spyOn(console, 'warn').mockImplementation();
-		registerDeleteContactHandler(contactGroupNoMembers.id, JEST_MOCKED_ERROR);
+		registerDeleteContactHandler(contactGroupNoMembers.id, VITEST_MOCKED_ERROR);
 		const { result, user } = setupHook(useContactGroupDeleteAction, {
 			initialProps: [contactGroupWithMembers]
 		});
@@ -184,7 +183,7 @@ describe('useContactGroupDeleteAction', () => {
 		});
 
 		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+			vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 
 		await user.click(await findDeletePermanentlyButton());
@@ -204,7 +203,7 @@ describe('useContactGroupDeleteAction', () => {
 		});
 
 		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+			vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 
 		const titleElement = screen.getByText(`Delete "${contactGroupWithMembers.title}"`);
@@ -226,7 +225,7 @@ describe('useContactGroupDeleteAction', () => {
 		const action = result.current;
 		act(() => {
 			action.onClick();
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+			vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 
 		const titleElement = screen.getByText(`Delete "${contactGroupWithMembers.title}"`);
