@@ -12,15 +12,15 @@ import {
 	JSNS
 } from '@zextras/carbonio-ui-commons';
 
+import { screen, UserEvent } from '@test-setup';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 import { TESTID_SELECTORS } from 'constants/tests';
+import { FullAutocompleteRequest, FullAutocompleteResponse } from 'legacy/types/contact';
+import { GetContactsRequest, GetContactsResponse } from 'legacy/types/soap';
 import {
 	GetDistributionListRequest,
 	GetDistributionListResponse
 } from 'network/api/get-distribution-list';
-import { FullAutocompleteRequest, FullAutocompleteResponse } from 'legacy/types/contact';
-import { GetContactsRequest, GetContactsResponse } from 'legacy/types/soap';
-import { screen, UserEvent } from '@test-setup';
-import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 export const SHOW_MORE = /show more/i;
 export const SELECT_ALL = /Select address|Select all \d+ addresses/;
