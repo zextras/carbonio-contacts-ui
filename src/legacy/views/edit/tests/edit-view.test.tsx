@@ -73,7 +73,7 @@ describe('Edit view', () => {
 		populateFoldersStore();
 		const firstName = faker.person.firstName();
 
-		const onTitleChanged = jest.fn();
+		const onTitleChanged = vi.fn();
 		const { user } = setupTest(<EditView onTitleChanged={onTitleChanged} />);
 		const inputName = await screen.findByRole('textbox', { name: /first name/i });
 		await act(async () => user.type(inputName, firstName));
@@ -108,7 +108,7 @@ describe('Edit view', () => {
 		populateFoldersStore();
 		registerCreateContactHandler();
 
-		const onClose = jest.fn();
+		const onClose = vi.fn();
 		const { user } = setupTest(<EditView onClose={onClose} />);
 		const newName = faker.person.firstName();
 		const inputName = screen.getByRole('textbox', { name: /first name/i });
