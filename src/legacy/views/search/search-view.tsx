@@ -171,18 +171,24 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 			setSearchResults(initialSearchState);
 			if (query.length > 0) {
 				const queryString = evaluateQueryString(newQuery);
-				runSearch({ queryString, offset: 0, abortSignal }).then((r) => {
-					const contacts = r.contacts ?? [];
-					const contactIds = contacts.map((c) => c.id);
-					addContactsToStore(contacts);
-					setSearchResults({
-						more: r.more,
-						offset: r.offset,
-						query: queryString,
-						sortBy: 'nameAsc',
-						contacts: contactIds
+				runSearch({ queryString, offset: 0, abortSignal })
+					.then((r) => {
+						const contacts = r.contacts ?? [];
+						const contactIds = contacts.map((c) => c.id);
+						addContactsToStore(contacts);
+						setSearchResults({
+							more: r.more,
+							offset: r.offset,
+							query: queryString,
+							sortBy: 'nameAsc',
+							contacts: contactIds
+						});
+					})
+					.catch((error) => {
+						if (error.name !== 'AbortError') {
+							throw error; // rethrow if not abort
+						}
 					});
-				});
 			}
 		},
 		[evaluateQueryString, initialSearchState, query.length]
@@ -210,18 +216,24 @@ const SearchView: FC<SearchViewProps> = ({ useQuery, ResultsHeader }) => {
 				offset,
 				queryString: queryToString,
 				abortSignal: controller.signal
-			}).then((r) => {
-				const allContacts = [...(searchContacts ?? []), ...(r.contacts ?? [])];
-				const contactIds = allContacts.map((c) => c.id);
-				setSearchResults({
-					more: r.more,
-					offset: r.offset,
-					query: queryToString,
-					sortBy: 'nameAsc',
-					contacts: contactIds
+			})
+				.then((r) => {
+					const allContacts = [...(searchContacts ?? []), ...(r.contacts ?? [])];
+					const contactIds = allContacts.map((c) => c.id);
+					setSearchResults({
+						more: r.more,
+						offset: r.offset,
+						query: queryToString,
+						sortBy: 'nameAsc',
+						contacts: contactIds
+					});
+					addContactsToStore(allContacts);
+				})
+				.catch((error) => {
+					if (error.name !== 'AbortError') {
+						throw error; // rethrow if not abort
+					}
 				});
-				addContactsToStore(allContacts);
-			});
 		}
 
 		return () => {
