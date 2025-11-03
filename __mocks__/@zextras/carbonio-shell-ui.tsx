@@ -3,6 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+import React from 'react';
 
 import type * as shell from '@zextras/carbonio-shell-ui';
 import { useActions as realUseActions } from '@zextras/carbonio-shell-ui';
@@ -33,10 +34,11 @@ export const setAppContext = vi.fn();
 export const getBridgedFunctions = vi.fn();
 export const addBoard = vi.fn();
 export const closeBoard = vi.fn();
+export const updateBoard = vi.fn();
 export const updateBoardContext = vi.fn();
 export const useBoardHooks = vi.fn(() => ({
 	closeBoard,
-	updateBoard: vi.fn(),
+	updateBoard,
 	setCurrentBoard: vi.fn(),
 	getBoardContext: vi.fn(),
 	getBoard: vi.fn()
@@ -86,6 +88,18 @@ export const useIntegratedFunction: Mock<typeof shell.useIntegratedFunction> = v
 		return [fn, false];
 	}
 );
+
+const FakeIntegrationComponent = (): React.JSX.Element => <div data-testid="fake-component" />;
+const IntegrationComponent = vi.fn(FakeIntegrationComponent);
+const isIntegrationAvailable = false;
+export const useIntegratedComponent = vi.fn((id: string) => [
+	IntegrationComponent,
+	isIntegrationAvailable
+]);
+export const getIntegratedComponent = vi.fn((id: string) => [
+	IntegrationComponent,
+	isIntegrationAvailable
+]);
 
 export const useAuthenticated: Mock<typeof shell.useAuthenticated> = vi.fn(() => true);
 
