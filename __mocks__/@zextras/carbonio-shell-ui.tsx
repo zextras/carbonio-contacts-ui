@@ -87,7 +87,7 @@ export const useIntegratedFunction: Mock<typeof shell.useIntegratedFunction> = v
 	}
 );
 
-export const useAuthenticated: typeof shell.useAuthenticated = vi.fn(() => true);
+export const useAuthenticated: Mock<typeof shell.useAuthenticated> = vi.fn(() => true);
 
 export const NotificationManager = {
 	notify: vi.fn()
