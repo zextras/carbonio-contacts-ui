@@ -5,6 +5,7 @@
  */
 import { SoapResponse } from '@zextras/carbonio-shell-ui';
 import { HttpResponseResolver, http, HttpResponse } from 'msw';
+import { Mock } from 'vitest';
 
 import { getSetupServer } from '@jest-setup';
 import { FullAutocompleteResponse, Match } from 'legacy/types/contact';
@@ -37,16 +38,13 @@ type FullAutoCompleteHandler = HttpResponseResolver<
 	{ Body: { FullAutocompleteRequest: FullAutocompleteResponse } },
 	SoapResponse<FullAutocompleteResponse>
 >;
-export const registerFullAutocompleteHandler = (
-	results: Array<Match>
-): vi.Mock<ReturnType<FullAutoCompleteHandler>, Parameters<FullAutoCompleteHandler>> => {
-	const handler = vi.fn<ReturnType<FullAutoCompleteHandler>, Parameters<FullAutoCompleteHandler>>(
-		() =>
-			HttpResponse.json(
-				buildSoapResponse<FullAutocompleteResponse>({
-					FullAutocompleteResponse: createAutocompleteResponse(results)
-				})
-			)
+export const registerFullAutocompleteHandler = (results: Array<Match>): Mock<FullAutoCompleteHandler> => {
+	const handler = vi.fn<FullAutoCompleteHandler>(() =>
+		HttpResponse.json(
+			buildSoapResponse<FullAutocompleteResponse>({
+				FullAutocompleteResponse: createAutocompleteResponse(results)
+			})
+		)
 	);
 	getSetupServer().use(http.post('/service/soap/FullAutocompleteRequest', handler));
 

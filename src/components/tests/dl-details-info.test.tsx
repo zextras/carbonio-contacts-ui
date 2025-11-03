@@ -6,7 +6,6 @@
 import React from 'react';
 
 import * as clipboard from '@zextras/carbonio-ui-commons';
-import { vi } from 'vitest';
 
 import { screen, setupTest, within } from '@test-setup';
 import { DLDetailsInfo } from 'components/dl-details-info';
