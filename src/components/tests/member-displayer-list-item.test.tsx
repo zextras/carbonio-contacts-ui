@@ -8,14 +8,15 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import * as shell from '@zextras/carbonio-shell-ui';
 import * as clipboard from '@zextras/carbonio-ui-commons';
-import { vi } from 'vitest';
 
 import { screen, setupTest, within } from '@test-setup';
 import { MemberDisplayerListItemComponent } from 'components/member-displayer-list-item';
 import { TESTID_SELECTORS } from 'constants/tests';
 
-vi.mock('@zextras/carbonio-ui-commons', async (importOriginal) => {
-	const actual = await importOriginal();
+vi.mock('@zextras/carbonio-ui-commons', async () => {
+	const actual = await vi.importActual<typeof import('@zextras/carbonio-ui-commons')>(
+		'@zextras/carbonio-ui-commons'
+	);
 	return {
 		...actual,
 		copyToClipboard: vi.fn()

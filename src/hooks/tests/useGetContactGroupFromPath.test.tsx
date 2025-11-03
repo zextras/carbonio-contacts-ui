@@ -13,8 +13,8 @@ import { useGetContactGroupFromPath } from 'hooks/useGetContactGroupFromPath';
 import { addContactsToStore } from 'legacy/store/contacts';
 import { buildContactGroup } from 'tests/model-builder';
 
-vi.mock('react-router-dom', async (importOriginal) => {
-	const actual = await importOriginal();
+vi.mock('react-router-dom', async () => {
+	const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
 	return {
 		...actual,
 		useParams: vi.fn()
