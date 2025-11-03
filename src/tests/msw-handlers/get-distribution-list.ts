@@ -7,7 +7,7 @@ import { SoapResponse } from '@zextras/carbonio-shell-ui';
 import { JSNS } from '@zextras/carbonio-ui-commons';
 import { map } from 'lodash';
 import { http, HttpResponse, HttpResponseResolver } from 'msw';
-import { vi } from 'vitest';
+import { Mock, vi } from 'vitest';
 
 import { getSetupServer } from '@jest-setup';
 import { DistributionList } from 'model/distribution-list';
@@ -46,11 +46,8 @@ export const buildGetDistributionListResponse = (
 export const registerGetDistributionListHandler = (
 	dl: DistributionList,
 	error?: string
-): vi.Mock<ReturnType<GetDistributionListHandler>, Parameters<GetDistributionListHandler>> => {
-	const handler = vi.fn<
-		ReturnType<GetDistributionListHandler>,
-		Parameters<GetDistributionListHandler>
-	>(() => {
+): Mock<GetDistributionListHandler> => {
+	const handler = vi.fn<GetDistributionListHandler>(() => {
 		if (error) {
 			return HttpResponse.json(buildSoapError(error));
 		}

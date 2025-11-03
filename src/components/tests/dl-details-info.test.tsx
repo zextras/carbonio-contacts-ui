@@ -6,15 +6,16 @@
 import React from 'react';
 
 import * as clipboard from '@zextras/carbonio-ui-commons';
-import { vi } from 'vitest';
 
 import { screen, setupTest, within } from '@test-setup';
 import { DLDetailsInfo } from 'components/dl-details-info';
 import { TESTID_SELECTORS } from 'constants/tests';
 import { generateDistributionList } from 'tests/utils';
 
-vi.mock('@zextras/carbonio-ui-commons', async (importOriginal) => {
-	const actual = await importOriginal();
+vi.mock('@zextras/carbonio-ui-commons', async () => {
+	const actual = await vi.importActual<typeof import('@zextras/carbonio-ui-commons')>(
+		'@zextras/carbonio-ui-commons'
+	);
 	return {
 		...actual,
 		copyToClipboard: vi.fn()

@@ -28,7 +28,7 @@ export const pushHistory = vi.fn();
 
 export const useBoard = vi.fn();
 
-export const useAppContext = vi.fn(() => mockedAccounts);
+export const useAppContext: Mock<typeof shell.useAppContext> = vi.fn(() => mockedAccounts);
 export const setAppContext = vi.fn();
 export const getBridgedFunctions = vi.fn();
 export const addBoard = vi.fn();
