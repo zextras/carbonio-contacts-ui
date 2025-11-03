@@ -9,8 +9,8 @@ import { useSnackbar } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
 import { Action } from 'actions/types';
-import { TIMEOUTS } from 'constants/index';
 import { EXPORT_CONTACT_ACTION } from 'constants/actions';
+import { TIMEOUTS } from 'constants/index';
 import { redirectToBlob } from 'helpers/download';
 import { getDisplayName } from 'legacy/hooks/use-display-name';
 import { Contact } from 'legacy/types/contact';
@@ -39,7 +39,7 @@ export const useContactExportAction = (contact: Contact): Action => {
 					hideButton: true
 				});
 			})
-			.catch(() => {
+			.catch((err) => {
 				createSnackbar({
 					key: 'export-contact-error',
 					replace: true,

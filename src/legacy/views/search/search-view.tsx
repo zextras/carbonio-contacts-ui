@@ -18,10 +18,10 @@ import { map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { Route, Routes } from 'react-router-dom';
 
-import { AdvancedFilterModal } from 'legacy/views/search/advance-filter-modal';
 import { addContactsToStore, useContactsById } from 'legacy/store/contacts';
 import ContactEditPanel from 'legacy/views/edit/contact-edit-panel';
 import { ContactPreviewWrapper } from 'legacy/views/preview/contact-preview-wrapper';
+import { AdvancedFilterModal } from 'legacy/views/search/advance-filter-modal';
 import { runSearch } from 'legacy/views/search/run-search';
 import { SearchContactsEmptyPanel } from 'legacy/views/search/search-contacts-empty-panel';
 import { SearchList } from 'legacy/views/search/search-list';
