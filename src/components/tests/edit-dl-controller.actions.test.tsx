@@ -150,7 +150,7 @@ describe('EditDLControllerComponent', () => {
 				const saveButton = screen.getByRole('button', { name: /save/i });
 				await user.type(screen.getByRole('textbox', { name: /description/i }), faker.word.words());
 				await waitFor(() => expect(saveButton).toBeEnabled());
-				await user.type(
+				await user.pasteInto(
 					screen.getByRole('textbox', { name: /name/i }),
 					faker.string.alpha({ length: 257 })
 				);

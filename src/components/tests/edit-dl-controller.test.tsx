@@ -80,7 +80,11 @@ describe('EditDLControllerComponent', () => {
 				const errorMessage = 'Maximum length allowed is 256 characters';
 				const { user } = setupTest(<EditDLControllerComponent {...buildProps(dl)} />);
 				const newName = faker.string.alpha(257);
-				await user.type(screen.getByRole('textbox', { name: /name/i }), newName.substring(0, 256));
+				await user.pasteInto(
+					screen.getByRole('textbox', { name: /name/i }),
+					newName.substring(0, 255)
+				);
+				await user.type(screen.getByRole('textbox', { name: /name/i }), newName[255]);
 				await screen.findByText(newName.substring(0, 256));
 				expect(screen.queryByText(errorMessage)).not.toBeInTheDocument();
 				await user.type(screen.getByRole('textbox', { name: /name/i }), newName[256]);
