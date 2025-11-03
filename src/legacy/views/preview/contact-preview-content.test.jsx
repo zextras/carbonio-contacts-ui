@@ -5,10 +5,9 @@
  */
 import React from 'react';
 
-// import { screen } from '@testing-library/react';
 import { testUtils } from '@zextras/carbonio-shell-ui';
+import { vi } from 'vitest';
 
-// import { populateContact } from '../../mocks/populate-contact';
 import ContactPreviewContent from 'legacy/views/preview/contact-preview-content';
 
 describe('Contact Preview Content', () => {
@@ -39,12 +38,12 @@ describe('Contact Preview Content', () => {
 		testUtils.render(
 			<ContactPreviewContent
 				// contact={contact}
-				onEdit={jest.fn()}
-				onDelete={jest.fn()}
-				onPrint={jest.fn()}
-				onArchieve={jest.fn()}
-				onMail={jest.fn()}
-				//	onClose={jest.fn()}
+				onEdit={vi.fn()}
+				onDelete={vi.fn()}
+				onPrint={vi.fn()}
+				onArchieve={vi.fn()}
+				onMail={vi.fn()}
+				//	onClose={vi.fn()}
 			/>,
 			{ ctxt }
 		);
@@ -64,12 +63,12 @@ describe('Contact Preview Content', () => {
 		testUtils.render(
 			<ContactPreviewContent
 				// contact={contact}
-				onEdit={jest.fn()}
-				onDelete={jest.fn()}
-				onPrint={jest.fn()}
-				onArchieve={jest.fn()}
-				onMail={jest.fn()}
-				//	onClose={jest.fn()}
+				onEdit={vi.fn()}
+				onDelete={vi.fn()}
+				onPrint={vi.fn()}
+				onArchieve={vi.fn()}
+				onMail={vi.fn()}
+				//	onClose={vi.fn()}
 			/>,
 			{ ctxt }
 		);

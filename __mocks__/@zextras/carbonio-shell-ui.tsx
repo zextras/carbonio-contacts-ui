@@ -34,13 +34,13 @@ export const getBridgedFunctions = vi.fn();
 export const addBoard = vi.fn();
 export const closeBoard = vi.fn();
 export const updateBoardContext = vi.fn();
-export const useBoardHooks = vi.fn().mockReturnValue({
-	closeBoard: vi.fn(),
+export const useBoardHooks = vi.fn(() => ({
+	closeBoard,
 	updateBoard: vi.fn(),
 	setCurrentBoard: vi.fn(),
 	getBoardContext: vi.fn(),
 	getBoard: vi.fn()
-});
+}));
 export const minimizeBoards = vi.fn();
 export const getCurrentRoute = vi.fn();
 export const useIsCarbonioCE: Mock<typeof shell.useIsCarbonioCE> = vi.fn(() => false);
