@@ -372,7 +372,7 @@ describe('SearchView', () => {
 			).toBeVisible();
 		});
 
-		it('re-running the search should should clear the search list before populating with new results', async () => {
+		it('re-running the search should clear the search list before populating with new results', async () => {
 			const soapContact = createSoapContact({
 				id: '1',
 				email: 'testContact1@demo.com',
@@ -386,6 +386,7 @@ describe('SearchView', () => {
 			act(() => {
 				vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 			});
+
 			createSoapAPIInterceptor<SearchContactsRequest, SearchContactsSoapResponse>('Search', {
 				cn: [soapContact],
 				more: false,
@@ -395,7 +396,7 @@ describe('SearchView', () => {
 
 			const filterModal = await screen.findByTestId('advanced-filter-modal');
 			const searchButton = await within(filterModal).findByRole('button', { name: 'Search' });
-			await user.click(searchButton);
+			act(() => user.click(searchButton));
 
 			expect(
 				screen.queryByTestId(`search-contact-list-item-${soapContact.id}`)
