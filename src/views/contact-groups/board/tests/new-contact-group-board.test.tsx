@@ -84,7 +84,8 @@ describe('New contact group board', () => {
 				const { user } = setupNewContactGroupBoard();
 				const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
 				await user.clear(nameInput);
-				await user.type(nameInput, newName);
+				await user.pasteInto(nameInput, newName.substring(0, CONTACT_GROUP_NAME_MAX_LENGTH));
+				await user.type(nameInput, newName[CONTACT_GROUP_NAME_MAX_LENGTH]);
 				expect(
 					screen.getByRoleWithIcon('button', { name: /SAVE/i, icon: TESTID_SELECTORS.icons.save })
 				).toBeDisabled();
@@ -386,7 +387,9 @@ describe('New contact group board', () => {
 			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
 			const newName = faker.string.alphanumeric(CONTACT_GROUP_NAME_MAX_LENGTH + 1);
 			await user.clear(nameInput);
-			await user.type(nameInput, newName);
+			await user.pasteInto(nameInput, newName.substring(0, CONTACT_GROUP_NAME_MAX_LENGTH));
+			await user.type(nameInput, newName[CONTACT_GROUP_NAME_MAX_LENGTH]);
+			// await user.type(nameInput, newName);
 			expect(nameInput).toHaveValue(newName);
 			await user.click(screen.getByRole('button', { name: /discard/i }));
 			expect(nameInput).toHaveValue('New Group');

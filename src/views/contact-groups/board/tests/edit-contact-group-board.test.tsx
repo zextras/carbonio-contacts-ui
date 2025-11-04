@@ -255,7 +255,11 @@ describe('Edit contact group board', () => {
 			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
 			const newName = faker.string.alphanumeric(CONTACT_GROUP_NAME_MAX_LENGTH + 1);
 			await user.clear(nameInput);
-			await user.type(nameInput, newName);
+			await user.pasteInto(nameInput, newName.substring(0, CONTACT_GROUP_NAME_MAX_LENGTH));
+			await user.type(
+				nameInput,
+				newName.substring(CONTACT_GROUP_NAME_MAX_LENGTH, CONTACT_GROUP_NAME_MAX_LENGTH + 1)
+			);
 			expect(nameInput).toHaveValue(newName);
 			await user.click(screen.getByRole('button', { name: /discard/i }));
 			expect(nameInput).toHaveValue(contactGroup.title);
