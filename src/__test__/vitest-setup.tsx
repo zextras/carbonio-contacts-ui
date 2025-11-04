@@ -13,9 +13,6 @@ import { vi, beforeAll, beforeEach, afterEach, afterAll } from 'vitest';
 import { useDistributionListsStore } from '../store/distribution-lists';
 import { getRestHandlers } from '@test-utils/network/msw/handlers';
 
-// vi.mock(import('@zextras/carbonio-ui-soap-lib'));
-// vi.mock(import('zustand'));
-
 vi.mock('@zextras/carbonio-shell-ui');
 
 // Setup MSW mock server
@@ -66,6 +63,11 @@ afterAll(() => {
 Object.defineProperty(window.crypto, 'randomUUID', {
 	writable: true,
 	value: vi.fn(() => Math.random().toString())
+});
+
+Object.defineProperty(window.URL, 'createObjectURL', {
+	writable: true,
+	value: vi.fn()
 });
 
 // Mock Worker

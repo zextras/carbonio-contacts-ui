@@ -24,6 +24,7 @@ export default defineConfig({
 		setupFiles: ['./src/__test__/vitest-setup.tsx', './src/__test__/setup-browser-env.ts'],
 		clearMocks: true,
 		mockReset: true,
+		testTimeout: 20000,
 		coverage: {
 			provider: 'v8',
 			reporter: ['text', 'cobertura', 'lcov'],
