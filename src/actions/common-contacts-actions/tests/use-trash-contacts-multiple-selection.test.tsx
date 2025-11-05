@@ -79,7 +79,9 @@ describe('Api Client Actions', () => {
 			action.onClick();
 		});
 
-		expect(await screen.findByText('Something went wrong, please try again')).toBeVisible();
+		await vi.waitFor(() => {
+			expect(screen.getByText('Something went wrong, please try again')).toBeVisible();
+		});
 	});
 
 	it('should call the API to restore the folder position if the user clicks on the "undo" button on the snackbar', async () => {

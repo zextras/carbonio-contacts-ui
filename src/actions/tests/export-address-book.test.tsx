@@ -153,8 +153,9 @@ describe('useActionExportAddressBook', () => {
 			act(() => {
 				action.execute(addressBook);
 			});
-
-			expect(await screen.findByText('Something went wrong, please try again')).toBeVisible();
+			await vi.waitFor(() => {
+				expect(screen.getByText('Something went wrong, please try again')).toBeVisible();
+			});
 		});
 
 		it('should not call the ExportContacts API if the action cannot be executed', () => {
