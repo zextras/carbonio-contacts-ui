@@ -7,15 +7,22 @@ import React, { ReactElement, ReactNode } from 'react';
 
 import { renderHook } from '@testing-library/react';
 import { useFolderStore, folderWorker } from '@zextras/carbonio-ui-commons';
-import { SoapNotify } from '@zextras/carbonio-ui-soap-lib';
+import { SoapNotify, useSync } from '@zextras/carbonio-ui-soap-lib';
 import { http } from 'msw';
 
-import { useSync } from '../../../../../__mocks__/@zextras/carbonio-ui-soap-lib';
 import { getSetupServer } from '@jest-setup';
 import { generateFolder } from '@test-utils/folders/folders-generator';
 import { handleGetFolderRequest } from '@test-utils/network/msw/handle-get-folder';
 import { handleGetShareInfoRequest } from '@test-utils/network/msw/handle-get-share-info';
 import { useSyncDataHandler } from 'legacy/views/secondary-bar/use-sync-data-handler';
+
+vi.mock('@zextras/carbonio-ui-soap-lib', async (importActual) => {
+	const actual = await importActual<typeof import('@zextras/carbonio-ui-soap-lib')>();
+	return {
+		...actual,
+		useSync: vi.fn(() => [])
+	};
+});
 
 function getWrapper() {
 	// eslint-disable-next-line react/display-name

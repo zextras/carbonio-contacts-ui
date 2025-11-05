@@ -14,7 +14,6 @@ import { useDistributionListsStore } from '../store/distribution-lists';
 import { getRestHandlers } from '@test-utils/network/msw/handlers';
 
 vi.mock('@zextras/carbonio-shell-ui');
-vi.mock('@zextras/carbonio-ui-soap-lib');
 
 // Setup MSW mock server
 let server = setupServer();
