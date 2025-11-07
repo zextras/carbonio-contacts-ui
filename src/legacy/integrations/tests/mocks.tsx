@@ -119,9 +119,9 @@ export const clickExpandDL = async (
 	parentElement?: HTMLElement
 ): Promise<void> => {
 	const expandIcon = parentElement
-		? within(parentElement).findByTestId(TESTID_SELECTORS.icons.expandDL)
-		: screen.findByTestId(TESTID_SELECTORS.icons.expandDL);
-	await user.click(await expandIcon);
+		? await within(parentElement).findByTestId(TESTID_SELECTORS.icons.expandDL)
+		: await screen.findByTestId(TESTID_SELECTORS.icons.expandDL);
+	await user.click(expandIcon);
 };
 
 export const clickCollapseDL = async (user: UserEvent): Promise<void> => {

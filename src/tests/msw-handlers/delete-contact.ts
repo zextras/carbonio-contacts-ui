@@ -22,7 +22,10 @@ type DeleteContactHandler = HttpResponseResolver<
 	SoapResponse<ContactActionResponse>
 >;
 
-export const registerDeleteContactHandler = (id: string, error?: string): Mock<DeleteContactHandler> => {
+export const registerDeleteContactHandler = (
+	id: string,
+	error?: string
+): Mock<DeleteContactHandler> => {
 	const handler = vi.fn<DeleteContactHandler>(() => {
 		if (error) {
 			return HttpResponse.json(buildSoapError(error));

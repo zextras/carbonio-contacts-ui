@@ -38,7 +38,9 @@ type FullAutoCompleteHandler = HttpResponseResolver<
 	{ Body: { FullAutocompleteRequest: FullAutocompleteResponse } },
 	SoapResponse<FullAutocompleteResponse>
 >;
-export const registerFullAutocompleteHandler = (results: Array<Match>): Mock<FullAutoCompleteHandler> => {
+export const registerFullAutocompleteHandler = (
+	results: Array<Match>
+): Mock<FullAutoCompleteHandler> => {
 	const handler = vi.fn<FullAutoCompleteHandler>(() =>
 		HttpResponse.json(
 			buildSoapResponse<FullAutocompleteResponse>({
