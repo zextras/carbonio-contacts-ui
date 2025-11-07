@@ -37,7 +37,7 @@ type ByRoleWithIconOptions = ByRoleOptions & {
 	icon: string | RegExp;
 };
 
-expect.extend(matchers);
+expect.extend({ toHaveStyleRule: matchers.toHaveStyleRule });
 
 /**
  * Matcher function to search an icon button through the icon data-testid
