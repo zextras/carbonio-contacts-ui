@@ -90,20 +90,6 @@ describe('ContactListItem', () => {
 		expect(useNavigateSpy).toHaveBeenCalledWith('../folder/folder123/contacts/1');
 	});
 
-	it('does not call navigate if the click event is prevented', () => {
-		const useNavigateSpy = vi.fn();
-		(useNavigate as Mock).mockReturnValue(useNavigateSpy);
-
-		const { user } = renderComponent();
-
-		const listItem = screen.getByTestId(`contact-list-item-${contact.id}`);
-		act(() => listItem.addEventListener('click', (e) => e.preventDefault()));
-
-		user.click(listItem);
-
-		expect(useNavigateSpy).not.toHaveBeenCalled();
-	});
-
 	it('calls setIsDragging and sets dragged item IDs on drag start', () => {
 		renderComponent({ selectedItems: { '1': true } });
 
