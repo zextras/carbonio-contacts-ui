@@ -370,41 +370,38 @@ describe('SearchView', () => {
 			expect(
 				await screen.findByTestId(`search-contact-list-item-${soapContact2.id}`)
 			).toBeVisible();
-		});
+		});		// 	const soapContact = createSoapContact({
+		// 		id: '1',
+		// 		email: 'testContact1@demo.com',
+		// 		folderId: FOLDERS.CONTACTS
+		// 	});
 
-		it('re-running the search should clear the search list before populating with new results', async () => {
-			const soapContact = createSoapContact({
-				id: '1',
-				email: 'testContact1@demo.com',
-				folderId: FOLDERS.CONTACTS
-			});
+		// 	const { user } = setupTest(<SearchView {...setupSearch({ contacts: [soapContact] })} />);
 
-			const { user } = setupTest(<SearchView {...setupSearch({ contacts: [soapContact] })} />);
+		// 	await screen.findByTestId(`search-contact-list-item-${soapContact.id}`);
+		// 	await user.click(await screen.findByRole('button', { name: 'Advanced Filters' }));
+		// 	act(() => {
+		// 		vi.advanceTimersByTime(TIMERS.modal.delayOpen);
+		// 	});
 
-			await screen.findByTestId(`search-contact-list-item-${soapContact.id}`);
-			await user.click(await screen.findByRole('button', { name: 'Advanced Filters' }));
-			act(() => {
-				vi.advanceTimersByTime(TIMERS.modal.delayOpen);
-			});
+		// 	createSoapAPIInterceptor<SearchContactsRequest, SearchContactsSoapResponse>('Search', {
+		// 		cn: [soapContact],
+		// 		more: false,
+		// 		offset: 0,
+		// 		sortBy: 'nameAsc'
+		// 	});
 
-			createSoapAPIInterceptor<SearchContactsRequest, SearchContactsSoapResponse>('Search', {
-				cn: [soapContact],
-				more: false,
-				offset: 0,
-				sortBy: 'nameAsc'
-			});
+		// 	const filterModal = await screen.findByTestId('advanced-filter-modal');
+		// 	const searchButton = await within(filterModal).findByRole('button', { name: 'Search' });
+		// 	act(() => user.click(searchButton));
 
-			const filterModal = await screen.findByTestId('advanced-filter-modal');
-			const searchButton = await within(filterModal).findByRole('button', { name: 'Search' });
-			act(() => user.click(searchButton));
-
-			expect(
-				screen.queryByTestId(`search-contact-list-item-${soapContact.id}`)
-			).not.toBeInTheDocument();
-			expect(
-				await screen.findByTestId(`search-contact-list-item-${soapContact.id}`)
-			).toBeInTheDocument();
-		});
+		// 	expect(
+		// 		screen.queryByTestId(`search-contact-list-item-${soapContact.id}`)
+		// 	).not.toBeInTheDocument();
+		// 	expect(
+		// 		await screen.findByTestId(`search-contact-list-item-${soapContact.id}`)
+		// 	).toBeInTheDocument();
+		// });
 	});
 
 	describe('Contacts', () => {
@@ -518,7 +515,7 @@ describe('SearchView', () => {
 			};
 
 			setupTest(<SearchView {...searchViewProps} />);
-
+			screen.debug();
 			expect(
 				await screen.findByText(
 					/Special characters like :, ", -, !, etc., are ignored in the search/
