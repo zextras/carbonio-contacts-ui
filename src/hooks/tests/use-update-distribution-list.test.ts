@@ -5,6 +5,7 @@
  */
 
 import { faker } from '@faker-js/faker';
+import { act } from '@testing-library/react';
 
 import { screen, setupHook } from '@test-setup';
 import { VITEST_MOCKED_ERROR } from 'constants/tests';
@@ -44,7 +45,7 @@ describe('Use update distribution list hook', () => {
 			const newDisplayName = faker.string.alpha(51);
 			registerDistributionListActionHandler({});
 			const { result } = setupHook(useUpdateDistributionList, { initialProps: [dl] });
-			result.current({ email: dl.email, displayName: newDisplayName });
+			await act(() => result.current({ email: dl.email, displayName: newDisplayName }));
 			expect(
 				await screen.findByText(
 					`"${newDisplayName.substring(0, 50)}..." distribution list edits saved successfully`
@@ -59,7 +60,7 @@ describe('Use update distribution list hook', () => {
 				const newDisplayName = faker.string.alpha(length);
 				registerDistributionListActionHandler({});
 				const { result } = setupHook(useUpdateDistributionList, { initialProps: [dl] });
-				result.current({ email: dl.email, displayName: newDisplayName });
+				await act(() => result.current({ email: dl.email, displayName: newDisplayName }));
 				expect(
 					await screen.findByText(`"${newDisplayName}" distribution list edits saved successfully`)
 				).toBeVisible();
