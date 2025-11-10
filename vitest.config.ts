@@ -27,6 +27,7 @@ export default defineConfig({
 		testTimeout: 20000,
 		reporters: ['default', 'junit'],
 		coverage: {
+			enabled: true,
 			provider: 'v8',
 			reporter: ['text', 'cobertura', 'lcov'],
 			reportsDirectory: 'coverage',
