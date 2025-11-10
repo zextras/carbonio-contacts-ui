@@ -31,13 +31,7 @@ export default defineConfig({
 			reporter: ['text', 'cobertura', 'lcov'],
 			reportsDirectory: 'coverage',
 			include: ['src/**/*.{ts,tsx}'],
-			exclude: [
-				'**/__tests__/**',
-				'**/*.test.{js,jsx,ts,tsx}',
-				'**/*.spec.{js,jsx,ts,tsx}',
-				'src/tests/**',
-				'src/**/test/mocks/**'
-			]
+			exclude: ['**/__test__/**', '**/tests/**', '**/mocks/**', '**/*.test.{js,jsx,ts,tsx}']
 		},
 		server: {
 			deps: {
