@@ -28,9 +28,9 @@ export default defineConfig({
 		reporters: ['default', 'junit'],
 		coverage: {
 			provider: 'v8',
-			reporter: ['text', 'cobertura', 'lcov', 'html'],
+			reporter: ['text', 'cobertura', 'lcov'],
 			reportsDirectory: 'coverage',
-			include: ['src/**'],
+			include: ['src/**/*.{ts,tsx}'],
 			exclude: [
 				'**/__tests__/**',
 				'**/*.test.{js,jsx,ts,tsx}',
