@@ -121,7 +121,6 @@ describe('SharesModal', () => {
 
 		const onClose = vi.fn();
 		setupTest(<SharedAddressBooksAddModal onClose={onClose} />, {});
-		// expect(await screen.findByText(/something went wrong/i)).toBeVisible();
 
 		const snackbar = await screen.findByText(/something went wrong/i);
 		await vi.waitFor(() => expect(snackbar).toBeVisible());
