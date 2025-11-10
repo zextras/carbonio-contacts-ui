@@ -25,9 +25,10 @@ export default defineConfig({
 		clearMocks: true,
 		mockReset: true,
 		testTimeout: 20000,
+		reporters: ['default', 'junit'],
 		coverage: {
 			provider: 'v8',
-			reporter: ['text', 'cobertura', 'lcov', 'json'],
+			reporter: ['text', 'cobertura', 'lcov', 'html'],
 			reportsDirectory: 'coverage',
 			include: ['src/**'],
 			exclude: [
