@@ -72,7 +72,12 @@ describe('Use update distribution list hook', () => {
 			dl.displayName = displayName;
 			registerDistributionListActionHandler({});
 			const { result } = setupHook(useUpdateDistributionList, { initialProps: [dl] });
-			result.current({ email: dl.email, members: { members: [faker.internet.email()], total: 1 } });
+			await act(() =>
+				result.current({
+					email: dl.email,
+					members: { members: [faker.internet.email()], total: 1 }
+				})
+			);
 			expect(
 				await screen.findByText(`"${dl.email}" distribution list edits saved successfully`)
 			).toBeVisible();
