@@ -46,7 +46,7 @@
 		"@types/react-redux": "^7.1.34",
 		"@zextras/carbonio-search-ui": "github:zextras/carbonio-search-ui#devel",
 		"@zextras/carbonio-ui-configs": "2.0.1",
-		"@zextras/carbonio-ui-sdk": "2.2.0-devel.4",
+		"@zextras/carbonio-ui-sdk": "2.2.0-devel.5",
 		"babel-jest": "^29.7.0",
 		"babel-plugin-transform-import-meta": "^2.2.1",
 		"eslint-plugin-notice": "^0.9.10",
