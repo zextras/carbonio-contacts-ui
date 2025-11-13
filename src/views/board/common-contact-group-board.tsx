@@ -224,6 +224,7 @@ export const CommonContactGroupBoard = ({
 	const onInputType = useCallback<NonNullable<ChipInputProps['onInputType']>>(
 		({ key, textContent }) => {
 			if (key === 'Enter') {
+				setOptions([]);
 				onInputEnter();
 				return;
 			}
