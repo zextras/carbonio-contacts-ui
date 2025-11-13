@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 
 import styled from '@emotion/styled';
 import {
@@ -14,8 +14,8 @@ import {
 	InputProps,
 	Avatar,
 	Row,
-	ChipAction,
-	List as DSList
+	List as DSList,
+	type ChipInputProps
 } from '@zextras/carbonio-design-system';
 import { useBoardHooks } from '@zextras/carbonio-shell-ui';
 import {
@@ -28,36 +28,23 @@ import {
 	useFolder,
 	getFlatChildrenFolders,
 	Folders,
-	FolderSelectorItem
+	FolderSelectorItem,
+	isValidEmail,
+	CONTACT_TYPES
 } from '@zextras/carbonio-ui-commons';
-import { map, reduce, remove, some, uniqBy } from 'lodash';
+import { map, reduce, uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
+import { Hint } from '../../legacy/integrations/parts/hint';
+import { Loader } from '../../legacy/integrations/parts/loader';
+import { searchContacts, tryToParseEmail } from '../../legacy/integrations/parts/utils';
+import { ContactInputOptions } from '../../legacy/integrations/types';
 import { MemberListItemComponent } from 'components/member-list-item';
 import { CONTACT_GROUP_NAME_MAX_LENGTH } from 'constants/index';
 import { ContactInput } from 'legacy/integrations/contact-input';
 
 export function isContactGroupNameInvalid(nameValue: string): boolean {
 	return nameValue.trim().length === 0 || nameValue.length > CONTACT_GROUP_NAME_MAX_LENGTH;
-}
-
-function cleanupDuplicates(
-	chip: EnhancedChipItem,
-	newMemberListEmails: string[]
-): EnhancedChipItem {
-	const duplicated =
-		chip.value.email !== undefined && newMemberListEmails.includes(chip.value.email);
-
-	const actions = [...(chip.actions ?? [])];
-	if (!duplicated && chip.duplicated) {
-		remove(actions, (action) => action.id === 'duplicated');
-	}
-
-	return {
-		...chip,
-		duplicated,
-		actions
-	};
 }
 
 const List = styled(DSList)`
@@ -156,13 +143,10 @@ export const CommonContactGroupBoard = ({
 		return undefined;
 	}, [t, nameValue]);
 
-	const [contactInputValue, setContactInputValue] = useState<Array<EnhancedChipItem>>([]);
-
 	const discardChanges = useCallback(() => {
 		setNameValue(initialNameValue);
 		setMemberListEmails(initialMemberListEmails);
 		updateBoard({ title: initialNameValue });
-		setContactInputValue([]);
 	}, [initialMemberListEmails, initialNameValue, setMemberListEmails, setNameValue, updateBoard]);
 
 	const contactInputOnChange = (
@@ -174,107 +158,36 @@ export const CommonContactGroupBoard = ({
 		//  but provide that item inside onChange parameter
 		const uniqNewContactInputValue = uniqBy(newContactInputValue, (chip) => chip.value.email);
 
-		const uniqNewContactInputValueWithActions = uniqNewContactInputValue.map((chip) => {
-			const duplicated =
-				chip.value.email !== undefined && memberListEmails.includes(chip.value.email);
-
-			const duplicatedChipAction: ChipAction = {
-				id: 'duplicated',
-				color: 'error',
-				type: 'icon',
-				icon: 'AlertCircle'
-			};
-
-			const duplicatedChipActionNotPresent = !chip.actions?.find(
-				(action) => action.id === 'duplicated'
-			);
-
-			const actions = [
-				...(chip.actions ?? []),
-				...(duplicated && duplicatedChipActionNotPresent ? [duplicatedChipAction] : [])
-			];
-
-			return {
-				...chip,
-				duplicated,
-				actions
-			};
-		});
-
-		setContactInputValue(uniqNewContactInputValueWithActions);
-	};
-
-	const contactInputIconAction = useCallback(() => {
-		const valid: string[] = [];
-		const invalid: typeof contactInputValue = [];
-
-		contactInputValue.forEach((chip) => {
-			if (chip.error || chip.duplicated || chip.value.email === undefined) {
-				invalid.push(chip);
-			} else {
-				valid.push(chip.value.email);
+		const newMembers = uniqNewContactInputValue.reduce<string[]>((acc, chip) => {
+			if (!memberListEmails.includes(chip.value.email)) {
+				acc.push(chip.value.email);
 			}
-		});
+			return acc;
+		}, []);
 
-		setContactInputValue(invalid);
-		setMemberListEmails((prevState) => [...prevState, ...valid]);
-	}, [contactInputValue, setMemberListEmails]);
+		setMemberListEmails((prevState) => [...newMembers, ...prevState]);
+	};
 
 	const removeItem = useCallback(
 		(emailToRemove: string) => {
 			const newMemberListEmails = memberListEmails.filter((value) => value !== emailToRemove);
 			setMemberListEmails(newMemberListEmails);
-			setContactInputValue((prevState) =>
-				prevState.map((chip) => cleanupDuplicates(chip, newMemberListEmails))
-			);
 		},
 		[memberListEmails, setMemberListEmails]
 	);
 
-	const contactInputDescription = useMemo(() => {
-		let valid = 0;
-		let duplicated = 0;
-		let invalid = 0;
+	const [showInvalidAddressDescription, setShowInvalidAddressDescription] = useState(false);
 
-		contactInputValue.forEach((value) => {
-			if (value.duplicated) {
-				duplicated += 1;
-			} else if (value.error) {
-				invalid += 1;
-			} else {
-				valid += 1;
-			}
-		});
-		if (valid > 0) {
-			return undefined;
-		}
-		if (invalid > 0 && duplicated > 0) {
-			return t(
-				'board.newContactGroup.input.contact_input.error.invalid_already_present_addresses',
-				'Invalid and already present addresses'
-			);
-		}
-		if (invalid > 0 && duplicated === 0) {
+	const contactInputDescription = useMemo(() => {
+		if (showInvalidAddressDescription) {
 			return t('board.newContactGroup.input.contact_input.error.invalid_address', {
-				count: invalid,
+				count: 1,
 				defaultValue_one: 'Invalid address',
 				defaultValue_other: 'Invalid addresses'
 			});
 		}
-		if (duplicated > 0 && invalid === 0) {
-			return t('board.newContactGroup.input.contact_input.error.address_already_present', {
-				count: duplicated,
-				defaultValue_one: 'Address already present',
-				defaultValue_other: 'Addresses already present'
-			});
-		}
 		return undefined;
-	}, [contactInputValue, t]);
-
-	const noValidChip = useMemo(
-		() => !some(contactInputValue, (chip) => !chip.error && !chip.duplicated),
-		[contactInputValue]
-	);
+	}, [t, showInvalidAddressDescription]);
 
 	const listItems = useMemo(
 		(): Array<React.JSX.Element> =>
@@ -282,6 +195,78 @@ export const CommonContactGroupBoard = ({
 				<MemberListItemComponent key={item} email={item} onRemove={(): void => removeItem(item)} />
 			)),
 		[memberListEmails, removeItem]
+	);
+
+	const [options, setOptions] = useState<Array<ContactInputOptions>>([]);
+
+	const inputRef = useRef<HTMLInputElement>(null);
+
+	const onInputEnter = useCallback((): void => {
+		if (inputRef?.current) {
+			const valueToAdd = inputRef.current?.value.replaceAll('\n', '');
+			if (valueToAdd !== '') {
+				if (isValidEmail(valueToAdd)) {
+					const parsedEmail = tryToParseEmail(valueToAdd);
+					setMemberListEmails((prevState) => {
+						if (!prevState.includes(parsedEmail)) {
+							return [parsedEmail, ...prevState];
+						}
+						return prevState;
+					});
+					inputRef.current.value = '';
+				} else {
+					setShowInvalidAddressDescription(true);
+				}
+			}
+		}
+	}, [setMemberListEmails]);
+
+	const onInputType = useCallback<NonNullable<ChipInputProps['onInputType']>>(
+		({ key, textContent }) => {
+			if (key === 'Enter') {
+				onInputEnter();
+				return;
+			}
+			setShowInvalidAddressDescription(false);
+			if (textContent && textContent !== '') {
+				setOptions([
+					{
+						id: 'loading',
+						label: 'loading',
+						customComponent: <Loader />
+					}
+				]);
+				searchContacts(textContent, [])
+					.then((contactInputItems) => {
+						if (contactInputItems.length > 0) {
+							setOptions(contactInputItems);
+						} else if (isValidEmail(textContent)) {
+							const parsedEmail = tryToParseEmail(textContent);
+							const contact = {
+								id: parsedEmail,
+								email: parsedEmail,
+								type: CONTACT_TYPES.CONTACT
+							};
+							setOptions([
+								{
+									label: parsedEmail,
+									value: contact,
+									id: parsedEmail,
+									customComponent: <Hint email={contact.email} label={parsedEmail} />
+								}
+							]);
+						} else {
+							setOptions([]);
+						}
+					})
+					.catch(() => {
+						setOptions([]);
+					});
+			} else {
+				setOptions([]);
+			}
+		},
+		[onInputEnter]
 	);
 
 	return (
@@ -339,7 +324,7 @@ export const CommonContactGroupBoard = ({
 			>
 				<Input
 					label={t('board.newContactGroup.input.name_input.name.label', 'Group name*')}
-					backgroundColor={'gray5'}
+					background={'gray5'}
 					borderColor={'gray3'}
 					value={nameValue}
 					onChange={onNameChange}
@@ -366,17 +351,20 @@ export const CommonContactGroupBoard = ({
 				<Container orientation={'horizontal'} height={'fit'} crossAlignment={'flex-start'}>
 					<ContactInput
 						data-testid={'contact-group-contact-input'}
-						defaultValue={contactInputValue}
+						defaultValue={[]}
 						onChange={contactInputOnChange}
 						placeholder={t(
-							'board.newContactGroup.input.contact_input.placeholder',
-							'Type an address, click ‘+’ to add to the group'
+							'board.newContactGroup.input.contact_input.placeholder2',
+							'Type an address'
 						)}
-						icon={'Plus'}
-						iconAction={contactInputIconAction}
-						iconDisabled={noValidChip}
+						// @ts-expect-error types are not aligned
+						options={options}
+						inputRef={inputRef}
+						onInputType={onInputType}
+						confirmChipOnBlur={false}
+						separators={[]}
 						description={contactInputDescription}
-						hasError={contactInputValue.length > 0 && noValidChip}
+						hasError={showInvalidAddressDescription}
 					/>
 				</Container>
 				<List data-testid={'members-list'}>{listItems}</List>
