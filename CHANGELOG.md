@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.18.0](https://github.com/zextras/carbonio-contacts-ui/compare/v1.17.0...v1.18.0) (2025-11-18)
+
+
+### Features
+
+* [CO-2298] Show Contact display name as ContactInput Chip label  ([#376](https://github.com/zextras/carbonio-contacts-ui/issues/376)) ([4bf6dbf](https://github.com/zextras/carbonio-contacts-ui/commit/4bf6dbfaee1edb9d51ffcc5ba2feba089d5d3bb5))
+* [CO-2299] show distribution list display names in autocomplete results ([#373](https://github.com/zextras/carbonio-contacts-ui/issues/373)) ([aca36b5](https://github.com/zextras/carbonio-contacts-ui/commit/aca36b591afd4a58a29c8e9215b7654ec4f70afa))
+* [CO-2338] let the user press the ESC key to close modals ([#369](https://github.com/zextras/carbonio-contacts-ui/issues/369)) ([6db80c5](https://github.com/zextras/carbonio-contacts-ui/commit/6db80c55a3d17e120bdade3a3952e041650dc96e))
+* improve contact group boards ([cc331e4](https://github.com/zextras/carbonio-contacts-ui/commit/cc331e4d3debef66408de38c33888477f9893884))
+
+
+### Bug Fixes
+
+* build fails ([6bed6f9](https://github.com/zextras/carbonio-contacts-ui/commit/6bed6f9fc65bf5251d6f1bbf80af12096c779396))
+
 ## [1.17.0](https://github.com/zextras/carbonio-contacts-ui/compare/v1.16.1...v1.17.0) (2025-08-22)
 
 
