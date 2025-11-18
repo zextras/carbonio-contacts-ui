@@ -6,6 +6,8 @@
 
 import React from 'react';
 
+import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 import {
 	AnyColor,
 	Avatar,
@@ -13,10 +15,8 @@ import {
 	getColor,
 	ListItem,
 	type ListItemProps,
-	pseudoClasses,
 	Row
 } from '@zextras/carbonio-design-system';
-import styled, { css } from 'styled-components';
 
 export const HoverRow = styled(Row)`
 	position: relative;
@@ -52,41 +52,42 @@ export const ListItemContainer = styled(Container)`
 	}
 `;
 
-const StyledListItem = styled(ListItem)<{ $backgroundColor: AnyColor | undefined }>`
-	${({ $backgroundColor, theme }): undefined | ReturnType<typeof pseudoClasses> =>
-		$backgroundColor && pseudoClasses(theme, $backgroundColor, 'color')}
-	transition: none;
+const StyledListItem = styled(ListItem)<{ $backgroundColor: AnyColor | null }>`
+	${({ $backgroundColor, theme }): ReturnType<typeof css> =>
+		$backgroundColor
+			? css`
+					${HoverBarContainer} {
+						background: linear-gradient(
+							to right,
+							transparent,
+							${getColor($backgroundColor, theme)}
+						);
+					}
+					&:focus ${HoverBarContainer} {
+						background: linear-gradient(
+							to right,
+							transparent,
+							${getColor(`${$backgroundColor}.focus`, theme)}
+						);
+					}
 
-	${({ $backgroundColor, theme }): undefined | ReturnType<typeof css> =>
-		$backgroundColor &&
-		css`
-			${HoverBarContainer} {
-				background: linear-gradient(to right, transparent, ${getColor($backgroundColor, theme)});
-			}
-			&:focus ${HoverBarContainer} {
-				background: linear-gradient(
-					to right,
-					transparent,
-					${getColor(`${$backgroundColor}.focus`, theme)}
-				);
-			}
+					&:hover ${HoverBarContainer} {
+						background: linear-gradient(
+							to right,
+							transparent,
+							${getColor(`${$backgroundColor}.hover`, theme)}
+						);
+					}
 
-			&:hover ${HoverBarContainer} {
-				background: linear-gradient(
-					to right,
-					transparent,
-					${getColor(`${$backgroundColor}.hover`, theme)}
-				);
-			}
-
-			&:active ${HoverBarContainer} {
-				background: linear-gradient(
-					to right,
-					transparent,
-					${getColor(`${$backgroundColor}.active`, theme)}
-				);
-			}
-		`}
+					&:active ${HoverBarContainer} {
+						background: linear-gradient(
+							to right,
+							transparent,
+							${getColor(`${$backgroundColor}.active`, theme)}
+						);
+					}
+				`
+			: css``}
 `;
 
 export const EnhancedListItem = React.forwardRef<HTMLDivElement, ListItemProps>(
@@ -98,7 +99,7 @@ export const EnhancedListItem = React.forwardRef<HTMLDivElement, ListItemProps>(
 			<StyledListItem
 				ref={ref}
 				$backgroundColor={
-					(active && activeBackground) || (selected && selectedBackground) || background
+					(active && activeBackground) || (selected && selectedBackground) || background || null
 				}
 				background={background}
 				selectedBackground={selectedBackground}

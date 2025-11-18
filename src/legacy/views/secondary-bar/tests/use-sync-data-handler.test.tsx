@@ -11,11 +11,11 @@ import { SoapNotify } from '@zextras/carbonio-ui-soap-lib';
 import { http } from 'msw';
 
 import { useSync } from '../../../../../__mocks__/@zextras/carbonio-ui-soap-lib';
+import { useSyncDataHandler } from 'legacy/views/secondary-bar/use-sync-data-handler';
 import { getSetupServer } from '@jest-setup';
 import { generateFolder } from '@test-utils/folders/folders-generator';
 import { handleGetFolderRequest } from '@test-utils/network/msw/handle-get-folder';
 import { handleGetShareInfoRequest } from '@test-utils/network/msw/handle-get-share-info';
-import { useSyncDataHandler } from 'legacy/views/secondary-bar/use-sync-data-handler';
 
 function getWrapper() {
 	// eslint-disable-next-line react/display-name

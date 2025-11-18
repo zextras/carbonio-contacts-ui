@@ -9,10 +9,9 @@ import { faker } from '@faker-js/faker';
 import { act, waitFor, within } from '@testing-library/react';
 import { times } from 'lodash';
 
-import { EditDLMembersComponent, EditDLComponentProps } from 'components/edit-dl-members';
 import { screen, setupTest } from '@test-setup';
+import { EditDLMembersComponent, EditDLComponentProps } from 'components/edit-dl-members';
 import { PALETTE, TESTID_SELECTORS } from 'constants/tests';
-import 'jest-styled-components';
 import { registerFullAutocompleteHandler } from 'tests/msw-handlers/full-autocomplete';
 import { getDLContactInput } from 'tests/utils';
 

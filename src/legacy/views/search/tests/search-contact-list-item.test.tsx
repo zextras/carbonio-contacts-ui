@@ -10,9 +10,9 @@ import { act, screen } from '@testing-library/react';
 import { useTags } from '@zextras/carbonio-ui-commons';
 import { useNavigate } from 'react-router-dom';
 
-import { getTagsArray } from 'legacy/helpers/tags';
-import { Contact } from 'legacy/types/contact';
-import { SearchContactListItem } from 'legacy/views/search/search-contact-list-item';
+import { getTagsArray } from '../../../helpers/tags';
+import { Contact } from '../../../types/contact';
+import { SearchContactListItem } from '../search-contact-list-item';
 import { setupTest } from '@test-setup';
 
 jest.mock('@zextras/carbonio-ui-commons', () => ({

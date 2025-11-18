@@ -5,8 +5,8 @@
  */
 import React, { ReactNode, useCallback } from 'react';
 
+import styled from '@emotion/styled';
 import { Action, Container } from '@zextras/carbonio-design-system';
-import styled from 'styled-components';
 
 import { ContextualMenu } from 'components/contextual-menu';
 
@@ -29,9 +29,7 @@ export const HoverBarContainer = styled(Container)`
 	}
 `;
 
-export const HoverContainer = styled(Container).attrs(() => ({
-	background: 'transparent'
-}))`
+export const HoverContainer = styled(Container)`
 	width: 100%;
 	position: relative;
 	cursor: pointer;
@@ -68,6 +66,7 @@ export const ListItemActionsWrapper = ({
 			<Container orientation="horizontal" mainAlignment="flex-start">
 				<ContextualMenu actions={contextualMenuActions} {...rest}>
 					<HoverContainer
+						background={'transparent'}
 						orientation="horizontal"
 						mainAlignment="flex-start"
 						crossAlignment="unset"

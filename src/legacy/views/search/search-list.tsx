@@ -5,16 +5,16 @@
  */
 import React, { useMemo } from 'react';
 
+import styled from '@emotion/styled';
 import { Button, Container, List, ListItem, Padding, Text } from '@zextras/carbonio-design-system';
 import { map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import styled from 'styled-components';
 
-import { ContactGroupListItem } from 'views/contact-groups/list/contact-group-list-item';
 import { ContactOrGroup } from 'legacy/types/contact';
 import { isGroup } from 'legacy/utils/helpers';
 import { ContactListItem } from 'legacy/views/app/folder-panel/contact-list-item';
+import { ContactGroupListItem } from 'views/contact-groups/list/contact-group-list-item';
 
 const BorderContainer = styled(Container)`
 	border-bottom: 0.0625rem solid ${({ theme }): string => theme.palette.gray2.regular};
@@ -48,7 +48,7 @@ export const SearchList = ({
 
 	const listItems = useMemo(
 		() =>
-			map(contacts, (contact, index) => {
+			map(contacts, (contact) => {
 				const isActive = itemId === contact.id;
 				if (isGroup(contact)) {
 					return (

@@ -7,7 +7,12 @@ import { CONTACT_TYPES, ContactInputItem } from '@zextras/carbonio-ui-commons';
 import { TFunction } from 'i18next';
 import { concat, filter, map } from 'lodash';
 
-import { AdvancedFilterModalFormValues, KeywordState, Query, SearchQueryItem } from './types';
+import {
+	AdvancedFilterModalFormValues,
+	KeywordState,
+	Query,
+	SearchQueryItem
+} from 'legacy/views/search/types';
 
 const excludeLabels = ['has:attachment', 'is:flagged', 'is:unread'];
 const emailFilterPrefix = 'field[email]:';

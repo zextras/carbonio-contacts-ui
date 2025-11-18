@@ -8,12 +8,12 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import * as shell from '@zextras/carbonio-shell-ui';
 
-import { DLListItem } from 'components/dl-list-item';
+import { screen, setupTest, within } from '@test-setup';
 import { OpenMailComposerIntegratedFunction } from 'actions/send-email';
+import { DLListItem } from 'components/dl-list-item';
 import { EDIT_DL_BOARD_ID } from 'constants/index';
 import { TESTID_SELECTORS } from 'constants/tests';
 import { generateDistributionList } from 'tests/utils';
-import { screen, setupTest, within } from '@test-setup';
 
 describe('DL list item', () => {
 	it('should show avatar', () => {
@@ -45,15 +45,13 @@ describe('DL list item', () => {
 	describe('actions', () => {
 		describe('send email', () => {
 			describe('on hover bar', () => {
-				it('should be visible if integration is available', () => {
+				it('should be visible if integration is available', async () => {
 					const openMailComposer = jest.fn();
 					jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
 
 					const dl = generateDistributionList();
 					setupTest(<DLListItem distributionList={dl} visible />);
-					expect(
-						screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.sendEmail })
-					).toBeInTheDocument();
+					expect(await screen.findByTestId(TESTID_SELECTORS.icons.sendEmail)).toBeInTheDocument();
 				});
 
 				it('should not be visible if integration is not available', () => {
@@ -73,9 +71,7 @@ describe('DL list item', () => {
 
 					const dl = generateDistributionList();
 					const { user } = setupTest(<DLListItem distributionList={dl} visible />);
-					await user.click(
-						screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.sendEmail })
-					);
+					await user.click(await screen.findByTestId(TESTID_SELECTORS.icons.sendEmail));
 					expect(openMailComposer).toHaveBeenCalledWith<
 						Parameters<OpenMailComposerIntegratedFunction>
 					>({ recipients: [expect.objectContaining({ email: dl.email, isGroup: true })] });
@@ -121,12 +117,10 @@ describe('DL list item', () => {
 
 		describe('edit', () => {
 			describe('on hover bar', () => {
-				it('should be visible if user is owner', () => {
+				it('should be visible if user is owner', async () => {
 					const dl = generateDistributionList({ isOwner: true });
 					setupTest(<DLListItem distributionList={dl} visible />);
-					expect(
-						screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.editDL })
-					).toBeInTheDocument();
+					expect(await screen.findByTestId(TESTID_SELECTORS.icons.editDL)).toBeInTheDocument();
 				});
 
 				it('should not be visible if user is not owner', () => {
@@ -141,9 +135,7 @@ describe('DL list item', () => {
 					const addBoardFn = jest.spyOn(shell, 'addBoard');
 					const dl = generateDistributionList({ isOwner: true });
 					const { user } = setupTest(<DLListItem distributionList={dl} visible />);
-					await user.click(
-						screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.editDL })
-					);
+					await user.click(await screen.findByTestId(TESTID_SELECTORS.icons.editDL));
 					expect(addBoardFn).toHaveBeenCalledWith(
 						expect.objectContaining<Partial<Parameters<typeof shell.addBoard>[0]>>({
 							boardViewId: EDIT_DL_BOARD_ID,
@@ -187,12 +179,10 @@ describe('DL list item', () => {
 
 		describe('edit', () => {
 			describe('on hover bar', () => {
-				it('should be visible if user is owner', () => {
+				it('should be visible if user is owner', async () => {
 					const dl = generateDistributionList({ isOwner: true });
 					setupTest(<DLListItem distributionList={dl} visible />);
-					expect(
-						screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.editDL })
-					).toBeInTheDocument();
+					expect(await screen.findByTestId(TESTID_SELECTORS.icons.editDL)).toBeInTheDocument();
 				});
 
 				it('should not be visible if user is not owner', () => {

@@ -7,8 +7,8 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { useBoardHooks } from '@zextras/carbonio-shell-ui';
-import 'jest-styled-components';
 
+import { screen, setupTest, within } from '@test-setup';
 import {
 	EditDLControllerComponent,
 	EditDLControllerComponentProps
@@ -20,7 +20,6 @@ import {
 	generateDistributionListMembersPage,
 	spyUseBoardHooks
 } from 'tests/utils';
-import { screen, setupTest, within } from '@test-setup';
 
 beforeEach(() => {
 	spyUseBoardHooks();
