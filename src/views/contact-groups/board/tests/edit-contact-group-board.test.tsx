@@ -12,7 +12,7 @@ import { useBoard } from '@zextras/carbonio-shell-ui';
 
 import { setupTest, screen } from '@test-setup';
 import { CONTACT_GROUP_NAME_MAX_LENGTH } from 'constants/index';
-import { PALETTE, TESTID_SELECTORS, VITEST_MOCKED_ERROR } from 'constants/tests';
+import { TESTID_SELECTORS, VITEST_MOCKED_ERROR } from 'constants/tests';
 import { addContactsToStore } from 'legacy/store/contacts';
 import * as modifyContactGroup from 'network/api/modify-contact';
 import { buildContactGroup } from 'tests/model-builder';
@@ -22,7 +22,7 @@ import EditContactGroupBoard from 'views/contact-groups/board/edit-contact-group
 
 function getContactInput(): HTMLElement {
 	return screen.getByRole('textbox', {
-		name: `Type an address, click ‘+’ to add to the group`
+		name: `Type an address`
 	});
 }
 
@@ -162,19 +162,15 @@ describe('Edit contact group board', () => {
 			const { user } = setupTest(<EditContactGroupBoard />);
 			const contactInput = getContactInput();
 			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
+			const memberList = await screen.findByTestId(TESTID_SELECTORS.membersList);
 			await user.clear(nameInput);
 			await user.type(nameInput, newName);
 			await user.type(contactInput, newEmail1);
 			await act(async () => {
-				await user.type(contactInput, ',');
+				await user.keyboard('{Enter}');
 			});
-			await user.click(
-				screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
-			);
+			await within(memberList).findByText(newEmail1);
 			await user.type(contactInput, newEmail2);
-			await act(async () => {
-				await user.type(contactInput, ',');
-			});
 			const saveButton = screen.getByRoleWithIcon('button', {
 				name: /SAVE/i,
 				icon: TESTID_SELECTORS.icons.save
@@ -182,10 +178,9 @@ describe('Edit contact group board', () => {
 			await user.click(saveButton);
 			await screen.findByText('Something went wrong saving the edits, try again');
 			expect(screen.getByText(newName)).toBeVisible();
-			const memberList = await screen.findByTestId(TESTID_SELECTORS.membersList);
 			expect(within(memberList).getByText(newEmail1)).toBeVisible();
 			const chipInput = screen.getByTestId(TESTID_SELECTORS.cgContactInput);
-			expect(within(chipInput).getByText(newEmail2)).toBeVisible();
+			expect(within(chipInput).getByRole('textbox')).toHaveValue(newEmail2);
 		});
 
 		it('should not use unconfirmed mails (valid chips in contactInput) in modifyContactGroup request', async () => {
@@ -200,16 +195,12 @@ describe('Edit contact group board', () => {
 
 			await user.type(contactInput, newEmail1);
 			await act(async () => {
-				await user.type(contactInput, ',');
+				await user.keyboard('{Enter}');
 			});
-			await user.click(
-				screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
-			);
+			const memberList = await screen.findByTestId(TESTID_SELECTORS.membersList);
+			await within(memberList).findByText(newEmail1);
 
 			await user.type(contactInput, newEmail2);
-			await act(async () => {
-				await user.type(contactInput, ',');
-			});
 
 			const saveButton = screen.getByRoleWithIcon('button', {
 				name: /SAVE/i,
@@ -271,13 +262,11 @@ describe('Edit contact group board', () => {
 			const contactInput = getContactInput();
 			await user.type(contactInput, newEmail);
 			await act(async () => {
-				await user.type(contactInput, ',');
+				await user.keyboard('{Enter}');
 			});
-			await user.click(
-				screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
-			);
-			await user.click(screen.getByRole('button', { name: /discard/i }));
 			const memberList = await screen.findByTestId(TESTID_SELECTORS.membersList);
+			await within(memberList).findByText(newEmail);
+			await user.click(screen.getByRole('button', { name: /discard/i }));
 			expect(within(memberList).queryByText(newEmail)).not.toBeInTheDocument();
 		});
 	});
@@ -312,37 +301,12 @@ describe('Edit contact group board', () => {
 			const contactInput = getContactInput();
 			await user.type(contactInput, email);
 			await act(async () => {
-				await user.type(contactInput, ',');
+				await user.keyboard('{Enter}');
 			});
-			await user.click(
-				screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
-			);
+			const memberList = await screen.findByTestId(TESTID_SELECTORS.membersList);
+			await within(memberList).findByText(email);
 			await screen.findByTestId(TESTID_SELECTORS.membersList);
 			expect(screen.getByText('Addresses: 1')).toBeVisible();
-		});
-
-		describe('Plus button and contact input', () => {
-			it('should disable the plus button when the user insert a duplicated chip only', async () => {
-				const validMail = faker.internet.email();
-				const { user } = setupTest(<EditContactGroupBoard />);
-				const contactInput = getContactInput();
-				await user.type(contactInput, validMail);
-				await act(async () => {
-					await user.type(contactInput, ',');
-				});
-				await act(async () => {
-					await user.click(
-						screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
-					);
-				});
-				await user.type(contactInput, validMail);
-				await act(async () => {
-					await user.type(contactInput, ',');
-				});
-				expect(
-					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
-				).toBeDisabled();
-			});
 		});
 
 		describe('Contact group add and remove members', () => {
@@ -352,13 +316,10 @@ describe('Edit contact group board', () => {
 				const contactInput = getContactInput();
 				await user.type(contactInput, email);
 				await act(async () => {
-					await user.type(contactInput, ',');
+					await user.type(contactInput, '{Enter}');
 				});
-				await user.click(
-					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
-				);
 				const memberList = await screen.findByTestId(TESTID_SELECTORS.membersList);
-				expect(within(memberList).getByText(email)).toBeVisible();
+				await waitFor(() => expect(within(memberList).getByText(email)).toBeEnabled());
 			});
 
 			it('should add the valid email on the list and maintain also the previous list item', async () => {
@@ -367,23 +328,18 @@ describe('Edit contact group board', () => {
 				const { user } = setupTest(<EditContactGroupBoard />);
 				const contactInput = getContactInput();
 				await user.type(contactInput, email);
+
 				await act(async () => {
-					await user.type(contactInput, ',');
+					await user.keyboard('{Enter}');
 				});
-				await user.click(
-					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
-				);
 				const memberList = await screen.findByTestId(TESTID_SELECTORS.membersList);
-				expect(within(memberList).getByText(email)).toBeVisible();
+				expect(await within(memberList).findByText(email)).toBeVisible();
 
 				await user.type(contactInput, email2);
 				await act(async () => {
-					await user.type(contactInput, ',');
+					await user.keyboard('{Enter}');
 				});
-				await user.click(
-					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
-				);
-				expect(within(memberList).getByText(email2)).toBeVisible();
+				expect(await within(memberList).findByText(email2)).toBeVisible();
 				expect(within(memberList).getByText(email)).toBeVisible();
 			});
 
@@ -393,266 +349,33 @@ describe('Edit contact group board', () => {
 				const contactInput = getContactInput();
 				await user.type(contactInput, email);
 				await act(async () => {
-					await user.type(contactInput, ',');
+					await user.keyboard('{Enter}');
 				});
-				await user.click(
-					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
-				);
-				await user.click(
-					screen.getByRoleWithIcon('button', {
-						icon: TESTID_SELECTORS.icons.trash,
-						name: /remove/i
-					})
-				);
 				const memberList = await screen.findByTestId(TESTID_SELECTORS.membersList);
-				expect(within(memberList).queryByText(email)).not.toBeInTheDocument();
-			});
-
-			it('should update contactInput chips and icon when item is removed from the bottom list', async () => {
-				const errorMessage = 'Address already present';
-				const validMail = faker.internet.email();
-				const { user } = setupTest(<EditContactGroupBoard />);
-				const contactInput = getContactInput();
-				await user.type(contactInput, validMail);
-				await act(async () => {
-					await user.type(contactInput, ',');
-				});
-				await act(async () => {
-					await user.click(
-						screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
-					);
-				});
-				await user.type(contactInput, validMail);
-				await act(async () => {
-					await user.type(contactInput, ',');
-				});
-				expect(
-					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
-				).toBeDisabled();
-				expect(screen.getByText(errorMessage)).toBeVisible();
+				await within(memberList).findByText(email);
 				await user.click(
 					screen.getByRoleWithIcon('button', {
 						icon: TESTID_SELECTORS.icons.trash,
 						name: /remove/i
 					})
 				);
-				expect(
-					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
-				).toBeEnabled();
-				expect(screen.queryByText(errorMessage)).not.toBeInTheDocument();
-			});
-
-			it('should move valid chip addresses in bottom list and maintain invalid ones in the contact input', async () => {
-				const newEmail = faker.internet.email();
-				const invalidMail1 = faker.string.alpha(10);
-				const invalidMail2 = faker.string.alpha(10);
-				const { user } = setupTest(<EditContactGroupBoard />);
-				const contactInput = getContactInput();
-				await user.type(contactInput, newEmail);
-				await act(async () => {
-					await user.type(contactInput, ',');
-				});
-				await user.type(contactInput, invalidMail1);
-				await act(async () => {
-					await user.type(contactInput, ',');
-				});
-				await user.type(contactInput, invalidMail2);
-				await act(async () => {
-					await user.type(contactInput, ',');
-				});
-
-				const chipInput = screen.getByTestId(TESTID_SELECTORS.cgContactInput);
-				expect(within(chipInput).getByText(invalidMail1)).toBeVisible();
-				expect(within(chipInput).getByText(invalidMail2)).toBeVisible();
-				expect(within(chipInput).getByText(newEmail)).toBeVisible();
-				await act(async () => {
-					await user.click(
-						screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
-					);
-				});
-				expect(within(chipInput).queryByText(newEmail)).not.toBeInTheDocument();
-				expect(within(chipInput).getByText(invalidMail1)).toBeVisible();
-				expect(within(chipInput).getByText(invalidMail2)).toBeVisible();
-
-				expect(
-					within(screen.getByTestId(TESTID_SELECTORS.membersList)).getByText(newEmail)
-				).toBeVisible();
-			});
-
-			it('should move valid chip addresses in bottom list and maintain duplicated ones in the contact input', async () => {
-				const email1 = faker.internet.email();
-				const email2 = faker.internet.email();
-				const { user } = setupTest(<EditContactGroupBoard />);
-				const contactInput = getContactInput();
-				await user.type(contactInput, email1);
-				await act(async () => {
-					await user.type(contactInput, ',');
-				});
-				await act(async () => {
-					await user.click(
-						screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
-					);
-				});
-				const chipInput = screen.getByTestId(TESTID_SELECTORS.cgContactInput);
-				expect(within(chipInput).queryByText(email1)).not.toBeInTheDocument();
-				await user.type(contactInput, email2);
-				await act(async () => {
-					await user.type(contactInput, ',');
-				});
-				await user.type(contactInput, email1);
-				await act(async () => {
-					await user.type(contactInput, ',');
-				});
-				await act(async () => {
-					await user.click(
-						screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
-					);
-				});
-				expect(within(chipInput).queryByText(email2)).not.toBeInTheDocument();
-				expect(within(chipInput).getByText(email1)).toBeVisible();
-
-				expect(
-					within(screen.getByTestId(TESTID_SELECTORS.membersList)).getByText(email1)
-				).toBeVisible();
-				expect(
-					within(screen.getByTestId(TESTID_SELECTORS.membersList)).getByText(email2)
-				).toBeVisible();
+				expect(within(memberList).queryByText(email)).not.toBeInTheDocument();
 			});
 		});
 
 		describe('Error message contact input', () => {
-			it('should render "Address already present" error message when there is only a duplicated email as a chip and remove the error when a valid chip is added', async () => {
-				const errorMessage = 'Address already present';
-				const validMail = faker.internet.email();
-				const { user } = setupTest(<EditContactGroupBoard />);
-				const contactInput = getContactInput();
-				await user.type(contactInput, validMail);
-				await act(async () => {
-					await user.type(contactInput, ',');
-				});
-				await user.click(
-					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
-				);
-
-				await user.type(contactInput, validMail);
-				await act(async () => {
-					await user.type(contactInput, ',');
-				});
-				expect(screen.getByText(errorMessage)).toBeVisible();
-				expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
-				await user.type(contactInput, faker.internet.email());
-				await act(async () => {
-					await user.type(contactInput, ',');
-				});
-
-				expect(screen.queryByText(errorMessage)).not.toBeInTheDocument();
-			});
-
-			it('should render AlertCircle error icon inside chip when the chip is a duplicated email and remove the icon error when duplicated item is removed from the bottom list', async () => {
-				const validMail = faker.internet.email();
-				const { user } = setupTest(<EditContactGroupBoard />);
-				const contactInput = getContactInput();
-				await user.type(contactInput, validMail);
-				await act(async () => {
-					await user.type(contactInput, ',');
-				});
-				await act(async () => {
-					await user.click(
-						screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
-					);
-				});
-				await user.type(contactInput, validMail);
-				await act(async () => {
-					await user.type(contactInput, ',');
-				});
-
-				expect(
-					within(screen.getByTestId(TESTID_SELECTORS.contactInputChip)).getByTestId(
-						TESTID_SELECTORS.icons.duplicatedMember
-					)
-				).toBeVisible();
-				await act(async () => {
-					await user.click(
-						screen.getByRoleWithIcon('button', {
-							icon: TESTID_SELECTORS.icons.trash,
-							name: /remove/i
-						})
-					);
-				});
-				const chip = screen.getByTestId(TESTID_SELECTORS.contactInputChip);
-				expect(
-					within(chip).queryByTestId(TESTID_SELECTORS.icons.duplicatedMember)
-				).not.toBeInTheDocument();
-			});
-
-			it('should render "Addresses already present" error message when there are only duplicated emails (at least 2) as chips and remove the error when a valid chip is added', async () => {
-				const errorMessage = 'Addresses already present';
-				const validMail1 = faker.internet.email();
-				const validMail2 = faker.internet.email();
+			it('should render "Invalid address" error message when try to confirm invalid email', async () => {
+				const errorMessage = 'Invalid address';
+				const invalidEmail = 'test@';
 				const { user } = setupTest(<EditContactGroupBoard />);
 				const contactInput = getContactInput();
 
-				await user.type(contactInput, validMail1);
+				await user.type(contactInput, invalidEmail);
 				await act(async () => {
-					await user.type(contactInput, ',');
-				});
-				await user.type(contactInput, validMail2);
-				await act(async () => {
-					await user.type(contactInput, ',');
-				});
-				await user.click(
-					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
-				);
-				await user.type(contactInput, validMail1);
-				await act(async () => {
-					await user.type(contactInput, ',');
-				});
-				await user.type(contactInput, validMail2);
-				await act(async () => {
-					await user.type(contactInput, ',');
+					await user.keyboard('{Enter}');
 				});
 
-				expect(screen.getByText(errorMessage)).toBeVisible();
-				expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
-				await user.type(contactInput, faker.internet.email());
-				await act(async () => {
-					await user.type(contactInput, ',');
-				});
-
-				expect(screen.queryByText(errorMessage)).not.toBeInTheDocument();
-			});
-
-			it('should render "Invalid and already present addresses" error message when there are at least 1 error chip per type and remove the error when a valid chip is added', async () => {
-				const errorMessage = 'Invalid and already present addresses';
-				const validMail = faker.internet.email();
-				const { user } = setupTest(<EditContactGroupBoard />);
-				const contactInput = getContactInput();
-
-				await user.type(contactInput, validMail);
-				await act(async () => {
-					await user.type(contactInput, ',');
-				});
-				await user.click(
-					screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.addMembers })
-				);
-
-				await user.type(contactInput, faker.string.alpha(10));
-				await act(async () => {
-					await user.type(contactInput, ',');
-				});
-
-				await user.type(contactInput, validMail);
-				await act(async () => {
-					await user.type(contactInput, ',');
-				});
-
-				expect(screen.getByText(errorMessage)).toBeVisible();
-				expect(screen.getByText(errorMessage)).toHaveStyleRule('color', PALETTE.error.regular);
-				await user.type(contactInput, faker.internet.email());
-				await act(async () => {
-					await user.type(contactInput, ',');
-				});
-				expect(screen.queryByText(errorMessage)).not.toBeInTheDocument();
+				expect(await screen.findByText(errorMessage)).toBeVisible();
 			});
 		});
 	});
