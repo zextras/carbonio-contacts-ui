@@ -70,6 +70,9 @@ export const createAndApplyTag = ({
 		createModal?.(
 			{
 				id: modalId,
+				onClose: () => {
+					closeModal?.(modalId);
+				},
 				children: (
 					<CreateUpdateTagModal onClose={(): void => closeModal?.(modalId)} contact={contact} />
 				)
@@ -90,6 +93,9 @@ export const createTag = ({ t, createModal, closeModal }: TagsActionsParams): Ta
 		createModal?.(
 			{
 				id: modalId,
+				onClose: () => {
+					closeModal?.(modalId);
+				},
 				children: <CreateUpdateTagModal onClose={(): void => closeModal?.(modalId)} />
 			},
 			true
@@ -109,6 +115,9 @@ export const editTag = ({ t, createModal, closeModal, tag }: TagsActionsParams):
 		createModal?.(
 			{
 				id: modalId,
+				onClose: () => {
+					closeModal?.(modalId);
+				},
 				children: (
 					<CreateUpdateTagModal onClose={(): void => closeModal?.(modalId)} tag={tag} editMode />
 				)
@@ -131,6 +140,9 @@ export const deleteTag = ({ t, createModal, closeModal, tag }: TagsActionsParams
 			createModal?.(
 				{
 					id: modalId,
+					onClose: () => {
+						closeModal?.(modalId);
+					},
 					children: <DeleteTagModal onClose={(): void => closeModal?.(modalId)} tag={tag} />
 				},
 				true

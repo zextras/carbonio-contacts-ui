@@ -21,11 +21,11 @@ import { last } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { UsersSharesList } from 'components/modals/shared-address-books-add/users-shares-list';
+import { ScrollableContainer } from 'components/styled-components';
 import { TIMEOUTS } from 'constants/index';
 import { getFolderTranslatedName } from 'legacy/utils/helpers';
 import { ShareInfo } from 'model/share-info';
 import { apiClient } from 'network/api-client';
-import { ScrollableContainer } from 'components/styled-components';
 
 export type SharesModalProps = {
 	onClose: () => void;

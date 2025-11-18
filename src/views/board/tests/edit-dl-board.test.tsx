@@ -11,7 +11,7 @@ import * as shell from '@zextras/carbonio-shell-ui';
 import { EventEmitter } from 'events';
 import { HttpResponse } from 'msw';
 
-import EditDLBoard, { EditDLBoardContext } from 'views/board/edit-dl-board';
+import { screen, setupTest, within } from '@test-setup';
 import { ROUTES, ROUTES_INTERNAL_PARAMS } from 'constants/index';
 import { JEST_MOCKED_ERROR, TESTID_SELECTORS } from 'constants/tests';
 import { DistributionList } from 'model/distribution-list';
@@ -35,8 +35,8 @@ import {
 	getDLContactInput,
 	spyUseBoardHooks
 } from 'tests/utils';
+import EditDLBoard, { EditDLBoardContext } from 'views/board/edit-dl-board';
 import { DistributionListsView } from 'views/distribution-list/distribution-lists-view';
-import { screen, setupTest, within } from '@test-setup';
 
 const spyUseBoard = (dl: DistributionList | undefined): void => {
 	jest.spyOn(shell, 'useBoard').mockReturnValue({

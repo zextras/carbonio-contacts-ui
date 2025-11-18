@@ -5,9 +5,9 @@
  */
 import React from 'react';
 
+import styled from '@emotion/styled';
 import { Container, Text, Accordion } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
 
 const ContainerEl = styled(Container)`
 	overflow-y: auto;

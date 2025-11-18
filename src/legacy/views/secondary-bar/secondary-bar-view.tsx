@@ -5,25 +5,24 @@
  */
 import React, { FC, ReactElement, useMemo } from 'react';
 
-import { ThemeProvider } from '@mui/material';
-import { Container, Divider } from '@zextras/carbonio-design-system';
+import { Container, Divider, ThemeProvider } from '@zextras/carbonio-design-system';
 import { SecondaryBarComponentProps } from '@zextras/carbonio-shell-ui';
 import {
 	SidebarAccordionMui,
 	FOLDERS,
 	useRootsArray,
-	themeMui,
-	Folder
+	Folder,
+	themeMuiExtension
 } from '@zextras/carbonio-ui-commons';
 import { map } from 'lodash';
 import { Route, Routes, useParams } from 'react-router-dom';
 
+import { LOCAL_STORAGES } from 'constants/index';
+import { sortFolders } from 'helpers/folders';
 import { AccordionCustomComponent } from 'legacy/views/secondary-bar/accordion-custom-component';
 import { CollapsedSideBarFolderItem } from 'legacy/views/secondary-bar/collapsed-sidebar-folder-item';
 import { FindSharesButton } from 'legacy/views/secondary-bar/find-shares-button';
 import { TagsAccordion } from 'legacy/views/secondary-bar/tags-accordion';
-import { LOCAL_STORAGES } from 'constants/index';
-import { sortFolders } from 'helpers/folders';
 
 /**
  * Item component for the collapsed secondary bar
@@ -81,7 +80,7 @@ const SecondaryBarView: FC<SecondaryBarComponentProps> = ({ expanded = false }) 
 		});
 
 	return (
-		<ThemeProvider theme={themeMui}>
+		<ThemeProvider extension={themeMuiExtension}>
 			{expanded ? (
 				<Routes>
 					<Route

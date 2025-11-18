@@ -6,8 +6,8 @@
 
 import React from 'react';
 
+import styled from '@emotion/styled';
 import { Container, Icon, Padding } from '@zextras/carbonio-design-system';
-import styled from 'styled-components';
 
 import { Text } from 'components/Text';
 

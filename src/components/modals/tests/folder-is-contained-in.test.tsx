@@ -8,7 +8,7 @@ import React from 'react';
 import { waitFor } from '@testing-library/react';
 import { Folder } from '@zextras/carbonio-ui-commons';
 
-import { FolderIsContainedInModal } from './folder-is-contained-in';
+import { FolderIsContainedInModal } from 'components/modals/folder-is-contained-in';
 import { screen, setupTest } from '@test-setup';
 import { TESTID_SELECTORS } from 'constants/tests';
 

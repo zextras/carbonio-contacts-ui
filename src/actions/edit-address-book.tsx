@@ -52,6 +52,9 @@ export const useActionEditAddressBook = (): EditAddressBookAction => {
 				{
 					id: modalId,
 					maxHeight: '90vh',
+					onClose: () => {
+						closeModal(modalId);
+					},
 					children: (
 						<AddressBookEditModal
 							addressBookId={addressBook.id}

@@ -8,8 +8,8 @@ import React from 'react';
 import { useFolder } from '@zextras/carbonio-ui-commons';
 import { useParams } from 'react-router-dom';
 
-import { FolderPanel } from 'legacy/views/app/folder-panel';
 import { RouteParams } from 'constants/index';
+import { FolderPanel } from 'legacy/views/app/folder-panel';
 
 export const FolderPanelWrapper = (): React.JSX.Element => {
 	const { folderId } = useParams<RouteParams>() as { folderId: string };
