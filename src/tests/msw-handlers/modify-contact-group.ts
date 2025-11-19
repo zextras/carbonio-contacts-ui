@@ -6,11 +6,12 @@
 import { SoapResponse } from '@zextras/carbonio-shell-ui';
 import { JSNS } from '@zextras/carbonio-ui-commons';
 import { HttpResponse, HttpResponseResolver, http } from 'msw';
+import { Mock } from 'vitest';
 
+import { getSetupServer } from '@jest-setup';
 import { ModifyContactRequest, ModifyContactResponse } from 'network/api/modify-contact';
 import { CnItem } from 'network/api/types';
 import { buildSoapError, buildSoapResponse, createSoapContactGroup } from 'tests/utils';
-import { getSetupServer } from '@jest-setup';
 
 type ModifyContactGroupHandler = HttpResponseResolver<
 	never,
@@ -20,11 +21,8 @@ type ModifyContactGroupHandler = HttpResponseResolver<
 export const registerModifyContactGroupHandler = (
 	cnItem: CnItem = createSoapContactGroup(),
 	error: string | undefined = undefined
-): jest.Mock<ReturnType<ModifyContactGroupHandler>, Parameters<ModifyContactGroupHandler>> => {
-	const handler = jest.fn<
-		ReturnType<ModifyContactGroupHandler>,
-		Parameters<ModifyContactGroupHandler>
-	>(() => {
+): Mock<ModifyContactGroupHandler> => {
+	const handler = vi.fn<ModifyContactGroupHandler>(() => {
 		if (error) {
 			return HttpResponse.json(buildSoapError(error));
 		}

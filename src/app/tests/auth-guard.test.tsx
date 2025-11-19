@@ -11,8 +11,6 @@ import { setupTest, screen } from '@test-setup';
 
 describe('AuthGuard', () => {
 	it('should render the child component when the user is authenticated', () => {
-		useAuthenticated.mockReturnValue(true);
-
 		setupTest(
 			<AuthGuard>
 				<p>Authenticated</p>

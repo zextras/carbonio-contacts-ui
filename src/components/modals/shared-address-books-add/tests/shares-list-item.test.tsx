@@ -8,15 +8,15 @@ import React from 'react';
 import { act } from '@testing-library/react';
 import { last } from 'lodash';
 
+import { screen, setupTest } from '@test-setup';
 import { SharesListItem } from 'components/modals/shared-address-books-add/shares-list-item';
 import { TESTID_SELECTORS } from 'constants/tests';
 import { buildShareInfo } from 'tests/model-builder';
-import { screen, setupTest } from '@test-setup';
 
 describe('SharesListItem', () => {
 	it('should display an uncheck checkbox', () => {
 		const share = buildShareInfo();
-		setupTest(<SharesListItem share={share} onSelect={jest.fn()} onDeselect={jest.fn()} />);
+		setupTest(<SharesListItem share={share} onSelect={vi.fn()} onDeselect={vi.fn()} />);
 		expect(screen.getByTestId(TESTID_SELECTORS.checkbox)).toBeVisible();
 		expect(screen.getByTestId(TESTID_SELECTORS.icons.unckeckedCheckbox)).toBeVisible();
 	});
@@ -24,14 +24,14 @@ describe('SharesListItem', () => {
 	it('should display the name of the shared addressbook', () => {
 		const share = buildShareInfo();
 		const shareName = last(share.folderPath.split('/')) ?? '';
-		setupTest(<SharesListItem share={share} onSelect={jest.fn()} onDeselect={jest.fn()} />);
+		setupTest(<SharesListItem share={share} onSelect={vi.fn()} onDeselect={vi.fn()} />);
 		expect(screen.getByText(shareName)).toBeVisible();
 	});
 
 	it('should call the onSelected callback, passing the selected share, if the user check the checkbox. The onDeselect callback should not be called', async () => {
 		const share = buildShareInfo();
-		const onSelect = jest.fn();
-		const onDeselect = jest.fn();
+		const onSelect = vi.fn();
+		const onDeselect = vi.fn();
 		const { user } = setupTest(
 			<SharesListItem share={share} onSelect={onSelect} onDeselect={onDeselect} />
 		);
@@ -43,8 +43,8 @@ describe('SharesListItem', () => {
 
 	it('should call the onDeselected callback, passing the deselected share, if the user uncheck the checkbox. The onSelect callback should not be called', async () => {
 		const share = buildShareInfo();
-		const onSelect = jest.fn();
-		const onDeselect = jest.fn();
+		const onSelect = vi.fn();
+		const onDeselect = vi.fn();
 		const { user } = setupTest(
 			<SharesListItem share={share} onSelect={onSelect} onDeselect={onDeselect} />
 		);

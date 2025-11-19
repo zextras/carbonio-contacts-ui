@@ -10,12 +10,6 @@ import { screen, setupTest, within } from '@test-setup';
 import { TESTID_SELECTORS } from 'constants/tests';
 import SecondaryBarView from 'views/distribution-list/SecondaryBarView';
 
-// function spyUseNavigation(navigateTo: jest.Mock): void {
-// 	jest.spyOn(useNavigationHook, 'useNavigation').mockReturnValue({
-// 		navigateTo
-// 	});
-// }
-
 describe('SecondaryBar', () => {
 	it('should not show contact groups entry', () => {
 		setupTest(<SecondaryBarView expanded />);

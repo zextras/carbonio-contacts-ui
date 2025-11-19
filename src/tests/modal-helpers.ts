@@ -6,6 +6,7 @@
 import { act } from '@testing-library/react';
 import { UserEvent } from '@testing-library/user-event';
 import { FOLDER_VIEW, FOLDERS } from '@zextras/carbonio-ui-commons';
+import { vi } from 'vitest';
 
 import { makeListItemsVisible, screen } from '@test-setup';
 import { generateFolder } from '@test-utils/folders/folders-generator';
@@ -30,7 +31,7 @@ export const setupMoveItemModal = (
 	return {
 		selectFolder: (user: UserEvent): Promise<void> => {
 			act(() => {
-				jest.advanceTimersByTime(1000);
+				vi.advanceTimersByTime(1000);
 			});
 			makeListItemsVisible();
 			return user.click(screen.getByTestId(`folder-accordion-item-${folder.id}`));
@@ -61,7 +62,7 @@ export const setupRestoreModal = (
 	return {
 		selectFolder: (user: UserEvent): Promise<void> => {
 			act(() => {
-				jest.advanceTimersByTime(1000);
+				vi.advanceTimersByTime(1000);
 			});
 			makeListItemsVisible();
 			return user.click(screen.getByTestId(`folder-accordion-item-${folder.id}`));

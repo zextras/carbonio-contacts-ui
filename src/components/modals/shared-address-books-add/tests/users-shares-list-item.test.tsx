@@ -9,10 +9,10 @@ import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 import { times } from 'lodash';
 
+import { makeListItemsVisible, screen, setupTest } from '@test-setup';
 import { UsersSharesListItem } from 'components/modals/shared-address-books-add/users-shares-list-item';
 import { TESTID_SELECTORS } from 'constants/tests';
 import { buildShareInfo } from 'tests/model-builder';
-import { makeListItemsVisible, screen, setupTest } from '@test-setup';
 
 describe('UsersSharesListItem', () => {
 	it('should display an expanded accordion', () => {
@@ -22,8 +22,8 @@ describe('UsersSharesListItem', () => {
 			<UsersSharesListItem
 				shares={shares}
 				ownerName={faker.person.fullName()}
-				onDeselect={jest.fn()}
-				onSelect={jest.fn()}
+				onDeselect={vi.fn()}
+				onSelect={vi.fn()}
 			/>
 		);
 		expect(screen.getByTestId(TESTID_SELECTORS.icons.accordionCollapseAction)).toBeVisible();
@@ -37,8 +37,8 @@ describe('UsersSharesListItem', () => {
 			<UsersSharesListItem
 				shares={shares}
 				ownerName={ownerName}
-				onDeselect={jest.fn()}
-				onSelect={jest.fn()}
+				onDeselect={vi.fn()}
+				onSelect={vi.fn()}
 			/>
 		);
 		expect(screen.getByText(`${ownerName}'s shared address books`)).toBeVisible();
@@ -55,8 +55,8 @@ describe('UsersSharesListItem', () => {
 			<UsersSharesListItem
 				shares={shares}
 				ownerName={ownerName}
-				onDeselect={jest.fn()}
-				onSelect={jest.fn()}
+				onDeselect={vi.fn()}
+				onSelect={vi.fn()}
 			/>
 		);
 		makeListItemsVisible();
@@ -64,8 +64,8 @@ describe('UsersSharesListItem', () => {
 	});
 
 	it('should call the onSelected callback, passing the selected share, when the user select a share from the list', async () => {
-		const onSelected = jest.fn();
-		const onDeselected = jest.fn();
+		const onSelected = vi.fn();
+		const onDeselected = vi.fn();
 		const ownerName = faker.person.fullName();
 		const ownerEmail = faker.internet.email();
 		const ownerId = faker.string.uuid();
@@ -89,7 +89,7 @@ describe('UsersSharesListItem', () => {
 
 		// This is needed to ensure that the list elements will be visible and clickable
 		act(() => {
-			jest.advanceTimersByTime(1000);
+			vi.advanceTimersByTime(1000);
 		});
 
 		await act(() => user.click(screen.getByText(`share-${randomShareIndex}`)));
@@ -97,8 +97,8 @@ describe('UsersSharesListItem', () => {
 	});
 
 	it('should call the onDeselected callback, passing the deselected share, when the user deselect a share from the list', async () => {
-		const onSelected = jest.fn();
-		const onDeselected = jest.fn();
+		const onSelected = vi.fn();
+		const onDeselected = vi.fn();
 		const ownerName = faker.person.fullName();
 		const ownerEmail = faker.internet.email();
 		const ownerId = faker.string.uuid();
@@ -122,7 +122,7 @@ describe('UsersSharesListItem', () => {
 
 		// This is needed to ensure that the list elements will be visible and clickable
 		act(() => {
-			jest.advanceTimersByTime(1000);
+			vi.advanceTimersByTime(1000);
 		});
 
 		await act(() => user.click(screen.getByText(`share-${randomShareIndex}`)));

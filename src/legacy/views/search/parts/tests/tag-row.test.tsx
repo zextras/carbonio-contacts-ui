@@ -9,9 +9,10 @@ import { renderHook, act } from '@testing-library/react';
 import { ChipItem } from '@zextras/carbonio-design-system';
 import { filter } from 'lodash';
 import { useTranslation } from 'react-i18next';
+import { Mock } from 'vitest';
 
-jest.mock('react-i18next', () => ({
-	useTranslation: jest.fn()
+vi.mock('react-i18next', () => ({
+	useTranslation: vi.fn()
 }));
 
 // Mock ZIMBRA_STANDARD_COLORS since it's not exported
@@ -20,16 +21,16 @@ const ZIMBRA_STANDARD_COLORS = [{ hex: '#000000' }, { hex: '#FFFFFF' }];
 const TRANSLATION_KEY = 'label.tags';
 
 describe('Tag Row Component', () => {
-	const mockT = jest.fn((key) => key);
-	const mockSetTag = jest.fn();
-	const mockChipOnAdd = jest.fn();
+	const mockT = vi.fn((key) => key);
+	const mockSetTag = vi.fn();
+	const mockChipOnAdd = vi.fn();
 	const mockTagOptions = [
 		{ label: 'tag1', color: 0 },
 		{ label: 'tag2', color: 1 }
 	];
 
 	beforeEach(() => {
-		(useTranslation as jest.Mock).mockReturnValue([mockT]);
+		(useTranslation as Mock).mockReturnValue([mockT]);
 	});
 
 	describe('tagChipOnAdd', () => {

@@ -10,6 +10,7 @@ import { faker } from '@faker-js/faker';
 import { act, waitFor, within } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { http, HttpResponse } from 'msw';
+import { Mock } from 'vitest';
 
 import { getSetupServer } from '@jest-setup';
 import { setupTest, screen } from '@test-setup';
@@ -28,9 +29,9 @@ function getContactInput(): HTMLElement {
 	});
 }
 
-function spyUseBoard(navigateTo?: jest.Mock): void {
-	jest.spyOn(shell, 'useBoard').mockReturnValue({
-		context: { navigateTo: navigateTo ?? jest.fn() },
+function spyUseBoard(navigateTo?: Mock): void {
+	vi.spyOn(shell, 'useBoard').mockReturnValue({
+		context: { navigateTo: navigateTo ?? vi.fn() },
 		id: '',
 		boardViewId: '',
 		app: '',
@@ -47,11 +48,11 @@ beforeEach(() => {
 	spyUseBoard();
 });
 
-const mockedUseNavigate = jest.fn();
+const mockedUseNavigate = vi.fn();
 
-jest.mock('react-router-dom', () => ({
-	...jest.requireActual('react-router-dom'),
-	useNavigate: (): jest.Mock => mockedUseNavigate
+vi.mock('react-router-dom', async () => ({
+	...(await vi.importActual('react-router-dom')),
+	useNavigate: (): Mock => mockedUseNavigate
 }));
 
 function setupNewContactGroupBoard(): ReturnType<typeof setupTest> {
@@ -83,7 +84,8 @@ describe('New contact group board', () => {
 				const { user } = setupNewContactGroupBoard();
 				const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
 				await user.clear(nameInput);
-				await user.type(nameInput, newName);
+				await user.pasteInto(nameInput, newName.substring(0, CONTACT_GROUP_NAME_MAX_LENGTH));
+				await user.type(nameInput, newName[CONTACT_GROUP_NAME_MAX_LENGTH]);
 				expect(
 					screen.getByRoleWithIcon('button', { name: /SAVE/i, icon: TESTID_SELECTORS.icons.save })
 				).toBeDisabled();
@@ -91,7 +93,7 @@ describe('New contact group board', () => {
 		});
 
 		it('should close the board when save button is clicked and the request is done successfully', async () => {
-			const closeBoard = jest.fn();
+			const closeBoard = vi.fn();
 			spyUseBoardHooks(undefined, closeBoard);
 			getSetupServer().use(
 				http.post('/service/soap/CreateContactRequest', async () =>
@@ -211,7 +213,7 @@ describe('New contact group board', () => {
 		});
 
 		it('should not close the board when create contact fails', async () => {
-			const closeBoard = jest.fn();
+			const closeBoard = vi.fn();
 			spyUseBoardHooks(undefined, closeBoard);
 			getSetupServer().use(
 				http.post('/service/soap/CreateContactRequest', async () =>
@@ -309,7 +311,7 @@ describe('New contact group board', () => {
 				)
 			);
 
-			const createContactGroupSpy = jest.spyOn(createContactGroup, 'createContactGroup');
+			const createContactGroupSpy = vi.spyOn(createContactGroup, 'createContactGroup');
 			const newEmail1 = faker.internet.email();
 			const newEmail2 = faker.internet.email();
 			const { user } = setupNewContactGroupBoard();
@@ -349,7 +351,7 @@ describe('New contact group board', () => {
 				)
 			);
 			const newName = faker.string.alpha(10);
-			const createContactGroupSpy = jest.spyOn(createContactGroup, 'createContactGroup');
+			const createContactGroupSpy = vi.spyOn(createContactGroup, 'createContactGroup');
 			const { user } = setupNewContactGroupBoard();
 			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
 			await user.clear(nameInput);
@@ -376,7 +378,9 @@ describe('New contact group board', () => {
 			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
 			const newName = faker.string.alphanumeric(CONTACT_GROUP_NAME_MAX_LENGTH + 1);
 			await user.clear(nameInput);
-			await user.type(nameInput, newName);
+			await user.pasteInto(nameInput, newName.substring(0, CONTACT_GROUP_NAME_MAX_LENGTH));
+			await user.type(nameInput, newName[CONTACT_GROUP_NAME_MAX_LENGTH]);
+			// await user.type(nameInput, newName);
 			expect(nameInput).toHaveValue(newName);
 			await user.click(screen.getByRole('button', { name: /discard/i }));
 			expect(nameInput).toHaveValue('New Group');
@@ -408,7 +412,7 @@ describe('New contact group board', () => {
 		});
 
 		it('should update board title', async () => {
-			const updateBoard = jest.fn();
+			const updateBoard = vi.fn();
 			spyUseBoardHooks(updateBoard);
 			const newName = faker.string.alpha(10);
 			const { user } = setupNewContactGroupBoard();

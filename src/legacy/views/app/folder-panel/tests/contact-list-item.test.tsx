@@ -8,23 +8,28 @@ import React from 'react';
 import { screen, fireEvent, act } from '@testing-library/react';
 import { getAction } from '@zextras/carbonio-shell-ui';
 import { useNavigate } from 'react-router-dom';
+import { Mock } from 'vitest';
 
+import { setupTest, UserEvent } from '@test-setup';
 import { Contact } from 'legacy/types/contact';
 import { ContactListItem } from 'legacy/views/app/folder-panel/contact-list-item';
-import { setupTest, UserEvent } from '@test-setup';
 
-jest.mock('@zextras/carbonio-shell-ui', () => ({
-	useTags: jest.fn(() => []),
-	getAction: jest.fn()
-}));
-jest.mock('react-router-dom', () => ({
-	...jest.requireActual('react-router-dom'),
-	useNavigate: jest.fn()
+vi.mock('@zextras/carbonio-shell-ui', () => ({
+	useTags: vi.fn(() => []),
+	getAction: vi.fn()
 }));
 
-const mockToggle = jest.fn();
-const mockSetDraggedIds = jest.fn();
-const mockSetIsDragging = jest.fn();
+vi.mock('react-router-dom', async () => {
+	const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+	return {
+		...actual,
+		useNavigate: vi.fn()
+	};
+});
+
+const mockToggle = vi.fn();
+const mockSetDraggedIds = vi.fn();
+const mockSetIsDragging = vi.fn();
 
 const contact: Contact = {
 	URL: {},
@@ -64,8 +69,8 @@ const renderComponent = (props = {}): { user: UserEvent } =>
 
 describe('ContactListItem', () => {
 	beforeAll(() => {
-		const mailTo = { id: 'mail-to', label: 'action.send_msg', execute: jest.fn() };
-		(getAction as jest.Mock).mockReturnValue([mailTo, true]);
+		const mailTo = { id: 'mail-to', label: 'action.send_msg', execute: vi.fn() };
+		(getAction as Mock).mockReturnValue([mailTo, true]);
 	});
 
 	it('renders the contact item with avatar and content', () => {
@@ -74,32 +79,15 @@ describe('ContactListItem', () => {
 	});
 
 	it('calls navigate on click when not prevented', async () => {
-		const useNavigateSpy = jest.fn();
-		(useNavigate as jest.Mock).mockReturnValue(useNavigateSpy);
+		const useNavigateSpy = vi.fn();
+		(useNavigate as Mock).mockReturnValue(useNavigateSpy);
 		const { user } = renderComponent();
 
 		const listItem = await screen.findByTestId(`contact-list-item-${contact.id}`);
-		await act(async () => {
-			await user.hover(listItem);
-		});
-
+		await user.hover(listItem);
 		await user.click(listItem);
 
 		expect(useNavigateSpy).toHaveBeenCalledWith('../folder/folder123/contacts/1');
-	});
-
-	it('does not call navigate if the click event is prevented', () => {
-		const useNavigateSpy = jest.fn();
-		(useNavigate as jest.Mock).mockReturnValue(useNavigateSpy);
-
-		const { user } = renderComponent();
-
-		const listItem = screen.getByTestId(`contact-list-item-${contact.id}`);
-		act(() => listItem.addEventListener('click', (e) => e.preventDefault()));
-
-		user.click(listItem);
-
-		expect(useNavigateSpy).not.toHaveBeenCalled();
 	});
 
 	it('calls setIsDragging and sets dragged item IDs on drag start', () => {

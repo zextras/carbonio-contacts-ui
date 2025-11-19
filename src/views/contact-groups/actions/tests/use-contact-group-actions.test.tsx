@@ -24,7 +24,7 @@ import { generateFolder } from '@test-utils/folders/folders-generator';
 import { populateFoldersStore } from '@test-utils/store/folders';
 
 function mockMailComposerIntegration(): void {
-	jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([jest.fn(), true]);
+	vi.spyOn(shell, 'useIntegratedFunction').mockReturnValue([vi.fn(), true]);
 }
 
 describe('useContactGroupActions', () => {
@@ -49,7 +49,7 @@ describe('useContactGroupActions', () => {
 				expect(result.current[3].id).toBe(TRASH_ACTION.ID);
 			});
 			it('should return send mail action as enabled when the contact group has at least 1 member', () => {
-				jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([jest.fn(), true]);
+				vi.spyOn(shell, 'useIntegratedFunction').mockReturnValue([vi.fn(), true]);
 				const contactGroup = buildContactGroup({
 					members: buildMembers(faker.number.int({ min: 1, max: 100 })),
 					parent: FOLDERS.CONTACTS
@@ -85,7 +85,7 @@ describe('useContactGroupActions', () => {
 					folders: { [FOLDER_ID]: generateFolder({ id: FOLDER_ID, perm: 'r' }) }
 				});
 
-				jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([jest.fn(), true]);
+				vi.spyOn(shell, 'useIntegratedFunction').mockReturnValue([vi.fn(), true]);
 				const contactGroup = buildContactGroup({
 					members: buildMembers(faker.number.int({ min: 1, max: 100 })),
 					parent: FOLDER_ID

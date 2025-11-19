@@ -10,10 +10,11 @@ import { act, waitFor } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { EventEmitter } from 'events';
 import { HttpResponse } from 'msw';
+import { vi } from 'vitest';
 
 import { screen, setupTest, within } from '@test-setup';
 import { ROUTES, ROUTES_INTERNAL_PARAMS } from 'constants/index';
-import { JEST_MOCKED_ERROR, TESTID_SELECTORS } from 'constants/tests';
+import { VITEST_MOCKED_ERROR, TESTID_SELECTORS } from 'constants/tests';
 import { DistributionList } from 'model/distribution-list';
 import { GetDistributionListResponse } from 'network/api/get-distribution-list';
 import { GetDistributionListMembersResponse } from 'network/api/get-distribution-list-members';
@@ -39,7 +40,7 @@ import EditDLBoard, { EditDLBoardContext } from 'views/board/edit-dl-board';
 import { DistributionListsView } from 'views/distribution-list/distribution-lists-view';
 
 const spyUseBoard = (dl: DistributionList | undefined): void => {
-	jest.spyOn(shell, 'useBoard').mockReturnValue({
+	vi.spyOn(shell, 'useBoard').mockReturnValue({
 		context: dl ? ({ id: dl.id } satisfies EditDLBoardContext) : undefined,
 		id: '',
 		boardViewId: '',
@@ -79,7 +80,7 @@ describe('Edit DL board', () => {
 		const getDLHandler = registerGetDistributionListHandler(dl);
 		const getMembersHandler = registerGetDistributionListMembersHandler([]);
 		spyUseBoard(dl);
-		setupTest(<EditDLBoard />);
+		await act(() => setupTest(<EditDLBoard />));
 		expect(await screen.findByText(dl.email)).toBeVisible();
 		expect(getDLHandler).toHaveBeenCalled();
 		expect(getMembersHandler).toHaveBeenCalled();
@@ -103,7 +104,6 @@ describe('Edit DL board', () => {
 	});
 
 	it('should not request members to network if they are already stored', async () => {
-		jest.spyOn(console, 'warn').mockImplementation();
 		const member = faker.internet.email();
 		const dl = generateDistributionList({
 			description: '',
@@ -132,7 +132,7 @@ describe('Edit DL board', () => {
 			owners: []
 		});
 		useDistributionListsStore.getState().setDistributionLists([dl]);
-		registerGetDistributionListMembersHandler([], false, JEST_MOCKED_ERROR);
+		registerGetDistributionListMembersHandler([], false, VITEST_MOCKED_ERROR);
 		spyUseBoard(dl);
 		setupTest(<EditDLBoard />);
 		await screen.findByText(dl.email);

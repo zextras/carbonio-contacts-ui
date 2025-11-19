@@ -19,8 +19,8 @@ import { ROUTES, ROUTES_INTERNAL_PARAMS } from 'constants/index';
 import {
 	EMPTY_DISPLAYER_NO_CONTACTS_HINT,
 	EMPTY_DISTRIBUTION_LIST_HINT,
-	JEST_MOCKED_ERROR,
-	TESTID_SELECTORS
+	TESTID_SELECTORS,
+	VITEST_MOCKED_ERROR
 } from 'constants/tests';
 import { DistributionList } from 'model/distribution-list';
 import { GetAccountDistributionListsResponse } from 'network/api/get-account-distribution-lists';
@@ -128,13 +128,15 @@ describe('Distribution Lists View', () => {
 	});
 
 	it('should show an error snackbar if there is a network error while loading the list', async () => {
-		jest.spyOn(console, 'warn').mockImplementation();
-		registerGetAccountDistributionListsHandler([], JEST_MOCKED_ERROR);
-		setupTest(<DistributionListsView />, {
-			initialEntries: [`/${ROUTES_INTERNAL_PARAMS.filter.member}/`],
-			path: ROUTES.distributionLists
-		});
-		expect(await screen.findByText(/something went wrong/i)).toBeVisible();
+		vi.spyOn(console, 'warn').mockImplementation(() => null);
+		registerGetAccountDistributionListsHandler([], VITEST_MOCKED_ERROR);
+		await act(() =>
+			setupTest(<DistributionListsView />, {
+				initialEntries: [`/${ROUTES_INTERNAL_PARAMS.filter.member}/`],
+				path: ROUTES.distributionLists
+			})
+		);
+		expect(screen.getByText(/something went wrong/i)).toBeVisible();
 	});
 
 	it('should show edit action on item of which the user is also owner, inside the member filter', async () => {

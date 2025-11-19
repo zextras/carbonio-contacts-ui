@@ -8,13 +8,14 @@ import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 import { FOLDER_VIEW } from '@zextras/carbonio-ui-commons';
+import { vi } from 'vitest';
 
-import { useActionRemoveAddressBookLink } from 'actions/remove-address-book-link';
-import { UIAction } from 'actions/types';
-import { FolderActionRequest } from 'network/api/folder-action';
 import { screen, setupHook } from '@test-setup';
 import { generateFolder } from '@test-utils/folders/folders-generator';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
+import { useActionRemoveAddressBookLink } from 'actions/remove-address-book-link';
+import { UIAction } from 'actions/types';
+import { FolderActionRequest } from 'network/api/folder-action';
 
 describe('useActionRemoveAddressBookLink', () => {
 	it('should return an object with the specific data', () => {
@@ -62,7 +63,7 @@ describe('useActionRemoveAddressBookLink', () => {
 				view: FOLDER_VIEW.contact
 			});
 
-			const spy = jest.fn();
+			const spy = vi.fn();
 			createSoapAPIInterceptor<FolderActionRequest>('FolderAction').then(spy);
 
 			const { result } = setupHook(useActionRemoveAddressBookLink);

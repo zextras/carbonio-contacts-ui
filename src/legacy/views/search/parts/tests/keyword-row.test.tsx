@@ -8,20 +8,21 @@ import { useCallback } from 'react';
 import { renderHook, act } from '@testing-library/react';
 import { ChipItem } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
+import { Mock } from 'vitest';
 
-jest.mock('react-i18next', () => ({
-	useTranslation: jest.fn()
+vi.mock('react-i18next', () => ({
+	useTranslation: vi.fn()
 }));
 
 const TRANSLATION_KEY = 'label.keyword';
 
 describe('Keyword Row Component', () => {
-	const mockT = jest.fn((key) => key);
-	const mockSetOtherKeywords = jest.fn();
-	const mockChipOnAdd = jest.fn();
+	const mockT = vi.fn((key) => key);
+	const mockSetOtherKeywords = vi.fn();
+	const mockChipOnAdd = vi.fn();
 
 	beforeEach(() => {
-		(useTranslation as jest.Mock).mockReturnValue([mockT]);
+		(useTranslation as Mock).mockReturnValue([mockT]);
 	});
 
 	describe('keywordChipOnAdd', () => {

@@ -9,11 +9,11 @@ import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 import { times } from 'lodash';
 
+import { makeListItemsVisible, screen, setupTest } from '@test-setup';
 import { UsersSharesList } from 'components/modals/shared-address-books-add/users-shares-list';
 import { TESTID_SELECTORS } from 'constants/tests';
 import { ShareInfo } from 'model/share-info';
 import { buildShareInfo } from 'tests/model-builder';
-import { makeListItemsVisible, screen, setupTest } from '@test-setup';
 
 describe('UsersSharesList', () => {
 	it('should display an item for each owner of the shares list', async () => {
@@ -26,7 +26,7 @@ describe('UsersSharesList', () => {
 			return result.concat(ownerShares);
 		}, []);
 
-		setupTest(<UsersSharesList shares={shares} onSelectionChange={jest.fn()} />);
+		setupTest(<UsersSharesList shares={shares} onSelectionChange={vi.fn()} />);
 		makeListItemsVisible();
 		expect(await screen.findAllByTestId(TESTID_SELECTORS.sharesUsersListItem)).toHaveLength(
 			owners.length
@@ -42,7 +42,7 @@ describe('UsersSharesList', () => {
 			buildShareInfo({ ownerName, ownerId, ownerEmail })
 		);
 
-		setupTest(<UsersSharesList shares={shares} onSelectionChange={jest.fn()} />);
+		setupTest(<UsersSharesList shares={shares} onSelectionChange={vi.fn()} />);
 
 		// Call 2 times the makeListItemVisible because of the nested lists
 		makeListItemsVisible();
@@ -60,7 +60,7 @@ describe('UsersSharesList', () => {
 			buildShareInfo({ ownerName: owners[1] })
 		];
 
-		const onSelectionChange = jest.fn();
+		const onSelectionChange = vi.fn();
 		const { user } = setupTest(
 			<UsersSharesList shares={shares} onSelectionChange={onSelectionChange} />
 		);
@@ -70,7 +70,7 @@ describe('UsersSharesList', () => {
 		makeListItemsVisible();
 
 		const checkboxes = screen.getAllByTestId(TESTID_SELECTORS.checkbox);
-		act(() => jest.advanceTimersByTime(1000));
+		act(() => vi.advanceTimersByTime(1000));
 		await act(async () => user.click(checkboxes[0]));
 		await act(async () => user.click(checkboxes[1]));
 
@@ -85,7 +85,7 @@ describe('UsersSharesList', () => {
 			buildShareInfo({ ownerName: owners[1] })
 		];
 
-		const onSelectionChange = jest.fn();
+		const onSelectionChange = vi.fn();
 		const { user } = setupTest(
 			<UsersSharesList shares={shares} onSelectionChange={onSelectionChange} />
 		);
@@ -95,7 +95,7 @@ describe('UsersSharesList', () => {
 		makeListItemsVisible();
 
 		const checkboxes = screen.getAllByTestId(TESTID_SELECTORS.checkbox);
-		act(() => jest.advanceTimersByTime(1000));
+		act(() => vi.advanceTimersByTime(1000));
 		await act(async () => user.click(checkboxes[0]));
 		await act(async () => user.click(checkboxes[1]));
 

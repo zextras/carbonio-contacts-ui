@@ -6,7 +6,7 @@
 import React from 'react';
 
 import { testUtils } from '@zextras/carbonio-shell-ui';
-import { vi } from 'vitest';
+import vi from 'vitest';
 
 import ContactPreviewContent from 'legacy/views/preview/contact-preview-content';
 

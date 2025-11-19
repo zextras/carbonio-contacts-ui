@@ -12,7 +12,7 @@ import { Contact } from '../../../types/contact';
 import { SearchList } from '../search-list';
 import { makeListItemsVisible, setupTest } from '@test-setup';
 
-const mockSetShowAdvanceFilters = jest.fn();
+const mockSetShowAdvanceFilters = vi.fn();
 
 const mockContacts: Array<Contact> = [
 	{
@@ -36,6 +36,7 @@ const mockContacts: Array<Contact> = [
 		phone: {}
 	}
 ];
+
 describe('SearchList', () => {
 	it('should render the SearchList with no results', () => {
 		setupTest(<SearchList contacts={[]} setShowAdvanceFilters={mockSetShowAdvanceFilters} />);

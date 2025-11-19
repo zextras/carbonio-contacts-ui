@@ -92,7 +92,11 @@ describe('Folders helpers', () => {
 		it.todo('should return the list of the folders in the alphabetical order recursively');
 	});
 
-	describe('getFolderIconName', () => {});
+	describe('getFolderIconName', () => {
+		it.todo('should return the correct icon name for the given folder');
+	});
 
-	describe('getFolderIconColor', () => {});
+	describe('getFolderIconColor', () => {
+		it.todo('should return the correct icon color for the given folder');
+	});
 });

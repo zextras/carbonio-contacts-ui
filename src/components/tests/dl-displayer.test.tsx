@@ -8,14 +8,15 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { times } from 'lodash';
+import { vi } from 'vitest';
 
-import { DistributionListDisplayer } from 'components/dl-displayer';
+import { screen, setupTest, within } from '@test-setup';
 import { OpenMailComposerIntegratedFunction } from 'actions/send-email';
+import { DistributionListDisplayer } from 'components/dl-displayer';
 import { EDIT_DL_BOARD_ID } from 'constants/index';
 import { TESTID_SELECTORS } from 'constants/tests';
 import { DistributionList } from 'model/distribution-list';
 import { generateDistributionList } from 'tests/utils';
-import { screen, setupTest, within } from '@test-setup';
 
 describe('Distribution List displayer', () => {
 	it('should show the display name in the title', async () => {
@@ -40,8 +41,8 @@ describe('Distribution List displayer', () => {
 	describe('actions', () => {
 		describe('send email', () => {
 			it('should be visible if integration is available', async () => {
-				const openMailComposer = jest.fn();
-				jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
+				const openMailComposer = vi.fn();
+				vi.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
 				const dl = generateDistributionList();
 				setupTest(
 					<DistributionListDisplayer distributionList={dl} members={[]} totalMembers={0} />
@@ -50,7 +51,7 @@ describe('Distribution List displayer', () => {
 			});
 
 			it('should not be visible if integration is not available', async () => {
-				jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([jest.fn(), false]);
+				vi.spyOn(shell, 'useIntegratedFunction').mockReturnValue([vi.fn(), false]);
 				const dl = generateDistributionList();
 				setupTest(
 					<DistributionListDisplayer distributionList={dl} members={[]} totalMembers={0} />
@@ -60,8 +61,8 @@ describe('Distribution List displayer', () => {
 			});
 
 			it('should open the composer with the email of the distribution list set as recipient', async () => {
-				const openMailComposer = jest.fn();
-				jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
+				const openMailComposer = vi.fn();
+				vi.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
 				const dl = generateDistributionList();
 				const { user } = setupTest(
 					<DistributionListDisplayer distributionList={dl} members={[]} totalMembers={0} />
@@ -92,7 +93,7 @@ describe('Distribution List displayer', () => {
 			});
 
 			it('should open the board to edit the dl with the id of the distribution list', async () => {
-				const addBoardFn = jest.spyOn(shell, 'addBoard');
+				const addBoardFn = vi.spyOn(shell, 'addBoard');
 				const members = times(10, () => faker.internet.email());
 				const dl = generateDistributionList({ isOwner: true });
 				const { user } = setupTest(

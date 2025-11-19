@@ -7,12 +7,13 @@ import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 import { FOLDER_VIEW, FOLDERS } from '@zextras/carbonio-ui-commons';
+import { vi } from 'vitest';
 
-import { useActionExportAddressBook } from 'actions/export-address-book';
-import { UIAction } from 'actions/types';
 import { screen, setupHook } from '@test-setup';
 import { generateFolder } from '@test-utils/folders/folders-generator';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
+import { useActionExportAddressBook } from 'actions/export-address-book';
+import { UIAction } from 'actions/types';
 
 describe('useActionExportAddressBook', () => {
 	it('should return an object with the specific data', () => {
@@ -152,8 +153,9 @@ describe('useActionExportAddressBook', () => {
 			act(() => {
 				action.execute(addressBook);
 			});
-
-			expect(await screen.findByText('Something went wrong, please try again')).toBeVisible();
+			await vi.waitFor(() => {
+				expect(screen.getByText('Something went wrong, please try again')).toBeVisible();
+			});
 		});
 
 		it('should not call the ExportContacts API if the action cannot be executed', () => {
@@ -162,7 +164,7 @@ describe('useActionExportAddressBook', () => {
 				view: FOLDER_VIEW.contact
 			});
 
-			const callFlag = jest.fn();
+			const callFlag = vi.fn();
 			createSoapAPIInterceptor('ExportContacts').then(() => callFlag());
 
 			const { result } = setupHook(useActionExportAddressBook);
