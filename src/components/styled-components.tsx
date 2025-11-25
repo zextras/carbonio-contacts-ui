@@ -6,15 +6,14 @@
 
 import React from 'react';
 
-import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import {
 	AnyColor,
 	Avatar,
 	Container,
-	getColor,
 	ListItem,
 	type ListItemProps,
+	pseudoClasses,
 	Row
 } from '@zextras/carbonio-design-system';
 
@@ -30,12 +29,11 @@ export const HoverRow = styled(Row)`
 
 export const HoverContainer = styled(Row)``;
 
-export const HoverBarContainer = styled(Row)`
+export const HoverBarContainer = styled(Container)`
 	display: none;
 	position: absolute;
-	top: 0;
 	right: 0;
-	background: linear-gradient(to right, transparent, currentColor);
+	background: linear-gradient(to right, transparent, currentColor 50%, currentColor 100%);
 `;
 
 export const ListItemContainer = styled(Container)`
@@ -52,61 +50,23 @@ export const ListItemContainer = styled(Container)`
 	}
 `;
 
-const StyledListItem = styled(ListItem)<{ $backgroundColor: AnyColor | null }>`
-	${({ $backgroundColor, theme }): ReturnType<typeof css> =>
-		$backgroundColor
-			? css`
-					${HoverBarContainer} {
-						background: linear-gradient(
-							to right,
-							transparent,
-							${getColor($backgroundColor, theme)}
-						);
-					}
-					&:focus ${HoverBarContainer} {
-						background: linear-gradient(
-							to right,
-							transparent,
-							${getColor(`${$backgroundColor}.focus`, theme)}
-						);
-					}
-
-					&:hover ${HoverBarContainer} {
-						background: linear-gradient(
-							to right,
-							transparent,
-							${getColor(`${$backgroundColor}.hover`, theme)}
-						);
-					}
-
-					&:active ${HoverBarContainer} {
-						background: linear-gradient(
-							to right,
-							transparent,
-							${getColor(`${$backgroundColor}.active`, theme)}
-						);
-					}
-				`
-			: css``}
+const StyledListItem = styled(ListItem)<{ $backgroundColor?: AnyColor }>`
+	${({ $backgroundColor, theme }): undefined | ReturnType<typeof pseudoClasses> | string =>
+		$backgroundColor && pseudoClasses(theme, $backgroundColor, 'color')}
+	transition: none;
 `;
 
 export const EnhancedListItem = React.forwardRef<HTMLDivElement, ListItemProps>(
-	function EnhancedListItemFn(
-		{ background, selectedBackground, activeBackground, active, selected, ...rest },
-		ref
-	) {
+	function EnhancedListItemFn(props, ref) {
 		return (
 			<StyledListItem
 				ref={ref}
 				$backgroundColor={
-					(active && activeBackground) || (selected && selectedBackground) || background || null
+					(props.active && props.activeBackground) ||
+					(props.selected && props.selectedBackground) ||
+					props.background
 				}
-				background={background}
-				selectedBackground={selectedBackground}
-				activeBackground={activeBackground}
-				active={active}
-				selected={selected}
-				{...rest}
+				{...props}
 			/>
 		);
 	}
