@@ -6,14 +6,15 @@
 
 import React from 'react';
 
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import {
 	AnyColor,
 	Avatar,
 	Container,
+	getColor,
 	ListItem,
 	type ListItemProps,
-	pseudoClasses,
 	Row
 } from '@zextras/carbonio-design-system';
 
@@ -50,23 +51,61 @@ export const ListItemContainer = styled(Container)`
 	}
 `;
 
-const StyledListItem = styled(ListItem)<{ $backgroundColor?: AnyColor }>`
-	${({ $backgroundColor, theme }): undefined | ReturnType<typeof pseudoClasses> | string =>
-		$backgroundColor && pseudoClasses(theme, $backgroundColor, 'color')}
-	transition: none;
+const StyledListItem = styled(ListItem)<{ $backgroundColor: AnyColor | null }>`
+	${({ $backgroundColor, theme }): ReturnType<typeof css> =>
+		$backgroundColor
+			? css`
+					${HoverBarContainer} {
+						background: linear-gradient(
+							to right,
+							transparent,
+							${getColor($backgroundColor, theme)}
+						);
+					}
+					&:focus ${HoverBarContainer} {
+						background: linear-gradient(
+							to right,
+							transparent,
+							${getColor(`${$backgroundColor}.focus`, theme)}
+						);
+					}
+
+					&:hover ${HoverBarContainer} {
+						background: linear-gradient(
+							to right,
+							transparent,
+							${getColor(`${$backgroundColor}.hover`, theme)}
+						);
+					}
+
+					&:active ${HoverBarContainer} {
+						background: linear-gradient(
+							to right,
+							transparent,
+							${getColor(`${$backgroundColor}.active`, theme)}
+						);
+					}
+				`
+			: css``}
 `;
 
 export const EnhancedListItem = React.forwardRef<HTMLDivElement, ListItemProps>(
-	function EnhancedListItemFn(props, ref) {
+	function EnhancedListItemFn(
+		{ background, selectedBackground, activeBackground, active, selected, ...rest },
+		ref
+	) {
 		return (
 			<StyledListItem
 				ref={ref}
 				$backgroundColor={
-					(props.active && props.activeBackground) ||
-					(props.selected && props.selectedBackground) ||
-					props.background
+					(active && activeBackground) || (selected && selectedBackground) || background || null
 				}
-				{...props}
+				background={background}
+				selectedBackground={selectedBackground}
+				activeBackground={activeBackground}
+				active={active}
+				selected={selected}
+				{...rest}
 			/>
 		);
 	}
