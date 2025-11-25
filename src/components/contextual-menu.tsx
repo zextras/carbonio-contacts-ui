@@ -24,6 +24,7 @@ type ContextualMenuElement = HTMLDivElement & {
 
 const CustomDropdown = styled(Dropdown)`
 	height: 100%;
+	width: 100%;
 `;
 
 export const ContextualMenu = React.forwardRef<HTMLDivElement, ContextualMenuProps>(
@@ -78,7 +79,6 @@ export const ContextualMenu = React.forwardRef<HTMLDivElement, ContextualMenuPro
 
 		return (
 			<CustomDropdown
-				width="100%"
 				placement="right-start"
 				contextMenu
 				disabled={disabled}
