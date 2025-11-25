@@ -40,7 +40,7 @@ describe('useRestoreSingleContact', () => {
 			});
 
 			act(() => {
-				jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+				vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 			});
 
 			expect(screen.getByText(expectedTitle)).toBeVisible();

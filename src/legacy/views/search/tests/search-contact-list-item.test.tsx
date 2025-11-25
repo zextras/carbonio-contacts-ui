@@ -7,58 +7,62 @@
 import React from 'react';
 
 import { act, screen } from '@testing-library/react';
-import { useTags } from '@zextras/carbonio-ui-commons';
 import { useNavigate } from 'react-router-dom';
+import { Mock } from 'vitest';
 
 import { getTagsArray } from '../../../helpers/tags';
 import { Contact } from '../../../types/contact';
 import { SearchContactListItem } from '../search-contact-list-item';
 import { setupTest } from '@test-setup';
 
-jest.mock('@zextras/carbonio-ui-commons', () => ({
-	...jest.requireActual('@zextras/carbonio-ui-commons'),
-	useTags: jest.fn()
-}));
+const mockTags = { tag1: { id: 'tag1', name: 'Tag 1', color: 1 } };
+const mockItem: Contact = {
+	id: '1',
+	parent: 'folder1',
+	tags: ['tag1'],
+	firstName: '',
+	middleName: '',
+	lastName: '',
+	displayName: 'display name',
+	nickName: '',
+	address: {},
+	company: '',
+	department: '',
+	email: {},
+	image: '',
+	jobTitle: '',
+	notes: '',
+	phone: {},
+	nameSuffix: '',
+	namePrefix: '',
+	URL: {},
+	fileAsStr: ''
+};
 
-jest.mock('react-router-dom', () => ({
-	...jest.requireActual('react-router-dom'),
-	useNavigate: jest.fn()
-}));
+vi.mock('@zextras/carbonio-ui-commons', async () => {
+	const actual = await vi.importActual<typeof import('@zextras/carbonio-ui-commons')>(
+		'@zextras/carbonio-ui-commons'
+	);
+	return {
+		...actual,
+		getTags: vi.fn(),
+		useTags: vi.fn(() => mockTags)
+	};
+});
 
-jest.mock('../../../helpers/tags', () => ({
-	getTagsArray: jest.fn()
+vi.mock('react-router-dom', async () => {
+	const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+	return {
+		...actual,
+		useNavigate: vi.fn()
+	};
+});
+
+vi.mock('../../../helpers/tags', () => ({
+	getTagsArray: vi.fn(() => [{ id: 'tag1', name: 'Tag 1', color: 1 }])
 }));
 
 describe('SearchContactListItem', () => {
-	const mockTags = { tag1: { id: 'tag1', name: 'Tag 1', color: 1 } };
-	const mockItem: Contact = {
-		id: '1',
-		parent: 'folder1',
-		tags: ['tag1'],
-		firstName: '',
-		middleName: '',
-		lastName: '',
-		displayName: 'display name',
-		nickName: '',
-		address: {},
-		company: '',
-		department: '',
-		email: {},
-		image: '',
-		jobTitle: '',
-		notes: '',
-		phone: {},
-		nameSuffix: '',
-		namePrefix: '',
-		URL: {},
-		fileAsStr: ''
-	};
-
-	beforeEach(() => {
-		(useTags as jest.Mock).mockReturnValue(mockTags);
-		(getTagsArray as jest.Mock).mockReturnValue([{ id: 'tag1', name: 'Tag 1', color: 1 }]);
-	});
-
 	it('should render the component with correct structure', async () => {
 		setupTest(<SearchContactListItem item={mockItem} />);
 		expect(screen.getByTestId('search-contact-list-item')).toBeInTheDocument();
@@ -67,8 +71,8 @@ describe('SearchContactListItem', () => {
 	});
 
 	it('should handle click event correctly', async () => {
-		const useNavigateSpy = jest.fn();
-		(useNavigate as jest.Mock).mockReturnValue(useNavigateSpy);
+		const useNavigateSpy = vi.fn();
+		(useNavigate as Mock).mockReturnValue(useNavigateSpy);
 
 		const { user } = setupTest(<SearchContactListItem item={mockItem} />);
 		const container = screen.getByTestId('search-contact-list-item');

@@ -9,18 +9,19 @@ import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 import { FOLDER_VIEW, FOLDERS, getFolder, JSNS } from '@zextras/carbonio-ui-commons';
+import { vi } from 'vitest';
 
+import { makeListItemsVisible, screen, setupHook, setupTest, within } from '@test-setup';
+import { generateFolder } from '@test-utils/folders/folders-generator';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
+import { populateFoldersStore } from '@test-utils/store/folders';
+import { getMocksContext } from '@test-utils/utils/mocks-context';
 import { useActionMoveAddressBook } from 'actions/move-address-book';
 import { UIAction } from 'actions/types';
 import { AddressBookMoveModal } from 'components/modals/address-book-move';
 import { FOLDERS_DESCRIPTORS, TIMERS } from 'constants/tests';
 import { FolderActionRequest, FolderActionResponse } from 'network/api/folder-action';
 import { getFoldersArray } from 'tests/utils';
-import { makeListItemsVisible, screen, setupHook, setupTest, within } from '@test-setup';
-import { generateFolder } from '@test-utils/folders/folders-generator';
-import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
-import { populateFoldersStore } from '@test-utils/store/folders';
-import { getMocksContext } from '@test-utils/utils/mocks-context';
 
 describe('useActionMoveAddressBook', () => {
 	it('should return an object with the specific data', () => {
@@ -184,7 +185,7 @@ describe('useActionMoveAddressBook', () => {
 			});
 
 			act(() => {
-				jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+				vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 			});
 
 			expect(screen.getByText(`Move ${addressBook.name}`)).toBeVisible();
@@ -204,7 +205,7 @@ describe('useActionMoveAddressBook', () => {
 			});
 
 			act(() => {
-				jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+				vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 			});
 
 			expect(screen.queryByText(`Move ${addressBook.name}`)).not.toBeInTheDocument();
@@ -226,7 +227,7 @@ describe('useActionMoveAddressBook', () => {
 			});
 
 			act(() => {
-				jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+				vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 			});
 
 			expect(screen.queryByText(`Move ${addressBook.name}`)).not.toBeInTheDocument();
@@ -275,7 +276,7 @@ describe('useActionMoveAddressBook', () => {
 				action.execute({ addressBook });
 			});
 			act(() => {
-				jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+				vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 			});
 
 			const moveButton = screen.getByRole('button', { name: 'Move' });
@@ -315,7 +316,7 @@ describe('useActionMoveAddressBook', () => {
 				action.execute({ addressBook });
 			});
 			act(() => {
-				jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+				vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 			});
 
 			const moveButton = screen.getByRole('button', { name: 'Move' });
@@ -419,7 +420,7 @@ describe('useActionMoveAddressBook', () => {
 				action.execute({ addressBook });
 			});
 			act(() => {
-				jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+				vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 			});
 
 			makeListItemsVisible();
@@ -459,7 +460,7 @@ describe('useActionMoveAddressBook', () => {
 				action.execute({ addressBook });
 			});
 			act(() => {
-				jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+				vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 			});
 			makeListItemsVisible();
 			const moveButton = screen.getByRole('button', { name: 'Move' });
@@ -493,9 +494,9 @@ describe('useActionMoveAddressBook', () => {
 				'FolderAction',
 				response
 			);
-			const onClose = jest.fn();
+			const onClose = vi.fn();
 			const { user } = setupTest(
-				<AddressBookMoveModal addressBookId={addressBook.id} onMove={jest.fn()} onClose={onClose} />
+				<AddressBookMoveModal addressBookId={addressBook.id} onMove={vi.fn()} onClose={onClose} />
 			);
 			makeListItemsVisible();
 			const moveButton = screen.getByRole('button', { name: 'Move' });

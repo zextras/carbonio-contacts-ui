@@ -8,6 +8,7 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import { act, waitFor, within } from '@testing-library/react';
 import { times } from 'lodash';
+import { vi } from 'vitest';
 
 import { screen, setupTest } from '@test-setup';
 import { EditDLMembersComponent, EditDLComponentProps } from 'components/edit-dl-members';
@@ -18,8 +19,8 @@ import { getDLContactInput } from 'tests/utils';
 const buildProps = ({
 	members = [],
 	totalMembers = 0,
-	onRemoveMember = jest.fn(),
-	onAddMembers = jest.fn(),
+	onRemoveMember = vi.fn(),
+	onAddMembers = vi.fn(),
 	resetRef = React.createRef(),
 	...rest
 }: Partial<EditDLComponentProps> = {}): EditDLComponentProps => ({
@@ -130,7 +131,7 @@ describe('Edit DL Members Component', () => {
 			await user.type(contactInput.textbox, email.substring(0, 3));
 			act(() => {
 				// run timers of dropdown
-				jest.runOnlyPendingTimers();
+				vi.runOnlyPendingTimers();
 			});
 			await screen.findByTestId(TESTID_SELECTORS.dropdownList);
 			const dropdownOption = await screen.findByText(email, { exact: false });
@@ -157,7 +158,7 @@ describe('Edit DL Members Component', () => {
 		});
 
 		it('should call the onAddMember callback when the user clicks the add action', async () => {
-			const onAddMembers = jest.fn();
+			const onAddMembers = vi.fn();
 			const { user } = setupTest(<EditDLMembersComponent {...buildProps({ onAddMembers })} />);
 			const contactInput = getDLContactInput();
 			await act(async () => {
@@ -169,7 +170,7 @@ describe('Edit DL Members Component', () => {
 		});
 
 		it('should call the onAddMember callback with only the valid emails', async () => {
-			const onAddMembers = jest.fn();
+			const onAddMembers = vi.fn();
 			const { user } = setupTest(<EditDLMembersComponent {...buildProps({ onAddMembers })} />);
 			const contactInput = getDLContactInput();
 			const values = ['bad', 'correct.email@domain.com', 'worst', 'supercorrect.email@domain.net'];
@@ -183,7 +184,7 @@ describe('Edit DL Members Component', () => {
 		});
 
 		it('should leave only invalid values inside input when user clicks on add action', async () => {
-			const onAddMembers = jest.fn();
+			const onAddMembers = vi.fn();
 			const { user } = setupTest(<EditDLMembersComponent {...buildProps({ onAddMembers })} />);
 			const contactInput = getDLContactInput();
 			const values = ['bad', 'correct.email@domain.com', 'worst', 'supercorrect.email@domain.net'];
@@ -343,7 +344,7 @@ describe('Edit DL Members Component', () => {
 			times(10, () => {
 				members.push(faker.internet.email());
 			});
-			const onRemoveFn = jest.fn();
+			const onRemoveFn = vi.fn();
 			const { user } = setupTest(
 				<EditDLMembersComponent {...buildProps({ members, onRemoveMember: onRemoveFn })} />
 			);

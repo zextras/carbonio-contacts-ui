@@ -8,11 +8,11 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { act, waitFor, within } from '@testing-library/react';
-import * as shell from '@zextras/carbonio-shell-ui';
+import { useBoard } from '@zextras/carbonio-shell-ui';
 
 import { setupTest, screen } from '@test-setup';
 import { CONTACT_GROUP_NAME_MAX_LENGTH } from 'constants/index';
-import { JEST_MOCKED_ERROR, TESTID_SELECTORS } from 'constants/tests';
+import { TESTID_SELECTORS, VITEST_MOCKED_ERROR } from 'constants/tests';
 import { addContactsToStore } from 'legacy/store/contacts';
 import * as modifyContactGroup from 'network/api/modify-contact';
 import { buildContactGroup } from 'tests/model-builder';
@@ -27,7 +27,7 @@ function getContactInput(): HTMLElement {
 }
 
 function spyUseBoard(contactGroupId: string, folderId: string): void {
-	jest.spyOn(shell, 'useBoard').mockReturnValue({
+	vi.mocked(useBoard).mockReturnValue({
 		context: { contactGroupId, folderId },
 		id: '',
 		boardViewId: '',
@@ -41,6 +41,7 @@ const contactGroup = buildContactGroup();
 const setupStoreForTest = (): void => {
 	addContactsToStore([contactGroup]);
 };
+
 beforeEach(() => {
 	spyUseBoardHooks();
 	spyUseBoard(contactGroup.id, '1');
@@ -52,7 +53,7 @@ describe('Edit contact group board', () => {
 		describe('Save button disabled', () => {
 			it('should disable the save button when name input is empty string', async () => {
 				const { user } = setupTest(<EditContactGroupBoard />);
-				await user.clear(screen.getByRole('textbox', { name: 'Group name*' }));
+				await act(() => user.clear(screen.getByRole('textbox', { name: 'Group name*' })));
 				expect(
 					screen.getByRoleWithIcon('button', { name: /SAVE/i, icon: TESTID_SELECTORS.icons.save })
 				).toBeDisabled();
@@ -61,8 +62,8 @@ describe('Edit contact group board', () => {
 			it('should disable save button when name input contains only space characters', async () => {
 				const { user } = setupTest(<EditContactGroupBoard />);
 				const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
-				await user.clear(nameInput);
-				await user.type(nameInput, '   ');
+				await act(() => user.clear(nameInput));
+				await act(() => user.pasteInto(nameInput, '   '));
 				expect(
 					screen.getByRoleWithIcon('button', { name: /SAVE/i, icon: TESTID_SELECTORS.icons.save })
 				).toBeDisabled();
@@ -72,8 +73,8 @@ describe('Edit contact group board', () => {
 				const newName = faker.string.alphanumeric(CONTACT_GROUP_NAME_MAX_LENGTH + 1);
 				const { user } = setupTest(<EditContactGroupBoard />);
 				const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
-				await user.clear(nameInput);
-				await user.type(nameInput, newName);
+				await act(() => user.clear(nameInput));
+				await act(() => user.pasteInto(nameInput, newName));
 				expect(
 					screen.getByRoleWithIcon('button', { name: /SAVE/i, icon: TESTID_SELECTORS.icons.save })
 				).toBeDisabled();
@@ -117,8 +118,7 @@ describe('Edit contact group board', () => {
 		});
 
 		it('should show error snackbar when modify contact fails', async () => {
-			jest.spyOn(console, 'warn').mockImplementation();
-			registerModifyContactGroupHandler(undefined, JEST_MOCKED_ERROR);
+			registerModifyContactGroupHandler(undefined, VITEST_MOCKED_ERROR);
 			const newName = faker.string.alpha(10);
 			const { user } = setupTest(<EditContactGroupBoard />);
 			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
@@ -135,9 +135,9 @@ describe('Edit contact group board', () => {
 		});
 
 		it('should not close the board when modify contact fails', async () => {
-			const closeBoard = jest.fn();
+			const closeBoard = vi.fn();
 			spyUseBoardHooks(undefined, closeBoard);
-			registerModifyContactGroupHandler(undefined, JEST_MOCKED_ERROR);
+			registerModifyContactGroupHandler(undefined, VITEST_MOCKED_ERROR);
 
 			const newName = faker.string.alpha(10);
 			const { user } = setupTest(<EditContactGroupBoard />);
@@ -155,7 +155,7 @@ describe('Edit contact group board', () => {
 		});
 
 		it('should not reset the fields when modify contact fails', async () => {
-			registerModifyContactGroupHandler(undefined, JEST_MOCKED_ERROR);
+			registerModifyContactGroupHandler(undefined, VITEST_MOCKED_ERROR);
 			const newEmail1 = faker.internet.email();
 			const newEmail2 = faker.internet.email();
 			const newName = faker.string.alpha(10);
@@ -187,7 +187,7 @@ describe('Edit contact group board', () => {
 			registerModifyContactGroupHandler(
 				createSoapContactGroup(contactGroup.title, undefined, contactGroup.id)
 			);
-			const modifyContactGroupSpy = jest.spyOn(modifyContactGroup, 'modifyContactGroup');
+			const modifyContactGroupSpy = vi.spyOn(modifyContactGroup, 'modifyContactGroup');
 			const newEmail1 = faker.internet.email();
 			const newEmail2 = faker.internet.email();
 			const { user } = setupTest(<EditContactGroupBoard />);
@@ -221,7 +221,7 @@ describe('Edit contact group board', () => {
 				createSoapContactGroup(contactGroup.title, undefined, contactGroup.id)
 			);
 			const newName = faker.string.alpha(10);
-			const modifyContactGroupSpy = jest.spyOn(modifyContactGroup, 'modifyContactGroup');
+			const modifyContactGroupSpy = vi.spyOn(modifyContactGroup, 'modifyContactGroup');
 			const { user } = setupTest(<EditContactGroupBoard />);
 			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
 			await user.clear(nameInput);
@@ -246,7 +246,11 @@ describe('Edit contact group board', () => {
 			const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
 			const newName = faker.string.alphanumeric(CONTACT_GROUP_NAME_MAX_LENGTH + 1);
 			await user.clear(nameInput);
-			await user.type(nameInput, newName);
+			await user.pasteInto(nameInput, newName.substring(0, CONTACT_GROUP_NAME_MAX_LENGTH));
+			await user.type(
+				nameInput,
+				newName.substring(CONTACT_GROUP_NAME_MAX_LENGTH, CONTACT_GROUP_NAME_MAX_LENGTH + 1)
+			);
 			expect(nameInput).toHaveValue(newName);
 			await user.click(screen.getByRole('button', { name: /discard/i }));
 			expect(nameInput).toHaveValue(contactGroup.title);
@@ -278,7 +282,7 @@ describe('Edit contact group board', () => {
 		});
 
 		it('should update board title', async () => {
-			const updateBoard = jest.fn();
+			const updateBoard = vi.fn();
 			spyUseBoardHooks(updateBoard);
 			const newName = faker.string.alpha(10);
 			const { user } = setupTest(<EditContactGroupBoard />);
@@ -380,7 +384,7 @@ describe('Edit contact group board', () => {
 		const contactGroupId = '123-456:1';
 		const folderId = '123-456:10';
 		it('should display contact group to edit', async () => {
-			jest.spyOn(shell, 'useBoard').mockReturnValue({
+			vi.mocked(useBoard).mockReturnValue({
 				context: { contactGroupId, folderId },
 				id: '',
 				boardViewId: '',

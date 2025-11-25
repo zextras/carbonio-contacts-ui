@@ -8,9 +8,9 @@ import React from 'react';
 import { waitFor } from '@testing-library/react';
 import { useForm } from 'react-hook-form';
 
-import { AdvancedFilterModalFormValues } from 'legacy/views/search/types';
-import { PhoneNumberRow } from 'legacy/views/search/parts/phone-number-row';
 import { screen, setupTest } from '@test-setup';
+import { PhoneNumberRow } from 'legacy/views/search/parts/phone-number-row';
+import { AdvancedFilterModalFormValues } from 'legacy/views/search/types';
 
 // Test wrapper component to provide form context
 const TestWrapper = ({ onAdd }: { onAdd?: (value: unknown) => unknown }): React.JSX.Element => {
@@ -69,7 +69,7 @@ describe('PhoneNumberRow', () => {
 
 	it('should create chips when Enter is pressed', async () => {
 		// Mock console.error to handle React warning about isQueryFilter prop
-		const consoleSpy = jest.spyOn(console, 'error').mockImplementation(jest.fn());
+		const consoleSpy = vi.spyOn(console, 'error').mockImplementation(vi.fn());
 
 		const { user } = setupTest(<TestWrapper />);
 
@@ -107,7 +107,7 @@ describe('PhoneNumberRow', () => {
 
 	describe('phoneNumberChipOnAdd function', () => {
 		it('should create correct chip data for string input', () => {
-			const mockOnAdd = jest.fn();
+			const mockOnAdd = vi.fn();
 			setupTest(<TestWrapper onAdd={mockOnAdd} />);
 
 			// We need to test the phoneNumberChipOnAdd function indirectly
@@ -202,7 +202,7 @@ describe('PhoneNumberRow', () => {
 	});
 
 	it('should handle multiple phone numbers', async () => {
-		const consoleSpy = jest.spyOn(console, 'error').mockImplementation(jest.fn());
+		const consoleSpy = vi.spyOn(console, 'error').mockImplementation(vi.fn());
 
 		const { user } = setupTest(<TestWrapper />);
 
@@ -226,7 +226,7 @@ describe('PhoneNumberRow', () => {
 	});
 
 	it('should support both Enter and comma as separators', async () => {
-		const consoleSpy = jest.spyOn(console, 'error').mockImplementation(jest.fn());
+		const consoleSpy = vi.spyOn(console, 'error').mockImplementation(vi.fn());
 
 		const { user } = setupTest(<TestWrapper />);
 
@@ -248,7 +248,7 @@ describe('PhoneNumberRow', () => {
 	});
 
 	it('should maintain focus after adding a chip', async () => {
-		const consoleSpy = jest.spyOn(console, 'error').mockImplementation(jest.fn());
+		const consoleSpy = vi.spyOn(console, 'error').mockImplementation(vi.fn());
 
 		const { user } = setupTest(<TestWrapper />);
 

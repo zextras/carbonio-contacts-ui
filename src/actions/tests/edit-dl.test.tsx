@@ -6,12 +6,13 @@
 import { faker } from '@faker-js/faker';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { times } from 'lodash';
+import { vi } from 'vitest';
 
+import { setupHook } from '@test-setup';
 import { useActionEditDL } from 'actions/edit-dl';
 import { UIAction } from 'actions/types';
 import { EDIT_DL_BOARD_ID } from 'constants/index';
 import { generateDistributionList } from 'tests/utils';
-import { setupHook } from '@test-setup';
 
 describe('useActionEditDL', () => {
 	it('should return an object with the specific data', () => {
@@ -26,7 +27,7 @@ describe('useActionEditDL', () => {
 	});
 
 	it('should return an execute field which opens a board with the dl info', async () => {
-		const addBoardFn = jest.spyOn(shell, 'addBoard');
+		const addBoardFn = vi.spyOn(shell, 'addBoard');
 
 		const members = times(10, () => faker.internet.email());
 		const dl = generateDistributionList({
@@ -46,7 +47,7 @@ describe('useActionEditDL', () => {
 	});
 
 	it('should show the email in the title if the dl has no display name', async () => {
-		const addBoardFn = jest.spyOn(shell, 'addBoard');
+		const addBoardFn = vi.spyOn(shell, 'addBoard');
 
 		const dl = generateDistributionList({ displayName: undefined });
 		const { result } = setupHook(useActionEditDL);
@@ -63,18 +64,18 @@ describe('useActionEditDL', () => {
 	});
 
 	it('should not open a new board, but reopen the existing tab, if the user is already editing the distribution list', async () => {
-		const addBoardFn = jest.spyOn(shell, 'addBoard');
+		const addBoardFn = vi.spyOn(shell, 'addBoard');
 		const dl = generateDistributionList();
 		const boardId = `${EDIT_DL_BOARD_ID}-${dl.id}`;
-		jest.spyOn(shell, 'getBoardById').mockReturnValue({
+		vi.spyOn(shell, 'getBoardById').mockReturnValue({
 			id: boardId,
 			boardViewId: EDIT_DL_BOARD_ID,
 			app: '',
 			icon: '',
 			title: ''
 		});
-		const setCurrentBoardFn = jest.spyOn(shell, 'setCurrentBoard');
-		const reopenBoardsFn = jest.spyOn(shell, 'reopenBoards');
+		const setCurrentBoardFn = vi.spyOn(shell, 'setCurrentBoard');
+		const reopenBoardsFn = vi.spyOn(shell, 'reopenBoards');
 
 		const { result } = setupHook(useActionEditDL);
 		const action = result.current;

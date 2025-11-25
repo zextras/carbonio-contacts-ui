@@ -17,6 +17,14 @@ const customizeConfig = (config, pkg, options, mode) => {
 		modules: [path.resolve(__dirname, 'src'), 'node_modules']
 	};
 
+	newConfig.module.rules = [
+		...config.module.rules,
+		{
+			test: /\.m?js$/,
+			resolve: { fullySpecified: false }
+		}
+	];
+
 	return newConfig;
 };
 

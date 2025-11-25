@@ -7,10 +7,11 @@ import React from 'react';
 
 import { waitFor } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
+import { vi } from 'vitest';
 
+import { screen, setupTest, within } from '@test-setup';
 import { MemberList } from 'components/member-list';
 import { TESTID_SELECTORS } from 'constants/tests';
-import { screen, setupTest, within } from '@test-setup';
 
 describe('Member list', () => {
 	it('should render Member list text with the counter of managers', () => {
@@ -28,7 +29,7 @@ describe('Member list', () => {
 	});
 
 	it('should render the buttons on the list item', () => {
-		jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([jest.fn(), true]);
+		vi.spyOn(shell, 'useIntegratedFunction').mockReturnValue([vi.fn(), true]);
 		setupTest(<MemberList members={['test']} membersCount={1} />);
 		expect(
 			screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.sendEmail })

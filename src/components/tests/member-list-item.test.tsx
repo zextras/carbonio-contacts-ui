@@ -6,14 +6,15 @@
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
+import { vi } from 'vitest';
 
+import { setupTest, screen } from '@test-setup';
 import { MemberListItemComponent, MemberListItemComponentProps } from 'components/member-list-item';
 import { TESTID_SELECTORS } from 'constants/tests';
-import { setupTest, screen } from '@test-setup';
 
 const buildProps = ({
 	email = '',
-	onRemove = jest.fn()
+	onRemove = vi.fn()
 }: Partial<MemberListItemComponentProps> = {}): MemberListItemComponentProps => ({
 	email,
 	onRemove
@@ -43,7 +44,7 @@ describe('Member item', () => {
 	});
 
 	it('should call onRemove callback when user clicks on remove button', async () => {
-		const removeFn = jest.fn();
+		const removeFn = vi.fn();
 		const { user } = setupTest(<MemberListItemComponent {...buildProps({ onRemove: removeFn })} />);
 		await user.click(screen.getByRole('button', { name: 'remove' }));
 		expect(removeFn).toHaveBeenCalled();

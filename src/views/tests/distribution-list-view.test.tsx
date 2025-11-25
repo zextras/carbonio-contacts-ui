@@ -5,13 +5,13 @@
  */
 import React from 'react';
 
-import { waitFor } from '@testing-library/react';
+import { act, waitFor } from '@testing-library/react';
 
-import DistributionListAppView from 'views/distribution-list-view';
+import { screen, setupTest } from '@test-setup';
 import { ROUTES_INTERNAL_PARAMS } from 'constants/index';
 import { registerGetAccountDistributionListsHandler } from 'tests/msw-handlers/get-account-distribution-lists';
 import { generateDistributionList } from 'tests/utils';
-import { screen, setupTest } from '@test-setup';
+import DistributionListAppView from 'views/distribution-list-view';
 
 describe('App view', () => {
 	describe('Distribution lists', () => {
@@ -20,9 +20,11 @@ describe('App view', () => {
 			async (filter) => {
 				const dl = generateDistributionList({ isOwner: true, isMember: true });
 				const handler = registerGetAccountDistributionListsHandler([dl]);
-				setupTest(<DistributionListAppView />, {
-					initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${filter}`]
-				});
+				await act(() =>
+					setupTest(<DistributionListAppView />, {
+						initialEntries: [`/${ROUTES_INTERNAL_PARAMS.route.distributionLists}/${filter}`]
+					})
+				);
 				await waitFor(() => expect(handler).toHaveBeenCalled());
 				expect(await screen.findByText(dl.displayName)).toBeVisible();
 			}

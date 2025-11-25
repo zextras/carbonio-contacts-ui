@@ -7,13 +7,14 @@ import React from 'react';
 
 import { act } from '@testing-library/react';
 import { FOLDERS, isLink, isTrashed, getRootsArray } from '@zextras/carbonio-ui-commons';
+import { vi } from 'vitest';
 
-import { AddressBookMoveModal } from 'components/modals/address-book-move';
-import { TESTID_SELECTORS } from 'constants/tests';
-import { getFoldersArray } from 'tests/utils';
 import { makeListItemsVisible, screen, setupTest, within } from '@test-setup';
 import { populateFoldersStore } from '@test-utils/store/folders';
 import { getMocksContext } from '@test-utils/utils/mocks-context';
+import { AddressBookMoveModal } from 'components/modals/address-book-move';
+import { TESTID_SELECTORS } from 'constants/tests';
+import { getFoldersArray } from 'tests/utils';
 
 describe('AddressBookMoveModal', () => {
 	const mocksContext = getMocksContext();
@@ -28,7 +29,7 @@ describe('AddressBookMoveModal', () => {
 		}
 
 		setupTest(
-			<AddressBookMoveModal addressBookId={addressBook.id} onMove={jest.fn()} onClose={jest.fn()} />
+			<AddressBookMoveModal addressBookId={addressBook.id} onMove={vi.fn()} onClose={vi.fn()} />
 		);
 		expect(screen.getByText(`Move ${addressBook.name}`)).toBeVisible();
 	});
@@ -41,7 +42,7 @@ describe('AddressBookMoveModal', () => {
 			return;
 		}
 		setupTest(
-			<AddressBookMoveModal addressBookId={addressBook.id} onMove={jest.fn()} onClose={jest.fn()} />
+			<AddressBookMoveModal addressBookId={addressBook.id} onMove={vi.fn()} onClose={vi.fn()} />
 		);
 		expect(
 			screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.close })
@@ -55,9 +56,9 @@ describe('AddressBookMoveModal', () => {
 		if (!addressBook) {
 			return;
 		}
-		const onClose = jest.fn();
+		const onClose = vi.fn();
 		const { user } = setupTest(
-			<AddressBookMoveModal addressBookId={addressBook.id} onMove={jest.fn()} onClose={onClose} />
+			<AddressBookMoveModal addressBookId={addressBook.id} onMove={vi.fn()} onClose={onClose} />
 		);
 		const button = screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.close });
 		await user.click(button);
@@ -74,11 +75,7 @@ describe('AddressBookMoveModal', () => {
 				return;
 			}
 			setupTest(
-				<AddressBookMoveModal
-					addressBookId={addressBook.id}
-					onMove={jest.fn()}
-					onClose={jest.fn()}
-				/>
+				<AddressBookMoveModal addressBookId={addressBook.id} onMove={vi.fn()} onClose={vi.fn()} />
 			);
 			expect(screen.getByTestId(`folder-accordion-root-1`)).toBeVisible();
 		});
@@ -92,11 +89,7 @@ describe('AddressBookMoveModal', () => {
 				return;
 			}
 			setupTest(
-				<AddressBookMoveModal
-					addressBookId={addressBook.id}
-					onMove={jest.fn()}
-					onClose={jest.fn()}
-				/>
+				<AddressBookMoveModal addressBookId={addressBook.id} onMove={vi.fn()} onClose={vi.fn()} />
 			);
 
 			getRootsArray().forEach((root) => {
@@ -113,11 +106,7 @@ describe('AddressBookMoveModal', () => {
 				return;
 			}
 			setupTest(
-				<AddressBookMoveModal
-					addressBookId={addressBook.id}
-					onMove={jest.fn()}
-					onClose={jest.fn()}
-				/>
+				<AddressBookMoveModal addressBookId={addressBook.id} onMove={vi.fn()} onClose={vi.fn()} />
 			);
 			expect(
 				screen.queryByTestId(`folder-accordion-root-${FOLDERS.TRASH}`)
@@ -140,11 +129,7 @@ describe('AddressBookMoveModal', () => {
 			}
 
 			setupTest(
-				<AddressBookMoveModal
-					addressBookId={addressBook.id}
-					onMove={jest.fn()}
-					onClose={jest.fn()}
-				/>
+				<AddressBookMoveModal addressBookId={addressBook.id} onMove={vi.fn()} onClose={vi.fn()} />
 			);
 			expect(
 				screen.queryByTestId(`folder-accordion-root-${trashedFolder.id}`)
@@ -167,11 +152,7 @@ describe('AddressBookMoveModal', () => {
 			}
 
 			setupTest(
-				<AddressBookMoveModal
-					addressBookId={addressBook.id}
-					onMove={jest.fn()}
-					onClose={jest.fn()}
-				/>
+				<AddressBookMoveModal addressBookId={addressBook.id} onMove={vi.fn()} onClose={vi.fn()} />
 			);
 			makeListItemsVisible();
 			expect(screen.getByTestId(`folder-accordion-item-${linkedFolder.id}`)).toBeVisible();
@@ -189,8 +170,8 @@ describe('AddressBookMoveModal', () => {
 			setupTest(
 				<AddressBookMoveModal
 					addressBookId={addressBookToMove.id}
-					onMove={jest.fn()}
-					onClose={jest.fn()}
+					onMove={vi.fn()}
+					onClose={vi.fn()}
 				/>
 			);
 			makeListItemsVisible();
@@ -215,8 +196,8 @@ describe('AddressBookMoveModal', () => {
 			setupTest(
 				<AddressBookMoveModal
 					addressBookId={addressBookToMove.id}
-					onMove={jest.fn()}
-					onClose={jest.fn()}
+					onMove={vi.fn()}
+					onClose={vi.fn()}
 				/>
 			);
 			expect(screen.getByRole('button', { name: 'Move' })).toBeVisible();
@@ -233,8 +214,8 @@ describe('AddressBookMoveModal', () => {
 			setupTest(
 				<AddressBookMoveModal
 					addressBookId={addressBookToMove.id}
-					onMove={jest.fn()}
-					onClose={jest.fn()}
+					onMove={vi.fn()}
+					onClose={vi.fn()}
 				/>
 			);
 			expect(screen.getByRole('button', { name: 'Move' })).toBeDisabled();
@@ -251,8 +232,8 @@ describe('AddressBookMoveModal', () => {
 			const { user } = setupTest(
 				<AddressBookMoveModal
 					addressBookId={addressBookToMove.id}
-					onMove={jest.fn()}
-					onClose={jest.fn()}
+					onMove={vi.fn()}
+					onClose={vi.fn()}
 				/>
 			);
 			makeListItemsVisible();
@@ -272,12 +253,12 @@ describe('AddressBookMoveModal', () => {
 				return;
 			}
 			const destinationFolder = '1';
-			const onMove = jest.fn();
+			const onMove = vi.fn();
 			const { user } = setupTest(
 				<AddressBookMoveModal
 					addressBookId={addressBookToMove.id}
 					onMove={onMove}
-					onClose={jest.fn()}
+					onClose={vi.fn()}
 				/>
 			);
 			makeListItemsVisible();

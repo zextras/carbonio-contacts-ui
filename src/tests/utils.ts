@@ -4,18 +4,18 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { faker } from '@faker-js/faker';
-import * as shell from '@zextras/carbonio-shell-ui';
-import { ErrorSoapResponse, SuccessSoapResponse } from '@zextras/carbonio-shell-ui';
+import { ErrorSoapResponse, SuccessSoapResponse, useBoardHooks } from '@zextras/carbonio-shell-ui';
 import { getFoldersMap, Folder } from '@zextras/carbonio-ui-commons';
 import { EventEmitter } from 'events';
 import { times } from 'lodash';
+import { Mock, vi } from 'vitest';
 
+import { screen, within } from '@test-setup';
 import { TESTID_SELECTORS } from 'constants/tests';
 import { SoapContact } from 'legacy/types/soap';
 import { DistributionList, DistributionListMembersPage } from 'model/distribution-list';
 import { CnItem } from 'network/api/types';
 import { MakeRequired } from 'types/utils';
-import { screen, within } from '@test-setup';
 
 export const getDLContactInput = (): {
 	container: HTMLElement;
@@ -170,13 +170,13 @@ export function createSoapContact({
 	};
 }
 
-export function spyUseBoardHooks(updateBoardFn?: jest.Mock, closeBoardFn?: jest.Mock): void {
-	jest.spyOn(shell, 'useBoardHooks').mockReturnValue({
-		updateBoard: updateBoardFn ?? jest.fn(),
-		setCurrentBoard: jest.fn(),
-		getBoardContext: jest.fn(),
-		getBoard: jest.fn(),
-		closeBoard: closeBoardFn ?? jest.fn()
+export function spyUseBoardHooks(updateBoardFn?: Mock, closeBoardFn?: Mock): void {
+	vi.mocked(useBoardHooks).mockReturnValue({
+		updateBoard: updateBoardFn ?? vi.fn(),
+		setCurrentBoard: vi.fn(),
+		getBoardContext: vi.fn(),
+		getBoard: vi.fn(),
+		closeBoard: closeBoardFn ?? vi.fn()
 	});
 }
 

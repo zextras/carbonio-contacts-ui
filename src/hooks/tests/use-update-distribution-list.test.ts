@@ -5,13 +5,14 @@
  */
 
 import { faker } from '@faker-js/faker';
+import { act } from '@testing-library/react';
 
+import { screen, setupHook } from '@test-setup';
+import { VITEST_MOCKED_ERROR } from 'constants/tests';
 import { useUpdateDistributionList } from 'hooks/use-update-distribution-list';
-import { JEST_MOCKED_ERROR } from 'constants/tests';
 import { DistributionList } from 'model/distribution-list';
 import { registerDistributionListActionHandler } from 'tests/msw-handlers/distribution-list-action';
 import { generateDistributionList } from 'tests/utils';
-import { screen, setupHook } from '@test-setup';
 
 describe('Use update distribution list hook', () => {
 	it('should show success snackbar when there are no errors', async () => {
@@ -19,19 +20,23 @@ describe('Use update distribution list hook', () => {
 		registerDistributionListActionHandler({});
 		const { result } = setupHook(useUpdateDistributionList, { initialProps: [dl] });
 		result.current({ email: dl.email, displayName: 'different name' });
-		expect(await screen.findByText(/distribution list edits saved successfully/i)).toBeVisible();
+		await vi.waitFor(() => {
+			expect(screen.getByText(/distribution list edits saved successfully/i)).toBeVisible();
+		});
 	});
 
 	it('should show an error snackbar if there is an error', async () => {
 		const dl = generateDistributionList();
-		registerDistributionListActionHandler({}, [JEST_MOCKED_ERROR]);
+		registerDistributionListActionHandler({}, [VITEST_MOCKED_ERROR]);
 		const { result } = setupHook(useUpdateDistributionList, { initialProps: [dl] });
 		result.current({
 			email: dl.email,
 			displayName: 'different name',
 			members: { members: [faker.internet.email()], total: 1 }
 		});
-		expect(await screen.findByText(/something went wrong/i)).toBeVisible();
+		await vi.waitFor(() => {
+			expect(screen.getByText(/something went wrong/i)).toBeVisible();
+		});
 	});
 
 	describe('Success snackbar', () => {
@@ -40,7 +45,7 @@ describe('Use update distribution list hook', () => {
 			const newDisplayName = faker.string.alpha(51);
 			registerDistributionListActionHandler({});
 			const { result } = setupHook(useUpdateDistributionList, { initialProps: [dl] });
-			result.current({ email: dl.email, displayName: newDisplayName });
+			await act(() => result.current({ email: dl.email, displayName: newDisplayName }));
 			expect(
 				await screen.findByText(
 					`"${newDisplayName.substring(0, 50)}..." distribution list edits saved successfully`
@@ -55,7 +60,7 @@ describe('Use update distribution list hook', () => {
 				const newDisplayName = faker.string.alpha(length);
 				registerDistributionListActionHandler({});
 				const { result } = setupHook(useUpdateDistributionList, { initialProps: [dl] });
-				result.current({ email: dl.email, displayName: newDisplayName });
+				await act(() => result.current({ email: dl.email, displayName: newDisplayName }));
 				expect(
 					await screen.findByText(`"${newDisplayName}" distribution list edits saved successfully`)
 				).toBeVisible();
@@ -67,7 +72,12 @@ describe('Use update distribution list hook', () => {
 			dl.displayName = displayName;
 			registerDistributionListActionHandler({});
 			const { result } = setupHook(useUpdateDistributionList, { initialProps: [dl] });
-			result.current({ email: dl.email, members: { members: [faker.internet.email()], total: 1 } });
+			await act(() =>
+				result.current({
+					email: dl.email,
+					members: { members: [faker.internet.email()], total: 1 }
+				})
+			);
 			expect(
 				await screen.findByText(`"${dl.email}" distribution list edits saved successfully`)
 			).toBeVisible();

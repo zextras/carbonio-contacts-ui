@@ -18,6 +18,7 @@ describe('Contact group list item', () => {
 	beforeEach(() => {
 		populateFoldersStore();
 	});
+
 	describe('Actions', () => {
 		it('should show send mail action when the contact group has at least 1 member', () => {
 			const contactGroup = buildContactGroup({
