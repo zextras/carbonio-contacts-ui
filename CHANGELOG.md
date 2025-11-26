@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.18.1](https://github.com/zextras/carbonio-contacts-ui/compare/v1.18.0...v1.18.1) (2025-11-20)
+
+
+### Bug Fixes
+
+* fix ui list of contacts and distribution lists ([6fee21c](https://github.com/zextras/carbonio-contacts-ui/commit/6fee21c287debf0754e4830fecce757c03575ff8))
+* fix ui list of contacts and distribution lists ([5d000a9](https://github.com/zextras/carbonio-contacts-ui/commit/5d000a90ae17ace6d6db8009d554f6ee8a2c8a15))
+
 ## [1.18.0](https://github.com/zextras/carbonio-contacts-ui/compare/v1.17.0...v1.18.0) (2025-11-18)
 
 
