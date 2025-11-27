@@ -59,14 +59,16 @@ const StyledListItem = styled(ListItem)<{ $backgroundColor: AnyColor | null }>`
 						background: linear-gradient(
 							to right,
 							transparent,
-							${getColor($backgroundColor, theme)}
+							${getColor($backgroundColor, theme)} 50%,
+							${getColor($backgroundColor, theme)} 100%
 						);
 					}
 					&:focus ${HoverBarContainer} {
 						background: linear-gradient(
 							to right,
 							transparent,
-							${getColor(`${$backgroundColor}.focus`, theme)}
+							${getColor(`${$backgroundColor}.focus`, theme)} 50%,
+							${getColor(`${$backgroundColor}.focus`, theme)} 100%
 						);
 					}
 
@@ -74,7 +76,8 @@ const StyledListItem = styled(ListItem)<{ $backgroundColor: AnyColor | null }>`
 						background: linear-gradient(
 							to right,
 							transparent,
-							${getColor(`${$backgroundColor}.hover`, theme)}
+							${getColor(`${$backgroundColor}.hover`, theme)} 50%,
+							${getColor(`${$backgroundColor}.hover`, theme)} 100%
 						);
 					}
 
@@ -82,7 +85,8 @@ const StyledListItem = styled(ListItem)<{ $backgroundColor: AnyColor | null }>`
 						background: linear-gradient(
 							to right,
 							transparent,
-							${getColor(`${$backgroundColor}.active`, theme)}
+							${getColor(`${$backgroundColor}.active`, theme)} 50%,
+							${getColor(`${$backgroundColor}.active`, theme)} 100%
 						);
 					}
 				`

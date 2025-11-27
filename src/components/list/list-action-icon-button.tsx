@@ -20,6 +20,7 @@ export const ListActionIconButton = ({ action }: ListIconButtonProps): React.JSX
 				ev.stopPropagation();
 				action.onClick(ev);
 			}}
+			size={'large'}
 			disabled={action.disabled}
 			data-testid={action.id}
 		/>
