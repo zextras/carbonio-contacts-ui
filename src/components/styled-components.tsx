@@ -30,12 +30,11 @@ export const HoverRow = styled(Row)`
 
 export const HoverContainer = styled(Row)``;
 
-export const HoverBarContainer = styled(Row)`
+export const HoverBarContainer = styled(Container)`
 	display: none;
 	position: absolute;
-	top: 0;
 	right: 0;
-	background: linear-gradient(to right, transparent, currentColor);
+	background: linear-gradient(to right, transparent, currentColor 50%, currentColor 100%);
 `;
 
 export const ListItemContainer = styled(Container)`
@@ -60,14 +59,16 @@ const StyledListItem = styled(ListItem)<{ $backgroundColor: AnyColor | null }>`
 						background: linear-gradient(
 							to right,
 							transparent,
-							${getColor($backgroundColor, theme)}
+							${getColor($backgroundColor, theme)} 50%,
+							${getColor($backgroundColor, theme)} 100%
 						);
 					}
 					&:focus ${HoverBarContainer} {
 						background: linear-gradient(
 							to right,
 							transparent,
-							${getColor(`${$backgroundColor}.focus`, theme)}
+							${getColor(`${$backgroundColor}.focus`, theme)} 50%,
+							${getColor(`${$backgroundColor}.focus`, theme)} 100%
 						);
 					}
 
@@ -75,7 +76,8 @@ const StyledListItem = styled(ListItem)<{ $backgroundColor: AnyColor | null }>`
 						background: linear-gradient(
 							to right,
 							transparent,
-							${getColor(`${$backgroundColor}.hover`, theme)}
+							${getColor(`${$backgroundColor}.hover`, theme)} 50%,
+							${getColor(`${$backgroundColor}.hover`, theme)} 100%
 						);
 					}
 
@@ -83,7 +85,8 @@ const StyledListItem = styled(ListItem)<{ $backgroundColor: AnyColor | null }>`
 						background: linear-gradient(
 							to right,
 							transparent,
-							${getColor(`${$backgroundColor}.active`, theme)}
+							${getColor(`${$backgroundColor}.active`, theme)} 50%,
+							${getColor(`${$backgroundColor}.active`, theme)} 100%
 						);
 					}
 				`
