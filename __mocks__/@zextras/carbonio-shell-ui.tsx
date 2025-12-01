@@ -48,7 +48,6 @@ export const getCurrentRoute = vi.fn();
 export const useIsCarbonioCE: Mock<typeof shell.useIsCarbonioCE> = vi.fn(() => false);
 
 export const useLocalStorage = vi.fn();
-export const editSettings = vi.fn(() => Promise.resolve({ data: {} }));
 export const registerComponents: typeof shell.registerComponents = vi.fn();
 export const registerActions: typeof shell.registerActions = vi.fn();
 export const addRoute: typeof shell.addRoute = vi.fn();

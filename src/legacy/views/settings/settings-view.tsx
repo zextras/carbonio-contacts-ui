@@ -6,14 +6,19 @@
 import React, { useState, useMemo, useCallback } from 'react';
 
 import { Container, useSnackbar } from '@zextras/carbonio-design-system';
-import { useUserSettings, editSettings, SettingsHeader } from '@zextras/carbonio-shell-ui';
-import { useUpdateView } from '@zextras/carbonio-ui-commons';
+import {
+	useUserSettings,
+	SettingsHeader,
+	updateSettings as shellUpdateSettings
+} from '@zextras/carbonio-shell-ui';
+import { JSNS, useUpdateView } from '@zextras/carbonio-ui-commons';
+import { AccountSettingsPrefs, soapFetchV2 } from '@zextras/carbonio-ui-soap-lib';
 import { useTranslation } from 'react-i18next';
 
 import { differenceObject } from 'legacy/views/settings/components/utils';
 import OptionsSettingsView from 'legacy/views/settings/options-settings-view';
 
-export default function ContactSettingsView() {
+export default function ContactSettingsView(): React.JSX.Element {
 	const [t] = useTranslation();
 	const settings = useUserSettings()?.prefs;
 	const [settingsObj, setSettingsObj] = useState({ ...settings });
@@ -27,7 +32,12 @@ export default function ContactSettingsView() {
 	}, [settings]);
 
 	const updateSettings = useCallback(
-		(e) => {
+		(e: {
+			target: {
+				name: string;
+				value: string;
+			};
+		}) => {
 			setSettingsObj({ ...settingsObj, [e.target.name]: e.target.value });
 			setUpdatedSettings({ ...updatedSettings, [e.target.name]: e.target.value });
 		},
@@ -42,17 +52,14 @@ export default function ContactSettingsView() {
 	const disabled = useMemo(() => Object.keys(settingsToUpdate).length === 0, [settingsToUpdate]);
 
 	const saveChanges = useCallback(() => {
-		editSettings({ prefs: updatedSettings }).then((res) => {
-			if (res.type.includes('fulfilled')) {
-				createSnackbar({
-					key: `new`,
-					replace: true,
-					severity: 'info',
-					label: t('message.snackbar.settings_saved', 'Edits saved correctly'),
-					autoHideTimeout: 3000,
-					hideButton: true
-				});
-			} else {
+		const promise = soapFetchV2<
+			{ _attrs: AccountSettingsPrefs; _jsns: JSNS },
+			{ ModifyPrefsResponse: Record<string, unknown> }
+		>('ModifyPrefs', {
+			_jsns: JSNS.ACCOUNT,
+			_attrs: updatedSettings
+		}).then((rawSoapResponse) => {
+			if ('Fault' in rawSoapResponse.Body) {
 				createSnackbar({
 					key: `new`,
 					replace: true,
@@ -61,9 +68,20 @@ export default function ContactSettingsView() {
 					autoHideTimeout: 3000,
 					hideButton: true
 				});
+			} else {
+				shellUpdateSettings({ prefs: updatedSettings });
+				createSnackbar({
+					key: `new`,
+					replace: true,
+					severity: 'info',
+					label: t('message.snackbar.settings_saved', 'Edits saved correctly'),
+					autoHideTimeout: 3000,
+					hideButton: true
+				});
 			}
 		});
-	}, [updatedSettings, createSnackbar, t]);
+		return Promise.allSettled([promise]);
+	}, [createSnackbar, t, updatedSettings]);
 	const title = useMemo(() => t('label.contact_setting', 'Contact Settings'), [t]);
 	return (
 		<>
