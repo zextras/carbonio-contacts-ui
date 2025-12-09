@@ -7,12 +7,13 @@
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 import { FOLDER_VIEW, FOLDERS } from '@zextras/carbonio-ui-commons';
+import { vi } from 'vitest';
 
+import { screen, setupHook } from '@test-setup';
+import { generateFolder } from '@test-utils/folders/folders-generator';
 import { useActionTrashAddressBook } from 'actions/trash-address-book';
 import { UIAction } from 'actions/types';
 import { TIMERS } from 'constants/tests';
-import { screen, setupHook } from '@test-setup';
-import { generateFolder } from '@test-utils/folders/folders-generator';
 
 describe('useActionTrashAddressBooks', () => {
 	it('should return an object with the specific data', () => {
@@ -98,7 +99,7 @@ describe('useActionTrashAddressBooks', () => {
 		});
 
 		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+			vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 
 		expect(screen.getByText(`Delete ${addressBook.name}`)).toBeVisible();

@@ -35,7 +35,7 @@ import {
 	selectAllMembersInDL,
 	SELECT_ALL,
 	typeAndSelectOptionFromDropdown
-} from 'legacy/integrations/test/mocks';
+} from 'legacy/integrations/tests/mocks';
 import { FullAutocompleteRequest, FullAutocompleteResponse } from 'legacy/types/contact';
 import {
 	GetDistributionListRequest,
@@ -91,7 +91,7 @@ describe('Contact input', () => {
 	});
 
 	test('should not override previous chip label', async () => {
-		const onChangeFn = jest.fn();
+		const onChangeFn = vi.fn();
 		const contact = {
 			email: 'simple@chip.it',
 			first: 'first name',
@@ -282,7 +282,7 @@ describe('Contact input', () => {
 	});
 
 	it('should create chip with edit action when chip is created by by pressing enter', async () => {
-		const onChange = jest.fn();
+		const onChange = vi.fn();
 		registerFullAutocompleteHandler([]);
 		const { user } = setupTest(
 			<ContactInput defaultValue={[]} orderedAccountIds={[]} onChange={onChange} />
@@ -306,7 +306,7 @@ describe('Contact input', () => {
 		it('calls onChange with label equal to firstName if present in autocomplete', async () => {
 			const first = 'My name is';
 			const interceptor = createAutocompleteInterceptor([{ email: VALID_EMAIL, first }]);
-			const onChange = jest.fn();
+			const onChange = vi.fn();
 			const { user } = setupTest(
 				<ContactInput onChange={onChange} defaultValue={[]} orderedAccountIds={[]} />
 			);
@@ -317,7 +317,7 @@ describe('Contact input', () => {
 		});
 		it('calls onChange with label equal to email if no other field in autocomplete', async () => {
 			const interceptor = createAutocompleteInterceptor([{ email: VALID_EMAIL }]);
-			const onChange = jest.fn();
+			const onChange = vi.fn();
 			const { user } = setupTest(
 				<ContactInput onChange={onChange} defaultValue={[]} orderedAccountIds={[]} />
 			);
@@ -330,7 +330,7 @@ describe('Contact input', () => {
 			const interceptor = createAutocompleteInterceptor([
 				{ email: VALID_EMAIL, full: 'My fullname' }
 			]);
-			const onChange = jest.fn();
+			const onChange = vi.fn();
 			const { user } = setupTest(
 				<ContactInput onChange={onChange} defaultValue={[]} orderedAccountIds={[]} />
 			);
@@ -343,7 +343,7 @@ describe('Contact input', () => {
 			const interceptor = createAutocompleteInterceptor([
 				{ email: VALID_EMAIL, full: 'My fullname', first: 'first', middle: 'middle', last: 'last' }
 			]);
-			const onChange = jest.fn();
+			const onChange = vi.fn();
 			const { user } = setupTest(
 				<ContactInput onChange={onChange} defaultValue={[]} orderedAccountIds={[]} />
 			);
@@ -354,7 +354,7 @@ describe('Contact input', () => {
 		});
 
 		it('calls onChange with a chip with edit action after selecting a simple contact on the dropdown', async () => {
-			const onChange = jest.fn();
+			const onChange = vi.fn();
 			const autocompleteInterceptor = createAutocompleteInterceptor([
 				{ email: VALID_EMAIL, isGroup: false }
 			]);
@@ -373,7 +373,7 @@ describe('Contact input', () => {
 			const interceptor = createAutocompleteInterceptor([
 				{ email: VALID_EMAIL, display: 'Preferred Name', full: 'Full Name', first: 'First' }
 			]);
-			const onChange = jest.fn();
+			const onChange = vi.fn();
 			const { user } = setupTest(
 				<ContactInput onChange={onChange} defaultValue={[]} orderedAccountIds={[]} />
 			);
@@ -387,7 +387,7 @@ describe('Contact input', () => {
 			const interceptor = createAutocompleteInterceptor([
 				{ email: VALID_EMAIL, first: 'First', last: 'Last' }
 			]);
-			const onChange = jest.fn();
+			const onChange = vi.fn();
 			const { user } = setupTest(
 				<ContactInput onChange={onChange} defaultValue={[]} orderedAccountIds={[]} />
 			);
@@ -401,7 +401,7 @@ describe('Contact input', () => {
 			const interceptor = createAutocompleteInterceptor([
 				{ email: VALID_EMAIL, display: '   My Name   ' }
 			]);
-			const onChange = jest.fn();
+			const onChange = vi.fn();
 			const { user } = setupTest(
 				<ContactInput onChange={onChange} defaultValue={[]} orderedAccountIds={[]} />
 			);
@@ -415,7 +415,7 @@ describe('Contact input', () => {
 			const interceptor = createAutocompleteInterceptor([
 				{ email: VALID_EMAIL, first: 'First', middle: 'Middle', last: 'Last' }
 			]);
-			const onChange = jest.fn();
+			const onChange = vi.fn();
 			const { user } = setupTest(
 				<ContactInput onChange={onChange} defaultValue={[]} orderedAccountIds={[]} />
 			);
@@ -431,7 +431,7 @@ describe('Contact input', () => {
 			const interceptor = createAutocompleteInterceptor([
 				{ email: VALID_EMAIL, first: 'First', last: '' }
 			]);
-			const onChange = jest.fn();
+			const onChange = vi.fn();
 			const { user } = setupTest(
 				<ContactInput onChange={onChange} defaultValue={[]} orderedAccountIds={[]} />
 			);
@@ -443,7 +443,7 @@ describe('Contact input', () => {
 
 		it('displays email if no display, fullName, or name parts', async () => {
 			const interceptor = createAutocompleteInterceptor([{ email: 'john.doe@example.com' }]);
-			const onChange = jest.fn();
+			const onChange = vi.fn();
 			const { user } = setupTest(
 				<ContactInput onChange={onChange} defaultValue={[]} orderedAccountIds={[]} />
 			);
@@ -459,7 +459,7 @@ describe('Contact input', () => {
 			const interceptor = createAutocompleteInterceptor([
 				{ email: '"John Doe" <john.doe@example.com>' }
 			]);
-			const onChange = jest.fn();
+			const onChange = vi.fn();
 			const { user } = setupTest(
 				<ContactInput onChange={onChange} defaultValue={[]} orderedAccountIds={[]} />
 			);
@@ -498,7 +498,7 @@ describe('Contact input', () => {
 
 	describe('on distribution list contact', () => {
 		it('calls onChange with a chip with edit action after selecting a distribution list on the dropdown', async () => {
-			const onChange = jest.fn();
+			const onChange = vi.fn();
 			const autocompleteInterceptor = createAutocompleteInterceptor([
 				{ email: VALID_EMAIL, isGroup: true }
 			]);
@@ -535,7 +535,7 @@ describe('Contact input', () => {
 		});
 
 		it('should create chip with display name label when distribution list is selected from autocomplete', async () => {
-			const onChange = jest.fn();
+			const onChange = vi.fn();
 			const distributionListDisplayName = 'Sales Team Distribution';
 			const distributionListEmail = 'sales-team@demo.test.io';
 			const autocompleteInterceptor = createAutocompleteInterceptor([
@@ -566,7 +566,7 @@ describe('Contact input', () => {
 		});
 
 		it('should fallback to email as label when distribution list has no display name', async () => {
-			const onChange = jest.fn();
+			const onChange = vi.fn();
 			const distributionListEmail = 'no-display-name@demo.test.io';
 			const autocompleteInterceptor = createAutocompleteInterceptor([
 				{
@@ -651,7 +651,7 @@ describe('Contact input', () => {
 		});
 
 		it('calls onChange with all member in distribution list', async () => {
-			const onChange = jest.fn();
+			const onChange = vi.fn();
 
 			const getMemberHandler = registerGetDistributionListMembersHandler([
 				'dlmember1@test.it',
@@ -702,7 +702,7 @@ describe('Contact input', () => {
 		});
 
 		it('should keep the previous simple chips after expanding a distribution list chip', async () => {
-			const onChangeFn = jest.fn();
+			const onChangeFn = vi.fn();
 			const simpleChip = createSimpleChip({ label: 'simple chip', email: 'simple-chip@email.it' });
 			const dlChip = createDistributionListChip('distribution-list@email.it');
 			registerGetDistributionListMembersHandler(['dlmail1@email.test']);
@@ -732,7 +732,7 @@ describe('Contact input', () => {
 			]);
 		});
 		it('should keep other distribution list chips after expanding a distribution list chip', async () => {
-			const onChangeFn = jest.fn();
+			const onChangeFn = vi.fn();
 			const dl1Chip = createDistributionListChip('dl1@email.it');
 			const dl2Chip = createDistributionListChip('dl2@email.it');
 			const dlInterceptor = createGetDistributionListInterceptor([
@@ -769,7 +769,7 @@ describe('Contact input', () => {
 			]);
 		});
 		it('should create DL member chip with edit action when after selecting all addresses in DL', async () => {
-			const onChange = jest.fn();
+			const onChange = vi.fn();
 			const dl = createDistributionListChip('dltest@test.com');
 			const dlInterceptor = createGetDistributionListInterceptor([
 				{ id: dl.value.email, name: dl.value.email }
@@ -809,7 +809,7 @@ describe('Contact input', () => {
 			).not.toBeInTheDocument();
 		});
 		it('should call onChange with a chip with edit action if an invalid contact is added by typing', async () => {
-			const onChange = jest.fn();
+			const onChange = vi.fn();
 			const { user } = setupTest(
 				<ContactInput defaultValue={[]} orderedAccountIds={[]} onChange={onChange} />
 			);
@@ -824,7 +824,7 @@ describe('Contact input', () => {
 			]);
 		});
 		it('should create an invalid chip with edit action after selecting a contact with invalid email from the dropdown', async () => {
-			const onChange = jest.fn();
+			const onChange = vi.fn();
 			const autocompleteInterceptor = createAutocompleteInterceptor([{ email: INVALID_EMAIL }]);
 
 			const { user } = setupTest(
@@ -840,8 +840,8 @@ describe('Contact input', () => {
 
 	describe('on group selection', () => {
 		it('should call onChange passing the members of the selected group', async () => {
-			const onChange = jest.fn();
-			const GROUP_NAME = 'GROUP_MAME';
+			const onChange = vi.fn();
+			const GROUP_NAME = 'GROUP_NAME';
 			const autocompleteInterceptor = createAutocompleteInterceptor([
 				{ display: GROUP_NAME, isGroup: true, id: 'id-1' }
 			]);
@@ -885,19 +885,20 @@ describe('Contact input', () => {
 			await typeAndSelectOptionFromDropdown(user, GROUP_NAME);
 			await autocompleteInterceptor;
 			await createGetContactInterceptor;
-			await waitFor(() => expect(onChange).toHaveBeenCalledTimes(1));
-			await waitFor(() =>
-				expect(onChange).toHaveBeenCalledWith([
+			await waitFor(() => {
+				expect(onChange).toHaveBeenCalledTimes(2);
+				const lastCallArgs = onChange.mock.lastCall![0];
+				expect(lastCallArgs).toEqual([
 					generateGroupMemberChip(groupMember1),
 					generateGroupMemberChip(groupMember2),
 					generateGroupMemberChip(groupMember3)
-				])
-			);
+				]);
+			});
 		});
 
 		it('should not remove existing users/dl after adding a group', async () => {
-			const onChange = jest.fn();
-			const GROUP_NAME = 'GROUP_MAME';
+			const onChange = vi.fn();
+			const GROUP_NAME = 'GROUP_NAME';
 			const autocompleteInterceptor = createAutocompleteInterceptor([
 				{ display: GROUP_NAME, isGroup: true, id: 'id-1' }
 			]);
@@ -947,16 +948,17 @@ describe('Contact input', () => {
 			await typeAndSelectOptionFromDropdown(user, GROUP_NAME);
 			await autocompleteInterceptor;
 			await createGetContactInterceptor;
-			await waitFor(() => expect(onChange).toHaveBeenCalledTimes(1));
-			await waitFor(() =>
-				expect(onChange).toHaveBeenCalledWith([
+			await waitFor(() => {
+				expect(onChange).toHaveBeenCalledTimes(2);
+				const lastCallArgs = onChange.mock.lastCall![0];
+				expect(lastCallArgs).toEqual([
 					expect.objectContaining(simpleChip),
 					expect.objectContaining(distributionListChip),
 					expect.objectContaining(generateGroupMemberChip(groupMember1)),
 					expect.objectContaining(generateGroupMemberChip(groupMember2)),
 					expect.objectContaining(generateGroupMemberChip(groupMember3))
-				])
-			);
+				]);
+			});
 		});
 	});
 
@@ -964,7 +966,7 @@ describe('Contact input', () => {
 		it('should be called and its return value should be displayed as the chip label', async () => {
 			const first = 'My name is';
 			const label = faker.word.noun();
-			const chipLabelFactory = jest.fn().mockReturnValue(label);
+			const chipLabelFactory = vi.fn().mockReturnValue(label);
 			createAutocompleteInterceptor([{ email: VALID_EMAIL, first }]);
 
 			const { user } = setupTest(<TestableContactInput chipLabelFactory={chipLabelFactory} />);

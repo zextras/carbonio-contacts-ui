@@ -7,6 +7,7 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import * as shell from '@zextras/carbonio-shell-ui';
+import { vi } from 'vitest';
 
 import { screen, setupTest, within } from '@test-setup';
 import { OpenMailComposerIntegratedFunction } from 'actions/send-email';
@@ -46,8 +47,8 @@ describe('DL list item', () => {
 		describe('send email', () => {
 			describe('on hover bar', () => {
 				it('should be visible if integration is available', async () => {
-					const openMailComposer = jest.fn();
-					jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
+					const openMailComposer = vi.fn();
+					vi.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
 
 					const dl = generateDistributionList();
 					setupTest(<DLListItem distributionList={dl} visible />);
@@ -55,8 +56,8 @@ describe('DL list item', () => {
 				});
 
 				it('should not be visible if integration is not available', () => {
-					const openMailComposer = jest.fn();
-					jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, false]);
+					const openMailComposer = vi.fn();
+					vi.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, false]);
 
 					const dl = generateDistributionList();
 					setupTest(<DLListItem distributionList={dl} visible />);
@@ -66,8 +67,8 @@ describe('DL list item', () => {
 				});
 
 				it('should open the composer with the email of the distribution list set as recipient', async () => {
-					const openMailComposer = jest.fn();
-					jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
+					const openMailComposer = vi.fn();
+					vi.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
 
 					const dl = generateDistributionList();
 					const { user } = setupTest(<DLListItem distributionList={dl} visible />);
@@ -80,8 +81,8 @@ describe('DL list item', () => {
 
 			describe('on contextual menu', () => {
 				it('should be visible on contextual menu', async () => {
-					const openMailComposer = jest.fn();
-					jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
+					const openMailComposer = vi.fn();
+					vi.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
 
 					const dl = generateDistributionList();
 					const { user } = setupTest(<DLListItem distributionList={dl} visible />);
@@ -90,8 +91,8 @@ describe('DL list item', () => {
 				});
 
 				it('should not be visible on contextual menu if integration is not available', async () => {
-					const openMailComposer = jest.fn();
-					jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, false]);
+					const openMailComposer = vi.fn();
+					vi.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, false]);
 
 					const dl = generateDistributionList();
 					const { user } = setupTest(<DLListItem distributionList={dl} visible />);
@@ -101,8 +102,8 @@ describe('DL list item', () => {
 				});
 
 				it('should open the composer with the email of the distribution list set as recipient', async () => {
-					const openMailComposer = jest.fn();
-					jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
+					const openMailComposer = vi.fn();
+					vi.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
 
 					const dl = generateDistributionList();
 					const { user } = setupTest(<DLListItem distributionList={dl} visible />);
@@ -132,7 +133,7 @@ describe('DL list item', () => {
 				});
 
 				it('should open the board to edit the dl', async () => {
-					const addBoardFn = jest.spyOn(shell, 'addBoard');
+					const addBoardFn = vi.spyOn(shell, 'addBoard');
 					const dl = generateDistributionList({ isOwner: true });
 					const { user } = setupTest(<DLListItem distributionList={dl} visible />);
 					await user.click(await screen.findByTestId(TESTID_SELECTORS.icons.editDL));
@@ -162,7 +163,7 @@ describe('DL list item', () => {
 				});
 
 				it('should open the board to edit the dl', async () => {
-					const addBoardFn = jest.spyOn(shell, 'addBoard');
+					const addBoardFn = vi.spyOn(shell, 'addBoard');
 					const dl = generateDistributionList({ isOwner: true });
 					const { user } = setupTest(<DLListItem distributionList={dl} visible />);
 					await user.rightClick(screen.getByText(dl.displayName));

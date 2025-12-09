@@ -7,13 +7,14 @@
 import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 import { FOLDER_VIEW, FOLDERS } from '@zextras/carbonio-ui-commons';
+import { vi } from 'vitest';
 
-import { useActionEditAddressBook } from 'actions/edit-address-book';
-import { UIAction } from 'actions/types';
-import { TIMERS } from 'constants/tests';
 import { screen, setupHook } from '@test-setup';
 import { generateFolder } from '@test-utils/folders/folders-generator';
 import { populateFoldersStore } from '@test-utils/store/folders';
+import { useActionEditAddressBook } from 'actions/edit-address-book';
+import { UIAction } from 'actions/types';
+import { TIMERS } from 'constants/tests';
 
 describe('useActionEditAddressBook', () => {
 	it('should return an object with the specific data', () => {
@@ -102,7 +103,7 @@ describe('useActionEditAddressBook', () => {
 			});
 
 			act(() => {
-				jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+				vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 			});
 
 			expect(screen.getByText(`Edit ${addressBook.name}'s properties`)).toBeVisible();
@@ -121,7 +122,7 @@ describe('useActionEditAddressBook', () => {
 			});
 
 			act(() => {
-				jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+				vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 			});
 
 			expect(screen.queryByText(`Edit ${addressBook.name}'s properties`)).not.toBeInTheDocument();

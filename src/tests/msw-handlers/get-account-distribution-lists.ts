@@ -6,14 +6,15 @@
 import { SoapResponse } from '@zextras/carbonio-shell-ui';
 import { JSNS } from '@zextras/carbonio-ui-commons';
 import { http, HttpResponse, HttpResponseResolver } from 'msw';
+import { Mock } from 'vitest';
 
+import { getSetupServer } from '@jest-setup';
 import { DistributionList } from 'model/distribution-list';
 import type {
 	GetAccountDistributionListsRequest,
 	GetAccountDistributionListsResponse
 } from 'network/api/get-account-distribution-lists';
 import { buildSoapError, buildSoapResponse } from 'tests/utils';
-import { getSetupServer } from '@jest-setup';
 
 type GetAccountDistributionListsHandler = HttpResponseResolver<
 	never,
@@ -24,14 +25,8 @@ type GetAccountDistributionListsHandler = HttpResponseResolver<
 export const registerGetAccountDistributionListsHandler = (
 	items: Array<DistributionList>,
 	error?: string
-): jest.Mock<
-	ReturnType<GetAccountDistributionListsHandler>,
-	Parameters<GetAccountDistributionListsHandler>
-> => {
-	const handler = jest.fn<
-		ReturnType<GetAccountDistributionListsHandler>,
-		Parameters<GetAccountDistributionListsHandler>
-	>(async ({ request }) => {
+): Mock<GetAccountDistributionListsHandler> => {
+	const handler = vi.fn<GetAccountDistributionListsHandler>(async ({ request }) => {
 		if (error) {
 			return HttpResponse.json(buildSoapError(error));
 		}

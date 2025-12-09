@@ -20,7 +20,7 @@ export const registerGetItemHandler = ({
 	response,
 	error
 }: RegisterGetItemHandlerParam = {}): Promise<GetItemRequest> => {
-	const path = '/service/home/~/';
+	const path = `${window.location.origin}/service/home/~/`;
 	return new Promise<GetItemRequest>((resolve, reject) => {
 		getSetupServer().use(
 			http.get<never, GetItemRequest>(path, async ({ request }) => {

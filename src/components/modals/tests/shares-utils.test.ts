@@ -5,8 +5,8 @@
  */
 import { useTranslation } from 'react-i18next';
 
-import { getRoleDescription } from 'components/modals/shares-utils';
 import { setupHook } from '@test-setup';
+import { getRoleDescription } from 'components/modals/shares-utils';
 
 describe('getRoleDescription', () => {
 	const {

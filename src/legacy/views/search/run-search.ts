@@ -30,8 +30,15 @@ export const runSearch = ({
 		},
 		undefined,
 		abortSignal
-	).then(({ cn, more }) => ({
-		contacts: [...normalizeContactsFromSoap(cn)],
-		offset: offset + 100,
-		more
-	}));
+	)
+		.then(({ cn, more }) => ({
+			contacts: [...normalizeContactsFromSoap(cn)],
+			offset: offset + 100,
+			more
+		}))
+		.catch((error) => ({
+			contacts: [],
+			offset,
+			more: false,
+			error
+		}));

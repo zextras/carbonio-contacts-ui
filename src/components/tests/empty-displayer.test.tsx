@@ -6,9 +6,9 @@
 
 import React from 'react';
 
+import { screen, setupTest } from '@test-setup';
 import { EmptyDisplayer } from 'components/empty-displayer';
 import { EMPTY_DISPLAYER_NO_CONTACTS_HINT, TESTID_SELECTORS } from 'constants/tests';
-import { screen, setupTest } from '@test-setup';
 
 describe('Empty Displayer', () => {
 	it('should render empty displayer messages', () => {

@@ -53,6 +53,7 @@ describe('Contact Preview Actions', () => {
 			expect(actions[3].id).toBe(MOVE_ACTION.ID);
 			expect(actions[4].id).toBe(TRASH_ACTION.ID);
 		});
+
 		it('should return [restore, delete permanently] actions in this order when in trash folder', () => {
 			populateFoldersStore();
 			const folderId = FOLDERS.TRASH;
@@ -128,6 +129,7 @@ describe('Contact Preview Actions', () => {
 					parent: `${remoteAccountUuId}:${remoteFolderId}`,
 					tags: ['tag1', 'tag2']
 				});
+
 				it('should return send and show tag actions when has only Read permission', () => {
 					const mountpoint = generateLinkFolder({
 						folderId,
@@ -177,6 +179,7 @@ describe('Contact Preview Actions', () => {
 					parent: `${remoteAccountUuId}:${remoteFolderId}`,
 					tags: []
 				});
+
 				it('should return only send action when has only Read permission', () => {
 					const mountpoint = generateLinkFolder({
 						folderId,

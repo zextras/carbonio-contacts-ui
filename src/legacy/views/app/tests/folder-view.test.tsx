@@ -18,10 +18,12 @@ import {
 	JSNS
 } from '@zextras/carbonio-ui-commons';
 import { useNavigate } from 'react-router-dom';
+import { Mock } from 'vitest';
 
 import { FOLDERS_DESCRIPTORS, TESTID_SELECTORS } from '../../../../constants/tests';
 import { FolderView } from '../folder-view';
 import { createContactsApiInterceptor, findContactInList } from './utils';
+import { useAppContext } from '../../../../../__mocks__/@zextras/carbonio-shell-ui';
 import {
 	ContactActionRequest,
 	ContactActionResponse
@@ -37,15 +39,19 @@ import {
 } from '../../../../tests/utils';
 import { generateLinkFolder } from '../../../../views/contact-groups/tests/utils';
 import { makeListItemsVisible, screen, setupHook, setupTest } from '@test-setup';
-import { useAppContext } from '@test-utils/carbonio-shell-ui/carbonio-shell-ui';
 import { generateFolder } from '@test-utils/folders/folders-generator';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 import { populateFoldersStore } from '@test-utils/store/folders';
 
-jest.mock('@zextras/carbonio-ui-commons', () => ({
-	...jest.requireActual('@zextras/carbonio-ui-commons'),
-	useRunSearchIntegration: jest.fn()
-}));
+vi.mock('@zextras/carbonio-ui-commons', async () => {
+	const actual = await vi.importActual<typeof import('@zextras/carbonio-ui-commons')>(
+		'@zextras/carbonio-ui-commons'
+	);
+	return {
+		...actual,
+		useRunSearchIntegration: vi.fn()
+	};
+});
 
 function MockedButton(props: { routeTo: string; initialRoute: string }): React.JSX.Element {
 	const navigate = useNavigate();
@@ -158,7 +164,7 @@ describe('folder-view', () => {
 			const {
 				result: { current: theme }
 			} = setupHook(useTheme);
-			const activeBackground = `background: ${theme.palette.highlight.active}`;
+			const activeBackground = `background: ${theme.palette.highlight.focus}`;
 
 			const { user } = setupFolderView(folderId);
 
@@ -169,9 +175,9 @@ describe('folder-view', () => {
 		});
 
 		it('should open the mail board when clicking on send mail action', async () => {
-			const openMailComposer = jest.fn();
+			const openMailComposer = vi.fn();
 			const contactGroupId = '1';
-			jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
+			vi.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
 			const contactGroupName = faker.company.name();
 			const member = faker.internet.email();
 			registerFindContactGroupsHandler({
@@ -215,7 +221,7 @@ describe('folder-view', () => {
 					folderId,
 					email: contactEmail
 				});
-				const searchContacts = createContactsApiInterceptor({
+				createContactsApiInterceptor({
 					items: [contact]
 				});
 
@@ -244,7 +250,7 @@ describe('folder-view', () => {
 					folderId: `${remoteAccountUuId}:${remoteFolderId}`,
 					email: contactEmail
 				});
-				const searchContacts = createContactsApiInterceptor({
+				createContactsApiInterceptor({
 					items: [contact]
 				});
 
@@ -261,7 +267,7 @@ describe('folder-view', () => {
 			const contact = createSoapContact({ id: '10', folderId: folder.id, email });
 			beforeEach(() => {
 				populateFoldersStore();
-				const searchInContactsFolderInterceptor = createContactsApiInterceptor({
+				createContactsApiInterceptor({
 					items: [contact],
 					more: false
 				});
@@ -330,7 +336,7 @@ describe('folder-view', () => {
 				await act(() => user.click(moveButtonInDisplayer));
 
 				act(() => {
-					jest.advanceTimersByTime(1000);
+					vi.advanceTimersByTime(1000);
 				});
 
 				const modal = screen.getByTestId('modal');
@@ -363,8 +369,8 @@ describe('folder-view', () => {
 			});
 
 			it('should call SendMailAction when Mail icon is clicked in the displayer', async () => {
-				const mailTo = { id: 'mail-to', label: 'action.send_msg', execute: jest.fn() };
-				jest.spyOn(shell, 'getAction').mockReturnValueOnce([mailTo, true]);
+				const mailTo = { id: 'mail-to', label: 'action.send_msg', execute: vi.fn() };
+				vi.spyOn(shell, 'getAction').mockReturnValueOnce([mailTo, true]);
 
 				const { user } = setupFolderView(
 					folder.id,
@@ -387,11 +393,11 @@ describe('folder-view', () => {
 			});
 
 			it('should call search when tag icon is clicked in the displayer', async () => {
-				const runSearch = jest.fn();
-				(useRunSearchIntegration as jest.Mock).mockReturnValue(runSearch);
+				const runSearch = vi.fn();
+				(useRunSearchIntegration as Mock).mockReturnValue(runSearch);
 
 				const soapContact = createSoapContact({ t: '1', tn: '1', folderId: folder.id });
-				const firstSearchInterceptor = createContactsApiInterceptor({
+				createContactsApiInterceptor({
 					items: [soapContact],
 					more: false
 				});
@@ -417,10 +423,10 @@ describe('folder-view', () => {
 			});
 
 			it('should call search when selecting a tag icon inside multitag icon button is clicked in the displayer', async () => {
-				const runSearch = jest.fn();
-				(useRunSearchIntegration as jest.Mock).mockReturnValue(runSearch);
+				const runSearch = vi.fn();
+				(useRunSearchIntegration as Mock).mockReturnValue(runSearch);
 				const soapContact = createSoapContact({ t: '1,2', tn: '1,2', folderId: folder.id });
-				const firstSearchInterceptor = createContactsApiInterceptor({
+				createContactsApiInterceptor({
 					items: [soapContact],
 					more: false
 				});
@@ -464,7 +470,7 @@ describe('folder-view', () => {
 	});
 
 	it('should reload contacts when switching back to initial folder after changing the filter type', async () => {
-		useAppContext.mockReturnValue({ count: 0, setCount: jest.fn() });
+		useAppContext.mockReturnValue({ count: 0, setCount: vi.fn() });
 
 		const folderId1 = FOLDERS.CONTACTS;
 		const folderId2 = FOLDERS.TRASH;

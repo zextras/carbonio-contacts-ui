@@ -13,6 +13,7 @@ import { UIAction } from 'actions/types';
 import { TIMERS } from 'constants/tests';
 import { screen, setupHook } from '@test-setup';
 import { generateFolder } from '@test-utils/folders/folders-generator';
+import { vi } from 'vitest';
 
 describe('useActionEmptyTrash', () => {
 	it('should return an object with the specific data', () => {
@@ -122,7 +123,7 @@ describe('useActionEmptyTrash', () => {
 		});
 
 		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+			vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 
 		expect(screen.getByText(`Empty ${addressBook.name}`)).toBeVisible();
@@ -139,7 +140,7 @@ describe('useActionEmptyTrash', () => {
 		});
 
 		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+			vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 
 		expect(screen.queryByText(`Empty ${addressBook.name}`)).not.toBeInTheDocument();

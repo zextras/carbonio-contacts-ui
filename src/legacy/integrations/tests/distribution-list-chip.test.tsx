@@ -11,15 +11,18 @@ import { CONTACT_TYPES, JSNS } from '@zextras/carbonio-ui-commons';
 import { times } from 'lodash';
 import { HttpResponse } from 'msw';
 
+import { mockedAccount } from '../../../../__mocks__/@zextras/carbonio-shell-ui';
+import { screen, setupTest } from '@test-setup';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
+import { DL_MEMBERS_LOAD_LIMIT } from 'constants/index';
+import { TESTID_SELECTORS, TIMERS } from 'constants/tests';
 import { DistributionListChip } from 'legacy/integrations/distribution-list-chip';
 import {
 	clickCollapseDL,
 	clickExpandDL,
 	SELECT_ALL,
 	SHOW_MORE
-} from 'legacy/integrations/test/mocks';
-import { DL_MEMBERS_LOAD_LIMIT } from 'constants/index';
-import { TESTID_SELECTORS, TIMERS } from 'constants/tests';
+} from 'legacy/integrations/tests/mocks';
 import {
 	GetDistributionListRequest,
 	GetDistributionListResponse
@@ -34,9 +37,6 @@ import {
 	generateDistributionList,
 	generateDistributionListMembersPage
 } from 'tests/utils';
-import { screen, setupTest } from '@test-setup';
-import { mockedAccount } from '@test-utils/carbonio-shell-ui/carbonio-shell-ui';
-import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
 const id = 'dl-1';
 const email = 'dl1@mail.com';
@@ -80,12 +80,12 @@ describe('Distribution ListChip', () => {
 				requestId: ''
 			});
 			const { user } = setupTest(
-				<DistributionListChip onExpandDL={jest.fn()} {...distributionListChip} />
+				<DistributionListChip onExpandDL={vi.fn()} {...distributionListChip} />
 			);
 			await getDLInterceptor;
 			await clickExpandDL(user);
 			act(() => {
-				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
+				vi.advanceTimersByTime(TIMERS.dropdown.registerListeners);
 			});
 			await waitFor(() => expect(getMemberHandler).toHaveBeenCalledTimes(1));
 			await screen.findByText(user1.value.email);
@@ -95,7 +95,7 @@ describe('Distribution ListChip', () => {
 
 			await clickExpandDL(user);
 			act(() => {
-				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
+				vi.advanceTimersByTime(TIMERS.dropdown.registerListeners);
 			});
 			await screen.findByText(user1.value.email);
 			expect(getMemberHandler).toHaveBeenCalledTimes(1);
@@ -109,13 +109,13 @@ describe('Distribution ListChip', () => {
 			const getMembersHandler = registerGetDistributionListMembersHandler([user1.value.email]);
 
 			const { user } = setupTest(
-				<DistributionListChip onExpandDL={jest.fn()} {...distributionListChip} />
+				<DistributionListChip onExpandDL={vi.fn()} {...distributionListChip} />
 			);
 			await getDLErrorInterceptor;
 
 			await clickExpandDL(user);
 			await act(async () => {
-				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
+				vi.advanceTimersByTime(TIMERS.dropdown.registerListeners);
 			});
 			expect(getMembersHandler).toHaveBeenCalledTimes(1);
 			await screen.findByText(user1.value.email);
@@ -125,7 +125,7 @@ describe('Distribution ListChip', () => {
 
 			await clickExpandDL(user);
 			await act(async () => {
-				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
+				vi.advanceTimersByTime(TIMERS.dropdown.registerListeners);
 			});
 			await waitFor(() => expect(getMembersHandler).toHaveBeenCalledTimes(2));
 			await screen.findByText(user1.value.email);
@@ -136,12 +136,12 @@ describe('Distribution ListChip', () => {
 			const getMembersHandler = registerGetDistributionListMembersHandler(dlm);
 
 			const { user } = setupTest(
-				<DistributionListChip onExpandDL={jest.fn()} {...distributionListChip} />
+				<DistributionListChip onExpandDL={vi.fn()} {...distributionListChip} />
 			);
 			await clickExpandDL(user);
 
 			act(() => {
-				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
+				vi.advanceTimersByTime(TIMERS.dropdown.registerListeners);
 			});
 			await screen.findByText(user1.value.email);
 			expect(getMembersHandler).toHaveBeenCalled();
@@ -153,12 +153,12 @@ describe('Distribution ListChip', () => {
 			const getMembersHandler = registerGetDistributionListMembersHandler(dlm, true);
 
 			const { user } = setupTest(
-				<DistributionListChip onExpandDL={jest.fn()} {...distributionListChip} />
+				<DistributionListChip onExpandDL={vi.fn()} {...distributionListChip} />
 			);
 
 			await clickExpandDL(user);
 			act(() => {
-				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
+				vi.advanceTimersByTime(TIMERS.dropdown.registerListeners);
 			});
 			await waitFor(() => expect(getMembersHandler).toHaveBeenCalled());
 			await screen.findByText(user1.value.email);
@@ -170,11 +170,11 @@ describe('Distribution ListChip', () => {
 			const getMembersHandler = registerGetDistributionListMembersHandler(dlm, false);
 
 			const { user } = setupTest(
-				<DistributionListChip onExpandDL={jest.fn()} {...distributionListChip} />
+				<DistributionListChip onExpandDL={vi.fn()} {...distributionListChip} />
 			);
 			await clickExpandDL(user);
 			act(() => {
-				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
+				vi.advanceTimersByTime(TIMERS.dropdown.registerListeners);
 			});
 			await waitFor(() => expect(getMembersHandler).toHaveBeenCalled());
 			await screen.findByText(user1.value.email);
@@ -199,7 +199,7 @@ describe('Distribution ListChip', () => {
 			const firstResponse = { dlm: firstPage, total: 6, more: true };
 			const secondResponse = { dlm: secondPage, total: 6, more: false };
 
-			getMembersHandler.mockImplementation(async ({ request }) => {
+			getMembersHandler.mockImplementation(async ({ request }: { request: Request }) => {
 				const {
 					Body: {
 						GetDistributionListMembersRequest: { offset }
@@ -217,12 +217,12 @@ describe('Distribution ListChip', () => {
 			});
 
 			const { user } = setupTest(
-				<DistributionListChip onExpandDL={jest.fn()} {...distributionListChip} />
+				<DistributionListChip onExpandDL={vi.fn()} {...distributionListChip} />
 			);
 
 			await clickExpandDL(user);
 			act(() => {
-				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
+				vi.advanceTimersByTime(TIMERS.dropdown.registerListeners);
 			});
 			await waitFor(() => expect(getMembersHandler).toHaveBeenCalled());
 			await screen.findByText(user1.value.email);
@@ -240,14 +240,14 @@ describe('Distribution ListChip', () => {
 		it('should not request more data to the server on "select all" if all members are loaded', async () => {
 			const dlm = [user1.value.email, 'other@test.com', 'another@test.com'];
 			const getMembersHandler = registerGetDistributionListMembersHandler(dlm);
-			const contactInputOnChangeFn = jest.fn();
+			const contactInputOnChangeFn = vi.fn();
 
 			const { user } = setupTest(
 				<DistributionListChip onExpandDL={contactInputOnChangeFn} {...distributionListChip} />
 			);
 			await clickExpandDL(user);
 			act(() => {
-				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
+				vi.advanceTimersByTime(TIMERS.dropdown.registerListeners);
 			});
 			await waitFor(() => expect(getMembersHandler).toHaveBeenCalled());
 			await screen.findByText(user1.value.email);
@@ -262,7 +262,7 @@ describe('Distribution ListChip', () => {
 			const getMembersHandler = registerGetDistributionListMembersHandler();
 			const firstResponse = { dlm: members1.map((m) => ({ _content: m })), total: 6, more: true };
 			const secondResponse = { dlm: members2.map((m) => ({ _content: m })), total: 6, more: false };
-			getMembersHandler.mockImplementation(async ({ request }) => {
+			getMembersHandler.mockImplementation(async ({ request }: { request: Request }) => {
 				const {
 					Body: {
 						GetDistributionListMembersRequest: { offset }
@@ -279,13 +279,13 @@ describe('Distribution ListChip', () => {
 				);
 			});
 
-			const contactInputOnChangeFn = jest.fn();
+			const contactInputOnChangeFn = vi.fn();
 			const { user } = setupTest(
 				<DistributionListChip onExpandDL={contactInputOnChangeFn} {...distributionListChip} />
 			);
 			await clickExpandDL(user);
 			act(() => {
-				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
+				vi.advanceTimersByTime(TIMERS.dropdown.registerListeners);
 			});
 			await waitFor(() => expect(getMembersHandler).toHaveBeenCalled());
 			await screen.findByText(user1.value.email);
@@ -311,11 +311,11 @@ describe('Distribution ListChip', () => {
 			]);
 
 			const { user } = setupTest(
-				<DistributionListChip onExpandDL={jest.fn()} {...distributionListChip} />
+				<DistributionListChip onExpandDL={vi.fn()} {...distributionListChip} />
 			);
 			await clickExpandDL(user);
 			act(() => {
-				jest.advanceTimersByTime(TIMERS.dropdown.registerListeners);
+				vi.advanceTimersByTime(TIMERS.dropdown.registerListeners);
 			});
 			await screen.findByText(members[0]);
 			expect(getMembersHandler).not.toHaveBeenCalled();
@@ -338,7 +338,7 @@ describe('Distribution ListChip', () => {
 			]);
 
 			const { user } = setupTest(
-				<DistributionListChip onExpandDL={jest.fn()} {...distributionListChip} />
+				<DistributionListChip onExpandDL={vi.fn()} {...distributionListChip} />
 			);
 			await clickExpandDL(user);
 
@@ -351,7 +351,7 @@ describe('Distribution ListChip', () => {
 
 		it('should request distribution list data to the network if it is not stored', async () => {
 			const getDLHandler = registerGetDistributionListHandler(distributionList);
-			setupTest(<DistributionListChip onExpandDL={jest.fn()} {...distributionListChip} />);
+			setupTest(<DistributionListChip onExpandDL={vi.fn()} {...distributionListChip} />);
 			await waitFor(() => expect(getDLHandler).toHaveBeenCalled());
 			await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL });
 		});
@@ -368,7 +368,7 @@ describe('Distribution ListChip', () => {
 					...distributionList
 				}
 			]);
-			setupTest(<DistributionListChip onExpandDL={jest.fn()} {...distributionListChip} />);
+			setupTest(<DistributionListChip onExpandDL={vi.fn()} {...distributionListChip} />);
 			await screen.findByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.expandDL });
 			expect(getDLHandler).not.toHaveBeenCalled();
 		});

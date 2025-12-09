@@ -11,6 +11,7 @@ import {
 	useFolderStore
 } from '@zextras/carbonio-ui-commons';
 import { filter, values } from 'lodash';
+import { vi } from 'vitest';
 
 import { generateFolders } from '@test-utils/folders/folders-generator';
 
@@ -41,7 +42,7 @@ export const populateFoldersStore = ({
 		linksIdMap,
 		folders,
 		searches: {},
-		updateFolder: jest.fn()
+		updateFolder: vi.fn()
 	};
 	useFolderStore.setState(initialStoreState, true);
 };

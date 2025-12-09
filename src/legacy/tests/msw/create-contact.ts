@@ -8,10 +8,11 @@ import { faker } from '@faker-js/faker';
 import { SoapResponse } from '@zextras/carbonio-shell-ui';
 import { JSNS } from '@zextras/carbonio-ui-commons';
 import { http, HttpResponse, HttpResponseResolver } from 'msw';
+import { Mock } from 'vitest';
 
+import { getSetupServer } from '@jest-setup';
 import { GenericSoapPayload } from 'network/api/types';
 import { buildSoapError, buildSoapResponse } from 'tests/utils';
-import { getSetupServer } from '@jest-setup';
 
 interface CreateContactRequest extends GenericSoapPayload<typeof JSNS.MAIL> {
 	cn: {
@@ -39,28 +40,26 @@ export const registerCreateContactHandler = (
 	folderId?: string,
 	contactId?: string,
 	error?: string
-): jest.Mock<ReturnType<CreateContactHandler>, Parameters<CreateContactHandler>> => {
-	const handler = jest.fn<ReturnType<CreateContactHandler>, Parameters<CreateContactHandler>>(
-		async () => {
-			if (error) {
-				return HttpResponse.json(buildSoapError(error));
-			}
-
-			return HttpResponse.json(
-				buildSoapResponse<CreateContactResponse>({
-					CreateContactResponse: {
-						_jsns: JSNS.MAIL,
-						cn: [
-							{
-								id: contactId ?? faker.string.uuid(),
-								l: folderId ?? faker.string.uuid()
-							}
-						]
-					}
-				})
-			);
+): Mock<CreateContactHandler> => {
+	const handler = vi.fn<CreateContactHandler>(async () => {
+		if (error) {
+			return HttpResponse.json(buildSoapError(error));
 		}
-	);
+
+		return HttpResponse.json(
+			buildSoapResponse<CreateContactResponse>({
+				CreateContactResponse: {
+					_jsns: JSNS.MAIL,
+					cn: [
+						{
+							id: contactId ?? faker.string.uuid(),
+							l: folderId ?? faker.string.uuid()
+						}
+					]
+				}
+			})
+		);
+	});
 
 	getSetupServer().use(http.post('/service/soap/CreateContactRequest', handler));
 

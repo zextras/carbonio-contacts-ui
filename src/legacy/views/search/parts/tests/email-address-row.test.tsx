@@ -8,16 +8,22 @@ import React from 'react';
 import { waitFor } from '@testing-library/react';
 import { CONTACT_TYPES, ContactInputItem } from '@zextras/carbonio-ui-commons';
 import { useForm } from 'react-hook-form';
+import { Mock } from 'vitest';
 
-import { AdvancedFilterModalFormValues } from 'legacy/views/search/types';
-import { EmailAddressRow } from 'legacy/views/search/parts/email-address-row';
 import { screen, setupTest } from '@test-setup';
+import { EmailAddressRow } from 'legacy/views/search/parts/email-address-row';
+import { AdvancedFilterModalFormValues } from 'legacy/views/search/types';
 
-const mockContactInput = jest.fn();
-jest.mock('@zextras/carbonio-ui-commons', () => ({
-	...jest.requireActual('@zextras/carbonio-ui-commons'),
-	useContactInput: (): jest.Mock => mockContactInput
-}));
+const mockContactInput = vi.fn();
+vi.mock('@zextras/carbonio-ui-commons', async () => {
+	const actual = await vi.importActual<typeof import('@zextras/carbonio-ui-commons')>(
+		'@zextras/carbonio-ui-commons'
+	);
+	return {
+		...actual,
+		useContactInput: (): Mock => mockContactInput
+	};
+});
 
 // Test wrapper component to provide form context
 const TestWrapper = ({
@@ -79,7 +85,7 @@ const TestWrapper = ({
 
 describe('EmailAddressRow', () => {
 	beforeEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	it('should render the email address input field', () => {
@@ -164,7 +170,7 @@ describe('EmailAddressRow', () => {
 
 	describe('chipLabelFactory function', () => {
 		it('should return email for CONTACT type', () => {
-			const mockChipLabelFactory = jest.fn();
+			const mockChipLabelFactory = vi.fn();
 			setupTest(<TestWrapper onChipLabelFactory={mockChipLabelFactory} />);
 
 			const testButton = screen.getByTestId('test-chip-label-factory');
@@ -175,7 +181,7 @@ describe('EmailAddressRow', () => {
 
 		it('should return default label for non-CONTACT types', () => {
 			// Test the chipLabelFactory logic directly
-			const mockChipLabelFactory = jest.fn();
+			const mockChipLabelFactory = vi.fn();
 			setupTest(<TestWrapper onChipLabelFactory={mockChipLabelFactory} />);
 
 			const { chipLabelFactory } = mockContactInput.mock.calls[0][0];

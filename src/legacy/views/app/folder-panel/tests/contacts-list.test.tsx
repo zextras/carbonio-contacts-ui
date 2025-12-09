@@ -8,6 +8,7 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import { noop } from 'lodash';
 import { useParams } from 'react-router-dom';
+import { Mock } from 'vitest';
 
 import { EMPTY_LIST_HINT } from '../../../../../constants/tests';
 import { buildContact } from '../../../../../tests/model-builder';
@@ -16,10 +17,13 @@ import { ContactsList } from '../contacts-list';
 import { screen, setupTest } from '@test-setup';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 
-jest.mock('react-router-dom', () => ({
-	...jest.requireActual('react-router-dom'),
-	useParams: jest.fn()
-}));
+vi.mock('react-router-dom', async () => {
+	const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+	return {
+		...actual,
+		useParams: vi.fn()
+	};
+});
 
 function setupContactsList({
 	currentFolderId = '7',
@@ -46,7 +50,7 @@ describe('Contacts list', () => {
 			createSoapAPIInterceptor('Search', {});
 		});
 		it('should display contacts in list', async () => {
-			(useParams as jest.Mock).mockReturnValue({ folderId });
+			(useParams as Mock).mockReturnValue({ folderId });
 			const contacts: Array<Contact> = [
 				buildContact({
 					id: '1',
@@ -70,13 +74,13 @@ describe('Contacts list', () => {
 		});
 
 		test('Show a placeholder when the list is empty for folder', async () => {
-			(useParams as jest.Mock).mockReturnValue({ folderId: '1111' });
+			(useParams as Mock).mockReturnValue({ folderId: '1111' });
 			setupContactsList();
 			expect(await screen.findByText(EMPTY_LIST_HINT)).toBeVisible();
 		});
 
 		test('Show contact groups in list', async () => {
-			(useParams as jest.Mock).mockReturnValue({ folderId });
+			(useParams as Mock).mockReturnValue({ folderId });
 			const contactGroups = [
 				{
 					id: faker.string.uuid(),
@@ -115,7 +119,7 @@ describe('Contacts list', () => {
 		// 			}
 		// 		);
 		//
-		// 		(useParams as jest.Mock).mockReturnValue({ folderId });
+		// 		(useParams as vi.Mock).mockReturnValue({ folderId });
 		// 		setupTest(<ContactGroupList />);
 		//
 		// 		expect(await screen.findByText(cnItem1.fileAsStr)).toBeVisible();

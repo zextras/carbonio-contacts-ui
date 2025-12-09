@@ -80,7 +80,7 @@ const DLListItemContent = React.memo<DLListItemContentProps>(function DLListItem
 							</Container>
 						</Container>
 					</HoverContainer>
-					<ListItemHoverBar actions={actions} height={'fill'} crossAlignment={'flex-start'} />
+					<ListItemHoverBar actions={actions} />
 				</ListItemContainer>
 			</ContextualMenu>
 		</Container>

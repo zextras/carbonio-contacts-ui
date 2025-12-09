@@ -9,6 +9,7 @@ import { faker } from '@faker-js/faker';
 import { act, waitFor } from '@testing-library/react';
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 import { FOLDERS, isLink, isTrashed, getRootsArray, JSNS } from '@zextras/carbonio-ui-commons';
+import { vi } from 'vitest';
 
 import { makeListItemsVisible, screen, setupTest } from '@test-setup';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
@@ -20,20 +21,20 @@ import { getFoldersArray } from 'tests/utils';
 
 describe('AddressBookCreateModal', () => {
 	it('should display a modal with a specific title', () => {
-		setupTest(<AddressBookCreateModal onClose={jest.fn()} />);
+		setupTest(<AddressBookCreateModal onClose={vi.fn()} />);
 
 		expect(screen.getByText(/create new address book/i)).toBeVisible();
 	});
 
 	it('should display a close icon', () => {
-		setupTest(<AddressBookCreateModal onClose={jest.fn()} />);
+		setupTest(<AddressBookCreateModal onClose={vi.fn()} />);
 		expect(
 			screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.close })
 		).toBeVisible();
 	});
 
 	it('should call the onClose callback when the user clicks the close icon', async () => {
-		const onClose = jest.fn();
+		const onClose = vi.fn();
 		const { user } = setupTest(<AddressBookCreateModal onClose={onClose} />);
 		const button = screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.close });
 		await user.click(button);
@@ -41,14 +42,14 @@ describe('AddressBookCreateModal', () => {
 	});
 
 	it('should display a placeholder in the address book name field', () => {
-		setupTest(<AddressBookCreateModal onClose={jest.fn()} />);
+		setupTest(<AddressBookCreateModal onClose={vi.fn()} />);
 		expect(screen.getByRole('textbox', { name: 'Insert address book name' })).toBeVisible();
 	});
 
 	it('should display an error message in the label if an address book name already exists with the same name on the same parent', async () => {
 		populateFoldersStore();
 		const { user } = setupTest(
-			<AddressBookCreateModal defaultParentId={FOLDERS.USER_ROOT} onClose={jest.fn()} />
+			<AddressBookCreateModal defaultParentId={FOLDERS.USER_ROOT} onClose={vi.fn()} />
 		);
 		const input = screen.getByRole('textbox', { name: 'Insert address book name' });
 		await act(async () => user.type(input, 'Contacts'));
@@ -58,7 +59,7 @@ describe('AddressBookCreateModal', () => {
 	it('should restore the original label if the given folder name already exists and the user reset the field', async () => {
 		populateFoldersStore();
 		const { user } = setupTest(
-			<AddressBookCreateModal defaultParentId={FOLDERS.USER_ROOT} onClose={jest.fn()} />
+			<AddressBookCreateModal defaultParentId={FOLDERS.USER_ROOT} onClose={vi.fn()} />
 		);
 		const input = screen.getByRole('textbox', { name: 'Insert address book name' });
 		await act(async () => user.type(input, 'Contacts'));
@@ -70,14 +71,14 @@ describe('AddressBookCreateModal', () => {
 	describe('Parent address book selector', () => {
 		it('should display the primary account root', () => {
 			populateFoldersStore();
-			setupTest(<AddressBookCreateModal onClose={jest.fn()} />);
+			setupTest(<AddressBookCreateModal onClose={vi.fn()} />);
 			expect(screen.getByTestId(`folder-accordion-root-1`)).toBeVisible();
 		});
 
 		// TODO Enable it when the whole list of accounts will be handled
 		it.skip('should display the shared accounts roots', () => {
 			populateFoldersStore();
-			setupTest(<AddressBookCreateModal onClose={jest.fn()} />);
+			setupTest(<AddressBookCreateModal onClose={vi.fn()} />);
 			getRootsArray().forEach((root) => {
 				expect(screen.getByTestId(`folder-accordion-root-${root.id}`)).toBeVisible();
 			});
@@ -85,7 +86,7 @@ describe('AddressBookCreateModal', () => {
 
 		it('should not display the Trash folder', () => {
 			populateFoldersStore();
-			setupTest(<AddressBookCreateModal onClose={jest.fn()} />);
+			setupTest(<AddressBookCreateModal onClose={vi.fn()} />);
 			expect(
 				screen.queryByTestId(`folder-accordion-root-${FOLDERS.TRASH}`)
 			).not.toBeInTheDocument();
@@ -100,7 +101,7 @@ describe('AddressBookCreateModal', () => {
 				return;
 			}
 
-			setupTest(<AddressBookCreateModal onClose={jest.fn()} />);
+			setupTest(<AddressBookCreateModal onClose={vi.fn()} />);
 			expect(
 				screen.queryByTestId(`folder-accordion-root-${trashedFolder.id}`)
 			).not.toBeInTheDocument();
@@ -115,7 +116,7 @@ describe('AddressBookCreateModal', () => {
 				return;
 			}
 
-			setupTest(<AddressBookCreateModal onClose={jest.fn()} />);
+			setupTest(<AddressBookCreateModal onClose={vi.fn()} />);
 			makeListItemsVisible();
 			expect(screen.queryByTestId(`folder-accordion-item-${linkedFolder.id}`)).toBeVisible();
 		});
@@ -127,12 +128,12 @@ describe('AddressBookCreateModal', () => {
 
 	describe('Confirm button', () => {
 		it('should contain the "Create" label', () => {
-			setupTest(<AddressBookCreateModal onClose={jest.fn()} />);
+			setupTest(<AddressBookCreateModal onClose={vi.fn()} />);
 			expect(screen.getByRole('button', { name: 'Create' })).toBeVisible();
 		});
 
 		it('should be disabled if the address book name is not set', async () => {
-			const { user } = setupTest(<AddressBookCreateModal onClose={jest.fn()} />);
+			const { user } = setupTest(<AddressBookCreateModal onClose={vi.fn()} />);
 			await act(async () =>
 				user.clear(screen.getByRole('textbox', { name: 'Insert address book name' }))
 			);
@@ -142,7 +143,7 @@ describe('AddressBookCreateModal', () => {
 		it.todo(
 			'should be disabled if no parent address book is selected'
 			// , () => {
-			// const { user } = setupTest(<AddressBookCreateModal onClose={jest.fn()} />);
+			// const { user } = setupTest(<AddressBookCreateModal onClose={vi.fn()} />);
 			// await act(async () =>
 			// 	user.clear(screen.getByRole('textbox', { name: 'Insert address book name' }))
 			// );
@@ -153,7 +154,7 @@ describe('AddressBookCreateModal', () => {
 		it('should be enabled if both the address book name and the parent are set', async () => {
 			populateFoldersStore();
 			const { user } = setupTest(
-				<AddressBookCreateModal defaultParentId={FOLDERS.CONTACTS} onClose={jest.fn()} />
+				<AddressBookCreateModal defaultParentId={FOLDERS.CONTACTS} onClose={vi.fn()} />
 			);
 			const input = screen.getByRole('textbox', { name: 'Insert address book name' });
 			await act(async () => user.type(input, faker.string.uuid()));
@@ -163,7 +164,7 @@ describe('AddressBookCreateModal', () => {
 		it('should be disabled again, if the address book name is reset', async () => {
 			populateFoldersStore();
 			const { user } = setupTest(
-				<AddressBookCreateModal defaultParentId={FOLDERS.CONTACTS} onClose={jest.fn()} />
+				<AddressBookCreateModal defaultParentId={FOLDERS.CONTACTS} onClose={vi.fn()} />
 			);
 			const input = screen.getByRole('textbox', { name: 'Insert address book name' });
 			await act(async () => user.type(input, faker.string.uuid()));
@@ -175,7 +176,7 @@ describe('AddressBookCreateModal', () => {
 		it('should be disabled if an address book name already exists with the same name on the same parent', async () => {
 			populateFoldersStore();
 			const { user } = setupTest(
-				<AddressBookCreateModal defaultParentId={FOLDERS.USER_ROOT} onClose={jest.fn()} />
+				<AddressBookCreateModal defaultParentId={FOLDERS.USER_ROOT} onClose={vi.fn()} />
 			);
 			const input = screen.getByRole('textbox', { name: 'Insert address book name' });
 			await act(async () => user.type(input, 'Contacts'));
@@ -188,7 +189,7 @@ describe('AddressBookCreateModal', () => {
 			const parentAddressBookId = FOLDERS.CONTACTS;
 			const addressBookName = faker.word.noun(3);
 			const { user } = setupTest(
-				<AddressBookCreateModal defaultParentId={parentAddressBookId} onClose={jest.fn()} />
+				<AddressBookCreateModal defaultParentId={parentAddressBookId} onClose={vi.fn()} />
 			);
 			const input = screen.getByRole('textbox', { name: 'Insert address book name' });
 			await act(async () => user.type(input, addressBookName));
@@ -221,7 +222,7 @@ describe('AddressBookCreateModal', () => {
 				_jsns: JSNS.MAIL
 			});
 			const { user } = setupTest(
-				<AddressBookCreateModal defaultParentId={parentAddressBookId} onClose={jest.fn()} />
+				<AddressBookCreateModal defaultParentId={parentAddressBookId} onClose={vi.fn()} />
 			);
 			const input = screen.getByRole('textbox', { name: 'Insert address book name' });
 			await act(async () => user.type(input, addressBookName));
@@ -246,7 +247,7 @@ describe('AddressBookCreateModal', () => {
 				},
 				_jsns: JSNS.MAIL
 			});
-			const onClose = jest.fn();
+			const onClose = vi.fn();
 			const { user } = setupTest(
 				<AddressBookCreateModal defaultParentId={parentAddressBookId} onClose={onClose} />
 			);
@@ -271,7 +272,7 @@ describe('AddressBookCreateModal', () => {
 				'CreateFolder',
 				response
 			);
-			const onClose = jest.fn();
+			const onClose = vi.fn();
 			const { user } = setupTest(
 				<AddressBookCreateModal defaultParentId={parentAddressBookId} onClose={onClose} />
 			);
@@ -296,7 +297,7 @@ describe('AddressBookCreateModal', () => {
 				'CreateFolder',
 				response
 			);
-			const onClose = jest.fn();
+			const onClose = vi.fn();
 			const { user } = setupTest(
 				<AddressBookCreateModal defaultParentId={parentAddressBookId} onClose={onClose} />
 			);

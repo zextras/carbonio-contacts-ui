@@ -7,6 +7,7 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { useBoardHooks } from '@zextras/carbonio-shell-ui';
+import { vi } from 'vitest';
 
 import { screen, setupTest, within } from '@test-setup';
 import {
@@ -79,7 +80,11 @@ describe('EditDLControllerComponent', () => {
 				const errorMessage = 'Maximum length allowed is 256 characters';
 				const { user } = setupTest(<EditDLControllerComponent {...buildProps(dl)} />);
 				const newName = faker.string.alpha(257);
-				await user.type(screen.getByRole('textbox', { name: /name/i }), newName.substring(0, 256));
+				await user.pasteInto(
+					screen.getByRole('textbox', { name: /name/i }),
+					newName.substring(0, 255)
+				);
+				await user.type(screen.getByRole('textbox', { name: /name/i }), newName[255]);
 				await screen.findByText(newName.substring(0, 256));
 				expect(screen.queryByText(errorMessage)).not.toBeInTheDocument();
 				await user.type(screen.getByRole('textbox', { name: /name/i }), newName[256]);
@@ -89,7 +94,7 @@ describe('EditDLControllerComponent', () => {
 			});
 
 			it('should update board title when change', async () => {
-				const updateBoardFn = jest.fn();
+				const updateBoardFn = vi.fn();
 				spyUseBoardHooks(updateBoardFn);
 				const dl = generateDistributionList({
 					displayName: '',
@@ -118,7 +123,7 @@ describe('EditDLControllerComponent', () => {
 		});
 
 		it('should not update board title when description input change', async () => {
-			const updateBoardFn = jest.fn();
+			const updateBoardFn = vi.fn();
 			spyUseBoardHooks(updateBoardFn);
 			const dl = generateDistributionList({
 				displayName: '',

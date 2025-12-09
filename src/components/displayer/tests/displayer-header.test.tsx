@@ -7,10 +7,11 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { noop } from 'lodash';
+import { vi } from 'vitest';
 
+import { screen, setupTest } from '@test-setup';
 import { DisplayerHeader } from 'components/displayer/displayer-header';
 import { TESTID_SELECTORS } from 'constants/tests';
-import { screen, setupTest } from '@test-setup';
 
 describe('Displayer header', () => {
 	it('should display the icon', () => {
@@ -37,7 +38,7 @@ describe('Displayer header', () => {
 	});
 
 	it('should call the removeActive function of the useActiveItem hook when the user clicks on the close icon', async () => {
-		const spyCloseDisplayer = jest.fn();
+		const spyCloseDisplayer = vi.fn();
 		const title = faker.word.noun();
 		const icon = 'PeopleOutline';
 		const { user } = setupTest(

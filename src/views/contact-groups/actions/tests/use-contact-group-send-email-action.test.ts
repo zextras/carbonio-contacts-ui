@@ -32,7 +32,7 @@ describe('useContactGroupSendEmailAction', () => {
 	});
 
 	it('should return an action which is not disabled if the given CG has members', () => {
-		jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([jest.fn(), true]);
+		vi.spyOn(shell, 'useIntegratedFunction').mockReturnValue([vi.fn(), true]);
 		const { result } = setupHook(useContactGroupSendEmailAction, {
 			initialProps: [contactGroupWithMembers]
 		});
@@ -40,7 +40,7 @@ describe('useContactGroupSendEmailAction', () => {
 	});
 
 	it('should return a disabled action when the given CG has no members', () => {
-		jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([jest.fn(), true]);
+		vi.spyOn(shell, 'useIntegratedFunction').mockReturnValue([vi.fn(), true]);
 		const { result } = setupHook(useContactGroupSendEmailAction, {
 			initialProps: [contactGroupNoMembers]
 		});
@@ -48,8 +48,8 @@ describe('useContactGroupSendEmailAction', () => {
 	});
 
 	it('should not call the Mails integrated function if execute function is invoked passing a CG without members', () => {
-		const openComposer = jest.fn();
-		jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openComposer, true]);
+		const openComposer = vi.fn();
+		vi.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openComposer, true]);
 		const { result } = setupHook(useContactGroupSendEmailAction, {
 			initialProps: [contactGroupNoMembers]
 		});
@@ -58,8 +58,8 @@ describe('useContactGroupSendEmailAction', () => {
 	});
 
 	it('should call the Mails integrated function if execute function is invoked passing a CG with members', () => {
-		const openComposer = jest.fn();
-		jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openComposer, true]);
+		const openComposer = vi.fn();
+		vi.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openComposer, true]);
 		const { result } = setupHook(useContactGroupSendEmailAction, {
 			initialProps: [contactGroupWithMembers]
 		});

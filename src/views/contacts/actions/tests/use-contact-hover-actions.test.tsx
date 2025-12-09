@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { faker } from '@faker-js/faker';
-import * as shell from '@zextras/carbonio-shell-ui';
+import { getAction } from '@zextras/carbonio-shell-ui';
 import { FOLDERS, useFolderStore } from '@zextras/carbonio-ui-commons';
 
 import { buildContact } from '../../../../tests/model-builder';
@@ -15,9 +15,10 @@ import { populateFoldersStore } from '@test-utils/store/folders';
 
 describe('useContactHoverActions', () => {
 	beforeAll(() => {
-		const mailTo = { id: 'mail-to', label: 'action.send_msg', execute: jest.fn() };
-		jest.spyOn(shell, 'getAction').mockReturnValue([mailTo, true]);
+		const mailTo = { id: 'mail-to', label: 'action.send_msg', execute: vi.fn() };
+		vi.mocked(getAction).mockReturnValue([mailTo, true]);
 	});
+
 	it('should return no actions when folder is not in the store', () => {
 		const contact = buildContact({
 			parent: `unknown`
@@ -30,6 +31,7 @@ describe('useContactHoverActions', () => {
 		const actions = result.current;
 		expect(actions.length).toBe(0);
 	});
+
 	describe('Main Account', () => {
 		it('should return [mailTo, edit, move, trash] actions in this order when contact not in trash', () => {
 			populateFoldersStore();
