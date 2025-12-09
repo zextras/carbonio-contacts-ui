@@ -142,30 +142,31 @@ describe('Contact input', () => {
 	});
 
 	it('should call the API 500ms after the last typed character', async () => {
+		vi.useFakeTimers();
 		const contact = {
 			email: faker.internet.email()
 		};
 
-		const apiInterceptorSpy = jest.fn();
+		const apiInterceptorSpy = vi.fn();
 		createAutocompleteInterceptor([contact]).then(() => {
 			apiInterceptorSpy();
 		});
 
 		const { user } = setupTest(
-			<ContactInput onChange={jest.fn()} defaultValue={[]} orderedAccountIds={[]} />
+			<ContactInput onChange={vi.fn()} defaultValue={[]} orderedAccountIds={[]} />
 		);
 		const input = screen.getByRole('textbox');
 		await act(async () => {
-			await user.type(input, contact.email);
+			user.type(input, contact.email);
 		});
 
 		await act(async () => {
-			jest.advanceTimersByTime(499);
+			vi.advanceTimersByTime(499);
 		});
 
 		expect(apiInterceptorSpy).not.toHaveBeenCalled();
 		await act(async () => {
-			jest.advanceTimersByTime(1);
+			vi.advanceTimersByTime(1);
 		});
 		expect(apiInterceptorSpy).toHaveBeenCalled();
 	});
