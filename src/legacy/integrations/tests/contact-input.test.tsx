@@ -140,6 +140,36 @@ describe('Contact input', () => {
 		expect(await within(dropdown).findByText(contact.display)).toBeVisible();
 		expect(within(avatar).queryByText('?')).not.toBeInTheDocument();
 	});
+
+	it('should call the API 500ms after the last typed character', async () => {
+		const contact = {
+			email: faker.internet.email()
+		};
+
+		const apiInterceptorSpy = jest.fn();
+		createAutocompleteInterceptor([contact]).then(() => {
+			apiInterceptorSpy();
+		});
+
+		const { user } = setupTest(
+			<ContactInput onChange={jest.fn()} defaultValue={[]} orderedAccountIds={[]} />
+		);
+		const input = screen.getByRole('textbox');
+		await act(async () => {
+			await user.type(input, contact.email);
+		});
+
+		await act(async () => {
+			jest.advanceTimersByTime(499);
+		});
+
+		expect(apiInterceptorSpy).not.toHaveBeenCalled();
+		await act(async () => {
+			jest.advanceTimersByTime(1);
+		});
+		expect(apiInterceptorSpy).toHaveBeenCalled();
+	});
+
 	describe('pasting', () => {
 		test('a simple email should display it correctly', async () => {
 			const { user } = setupTest(<TestableContactInput />);
