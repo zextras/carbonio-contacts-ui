@@ -220,9 +220,8 @@ export const AddressBookEditGeneralModal = ({
 				<ModalFooter
 					onConfirm={onConfirm}
 					confirmLabel={t('label.edit', 'Edit')}
-					onSecondaryAction={onAddShare}
+					onSecondaryAction={addShareDisabled ? undefined : onAddShare}
 					secondaryActionLabel={t('label.add_share', 'Add Share')}
-					secondaryActionDisabled={addShareDisabled}
 					confirmDisabled={confirmButtonDisabled}
 					confirmColor="primary"
 				/>
