@@ -41,6 +41,7 @@ import type { ContactAddressMap } from 'legacy/types/contact';
 import type { GetContactsRequest, GetContactsResponse } from 'legacy/types/soap';
 
 const CHIP_TO_EXCLUDE = 'this-value-represent-a-chip-that-should-not-be-present';
+const CHIPINPUT_DEBOUNCE_TIME = 500;
 
 type EditChipFn = (text: string, id: string) => void;
 function createChipFromEmail(
@@ -394,6 +395,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 						{ key: ',', ctrlKey: false },
 						{ key: ';', ctrlKey: false }
 					]}
+					onInputTypeDebounce={CHIPINPUT_DEBOUNCE_TIME}
 					ChipComponent={ChipComponent}
 					onDragEnter={dragAndDropEnabled ? onDragEnter : noop}
 					onDragOver={dragAndDropEnabled ? onDragEnter : noop}
