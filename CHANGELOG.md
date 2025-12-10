@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.19.0](https://github.com/zextras/carbonio-contacts-ui/compare/v1.18.1...v1.19.0) (2025-12-09)
+
+
+### Features
+
+* await 500ms before calling the FullAutocomplete API ([bf18e96](https://github.com/zextras/carbonio-contacts-ui/commit/bf18e96ed05503d15a038df9f4e5389066dbb0cb))
+
 ### [1.18.1](https://github.com/zextras/carbonio-contacts-ui/compare/v1.18.0...v1.18.1) (2025-11-20)
 
 
