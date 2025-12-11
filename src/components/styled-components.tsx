@@ -62,7 +62,7 @@ const StyledListItem = styled(ListItem)<{ $backgroundColor: AnyColor | null }>`
 						background: linear-gradient(
 							to right,
 							transparent,
-							${getColor($backgroundColor, theme)} 2rem,
+							${getColor($backgroundColor, theme)} 1rem,
 							${getColor($backgroundColor, theme)} 100%
 						);
 					}
