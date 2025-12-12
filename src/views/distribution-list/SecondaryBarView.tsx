@@ -126,7 +126,7 @@ const SecondaryBarView = ({ expanded }: { expanded: boolean }): React.JSX.Elemen
 			mainAlignment="flex-start"
 			crossAlignment="flex-start"
 		>
-			{(expanded && <Accordion role="menuitem" items={items} />) || (
+			{(expanded && <Accordion role="menuitem" items={items} disableTransition />) || (
 				<Container mainAlignment={'flex-start'} padding={{ vertical: 'small' }}>
 					{collapsedItems}
 				</Container>
