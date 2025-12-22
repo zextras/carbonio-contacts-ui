@@ -16,6 +16,7 @@ type Attributes = {
 	zimbraHideInGal?: BooleanString;
 };
 
+// eslint-disable-next-line prettier/prettier
 export interface GetAccountDistributionListsRequest
 	extends GenericSoapPayload<typeof JSNS.ACCOUNT> {
 	ownerOf?: boolean;
