@@ -67,7 +67,8 @@ export const ListItemAvatar = ({
 			data-testid={`AvatarContainer`}
 			padding={{ all: 'small' }}
 			width="fit"
-			mainAlignment="flex-start"
+			mainAlignment="center"
+			crossAlignment="center"
 		>
 			<Tooltip label={activateSelectionModeTooltipLabel} disabled={selecting} maxWidth="100%">
 				<AvatarElement

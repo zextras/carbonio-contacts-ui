@@ -11,16 +11,18 @@ import { Action, Container } from '@zextras/carbonio-design-system';
 import { ContextualMenu } from 'components/contextual-menu';
 
 export const HoverBarContainer = styled(Container)`
+	top: 0;
 	right: 0;
 	display: none;
 	position: absolute;
+	width: fit-content;
+	height: 45%;
 	background: linear-gradient(
 		to right,
 		transparent,
-		${({ theme }): string => theme.palette.gray6.hover} 50%,
+		${({ theme }): string => theme.palette.gray6.hover} 1rem,
 		${({ theme }): string => theme.palette.gray6.hover} 100%
 	);
-	width: calc(100% - 4rem);
 `;
 
 export const HoverContainer = styled(Container)`
@@ -64,6 +66,7 @@ export const ListItemActionsWrapper = ({
 						orientation="horizontal"
 						mainAlignment="flex-start"
 						crossAlignment="unset"
+						height={'4rem'}
 						onClick={onClick}
 					>
 						{children}
@@ -72,7 +75,7 @@ export const ListItemActionsWrapper = ({
 							mainAlignment="flex-end"
 							crossAlignment="center"
 							gap={'0.25rem'}
-							padding={{ right: '0.5rem' }}
+							padding={{ right: '0.5rem', left: '2rem', top: '0.5em' }}
 						>
 							{hoverActions}
 						</HoverBarContainer>
