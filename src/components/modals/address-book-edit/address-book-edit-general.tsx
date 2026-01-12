@@ -223,7 +223,9 @@ export const AddressBookEditGeneralModal = ({
 				<ModalFooter
 					onConfirm={onConfirm}
 					confirmLabel={t('label.edit', 'Edit')}
-					onSecondaryAction={!addShareDisabled && zimbraFeatureSharingEnabled === 'TRUE' ? onAddShare : undefined}
+					onSecondaryAction={
+						!addShareDisabled && zimbraFeatureSharingEnabled === 'TRUE' ? onAddShare : undefined
+					}
 					secondaryActionLabel={t('label.add_share', 'Add Share')}
 					confirmDisabled={confirmButtonDisabled}
 					confirmColor="primary"
