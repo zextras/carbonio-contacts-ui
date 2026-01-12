@@ -6,7 +6,7 @@
 import React, { FC, ReactElement, useMemo } from 'react';
 
 import { Container, Divider, ThemeProvider } from '@zextras/carbonio-design-system';
-import { SecondaryBarComponentProps } from '@zextras/carbonio-shell-ui';
+import { getUserSettings, SecondaryBarComponentProps } from '@zextras/carbonio-shell-ui';
 import {
 	SidebarAccordionMui,
 	FOLDERS,
@@ -35,6 +35,8 @@ export type SidebarComponentProps = {
 const SidebarComponent = ({ accordions }: SidebarComponentProps): React.JSX.Element => {
 	const { folderId } = useParams<{ folderId: string }>();
 
+	const { zimbraFeatureSharingEnabled } = getUserSettings().attrs;
+
 	const accordionsWithFindShare = useMemo(() => {
 		if (!accordions?.[0]?.children.find((folder: Folder) => folder.id === 'find_shares')) {
 			accordions[0]?.children?.push({
@@ -53,7 +55,7 @@ const SidebarComponent = ({ accordions }: SidebarComponentProps): React.JSX.Elem
 				folderId={folderId ?? ''}
 				localStorageName={LOCAL_STORAGES.EXPANDED_ADDRESSBOOKS}
 				AccordionCustomComponent={AccordionCustomComponent}
-				buttonFindShares={<FindSharesButton key={'find-shares-button'} />}
+				buttonFindShares={zimbraFeatureSharingEnabled === 'TRUE' ? <FindSharesButton key={'find-shares-button'} /> : undefined}
 				initialExpanded={[FOLDERS.USER_ROOT]}
 			/>
 

@@ -14,7 +14,7 @@ import {
 	Tooltip,
 	useSnackbar
 } from '@zextras/carbonio-design-system';
-import { useUserAccount } from '@zextras/carbonio-shell-ui';
+import { BooleanString, getUserSettings, useUserAccount } from '@zextras/carbonio-shell-ui';
 import { Grant, useFolder } from '@zextras/carbonio-ui-commons';
 import { map } from 'lodash';
 import { useTranslation } from 'react-i18next';
@@ -69,6 +69,9 @@ const Actions = ({ addressBookId, grant, onEdit, onRevoke }: ActionProps): React
 	const account = useUserAccount();
 	const createSnackbar = useSnackbar();
 
+	const zimbraFeatureSharingEnabled: BooleanString | undefined =
+		getUserSettings().attrs.zimbraFeatureSharingEnabled;
+
 	const onRevokeClick = useCallback(() => {
 		onRevoke(grant);
 	}, [grant, onRevoke]);
@@ -112,10 +115,14 @@ const Actions = ({ addressBookId, grant, onEdit, onRevoke }: ActionProps): React
 
 	return (
 		<Container orientation="horizontal" mainAlignment="flex-end" maxWidth="fit">
-			<Tooltip label={t('label.edit_access', 'Edit access')} placement="top">
-				<Button type="outlined" label={t('label.edit')} onClick={onEditClick} size={'small'} />
-			</Tooltip>
-			<Padding horizontal="extrasmall" />
+			{zimbraFeatureSharingEnabled === 'TRUE' && (
+				<>
+					<Tooltip label={t('label.edit_access', 'Edit access')} placement="top">
+						<Button type="outlined" label={t('label.edit')} onClick={onEditClick} size={'small'} />
+					</Tooltip>
+					<Padding horizontal="extrasmall" />
+				</>
+			)}
 			<Tooltip label={t('tooltip.revoke', 'Revoke access')} placement="top">
 				<Button
 					type="outlined"
@@ -125,19 +132,23 @@ const Actions = ({ addressBookId, grant, onEdit, onRevoke }: ActionProps): React
 					size={'small'}
 				/>
 			</Tooltip>
-			<Padding horizontal="extrasmall" />
-			<Tooltip
-				label={t('tooltip.resend', 'Send e-mail notification about this share')}
-				placement="top"
-				maxWidth="18.75rem"
-			>
-				<Button
-					type="outlined"
-					label={t('label.resend', 'Resend')}
-					onClick={onResend}
-					size={'small'}
-				/>
-			</Tooltip>
+			{zimbraFeatureSharingEnabled === 'TRUE' && (
+				<>
+					<Padding horizontal="extrasmall" />
+					<Tooltip
+						label={t('tooltip.resend', 'Send e-mail notification about this share')}
+						placement="top"
+						maxWidth="18.75rem"
+					>
+						<Button
+							type="outlined"
+							label={t('label.resend', 'Resend')}
+							onClick={onResend}
+							size={'small'}
+						/>
+					</Tooltip>
+				</>
+			)}
 		</Container>
 	);
 };

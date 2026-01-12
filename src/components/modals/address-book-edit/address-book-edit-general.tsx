@@ -30,6 +30,7 @@ import { ShareFolderProperties } from 'components/modals/address-book-edit/share
 import { TIMEOUTS } from 'constants/index';
 import { getFolderTranslatedName } from 'legacy/utils/helpers';
 import { apiClient } from 'network/api-client';
+import { getUserSettings } from '@zextras/carbonio-shell-ui';
 
 export type AddressBookEditGeneralModalProps = {
 	addressBookId: string;
@@ -51,6 +52,8 @@ export const AddressBookEditGeneralModal = ({
 	const [t] = useTranslation();
 	const [addressBookName, setAddressBookName] = useState(addressBook?.name ?? '');
 	const [addressBookColor, setAddressBookColor] = useState(addressBook?.color ?? 0);
+
+	const { zimbraFeatureSharingEnabled } = getUserSettings().attrs;
 
 	const modalTitle = useMemo(
 		() =>
@@ -220,7 +223,7 @@ export const AddressBookEditGeneralModal = ({
 				<ModalFooter
 					onConfirm={onConfirm}
 					confirmLabel={t('label.edit', 'Edit')}
-					onSecondaryAction={addShareDisabled ? undefined : onAddShare}
+					onSecondaryAction={!addShareDisabled && zimbraFeatureSharingEnabled === 'TRUE' ? onAddShare : undefined}
 					secondaryActionLabel={t('label.add_share', 'Add Share')}
 					confirmDisabled={confirmButtonDisabled}
 					confirmColor="primary"
