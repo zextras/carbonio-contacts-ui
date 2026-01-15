@@ -85,14 +85,13 @@ function trimValue(val?: string): string {
  * Generates a human-friendly label for a person contact with the following priority:
  * 1. Use `display` if provided and non-empty.
  * 2. Use `fullName` if provided and non-empty.
- * 3. Use a concatenation of `firstName`, `middleName`, and `lastName` if available.
+ * 3. Use a concatenation of `firstName` and `lastName` if available.
  * 4. If none of the above are usable, attempt to extract a display name from the email.
  * 5. Fallback: return the `email` address itself.
  */
 function getPersonLabel(
 	contact: {
 		firstName?: string;
-		middleName?: string;
 		lastName?: string;
 		fullName?: string;
 		email: string;
@@ -109,9 +108,7 @@ function getPersonLabel(
 	if (fullName) return fullName;
 
 	// 3. Constructed name parts
-	const nameParts = [contact.firstName, contact.middleName, contact.lastName]
-		.map(trimValue)
-		.filter(Boolean);
+	const nameParts = [contact.firstName, contact.lastName].map(trimValue).filter(Boolean);
 	if (nameParts.length > 0) return nameParts.join(' ');
 
 	// 4. Extract from email (before falling back to raw email)
@@ -182,7 +179,6 @@ export const mapToChipContactOptions = (value: RemoteContactResponse): ContactIn
 		id: parsedEmail,
 		firstName: value.first,
 		lastName: value.last,
-		middleName: value.middle,
 		fullName: value.full,
 		company: value.company,
 		email: parsedEmail,
