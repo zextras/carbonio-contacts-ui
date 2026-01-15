@@ -31,7 +31,7 @@ export const SearchContactListItem = ({ item }: { item: Contact }): React.JSX.El
 	);
 	const avatarItem = {
 		id: item.id,
-		label: `${item.firstName} ${item.middleName} ${item.lastName}`
+		label: `${item.firstName} ${item.lastName}`
 	};
 	return (
 		<Container orientation="vertical" data-testid={'search-contact-list-item'} onClick={_onClick}>
