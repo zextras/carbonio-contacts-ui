@@ -13,16 +13,12 @@ import { Contact } from 'legacy/types/contact';
 
 /*
  * Returns the Display name
- * It will check the firstName, middleName and lastName props in contact and will return in string which are available.
- * If firstName, middleName or lastName not available and email found in contact then will return <No name> with email.
+ * It will check the firstName and lastName props in contact and will return in string which are available.
+ * If firstName or lastName not available and email found in contact then will return <No name> with email.
  */
 export const getDisplayName = (contact: Contact): string | undefined => {
-	if ((contact.firstName || contact.middleName || contact.lastName) && !contact.displayName) {
-		return trim(
-			`${contact.firstName || ''} ${contact.middleName || ''} ${contact.lastName || ''} ${
-				contact.nameSuffix || ''
-			}`
-		);
+	if ((contact.firstName || contact.lastName) && !contact.displayName) {
+		return trim(`${contact.firstName || ''} ${contact.lastName || ''} ${contact.nameSuffix || ''}`);
 	}
 	if (contact.displayName) {
 		return contact.displayName;
@@ -37,8 +33,8 @@ export const getDisplayName = (contact: Contact): string | undefined => {
 
 /*
  * UseDisplayName hook is returning the Display name
- * It will check the firstName, middleName and lastName props in contact and will return in string which are available.
- * If firstName, middleName or lastName not available and email found in contact then will return <No name> with email.
+ * It will check the firstName and lastName props in contact and will return in string which are available.
+ * If firstName or lastName not available and email found in contact then will return <No name> with email.
  */
 export const useDisplayName = (contact: Contact): string => {
 	const [t] = useTranslation();
