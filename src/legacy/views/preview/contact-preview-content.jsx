@@ -259,13 +259,13 @@ function ContactPreviewContent({ contact }) {
 							{contact.namePrefix && (
 								<ContactField field={contact.namePrefix} label={t('name.prefix', 'Prefix')} />
 							)}
-						{contact.firstName && (
-							<ContactField
-								field={contact.firstName}
-								label={t('name.first_name', 'First Name')}
-							/>
-						)}
-						{contact.lastName && (
+							{contact.firstName && (
+								<ContactField
+									field={contact.firstName}
+									label={t('name.first_name', 'First Name')}
+								/>
+							)}
+							{contact.lastName && (
 								<ContactField field={contact.lastName} label={t('name.last_name', 'Last Name')} />
 							)}
 							{contact.nameSuffix && (
