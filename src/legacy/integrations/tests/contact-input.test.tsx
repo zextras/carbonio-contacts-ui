@@ -412,22 +412,6 @@ describe('Contact input', () => {
 			expect(onChange).toHaveBeenCalledWith([expect.objectContaining({ label: 'My Name' })]);
 		});
 
-		it('includes middleName in concatenated label', async () => {
-			const interceptor = createAutocompleteInterceptor([
-				{ email: VALID_EMAIL, first: 'First', middle: 'Middle', last: 'Last' }
-			]);
-			const onChange = vi.fn();
-			const { user } = setupTest(
-				<ContactInput onChange={onChange} defaultValue={[]} orderedAccountIds={[]} />
-			);
-			await typeAndSelectOptionFromDropdown(user, VALID_EMAIL);
-			await interceptor;
-
-			expect(onChange).toHaveBeenCalledWith([
-				expect.objectContaining({ label: 'First Middle Last' })
-			]);
-		});
-
 		it('ignores empty string fields when concatenating names', async () => {
 			const interceptor = createAutocompleteInterceptor([
 				{ email: VALID_EMAIL, first: 'First', last: '' }

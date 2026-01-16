@@ -265,12 +265,6 @@ function ContactPreviewContent({ contact }) {
 									label={t('name.first_name', 'First Name')}
 								/>
 							)}
-							{contact.middleName && (
-								<ContactField
-									field={contact.middleName}
-									label={t('name.middle_name', 'Middle Name')}
-								/>
-							)}
 							{contact.lastName && (
 								<ContactField field={contact.lastName} label={t('name.last_name', 'Last Name')} />
 							)}
