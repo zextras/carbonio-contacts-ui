@@ -8,7 +8,6 @@ import React, { useMemo, ReactElement, FC } from 'react';
 import {
 	Container,
 	Dropdown,
-	IconButton,
 	Padding,
 	Divider,
 	DropdownItem,
@@ -66,9 +65,10 @@ const SelectPanelActions: FC<SelectPanelActionsProps> = ({
 				padding={{ all: 'extrasmall' }}
 			>
 				<Container background="gray5" orientation="horizontal" mainAlignment="flex-start">
-					<IconButton
+					<Button
 						icon="ArrowBack"
-						iconColor="primary"
+						type="ghost"
+						color="primary"
 						size="large"
 						onClick={deselectAll ?? noop}
 						data-testid="action-button-deselect-all"
