@@ -5,11 +5,11 @@
  */
 import React, { useCallback } from 'react';
 
-import { Container, ContainerProps, IconButton, Row } from '@zextras/carbonio-design-system';
+import { Button, Container, ContainerProps, Row } from '@zextras/carbonio-design-system';
 
+import { useActionCopyToClipboard } from 'actions/copy-to-clipboard';
 import { CustomIconAvatar } from 'components/styled-components';
 import { Text } from 'components/Text';
-import { useActionCopyToClipboard } from 'actions/copy-to-clipboard';
 import { DistributionList } from 'model/distribution-list';
 
 export const DLDetailsInfo = ({
@@ -49,11 +49,12 @@ export const DLDetailsInfo = ({
 					>
 						{email}
 					</Text>
-					<IconButton
+					<Button
 						icon={copyToClipboardAction.icon}
 						color={'primary'}
 						onClick={copyEmail}
 						type={'ghost'}
+						size="medium"
 					/>
 				</Row>
 			</Container>
