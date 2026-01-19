@@ -5,14 +5,7 @@
  */
 import React, { useCallback, useEffect, useMemo } from 'react';
 
-import {
-	Container,
-	IconButton,
-	Input,
-	Padding,
-	Row,
-	Select
-} from '@zextras/carbonio-design-system';
+import { Container, Button, Input, Padding, Row, Select } from '@zextras/carbonio-design-system';
 import { filter, find, map, omit, omitBy, reduce, set } from 'lodash';
 
 import { op } from 'legacy/views/edit/form-reducer';
@@ -222,31 +215,26 @@ export const CustomMultivalueField = ({
 							{index >= Object.entries(filteredValue).length - 1 ? (
 								<>
 									<Padding right="small">
-										<IconButton
+										<Button
 											icon="Plus"
-											customSize={{
-												iconSize: 'medium',
-												paddingSize: 'medium'
-											}}
+											size={'extralarge'}
 											iconColor="gray6"
 											backgroundColor="primary"
 											onClick={() => addValue()}
 										/>
 									</Padding>
-									<IconButton
+									<Button
 										icon="Minus"
 										iconColor="gray6"
-										customSize={{
-											iconSize: 'medium',
-											paddingSize: 'medium'
-										}}
+										size={'extralarge'}
 										backgroundColor="secondary"
 										onClick={() => removeValue(id)}
 									/>
 								</>
 							) : (
-								<IconButton
+								<Button
 									icon="Minus"
+									size={'extralarge'}
 									iconColor="gray6"
 									backgroundColor="secondary"
 									onClick={() => removeValue(id)}
