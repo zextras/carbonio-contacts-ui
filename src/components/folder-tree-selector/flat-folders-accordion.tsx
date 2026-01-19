@@ -9,10 +9,10 @@ import React, { FC, ReactElement, useCallback, useMemo, useState } from 'react';
 import styled from '@emotion/styled';
 import {
 	Avatar,
+	Button,
 	Collapse,
 	Container,
 	Icon,
-	IconButton,
 	ListItem,
 	List,
 	Padding,
@@ -212,8 +212,10 @@ const FlatFoldersAccordionRoot: FC<FlatFoldersAccordionRootProps> = ({
 				</Container>
 
 				<Padding right="small">
-					<IconButton
-						customSize={{ iconSize: 'large', paddingSize: 0 }}
+					<Button
+						size="medium"
+						type="ghost"
+						color="gray0"
 						onClick={toggleOpen}
 						icon={open ? 'ChevronUp' : 'ChevronDown'}
 					/>
