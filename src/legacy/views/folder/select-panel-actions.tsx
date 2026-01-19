@@ -11,7 +11,8 @@ import {
 	IconButton,
 	Padding,
 	Divider,
-	DropdownItem
+	DropdownItem,
+	Button
 } from '@zextras/carbonio-design-system';
 import { map, noop } from 'lodash';
 
@@ -81,9 +82,10 @@ const SelectPanelActions: FC<SelectPanelActionsProps> = ({
 						data-testid="secondary-actions-dropdown"
 						items={dropDownItems as Array<DropdownItem>}
 					>
-						<IconButton
+						<Button
 							size="medium"
-							iconColor="primary"
+							type="ghost"
+							color="primary"
 							icon="MoreVertical"
 							data-testid="secondary-actions-open-button"
 							onClick={noop}
