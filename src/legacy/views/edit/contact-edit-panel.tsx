@@ -6,10 +6,10 @@
 import React, { useCallback } from 'react';
 
 import {
+	Button,
 	Container,
 	Divider,
 	Icon,
-	IconButton,
 	Padding,
 	Row,
 	Text
@@ -49,7 +49,7 @@ function ContactEditHeader({ editId, folderId }: ContactEditProps): React.JSX.El
 						{editId && editId !== 'new' ? t('label.edit', 'Edit') : t('label.create', 'Create')}
 					</Text>
 				</Row>
-				<IconButton icon="Close" size="small" onClick={onClose} />
+				<Button icon="Close" type="ghost" color="gray0" onClick={onClose} />
 			</Container>
 			<Divider />
 		</Container>
