@@ -7,7 +7,6 @@ import React, { useCallback, useState, useMemo } from 'react';
 
 import {
 	Container,
-	IconButton,
 	Row,
 	Responsive,
 	Text,
@@ -93,7 +92,7 @@ function ContactField({ field, label, width, limit, items }) {
 										{field}
 									</Text>
 								</Row>
-								<IconButton size="small" icon="ArrowIosDownward" />
+								<Button size="small" type={'ghost'} color={'gray0'} icon="ArrowIosDownward" />
 							</Row>
 						</Container>
 					</Dropdown>
@@ -128,7 +127,7 @@ function ContactField({ field, label, width, limit, items }) {
 							<Dropdown items={items} placement="bottom-end">
 								<Container>
 									<Row takeAvailableSpace mainAlignment="flex-start" />
-									<IconButton size="small" icon="ArrowIosDownward" />
+									<Button size="small" type={'ghost'} color={'gray0'} icon="ArrowIosDownward" />
 								</Container>
 							</Dropdown>
 						)}
