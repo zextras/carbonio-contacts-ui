@@ -111,7 +111,7 @@ const SecondaryBarView = ({ expanded }: { expanded: boolean }): React.JSX.Elemen
 					<Button
 						size="large"
 						type="ghost"
-						color={item.active ? 'highlight' : 'gray0'}
+						color={'gray0'}
 						icon={item.icon ?? 'PeopleOutline'}
 						onClick={item.onClick ?? noop}
 					/>
