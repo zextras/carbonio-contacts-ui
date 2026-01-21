@@ -484,7 +484,6 @@ describe('SearchView', () => {
 			};
 
 			setupTest(<SearchView {...searchViewProps} />);
-			screen.debug();
 			expect(
 				await screen.findByText(
 					/Special characters like :, ", -, !, etc., are ignored in the search/
