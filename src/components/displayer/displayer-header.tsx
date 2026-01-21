@@ -7,7 +7,7 @@ import React from 'react';
 
 import type { Theme } from '@emotion/react';
 import styled from '@emotion/styled';
-import { Container, Divider, Icon, IconButton } from '@zextras/carbonio-design-system';
+import { Button, Container, Divider, Icon } from '@zextras/carbonio-design-system';
 
 import { Text } from 'components/Text';
 
@@ -52,7 +52,13 @@ export const DisplayerHeader = ({
 			<Text withTooltip>{title}</Text>
 			<Container margin={{ left: 'auto' }} width={'fit'} height={'fit'} flexShrink={0}>
 				{closeDisplayer && (
-					<IconButton icon={'CloseOutline'} size={'medium'} onClick={closeDisplayer} />
+					<Button
+						icon={'CloseOutline'}
+						size={'medium'}
+						type="ghost"
+						color="gray0"
+						onClick={closeDisplayer}
+					/>
 				)}
 			</Container>
 		</Container>

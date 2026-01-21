@@ -7,9 +7,9 @@
 import React, { FC, useCallback, useMemo, useState } from 'react';
 
 import {
+	Button,
 	Collapse,
 	Container,
-	IconButton,
 	ListItem,
 	List,
 	Row,
@@ -19,8 +19,8 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import { SharesListItem } from 'components/modals/shared-address-books-add/shares-list-item';
-import { ShareInfo } from 'model/share-info';
 import { HoverRow } from 'components/styled-components';
+import { ShareInfo } from 'model/share-info';
 
 export type UsersSharesListItemProps = {
 	shares: Array<ShareInfo>;
@@ -66,13 +66,12 @@ export const UsersSharesListItem: FC<UsersSharesListItemProps> = ({
 						<Text>{label}</Text>
 					</Tooltip>
 				</Row>
-				<IconButton
+				<Button
 					icon={expanded ? 'ChevronUp' : 'ChevronDown'}
 					onClick={onChevronClick}
-					customSize={{
-						iconSize: 'large',
-						paddingSize: 0
-					}}
+					type={'ghost'}
+					size={'medium'}
+					color="gray0"
 				/>
 			</HoverRow>
 			<Collapse open={expanded} crossSize="100%" orientation="vertical">
