@@ -16,11 +16,11 @@ export const ListActionIconButton = ({ action }: ListIconButtonProps): React.JSX
 			type="ghost"
 			icon={action.icon}
 			color={'text'}
-			size="small"
 			onClick={(ev): void => {
 				ev.stopPropagation();
 				action.onClick(ev);
 			}}
+			size={'medium'}
 			disabled={action.disabled}
 			data-testid={action.id}
 		/>

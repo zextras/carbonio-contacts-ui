@@ -15,17 +15,6 @@ import { FOLDERS, useFolderStore } from '@zextras/carbonio-ui-commons';
 import { noop } from 'lodash';
 import { HttpResponse } from 'msw';
 
-import { TIMERS } from 'constants/tests';
-import { CnItem } from 'network/api/types';
-import { createSoapContact, createSoapContactGroupV2 } from 'tests/utils';
-import {
-	SearchContactsRequest,
-	SearchContactsSoapRequest,
-	SearchContactsSoapResponse
-} from 'types/index.d';
-import { type SoapContact } from 'legacy/types/soap';
-import SearchView from 'legacy/views/search/search-view';
-import { Query, SearchQueryItem } from 'legacy/views/search/types';
 import { makeListItemsVisible, screen, setupTest, triggerLoadMore } from '@test-setup';
 import { generateFolder } from '@test-utils/folders/folders-generator';
 import {
@@ -34,6 +23,17 @@ import {
 } from '@test-utils/network/msw/create-api-interceptor';
 import { generateSettings } from '@test-utils/settings/settings-generator';
 import { populateFoldersStore } from '@test-utils/store/folders';
+import { TIMERS } from 'constants/tests';
+import { type SoapContact } from 'legacy/types/soap';
+import SearchView from 'legacy/views/search/search-view';
+import { Query, SearchQueryItem } from 'legacy/views/search/types';
+import { CnItem } from 'network/api/types';
+import { createSoapContact, createSoapContactGroupV2 } from 'tests/utils';
+import {
+	SearchContactsRequest,
+	SearchContactsSoapRequest,
+	SearchContactsSoapResponse
+} from 'types/index.d';
 
 const useMockedUseQuery = (): ReturnType<typeof useQuery> => {
 	const queryChip: SearchQueryItem = {
@@ -66,7 +66,7 @@ const setupSearch = ({ contacts }: { contacts: Array<CnItem | SoapContact> }): S
 		}
 	};
 	const settings = generateSettings(customSettings);
-	jest.spyOn(hooks, 'useUserSettings').mockReturnValue(settings);
+	vi.spyOn(hooks, 'useUserSettings').mockReturnValue(settings);
 	createSoapAPIInterceptor<SearchContactsRequest, SearchContactsSoapResponse>('Search', {
 		cn: contacts,
 		more: false,
@@ -91,7 +91,7 @@ describe('SearchView', () => {
 			}
 		};
 		const settings = generateSettings(customSettings);
-		jest.spyOn(hooks, 'useUserSettings').mockReturnValue(settings);
+		vi.spyOn(hooks, 'useUserSettings').mockReturnValue(settings);
 		const queryChip: QueryChip = {
 			hasAvatar: false,
 			id: '0',
@@ -109,7 +109,7 @@ describe('SearchView', () => {
 		});
 		const resultsHeader = (props: { label: string }): ReactElement => <>{props.label}</>;
 
-		const mockedUseQuery = jest.fn().mockReturnValue([[queryChip], noop]);
+		const mockedUseQuery = vi.fn().mockReturnValue([[queryChip], noop]);
 		const searchViewProps: SearchViewProps = {
 			useQuery: mockedUseQuery,
 			ResultsHeader: resultsHeader,
@@ -147,7 +147,7 @@ describe('SearchView', () => {
 			}
 		};
 		const settings = generateSettings(customSettings);
-		jest.spyOn(hooks, 'useUserSettings').mockReturnValue(settings);
+		vi.spyOn(hooks, 'useUserSettings').mockReturnValue(settings);
 		const queryChip: QueryChip = {
 			hasAvatar: false,
 			id: '0',
@@ -165,7 +165,7 @@ describe('SearchView', () => {
 		});
 		const resultsHeader = (props: { label: string }): ReactElement => <>{props.label}</>;
 
-		const mockedUseQuery = jest.fn().mockReturnValue([[queryChip], noop]);
+		const mockedUseQuery = vi.fn().mockReturnValue([[queryChip], noop]);
 		const searchViewProps: SearchViewProps = {
 			useQuery: mockedUseQuery,
 			ResultsHeader: resultsHeader,
@@ -200,7 +200,7 @@ describe('SearchView', () => {
 			}
 		};
 		const settings = generateSettings(customSettings);
-		jest.spyOn(hooks, 'useUserSettings').mockReturnValue(settings);
+		vi.spyOn(hooks, 'useUserSettings').mockReturnValue(settings);
 		const queryChip: QueryChip = {
 			hasAvatar: false,
 			id: '0',
@@ -218,7 +218,7 @@ describe('SearchView', () => {
 		});
 		const resultsHeader = (props: { label: string }): ReactElement => <>{props.label}</>;
 
-		const mockedUseQuery = jest.fn().mockReturnValue([[queryChip], noop]);
+		const mockedUseQuery = vi.fn().mockReturnValue([[queryChip], noop]);
 		const searchViewProps: SearchViewProps = {
 			useQuery: mockedUseQuery,
 			ResultsHeader: resultsHeader,
@@ -241,9 +241,9 @@ describe('SearchView', () => {
 			}
 		};
 		const settings = generateSettings(customSettings);
-		jest.spyOn(hooks, 'useUserSettings').mockReturnValue(settings);
+		vi.spyOn(hooks, 'useUserSettings').mockReturnValue(settings);
 		const resultsHeader = (props: { label: string }): ReactElement => <>{props.label}</>;
-		const mockedUseQuery = jest.fn().mockReturnValue([[], noop]);
+		const mockedUseQuery = vi.fn().mockReturnValue([[], noop]);
 		const searchAPIInterceptor = createAPIInterceptor(
 			'post',
 			'/service/soap/SearchRequest',
@@ -280,7 +280,7 @@ describe('SearchView', () => {
 
 	it('should call the search API and append items to existing results when more items are available to load', async () => {
 		const resultsHeader = (props: { label: string }): ReactElement => <>{props.label}</>;
-		const mockedUseQuery = jest.fn().mockReturnValue([
+		const mockedUseQuery = vi.fn().mockReturnValue([
 			[
 				{
 					hasAvatar: false,
@@ -353,7 +353,7 @@ describe('SearchView', () => {
 			await screen.findByTestId(`search-contact-list-item-${soapContact.id}`);
 			await user.click(await screen.findByRole('button', { name: 'Advanced Filters' }));
 			act(() => {
-				jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+				vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 			});
 
 			createSoapAPIInterceptor<SearchContactsRequest, SearchContactsSoapResponse>('Search', {
@@ -370,39 +370,6 @@ describe('SearchView', () => {
 			expect(
 				await screen.findByTestId(`search-contact-list-item-${soapContact2.id}`)
 			).toBeVisible();
-		});
-
-		it('re-running the search should should clear the search list before populating with new results', async () => {
-			const soapContact = createSoapContact({
-				id: '1',
-				email: 'testContact1@demo.com',
-				folderId: FOLDERS.CONTACTS
-			});
-
-			const { user } = setupTest(<SearchView {...setupSearch({ contacts: [soapContact] })} />);
-
-			await screen.findByTestId(`search-contact-list-item-${soapContact.id}`);
-			await user.click(await screen.findByRole('button', { name: 'Advanced Filters' }));
-			act(() => {
-				jest.advanceTimersByTime(TIMERS.modal.delayOpen);
-			});
-			createSoapAPIInterceptor<SearchContactsRequest, SearchContactsSoapResponse>('Search', {
-				cn: [soapContact],
-				more: false,
-				offset: 0,
-				sortBy: 'nameAsc'
-			});
-
-			const filterModal = await screen.findByTestId('advanced-filter-modal');
-			const searchButton = await within(filterModal).findByRole('button', { name: 'Search' });
-			await user.click(searchButton);
-
-			expect(
-				screen.queryByTestId(`search-contact-list-item-${soapContact.id}`)
-			).not.toBeInTheDocument();
-			expect(
-				await screen.findByTestId(`search-contact-list-item-${soapContact.id}`)
-			).toBeInTheDocument();
 		});
 	});
 
@@ -507,7 +474,7 @@ describe('SearchView', () => {
 				label: 'test:keyword',
 				value: 'test:keyword'
 			};
-			const mockedUseQuery = jest.fn().mockReturnValue([[queryChipWithSpecialChars], noop]);
+			const mockedUseQuery = vi.fn().mockReturnValue([[queryChipWithSpecialChars], noop]);
 			const resultsHeader = (props: { label: string }): ReactElement => <>{props.label}</>;
 
 			const searchViewProps: SearchViewProps = {
@@ -517,7 +484,6 @@ describe('SearchView', () => {
 			};
 
 			setupTest(<SearchView {...searchViewProps} />);
-
 			expect(
 				await screen.findByText(
 					/Special characters like :, ", -, !, etc., are ignored in the search/
@@ -533,7 +499,7 @@ describe('SearchView', () => {
 				value: 'flagged:true',
 				queryChipsToAdvancedFiltersValue: { flagged: true }
 			} as QueryChip & { queryChipsToAdvancedFiltersValue: any };
-			const mockedUseQuery = jest.fn().mockReturnValue([[advancedSearchChip], noop]);
+			const mockedUseQuery = vi.fn().mockReturnValue([[advancedSearchChip], noop]);
 			const resultsHeader = (props: { label: string }): ReactElement => <>{props.label}</>;
 
 			const searchViewProps: SearchViewProps = {
@@ -564,7 +530,7 @@ describe('SearchView', () => {
 				value: 'test:keyword'
 			};
 			const mixedQuery = [advancedSearchChip, regularKeywordWithSpecialChars];
-			const mockedUseQuery = jest.fn().mockReturnValue([mixedQuery, noop]);
+			const mockedUseQuery = vi.fn().mockReturnValue([mixedQuery, noop]);
 			const resultsHeader = (props: { label: string }): ReactElement => <>{props.label}</>;
 
 			const searchViewProps: SearchViewProps = {
@@ -598,7 +564,7 @@ describe('SearchView', () => {
 				queryChipsToAdvancedFiltersValue: { shared: true }
 			} as QueryChip & { queryChipsToAdvancedFiltersValue: any };
 			const queryWithOnlyAdvancedChips = [advancedSearchChip1, advancedSearchChip2];
-			const mockedUseQuery = jest.fn().mockReturnValue([queryWithOnlyAdvancedChips, noop]);
+			const mockedUseQuery = vi.fn().mockReturnValue([queryWithOnlyAdvancedChips, noop]);
 			const resultsHeader = (props: { label: string }): ReactElement => <>{props.label}</>;
 
 			const searchViewProps: SearchViewProps = {

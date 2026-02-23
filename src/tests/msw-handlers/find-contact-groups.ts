@@ -6,10 +6,11 @@
 import { SoapResponse } from '@zextras/carbonio-shell-ui';
 import { JSNS } from '@zextras/carbonio-ui-commons';
 import { http, HttpResponse, HttpResponseResolver } from 'msw';
+import { Mock } from 'vitest';
 
+import { getSetupServer } from '@jest-setup';
 import { CnItem, GenericSoapPayload } from 'network/api/types';
 import { buildSoapResponse, createSoapContactGroup } from 'tests/utils';
-import { getSetupServer } from '@jest-setup';
 
 interface FindContactGroupsSoapApiRequest extends GenericSoapPayload<typeof JSNS.MAIL> {
 	limit: number;
@@ -25,6 +26,7 @@ interface FindContactGroupsSoapApiResponse extends GenericSoapPayload<typeof JSN
 	offset: number;
 	more: boolean;
 }
+
 export const createFindContactGroupsResponse = (
 	cn: FindContactGroupsSoapApiResponse['cn'],
 	more = false
@@ -35,21 +37,20 @@ export const createFindContactGroupsResponse = (
 	more,
 	_jsns: JSNS.MAIL
 });
+
 type FindContactGroupsHandler = HttpResponseResolver<
 	never,
 	{ Body: { SearchRequest: FindContactGroupsSoapApiRequest } },
 	SoapResponse<FindContactGroupsSoapApiResponse>
 >;
+
 export const registerFindContactGroupsHandler = (
 	...args: Array<{
 		offset: number;
 		findContactGroupsResponse: FindContactGroupsSoapApiResponse;
 	}>
-): jest.Mock<ReturnType<FindContactGroupsHandler>, Parameters<FindContactGroupsHandler>> => {
-	const handler = jest.fn<
-		ReturnType<FindContactGroupsHandler>,
-		Parameters<FindContactGroupsHandler>
-	>(async ({ request }) => {
+): Mock<FindContactGroupsHandler> => {
+	const handler = vi.fn<FindContactGroupsHandler>(async ({ request }) => {
 		const reqBody = await request.json();
 		const { offset } = reqBody.Body.SearchRequest;
 

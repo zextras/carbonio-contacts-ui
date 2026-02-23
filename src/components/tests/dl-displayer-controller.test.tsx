@@ -6,14 +6,16 @@
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
+import { act } from '@testing-library/react';
 import { BooleanString } from '@zextras/carbonio-shell-ui';
 import { times } from 'lodash';
 import { HttpResponse } from 'msw';
 
+import { screen, setupTest } from '@test-setup';
 import { DLDisplayerController } from 'components/dl-displayer-controller';
 import {
 	EMPTY_DISPLAYER_NO_CONTACTS_HINT,
-	JEST_MOCKED_ERROR,
+	VITEST_MOCKED_ERROR,
 	TESTID_SELECTORS
 } from 'constants/tests';
 import { DistributionList } from 'model/distribution-list';
@@ -23,7 +25,6 @@ import {
 } from 'tests/msw-handlers/get-distribution-list';
 import { registerGetDistributionListMembersHandler } from 'tests/msw-handlers/get-distribution-list-members';
 import { buildSoapResponse, generateDistributionList } from 'tests/utils';
-import { screen, setupTest } from '@test-setup';
 
 beforeEach(() => {
 	registerGetDistributionListMembersHandler();
@@ -94,6 +95,7 @@ describe('Distribution List Displayer Controller', () => {
 			});
 			registerGetDistributionListMembersHandler(members);
 			const { user } = setupTest(<DLDisplayerController id={dl.id} />);
+
 			await screen.findAllByText(dl.displayName);
 			await user.click(screen.getByText(/member list/i));
 			expect(await screen.findByText(/member list 10/i)).toBeVisible();
@@ -128,17 +130,16 @@ describe('Distribution List Displayer Controller', () => {
 	});
 
 	it('should show an error snackbar if there is a network error while loading the details', async () => {
-		jest.spyOn(console, 'warn').mockImplementation();
 		const dl = generateDistributionList();
-		registerGetDistributionListHandler(dl, JEST_MOCKED_ERROR);
-		setupTest(<DLDisplayerController id={dl.id} />);
+		registerGetDistributionListHandler(dl, VITEST_MOCKED_ERROR);
+		await act(() => setupTest(<DLDisplayerController id={dl.id} />));
 		expect(await screen.findByText(/something went wrong/i)).toBeVisible();
 	});
 
 	it.skip('should show an error snackbar if there is a network error while loading the member list', async () => {
 		const dl = generateDistributionList();
 		registerGetDistributionListHandler(dl);
-		registerGetDistributionListMembersHandler(undefined, undefined, JEST_MOCKED_ERROR);
+		registerGetDistributionListMembersHandler(undefined, undefined, VITEST_MOCKED_ERROR);
 		setupTest(<DLDisplayerController id={dl.id} />);
 		expect(await screen.findAllByText(dl.displayName)).toHaveLength(2);
 		expect(await screen.findByText(/Something went wrong, please try again/i)).toBeVisible();

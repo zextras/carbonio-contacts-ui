@@ -10,18 +10,18 @@ import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 import { FOLDERS, isLink, isSystemFolder, getFolder, JSNS } from '@zextras/carbonio-ui-commons';
 import { times } from 'lodash';
 
-import { UIAction } from 'actions/types';
-import { MOVE_ACTION } from 'constants/actions';
-import { FOLDERS_DESCRIPTORS, TIMERS } from 'constants/tests';
-import { ContactActionResponse } from 'network/api/contact-action';
-import { buildContact } from 'tests/model-builder';
-import { getFoldersArray } from 'tests/utils';
-import { Contact } from 'legacy/types/contact';
-import { ContactActionRequest } from 'legacy/types/soap';
-import { useMoveContactsDragAndDrop } from 'legacy/ui-actions/use-move-contacts-drag-and-drop';
 import { setupHook, screen, makeListItemsVisible, within } from '@test-setup';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 import { populateFoldersStore } from '@test-utils/store/folders';
+import { UIAction } from 'actions/types';
+import { MOVE_ACTION } from 'constants/actions';
+import { FOLDERS_DESCRIPTORS, TIMERS } from 'constants/tests';
+import { Contact } from 'legacy/types/contact';
+import { ContactActionRequest } from 'legacy/types/soap';
+import { useMoveContactsDragAndDrop } from 'legacy/ui-actions/use-move-contacts-drag-and-drop';
+import { ContactActionResponse } from 'network/api/contact-action';
+import { buildContact } from 'tests/model-builder';
+import { getFoldersArray } from 'tests/utils';
 
 describe('useActionMoveContacts', () => {
 	it('should return an object with the specific data', () => {
@@ -111,7 +111,7 @@ describe('useActionMoveContacts', () => {
 				});
 
 				act(() => {
-					jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+					vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 				});
 
 				expect(screen.getByText(`Move ${contacts.length} contacts`)).toBeVisible();
@@ -127,7 +127,7 @@ describe('useActionMoveContacts', () => {
 				});
 
 				act(() => {
-					jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+					vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 				});
 
 				expect(screen.queryByRole('button', { name: 'Move' })).not.toBeInTheDocument();
@@ -147,7 +147,7 @@ describe('useActionMoveContacts', () => {
 				});
 
 				act(() => {
-					jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+					vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 				});
 
 				const moveButton = screen.getByRole('button', { name: 'Move' });

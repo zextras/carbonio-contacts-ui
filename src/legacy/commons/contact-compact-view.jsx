@@ -6,15 +6,7 @@
 import React, { useMemo } from 'react';
 
 import styled from '@emotion/styled';
-import {
-	Avatar,
-	Button,
-	Container,
-	IconButton,
-	Responsive,
-	Row,
-	Text
-} from '@zextras/carbonio-design-system';
+import { Avatar, Button, Container, Responsive, Row, Text } from '@zextras/carbonio-design-system';
 import { trim } from 'lodash';
 
 import { CustomIconAvatar } from 'components/styled-components';
@@ -87,7 +79,9 @@ export const CompactView = ({ contact, toggleOpen, open }) => {
 					</Container>
 
 					{toggleOpen && (
-						<IconButton
+						<Button
+							type={'ghost'}
+							color={'gray0'}
 							size="medium"
 							onClick={toggleOpen}
 							icon={open ? 'ArrowIosUpward' : 'ArrowIosDownward'}

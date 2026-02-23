@@ -8,6 +8,7 @@ import React from 'react';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { ContactInputProps } from '@zextras/carbonio-ui-commons';
 import { HttpResponse } from 'msw';
+import { vi } from 'vitest';
 
 import { setupTest } from '@test-setup';
 import { generateFolder } from '@test-utils/folders/folders-generator';
@@ -29,7 +30,7 @@ describe('App', () => {
 	});
 
 	it('should register a "contacts" route accessible from the primary bar with specific position, name and icon', () => {
-		const addRoute = jest.spyOn(shell, 'addRoute');
+		const addRoute = vi.spyOn(shell, 'addRoute');
 		setupTest(<App />);
 
 		expect(addRoute).toHaveBeenCalledWith<Parameters<typeof shell.addRoute>>(
@@ -44,7 +45,7 @@ describe('App', () => {
 	});
 
 	it('should register a "groups" route accessible from the primary bar with specific position, name and icon', () => {
-		const addRoute = jest.spyOn(shell, 'addRoute');
+		const addRoute = vi.spyOn(shell, 'addRoute');
 		setupTest(<App />);
 
 		expect(addRoute).toHaveBeenCalledWith<Parameters<typeof shell.addRoute>>(
@@ -59,7 +60,7 @@ describe('App', () => {
 	});
 
 	it('should register a settings view', () => {
-		const addSettingsView = jest.spyOn(shell, 'addSettingsView');
+		const addSettingsView = vi.spyOn(shell, 'addSettingsView');
 		setupTest(<App />);
 		expect(addSettingsView).toHaveBeenCalledWith<Parameters<typeof shell.addSettingsView>>(
 			expect.objectContaining({
@@ -70,7 +71,7 @@ describe('App', () => {
 	});
 
 	it('should register a board view to edit a contact', () => {
-		const addBoardView = jest.spyOn(shell, 'addBoardView');
+		const addBoardView = vi.spyOn(shell, 'addBoardView');
 		setupTest(<App />);
 		expect(addBoardView).toHaveBeenCalledWith<Parameters<typeof shell.addBoardView>>({
 			id: CONTACT_BOARD_ID,
@@ -79,7 +80,7 @@ describe('App', () => {
 	});
 
 	it('should register a board view to create a contacts group', () => {
-		const addBoardView = jest.spyOn(shell, 'addBoardView');
+		const addBoardView = vi.spyOn(shell, 'addBoardView');
 		setupTest(<App />);
 		expect(addBoardView).toHaveBeenCalledWith<Parameters<typeof shell.addBoardView>>({
 			id: 'new-contact-group-board',
@@ -88,7 +89,7 @@ describe('App', () => {
 	});
 
 	it('should register a board view to edit a contacts group', () => {
-		const addBoardView = jest.spyOn(shell, 'addBoardView');
+		const addBoardView = vi.spyOn(shell, 'addBoardView');
 		setupTest(<App />);
 		expect(addBoardView).toHaveBeenCalledWith<Parameters<typeof shell.addBoardView>>({
 			id: 'edit-contact-group-board',
@@ -97,7 +98,7 @@ describe('App', () => {
 	});
 
 	it('should register a board view to edit a distribution list', () => {
-		const addBoardView = jest.spyOn(shell, 'addBoardView');
+		const addBoardView = vi.spyOn(shell, 'addBoardView');
 		setupTest(<App />);
 		expect(addBoardView).toHaveBeenCalledWith<Parameters<typeof shell.addBoardView>>({
 			id: 'edit-dl-board',
@@ -106,7 +107,7 @@ describe('App', () => {
 	});
 
 	it('should register a contact-input component', async () => {
-		const registerComponents = jest.spyOn(shell, 'registerComponents');
+		const registerComponents = vi.spyOn(shell, 'registerComponents');
 		setupTest(<App />);
 		expect(registerComponents).toHaveBeenCalledWith<
 			Parameters<typeof shell.registerComponents<ContactInputProps>>

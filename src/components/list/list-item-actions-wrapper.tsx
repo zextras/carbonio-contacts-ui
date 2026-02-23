@@ -15,18 +15,14 @@ export const HoverBarContainer = styled(Container)`
 	right: 0;
 	display: none;
 	position: absolute;
+	width: fit-content;
+	height: 45%;
 	background: linear-gradient(
 		to right,
 		transparent,
-		${({ theme }): string => theme.palette.gray6.hover}
+		${({ theme }): string => theme.palette.gray6.hover} 1rem,
+		${({ theme }): string => theme.palette.gray6.hover} 100%
 	);
-	width: calc(100% - 4rem);
-	height: 45%;
-
-	& > * {
-		margin-top: ${({ theme }): string => theme.sizes.padding.small};
-		margin-right: ${({ theme }): string => theme.sizes.padding.small};
-	}
 `;
 
 export const HoverContainer = styled(Container)`
@@ -70,6 +66,7 @@ export const ListItemActionsWrapper = ({
 						orientation="horizontal"
 						mainAlignment="flex-start"
 						crossAlignment="unset"
+						height={'4rem'}
 						onClick={onClick}
 					>
 						{children}
@@ -77,6 +74,8 @@ export const ListItemActionsWrapper = ({
 							orientation="horizontal"
 							mainAlignment="flex-end"
 							crossAlignment="center"
+							gap={'0.25rem'}
+							padding={{ right: '0.5rem', left: '2rem', top: '0.5em' }}
 						>
 							{hoverActions}
 						</HoverBarContainer>

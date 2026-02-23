@@ -8,12 +8,14 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import { act, waitFor } from '@testing-library/react';
 import { JSNS } from '@zextras/carbonio-ui-commons';
+import { vi } from 'vitest';
 
+import { screen, setupTest, within } from '@test-setup';
 import {
 	EditDLControllerComponent,
 	EditDLControllerComponentProps
 } from 'components/edit-dl-controller';
-import { JEST_MOCKED_ERROR, TESTID_SELECTORS } from 'constants/tests';
+import { VITEST_MOCKED_ERROR, TESTID_SELECTORS } from 'constants/tests';
 import { DistributionList } from 'model/distribution-list';
 import {
 	BatchDistributionListActionRequest,
@@ -27,7 +29,6 @@ import {
 	getDLContactInput,
 	spyUseBoardHooks
 } from 'tests/utils';
-import { screen, setupTest, within } from '@test-setup';
 
 beforeEach(() => {
 	spyUseBoardHooks();
@@ -149,7 +150,7 @@ describe('EditDLControllerComponent', () => {
 				const saveButton = screen.getByRole('button', { name: /save/i });
 				await user.type(screen.getByRole('textbox', { name: /description/i }), faker.word.words());
 				await waitFor(() => expect(saveButton).toBeEnabled());
-				await user.type(
+				await user.pasteInto(
 					screen.getByRole('textbox', { name: /name/i }),
 					faker.string.alpha({ length: 257 })
 				);
@@ -272,7 +273,7 @@ describe('EditDLControllerComponent', () => {
 				const dl = generateDistributionList({
 					members: generateDistributionListMembersPage(members)
 				});
-				registerDistributionListActionHandler({}, [JEST_MOCKED_ERROR]);
+				registerDistributionListActionHandler({}, [VITEST_MOCKED_ERROR]);
 				const { user } = setupTest(<EditDLControllerComponent {...buildProps(dl)} />);
 				await screen.findByText(dl.email);
 				await user.click(screen.getByText(/member list/i));
@@ -384,7 +385,7 @@ describe('EditDLControllerComponent', () => {
 			});
 
 			it('should reset board title to the initial one', async () => {
-				const updateBoardFn = jest.fn();
+				const updateBoardFn = vi.fn();
 				spyUseBoardHooks(updateBoardFn);
 				const dlData = { displayName: faker.word.words(), description: faker.word.words() };
 				const dl = generateDistributionList({

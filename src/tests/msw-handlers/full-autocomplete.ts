@@ -5,10 +5,11 @@
  */
 import { SoapResponse } from '@zextras/carbonio-shell-ui';
 import { HttpResponseResolver, http, HttpResponse } from 'msw';
+import { Mock } from 'vitest';
 
+import { getSetupServer } from '@jest-setup';
 import { FullAutocompleteResponse, Match } from 'legacy/types/contact';
 import { buildSoapResponse } from 'tests/utils';
-import { getSetupServer } from '@jest-setup';
 
 const createAutocompleteResponse = (match: Array<Match>): FullAutocompleteResponse => {
 	const matchString = match.map((item) => {
@@ -39,14 +40,13 @@ type FullAutoCompleteHandler = HttpResponseResolver<
 >;
 export const registerFullAutocompleteHandler = (
 	results: Array<Match>
-): jest.Mock<ReturnType<FullAutoCompleteHandler>, Parameters<FullAutoCompleteHandler>> => {
-	const handler = jest.fn<ReturnType<FullAutoCompleteHandler>, Parameters<FullAutoCompleteHandler>>(
-		() =>
-			HttpResponse.json(
-				buildSoapResponse<FullAutocompleteResponse>({
-					FullAutocompleteResponse: createAutocompleteResponse(results)
-				})
-			)
+): Mock<FullAutoCompleteHandler> => {
+	const handler = vi.fn<FullAutoCompleteHandler>(() =>
+		HttpResponse.json(
+			buildSoapResponse<FullAutocompleteResponse>({
+				FullAutocompleteResponse: createAutocompleteResponse(results)
+			})
+		)
 	);
 	getSetupServer().use(http.post('/service/soap/FullAutocompleteRequest', handler));
 

@@ -7,6 +7,7 @@ import { faker } from '@faker-js/faker';
 import { act } from '@testing-library/react';
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 import { JSNS } from '@zextras/carbonio-ui-commons';
+import { vi } from 'vitest';
 
 import { TESTID_SELECTORS, TIMERS } from '../../../constants/tests';
 import { Contact } from '../../../legacy/types/contact';
@@ -40,7 +41,7 @@ describe('useMoveContacts', () => {
 			action.onClick();
 		});
 		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+			vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 		expect(screen.getByRole('button', { name: /Move/i })).toBeVisible();
 	});
@@ -53,7 +54,7 @@ describe('useMoveContacts', () => {
 			action.onClick();
 		});
 		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+			vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 		expect(screen.getByText('My Modal')).toBeVisible();
 	});
@@ -66,7 +67,7 @@ describe('useMoveContacts', () => {
 			action.onClick();
 		});
 		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+			vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 		expect(
 			screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.close })
@@ -81,7 +82,7 @@ describe('useMoveContacts', () => {
 			action.onClick();
 		});
 		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+			vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 		const button = screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.close });
 		await user.click(button);

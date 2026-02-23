@@ -9,14 +9,19 @@ import { faker } from '@faker-js/faker';
 import * as shell from '@zextras/carbonio-shell-ui';
 import * as clipboard from '@zextras/carbonio-ui-commons';
 
+import { screen, setupTest, within } from '@test-setup';
 import { MemberDisplayerListItemComponent } from 'components/member-displayer-list-item';
 import { TESTID_SELECTORS } from 'constants/tests';
-import { screen, setupTest, within } from '@test-setup';
 
-jest.mock('@zextras/carbonio-ui-commons', () => ({
-	...jest.requireActual('@zextras/carbonio-ui-commons'),
-	copyToClipboard: jest.fn()
-}));
+vi.mock('@zextras/carbonio-ui-commons', async () => {
+	const actual = await vi.importActual<typeof import('@zextras/carbonio-ui-commons')>(
+		'@zextras/carbonio-ui-commons'
+	);
+	return {
+		...actual,
+		copyToClipboard: vi.fn()
+	};
+});
 
 describe('Member displayer item', () => {
 	it('should show the email of the member', () => {
@@ -32,7 +37,7 @@ describe('Member displayer item', () => {
 	});
 
 	it('should show the send email action button if the Mails integration is available', () => {
-		jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([jest.fn(), true]);
+		vi.spyOn(shell, 'useIntegratedFunction').mockReturnValue([vi.fn(), true]);
 		const email = faker.internet.email();
 		setupTest(<MemberDisplayerListItemComponent email={email} />);
 		expect(
@@ -41,7 +46,7 @@ describe('Member displayer item', () => {
 	});
 
 	it('should not show the send email action button if the Mails integration is not available', () => {
-		jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([jest.fn(), false]);
+		vi.spyOn(shell, 'useIntegratedFunction').mockReturnValue([vi.fn(), false]);
 		const email = faker.internet.email();
 		setupTest(<MemberDisplayerListItemComponent email={email} />);
 		expect(
@@ -56,8 +61,8 @@ describe('Member displayer item', () => {
 	});
 
 	it('should call the send email integration function when user clicks on send mail button', async () => {
-		const openMailComposer = jest.fn();
-		jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
+		const openMailComposer = vi.fn();
+		vi.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openMailComposer, true]);
 		const email = faker.internet.email();
 		const { user } = setupTest(<MemberDisplayerListItemComponent email={email} />);
 		const button = screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.sendEmail });
@@ -68,7 +73,7 @@ describe('Member displayer item', () => {
 	});
 
 	it('should call copy into clipboard function when user clicks on copy address button', async () => {
-		const copyToClipboard = jest
+		const copyToClipboard = vi
 			.spyOn(clipboard, 'copyToClipboard')
 			.mockImplementation(() => Promise.resolve());
 		const email = faker.internet.email();
@@ -79,7 +84,7 @@ describe('Member displayer item', () => {
 	});
 
 	it('should show a success snackbar after the user clicks on copy address button', async () => {
-		jest.spyOn(clipboard, 'copyToClipboard').mockImplementation(() => Promise.resolve());
+		vi.spyOn(clipboard, 'copyToClipboard').mockImplementation(() => Promise.resolve());
 
 		const email = faker.internet.email();
 		const { user } = setupTest(<MemberDisplayerListItemComponent email={email} />);

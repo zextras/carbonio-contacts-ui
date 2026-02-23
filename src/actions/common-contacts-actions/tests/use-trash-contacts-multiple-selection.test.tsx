@@ -39,6 +39,7 @@ describe('execute actions', () => {
 		expect(action.label).toBe('Delete');
 	});
 });
+
 describe('Api Client Actions', () => {
 	it('should show a success snackbar after receiving a successful result from the API', async () => {
 		createSoapAPIInterceptor('ContactAction');
@@ -51,7 +52,13 @@ describe('Api Client Actions', () => {
 			action.onClick();
 		});
 
-		expect(await screen.findByText('Contact moved to trash')).toBeVisible();
+		// expect(await screen.findByText('Contact moved to trash')).toBeVisible();
+
+		// const snackbar = await vi.waitFor(() => screen.findByText('Contact moved to trash'));
+		// expect(snackbar).toBeVisible();
+
+		const snackbar = await screen.findByText('Contact moved to trash');
+		await vi.waitFor(() => expect(snackbar).toBeVisible());
 	});
 
 	it('should show an error snackbar after receiving a failure result from the API', async () => {
@@ -66,16 +73,15 @@ describe('Api Client Actions', () => {
 		createSoapAPIInterceptor('ContactAction', response);
 		const contacts: Array<Contact> = [buildContact({ parent: FOLDERS.CONTACTS })];
 
-		const { result, user } = setupHook(() => useTrashContacts(contacts));
+		const { result } = setupHook(() => useTrashContacts(contacts));
 		const action = result.current;
 		act(() => {
 			action.onClick();
 		});
-		act(() => {
-			jest.advanceTimersByTime(2000);
-		});
 
-		expect(await screen.findByText('Something went wrong, please try again')).toBeVisible();
+		await vi.waitFor(() => {
+			expect(screen.getByText('Something went wrong, please try again')).toBeVisible();
+		});
 	});
 
 	it('should call the API to restore the folder position if the user clicks on the "undo" button on the snackbar', async () => {
@@ -87,9 +93,6 @@ describe('Api Client Actions', () => {
 		const action = result.current;
 		act(() => {
 			action.onClick();
-		});
-		act(() => {
-			jest.advanceTimersByTime(2000);
 		});
 		const button = await screen.findByRole('button', { name: 'Undo' });
 
@@ -122,9 +125,6 @@ describe('Api Client Actions', () => {
 		const action = result.current;
 		act(() => {
 			action.onClick();
-		});
-		act(() => {
-			jest.advanceTimersByTime(2000);
 		});
 		const button = await screen.findByRole('button', { name: 'Undo' });
 

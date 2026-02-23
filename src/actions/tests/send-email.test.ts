@@ -6,10 +6,11 @@
 import { faker } from '@faker-js/faker';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { times } from 'lodash';
+import { vi } from 'vitest';
 
+import { setupHook } from '@test-setup';
 import { useActionSendEmail } from 'actions/send-email';
 import { UIAction } from 'actions/types';
-import { setupHook } from '@test-setup';
 
 describe('useActionSendEmail', () => {
 	it('should return an action with the specific data', () => {
@@ -26,21 +27,21 @@ describe('useActionSendEmail', () => {
 	});
 
 	it('should return an action which is executable if the integrated function is available', () => {
-		jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([jest.fn(), true]);
+		vi.spyOn(shell, 'useIntegratedFunction').mockReturnValue([vi.fn(), true]);
 		const { result } = setupHook(useActionSendEmail);
 		expect(result.current.canExecute()).toBeTruthy();
 	});
 
 	it('should return an action which is not executable if the integrated function is not available', () => {
-		jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([jest.fn(), false]);
+		vi.spyOn(shell, 'useIntegratedFunction').mockReturnValue([vi.fn(), false]);
 		const { result } = setupHook(useActionSendEmail);
 		expect(result.current.canExecute()).toBeFalsy();
 	});
 
 	it('should call the integrated function with the fields properly set for one single email address', () => {
 		const email = faker.internet.email();
-		const openComposer = jest.fn();
-		jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openComposer, true]);
+		const openComposer = vi.fn();
+		vi.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openComposer, true]);
 		const { result } = setupHook(useActionSendEmail);
 		result.current.execute([email]);
 		expect(openComposer).toBeCalledWith({
@@ -60,8 +61,8 @@ describe('useActionSendEmail', () => {
 			email: faker.internet.email(),
 			isGroup: false
 		};
-		const openComposer = jest.fn();
-		jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openComposer, true]);
+		const openComposer = vi.fn();
+		vi.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openComposer, true]);
 		const { result } = setupHook(useActionSendEmail);
 		result.current.execute([recipient]);
 		expect(openComposer).toBeCalledWith({
@@ -78,8 +79,8 @@ describe('useActionSendEmail', () => {
 
 	it('should call the integrated function with the fields properly set for multiple single email addresses', () => {
 		const emails = times(12, () => faker.internet.email());
-		const openComposer = jest.fn();
-		jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openComposer, true]);
+		const openComposer = vi.fn();
+		vi.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openComposer, true]);
 		const { result } = setupHook(useActionSendEmail);
 		result.current.execute(emails);
 		expect(openComposer).toBeCalledWith({
@@ -97,8 +98,8 @@ describe('useActionSendEmail', () => {
 			email: faker.internet.email(),
 			isGroup: index % 2 === 0
 		}));
-		const openComposer = jest.fn();
-		jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openComposer, true]);
+		const openComposer = vi.fn();
+		vi.spyOn(shell, 'useIntegratedFunction').mockReturnValue([openComposer, true]);
 		const { result } = setupHook(useActionSendEmail);
 		result.current.execute(recipients);
 		expect(openComposer).toBeCalledWith({

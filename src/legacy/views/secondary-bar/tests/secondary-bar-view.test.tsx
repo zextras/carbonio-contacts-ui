@@ -9,14 +9,17 @@ import { act, waitFor } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { FOLDER_VIEW, FOLDERS, useFolderStore } from '@zextras/carbonio-ui-commons';
 
-import SecondaryBarView from 'legacy/views/secondary-bar/secondary-bar-view';
 import { setupTest, screen } from '@test-setup';
 import { generateFolder } from '@test-utils/folders/folders-generator';
+import SecondaryBarView from 'legacy/views/secondary-bar/secondary-bar-view';
 
-jest.mock('react-router-dom', () => ({
-	...jest.requireActual('react-router-dom'),
-	useHistory: jest.fn()
-}));
+vi.mock('react-router-dom', async () => {
+	const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+	return {
+		...actual,
+		useHistory: vi.fn()
+	};
+});
 
 describe('Secondary Bar', () => {
 	it('should not break if empty folders', () => {
@@ -25,7 +28,7 @@ describe('Secondary Bar', () => {
 	it('should display FindShare button only on the main account when all folders expanded', async () => {
 		const sharedAccountFolderId = '200';
 		const expandedAccordions = [FOLDERS.USER_ROOT, sharedAccountFolderId];
-		jest.spyOn(shell, 'useLocalStorage').mockReturnValue([expandedAccordions, jest.fn()]);
+		vi.spyOn(shell, 'useLocalStorage').mockReturnValue([expandedAccordions, vi.fn()]);
 		const mainAccountFolder = generateFolder({
 			name: 'userRoot',
 			id: FOLDERS.USER_ROOT,

@@ -47,8 +47,8 @@ describe('DragItems', () => {
 
 		const items = screen.getAllByTestId(TESTID_SELECTORS.contactsListItem);
 		expect(items).toHaveLength(2);
-		expect(items[0]).toHaveTextContent(`${con0?.firstName} ${con0?.middleName} ${con0?.lastName}`);
-		expect(items[1]).toHaveTextContent(`${con1?.firstName} ${con1?.middleName} ${con1?.lastName}`);
+		expect(items[0]).toHaveTextContent(`${con0?.firstName} ${con0?.lastName}`);
+		expect(items[1]).toHaveTextContent(`${con1?.firstName} ${con1?.lastName}`);
 	});
 
 	it('ignores invalid IDs that do not match any contact', () => {

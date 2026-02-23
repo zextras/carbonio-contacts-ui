@@ -6,20 +6,29 @@
 
 import React from 'react';
 
-import { screen, waitFor } from '@testing-library/react';
+import { act, screen, waitFor } from '@testing-library/react';
 import { getTags } from '@zextras/carbonio-ui-commons';
+import { Mock } from 'vitest';
 
 import { AdvancedFilterModal, AdvancedFilterModalProps } from '../advance-filter-modal';
 import { setupTest, within } from '@test-setup';
 
-jest.mock('@zextras/carbonio-ui-commons', () => ({
-	...jest.requireActual('@zextras/carbonio-ui-commons'),
-	getTags: jest.fn()
-}));
+const mockContactInput = vi.fn();
+
+vi.mock('@zextras/carbonio-ui-commons', async () => {
+	const actual = await vi.importActual<typeof import('@zextras/carbonio-ui-commons')>(
+		'@zextras/carbonio-ui-commons'
+	);
+	return {
+		...actual,
+		getTags: vi.fn(),
+		useContactInput: (): Mock => mockContactInput
+	};
+});
 
 describe('Advanced filter modal', () => {
 	const resetFiltersLbl = 'Reset Filters';
-	const onSearchConfirmMock = jest.fn();
+	const onSearchConfirmMock = vi.fn();
 	const firstQueryChip = {
 		id: 'query1',
 		label: 'testKeyword1',
@@ -33,13 +42,13 @@ describe('Advanced filter modal', () => {
 	const mockedQuery = [firstQueryChip, secondQueryChip];
 	const properties: AdvancedFilterModalProps = {
 		open: true,
-		onClose: jest.fn(),
+		onClose: vi.fn(),
 		query: mockedQuery,
 		onSearchConfirm: onSearchConfirmMock,
 		isSharedFolderIncludedInitialValue: false
 	};
 	it('reset filters button should be enabled if query is not empty', async () => {
-		setupTest(<AdvancedFilterModal {...properties} />);
+		await act(() => setupTest(<AdvancedFilterModal {...properties} />));
 		const fieldLabel = screen.getByText(`Advanced Filters`);
 		expect(fieldLabel).toBeInTheDocument();
 
@@ -50,7 +59,7 @@ describe('Advanced filter modal', () => {
 	it('reset filters button should be disabled when modal has no query', () => {
 		const advancedFilterModalProps: AdvancedFilterModalProps = {
 			open: true,
-			onClose: jest.fn(),
+			onClose: vi.fn(),
 			query: [],
 			onSearchConfirm: onSearchConfirmMock,
 			isSharedFolderIncludedInitialValue: false
@@ -118,15 +127,15 @@ describe('Advanced filter modal', () => {
 	});
 
 	it('should run the search with tags', async () => {
-		jest.spyOn(console, 'error').mockImplementation();
-		(getTags as jest.Mock).mockImplementation(() => [
+		vi.spyOn(console, 'error').mockImplementation(() => null);
+		(getTags as Mock).mockImplementation(() => [
 			{
 				name: 'tag1'
 			}
 		]);
 		const props: AdvancedFilterModalProps = {
 			open: true,
-			onClose: jest.fn(),
+			onClose: vi.fn(),
 			query: [],
 			onSearchConfirm: onSearchConfirmMock,
 			isSharedFolderIncludedInitialValue: false
@@ -158,7 +167,7 @@ describe('Advanced filter modal', () => {
 	});
 
 	it('should restore initial query state when modal is reopened', async () => {
-		const onCloseMock = jest.fn();
+		const onCloseMock = vi.fn();
 		const { user, rerender } = setupTest(
 			<AdvancedFilterModal {...properties} onClose={onCloseMock} />
 		);
@@ -184,7 +193,7 @@ describe('Advanced filter modal', () => {
 	});
 
 	it('should reset filters when modal is closed via close button', async () => {
-		const onCloseMock = jest.fn();
+		const onCloseMock = vi.fn();
 		const { user } = setupTest(<AdvancedFilterModal {...properties} onClose={onCloseMock} />);
 
 		await screen.findAllByTestId('chip');
@@ -224,7 +233,7 @@ describe('Advanced filter modal', () => {
 	it('should disable search button when query is empty', () => {
 		const props: AdvancedFilterModalProps = {
 			open: true,
-			onClose: jest.fn(),
+			onClose: vi.fn(),
 			query: [],
 			onSearchConfirm: onSearchConfirmMock,
 			isSharedFolderIncludedInitialValue: false
@@ -277,7 +286,8 @@ describe('Advanced filter modal', () => {
 	});
 
 	it('should filter out advanced search chips from files-ui when switching modules', async () => {
-		jest.spyOn(console, 'error').mockImplementation();
+		vi.spyOn(console, 'error').mockImplementation(() => null);
+
 		const advancedSearchChip = {
 			id: 'advanced1',
 			label: 'flagged:true',
@@ -299,7 +309,7 @@ describe('Advanced filter modal', () => {
 
 		const props: AdvancedFilterModalProps = {
 			open: true,
-			onClose: jest.fn(),
+			onClose: vi.fn(),
 			query: queryWithAdvancedChips,
 			onSearchConfirm: onSearchConfirmMock,
 			isSharedFolderIncludedInitialValue: false
@@ -331,7 +341,7 @@ describe('Advanced filter modal', () => {
 
 		const props: AdvancedFilterModalProps = {
 			open: true,
-			onClose: jest.fn(),
+			onClose: vi.fn(),
 			query: queryWithFilterChips,
 			onSearchConfirm: onSearchConfirmMock,
 			isSharedFolderIncludedInitialValue: false
@@ -346,7 +356,8 @@ describe('Advanced filter modal', () => {
 	});
 
 	it('should handle mixed query with advanced chips, regular keywords, and tags', async () => {
-		jest.spyOn(console, 'error').mockImplementation();
+		vi.spyOn(console, 'error').mockImplementation(() => null);
+
 		const advancedSearchChip = {
 			id: 'advanced1',
 			label: 'shared:true',
@@ -373,7 +384,7 @@ describe('Advanced filter modal', () => {
 
 		const props: AdvancedFilterModalProps = {
 			open: true,
-			onClose: jest.fn(),
+			onClose: vi.fn(),
 			query: mixedQuery,
 			onSearchConfirm: onSearchConfirmMock,
 			isSharedFolderIncludedInitialValue: false
@@ -392,7 +403,8 @@ describe('Advanced filter modal', () => {
 	});
 
 	it('should not show any chips when query contains only advanced search chips', async () => {
-		jest.spyOn(console, 'error').mockImplementation();
+		vi.spyOn(console, 'error').mockImplementation(() => null);
+
 		const advancedSearchChip1 = {
 			id: 'advanced1',
 			label: 'flagged:true',
@@ -409,7 +421,7 @@ describe('Advanced filter modal', () => {
 
 		const props: AdvancedFilterModalProps = {
 			open: true,
-			onClose: jest.fn(),
+			onClose: vi.fn(),
 			query: queryWithOnlyAdvancedChips,
 			onSearchConfirm: onSearchConfirmMock,
 			isSharedFolderIncludedInitialValue: false
@@ -422,7 +434,7 @@ describe('Advanced filter modal', () => {
 	});
 
 	it('should close modal and call onSearchConfirm when search button is clicked', async () => {
-		const onCloseMock = jest.fn();
+		const onCloseMock = vi.fn();
 		const { user } = setupTest(<AdvancedFilterModal {...properties} onClose={onCloseMock} />);
 
 		const searchButton = screen.getByRole('button', { name: 'Search' });

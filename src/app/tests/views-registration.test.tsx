@@ -6,8 +6,14 @@
 import React from 'react';
 
 import type * as SearchUI from '@zextras/carbonio-search-ui';
-import { addBoardView, addRoute, addSettingsView } from '@zextras/carbonio-shell-ui';
-import * as shell from '@zextras/carbonio-shell-ui';
+import {
+	addBoardView,
+	addRoute,
+	addSettingsView,
+	useIntegratedFunction,
+	upsertApp
+} from '@zextras/carbonio-shell-ui';
+import { Mock, vi } from 'vitest';
 
 import {
 	CONTACT_BOARD_ID,
@@ -61,13 +67,12 @@ describe('ViewsRegistration', () => {
 	});
 
 	it('should register the search view', () => {
-		const addSearchView = jest.fn();
-		jest.spyOn(shell, 'useIntegratedFunction').mockImplementation((id) => {
-			if (id === 'search-add-view') {
-				return [addSearchView, true];
-			}
-			return [jest.fn(), false];
-		});
+		const SEARCH_ADD_VIEW = 'search-add-view';
+		const addSearchView = vi.fn();
+		(useIntegratedFunction as Mock).mockImplementation((id: string) => [
+			id === SEARCH_ADD_VIEW ? addSearchView : vi.fn(),
+			id === SEARCH_ADD_VIEW
+		]);
 		setupTest(<ViewsRegistration />);
 		expect(addSearchView).toHaveBeenCalledWith<Parameters<typeof SearchUI.addSearchView>>(
 			expect.objectContaining({
@@ -78,16 +83,15 @@ describe('ViewsRegistration', () => {
 	});
 
 	it('should remove the search view on unmount', () => {
-		const addSearchView = jest.fn();
-		const removeSearchView = jest.fn();
-		jest.spyOn(shell, 'useIntegratedFunction').mockImplementation((id) => {
-			if (id === 'search-add-view') {
-				return [addSearchView, true];
-			}
-			if (id === 'search-remove-view') {
-				return [removeSearchView, true];
-			}
-			return [jest.fn(), false];
+		const SEARCH_ADD_VIEW = 'search-add-view';
+		const SEARCH_REMOVE_VIEW = 'search-remove-view';
+		const addSearchView = vi.fn();
+		const removeSearchView = vi.fn();
+		(useIntegratedFunction as Mock).mockImplementation((id: string) => {
+			let fn = vi.fn();
+			if (id === SEARCH_ADD_VIEW) fn = addSearchView;
+			if (id === SEARCH_REMOVE_VIEW) fn = removeSearchView;
+			return [fn, id === SEARCH_ADD_VIEW || id === SEARCH_REMOVE_VIEW];
 		});
 		const { unmount } = setupTest(<ViewsRegistration />);
 
@@ -108,9 +112,8 @@ describe('ViewsRegistration', () => {
 	});
 
 	it('should register upsertApp', () => {
-		const upsertApp = jest.spyOn(shell, 'upsertApp');
 		setupTest(<ViewsRegistration />);
-		expect(upsertApp).toHaveBeenCalledWith<Parameters<typeof shell.upsertApp>>({
+		expect(upsertApp).toHaveBeenCalledWith({
 			name: CONTACTS_APP_ID,
 			display: 'Contacts'
 		});

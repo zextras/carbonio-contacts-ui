@@ -14,6 +14,7 @@ import { TIMERS } from 'constants/tests';
 import { screen, setupHook } from '@test-setup';
 import { generateFolder } from '@test-utils/folders/folders-generator';
 import { populateFoldersStore } from '@test-utils/store/folders';
+import { vi } from 'vitest';
 
 describe('useActionDeleteAddressBooks', () => {
 	it('should return an object with the specific data', () => {
@@ -99,7 +100,7 @@ describe('useActionDeleteAddressBooks', () => {
 		});
 
 		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+			vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 
 		expect(screen.getByText(`Delete ${addressBook.name}`)).toBeVisible();
@@ -120,7 +121,7 @@ describe('useActionDeleteAddressBooks', () => {
 		});
 
 		act(() => {
-			jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+			vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 		});
 
 		expect(screen.queryByText(`Delete ${addressBook.name}`)).not.toBeInTheDocument();

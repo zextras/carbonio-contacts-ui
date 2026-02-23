@@ -10,20 +10,20 @@ import { faker } from '@faker-js/faker';
 import { FOLDERS } from '@zextras/carbonio-ui-commons';
 import { http, HttpResponse } from 'msw';
 
-import { JEST_MOCKED_ERROR, TESTID_SELECTORS } from 'constants/tests';
-import { buildSoapError } from 'tests/utils';
-import * as modifyContactApi from 'legacy/store/actions/modify-contact';
-import { addContactsToStore } from 'legacy/store/contacts';
-import { DetailPanel } from 'legacy/views/app/detail-panel';
 import { getSetupServer } from '@jest-setup';
 import { screen, setupTest } from '@test-setup';
 import { populateFoldersStore } from '@test-utils/store/folders';
+import { VITEST_MOCKED_ERROR, TESTID_SELECTORS } from 'constants/tests';
+import * as modifyContactApi from 'legacy/store/actions/modify-contact';
+import { addContactsToStore } from 'legacy/store/contacts';
+import { DetailPanel } from 'legacy/views/app/detail-panel';
+import { buildSoapError } from 'tests/utils';
 
 describe('Detail panel', () => {
 	describe('Contacts', () => {
 		it('should close edit view when save is successful', async () => {
 			populateFoldersStore();
-			const modifyContactSpy = jest.spyOn(modifyContactApi, 'modifyContact');
+			const modifyContactSpy = vi.spyOn(modifyContactApi, 'modifyContact');
 			const contactId = faker.string.uuid();
 			const folderId = FOLDERS.CONTACTS;
 			const oldName = faker.person.firstName();
@@ -122,7 +122,7 @@ describe('Detail panel', () => {
 			]);
 			getSetupServer().use(
 				http.post('/service/soap/ModifyContactRequest', async () =>
-					HttpResponse.json(buildSoapError(JEST_MOCKED_ERROR), { status: 500 })
+					HttpResponse.json(buildSoapError(VITEST_MOCKED_ERROR), { status: 500 })
 				)
 			);
 			const { user } = setupTest(<DetailPanel />, {

@@ -15,10 +15,10 @@ describe('AddressBookEditGeneralModal', () => {
 		setupTest(
 			<AddressBookEditGeneralModal
 				addressBookId="non-existing-id"
-				onClose={jest.fn()}
-				onAddShare={jest.fn()}
-				onEditShare={jest.fn()}
-				onRevokeShare={jest.fn()}
+				onClose={vi.fn()}
+				onAddShare={vi.fn()}
+				onEditShare={vi.fn()}
+				onRevokeShare={vi.fn()}
 			/>
 		);
 

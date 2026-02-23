@@ -6,10 +6,11 @@
 import React from 'react';
 
 import * as shell from '@zextras/carbonio-shell-ui';
+import { vi } from 'vitest';
 
+import { screen, setupTest } from '@test-setup';
 import { ManagerList } from 'components/manager-list';
 import { TESTID_SELECTORS } from 'constants/tests';
-import { screen, setupTest } from '@test-setup';
 
 describe('Manager list', () => {
 	it('should render Manager list text with the counter of managers', () => {
@@ -24,7 +25,7 @@ describe('Manager list', () => {
 	});
 
 	it('should render the buttons on the list item', () => {
-		jest.spyOn(shell, 'useIntegratedFunction').mockReturnValue([jest.fn(), true]);
+		vi.spyOn(shell, 'useIntegratedFunction').mockReturnValue([vi.fn(), true]);
 		setupTest(<ManagerList managers={[{ id: '1', name: 'email@email.com' }]} />);
 		expect(
 			screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.sendEmail })

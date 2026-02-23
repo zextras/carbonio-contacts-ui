@@ -8,10 +8,10 @@ import React, { useMemo, ReactElement, FC } from 'react';
 import {
 	Container,
 	Dropdown,
-	IconButton,
 	Padding,
 	Divider,
-	DropdownItem
+	DropdownItem,
+	Button
 } from '@zextras/carbonio-design-system';
 import { map, noop } from 'lodash';
 
@@ -65,9 +65,10 @@ const SelectPanelActions: FC<SelectPanelActionsProps> = ({
 				padding={{ all: 'extrasmall' }}
 			>
 				<Container background="gray5" orientation="horizontal" mainAlignment="flex-start">
-					<IconButton
+					<Button
 						icon="ArrowBack"
-						iconColor="primary"
+						type="ghost"
+						color="primary"
 						size="large"
 						onClick={deselectAll ?? noop}
 						data-testid="action-button-deselect-all"
@@ -81,9 +82,10 @@ const SelectPanelActions: FC<SelectPanelActionsProps> = ({
 						data-testid="secondary-actions-dropdown"
 						items={dropDownItems as Array<DropdownItem>}
 					>
-						<IconButton
+						<Button
 							size="medium"
-							iconColor="primary"
+							type="ghost"
+							color="primary"
 							icon="MoreVertical"
 							data-testid="secondary-actions-open-button"
 							onClick={noop}

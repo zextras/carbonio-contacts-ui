@@ -7,10 +7,10 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 
-import { ContactGroupDisplayerDetails } from 'views/contact-groups/displayer/contact-group-displayer-details';
+import { screen, setupTest } from '@test-setup';
 import { TESTID_SELECTORS } from 'constants/tests';
 import { buildContactGroup, buildMembers } from 'tests/model-builder';
-import { screen, setupTest } from '@test-setup';
+import { ContactGroupDisplayerDetails } from 'views/contact-groups/displayer/contact-group-displayer-details';
 
 describe('Contact group displayer details', () => {
 	it('should display the name of the CG', () => {

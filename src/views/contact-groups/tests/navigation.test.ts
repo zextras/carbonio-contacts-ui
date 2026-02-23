@@ -8,18 +8,18 @@ import { faker } from '@faker-js/faker';
 import { useFolderStore } from '@zextras/carbonio-ui-commons';
 import { useNavigate } from 'react-router-dom';
 
+import { setupHook } from '@test-setup';
+import { generateFolder } from '@test-utils/folders/folders-generator';
+import { buildContactGroup } from 'tests/model-builder';
 import {
 	useRedirectToContactGroup,
 	useRedirectToContactGroupFolder
 } from 'views/contact-groups/navigation';
 import { generateLinkFolder } from 'views/contact-groups/tests/utils';
-import { buildContactGroup } from 'tests/model-builder';
-import { setupHook } from '@test-setup';
-import { generateFolder } from '@test-utils/folders/folders-generator';
 
-jest.mock('react-router-dom', () => ({
-	...jest.requireActual('react-router-dom'),
-	useNavigate: jest.fn()
+vi.mock('react-router-dom', async () => ({
+	...(await vi.importActual('react-router-dom')),
+	useNavigate: vi.fn()
 }));
 
 describe('contact groups navigation', () => {
@@ -27,8 +27,8 @@ describe('contact groups navigation', () => {
 		it('should use the folderId for the redirect', async () => {
 			const FOLDER_ID = '7';
 			const GROUP_ID = '33';
-			const spyNavigate = jest.fn();
-			(useNavigate as jest.Mock).mockReturnValue(spyNavigate);
+			const spyNavigate = vi.fn();
+			vi.mocked(useNavigate).mockReturnValue(spyNavigate);
 			const contactGroup = buildContactGroup({ parent: FOLDER_ID, id: GROUP_ID });
 			useFolderStore.setState({ folders: { [FOLDER_ID]: generateFolder({ id: FOLDER_ID }) } });
 
@@ -47,8 +47,8 @@ describe('contact groups navigation', () => {
 				remoteAccountUuId: REMOTE_ACCOUNT_UUID,
 				remoteId: REMOTE_FOLDER_ID
 			});
-			const spyNavigate = jest.fn();
-			(useNavigate as jest.Mock).mockReturnValue(spyNavigate);
+			const spyNavigate = vi.fn();
+			vi.mocked(useNavigate).mockReturnValue(spyNavigate);
 			const contactGroup = buildContactGroup({
 				parent: `${REMOTE_ACCOUNT_UUID}:${REMOTE_FOLDER_ID}`,
 				id: GROUP_ID
@@ -65,8 +65,8 @@ describe('contact groups navigation', () => {
 		it('should use the folderId for the redirect', async () => {
 			const FOLDER_ID = '7';
 			const GROUP_ID = '33';
-			const spyNavigate = jest.fn();
-			(useNavigate as jest.Mock).mockReturnValue(spyNavigate);
+			const spyNavigate = vi.fn();
+			vi.mocked(useNavigate).mockReturnValue(spyNavigate);
 
 			const contactGroup = buildContactGroup({ parent: FOLDER_ID, id: GROUP_ID });
 			useFolderStore.setState({ folders: { [FOLDER_ID]: generateFolder({ id: FOLDER_ID }) } });
@@ -86,8 +86,8 @@ describe('contact groups navigation', () => {
 				remoteAccountUuId: REMOTE_ACCOUNT_UUID,
 				remoteId: REMOTE_FOLDER_ID
 			});
-			const spyNavigate = jest.fn();
-			(useNavigate as jest.Mock).mockReturnValue(spyNavigate);
+			const spyNavigate = vi.fn();
+			vi.mocked(useNavigate).mockReturnValue(spyNavigate);
 
 			const contactGroup = buildContactGroup({
 				parent: `${REMOTE_ACCOUNT_UUID}:${REMOTE_FOLDER_ID}`,

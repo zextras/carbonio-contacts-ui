@@ -11,8 +11,8 @@ import {
 	Accordion,
 	type AccordionItemType,
 	Avatar,
+	Button,
 	Container,
-	IconButton,
 	Padding,
 	Text,
 	Tooltip
@@ -108,11 +108,12 @@ const SecondaryBarView = ({ expanded }: { expanded: boolean }): React.JSX.Elemen
 		() =>
 			items.map((item) => (
 				<Tooltip label={item.label} key={item.id}>
-					<IconButton
-						customSize={{ iconSize: 'large', paddingSize: 'small' }}
+					<Button
+						size="large"
+						type="ghost"
+						color={'gray0'}
 						icon={item.icon ?? 'PeopleOutline'}
 						onClick={item.onClick ?? noop}
-						backgroundColor={item.active ? 'highlight' : undefined}
 					/>
 				</Tooltip>
 			)),
@@ -126,7 +127,7 @@ const SecondaryBarView = ({ expanded }: { expanded: boolean }): React.JSX.Elemen
 			mainAlignment="flex-start"
 			crossAlignment="flex-start"
 		>
-			{(expanded && <Accordion role="menuitem" items={items} />) || (
+			{(expanded && <Accordion role="menuitem" items={items} disableTransition />) || (
 				<Container mainAlignment={'flex-start'} padding={{ vertical: 'small' }}>
 					{collapsedItems}
 				</Container>

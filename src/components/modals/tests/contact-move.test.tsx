@@ -8,25 +8,21 @@ import React from 'react';
 import { act } from '@testing-library/react';
 import { FOLDERS, isLink, isTrashed, getRootsArray } from '@zextras/carbonio-ui-commons';
 import { times } from 'lodash';
+import { vi } from 'vitest';
 
+import { makeListItemsVisible, screen, setupTest, within } from '@test-setup';
+import { populateFoldersStore } from '@test-utils/store/folders';
 import { ContactMoveModal } from 'components/modals/contact-move';
 import { TESTID_SELECTORS } from 'constants/tests';
 import { buildContact } from 'tests/model-builder';
 import { getFoldersArray } from 'tests/utils';
-import { makeListItemsVisible, screen, setupTest, within } from '@test-setup';
-import { populateFoldersStore } from '@test-utils/store/folders';
 
 describe('ContactMoveModal', () => {
 	describe('Move mode', () => {
 		it('should display a modal with a specific title for a single contact', () => {
 			const contact = buildContact();
 			setupTest(
-				<ContactMoveModal
-					mode={'move'}
-					contacts={[contact]}
-					onMove={jest.fn()}
-					onClose={jest.fn()}
-				/>
+				<ContactMoveModal mode={'move'} contacts={[contact]} onMove={vi.fn()} onClose={vi.fn()} />
 			);
 			expect(
 				screen.getByText(`Move ${contact.firstName} ${contact.lastName}'s contact`)
@@ -36,12 +32,7 @@ describe('ContactMoveModal', () => {
 		it('should display a modal with a specific title for multiple contacts', () => {
 			const contacts = times(10, () => buildContact());
 			setupTest(
-				<ContactMoveModal
-					mode={'move'}
-					contacts={contacts}
-					onMove={jest.fn()}
-					onClose={jest.fn()}
-				/>
+				<ContactMoveModal mode={'move'} contacts={contacts} onMove={vi.fn()} onClose={vi.fn()} />
 			);
 			expect(screen.getByText(`Move ${contacts.length} contacts`)).toBeVisible();
 		});
@@ -54,8 +45,8 @@ describe('ContactMoveModal', () => {
 				<ContactMoveModal
 					mode={'restore'}
 					contacts={[contact]}
-					onMove={jest.fn()}
-					onClose={jest.fn()}
+					onMove={vi.fn()}
+					onClose={vi.fn()}
 				/>
 			);
 			expect(
@@ -66,12 +57,7 @@ describe('ContactMoveModal', () => {
 		it('should display a modal with a specific title for multiple contacts', () => {
 			const contacts = times(10, () => buildContact());
 			setupTest(
-				<ContactMoveModal
-					mode={'restore'}
-					contacts={contacts}
-					onMove={jest.fn()}
-					onClose={jest.fn()}
-				/>
+				<ContactMoveModal mode={'restore'} contacts={contacts} onMove={vi.fn()} onClose={vi.fn()} />
 			);
 			expect(screen.getByText(`Restore ${contacts.length} contacts`)).toBeVisible();
 		});
@@ -79,7 +65,7 @@ describe('ContactMoveModal', () => {
 
 	it('should display a close icon', () => {
 		const contacts = [buildContact()];
-		setupTest(<ContactMoveModal contacts={contacts} onMove={jest.fn()} onClose={jest.fn()} />);
+		setupTest(<ContactMoveModal contacts={contacts} onMove={vi.fn()} onClose={vi.fn()} />);
 		expect(
 			screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.close })
 		).toBeVisible();
@@ -87,9 +73,9 @@ describe('ContactMoveModal', () => {
 
 	it('should call the onClose callback when the user clicks the close icon', async () => {
 		const contacts = [buildContact()];
-		const onClose = jest.fn();
+		const onClose = vi.fn();
 		const { user } = setupTest(
-			<ContactMoveModal contacts={contacts} onMove={jest.fn()} onClose={onClose} />
+			<ContactMoveModal contacts={contacts} onMove={vi.fn()} onClose={onClose} />
 		);
 		const button = screen.getByRoleWithIcon('button', { icon: TESTID_SELECTORS.icons.close });
 		await user.click(button);
@@ -100,14 +86,14 @@ describe('ContactMoveModal', () => {
 		it('should display the primary account root', () => {
 			populateFoldersStore();
 			const contacts = [buildContact()];
-			setupTest(<ContactMoveModal contacts={contacts} onMove={jest.fn()} onClose={jest.fn()} />);
+			setupTest(<ContactMoveModal contacts={contacts} onMove={vi.fn()} onClose={vi.fn()} />);
 			expect(screen.getByTestId(`folder-accordion-root-1`)).toBeVisible();
 		});
 
 		it('should display the shared accounts roots', () => {
 			populateFoldersStore();
 			const contacts = [buildContact()];
-			setupTest(<ContactMoveModal contacts={contacts} onMove={jest.fn()} onClose={jest.fn()} />);
+			setupTest(<ContactMoveModal contacts={contacts} onMove={vi.fn()} onClose={vi.fn()} />);
 			getRootsArray().forEach((root) => {
 				expect(screen.getByTestId(`folder-accordion-root-${root.id}`)).toBeVisible();
 			});
@@ -116,7 +102,7 @@ describe('ContactMoveModal', () => {
 		it('should not display the Trash folder', () => {
 			populateFoldersStore();
 			const contacts = [buildContact()];
-			setupTest(<ContactMoveModal contacts={contacts} onMove={jest.fn()} onClose={jest.fn()} />);
+			setupTest(<ContactMoveModal contacts={contacts} onMove={vi.fn()} onClose={vi.fn()} />);
 			expect(
 				screen.queryByTestId(`folder-accordion-root-${FOLDERS.TRASH}`)
 			).not.toBeInTheDocument();
@@ -133,7 +119,7 @@ describe('ContactMoveModal', () => {
 				return;
 			}
 
-			setupTest(<ContactMoveModal contacts={contacts} onMove={jest.fn()} onClose={jest.fn()} />);
+			setupTest(<ContactMoveModal contacts={contacts} onMove={vi.fn()} onClose={vi.fn()} />);
 			expect(
 				screen.queryByTestId(`folder-accordion-root-${trashedFolder.id}`)
 			).not.toBeInTheDocument();
@@ -150,7 +136,7 @@ describe('ContactMoveModal', () => {
 				return;
 			}
 
-			setupTest(<ContactMoveModal contacts={contacts} onMove={jest.fn()} onClose={jest.fn()} />);
+			setupTest(<ContactMoveModal contacts={contacts} onMove={vi.fn()} onClose={vi.fn()} />);
 			makeListItemsVisible();
 			expect(screen.getByTestId(`folder-accordion-item-${linkedFolder.id}`)).toBeVisible();
 		});
@@ -159,7 +145,7 @@ describe('ContactMoveModal', () => {
 			populateFoldersStore();
 			const parentAddressBookId = FOLDERS.CONTACTS;
 			const contacts = [buildContact({ parent: parentAddressBookId })];
-			setupTest(<ContactMoveModal contacts={contacts} onMove={jest.fn()} onClose={jest.fn()} />);
+			setupTest(<ContactMoveModal contacts={contacts} onMove={vi.fn()} onClose={vi.fn()} />);
 			makeListItemsVisible();
 			expect(
 				screen.queryByTestId(`folder-accordion-item-${parentAddressBookId}`)
@@ -170,7 +156,7 @@ describe('ContactMoveModal', () => {
 			populateFoldersStore();
 			const parentAddressBookId = FOLDERS.CONTACTS;
 			const contacts = times(10, () => buildContact({ parent: parentAddressBookId }));
-			setupTest(<ContactMoveModal contacts={contacts} onMove={jest.fn()} onClose={jest.fn()} />);
+			setupTest(<ContactMoveModal contacts={contacts} onMove={vi.fn()} onClose={vi.fn()} />);
 			makeListItemsVisible();
 			expect(
 				screen.queryByTestId(`folder-accordion-item-${parentAddressBookId}`)
@@ -183,7 +169,7 @@ describe('ContactMoveModal', () => {
 				buildContact({ parent: FOLDERS.CONTACTS }),
 				buildContact({ parent: FOLDERS.AUTO_CONTACTS })
 			];
-			setupTest(<ContactMoveModal contacts={contacts} onMove={jest.fn()} onClose={jest.fn()} />);
+			setupTest(<ContactMoveModal contacts={contacts} onMove={vi.fn()} onClose={vi.fn()} />);
 			makeListItemsVisible();
 			contacts.forEach((contact) =>
 				expect(screen.getByTestId(`folder-accordion-item-${contact.parent}`)).toBeVisible()
@@ -201,12 +187,7 @@ describe('ContactMoveModal', () => {
 				populateFoldersStore();
 				const contacts = [buildContact()];
 				setupTest(
-					<ContactMoveModal
-						mode={'move'}
-						contacts={contacts}
-						onMove={jest.fn()}
-						onClose={jest.fn()}
-					/>
+					<ContactMoveModal mode={'move'} contacts={contacts} onMove={vi.fn()} onClose={vi.fn()} />
 				);
 				expect(screen.getByRole('button', { name: 'Move' })).toBeVisible();
 			});
@@ -215,12 +196,7 @@ describe('ContactMoveModal', () => {
 				populateFoldersStore();
 				const contacts = [buildContact()];
 				setupTest(
-					<ContactMoveModal
-						mode={'move'}
-						contacts={contacts}
-						onMove={jest.fn()}
-						onClose={jest.fn()}
-					/>
+					<ContactMoveModal mode={'move'} contacts={contacts} onMove={vi.fn()} onClose={vi.fn()} />
 				);
 				expect(screen.getByRole('button', { name: 'Move' })).toBeDisabled();
 			});
@@ -234,8 +210,8 @@ describe('ContactMoveModal', () => {
 					<ContactMoveModal
 						mode={'restore'}
 						contacts={contacts}
-						onMove={jest.fn()}
-						onClose={jest.fn()}
+						onMove={vi.fn()}
+						onClose={vi.fn()}
 					/>
 				);
 				expect(screen.getByRole('button', { name: 'Restore' })).toBeVisible();
@@ -248,8 +224,8 @@ describe('ContactMoveModal', () => {
 					<ContactMoveModal
 						mode={'restore'}
 						contacts={contacts}
-						onMove={jest.fn()}
-						onClose={jest.fn()}
+						onMove={vi.fn()}
+						onClose={vi.fn()}
 					/>
 				);
 				expect(screen.getByRole('button', { name: 'Restore' })).toBeDisabled();
@@ -261,7 +237,7 @@ describe('ContactMoveModal', () => {
 			populateFoldersStore();
 			const contacts = [buildContact({ parent: FOLDERS.AUTO_CONTACTS })];
 			const { user } = setupTest(
-				<ContactMoveModal contacts={contacts} onMove={jest.fn()} onClose={jest.fn()} />
+				<ContactMoveModal contacts={contacts} onMove={vi.fn()} onClose={vi.fn()} />
 			);
 			makeListItemsVisible();
 			const newParentListItem = screen.getByTestId('folder-accordion-item-7');
@@ -275,9 +251,9 @@ describe('ContactMoveModal', () => {
 			const contacts = [buildContact({ parent: FOLDERS.AUTO_CONTACTS })];
 
 			const destinationFolder = FOLDERS.CONTACTS;
-			const onMove = jest.fn();
+			const onMove = vi.fn();
 			const { user } = setupTest(
-				<ContactMoveModal contacts={contacts} onMove={onMove} onClose={jest.fn()} />
+				<ContactMoveModal contacts={contacts} onMove={onMove} onClose={vi.fn()} />
 			);
 			makeListItemsVisible();
 			const newParentListItem = within(

@@ -7,15 +7,20 @@ import React from 'react';
 
 import * as clipboard from '@zextras/carbonio-ui-commons';
 
+import { screen, setupTest, within } from '@test-setup';
 import { DLDetailsInfo } from 'components/dl-details-info';
 import { TESTID_SELECTORS } from 'constants/tests';
 import { generateDistributionList } from 'tests/utils';
-import { screen, setupTest, within } from '@test-setup';
 
-jest.mock('@zextras/carbonio-ui-commons', () => ({
-	...jest.requireActual('@zextras/carbonio-ui-commons'),
-	copyToClipboard: jest.fn()
-}));
+vi.mock('@zextras/carbonio-ui-commons', async () => {
+	const actual = await vi.importActual<typeof import('@zextras/carbonio-ui-commons')>(
+		'@zextras/carbonio-ui-commons'
+	);
+	return {
+		...actual,
+		copyToClipboard: vi.fn()
+	};
+});
 
 describe('Distribution list details', () => {
 	it('should show the display name', () => {
@@ -41,7 +46,7 @@ describe('Distribution list details', () => {
 	});
 
 	it('should allow the user to copy the email', async () => {
-		const copyToClipboard = jest
+		const copyToClipboard = vi
 			.spyOn(clipboard, 'copyToClipboard')
 			.mockImplementation(() => Promise.resolve());
 		const dl = generateDistributionList();

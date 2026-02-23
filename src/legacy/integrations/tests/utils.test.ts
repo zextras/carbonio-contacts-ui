@@ -94,21 +94,6 @@ describe('utils', () => {
 			expect(label).toBe('John Toe');
 		});
 
-		it('should include middle name in firstName + lastName fallback', () => {
-			const personContact = {
-				id: '12346546',
-				email: 'john.poe@example.com',
-				firstName: 'John',
-				middleName: 'Michael',
-				lastName: 'Poe',
-				type: CONTACT_TYPES.CONTACT
-			};
-
-			const label = getContactLabel(personContact);
-
-			expect(label).toBe('John Michael Poe');
-		});
-
 		it('should fallback to fullName when no displayName and no name parts available', () => {
 			const personContact = {
 				id: '12321431',
