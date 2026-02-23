@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.20.0](https://github.com/zextras/carbonio-contacts-ui/compare/v1.19.0...v1.20.0) (2026-02-23)
+
+
+### Features
+
+* [CO-3030] Remove Contacts's Middle name field ([#422](https://github.com/zextras/carbonio-contacts-ui/issues/422)) ([c128c45](https://github.com/zextras/carbonio-contacts-ui/commit/c128c45cfeb850dce890c9e6531d8e6ebe29db54))
+* **ci:** add renovate definition for dependencies management ([#402](https://github.com/zextras/carbonio-contacts-ui/issues/402)) ([061a156](https://github.com/zextras/carbonio-contacts-ui/commit/061a156e08c4c126a76dcebd52cc6152cd9c8c55))
+* improve hover action button size and blur effect ([a121858](https://github.com/zextras/carbonio-contacts-ui/commit/a1218580ee29c7f3babc066e92dab2bc2a9897eb)), closes [#413](https://github.com/zextras/carbonio-contacts-ui/issues/413)
+* improve hovering of the lists ([060ad83](https://github.com/zextras/carbonio-contacts-ui/commit/060ad837dff5079e18ebfbe0a3656194f182bb6b))
+
+
+### Bug Fixes
+
+* add sonarqube-scanner dependency to resolve CI permission issue  ([bcf7948](https://github.com/zextras/carbonio-contacts-ui/commit/bcf7948628a1fa7541b7aab81a326131e0da60b2)), closes [#418](https://github.com/zextras/carbonio-contacts-ui/issues/418)
+* **deps:** upgrade node to v22 ([#415](https://github.com/zextras/carbonio-contacts-ui/issues/415)) ([818644a](https://github.com/zextras/carbonio-contacts-ui/commit/818644ad30df402a00499e7a11ed93c90d750eac))
+* disable transition of sidebar accordion ([#414](https://github.com/zextras/carbonio-contacts-ui/issues/414)) ([8ef18f3](https://github.com/zextras/carbonio-contacts-ui/commit/8ef18f361c1b56c8d886cbfbd1d41ae8a07cda83))
+* update commons version to fix workers error ([#399](https://github.com/zextras/carbonio-contacts-ui/issues/399)) ([372b9c6](https://github.com/zextras/carbonio-contacts-ui/commit/372b9c6ca5ceffdef7fe6e1254871c1951b89b19))
+
 ## [1.19.0](https://github.com/zextras/carbonio-contacts-ui/compare/v1.18.1...v1.19.0) (2025-12-09)
 
 
