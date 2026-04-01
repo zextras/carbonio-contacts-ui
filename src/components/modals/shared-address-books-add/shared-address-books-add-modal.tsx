@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import {
 	Divider,
@@ -37,6 +37,13 @@ export const SharedAddressBooksAddModal: FC<SharesModalProps> = ({ onClose }) =>
 	const [sharesInfo, setSharesInfo] = useState<Array<ShareInfo>>([]);
 	const [selectedShares, setSelectedShares] = useState<Array<ShareInfo>>([]);
 	const [ownerNameFilter, setOwnerNameFilter] = useState<string>('');
+	const filterInputRef = useRef<HTMLInputElement>(null);
+
+	useEffect(() => {
+		requestAnimationFrame(() => {
+			filterInputRef.current?.focus();
+		});
+	}, []);
 
 	// Fetch the list of the shares
 	useEffect(() => {
@@ -147,6 +154,7 @@ export const SharedAddressBooksAddModal: FC<SharesModalProps> = ({ onClose }) =>
 					)}
 					value={ownerNameFilter}
 					onChange={onOwnerNameFilterChange}
+					inputRef={filterInputRef}
 				/>
 			</Row>
 			<ScrollableContainer orientation="vertical" mainAlignment="flex-start" minHeight={'6rem'}>
