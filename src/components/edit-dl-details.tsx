@@ -48,11 +48,13 @@ export const EditDLDetails = ({
 	return (
 		<Container gap={'1rem'} height={'auto'}>
 			<Input
-				label={t('edit_dl_component.input.name.label', 'Distribution List name')}
+				label={`${t('edit_dl_component.input.name.label', 'Distribution List name')}*`}
 				value={name}
 				onChange={onDisplayNameChange}
 				description={nameError}
 				hasError={!!nameError}
+				// eslint-disable-next-line jsx-a11y/no-autofocus
+				autoFocus
 			/>
 			<TextArea
 				label={t('edit_dl_component.input.description.label', 'Description')}

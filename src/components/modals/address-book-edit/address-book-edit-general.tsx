@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 
 import {
 	Container,
@@ -51,6 +51,7 @@ export const AddressBookEditGeneralModal = ({
 	const [t] = useTranslation();
 	const [addressBookName, setAddressBookName] = useState(addressBook?.name ?? '');
 	const [addressBookColor, setAddressBookColor] = useState(addressBook?.color ?? 0);
+	const nameInputRef = useRef<HTMLInputElement>(null);
 
 	const modalTitle = useMemo(
 		() =>
@@ -62,7 +63,9 @@ export const AddressBookEditGeneralModal = ({
 	);
 
 	const confirmButtonDisabled = useMemo(
-		() => addressBook?.name === addressBookName && addressBook?.color === addressBookColor,
+		() =>
+			(addressBook?.name === addressBookName && addressBook?.color === addressBookColor) ||
+			addressBookName.trim().length === 0,
 		[addressBook, addressBookName, addressBookColor]
 	);
 
@@ -119,6 +122,15 @@ export const AddressBookEditGeneralModal = ({
 	);
 
 	const addressBookInputDisabled = useMemo(() => isSystemFolder(addressBookId), [addressBookId]);
+
+	useEffect(() => {
+		if (!addressBookInputDisabled) {
+			requestAnimationFrame(() => {
+				nameInputRef.current?.focus();
+			});
+		}
+	}, [addressBookInputDisabled]);
+
 	return (
 		<>
 			<Container
@@ -137,11 +149,12 @@ export const AddressBookEditGeneralModal = ({
 					padding={{ vertical: 'small' }}
 				>
 					<Input
-						label={t('modal.address_book_name', 'Address book name')}
+						label={`${t('modal.address_book_name', 'Address book name')}*`}
 						backgroundColor="gray5"
 						value={addressBookName}
 						onChange={onAddressBookInputChange}
 						disabled={addressBookInputDisabled}
+						inputRef={nameInputRef}
 					/>
 				</Container>
 				<Padding top="small" />

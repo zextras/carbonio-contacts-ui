@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import React, { FC, ReactElement, useCallback, useMemo, useState } from 'react';
+import React, { FC, ReactElement, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Input, Padding, Text, useSnackbar } from '@zextras/carbonio-design-system';
 import {
@@ -12,15 +12,15 @@ import {
 	ColorSelectProps,
 	changeTagColor,
 	createTag,
-	renameTag
+	renameTag,
+	ModalHeader,
+	ModalFooter
 } from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 
-import { ItemType } from 'legacy/views/secondary-bar/parts/tags/types';
 import { contactAction } from 'legacy/store/actions/contact-action';
 import { Contact } from 'legacy/types/contact';
-import ModalFooter from 'legacy/views/secondary-bar/commons/modal-footer';
-import { ModalHeader } from 'legacy/views/secondary-bar/commons/modal-header';
+import { ItemType } from 'legacy/views/secondary-bar/parts/tags/types';
 
 type ComponentProps = {
 	onClose: () => void;
@@ -39,6 +39,7 @@ const CreateUpdateTagModal: FC<ComponentProps> = ({
 	const [t] = useTranslation();
 	const [name, setName] = useState(tag?.name || '');
 	const [color, setColor] = useState(tag?.color || 0);
+	const nameInputRef = useRef<HTMLInputElement>(null);
 	const title = useMemo(
 		() =>
 			editMode
@@ -46,7 +47,7 @@ const CreateUpdateTagModal: FC<ComponentProps> = ({
 				: t('label.create_tag', 'Create a new Tag'),
 		[editMode, t, tag?.name]
 	);
-	const label = useMemo(() => t('label.tag_name', 'Tag name'), [t]);
+	const label = useMemo(() => `${t('label.tag_name', 'Tag name')}*`, [t]);
 	const handleColorChange = useCallback<ColorSelectProps['onChange']>(
 		(c) => setColor(Number(c)),
 		[]
@@ -155,9 +156,16 @@ const CreateUpdateTagModal: FC<ComponentProps> = ({
 			});
 	}, [color, createSnackbar, name, onClose, t, tag]);
 
+	useEffect(() => {
+		requestAnimationFrame(() => {
+			nameInputRef.current?.focus();
+		});
+	}, []);
+
 	return (
 		<>
 			<ModalHeader onClose={onClose} title={title} />
+			<Padding bottom={'small'} />
 			<Input
 				label={label}
 				value={name}
@@ -165,6 +173,7 @@ const CreateUpdateTagModal: FC<ComponentProps> = ({
 				backgroundColor="gray5"
 				textColor={showWarning ? 'error' : 'text'}
 				hasError={showWarning}
+				inputRef={nameInputRef}
 			/>
 
 			{showWarning && (
@@ -188,6 +197,7 @@ const CreateUpdateTagModal: FC<ComponentProps> = ({
 				label={t('label.select_color', 'Select Color')}
 				defaultColor={color}
 			/>
+			<Padding bottom={'medium'} />
 			<ModalFooter
 				onConfirm={editMode ? onUpdate : onCreate}
 				label={editMode ? t('label.edit', 'edit') : t('label.create', 'Create')}

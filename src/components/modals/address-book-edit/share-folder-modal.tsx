@@ -169,7 +169,7 @@ export const ShareFolderModal = ({
 			) : (
 				<Container height="fit" padding={{ vertical: 'small' }}>
 					<ContactInput
-						placeholder={t('share.recipients_address', 'Recipients’ e-mail addresses')}
+						placeholder={`${t('share.recipients_address', "Recipients' e-mail addresses")}*`}
 						onChange={(chips): void => {
 							setContacts(chips);
 						}}

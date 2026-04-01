@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import {
 	Divider,
@@ -17,11 +17,11 @@ import { FOLDERS, useFolder, Folder } from '@zextras/carbonio-ui-commons';
 import { filter } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
+import { FolderTreeSelector } from 'components/folder-tree-selector/folder-tree-selector';
 import { ModalContentAndFooterWrapper } from 'components/modals/modal-content-and-footer-wrapper';
 import { ModalWrapper } from 'components/modals/modal-wrapper';
 import { TIMEOUTS } from 'constants/index';
 import { apiClient } from 'network/api-client';
-import { FolderTreeSelector } from 'components/folder-tree-selector/folder-tree-selector';
 
 export type AddressBookCreateModalProps = {
 	defaultParentId?: string;
@@ -35,6 +35,7 @@ export const AddressBookCreateModal = ({
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
 	const defaultParent = useFolder(defaultParentId ?? FOLDERS.USER_ROOT);
+	const nameInputRef = useRef<HTMLInputElement>(null);
 
 	const [newAddressBookName, setNewAddressBookName] = useState<string>('');
 	const [parentAddressBook, setParentAddressBook] = useState<Folder | undefined>(defaultParent);
@@ -51,7 +52,7 @@ export const AddressBookCreateModal = ({
 		() =>
 			addressBookAlreadyExists
 				? t('folder.modal.new.input.name_exist', 'Name already exists in this path')
-				: t('folder.modal.new.input.name', 'Insert address book name'),
+				: `${t('folder.modal.new.input.name', 'Insert address book name')}*`,
 		[addressBookAlreadyExists, t]
 	);
 
@@ -105,6 +106,12 @@ export const AddressBookCreateModal = ({
 			});
 	}, [createSnackbar, newAddressBookName, onClose, parentAddressBook, t]);
 
+	useEffect(() => {
+		requestAnimationFrame(() => {
+			nameInputRef.current?.focus();
+		});
+	}, []);
+
 	return (
 		<ModalWrapper>
 			<ModalHeader title={modalTitle} onClose={onClose} showCloseIcon />
@@ -112,10 +119,11 @@ export const AddressBookCreateModal = ({
 			<ModalContentAndFooterWrapper>
 				<Input
 					label={addressBookNameFieldLabel}
-					backgroundColor={'gray5'}
+					background={'gray5'}
 					hasError={addressBookAlreadyExists}
 					value={newAddressBookName}
 					onChange={onAddressBookNameChanged}
+					inputRef={nameInputRef}
 				/>
 				<FolderTreeSelector
 					selectedFolderId={parentAddressBook?.id}
