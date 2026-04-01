@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import {
 	Container,
@@ -58,6 +58,15 @@ export const ShareFolderModal = ({
 	const account = useUserAccount();
 	const addressBook = useFolder(addressBookId);
 	const createSnackbar = useSnackbar();
+	const contactInputRef = useRef<HTMLInputElement>(null);
+
+	useEffect(() => {
+		if (!editMode) {
+			requestAnimationFrame(() => {
+				contactInputRef.current?.focus();
+			});
+		}
+	}, [editMode]);
 
 	const title = useMemo(
 		() =>
@@ -174,6 +183,7 @@ export const ShareFolderModal = ({
 							setContacts(chips);
 						}}
 						defaultValue={contacts}
+						inputRef={contactInputRef}
 					/>
 				</Container>
 			)}
