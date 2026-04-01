@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { FC, useCallback, useMemo } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { CustomModal, Divider, ModalFooter, ModalHeader } from '@zextras/carbonio-design-system';
 import { useUserSettings } from '@zextras/carbonio-shell-ui';
@@ -48,6 +48,16 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 	const methods = useForm<AdvancedFilterModalFormValues>({ defaultValues });
 	const { watch, setValue, control } = methods;
 	const formValues = watch();
+
+	const keywordInputRef = useRef<HTMLInputElement>(null);
+
+	useEffect(() => {
+		if (open) {
+			requestAnimationFrame(() => {
+				keywordInputRef.current?.focus();
+			});
+		}
+	}, [open]);
 
 	const resetFilters = useCallback(() => {
 		setValue('keywordInput', []);
@@ -107,7 +117,7 @@ export const AdvancedFilterModal: FC<AdvancedFilterModalProps> = ({
 			>
 				<FormProvider {...methods}>
 					<ToggleFilters />
-					<KeywordRow control={control} />
+					<KeywordRow control={control} inputRef={keywordInputRef} />
 					<NameRow control={control} />
 					<EmailAddressRow control={control} />
 					<CompanyJobRoleRow control={control} />

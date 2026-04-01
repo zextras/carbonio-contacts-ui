@@ -5,13 +5,17 @@
  */
 import React, { ReactElement, useCallback } from 'react';
 
-import { Container, ChipInput } from '@zextras/carbonio-design-system';
+import { Container, ChipInput, ChipInputProps } from '@zextras/carbonio-design-system';
 import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { FormValuesControlProps } from 'legacy/views/search/types';
 
-export const KeywordRow = ({ control }: FormValuesControlProps): ReactElement => {
+type KeywordRowProps = FormValuesControlProps & {
+	inputRef?: ChipInputProps['inputRef'];
+};
+
+export const KeywordRow = ({ control, inputRef }: KeywordRowProps): ReactElement => {
 	const [t] = useTranslation();
 	const keywordChipOnAdd = useCallback(
 		(label: unknown) => ({
@@ -40,6 +44,7 @@ export const KeywordRow = ({ control }: FormValuesControlProps): ReactElement =>
 						onChange={onChange}
 						onAdd={keywordChipOnAdd}
 						requireUniqueChips
+						inputRef={inputRef}
 					/>
 				)}
 			/>
