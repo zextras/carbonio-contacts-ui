@@ -324,7 +324,7 @@ export const CommonContactGroupBoard = ({
 				height={'calc(100% - 8rem)'}
 			>
 				<Input
-					label={`${t('board.newContactGroup.input.name_input.name.label', 'Group name')}`}
+					label={`${t('board.newContactGroup.input.name_input.group.name.label', 'Group name')}*`}
 					background={'gray5'}
 					borderColor={'gray3'}
 					value={nameValue}
