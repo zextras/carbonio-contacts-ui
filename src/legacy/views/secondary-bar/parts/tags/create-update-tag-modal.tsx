@@ -165,7 +165,6 @@ const CreateUpdateTagModal: FC<ComponentProps> = ({
 	return (
 		<>
 			<ModalHeader onClose={onClose} title={title} />
-			<Padding bottom={'small'} />
 			<Input
 				label={label}
 				value={name}
@@ -197,7 +196,6 @@ const CreateUpdateTagModal: FC<ComponentProps> = ({
 				label={t('label.select_color', 'Select Color')}
 				defaultColor={color}
 			/>
-			<Padding bottom={'medium'} />
 			<ModalFooter
 				onConfirm={editMode ? onUpdate : onCreate}
 				label={editMode ? t('label.edit', 'edit') : t('label.create', 'Create')}
