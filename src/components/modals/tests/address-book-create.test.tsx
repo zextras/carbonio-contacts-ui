@@ -43,7 +43,7 @@ describe('AddressBookCreateModal', () => {
 
 	it('should display a placeholder in the address book name field', () => {
 		setupTest(<AddressBookCreateModal onClose={vi.fn()} />);
-		expect(screen.getByRole('textbox', { name: 'Insert address book name' })).toBeVisible();
+		expect(screen.getByRole('textbox', { name: 'Insert address book name*' })).toBeVisible();
 	});
 
 	it('should display an error message in the label if an address book name already exists with the same name on the same parent', async () => {
@@ -51,7 +51,7 @@ describe('AddressBookCreateModal', () => {
 		const { user } = setupTest(
 			<AddressBookCreateModal defaultParentId={FOLDERS.USER_ROOT} onClose={vi.fn()} />
 		);
-		const input = screen.getByRole('textbox', { name: 'Insert address book name' });
+		const input = screen.getByRole('textbox', { name: 'Insert address book name*' });
 		await act(async () => user.type(input, 'Contacts'));
 		expect(screen.getByText('Name already exists in this path')).toBeVisible();
 	});
@@ -61,11 +61,11 @@ describe('AddressBookCreateModal', () => {
 		const { user } = setupTest(
 			<AddressBookCreateModal defaultParentId={FOLDERS.USER_ROOT} onClose={vi.fn()} />
 		);
-		const input = screen.getByRole('textbox', { name: 'Insert address book name' });
+		const input = screen.getByRole('textbox', { name: 'Insert address book name*' });
 		await act(async () => user.type(input, 'Contacts'));
 		await waitFor(() => expect(screen.getByText('Name already exists in this path')).toBeVisible());
 		await act(async () => user.clear(input));
-		expect(screen.getByRole('textbox', { name: 'Insert address book name' })).toBeVisible();
+		expect(screen.getByRole('textbox', { name: 'Insert address book name*' })).toBeVisible();
 	});
 
 	describe('Parent address book selector', () => {
@@ -135,7 +135,7 @@ describe('AddressBookCreateModal', () => {
 		it('should be disabled if the address book name is not set', async () => {
 			const { user } = setupTest(<AddressBookCreateModal onClose={vi.fn()} />);
 			await act(async () =>
-				user.clear(screen.getByRole('textbox', { name: 'Insert address book name' }))
+				user.clear(screen.getByRole('textbox', { name: 'Insert address book name*' }))
 			);
 			expect(screen.getByRole('button', { name: 'Create' })).toBeDisabled();
 		});
@@ -145,7 +145,7 @@ describe('AddressBookCreateModal', () => {
 			// , () => {
 			// const { user } = setupTest(<AddressBookCreateModal onClose={vi.fn()} />);
 			// await act(async () =>
-			// 	user.clear(screen.getByRole('textbox', { name: 'Insert address book name' }))
+			// 	user.clear(screen.getByRole('textbox', { name: 'Insert address book name*' }))
 			// );
 			// expect(screen.getByRole('button', { name: 'Create' })).toBeDisabled();
 			// }
@@ -156,7 +156,7 @@ describe('AddressBookCreateModal', () => {
 			const { user } = setupTest(
 				<AddressBookCreateModal defaultParentId={FOLDERS.CONTACTS} onClose={vi.fn()} />
 			);
-			const input = screen.getByRole('textbox', { name: 'Insert address book name' });
+			const input = screen.getByRole('textbox', { name: 'Insert address book name*' });
 			await act(async () => user.type(input, faker.string.uuid()));
 			expect(screen.getByRole('button', { name: 'Create' })).toBeEnabled();
 		});
@@ -166,7 +166,7 @@ describe('AddressBookCreateModal', () => {
 			const { user } = setupTest(
 				<AddressBookCreateModal defaultParentId={FOLDERS.CONTACTS} onClose={vi.fn()} />
 			);
-			const input = screen.getByRole('textbox', { name: 'Insert address book name' });
+			const input = screen.getByRole('textbox', { name: 'Insert address book name*' });
 			await act(async () => user.type(input, faker.string.uuid()));
 			await waitFor(() => expect(screen.getByRole('button', { name: 'Create' })).toBeEnabled());
 			await act(async () => user.clear(input));
@@ -178,7 +178,7 @@ describe('AddressBookCreateModal', () => {
 			const { user } = setupTest(
 				<AddressBookCreateModal defaultParentId={FOLDERS.USER_ROOT} onClose={vi.fn()} />
 			);
-			const input = screen.getByRole('textbox', { name: 'Insert address book name' });
+			const input = screen.getByRole('textbox', { name: 'Insert address book name*' });
 			await act(async () => user.type(input, 'Contacts'));
 			expect(screen.getByRole('button', { name: 'Create' })).toBeDisabled();
 		});
@@ -191,7 +191,7 @@ describe('AddressBookCreateModal', () => {
 			const { user } = setupTest(
 				<AddressBookCreateModal defaultParentId={parentAddressBookId} onClose={vi.fn()} />
 			);
-			const input = screen.getByRole('textbox', { name: 'Insert address book name' });
+			const input = screen.getByRole('textbox', { name: 'Insert address book name*' });
 			await act(async () => user.type(input, addressBookName));
 			await act(async () => user.click(screen.getByRole('button', { name: 'Create' })));
 			await expect(apiInterceptor).resolves.toEqual(
@@ -224,7 +224,7 @@ describe('AddressBookCreateModal', () => {
 			const { user } = setupTest(
 				<AddressBookCreateModal defaultParentId={parentAddressBookId} onClose={vi.fn()} />
 			);
-			const input = screen.getByRole('textbox', { name: 'Insert address book name' });
+			const input = screen.getByRole('textbox', { name: 'Insert address book name*' });
 			await act(async () => user.type(input, addressBookName));
 			await act(async () => user.click(screen.getByRole('button', { name: 'Create' })));
 			expect(screen.getByText('New address book created')).toBeVisible();
@@ -251,7 +251,7 @@ describe('AddressBookCreateModal', () => {
 			const { user } = setupTest(
 				<AddressBookCreateModal defaultParentId={parentAddressBookId} onClose={onClose} />
 			);
-			const input = screen.getByRole('textbox', { name: 'Insert address book name' });
+			const input = screen.getByRole('textbox', { name: 'Insert address book name*' });
 			await act(async () => user.type(input, addressBookName));
 			await act(async () => user.click(screen.getByRole('button', { name: 'Create' })));
 			expect(onClose).toHaveBeenCalled();
@@ -276,7 +276,7 @@ describe('AddressBookCreateModal', () => {
 			const { user } = setupTest(
 				<AddressBookCreateModal defaultParentId={parentAddressBookId} onClose={onClose} />
 			);
-			const input = screen.getByRole('textbox', { name: 'Insert address book name' });
+			const input = screen.getByRole('textbox', { name: 'Insert address book name*' });
 			await act(async () => user.type(input, addressBookName));
 			await act(async () => user.click(screen.getByRole('button', { name: 'Create' })));
 			expect(screen.getByText('Something went wrong, please try again')).toBeVisible();
@@ -301,7 +301,7 @@ describe('AddressBookCreateModal', () => {
 			const { user } = setupTest(
 				<AddressBookCreateModal defaultParentId={parentAddressBookId} onClose={onClose} />
 			);
-			const input = screen.getByRole('textbox', { name: 'Insert address book name' });
+			const input = screen.getByRole('textbox', { name: 'Insert address book name*' });
 			await act(async () => user.type(input, addressBookName));
 			await act(async () => user.click(screen.getByRole('button', { name: 'Create' })));
 			expect(onClose).not.toHaveBeenCalled();
