@@ -133,13 +133,14 @@ describe('ShareFolderModal', () => {
 
 		it('should call the Batch API with the correct folder id and role on confirm', async () => {
 			const apiInterceptor = createSoapAPIInterceptor('Batch');
+			createSoapAPIInterceptor('SendShareNotification');
 			const recipientEmail = 'test@example.com';
 			const { user } = setupTest(
 				<ShareFolderModal addressBookId={addressBookId} onClose={vi.fn()} activeGrant={grant} />
 			);
 			await act(async () => user.type(screen.getByTestId('mock-contact-input'), recipientEmail));
 			await act(async () => user.click(screen.getByRole('button', { name: 'Share folder' })));
-			expect(apiInterceptor).resolves.toEqual(
+			await expect(apiInterceptor).resolves.toEqual(
 				expect.objectContaining({
 					FolderActionRequest: expect.arrayContaining([
 						expect.objectContaining({
@@ -156,6 +157,7 @@ describe('ShareFolderModal', () => {
 
 		it('should display a success snackbar after a successful share', async () => {
 			createSoapAPIInterceptor('Batch');
+			createSoapAPIInterceptor('SendShareNotification');
 			const { user } = setupTest(
 				<ShareFolderModal addressBookId={addressBookId} onClose={vi.fn()} activeGrant={grant} />
 			);
@@ -168,6 +170,7 @@ describe('ShareFolderModal', () => {
 
 		it('should close the modal after a successful share', async () => {
 			createSoapAPIInterceptor('Batch');
+			createSoapAPIInterceptor('SendShareNotification');
 			const onClose = vi.fn();
 			const { user } = setupTest(
 				<ShareFolderModal addressBookId={addressBookId} onClose={onClose} activeGrant={grant} />

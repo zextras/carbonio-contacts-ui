@@ -3,7 +3,11 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+import { JSNS } from '@zextras/carbonio-ui-commons';
+import { legacySoapFetch } from '@zextras/carbonio-ui-soap-lib';
 import { map } from 'lodash';
+
+import { GenericSoapPayload } from 'network/api/types';
 
 export type SendShareNotificationParams = {
 	accountName: string;
@@ -12,42 +16,29 @@ export type SendShareNotificationParams = {
 	message?: string;
 };
 
-/*
- * TODO handle faults
- *
- * TODO JSON requests
- */
-export const sendShareNotification = async ({
-	accountName,
+export interface SendShareNotificationRequest extends GenericSoapPayload<typeof JSNS.MAIL> {
+	item: { id: string };
+	e: Array<{ a: string }>;
+	notes?: string;
+}
+
+export type SendShareNotificationResponse = GenericSoapPayload<typeof JSNS.MAIL>;
+
+export const sendShareNotification = ({
 	folderId,
 	addresses,
 	message
 }: SendShareNotificationParams): Promise<Array<void>> =>
 	Promise.all(
 		map(addresses, (address) =>
-			fetch('/service/soap/SendShareNotificationRequest', {
-				method: 'POST',
-				headers: {
-					'content-type': 'application/soap+xml'
-				},
-				body: `<?xml version="1.0" encoding="utf-8"?>
-                <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope">
-                    <soap:Header>
-                        <context xmlns="urn:zimbra">
-                            <account by="name">${accountName}</account>
-                            <format type="js"/>
-                        </context>
-                    </soap:Header>
-                    <soap:Body>
-                    <SendShareNotificationRequest xmlns="urn:zimbraMail">
-                           <item id="${folderId}"/>
-                           <e a="${address}"/>
-                           ${message ? `<notes>${message}</notes>` : ''}
-                           
-                    </SendShareNotificationRequest>				
-                    </soap:Body>
-                </soap:Envelope>
-            `
-			}).then((response) => response.json())
+			legacySoapFetch<SendShareNotificationRequest, SendShareNotificationResponse>(
+				'SendShareNotification',
+				{
+					item: { id: folderId },
+					e: [{ a: address }],
+					...(message ? { notes: message } : {}),
+					_jsns: JSNS.MAIL
+				}
+			).then(() => undefined)
 		)
 	);
