@@ -54,7 +54,7 @@
 		"eslint-plugin-notice": "^0.9.10",
 		"eslint-plugin-unused-imports": "^2.0.0",
 		"eslint-stats": "^1.0.1",
-		"jsdom": "^27.0.1",
+		"jsdom": "^27.4.0",
 		"msw": "2.2.7",
 		"sonarqube-scanner": "^4.3.5",
 		"ts-node": "^10.9.1",
