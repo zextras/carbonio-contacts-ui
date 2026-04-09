@@ -324,7 +324,7 @@ export const CommonContactGroupBoard = ({
 				height={'calc(100% - 8rem)'}
 			>
 				<Input
-					label={t('board.newContactGroup.input.name_input.name.label', 'Group name*')}
+					label={`${t('board.newContactGroup.input.name_input.group.name.label', 'Group name')}*`}
 					background={'gray5'}
 					borderColor={'gray3'}
 					value={nameValue}
@@ -333,6 +333,8 @@ export const CommonContactGroupBoard = ({
 					hasError={
 						nameValue.trim().length === 0 || nameValue.length > CONTACT_GROUP_NAME_MAX_LENGTH
 					}
+					// eslint-disable-next-line jsx-a11y/no-autofocus
+					autoFocus
 				/>
 				{initialFolderId && setFolderId && (
 					<Row padding={{ top: '0.5rem' }} width={'fill'}>

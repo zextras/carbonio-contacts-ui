@@ -7,12 +7,10 @@
 import React, { FC, ReactElement, useCallback, useMemo } from 'react';
 
 import { Container, Text, useSnackbar } from '@zextras/carbonio-design-system';
-import { deleteTag } from '@zextras/carbonio-ui-commons';
+import { deleteTag, ModalFooter, ModalHeader } from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 
 import { ItemType } from 'legacy/views/secondary-bar/parts/tags/types';
-import ModalFooter from 'legacy/views/secondary-bar/commons/modal-footer';
-import { ModalHeader } from 'legacy/views/secondary-bar/commons/modal-header';
 
 type ComponentProps = {
 	onClose: () => void;
@@ -57,6 +55,7 @@ const DeleteTagModal: FC<ComponentProps> = ({ onClose, tag }): ReactElement => {
 	return (
 		<>
 			<ModalHeader onClose={onClose} title={title} />
+
 			<Container padding={{ horizontal: 'large' }}>
 				<Text>
 					{t('message.delete_tag_message1', {
@@ -71,11 +70,12 @@ const DeleteTagModal: FC<ComponentProps> = ({ onClose, tag }): ReactElement => {
 					)}
 				</Text>
 			</Container>
+
 			<ModalFooter
 				onConfirm={onConfirm}
 				label={t('label.delete', 'Delete')}
 				disabled={false}
-				background="error"
+				color="error"
 			/>
 		</>
 	);

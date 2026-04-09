@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { ChangeEvent, useMemo, useState } from 'react';
+import React, { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react';
 
 import styled from '@emotion/styled';
 import { Button, Container, Input, Padding } from '@zextras/carbonio-design-system';
@@ -138,6 +138,7 @@ export const FolderTreeSelector = ({
 }: FolderTreeSelectorProps): React.JSX.Element => {
 	const [t] = useTranslation();
 	const [inputValue, setInputValue] = useState('');
+	const filterInputRef = useRef<HTMLInputElement>(null);
 	const selectedFolder = useFolder(selectedFolderId ?? '');
 	const roots = useRootsArray();
 	const filteredAccountsRoots = useMemo<Array<Folder>>(
@@ -155,6 +156,12 @@ export const FolderTreeSelector = ({
 		[excludeIds, filteredAccountsRoots, showLinkedFolders, showTrashFolder, t]
 	);
 
+	useEffect(() => {
+		requestAnimationFrame(() => {
+			filterInputRef.current?.focus();
+		});
+	}, []);
+
 	const filteredRoots = filterRoots(flattenRoots, inputValue);
 	const inputName = selectedFolder ? selectedFolder.name : '';
 	return (
@@ -166,6 +173,7 @@ export const FolderTreeSelector = ({
 				backgroundColor="gray5"
 				value={inputValue}
 				onChange={(e: ChangeEvent<HTMLInputElement>): void => setInputValue(e.target.value)}
+				inputRef={filterInputRef}
 			/>
 			<Padding vertical="medium" />
 			<ScrollableContainer

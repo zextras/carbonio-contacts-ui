@@ -147,7 +147,7 @@ describe('Edit DL board', () => {
 			spyUseBoard(dl);
 			setupTest(<EditDLBoard />);
 			await screen.findByText(dl.displayName);
-			expect(screen.getByRole('textbox', { name: 'Distribution List name' })).toHaveValue(
+			expect(screen.getByRole('textbox', { name: 'Distribution List name*' })).toHaveValue(
 				dl.displayName
 			);
 			expect(screen.getByRole('textbox', { name: 'Description' })).toHaveValue(description);

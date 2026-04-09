@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 
 import {
 	Container,
@@ -51,6 +51,7 @@ export const AddressBookEditGeneralModal = ({
 	const [t] = useTranslation();
 	const [addressBookName, setAddressBookName] = useState(addressBook?.name ?? '');
 	const [addressBookColor, setAddressBookColor] = useState(addressBook?.color ?? 0);
+	const nameInputRef = useRef<HTMLInputElement>(null);
 
 	const modalTitle = useMemo(
 		() =>
@@ -62,7 +63,9 @@ export const AddressBookEditGeneralModal = ({
 	);
 
 	const confirmButtonDisabled = useMemo(
-		() => addressBook?.name === addressBookName && addressBook?.color === addressBookColor,
+		() =>
+			(addressBook?.name === addressBookName && addressBook?.color === addressBookColor) ||
+			addressBookName.trim().length === 0,
 		[addressBook, addressBookName, addressBookColor]
 	);
 
@@ -119,114 +122,122 @@ export const AddressBookEditGeneralModal = ({
 	);
 
 	const addressBookInputDisabled = useMemo(() => isSystemFolder(addressBookId), [addressBookId]);
+
+	useEffect(() => {
+		if (!addressBookInputDisabled) {
+			requestAnimationFrame(() => {
+				nameInputRef.current?.focus();
+			});
+		}
+	}, [addressBookInputDisabled]);
+
 	return (
-		<>
+		<Container
+			padding={{ vertical: 'medium', horizontal: 'small' }}
+			mainAlignment="center"
+			crossAlignment="flex-start"
+			height="fit"
+		>
+			<ModalHeader onClose={onClose} title={modalTitle} showCloseIcon />
+			<Divider />
+
 			<Container
-				padding={{ vertical: 'medium', horizontal: 'small' }}
+				orientation="horizontal"
 				mainAlignment="center"
 				crossAlignment="flex-start"
-				height="fit"
+				padding={{ vertical: 'small' }}
 			>
-				<ModalHeader onClose={onClose} title={modalTitle} showCloseIcon />
-				<Divider />
-
-				<Container
-					orientation="horizontal"
-					mainAlignment="center"
-					crossAlignment="flex-start"
-					padding={{ vertical: 'small' }}
-				>
-					<Input
-						label={t('modal.address_book_name', 'Address book name')}
-						backgroundColor="gray5"
-						value={addressBookName}
-						onChange={onAddressBookInputChange}
-						disabled={addressBookInputDisabled}
-					/>
-				</Container>
-				<Padding top="small" />
-				<ColorSelect
-					onChange={onColorChange}
-					label={t('label.select_color', 'Select Color')}
-					defaultColor={addressBookColor ?? 0}
-				/>
-				<Padding top="small" />
-				<Container orientation="horizontal" mainAlignment="center" crossAlignment="flex-start">
-					<Container
-						mainAlignment="flex-start"
-						crossAlignment="flex-start"
-						padding={{ top: 'small', bottom: 'small' }}
-						width="48%"
-						style={{ minHeight: '3rem', maxWidth: 'calc(100% - 3rem)' }}
-					>
-						<Text color="secondary">{t('label.type', 'Type')}</Text>
-						<Row
-							takeAvailableSpace
-							wrap="nowrap"
-							height="fit"
-							width="fill"
-							orientation="horizontal"
-							mainAlignment="flex-start"
-							padding={{ top: 'small' }}
-						>
-							<Row takeAvailableSpace mainAlignment="flex-start">
-								<Text size="medium" overflow="break-word">
-									{t('folder.type', 'Contact Folder')}
-								</Text>
-							</Row>
-						</Row>
-					</Container>
-					<Padding horizontal="small" />
-					<Container
-						mainAlignment="flex-start"
-						crossAlignment="flex-start"
-						padding={{ top: 'small', bottom: 'small' }}
-						width="48%"
-						style={{ minHeight: '3rem', maxWidth: 'calc(100% - 3rem)' }}
-					>
-						<Text color="secondary">{t('label.contacts', 'Contacts')}</Text>
-						<Row
-							takeAvailableSpace
-							wrap="nowrap"
-							height="fit"
-							width="fill"
-							orientation="horizontal"
-							mainAlignment="flex-start"
-							padding={{ top: 'extrasmall' }}
-						>
-							<Row takeAvailableSpace mainAlignment="flex-start">
-								<Text size="medium" overflow="break-word">
-									{addressBook?.n}
-								</Text>
-							</Row>
-						</Row>
-					</Container>
-				</Container>
-
-				{showShared && (
-					<>
-						<Divider />
-						<Padding vertical="small" />
-						<ShareFolderProperties
-							addressBookId={addressBookId}
-							onEdit={onEditShare}
-							onRevoke={onRevokeShare}
-						/>
-					</>
-				)}
-
-				<Divider />
-
-				<ModalFooter
-					onConfirm={onConfirm}
-					confirmLabel={t('label.edit', 'Edit')}
-					onSecondaryAction={onAddShare}
-					secondaryActionLabel={t('label.add_share', 'Add Share')}
-					secondaryActionDisabled={addShareDisabled}
-					confirmDisabled={confirmButtonDisabled}
-					confirmColor="primary"
+				<Input
+					label={`${t('modal.address_book_name', 'Address book name')}*`}
+					backgroundColor="gray5"
+					value={addressBookName}
+					onChange={onAddressBookInputChange}
+					disabled={addressBookInputDisabled}
+					inputRef={nameInputRef}
 				/>
 			</Container>
-		</>
+			<Padding top="small" />
+			<ColorSelect
+				onChange={onColorChange}
+				label={t('label.select_color', 'Select Color')}
+				defaultColor={addressBookColor ?? 0}
+			/>
+			<Padding top="small" />
+			<Container orientation="horizontal" mainAlignment="center" crossAlignment="flex-start">
+				<Container
+					mainAlignment="flex-start"
+					crossAlignment="flex-start"
+					padding={{ top: 'small', bottom: 'small' }}
+					width="48%"
+					style={{ minHeight: '3rem', maxWidth: 'calc(100% - 3rem)' }}
+				>
+					<Text color="secondary">{t('label.type', 'Type')}</Text>
+					<Row
+						takeAvailableSpace
+						wrap="nowrap"
+						height="fit"
+						width="fill"
+						orientation="horizontal"
+						mainAlignment="flex-start"
+						padding={{ top: 'small' }}
+					>
+						<Row takeAvailableSpace mainAlignment="flex-start">
+							<Text size="medium" overflow="break-word">
+								{t('folder.type', 'Contact Folder')}
+							</Text>
+						</Row>
+					</Row>
+				</Container>
+				<Padding horizontal="small" />
+				<Container
+					mainAlignment="flex-start"
+					crossAlignment="flex-start"
+					padding={{ top: 'small', bottom: 'small' }}
+					width="48%"
+					style={{ minHeight: '3rem', maxWidth: 'calc(100% - 3rem)' }}
+				>
+					<Text color="secondary">{t('label.contacts', 'Contacts')}</Text>
+					<Row
+						takeAvailableSpace
+						wrap="nowrap"
+						height="fit"
+						width="fill"
+						orientation="horizontal"
+						mainAlignment="flex-start"
+						padding={{ top: 'extrasmall' }}
+					>
+						<Row takeAvailableSpace mainAlignment="flex-start">
+							<Text size="medium" overflow="break-word">
+								{addressBook?.n}
+							</Text>
+						</Row>
+					</Row>
+				</Container>
+			</Container>
+
+			{showShared && (
+				<>
+					<Divider />
+					<Padding vertical="small" />
+					<ShareFolderProperties
+						addressBookId={addressBookId}
+						onEdit={onEditShare}
+						onRevoke={onRevokeShare}
+					/>
+				</>
+			)}
+
+			<Divider />
+
+			<ModalFooter
+				onConfirm={onConfirm}
+				confirmLabel={t('label.edit', 'Edit')}
+				onSecondaryAction={onAddShare}
+				secondaryActionLabel={t('label.add_share', 'Add Share')}
+				secondaryActionDisabled={addShareDisabled}
+				confirmDisabled={confirmButtonDisabled}
+				confirmColor="primary"
+			/>
+		</Container>
 	);
 };

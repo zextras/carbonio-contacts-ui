@@ -64,7 +64,7 @@ describe('EditDLControllerComponent', () => {
 		const dl = generateDistributionList();
 		setupTest(<EditDLControllerComponent {...buildProps(dl)} />);
 		await screen.findByText(dl.displayName);
-		expect(screen.getByRole('textbox', { name: 'Distribution List name' })).toBeVisible();
+		expect(screen.getByRole('textbox', { name: 'Distribution List name*' })).toBeVisible();
 		expect(screen.getByRole('textbox', { name: 'Description' })).toBeVisible();
 		expect(screen.queryByText(/member list \d+/i)).not.toBeInTheDocument();
 		expect(screen.queryByText(/manager list \d+/i)).not.toBeInTheDocument();
