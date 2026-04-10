@@ -26,15 +26,16 @@ Contacts module
 - clone this repo
 
 - install the dependencies:
+
 ```
-npm install
-npm run sdk-setup
+pnpm install
+pnpm run sdk-install
 ```
 
 <h4>Watch Mode</h4>
 
 ```
-npm run start -- -h <host>
+pnpm run start -- -h <host>
 ```
 
 The host parameter is required to proxy requests and content from an existing Carbonio installation.
@@ -42,7 +43,7 @@ The host parameter is required to proxy requests and content from an existing Ca
 <h4>Build</h4>
 
 ```
-npm run build
+pnpm run build
 ```
 
 <h2>License</h2>
