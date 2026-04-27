@@ -1,3 +1,21 @@
+## 1.21.0 (2026-04-27)
+
+* build(release): migrate to semantic-release (#442) ([238b7c0](https://github.com/zextras/carbonio-contacts-ui/commit/238b7c0)), closes [#442](https://github.com/zextras/carbonio-contacts-ui/issues/442)
+* chore(deps): lock file maintenance (#410) ([b5e5a58](https://github.com/zextras/carbonio-contacts-ui/commit/b5e5a58)), closes [#410](https://github.com/zextras/carbonio-contacts-ui/issues/410)
+* chore(deps): update babel (#405) ([fb173b1](https://github.com/zextras/carbonio-contacts-ui/commit/fb173b1)), closes [#405](https://github.com/zextras/carbonio-contacts-ui/issues/405)
+* chore(deps): update commitlint to ^19.8.1 (#406) ([70f8304](https://github.com/zextras/carbonio-contacts-ui/commit/70f8304)), closes [#406](https://github.com/zextras/carbonio-contacts-ui/issues/406)
+* chore(deps): update dependency @emotion/jest to ^11.14.2 (#407) ([3bc1c32](https://github.com/zextras/carbonio-contacts-ui/commit/3bc1c32)), closes [#407](https://github.com/zextras/carbonio-contacts-ui/issues/407)
+* chore(deps): update dependency jsdom to ^27.4.0 (#416) ([b58adbe](https://github.com/zextras/carbonio-contacts-ui/commit/b58adbe)), closes [#416](https://github.com/zextras/carbonio-contacts-ui/issues/416)
+* chore(deps): update dependency lodash to v4.18.1 [security] (#425) ([38fb608](https://github.com/zextras/carbonio-contacts-ui/commit/38fb608)), closes [#425](https://github.com/zextras/carbonio-contacts-ui/issues/425)
+* chore(deps): update dependency sonarqube-scanner to ^4.3.5 (#426) ([e317f01](https://github.com/zextras/carbonio-contacts-ui/commit/e317f01)), closes [#426](https://github.com/zextras/carbonio-contacts-ui/issues/426)
+* chore(deps): update testing library (#417) ([afa777c](https://github.com/zextras/carbonio-contacts-ui/commit/afa777c)), closes [#417](https://github.com/zextras/carbonio-contacts-ui/issues/417)
+* chore(release): 1.20.1 ([573d7d1](https://github.com/zextras/carbonio-contacts-ui/commit/573d7d1))
+* chore(release): 1.20.2 ([909a9b4](https://github.com/zextras/carbonio-contacts-ui/commit/909a9b4))
+* refactor: migrate from npm to pnpm (#437) ([155d085](https://github.com/zextras/carbonio-contacts-ui/commit/155d085)), closes [#437](https://github.com/zextras/carbonio-contacts-ui/issues/437)
+* feat: update dependencies for carbonio packages and related libraries (#435) ([9975713](https://github.com/zextras/carbonio-contacts-ui/commit/9975713)), closes [#435](https://github.com/zextras/carbonio-contacts-ui/issues/435)
+* feat(CO-3426): add focus to input fields in modals & add required indicator (#436) ([d9a32e7](https://github.com/zextras/carbonio-contacts-ui/commit/d9a32e7)), closes [#436](https://github.com/zextras/carbonio-contacts-ui/issues/436)
+* Merge remote-tracking branch 'origin/devel' into version-bumper/v1.20.2-1 ([07b8233](https://github.com/zextras/carbonio-contacts-ui/commit/07b8233))
+
 # Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
