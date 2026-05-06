@@ -1,3 +1,8 @@
+## <small>1.21.1 (2026-05-06)</small>
+
+* build(deps): update dependencies (#448) ([600b44f](https://github.com/zextras/carbonio-contacts-ui/commit/600b44f)), closes [#448](https://github.com/zextras/carbonio-contacts-ui/issues/448)
+* chore(deps): update dependency @zextras/carbonio-search-ui to v0.0.8 (#446) ([9b2ff6c](https://github.com/zextras/carbonio-contacts-ui/commit/9b2ff6c)), closes [#446](https://github.com/zextras/carbonio-contacts-ui/issues/446)
+
 ## 1.21.0 (2026-04-27)
 
 * build(release): migrate to semantic-release (#442) ([238b7c0](https://github.com/zextras/carbonio-contacts-ui/commit/238b7c0)), closes [#442](https://github.com/zextras/carbonio-contacts-ui/issues/442)
