@@ -1,3 +1,9 @@
+## <small>1.21.2 (2026-05-12)</small>
+
+* Merge pull request #449 from zextras/IN-1095-jfrog-cost-optimization-usage-analysis-and-mitigation-s ([adf6cfe](https://github.com/zextras/carbonio-contacts-ui/commit/adf6cfe)), closes [#449](https://github.com/zextras/carbonio-contacts-ui/issues/449)
+* build(release): update jenkins-lib-ui to 1.0.13 ([47e1877](https://github.com/zextras/carbonio-contacts-ui/commit/47e1877))
+* chore(deps): update semantic-release monorepo (#447) ([66a4c3d](https://github.com/zextras/carbonio-contacts-ui/commit/66a4c3d)), closes [#447](https://github.com/zextras/carbonio-contacts-ui/issues/447)
+
 ## <small>1.21.1 (2026-05-06)</small>
 
 * build(deps): update dependencies (#448) ([600b44f](https://github.com/zextras/carbonio-contacts-ui/commit/600b44f)), closes [#448](https://github.com/zextras/carbonio-contacts-ui/issues/448)
