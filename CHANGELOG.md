@@ -1,3 +1,8 @@
+## <small>1.21.3 (2026-05-14)</small>
+
+* fix(ci): migrate Jenkinsfile to jenkins-lib-common ([2215767](https://github.com/zextras/carbonio-contacts-ui/commit/2215767))
+* chore: add .worktrees to .gitignore ([4bc7716](https://github.com/zextras/carbonio-contacts-ui/commit/4bc7716))
+
 ## <small>1.21.2 (2026-05-12)</small>
 
 * Merge pull request #449 from zextras/IN-1095-jfrog-cost-optimization-usage-analysis-and-mitigation-s ([adf6cfe](https://github.com/zextras/carbonio-contacts-ui/commit/adf6cfe)), closes [#449](https://github.com/zextras/carbonio-contacts-ui/issues/449)
