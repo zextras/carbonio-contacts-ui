@@ -1,3 +1,11 @@
+## <small>1.21.4 (2026-05-21)</small>
+
+* fix(deps): remove dependency axios to v1.15.2 [security] (#438) ([8d1e07e](https://github.com/zextras/carbonio-contacts-ui/commit/8d1e07e)), closes [#438](https://github.com/zextras/carbonio-contacts-ui/issues/438)
+* chore(deps): update dependency @types/lodash to v4.17.24 (#440) ([6eb3846](https://github.com/zextras/carbonio-contacts-ui/commit/6eb3846)), closes [#440](https://github.com/zextras/carbonio-contacts-ui/issues/440)
+* chore(deps): update dependency @types/react to v18.3.29 (#441) ([124a255](https://github.com/zextras/carbonio-contacts-ui/commit/124a255)), closes [#441](https://github.com/zextras/carbonio-contacts-ui/issues/441)
+* chore(deps): update dependency @zextras/carbonio-ui-sdk to v2.3.0 (#443) ([c33604f](https://github.com/zextras/carbonio-contacts-ui/commit/c33604f)), closes [#443](https://github.com/zextras/carbonio-contacts-ui/issues/443)
+* chore(deps): update dependency zextras/jenkins-lib-common to v2.7.0 (#451) ([cc1a4c5](https://github.com/zextras/carbonio-contacts-ui/commit/cc1a4c5)), closes [#451](https://github.com/zextras/carbonio-contacts-ui/issues/451)
+
 ## <small>1.21.3 (2026-05-14)</small>
 
 * fix(ci): migrate Jenkinsfile to jenkins-lib-common ([2215767](https://github.com/zextras/carbonio-contacts-ui/commit/2215767))
