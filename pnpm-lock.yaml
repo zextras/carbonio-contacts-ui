@@ -29,9 +29,6 @@ importers:
       '@zextras/carbonio-ui-soap-lib':
         specifier: 1.2.0
         version: 1.2.0
-      axios:
-        specifier: 1.13.6
-        version: 1.13.6
       core-js:
         specifier: 3.47.0
         version: 3.47.0
