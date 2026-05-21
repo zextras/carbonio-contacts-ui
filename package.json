@@ -83,7 +83,7 @@
 		"@zextras/carbonio-shell-ui": "14.2.2",
 		"@zextras/carbonio-ui-commons": "2.2.0",
 		"@zextras/carbonio-ui-soap-lib": "1.2.0",
-		"axios": "1.13.6",
+		"axios": "1.15.2",
 		"core-js": "3.47.0",
 		"i18next": "22.5.1",
 		"immer": "9.0.21",
