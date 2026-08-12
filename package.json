@@ -15,6 +15,7 @@
 		"deploy": "sdk deploy",
 		"sdk-install": "sdk install",
 		"test": "vitest run",
+		"test:ci": "vitest run --maxWorkers=2",
 		"test:watch": "vitest",
 		"coverage": "vitest run --coverage",
 		"type-check": "tsc --noEmit",
