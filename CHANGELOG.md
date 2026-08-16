@@ -1,3 +1,14 @@
+## <small>1.21.5 (2026-08-16)</small>
+
+* fix(ci): cap vitest forks to 2 to prevent k8s CPU saturation ([fb4e5ae](https://github.com/zextras/carbonio-contacts-ui/commit/fb4e5ae))
+* chore(deps): lock file maintenance (#439) ([45bb6ec](https://github.com/zextras/carbonio-contacts-ui/commit/45bb6ec)), closes [#439](https://github.com/zextras/carbonio-contacts-ui/issues/439)
+* chore(deps): lock file maintenance (#453) ([32c3f6c](https://github.com/zextras/carbonio-contacts-ui/commit/32c3f6c)), closes [#453](https://github.com/zextras/carbonio-contacts-ui/issues/453)
+* chore(deps): lock file maintenance (#455) ([632dfb2](https://github.com/zextras/carbonio-contacts-ui/commit/632dfb2)), closes [#455](https://github.com/zextras/carbonio-contacts-ui/issues/455)
+* chore(deps): update dependency sonarqube-scanner to v4.3.6 (#444) ([a37022f](https://github.com/zextras/carbonio-contacts-ui/commit/a37022f)), closes [#444](https://github.com/zextras/carbonio-contacts-ui/issues/444)
+* chore(deps): update dependency zextras/jenkins-lib-common to v2.8.8 ([25fea96](https://github.com/zextras/carbonio-contacts-ui/commit/25fea96))
+* chore(deps): update dependency zextras/jenkins-lib-common to v4.1.4 (#482) ([804001f](https://github.com/zextras/carbonio-contacts-ui/commit/804001f)), closes [#482](https://github.com/zextras/carbonio-contacts-ui/issues/482)
+* chore(deps): update semantic-release monorepo (#462) ([511cb4a](https://github.com/zextras/carbonio-contacts-ui/commit/511cb4a)), closes [#462](https://github.com/zextras/carbonio-contacts-ui/issues/462)
+
 ## <small>1.21.4 (2026-05-21)</small>
 
 * fix(deps): remove dependency axios to v1.15.2 [security] (#438) ([8d1e07e](https://github.com/zextras/carbonio-contacts-ui/commit/8d1e07e)), closes [#438](https://github.com/zextras/carbonio-contacts-ui/issues/438)
