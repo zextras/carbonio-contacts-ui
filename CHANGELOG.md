@@ -1,3 +1,8 @@
+## <small>1.21.6 (2026-08-25)</small>
+
+* fix(ci): run Docker build stages as root ([c406433](https://github.com/zextras/carbonio-contacts-ui/commit/c406433))
+* chore(deps): update babel to v7.29.7 (#457) ([f853789](https://github.com/zextras/carbonio-contacts-ui/commit/f853789)), closes [#457](https://github.com/zextras/carbonio-contacts-ui/issues/457)
+
 ## <small>1.21.5 (2026-08-16)</small>
 
 * fix(ci): cap vitest forks to 2 to prevent k8s CPU saturation ([fb4e5ae](https://github.com/zextras/carbonio-contacts-ui/commit/fb4e5ae))
