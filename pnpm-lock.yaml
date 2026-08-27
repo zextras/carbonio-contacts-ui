@@ -24,8 +24,8 @@ importers:
         specifier: 14.2.2
         version: 14.2.2(@emotion/react@11.14.0(@types/react@18.3.31)(react@18.3.1))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@18.3.31)(react@18.3.1))(@types/react@18.3.31)(react@18.3.1))(@types/react@18.3.31)(@zextras/carbonio-design-system@12.0.4(@emotion/react@11.14.0(@types/react@18.3.31)(react@18.3.1))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@18.3.31)(react@18.3.1))(@types/react@18.3.31)(react@18.3.1))(date-fns@4.4.0)(lodash@4.18.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(core-js@3.47.0)(lodash@4.18.1)(react-dom@18.3.1(react@18.3.1))(react-i18next@12.3.1(i18next@22.5.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router-dom@6.30.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.6.0(react@18.3.1))
       '@zextras/carbonio-ui-commons':
-        specifier: 2.2.0
-        version: 2.2.0(03a2375e1c534b5bebb8a1bdda3d9e9d)
+        specifier: 2.4.1
+        version: 2.4.1(03a2375e1c534b5bebb8a1bdda3d9e9d)
       '@zextras/carbonio-ui-soap-lib':
         specifier: 1.2.0
         version: 1.2.0
@@ -2697,22 +2697,22 @@ packages:
       react-router-dom:
         optional: true
 
-  '@zextras/carbonio-ui-commons@2.2.0':
-    resolution: {integrity: sha512-bvL8LI/GEvisxhtDd8deUfNGS0zs8QoX73xwBg2VPw01MUmDJXji4+CanZpVVbK9TTUUUOJiu5jG/rKwZLvvHg==}
-    engines: {node: v22, npm: v10}
+  '@zextras/carbonio-ui-commons@2.4.1':
+    resolution: {integrity: sha512-q8kEYUnPxSeUQMVNLEsxwk1UvWAzyhQ6rfhwM8pH5WFcdx15abcLjzJe55fbx0+Kvapmjcb+7r0ZlTGR1CQgtw==}
+    engines: {node: v22, pnpm: '>=10'}
     peerDependencies:
-      '@emotion/react': ^11.14.0
-      '@emotion/styled': ^11.14.0
-      '@mui/icons-material': ^5.15.12
-      '@mui/material': ^5.15.12
-      '@zextras/carbonio-design-system': '>=12.0.0'
-      '@zextras/carbonio-shell-ui': '>=12.0.0'
+      '@emotion/react': 11.14.0
+      '@emotion/styled': 11.14.1
+      '@mui/icons-material': 5.18.0
+      '@mui/material': 5.18.0
+      '@zextras/carbonio-design-system': '>=12.0.4'
+      '@zextras/carbonio-shell-ui': '>=14.0.0'
       '@zextras/carbonio-ui-soap-lib': '>=1.0.4'
-      lodash: ^4.17.21
-      react: ^18.3.1
-      react-dom: ^18.3.1
-      react-i18next: ^12.2.0
-      react-router-dom: ^6.30.0
+      lodash: 4.18.1
+      react: 18.3.1
+      react-dom: 18.3.1
+      react-i18next: 12.3.1
+      react-router-dom: 6.30.3
 
   '@zextras/carbonio-ui-configs@2.1.0':
     resolution: {integrity: sha512-eBHiSyLyGpWUJIfGHVBRVV0cY98oaQCNrTcjA4Jjh711t+LxdQd4sNYSwnsGBKAeVo21SNKH54jHj3SQSFBvPQ==}
@@ -6820,6 +6820,10 @@ packages:
     resolution: {integrity: sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==}
     engines: {node: '>= 0.4.0'}
 
+  uuid@11.1.1:
+    resolution: {integrity: sha512-vIYxrBCC/N/K+Js3qSN88go7kIfNPssr/hHCesKCQNAjmgvYS2oqr69kIufEG+O4+PfezOH4EbIeHCfFov8ZgQ==}
+    hasBin: true
+
   uuid@8.3.2:
     resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
     deprecated: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
@@ -10059,7 +10063,7 @@ snapshots:
       - encoding
       - use-sync-external-store
 
-  '@zextras/carbonio-ui-commons@2.2.0(03a2375e1c534b5bebb8a1bdda3d9e9d)':
+  '@zextras/carbonio-ui-commons@2.4.1(03a2375e1c534b5bebb8a1bdda3d9e9d)':
     dependencies:
       '@emotion/react': 11.14.0(@types/react@18.3.31)(react@18.3.1)
       '@emotion/styled': 11.14.1(@emotion/react@11.14.0(@types/react@18.3.31)(react@18.3.1))(@types/react@18.3.31)(react@18.3.1)
@@ -10076,7 +10080,8 @@ snapshots:
       react-dom: 18.3.1(react@18.3.1)
       react-i18next: 12.3.1(i18next@22.5.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-router-dom: 6.30.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      uuid: 9.0.1
+      redux: 4.2.1
+      uuid: 11.1.1
       zustand: 4.5.7(@types/react@18.3.31)(immer@9.0.21)(react@18.3.1)
     transitivePeerDependencies:
       - '@types/react'
@@ -14514,6 +14519,8 @@ snapshots:
   utila@0.4.0: {}
 
   utils-merge@1.0.1: {}
+
+  uuid@11.1.1: {}
 
   uuid@8.3.2: {}
 
