@@ -11,6 +11,7 @@ import {
 	addBoardView,
 	addRoute,
 	addSettingsView,
+	getUserSettings,
 	SecondaryBarComponentProps,
 	upsertApp,
 	useIntegratedFunction
@@ -157,6 +158,8 @@ export const ViewsRegistration: FC = () => {
 	const [removeSearchView, isRemoveSearchViewAvailable] =
 		useIntegratedFunction<typeof SearchUI.removeSearchView>('search-remove-view');
 
+	const { zimbraFeatureDistributionListFolderEnabled } = getUserSettings().attrs;
+
 	const contactsAppLabel = t('label.app_name', 'Contacts');
 
 	useEffect(() => {
@@ -169,15 +172,17 @@ export const ViewsRegistration: FC = () => {
 			secondaryBar: LegacySecondaryBarView,
 			appView: ContactsAppView
 		});
-		addRoute({
-			route: GROUPS_ROUTE,
-			position: 310,
-			visible: true,
-			label: t('label.distribution_list_app_name', 'Distribution Lists'),
-			primaryBar: 'ListOutline',
-			secondaryBar: SecondaryBarView,
-			appView: DistributionListAppView
-		});
+		if (zimbraFeatureDistributionListFolderEnabled === 'TRUE') {
+			addRoute({
+				route: GROUPS_ROUTE,
+				position: 310,
+				visible: true,
+				label: t('label.distribution_list_app_name', 'Distribution Lists'),
+				primaryBar: 'ListOutline',
+				secondaryBar: SecondaryBarView,
+				appView: DistributionListAppView
+			});
+		}
 		addSettingsView({
 			route: CONTACTS_ROUTE,
 			label: contactsAppLabel,
