@@ -3,10 +3,10 @@
 	"version": "1.21.6",
 	"description": "Contacts module",
 	"main": "src/app.tsx",
-	"packageManager": "pnpm@10.32.1",
+	"packageManager": "pnpm@11.25.0",
 	"engines": {
 		"node": "v22",
-		"pnpm": ">=10"
+		"pnpm": ">=11.25.0"
 	},
 	"scripts": {
 		"bump-version": "semantic-release",
