@@ -5,7 +5,7 @@
  */
 import React, { ReactElement, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Container, MultiButton, Row, Tooltip } from '@zextras/carbonio-design-system';
+import { Container, MultiButton, Row, Text, Tooltip } from '@zextras/carbonio-design-system';
 import { useAppContext } from '@zextras/carbonio-shell-ui';
 import { Folder } from '@zextras/carbonio-ui-commons';
 import { filter, find, noop, orderBy } from 'lodash';
@@ -13,10 +13,16 @@ import { useTranslation } from 'react-i18next';
 
 import { useSelection } from 'legacy/hooks/useSelection';
 import { addContactsToStore, setContactsInStore, useContactsByFolder } from 'legacy/store/contacts';
-import { isGroup } from 'legacy/utils/helpers';
+import {
+	buildContactsQuery,
+	ContactFilterType,
+	FILTER_TYPES
+} from 'legacy/utils/build-contacts-query';
+import { getContactSortValue } from 'legacy/utils/contact-initial';
 import { normalizeContactsFromSoap } from 'legacy/utils/normalizations/normalize-contact-from-soap';
 import { Breadcrumbs } from 'legacy/views/app/breadcrumbs';
 import { ContactsList } from 'legacy/views/app/folder-panel/contacts-list';
+import { LetterFilterGrid } from 'legacy/views/app/folder-panel/letter-filter-grid';
 import { SelectPanelActions } from 'legacy/views/folder/select-panel-actions';
 import { FolderViewSearchResults } from 'legacy/views/search/types';
 import { searchContactsHelper } from 'views/search-contacts-helper';
@@ -25,13 +31,6 @@ type UseAppContextType = {
 	setCount: (count: number) => void;
 };
 
-const FILTER_TYPES = {
-	ALL: 'ALL',
-	CONTACT: 'CONTACT',
-	CONTACT_GROUP: 'CONTACT_GROUP'
-} as const;
-
-type ContactFilterType = (typeof FILTER_TYPES)[keyof typeof FILTER_TYPES];
 type FolderPanelProps = {
 	folder: Folder;
 };
@@ -41,6 +40,7 @@ export const FolderPanel = ({ folder }: FolderPanelProps): ReactElement => {
 	const loading = useRef(false);
 	const { selected, isSelecting, toggle, deselectAll } = useSelection(folder.id, setCount);
 	const [activeFilter, setActiveFilter] = useState<ContactFilterType>(FILTER_TYPES.ALL);
+	const [activeLetter, setActiveLetter] = useState<string | null>(null);
 
 	const prevQuery = useRef<string>('');
 	const initialState = useMemo(
@@ -54,20 +54,11 @@ export const FolderPanel = ({ folder }: FolderPanelProps): ReactElement => {
 	const [searchResults, setSearchResults] = useState<FolderViewSearchResults>(initialState);
 	const searchContacts = useContactsByFolder(folder);
 
+	// Sorted on the same value the list displays (and the letter filter matches on),
+	// so that the alphabetical sections are coherent with their contents.
 	const sortedContacts = useMemo(
 		() =>
-			orderBy(
-				searchContacts,
-				[
-					(item): string =>
-						isGroup(item)
-							? item?.title?.toLowerCase()
-							: item?.firstName?.toLowerCase() ||
-								item?.lastName?.toLowerCase() ||
-								item?.middleName?.toLowerCase()
-				],
-				'asc'
-			),
+			orderBy(searchContacts, [(item): string => getContactSortValue(item).toLowerCase()], 'asc'),
 		[searchContacts]
 	);
 	const ids = useMemo(() => Object.keys(selected ?? []), [selected]);
@@ -99,24 +90,38 @@ export const FolderPanel = ({ folder }: FolderPanelProps): ReactElement => {
 		[searchResults.offset]
 	);
 
-	const query = useMemo((): string => {
-		let queryContent = `inid:"${folder.id}"`;
-		if (activeFilter === 'CONTACT') {
-			queryContent += ` and not #type:group`;
-		} else if (activeFilter === 'CONTACT_GROUP') {
-			queryContent += ` and #type:group`;
-		}
-		return queryContent;
-	}, [activeFilter, folder.id]);
+	const query = useMemo(
+		(): string =>
+			buildContactsQuery({ folderId: folder.id, filterType: activeFilter, letter: activeLetter }),
+		[activeFilter, activeLetter, folder.id]
+	);
 
 	useEffect(() => {
 		if (query === prevQuery.current) return;
 		searchQuery(query, true);
 	}, [query, searchQuery]);
 
-	const selectType = useCallback((filterType: ContactFilterType) => {
-		setActiveFilter(filterType);
-	}, []);
+	const selectType = useCallback(
+		(filterType: ContactFilterType) => {
+			deselectAll();
+			setActiveFilter(filterType);
+		},
+		[deselectAll]
+	);
+
+	const selectLetter = useCallback(
+		(letter: string | null) => {
+			deselectAll();
+			setActiveLetter(letter);
+		},
+		[deselectAll]
+	);
+
+	const clearAllFilters = useCallback(() => {
+		deselectAll();
+		setActiveFilter(FILTER_TYPES.ALL);
+		setActiveLetter(null);
+	}, [deselectAll]);
 
 	const loadMore = useCallback(() => {
 		if (searchResults.more) {
@@ -124,7 +129,15 @@ export const FolderPanel = ({ folder }: FolderPanelProps): ReactElement => {
 		}
 	}, [query, searchQuery, searchResults.more]);
 
+	const isFiltered = activeFilter !== FILTER_TYPES.ALL || activeLetter !== null;
+
 	const selectOptions = [
+		{
+			id: 'show-label',
+			label: t('folder_panel.option.show', 'Show:'),
+			disabled: true,
+			onClick: noop
+		},
 		{
 			id: FILTER_TYPES.ALL,
 			icon: 'FunnelOutline',
@@ -148,6 +161,35 @@ export const FolderPanel = ({ folder }: FolderPanelProps): ReactElement => {
 			value: FILTER_TYPES.CONTACT_GROUP,
 			onClick: (): void => selectType(FILTER_TYPES.CONTACT_GROUP),
 			selected: activeFilter === FILTER_TYPES.CONTACT_GROUP
+		},
+		{ id: 'filter-by-letter-divider', type: 'divider' as const },
+		{
+			id: 'filter-by-letter-label',
+			label: t('folder_panel.option.filter_by_letter', 'Filter by letter:'),
+			disabled: true,
+			onClick: noop
+		},
+		{
+			id: 'filter-by-letter',
+			label: activeLetter ?? t('folder_panel.option.all_letters', 'All letters'),
+			selected: activeLetter !== null,
+			// the nested dropdown opens on hover: clicking the entry must not close the menu
+			keepOpen: true,
+			onClick: noop,
+			items: [
+				{
+					id: 'filter-by-letter-grid',
+					onClick: noop,
+					customComponent: <LetterFilterGrid activeLetter={activeLetter} onSelect={selectLetter} />
+				}
+			]
+		},
+		{
+			id: 'clear-all-filters',
+			icon: 'CloseOutline',
+			label: t('folder_panel.option.clear_all_filters', 'Clear all filters'),
+			disabled: !isFiltered,
+			onClick: clearAllFilters
 		}
 	];
 
@@ -181,6 +223,11 @@ export const FolderPanel = ({ folder }: FolderPanelProps): ReactElement => {
 						itemsCount={sortedContacts.length}
 					>
 						<Row mainAlignment="flex-end">
+							{activeLetter !== null && (
+								<Text size="medium" color="primary" data-testid="active-letter-filter">
+									{activeLetter}
+								</Text>
+							)}
 							<Tooltip label={t('label.filter_mode', 'Filter mode')} maxWidth="100%">
 								<MultiButton
 									size={'large'}
@@ -202,6 +249,9 @@ export const FolderPanel = ({ folder }: FolderPanelProps): ReactElement => {
 					selected={selected}
 					isSelecting={isSelecting}
 					toggle={toggle}
+					activeLetter={activeLetter}
+					filterType={activeFilter}
+					onClearFilters={clearAllFilters}
 				/>
 			</Container>
 		</Container>
