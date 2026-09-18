@@ -896,6 +896,11 @@ describe('Folder panel', () => {
 	});
 
 	describe('Select contact type filter', () => {
+		beforeEach(() => {
+			// changing a filter deselects the current selection, which needs the app context
+			useAppContext.mockReturnValue({ count: 0, setCount: vi.fn() });
+		});
+
 		it('should display contacts and contact groups by default', async () => {
 			const contactGroupName = faker.company.name();
 			const folderId = '7';
