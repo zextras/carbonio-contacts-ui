@@ -19,7 +19,11 @@ export const EmptyListPanel = ({
 	actionLabel?: string;
 	onAction?: () => void;
 }): React.JSX.Element => (
-	<Container data-testid="ContactsListToScrollContainer" crossAlignment="unset">
+	<Container
+		data-testid="ContactsListToScrollContainer"
+		mainAlignment="flex-start"
+		padding={{ vertical: 'large' }}
+	>
 		{icon && (
 			<Row width="fill" padding={{ top: 'extralarge', bottom: 'small' }}>
 				<Icon icon={icon} size="large" color="gray1" />

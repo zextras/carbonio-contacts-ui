@@ -22,9 +22,15 @@ const SelectableRow = styled(Row)<{ $selected: boolean }>`
 	}
 `;
 
+/*
+ * Sizes taken from the design: a 6 column grid of square cells, which lays the
+ * 26 letters plus the "#" bucket out as four full rows and a trailing "Y Z #".
+ */
+const CELL_SIZE = '2.5rem';
+
 const LetterGrid = styled.div`
 	display: grid;
-	grid-template-columns: repeat(6, 1fr);
+	grid-template-columns: repeat(6, ${CELL_SIZE});
 	gap: 0.25rem;
 	padding: 0.5rem;
 `;
@@ -34,7 +40,9 @@ const LetterCell = styled.button<{ $selected: boolean }>`
 	border: none;
 	cursor: pointer;
 	border-radius: 0.125rem;
-	padding: 0.375rem 0;
+	width: ${CELL_SIZE};
+	height: ${CELL_SIZE};
+	padding: 0;
 	font-family: inherit;
 	font-size: 0.875rem;
 	background: ${({ theme, $selected }): string =>
