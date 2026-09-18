@@ -63,7 +63,7 @@
 		"eslint-stats": "1.0.1",
 		"jsdom": "27.4.0",
 		"msw": "2.2.7",
-		"sonarqube-scanner": "4.3.6",
+		"sonarqube-scanner": "4.4.0",
 		"ts-node": "10.9.2",
 		"typescript": "5.9.3",
 		"vite-tsconfig-paths": "5.1.4",
