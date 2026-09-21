@@ -5,7 +5,7 @@
  */
 import React, { ReactElement, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Container, MultiButton, Row, Text, Tooltip } from '@zextras/carbonio-design-system';
+import { Container, MultiButton, Row, Tooltip } from '@zextras/carbonio-design-system';
 import { useAppContext } from '@zextras/carbonio-shell-ui';
 import { Folder } from '@zextras/carbonio-ui-commons';
 import { filter, find, noop, orderBy } from 'lodash';
@@ -223,18 +223,14 @@ export const FolderPanel = ({ folder }: FolderPanelProps): ReactElement => {
 						itemsCount={sortedContacts.length}
 					>
 						<Row mainAlignment="flex-end">
-							{activeLetter !== null && (
-								<Text size="medium" color="primary" data-testid="active-letter-filter">
-									{activeLetter}
-								</Text>
-							)}
 							<Tooltip label={t('label.filter_mode', 'Filter mode')} maxWidth="100%">
 								<MultiButton
 									size={'large'}
 									primaryIcon={selectedViewTypeIcon}
+									label={activeLetter ?? undefined}
 									type={'ghost'}
 									onClick={noop}
-									color={'gray0'}
+									color={isFiltered ? 'primary' : 'gray0'}
 									items={selectOptions}
 									data-testid="select-contacts-view"
 								/>

@@ -5,6 +5,8 @@
  */
 import React from 'react';
 
+import { waitFor } from '@testing-library/react';
+
 import { useAppContext } from '../../../../../__mocks__/@zextras/carbonio-shell-ui';
 import { makeListItemsVisible, screen, setupTest, UserEvent } from '@test-setup';
 import { populateFoldersStore } from '@test-utils/store/folders';
@@ -92,17 +94,17 @@ describe('Folder panel letter filter', () => {
 		);
 	});
 
-	it('should show the active letter next to the filter button', async () => {
+	it('should show the active letter inside the filter button', async () => {
 		createContactsApiInterceptor({ items: [] });
 		const { user } = setupFolderPanel();
 
-		expect(screen.queryByTestId('active-letter-filter')).not.toBeInTheDocument();
+		expect(screen.getByTestId('select-contacts-view')).toHaveTextContent('');
 
 		await openLetterGrid(user);
 		createContactsApiInterceptor({ items: [] });
 		await user.click(screen.getByTestId('letter-filter-B'));
 
-		expect(await screen.findByTestId('active-letter-filter')).toHaveTextContent('B');
+		await waitFor(() => expect(screen.getByTestId('select-contacts-view')).toHaveTextContent('B'));
 	});
 
 	it('should show a dedicated empty message and clear the filters from it', async () => {
@@ -120,7 +122,7 @@ describe('Folder panel letter filter', () => {
 
 		const request = await clearInterceptor;
 		expect(request.query?._content).toBe(`inid:"${FOLDER_ID}"`);
-		expect(screen.queryByTestId('active-letter-filter')).not.toBeInTheDocument();
+		await waitFor(() => expect(screen.getByTestId('select-contacts-view')).toHaveTextContent(''));
 	});
 
 	it('should search on every digit when the # bucket is selected', async () => {
@@ -137,7 +139,7 @@ describe('Folder panel letter filter', () => {
 			`inid:"${FOLDER_ID}" and ((not #type:group and ${CONTACT_DIGITS_CLAUSE})` +
 				` or (#type:group and ${anyDigit('fullName')}))`
 		);
-		expect(await screen.findByTestId('active-letter-filter')).toHaveTextContent('#');
+		await waitFor(() => expect(screen.getByTestId('select-contacts-view')).toHaveTextContent('#'));
 	});
 
 	it('should show a number specific empty message for the # bucket', async () => {
