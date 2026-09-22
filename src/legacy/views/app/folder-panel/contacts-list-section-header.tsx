@@ -19,6 +19,8 @@ export const ContactsListSectionHeader = ({
 }: ContactsListSectionHeaderProps): React.JSX.Element => {
 	const [t] = useTranslation();
 
+	const isTextDisabled = count === 0;
+
 	return (
 		<>
 			<Row
@@ -29,10 +31,10 @@ export const ContactsListSectionHeader = ({
 				padding={{ horizontal: 'medium' }}
 				data-testid={`contacts-list-section-${letter}`}
 			>
-				<Text size="medium" weight="bold">
+				<Text size="medium" weight="bold" disabled={isTextDisabled}>
 					{letter}
 				</Text>
-				<Text size="extrasmall" color="secondary">
+				<Text size="extrasmall" disabled={isTextDisabled}>
 					{t('folder_panel.section.visible_contacts', {
 						count,
 						defaultValue_one: '{{count}} visible contact',

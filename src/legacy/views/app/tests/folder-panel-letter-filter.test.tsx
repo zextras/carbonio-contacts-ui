@@ -6,8 +6,10 @@
 import React from 'react';
 
 import { waitFor } from '@testing-library/react';
+import { http, HttpResponse } from 'msw';
 
 import { useAppContext } from '../../../../../__mocks__/@zextras/carbonio-shell-ui';
+import { getSetupServer } from '@jest-setup';
 import { makeListItemsVisible, screen, setupTest, UserEvent } from '@test-setup';
 import { populateFoldersStore } from '@test-utils/store/folders';
 import { SoapContact } from 'legacy/types/soap';
@@ -38,6 +40,16 @@ const buildSoapContact = (id: string, attrs: Record<string, string>): SoapContac
 		rev: 1,
 		fileAsStr: attrs.displayName ?? attrs.firstName ?? attrs.email ?? '',
 		_attrs: attrs
+	}) as unknown as SoapContact;
+
+const buildSoapGroup = (id: string, fullName: string): SoapContact =>
+	({
+		id,
+		l: FOLDER_ID,
+		d: 1700000000000,
+		rev: 1,
+		fileAsStr: fullName,
+		_attrs: { type: 'group', fullName }
 	}) as unknown as SoapContact;
 
 function setupFolderPanel(): ReturnType<typeof setupTest> {
@@ -176,6 +188,57 @@ describe('Folder panel letter filter', () => {
 			'2 visible contacts'
 		);
 		expect(screen.queryByTestId('contacts-list-section-A')).not.toBeInTheDocument();
+	});
+
+	it('should not show nor count the items the server matched on a secondary token', async () => {
+		createContactsApiInterceptor({ items: [] });
+		const { user } = setupFolderPanel();
+
+		await openLetterGrid(user);
+		// the server matches every token of fullName, so this group comes back for the
+		// letter A although the list groups it under G
+		createContactsApiInterceptor({ items: [buildSoapGroup('1', 'Gruppo Amici')] });
+		await user.click(screen.getByTestId('letter-filter-A'));
+
+		expect(await screen.findByText('There are no contacts starting with "A"')).toBeVisible();
+		expect(screen.getByTestId('BreadcrumbCount')).toHaveTextContent('0');
+	});
+
+	it('should load the next page when every item of a page is filtered out', async () => {
+		createContactsApiInterceptor({ items: [] });
+		const { user } = setupFolderPanel();
+
+		await openLetterGrid(user);
+
+		const offsets: Array<number> = [];
+		getSetupServer().use(
+			http.post('/service/soap/SearchRequest', async ({ request }) => {
+				const content = (await request.json()) as {
+					Body: { SearchRequest: { offset: number } };
+				};
+				const { offset } = content.Body.SearchRequest;
+				offsets.push(offset);
+				const isFirstPage = offsets.length === 1;
+				return HttpResponse.json({
+					Body: {
+						SearchResponse: {
+							sortBy: 'nameAsc',
+							offset,
+							more: isFirstPage,
+							cn: isFirstPage
+								? [buildSoapGroup('1', 'Gruppo Amici')]
+								: [buildSoapContact('2', { displayName: 'Anna Rossi' })]
+						}
+					}
+				});
+			})
+		);
+		await user.click(screen.getByTestId('letter-filter-A'));
+
+		expect(await screen.findByTestId('contacts-list-section-A')).toHaveTextContent(
+			'1 visible contact'
+		);
+		await waitFor(() => expect(offsets).toEqual([0, 100]));
 	});
 
 	it('should group the contacts into alphabetical sections with their counts', async () => {

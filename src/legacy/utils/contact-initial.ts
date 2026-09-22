@@ -14,7 +14,7 @@ import { isGroup } from 'legacy/utils/helpers';
  * as a filter it selects the items whose initial is a digit, since that is the
  * only part of the bucket which can be expressed as a Search query.
  */
-export const OTHER_INITIAL = '#';
+export const OTHER_INITIAL = '123';
 
 export const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 

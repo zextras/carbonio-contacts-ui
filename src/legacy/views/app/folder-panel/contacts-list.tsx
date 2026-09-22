@@ -187,7 +187,7 @@ export const ContactsList = ({
 			}
 			return {
 				emptyListTitle,
-				icon: isGroupFilter ? 'PeopleOutline' : 'PersonOutline'
+				icon: 'PeopleOutline'
 			};
 		}
 		if (isFiltered) {

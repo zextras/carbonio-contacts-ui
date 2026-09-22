@@ -76,7 +76,7 @@ export const buildContactsQuery = ({
 	let query = `inid:"${folderId}"`;
 
 	if (filterType === FILTER_TYPES.CONTACT) {
-		query += ` and not #type:group`;
+		query += ` and (not #type:group)`;
 	} else if (filterType === FILTER_TYPES.CONTACT_GROUP) {
 		query += ` and #type:group`;
 	}

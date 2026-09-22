@@ -6,19 +6,21 @@
 import React, { useCallback } from 'react';
 
 import styled from '@emotion/styled';
-import { Container, Icon, Row, Text, Tooltip, getColor } from '@zextras/carbonio-design-system';
+import { Container, Icon, Row, Text, getColor } from '@zextras/carbonio-design-system';
 import { map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { ALPHABET, OTHER_INITIAL } from 'legacy/utils/contact-initial';
 
 const SelectableRow = styled(Row)<{ $selected: boolean }>`
+	border-radius: 0.25rem;
 	cursor: pointer;
 	background: ${({ theme, $selected }): string =>
-		$selected ? getColor('highlight', theme) : 'transparent'};
+		$selected ? getColor('primary', theme) : 'transparent'};
 
 	&:hover {
-		background: ${({ theme }): string => getColor('gray5', theme)};
+		background: ${({ theme, $selected }): string =>
+			getColor($selected ? 'primary.hover' : 'gray5.hover', theme)};
 	}
 `;
 
@@ -32,14 +34,13 @@ const LetterGrid = styled.div`
 	display: grid;
 	grid-template-columns: repeat(6, ${CELL_SIZE});
 	gap: 0.25rem;
-	padding: 0.5rem;
 `;
 
 const LetterCell = styled.button<{ $selected: boolean }>`
 	appearance: none;
 	border: none;
 	cursor: pointer;
-	border-radius: 0.125rem;
+	border-radius: 0.25rem;
 	width: ${CELL_SIZE};
 	height: ${CELL_SIZE};
 	padding: 0;
@@ -51,7 +52,7 @@ const LetterCell = styled.button<{ $selected: boolean }>`
 
 	&:hover {
 		background: ${({ theme, $selected }): string =>
-			getColor($selected ? 'primary' : 'gray5', theme)};
+			getColor($selected ? 'primary.hover' : 'gray5.hover', theme)};
 	}
 `;
 
@@ -73,8 +74,10 @@ export const LetterFilterGrid = ({
 			orientation="vertical"
 			crossAlignment="stretch"
 			mainAlignment="flex-start"
+			padding={{ vertical: 'small' }}
 			height="fit"
 			data-testid="letter-filter-grid"
+			gap="0.5rem"
 		>
 			<SelectableRow
 				$selected={activeLetter === null}
@@ -83,31 +86,21 @@ export const LetterFilterGrid = ({
 				onClick={selectAllLetters}
 				data-testid="letter-filter-all"
 			>
-				<Text size="small" weight="bold" color={activeLetter === null ? 'primary' : 'secondary'}>
+				<Text size="small" color={activeLetter === null ? 'gray6' : 'primary'} disabled={false}>
 					{t('folder_panel.option.all_letters_caption', 'ALL LETTERS')}
 				</Text>
-				{activeLetter === null && <Icon icon="Checkmark" size="small" color="primary" />}
+				{activeLetter === null && <Icon icon="Checkmark" size="small" color="gray6" />}
 			</SelectableRow>
 			<LetterGrid>
 				{map([...ALPHABET, OTHER_INITIAL], (letter) => (
-					<Tooltip
-						key={letter}
-						label={
-							letter === OTHER_INITIAL
-								? t('folder_panel.option.digits_tooltip', 'Names starting with a number')
-								: letter
-						}
-						disabled={letter !== OTHER_INITIAL}
+					<LetterCell
+						type="button"
+						$selected={letter === activeLetter}
+						onClick={(): void => onSelect(letter)}
+						data-testid={`letter-filter-${letter}`}
 					>
-						<LetterCell
-							type="button"
-							$selected={letter === activeLetter}
-							onClick={(): void => onSelect(letter)}
-							data-testid={`letter-filter-${letter}`}
-						>
-							{letter}
-						</LetterCell>
-					</Tooltip>
+						{letter}
+					</LetterCell>
 				))}
 			</LetterGrid>
 		</Container>
