@@ -235,7 +235,7 @@ export const FolderPanel = ({ folder }: FolderPanelProps): ReactElement => {
 						padding={{ horizontal: 'small', vertical: 'xsmall' }}
 						gap="0.75rem"
 					>
-						<Icon icon="CloseOutline" size="large" disabled={!isFiltered} color="primary" />
+						<Icon icon="CloseOutline" size="medium" disabled={!isFiltered} color="primary" />
 						<Text color="primary" disabled={!isFiltered}>
 							{t('folder_panel.option.clear_all_filters', 'Clear all filters')}
 						</Text>

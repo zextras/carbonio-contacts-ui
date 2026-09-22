@@ -7,6 +7,7 @@ import React, { ReactElement, useCallback, useMemo, useRef, useState } from 'rea
 
 import styled from '@emotion/styled';
 import { List, ListItem } from '@zextras/carbonio-design-system';
+import type { TFunction } from 'i18next';
 import { groupBy, map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -20,6 +21,34 @@ import { ContactsListSectionHeader } from 'legacy/views/app/folder-panel/contact
 import { DragItems } from 'legacy/views/app/folder-panel/drag-items';
 import { EmptyListPanel } from 'legacy/views/app/folder-panel/empty-list-panel';
 import { ContactGroupListItem } from 'views/contact-groups/list/contact-group-list-item';
+
+/*
+ * The message of the empty list when a letter filter is active. Kept out of the
+ * component to hold the whole "which of the four messages" decision in one place.
+ */
+const getLetterEmptyTitle = (t: TFunction, letter: string, isGroupFilter: boolean): string => {
+	// the bucket matches any digit, so naming it in the message would be misleading
+	if (letter === OTHER_INITIAL) {
+		return isGroupFilter
+			? t(
+					'displayer.no_contact_groups_starting_with_digit',
+					'There are no contact groups starting with a number'
+				)
+			: t(
+					'displayer.no_contacts_starting_with_digit',
+					'There are no contacts starting with a number'
+				);
+	}
+	return isGroupFilter
+		? t('displayer.no_contact_groups_starting_with', {
+				letter,
+				defaultValue: 'There are no contact groups starting with "{{letter}}"'
+			})
+		: t('displayer.no_contacts_starting_with', {
+				letter,
+				defaultValue: 'There are no contacts starting with "{{letter}}"'
+			});
+};
 
 const DragImageContainer = styled.div`
 	position: absolute;
@@ -160,33 +189,12 @@ export const ContactsList = ({
 
 	const emptyListProps = useMemo(() => {
 		if (activeLetter !== null) {
-			const isGroupFilter = filterType === FILTER_TYPES.CONTACT_GROUP;
-			// the "#" bucket matches any digit, so naming it in the message would be misleading
-			const startingWithDigit = activeLetter === OTHER_INITIAL;
-			let emptyListTitle;
-			if (startingWithDigit) {
-				emptyListTitle = isGroupFilter
-					? t(
-							'displayer.no_contact_groups_starting_with_digit',
-							'There are no contact groups starting with a number'
-						)
-					: t(
-							'displayer.no_contacts_starting_with_digit',
-							'There are no contacts starting with a number'
-						);
-			} else {
-				emptyListTitle = isGroupFilter
-					? t('displayer.no_contact_groups_starting_with', {
-							letter: activeLetter,
-							defaultValue: 'There are no contact groups starting with "{{letter}}"'
-						})
-					: t('displayer.no_contacts_starting_with', {
-							letter: activeLetter,
-							defaultValue: 'There are no contacts starting with "{{letter}}"'
-						});
-			}
 			return {
-				emptyListTitle,
+				emptyListTitle: getLetterEmptyTitle(
+					t,
+					activeLetter,
+					filterType === FILTER_TYPES.CONTACT_GROUP
+				),
 				icon: 'PeopleOutline'
 			};
 		}

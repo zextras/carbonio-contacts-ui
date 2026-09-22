@@ -28,10 +28,13 @@ const prefixesOf = (letter: string): Array<string> | undefined => {
 	return undefined;
 };
 
-const startsWith = (field: string, prefixes: Array<string>): string =>
-	prefixes.length === 1
-		? `#${field}:${prefixes[0]}*`
-		: `(${prefixes.map((prefix) => `#${field}:${prefix}*`).join(' or ')})`;
+const startsWith = (field: string, prefixes: Array<string>): string => {
+	if (prefixes.length === 1) {
+		return `#${field}:${prefixes[0]}*`;
+	}
+	const alternatives = prefixes.map((prefix) => `#${field}:${prefix}*`).join(' or ');
+	return `(${alternatives})`;
+};
 
 /*
  * Replicates, as a Search query, the cascade used to build the value displayed in
@@ -76,7 +79,7 @@ export const buildContactsQuery = ({
 	let query = `inid:"${folderId}"`;
 
 	if (filterType === FILTER_TYPES.CONTACT) {
-		query += ` and (not #type:group)`;
+		query += ` and not #type:group`;
 	} else if (filterType === FILTER_TYPES.CONTACT_GROUP) {
 		query += ` and #type:group`;
 	}

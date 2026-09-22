@@ -13,7 +13,7 @@ import { getSetupServer } from '@jest-setup';
 import { makeListItemsVisible, screen, setupTest, UserEvent } from '@test-setup';
 import { populateFoldersStore } from '@test-utils/store/folders';
 import { SoapContact } from 'legacy/types/soap';
-import { DIGITS } from 'legacy/utils/contact-initial';
+import { DIGITS, OTHER_INITIAL } from 'legacy/utils/contact-initial';
 import { FolderPanelWrapper } from 'legacy/views/app/folder-panel-wrapper';
 import { createContactsApiInterceptor } from 'legacy/views/app/tests/utils';
 
@@ -59,8 +59,17 @@ function setupFolderPanel(): ReturnType<typeof setupTest> {
 	});
 }
 
-async function openLetterGrid(user: UserEvent, entryLabel = 'All letters'): Promise<void> {
+async function openSelectContactsView(user: UserEvent): Promise<void> {
+	// the dropdown keeps itself open after a selection, so the chevron is clicked
+	// only when the menu is actually closed
+	if (screen.queryByTestId('icon: ChevronUpOutline')) {
+		return;
+	}
 	await user.click(await screen.findByTestId('icon: ChevronDownOutline'));
+}
+
+async function openLetterGrid(user: UserEvent, entryLabel = 'All letters'): Promise<void> {
+	await openSelectContactsView(user);
 	// the nested dropdown holding the letter grid opens on hover
 	await user.hover(await screen.findByText(entryLabel));
 	await screen.findByTestId('letter-filter-grid');
@@ -92,7 +101,7 @@ describe('Folder panel letter filter', () => {
 		createContactsApiInterceptor({ items: [] });
 		const { user } = setupFolderPanel();
 
-		await user.click(await screen.findByTestId('icon: ChevronDownOutline'));
+		await openSelectContactsView(user);
 		createContactsApiInterceptor({ items: [] });
 		await user.click(await screen.findByText('Contacts'));
 
@@ -137,36 +146,40 @@ describe('Folder panel letter filter', () => {
 		await waitFor(() => expect(screen.getByTestId('select-contacts-view')).toHaveTextContent(''));
 	});
 
-	it('should search on every digit when the # bucket is selected', async () => {
+	it('should search on every digit when the digits bucket is selected', async () => {
 		createContactsApiInterceptor({ items: [] });
 		const { user } = setupFolderPanel();
 
 		await openLetterGrid(user);
 
 		const digitsInterceptor = createContactsApiInterceptor({ items: [] });
-		await user.click(screen.getByTestId('letter-filter-#'));
+		await user.click(screen.getByTestId(`letter-filter-${OTHER_INITIAL}`));
 
 		const request = await digitsInterceptor;
 		expect(request.query?._content).toBe(
 			`inid:"${FOLDER_ID}" and ((not #type:group and ${CONTACT_DIGITS_CLAUSE})` +
 				` or (#type:group and ${anyDigit('fullName')}))`
 		);
-		await waitFor(() => expect(screen.getByTestId('select-contacts-view')).toHaveTextContent('#'));
+		await waitFor(() =>
+			expect(screen.getByTestId('select-contacts-view')).toHaveTextContent(OTHER_INITIAL)
+		);
 	});
 
-	it('should show a number specific empty message for the # bucket', async () => {
+	it('should show a number specific empty message for the digits bucket', async () => {
 		createContactsApiInterceptor({ items: [] });
 		const { user } = setupFolderPanel();
 
 		await openLetterGrid(user);
 		createContactsApiInterceptor({ items: [] });
-		await user.click(screen.getByTestId('letter-filter-#'));
+		await user.click(screen.getByTestId(`letter-filter-${OTHER_INITIAL}`));
 
 		expect(await screen.findByText('There are no contacts starting with a number')).toBeVisible();
-		expect(screen.queryByText(/starting with "#"/)).not.toBeInTheDocument();
+		expect(
+			screen.queryByText(`There are no contacts starting with "${OTHER_INITIAL}"`)
+		).not.toBeInTheDocument();
 	});
 
-	it('should list the contacts whose name starts with a digit under the # section', async () => {
+	it('should list the contacts whose name starts with a digit under the digits section', async () => {
 		createContactsApiInterceptor({
 			items: [
 				buildSoapContact('1', { displayName: '3M Italia' }),
@@ -182,9 +195,9 @@ describe('Folder panel letter filter', () => {
 				buildSoapContact('2', { firstName: '1st', lastName: 'Aid' })
 			]
 		});
-		await user.click(screen.getByTestId('letter-filter-#'));
+		await user.click(screen.getByTestId(`letter-filter-${OTHER_INITIAL}`));
 
-		expect(await screen.findByTestId('contacts-list-section-#')).toHaveTextContent(
+		expect(await screen.findByTestId(`contacts-list-section-${OTHER_INITIAL}`)).toHaveTextContent(
 			'2 visible contacts'
 		);
 		expect(screen.queryByTestId('contacts-list-section-A')).not.toBeInTheDocument();

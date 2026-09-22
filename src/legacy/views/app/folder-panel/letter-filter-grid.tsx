@@ -94,6 +94,7 @@ export const LetterFilterGrid = ({
 			<LetterGrid>
 				{map([...ALPHABET, OTHER_INITIAL], (letter) => (
 					<LetterCell
+						key={letter}
 						type="button"
 						$selected={letter === activeLetter}
 						onClick={(): void => onSelect(letter)}

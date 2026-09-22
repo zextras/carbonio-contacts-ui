@@ -69,8 +69,13 @@ function setupFolderPanel(folderId: string): ReturnType<typeof setupTest> {
 }
 
 async function toggleSelectContactTypeFilter(user: UserEvent): Promise<void> {
+	// the dropdown keeps itself open after a selection, so the chevron is clicked
+	// only when the menu is actually closed
+	if (screen.queryByTestId('icon: ChevronUpOutline')) {
+		return;
+	}
 	const selectContactsViewDropdown = await screen.findByTestId('icon: ChevronDownOutline');
-	return user.click(selectContactsViewDropdown);
+	await user.click(selectContactsViewDropdown);
 }
 
 function registerSearchContacts(soapContacts: Array<SoapContact>): void {

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import { buildContactsQuery, FILTER_TYPES } from 'legacy/utils/build-contacts-query';
-import { DIGITS } from 'legacy/utils/contact-initial';
+import { DIGITS, OTHER_INITIAL } from 'legacy/utils/contact-initial';
 
 const CONTACT_L_CLAUSE =
 	'(#displayName:L* or (#displayName:"" and ' +
@@ -74,18 +74,28 @@ describe('buildContactsQuery', () => {
 	describe('with the digits bucket', () => {
 		it('should match any digit on every field of the cascade for the CONTACT filter', () => {
 			expect(
-				buildContactsQuery({ folderId: '7', filterType: FILTER_TYPES.CONTACT, letter: '#' })
+				buildContactsQuery({
+					folderId: '7',
+					filterType: FILTER_TYPES.CONTACT,
+					letter: OTHER_INITIAL
+				})
 			).toBe(`inid:"7" and not #type:group and ${CONTACT_DIGITS_CLAUSE}`);
 		});
 
 		it('should match any digit on the group title for the CONTACT_GROUP filter', () => {
 			expect(
-				buildContactsQuery({ folderId: '7', filterType: FILTER_TYPES.CONTACT_GROUP, letter: '#' })
+				buildContactsQuery({
+					folderId: '7',
+					filterType: FILTER_TYPES.CONTACT_GROUP,
+					letter: OTHER_INITIAL
+				})
 			).toBe(`inid:"7" and #type:group and ${DIGITS_FULLNAME_CLAUSE}`);
 		});
 
 		it('should match contacts and groups on their own fields for the ALL filter', () => {
-			expect(buildContactsQuery({ folderId: '7', filterType: FILTER_TYPES.ALL, letter: '#' })).toBe(
+			expect(
+				buildContactsQuery({ folderId: '7', filterType: FILTER_TYPES.ALL, letter: OTHER_INITIAL })
+			).toBe(
 				`inid:"7" and ((not #type:group and ${CONTACT_DIGITS_CLAUSE})` +
 					` or (#type:group and ${DIGITS_FULLNAME_CLAUSE}))`
 			);
@@ -95,7 +105,7 @@ describe('buildContactsQuery', () => {
 			const query = buildContactsQuery({
 				folderId: '7',
 				filterType: FILTER_TYPES.CONTACT,
-				letter: '#'
+				letter: OTHER_INITIAL
 			});
 			DIGITS.forEach((digit) => {
 				expect(query).toContain(`#displayName:${digit}*`);
@@ -103,15 +113,19 @@ describe('buildContactsQuery', () => {
 			});
 		});
 
-		it('should not match the literal "#" character', () => {
+		it('should not match the bucket label itself', () => {
 			expect(
-				buildContactsQuery({ folderId: '7', filterType: FILTER_TYPES.CONTACT, letter: '#' })
-			).not.toContain('#displayName:#*');
+				buildContactsQuery({
+					folderId: '7',
+					filterType: FILTER_TYPES.CONTACT,
+					letter: OTHER_INITIAL
+				})
+			).not.toContain(`#displayName:${OTHER_INITIAL}*`);
 		});
 	});
 
 	describe('letter validation', () => {
-		it.each([null, undefined, '', 'AB', 'è', '1', '*', 'a* or x'])(
+		it.each([null, undefined, '', 'AB', 'è', '1', '#', '*', 'a* or x'])(
 			'should ignore the invalid letter %p',
 			(letter) => {
 				expect(buildContactsQuery({ folderId: '7', filterType: FILTER_TYPES.ALL, letter })).toBe(
