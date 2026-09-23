@@ -23,30 +23,50 @@ import { EmptyListPanel } from 'legacy/views/app/folder-panel/empty-list-panel';
 import { ContactGroupListItem } from 'views/contact-groups/list/contact-group-list-item';
 
 /*
- * The message of the empty list when a letter filter is active. Kept out of the
- * component to hold the whole "which of the four messages" decision in one place.
+ * The message of the empty list when a letter filter is active: one per filter
+ * type, since the list can hold contacts, contact groups or both. Kept out of the
+ * component to hold the whole decision in one place.
  */
-const getLetterEmptyTitle = (t: TFunction, letter: string, isGroupFilter: boolean): string => {
+const getLetterEmptyTitle = (
+	t: TFunction,
+	letter: string,
+	filterType: ContactFilterType
+): string => {
 	// the bucket matches any digit, so naming it in the message would be misleading
-	if (letter === OTHER_INITIAL) {
-		return isGroupFilter
+	const startsWithDigit = letter === OTHER_INITIAL;
+
+	if (filterType === FILTER_TYPES.CONTACT_GROUP) {
+		return startsWithDigit
 			? t(
 					'displayer.no_contact_groups_starting_with_digit',
 					'There are no contact groups starting with a number'
 				)
-			: t(
+			: t('displayer.no_contact_groups_starting_with', {
+					letter,
+					defaultValue: 'There are no contact groups starting with "{{letter}}"'
+				});
+	}
+
+	if (filterType === FILTER_TYPES.CONTACT) {
+		return startsWithDigit
+			? t(
 					'displayer.no_contacts_starting_with_digit',
 					'There are no contacts starting with a number'
-				);
+				)
+			: t('displayer.no_contacts_starting_with', {
+					letter,
+					defaultValue: 'There are no contacts starting with "{{letter}}"'
+				});
 	}
-	return isGroupFilter
-		? t('displayer.no_contact_groups_starting_with', {
+
+	return startsWithDigit
+		? t(
+				'displayer.no_contacts_or_contact_groups_starting_with_digit',
+				'There are no contacts or contact groups starting with a number'
+			)
+		: t('displayer.no_contacts_or_contact_groups_starting_with', {
 				letter,
-				defaultValue: 'There are no contact groups starting with "{{letter}}"'
-			})
-		: t('displayer.no_contacts_starting_with', {
-				letter,
-				defaultValue: 'There are no contacts starting with "{{letter}}"'
+				defaultValue: 'There are no contacts or contact groups starting with "{{letter}}"'
 			});
 };
 
@@ -190,11 +210,7 @@ export const ContactsList = ({
 	const emptyListProps = useMemo(() => {
 		if (activeLetter !== null) {
 			return {
-				emptyListTitle: getLetterEmptyTitle(
-					t,
-					activeLetter,
-					filterType === FILTER_TYPES.CONTACT_GROUP
-				),
+				emptyListTitle: getLetterEmptyTitle(t, activeLetter, filterType),
 				icon: 'PeopleOutline'
 			};
 		}

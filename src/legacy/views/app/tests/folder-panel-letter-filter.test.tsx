@@ -136,7 +136,9 @@ describe('Folder panel letter filter', () => {
 		createContactsApiInterceptor({ items: [] });
 		await user.click(screen.getByTestId('letter-filter-Y'));
 
-		expect(await screen.findByText('There are no contacts starting with "Y"')).toBeVisible();
+		expect(
+			await screen.findByText('There are no contacts or contact groups starting with "Y"')
+		).toBeVisible();
 
 		const clearInterceptor = createContactsApiInterceptor({ items: [] });
 		await user.click(screen.getByTestId('clear-all-filters-button'));
@@ -144,6 +146,36 @@ describe('Folder panel letter filter', () => {
 		const request = await clearInterceptor;
 		expect(request.query?._content).toBe(`inid:"${FOLDER_ID}"`);
 		await waitFor(() => expect(screen.getByTestId('select-contacts-view')).toHaveTextContent(''));
+	});
+
+	it('should show the contacts-only empty message when the contacts filter is active', async () => {
+		createContactsApiInterceptor({ items: [] });
+		const { user } = setupFolderPanel();
+
+		await openSelectContactsView(user);
+		createContactsApiInterceptor({ items: [] });
+		await user.click(await screen.findByText('Contacts'));
+
+		await openLetterGrid(user);
+		createContactsApiInterceptor({ items: [] });
+		await user.click(screen.getByTestId('letter-filter-Y'));
+
+		expect(await screen.findByText('There are no contacts starting with "Y"')).toBeVisible();
+	});
+
+	it('should show the contact-groups-only empty message when the contact groups filter is active', async () => {
+		createContactsApiInterceptor({ items: [] });
+		const { user } = setupFolderPanel();
+
+		await openSelectContactsView(user);
+		createContactsApiInterceptor({ items: [] });
+		await user.click(await screen.findByText('Contact Groups'));
+
+		await openLetterGrid(user);
+		createContactsApiInterceptor({ items: [] });
+		await user.click(screen.getByTestId('letter-filter-Y'));
+
+		expect(await screen.findByText('There are no contact groups starting with "Y"')).toBeVisible();
 	});
 
 	it('should search on every digit when the digits bucket is selected', async () => {
@@ -173,9 +205,11 @@ describe('Folder panel letter filter', () => {
 		createContactsApiInterceptor({ items: [] });
 		await user.click(screen.getByTestId(`letter-filter-${OTHER_INITIAL}`));
 
-		expect(await screen.findByText('There are no contacts starting with a number')).toBeVisible();
 		expect(
-			screen.queryByText(`There are no contacts starting with "${OTHER_INITIAL}"`)
+			await screen.findByText('There are no contacts or contact groups starting with a number')
+		).toBeVisible();
+		expect(
+			screen.queryByText(`There are no contacts or contact groups starting with "${OTHER_INITIAL}"`)
 		).not.toBeInTheDocument();
 	});
 
@@ -213,7 +247,9 @@ describe('Folder panel letter filter', () => {
 		createContactsApiInterceptor({ items: [buildSoapGroup('1', 'Gruppo Amici')] });
 		await user.click(screen.getByTestId('letter-filter-A'));
 
-		expect(await screen.findByText('There are no contacts starting with "A"')).toBeVisible();
+		expect(
+			await screen.findByText('There are no contacts or contact groups starting with "A"')
+		).toBeVisible();
 		expect(screen.getByTestId('BreadcrumbCount')).toHaveTextContent('0');
 	});
 
