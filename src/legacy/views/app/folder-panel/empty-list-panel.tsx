@@ -6,21 +6,47 @@
 
 import React from 'react';
 
-import { Container, Text } from '@zextras/carbonio-design-system';
+import { Button, Container, Icon, Row, Text } from '@zextras/carbonio-design-system';
 
 export const EmptyListPanel = ({
-	emptyListTitle
+	emptyListTitle,
+	icon,
+	actionLabel,
+	onAction
 }: {
 	emptyListTitle: string;
+	icon?: string;
+	actionLabel?: string;
+	onAction?: () => void;
 }): React.JSX.Element => (
-	<Container data-testid="ContactsListToScrollContainer" crossAlignment="unset">
+	<Container
+		data-testid="ContactsListToScrollContainer"
+		mainAlignment="flex-start"
+		padding={{ vertical: 'large' }}
+	>
+		{icon && (
+			<Row width="fill" padding={{ top: 'extralarge', bottom: 'small' }}>
+				<Icon icon={icon} size="large" color="gray1" />
+			</Row>
+		)}
 		<Text
 			color="gray1"
 			overflow="break-word"
 			size="small"
-			style={{ whiteSpace: 'pre-line', textAlign: 'center', paddingTop: '2rem' }}
+			style={{ whiteSpace: 'pre-line', textAlign: 'center', paddingTop: icon ? 0 : '2rem' }}
 		>
 			{emptyListTitle}
 		</Text>
+		{actionLabel && onAction && (
+			<Row width="fill" padding={{ top: 'medium' }}>
+				<Button
+					type="ghost"
+					color="primary"
+					label={actionLabel}
+					onClick={onAction}
+					data-testid="clear-all-filters-button"
+				/>
+			</Row>
+		)}
 	</Container>
 );

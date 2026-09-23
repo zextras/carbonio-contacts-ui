@@ -69,8 +69,13 @@ function setupFolderPanel(folderId: string): ReturnType<typeof setupTest> {
 }
 
 async function toggleSelectContactTypeFilter(user: UserEvent): Promise<void> {
+	// the dropdown keeps itself open after a selection, so the chevron is clicked
+	// only when the menu is actually closed
+	if (screen.queryByTestId('icon: ChevronUpOutline')) {
+		return;
+	}
 	const selectContactsViewDropdown = await screen.findByTestId('icon: ChevronDownOutline');
-	return user.click(selectContactsViewDropdown);
+	await user.click(selectContactsViewDropdown);
 }
 
 function registerSearchContacts(soapContacts: Array<SoapContact>): void {
@@ -896,6 +901,11 @@ describe('Folder panel', () => {
 	});
 
 	describe('Select contact type filter', () => {
+		beforeEach(() => {
+			// changing a filter deselects the current selection, which needs the app context
+			useAppContext.mockReturnValue({ count: 0, setCount: vi.fn() });
+		});
+
 		it('should display contacts and contact groups by default', async () => {
 			const contactGroupName = faker.company.name();
 			const folderId = '7';
