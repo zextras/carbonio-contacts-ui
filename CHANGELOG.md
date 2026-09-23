@@ -1,3 +1,23 @@
+## 1.22.0 (2026-09-23)
+
+* feat: implement contact initial and sorting utilities ([ee99420](https://github.com/zextras/carbonio-contacts-ui/commit/ee99420))
+* chore: point semantic-release at main branch ([98caed8](https://github.com/zextras/carbonio-contacts-ui/commit/98caed8))
+* chore(deps): update dependency @testing-library/user-event to v14.6.7 (#496) ([2e19420](https://github.com/zextras/carbonio-contacts-ui/commit/2e19420)), closes [#496](https://github.com/zextras/carbonio-contacts-ui/issues/496)
+* chore(deps): update dependency @types/lodash to v4.17.25 (#497) ([30145a4](https://github.com/zextras/carbonio-contacts-ui/commit/30145a4)), closes [#497](https://github.com/zextras/carbonio-contacts-ui/issues/497)
+* chore(deps): update dependency @types/react to v18.3.31 (#461) ([e0bc003](https://github.com/zextras/carbonio-contacts-ui/commit/e0bc003)), closes [#461](https://github.com/zextras/carbonio-contacts-ui/issues/461)
+* chore(deps): update dependency @vitejs/plugin-react to v5.2.0 (#469) ([63d3432](https://github.com/zextras/carbonio-contacts-ui/commit/63d3432)), closes [#469](https://github.com/zextras/carbonio-contacts-ui/issues/469)
+* chore(deps): update dependency @zextras/carbonio-search-ui to v0.1.2 (#458) ([c4d7a07](https://github.com/zextras/carbonio-contacts-ui/commit/c4d7a07)), closes [#458](https://github.com/zextras/carbonio-contacts-ui/issues/458)
+* chore(deps): update dependency @zextras/carbonio-search-ui to v0.1.8 (#498) ([a728b5b](https://github.com/zextras/carbonio-contacts-ui/commit/a728b5b)), closes [#498](https://github.com/zextras/carbonio-contacts-ui/issues/498)
+* chore(deps): update dependency @zextras/carbonio-ui-sdk to v2.3.12 (#460) ([33fb63c](https://github.com/zextras/carbonio-contacts-ui/commit/33fb63c)), closes [#460](https://github.com/zextras/carbonio-contacts-ui/issues/460)
+* chore(deps): update dependency typescript to v5.9.3 (#468) ([837356f](https://github.com/zextras/carbonio-contacts-ui/commit/837356f)), closes [#468](https://github.com/zextras/carbonio-contacts-ui/issues/468)
+* chore(deps): update dependency zextras/jenkins-lib-common to v4.10.11 (#493) ([b7d2ee5](https://github.com/zextras/carbonio-contacts-ui/commit/b7d2ee5)), closes [#493](https://github.com/zextras/carbonio-contacts-ui/issues/493)
+* chore(deps): update dependency zextras/jenkins-lib-common to v4.10.5 (#488) ([7b00ab2](https://github.com/zextras/carbonio-contacts-ui/commit/7b00ab2)), closes [#488](https://github.com/zextras/carbonio-contacts-ui/issues/488)
+* chore(deps): update dependency zextras/jenkins-lib-common to v4.10.6 (#489) ([1340acf](https://github.com/zextras/carbonio-contacts-ui/commit/1340acf)), closes [#489](https://github.com/zextras/carbonio-contacts-ui/issues/489)
+* chore(deps): update dependency zextras/jenkins-lib-common to v4.10.7 (#491) ([7b6ec2d](https://github.com/zextras/carbonio-contacts-ui/commit/7b6ec2d)), closes [#491](https://github.com/zextras/carbonio-contacts-ui/issues/491)
+* chore(deps): update dependency zextras/jenkins-lib-common to v4.11.0 (#495) ([ef19c65](https://github.com/zextras/carbonio-contacts-ui/commit/ef19c65)), closes [#495](https://github.com/zextras/carbonio-contacts-ui/issues/495)
+* chore(deps): update dependency zextras/jenkins-lib-common to v4.9.2 (#485) ([82e3b37](https://github.com/zextras/carbonio-contacts-ui/commit/82e3b37)), closes [#485](https://github.com/zextras/carbonio-contacts-ui/issues/485)
+* chore(deps): update sonarqube-scanner to 4.4.0 ([23acee8](https://github.com/zextras/carbonio-contacts-ui/commit/23acee8))
+
 ## <small>1.21.6 (2026-08-25)</small>
 
 * fix(ci): run Docker build stages as root ([c406433](https://github.com/zextras/carbonio-contacts-ui/commit/c406433))
