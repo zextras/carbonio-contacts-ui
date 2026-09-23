@@ -5,7 +5,7 @@
  */
 import { trim } from 'lodash';
 
-import { Contact, ContactOrGroup } from 'legacy/types/contact';
+import { ContactOrGroup } from 'legacy/types/contact';
 import { isGroup } from 'legacy/utils/helpers';
 
 /**
@@ -32,15 +32,14 @@ export const getContactSortValue = (item: ContactOrGroup): string => {
 	if (isGroup(item)) {
 		return item.title ?? '';
 	}
-	const contact = item as Contact;
-	if (contact.displayName) {
-		return contact.displayName;
+	if (item.displayName) {
+		return item.displayName;
 	}
-	if (contact.firstName || contact.lastName) {
-		return trim(`${contact.firstName || ''} ${contact.lastName || ''}`);
+	if (item.firstName || item.lastName) {
+		return trim(`${item.firstName || ''} ${item.lastName || ''}`);
 	}
-	const firstEmailType = Object.keys(contact.email ?? {})[0];
-	return (firstEmailType && contact.email[firstEmailType]?.mail) || '';
+	const firstEmailType = Object.keys(item.email ?? {})[0];
+	return (firstEmailType && item.email[firstEmailType]?.mail) || '';
 };
 
 /**
@@ -53,7 +52,7 @@ export const getContactInitial = (item: ContactOrGroup): string => {
 		.trim()
 		.charAt(0)
 		.normalize('NFD')
-		.replace(DIACRITICS_REG, '')
+		.replaceAll(DIACRITICS_REG, '')
 		.toUpperCase();
 
 	return ALPHABET.includes(initial) ? initial : OTHER_INITIAL;
