@@ -106,6 +106,7 @@ export type SoapContact = {
 		nickname?: string;
 		nameSuffix?: string;
 		namePrefix?: string;
+		fileAs?: string;
 		mobilePhone?: string;
 		workPhone?: string;
 		otherPhone?: string;
@@ -230,7 +231,8 @@ export type CreateContactRequestAttr =
 	| { n: 'department'; _content: string }
 	| { n: 'company'; _content: string }
 	| { n: 'notes'; _content: string }
-	| { n: 'email'; _content: string };
+	| { n: 'email'; _content: string }
+	| { n: 'fileAs'; _content: string };
 export type CreateContactRequest = {
 	cn: {
 		m: unknown[];

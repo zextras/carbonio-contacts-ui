@@ -16,8 +16,9 @@ describe('getLetterCursor', () => {
 		expect(getLetterCursor('B')).toEqual({ sortVal: 'b', endSortVal: 'c' });
 	});
 
-	it('should use the next ASCII character after z for the last letter', () => {
-		expect(getLetterCursor('Z')).toEqual({ sortVal: 'z', endSortVal: '{' });
+	it('should leave the upper bound open for the last letter', () => {
+		expect(getLetterCursor('Z')).toEqual({ sortVal: 'z' });
+		expect(getLetterCursor('Z')).not.toHaveProperty('endSortVal');
 	});
 
 	it('should bound the other-initial bucket to everything sorting before a', () => {

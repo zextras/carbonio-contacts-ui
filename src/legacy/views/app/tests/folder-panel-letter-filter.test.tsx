@@ -78,6 +78,26 @@ describe('Folder panel letter filter', () => {
 		expect(request.cursor).toEqual({ id: 0, sortVal: 'b', endSortVal: 'c' });
 	});
 
+	it('should leave the cursor upper bound open for the last letter', async () => {
+		createContactsApiInterceptor({ items: [] });
+		const { user } = setupFolderPanel();
+
+		await openLetterGrid(user);
+
+		const letterInterceptor = createContactsApiInterceptor({
+			items: [buildSoapContact('1', { displayName: 'Zorro' })]
+		});
+		await user.click(screen.getByTestId('letter-filter-Z'));
+
+		const request = await letterInterceptor;
+		expect(request.sortVal).toBe('z');
+		expect(request.endSortVal).toBeUndefined();
+		expect(request.cursor).toEqual({ id: 0, sortVal: 'z' });
+		expect(await screen.findByTestId('contacts-list-section-Z')).toHaveTextContent(
+			'1 visible contact'
+		);
+	});
+
 	it('should restrict the query to contacts while keeping the cursor bounds', async () => {
 		createContactsApiInterceptor({ items: [] });
 		const { user } = setupFolderPanel();

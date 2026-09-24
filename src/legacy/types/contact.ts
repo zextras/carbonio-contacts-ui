@@ -96,6 +96,8 @@ export type Contact = {
 	namePrefix: string;
 	URL: ContactUrlMap;
 	fileAsStr: string;
+	fileAs?: number;
+	fileAsFreeText?: string;
 };
 
 export type ContactOrGroup = Contact | ContactGroup;

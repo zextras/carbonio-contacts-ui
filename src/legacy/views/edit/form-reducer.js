@@ -30,7 +30,9 @@ export default function reducer(state, action) {
 				lastName: '',
 				nameSuffix: '',
 				image: '',
-				notes: ''
+				notes: '',
+				fileAs: 1,
+				fileAsFreeText: ''
 			};
 		case op.setExistingContact:
 			return {

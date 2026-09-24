@@ -12,6 +12,7 @@ import {
 	Input,
 	Padding,
 	Row,
+	Select,
 	Text,
 	Tooltip,
 	useSnackbar
@@ -34,6 +35,7 @@ import { CompactView } from 'legacy/commons/contact-compact-view';
 import { createContact } from 'legacy/store/actions/create-contact';
 import { modifyContact } from 'legacy/store/actions/modify-contact';
 import { addContactsToStore, useContactById } from 'legacy/store/contacts';
+import { composeFileAsDescription, FILE_AS_FREE_TEXT } from 'legacy/utils/file-as';
 import { getFolderTranslatedName } from 'legacy/utils/helpers';
 import { normalizeContactsFromSoap } from 'legacy/utils/normalizations/normalize-contact-from-soap';
 import { ContactEditorRow, CustomMultivalueField } from 'legacy/views/edit/CustomMultivalueField';
@@ -62,7 +64,14 @@ const cleanMultivalueFields = (contact) => ({
 	URL: filterEmptyValues(contact.URL)
 });
 
-const CustomStringField = ({ name, label, value, dispatch, autoFocus = false }) => (
+const CustomStringField = ({
+	name,
+	label,
+	value,
+	dispatch,
+	autoFocus = false,
+	disabled = false
+}) => (
 	<Container padding={{ all: 'small' }}>
 		<Input
 			background="gray5"
@@ -72,6 +81,7 @@ const CustomStringField = ({ name, label, value, dispatch, autoFocus = false }) 
 			onChange={(ev) => dispatch({ type: op.setInput, payload: ev.target })}
 			// eslint-disable-next-line jsx-a11y/no-autofocus
 			autoFocus={autoFocus}
+			disabled={disabled}
 		/>
 	</Container>
 );
@@ -231,6 +241,37 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 		[t]
 	);
 
+	const fileAsOptions = useMemo(
+		() => [
+			{ label: t('file_as.last_first', 'Last, First'), value: 1 },
+			{ label: t('file_as.first_last', 'First Last'), value: 2 },
+			{ label: t('file_as.company', 'Company'), value: 3 },
+			{ label: t('file_as.last_first_company', 'Last, First (Company)'), value: 4 },
+			{ label: t('file_as.first_last_company', 'First Last (Company)'), value: 5 },
+			{ label: t('file_as.company_last_first', 'Company (Last, First)'), value: 6 },
+			{ label: t('file_as.company_first_last', 'Company (First Last)'), value: 7 },
+			{ label: t('file_as.free_text', 'Free text'), value: FILE_AS_FREE_TEXT }
+		],
+		[t]
+	);
+
+	const fileAsDescription = useMemo(
+		() =>
+			composeFileAsDescription(contact?.fileAs, {
+				firstName: contact?.firstName,
+				lastName: contact?.lastName,
+				company: contact?.company,
+				fileAsFreeText: contact?.fileAsFreeText
+			}),
+		[
+			contact?.company,
+			contact?.fileAs,
+			contact?.fileAsFreeText,
+			contact?.firstName,
+			contact?.lastName
+		]
+	);
+
 	return contact ? (
 		<Container
 			mainAlignment="flex-start"
@@ -265,8 +306,27 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 					</Tooltip>
 				</Row>
 				<Padding value="medium small">
-					<CompactView contact={contact} />
+					<CompactView contact={contact} displayName={fileAsDescription} />
 				</Padding>
+				<ContactEditorRow>
+					<Container padding={{ all: 'small' }}>
+						<Select
+							label={t('label.file_as', 'File as')}
+							items={fileAsOptions}
+							defaultSelection={find(fileAsOptions, ['value', contact.fileAs])}
+							onChange={(value) =>
+								dispatch({ type: op.setInput, payload: { name: 'fileAs', value } })
+							}
+						/>
+					</Container>
+					<CustomStringField
+						name="fileAsFreeText"
+						label={t('label.file_as_free_text', 'Custom text')}
+						value={contact.fileAsFreeText}
+						dispatch={dispatch}
+						disabled={contact.fileAs !== FILE_AS_FREE_TEXT}
+					/>
+				</ContactEditorRow>
 				<ContactEditorRow>
 					<CustomStringField
 						name="namePrefix"
