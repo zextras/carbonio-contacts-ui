@@ -72,6 +72,21 @@ export type FolderActionParams = {
 	type?: string;
 };
 
+export const buildFolderActionRequest = (params: FolderActionParams): FolderActionRequest => ({
+	action: {
+		id: params.folderId,
+		op: params.operation,
+		...(params.parentId !== undefined && { l: params.parentId }),
+		...(params.recursive !== undefined && { recursive: params.recursive }),
+		...(params.name !== undefined && { name: params.name }),
+		...(params.color !== undefined && { color: params.color }),
+		...(params.rgb !== undefined && { rgb: params.rgb }),
+		...(params.granteeId !== undefined && { zid: params.granteeId }),
+		...(params.type !== undefined && { type: params.type })
+	},
+	_jsns: JSNS.MAIL
+});
+
 /**
  * Call the API to perform actions on a folder/tag.
  * It returns nothing because, at the moment, the generated items will be
@@ -80,20 +95,7 @@ export type FolderActionParams = {
  * @param params
  */
 export const folderAction = (params: FolderActionParams): Promise<void> => {
-	const request: FolderActionRequest = {
-		action: {
-			id: params.folderId,
-			op: params.operation,
-			...(params.parentId !== undefined && { l: params.parentId }),
-			...(params.recursive !== undefined && { recursive: params.recursive }),
-			...(params.name !== undefined && { name: params.name }),
-			...(params.color !== undefined && { color: params.color }),
-			...(params.rgb !== undefined && { rgb: params.rgb }),
-			...(params.granteeId !== undefined && { zid: params.granteeId }),
-			...(params.type !== undefined && { type: params.type })
-		},
-		_jsns: JSNS.MAIL
-	};
+	const request = buildFolderActionRequest(params);
 	return legacySoapFetch<FolderActionRequest, FolderActionResponse | ErrorSoapBodyResponse>(
 		'FolderAction',
 		request

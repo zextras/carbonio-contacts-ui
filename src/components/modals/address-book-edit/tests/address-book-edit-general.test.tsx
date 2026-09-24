@@ -13,6 +13,7 @@ import { generateFolder } from '@test-utils/folders/folders-generator';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 import { TESTID_SELECTORS } from 'constants/tests';
 import { FolderActionRequest } from 'network/api/folder-action';
+import { BatchUpdateFolderRequest } from 'network/api/update-folder';
 
 const ADDRESS_BOOK_ID = '1001';
 const ADDRESS_BOOK_NAME = 'My Contacts';
@@ -91,23 +92,24 @@ describe('AddressBookEditGeneralModal', () => {
 			expect(screen.getByRole('button', { name: EDIT_LABEL })).toBeEnabled();
 		});
 
-		it('should send the picked color as rgb', async () => {
+		it('should batch the update with a separate color action for the picked color', async () => {
 			setAddressBook({ color: 1 });
 			const { user } = renderModal();
-			const interceptor = createSoapAPIInterceptor<FolderActionRequest>('FolderAction');
+			const interceptor = createSoapAPIInterceptor<BatchUpdateFolderRequest>('Batch');
 
 			await user.click(screen.getByRole('button', { name: ZIMBRA_STANDARD_COLORS[5].zLabel }));
 			await user.click(screen.getByRole('button', { name: EDIT_LABEL }));
 
-			const { action } = await interceptor;
-			expect(action).toEqual(
-				expect.objectContaining({
-					id: ADDRESS_BOOK_ID,
-					op: 'update',
-					rgb: ZIMBRA_STANDARD_COLORS[5].hex
-				})
-			);
-			expect(action).not.toHaveProperty('color');
+			const { FolderActionRequest } = await interceptor;
+			const [update, colorAction] = FolderActionRequest.map(({ action }) => action);
+			expect(update).toEqual(expect.objectContaining({ id: ADDRESS_BOOK_ID, op: 'update' }));
+			expect(update).not.toHaveProperty('rgb');
+			expect(update).not.toHaveProperty('color');
+			expect(colorAction).toEqual({
+				id: ADDRESS_BOOK_ID,
+				op: 'color',
+				rgb: ZIMBRA_STANDARD_COLORS[5].hex
+			});
 		});
 
 		it('should not send the color when only the name changes', async () => {
