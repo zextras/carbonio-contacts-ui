@@ -20,7 +20,7 @@ import { report } from '@zextras/carbonio-shell-ui';
 import {
 	FoldersSelector,
 	FOLDERS,
-	ZIMBRA_STANDARD_COLORS,
+	resolveFolderColorHex,
 	isRoot,
 	isSharedAccountFolder,
 	isTrash,
@@ -137,7 +137,7 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 			map(folderWithWritePerm, (item) => ({
 				label: getFolderTranslatedName(t, item.id, item.name),
 				value: item.id,
-				color: ZIMBRA_STANDARD_COLORS[item.color || 0].hex
+				color: resolveFolderColorHex(item.color, item.rgb)
 			})),
 		[folderWithWritePerm, t]
 	);

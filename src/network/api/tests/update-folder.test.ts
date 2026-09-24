@@ -6,8 +6,8 @@
 import { faker } from '@faker-js/faker';
 import { JSNS } from '@zextras/carbonio-ui-commons';
 
-import { updateFolder, UpdateFolderParams } from 'network/api/update-folder';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
+import { updateFolder, UpdateFolderParams } from 'network/api/update-folder';
 
 describe('updateFolder', () => {
 	it('should call the API with the proper fields', () => {
@@ -16,7 +16,8 @@ describe('updateFolder', () => {
 			folderId: faker.string.uuid(),
 			name: faker.word.words(1),
 			parentId: `${faker.number.int({ min: 1 })}`,
-			color: faker.number.int({ min: 0, max: 127 })
+			color: faker.number.int({ min: 0, max: 127 }),
+			rgb: faker.color.rgb()
 		};
 		updateFolder(params);
 		expect(apiInterceptor).resolves.toEqual({
@@ -25,6 +26,7 @@ describe('updateFolder', () => {
 				name: params.name,
 				l: params.parentId,
 				color: params.color,
+				rgb: params.rgb,
 				op: 'update'
 			},
 			_jsns: JSNS.MAIL

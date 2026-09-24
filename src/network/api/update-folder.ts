@@ -11,18 +11,21 @@ export type UpdateFolderParams = {
 	name?: string;
 	parentId?: string;
 	color?: number;
+	rgb?: string;
 };
 
 export const updateFolder = ({
 	folderId,
 	name,
 	parentId,
-	color
+	color,
+	rgb
 }: UpdateFolderParams): Promise<void> =>
 	folderAction({
 		folderId,
 		name,
 		parentId,
 		color,
+		rgb,
 		operation: 'update'
 	});

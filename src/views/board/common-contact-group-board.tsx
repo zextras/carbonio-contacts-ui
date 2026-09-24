@@ -20,7 +20,7 @@ import {
 import { useBoardHooks } from '@zextras/carbonio-shell-ui';
 import {
 	FoldersSelector,
-	ZIMBRA_STANDARD_COLORS,
+	resolveFolderColorHex,
 	FOLDERS,
 	getFolderIdParts,
 	isSharedAccountFolder,
@@ -112,7 +112,7 @@ export const CommonContactGroupBoard = ({
 						? t('folders.contacts', 'Contacts')
 						: item.name,
 				value: item.id,
-				color: ZIMBRA_STANDARD_COLORS[item.color ?? 0].hex
+				color: resolveFolderColorHex(item.color, item.rgb)
 			})),
 		[folderWithWritePerm, t]
 	);

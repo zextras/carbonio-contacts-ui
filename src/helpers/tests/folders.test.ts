@@ -3,9 +3,10 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { FOLDERS } from '@zextras/carbonio-ui-commons';
+import { FOLDERS, ZIMBRA_STANDARD_COLORS } from '@zextras/carbonio-ui-commons';
 
-import { isContacts, isEmailedContacts } from 'helpers/folders';
+import { generateFolder } from '@test-utils/folders/folders-generator';
+import { getFolderIconColor, isContacts, isEmailedContacts } from 'helpers/folders';
 
 describe('Folders helpers', () => {
 	describe('isContacts', () => {
@@ -97,6 +98,20 @@ describe('Folders helpers', () => {
 	});
 
 	describe('getFolderIconColor', () => {
-		it.todo('should return the correct icon color for the given folder');
+		it('should prefer the folder rgb custom color over its color index', () => {
+			expect(getFolderIconColor({ ...generateFolder(), color: 2, rgb: '#abcdef' })).toBe('#abcdef');
+		});
+
+		it('should return the standard color for the folder color index when there is no rgb', () => {
+			expect(getFolderIconColor({ ...generateFolder(), color: 2, rgb: undefined })).toBe(
+				ZIMBRA_STANDARD_COLORS[2].hex
+			);
+		});
+
+		it('should return the first standard color when the folder has no color', () => {
+			expect(getFolderIconColor({ ...generateFolder(), color: undefined, rgb: undefined })).toBe(
+				ZIMBRA_STANDARD_COLORS[0].hex
+			);
+		});
 	});
 });

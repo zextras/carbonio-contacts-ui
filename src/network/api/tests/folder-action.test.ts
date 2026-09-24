@@ -8,8 +8,8 @@ import { faker } from '@faker-js/faker';
 import { ErrorSoapBodyResponse } from '@zextras/carbonio-shell-ui';
 import { JSNS } from '@zextras/carbonio-ui-commons';
 
-import { folderAction, FolderActionOperation, FolderActionParams } from 'network/api/folder-action';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
+import { folderAction, FolderActionOperation, FolderActionParams } from 'network/api/folder-action';
 
 describe('Folder action', () => {
 	it('should raise an exception if the response contains a Fault', () => {
@@ -34,7 +34,8 @@ describe('Folder action', () => {
 			parentId: faker.string.uuid(),
 			granteeId: faker.string.uuid(),
 			name: faker.word.words(2),
-			color: faker.number.int({ min: 0, max: 127 })
+			color: faker.number.int({ min: 0, max: 127 }),
+			rgb: faker.color.rgb()
 		};
 		folderAction(params);
 		expect(apiInterceptor).resolves.toEqual({
@@ -44,7 +45,8 @@ describe('Folder action', () => {
 				l: params.parentId,
 				zid: params.granteeId,
 				name: params.name,
-				color: params.color
+				color: params.color,
+				rgb: params.rgb
 			},
 			_jsns: JSNS.MAIL
 		});
