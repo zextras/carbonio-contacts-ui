@@ -244,7 +244,12 @@ function ContactPreviewContent({ contact }) {
 		<DisplayerContent>
 			<Responsive mode="desktop" target={window.top}>
 				<Container data-testid="contact-preview-content-desktop" background="gray6" height="fit">
-					<CompactView contact={contact} open={open} toggleOpen={toggleOpen} />
+					<CompactView
+						contact={contact}
+						open={open}
+						toggleOpen={toggleOpen}
+						displayName={contact.fileAsStr}
+					/>
 				</Container>
 				<Collapse orientation="vertical" open={open} crossSize="100%" disableTransition>
 					<Container
@@ -386,7 +391,12 @@ function ContactPreviewContent({ contact }) {
 					padding={{ all: 'medium' }}
 				>
 					<Container>
-						<CompactView contact={contact} open={open} toggleOpen={toggleOpen} />
+						<CompactView
+							contact={contact}
+							open={open}
+							toggleOpen={toggleOpen}
+							displayName={contact.fileAsStr}
+						/>
 					</Container>
 				</Container>
 				<Collapse orientation="vertical" open={open} crossSize="100%" disableTransition>

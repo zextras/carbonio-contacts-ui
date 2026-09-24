@@ -68,7 +68,7 @@ export const ContactListItem = ({
 
 	const avatarItem = {
 		id: item.id,
-		label: `${item.firstName} ${item.middleName} ${item.lastName}`
+		label: item.fileAsStr
 	};
 	const contextualMenuActions = useContactContextualMenuActions(item);
 

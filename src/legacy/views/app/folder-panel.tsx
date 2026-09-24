@@ -16,7 +16,7 @@ import {
 } from '@zextras/carbonio-design-system';
 import { useAppContext } from '@zextras/carbonio-shell-ui';
 import { Folder } from '@zextras/carbonio-ui-commons';
-import { filter, find, noop, orderBy } from 'lodash';
+import { filter, find, noop } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { useSelection } from 'legacy/hooks/useSelection';
@@ -26,7 +26,7 @@ import {
 	ContactFilterType,
 	FILTER_TYPES
 } from 'legacy/utils/build-contacts-query';
-import { getContactInitial, getContactSortValue } from 'legacy/utils/contact-initial';
+import { getLetterCursor, LetterCursor } from 'legacy/utils/letter-search-cursor';
 import { normalizeContactsFromSoap } from 'legacy/utils/normalizations/normalize-contact-from-soap';
 import { Breadcrumbs } from 'legacy/views/app/breadcrumbs';
 import { ContactsList } from 'legacy/views/app/folder-panel/contacts-list';
@@ -46,8 +46,6 @@ export const FolderPanel = ({ folder }: FolderPanelProps): ReactElement => {
 	const [t] = useTranslation();
 	const { setCount } = useAppContext<UseAppContextType>();
 	const loading = useRef(false);
-	// mirrors the ref above, so that the effects can react to the end of a request
-	const [isLoading, setIsLoading] = useState(false);
 	const { selected, isSelecting, toggle, deselectAll } = useSelection(folder.id, setCount);
 	const [activeFilter, setActiveFilter] = useState<ContactFilterType>(FILTER_TYPES.ALL);
 	const [activeLetter, setActiveLetter] = useState<string | null>(null);
@@ -64,39 +62,21 @@ export const FolderPanel = ({ folder }: FolderPanelProps): ReactElement => {
 	const [searchResults, setSearchResults] = useState<FolderViewSearchResults>(initialState);
 	const searchContacts = useContactsByFolder(folder);
 
-	// Sorted on the same value the list displays (and the letter filter matches on),
-	// so that the alphabetical sections are coherent with their contents.
-	const sortedContacts = useMemo(
-		() =>
-			orderBy(searchContacts, [(item): string => getContactSortValue(item).toLowerCase()], 'asc'),
-		[searchContacts]
-	);
-	// The Search query cannot express "the displayed value starts with X": it matches
-	// every token of the indexed fields, so a "Mario Bianchi" comes back for the letter
-	// B. Those items belong to another section and the list would not render them, so
-	// they are dropped here and every count stays coherent with what is on screen.
-	const visibleContacts = useMemo(
-		() =>
-			activeLetter === null
-				? sortedContacts
-				: sortedContacts.filter((contact) => getContactInitial(contact) === activeLetter),
-		[activeLetter, sortedContacts]
-	);
+	const letterCursor = useMemo(() => getLetterCursor(activeLetter), [activeLetter]);
 
 	const ids = useMemo(() => Object.keys(selected ?? []), [selected]);
 	const selectedContacts = filter(searchContacts, (contact) => ids.indexOf(contact.id) !== -1);
 
 	const searchQuery = useCallback(
-		(queryStr: string, reset: boolean) => {
+		(queryStr: string, reset: boolean, cursor?: LetterCursor) => {
 			if (loading.current) return;
-			prevQuery.current = queryStr;
 			loading.current = true;
-			setIsLoading(true);
 			const offset = reset ? 0 : searchResults.offset;
 			searchContactsHelper({
 				query: { _content: queryStr },
 				offset,
-				sortBy: 'nameAsc'
+				sortBy: 'nameAsc',
+				cursor
 			})
 				.then((searchResultResponse) => {
 					const newContacts = normalizeContactsFromSoap(searchResultResponse.cn);
@@ -108,31 +88,33 @@ export const FolderPanel = ({ folder }: FolderPanelProps): ReactElement => {
 				})
 				.finally(() => {
 					loading.current = false;
-					setIsLoading(false);
 				});
 		},
 		[searchResults.offset]
 	);
 
 	const query = useMemo(
-		(): string =>
-			buildContactsQuery({ folderId: folder.id, filterType: activeFilter, letter: activeLetter }),
-		[activeFilter, activeLetter, folder.id]
+		(): string => buildContactsQuery({ folderId: folder.id, filterType: activeFilter }),
+		[activeFilter, folder.id]
 	);
 
-	useEffect(() => {
-		if (query === prevQuery.current) return;
-		searchQuery(query, true);
-	}, [query, searchQuery]);
+	// The letter filter narrows results through the cursor bounds rather than the
+	// query string, so the search key has to account for it too, or switching
+	// letters within the same query/filter would be mistaken for a no-op.
+	const searchKey = `${query}::${activeLetter ?? ''}`;
 
-	// A page whose items are all discarded by the filter above leaves the list empty:
-	// it never reaches its bottom, so onListBottom would never ask for the next page.
-	// Keep loading until something becomes visible or the results are over.
 	useEffect(() => {
-		if (isLoading || activeLetter === null || visibleContacts.length > 0 || !searchResults.more)
-			return;
-		searchQuery(query, false);
-	}, [activeLetter, isLoading, query, searchQuery, searchResults.more, visibleContacts.length]);
+		if (searchKey === prevQuery.current) return;
+		prevQuery.current = searchKey;
+		searchQuery(query, true, letterCursor);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [searchKey]);
+
+	const loadMore = useCallback(() => {
+		if (searchResults.more) {
+			searchQuery(query, false, letterCursor);
+		}
+	}, [letterCursor, query, searchQuery, searchResults.more]);
 
 	const selectType = useCallback(
 		(filterType: ContactFilterType) => {
@@ -155,12 +137,6 @@ export const FolderPanel = ({ folder }: FolderPanelProps): ReactElement => {
 		setActiveFilter(FILTER_TYPES.ALL);
 		setActiveLetter(null);
 	}, [deselectAll]);
-
-	const loadMore = useCallback(() => {
-		if (searchResults.more) {
-			searchQuery(query, false);
-		}
-	}, [query, searchQuery, searchResults.more]);
 
 	const isFiltered = activeFilter !== FILTER_TYPES.ALL || activeLetter !== null;
 
@@ -273,7 +249,7 @@ export const FolderPanel = ({ folder }: FolderPanelProps): ReactElement => {
 					<Breadcrumbs
 						folderPath={folder?.absFolderPath}
 						data-testid="breadcrumbs-contacts"
-						itemsCount={visibleContacts.length}
+						itemsCount={searchContacts.length}
 					>
 						<Row mainAlignment="flex-end" padding={{ left: 'medium' }}>
 							<Tooltip label={t('label.filter_mode', 'Filter mode')} maxWidth="100%">
@@ -296,7 +272,7 @@ export const FolderPanel = ({ folder }: FolderPanelProps): ReactElement => {
 				<ContactsList
 					onListBottom={loadMore}
 					folderId={folder.id}
-					contacts={visibleContacts}
+					contacts={searchContacts}
 					selected={selected}
 					isSelecting={isSelecting}
 					toggle={toggle}

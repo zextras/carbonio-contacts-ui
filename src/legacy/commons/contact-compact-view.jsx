@@ -34,8 +34,9 @@ function calcColor(label) {
 	return `avatar_${(sum % 50) + 1}`;
 }
 
-export const CompactView = ({ contact, toggleOpen, open }) => {
-	const displayName = useDisplayName(contact);
+export const CompactView = ({ contact, toggleOpen, open, displayName: displayNameOverride }) => {
+	const fallbackDisplayName = useDisplayName(contact);
+	const displayName = displayNameOverride ?? fallbackDisplayName;
 	const displayMailAndPhone = useMemo(
 		() =>
 			trim(

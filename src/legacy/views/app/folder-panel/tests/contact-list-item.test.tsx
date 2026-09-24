@@ -5,7 +5,7 @@
  */
 import React from 'react';
 
-import { screen, fireEvent, act } from '@testing-library/react';
+import { screen, fireEvent } from '@testing-library/react';
 import { getAction } from '@zextras/carbonio-shell-ui';
 import { useNavigate } from 'react-router-dom';
 import { Mock } from 'vitest';
@@ -37,7 +37,7 @@ const contact: Contact = {
 	company: '',
 	department: '',
 	email: {},
-	fileAsStr: '',
+	fileAsStr: 'Doe John',
 	image: '',
 	jobTitle: '',
 	middleName: '',

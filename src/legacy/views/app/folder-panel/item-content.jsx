@@ -9,7 +9,6 @@ import { Text, Row, Tooltip, Container, Padding, Icon } from '@zextras/carbonio-
 import { trim } from 'lodash';
 
 import { ListItemContent } from 'components/list/list-item-content';
-import { useDisplayName } from 'legacy/hooks/use-display-name';
 import { useTagExist } from 'legacy/ui-actions/tag-actions';
 
 export const RowInfo = ({ item, tags }) => {
@@ -34,7 +33,7 @@ export const RowInfo = ({ item, tags }) => {
 };
 
 export const ItemContent = ({ item, tags }) => {
-	const displayName = useDisplayName(item);
+	const displayName = item.fileAsStr;
 	const secondaryRow = useMemo(
 		() =>
 			trim(

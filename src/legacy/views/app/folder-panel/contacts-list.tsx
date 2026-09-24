@@ -32,14 +32,14 @@ const getLetterEmptyTitle = (
 	letter: string,
 	filterType: ContactFilterType
 ): string => {
-	// the bucket matches any digit, so naming it in the message would be misleading
-	const startsWithDigit = letter === OTHER_INITIAL;
+	// the bucket matches any digit or symbol, so naming it in the message would be misleading
+	const startsWithDigitOrSymbol = letter === OTHER_INITIAL;
 
 	if (filterType === FILTER_TYPES.CONTACT_GROUP) {
-		return startsWithDigit
+		return startsWithDigitOrSymbol
 			? t(
-					'displayer.no_contact_groups_starting_with_digit',
-					'There are no contact groups starting with a number'
+					'displayer.no_contact_groups_starting_with_digit_or_symbol',
+					'There are no contact groups starting with a number or a symbol'
 				)
 			: t('displayer.no_contact_groups_starting_with', {
 					letter,
@@ -48,10 +48,10 @@ const getLetterEmptyTitle = (
 	}
 
 	if (filterType === FILTER_TYPES.CONTACT) {
-		return startsWithDigit
+		return startsWithDigitOrSymbol
 			? t(
-					'displayer.no_contacts_starting_with_digit',
-					'There are no contacts starting with a number'
+					'displayer.no_contacts_starting_with_digit_or_symbol',
+					'There are no contacts starting with a number or a symbol'
 				)
 			: t('displayer.no_contacts_starting_with', {
 					letter,
@@ -59,10 +59,10 @@ const getLetterEmptyTitle = (
 				});
 	}
 
-	return startsWithDigit
+	return startsWithDigitOrSymbol
 		? t(
-				'displayer.no_contacts_or_contact_groups_starting_with_digit',
-				'There are no contacts or contact groups starting with a number'
+				'displayer.no_contacts_or_contact_groups_starting_with_digit_or_symbol',
+				'There are no contacts or contact groups starting with a number or a symbol'
 			)
 		: t('displayer.no_contacts_or_contact_groups_starting_with', {
 				letter,
@@ -184,13 +184,27 @@ export const ContactsList = ({
 	);
 
 	const listItems = useMemo(() => {
+		// When a letter is active, contacts already come cursor-bounded from the
+		// server, so the whole batch is rendered as a single section instead of
+		// being re-bucketed by a client-computed initial. Otherwise every letter of
+		// the alphabet gets a header (even at zero, so that it can act as a jump
+		// anchor), plus the "#" section when some loaded item falls outside A-Z.
+		if (activeLetter) {
+			return [
+				<ListItem
+					key={`section-${activeLetter}`}
+					data-testid={`contacts-list-section-item-${activeLetter}`}
+				>
+					{(): React.JSX.Element => (
+						<ContactsListSectionHeader letter={activeLetter} count={contacts.length} />
+					)}
+				</ListItem>,
+				...map(contacts, renderContact)
+			];
+		}
+
 		const contactsByInitial = groupBy(contacts, getContactInitial);
-		// When a letter is active the list only contains that section. Otherwise every
-		// letter of the alphabet gets a header (even at zero, so that it can act as a
-		// jump anchor), plus the "#" section when some loaded item falls outside A-Z.
-		const sections = activeLetter
-			? [activeLetter]
-			: [...ALPHABET, ...(contactsByInitial[OTHER_INITIAL] ? [OTHER_INITIAL] : [])];
+		const sections = [...ALPHABET, ...(contactsByInitial[OTHER_INITIAL] ? [OTHER_INITIAL] : [])];
 
 		return sections.flatMap((initial) => {
 			const sectionContacts = contactsByInitial[initial] ?? [];

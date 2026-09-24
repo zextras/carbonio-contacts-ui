@@ -11,13 +11,12 @@ import { SoapContact } from 'legacy/types/soap';
 import { normalizeContactToSoap } from 'legacy/utils/normalizations/normalize-contact-to-soap';
 
 export const createContact = async (contact: Contact): Promise<SoapContact> => {
-	const cnt = { ...contact, fileAsStr: contact.firstName };
 	const { cn } = (await legacySoapFetch('CreateContact', {
 		_jsns: 'urn:zimbraMail',
 		cn: {
 			m: [],
-			l: cnt.parent,
-			a: normalizeContactToSoap(cnt)
+			l: contact.parent,
+			a: normalizeContactToSoap(contact)
 		}
 	})) as { cn: any };
 	return cn;

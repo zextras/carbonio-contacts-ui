@@ -6,31 +6,18 @@
 import React from 'react';
 
 import { waitFor } from '@testing-library/react';
-import { http, HttpResponse } from 'msw';
 
 import { useAppContext } from '../../../../../__mocks__/@zextras/carbonio-shell-ui';
-import { getSetupServer } from '@jest-setup';
-import { makeListItemsVisible, screen, setupTest, UserEvent } from '@test-setup';
+import { makeListItemsVisible, screen, setupTest, triggerLoadMore, UserEvent } from '@test-setup';
+import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 import { populateFoldersStore } from '@test-utils/store/folders';
 import { SoapContact } from 'legacy/types/soap';
-import { DIGITS, OTHER_INITIAL } from 'legacy/utils/contact-initial';
+import { OTHER_INITIAL } from 'legacy/utils/contact-initial';
 import { FolderPanelWrapper } from 'legacy/views/app/folder-panel-wrapper';
 import { createContactsApiInterceptor } from 'legacy/views/app/tests/utils';
+import { SearchContactsSoapRequest, SearchContactsSoapResponse } from 'types';
 
 const FOLDER_ID = '7';
-
-const CONTACT_B_CLAUSE =
-	'(#displayName:B* or (#displayName:"" and ' +
-	'(#firstName:B* or (#firstName:"" and ' +
-	'(#lastName:B* or (#lastName:"" and #email:B*))))))';
-
-const anyDigit = (field: string): string =>
-	`(${DIGITS.map((digit) => `#${field}:${digit}*`).join(' or ')})`;
-
-const CONTACT_DIGITS_CLAUSE =
-	`(${anyDigit('displayName')} or (#displayName:"" and ` +
-	`(${anyDigit('firstName')} or (#firstName:"" and ` +
-	`(${anyDigit('lastName')} or (#lastName:"" and ${anyDigit('email')}))))))`;
 
 const buildSoapContact = (id: string, attrs: Record<string, string>): SoapContact =>
 	({
@@ -38,18 +25,12 @@ const buildSoapContact = (id: string, attrs: Record<string, string>): SoapContac
 		l: FOLDER_ID,
 		d: 1700000000000,
 		rev: 1,
-		fileAsStr: attrs.displayName ?? attrs.firstName ?? attrs.email ?? '',
+		fileAsStr:
+			attrs.displayName ||
+			[attrs.firstName, attrs.lastName].filter(Boolean).join(' ') ||
+			attrs.email ||
+			'',
 		_attrs: attrs
-	}) as unknown as SoapContact;
-
-const buildSoapGroup = (id: string, fullName: string): SoapContact =>
-	({
-		id,
-		l: FOLDER_ID,
-		d: 1700000000000,
-		rev: 1,
-		fileAsStr: fullName,
-		_attrs: { type: 'group', fullName }
 	}) as unknown as SoapContact;
 
 function setupFolderPanel(): ReturnType<typeof setupTest> {
@@ -81,7 +62,7 @@ describe('Folder panel letter filter', () => {
 		populateFoldersStore();
 	});
 
-	it('should search with the display name cascade clause when a letter is selected', async () => {
+	it('should search with the cursor bounds of the selected letter', async () => {
 		createContactsApiInterceptor({ items: [] });
 		const { user } = setupFolderPanel();
 
@@ -91,13 +72,13 @@ describe('Folder panel letter filter', () => {
 		await user.click(screen.getByTestId('letter-filter-B'));
 
 		const request = await letterInterceptor;
-		expect(request.query?._content).toBe(
-			`inid:"${FOLDER_ID}" and ((not #type:group and ${CONTACT_B_CLAUSE})` +
-				' or (#type:group and #fullName:B*))'
-		);
+		expect(request.query?._content).toBe(`inid:"${FOLDER_ID}"`);
+		expect(request.sortVal).toBe('b');
+		expect(request.endSortVal).toBe('c');
+		expect(request.cursor).toEqual({ id: 0, sortVal: 'b', endSortVal: 'c' });
 	});
 
-	it('should restrict the clause to contacts when the contacts filter is active', async () => {
+	it('should restrict the query to contacts while keeping the cursor bounds', async () => {
 		createContactsApiInterceptor({ items: [] });
 		const { user } = setupFolderPanel();
 
@@ -110,9 +91,9 @@ describe('Folder panel letter filter', () => {
 		await user.click(screen.getByTestId('letter-filter-B'));
 
 		const request = await letterInterceptor;
-		expect(request.query?._content).toBe(
-			`inid:"${FOLDER_ID}" and not #type:group and ${CONTACT_B_CLAUSE}`
-		);
+		expect(request.query?._content).toBe(`inid:"${FOLDER_ID}" and not #type:group`);
+		expect(request.sortVal).toBe('b');
+		expect(request.endSortVal).toBe('c');
 	});
 
 	it('should show the active letter inside the filter button', async () => {
@@ -145,6 +126,8 @@ describe('Folder panel letter filter', () => {
 
 		const request = await clearInterceptor;
 		expect(request.query?._content).toBe(`inid:"${FOLDER_ID}"`);
+		expect(request.sortVal).toBeUndefined();
+		expect(request.cursor).toBeUndefined();
 		await waitFor(() => expect(screen.getByTestId('select-contacts-view')).toHaveTextContent(''));
 	});
 
@@ -178,26 +161,25 @@ describe('Folder panel letter filter', () => {
 		expect(await screen.findByText('There are no contact groups starting with "Y"')).toBeVisible();
 	});
 
-	it('should search on every digit when the digits bucket is selected', async () => {
+	it('should search with the other-initial cursor bounds when the "#" bucket is selected', async () => {
 		createContactsApiInterceptor({ items: [] });
 		const { user } = setupFolderPanel();
 
 		await openLetterGrid(user);
 
-		const digitsInterceptor = createContactsApiInterceptor({ items: [] });
+		const otherInterceptor = createContactsApiInterceptor({ items: [] });
 		await user.click(screen.getByTestId(`letter-filter-${OTHER_INITIAL}`));
 
-		const request = await digitsInterceptor;
-		expect(request.query?._content).toBe(
-			`inid:"${FOLDER_ID}" and ((not #type:group and ${CONTACT_DIGITS_CLAUSE})` +
-				` or (#type:group and ${anyDigit('fullName')}))`
-		);
+		const request = await otherInterceptor;
+		expect(request.sortVal).toBe('');
+		expect(request.endSortVal).toBe('a');
+		expect(request.cursor).toEqual({ id: 0, sortVal: '', endSortVal: 'a' });
 		await waitFor(() =>
 			expect(screen.getByTestId('select-contacts-view')).toHaveTextContent(OTHER_INITIAL)
 		);
 	});
 
-	it('should show a number specific empty message for the digits bucket', async () => {
+	it('should show a number/symbol specific empty message for the "#" bucket', async () => {
 		createContactsApiInterceptor({ items: [] });
 		const { user } = setupFolderPanel();
 
@@ -206,88 +188,71 @@ describe('Folder panel letter filter', () => {
 		await user.click(screen.getByTestId(`letter-filter-${OTHER_INITIAL}`));
 
 		expect(
-			await screen.findByText('There are no contacts or contact groups starting with a number')
+			await screen.findByText(
+				'There are no contacts or contact groups starting with a number or a symbol'
+			)
 		).toBeVisible();
 		expect(
 			screen.queryByText(`There are no contacts or contact groups starting with "${OTHER_INITIAL}"`)
 		).not.toBeInTheDocument();
 	});
 
-	it('should list the contacts whose name starts with a digit under the digits section', async () => {
-		createContactsApiInterceptor({
-			items: [
-				buildSoapContact('1', { displayName: '3M Italia' }),
-				buildSoapContact('2', { firstName: '1st', lastName: 'Aid' })
-			]
-		});
+	it('should list the contacts whose name starts with a digit or a symbol under the "#" section', async () => {
+		const items = [
+			buildSoapContact('1', { displayName: '3M Italia' }),
+			buildSoapContact('2', { firstName: '1st', lastName: 'Aid' }),
+			buildSoapContact('3', { displayName: '!Zorro' })
+		];
+		createContactsApiInterceptor({ items });
 		const { user } = setupFolderPanel();
 
 		await openLetterGrid(user);
-		createContactsApiInterceptor({
-			items: [
-				buildSoapContact('1', { displayName: '3M Italia' }),
-				buildSoapContact('2', { firstName: '1st', lastName: 'Aid' })
-			]
-		});
+		createContactsApiInterceptor({ items });
 		await user.click(screen.getByTestId(`letter-filter-${OTHER_INITIAL}`));
 
 		expect(await screen.findByTestId(`contacts-list-section-${OTHER_INITIAL}`)).toHaveTextContent(
-			'2 visible contacts'
+			'3 visible contacts'
 		);
 		expect(screen.queryByTestId('contacts-list-section-A')).not.toBeInTheDocument();
 	});
 
-	it('should not show nor count the items the server matched on a secondary token', async () => {
-		createContactsApiInterceptor({ items: [] });
-		const { user } = setupFolderPanel();
-
-		await openLetterGrid(user);
-		// the server matches every token of fullName, so this group comes back for the
-		// letter A although the list groups it under G
-		createContactsApiInterceptor({ items: [buildSoapGroup('1', 'Gruppo Amici')] });
-		await user.click(screen.getByTestId('letter-filter-A'));
-
-		expect(
-			await screen.findByText('There are no contacts or contact groups starting with "A"')
-		).toBeVisible();
-		expect(screen.getByTestId('BreadcrumbCount')).toHaveTextContent('0');
-	});
-
-	it('should load the next page when every item of a page is filtered out', async () => {
+	it('should keep the cursor bounds constant across pages while the offset increments', async () => {
 		createContactsApiInterceptor({ items: [] });
 		const { user } = setupFolderPanel();
 
 		await openLetterGrid(user);
 
-		const offsets: Array<number> = [];
-		getSetupServer().use(
-			http.post('/service/soap/SearchRequest', async ({ request }) => {
-				const content = (await request.json()) as {
-					Body: { SearchRequest: { offset: number } };
-				};
-				const { offset } = content.Body.SearchRequest;
-				offsets.push(offset);
-				const isFirstPage = offsets.length === 1;
-				return HttpResponse.json({
-					Body: {
-						SearchResponse: {
-							sortBy: 'nameAsc',
-							offset,
-							more: isFirstPage,
-							cn: isFirstPage
-								? [buildSoapGroup('1', 'Gruppo Amici')]
-								: [buildSoapContact('2', { displayName: 'Anna Rossi' })]
-						}
-					}
-				});
-			})
-		);
+		const firstPageInterceptor = createSoapAPIInterceptor<
+			SearchContactsSoapRequest,
+			SearchContactsSoapResponse
+		>('Search', {
+			sortBy: 'nameAsc',
+			offset: 0,
+			cn: [buildSoapContact('1', { displayName: 'Anna Rossi' })],
+			more: true
+		});
 		await user.click(screen.getByTestId('letter-filter-A'));
+		const firstRequest = await firstPageInterceptor;
+		await screen.findByTestId('contacts-list-section-A');
+		makeListItemsVisible();
 
-		expect(await screen.findByTestId('contacts-list-section-A')).toHaveTextContent(
-			'1 visible contact'
-		);
-		await waitFor(() => expect(offsets).toEqual([0, 100]));
+		const secondPageInterceptor = createSoapAPIInterceptor<
+			SearchContactsSoapRequest,
+			SearchContactsSoapResponse
+		>('Search', {
+			sortBy: 'nameAsc',
+			offset: 100,
+			cn: [buildSoapContact('2', { displayName: 'Aldo Bianchi' })],
+			more: false
+		});
+		await screen.findByTestId('list-bottom-element');
+		await triggerLoadMore();
+		const secondRequest = await secondPageInterceptor;
+
+		expect(firstRequest.offset).toBe(0);
+		expect(secondRequest.offset).toBe(100);
+		expect(secondRequest.sortVal).toBe(firstRequest.sortVal);
+		expect(secondRequest.endSortVal).toBe(firstRequest.endSortVal);
 	});
 
 	it('should group the contacts into alphabetical sections with their counts', async () => {
