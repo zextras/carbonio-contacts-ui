@@ -17,10 +17,10 @@ import {
 	ModalFooter
 } from '@zextras/carbonio-design-system';
 import {
-	ColorSelect,
-	ColorSelectProps,
+	FolderColorPicker,
 	isAdministerAllowed,
 	isSystemFolder,
+	resolveFolderColorHex,
 	useFolder,
 	Grant
 } from '@zextras/carbonio-ui-commons';
@@ -50,7 +50,12 @@ export const AddressBookEditGeneralModal = ({
 	const createSnackbar = useSnackbar();
 	const [t] = useTranslation();
 	const [addressBookName, setAddressBookName] = useState(addressBook?.name ?? '');
-	const [addressBookColor, setAddressBookColor] = useState(addressBook?.color ?? 0);
+	const initialAddressBookColorHex = useMemo(
+		() => resolveFolderColorHex(addressBook?.color, addressBook?.rgb),
+		[addressBook?.color, addressBook?.rgb]
+	);
+	const [addressBookColorHex, setAddressBookColorHex] = useState(initialAddressBookColorHex);
+	const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
 	const nameInputRef = useRef<HTMLInputElement>(null);
 
 	const modalTitle = useMemo(
@@ -64,24 +69,40 @@ export const AddressBookEditGeneralModal = ({
 
 	const confirmButtonDisabled = useMemo(
 		() =>
-			(addressBook?.name === addressBookName && addressBook?.color === addressBookColor) ||
-			addressBookName.trim().length === 0,
-		[addressBook, addressBookName, addressBookColor]
+			(addressBook?.name === addressBookName &&
+				initialAddressBookColorHex === addressBookColorHex) ||
+			addressBookName.trim().length === 0 ||
+			isColorPickerOpen,
+		[
+			addressBook,
+			addressBookName,
+			initialAddressBookColorHex,
+			addressBookColorHex,
+			isColorPickerOpen
+		]
 	);
 
 	const addShareDisabled = useMemo(
-		() => !addressBook || !isAdministerAllowed(addressBook),
-		[addressBook]
+		() => !addressBook || !isAdministerAllowed(addressBook) || isColorPickerOpen,
+		[addressBook, isColorPickerOpen]
 	);
 
 	const close = useCallback(() => onClose(), [onClose]);
+
+	const onCloseModal = useCallback(() => {
+		if (!isColorPickerOpen) {
+			onClose();
+		}
+	}, [isColorPickerOpen, onClose]);
 
 	const onConfirm = useCallback(() => {
 		apiClient
 			.updateFolder({
 				folderId: addressBookId,
 				name: addressBookName,
-				color: addressBookColor
+				// Always sent as `rgb`, even for a standard color: an update carrying only `color` doesn't
+				// clear an existing `rgb`, so the address book would keep showing its previous custom color.
+				rgb: addressBookColorHex !== initialAddressBookColorHex ? addressBookColorHex : undefined
 			})
 			.then(() => {
 				createSnackbar({
@@ -104,15 +125,18 @@ export const AddressBookEditGeneralModal = ({
 					autoHideTimeout: TIMEOUTS.defaultSnackbar
 				});
 			});
-	}, [addressBookId, addressBookName, addressBookColor, createSnackbar, t, close]);
+	}, [
+		addressBookId,
+		addressBookName,
+		addressBookColorHex,
+		initialAddressBookColorHex,
+		createSnackbar,
+		t,
+		close
+	]);
 
 	const onAddressBookInputChange = useCallback(
 		(e: React.ChangeEvent<HTMLInputElement>) => setAddressBookName(e.target.value),
-		[]
-	);
-
-	const onColorChange = useCallback<ColorSelectProps['onChange']>(
-		(color) => setAddressBookColor(Number(color)),
 		[]
 	);
 
@@ -138,7 +162,7 @@ export const AddressBookEditGeneralModal = ({
 			crossAlignment="flex-start"
 			height="fit"
 		>
-			<ModalHeader onClose={onClose} title={modalTitle} showCloseIcon />
+			<ModalHeader onClose={onCloseModal} title={modalTitle} showCloseIcon />
 			<Divider />
 
 			<Container
@@ -148,19 +172,23 @@ export const AddressBookEditGeneralModal = ({
 				padding={{ vertical: 'small' }}
 			>
 				<Input
-					label={`${t('modal.address_book_name', 'Address book name')}*`}
+					label={`${t('label.choose_representative_name', 'Choose a representative name')}*`}
 					backgroundColor="gray5"
 					value={addressBookName}
 					onChange={onAddressBookInputChange}
-					disabled={addressBookInputDisabled}
+					disabled={addressBookInputDisabled || isColorPickerOpen}
 					inputRef={nameInputRef}
 				/>
 			</Container>
 			<Padding top="small" />
-			<ColorSelect
-				onChange={onColorChange}
-				label={t('label.select_color', 'Select Color')}
-				defaultColor={addressBookColor ?? 0}
+			<FolderColorPicker
+				value={addressBookColorHex}
+				onChange={setAddressBookColorHex}
+				onOpenChange={setIsColorPickerOpen}
+				caption={t(
+					'label.choose_address_book_color_caption',
+					'Choose a color to make this address book easier to recognize'
+				)}
 			/>
 			<Padding top="small" />
 			<Container orientation="horizontal" mainAlignment="center" crossAlignment="flex-start">
