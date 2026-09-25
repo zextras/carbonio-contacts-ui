@@ -27,7 +27,7 @@ import {
 	isTrash,
 	useFoldersMap
 } from '@zextras/carbonio-ui-commons';
-import { filter, find, map, reduce } from 'lodash';
+import { filter, find, map, reduce, trim } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -40,6 +40,7 @@ import { getFolderTranslatedName } from 'legacy/utils/helpers';
 import { normalizeContactsFromSoap } from 'legacy/utils/normalizations/normalize-contact-from-soap';
 import { ContactEditorRow, CustomMultivalueField } from 'legacy/views/edit/CustomMultivalueField';
 import reducer, { op } from 'legacy/views/edit/form-reducer';
+import FormSection from 'legacy/views/edit/form-section';
 import { differenceObject } from 'legacy/views/settings/components/utils';
 
 const CustomText = styled(Text)`
@@ -152,12 +153,27 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 		[folderWithWritePerm, t]
 	);
 
+	const isCustomFileAsEmpty = useMemo(
+		() => contact?.fileAs === FILE_AS_FREE_TEXT && !trim(contact?.fileAsFreeText),
+		[contact?.fileAs, contact?.fileAsFreeText]
+	);
+
 	const isDisabled = useMemo(() => {
+		if (isCustomFileAsEmpty) {
+			return true;
+		}
 		if (editId && editId !== 'new' && existingContact) {
 			return Object.keys(fieldsToUpdate).length < 1 || !(contact?.firstName || contact?.lastName);
 		}
 		return !(contact?.firstName || contact?.lastName);
-	}, [contact?.firstName, contact?.lastName, editId, existingContact, fieldsToUpdate]);
+	}, [
+		contact?.firstName,
+		contact?.lastName,
+		editId,
+		existingContact,
+		fieldsToUpdate,
+		isCustomFileAsEmpty
+	]);
 	const title = useMemo(
 		() =>
 			contact?.namePrefix ||
@@ -250,7 +266,7 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 			{ label: t('file_as.first_last_company', 'First Last (Company)'), value: 5 },
 			{ label: t('file_as.company_last_first', 'Company (Last, First)'), value: 6 },
 			{ label: t('file_as.company_first_last', 'Company (First Last)'), value: 7 },
-			{ label: t('file_as.free_text', 'Free text'), value: FILE_AS_FREE_TEXT }
+			{ label: t('file_as.custom', 'Custom'), value: FILE_AS_FREE_TEXT }
 		],
 		[t]
 	);
@@ -308,25 +324,6 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 				<Padding value="medium small">
 					<CompactView contact={contact} displayName={fileAsDescription} />
 				</Padding>
-				<ContactEditorRow>
-					<Container padding={{ all: 'small' }}>
-						<Select
-							label={t('label.file_as', 'File as')}
-							items={fileAsOptions}
-							defaultSelection={find(fileAsOptions, ['value', contact.fileAs])}
-							onChange={(value) =>
-								dispatch({ type: op.setInput, payload: { name: 'fileAs', value } })
-							}
-						/>
-					</Container>
-					<CustomStringField
-						name="fileAsFreeText"
-						label={t('label.file_as_free_text', 'Custom text')}
-						value={contact.fileAsFreeText}
-						dispatch={dispatch}
-						disabled={contact.fileAs !== FILE_AS_FREE_TEXT}
-					/>
-				</ContactEditorRow>
 				<ContactEditorRow>
 					<CustomStringField
 						name="namePrefix"
@@ -391,6 +388,35 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 						dispatch={dispatch}
 					/>
 				</ContactEditorRow>
+				<FormSection label={t('label.file_as', 'File as')}>
+					<Padding bottom="small" top="medium" style={{ width: '100%' }}>
+						<Text size="small" color="secondary" overflow="break-word">
+							{t(
+								'file_as.description',
+								'Select the "Custom" option to enable the custom field. When enabled, the custom field can\'t be empty.'
+							)}
+						</Text>
+					</Padding>
+					<ContactEditorRow>
+						<Container padding={{ top: 'small', right: 'small', bottom: 'small' }}>
+							<Select
+								label={t('file_as.select_placeholder', 'Select an option')}
+								items={fileAsOptions}
+								defaultSelection={find(fileAsOptions, ['value', contact.fileAs])}
+								onChange={(value) =>
+									dispatch({ type: op.setInput, payload: { name: 'fileAs', value } })
+								}
+							/>
+						</Container>
+						<CustomStringField
+							name="fileAsFreeText"
+							label={t('label.file_as_custom', 'Custom*')}
+							value={contact.fileAsFreeText}
+							dispatch={dispatch}
+							disabled={contact.fileAs !== FILE_AS_FREE_TEXT}
+						/>
+					</ContactEditorRow>
+				</FormSection>
 				{!editId && (
 					<ContactEditorRow>
 						<Padding horizontal="small" top="small" style={{ width: '100%' }}>

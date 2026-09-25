@@ -39,37 +39,56 @@ describe('Edit view - File as', () => {
 		await user.type(firstNameInput, firstName);
 		await user.type(lastNameInput, lastName);
 
-		await user.click(screen.getByText('File as'));
+		await user.click(screen.getByText('Select an option'));
 		await user.click(screen.getByText('First Last'));
 
 		expect(screen.getByText(`${firstName} ${lastName}`)).toBeVisible();
 	});
 
-	it('should disable the custom text input unless the free text option is selected', async () => {
+	it('should disable the custom text input unless the custom option is selected', async () => {
 		populateFoldersStore();
 
 		const { user } = setupTest(<EditView />);
-		const customTextInput = screen.getByRole('textbox', { name: /custom text/i });
+		const customTextInput = screen.getByRole('textbox', { name: /custom/i });
 		expect(customTextInput).toBeDisabled();
 
-		await user.click(screen.getByText('File as'));
-		await user.click(screen.getByText('Free text'));
+		await user.click(screen.getByText('Select an option'));
+		await user.click(screen.getByText('Custom'));
 
 		expect(customTextInput).toBeEnabled();
 	});
 
-	it('should show the free text value as description once typed', async () => {
+	it('should show the custom value as description once typed', async () => {
 		populateFoldersStore();
 		const customText = faker.lorem.words(3);
 
 		const { user } = setupTest(<EditView />);
-		await user.click(screen.getByText('File as'));
-		await user.click(screen.getByText('Free text'));
+		await user.click(screen.getByText('Select an option'));
+		await user.click(screen.getByText('Custom'));
 
-		const customTextInput = screen.getByRole('textbox', { name: /custom text/i });
+		const customTextInput = screen.getByRole('textbox', { name: /custom/i });
 		await user.type(customTextInput, customText);
 
 		expect(screen.getByText(customText)).toBeVisible();
+	});
+
+	it('should disable the save button when the custom option is selected and the custom field is empty', async () => {
+		populateFoldersStore();
+		const newName = faker.person.firstName();
+
+		const { user } = setupTest(<EditView />);
+		const inputName = screen.getByRole('textbox', { name: /first name/i });
+		await user.type(inputName, newName);
+
+		await user.click(screen.getByText('Select an option'));
+		await user.click(screen.getByText('Custom'));
+
+		expect(screen.getByRole('button', { name: /save/i })).toBeDisabled();
+
+		const customTextInput = screen.getByRole('textbox', { name: /custom/i });
+		await user.type(customTextInput, faker.lorem.words(3));
+
+		expect(screen.getByRole('button', { name: /save/i })).toBeEnabled();
 	});
 
 	it('should send the default fileAs value ("1") when creating a contact', async () => {
@@ -97,7 +116,7 @@ describe('Edit view - File as', () => {
 		);
 	});
 
-	it('should send the fileAs value composed as "8:<custom text>" when the free text option is used', async () => {
+	it('should send the fileAs value composed as "8:<custom text>" when the custom option is used', async () => {
 		populateFoldersStore();
 		const handler = registerCreateContactHandler();
 		const newName = faker.person.firstName();
@@ -107,9 +126,9 @@ describe('Edit view - File as', () => {
 		const inputName = screen.getByRole('textbox', { name: /first name/i });
 		await user.type(inputName, newName);
 
-		await user.click(screen.getByText('File as'));
-		await user.click(screen.getByText('Free text'));
-		const customTextInput = screen.getByRole('textbox', { name: /custom text/i });
+		await user.click(screen.getByText('Select an option'));
+		await user.click(screen.getByText('Custom'));
+		const customTextInput = screen.getByRole('textbox', { name: /custom/i });
 		await user.type(customTextInput, customText);
 
 		await user.click(screen.getByRole('button', { name: /save/i }));
