@@ -47,6 +47,10 @@ const CustomText = styled(Text)`
 	padding-right: 0.5rem;
 `;
 
+// Reserves the description/error line's height at all times, so no field ever grows
+// taller than its siblings and shifts the row's vertical rhythm around.
+const RESERVED_DESCRIPTION_SPACE = ' ';
+
 const filterEmptyValues = (values) =>
 	reduce(
 		values,
@@ -71,9 +75,12 @@ const CustomStringField = ({
 	value,
 	dispatch,
 	autoFocus = false,
-	disabled = false
+	disabled = false,
+	hasError = false,
+	description = RESERVED_DESCRIPTION_SPACE,
+	onBlur
 }) => (
-	<Container padding={{ all: 'small' }}>
+	<Container padding={{ all: 'small' }} crossAlignment="flex-start" height={'fit'}>
 		<Input
 			background="gray5"
 			inputName={name}
@@ -83,6 +90,9 @@ const CustomStringField = ({
 			// eslint-disable-next-line jsx-a11y/no-autofocus
 			autoFocus={autoFocus}
 			disabled={disabled}
+			hasError={hasError}
+			description={description}
+			onBlur={onBlur}
 		/>
 	</Container>
 );
@@ -95,6 +105,8 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 	const [contact, dispatch] = useReducer(reducer);
 	const [compareToContact, setCompareToContact] = useState(existingContact);
 	const [selectFolderId, setSelectFolderId] = useState(FOLDERS.CONTACTS);
+	const [isNameTouched, setIsNameTouched] = useState(false);
+	const [isCustomFileAsTouched, setIsCustomFileAsTouched] = useState(false);
 	const keys = Object.keys(existingContact ?? {});
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
@@ -157,6 +169,17 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 		() => contact?.fileAs === FILE_AS_FREE_TEXT && !trim(contact?.fileAsFreeText),
 		[contact?.fileAs, contact?.fileAsFreeText]
 	);
+
+	const isNameMissing = useMemo(
+		() => !trim(contact?.firstName) && !trim(contact?.lastName),
+		[contact?.firstName, contact?.lastName]
+	);
+
+	const showNameError = isNameTouched && isNameMissing;
+	const showCustomFileAsError = isCustomFileAsTouched && isCustomFileAsEmpty;
+
+	const onNameBlur = useCallback(() => setIsNameTouched(true), []);
+	const onCustomFileAsBlur = useCallback(() => setIsCustomFileAsTouched(true), []);
 
 	const isDisabled = useMemo(() => {
 		if (isCustomFileAsEmpty) {
@@ -278,13 +301,14 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 				lastName: contact?.lastName,
 				company: contact?.company,
 				fileAsFreeText: contact?.fileAsFreeText
-			}),
+			}) || t('label.no_name', '<No Name>'),
 		[
 			contact?.company,
 			contact?.fileAs,
 			contact?.fileAsFreeText,
 			contact?.firstName,
-			contact?.lastName
+			contact?.lastName,
+			t
 		]
 	);
 
@@ -314,7 +338,7 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 						)}
 					</Container>
 					<Tooltip
-						label={t('message.require_field', 'Fill one required * field')}
+						label={t('message.require_field', 'Fill in the required fields to save')}
 						placement="top"
 						disabled={!isDisabled}
 					>
@@ -325,6 +349,13 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 					<CompactView contact={contact} displayName={fileAsDescription} />
 				</Padding>
 				<ContactEditorRow>
+					<Padding horizontal="small" vertical="medium" style={{ width: '100%' }}>
+						<Text overflow="break-word">
+							{t('label.name_hint', 'Enter a first name, a last name, or both.')}
+						</Text>
+					</Padding>
+				</ContactEditorRow>
+				<ContactEditorRow>
 					<CustomStringField
 						name="namePrefix"
 						label={t('name.prefix', 'Prefix')}
@@ -333,9 +364,16 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 					/>
 					<CustomStringField
 						name="firstName"
-						label={`${t('name.first_name', 'First Name')}*`}
+						label={t('name.first_name', 'First Name')}
 						value={contact.firstName}
 						dispatch={dispatch}
+						hasError={showNameError}
+						description={
+							showNameError
+								? t('validation.first_or_last_name_required', 'Enter a first name or a last name')
+								: RESERVED_DESCRIPTION_SPACE
+						}
+						onBlur={onNameBlur}
 						// eslint-disable-next-line jsx-a11y/no-autofocus
 						autoFocus
 					/>
@@ -349,9 +387,16 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 					/>
 					<CustomStringField
 						name="lastName"
-						label={`${t('name.last_name', 'Last Name')}*`}
+						label={t('name.last_name', 'Last Name')}
 						value={contact.lastName}
 						dispatch={dispatch}
+						hasError={showNameError}
+						description={
+							showNameError
+								? t('validation.first_or_last_name_required', 'Enter a first name or a last name')
+								: RESERVED_DESCRIPTION_SPACE
+						}
+						onBlur={onNameBlur}
 					/>
 					<CustomStringField
 						name="nameSuffix"
@@ -390,15 +435,17 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 				</ContactEditorRow>
 				<FormSection label={t('label.file_as', 'File as')}>
 					<Padding bottom="small" top="medium" style={{ width: '100%' }}>
-						<Text size="small" color="secondary" overflow="break-word">
-							{t(
-								'file_as.description',
-								'Select the "Custom" option to enable the custom field. When enabled, the custom field can\'t be empty.'
-							)}
+						<Text overflow="break-word">
+							{t('file_as.description', 'Select the "Custom" option to enable the custom field.')}
 						</Text>
 					</Padding>
 					<ContactEditorRow>
-						<Container padding={{ top: 'small', right: 'small', bottom: 'small' }}>
+						<Container
+							padding={{ top: 'small', right: 'small', bottom: 'small' }}
+							crossAlignment="flex-start"
+							orientation="horizontal"
+							mainAlignment="flex-start"
+						>
 							<Select
 								label={t('file_as.select_placeholder', 'Select an option')}
 								items={fileAsOptions}
@@ -414,6 +461,16 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 							value={contact.fileAsFreeText}
 							dispatch={dispatch}
 							disabled={contact.fileAs !== FILE_AS_FREE_TEXT}
+							hasError={showCustomFileAsError}
+							description={
+								showCustomFileAsError
+									? t(
+											'validation.file_as_custom_required',
+											'Enter a value or select a different option'
+										)
+									: RESERVED_DESCRIPTION_SPACE
+							}
+							onBlur={onCustomFileAsBlur}
 						/>
 					</ContactEditorRow>
 				</FormSection>

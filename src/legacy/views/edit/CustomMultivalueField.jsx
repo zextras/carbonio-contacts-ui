@@ -14,7 +14,7 @@ import FormSection from 'legacy/views/edit/form-section';
 export const ContactEditorRow = ({ children, wrap }) => (
 	<Row
 		orientation="horizontal"
-		mainAlignment="space-between"
+		mainAlignment="flex-start"
 		crossAlignment="flex-start"
 		width="fill"
 		wrap={wrap || 'nowrap'}

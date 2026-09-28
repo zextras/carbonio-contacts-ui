@@ -72,6 +72,20 @@ describe('Edit view - File as', () => {
 		expect(screen.getByText(customText)).toBeVisible();
 	});
 
+	it('should show an error under the custom field once it is left empty on blur', async () => {
+		populateFoldersStore();
+		const { user } = setupTest(<EditView />);
+
+		await user.click(screen.getByText('Select an option'));
+		await user.click(screen.getByText('Custom'));
+
+		const customTextInput = screen.getByRole('textbox', { name: /custom/i });
+		await user.click(customTextInput);
+		await user.tab();
+
+		expect(await screen.findByText(/enter a value or select a different option/i)).toBeVisible();
+	});
+
 	it('should disable the save button when the custom option is selected and the custom field is empty', async () => {
 		populateFoldersStore();
 		const newName = faker.person.firstName();
