@@ -45,16 +45,18 @@ describe('Edit view - File as', () => {
 		expect(screen.getByText(`${firstName} ${lastName}`)).toBeVisible();
 	});
 
-	it('should disable the custom text input unless the custom option is selected', async () => {
+	it('should hide the custom text input unless the custom option is selected', async () => {
 		populateFoldersStore();
 
 		const { user } = setupTest(<EditView />);
-		const customTextInput = screen.getByRole('textbox', { name: /custom/i });
+		const customTextInput = screen.getByPlaceholderText(/custom/i);
+		expect(customTextInput).not.toBeVisible();
 		expect(customTextInput).toBeDisabled();
 
 		await user.click(screen.getByText('Select an option'));
 		await user.click(screen.getByText('Custom'));
 
+		expect(customTextInput).toBeVisible();
 		expect(customTextInput).toBeEnabled();
 	});
 

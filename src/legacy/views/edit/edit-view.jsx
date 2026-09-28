@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 
 import styled from '@emotion/styled';
 import {
@@ -78,9 +78,16 @@ const CustomStringField = ({
 	disabled = false,
 	hasError = false,
 	description = RESERVED_DESCRIPTION_SPACE,
-	onBlur
+	onBlur,
+	onFocus,
+	hidden = false
 }) => (
-	<Container padding={{ all: 'small' }} crossAlignment="flex-start" height={'fit'}>
+	<Container
+		padding={{ all: 'small' }}
+		crossAlignment="flex-start"
+		height={'fit'}
+		style={{ visibility: hidden ? 'hidden' : 'visible' }}
+	>
 		<Input
 			background="gray5"
 			inputName={name}
@@ -93,6 +100,7 @@ const CustomStringField = ({
 			hasError={hasError}
 			description={description}
 			onBlur={onBlur}
+			onFocus={onFocus}
 		/>
 	</Container>
 );
@@ -106,7 +114,9 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 	const [compareToContact, setCompareToContact] = useState(existingContact);
 	const [selectFolderId, setSelectFolderId] = useState(FOLDERS.CONTACTS);
 	const [isNameTouched, setIsNameTouched] = useState(false);
+	const [isNameFocused, setIsNameFocused] = useState(false);
 	const [isCustomFileAsTouched, setIsCustomFileAsTouched] = useState(false);
+	const [isCustomFileAsFocused, setIsCustomFileAsFocused] = useState(false);
 	const keys = Object.keys(existingContact ?? {});
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
@@ -127,6 +137,22 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 			canSet = false;
 		};
 	}, [compareToContact, editId, existingContact, keys?.length, panel]);
+
+	// Surfaces validation errors already present on a loaded contact right away,
+	// instead of waiting for the user to touch (blur) the offending field first.
+	const hasInitializedTouched = useRef(false);
+	useEffect(() => {
+		if (hasInitializedTouched.current) return;
+		if (editId && editId !== 'new' && existingContact) {
+			hasInitializedTouched.current = true;
+			if (!trim(existingContact.firstName) && !trim(existingContact.lastName)) {
+				setIsNameTouched(true);
+			}
+			if (existingContact.fileAs === FILE_AS_FREE_TEXT && !trim(existingContact.fileAsFreeText)) {
+				setIsCustomFileAsTouched(true);
+			}
+		}
+	}, [editId, existingContact]);
 
 	const fieldsToUpdate = useMemo(() => {
 		if (!contact) {
@@ -175,11 +201,20 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 		[contact?.firstName, contact?.lastName]
 	);
 
-	const showNameError = isNameTouched && isNameMissing;
-	const showCustomFileAsError = isCustomFileAsTouched && isCustomFileAsEmpty;
+	const showNameError = isNameTouched && isNameMissing && !isNameFocused;
+	const showCustomFileAsError =
+		isCustomFileAsTouched && isCustomFileAsEmpty && !isCustomFileAsFocused;
 
-	const onNameBlur = useCallback(() => setIsNameTouched(true), []);
-	const onCustomFileAsBlur = useCallback(() => setIsCustomFileAsTouched(true), []);
+	const onNameFocus = useCallback(() => setIsNameFocused(true), []);
+	const onNameBlur = useCallback(() => {
+		setIsNameFocused(false);
+		setIsNameTouched(true);
+	}, []);
+	const onCustomFileAsFocus = useCallback(() => setIsCustomFileAsFocused(true), []);
+	const onCustomFileAsBlur = useCallback(() => {
+		setIsCustomFileAsFocused(false);
+		setIsCustomFileAsTouched(true);
+	}, []);
 
 	const isDisabled = useMemo(() => {
 		if (isCustomFileAsEmpty) {
@@ -373,9 +408,10 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 								? t('validation.first_or_last_name_required', 'Enter a first name or a last name')
 								: RESERVED_DESCRIPTION_SPACE
 						}
+						onFocus={onNameFocus}
 						onBlur={onNameBlur}
 						// eslint-disable-next-line jsx-a11y/no-autofocus
-						autoFocus
+						autoFocus={!editId || editId === 'new'}
 					/>
 				</ContactEditorRow>
 				<ContactEditorRow>
@@ -396,6 +432,7 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 								? t('validation.first_or_last_name_required', 'Enter a first name or a last name')
 								: RESERVED_DESCRIPTION_SPACE
 						}
+						onFocus={onNameFocus}
 						onBlur={onNameBlur}
 					/>
 					<CustomStringField
@@ -461,6 +498,7 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 							value={contact.fileAsFreeText}
 							dispatch={dispatch}
 							disabled={contact.fileAs !== FILE_AS_FREE_TEXT}
+							hidden={contact.fileAs !== FILE_AS_FREE_TEXT}
 							hasError={showCustomFileAsError}
 							description={
 								showCustomFileAsError
@@ -470,6 +508,7 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 										)
 									: RESERVED_DESCRIPTION_SPACE
 							}
+							onFocus={onCustomFileAsFocus}
 							onBlur={onCustomFileAsBlur}
 						/>
 					</ContactEditorRow>
