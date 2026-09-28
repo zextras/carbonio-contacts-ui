@@ -5,7 +5,7 @@
  */
 
 import { JSNS } from '@zextras/carbonio-ui-commons';
-import { legacySoapFetch } from '@zextras/carbonio-ui-soap-lib';
+import { soapFetchV2 } from '@zextras/carbonio-ui-soap-lib';
 import { isArray } from 'lodash';
 
 import {
@@ -49,18 +49,22 @@ export const updateFolder = ({
 
 	// The server ignores `rgb` on any operation but `color`, so a custom color is sent as a separate
 	// `color` action, batched with the update in a single request.
-	return legacySoapFetch<BatchUpdateFolderRequest, BatchUpdateFolderResponse>('Batch', {
-		onerror: 'continue',
-		FolderActionRequest: [
-			buildFolderActionRequest(updateParams),
-			buildFolderActionRequest({ folderId, rgb, operation: 'color' })
-		],
-		_jsns: JSNS.ALL
-	}).then((response) => {
-		if (response.Fault) {
-			const faults = isArray(response.Fault) ? response.Fault : [response.Fault];
-			throw new Error(faults.map((fault) => fault.Reason.Text).join(',\n'), {
-				cause: response.Fault
+	return soapFetchV2<BatchUpdateFolderRequest, { BatchResponse: BatchUpdateFolderResponse }>(
+		'Batch',
+		{
+			onerror: 'continue',
+			FolderActionRequest: [
+				buildFolderActionRequest(updateParams),
+				buildFolderActionRequest({ folderId, rgb, operation: 'color' })
+			],
+			_jsns: JSNS.ALL
+		}
+	).then(({ Body }) => {
+		const fault = 'Fault' in Body ? Body.Fault : Body.BatchResponse.Fault;
+		if (fault) {
+			const faults = isArray(fault) ? fault : [fault];
+			throw new Error(faults.map(({ Reason }) => Reason.Text).join(',\n'), {
+				cause: fault
 			});
 		}
 	});

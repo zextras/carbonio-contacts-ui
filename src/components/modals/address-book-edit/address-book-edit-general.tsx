@@ -102,7 +102,7 @@ export const AddressBookEditGeneralModal = ({
 				name: addressBookName,
 				// Always sent as `rgb`, even for a standard color: an update carrying only `color` doesn't
 				// clear an existing `rgb`, so the address book would keep showing its previous custom color.
-				rgb: addressBookColorHex !== initialAddressBookColorHex ? addressBookColorHex : undefined
+				rgb: addressBookColorHex === initialAddressBookColorHex ? undefined : addressBookColorHex
 			})
 			.then(() => {
 				createSnackbar({

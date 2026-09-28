@@ -5,7 +5,9 @@
  */
 import { faker } from '@faker-js/faker';
 import { JSNS } from '@zextras/carbonio-ui-commons';
+import { http, HttpResponse } from 'msw';
 
+import { getSetupServer } from '@jest-setup';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 import {
 	BatchUpdateFolderRequest,
@@ -64,6 +66,27 @@ describe('updateFolder', () => {
 			],
 			_jsns: JSNS.ALL
 		});
+
+		await expect(updateFolder({ folderId: faker.string.uuid(), rgb: '#123456' })).rejects.toThrow(
+			reason
+		);
+	});
+
+	it('should reject with the fault reason when the whole batch request fails', async () => {
+		const reason = faker.lorem.sentence();
+		getSetupServer().use(
+			http.post('/service/soap/BatchRequest', () =>
+				HttpResponse.json({
+					Body: {
+						Fault: {
+							Code: { Value: faker.string.uuid() },
+							Detail: { Error: { Code: faker.string.uuid(), Trace: faker.word.sample() } },
+							Reason: { Text: reason }
+						}
+					}
+				})
+			)
+		);
 
 		await expect(updateFolder({ folderId: faker.string.uuid(), rgb: '#123456' })).rejects.toThrow(
 			reason
