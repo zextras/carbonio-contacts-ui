@@ -1,3 +1,9 @@
+## 1.23.0 (2026-09-29)
+
+* feat(CO-4314): use the shared color picker for address book colors ([e0ba846](https://github.com/zextras/carbonio-contacts-ui/commit/e0ba846))
+* chore(deps): update dependency @zextras/carbonio-ui-configs to v2.1.1 (#499) ([201c75c](https://github.com/zextras/carbonio-contacts-ui/commit/201c75c)), closes [#499](https://github.com/zextras/carbonio-contacts-ui/issues/499)
+* chore(deps): update dependency zextras/jenkins-lib-common to v4.13.0 (#500) ([285390a](https://github.com/zextras/carbonio-contacts-ui/commit/285390a)), closes [#500](https://github.com/zextras/carbonio-contacts-ui/issues/500)
+
 ## 1.22.0 (2026-09-23)
 
 * feat: implement contact initial and sorting utilities ([ee99420](https://github.com/zextras/carbonio-contacts-ui/commit/ee99420))
