@@ -14,20 +14,19 @@ import { addContactsToStore } from 'legacy/store/contacts';
 import EditView from 'legacy/views/edit/edit-view';
 
 describe('Edit view - Name validation', () => {
-	it('should not show an error before the name fields are touched', () => {
+	it('should show the error immediately when the new contact form opens, since the empty first name field is auto-focused', async () => {
 		populateFoldersStore();
 		setupTest(<EditView />);
 
-		expect(screen.queryByText(/enter a first name or a last name/i)).not.toBeInTheDocument();
+		expect(await screen.findAllByText(/enter a first name or a last name/i)).toHaveLength(2);
 	});
 
-	it('should show an error under first and last name once they are both left empty on blur', async () => {
+	it('should show an error under last name as soon as the field gains focus', async () => {
 		populateFoldersStore();
 		const { user } = setupTest(<EditView />);
 
-		const firstNameInput = screen.getByRole('textbox', { name: /first name/i });
-		await user.click(firstNameInput);
-		await user.tab();
+		const lastNameInput = screen.getByRole('textbox', { name: /last name/i });
+		await user.click(lastNameInput);
 
 		expect(await screen.findAllByText(/enter a first name or a last name/i)).toHaveLength(2);
 	});
@@ -37,8 +36,6 @@ describe('Edit view - Name validation', () => {
 		const { user } = setupTest(<EditView />);
 
 		const firstNameInput = screen.getByRole('textbox', { name: /first name/i });
-		await user.click(firstNameInput);
-		await user.tab();
 		await screen.findAllByText(/enter a first name or a last name/i);
 
 		await user.type(firstNameInput, faker.person.firstName());
@@ -53,30 +50,14 @@ describe('Edit view - Name validation', () => {
 		expect(screen.getByText('<No Name>')).toBeVisible();
 	});
 
-	it('should hide the error again while the user is focused on fixing it', async () => {
+	it('should keep showing the error after blur if the fields are still both empty', async () => {
 		populateFoldersStore();
 		const { user } = setupTest(<EditView />);
 
 		const firstNameInput = screen.getByRole('textbox', { name: /first name/i });
 		await user.click(firstNameInput);
-		await user.tab();
 		await screen.findAllByText(/enter a first name or a last name/i);
 
-		await user.click(firstNameInput);
-
-		expect(screen.queryByText(/enter a first name or a last name/i)).not.toBeInTheDocument();
-	});
-
-	it('should show the error again on blur if the fields are still both empty', async () => {
-		populateFoldersStore();
-		const { user } = setupTest(<EditView />);
-
-		const firstNameInput = screen.getByRole('textbox', { name: /first name/i });
-		await user.click(firstNameInput);
-		await user.tab();
-		await screen.findAllByText(/enter a first name or a last name/i);
-
-		await user.click(firstNameInput);
 		await user.tab();
 
 		expect(await screen.findAllByText(/enter a first name or a last name/i)).toHaveLength(2);

@@ -114,9 +114,7 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 	const [compareToContact, setCompareToContact] = useState(existingContact);
 	const [selectFolderId, setSelectFolderId] = useState(FOLDERS.CONTACTS);
 	const [isNameTouched, setIsNameTouched] = useState(false);
-	const [isNameFocused, setIsNameFocused] = useState(false);
 	const [isCustomFileAsTouched, setIsCustomFileAsTouched] = useState(false);
-	const [isCustomFileAsFocused, setIsCustomFileAsFocused] = useState(false);
 	const keys = Object.keys(existingContact ?? {});
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
@@ -201,20 +199,11 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 		[contact?.firstName, contact?.lastName]
 	);
 
-	const showNameError = isNameTouched && isNameMissing && !isNameFocused;
-	const showCustomFileAsError =
-		isCustomFileAsTouched && isCustomFileAsEmpty && !isCustomFileAsFocused;
+	const showNameError = isNameTouched && isNameMissing;
+	const showCustomFileAsError = isCustomFileAsTouched && isCustomFileAsEmpty;
 
-	const onNameFocus = useCallback(() => setIsNameFocused(true), []);
-	const onNameBlur = useCallback(() => {
-		setIsNameFocused(false);
-		setIsNameTouched(true);
-	}, []);
-	const onCustomFileAsFocus = useCallback(() => setIsCustomFileAsFocused(true), []);
-	const onCustomFileAsBlur = useCallback(() => {
-		setIsCustomFileAsFocused(false);
-		setIsCustomFileAsTouched(true);
-	}, []);
+	const onNameFocus = useCallback(() => setIsNameTouched(true), []);
+	const onCustomFileAsFocus = useCallback(() => setIsCustomFileAsTouched(true), []);
 
 	const isDisabled = useMemo(() => {
 		if (isCustomFileAsEmpty) {
@@ -409,7 +398,6 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 								: RESERVED_DESCRIPTION_SPACE
 						}
 						onFocus={onNameFocus}
-						onBlur={onNameBlur}
 						// eslint-disable-next-line jsx-a11y/no-autofocus
 						autoFocus={!editId || editId === 'new'}
 					/>
@@ -433,7 +421,6 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 								: RESERVED_DESCRIPTION_SPACE
 						}
 						onFocus={onNameFocus}
-						onBlur={onNameBlur}
 					/>
 					<CustomStringField
 						name="nameSuffix"
@@ -471,11 +458,6 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 					/>
 				</ContactEditorRow>
 				<FormSection label={t('label.file_as', 'File as')}>
-					<Padding bottom="small" top="medium" style={{ width: '100%' }}>
-						<Text overflow="break-word">
-							{t('file_as.description', 'Select the "Custom" option to enable the custom field.')}
-						</Text>
-					</Padding>
 					<ContactEditorRow>
 						<Container
 							padding={{ top: 'small', right: 'small', bottom: 'small' }}
@@ -509,7 +491,6 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 									: RESERVED_DESCRIPTION_SPACE
 							}
 							onFocus={onCustomFileAsFocus}
-							onBlur={onCustomFileAsBlur}
 						/>
 					</ContactEditorRow>
 				</FormSection>

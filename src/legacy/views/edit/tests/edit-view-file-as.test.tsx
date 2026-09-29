@@ -74,7 +74,7 @@ describe('Edit view - File as', () => {
 		expect(screen.getByText(customText)).toBeVisible();
 	});
 
-	it('should show an error under the custom field once it is left empty on blur', async () => {
+	it('should show an error under the custom field as soon as it gains focus while empty', async () => {
 		populateFoldersStore();
 		const { user } = setupTest(<EditView />);
 
@@ -83,7 +83,6 @@ describe('Edit view - File as', () => {
 
 		const customTextInput = screen.getByRole('textbox', { name: /custom/i });
 		await user.click(customTextInput);
-		await user.tab();
 
 		expect(await screen.findByText(/enter a value or select a different option/i)).toBeVisible();
 	});
