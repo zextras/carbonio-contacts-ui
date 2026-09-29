@@ -5,7 +5,7 @@
  */
 
 import {
-	ZIMBRA_STANDARD_COLORS,
+	resolveFolderColorHex,
 	FOLDERS,
 	getFolderIdParts,
 	isA,
@@ -87,4 +87,4 @@ export const getFolderIconName = (folder: Folder): string | null => {
 };
 
 export const getFolderIconColor = (folder: Folder): string =>
-	folder.color ? ZIMBRA_STANDARD_COLORS[folder.color].hex : ZIMBRA_STANDARD_COLORS[0].hex;
+	resolveFolderColorHex(folder.color, folder.rgb);

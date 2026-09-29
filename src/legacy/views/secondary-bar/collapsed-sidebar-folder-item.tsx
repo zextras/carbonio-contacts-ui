@@ -7,11 +7,11 @@
 import React, { useMemo } from 'react';
 
 import { t } from '@zextras/carbonio-shell-ui';
-import { ZIMBRA_STANDARD_COLORS, isLink, Folder } from '@zextras/carbonio-ui-commons';
+import { isLink, Folder, resolveFolderColorHex } from '@zextras/carbonio-ui-commons';
 
-import { CollapsedSideBarItem } from 'legacy/views/secondary-bar/collapsed-sidebar-item';
 import { CONTACTS_ROUTE } from 'constants/index';
 import { getFolderTranslatedName } from 'legacy/utils/helpers';
+import { CollapsedSideBarItem } from 'legacy/views/secondary-bar/collapsed-sidebar-item';
 
 const folderIconName: Record<number, string> = {
 	7: 'PersonOutline',
@@ -30,10 +30,7 @@ export const CollapsedSideBarFolderItem = ({ folder }: { folder: Folder }): Reac
 		return 'Folder';
 	}, [folder]);
 
-	const folderIconColor = useMemo(
-		() => (folder.color ? ZIMBRA_STANDARD_COLORS[folder.color].hex : ZIMBRA_STANDARD_COLORS[0].hex),
-		[folder]
-	);
+	const folderIconColor = useMemo(() => resolveFolderColorHex(folder.color, folder.rgb), [folder]);
 
 	const folderIconTooltip = useMemo(
 		() => getFolderTranslatedName(t, folder.id, folder.name),
