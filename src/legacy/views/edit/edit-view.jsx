@@ -225,16 +225,18 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 		() =>
 			contact?.namePrefix ||
 			contact?.firstName ||
+			contact?.middleName ||
 			contact?.nickName ||
 			contact?.lastName ||
 			contact?.nameSuffix
-				? `${contact?.namePrefix ?? ''} ${contact?.firstName ?? ''} ${
+				? `${contact?.namePrefix ?? ''} ${contact?.firstName ?? ''} ${contact?.middleName ?? ''} ${
 						contact?.nickName ?? ''
 					} ${contact?.lastName ?? ''} ${contact?.nameSuffix ?? ''}`
 				: t('label.new_contact', 'New contact'),
 		[
 			contact?.firstName,
 			contact?.lastName,
+			contact?.middleName,
 			contact?.namePrefix,
 			contact?.nameSuffix,
 			contact?.nickName,
@@ -400,6 +402,12 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 						onFocus={onNameFocus}
 						// eslint-disable-next-line jsx-a11y/no-autofocus
 						autoFocus={!editId || editId === 'new'}
+					/>
+					<CustomStringField
+						name="middleName"
+						label={t('name.middle_name', 'Middle Name')}
+						value={contact.middleName}
+						dispatch={dispatch}
 					/>
 				</ContactEditorRow>
 				<ContactEditorRow>
