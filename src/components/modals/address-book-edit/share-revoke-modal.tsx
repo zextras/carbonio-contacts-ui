@@ -122,7 +122,7 @@ export const ShareRevokeModal = ({
 				iconSize="medium"
 				value={sendNotification}
 				defaultChecked={sendNotification}
-				onClick={() => setSendNotification(!sendNotification)}
+				onClick={(): void => setSendNotification(!sendNotification)}
 				label={t('share.send_notification', 'Send notification about this share')}
 			/>
 			<Container
@@ -134,7 +134,7 @@ export const ShareRevokeModal = ({
 				<Input
 					label={t('share.standard_message', 'Add a note to standard message')}
 					value={standardMessage}
-					onChange={(ev) => {
+					onChange={(ev): void => {
 						setStandardMessage(ev.target.value);
 					}}
 					disabled={!sendNotification}
