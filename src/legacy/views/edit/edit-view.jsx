@@ -76,11 +76,6 @@ const CustomStringField = ({
 	dispatch,
 	autoFocus = false,
 	disabled = false,
-	hasError = false,
-	description = RESERVED_DESCRIPTION_SPACE,
-	onBlur,
-	onFocus,
-	onChange,
 	hidden = false,
 	inputRef
 }) => (
@@ -97,15 +92,11 @@ const CustomStringField = ({
 			defaultValue={value}
 			onChange={(ev) => {
 				dispatch({ type: op.setInput, payload: ev.target });
-				onChange?.(ev);
 			}}
 			// eslint-disable-next-line jsx-a11y/no-autofocus
 			autoFocus={autoFocus}
 			disabled={disabled}
-			hasError={hasError}
-			description={description}
-			onBlur={onBlur}
-			onFocus={onFocus}
+			description={RESERVED_DESCRIPTION_SPACE}
 			inputRef={inputRef}
 		/>
 	</Container>
@@ -119,8 +110,6 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 	const [contact, dispatch] = useReducer(reducer);
 	const [compareToContact, setCompareToContact] = useState(existingContact);
 	const [selectFolderId, setSelectFolderId] = useState(FOLDERS.CONTACTS);
-	const [showNameError, setShowNameError] = useState(false);
-	const [showCustomFileAsError, setShowCustomFileAsError] = useState(false);
 	const keys = Object.keys(existingContact ?? {});
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
@@ -141,16 +130,6 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 			canSet = false;
 		};
 	}, [compareToContact, editId, existingContact, keys?.length, panel]);
-
-	// Surfaces validation errors as soon as the form is first rendered, instead of
-	// waiting for the user to interact with the offending field first.
-	const hasInitializedValidation = useRef(false);
-	useEffect(() => {
-		if (hasInitializedValidation.current || !contact) return;
-		hasInitializedValidation.current = true;
-		setShowNameError(!trim(contact.firstName) && !trim(contact.lastName));
-		setShowCustomFileAsError(contact.fileAs === FILE_AS_FREE_TEXT && !trim(contact.fileAsFreeText));
-	}, [contact]);
 
 	const fieldsToUpdate = useMemo(() => {
 		if (!contact) {
@@ -194,62 +173,7 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 		[contact?.fileAs, contact?.fileAsFreeText]
 	);
 
-	const isNameMissing = useMemo(
-		() => !trim(contact?.firstName) && !trim(contact?.lastName),
-		[contact?.firstName, contact?.lastName]
-	);
-
-	// Focusing a field never hides an existing error, and only reveals one that
-	// already applies to the field's current (committed) value.
-	const onNameFieldFocus = useCallback(() => {
-		if (isNameMissing) {
-			setShowNameError(true);
-		}
-	}, [isNameMissing]);
-	// Suppresses the reveal-on-focus behavior for the focus event fired by the
-	// programmatic autoFocus below, so picking "Custom" doesn't show (or leave
-	// showing, if a stale error was already set) an error before the user has
-	// had a chance to type anything.
-	const skipNextCustomFileAsFocusValidation = useRef(false);
-	const onCustomFileAsFocus = useCallback(() => {
-		if (skipNextCustomFileAsFocusValidation.current) {
-			skipNextCustomFileAsFocusValidation.current = false;
-			setShowCustomFileAsError(false);
-			return;
-		}
-		if (isCustomFileAsEmpty) {
-			setShowCustomFileAsError(true);
-		}
-	}, [isCustomFileAsEmpty]);
-
-	// Typing only ever hides the error, the moment the field's content validates;
-	// it never shows one, so erasing content without blurring keeps it hidden.
-	const onNameFieldChange = useCallback(
-		(ev) => {
-			const { name, value } = ev.target;
-			const firstName = name === 'firstName' ? value : contact?.firstName;
-			const lastName = name === 'lastName' ? value : contact?.lastName;
-			if (trim(firstName) || trim(lastName)) {
-				setShowNameError(false);
-			}
-		},
-		[contact?.firstName, contact?.lastName]
-	);
-	const onCustomFileAsChange = useCallback((ev) => {
-		if (trim(ev.target.value)) {
-			setShowCustomFileAsError(false);
-		}
-	}, []);
-
-	// Leaving the field re-validates its committed value, showing the error if it's
-	// still invalid or hiding it otherwise.
-	const onNameFieldBlur = useCallback(() => setShowNameError(isNameMissing), [isNameMissing]);
-	const onCustomFileAsBlur = useCallback(
-		() => setShowCustomFileAsError(isCustomFileAsEmpty),
-		[isCustomFileAsEmpty]
-	);
-
-	// Moves focus to the custom text field as soon as it becomes enabled after the
+	// Moves focus to the custom text field as soon as it becomes visible after the
 	// user picks the "Custom" option, so they can start typing right away.
 	const fileAsFreeTextRef = useRef(null);
 	const shouldFocusCustomFileAs = useRef(false);
@@ -258,7 +182,6 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 			dispatch({ type: op.setInput, payload: { name: 'fileAs', value } });
 			if (value === FILE_AS_FREE_TEXT) {
 				shouldFocusCustomFileAs.current = true;
-				skipNextCustomFileAsFocusValidation.current = true;
 			}
 		},
 		[dispatch]
@@ -271,21 +194,14 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 	}, [contact?.fileAs]);
 
 	const isDisabled = useMemo(() => {
-		if (isCustomFileAsEmpty) {
+		if (!trim(contact?.firstName) || isCustomFileAsEmpty) {
 			return true;
 		}
 		if (editId && editId !== 'new' && existingContact) {
-			return Object.keys(fieldsToUpdate).length < 1 || !(contact?.firstName || contact?.lastName);
+			return Object.keys(fieldsToUpdate).length < 1;
 		}
-		return !(contact?.firstName || contact?.lastName);
-	}, [
-		contact?.firstName,
-		contact?.lastName,
-		editId,
-		existingContact,
-		fieldsToUpdate,
-		isCustomFileAsEmpty
-	]);
+		return false;
+	}, [contact?.firstName, editId, existingContact, fieldsToUpdate, isCustomFileAsEmpty]);
 	const title = useMemo(
 		() =>
 			contact?.namePrefix ||
@@ -440,13 +356,6 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 					<CompactView contact={contact} displayName={fileAsDescription} />
 				</Padding>
 				<ContactEditorRow>
-					<Padding horizontal="small" vertical="medium" style={{ width: '100%' }}>
-						<Text overflow="break-word">
-							{t('label.name_hint', 'Enter a first name, a last name, or both.')}
-						</Text>
-					</Padding>
-				</ContactEditorRow>
-				<ContactEditorRow>
 					<CustomStringField
 						name="namePrefix"
 						label={t('name.prefix', 'Prefix')}
@@ -455,18 +364,9 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 					/>
 					<CustomStringField
 						name="firstName"
-						label={t('name.first_name', 'First Name')}
+						label={t('name.first_name', 'First Name*')}
 						value={contact.firstName}
 						dispatch={dispatch}
-						hasError={showNameError}
-						description={
-							showNameError
-								? t('validation.first_or_last_name_required', 'Enter a first name or a last name')
-								: RESERVED_DESCRIPTION_SPACE
-						}
-						onFocus={onNameFieldFocus}
-						onChange={onNameFieldChange}
-						onBlur={onNameFieldBlur}
 						// eslint-disable-next-line jsx-a11y/no-autofocus
 						autoFocus={!editId || editId === 'new'}
 					/>
@@ -489,15 +389,6 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 						label={t('name.last_name', 'Last Name')}
 						value={contact.lastName}
 						dispatch={dispatch}
-						hasError={showNameError}
-						description={
-							showNameError
-								? t('validation.first_or_last_name_required', 'Enter a first name or a last name')
-								: RESERVED_DESCRIPTION_SPACE
-						}
-						onFocus={onNameFieldFocus}
-						onChange={onNameFieldChange}
-						onBlur={onNameFieldBlur}
 					/>
 					<CustomStringField
 						name="nameSuffix"
@@ -557,18 +448,6 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 							disabled={contact.fileAs !== FILE_AS_FREE_TEXT}
 							hidden={contact.fileAs !== FILE_AS_FREE_TEXT}
 							inputRef={fileAsFreeTextRef}
-							hasError={showCustomFileAsError}
-							description={
-								showCustomFileAsError
-									? t(
-											'validation.file_as_custom_required',
-											'Enter a value or select a different option'
-										)
-									: RESERVED_DESCRIPTION_SPACE
-							}
-							onFocus={onCustomFileAsFocus}
-							onChange={onCustomFileAsChange}
-							onBlur={onCustomFileAsBlur}
 						/>
 					</ContactEditorRow>
 				</FormSection>

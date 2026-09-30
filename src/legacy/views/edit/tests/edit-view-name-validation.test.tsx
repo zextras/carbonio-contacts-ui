@@ -14,33 +14,40 @@ import { addContactsToStore } from 'legacy/store/contacts';
 import EditView from 'legacy/views/edit/edit-view';
 
 describe('Edit view - Name validation', () => {
-	it('should show the error immediately when the new contact form opens, since the empty first name field is auto-focused', async () => {
+	it('should mark the first name field as required and the last name field as optional', () => {
 		populateFoldersStore();
 		setupTest(<EditView />);
 
-		expect(await screen.findAllByText(/enter a first name or a last name/i)).toHaveLength(2);
+		expect(screen.getByRole('textbox', { name: /first name\*/i })).toBeVisible();
+		expect(screen.queryByRole('textbox', { name: /last name\*/i })).not.toBeInTheDocument();
+		expect(screen.getByRole('textbox', { name: /^last name$/i })).toBeVisible();
 	});
 
-	it('should show an error under last name as soon as the field gains focus', async () => {
+	it('should disable the save button when the first name is empty', () => {
 		populateFoldersStore();
-		const { user } = setupTest(<EditView />);
+		setupTest(<EditView />);
 
-		const lastNameInput = screen.getByRole('textbox', { name: /last name/i });
-		await user.click(lastNameInput);
-
-		expect(await screen.findAllByText(/enter a first name or a last name/i)).toHaveLength(2);
+		expect(screen.getByRole('button', { name: /save/i })).toBeDisabled();
 	});
 
-	it('should clear the error once a name is entered', async () => {
+	it('should enable the save button once a first name is entered, even without a last name', async () => {
 		populateFoldersStore();
 		const { user } = setupTest(<EditView />);
 
 		const firstNameInput = screen.getByRole('textbox', { name: /first name/i });
-		await screen.findAllByText(/enter a first name or a last name/i);
-
 		await user.type(firstNameInput, faker.person.firstName());
 
-		expect(screen.queryByText(/enter a first name or a last name/i)).not.toBeInTheDocument();
+		expect(screen.getByRole('button', { name: /save/i })).toBeEnabled();
+	});
+
+	it('should keep the save button disabled when only a last name is entered', async () => {
+		populateFoldersStore();
+		const { user } = setupTest(<EditView />);
+
+		const lastNameInput = screen.getByRole('textbox', { name: /last name/i });
+		await user.type(lastNameInput, faker.person.lastName());
+
+		expect(screen.getByRole('button', { name: /save/i })).toBeDisabled();
 	});
 
 	it('should show the "<No Name>" placeholder when no name is provided', () => {
@@ -50,20 +57,7 @@ describe('Edit view - Name validation', () => {
 		expect(screen.getByText('<No Name>')).toBeVisible();
 	});
 
-	it('should keep showing the error after blur if the fields are still both empty', async () => {
-		populateFoldersStore();
-		const { user } = setupTest(<EditView />);
-
-		const firstNameInput = screen.getByRole('textbox', { name: /first name/i });
-		await user.click(firstNameInput);
-		await screen.findAllByText(/enter a first name or a last name/i);
-
-		await user.tab();
-
-		expect(await screen.findAllByText(/enter a first name or a last name/i)).toHaveLength(2);
-	});
-
-	it('should show the error immediately when an existing contact is missing both names', async () => {
+	it('should disable the save button when an existing contact is missing the first name', async () => {
 		populateFoldersStore();
 		const folderId = FOLDERS.CONTACTS;
 		const contactId = faker.string.uuid();
@@ -78,7 +72,7 @@ describe('Edit view - Name validation', () => {
 				company: faker.company.name(),
 				firstName: '',
 				middleName: '',
-				lastName: '',
+				lastName: faker.person.lastName(),
 				nickName: '',
 				department: '',
 				image: '',
@@ -95,6 +89,6 @@ describe('Edit view - Name validation', () => {
 			path: 'folder/:folderId/edit/:editId'
 		});
 
-		expect(await screen.findAllByText(/enter a first name or a last name/i)).toHaveLength(2);
+		expect(await screen.findByRole('button', { name: /save/i })).toBeDisabled();
 	});
 });
