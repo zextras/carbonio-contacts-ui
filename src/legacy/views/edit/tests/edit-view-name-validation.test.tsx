@@ -75,7 +75,18 @@ describe('Edit view - Name validation', () => {
 				address: {},
 				email: {},
 				phone: {},
-				company: faker.company.name()
+				company: faker.company.name(),
+				firstName: '',
+				middleName: '',
+				lastName: '',
+				nickName: '',
+				department: '',
+				image: '',
+				jobTitle: '',
+				notes: '',
+				nameSuffix: '',
+				namePrefix: '',
+				fileAsStr: ''
 			}
 		]);
 
