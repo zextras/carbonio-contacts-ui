@@ -24,8 +24,8 @@ importers:
         specifier: 14.2.2
         version: 14.2.2(@emotion/react@11.14.0(@types/react@18.3.31)(react@18.3.1))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@18.3.31)(react@18.3.1))(@types/react@18.3.31)(react@18.3.1))(@types/react@18.3.31)(@zextras/carbonio-design-system@12.0.4(@emotion/react@11.14.0(@types/react@18.3.31)(react@18.3.1))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@18.3.31)(react@18.3.1))(@types/react@18.3.31)(react@18.3.1))(date-fns@4.4.0)(lodash@4.18.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(core-js@3.47.0)(lodash@4.18.1)(react-dom@18.3.1(react@18.3.1))(react-i18next@12.3.1(i18next@22.5.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router-dom@6.30.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.6.0(react@18.3.1))
       '@zextras/carbonio-ui-commons':
-        specifier: 2.5.0
-        version: 2.5.0(03a2375e1c534b5bebb8a1bdda3d9e9d)
+        specifier: 2.6.0
+        version: 2.6.0(03a2375e1c534b5bebb8a1bdda3d9e9d)
       '@zextras/carbonio-ui-soap-lib':
         specifier: 1.2.0
         version: 1.2.0
@@ -2725,8 +2725,8 @@ packages:
       react-router-dom:
         optional: true
 
-  '@zextras/carbonio-ui-commons@2.5.0':
-    resolution: {integrity: sha512-Y+cBoLLXe99qaBU1ymITQNaO2rm0bJ6TL13UE4I9scNTlJp9b/wxdDL6mGGhtM2gnAPv/AFZp6Z+rf/yOYch7w==}
+  '@zextras/carbonio-ui-commons@2.6.0':
+    resolution: {integrity: sha512-Q216ToiYsCPou3YolyidWj9/UFG7oNCz8x3acwtzT5wkx/3kqDmr3Pq5VfnveQn4LdQXtmY3iS+AQ0e/oSilhQ==}
     engines: {node: v22, pnpm: '>=10'}
     peerDependencies:
       '@emotion/react': 11.14.0
@@ -10169,7 +10169,7 @@ snapshots:
       - preact-render-to-string
       - use-sync-external-store
 
-  '@zextras/carbonio-ui-commons@2.5.0(03a2375e1c534b5bebb8a1bdda3d9e9d)':
+  '@zextras/carbonio-ui-commons@2.6.0(03a2375e1c534b5bebb8a1bdda3d9e9d)':
     dependencies:
       '@emotion/react': 11.14.0(@types/react@18.3.31)(react@18.3.1)
       '@emotion/styled': 11.14.1(@emotion/react@11.14.0(@types/react@18.3.31)(react@18.3.1))(@types/react@18.3.31)(react@18.3.1)
