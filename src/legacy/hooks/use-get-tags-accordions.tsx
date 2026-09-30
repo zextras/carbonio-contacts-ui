@@ -18,7 +18,7 @@ import {
 } from '@zextras/carbonio-design-system';
 import type { QueryChip } from '@zextras/carbonio-search-ui';
 import {
-	ZIMBRA_STANDARD_COLORS,
+	resolveTagColorHex,
 	useRunSearchIntegration,
 	useSortedTagsArray
 } from '@zextras/carbonio-ui-commons';
@@ -44,7 +44,7 @@ const CustomComp: FC<ItemProps> = (props) => {
 				[
 					{
 						id: nanoid(),
-						avatarBackground: ZIMBRA_STANDARD_COLORS[props?.item?.color || 0].hex,
+						avatarBackground: resolveTagColorHex(props?.item),
 						avatarIcon: 'Tag',
 						background: 'gray2',
 						hasAvatar: true,
@@ -56,7 +56,7 @@ const CustomComp: FC<ItemProps> = (props) => {
 				],
 				'contacts'
 			),
-		[props?.item?.color, props?.item?.name, runSearch]
+		[props?.item, runSearch]
 	);
 
 	return (
@@ -68,7 +68,7 @@ const CustomComp: FC<ItemProps> = (props) => {
 			onClick={triggerSearch}
 		>
 			<Row mainAlignment="flex-start" height="fit" padding={{ left: 'large' }} takeAvailableSpace>
-				<Icon size="large" icon="Tag" color={ZIMBRA_STANDARD_COLORS[props?.item?.color ?? 0].hex} />
+				<Icon size="large" icon="Tag" color={resolveTagColorHex(props?.item)} />
 
 				<Padding right="large" />
 				<Tooltip label={props?.item?.name} placement="right" maxWidth="100%">
@@ -120,6 +120,7 @@ const useGetTagsAccordion = (): TagsAccordionItems => {
 						item: v,
 						active: false,
 						color: v.color || 0,
+						rgb: v.rgb,
 						divider: false,
 						label: v.name,
 						name: v.name,

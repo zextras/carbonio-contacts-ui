@@ -15,7 +15,7 @@ import {
 	Text
 } from '@zextras/carbonio-design-system';
 import {
-	ZIMBRA_STANDARD_COLORS,
+	resolveTagColorHex,
 	useRunSearchIntegration,
 	useSortedTagsArray,
 	Tag
@@ -42,7 +42,7 @@ export const ActionTagButton: React.FC<ActionTagButtonProps> = ({
 			runSearch?.(
 				[
 					{
-						avatarBackground: ZIMBRA_STANDARD_COLORS[tagToSearch?.color ?? 0].hex,
+						avatarBackground: resolveTagColorHex(tagToSearch),
 						avatarIcon: 'Tag',
 						background: 'gray2',
 						hasAvatar: true,
@@ -65,7 +65,7 @@ export const ActionTagButton: React.FC<ActionTagButtonProps> = ({
 					if (includes(contact.tags, v.id))
 						acc.push({
 							...v,
-							color: ZIMBRA_STANDARD_COLORS[v.color ?? 0].hex,
+							color: resolveTagColorHex(v),
 							label: v.name,
 							onClick: () => triggerTagSearch(v),
 							customComponent: (
@@ -73,7 +73,7 @@ export const ActionTagButton: React.FC<ActionTagButtonProps> = ({
 									<Row takeAvailableSpace mainAlignment="space-between">
 										<Row mainAlignment="flex-end">
 											<Padding right="small">
-												<Icon icon="Tag" color={ZIMBRA_STANDARD_COLORS[v.color ?? 0].hex} />
+												<Icon icon="Tag" color={resolveTagColorHex(v)} />
 											</Padding>
 										</Row>
 										<Row takeAvailableSpace mainAlignment="flex-start">
