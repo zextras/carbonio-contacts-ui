@@ -74,7 +74,7 @@ describe('Edit view - File as', () => {
 		expect(screen.getByText(customText)).toBeVisible();
 	});
 
-	it('should show an error under the custom field as soon as it gains focus while empty', async () => {
+	it('should autofocus the custom field and not show an error right after selecting Custom', async () => {
 		populateFoldersStore();
 		const { user } = setupTest(<EditView />);
 
@@ -82,7 +82,20 @@ describe('Edit view - File as', () => {
 		await user.click(screen.getByText('Custom'));
 
 		const customTextInput = screen.getByRole('textbox', { name: /custom/i });
-		await user.click(customTextInput);
+		expect(customTextInput).toHaveFocus();
+		expect(
+			screen.queryByText(/enter a value or select a different option/i)
+		).not.toBeInTheDocument();
+	});
+
+	it('should show an error under the custom field once it is left empty', async () => {
+		populateFoldersStore();
+		const { user } = setupTest(<EditView />);
+
+		await user.click(screen.getByText('Select an option'));
+		await user.click(screen.getByText('Custom'));
+
+		await user.tab();
 
 		expect(await screen.findByText(/enter a value or select a different option/i)).toBeVisible();
 	});
