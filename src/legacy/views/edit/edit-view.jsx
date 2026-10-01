@@ -322,7 +322,7 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 			case 5:
 			case 6:
 			case 7:
-				return t('file_as.missing_name_and_company', 'No firstName, lastName nor company set');
+				return t('file_as.missing_name_and_company', 'No first name, last name and company yet');
 			case 1:
 			case 2:
 			default:
