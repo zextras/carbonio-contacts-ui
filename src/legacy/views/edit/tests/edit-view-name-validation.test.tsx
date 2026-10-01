@@ -50,11 +50,11 @@ describe('Edit view - Name validation', () => {
 		expect(screen.getByRole('button', { name: /save/i })).toBeDisabled();
 	});
 
-	it('should show the "<No Name>" placeholder when no name is provided', () => {
+	it('should show the "No last name and first name yet" placeholder when no name is provided', () => {
 		populateFoldersStore();
 		setupTest(<EditView />);
 
-		expect(screen.getByText('<No Name>')).toBeVisible();
+		expect(screen.getByText('No last name and first name yet')).toBeVisible();
 	});
 
 	it('should disable the save button when an existing contact is missing the first name', async () => {

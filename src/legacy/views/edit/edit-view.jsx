@@ -290,23 +290,45 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 
 	const fileAsOptions = useFileAsOptions();
 
-	const fileAsDescription = useMemo(
+	const composedFileAs = useMemo(
 		() =>
 			composeFileAsDescription(contact?.fileAs, {
 				firstName: contact?.firstName,
 				lastName: contact?.lastName,
 				company: contact?.company,
 				fileAsFreeText: contact?.fileAsFreeText
-			}) || t('label.no_name', '<No Name>'),
+			}),
 		[
 			contact?.company,
 			contact?.fileAs,
 			contact?.fileAsFreeText,
 			contact?.firstName,
-			contact?.lastName,
-			t
+			contact?.lastName
 		]
 	);
+
+	const isDisplayNameEmpty = useMemo(() => !trim(composedFileAs), [composedFileAs]);
+
+	const fileAsDescription = useMemo(() => {
+		if (!isDisplayNameEmpty) {
+			return composedFileAs;
+		}
+		switch (contact?.fileAs) {
+			case FILE_AS_FREE_TEXT:
+				return t('file_as.missing_custom', 'No custom name yet');
+			case 3:
+				return t('file_as.missing_company', 'No company yet');
+			case 4:
+			case 5:
+			case 6:
+			case 7:
+				return t('file_as.missing_name_and_company', 'No firstName, lastName nor company set');
+			case 1:
+			case 2:
+			default:
+				return t('file_as.missing_name', 'No last name and first name yet');
+		}
+	}, [composedFileAs, contact?.fileAs, isDisplayNameEmpty, t]);
 
 	return contact ? (
 		<Container
@@ -342,7 +364,11 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 					</Tooltip>
 				</Row>
 				<Padding value="medium small">
-					<CompactView contact={contact} displayName={fileAsDescription} />
+					<CompactView
+						contact={contact}
+						displayName={fileAsDescription}
+						isDisplayNameEmpty={isDisplayNameEmpty}
+					/>
 				</Padding>
 				<ContactEditorRow>
 					<CustomStringField
