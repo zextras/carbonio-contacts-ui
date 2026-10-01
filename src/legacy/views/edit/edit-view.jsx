@@ -32,6 +32,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { CompactView } from 'legacy/commons/contact-compact-view';
+import { useFileAsOptions } from 'legacy/hooks/use-file-as-options';
 import { createContact } from 'legacy/store/actions/create-contact';
 import { modifyContact } from 'legacy/store/actions/modify-contact';
 import { addContactsToStore, useContactById } from 'legacy/store/contacts';
@@ -287,19 +288,7 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 		[t]
 	);
 
-	const fileAsOptions = useMemo(
-		() => [
-			{ label: t('file_as.last_first', 'Last, First'), value: 1 },
-			{ label: t('file_as.first_last', 'First Last'), value: 2 },
-			{ label: t('file_as.company', 'Company'), value: 3 },
-			{ label: t('file_as.last_first_company', 'Last, First (Company)'), value: 4 },
-			{ label: t('file_as.first_last_company', 'First Last (Company)'), value: 5 },
-			{ label: t('file_as.company_last_first', 'Company (Last, First)'), value: 6 },
-			{ label: t('file_as.company_first_last', 'Company (First Last)'), value: 7 },
-			{ label: t('file_as.custom', 'Custom'), value: FILE_AS_FREE_TEXT }
-		],
-		[t]
-	);
+	const fileAsOptions = useFileAsOptions();
 
 	const fileAsDescription = useMemo(
 		() =>
@@ -364,7 +353,7 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 					/>
 					<CustomStringField
 						name="firstName"
-						label={t('name.first_name', 'First Name*')}
+						label={`${t('name.first_name', 'First Name')}*`}
 						value={contact.firstName}
 						dispatch={dispatch}
 						// eslint-disable-next-line jsx-a11y/no-autofocus
@@ -442,7 +431,7 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 						</Container>
 						<CustomStringField
 							name="fileAsFreeText"
-							label={t('label.file_as_custom', 'Custom*')}
+							label={`${t('label.file_as_custom', 'Custom')}*`}
 							value={contact.fileAsFreeText}
 							dispatch={dispatch}
 							disabled={contact.fileAs !== FILE_AS_FREE_TEXT}

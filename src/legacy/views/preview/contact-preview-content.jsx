@@ -15,11 +15,13 @@ import {
 	Dropdown,
 	Link
 } from '@zextras/carbonio-design-system';
-import { map, reduce } from 'lodash';
+import { find, map, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { DisplayerContent } from 'components/displayer/displayer-content';
 import { CompactView } from 'legacy/commons/contact-compact-view';
+import { useFileAsOptions } from 'legacy/hooks/use-file-as-options';
+import { DEFAULT_FILE_AS, FILE_AS_FREE_TEXT } from 'legacy/utils/file-as';
 
 function typeToIcon(type) {
 	switch (type) {
@@ -240,6 +242,17 @@ function ContactPreviewContent({ contact }) {
 	const urlData = useMemo(() => Object.values(contact.URL), [contact]);
 	const phoneData = useMemo(() => Object.values(contact.phone), [contact]);
 	const addressData = useMemo(() => Object.values(contact.address), [contact]);
+	const fileAsOptions = useFileAsOptions();
+	const fileAsValue = useMemo(() => {
+		const fileAs = contact.fileAs || DEFAULT_FILE_AS;
+		if (fileAs === FILE_AS_FREE_TEXT) {
+			return t('file_as.custom_value', {
+				defaultValue: 'Custom: "{{text}}"',
+				text: contact.fileAsFreeText ?? ''
+			});
+		}
+		return find(fileAsOptions, ['value', fileAs])?.label;
+	}, [contact.fileAs, contact.fileAsFreeText, fileAsOptions, t]);
 	return (
 		<DisplayerContent>
 			<Responsive mode="desktop" target={window.top}>
@@ -305,6 +318,7 @@ function ContactPreviewContent({ contact }) {
 							{contact.company && (
 								<ContactField field={contact.company} label={t('job.company', 'Company')} />
 							)}
+							<ContactField field={fileAsValue} label={t('label.file_as', 'File as')} />
 						</ContactPreviewRow>
 						{contact.notes && <ContactPreviewRow></ContactPreviewRow>}
 						{contact.notes && (
