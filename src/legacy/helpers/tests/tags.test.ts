@@ -48,4 +48,11 @@ describe('getTagsArray', () => {
 			}
 		]);
 	});
+
+	it('should resolve the custom rgb color of a tag', () => {
+		const result = getTagsArray({ tag1: { id: 'tag1', name: 'Tag 1', color: 1, rgb: '#abcdef' } }, [
+			'tag1'
+		]);
+		expect(result).toEqual([{ id: 'tag1', name: 'Tag 1', color: '#abcdef', rgb: '#abcdef' }]);
+	});
 });

@@ -15,7 +15,7 @@ import {
 	useSnackbar,
 	Action
 } from '@zextras/carbonio-design-system';
-import { ZIMBRA_STANDARD_COLORS, useTags, Tag, Tags } from '@zextras/carbonio-ui-commons';
+import { resolveTagColorHex, useTags, Tag, Tags } from '@zextras/carbonio-ui-commons';
 import { TFunction } from 'i18next';
 import { every, find, includes, map, noop, reduce } from 'lodash';
 import { useTranslation } from 'react-i18next';
@@ -73,6 +73,7 @@ export const createAndApplyTag = ({
 				onClose: () => {
 					closeModal?.(modalId);
 				},
+				size: 'medium',
 				children: (
 					<CreateUpdateTagModal onClose={(): void => closeModal?.(modalId)} contact={contact} />
 				)
@@ -96,6 +97,7 @@ export const createTag = ({ t, createModal, closeModal }: TagsActionsParams): Ta
 				onClose: () => {
 					closeModal?.(modalId);
 				},
+				size: 'medium',
 				children: <CreateUpdateTagModal onClose={(): void => closeModal?.(modalId)} />
 			},
 			true
@@ -118,6 +120,7 @@ export const editTag = ({ t, createModal, closeModal, tag }: TagsActionsParams):
 				onClose: () => {
 					closeModal?.(modalId);
 				},
+				size: 'medium',
 				children: (
 					<CreateUpdateTagModal onClose={(): void => closeModal?.(modalId)} tag={tag} editMode />
 				)
@@ -204,7 +207,7 @@ export const TagsDropdownItem = ({
 		},
 		[contact.id, createSnackbar, t, tag.name]
 	);
-	const tagColor = useMemo(() => ZIMBRA_STANDARD_COLORS[tag.color || 0].hex, [tag.color]);
+	const tagColor = useMemo(() => resolveTagColorHex(tag), [tag]);
 	const tagIcon = useMemo(() => (checked ? 'Tag' : 'TagOutline'), [checked]);
 	const tagIconOnHovered = useMemo(() => (checked ? 'Untag' : 'Tag'), [checked]);
 
@@ -308,7 +311,7 @@ const MultiSelectTagsDropdownItem = ({
 
 	const tagIcon = useMemo(() => (checked ? 'Tag' : 'TagOutline'), [checked]);
 	const tagIconOnHovered = useMemo(() => (checked ? 'Untag' : 'Tag'), [checked]);
-	const tagColor = useMemo(() => ZIMBRA_STANDARD_COLORS[tag.color || 0].hex, [tag.color]);
+	const tagColor = useMemo(() => resolveTagColorHex(tag), [tag]);
 	return (
 		<Row
 			takeAvailableSpace

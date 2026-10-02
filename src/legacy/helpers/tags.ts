@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { ZIMBRA_STANDARD_COLORS, Tag, Tags } from '@zextras/carbonio-ui-commons';
+import { resolveTagColorHex, Tag, Tags } from '@zextras/carbonio-ui-commons';
 import { includes, reduce } from 'lodash';
 
 import { Contact } from 'legacy/types/contact';
@@ -17,8 +17,7 @@ export function getTagsArray(tagsMap: Tags, itemTags: Contact['tags']): Array<Ta
 				acc.push({
 					...v,
 					// TOFIX: casting to number not to deal with issues in tags. nevertheless the code is working, tags need a refactor
-					color: ZIMBRA_STANDARD_COLORS[parseInt(v.color?.toString() ?? '0', 10)]
-						.hex as unknown as number
+					color: resolveTagColorHex(v) as unknown as number
 				});
 			return acc;
 		},

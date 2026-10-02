@@ -22,7 +22,7 @@ import {
 	getTags,
 	isSharedAccountFolder,
 	Tag,
-	ZIMBRA_STANDARD_COLORS
+	resolveTagColorHex
 } from '@zextras/carbonio-ui-commons';
 import { map } from 'lodash';
 import { Controller, UseFormSetValue } from 'react-hook-form';
@@ -53,7 +53,7 @@ export const TagFolderRow = ({
 						<Row takeAvailableSpace mainAlignment="space-between">
 							<Row mainAlignment="flex-end">
 								<Padding right="small">
-									<Icon icon="Tag" color={ZIMBRA_STANDARD_COLORS[item.color ?? 0].hex} />
+									<Icon icon="Tag" color={resolveTagColorHex(item)} />
 								</Padding>
 							</Row>
 							<Row takeAvailableSpace mainAlignment="flex-start">
@@ -111,15 +111,7 @@ export const TagFolderRow = ({
 				return undefined;
 			}
 			const chipBg = tagOptions.filter((tag) => tag.label === label);
-			return chipOnAdd(
-				label,
-				'tag',
-				true,
-				false,
-				true,
-				'Tag',
-				ZIMBRA_STANDARD_COLORS[chipBg[0]?.color ?? 0].hex
-			);
+			return chipOnAdd(label, 'tag', true, false, true, 'Tag', resolveTagColorHex(chipBg[0]));
 		},
 		[chipOnAdd, tagOptions]
 	);

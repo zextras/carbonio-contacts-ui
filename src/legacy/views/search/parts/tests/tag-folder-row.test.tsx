@@ -567,4 +567,26 @@ describe('TagFolderRow', () => {
 			expect(screen.getByPlaceholderText('share.is_contained_in')).toBeInTheDocument();
 		});
 	});
+
+	describe('Custom tag color', () => {
+		beforeEach(() => {
+			(getTags as Mock).mockReturnValue([{ id: 'tag4', name: 'Custom', rgb: '#abcdef' }]);
+		});
+
+		it('colors the tag option icon and the added chip with the custom color', async () => {
+			const { user } = setupTest(<TestWrapper />);
+
+			await user.click(screen.getByTestId('tagInput'));
+			const option = await screen.findByText('Custom');
+			expect(screen.getByTestId('icon: Tag')).toHaveStyleRule('color', '#abcdef');
+
+			await user.click(option);
+
+			expect(await screen.findByText('tag:Custom')).toBeVisible();
+			expect(within(screen.getByTestId('tagInput')).getByTestId('avatar')).toHaveStyleRule(
+				'background-color',
+				'#abcdef'
+			);
+		});
+	});
 });

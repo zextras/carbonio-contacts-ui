@@ -126,4 +126,57 @@ describe('TagsAccordion', () => {
 			expect(createTagInterceptor.getCalledTimes()).toBe(1);
 		});
 	});
+
+	describe('custom tag color', () => {
+		const customTag = { id: '1', name: 'testTag', rgb: '#abcdef' };
+
+		const expandTags = async (user: ReturnType<typeof setupTest>['user']): Promise<HTMLElement> => {
+			await user.click(screen.getByTestId(TESTID_SELECTORS.icons.accordionExpandAction));
+			act(() => {
+				vi.advanceTimersByTime(TIMERS.dropdown.registerListeners);
+			});
+			return screen.findByText('testTag');
+		};
+
+		it('colors the tag icon with the custom color', async () => {
+			useTagStore.setState({ tags: { [customTag.id]: customTag } });
+			const { user } = setupTest(<TagsAccordion />);
+
+			await expandTags(user);
+
+			expect(screen.getByTestId('icon: Tag')).toHaveStyleRule('color', '#abcdef');
+		});
+
+		it('performs the search with the custom color', async () => {
+			const runSearch = vi.fn();
+			(useRunSearchIntegration as Mock).mockReturnValue(runSearch);
+			useTagStore.setState({ tags: { [customTag.id]: customTag } });
+			const { user } = setupTest(<TagsAccordion />);
+
+			// eslint-disable-next-line testing-library/prefer-user-event
+			fireEvent.click(await expandTags(user));
+
+			expect(runSearch).toHaveBeenCalledWith(
+				[expect.objectContaining({ avatarBackground: '#abcdef' })],
+				'contacts'
+			);
+		});
+
+		it('preselects the custom color in the edit tag modal', async () => {
+			useTagStore.setState({ tags: { [customTag.id]: customTag } });
+			const { user } = setupTest(<TagsAccordion />);
+
+			// user.rightClick does not work
+			fireEvent.contextMenu(await expandTags(user));
+			await user.click(await screen.findByText('Edit Tag'));
+			act(() => {
+				vi.advanceTimersByTime(TIMERS.modal.delayOpen);
+			});
+
+			expect(await screen.findByRole('button', { name: 'Custom color (#abcdef)' })).toHaveAttribute(
+				'aria-pressed',
+				'true'
+			);
+		});
+	});
 });

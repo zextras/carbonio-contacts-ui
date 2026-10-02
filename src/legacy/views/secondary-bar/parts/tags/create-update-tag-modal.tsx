@@ -8,13 +8,13 @@ import React, { FC, ReactElement, useCallback, useEffect, useMemo, useRef, useSt
 
 import { Input, Padding, Text, useSnackbar } from '@zextras/carbonio-design-system';
 import {
-	ColorSelect,
-	ColorSelectProps,
 	changeTagColor,
 	createTag,
 	renameTag,
+	resolveTagColorHex,
 	ModalHeader,
-	ModalFooter
+	ModalFooter,
+	TagColorPicker
 } from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 
@@ -38,7 +38,8 @@ const CreateUpdateTagModal: FC<ComponentProps> = ({
 	const createSnackbar = useSnackbar();
 	const [t] = useTranslation();
 	const [name, setName] = useState(tag?.name || '');
-	const [color, setColor] = useState(tag?.color || 0);
+	const [colorHex, setColorHex] = useState(() => resolveTagColorHex(tag));
+	const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
 	const nameInputRef = useRef<HTMLInputElement>(null);
 	const title = useMemo(
 		() =>
@@ -48,10 +49,6 @@ const CreateUpdateTagModal: FC<ComponentProps> = ({
 		[editMode, t, tag?.name]
 	);
 	const label = useMemo(() => `${t('label.tag_name', 'Tag name')}*`, [t]);
-	const handleColorChange = useCallback<ColorSelectProps['onChange']>(
-		(c) => setColor(Number(c)),
-		[]
-	);
 	const handleNameChange = useCallback(
 		(ev: React.ChangeEvent<HTMLInputElement>) => setName(ev.target.value),
 		[]
@@ -64,7 +61,10 @@ const CreateUpdateTagModal: FC<ComponentProps> = ({
 		() => showMaxLengthWarning || showSpecialCharWarning,
 		[showMaxLengthWarning, showSpecialCharWarning]
 	);
-	const disabled = useMemo(() => name === '' || showWarning, [name, showWarning]);
+	const disabled = useMemo(
+		() => name === '' || showWarning || isColorPickerOpen,
+		[name, showWarning, isColorPickerOpen]
+	);
 
 	const applyNewlyCreatedTag = useCallback(
 		({ id, tagName }: { id: string; tagName: string }) => {
@@ -103,7 +103,7 @@ const CreateUpdateTagModal: FC<ComponentProps> = ({
 	);
 	const onCreate = useCallback(
 		() =>
-			createTag({ name, color }).then((res: any) => {
+			createTag({ name, rgb: colorHex }).then((res: any) => {
 				if (res.tag) {
 					if (contact) {
 						applyNewlyCreatedTag({ id: contact.id, tagName: res.tag?.[0]?.name });
@@ -125,10 +125,10 @@ const CreateUpdateTagModal: FC<ComponentProps> = ({
 				}
 				onClose();
 			}),
-		[name, color, onClose, contact, applyNewlyCreatedTag, createSnackbar, t]
+		[name, colorHex, onClose, contact, applyNewlyCreatedTag, createSnackbar, t]
 	);
 	const onUpdate = useCallback(() => {
-		Promise.all([renameTag(`${tag?.id}`, name), changeTagColor(`${tag?.id}`, Number(color))])
+		Promise.all([renameTag(`${tag?.id}`, name), changeTagColor(`${tag?.id}`, colorHex)])
 			.then(() => {
 				onClose();
 				createSnackbar({
@@ -154,7 +154,7 @@ const CreateUpdateTagModal: FC<ComponentProps> = ({
 					hideButton: true
 				});
 			});
-	}, [color, createSnackbar, name, onClose, t, tag]);
+	}, [colorHex, createSnackbar, name, onClose, t, tag]);
 
 	useEffect(() => {
 		requestAnimationFrame(() => {
@@ -162,9 +162,15 @@ const CreateUpdateTagModal: FC<ComponentProps> = ({
 		});
 	}, []);
 
+	const onCloseModal = useCallback(() => {
+		if (!isColorPickerOpen) {
+			onClose();
+		}
+	}, [isColorPickerOpen, onClose]);
+
 	return (
 		<>
-			<ModalHeader onClose={onClose} title={title} />
+			<ModalHeader onClose={onCloseModal} title={title} />
 			<Input
 				label={label}
 				value={name}
@@ -190,13 +196,11 @@ const CreateUpdateTagModal: FC<ComponentProps> = ({
 				</Padding>
 			)}
 
-			<Padding top="small" />
-			<ColorSelect
-				onChange={handleColorChange}
-				label={t('label.select_color', 'Select Color')}
-				defaultColor={color}
-			/>
+			<Padding vertical="medium" />
+			<TagColorPicker value={colorHex} onChange={setColorHex} onOpenChange={setIsColorPickerOpen} />
+			<Padding vertical="medium" />
 			<ModalFooter
+				paddingTop="0"
 				onConfirm={editMode ? onUpdate : onCreate}
 				label={editMode ? t('label.edit', 'edit') : t('label.create', 'Create')}
 				disabled={disabled}
