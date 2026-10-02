@@ -40,6 +40,13 @@ export type SearchContactsSoapRequest = {
 	limit?: number;
 	offset?: number;
 	sortBy?: string;
+	sortVal?: string;
+	endSortVal?: string;
+	cursor?: {
+		id: number;
+		sortVal: string;
+		endSortVal?: string;
+	};
 	types: 'contact';
 	query?: {
 		_content: string;

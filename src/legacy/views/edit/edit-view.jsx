@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 
 import styled from '@emotion/styled';
 import {
@@ -12,6 +12,7 @@ import {
 	Input,
 	Padding,
 	Row,
+	Select,
 	Text,
 	Tooltip,
 	useSnackbar
@@ -26,23 +27,30 @@ import {
 	isTrash,
 	useFoldersMap
 } from '@zextras/carbonio-ui-commons';
-import { filter, find, map, reduce } from 'lodash';
+import { filter, find, map, reduce, trim } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { CompactView } from 'legacy/commons/contact-compact-view';
+import { useFileAsOptions } from 'legacy/hooks/use-file-as-options';
 import { createContact } from 'legacy/store/actions/create-contact';
 import { modifyContact } from 'legacy/store/actions/modify-contact';
 import { addContactsToStore, useContactById } from 'legacy/store/contacts';
+import { composeFileAsDescription, FILE_AS_FREE_TEXT } from 'legacy/utils/file-as';
 import { getFolderTranslatedName } from 'legacy/utils/helpers';
 import { normalizeContactsFromSoap } from 'legacy/utils/normalizations/normalize-contact-from-soap';
 import { ContactEditorRow, CustomMultivalueField } from 'legacy/views/edit/CustomMultivalueField';
 import reducer, { op } from 'legacy/views/edit/form-reducer';
+import FormSection from 'legacy/views/edit/form-section';
 import { differenceObject } from 'legacy/views/settings/components/utils';
 
 const CustomText = styled(Text)`
 	padding-right: 0.5rem;
 `;
+
+// Reserves the description/error line's height at all times, so no field ever grows
+// taller than its siblings and shifts the row's vertical rhythm around.
+const RESERVED_DESCRIPTION_SPACE = ' ';
 
 const filterEmptyValues = (values) =>
 	reduce(
@@ -62,16 +70,35 @@ const cleanMultivalueFields = (contact) => ({
 	URL: filterEmptyValues(contact.URL)
 });
 
-const CustomStringField = ({ name, label, value, dispatch, autoFocus = false }) => (
-	<Container padding={{ all: 'small' }}>
+const CustomStringField = ({
+	name,
+	label,
+	value,
+	dispatch,
+	autoFocus = false,
+	disabled = false,
+	hidden = false,
+	inputRef
+}) => (
+	<Container
+		padding={{ all: 'small' }}
+		crossAlignment="flex-start"
+		height={'fit'}
+		style={{ visibility: hidden ? 'hidden' : 'visible' }}
+	>
 		<Input
 			background="gray5"
 			inputName={name}
 			label={label}
 			defaultValue={value}
-			onChange={(ev) => dispatch({ type: op.setInput, payload: ev.target })}
+			onChange={(ev) => {
+				dispatch({ type: op.setInput, payload: ev.target });
+			}}
 			// eslint-disable-next-line jsx-a11y/no-autofocus
 			autoFocus={autoFocus}
+			disabled={disabled}
+			description={RESERVED_DESCRIPTION_SPACE}
+			inputRef={inputRef}
 		/>
 	</Container>
 );
@@ -142,26 +169,56 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 		[folderWithWritePerm, t]
 	);
 
-	const isDisabled = useMemo(() => {
-		if (editId && editId !== 'new' && existingContact) {
-			return Object.keys(fieldsToUpdate).length < 1 || !(contact?.firstName || contact?.lastName);
+	const isCustomFileAsEmpty = useMemo(
+		() => contact?.fileAs === FILE_AS_FREE_TEXT && !trim(contact?.fileAsFreeText),
+		[contact?.fileAs, contact?.fileAsFreeText]
+	);
+
+	// Moves focus to the custom text field as soon as it becomes visible after the
+	// user picks the "Custom" option, so they can start typing right away.
+	const fileAsFreeTextRef = useRef(null);
+	const shouldFocusCustomFileAs = useRef(false);
+	const onFileAsChange = useCallback(
+		(value) => {
+			dispatch({ type: op.setInput, payload: { name: 'fileAs', value } });
+			if (value === FILE_AS_FREE_TEXT) {
+				shouldFocusCustomFileAs.current = true;
+			}
+		},
+		[dispatch]
+	);
+	useEffect(() => {
+		if (shouldFocusCustomFileAs.current && contact?.fileAs === FILE_AS_FREE_TEXT) {
+			shouldFocusCustomFileAs.current = false;
+			fileAsFreeTextRef.current?.focus();
 		}
-		return !(contact?.firstName || contact?.lastName);
-	}, [contact?.firstName, contact?.lastName, editId, existingContact, fieldsToUpdate]);
+	}, [contact?.fileAs]);
+
+	const isDisabled = useMemo(() => {
+		if (!trim(contact?.firstName) || isCustomFileAsEmpty) {
+			return true;
+		}
+		if (editId && editId !== 'new' && existingContact) {
+			return Object.keys(fieldsToUpdate).length < 1;
+		}
+		return false;
+	}, [contact?.firstName, editId, existingContact, fieldsToUpdate, isCustomFileAsEmpty]);
 	const title = useMemo(
 		() =>
 			contact?.namePrefix ||
 			contact?.firstName ||
+			contact?.middleName ||
 			contact?.nickName ||
 			contact?.lastName ||
 			contact?.nameSuffix
-				? `${contact?.namePrefix ?? ''} ${contact?.firstName ?? ''} ${
+				? `${contact?.namePrefix ?? ''} ${contact?.firstName ?? ''} ${contact?.middleName ?? ''} ${
 						contact?.nickName ?? ''
 					} ${contact?.lastName ?? ''} ${contact?.nameSuffix ?? ''}`
 				: t('label.new_contact', 'New contact'),
 		[
 			contact?.firstName,
 			contact?.lastName,
+			contact?.middleName,
 			contact?.namePrefix,
 			contact?.nameSuffix,
 			contact?.nickName,
@@ -231,6 +288,48 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 		[t]
 	);
 
+	const fileAsOptions = useFileAsOptions();
+
+	const composedFileAs = useMemo(
+		() =>
+			composeFileAsDescription(contact?.fileAs, {
+				firstName: contact?.firstName,
+				lastName: contact?.lastName,
+				company: contact?.company,
+				fileAsFreeText: contact?.fileAsFreeText
+			}),
+		[
+			contact?.company,
+			contact?.fileAs,
+			contact?.fileAsFreeText,
+			contact?.firstName,
+			contact?.lastName
+		]
+	);
+
+	const isDisplayNameEmpty = useMemo(() => !trim(composedFileAs), [composedFileAs]);
+
+	const fileAsDescription = useMemo(() => {
+		if (!isDisplayNameEmpty) {
+			return composedFileAs;
+		}
+		switch (contact?.fileAs) {
+			case FILE_AS_FREE_TEXT:
+				return t('file_as.missing_custom', 'No custom name yet');
+			case 3:
+				return t('file_as.missing_company', 'No company yet');
+			case 4:
+			case 5:
+			case 6:
+			case 7:
+				return t('file_as.missing_name_and_company', 'No first name, last name and company yet');
+			case 1:
+			case 2:
+			default:
+				return t('file_as.missing_name', 'No last name and first name yet');
+		}
+	}, [composedFileAs, contact?.fileAs, isDisplayNameEmpty, t]);
+
 	return contact ? (
 		<Container
 			mainAlignment="flex-start"
@@ -257,7 +356,7 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 						)}
 					</Container>
 					<Tooltip
-						label={t('message.require_field', 'Fill one required * field')}
+						label={t('message.require_field', 'Fill in the required fields to save')}
 						placement="top"
 						disabled={!isDisabled}
 					>
@@ -265,7 +364,11 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 					</Tooltip>
 				</Row>
 				<Padding value="medium small">
-					<CompactView contact={contact} />
+					<CompactView
+						contact={contact}
+						displayName={fileAsDescription}
+						isDisplayNameEmpty={isDisplayNameEmpty}
+					/>
 				</Padding>
 				<ContactEditorRow>
 					<CustomStringField
@@ -280,7 +383,13 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 						value={contact.firstName}
 						dispatch={dispatch}
 						// eslint-disable-next-line jsx-a11y/no-autofocus
-						autoFocus
+						autoFocus={!editId || editId === 'new'}
+					/>
+					<CustomStringField
+						name="middleName"
+						label={t('name.middle_name', 'Middle Name')}
+						value={contact.middleName}
+						dispatch={dispatch}
 					/>
 				</ContactEditorRow>
 				<ContactEditorRow>
@@ -292,7 +401,7 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 					/>
 					<CustomStringField
 						name="lastName"
-						label={`${t('name.last_name', 'Last Name')}*`}
+						label={t('name.last_name', 'Last Name')}
 						value={contact.lastName}
 						dispatch={dispatch}
 					/>
@@ -331,6 +440,32 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 						dispatch={dispatch}
 					/>
 				</ContactEditorRow>
+				<FormSection label={t('label.file_as', 'File as')}>
+					<ContactEditorRow>
+						<Container
+							padding={{ top: 'small', right: 'small', bottom: 'small' }}
+							crossAlignment="flex-start"
+							orientation="horizontal"
+							mainAlignment="flex-start"
+						>
+							<Select
+								label={t('file_as.select_placeholder', 'Select an option')}
+								items={fileAsOptions}
+								defaultSelection={find(fileAsOptions, ['value', contact.fileAs])}
+								onChange={onFileAsChange}
+							/>
+						</Container>
+						<CustomStringField
+							name="fileAsFreeText"
+							label={`${t('label.file_as_custom', 'Custom')}*`}
+							value={contact.fileAsFreeText}
+							dispatch={dispatch}
+							disabled={contact.fileAs !== FILE_AS_FREE_TEXT}
+							hidden={contact.fileAs !== FILE_AS_FREE_TEXT}
+							inputRef={fileAsFreeTextRef}
+						/>
+					</ContactEditorRow>
+				</FormSection>
 				{!editId && (
 					<ContactEditorRow>
 						<Padding horizontal="small" top="small" style={{ width: '100%' }}>

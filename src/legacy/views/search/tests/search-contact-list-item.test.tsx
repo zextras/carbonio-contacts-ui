@@ -36,7 +36,7 @@ const mockItem: Contact = {
 	nameSuffix: '',
 	namePrefix: '',
 	URL: {},
-	fileAsStr: ''
+	fileAsStr: 'display name'
 };
 
 vi.mock('@zextras/carbonio-ui-commons', async () => {

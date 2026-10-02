@@ -7,9 +7,9 @@ import React, { useMemo } from 'react';
 
 import { Text, Row, Tooltip, Container, Padding, Icon } from '@zextras/carbonio-design-system';
 import { trim } from 'lodash';
+import { useTranslation } from 'react-i18next';
 
 import { ListItemContent } from 'components/list/list-item-content';
-import { useDisplayName } from 'legacy/hooks/use-display-name';
 import { useTagExist } from 'legacy/ui-actions/tag-actions';
 
 export const RowInfo = ({ item, tags }) => {
@@ -34,7 +34,8 @@ export const RowInfo = ({ item, tags }) => {
 };
 
 export const ItemContent = ({ item, tags }) => {
-	const displayName = useDisplayName(item);
+	const [t] = useTranslation();
+	const displayName = trim(item.fileAsStr) ? item.fileAsStr : t('label.no_name', 'No name');
 	const secondaryRow = useMemo(
 		() =>
 			trim(

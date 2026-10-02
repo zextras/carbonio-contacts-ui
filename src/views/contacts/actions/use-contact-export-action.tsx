@@ -12,7 +12,6 @@ import { Action } from 'actions/types';
 import { EXPORT_CONTACT_ACTION } from 'constants/actions';
 import { TIMEOUTS } from 'constants/index';
 import { redirectToBlob } from 'helpers/download';
-import { getDisplayName } from 'legacy/hooks/use-display-name';
 import { Contact } from 'legacy/types/contact';
 import { apiClient } from 'network/api-client';
 
@@ -24,7 +23,7 @@ export const useContactExportAction = (contact: Contact): Action => {
 	const createSnackbar = useSnackbar();
 
 	const execute = useCallback(() => {
-		const fileName = `${getDisplayName(contact) ?? contact.id}.${FILENAME_EXTENSION}`;
+		const fileName = `${contact.fileAsStr ?? contact.id}.${FILENAME_EXTENSION}`;
 
 		apiClient
 			.getItem(contact.id)

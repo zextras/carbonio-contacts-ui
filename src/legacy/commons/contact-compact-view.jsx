@@ -34,8 +34,15 @@ function calcColor(label) {
 	return `avatar_${(sum % 50) + 1}`;
 }
 
-export const CompactView = ({ contact, toggleOpen, open }) => {
-	const displayName = useDisplayName(contact);
+export const CompactView = ({
+	contact,
+	toggleOpen,
+	open,
+	displayName: displayNameOverride,
+	isDisplayNameEmpty = false
+}) => {
+	const fallbackDisplayName = useDisplayName(contact);
+	const displayName = displayNameOverride ?? fallbackDisplayName;
 	const displayMailAndPhone = useMemo(
 		() =>
 			trim(
@@ -62,7 +69,11 @@ export const CompactView = ({ contact, toggleOpen, open }) => {
 						fallbackIcon="PeopleOutline"
 					/>
 					<Container height={'fit'} crossAlignment={'flex-start'} minWidth={0}>
-						<Text size="medium" weight="bold">
+						<Text
+							size="medium"
+							weight={isDisplayNameEmpty ? 'regular' : 'bold'}
+							color={isDisplayNameEmpty ? 'gray1.active' : undefined}
+						>
 							{displayName}
 						</Text>
 						<Text size="small" weight="bold" color="secondary">
@@ -119,7 +130,11 @@ export const CompactView = ({ contact, toggleOpen, open }) => {
 						padding={{ horizontal: 'large', vertical: 'small' }}
 						height="fill"
 					>
-						<Text size="large" weight="bold">
+						<Text
+							size="large"
+							weight={isDisplayNameEmpty ? 'regular' : 'bold'}
+							color={isDisplayNameEmpty ? 'gray1.active' : undefined}
+						>
 							{displayName}
 						</Text>
 						<Text weight="bold" color="secondary">

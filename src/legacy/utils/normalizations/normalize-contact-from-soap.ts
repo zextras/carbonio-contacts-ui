@@ -15,7 +15,6 @@ import {
 	filter
 } from 'lodash';
 
-import { ContactGroup } from 'model/contact-group';
 import {
 	Contact,
 	ContactAddress,
@@ -29,6 +28,8 @@ import {
 	ContactUrlType
 } from 'legacy/types/contact';
 import { PartialSoapContactWithId, SoapContact } from 'legacy/types/soap';
+import { parseFileAsAttr } from 'legacy/utils/file-as';
+import { ContactGroup } from 'model/contact-group';
 
 const MAIL_REG = /^email(\d*)$/;
 const PHONE_REG = /^(.*)Phone(\d*)$/;
@@ -162,6 +163,7 @@ export function normalizeContactsFromSoap(contact: SoapContact[]): ContactOrGrou
 						parent: c.l,
 						id: c.id,
 						fileAsStr: c.fileAsStr,
+						...parseFileAsAttr(c._attrs?.fileAs),
 						tags: !isNil(c.t) ? filter(c.t.split(','), (t) => t !== '') : [],
 						address: normalizeContactAddresses(c),
 						company: c._attrs?.company ?? '',
@@ -202,6 +204,7 @@ export function normalizeSyncContactsFromSoap(
 							parent: c.l,
 							tags: !isNil(c.t) ? filter(c.t.split(','), (t) => t !== '') : undefined,
 							fileAsStr: c.fileAsStr,
+							...(c._attrs?.fileAs ? parseFileAsAttr(c._attrs.fileAs) : undefined),
 							address: c._attrs
 								? normalizeContactAddressesKV(c._attrs as { [k: string]: string })
 								: undefined,

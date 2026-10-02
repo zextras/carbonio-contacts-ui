@@ -21,7 +21,7 @@ const mockContacts: Array<Contact> = [
 		company: '',
 		department: '',
 		email: {},
-		fileAsStr: '',
+		fileAsStr: 'John Doe',
 		firstName: 'John',
 		id: '',
 		image: '',

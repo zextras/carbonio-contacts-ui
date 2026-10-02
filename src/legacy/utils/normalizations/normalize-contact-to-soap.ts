@@ -14,6 +14,7 @@ import {
 	ContactUrlMap
 } from 'legacy/types/contact';
 import { CreateContactRequestAttr, ModifyContactRequestAttr } from 'legacy/types/soap';
+import { composeFileAsAttr } from 'legacy/utils/file-as';
 
 export function normalizeContactMailsToSoapOp(mails: ContactEmailMap): any {
 	return reduce(
@@ -102,6 +103,7 @@ export function normalizeContactToSoap(
 		'notes'
 	]);
 	if (c.nickName) obj.nickname = c.nickName;
+	if (c.fileAs) obj.fileAs = composeFileAsAttr(c.fileAs, c.fileAsFreeText);
 	if (c.email) merge(obj, normalizeContactMailsToSoapOp(c.email));
 	if (c.phone) merge(obj, normalizeContactPhonesToSoapOp(c.phone));
 	if (c.address) merge(obj, normalizeContactAddressesToSoapOp(c.address));
