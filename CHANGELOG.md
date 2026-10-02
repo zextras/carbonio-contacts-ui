@@ -1,3 +1,7 @@
+## 1.24.0 (2026-10-02)
+
+* feat: let the user be able to manage the fileAs ([4ef4a24](https://github.com/zextras/carbonio-contacts-ui/commit/4ef4a24))
+
 ## 1.23.0 (2026-09-29)
 
 * feat(CO-4314): use the shared color picker for address book colors ([e0ba846](https://github.com/zextras/carbonio-contacts-ui/commit/e0ba846))
