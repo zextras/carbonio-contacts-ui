@@ -1,3 +1,7 @@
+## 1.25.0 (2026-10-02)
+
+* feat(CO-4361): support custom tag colors with the shared color picker (#503) ([463cd06](https://github.com/zextras/carbonio-contacts-ui/commit/463cd06)), closes [#503](https://github.com/zextras/carbonio-contacts-ui/issues/503)
+
 ## 1.24.0 (2026-10-02)
 
 * feat: let the user be able to manage the fileAs ([4ef4a24](https://github.com/zextras/carbonio-contacts-ui/commit/4ef4a24))
