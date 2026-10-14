@@ -21,6 +21,7 @@ import { useGetDistributionList } from 'hooks/use-get-distribution-list';
 import { useGetDistributionListMembers } from 'hooks/use-get-distribution-list-members';
 import { ContactInputDistributionList } from 'legacy/integrations/types';
 import type { DistributionListMembersPage } from 'model/distribution-list';
+import { getUserSettings } from '@zextras/carbonio-shell-ui';
 
 const StyledChip = styled(Chip)`
 	cursor: default;
@@ -53,6 +54,8 @@ export const DistributionListChip = ({
 	const [t] = useTranslation();
 	const [open, setOpen] = useState(false);
 	const { distributionList } = useGetDistributionList({ id, email: value.email });
+
+	const { zimbraFeatureDistributionListFolderEnabled } = getUserSettings().attrs;
 
 	const {
 		members,
@@ -151,11 +154,26 @@ export const DistributionListChip = ({
 	);
 
 	const items = useMemo(() => {
-		if (more) {
-			return [selectAllButton, ...memberDropdownItems, moreButton];
+		const items = [];
+
+		if (zimbraFeatureDistributionListFolderEnabled === 'TRUE') {
+			items.push(selectAllButton);
 		}
-		return [selectAllButton, ...memberDropdownItems];
-	}, [memberDropdownItems, more, moreButton, selectAllButton]);
+
+		items.push(...memberDropdownItems);
+
+		if (more) {
+			items.push(moreButton);
+		}
+
+		return items;
+	}, [
+		memberDropdownItems,
+		more,
+		moreButton,
+		selectAllButton,
+		zimbraFeatureDistributionListFolderEnabled
+	]);
 
 	const expandDLAction = useCallback(() => {
 		setOpen(true);
