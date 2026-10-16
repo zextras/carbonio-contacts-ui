@@ -19,7 +19,15 @@ const folderIconName: Record<number, string> = {
 	3: 'Trash2Outline'
 };
 
-export const CollapsedSideBarFolderItem = ({ folder }: { folder: Folder }): React.JSX.Element => {
+export interface CollapsedSideBarFolderItemProps {
+	folder: Folder;
+	isSelected?: boolean;
+}
+
+export const CollapsedSideBarFolderItem = ({
+	folder,
+	isSelected
+}: CollapsedSideBarFolderItemProps): React.JSX.Element => {
 	const folderIcon = useMemo(() => {
 		if (Object.keys(folderIconName).includes(folder.id)) {
 			return folderIconName[Number(folder.id)];
@@ -44,6 +52,7 @@ export const CollapsedSideBarFolderItem = ({ folder }: { folder: Folder }): Reac
 			id={folder.id}
 			icon={folderIcon}
 			iconColor={folderIconColor}
+			isSelected={isSelected}
 		/>
 	);
 };

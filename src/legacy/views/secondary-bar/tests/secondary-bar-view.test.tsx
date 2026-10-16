@@ -9,7 +9,7 @@ import { act, waitFor } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { FOLDER_VIEW, FOLDERS, useFolderStore } from '@zextras/carbonio-ui-commons';
 
-import { setupTest, screen } from '@test-setup';
+import { setupTest, screen, within } from '@test-setup';
 import { generateFolder } from '@test-utils/folders/folders-generator';
 import SecondaryBarView from 'legacy/views/secondary-bar/secondary-bar-view';
 
@@ -114,5 +114,60 @@ describe('Secondary Bar', () => {
 		expect(
 			screen.queryByTestId(`sidebar-collapsed-item-${sharedFolderId}`)
 		).not.toBeInTheDocument();
+	});
+
+	it('should apply highlight background to the active folder item in collapsed mode', async () => {
+		const folderId1 = '100';
+		const folderId2 = '101';
+		const mainAccountFolders = generateFolder({
+			l: '1',
+			id: FOLDERS.USER_ROOT,
+			name: 'main.account@test.com',
+			absFolderPath: '/',
+			view: FOLDER_VIEW.contact,
+			children: [
+				generateFolder({
+					id: `${folderId1}`,
+					name: 'Folder 1',
+					absFolderPath: '/folder1',
+					view: FOLDER_VIEW.contact
+				}),
+				generateFolder({
+					id: `${folderId2}`,
+					name: 'Folder 2',
+					absFolderPath: '/folder2',
+					view: FOLDER_VIEW.contact
+				})
+			]
+		});
+		await act(async () => {
+			useFolderStore.setState({
+				folders: {
+					'1': mainAccountFolders
+				}
+			});
+		});
+
+		const { user } = setupTest(<SecondaryBarView expanded={false} />, {
+			initialEntries: [`/folder/${folderId1}`]
+		});
+
+		const activeRow = await screen.findByTestId(`sidebar-collapsed-item-${folderId1}`);
+		const inactiveRow = await screen.findByTestId(`sidebar-collapsed-item-${folderId2}`);
+
+		const activeButton = within(activeRow).getByRole('button');
+		const inactiveButton = within(inactiveRow).getByRole('button');
+
+		const BG_COLOR_PROPERTY = 'background-color';
+		const HIGHLIGHT_COLOR = '#d5e3f6';
+		const TRANSPARENT_COLOR = 'rgba(0, 0, 0, 0)';
+
+		expect(activeButton).toHaveStyleRule(BG_COLOR_PROPERTY, HIGHLIGHT_COLOR);
+		expect(inactiveButton).toHaveStyleRule(BG_COLOR_PROPERTY, TRANSPARENT_COLOR);
+
+		await user.click(inactiveButton);
+
+		expect(inactiveButton).toHaveStyleRule(BG_COLOR_PROPERTY, HIGHLIGHT_COLOR);
+		expect(activeButton).toHaveStyleRule(BG_COLOR_PROPERTY, TRANSPARENT_COLOR);
 	});
 });

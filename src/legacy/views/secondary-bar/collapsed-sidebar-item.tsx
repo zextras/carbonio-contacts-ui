@@ -4,26 +4,42 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import React, { SyntheticEvent } from 'react';
+import React, { SyntheticEvent, useMemo } from 'react';
 
 import { Button, Padding, Row, Tooltip } from '@zextras/carbonio-design-system';
-import { useNavigate } from 'react-router-dom';
+import { matchPath, useLocation, useNavigate } from 'react-router-dom';
 
-type CollapsedSidebarItemProps = {
+import { CONTACTS_ROUTE } from 'constants/index';
+
+export type CollapsedSidebarItemProps = {
 	id: string;
 	icon: string;
 	iconTooltip: string;
 	redirectPath: string;
 	iconColor?: string;
+	isSelected?: boolean;
 };
 export const CollapsedSideBarItem = ({
 	id,
 	icon,
 	iconTooltip,
 	iconColor = 'text',
-	redirectPath
+	redirectPath,
+	isSelected
 }: CollapsedSidebarItemProps): React.JSX.Element => {
 	const navigate = useNavigate();
+	const { pathname } = useLocation();
+
+	const active = useMemo(() => {
+		if (isSelected !== undefined) {
+			return isSelected;
+		}
+		const match =
+			matchPath(`/${CONTACTS_ROUTE}/folder/:folderId/*`, pathname) ??
+			matchPath(`/folder/:folderId/*`, pathname);
+		return match?.params?.folderId === id;
+	}, [isSelected, pathname, id]);
+
 	const onClick = (ev: KeyboardEvent | SyntheticEvent): void => {
 		ev.preventDefault();
 		navigate(redirectPath, { replace: true });
@@ -36,7 +52,7 @@ export const CollapsedSideBarItem = ({
 					<Button
 						icon={icon}
 						onClick={onClick}
-						backgroundColor={'transparent'}
+						backgroundColor={active ? 'highlight' : 'transparent'}
 						labelColor={iconColor}
 						size="extralarge"
 						shape="regular"
