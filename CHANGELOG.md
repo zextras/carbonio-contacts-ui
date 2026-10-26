@@ -1,3 +1,16 @@
+## <small>1.25.1 (2026-10-26)</small>
+
+* fix(CO-4528): update carbonio-ui-commons to 2.6.2 ([265665f](https://github.com/zextras/carbonio-contacts-ui/commit/265665f))
+* chore(deps): update dependency @testing-library/user-event to v14.6.8 (#511) ([b895e3e](https://github.com/zextras/carbonio-contacts-ui/commit/b895e3e)), closes [#511](https://github.com/zextras/carbonio-contacts-ui/issues/511)
+* chore(deps): update dependency @types/lodash to v4.17.27 (#512) ([040863c](https://github.com/zextras/carbonio-contacts-ui/commit/040863c)), closes [#512](https://github.com/zextras/carbonio-contacts-ui/issues/512)
+* chore(deps): update dependency @types/react-redux to v7.1.35 (#513) ([de1d46d](https://github.com/zextras/carbonio-contacts-ui/commit/de1d46d)), closes [#513](https://github.com/zextras/carbonio-contacts-ui/issues/513)
+* chore(deps): update dependency @zextras/carbonio-ui-sdk to v2.4.0 (#517) ([130f553](https://github.com/zextras/carbonio-contacts-ui/commit/130f553)), closes [#517](https://github.com/zextras/carbonio-contacts-ui/issues/517)
+* chore(deps): update dependency zextras/jenkins-lib-common to v4.15.0 (#504) ([2389ca7](https://github.com/zextras/carbonio-contacts-ui/commit/2389ca7)), closes [#504](https://github.com/zextras/carbonio-contacts-ui/issues/504)
+* chore(deps): update dependency zextras/jenkins-lib-common to v4.15.2 (#505) ([4ccb422](https://github.com/zextras/carbonio-contacts-ui/commit/4ccb422)), closes [#505](https://github.com/zextras/carbonio-contacts-ui/issues/505)
+* chore(deps): update dependency zextras/jenkins-lib-common to v5 ([d74d2b6](https://github.com/zextras/carbonio-contacts-ui/commit/d74d2b6))
+* chore(deps): update dependency zextras/jenkins-lib-common to v5.1.0 (#510) ([74eba1c](https://github.com/zextras/carbonio-contacts-ui/commit/74eba1c)), closes [#510](https://github.com/zextras/carbonio-contacts-ui/issues/510)
+* docs: remove double hyphen from pnpm commands in README ([718d76c](https://github.com/zextras/carbonio-contacts-ui/commit/718d76c))
+
 ## 1.25.0 (2026-10-02)
 
 * feat(CO-4361): support custom tag colors with the shared color picker (#503) ([463cd06](https://github.com/zextras/carbonio-contacts-ui/commit/463cd06)), closes [#503](https://github.com/zextras/carbonio-contacts-ui/issues/503)
