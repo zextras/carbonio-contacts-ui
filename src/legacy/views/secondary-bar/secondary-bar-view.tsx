@@ -15,9 +15,9 @@ import {
 	themeMuiExtension
 } from '@zextras/carbonio-ui-commons';
 import { map } from 'lodash';
-import { Route, Routes, useParams } from 'react-router-dom';
+import { matchPath, Route, Routes, useLocation, useParams } from 'react-router-dom';
 
-import { LOCAL_STORAGES } from 'constants/index';
+import { CONTACTS_ROUTE, LOCAL_STORAGES } from 'constants/index';
 import { sortFolders } from 'helpers/folders';
 import { AccordionCustomComponent } from 'legacy/views/secondary-bar/accordion-custom-component';
 import { CollapsedSideBarFolderItem } from 'legacy/views/secondary-bar/collapsed-sidebar-folder-item';
@@ -33,7 +33,12 @@ export type SidebarComponentProps = {
 	accordions: Array<Folder>;
 };
 const SidebarComponent = ({ accordions }: SidebarComponentProps): React.JSX.Element => {
-	const { folderId } = useParams<{ folderId: string }>();
+	const { folderId: routeFolderId } = useParams<{ folderId: string }>();
+	const { pathname } = useLocation();
+	const match =
+		matchPath(`/${CONTACTS_ROUTE}/folder/:folderId/*`, pathname) ??
+		matchPath(`/folder/:folderId/*`, pathname);
+	const folderId = routeFolderId ?? match?.params?.folderId ?? '';
 
 	const accordionsWithFindShare = useMemo(() => {
 		if (!accordions?.[0]?.children.find((folder: Folder) => folder.id === 'find_shares')) {
@@ -50,7 +55,7 @@ const SidebarComponent = ({ accordions }: SidebarComponentProps): React.JSX.Elem
 		<Container orientation="vertical" height="fit" width="fill">
 			<SidebarAccordionMui
 				accordions={accordionsWithFindShare}
-				folderId={folderId ?? ''}
+				folderId={folderId}
 				localStorageName={LOCAL_STORAGES.EXPANDED_ADDRESSBOOKS}
 				AccordionCustomComponent={AccordionCustomComponent}
 				buttonFindShares={<FindSharesButton key={'find-shares-button'} />}
@@ -66,18 +71,25 @@ const SidebarComponent = ({ accordions }: SidebarComponentProps): React.JSX.Elem
 const SecondaryBarView: FC<SecondaryBarComponentProps> = ({ expanded = false }) => {
 	const roots = useRootsArray();
 	const folders = useMemo(() => sortFolders(roots), [roots]);
+	const { pathname } = useLocation();
+	const match =
+		matchPath(`/${CONTACTS_ROUTE}/folder/:folderId/*`, pathname) ??
+		matchPath(`/folder/:folderId/*`, pathname);
+	const activeFolderId = match?.params?.folderId;
 	const collapsedItems = [] as Array<ReactElement>;
 
-	folders.length > 0 &&
+	if (folders.length > 0) {
 		folders[0].children.forEach((folder) => {
 			collapsedItems.push(
 				<CollapsedSideBarFolderItem
 					data-testid={`sidebar-folder-${folder.id}-collapsed`}
 					key={folder.id}
 					folder={folder}
+					isSelected={activeFolderId === folder.id}
 				/>
 			);
 		});
+	}
 
 	return (
 		<ThemeProvider extension={themeMuiExtension}>
@@ -87,6 +99,7 @@ const SecondaryBarView: FC<SecondaryBarComponentProps> = ({ expanded = false }) 
 						path={`folder/:folderId/:type?/:itemId?`}
 						element={<SidebarComponent accordions={folders} />}
 					/>
+					<Route path="*" element={<SidebarComponent accordions={folders} />} />
 				</Routes>
 			) : (
 				<div data-testid={'sidebar-collapsed'}>{collapsedItems}</div>
