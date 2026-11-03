@@ -1,3 +1,9 @@
+## <small>1.25.2 (2026-11-03)</small>
+
+* fix(deps): update dependency @zextras/carbonio-ui-soap-lib to v1.3.3 (#529) ([5e157ad](https://github.com/zextras/carbonio-contacts-ui/commit/5e157ad)), closes [#529](https://github.com/zextras/carbonio-contacts-ui/issues/529)
+* chore(deps): update dependency @zextras/carbonio-search-ui to v0.1.22 (#514) ([2050663](https://github.com/zextras/carbonio-contacts-ui/commit/2050663)), closes [#514](https://github.com/zextras/carbonio-contacts-ui/issues/514)
+* chore(deps): update semantic-release monorepo (#515) ([cdbb0b1](https://github.com/zextras/carbonio-contacts-ui/commit/cdbb0b1)), closes [#515](https://github.com/zextras/carbonio-contacts-ui/issues/515)
+
 ## <small>1.25.1 (2026-10-26)</small>
 
 * fix(CO-4528): update carbonio-ui-commons to 2.6.2 ([265665f](https://github.com/zextras/carbonio-contacts-ui/commit/265665f))
