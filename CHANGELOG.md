@@ -1,3 +1,8 @@
+## <small>1.25.3 (2026-11-06)</small>
+
+* fix: highlight selected item in collapsed secondary bar ([1bd38c8](https://github.com/zextras/carbonio-contacts-ui/commit/1bd38c8)), closes [#506](https://github.com/zextras/carbonio-contacts-ui/issues/506)
+* chore(deps): update dependency zextras/jenkins-lib-common to v5.3.1 (#525) ([f96e9d7](https://github.com/zextras/carbonio-contacts-ui/commit/f96e9d7)), closes [#525](https://github.com/zextras/carbonio-contacts-ui/issues/525)
+
 ## <small>1.25.2 (2026-11-03)</small>
 
 * fix(deps): update dependency @zextras/carbonio-ui-soap-lib to v1.3.3 (#529) ([5e157ad](https://github.com/zextras/carbonio-contacts-ui/commit/5e157ad)), closes [#529](https://github.com/zextras/carbonio-contacts-ui/issues/529)
