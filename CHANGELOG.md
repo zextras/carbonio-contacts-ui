@@ -1,3 +1,7 @@
+## <small>1.25.4 (2026-11-10)</small>
+
+* fix(deps): update carbonio-shell-ui to v15.5.2 and carbonio-search-ui to v0.1.26 (#531) ([3251a43](https://github.com/zextras/carbonio-contacts-ui/commit/3251a43)), closes [#531](https://github.com/zextras/carbonio-contacts-ui/issues/531)
+
 ## <small>1.25.3 (2026-11-06)</small>
 
 * fix: highlight selected item in collapsed secondary bar ([1bd38c8](https://github.com/zextras/carbonio-contacts-ui/commit/1bd38c8)), closes [#506](https://github.com/zextras/carbonio-contacts-ui/issues/506)
