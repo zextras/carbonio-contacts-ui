@@ -7,7 +7,13 @@
 
 import { CONTACT_TYPES } from '@zextras/carbonio-ui-commons';
 
-import { getContactLabel, mapToChipContactOptions } from 'legacy/integrations/parts/utils';
+import {
+	type ChipBox,
+	findDropTarget,
+	getContactLabel,
+	insertChipAt,
+	mapToChipContactOptions
+} from 'legacy/integrations/parts/utils';
 import { RemoteDistributionListContact } from 'legacy/integrations/types';
 
 describe('utils', () => {
@@ -295,5 +301,78 @@ describe('utils', () => {
 			// Since the regex expects quotes, this should fall back to firstName + lastName
 			expect(result.label).toBe('John Doe');
 		});
+	});
+});
+
+const chipA = { id: 'a' };
+const chipB = { id: 'b' };
+const chipC = { id: 'c' };
+const chipD = { id: 'd' };
+const ids = (items: Array<{ id?: string }>): Array<string | undefined> => items.map((i) => i.id);
+
+describe('insertChipAt', () => {
+	it('moves a chip before the target', () => {
+		expect(ids(insertChipAt([chipA, chipB, chipC], chipC, { id: 'a', side: 'before' }))).toEqual([
+			'c',
+			'a',
+			'b'
+		]);
+	});
+
+	it('moves a chip after the target', () => {
+		expect(ids(insertChipAt([chipA, chipB, chipC], chipA, { id: 'b', side: 'after' }))).toEqual([
+			'b',
+			'a',
+			'c'
+		]);
+	});
+
+	it('inserts a new chip at the target', () => {
+		expect(ids(insertChipAt([chipA, chipB], chipD, { id: 'b', side: 'before' }))).toEqual([
+			'a',
+			'd',
+			'b'
+		]);
+	});
+
+	it('puts the chip last without a target', () => {
+		expect(ids(insertChipAt([chipA, chipB, chipC], chipA, undefined))).toEqual(['b', 'c', 'a']);
+	});
+
+	it('leaves the list unchanged when the chip is dropped on itself', () => {
+		const chips = [chipA, chipB, chipC];
+		expect(insertChipAt(chips, chipB, { id: 'b', side: 'after' })).toBe(chips);
+	});
+});
+
+describe('findDropTarget', () => {
+	const box = (id: string, left: number, top = 0): ChipBox => ({
+		id,
+		left,
+		right: left + 100,
+		top,
+		bottom: top + 20
+	});
+	// two rows: a, b on the first one, c on the second one
+	const boxes = [box('a', 0), box('b', 120), box('c', 0, 30)];
+
+	it('targets before the first chip when the pointer is on its left half', () => {
+		expect(findDropTarget(boxes, 10, 10)).toEqual({ id: 'a', side: 'before' });
+	});
+
+	it('targets before the next chip when the pointer is in the gap between two chips', () => {
+		expect(findDropTarget(boxes, 110, 10)).toEqual({ id: 'b', side: 'before' });
+	});
+
+	it('targets after the last chip of the row when the pointer is past its end', () => {
+		expect(findDropTarget(boxes, 400, 10)).toEqual({ id: 'b', side: 'after' });
+	});
+
+	it('targets the nearest row when the pointer is between rows or below them', () => {
+		expect(findDropTarget(boxes, 400, 80)).toEqual({ id: 'c', side: 'after' });
+	});
+
+	it('has no target without chips', () => {
+		expect(findDropTarget([], 10, 10)).toBeUndefined();
 	});
 });

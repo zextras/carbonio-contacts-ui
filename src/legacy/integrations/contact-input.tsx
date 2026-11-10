@@ -4,8 +4,19 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback, useEffect, useRef, useState, ReactElement, FC, useMemo } from 'react';
+import React, {
+	createContext,
+	useCallback,
+	useContext,
+	useEffect,
+	useRef,
+	useState,
+	ReactElement,
+	FC,
+	useMemo
+} from 'react';
 
+import styled from '@emotion/styled';
 import {
 	ChipInput,
 	Container,
@@ -35,15 +46,103 @@ import { useTranslation } from 'react-i18next';
 import { DistributionListChip } from 'legacy/integrations/distribution-list-chip';
 import { Loader } from 'legacy/integrations/parts/loader';
 import { PasteContextMenu } from 'legacy/integrations/parts/paste-context-menu';
-import { getContactLabel, searchContacts, tryToParseEmail } from 'legacy/integrations/parts/utils';
+import {
+	type ChipBox,
+	type DropTarget,
+	findDropTarget,
+	getContactLabel,
+	insertChipAt,
+	searchContacts,
+	tryToParseEmail
+} from 'legacy/integrations/parts/utils';
 import { ContactInputOptions } from 'legacy/integrations/types';
-import type { ContactAddressMap } from 'legacy/types/contact';
 import type { GetContactsRequest, GetContactsResponse } from 'legacy/types/soap';
 
 const CHIP_TO_EXCLUDE = 'this-value-represent-a-chip-that-should-not-be-present';
 const CHIPINPUT_DEBOUNCE_TIME = 500;
 
 type EditChipFn = (text: string, id: string) => void;
+
+/**
+ * The chip being dragged, shared by every contact input of the page: during dragover the browser does not expose
+ * the dragged data, and the input under the pointer needs the chip to show it in its new place.
+ * Set only by a drag started in this page: a drop without it (e.g. from another page) is ignored.
+ * The input that gets the chip removes it from the source: the dragend may never reach the source, when a
+ * preview remounts the dragged chip
+ */
+let activeDrag:
+	| { chip: ContactInputItem; source: HTMLInputElement | null; removeFromSource: () => void }
+	| undefined;
+
+/**
+ * The chip being dragged in this input: shown as a placeholder where it will go, or hidden while the pointer is
+ * over another input (it is shown there). Hidden, not removed: the browser sends the dragend to its element
+ */
+const DraggedChipContext = createContext<{ id: string; hidden: boolean } | undefined>(undefined);
+
+const CHIP_DROP_ID_SELECTOR = '[data-chip-drop-id]';
+const CONTACT_INPUT_ROOT_SELECTOR = '[data-contact-input-root]';
+const CONTACT_DRAG_TYPE = 'contact';
+
+const ChipDropZoneEl = styled.span<{ $dragged: boolean; $hidden: boolean }>`
+	display: ${({ $hidden }): string => ($hidden ? 'none' : 'inline-flex')};
+	min-width: 0;
+	max-width: 100%;
+	opacity: ${({ $dragged }): number => ($dragged ? 0.4 : 1)};
+`;
+
+/** Wraps a chip to find its box during a drag and to show it as a placeholder while it is the dragged one */
+const ChipDropZone: FC<Readonly<{ id: string; children: React.ReactNode }>> = ({
+	id,
+	children
+}) => {
+	const dragged = useContext(DraggedChipContext);
+	const isDragged = dragged?.id === id;
+	return (
+		<ChipDropZoneEl
+			data-testid={'chip-drop-zone'}
+			data-chip-drop-id={id}
+			$dragged={isDragged}
+			$hidden={isDragged && !!dragged?.hidden}
+		>
+			{children}
+		</ChipDropZoneEl>
+	);
+};
+
+const getChipBoxes = (container: Element): Array<ChipBox> =>
+	Array.from(container.querySelectorAll<HTMLElement>(CHIP_DROP_ID_SELECTOR)).map((el) => {
+		const { left, right, top, bottom } = el.getBoundingClientRect();
+		return { id: el.dataset.chipDropId ?? '', left, right, top, bottom };
+	});
+
+/** The id of the chip named by the drag data, if the data is a chip at all (a file, some text, a malformed one) */
+const getDraggedChipId = (dataTransfer: DataTransfer): string | undefined => {
+	try {
+		const chip: unknown = JSON.parse(dataTransfer.getData(CONTACT_DRAG_TYPE));
+		return chip && typeof chip === 'object' && 'id' in chip && typeof chip.id === 'string'
+			? chip.id
+			: undefined;
+	} catch {
+		// empty or non-JSON drag data (a file, some text) is expected: it is not a chip
+		return undefined;
+	}
+};
+
+/** A chip moved from another input, whose edit action edits in the input that gets it */
+const withEditActionOf = (
+	chip: ContactInputItem,
+	chipId: string,
+	editChip: EditChipFn
+): ContactInputItem => ({
+	...chip,
+	actions: chip.actions?.map((action) =>
+		action.id === EDIT_ACTION_ID
+			? { ...action, onClick: (): void => editChip(chip.value.email ?? '', chipId) }
+			: action
+	)
+});
+
 function createChipFromEmail(
 	t: TFunction,
 	editChipFn: EditChipFn,
@@ -94,24 +193,50 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	const [idToRemove, setIdToRemove] = useState('');
 	const [t] = useTranslation();
 	const inputRef = useCombinedRefs(propsInputRef);
-	const emptyDraggedChip = useMemo(() => ({ id: '', email: '', dragStartRef: null }), []);
-	const draggedChip = useRef<{
-		id?: string;
-		email?: string | ContactAddressMap;
-		dragStartRef: HTMLInputElement | null;
-	}>(emptyDraggedChip);
-	const isSameElement = useRef(false);
+	// while a chip is dragged over this input: where it would be dropped (undefined target = last)
+	const [dragOver, setDragOver] = useState<{ target: DropTarget | undefined } | undefined>(
+		undefined
+	);
+	// id of the chip dragged out of this input, shown as a placeholder until the drag ends
+	const [sourceDragId, setSourceDragId] = useState<string | undefined>(undefined);
+	// true while the pointer is over another input: the chip is shown there, not here
+	const [sourceHidden, setSourceHidden] = useState(false);
+	// the drop position also in a ref: the drop must not depend on React having rendered the last dragover
+	const dropTargetRef = useRef<DropTarget | undefined>(undefined);
+	// the chips and onChange of the last render, for the input that removes a chip moved out of this one
+	const defaultsRef = useRef<Array<ContactInputItem>>([]);
+	const onChangeRef = useRef(onChange);
+	useEffect(() => {
+		defaultsRef.current = defaults;
+	}, [defaults]);
+	useEffect(() => {
+		onChangeRef.current = onChange;
+	}, [onChange]);
+
+	const removeChip = useCallback((id: string | undefined) => {
+		const newDefaults = filter(defaultsRef.current, (contact) => contact.id !== id);
+		setDefaults(newDefaults);
+		onChangeRef.current?.(newDefaults);
+	}, []);
 
 	const buildDragStartHandler = useCallback(
 		(chip: ContactInputItem) => (ev: React.DragEvent) => {
-			ev.dataTransfer.setData('contact', JSON.stringify(chip));
+			ev.dataTransfer.setData(CONTACT_DRAG_TYPE, JSON.stringify(chip));
 			ev.dataTransfer.dropEffect = 'move';
-			draggedChip.current = {
-				id: chip.id,
-				dragStartRef: inputRef.current
+			activeDrag = {
+				chip,
+				source: inputRef.current,
+				removeFromSource: (): void => removeChip(chip.id)
 			};
+			// changing the dragged element during dragstart can cancel the drag in Chrome
+			// (and only if the drag is still going on: it may have been cancelled in the meantime)
+			setTimeout(() => {
+				if (activeDrag?.chip.id === chip.id) {
+					setSourceDragId(chip.id);
+				}
+			}, 0);
 		},
-		[inputRef]
+		[inputRef, removeChip]
 	);
 	useEffect(() => {
 		setDefaults(
@@ -233,7 +358,17 @@ const ContactInputCore: FC<ContactInputProps> = ({
 		[]
 	);
 
-	const contactInputValue = useMemo(() => uniqBy(defaults, 'id'), [defaults]);
+	// during a drag over this input the chips are shown as if the drop had already happened
+	const contactInputValue = useMemo(() => {
+		const chips = uniqBy(defaults, 'id');
+		return dragOver && activeDrag ? insertChipAt(chips, activeDrag.chip, dragOver.target) : chips;
+	}, [defaults, dragOver]);
+	const draggedChipState = useMemo(() => {
+		if (dragOver && activeDrag?.chip.id) {
+			return { id: activeDrag.chip.id, hidden: false };
+		}
+		return sourceDragId ? { id: sourceDragId, hidden: sourceHidden } : undefined;
+	}, [dragOver, sourceDragId, sourceHidden]);
 
 	const onAdd = useCallback(
 		(valueToAdd: unknown): ContactInputItem => {
@@ -300,7 +435,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	const ChipComponent = useCallback(
 		(props: ChipItem<UserOrDL>): React.JSX.Element => {
 			const val = props.value;
-			return (
+			const chip = (
 				<>
 					{val && val.type === CONTACT_TYPES.CONTACT && (
 						<Chip {...props} data-testid={'default-chip'} />
@@ -315,95 +450,189 @@ const ContactInputCore: FC<ContactInputProps> = ({
 					)}
 				</>
 			);
+			return dragAndDropEnabled && props.id ? (
+				<ChipDropZone id={props.id}>{chip}</ChipDropZone>
+			) : (
+				chip
+			);
 		},
-		[onExpandDistributionList]
+		[dragAndDropEnabled, onExpandDistributionList]
 	);
 
-	const onDragEnter = useCallback<React.DragEventHandler>((ev) => {
-		ev.preventDefault();
-		ev.dataTransfer.dropEffect = 'move';
-	}, []);
-
-	const resetDraggedChip = useCallback(() => {
-		draggedChip.current = emptyDraggedChip;
-	}, [emptyDraggedChip]);
-
-	const onDragEnd = useCallback<React.DragEventHandler>(
+	const onDragEnter = useCallback<React.DragEventHandler>(
 		(ev) => {
 			ev.preventDefault();
-			// if the drop is cancelled (e.g. by dropping outside of the dropzone or by pressing ESC), no dragleave action is fired
-			if (ev?.dataTransfer?.dropEffect === 'none' || isSameElement.current) {
-				resetDraggedChip();
-				isSameElement.current = false;
+			// eslint-disable-next-line no-param-reassign
+			ev.dataTransfer.dropEffect = 'move';
+			// a drag of something else (a file, some text) never shows a chip, even if a stale activeDrag is left
+			if (!activeDrag || !Array.from(ev.dataTransfer.types).includes(CONTACT_DRAG_TYPE)) {
 				return;
 			}
-			setDefaults((prevState) =>
-				filter(prevState, (contact) => contact.id !== draggedChip.current.id)
+			const draggedId = activeDrag.chip.id;
+			// a chip from another input that this one already has is not added on drop: no preview either
+			const fromThisInput = activeDrag.source === inputRef.current;
+			if (!fromThisInput && find(defaults, { id: draggedId })) {
+				dropTargetRef.current = undefined;
+				setDragOver(undefined);
+				return;
+			}
+			// the dragged chip is left out: it is shown at the target, and measuring it would make the target flicker
+			const boxes = getChipBoxes(ev.currentTarget).filter((box) => box.id !== draggedId);
+			const target = findDropTarget(boxes, ev.clientX, ev.clientY);
+			dropTargetRef.current = target;
+			setDragOver((prev) =>
+				prev && prev.target?.id === target?.id && prev.target?.side === target?.side
+					? prev
+					: { target }
 			);
-			const newDefaults = filter(defaults, (c) => c.id !== draggedChip.current.id);
-			onChange?.(newDefaults);
-			resetDraggedChip();
-			isSameElement.current = false;
 		},
-		[defaults, onChange, resetDraggedChip]
+		[defaults, inputRef]
 	);
+
+	// leaving the input cancels the preview: the chips go back to their order
+	const onDragLeave = useCallback<React.DragEventHandler>((ev) => {
+		const { left, right, top, bottom } = ev.currentTarget.getBoundingClientRect();
+		const { clientX: x, clientY: y } = ev;
+		if (x <= left || x >= right || y <= top || y >= bottom) {
+			setDragOver(undefined);
+		}
+	}, []);
+
+	// a drag that ends anywhere (drop elsewhere, ESC) clears the preview of this input;
+	// while it goes on, the dragover events of the page tell which input the pointer is over, so that the chip is
+	// shown only there (dragleave alone is not reliable when the pointer moves fast from one input to another)
+	const isDragging = !!dragOver || !!sourceDragId;
+	useEffect(() => {
+		if (!isDragging) {
+			return undefined;
+		}
+		// the page listeners run after the React handlers of the drop target, which have used the drag state
+		const clear = (): void => {
+			activeDrag = undefined;
+			dropTargetRef.current = undefined;
+			setDragOver(undefined);
+			setSourceDragId(undefined);
+			setSourceHidden(false);
+		};
+		const onPageDragOver = (ev: DragEvent): void => {
+			const ownRoot = inputRef.current?.closest(CONTACT_INPUT_ROOT_SELECTOR);
+			const rootUnderPointer =
+				ev.target instanceof Element ? ev.target.closest(CONTACT_INPUT_ROOT_SELECTOR) : null;
+			if (rootUnderPointer !== ownRoot) {
+				dropTargetRef.current = undefined;
+				setDragOver(undefined);
+			}
+			setSourceHidden(rootUnderPointer !== null && rootUnderPointer !== ownRoot);
+		};
+		globalThis.addEventListener('dragend', clear);
+		globalThis.addEventListener('drop', clear);
+		globalThis.addEventListener('dragover', onPageDragOver);
+		// no mouse event is sent during a drag: a mousedown means that it ended without a dragend reaching the page
+		// (ESC after a preview remounted the dragged chip)
+		globalThis.addEventListener('mousedown', clear);
+		return (): void => {
+			globalThis.removeEventListener('dragend', clear);
+			globalThis.removeEventListener('drop', clear);
+			globalThis.removeEventListener('dragover', onPageDragOver);
+			globalThis.removeEventListener('mousedown', clear);
+		};
+	}, [inputRef, isDragging]);
+
+	// the move itself is done on drop, by the input that gets the chip: here the drag state is only reset
+	const onDragEnd = useCallback<React.DragEventHandler>((ev) => {
+		ev.preventDefault();
+		setDragOver(undefined);
+		setSourceDragId(undefined);
+		setSourceHidden(false);
+		activeDrag = undefined;
+	}, []);
 
 	const onDrop = useCallback<React.DragEventHandler>(
 		(ev) => {
 			ev.preventDefault();
-			if (draggedChip.current.dragStartRef === inputRef.current) {
-				isSameElement.current = true;
-				resetDraggedChip();
+			const target = dropTargetRef.current;
+			dropTargetRef.current = undefined;
+			setDragOver(undefined);
+			setSourceDragId(undefined);
+			setSourceHidden(false);
+			const drag = activeDrag;
+			// the dragend of this drag may be lost (the chips remount), so the drag is over here
+			activeDrag = undefined;
+			// a drag started in another page: its data is not trusted, so it is never turned into a chip
+			if (!drag) {
 				return;
 			}
-			const chipJson = ev.dataTransfer.getData('contact');
-			if (chipJson) {
-				const chip = JSON.parse(chipJson);
-				const newChip = buildDraggableChip(chip);
-				setDefaults((prevState) =>
-					find(prevState, { id: newChip.id }) ? prevState : { ...prevState, newChip }
-				);
-				onChange?.([...defaults, { ...newChip }]);
-				resetDraggedChip();
-				isSameElement.current = false;
+			if (drag.source === inputRef.current) {
+				// dropped on the same input: move the chip to the position of the drop
+				const movedChip = find(defaults, { id: drag.chip.id });
+				if (movedChip) {
+					const reordered = insertChipAt(defaults, movedChip, target);
+					const orderChanged = reordered.some((chip, index) => chip.id !== defaults[index]?.id);
+					if (orderChanged) {
+						setDefaults(reordered);
+						onChange?.(reordered);
+					}
+				}
+				return;
+			}
+			// dropped from another input of this page: the chip moves here, at the position of the drop.
+			// The chip comes from this page, never from the drag data (another page can set the same type): the data
+			// only has to name the same chip, so that a drop from elsewhere after a drag left over is ignored.
+			const chipId = getDraggedChipId(ev.dataTransfer);
+			if (chipId && chipId === drag.chip.id) {
+				const newChip = buildDraggableChip(withEditActionOf(drag.chip, chipId, editChip));
+				if (!find(defaults, { id: newChip.id })) {
+					const newDefaults = insertChipAt(defaults, newChip, target);
+					setDefaults(newDefaults);
+					onChange?.(newDefaults);
+				}
+				drag.removeFromSource();
 			}
 		},
-		[buildDraggableChip, defaults, inputRef, onChange, resetDraggedChip]
+		[buildDraggableChip, defaults, editChip, inputRef, onChange]
 	);
 
 	return (
-		<Container width="100%" onDrop={onDrop} height="100%">
-			<PasteContextMenu elementReceivingPaste={inputRef.current}>
-				<ChipInput<UserOrDL>
-					data-testid={'contact-input'}
-					disableOptions
-					placeholder={placeholder}
-					confirmChipOnBlur
-					inputRef={inputRef}
-					onInputType={onInputType}
-					onChange={handleChipOnChange}
-					options={options}
-					value={contactInputValue}
-					background={background}
-					onAdd={onAdd}
-					requireUniqueChips
-					createChipOnPaste
-					pasteSeparators={[',', ';', '\n']}
-					separators={[
-						{ code: 'Enter', ctrlKey: false },
-						{ code: 'NumpadEnter', ctrlKey: false },
-						{ key: ',', ctrlKey: false },
-						{ key: ';', ctrlKey: false }
-					]}
-					onInputTypeDebounce={CHIPINPUT_DEBOUNCE_TIME}
-					ChipComponent={ChipComponent}
-					onDragEnter={dragAndDropEnabled ? onDragEnter : noop}
-					onDragOver={dragAndDropEnabled ? onDragEnter : noop}
-					onDragEnd={dragAndDropEnabled ? onDragEnd : noop}
-					{...rest}
-				/>
-			</PasteContextMenu>
-		</Container>
+		<DraggedChipContext.Provider value={draggedChipState}>
+			<Container
+				width="100%"
+				onDrop={dragAndDropEnabled ? onDrop : noop}
+				onDragLeave={dragAndDropEnabled ? onDragLeave : noop}
+				height="100%"
+				data-contact-input-root={dragAndDropEnabled || undefined}
+			>
+				<PasteContextMenu elementReceivingPaste={inputRef.current}>
+					<ChipInput<UserOrDL>
+						data-testid={'contact-input'}
+						disableOptions
+						placeholder={placeholder}
+						confirmChipOnBlur
+						inputRef={inputRef}
+						onInputType={onInputType}
+						onChange={handleChipOnChange}
+						options={options}
+						value={contactInputValue}
+						background={background}
+						onAdd={onAdd}
+						requireUniqueChips
+						createChipOnPaste
+						pasteSeparators={[',', ';', '\n']}
+						separators={[
+							{ code: 'Enter', ctrlKey: false },
+							{ code: 'NumpadEnter', ctrlKey: false },
+							{ key: ',', ctrlKey: false },
+							{ key: ';', ctrlKey: false }
+						]}
+						onInputTypeDebounce={CHIPINPUT_DEBOUNCE_TIME}
+						ChipComponent={ChipComponent}
+						onDragEnter={dragAndDropEnabled ? onDragEnter : noop}
+						onDragOver={dragAndDropEnabled ? onDragEnter : noop}
+						onDragEnd={dragAndDropEnabled ? onDragEnd : noop}
+						{...rest}
+					/>
+				</PasteContextMenu>
+			</Container>
+		</DraggedChipContext.Provider>
 	);
 };
 

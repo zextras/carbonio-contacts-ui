@@ -209,3 +209,50 @@ export const searchContacts = (
 		},
 		_jsns: 'urn:zimbraMail'
 	}).then((autoCompleteResult) => map(autoCompleteResult.match, mapToChipContactOptions));
+
+type DropSide = 'before' | 'after';
+export type DropTarget = { id: string; side: DropSide };
+export type ChipBox = { id: string; left: number; right: number; top: number; bottom: number };
+
+/**
+ * Where a chip dropped at (x, y) goes, from the boxes of the chips in their order: on the row under the pointer
+ * (or the nearest one), before the first chip whose center is past x, else after the last chip of that row.
+ * Gaps, row ends and the empty part of the input get a target too, so the indicator is always shown
+ */
+export function findDropTarget(
+	boxes: Array<ChipBox>,
+	x: number,
+	y: number
+): DropTarget | undefined {
+	const distanceY = (box: ChipBox): number => {
+		if (y < box.top) return box.top - y;
+		if (y > box.bottom) return y - box.bottom;
+		return 0;
+	};
+	const nearest = Math.min(...boxes.map(distanceY));
+	const row = boxes.filter((box) => distanceY(box) === nearest);
+	const before = row.find((box) => x < (box.left + box.right) / 2);
+	if (before) {
+		return { id: before.id, side: 'before' };
+	}
+	const last = row.at(-1);
+	return last && { id: last.id, side: 'after' };
+}
+
+/**
+ * Inserts the chip in the list at the position of the drop target, moving it if it is already in the list.
+ * Without a target (dropped on the empty part of the input), the chip goes last
+ */
+export function insertChipAt<T extends { id?: string }>(
+	chips: Array<T>,
+	chip: T,
+	target: DropTarget | undefined
+): Array<T> {
+	const withoutChip = chips.filter((c) => c.id !== chip.id);
+	const targetIndex = target ? withoutChip.findIndex((c) => c.id === target.id) : -1;
+	if (targetIndex < 0) {
+		return target?.id === chip.id ? chips : [...withoutChip, chip];
+	}
+	const insertAt = target?.side === 'after' ? targetIndex + 1 : targetIndex;
+	return [...withoutChip.slice(0, insertAt), chip, ...withoutChip.slice(insertAt)];
+}
