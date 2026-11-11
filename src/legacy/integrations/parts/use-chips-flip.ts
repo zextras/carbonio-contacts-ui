@@ -61,13 +61,28 @@ const animateChip = (el: HTMLElement, previous: Positions): void => {
 	}
 };
 
+const shownOrder = (root: Element | null | undefined): string =>
+	getFlipElements(root)
+		.map((el) => el.dataset.chipFlip)
+		.join(',');
+
+// the longest a chip input takes to show a new order: past it, the order is not coming
+const ORDER_WAIT_MS = 500;
+
 /**
  * Slides the chips of an input from where they were to where they are after a change of their order (FLIP), and fades
  * in a chip that appears. The positions are read during the render that changes the order, while the DOM still shows
- * the previous one; the elements that move are the inner wrappers, so the boxes used to find the drop target never
- * move with the animation.
+ * the previous one. The chip input shows the new order in an effect of its own, after this one: the animation starts
+ * when the DOM shows it (a mutation observer runs before the browser paints). The elements that move are the inner
+ * wrappers, so the boxes used to find the drop target never move with the animation.
  */
-export const useChipsFlip = (getRoot: () => Element | null | undefined, orderKey: string): void => {
+export const useChipsFlip = (
+	getRoot: () => Element | null | undefined,
+	ids: Array<string | undefined>,
+	hiddenId: string | undefined
+): void => {
+	const order = ids.join(',');
+	const orderKey = `${order}|${hiddenId ?? ''}`;
 	const previousKey = useRef(orderKey);
 	const before = useRef<Positions>(new Map());
 	if (previousKey.current !== orderKey) {
@@ -78,9 +93,31 @@ export const useChipsFlip = (getRoot: () => Element | null | undefined, orderKey
 	useLayoutEffect(() => {
 		const previous = before.current;
 		before.current = new Map();
-		if (previous.size === 0 || prefersReducedMotion()) {
-			return;
+		const root = getRoot();
+		if (!root || previous.size === 0 || prefersReducedMotion()) {
+			return undefined;
 		}
-		getFlipElements(getRoot()).forEach((el) => animateChip(el, previous));
-	}, [getRoot, orderKey]);
+		const animate = (): void => getFlipElements(root).forEach((el) => animateChip(el, previous));
+		if (shownOrder(root) === order || typeof MutationObserver === 'undefined') {
+			animate();
+			return undefined;
+		}
+		const observer = new MutationObserver(() => {
+			if (shownOrder(root) === order) {
+				observer.disconnect();
+				animate();
+			}
+		});
+		observer.observe(root, {
+			subtree: true,
+			childList: true,
+			attributes: true,
+			attributeFilter: ['data-chip-flip']
+		});
+		const timeout = setTimeout(() => observer.disconnect(), ORDER_WAIT_MS);
+		return (): void => {
+			clearTimeout(timeout);
+			observer.disconnect();
+		};
+	}, [getRoot, order, orderKey]);
 };

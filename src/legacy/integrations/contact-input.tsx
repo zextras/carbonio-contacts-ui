@@ -384,7 +384,8 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	);
 	useChipsFlip(
 		getChipsRoot,
-		`${map(contactInputValue, 'id').join(',')}|${draggedChipState?.hidden ? draggedChipState.id : ''}`
+		map(contactInputValue, 'id'),
+		draggedChipState?.hidden ? draggedChipState.id : undefined
 	);
 
 	const onAdd = useCallback(
