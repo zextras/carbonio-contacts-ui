@@ -10,6 +10,7 @@ import { CONTACT_TYPES } from '@zextras/carbonio-ui-commons';
 import {
 	type ChipBox,
 	findDropTarget,
+	findDropTargetAround,
 	getContactLabel,
 	insertChipAt,
 	mapToChipContactOptions
@@ -345,14 +346,15 @@ describe('insertChipAt', () => {
 	});
 });
 
+const box = (id: string, left: number, top = 0): ChipBox => ({
+	id,
+	left,
+	right: left + 100,
+	top,
+	bottom: top + 20
+});
+
 describe('findDropTarget', () => {
-	const box = (id: string, left: number, top = 0): ChipBox => ({
-		id,
-		left,
-		right: left + 100,
-		top,
-		bottom: top + 20
-	});
 	// two rows: a, b on the first one, c on the second one
 	const boxes = [box('a', 0), box('b', 120), box('c', 0, 30)];
 
@@ -374,5 +376,29 @@ describe('findDropTarget', () => {
 
 	it('has no target without chips', () => {
 		expect(findDropTarget([], 10, 10)).toBeUndefined();
+	});
+});
+
+describe('findDropTargetAround', () => {
+	it('keeps the dragged chip last when it is alone on the second row under the pointer', () => {
+		// a, b, c, e on the first row; the dragged chip d, shown last, alone on the second row
+		const boxes = [box('a', 0), box('b', 110), box('c', 220), box('e', 330), box('d', 0, 30)];
+		expect(findDropTargetAround(boxes, 'd', 130, 40)).toEqual({ id: 'e', side: 'after' });
+	});
+
+	it('moves the dragged chip last when the pointer is past the last chip of the second row', () => {
+		// d shown second: a, d, b, c on the first row, e alone on the second row
+		const boxes = [box('a', 0), box('d', 110), box('b', 220), box('c', 330), box('e', 0, 30)];
+		expect(findDropTargetAround(boxes, 'd', 130, 40)).toEqual({ id: 'e', side: 'after' });
+	});
+
+	it('keeps the dragged chip first when the pointer is on it', () => {
+		const boxes = [box('d', 0), box('a', 110)];
+		expect(findDropTargetAround(boxes, 'd', 60, 10)).toEqual({ id: 'a', side: 'before' });
+	});
+
+	it('targets among the other chips when the dragged one is not shown in this input', () => {
+		const boxes = [box('a', 0), box('b', 110), { id: 'd', left: 0, right: 0, top: 0, bottom: 0 }];
+		expect(findDropTargetAround(boxes, 'd', 120, 10)).toEqual({ id: 'b', side: 'before' });
 	});
 });

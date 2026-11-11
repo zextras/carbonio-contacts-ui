@@ -50,7 +50,7 @@ import { useChipsFlip } from 'legacy/integrations/parts/use-chips-flip';
 import {
 	type ChipBox,
 	type DropTarget,
-	findDropTarget,
+	findDropTargetAround,
 	getContactLabel,
 	insertChipAt,
 	searchContacts,
@@ -493,9 +493,12 @@ const ContactInputCore: FC<ContactInputProps> = ({
 				setDragOver(undefined);
 				return;
 			}
-			// the dragged chip is left out: it is shown at the target, and measuring it would make the target flicker
-			const boxes = getChipBoxes(ev.currentTarget).filter((box) => box.id !== draggedId);
-			const target = findDropTarget(boxes, ev.clientX, ev.clientY);
+			const target = findDropTargetAround(
+				getChipBoxes(ev.currentTarget),
+				draggedId,
+				ev.clientX,
+				ev.clientY
+			);
 			dropTargetRef.current = target;
 			setDragOver((prev) =>
 				prev && prev.target?.id === target?.id && prev.target?.side === target?.side

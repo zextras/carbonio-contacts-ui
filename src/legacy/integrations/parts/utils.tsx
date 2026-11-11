@@ -256,3 +256,29 @@ export function insertChipAt<T extends { id?: string }>(
 	const insertAt = target?.side === 'after' ? targetIndex + 1 : targetIndex;
 	return [...withoutChip.slice(0, insertAt), chip, ...withoutChip.slice(insertAt)];
 }
+
+/**
+ * Where the dragged chip goes, from the boxes of the chips as they are shown, the dragged one included (a chip not
+ * shown has an empty box). With the pointer on the dragged chip, or on its row past it, it stays where it is: leaving
+ * it out of the boxes would move the pointer onto another row or chip after each preview, and the order would flip
+ * between two places (a chip alone on the last row, for instance)
+ */
+export function findDropTargetAround(
+	boxes: Array<ChipBox>,
+	draggedId: string | undefined,
+	x: number,
+	y: number
+): DropTarget | undefined {
+	const shown = boxes.filter((box) => box.right > box.left && box.bottom > box.top);
+	const target = findDropTarget(shown, x, y);
+	if (target?.id !== draggedId) {
+		return target;
+	}
+	const index = shown.findIndex((box) => box.id === draggedId);
+	const previous = shown[index - 1];
+	if (previous) {
+		return { id: previous.id, side: 'after' };
+	}
+	const next = shown[index + 1];
+	return next && { id: next.id, side: 'before' };
+}
