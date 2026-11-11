@@ -90,7 +90,6 @@ const ChipDropZoneEl = styled.span<{ $dragged: boolean; $hidden: boolean }>`
 	min-width: 0;
 	max-width: 100%;
 	opacity: ${({ $dragged }): number => ($dragged ? 0.4 : 1)};
-	transition: opacity 150ms ease-out;
 `;
 
 /** The part of a chip that slides to its new place: its drop zone stays where the layout puts it */
