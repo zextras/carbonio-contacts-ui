@@ -11,7 +11,11 @@ import { ContactInputItem, EDIT_ACTION_ID } from '@zextras/carbonio-ui-commons';
 
 import { screen, setupTest } from '@test-setup';
 import { ContactInput } from 'legacy/integrations/contact-input';
-import { createSimpleChip } from 'legacy/integrations/tests/mocks';
+import {
+	createDistributionListChip,
+	createGetDistributionListInterceptor,
+	createSimpleChip
+} from 'legacy/integrations/tests/mocks';
 
 const chipA = createSimpleChip({ id: 'a', label: 'Alice', email: 'a@test.io' });
 const chipB = createSimpleChip({ id: 'b', label: 'Bob', email: 'b@test.io' });
@@ -56,7 +60,7 @@ const createSpoofedDataTransfer = (id: string): ReturnType<typeof createDataTran
 	return dataTransfer;
 };
 
-const getElementWithLabel = (testId: string, label: string): HTMLElement => {
+const getElementWithLabel = (testId: string | RegExp, label: string): HTMLElement => {
 	const element = screen
 		.getAllByTestId(testId)
 		.find((candidate) => within(candidate).queryByText(label) !== null);
@@ -66,7 +70,9 @@ const getElementWithLabel = (testId: string, label: string): HTMLElement => {
 	return element;
 };
 
-const getChipElement = (label: string): HTMLElement => getElementWithLabel('default-chip', label);
+// a contact or a distribution list chip: both can be dragged
+const getChipElement = (label: string): HTMLElement =>
+	getElementWithLabel(/^(default-chip|distribution-list-chip)$/, label);
 
 const CHIP_GAP = 20;
 const INPUT_IDS = ['to', 'cc'];
@@ -493,5 +499,65 @@ describe('Contact input reorder by drag and drop', () => {
 		dragChip({ from: 'Carol', dropOn: () => screen.getAllByRole('textbox')[0] });
 
 		expect(ids(onToChange.mock.lastCall?.[0] ?? [])).toEqual(['a', 'b', 'c']);
+	});
+});
+
+describe('Contact input reorder by drag and drop, with distribution lists', () => {
+	const DL_EMAIL = 'team@test.io';
+	const dl = createDistributionListChip(DL_EMAIL);
+
+	beforeEach(() => {
+		createGetDistributionListInterceptor([{ id: dl.value.id, name: DL_EMAIL }]);
+	});
+
+	it('moves a distribution list before another chip of the same input', () => {
+		const onChange = vi.fn();
+		setupTest(<ControlledInput initial={[chipA, dl, chipB]} onChange={onChange} testId="to" />);
+
+		dragChip({ from: DL_EMAIL, over: 'Alice', side: 'before', dropOn: () => getDropZone('Alice') });
+
+		expect(ids(onChange.mock.lastCall?.[0] ?? [])).toEqual([DL_EMAIL, 'a', 'b']);
+	});
+
+	it('moves a distribution list to another input at the drop position and removes it from the source', () => {
+		const onToChange = vi.fn();
+		const onCcChange = vi.fn();
+		setupTest(
+			<>
+				<ControlledInput initial={[chipA, dl]} onChange={onToChange} testId="to" />
+				<ControlledInput initial={[chipC, chipD]} onChange={onCcChange} testId="cc" />
+			</>
+		);
+
+		dragChip({ from: DL_EMAIL, over: 'Dave', side: 'before', dropOn: () => getDropZone('Dave') });
+
+		expect(ids(onCcChange.mock.lastCall?.[0] ?? [])).toEqual(['c', DL_EMAIL, 'd']);
+		expect(ids(onToChange.mock.lastCall?.[0] ?? [])).toEqual(['a']);
+	});
+
+	it('moves a contact dragged past a distribution list to another input, although the preview remounts it', () => {
+		const onToChange = vi.fn();
+		const onCcChange = vi.fn();
+		setupTest(
+			<>
+				<ControlledInput initial={[chipA, dl, chipB]} onChange={onToChange} testId="to" />
+				<ControlledInput initial={[chipC]} onChange={onCcChange} testId="cc" />
+			</>
+		);
+
+		// the preview puts the distribution list where Alice was: her chip is drawn again and her dragend is lost
+		const { dataTransfer, source } = startDrag({ from: 'Alice', over: DL_EMAIL, side: 'after' });
+		expect(source.isConnected).toBe(false);
+		layoutChips();
+		const carol = getDropZone('Carol');
+		fireDragEventAt('dragOver', carol, dataTransfer, carol.getBoundingClientRect().left + 10);
+		fireEvent.drop(carol, { dataTransfer });
+		// the browser still sends the dragend to the detached node, which no longer reaches the input
+		fireEvent.dragEnd(source, { dataTransfer });
+
+		expect(ids(onCcChange.mock.lastCall?.[0] ?? [])).toEqual(['a', 'c']);
+		expect(ids(onToChange.mock.lastCall?.[0] ?? [])).toEqual([DL_EMAIL, 'b']);
+		expect(shownLabels('cc')).toEqual(['Alice', 'Carol']);
+		expect(within(screen.getByTestId('to')).queryByText('Alice')).not.toBeInTheDocument();
 	});
 });
