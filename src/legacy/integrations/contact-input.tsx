@@ -46,6 +46,7 @@ import { useTranslation } from 'react-i18next';
 import { DistributionListChip } from 'legacy/integrations/distribution-list-chip';
 import { Loader } from 'legacy/integrations/parts/loader';
 import { PasteContextMenu } from 'legacy/integrations/parts/paste-context-menu';
+import { useChipsFlip } from 'legacy/integrations/parts/use-chips-flip';
 import {
 	type ChipBox,
 	type DropTarget,
@@ -89,6 +90,14 @@ const ChipDropZoneEl = styled.span<{ $dragged: boolean; $hidden: boolean }>`
 	min-width: 0;
 	max-width: 100%;
 	opacity: ${({ $dragged }): number => ($dragged ? 0.4 : 1)};
+	transition: opacity 150ms ease-out;
+`;
+
+/** The part of a chip that slides to its new place: its drop zone stays where the layout puts it */
+const ChipFlipEl = styled.span`
+	display: inline-flex;
+	min-width: 0;
+	max-width: 100%;
 `;
 
 /** Wraps a chip to find its box during a drag and to show it as a placeholder while it is the dragged one */
@@ -105,7 +114,7 @@ const ChipDropZone: FC<Readonly<{ id: string; children: React.ReactNode }>> = ({
 			$dragged={isDragged}
 			$hidden={isDragged && !!dragged?.hidden}
 		>
-			{children}
+			<ChipFlipEl data-chip-flip={id}>{children}</ChipFlipEl>
 		</ChipDropZoneEl>
 	);
 };
@@ -369,6 +378,14 @@ const ContactInputCore: FC<ContactInputProps> = ({
 		}
 		return sourceDragId ? { id: sourceDragId, hidden: sourceHidden } : undefined;
 	}, [dragOver, sourceDragId, sourceHidden]);
+	const getChipsRoot = useCallback(
+		() => inputRef.current?.closest(CONTACT_INPUT_ROOT_SELECTOR),
+		[inputRef]
+	);
+	useChipsFlip(
+		getChipsRoot,
+		`${map(contactInputValue, 'id').join(',')}|${draggedChipState?.hidden ? draggedChipState.id : ''}`
+	);
 
 	const onAdd = useCallback(
 		(valueToAdd: unknown): ContactInputItem => {
