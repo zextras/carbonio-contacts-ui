@@ -7,7 +7,7 @@ import { useLayoutEffect, useRef } from 'react';
 
 const FLIP_DURATION_MS = 180;
 const FLIP_EASING = 'cubic-bezier(0.2, 0, 0, 1)';
-export const CHIP_FLIP_SELECTOR = '[data-chip-flip]';
+const CHIP_FLIP_SELECTOR = '[data-chip-flip]';
 
 type Positions = Map<string, { left: number; top: number }>;
 
@@ -75,11 +75,13 @@ const ORDER_WAIT_MS = 500;
  * the previous one. The chip input shows the new order in an effect of its own, after this one: the animation starts
  * when the DOM shows it (a mutation observer runs before the browser paints). The elements that move are the inner
  * wrappers, so the boxes used to find the drop target never move with the animation.
+ * Only the changes made while `enabled` are animated.
  */
 export const useChipsFlip = (
 	getRoot: () => Element | null | undefined,
 	ids: Array<string | undefined>,
-	hiddenId: string | undefined
+	hiddenId: string | undefined,
+	enabled: boolean
 ): void => {
 	const order = ids.join(',');
 	const orderKey = `${order}|${hiddenId ?? ''}`;
@@ -87,7 +89,7 @@ export const useChipsFlip = (
 	const before = useRef<Positions>(new Map());
 	if (previousKey.current !== orderKey) {
 		previousKey.current = orderKey;
-		before.current = readPositions(getRoot());
+		before.current = enabled ? readPositions(getRoot()) : new Map();
 	}
 
 	useLayoutEffect(() => {

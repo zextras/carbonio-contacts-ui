@@ -397,6 +397,10 @@ describe('findDropTargetAround', () => {
 		expect(findDropTargetAround(boxes, 'd', 60, 10)).toEqual({ id: 'a', side: 'before' });
 	});
 
+	it('has no target when the dragged chip is the only one shown', () => {
+		expect(findDropTargetAround([box('d', 0)], 'd', 10, 10)).toBeUndefined();
+	});
+
 	it('targets among the other chips when the dragged one is not shown in this input', () => {
 		const boxes = [box('a', 0), box('b', 110), { id: 'd', left: 0, right: 0, top: 0, bottom: 0 }];
 		expect(findDropTargetAround(boxes, 'd', 120, 10)).toEqual({ id: 'b', side: 'before' });

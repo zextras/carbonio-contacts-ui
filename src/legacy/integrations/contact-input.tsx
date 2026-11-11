@@ -377,15 +377,6 @@ const ContactInputCore: FC<ContactInputProps> = ({
 		}
 		return sourceDragId ? { id: sourceDragId, hidden: sourceHidden } : undefined;
 	}, [dragOver, sourceDragId, sourceHidden]);
-	const getChipsRoot = useCallback(
-		() => inputRef.current?.closest(CONTACT_INPUT_ROOT_SELECTOR),
-		[inputRef]
-	);
-	useChipsFlip(
-		getChipsRoot,
-		map(contactInputValue, 'id'),
-		draggedChipState?.hidden ? draggedChipState.id : undefined
-	);
 
 	const onAdd = useCallback(
 		(valueToAdd: unknown): ContactInputItem => {
@@ -522,6 +513,21 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	// while it goes on, the dragover events of the page tell which input the pointer is over, so that the chip is
 	// shown only there (dragleave alone is not reliable when the pointer moves fast from one input to another)
 	const isDragging = !!dragOver || !!sourceDragId;
+	// the chips move only while a chip is dragged, and when it is dropped or the drag is cancelled
+	const wasDragging = useRef(isDragging);
+	useEffect(() => {
+		wasDragging.current = isDragging;
+	}, [isDragging]);
+	const getChipsRoot = useCallback(
+		() => inputRef.current?.closest(CONTACT_INPUT_ROOT_SELECTOR),
+		[inputRef]
+	);
+	useChipsFlip(
+		getChipsRoot,
+		map(contactInputValue, 'id'),
+		draggedChipState?.hidden ? draggedChipState.id : undefined,
+		isDragging || wasDragging.current
+	);
 	useEffect(() => {
 		if (!isDragging) {
 			return undefined;
