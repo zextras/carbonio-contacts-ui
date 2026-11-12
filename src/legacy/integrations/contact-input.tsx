@@ -222,7 +222,7 @@ const ContactInputCore: FC<ContactInputProps> = ({
 	}, [onChange]);
 
 	const removeChip = useCallback((id: string | undefined) => {
-		const newDefaults = filter(defaultsRef.current, (contact) => contact.id !== id);
+		const newDefaults = defaultsRef.current.filter((contact) => contact.id !== id);
 		setDefaults(newDefaults);
 		onChangeRef.current?.(newDefaults);
 	}, []);
