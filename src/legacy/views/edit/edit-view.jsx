@@ -152,7 +152,7 @@ export default function EditView({ panel, onClose, onTitleChanged, onDirtyChange
 	}, [contact]);
 
 	useEffect(() => {
-		onDirtyChange && onDirtyChange(isDirty);
+		onDirtyChange?.(isDirty);
 	}, [isDirty, onDirtyChange]);
 
 	const folders = useFoldersMap();
