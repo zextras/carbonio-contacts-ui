@@ -16,6 +16,7 @@ import { EditDLMembersComponent, ResetMembers } from 'components/edit-dl-members
 import { ManagerList } from 'components/manager-list';
 import { ScrollableContainer } from 'components/styled-components';
 import { DL_NAME_MAX_LENGTH, DL_TABS } from 'constants/index';
+import { useBoardContentStatus } from 'hooks/use-board-content-status';
 import { useDLTabs } from 'hooks/use-dl-tabs';
 import { useUpdateDistributionList } from 'hooks/use-update-distribution-list';
 import { DistributionList } from 'model/distribution-list';
@@ -65,9 +66,18 @@ export const EditDLControllerComponent = ({
 
 	useEffect(() => {
 		if (!loadingMembers) {
-			setMembers(membersPage?.members ?? []);
+			const loadedMembers = membersPage?.members ?? [];
+			const loadedTotal = membersPage?.total ?? 0;
+			setMembers(loadedMembers);
+			setTotalMembers(loadedTotal);
+			// the members loaded from the server are the reference to detect the pending changes
+			setInitialDistributionList((prevState) => ({
+				...prevState,
+				members: loadedMembers,
+				totalMembers: loadedTotal
+			}));
 		}
-	}, [loadingMembers, membersPage?.members]);
+	}, [loadingMembers, membersPage?.members, membersPage?.total]);
 
 	const updateDistributionList = useUpdateDistributionList({
 		email,
@@ -111,6 +121,8 @@ export const EditDLControllerComponent = ({
 			some(details, (value, key) => initialDistributionList[key as keyof DLDetails] !== value),
 		[details, initialDistributionList, members]
 	);
+
+	useBoardContentStatus(isDirty);
 
 	const onDetailsChange = useCallback<EditDLDetailsProps['onChange']>(
 		(newData) => {

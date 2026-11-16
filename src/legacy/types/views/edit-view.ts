@@ -10,6 +10,7 @@ export type EditViewProps = BoardViewComponentProps & {
 	panel?: boolean;
 	onClose?: () => void;
 	onTitleChanged?: (title: string) => void;
+	onDirtyChange?: (isDirty: boolean) => void;
 	editPanelId?: string;
 	folderId?: string;
 };

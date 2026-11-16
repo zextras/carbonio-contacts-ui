@@ -9,7 +9,7 @@ import { addBoard, getBoardById, reopenBoards, setCurrentBoard } from '@zextras/
 import { useTranslation } from 'react-i18next';
 
 import { UIAction } from 'actions/types';
-import { ACTION_IDS, EDIT_DL_BOARD_ID } from 'constants/index';
+import { ACTION_IDS, DL_BOARD_ICON, DL_DIRTY_BOARD_ICON, EDIT_DL_BOARD_ID } from 'constants/index';
 import { DistributionList } from 'model/distribution-list';
 import { EditDLBoardContext } from 'views/board/edit-dl-board';
 
@@ -31,7 +31,8 @@ export const useActionEditDL = (): EditDLAction => {
 			} else {
 				addBoard<EditDLBoardContext>({
 					context: { id: distributionList.id },
-					icon: 'DistributionListOutline',
+					icon: DL_BOARD_ICON,
+					dirtyIcon: DL_DIRTY_BOARD_ICON,
 					title: distributionList.displayName || distributionList.email,
 					id: boardId,
 					boardViewId: EDIT_DL_BOARD_ID

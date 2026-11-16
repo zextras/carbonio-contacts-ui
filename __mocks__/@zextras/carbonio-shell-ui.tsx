@@ -36,10 +36,12 @@ export const addBoard = vi.fn();
 export const closeBoard = vi.fn();
 export const updateBoard = vi.fn();
 export const updateBoardContext = vi.fn();
+export const setContentStatus = vi.fn();
 export const useBoardHooks = vi.fn(() => ({
 	closeBoard,
 	updateBoard,
 	setCurrentBoard: vi.fn(),
+	setContentStatus,
 	getBoardContext: vi.fn(),
 	getBoard: vi.fn()
 }));

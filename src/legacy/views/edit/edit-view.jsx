@@ -27,7 +27,7 @@ import {
 	isTrash,
 	useFoldersMap
 } from '@zextras/carbonio-ui-commons';
-import { filter, find, map, reduce, trim } from 'lodash';
+import { filter, find, isEqual, map, reduce, trim } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -103,8 +103,8 @@ const CustomStringField = ({
 	</Container>
 );
 
-/** @type { (props: { panel?: boolean; onClose?: () => void; onTitleChanged?: (title: string) => void }) => React.JSX.Element } */
-export default function EditView({ panel, onClose, onTitleChanged }) {
+/** @type { (props: { panel?: boolean; onClose?: () => void; onTitleChanged?: (title: string) => void; onDirtyChange?: (isDirty: boolean) => void }) => React.JSX.Element } */
+export default function EditView({ panel, onClose, onTitleChanged, onDirtyChange }) {
 	const { folderId, editId } = useParams();
 	const navigate = useNavigate();
 	const existingContact = useContactById(editId);
@@ -140,6 +140,20 @@ export default function EditView({ panel, onClose, onTitleChanged }) {
 
 		return differenceObject(compareToContact, updatedContact);
 	}, [compareToContact, contact]);
+
+	// the board creates a new contact: it is dirty when the contact differs from the empty one
+	// (the selected address book is part of the contact, as its parent)
+	const isDirty = useMemo(() => {
+		if (!contact) {
+			return false;
+		}
+		const emptyContact = reducer(undefined, { type: op.setEmptyContact, payload: {} });
+		return !isEqual(cleanMultivalueFields(contact), cleanMultivalueFields(emptyContact));
+	}, [contact]);
+
+	useEffect(() => {
+		onDirtyChange && onDirtyChange(isDirty);
+	}, [isDirty, onDirtyChange]);
 
 	const folders = useFoldersMap();
 

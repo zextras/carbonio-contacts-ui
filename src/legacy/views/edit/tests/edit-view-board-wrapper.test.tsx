@@ -7,7 +7,11 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 
-import { closeBoard, updateBoard } from '../../../../../__mocks__/@zextras/carbonio-shell-ui';
+import {
+	closeBoard,
+	setContentStatus,
+	updateBoard
+} from '../../../../../__mocks__/@zextras/carbonio-shell-ui';
 import { screen, setupTest } from '@test-setup';
 import { populateFoldersStore } from '@test-utils/store/folders';
 import { registerCreateContactHandler } from 'legacy/tests/msw/create-contact';
@@ -41,5 +45,32 @@ describe('EditViewBoardWrapper', () => {
 		await user.click(saveButton);
 		await screen.findByText(/new contact created/i);
 		expect(closeBoard).toHaveBeenCalled();
+	});
+
+	describe('content status', () => {
+		beforeEach(() => {
+			setContentStatus.mockClear();
+		});
+
+		it('should be pristine when the board is opened', () => {
+			populateFoldersStore();
+
+			setupTest(<EditViewBoardWrapper />);
+			expect(setContentStatus).toHaveBeenLastCalledWith('pristine');
+			expect(setContentStatus).not.toHaveBeenCalledWith('dirty');
+		});
+
+		it('should be dirty when the user types a value and pristine when it is removed', async () => {
+			populateFoldersStore();
+
+			const { user } = setupTest(<EditViewBoardWrapper />);
+			const inputName = screen.getByRole('textbox', { name: /first name/i });
+
+			await user.type(inputName, 'a');
+			expect(setContentStatus).toHaveBeenLastCalledWith('dirty');
+
+			await user.clear(inputName);
+			expect(setContentStatus).toHaveBeenLastCalledWith('pristine');
+		});
 	});
 });

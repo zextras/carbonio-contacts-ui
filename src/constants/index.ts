@@ -34,6 +34,12 @@ export const CONTACT_BOARD_ID = 'contact-board';
 export const NEW_CONTACT_GROUP_BOARD_ID = 'new-contact-group-board';
 export const EDIT_CONTACT_GROUP_BOARD_ID = 'edit-contact-group-board';
 export const EDIT_DL_BOARD_ID = 'edit-dl-board';
+export const CONTACT_GROUP_BOARD_ICON = 'PeopleOutline';
+export const CONTACT_GROUP_DIRTY_BOARD_ICON = 'PeopleEditingOutline';
+export const CONTACT_BOARD_ICON = 'ContactsModOutline';
+export const CONTACT_DIRTY_BOARD_ICON = 'ContactsModEditingOutline';
+export const DL_BOARD_ICON = 'DistributionListOutline';
+export const DL_DIRTY_BOARD_ICON = 'DistributionListEditingOutline';
 
 export const CONTACT_GROUP_NAME_MAX_LENGTH = 256;
 export const DL_NAME_MAX_LENGTH = 256;
