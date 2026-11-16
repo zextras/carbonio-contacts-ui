@@ -1,3 +1,7 @@
+## 1.26.0 (2026-11-16)
+
+* feat(CO-4661): reorder recipients by drag and drop (#532) ([8e03dd8](https://github.com/zextras/carbonio-contacts-ui/commit/8e03dd8)), closes [#532](https://github.com/zextras/carbonio-contacts-ui/issues/532)
+
 ## <small>1.25.4 (2026-11-10)</small>
 
 * fix(deps): update carbonio-shell-ui to v15.5.2 and carbonio-search-ui to v0.1.26 (#531) ([3251a43](https://github.com/zextras/carbonio-contacts-ui/commit/3251a43)), closes [#531](https://github.com/zextras/carbonio-contacts-ui/issues/531)
