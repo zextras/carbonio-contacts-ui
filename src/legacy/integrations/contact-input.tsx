@@ -265,6 +265,54 @@ const ContactInputCore: FC<ContactInputProps> = ({
 		[buildDragStartHandler]
 	);
 
+	// read when a search starts, so that the callbacks below (and the chips' edit actions) stay the same
+	const orderedAccountIdsRef = useRef(orderedAccountIds);
+	useEffect(() => {
+		orderedAccountIdsRef.current = orderedAccountIds;
+	}, [orderedAccountIds]);
+	// only the response of the last search, for the text still in the input, becomes the suggestions
+	const lastSearchRef = useRef(0);
+	useEffect(
+		() => (): void => {
+			// a response that arrives after the unmount belongs to no search
+			lastSearchRef.current += 1;
+		},
+		[]
+	);
+
+	const searchSuggestions = useCallback(
+		(text: string | null): void => {
+			lastSearchRef.current += 1;
+			const search = lastSearchRef.current;
+			if (!text) {
+				setOptions([]);
+				return;
+			}
+			setOptions([
+				{
+					id: 'loading',
+					label: 'loading',
+					customComponent: <Loader />,
+					// a placeholder while the search runs: it can be neither highlighted nor chosen
+					disabled: true
+				}
+			]);
+			searchContacts(text, orderedAccountIdsRef.current)
+				.then((contactinputItems) => {
+					if (search === lastSearchRef.current) {
+						// the text may have become a chip meanwhile: its suggestions are not needed anymore
+						setOptions(inputRef.current?.value === text ? contactinputItems : []);
+					}
+				})
+				.catch(() => {
+					if (search === lastSearchRef.current) {
+						setOptions([]);
+					}
+				});
+		},
+		[inputRef]
+	);
+
 	const editChip = useCallback<EditChipFn>(
 		(text: string, id: string) => {
 			setIdToRemove(id);
@@ -274,8 +322,10 @@ const ContactInputCore: FC<ContactInputProps> = ({
 					? `${inputRef.current.scrollWidth}px`
 					: '';
 			}
+			// the text of the chip is back in the input: show its suggestions, as when it is typed
+			searchSuggestions(text);
 		},
-		[inputRef]
+		[inputRef, searchSuggestions]
 	);
 
 	const handleChipOnChange = useCallback(
@@ -322,28 +372,9 @@ const ContactInputCore: FC<ContactInputProps> = ({
 				onInputEnter();
 				return;
 			}
-			if (textContent && textContent !== '') {
-				setOptions([
-					{
-						id: 'loading',
-						label: 'loading',
-						customComponent: <Loader />,
-						// a placeholder while the search runs: it can be neither highlighted nor chosen
-						disabled: true
-					}
-				]);
-				searchContacts(textContent, orderedAccountIds)
-					.then((contactinputItems) => {
-						setOptions(contactinputItems);
-					})
-					.catch(() => {
-						setOptions([]);
-					});
-			} else {
-				setOptions([]);
-			}
+			searchSuggestions(textContent);
 		},
-		[onInputEnter, orderedAccountIds]
+		[onInputEnter, searchSuggestions]
 	);
 
 	const getGroupMembers = useCallback(
@@ -635,6 +666,8 @@ const ContactInputCore: FC<ContactInputProps> = ({
 						disableOptions
 						placeholder={placeholder}
 						confirmChipOnBlur
+						// an address typed and left in the input is a recipient, also while its suggestions are shown
+						confirmChipOnBlurWithOptions
 						inputRef={inputRef}
 						onInputType={onInputType}
 						onChange={handleChipOnChange}
