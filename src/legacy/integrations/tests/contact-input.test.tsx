@@ -17,7 +17,9 @@ import {
 	ContactInputValue,
 	JSNS
 } from '@zextras/carbonio-ui-commons';
+import { delay, http } from 'msw';
 
+import { getSetupServer } from '@jest-setup';
 import { UserEvent, screen, setupTest } from '@test-setup';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 import { TESTID_SELECTORS } from 'constants/tests';
@@ -169,6 +171,27 @@ describe('Contact input', () => {
 			vi.advanceTimersByTime(1);
 		});
 		expect(apiInterceptorSpy).toHaveBeenCalled();
+	});
+
+	it('should not create a chip from the loader shown while the search is running', async () => {
+		getSetupServer().use(
+			http.post(
+				'/service/soap/FullAutocompleteRequest',
+				async () => {
+					await delay('infinite');
+				},
+				{ once: true }
+			)
+		);
+		const onChange = vi.fn();
+		const { user } = setupTest(
+			<ContactInput onChange={onChange} defaultValue={[]} orderedAccountIds={[]} />
+		);
+		await user.type(screen.getByRole('textbox'), 'abc');
+		const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
+		const loader = await within(dropdown).findByTestId('dropdown-item');
+		await user.click(loader);
+		expect(onChange).not.toHaveBeenCalled();
 	});
 
 	describe('pasting', () => {

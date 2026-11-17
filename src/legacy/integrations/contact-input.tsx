@@ -327,7 +327,9 @@ const ContactInputCore: FC<ContactInputProps> = ({
 					{
 						id: 'loading',
 						label: 'loading',
-						customComponent: <Loader />
+						customComponent: <Loader />,
+						// a placeholder while the search runs: it can be neither highlighted nor chosen
+						disabled: true
 					}
 				]);
 				searchContacts(textContent, orderedAccountIds)
