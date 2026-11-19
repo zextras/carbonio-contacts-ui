@@ -1,3 +1,7 @@
+## <small>1.26.1 (2026-11-19)</small>
+
+* fix(ci): use the fully qualified name of the jq base image ([69e3b38](https://github.com/zextras/carbonio-contacts-ui/commit/69e3b38))
+
 ## 1.26.0 (2026-11-16)
 
 * feat(CO-4661): reorder recipients by drag and drop (#532) ([8e03dd8](https://github.com/zextras/carbonio-contacts-ui/commit/8e03dd8)), closes [#532](https://github.com/zextras/carbonio-contacts-ui/issues/532)
