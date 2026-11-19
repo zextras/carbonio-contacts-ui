@@ -9,6 +9,7 @@ import { useSnackbar } from '@zextras/carbonio-design-system';
 import { difference, xor } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
+import { useBoardContentStatus } from 'hooks/use-board-content-status';
 import { useGetContactGroupFromBoardId } from 'hooks/use-get-contact-group-from-board-id';
 import { addContactsToStore } from 'legacy/store/contacts';
 import { ContactGroup } from 'model/contact-group';
@@ -71,12 +72,17 @@ const InnerEditContactGroupBoard = ({
 		t
 	]);
 
-	const isOnSaveDisabled = useMemo(
+	const isDirty = useMemo(
 		() =>
-			isContactGroupNameInvalid(nameValue) ||
-			(xor(memberListEmails, contactGroup.members).length === 0 &&
-				contactGroup.title === nameValue),
+			xor(memberListEmails, contactGroup.members).length > 0 || contactGroup.title !== nameValue,
 		[contactGroup.members, contactGroup.title, memberListEmails, nameValue]
+	);
+
+	useBoardContentStatus(isDirty);
+
+	const isOnSaveDisabled = useMemo(
+		() => isContactGroupNameInvalid(nameValue) || !isDirty,
+		[isDirty, nameValue]
 	);
 
 	return (

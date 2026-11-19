@@ -135,3 +135,52 @@ describe('EditDLControllerComponent', () => {
 		});
 	});
 });
+
+describe('EditDLControllerComponent content status', () => {
+	it('should be pristine when opened', async () => {
+		const setContentStatus = vi.fn();
+		spyUseBoardHooks(undefined, undefined, setContentStatus);
+		const dl = generateDistributionList();
+		setupTest(<EditDLControllerComponent {...buildProps(dl)} />);
+		await screen.findByText(dl.displayName);
+		expect(setContentStatus).toHaveBeenLastCalledWith('pristine');
+		expect(setContentStatus).not.toHaveBeenCalledWith('dirty');
+	});
+
+	it('should stay pristine when the members are loaded after the board is opened', () => {
+		const setContentStatus = vi.fn();
+		spyUseBoardHooks(undefined, undefined, setContentStatus);
+		const dl = generateDistributionList();
+		const props = buildProps(dl);
+		const { rerender } = setupTest(
+			<EditDLControllerComponent
+				{...props}
+				members={generateDistributionListMembersPage()}
+				loadingMembers
+			/>
+		);
+		rerender(
+			<EditDLControllerComponent
+				{...props}
+				members={generateDistributionListMembersPage([faker.internet.email()])}
+				loadingMembers={false}
+			/>
+		);
+		expect(setContentStatus).toHaveBeenLastCalledWith('pristine');
+		expect(setContentStatus).not.toHaveBeenCalledWith('dirty');
+	});
+
+	it('should be dirty when the description is changed and pristine when it is restored', async () => {
+		const setContentStatus = vi.fn();
+		spyUseBoardHooks(undefined, undefined, setContentStatus);
+		const dl = generateDistributionList();
+		const { user } = setupTest(<EditDLControllerComponent {...buildProps(dl)} />);
+		const description = await screen.findByRole('textbox', { name: 'Description' });
+
+		await user.type(description, 'a');
+		expect(setContentStatus).toHaveBeenLastCalledWith('dirty');
+
+		await user.type(description, '{Backspace}');
+		expect(setContentStatus).toHaveBeenLastCalledWith('pristine');
+	});
+});

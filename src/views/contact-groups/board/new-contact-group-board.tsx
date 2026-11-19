@@ -11,6 +11,7 @@ import { FOLDERS } from '@zextras/carbonio-ui-commons';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import { useBoardContentStatus } from 'hooks/use-board-content-status';
 import { addContactsToStore } from 'legacy/store/contacts';
 import {
 	CommonContactGroupBoard,
@@ -31,6 +32,10 @@ const NewContactGroupBoard = (): React.JSX.Element => {
 	const [nameValue, setNameValue] = useState(initialName);
 
 	const [memberListEmails, setMemberListEmails] = useState<string[]>([]);
+
+	useBoardContentStatus(
+		nameValue !== initialName || memberListEmails.length > 0 || folderId !== FOLDERS.CONTACTS
+	);
 
 	const onSave = useCallback(() => {
 		createContactGroup({ title: nameValue, members: memberListEmails, folderId })

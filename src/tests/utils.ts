@@ -170,10 +170,15 @@ export function createSoapContact({
 	};
 }
 
-export function spyUseBoardHooks(updateBoardFn?: Mock, closeBoardFn?: Mock): void {
+export function spyUseBoardHooks(
+	updateBoardFn?: Mock,
+	closeBoardFn?: Mock,
+	setContentStatusFn?: Mock
+): void {
 	vi.mocked(useBoardHooks).mockReturnValue({
 		updateBoard: updateBoardFn ?? vi.fn(),
 		setCurrentBoard: vi.fn(),
+		setContentStatus: setContentStatusFn ?? vi.fn(),
 		getBoardContext: vi.fn(),
 		getBoard: vi.fn(),
 		closeBoard: closeBoardFn ?? vi.fn()

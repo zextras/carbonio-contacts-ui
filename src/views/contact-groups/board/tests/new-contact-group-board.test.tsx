@@ -511,3 +511,28 @@ describe('New contact group board', () => {
 		});
 	});
 });
+
+describe('New contact group board content status', () => {
+	it('should be pristine when the board is opened', () => {
+		const setContentStatus = vi.fn();
+		spyUseBoardHooks(undefined, undefined, setContentStatus);
+		setupNewContactGroupBoard();
+		expect(setContentStatus).toHaveBeenLastCalledWith('pristine');
+		expect(setContentStatus).not.toHaveBeenCalledWith('dirty');
+	});
+
+	it('should be dirty when the name is changed and pristine when it is restored', async () => {
+		const setContentStatus = vi.fn();
+		spyUseBoardHooks(undefined, undefined, setContentStatus);
+		const { user } = setupNewContactGroupBoard();
+		const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
+		const initialName = (nameInput as HTMLInputElement).value;
+
+		await user.type(nameInput, 'a');
+		expect(setContentStatus).toHaveBeenLastCalledWith('dirty');
+
+		await user.clear(nameInput);
+		await user.type(nameInput, initialName);
+		expect(setContentStatus).toHaveBeenLastCalledWith('pristine');
+	});
+});

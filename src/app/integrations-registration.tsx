@@ -15,7 +15,15 @@ import {
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
-import { CONTACT_BOARD_ID, CONTACTS_APP_ID, NEW_CONTACT_GROUP_BOARD_ID } from 'constants/index';
+import {
+	CONTACT_BOARD_ICON,
+	CONTACT_BOARD_ID,
+	CONTACT_DIRTY_BOARD_ICON,
+	CONTACT_GROUP_BOARD_ICON,
+	CONTACT_GROUP_DIRTY_BOARD_ICON,
+	CONTACTS_APP_ID,
+	NEW_CONTACT_GROUP_BOARD_ID
+} from 'constants/index';
 import { ContactInput } from 'legacy/integrations/contact-input';
 import createContactIntegration from 'legacy/integrations/create-contact';
 
@@ -32,7 +40,9 @@ export const IntegrationsRegistration: FC = () => {
 				ev?.preventDefault?.();
 				addBoard({
 					boardViewId: CONTACT_BOARD_ID,
-					title: t('label.new_contact', 'New Contact')
+					title: t('label.new_contact', 'New Contact'),
+					icon: CONTACT_BOARD_ICON,
+					dirtyIcon: CONTACT_DIRTY_BOARD_ICON
 				});
 			},
 			disabled: false,
@@ -50,7 +60,9 @@ export const IntegrationsRegistration: FC = () => {
 			execute: (): void => {
 				addBoard({
 					boardViewId: NEW_CONTACT_GROUP_BOARD_ID,
-					title: t('board.newContactGroup.title', 'New Group')
+					title: t('board.newContactGroup.title', 'New Group'),
+					icon: CONTACT_GROUP_BOARD_ICON,
+					dirtyIcon: CONTACT_GROUP_DIRTY_BOARD_ICON
 				});
 			},
 			disabled: false,
