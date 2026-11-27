@@ -17,7 +17,9 @@ import {
 	ContactInputValue,
 	JSNS
 } from '@zextras/carbonio-ui-commons';
+import { delay, http, HttpResponse } from 'msw';
 
+import { getSetupServer } from '@jest-setup';
 import { UserEvent, screen, setupTest } from '@test-setup';
 import { createSoapAPIInterceptor } from '@test-utils/network/msw/create-api-interceptor';
 import { TESTID_SELECTORS } from 'constants/tests';
@@ -171,6 +173,27 @@ describe('Contact input', () => {
 		expect(apiInterceptorSpy).toHaveBeenCalled();
 	});
 
+	it('should not create a chip from the loader shown while the search is running', async () => {
+		getSetupServer().use(
+			http.post(
+				'/service/soap/FullAutocompleteRequest',
+				async () => {
+					await delay('infinite');
+				},
+				{ once: true }
+			)
+		);
+		const onChange = vi.fn();
+		const { user } = setupTest(
+			<ContactInput onChange={onChange} defaultValue={[]} orderedAccountIds={[]} />
+		);
+		await user.type(screen.getByRole('textbox'), 'abc');
+		const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
+		const loader = await within(dropdown).findByTestId('dropdown-item');
+		await user.click(loader);
+		expect(onChange).not.toHaveBeenCalled();
+	});
+
 	describe('pasting', () => {
 		test('a simple email should display it correctly', async () => {
 			const { user } = setupTest(<TestableContactInput />);
@@ -197,6 +220,7 @@ describe('Contact input', () => {
 	});
 
 	it('edit a mail from a pasted list of emails should edit only the selected one and keep the others', async () => {
+		registerFullAutocompleteHandler([]);
 		const complexText = 'dan@email.it\n"Invalid"\n<a@valid.email>;\n"Another" <another@valid.it>';
 		const { user } = setupTest(<TestableContactInput />);
 
@@ -217,6 +241,7 @@ describe('Contact input', () => {
 	});
 
 	it('edit a mail from a pasted list of emails and focus out should keep the edited chip', async () => {
+		registerFullAutocompleteHandler([]);
 		const complexText = 'dan@email.it\n"Invalid"\n<a@valid.email>;\n"Another" <another@valid.it>';
 		const { user } = setupTest(<TestableContactInput />);
 
@@ -293,6 +318,167 @@ describe('Contact input', () => {
 		expect(onChange).toHaveBeenCalledWith([
 			expect.objectContaining({ actions: [editValidChipAction] })
 		]);
+	});
+
+	it('should add the typed address as a chip when the input loses focus while its suggestions are shown', async () => {
+		const onChange = vi.fn();
+		const contact = { email: VALID_EMAIL, first: 'Suggested contact', isGroup: false };
+		const autocompleteInterceptor = createAutocompleteInterceptor([contact]);
+		const { user } = setupTest(
+			<ContactInput defaultValue={[]} orderedAccountIds={[]} onChange={onChange} />
+		);
+		await user.type(screen.getByRole('textbox'), VALID_EMAIL);
+		await autocompleteInterceptor;
+		expect(await screen.findByText(contact.first)).toBeVisible();
+
+		fireEvent.focusOut(screen.getByRole('textbox'));
+
+		expect(onChange).toHaveBeenLastCalledWith([
+			expect.objectContaining({
+				error: false,
+				value: expect.objectContaining({ email: VALID_EMAIL })
+			})
+		]);
+	});
+
+	it('should not show the suggestions that arrive after the typed address became a chip', async () => {
+		const contact = { email: VALID_EMAIL, first: 'Late contact', isGroup: false };
+		const handler = registerFullAutocompleteHandler([contact]);
+		const respond = handler.getMockImplementation();
+		let releaseResponse: () => void = () => undefined;
+		const responseHeld = new Promise<void>((resolve) => {
+			releaseResponse = resolve;
+		});
+		let markResponded: () => void = () => undefined;
+		const responded = new Promise<void>((resolve) => {
+			markResponded = resolve;
+		});
+		handler.mockImplementation(async (...args) => {
+			await responseHeld;
+			const response = await respond?.(...args);
+			markResponded();
+			return response;
+		});
+		const onChange = vi.fn();
+		const { user } = setupTest(
+			<ContactInput defaultValue={[]} orderedAccountIds={[]} onChange={onChange} />
+		);
+		await user.type(screen.getByRole('textbox'), VALID_EMAIL);
+		await waitFor(() => expect(handler).toHaveBeenCalled());
+
+		fireEvent.focusOut(screen.getByRole('textbox'));
+		expect(onChange).toHaveBeenLastCalledWith([
+			expect.objectContaining({ value: expect.objectContaining({ email: VALID_EMAIL }) })
+		]);
+		await act(async () => {
+			releaseResponse();
+			await responded;
+			// let the response reach the component
+			await new Promise((resolve) => {
+				setTimeout(resolve, 0);
+			});
+		});
+
+		expect(screen.queryByText(contact.first)).not.toBeInTheDocument();
+	});
+
+	it('should keep the suggestions of the last search when an older response arrives later', async () => {
+		const oldContact = { email: 'old@email.it', first: 'Old result', isGroup: false };
+		const newContact = { email: 'new@email.it', first: 'New result', isGroup: false };
+		let releaseOldResponse: () => void = () => undefined;
+		const oldResponseHeld = new Promise<void>((resolve) => {
+			releaseOldResponse = resolve;
+		});
+		let markOldResponded: () => void = () => undefined;
+		const oldResponded = new Promise<void>((resolve) => {
+			markOldResponded = resolve;
+		});
+		const respondWithOld = registerFullAutocompleteHandler([oldContact]).getMockImplementation();
+		const handler = registerFullAutocompleteHandler([newContact]);
+		const respondWithNew = handler.getMockImplementation();
+		handler.mockImplementation(async (info) => {
+			if ((await info.request.clone().text()).includes('"name":"o"')) {
+				await oldResponseHeld;
+				const response = await respondWithOld?.(info);
+				markOldResponded();
+				return response;
+			}
+			return respondWithNew?.(info);
+		});
+		const { user } = setupTest(<ContactInput defaultValue={[]} orderedAccountIds={[]} />);
+		await user.type(screen.getByRole('textbox'), 'o');
+		await waitFor(() => expect(handler).toHaveBeenCalledTimes(1));
+		await user.type(screen.getByRole('textbox'), 'n');
+		expect(await screen.findByText(newContact.first)).toBeVisible();
+
+		await act(async () => {
+			releaseOldResponse();
+			await oldResponded;
+			// let the response reach the component
+			await new Promise((resolve) => {
+				setTimeout(resolve, 0);
+			});
+		});
+
+		expect(screen.getByText(newContact.first)).toBeVisible();
+		expect(screen.queryByText(oldContact.first)).not.toBeInTheDocument();
+	});
+
+	it('should hide the suggestions when the search fails', async () => {
+		getSetupServer().use(
+			http.post('/service/soap/FullAutocompleteRequest', () => HttpResponse.error())
+		);
+		const { user } = setupTest(<ContactInput defaultValue={[]} orderedAccountIds={[]} />);
+		await user.type(screen.getByRole('textbox'), 'abc');
+		await waitFor(() =>
+			expect(screen.queryByTestId(TESTID_SELECTORS.dropdownList)).not.toBeInTheDocument()
+		);
+	});
+
+	it('should hide the suggestions when the typed text is deleted', async () => {
+		const contact = { email: VALID_EMAIL, first: 'Some contact', isGroup: false };
+		registerFullAutocompleteHandler([contact]);
+		const { user } = setupTest(<ContactInput defaultValue={[]} orderedAccountIds={[]} />);
+		await user.type(screen.getByRole('textbox'), 's');
+		expect(await screen.findByText(contact.first)).toBeVisible();
+		await user.keyboard('{Backspace}');
+		await waitFor(() => expect(screen.queryByText(contact.first)).not.toBeInTheDocument());
+	});
+
+	it('should add only the chosen suggestion, not also the typed text', async () => {
+		const contact = { email: VALID_EMAIL, first: 'Chosen contact', isGroup: false };
+		registerFullAutocompleteHandler([contact]);
+		const onChange = vi.fn();
+		const { user } = setupTest(
+			<ContactInput defaultValue={[]} orderedAccountIds={[]} onChange={onChange} />
+		);
+		await user.type(screen.getByRole('textbox'), 'chos');
+		const target = await screen.findByText(contact.first);
+		await user.click(target);
+		expect(onChange).toHaveBeenLastCalledWith([
+			expect.objectContaining({ value: expect.objectContaining({ email: VALID_EMAIL }) })
+		]);
+	});
+
+	it('should show the suggestions for the text of a chip when the chip is edited', async () => {
+		registerFullAutocompleteHandler([]);
+		const { user } = setupTest(<TestableContactInput />);
+		await user.type(screen.getByRole('textbox'), VALID_EMAIL);
+		await user.keyboard('{Enter}');
+		expect(screen.queryByTestId(TESTID_SELECTORS.dropdownList)).not.toBeInTheDocument();
+
+		const contact = { email: VALID_EMAIL, first: 'Suggested contact', isGroup: false };
+		const autocompleteInterceptor = createAutocompleteInterceptor([contact]);
+		const chipEditButton = within(getChipWithText(VALID_EMAIL)).getAllByRole('button')[0];
+		await act(async () => {
+			await user.click(chipEditButton);
+		});
+
+		expect(screen.getByRole('textbox')).toHaveValue(VALID_EMAIL);
+		const request = await autocompleteInterceptor;
+		expect(request.AutoCompleteRequest.name).toBe(VALID_EMAIL);
+		const dropdown = await screen.findByTestId(TESTID_SELECTORS.dropdownList);
+		expect(await within(dropdown).findByText(contact.first)).toBeVisible();
 	});
 
 	describe('on simple contact', () => {
