@@ -1,6 +1,6 @@
 {
 	"name": "carbonio-contacts-ui",
-	"version": "1.26.0",
+	"version": "1.26.1",
 	"description": "Contacts module",
 	"main": "src/app.tsx",
 	"packageManager": "pnpm@10.32.1",
@@ -35,7 +35,7 @@
 	"license": "AGPL-3.0-only",
 	"devDependencies": {
 		"@babel/core": "7.29.0",
-		"@babel/preset-env": "7.29.7",
+		"@babel/preset-env": "7.29.14",
 		"@babel/preset-react": "7.29.7",
 		"@babel/preset-typescript": "7.29.7",
 		"@commitlint/cli": "19.8.1",
@@ -45,9 +45,9 @@
 		"@faker-js/faker": "8.4.1",
 		"@testing-library/jest-dom": "6.9.1",
 		"@testing-library/react": "15.0.7",
-		"@testing-library/user-event": "14.6.8",
+		"@testing-library/user-event": "14.6.13",
 		"@types/lodash": "4.17.27",
-		"@types/react": "18.3.31",
+		"@types/react": "18.3.32",
 		"@types/react-dom": "18.3.7",
 		"@types/react-redux": "7.1.35",
 		"@typescript-eslint/parser": "6.21.0",
@@ -71,7 +71,7 @@
 		"@semantic-release/changelog": "6.0.3",
 		"@semantic-release/commit-analyzer": "13.0.1",
 		"@semantic-release/git": "10.0.1",
-		"@semantic-release/github": "12.0.10",
+		"@semantic-release/github": "12.0.11",
 		"@semantic-release/npm": "13.2.0",
 		"@semantic-release/release-notes-generator": "14.1.1",
 		"semantic-release": "25.0.9"
