@@ -416,3 +416,26 @@ describe('Edit contact group board', () => {
 		});
 	});
 });
+
+describe('Edit contact group board content status', () => {
+	it('should be pristine when the board is opened', () => {
+		const setContentStatus = vi.fn();
+		spyUseBoardHooks(undefined, undefined, setContentStatus);
+		setupTest(<EditContactGroupBoard />);
+		expect(setContentStatus).toHaveBeenLastCalledWith('pristine');
+		expect(setContentStatus).not.toHaveBeenCalledWith('dirty');
+	});
+
+	it('should be dirty when the name is changed and pristine when it is restored', async () => {
+		const setContentStatus = vi.fn();
+		spyUseBoardHooks(undefined, undefined, setContentStatus);
+		const { user } = setupTest(<EditContactGroupBoard />);
+		const nameInput = screen.getByRole('textbox', { name: 'Group name*' });
+
+		await act(() => user.type(nameInput, 'a'));
+		expect(setContentStatus).toHaveBeenLastCalledWith('dirty');
+
+		await act(() => user.type(nameInput, '{Backspace}'));
+		expect(setContentStatus).toHaveBeenLastCalledWith('pristine');
+	});
+});

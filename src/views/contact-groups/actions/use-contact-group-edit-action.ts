@@ -10,7 +10,11 @@ import { addBoard, getBoardById, reopenBoards, setCurrentBoard } from '@zextras/
 import { useTranslation } from 'react-i18next';
 
 import { getParentFolder } from 'actions/folder-utils';
-import { EDIT_CONTACT_GROUP_BOARD_ID } from 'constants/index';
+import {
+	CONTACT_GROUP_BOARD_ICON,
+	CONTACT_GROUP_DIRTY_BOARD_ICON,
+	EDIT_CONTACT_GROUP_BOARD_ID
+} from 'constants/index';
 import { EDIT_ACTION } from 'constants/actions';
 import { ContactGroup } from 'model/contact-group';
 
@@ -29,6 +33,8 @@ export const useContactGroupEditAction = (contactGroup: ContactGroup): Action =>
 				id: `${EDIT_CONTACT_GROUP_BOARD_ID}-${contactGroup.id}`,
 				boardViewId: EDIT_CONTACT_GROUP_BOARD_ID,
 				title: contactGroup.title,
+				icon: CONTACT_GROUP_BOARD_ICON,
+				dirtyIcon: CONTACT_GROUP_DIRTY_BOARD_ICON,
 				context: { contactGroupId: contactGroup.id, folderId: parentFolder?.id }
 			});
 		}
